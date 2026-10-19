@@ -123,9 +123,9 @@ again.
 
 ## Messages
 
-- **Email, English, twenty-four kinds** — one per event the collector may
-  see, the identity-check invitation before the visit among them; the set is
-  the capability's own table
+- **Email, English** - one per event the collector may see; the set is the
+  capability's own table, and its identity-check invitation is never sent -
+  [Identity Check](/p/grade10-site/vault/identity-check)
 - **What a message names** — its figures as a table, not a sentence: the
   offer its terms, total, late-day cost and expiry; a money message the
   amount, the due date, the daily figure after it, how to pay while a balance
@@ -135,7 +135,7 @@ again.
   pay by, what is owed as at that day and what each further day adds, the
   condition on which the item lapses, that taking it is a person's decision,
   and that no further reminder follows
-- 🚧 **Hong Kong time named** - every email's footer reads "Dates and times are
+- **Hong Kong time named** - every email's footer reads "Dates and times are
   in Hong Kong time (GMT+8)." ([Dates and Times](/p/platform/shared/dates-and-times))
 - **Reminders** — **7 days** and **1 day** before the due date, then every
   **7 days** overdue; each names the balance and the date, the overdue one that
@@ -146,9 +146,8 @@ again.
 - **WhatsApp** — a click-to-chat link staff press, with six templates; no
   automation, no inbound channel
 - **Where a message links** — every email's case link keeps
-  `grade10.com/vault/cases/<id>`, the identity invitation's
-  `grade10.com/vault/verify#<secret>`, and a sign-in started there returns
-  there; each lands on the not-found surface until the collector's screens
+  `grade10.com/vault/cases/<id>`, and a sign-in started there returns
+  there; it lands on the not-found surface until the collector's screens
   ship
 
 ## Specs and journeys

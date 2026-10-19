@@ -3,6 +3,7 @@
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import { cn } from "@grade10/design-system/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { LoaderCircleIcon } from "lucide-react";
 import type * as React from "react";
 
 // Label is `Base/popover-foreground` on every rung — not `accent-foreground`,
@@ -37,6 +38,11 @@ const dropdownMenuItemVariants = cva(
  * Size `sm` (36px, `text-sm`, 14px icon) is default; size `md` (40px,
  * `text-base`, 16px icon) supports larger menu listings. Trailing content
  * binds `Base/secondary-foreground` at regular weight.
+ *
+ * `pending` is an item whose work is running: a spinner takes the leading
+ * slot, a second press does nothing, and the item stays focusable.
+ * An item that declares `pending`, true or false, starts work, so a click on it
+ * keeps the menu open; an item without it navigates and closes the menu.
  */
 function DropdownMenuItem({
   className,
@@ -46,7 +52,10 @@ function DropdownMenuItem({
   size = "sm",
   leading,
   trailing,
+  pending,
   children,
+  onClick,
+  closeOnClick,
   ...props
 }: MenuPrimitive.Item.Props &
   VariantProps<typeof dropdownMenuItemVariants> & {
@@ -56,6 +65,7 @@ function DropdownMenuItem({
     selected?: boolean;
     leading?: React.ReactNode;
     trailing?: React.ReactNode;
+    pending?: boolean;
   }) {
   return (
     <MenuPrimitive.Item
@@ -65,9 +75,16 @@ function DropdownMenuItem({
       data-selected={selected || undefined}
       className={cn(dropdownMenuItemVariants({ size }), className)}
       {...props}
+      aria-busy={pending || undefined}
       aria-current={selected ? "true" : undefined}
+      closeOnClick={pending === undefined ? closeOnClick : false}
+      onClick={pending ? undefined : onClick}
     >
-      {leading}
+      {pending ? (
+        <LoaderCircleIcon aria-hidden="true" className="animate-spin" />
+      ) : (
+        leading
+      )}
       <span className="min-w-0 flex-1 whitespace-nowrap font-normal">
         {children}
       </span>

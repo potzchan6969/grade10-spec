@@ -3,48 +3,51 @@ import type {
   AuctionAddressFormCopy,
   AuctionAddressFormProps,
   AuctionAddressFormValues,
-  AuctionOrderEmptyProps,
-  AuctionOrderListProps,
-  AuctionOrderRowCopy,
-  AuctionOrderRowProps,
+  AuctionPaymentRail,
+  AuctionPhoneFieldProps,
+  AuctionWinnerOrderBankDetails,
   AuctionWinnerOrderCopy,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,
 } from "../../index";
+import * as publicEntry from "../../index";
 import {
   AuctionAddressForm,
-  AuctionOrderEmpty,
-  AuctionOrderList,
-  AuctionOrderRow,
+  AuctionPhoneField,
   AuctionWinnerOrder,
   auctionPhoneConfirmValue,
   auctionPhoneSoftReady,
 } from "../../index";
 
 type PublicAuctionOrderTypes = [
-  AuctionOrderListProps,
-  AuctionOrderRowProps,
-  AuctionOrderRowCopy,
-  AuctionOrderEmptyProps,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderCopy,
   AuctionWinnerOrderStep,
+  AuctionPaymentRail,
+  AuctionWinnerOrderBankDetails,
   AuctionAddressFormProps,
   AuctionAddressFormCopy,
   AuctionAddressFormValues,
+  AuctionPhoneFieldProps,
+  // @ts-expect-error Retired list props must stay absent from the public entry.
+  import("../../index").AuctionOrderListProps,
+  // @ts-expect-error Retired row props must stay absent from the public entry.
+  import("../../index").AuctionOrderRowProps,
+  // @ts-expect-error Retired row copy must stay absent from the public entry.
+  import("../../index").AuctionOrderRowCopy,
+  // @ts-expect-error Retired empty props must stay absent from the public entry.
+  import("../../index").AuctionOrderEmptyProps,
 ];
 
 const publicAuctionOrderTypes: PublicAuctionOrderTypes | undefined = undefined;
 void publicAuctionOrderTypes;
 
 describe("auction-order public entry", () => {
-  it("exports every named auction-order component", () => {
+  it("shared-ui-auction-order-SC-15 - exports the retained auction-order surface", () => {
     expect([
-      AuctionOrderList,
-      AuctionOrderRow,
-      AuctionOrderEmpty,
       AuctionWinnerOrder,
       AuctionAddressForm,
+      AuctionPhoneField,
       auctionPhoneSoftReady,
       auctionPhoneConfirmValue,
     ]).toEqual([
@@ -53,8 +56,14 @@ describe("auction-order public entry", () => {
       expect.any(Function),
       expect.any(Function),
       expect.any(Function),
-      expect.any(Function),
-      expect.any(Function),
     ]);
+  });
+
+  it("shared-ui-auction-order-SC-16 - omits retired auction-order list exports", () => {
+    expect(
+      ["AuctionOrderList", "AuctionOrderRow", "AuctionOrderEmpty"].filter(
+        (name) => name in publicEntry,
+      ),
+    ).toEqual([]);
   });
 });

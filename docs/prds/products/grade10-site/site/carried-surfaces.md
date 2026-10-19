@@ -44,7 +44,7 @@ already opened and is carried everywhere.
 - **Labs** — the demonstration surfaces, and the refund and shipping drafts
   nobody has approved
 
-🚧 **Store Locator** — the shop's location and hours page joins the store's
+**Store Locator** — the shop's location and hours page joins the store's
 set, so it waits for the store's launch —
 [Store Locator](/p/grade10-site/store/store-locator)
 
@@ -73,8 +73,9 @@ surface changes, and nothing outside this rule has to be edited to let it
 through.
 
 :::detail{title="Code map" for="engineer"}
-- **Surface table, and which lanes carry what** —
-  `apps/frontend/grade10/src/surfaces.ts`
+- **Surface table** — `apps/frontend/grade10/src/surfaces.ts`
+- **Which lanes carry what** — `siteGates` in `@grade10/app-env`
+  (`packages/app-env/src/siteGates.ts`)
 - **The build's own answer** — `apps/frontend/grade10/src/config.ts` for the
   application, `resolveDeployEnv()` for the build configs and the build check
 - **Serving** —

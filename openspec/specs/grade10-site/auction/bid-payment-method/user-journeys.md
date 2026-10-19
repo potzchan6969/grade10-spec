@@ -16,8 +16,10 @@
 
 **As a** collector considering a live lot,
 **I want** to know the buyer's premium rate before I bid,
-**so that** I understand the policy without being shown an invoice amount that
-does not exist yet.
+**so that** I understand the policy without being shown an invoice amount that does not exist yet.
+
+Every lot is bid in USD, and the panel shows the 20% rate without a
+currency-specific premium amount.
 
 ## Retired
 

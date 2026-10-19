@@ -3,7 +3,7 @@ import { CheckboxList } from "./checkbox-list";
 import { CheckboxListInput } from "./checkbox-list-input";
 
 const meta = {
-  title: "Components/CheckboxList",
+  title: "Design System/Forms/CheckboxList",
   component: CheckboxList,
   tags: ["autodocs"],
 } satisfies Meta<typeof CheckboxList>;

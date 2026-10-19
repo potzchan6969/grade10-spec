@@ -5,12 +5,12 @@
 
 ## grade10-site-store-account-identity-US1: Collector verifies their identity from their account
 
-**As a** collector who wants to buy or bid above the bar,
+**As a** collector who wants to bid above the bar,
 **I want** to verify who I am from my own account page, on my own phone, after reading what will be checked,
 **so that** I am recognised wherever Grade10 asks, without a visit and without being asked twice.
 
-<!-- trace:case id=g10.store-account-identity.TC-25d rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
-### grade10-site-store-account-identity-US1-TC1-1: Unverified account names the bar and offers to verify
+<!-- trace:case id=g10.store-account-identity.TC-25d rev=3 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
+### grade10-site-store-account-identity-US1-TC1-3: Unverified account names the bar and offers to verify
 
 **Classification:**
 
@@ -34,7 +34,7 @@
 | Field | Value |
 | --- | --- |
 | `<an unverified account>` | An account with no verified identity on file and no check raised |
-| `<bar>` | 12000000 HKD minor units (HKD 120,000.00), the bar Grade10 sets on an order's goods and on a bid |
+| `<bar>` | 1500000 USD minor units (USD 15,000.00), the bar Grade10 sets on a bid |
 
 **Steps:**
 
@@ -44,11 +44,11 @@
 **Expected Results:**
 
 * The card says the user is not verified.
-* The card names `<bar>` as the order value and as the bid value at which a verified identity is asked for.
+* The card names `<bar>` as the bid value at which a verified identity is asked for.
 * The card offers to verify — the agreement to tick and the verify button.
 
-<!-- trace:case id=g10.store-account-identity.TC-dbs rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
-### grade10-site-store-account-identity-US1-TC2-1: Verifying from the account is recognised at a checkout above the bar
+<!-- trace:case id=g10.store-account-identity.TC-dbs rev=3 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
+### grade10-site-store-account-identity-US1-TC2-3: Verifying from the account is recognised at a bid above the bar
 
 **Classification:**
 
@@ -66,15 +66,16 @@
 **Pre-conditions:**
 
 * The user is signed in on `<an unverified account>`.
-* The user's cart holds `<basket above the bar>`.
+* `<listing above the bar>` is live, inside its window.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | `<an unverified account>` | An account with no verified identity on file and no check raised |
-| `<bar>` | 12000000 HKD minor units (HKD 120,000.00), the bar Grade10 sets on an order's goods and on a bid |
-| `<basket above the bar>` | A basket whose goods are worth 12500000 minor units, above `<bar>` |
+| `<bar>` | 1500000 USD minor units (USD 15,000.00), the bar Grade10 sets on a bid |
+| `<bid above the bar>` | 1550000 USD minor units (USD 15,500.00), above `<bar>` |
+| `<listing above the bar>` | A live USD listing whose minimum next bid is at most `<bid above the bar>` |
 
 **Steps:**
 
@@ -84,15 +85,15 @@
 4. Complete the provider's check with a valid document, on the same device.
 5. Read the identity card once the verdict lands.
 6. Read the check the account holds.
-7. Open the cart drawer.
-8. Click the checkout button.
+7. Navigate to `<listing above the bar>`.
+8. Enter `<bid above the bar>` in the bid field and select **Place Bid**.
 
 **Expected Results:**
 
 * Step 3 hands the user to the provider's page on the device they are on.
 * Step 5: the card reads `verified`.
 * The check records the instant the user agreed.
-* Step 8 proceeds as any other checkout: the browser is handed to Shopify's checkout page, with no refusal naming `<bar>`.
+* Step 8: the bid is accepted as any other, with no refusal naming a verified identity.
 
 <!-- trace:case id=g10.store-account-identity.TC-v73 rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
 ### grade10-site-store-account-identity-US1-TC3-1: Account page carries no identity field in any standing
@@ -295,7 +296,7 @@ Runs once per row of **Test data**.
 
 **As a** collector who verified for a vault visit,
 **I want** the site to recognise that verification on my account,
-**so that** I am not asked for my passport again to buy or bid.
+**so that** I am not asked for my passport again to bid.
 
 <!-- trace:case id=g10.store-account-identity.TC-k5a rev=1 covers=g10.store-account-identity.SC-9f4,g10.store-account-identity.SC-f7d,g10.store-account-identity.SC-wb2 -->
 ### grade10-site-store-account-identity-US2-TC1-1: Vault-verified account reads verified until the document's expiry
@@ -421,7 +422,7 @@ Runs once per row of **Test data**.
 
 ## Settled
 
-- The account page shows a standing and the identity bar, never an identity field.
+- The account page shows a standing and the bid's identity bar, never an identity field.
 - Consent is recorded before a hosted check starts, and an approved standing is reused across Grade10 services.
 - Erasing the account ends its check, releases its binding and commands provider erasure.
 
@@ -430,3 +431,4 @@ Runs once per row of **Test data**.
 Run: durable carry for add-account-identity-gate; the feature set, journeys and suite were reconciled against the carried requirements.
 
 - **Uncovered anchors:** none.
+- **Rewritten** - `grade10-site-store-account-identity-US1-TC1-3` and `grade10-site-store-account-identity-US1-TC2-3`: the bar names a bid alone since the checkout bar was dropped on 2026-10-13; it is one USD bar since bidding became USD-only on 2026-10-14

@@ -10,7 +10,7 @@
 * A callback a block reports logs in the Actions panel under its own name. A story's own checks run when it opens and show in the Interactions panel; before a step that clicks, return the story to its start there and clear the Actions panel.
 * The Controls panel changes a story's props in place; a step that plays the consumer's part sets them there.
 
-## shared-ui-vault-case-US1: The vault collector's blocks
+## g10.shared-vault-case.US1: The vault collector's blocks
 
 **Walked by:** nobody on their own - a component contract the vault's collector pages compose; the journeys of `grade10-site/vault/case-intake`, `grade10-site/vault/case-lifecycle`, `grade10-site/vault/valuation-and-offer`, `grade10-site/vault/loan-and-settlement`, `grade10-site/vault/visit-booking` and `grade10-site/vault/retention-and-erasure` are what reach it.
 
@@ -19,7 +19,7 @@
 **so that** every vault page composes store blocks instead of drawing its own.
 
 <!-- trace:case id=g10.shared-vault-case.TC-khu rev=1 covers=g10.shared-vault-case.SC-k73,g10.shared-vault-case.SC-abf,g10.shared-vault-case.SC-jrc -->
-### shared-ui-vault-case-US1-TC1-1: Every named vault block exports from the package entry
+### g10.shared-vault-case.US1-TC1: Every named vault block exports from the package entry
 
 **Classification:**
 
@@ -53,7 +53,7 @@
 * `VaultCasesCard` holds the case's id and the card's words and tones, and no case status.
 
 <!-- trace:case id=g10.shared-vault-case.TC-58x rev=1 covers=g10.shared-vault-case.SC-k73,g10.shared-vault-case.SC-abf,g10.shared-vault-case.SC-jrc -->
-### shared-ui-vault-case-US1-TC2-1: A booked visit composes the booking cards, not a vault copy
+### g10.shared-vault-case.US1-TC2: A booked visit composes the booking cards, not a vault copy
 
 **Classification:**
 
@@ -84,7 +84,7 @@
 * No vault export duplicates a booking card.
 
 <!-- trace:case id=g10.shared-vault-case.TC-0v9 rev=1 covers=g10.shared-vault-case.SC-k73,g10.shared-vault-case.SC-abf,g10.shared-vault-case.SC-jrc -->
-### shared-ui-vault-case-US1-TC3-1: No vault block reads a catalogue, fetches, routes or stores
+### g10.shared-vault-case.US1-TC3: No vault block reads a catalogue, fetches, routes or stores
 
 **Classification:**
 
@@ -115,7 +115,7 @@
 * No block fetches, stores, routes or subscribes to data.
 
 <!-- trace:case id=g10.shared-vault-case.TC-v61 rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC16-1: The accept confirmation reads the terms and reports Accept
+### g10.shared-vault-case.US1-TC16: The accept confirmation reads the terms and reports Accept
 
 **Classification:**
 
@@ -155,7 +155,7 @@
 * Step 3 logs `onConfirm` once.
 
 <!-- trace:case id=g10.shared-vault-case.TC-fwl rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC17-1: Going back reports it and answers nothing
+### g10.shared-vault-case.US1-TC17: Going back reports it and answers nothing
 
 **Classification:**
 
@@ -193,7 +193,7 @@ Runs once per row of **Test data**.
 * `onConfirm` is not logged.
 
 <!-- trace:case id=g10.shared-vault-case.TC-h4p rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC18-1: An answer in flight holds the dialog open
+### g10.shared-vault-case.US1-TC18: An answer in flight holds the dialog open
 
 **Classification:**
 
@@ -224,7 +224,7 @@ Runs once per row of **Test data**.
 * Step 3 leaves the dialog open and logs nothing.
 
 <!-- trace:case id=g10.shared-vault-case.TC-pzj rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC19-1: A refusal reads beside the terms, the dialog open
+### g10.shared-vault-case.US1-TC19: A refusal reads beside the terms, the dialog open
 
 **Classification:**
 
@@ -260,7 +260,7 @@ Runs once per row of **Test data**.
 * Go back and Accept can both be clicked.
 
 <!-- trace:case id=g10.shared-vault-case.TC-spt rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC20-1: The accept confirmation never opens itself
+### g10.shared-vault-case.US1-TC20: The accept confirmation never opens itself
 
 **Classification:**
 
@@ -289,7 +289,7 @@ Runs once per row of **Test data**.
 * No dialog is drawn.
 
 <!-- trace:case id=g10.shared-vault-case.TC-3ec rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC21-1: The empty vault home draws its parts and reports the start
+### g10.shared-vault-case.US1-TC21: The empty vault home draws its parts and reports the start
 
 **Classification:**
 
@@ -326,7 +326,7 @@ Runs once per row of **Test data**.
 * Step 3 logs `onStartRequest` once.
 
 <!-- trace:case id=g10.shared-vault-case.TC-dgq rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC22-1: The home with cases draws its parts in order and reports the start
+### g10.shared-vault-case.US1-TC22: The home with cases draws its parts in order and reports the start
 
 **Classification:**
 
@@ -367,7 +367,7 @@ Runs once per row of **Test data**.
 * Step 3 logs `onStartRequest` once.
 
 <!-- trace:case id=g10.shared-vault-case.TC-c9u rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC23-1: Your cases counts the cases it is given
+### g10.shared-vault-case.US1-TC23: Your cases counts the cases it is given
 
 **Classification:**
 
@@ -407,7 +407,7 @@ Runs once per row of **Test data**.
 * The row's number of cards is drawn.
 
 <!-- trace:case id=g10.shared-vault-case.TC-65o rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC24-1: A card per case, in the order the consumer gives
+### g10.shared-vault-case.US1-TC24: A card per case, in the order the consumer gives
 
 **Classification:**
 
@@ -446,7 +446,7 @@ Runs once per row of **Test data**.
 * Step 3 reads <case C>, <case A>, <case B>; no card is re-sorted.
 
 <!-- trace:case id=g10.shared-vault-case.TC-ub8 rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC25-1: Clicking a card opens that case, and only that case
+### g10.shared-vault-case.US1-TC25: Clicking a card opens that case, and only that case
 
 **Classification:**
 
@@ -486,7 +486,7 @@ Runs once per row of **Test data**.
 * Step 3 logs `onOpen` once, with <case A>'s id.
 
 <!-- trace:case id=g10.shared-vault-case.TC-1gw rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC26-1: An offer waiting reads its terms, its deadline and the visit
+### g10.shared-vault-case.US1-TC26: An offer waiting reads its terms, its deadline and the visit
 
 **Classification:**
 
@@ -530,7 +530,7 @@ Runs once per row of **Test data**.
 * The calendar line, with its icon, names <visit>.
 
 <!-- trace:case id=g10.shared-vault-case.TC-thx rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC27-1: A booked visit reads on the calendar line
+### g10.shared-vault-case.US1-TC27: A booked visit reads on the calendar line
 
 **Classification:**
 
@@ -566,7 +566,7 @@ Runs once per row of **Test data**.
 * The calendar line, with its icon, names <visit>.
 
 <!-- trace:case id=g10.shared-vault-case.TC-69v rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC28-1: An item in the vault reads since when, with no next step
+### g10.shared-vault-case.US1-TC28: An item in the vault reads since when, with no next step
 
 **Classification:**
 
@@ -603,7 +603,7 @@ Runs once per row of **Test data**.
 * No next-step row, calendar line or note is drawn; <day in> reads once, on the chip.
 
 <!-- trace:case id=g10.shared-vault-case.TC-ytv rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC29-1: A draft owes photographs and reads no calendar line
+### g10.shared-vault-case.US1-TC29: A draft owes photographs and reads no calendar line
 
 **Classification:**
 
@@ -634,7 +634,7 @@ Runs once per row of **Test data**.
 * No calendar line is drawn.
 
 <!-- trace:case id=g10.shared-vault-case.TC-xr5 rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC30-1: A walk-in draft carries the counter line as its next step
+### g10.shared-vault-case.US1-TC30: A walk-in draft carries the counter line as its next step
 
 **Classification:**
 
@@ -670,7 +670,7 @@ Runs once per row of **Test data**.
 * <counter line> sits in a muted-tinted row, unchanged.
 
 <!-- trace:case id=g10.shared-vault-case.TC-h92 rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC31-1: An ended case reads its ending and the reason, no next step
+### g10.shared-vault-case.US1-TC31: An ended case reads its ending and the reason, no next step
 
 **Classification:**
 
@@ -708,7 +708,7 @@ Runs once per row of **Test data**.
 * No next-step row is drawn.
 
 <!-- trace:case id=g10.shared-vault-case.TC-n00 rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC32-1: An item with no name reads the vault's untitled word
+### g10.shared-vault-case.US1-TC32: An item with no name reads the vault's untitled word
 
 **Classification:**
 
@@ -744,7 +744,7 @@ Runs once per row of **Test data**.
 * The title's control is described by the case's reference, so two untitled cards stay apart.
 
 <!-- trace:case id=g10.shared-vault-case.TC-lk2 rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC33-1: At the narrow column, chips and facts wrap
+### g10.shared-vault-case.US1-TC33: At the narrow column, chips and facts wrap
 
 **Classification:**
 
@@ -784,7 +784,7 @@ Runs once per row of **Test data**.
 * Nothing scrolls sideways.
 
 <!-- trace:case id=g10.shared-vault-case.TC-r2n rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC34-1: A part the consumer gives no words for is not drawn
+### g10.shared-vault-case.US1-TC34: A part the consumer gives no words for is not drawn
 
 **Classification:**
 
@@ -824,7 +824,7 @@ Runs once per row of **Test data**.
 * The title, both chips and the facts line still read.
 
 <!-- trace:case id=g10.shared-vault-case.TC-fr0 rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC35-1: The reference ends the facts line, in mono
+### g10.shared-vault-case.US1-TC35: The reference ends the facts line, in mono
 
 **Classification:**
 
@@ -860,7 +860,7 @@ Runs once per row of **Test data**.
 * <reference> is the line's last fact, in a monospaced face.
 
 <!-- trace:case id=g10.shared-vault-case.TC-4hk rev=1 covers=none -->
-### shared-ui-vault-case-US1-TC36-1: A card given every part reads them in order, its control named by the item
+### g10.shared-vault-case.US1-TC36: A card given every part reads them in order, its control named by the item
 
 **Classification:**
 
@@ -899,7 +899,7 @@ Runs once per row of **Test data**.
 * The control is named <title> and described by <reference>.
 
 <!-- trace:case id=g10.shared-vault-case.TC-74a rev=1 covers=g10.shared-vault-case.SC-k73,g10.shared-vault-case.SC-abf,g10.shared-vault-case.SC-jrc -->
-### shared-ui-vault-case-US1-TC37-1: The package entry exports no vault collector block
+### g10.shared-vault-case.US1-TC37: The package entry exports no vault collector block
 
 **Classification:**
 

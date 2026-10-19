@@ -6,7 +6,7 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import { RadioCard } from "./radio-card";
 
 const meta = {
-  title: "Components/RadioCard",
+  title: "Design System/Forms/RadioCard",
   parameters: {
     docs: {
       description: {

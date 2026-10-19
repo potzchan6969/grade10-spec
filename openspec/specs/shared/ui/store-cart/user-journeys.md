@@ -90,3 +90,40 @@ the sale from and show only that code's Discount in the footer,
 **I want** removing the promo to drop its discount and, where it had replaced
 the site sale, put the sale back on the lines while the sale still runs,
 **so that** I am not left at full list price after clearing a code.
+
+### shared-ui-store-cart-US-18: Shopper reads an order discount in the summary
+
+**As a** shopper,
+**I want** a cut the shop takes off the whole order to show as its own row
+after the Subtotal, with no line struck and no Remove,
+**so that** the cart reads the way the shop's checkout prints it.
+
+### shared-ui-store-cart-US-19: Shopper waits for an accepted tender choice
+
+**As a** shopper,
+**I want** the drawer to hold my accepted figures while a tender change finishes,
+**so that** I cannot submit conflicting changes or continue with an unresolved choice.
+
+### shared.ui-store-cart.US19: Shopper waits before another drawer action
+
+**As a** shopper whose drawer is waiting for an answer,
+**I want** the item controls, tender controls and navigation actions to wait together,
+**so that** no remaining control can start a conflicting action.
+
+### shared.ui-store-cart.US20: Shopper resumes after the drawer receives an answer
+
+**As a** shopper whose drawer is no longer waiting,
+**I want** only currently available actions to return without repeating an earlier action,
+**so that** I decide what happens next from the accepted cart or its failure feedback.
+
+### shared.ui-store-cart.US21: Shopper sees a guest checkout in the cart footer
+
+**As a** shopper who is not signed in,
+**I want** the footer to offer a guest checkout action with a sign-in link under it and no points block or wallet section,
+**so that** I can continue to checkout without the benefits a guest does not hold.
+
+### shared.ui-store-cart.US22: Shopper sees public codes in the picker
+
+**As a** shopper,
+**I want** the promo-code picker to list the public codes the consumer passes in their own section,
+**so that** I can pick a code open to everyone beside whatever codes are mine.

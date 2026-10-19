@@ -1,3 +1,5 @@
+import type { ActivityTimeCopy } from "@grade10/date";
+import { formatActivityAt } from "@grade10/date";
 import {
   Avatar,
   AvatarFallback,
@@ -16,12 +18,7 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { CrownSimple, Info } from "@phosphor-icons/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  type ActivityTimeCopy,
-  formatActivityAt,
-  type ShippedLocale,
-} from "../../lib/format-datetime";
-import { formatMoney } from "../../lib/format-money";
+import { formatLotMoney } from "../../lib/format-money";
 import { useClockNow } from "./listing-clock";
 import type { ListingBidHistoryRow } from "./types";
 import "./listing-bid-history-list.css";
@@ -43,7 +40,7 @@ type ListingBidHistoryListProps = {
   rows: readonly ListingBidHistoryRow[];
   heading?: string;
   currency: string;
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   activityTimeCopy: ActivityTimeCopy;
   /** Resets entrance animation when the bidding lifecycle changes. */
@@ -60,7 +57,7 @@ type BidHistoryRowItemProps = {
   animateEnter: boolean;
   useEnterWrapper: boolean;
   entranceMode: "expand" | "fade";
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   activityTimeCopy: ActivityTimeCopy;
   nowMs: number;
@@ -68,7 +65,7 @@ type BidHistoryRowItemProps = {
 
 function formatRowTime(
   row: ListingBidHistoryRow,
-  locale: ShippedLocale,
+  locale: string,
   timeZone: string,
   activityTimeCopy: ActivityTimeCopy,
   nowMs: number,
@@ -114,7 +111,7 @@ function BidHistoryRowContent({
           tone={recessed ? "secondary" : "primary"}
           weight={recessed ? "regular" : "medium"}
         >
-          {formatMoney(row.amountMinor, currency, { locale })}
+          {formatLotMoney(row.amountMinor, currency, { locale })}
           {row.samePricePriority && copy.samePricePriorityTip ? (
             <Tooltip>
               <TooltipTrigger
@@ -233,6 +230,7 @@ function BidHistoryEntrances({
   activityTimeCopy,
 }: Omit<ListingBidHistoryListProps, "resetKey">) {
   const nowMs = useClockNow(ACTIVITY_TICK_MS);
+  const listRef = useRef<HTMLDivElement>(null);
   const knownIdsRef = useRef<Set<string>>(new Set());
   const skipEntranceRef = useRef(true);
   const [enteredIds, setEnteredIds] = useState<ReadonlySet<string>>(
@@ -258,8 +256,19 @@ function BidHistoryEntrances({
 
   useEffect(() => {
     if (!enteringId) return;
+    // Defer a frame so the browser's own scroll anchoring - which holds the
+    // reader's place as a row is prepended - finishes first, then surface the
+    // new bid.
+    const frame = requestAnimationFrame(() => {
+      listRef.current
+        ?.querySelector(`[data-bid-row-id="${CSS.escape(enteringId)}"]`)
+        ?.scrollIntoView?.({ behavior: "instant", block: "nearest" });
+    });
     const timer = window.setTimeout(() => setEnteringId(null), 500);
-    return () => window.clearTimeout(timer);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
   }, [enteringId]);
 
   if (rows.length === 0) {
@@ -278,7 +287,11 @@ function BidHistoryEntrances({
             {heading}
           </Text>
         ) : null}
-        <VStack className="w-full divide-y divide-border" gap="none">
+        <VStack
+          className="w-full divide-y divide-border"
+          gap="none"
+          ref={listRef}
+        >
           {rows.map((row, index) => (
             <BidHistoryRowItem
               activityTimeCopy={activityTimeCopy}

@@ -33,7 +33,6 @@ describe("the handles one role is offered", () => {
   });
 
   it("offers every handle alphabetically for a role the map lists nobody under", () => {
-    expect(handlesFor(TEAM, "tech")).toEqual(["dana", "lee", "robin", "sam"]);
     expect(handlesFor(TEAM, "release")).toEqual([
       "dana",
       "lee",

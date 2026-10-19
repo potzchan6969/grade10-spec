@@ -110,6 +110,8 @@ function TwoFactorVerifyForm({
         </Button>
         {secondaryAction ? (
           <Button
+            focusableWhenDisabled
+            loading={secondaryAction.pending}
             onClick={secondaryAction.onAction}
             size="sm"
             type="button"

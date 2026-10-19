@@ -35,16 +35,17 @@ as needed to lead — [Bidding · Auction Logic](/p/grade10-site/auction/bidding
 At the scheduled close a lot with a bid enters extended bidding, and it closes
 when its timer runs out with no new bid.
 ## *Winner* — **Sets up the order**
-Confirms a delivery address and chooses card or bank transfer within 48 hours
+Confirms a delivery address and chooses USD or HKD settlement plus an offered
+payment method or bank rail within 48 hours
 — [Post-Bidding · Winner Order](/p/grade10-site/auction/post-bidding#winner-order).
 ## *Operator* — **Sends the invoice**
 Prices shipping and insurance for that address, adds any tax for the order, and sends the invoice; the
 7-day payment window starts — [Auction Management · Payment](/p/grade10-admin/auction/management#payment).
 ## *Winner* — **Pays**
-By card, which Grade10 confirms on its own, or by bank transfer quoting the
-reference and uploading proof an operator checks.
+By the chosen card or bank rail, which Grade10 confirms or checks with proof;
+the winner quotes the reference for a bank payment.
 ## *Operator* — **Ships**
-🚧 Records dispatch with the tracking number, then delivery; the winner reads
+Records dispatch with the tracking number, then delivery; the winner reads
 the tracking number as the link to the carrier's tracking page when the
 operator recorded a tracker link, and as plain text when none was.
 :::
@@ -85,7 +86,7 @@ lot is its own capability.
 | Auction unit | Decided | A **listing** is one auction item and the sole term in every spec and the operator queue; collectors read **auction**. | Product |
 | Buy Now | Decided | Excluded, including browse-only Buy Now listings. | Product |
 | One auction, two brands | Decided | A card is auctioned once, and Grade10 and ZZZ collectors bid on the same lot. Identities, sessions and money never cross; a display says Bidder 4, never a name. A public bid avatar may show one letter from the bidder's email local part; never the full email. | Product |
-| Currencies | Decided | USD, HKD and JPY, one per lot, each with a Grade10-owned increment schedule. | Product |
+| Auction money | Decided | Every lot is bid in USD. The winner chooses USD or HKD settlement at order setup; HKD uses the fixed 7.85 rate, named only in the note under the HKD Order Summary's total. | Product |
 | Operator grants | Decided | Payment processing and shipment processing are different grants and different roles (`finance` vs `staff`); `admin` holds both. Publishing a lot is neither. | Product |
 | Chapters, not capability pages | Decided | The manual cuts the auction into four chapters a reader meets in order; each capability is a section of one chapter, names its spec there, and is what a proposal links. | Product |
 | Design frames | ❓ Open | No Figma frame exists for any auction surface; the shipped Storybook stories are the reference until Design names the screens drawn first. | Design |

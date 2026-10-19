@@ -1,6 +1,6 @@
 # UI: Product card photo fit
 
-Layout SoT: Storybook `Store Product Listing/ProductCardImage` (and tiles on
+Layout SoT: Storybook `Store/Product Listing/Blocks/ProductCardImage` (and tiles on
 `ProductBrowse`). Historical Figma:
 [Product Card Image](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074).
 
@@ -10,11 +10,11 @@ Layout SoT: Storybook `Store Product Listing/ProductCardImage` (and tiles on
 
 | Surface | Storybook (SoT) | Figma (historical) |
 | --- | --- | --- |
-| Non-square photo: portrait in available, on sale, sold out and in cart; landscape and a small portrait, available | 🚧 `ProductCardImage` → Non Square Photo, six wells side by side, its fixtures beside `product-card.fixture.png`; the page's `::story` "The whole photo in the well" moves to it once it is built | [Product Card Image](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074&m=dev) |
-| Available, a square photo filling the well | [`ProductCardImage` → Default](?path=/story/store-product-listing-productcardimage--default) | none |
-| On sale | [`ProductCardImage` → Sale](?path=/story/store-product-listing-productcardimage--sale) | none |
-| Sold out (inert, listing) | [`ProductCardImage` → Sold Out](?path=/story/store-product-listing-productcardimage--sold-out) | none |
-| In cart | [`ProductCardImage` → In Cart](?path=/story/store-product-listing-productcardimage--in-cart) | none |
+| Non-square photo: portrait in available, on sale, sold out and in cart; landscape and a small portrait, available | `ProductCardImage` → Non Square Photo (`store-product-listing-blocks-productcardimage--non-square-photo`), six wells side by side, its fixtures beside `product-card.fixture.png`; the page's `::story` "The whole photo in the well" shows it | [Product Card Image](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4274-10074&m=dev) |
+| Available, a square photo filling the well | [`ProductCardImage` → Default](?path=/story/store-product-listing-blocks-productcardimage--default) | none |
+| On sale | [`ProductCardImage` → Sale](?path=/story/store-product-listing-blocks-productcardimage--sale) | none |
+| Sold out (inert, listing) | [`ProductCardImage` → Sold Out](?path=/story/store-product-listing-blocks-productcardimage--sold-out) | none |
+| In cart | [`ProductCardImage` → In Cart](?path=/story/store-product-listing-blocks-productcardimage--in-cart) | none |
 
 The four single-status stories keep their square photo, which fills the well;
 `Default`'s play test reads it at all four edges, its corners rounded with the
@@ -26,7 +26,7 @@ redraw is handed to the redraw-store-product-card-frames change by
 `drop-product-listing-photo-multiply`, its Q2.
 
 Sold-out that still opens, including hover scale: `add-store-cross-sell` Q50,
-[`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-productcardimage--sold-out-with-handler). Not this change.
+[`ProductCardImage` → Sold Out With Handler](?path=/story/store-product-listing-blocks-productcardimage--sold-out-with-handler). Not this change.
 
 ## Components
 

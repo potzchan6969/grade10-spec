@@ -40,9 +40,11 @@ export type ListingLotGalleryImage = {
   src: string;
   /** Thumbnail rail image. Falls back to `src`. */
   thumbSrc?: string;
-  /** Zoom dialog image. Falls back to `src`. */
+  /** Magnified lens image. Falls back to `src`. */
   zoomSrc?: string;
   alt: string;
+  /** Short caption shown next to the slide counter, e.g. `Front`. */
+  label?: string;
 };
 
 export type ListingAuctionStanding =
@@ -58,6 +60,8 @@ export type ListingAuctionStanding =
 export type ListingAuctionBidView = {
   /** ISO 4217 currency for every amount on this listing. */
   currency: string;
+  /** Consumer-owned maximum in integer minor units for this listing currency. */
+  ceilingMinor: number;
   headerLabel: string;
   live: boolean;
   opens: boolean;

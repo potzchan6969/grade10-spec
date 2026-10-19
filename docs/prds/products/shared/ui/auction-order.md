@@ -5,23 +5,22 @@ order: 10
 reviewed: 2026-09-30
 ---
 
-Blocks make a winner's auction orders, composed by every application that
-shows them: the My Auction Orders list, its row and empty state, the Winner
-Order page body, and the delivery address form. What an order means is [My Auction
-Orders](/p/grade10-site/auction/post-bidding#winner-order) and [Winner
+Blocks make a winner's auction order, composed by every application that
+shows it: the Winner Order page body and the delivery address form. What an
+order means is [Winner
 Order](/p/grade10-site/auction/post-bidding#winner-order); this capability is the
-component contract underneath them.
+component contract underneath it.
 
 ## The Blocks
 
-- **Order list** — the page body with its rows, or the empty state
-- **Order row** — the lot, the auction, the winning bid and the order
-  status as supplied, a **View lot** action, and exactly one next action
-  whose label the application supplies; the row reports which action was
-  chosen and never picks it from the status itself
 - **Winner order** — the Winner Order page body from parts the
   application resolves: it derives the progress from the current step and
-  knows no order status; Storybook and the site render it
+  knows no order status; it shows the selected payment method and, for a bank
+  method, the one selected rail; Storybook and the site render it; 🚧 a
+  two-option control in the Order Summary heading swaps every row's amount
+  for its secondary amount when the application supplies one
+- 🚧 **Bank details dialog** — shows the same single rail as the invoice, with
+  its payment details and reference; no tabs or copy controls
 - **Address form** — the fields [Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order) names, Personal or
   Company, a country-aware phone (country and digits required; E.164 when
@@ -33,7 +32,7 @@ component contract underneath them.
 - **Billing address** — a Same as delivery address box,
   ticked by default; unticked, a second address with the same fields. It
   follows the form, which first ships without one
-- **On their own** — the row and the address form each render alone
+- **On its own** — the address form renders alone
 
 ## Ownership
 
@@ -43,8 +42,7 @@ component contract underneath them.
   writes stay the application's
 
 :::detail{title="Code map" for="engineer"}
-- **Blocks** — `AuctionOrderList`, `AuctionOrderRow`, `AuctionOrderEmpty`,
-  `AuctionWinnerOrder` and `AuctionAddressForm`, in `packages/ui`
+- **Blocks** — `AuctionWinnerOrder` and `AuctionAddressForm`, in `packages/ui`
 :::
 
 :::detail{title="Test cases" for="qa"}

@@ -231,11 +231,11 @@ export function checkAwaiting(ctx, changes) {
 const KNOWN_ROLES = ROLES.map((one) => `\`${one}\``).join(", ");
 
 /**
- * RULE `hands`: `hands:` maps one of the six roles to one handle each,
+ * RULE `hands`: `hands:` maps one of the five roles to one handle each,
  * written by the product manager at the interview's end, by Assign, or by
  * `pnpm plan hand`. `readIdMap` in `read-changes.mts` already refuses a
  * `hands:` that is not a mapping and an entry that is not a line of text —
- * what survives that read is what this names: a role outside the six, a
+ * what survives that read is what this names: a role outside the five, a
  * value shaped like more than one handle, and a handle `docs/prds/team.yaml`
  * does not carry.
  */

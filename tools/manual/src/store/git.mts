@@ -20,6 +20,12 @@ export type GitIndex = {
    * for; a path that revision does not carry is absent from the map. One
    * process serves the whole request, for the same reason. */
   readBlobs: (refs: string[]) => Promise<Map<string, string>>;
+  /** The newest commit that changed how often `needle` occurs in `path` —
+   * the one that wrote a record line holding it. Nothing where the history
+   * holds none, or where there is no history to walk. */
+  writerOf?: (path: string, needle: string) => string | undefined;
+  /** A file as one commit holds it, or nothing where it holds none. */
+  showAt?: (sha: string, path: string) => string | undefined;
 };
 
 export const NO_GIT: GitIndex = {
@@ -149,6 +155,8 @@ export function mergeGitIndexes(
     history: [...store.history, ...content.history]
       .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
       .slice(0, HISTORY_LIMIT),
+    writerOf: (path, needle) => side(path).writerOf?.(path, needle),
+    showAt: (sha, path) => side(path).showAt?.(sha, path),
     readBlobs: async (refs) => {
       const ofSide = (index: GitIndex) =>
         refs.filter((ref) => side(ref.slice(ref.indexOf(":") + 1)) === index);
@@ -222,7 +230,34 @@ export async function readGitIndex(
     newestUnder: (storeDir) => dirs.get(storeDir),
     history,
     readBlobs: (refs) => readBlobs(root, refs),
+    writerOf: (path, needle) =>
+      quietGit(root, [
+        "log",
+        "-1",
+        "--format=%H",
+        "-S",
+        needle,
+        "HEAD",
+        "--",
+        path,
+      ])?.trim() || undefined,
+    showAt: (sha, path) => quietGit(root, ["show", `${sha}:${path}`]),
   };
+}
+
+/** One synchronous git call whose refusal is an answer: a commit that holds
+ * no such file, or a history too shallow to hold the commit. */
+function quietGit(root: string, args: string[]): string | undefined {
+  try {
+    return execFileSync("git", ["-c", "core.quotePath=false", ...args], {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+      maxBuffer: 256 * 1024 * 1024,
+    });
+  } catch {
+    return undefined;
+  }
 }
 
 /** A file's commit answers for every directory above it. The walk is

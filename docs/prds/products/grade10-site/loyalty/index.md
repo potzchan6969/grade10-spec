@@ -26,7 +26,7 @@ a balance, a tier or a code. ZZZ has no programme.
 | [Rewards](/p/grade10-site/loyalty/rewards) | What a reward is, the catalog, the shop, what a member holds, and how one is given |
 | [Paying with Points](/p/grade10-site/loyalty/paying-with-points) | Points straight off a bill, online and at the till |
 | [Coupons](/p/grade10-site/loyalty/coupons) | How a coupon reaches an order at each checkout, and what happens when one goes wrong |
-| [Profile](/p/grade10-site/loyalty/profile) | Membership with the account, the membership page, the member card and the member's own histories |
+| [Membership](/p/grade10-site/loyalty/membership) | Membership with the account, the membership page, the member pass and the member's own histories |
 | [Shopify Integration](/p/grade10-site/loyalty/shopify-integration) | Customer pairing, the draft-order checkout, the POS extension, discounts and shipping |
 | [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card) | The card in Google Wallet and Apple Wallet — what each code can do, and how a pass stays current |
 | [Operator Console](/p/grade10-site/loyalty/operator-console) | Moving points by hand, and restarting a member's expiry |
@@ -63,6 +63,3 @@ and giving the top tier to a named person with a reason.
   draft the programme implements
 - [The Shopify membership and POS notes](/references/shopify-membership-pos) —
   the delivery plan for the counter
-- [[grade10-site/loyalty/programme]] — the checkable rules of the programme
-- [[grade10-site/store/membership]] — the till, the commerce customer behind
-  every member, and orders reaching the programme

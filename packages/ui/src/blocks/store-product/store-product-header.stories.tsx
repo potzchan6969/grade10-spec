@@ -4,7 +4,7 @@ import { HEADER_COPY, PRODUCT_DETAIL_STORY } from "./fixtures";
 import { StoreProductHeader } from "./store-product-header";
 
 const meta = {
-  title: "Store Product/Product Header",
+  title: "Store/Product Page/Blocks/StoreProductHeader",
   component: StoreProductHeader,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

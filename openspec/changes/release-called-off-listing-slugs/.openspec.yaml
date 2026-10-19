@@ -1,0 +1,14 @@
+schema: grade10-planning
+created: 2026-10-12
+depends_on:
+  - clarify-auction-shipping-progress-copy
+hands:
+  pm: "@htonyl"
+reviewed:
+  proposal: 5ae7ad9d
+  decisions: 6d6700c8
+  user-journeys: fe619cb3
+  tech-design: a9e067e9
+  specs: 0de1b9ec
+  test-cases: a9e067e9
+  tasks: cab28396

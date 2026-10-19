@@ -25,6 +25,7 @@ it.
   - Operator review only: an operator reinstates whatever the cause, from the admin Users page
   - Account record: the state and its reason are visible to whoever decides
 ## Requirements
+
 ### Requirement: An elapsed payment deadline suspends the account
 
 When an auction order's payment deadline passes with its invoice status still
@@ -39,8 +40,8 @@ Grade10 SHALL record the suspension's reason and the auction order that
 caused it, and SHALL show both on the account record.
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-3hh rev=1 -->
-#### Scenario: suspension-SC-01 - An elapsed deadline suspends the account
-**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
+#### Scenario: g10.auction-bidder-suspension.SC1 - An elapsed deadline suspends the account
+**Serves:** g10.auction-bidder-suspension.US1 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** an auction order whose invoice status is `pending`
 - **WHEN** its payment deadline passes with no payment received
@@ -49,7 +50,7 @@ caused it, and SHALL show both on the account record.
 - **AND** records the reason and the causing auction order on the account record
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-tnq rev=1 -->
-#### Scenario: suspension-SC-02 - One expired lot suspends a winner paid up on another
+#### Scenario: g10.auction-bidder-suspension.SC2 - One expired lot suspends a winner paid up on another
 **Serves:** Trigger and notice - one expired lot suspends a winner paid up on another
 
 - **GIVEN** a winner with two auction orders, one `paid` and one `pending`
@@ -75,8 +76,8 @@ A suspension SHALL NOT be a platform ban. It SHALL NOT prevent the account
 signing in, and it SHALL NOT change anything `shared/auth/users` governs.
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-rcj rev=1 -->
-#### Scenario: suspension-SC-03 - A suspended account can still pay what it owes
-**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
+#### Scenario: g10.auction-bidder-suspension.SC3 - A suspended account can still pay what it owes
+**Serves:** g10.auction-bidder-suspension.US1 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account with an outstanding invoice
 - **WHEN** the collector opens that invoice and pays it
@@ -84,7 +85,7 @@ signing in, and it SHALL NOT change anything `shared/auth/users` governs.
 - **AND** the invoice status becomes `paid`
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-6yc rev=1 -->
-#### Scenario: suspension-SC-04 - A suspended account still signs in and shops
+#### Scenario: g10.auction-bidder-suspension.SC4 - A suspended account still signs in and shops
 **Serves:** Scope of the suspension - a suspended account still signs in and shops
 
 - **GIVEN** a suspended account
@@ -112,8 +113,8 @@ explicit operator action following review, taken by an operator holding
 Grade10 SHALL show the suspension state and its reason on the account record.
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-6hs rev=1 -->
-#### Scenario: suspension-SC-09 - Paying does not lift the suspension
-**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
+#### Scenario: g10.auction-bidder-suspension.SC9 - Paying does not lift the suspension
+**Serves:** g10.auction-bidder-suspension.US1 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account with one outstanding invoice
 - **WHEN** the collector pays that invoice in full
@@ -122,7 +123,7 @@ Grade10 SHALL show the suspension state and its reason on the account record.
 - **AND** the account record still shows the suspension and its reason
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-q1k rev=1 -->
-#### Scenario: suspension-SC-10 - A reissue does not lift the suspension
+#### Scenario: g10.auction-bidder-suspension.SC10 - A reissue does not lift the suspension
 **Serves:** Reinstatement - a reissue does not lift the suspension
 
 - **GIVEN** a suspended account with an expired auction order
@@ -131,7 +132,7 @@ Grade10 SHALL show the suspension state and its reason on the account record.
 - **AND** the collector can pay the reissued invoice and still cannot bid
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-6h4 rev=1 -->
-#### Scenario: suspension-SC-11 - An operator reinstates the account
+#### Scenario: g10.auction-bidder-suspension.SC11 - An operator reinstates the account
 **Serves:** Reinstatement - an operator reinstates the account
 
 - **GIVEN** a suspended account an operator has reviewed
@@ -165,7 +166,7 @@ bids, and lifted the same way. Only its cause differs.
   SHALL stay suspended once.
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-o2m rev=1 -->
-#### Scenario: suspension-SC-17 - An operator suspends an account with a reason
+#### Scenario: g10.auction-bidder-suspension.SC17 - An operator suspends an account with a reason
 **Serves:** Trigger and notice - an operator suspends an account with a reason
 
 - **GIVEN** an operator holding `auction:moderate` and an account that is not suspended
@@ -174,7 +175,7 @@ bids, and lifted the same way. Only its cause differs.
 - **AND** the account record shows the operator's reason, who suspended, and when
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-m1g rev=1 -->
-#### Scenario: suspension-SC-18 - A suspension without a reason is refused
+#### Scenario: g10.auction-bidder-suspension.SC18 - A suspension without a reason is refused
 **Serves:** Trigger and notice - a suspension without a reason is refused
 
 - **GIVEN** an operator holding `auction:moderate`
@@ -183,7 +184,7 @@ bids, and lifted the same way. Only its cause differs.
 - **AND** the account is not suspended
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-pyn rev=1 -->
-#### Scenario: suspension-SC-19 - An operator without the grant cannot suspend
+#### Scenario: g10.auction-bidder-suspension.SC19 - An operator without the grant cannot suspend
 **Serves:** Trigger and notice - an operator without the grant cannot suspend
 
 - **GIVEN** an operator who does not hold `auction:moderate`
@@ -192,8 +193,8 @@ bids, and lifted the same way. Only its cause differs.
 - **AND** the account is not suspended
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-6y9 rev=1 -->
-#### Scenario: suspension-SC-20 - The collector is told without the operator's reason
-**Serves:** suspension-US-03 - Collector suspended by an operator learns they can no longer bid
+#### Scenario: g10.auction-bidder-suspension.SC20 - The collector is told without the operator's reason
+**Serves:** g10.auction-bidder-suspension.US3 - Collector suspended by an operator learns they can no longer bid
 
 - **GIVEN** an account an operator has just suspended with a reason
 - **WHEN** the collector reads the suspension notice and their account record
@@ -201,8 +202,8 @@ bids, and lifted the same way. Only its cause differs.
 - **AND** neither shows the operator's reason
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-nq6 rev=1 -->
-#### Scenario: suspension-SC-21 - A missed deadline on a suspended account adds a cause
-**Serves:** suspension-US-03 - Collector suspended by an operator learns they can no longer bid
+#### Scenario: g10.auction-bidder-suspension.SC21 - A missed deadline on a suspended account adds a cause
+**Serves:** g10.auction-bidder-suspension.US3 - Collector suspended by an operator learns they can no longer bid
 
 - **GIVEN** an account an operator suspended, with an auction order whose invoice is `pending`
 - **WHEN** that order's payment deadline passes
@@ -210,7 +211,7 @@ bids, and lifted the same way. Only its cause differs.
 - **AND** the account record shows both causes
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-9oo rev=1 -->
-#### Scenario: suspension-SC-22 - Reinstating lifts an operator's suspension
+#### Scenario: g10.auction-bidder-suspension.SC22 - Reinstating lifts an operator's suspension
 **Serves:** Reinstatement - reinstating lifts an operator's suspension
 
 - **GIVEN** an account an operator suspended
@@ -241,54 +242,53 @@ before it:
   and SHALL NOT change any lot's current price or leader.
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-def rev=1 -->
-#### Scenario: suspension-SC-16 - A lot already won stays won
-**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
+#### Scenario: g10.auction-bidder-suspension.SC16 - A lot already won stays won
+**Serves:** g10.auction-bidder-suspension.US1 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account that won a lot before the suspension
 - **WHEN** the suspension takes effect
 - **THEN** that lot is still won by the account
 - **AND** its invoice is still payable
 
-<!-- trace:scenario id=g10.auction-bidder-suspension.SC-o11 rev=1 -->
-#### Scenario: suspension-SC-12 - A suspended account cannot bid or raise its maximum
-**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
+<!-- trace:scenario id=g10.auction-bidder-suspension.SC-o11 rev=2 -->
+#### Scenario: g10.auction-bidder-suspension.SC12 - A suspended account cannot bid or raise its maximum
+**Serves:** g10.auction-bidder-suspension.US1 - Collector who misses a deadline loses their auction standing
 
-- **GIVEN** a suspended account holding a maximum of 50000 HKD minor units on
+- **GIVEN** a suspended account holding a maximum of 50000 USD minor units on
   an open lot
 - **WHEN** the collector tries to raise that maximum, and to place a bid on a
   second open lot
 - **THEN** Grade10 refuses both
-- **AND** the maximum on the first lot is still 50000 HKD minor units
+- **AND** the maximum on the first lot is still 50000 USD minor units
 
-<!-- trace:scenario id=g10.auction-bidder-suspension.SC-tsa rev=1 -->
-#### Scenario: suspension-SC-13 - Suspension leaves open lots and their history unchanged
-**Serves:** suspension-US-02 - Bidder competes on a lot whose leader is suspended
+<!-- trace:scenario id=g10.auction-bidder-suspension.SC-tsa rev=2 -->
+#### Scenario: g10.auction-bidder-suspension.SC13 - Suspension leaves open lots and their history unchanged
+**Serves:** g10.auction-bidder-suspension.US2 - Bidder competes on a lot whose leader is suspended
 
-- **GIVEN** an open lot led by an account at a current price of 30000 HKD
+- **GIVEN** an open lot led by an account at a current price of 30000 USD
   minor units, with a second bidder holding a lower maximum
 - **WHEN** the leading account is suspended
-- **THEN** the account still leads the lot at 30000 HKD minor units
+- **THEN** the account still leads the lot at 30000 USD minor units
 - **AND** the lot's bid history has the same entries as before the suspension
 
-<!-- trace:scenario id=g10.auction-bidder-suspension.SC-yn5 rev=1 -->
-#### Scenario: suspension-SC-14 - A standing maximum keeps bidding after suspension
-**Serves:** suspension-US-02 - Bidder competes on a lot whose leader is suspended
+<!-- trace:scenario id=g10.auction-bidder-suspension.SC-yn5 rev=2 -->
+#### Scenario: g10.auction-bidder-suspension.SC14 - A standing maximum keeps bidding after suspension
+**Serves:** g10.auction-bidder-suspension.US2 - Bidder competes on a lot whose leader is suspended
 
-- **GIVEN** a suspended account holding a maximum of 50000 HKD minor units on
-  an open lot it leads at 30000 HKD minor units
-- **WHEN** another bidder commits a maximum of 40000 HKD minor units
+- **GIVEN** a suspended account holding a maximum of 50000 USD minor units on
+  an open lot it leads at 30000 USD minor units
+- **WHEN** another bidder commits a maximum of 40000 USD minor units
 - **THEN** auto-bidding resolves the lot with the suspended account's maximum
   as for any bidder
 - **AND** the suspended account still leads, at the price auto-bidding
   resolves
 
 <!-- trace:scenario id=g10.auction-bidder-suspension.SC-1wb rev=1 -->
-#### Scenario: suspension-SC-15 - A suspended account wins through a standing maximum
-**Serves:** suspension-US-02 - Bidder competes on a lot whose leader is suspended
+#### Scenario: g10.auction-bidder-suspension.SC15 - A suspended account wins through a standing maximum
+**Serves:** g10.auction-bidder-suspension.US2 - Bidder competes on a lot whose leader is suspended
 
 - **GIVEN** a suspended account holding the highest maximum on an open lot
 - **WHEN** the lot closes
 - **THEN** the account wins the lot
 - **AND** Grade10 creates its auction order with its own invoice and payment
   deadline
-

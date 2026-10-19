@@ -5,9 +5,8 @@ order: 15
 ---
 
 The parts a site page composes rather than drawing its own: a titled card of
-facts and its loading cards, short lines one under the other, a rail of
-stages, and an empty panel. Each page supplies the words, the figures and
-the callbacks.
+facts and its loading cards, short lines one under the other, and a rail of
+stages. Each page supplies the words, the figures and the callbacks.
 
 ## The Blocks
 
@@ -20,19 +19,18 @@ the callbacks.
 - **`StageRail`** - stages in order with the current one marked; an ended
   case stays where it ended, and a narrow screen scrolls the rail, not the
   page
-- **`EmptyPanel`** - nothing here yet: a title, the line under it and the
-  way out
+
+A page with nothing to show composes the design system's `EmptyState`
+directly, passing `data-slot` for the name its tests and walks find it by.
 
 A page finds each block by the slot it gives it; given none, a block keeps
 the design system's own.
 
-::story{id="page-blocks-factcard--every-part" title="A fact card with every part"}
+::story{id="site-page-shell-blocks-factcard--every-part" title="A fact card with every part"}
 
-::story{id="page-blocks-notelist--with-link-item" title="A line carrying a link"}
+::story{id="site-page-shell-blocks-notelist--with-link-item" title="A line carrying a link"}
 
-::story{id="page-blocks-stagerail--financed-mid" title="A rail at its fifth stage"}
-
-::story{id="page-blocks-emptypanel--with-action" title="An empty panel with a way out"}
+::story{id="site-page-shell-blocks-stagerail--financed-mid" title="A rail at its fifth stage"}
 
 :::detail{title="Product decisions" for="pm"}
 Design Override refuses a site page that draws a card, a list, a table, a
@@ -45,4 +43,5 @@ blocks every site page can compose.
 | Found by slot | Decided | Each block takes the `data-slot` a page's tests and walks find it by, keeping the design system's own when given none, so no page reaches for a `className` on a store block | Design |
 | No existing block moves | Decided | `BookingSteps` keeps its stage union; `StageRail` is the rail a page draws its own stages with | Design |
 | Story ids | Decided | `page-blocks-<component>--<state>`, the package's `Page Blocks/<Component>` title | Design |
+| Empty panel dropped | Decided | `EmptyPanel` forwarded its title, line and actions to the design system's `EmptyState` and renamed its slot; a page with nothing to show composes the primitive and passes `data-slot` itself | Design |
 :::

@@ -25,6 +25,7 @@ import {
   git as runGit,
   type StoreMain,
 } from "./git.mts";
+import { scenarioToken } from "./markdown.mts";
 import { markQuestions } from "./questions.mts";
 import { readChangeDocuments } from "./read-change-documents.mts";
 import {
@@ -49,7 +50,7 @@ import { checkWarnings } from "./warnings.mts";
 /** `docs/prds/team.yaml`, projected to what the browser needs: a handle
  * against the roles it may take, its e-mail, Slack member and channels left
  * behind — those address a message, which is the notify script's own job.
- * A role the map does not spell as one of the six is dropped rather than
+ * A role the map does not spell as one of the five is dropped rather than
  * carried into a type that promises only those six: `checkHands` is where a
  * change's own `hands:` is held to that set, and the map itself owes no such
  * check yet. */
@@ -221,12 +222,11 @@ function markIssuedIds(root: string, specs: SpecEntry[]): void {
 function tokenOf(spec: SpecEntry): string {
   for (const requirement of spec.requirements) {
     for (const scenario of requirement.scenarios) {
-      const token = scenario.id?.replace(/-SC-\d+[a-z]?$/, "");
-      if (token) return token;
+      if (scenario.id) return scenarioToken(scenario.id);
     }
   }
   for (const journey of spec.journeys ?? []) {
-    const token = journey.id.replace(/-US-\d+$/, "");
+    const token = journey.id.replace(/(?:-US-|\.US)\d+$/, "");
     if (token !== journey.id) return token;
   }
   return spec.id.split("/").pop() ?? spec.id;

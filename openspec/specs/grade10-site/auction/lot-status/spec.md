@@ -9,10 +9,12 @@
   - Lot, not order: the winner's order status is shown separately
   - Preparing Shipment maps to Ended (was Processing)
 - Hidden lots
-  - Never shown: Draft and Called off lots do not appear on any
-    collector page
   - Bidder exception: a collector who bid on a called-off lot still sees it in
     My Auctions
+  - Browse removal: Draft and Called off lots stay out of browse, search
+    and watchlist
+  - Released address: a called-off lot no longer answers at its former
+    public address
 - Listing data
   - Status in the listing data: every page uses the same value
 
@@ -61,7 +63,7 @@ Hidden:
 | Refunded | Ended |
 
 **Hidden** - A Hidden lot SHALL have no external lot status. Collectors SHALL
-NOT see it, as "Collectors never see hidden lots" sets out.
+NOT see it, as "Hidden lots have no public address" sets out.
 
 **Lot, not order** - The external lot status SHALL describe the lot only. It
 SHALL NOT describe a collector's bid or the winner's order. The winner's order
@@ -122,25 +124,48 @@ lot status.
 - **THEN** the lot's external lot status is Ended
 - **AND** their order status is shown separately
 
-### Requirement: Collectors never see hidden lots
+### Requirement: Listing data includes the external lot status
+
+The public listing data SHALL include the lot's external lot status: Upcoming,
+Active or Ended. It SHALL NOT include hidden lots.
+
+<!-- trace:scenario id=g10.auction-lot-status.SC-l6k rev=1 -->
+#### Scenario: grade10-site-auction-lot-status-SC-10 - Listing data includes the external lot status
+**Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
+
+- **WHEN** a customer application reads the public listing data for a lot open
+  for bidding
+- **THEN** the data includes the external lot status Active
+
+<!-- trace:scenario id=g10.auction-lot-status.SC-3yw rev=1 -->
+#### Scenario: grade10-site-auction-lot-status-SC-11 - Listing data leaves out called-off lots
+**Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
+
+- **GIVEN** a lot whose bidding ended with no winner, and a lot that was called
+  off
+- **WHEN** a customer application reads the public listing data
+- **THEN** the called-off lot is not included
+- **AND** the unsold lot is included with the external lot status Ended
+
+### Requirement: Hidden lots have no public address
 
 A draft lot is absent from every collector page. A called-off lot is absent
-from browse, search, watchlist and public listing data, but its canonical
-listing page remains directly accessible; a collector who bid on it also sees
-it in My Auctions.
+from browse, search, watchlist and public listing data. A collector who bid on
+it still sees it in My Auctions.
 
 **Hidden lots** - A hidden lot is a lot whose internal lot status is Draft or
 Called off.
 
 **Browse removal** - Collectors SHALL NOT discover a called-off lot through
-catalogue, search, filters, watchlist or public listing data. Its canonical
-listing page remains directly accessible by its original address, per
-`grade10-site/auction/listing-page`; the listing code is not an alternate
-route. A draft has no public address and remains unavailable.
+catalogue, search, filters, watchlist or public listing data. A called-off
+lot SHALL NOT answer at its former address. That released address follows
+current-holder lookup in `grade10-site/auction/listing-page`, and its listing
+code SHALL NOT provide an alternate route. A draft remains unavailable.
 
 **Bidder exception** - A collector who bid on a called-off lot SHALL still see
 it in My Auctions, where the row says their card was not charged, per
-`grade10-site/auction/account-record`. No other collector SHALL see it.
+`grade10-site/auction/account-record`. That row SHALL NOT open another lot
+that now holds the former address. No other collector SHALL see it.
 
 <!-- trace:scenario id=g10.auction-lot-status.SC-me0 rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-06 - A draft lot is not in the catalogue, but an unsold lot is
@@ -179,37 +204,20 @@ it in My Auctions, where the row says their card was not charged, per
 - **AND** the row says their card was not charged
 - **AND** a collector who did not bid on the lot does not see it
 
-<!-- trace:scenario id=g10.auction-lot-status.SC-w9d rev=1 -->
-#### Scenario: grade10-site-auction-lot-status-SC-13 - A called-off lot stays reachable at its canonical address
-**Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
+<!-- trace:scenario id=g10.auction-lot-status.SC-w9d rev=2 -->
+#### Scenario: g10.auction-lot-status.SC13 - A called-off lot no longer answers at its former address
+**Serves:** grade10-site-auction-lot-status-US-02 - the collector follows an address after its lot is withdrawn
 
-- **GIVEN** a published lot whose canonical address and listing code are
-  permanently reserved
-- **WHEN** an operator calls the lot off and a collector opens its canonical
-  address directly
-- **THEN** the address serves the lot's public listing page
-- **AND** the lot remains absent from catalogue, search and watchlist
-- **AND** the listing code does not resolve as an alternate address
+- **GIVEN** a published lot that is called off and no new eligible holder of its former slug
+- **WHEN** a collector opens the former address directly
+- **THEN** the response is Page not found with status 404
+- **AND** the called-off lot remains absent from catalogue, search and watchlist
+- **AND** its listing code does not resolve as an alternate address
 
-### Requirement: Listing data includes the external lot status
+<!-- trace:scenario id=g10.auction-lot-status.SC-cmh rev=1 -->
+#### Scenario: g10.auction-lot-status.SC14 - Reuse does not replace the bidder history
+**Serves:** grade10-site-auction-lot-status-US-03 - the bidder checks the outcome of the lot they bid on
 
-The public listing data SHALL include the lot's external lot status: Upcoming,
-Active or Ended. It SHALL NOT include hidden lots.
-
-<!-- trace:scenario id=g10.auction-lot-status.SC-l6k rev=1 -->
-#### Scenario: grade10-site-auction-lot-status-SC-10 - Listing data includes the external lot status
-**Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
-
-- **WHEN** a customer application reads the public listing data for a lot open
-  for bidding
-- **THEN** the data includes the external lot status Active
-
-<!-- trace:scenario id=g10.auction-lot-status.SC-3yw rev=1 -->
-#### Scenario: grade10-site-auction-lot-status-SC-11 - Listing data leaves out called-off lots
-**Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
-
-- **GIVEN** a lot whose bidding ended with no winner, and a lot that was called
-  off
-- **WHEN** a customer application reads the public listing data
-- **THEN** the called-off lot is not included
-- **AND** the unsold lot is included with the external lot status Ended
+- **GIVEN** a collector bid on a called-off lot whose former slug now belongs to a different public lot
+- **WHEN** the bidder opens My Auctions
+- **THEN** their called-off lot remains recorded with the existing no-charge result; it is not replaced by the new slug holder and opens no lot at the reused address, and a collector who did not bid cannot see that called-off record

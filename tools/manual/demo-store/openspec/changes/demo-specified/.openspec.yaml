@@ -5,3 +5,8 @@ design_waived: "the fixture is about the Specified stage, not the designs"
 hands:
   qa: tester
   dev: tester
+reviewed:
+  decisions: fdbf2cd6
+  user-journeys: a3bddd05
+  specs: 0e0b05b5
+  test-cases: 0e0b05b5

@@ -29,6 +29,10 @@ session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu when signed in, with an initial avatar above the
 sign-in email, then My Auctions and Sign Out
 
+**Pending session** - while the application says the session has not answered,
+the account entry is a placeholder the size of the account icon, with nothing to
+press and nothing read aloud
+
 **Profile** - first in the menu, only when `onProfile` is supplied
 
 **My Orders** - ahead of My Auctions, only when `onMyOrders` is supplied
@@ -39,7 +43,7 @@ sign-in email, then My Auctions and Sign Out
 🚧 **No other item** - the menu offers nothing beyond these, KYC and a second
 orders item included
 
-🚧 **Profile image** - the menu's avatar shows the profile's image where the
+**Profile image** - the menu's avatar shows the profile's image where the
 collector has one, and the initial where they do not
 
 **Avatar without an email** - when `accountEmail` is not supplied, the menu
@@ -66,8 +70,8 @@ utility strip / compact utility list.
 🚧 **Cart count** - when the cart control is present and the cart holds active
 lines, `SiteHeader` shows a round count on the cart icon, the same number as
 the cart drawer title badge, in full, never `99+`. An empty, omitted, or
-unknown count hides it. Signed-out visitors have no guest cart, so they
-receive no count. Design-system `Nav` stays
+unknown count hides it. A signed-out visitor's count is the cart their
+browser holds. Design-system `Nav` stays
 count-agnostic: a header that shows a count hands `Nav` its own cart control
 through an optional cart slot, as it does for account.
 
@@ -75,37 +79,41 @@ through an optional cart slot, as it does for account.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
 
-::story{id="components-nav-overview--all-controls" title="Nav — all controls"}
+::story{id="design-system-layout-nav-overview--all-controls" title="Nav — all controls"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--empty-no-badge" title="Cart count — empty, no badge"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--empty-no-badge" title="Cart count — empty, no badge"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--count-1" title="Cart count — 1 item"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--count-1" title="Cart count — 1 item"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--count-3" title="Cart count — 3 items"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--count-3" title="Cart count — 3 items"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--count-123" title="Cart count — 123 items"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--count-123" title="Cart count — 123 items"}
 
-::story{id="site-chrome-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
 
-::story{id="site-chrome-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
 
-::story{id="components-nav-account--sign-in" title="Nav — Sign In button"}
+::story{id="design-system-layout-nav-account--sign-in" title="Nav — Sign In button"}
 
-::story{id="components-nav-layout--narrow" title="Nav — narrow (375px)"}
+::story{id="design-system-layout-nav-layout--narrow" title="Nav — narrow (375px)"}
 
-::story{id="components-nav-layout--menu-open" title="Nav — menu open (375px)"}
+::story{id="design-system-layout-nav-layout--menu-open" title="Nav — menu open (375px)"}
 
-::story{id="components-nav-layout--language-nested" title="Nav — language nested (375px)"}
+::story{id="design-system-layout-nav-layout--language-nested" title="Nav — language nested (375px)"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-out" title="Auction first — signed out"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-out" title="Auction first — signed out"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-in" title="Auction first — signed in"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-in" title="Auction first — signed in"}
 
-::story{id="site-chrome-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
 
-::story{id="components-nav-overview--another-brand" title="Nav — another brand"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-surfaces--pending" title="Auction & Store — pending session"}
 
-::story{id="components-footer--auction-only" title="Footer — auction only"}
+::story{id="site-page-shell-blocks-siteheader-layout--narrow-pending" title="SiteHeader — narrow pending session"}
+
+::story{id="design-system-layout-nav-overview--another-brand" title="Nav — another brand"}
+
+::story{id="design-system-layout-footer--auction-only" title="Footer — auction only"}
 
 The site's own rules for what the shell must do — the landmarks, the session
 timing, the small-width reflow — are [the page shell's](/p/grade10-site/site/page-shell).

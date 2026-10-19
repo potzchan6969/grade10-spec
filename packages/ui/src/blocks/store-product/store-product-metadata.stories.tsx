@@ -8,7 +8,7 @@ import {
 import { StoreProductMetadata } from "./store-product-metadata";
 
 const meta = {
-  title: "Store Product/Product Metadata",
+  title: "Store/Product Page/Blocks/StoreProductMetadata",
   component: StoreProductMetadata,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -47,5 +47,27 @@ export const WithoutSku: Story = {
     expect(canvas.getByText("About This Item")).toBeVisible();
     expect(canvas.queryByText(/^SKU:/)).toBeNull();
     expect(canvas.getByText("Shipping calculated at checkout")).toBeVisible();
+  },
+};
+
+/** A label with no page is the line's own text: neither the store name nor
+ * the shipping fee is a link, and neither is underlined (Q22). */
+export const NoPages: Story = {
+  args: {
+    badges: PRODUCT_DETAIL_STORY.badges,
+    copy: METADATA_COPY,
+    pickupHref: undefined,
+    shippingFeeHref: undefined,
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryAllByRole("link")).toHaveLength(0);
+    for (const label of [
+      args.copy.hongKongGrade10Store,
+      args.copy.shippingFee,
+    ]) {
+      const text = canvas.getByText(label);
+      expect(getComputedStyle(text).textDecorationLine).toBe("none");
+    }
   },
 };

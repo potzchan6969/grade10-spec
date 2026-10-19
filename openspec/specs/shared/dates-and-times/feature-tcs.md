@@ -1,9 +1,9 @@
 # shared/dates-and-times Test Cases
 
 **Status:** pending-review · 0/18
-**Drafts styled:** 2026-10-06, tcs-rules r4
+**Drafts styled:** 2026-10-13, tcs-rules r4
 
-## shared-dates-and-times-US1: The zone a date is stated in
+## g10.shared-dates-and-times.US1: The zone a date is stated in
 
 **Walked by:** nobody on their own - a format every surface that shows a date inherits; the journeys live in the capabilities that render one
 
@@ -12,7 +12,7 @@
 **so that** I read the same instant the same way wherever it is shown.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-obo rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC1-1: A collector moment reads in the viewer's own zone
+### g10.shared-dates-and-times.US1-TC1: A collector moment reads in the viewer's own zone
 
 Runs once per row of **Test data**.
 
@@ -33,12 +33,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingBidHistoryList` with locale en and time zone <viewer zone>.
-* One older row was accepted at 2026-09-01T23:30:00Z.
+* Storybook renders `ListingBidHistoryList` with locale `<locale>` and time zone `<viewer zone>`.
+* One older row was accepted at `<accepted instant>`.
 
 **Test data:**
 
-| Viewer zone | Offset from UTC | Moment reads |
+| `<viewer zone>` | Offset from UTC | `<moment reads>` |
 | --- | --- | --- |
 | UTC | +0:00 | 1 Sep 2026, 23:30 |
 | Asia/Hong_Kong | +8:00 | 2 Sep 2026, 07:30 |
@@ -48,17 +48,22 @@ Runs once per row of **Test data**.
 | Pacific/Kiritimati | +14:00 | 2 Sep 2026, 13:30 |
 | Pacific/Pago_Pago | -11:00 | 1 Sep 2026, 12:30 |
 
+| Field | Value |
+| --- | --- |
+| locale | en |
+| accepted instant | 2026-09-01T23:30:00Z |
+
 **Steps:**
 
 1. Read the older row's moment.
 
 **Expected Results:**
 
-* The moment reads <moment reads>.
+* The moment reads `<moment reads>`.
 * No zone name follows the moment.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-d4g rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC2-1: A recent activity time reads the same in every zone
+### g10.shared-dates-and-times.US1-TC2: A recent activity time reads the same in every zone
 
 Runs once per row of **Test data**.
 
@@ -79,16 +84,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingBidHistoryList` with locale en and time zone <viewer zone>.
-* One row was accepted 5 minutes ago.
+* Storybook renders `ListingBidHistoryList` with locale `<locale>` and time zone `<viewer zone>`.
+* One row was accepted `<activity age>` ago.
 
 **Test data:**
 
-| Viewer zone |
+| `<viewer zone>` |
 | --- |
 | Asia/Hong_Kong |
 | Pacific/Kiritimati |
 | Pacific/Pago_Pago |
+
+| Field | Value |
+| --- | --- |
+| locale | en |
+| activity age | 5 minutes |
 
 **Steps:**
 
@@ -96,12 +106,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The row reads 5 minutes ago, in relative form.
+* The row reads `<activity age>` ago, in relative form.
 * The row does not read hours elapsed, or a time in the future.
 * No zone name follows the time.
 
-<!-- trace:case id=g10.shared-dates-and-times.TC-fqv rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC3-1: A deadline names the viewer's zone as it stands at its instant
+<!-- trace:case id=g10.shared-dates-and-times.TC-fqv rev=2 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
+### g10.shared-dates-and-times.US1-TC3: A deadline names the viewer's zone as it stands at its instant
 
 Runs once per row of **Test data**.
 
@@ -118,11 +128,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Stated zones
 
-**Decided by:** `packages/ui/src/lib/format-datetime.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `AuctionCard` with locale en and time zone America/New_York, closing at <close instant>.
+* The preview workbench renders a closed `AuctionLotCard` with locale en and time zone America/New_York, closing at <close instant>.
 
 **Test data:**
 
@@ -137,15 +147,15 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the close line on the card.
+1. Read the close line on the tile.
 
 **Expected Results:**
 
 * The clock reads <local time>.
 * The line names <zone name>.
 
-<!-- trace:case id=g10.shared-dates-and-times.TC-v92 rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC4-1: A deadline outside the HKT and EDT examples names the viewer's zone
+<!-- trace:case id=g10.shared-dates-and-times.TC-v92 rev=2 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
+### g10.shared-dates-and-times.US1-TC4: A deadline outside the HKT and EDT examples names the viewer's zone
 
 Runs once per row of **Test data**.
 
@@ -162,11 +172,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Stated zones
 
-**Decided by:** `packages/ui/src/lib/format-datetime.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `AuctionCard` with locale <locale> and time zone <viewer zone>, closing at <close instant>.
+* The preview workbench renders a closed `AuctionLotCard` with locale <locale> and time zone <viewer zone>, closing at <close instant>.
 
 **Test data:**
 
@@ -184,7 +194,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the close line on the card.
+1. Read the close line on the tile.
 
 **Expected Results:**
 
@@ -193,7 +203,7 @@ Runs once per row of **Test data**.
 * The line names neither HKT nor UTC.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-e5n rev=1 covers=g10.shared-dates-and-times.SC-v5n,g10.shared-dates-and-times.SC-ufn,g10.shared-dates-and-times.SC-6rx,g10.shared-dates-and-times.SC-7pr -->
-### shared-dates-and-times-US1-TC8-1: A message date names GMT+8 and reads the same for every recipient
+### g10.shared-dates-and-times.US1-TC8: A message date names GMT+8 and reads the same for every recipient
 
 Runs once per row of **Test data**.
 
@@ -212,30 +222,35 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction email carrying a close time of 2026-09-01T16:30:00Z is sent to a test recipient whose language is <recipient language>.
+* An auction email carrying a close time of `<close instant>` is sent to a test recipient whose language is `<recipient language>`.
 
 **Test data:**
 
-| Reader zone | Recipient language |
+| `<reader zone>` | `<recipient language>` |
 | --- | --- |
 | America/New_York | en |
 | Asia/Hong_Kong | en |
 | Pacific/Kiritimati | en |
 | Asia/Hong_Kong | zh-Hant |
 
+| Field | Value |
+| --- | --- |
+| close instant | 2026-09-01T16:30:00Z |
+| email close time | 2 Sep 2026, 00:30 |
+
 **Steps:**
 
-1. Open the email on a device set to <reader zone>.
+1. Open the email on a device set to `<reader zone>`.
 2. Read the close time in the email.
 
 **Expected Results:**
 
-* The close time reads 2 Sep 2026, 00:30.
+* The close time reads `<email close time>`.
 * The close time ends in `GMT+8`.
 * The close time does not contain `HKT`.
 
-<!-- trace:case id=g10.shared-dates-and-times.TC-07a rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC9-1: A collector clock reads the same text on any machine zone
+<!-- trace:case id=g10.shared-dates-and-times.TC-07a rev=2 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
+### g10.shared-dates-and-times.US1-TC9: A collector clock reads the same text on any machine zone
 
 Runs once per row of **Test data**.
 
@@ -252,13 +267,13 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Stated zones
 
-**Decided by:** `packages/ui/src/lib/format-datetime.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 
 * The machine's time zone is <machine zone>.
-* Storybook renders `ListingBidHistoryList` and `AuctionCard` with locale en and time zone America/New_York.
-* One older row was accepted at 2026-09-01T12:00:00Z, and the card closes at the same instant.
+* The preview workbench renders `ListingBidHistoryList` and a closed `AuctionLotCard` with locale en and time zone America/New_York.
+* One older row was accepted at 2026-09-01T12:00:00Z, and the tile closes at the same instant.
 
 **Test data:**
 
@@ -270,15 +285,15 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Read the older row's moment.
-2. Read the close line on the card.
+2. Read the close line on the tile.
 
 **Expected Results:**
 
 * Step 1: the moment reads <moment reads>.
-* Step 2: the close line reads <deadline reads>.
+* Step 2: the close line reads `Ended` then <deadline reads>.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-1pn rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC10-1: The lot page's deadline names the viewer's own zone
+### g10.shared-dates-and-times.US1-TC10: The listing page's deadline names the viewer's own zone
 
 Runs once per row of **Test data**.
 
@@ -299,14 +314,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` for one open lot closing at 2027-09-01T12:00:00Z, with locale en and time zone <viewer zone>.
+* Storybook renders `ListingAuctionBidCard` for one open listing closing at `<close instant>`, with locale `<locale>` and time zone `<viewer zone>`.
 
 **Test data:**
 
-| Viewer zone | Local time | Zone name |
+| `<viewer zone>` | `<local time>` | `<zone name>` |
 | --- | --- | --- |
 | Asia/Hong_Kong | 20:00 | HKT |
 | America/New_York | 08:00 | EDT |
+
+| Field | Value |
+| --- | --- |
+| locale | en |
+| close instant | 2027-09-01T12:00:00Z |
 
 **Steps:**
 
@@ -314,12 +334,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The deadline reads <local time> and names <zone name>.
+* The deadline reads `<local time>` and names `<zone name>`.
 * The deadline does not name UTC.
 * The New York deadline does not contain HKT.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-0fp rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC11-1: A closed lot reads its close in the viewer's own zone
+### g10.shared-dates-and-times.US1-TC11: A closed listing reads its close in the viewer's own zone
 
 Runs once per row of **Test data**.
 
@@ -336,36 +356,41 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Stated zones
 
-**Decided by:** `packages/ui/src/blocks/auction-listing/listing-auction-bid-card.stories.tsx`, `packages/ui/src/blocks/auction-listing/auction-card.test.ts`
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-auction-bid-card.stories.tsx`, `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 
-* Storybook renders <surface> for one closed lot that closed at 2027-09-01T12:00:00Z and whose opening time is <opening time>, with locale en and time zone <viewer zone>, so the close shows a clock.
+* Storybook renders `<surface>` for one closed listing that closed at `<close instant>` and whose opening time is `<opening time>`, with locale `<locale>` and time zone `<viewer zone>`, so the close shows a clock.
 
 **Test data:**
 
-| Surface | Opening time | Viewer zone | Local time | Zone name |
+| `<surface>` | `<opening time>` | `<viewer zone>` | `<local time>` | `<zone name>` |
 | --- | --- | --- | --- | --- |
 | The catalogue tile's closed line | 2027-08-29T12:00:00Z | Asia/Hong_Kong | 20:00 | HKT |
 | The catalogue tile's closed line | 2027-08-29T12:00:00Z | America/New_York | 08:00 | EDT |
-| The lot bid card's closed block, at `sm` or wider | 2027-08-29T12:00:00Z | Asia/Hong_Kong | 20:00 | HKT |
-| The lot bid card's closed block, at `sm` or wider | 2027-08-29T12:00:00Z | America/New_York | 08:00 | EDT |
-| The lot bid card's closed summary line, below `sm` | 2027-08-29T12:00:00Z | Asia/Hong_Kong | 20:00 | HKT |
-| The lot bid card's closed summary line, below `sm` | 2027-08-29T12:00:00Z | America/New_York | 08:00 | EDT |
-| The lot bid card's closed summary line, below `sm` | not known | Asia/Hong_Kong | 20:00 | HKT |
-| The lot bid card's closed summary line, below `sm` | not known | America/New_York | 08:00 | EDT |
+| The listing bid card's closed block, at `sm` or wider | 2027-08-29T12:00:00Z | Asia/Hong_Kong | 20:00 | HKT |
+| The listing bid card's closed block, at `sm` or wider | 2027-08-29T12:00:00Z | America/New_York | 08:00 | EDT |
+| The listing bid card's closed summary line, below `sm` | 2027-08-29T12:00:00Z | Asia/Hong_Kong | 20:00 | HKT |
+| The listing bid card's closed summary line, below `sm` | 2027-08-29T12:00:00Z | America/New_York | 08:00 | EDT |
+| The listing bid card's closed summary line, below `sm` | not known | Asia/Hong_Kong | 20:00 | HKT |
+| The listing bid card's closed summary line, below `sm` | not known | America/New_York | 08:00 | EDT |
+
+| Field | Value |
+| --- | --- |
+| locale | en |
+| close instant | 2027-09-01T12:00:00Z |
 
 **Steps:**
 
-1. Read the close time on <surface>.
+1. Read the close time on `<surface>`.
 
 **Expected Results:**
 
-* The close time reads <local time>.
-* The close time names <zone name>, not UTC.
+* The close time reads `<local time>`.
+* The close time names `<zone name>`, not UTC.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-bnl rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC12-1: The page and the email state one close in two zones
+### g10.shared-dates-and-times.US1-TC12: The page and the email state one close in two zones
 
 Runs once per row of **Test data**.
 
@@ -384,31 +409,36 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* One listing is open for bids and closes at 2027-09-01T12:00:00Z.
+* `<listing>` is open for bids and closes at `<close instant>`.
 * An auction email carrying that close time has been sent to the customer.
 
 **Test data:**
 
-| Viewer zone | Page reads | Email reads |
+| `<viewer zone>` | `<page reads>` | `<email reads>` |
 | --- | --- | --- |
 | Asia/Hong_Kong | 20:00 HKT | 1 Sep 2027, 20:00 GMT+8 |
 | America/New_York | 08:00 EDT | 1 Sep 2027, 20:00 GMT+8 |
 
+| Field | Value |
+| --- | --- |
+| close instant | 2027-09-01T12:00:00Z |
+| listing | An open auction listing closing at `<close instant>`; bind its identity only |
+
 **Steps:**
 
-1. Open the listing's page in a browser set to <viewer zone>.
+1. Open the page for `<listing>` in a browser set to `<viewer zone>`.
 2. Read the deadline line.
-3. Open the auction email in a client set to <viewer zone>.
+3. Open the auction email in a client set to `<viewer zone>`.
 4. Read the close time in the email.
 
 **Expected Results:**
 
-* Step 2: the deadline reads <page reads>.
-* Step 4: the close time reads <email reads>.
+* Step 2: the deadline reads `<page reads>`.
+* Step 4: the close time reads `<email reads>`.
 * The email's close time is the same text for both viewer zones.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-g85 rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC13-1: A relative remaining time names no zone
+### g10.shared-dates-and-times.US1-TC13: A relative remaining time names no zone
 
 Runs once per row of **Test data**.
 
@@ -429,14 +459,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with locale en and time zone America/New_York, for <lot state>.
+* Storybook renders `ListingAuctionBidCard` with locale `<locale>` and time zone `<viewer zone>`, for `<listing state>`.
 
 **Test data:**
 
-| Lot state | Remaining time counts down to |
+| `<listing state>` | `<counts down to>` |
 | --- | --- |
-| An open lot closing 5 hours from now | the close |
-| A scheduled lot opening 5 hours from now | the opening |
+| An open listing closing 5 hours from now | the close |
+| A scheduled listing opening 5 hours from now | the opening |
+
+| Field | Value |
+| --- | --- |
+| locale | en |
+
+| Field | Value |
+| --- | --- |
+| viewer zone | America/New_York |
 
 **Steps:**
 
@@ -444,11 +482,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The remaining time reads the time left until <counts down to>, not a clock time.
+* The remaining time reads the time left until `<counts down to>`, not a clock time.
 * No zone name sits in the remaining time or in its label.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-of9 rev=1 covers=g10.shared-dates-and-times.SC-dfo,g10.shared-dates-and-times.SC-d40,g10.shared-dates-and-times.SC-fe1 -->
-### shared-dates-and-times-US1-TC14-1: A zone the platform does not recognise stops the render
+### g10.shared-dates-and-times.US1-TC14: A zone the platform does not recognise stops the render
 
 Runs once per row of **Test data**.
 
@@ -465,19 +503,23 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Refusals
 
-**Decided by:** `packages/ui/src/lib/format-datetime.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`, `packages/date/src/shapes.test.ts`
 
 **Pre-conditions:**
 
-* A collector clock renders 2027-09-01T12:00:00Z in English with the time zone <zone>.
+* A collector clock renders `<instant>` in English with the time zone `<zone>`.
 
 **Test data:**
 
-| Zone | What is wrong with it |
+| `<zone>` | What is wrong with it |
 | --- | --- |
 | Mars/Olympus | A region and a city the platform does not know |
 | Hong_Kong | A city with no region |
 | America/New York | A space where the underscore belongs |
+
+| Field | Value |
+| --- | --- |
+| instant | 2027-09-01T12:00:00Z |
 
 **Steps:**
 
@@ -486,11 +528,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Each step fails with an error that names <zone>.
+* Each step fails with an error that names `<zone>`.
 * No time shows in UTC, or in the machine's zone, in its place.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-qrd rev=1 covers=g10.shared-dates-and-times.SC-v5n,g10.shared-dates-and-times.SC-ufn,g10.shared-dates-and-times.SC-6rx,g10.shared-dates-and-times.SC-7pr -->
-### shared-dates-and-times-US1-TC15-1: A letter's footer names GMT+8
+### g10.shared-dates-and-times.US1-TC15: A letter's footer names GMT+8
 
 Runs once per row of **Test data**.
 
@@ -509,14 +551,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The <letter> is rendered for a visit at 2026-10-27T07:00:00Z.
+* The `<letter>` is rendered for a visit at `<visit instant>`.
 
 **Test data:**
 
-| Letter | Footer line |
+| `<letter>` | `<footer line>` |
 | --- | --- |
 | Grading drop-off booked letter | `Dates and times are Hong Kong time (GMT+8).` |
 | Vault visit booked letter | `Dates and times are in Hong Kong time (GMT+8).` |
+
+| Field | Value |
+| --- | --- |
+| visit instant | 2026-10-27T07:00:00Z |
+| visit time | 15:00 on 27 Oct 2026 |
 
 **Steps:**
 
@@ -525,12 +572,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the visit reads 15:00 on 27 Oct 2026, Hong Kong time.
-* Step 2: the line reads <footer line>.
+* Step 1: the visit reads `<visit time>`, Hong Kong time.
+* Step 2: the line reads `<footer line>`.
 * The letter is worded in English.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-1hq rev=1 covers=g10.shared-dates-and-times.SC-v5n,g10.shared-dates-and-times.SC-ufn,g10.shared-dates-and-times.SC-6rx,g10.shared-dates-and-times.SC-7pr -->
-### shared-dates-and-times-US1-TC16-1: A day with no clock names no zone
+### g10.shared-dates-and-times.US1-TC16: A day with no clock names no zone
 
 **Classification:**
 
@@ -547,7 +594,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A saved-plan letter, which states a calendar day and no time, is rendered for a plan whose kept-until instant is 2026-11-19T16:00:00Z, the plan's expiry less 1 ms, so the plan expires at 2026-11-19T16:00:00.001Z.
+* A saved-plan letter, which states a calendar day and no time, is rendered for a plan whose kept-until instant is `<kept until instant>`, the plan's expiry less 1 ms, so the plan expires at `<plan expiry>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| plan expiry | 2026-11-19T16:00:00.001Z |
+| kept until instant | 2026-11-19T16:00:00Z |
+| kept until day | 20 Nov 2026 |
 
 **Steps:**
 
@@ -556,12 +611,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the day reads 20 Nov 2026, the Hong Kong day of that instant.
+* Step 1: the day reads `<kept until day>`, the Hong Kong day of that instant.
 * Step 1: no zone name follows the day.
 * Step 2: the line reads `Dates and times are Hong Kong time (GMT+8).`
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-x7m rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC17-1: The invoice page states GMT+8 for every viewer
+### g10.shared-dates-and-times.US1-TC17: The invoice page states GMT+8 for every viewer
 
 Runs once per row of **Test data**.
 
@@ -580,15 +635,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order has a sent invoice whose payment deadline is 2026-09-19T09:00:00Z.
-* The application's invoice page, `/auction/invoice`, is open for that order and invoice in a browser set to <viewer zone>.
+* An auction order has a sent invoice whose payment deadline is `<payment deadline>`.
+* The application's invoice page, `/auction/invoice`, is open for that order and invoice in a browser set to `<viewer zone>`.
 
 **Test data:**
 
-| Viewer zone |
+| `<viewer zone>` |
 | --- |
 | Asia/Hong_Kong |
 | America/New_York |
+
+| Field | Value |
+| --- | --- |
+| payment deadline | 2026-09-19T09:00:00Z |
+| payment deadline clock | 17:00 |
 
 **Steps:**
 
@@ -596,13 +656,13 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The payment deadline reads 17:00, the Hong Kong clock.
+* The payment deadline reads `<payment deadline clock>`, the Hong Kong clock.
 * The payment deadline ends in `GMT+8`.
 * The payment deadline contains neither HKT nor EDT.
 * The payment deadline is the same text for both viewer zones.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-xqa rev=1 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### shared-dates-and-times-US1-TC18-1: A close shown as a day alone names no zone
+### g10.shared-dates-and-times.US1-TC18: A close shown as a day alone names no zone
 
 Runs once per row of **Test data**.
 
@@ -623,15 +683,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` for one closed lot that closed at 2027-09-01T23:30:00Z and has no opening time, so its closed block shows the close as a day alone, with locale en and time zone <viewer zone>.
+* Storybook renders `ListingAuctionBidCard` for one closed listing that closed at `<close instant>` and has no opening time, so its closed block shows the close as a day alone, with locale `<locale>` and time zone `<viewer zone>`.
 * The viewport is `sm` or wider, so the closed block shows its full time column.
 
 **Test data:**
 
-| Viewer zone | Close day reads |
+| `<viewer zone>` | `<close day>` |
 | --- | --- |
 | Asia/Hong_Kong | 2 Sep 2027 |
 | America/New_York | 1 Sep 2027 |
+
+| Field | Value |
+| --- | --- |
+| locale | en |
+| close instant | 2027-09-01T23:30:00Z |
 
 **Steps:**
 
@@ -639,11 +704,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The close reads <close day>, the viewer's calendar day of the close.
+* The close reads `<close day>`, the viewer's calendar day of the close.
 * No zone name follows the day: not HKT, EDT or GMT.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-hi5 rev=1 covers=g10.shared-dates-and-times.SC-gkv -->
-### shared-dates-and-times-US1-TC19-1: An admin surface with no shop's clock of its own states UTC
+### g10.shared-dates-and-times.US1-TC19: An admin surface with no shop's clock of its own states UTC
 
 **Classification:**
 
@@ -660,21 +725,37 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An audit trail entry was recorded at 2026-10-07T01:30:00Z: 01:30 on 7 Oct in UTC, 09:30 on 7 Oct in Hong Kong, 21:30 on 6 Oct in New York.
-* admin(holds the audit trail's read grant) is on <grade10 admin audit trail url>, on a machine set to America/New_York.
+* An audit trail entry was recorded at `<recorded instant>`: `<UTC reading>` in UTC, `<Hong Kong reading>` in Hong Kong, `<New York reading>` in New York.
+* admin(holds the audit trail's read grant) is on `<grade10 admin audit trail url>`, on a machine set to `<machine zone>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| recorded instant | 2026-10-07T01:30:00Z |
+| grade10 admin audit trail url | The operator audit-trail URL in the test environment; bind its URL only |
+
+| Field | Value |
+| --- | --- |
+| machine zone | America/New_York |
+| UTC reading | 01:30 on 7 Oct |
+| Hong Kong reading | 09:30 on 7 Oct |
+| New York reading | 21:30 on 6 Oct |
+| Hong Kong clock | 09:30 |
+| New York clock | 21:30 |
 
 **Steps:**
 
-1. Find the entry recorded at 2026-10-07T01:30:00Z.
+1. Find the entry recorded at `<recorded instant>`.
 2. Read its time.
 
 **Expected Results:**
 
-* Step 2: the entry reads 01:30 on 7 Oct.
-* Step 2: the entry does not read 09:30 (Hong Kong) or 21:30 (the machine's zone).
+* Step 2: the entry reads `<UTC reading>`.
+* Step 2: the entry does not read `<Hong Kong clock>` (Hong Kong) or `<New York clock>` (the machine's zone).
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-6n0 rev=1 covers=g10.shared-dates-and-times.SC-msf -->
-### shared-dates-and-times-US1-TC20-1: A collector's vault timeline stamp stays UTC
+### g10.shared-dates-and-times.US1-TC20: A collector's vault timeline stamp stays UTC
 
 **Classification:**
 
@@ -691,20 +772,37 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <case_1> is a vault case kept at a Hong Kong shop, with a timeline entry recorded at 2026-10-07T01:30:00Z: 01:30 on 7 Oct in UTC, 09:30 on 7 Oct in Hong Kong, 21:30 on 6 Oct in New York.
-* customer(owns <case_1>) is on <grade10 vault case url> for <case_1>, on a machine set to America/New_York.
+* `<case_1>` is a vault case kept at a Hong Kong shop, with a timeline entry recorded at `<recorded instant>`: `<UTC reading>` in UTC, `<Hong Kong reading>` in Hong Kong, `<New York reading>` in New York.
+* customer(owns `<case_1>`) is on `<grade10 vault case url>` for `<case_1>`, on a machine set to `<machine zone>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| recorded instant | 2026-10-07T01:30:00Z |
+| case_1 | A vault case kept at a Hong Kong shop, owned by the customer, with an entry recorded at `<recorded instant>`; bind its case identity only |
+| grade10 vault case url | The public URL of `<case_1>` in the test environment; bind its URL only |
+
+| Field | Value |
+| --- | --- |
+| machine zone | America/New_York |
+| UTC reading | 01:30 on 7 Oct |
+| Hong Kong reading | 09:30 on 7 Oct |
+| New York reading | 21:30 on 6 Oct |
+| Hong Kong clock | 09:30 |
+| New York clock | 21:30 |
 
 **Steps:**
 
-1. Read the timeline entry recorded at 2026-10-07T01:30:00Z.
+1. Read the timeline entry recorded at `<recorded instant>`.
 
 **Expected Results:**
 
-* The stamp reads 01:30 on 7 Oct, in UTC.
-* The stamp does not read 09:30 (the shop's clock) or 21:30 (the viewer's zone).
+* The stamp reads `<UTC reading>`, in UTC.
+* The stamp does not read `<Hong Kong clock>` (the shop's clock) or `<New York clock>` (the viewer's zone).
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-oss rev=1 covers=g10.shared-dates-and-times.SC-u8t -->
-### shared-dates-and-times-US1-TC22-1: An auction order operator surface states Hong Kong time
+### g10.shared-dates-and-times.US1-TC22: An auction order operator surface states Hong Kong time
 
 **Classification:**
 
@@ -721,12 +819,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order was placed at 2026-10-07T01:30:00Z: 01:30 on 7 Oct in UTC, 09:30 on 7 Oct in Hong Kong, 21:30 on 6 Oct in New York.
-* admin(holds the auction orders grant) is on <grade10 admin auction orders url>, on a machine set to America/New_York.
+* An auction order was placed at `<recorded instant>`: `<UTC reading>` in UTC, `<Hong Kong reading>` in Hong Kong, `<New York reading>` in New York.
+* admin(holds the auction orders grant) is on `<grade10 admin auction orders url>`, on a machine set to `<machine zone>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| recorded instant | 2026-10-07T01:30:00Z |
+| grade10 admin auction orders url | The operator auction Orders worklist URL in the test environment; bind its URL only |
+
+| Field | Value |
+| --- | --- |
+| machine zone | America/New_York |
+| UTC reading | 01:30 on 7 Oct |
+| Hong Kong reading | 09:30 on 7 Oct |
+| New York reading | 21:30 on 6 Oct |
+| UTC clock | 01:30 |
+| New York clock | 21:30 |
 
 **Steps:**
 
-1. Find the order placed at 2026-10-07T01:30:00Z on the Orders worklist.
+1. Find the order placed at `<recorded instant>` on the Orders worklist.
 2. Read its time.
 3. Open the order page and read the same time on its timeline and invoice log.
 4. Open the send dialog and read its payment deadline.
@@ -734,10 +848,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Steps 2 and 3: the time reads 09:30 on 7 Oct, labelled GMT+8, on the worklist, the timeline and the invoice log.
+* Steps 2 and 3: the time reads `<Hong Kong reading>`, labelled GMT+8, on the worklist, the timeline and the invoice log.
 * Step 4: the payment deadline reads in Asia/Hong_Kong, labelled GMT+8.
-* Step 5: the other table reads 01:30 on 7 Oct in Coordinated Universal Time.
-* No step on an order surface reads 01:30 (UTC) or 21:30 (the machine's zone).
+* Step 5: the other table reads `<UTC reading>` in Coordinated Universal Time.
+* No step on an order surface reads `<UTC clock>` (UTC) or `<New York clock>` (the machine's zone).
 
 ## Settled
 
@@ -825,6 +939,14 @@ Runs once per row of **Test data**.
 | Extension: that change's blind case `shared-dates-and-times-US1-TC21-1`, a collector's vault page keeping the shop's clock in any viewer zone | **Rejected:** the console carve-out does not move a collector's page, which is a non-goal there, and Settled says this change moves none of those pages |
 
 **Uncovered anchors:** Reading shapes, Format and language and Typed calendar days, and the brand's day leaf of Stated zones. This change does not touch them and this is the capability's first suite, so no case traces them and none is added here. They are left to a suite backfill: no change in the store lists this capability for one yet, and after the fold `pnpm check:manual` warns on `shared-dates-and-times-SC-01` to `shared-dates-and-times-SC-07`, `shared-dates-and-times-SC-17` to `shared-dates-and-times-SC-22` and `shared-dates-and-times-SC-24`. The brand's day scenarios, `shared-dates-and-times-SC-25` to `shared-dates-and-times-SC-28` (a loan term, a queue cut, an age, an expiry), sit in the covers of the Stated zones cases but no case here reads any of them, and this change moves none of them. TC1 and TC2 read the older and the recent halves of `shared-dates-and-times-SC-24` but trace Stated zones, which that scenario does not serve. The Documents as GMT+8 leaf's terms half has no case: no terms page shows a date with a clock today (decisions Q13); its invoice page is walked by `shared-dates-and-times-US1-TC17-1` and its invoice and receipt PDFs by the `shared/ui/invoice-and-receipt-pdf` suite.
+
+**Run:** no blind pass - a carrier repoint for `drop-auction-card`: `AuctionCard` is removed from `shared/ui/auction-listing`, and the cases that used it as a rendered surface now read the same line on a closed `AuctionLotCard`, the tile the catalogue draws. The deciding test, `packages/date/src/local.test.ts`, is unchanged: the tile's close line is the formatter's own output.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| US1-TC3 | Revised as US1-TC3-2, rev 2 | `AuctionCard` precondition repointed to a closed `AuctionLotCard`; clock, zones and deciding test unchanged |
+| US1-TC4 | Revised as US1-TC4-2, rev 2 | Same repoint; the rows keep their locales, zones and offsets |
+| US1-TC9 | Revised as US1-TC9-2, rev 2 | The machine-zone case keeps its two renderings; the card is now the closed catalogue tile |
 
 ### Manual
 

@@ -9,7 +9,7 @@ import {
 import { StageRail } from "./stage-rail";
 
 const meta = {
-  title: "Page Blocks/StageRail",
+  title: "Site/Page Shell/Blocks/StageRail",
   component: StageRail,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

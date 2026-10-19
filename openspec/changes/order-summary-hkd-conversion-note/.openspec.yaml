@@ -1,0 +1,14 @@
+schema: grade10-planning
+created: 2026-10-15
+promoted_by: "@tangconst"
+depends_on:
+  - usd-lot-currency-winner-settlement-choice
+hands:
+  design: "@tangconst"
+  dev: "@tangconst"
+ui_waived: "@tangconst waived ui-design on 2026-10-15; the Order Summary stories draw the note under the total as the design reference, as usd-lot-currency-winner-settlement-choice settled its own."
+reviewed:
+  proposal: 69f2eedf
+  decisions: c17486e1
+  user-journeys: 3ff43303
+  test-cases: 23a24aac

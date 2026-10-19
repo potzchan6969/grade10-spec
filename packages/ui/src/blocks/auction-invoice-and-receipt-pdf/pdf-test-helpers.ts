@@ -3,10 +3,15 @@ import {
   PDFArray,
   PDFDocument,
   PDFRawStream,
+  StandardFonts,
 } from "pdf-lib";
+import { expect } from "vitest";
 
-function contentStreams(pdf: Awaited<ReturnType<typeof PDFDocument.load>>) {
-  const contents = pdf.getPage(0).node.Contents();
+function contentStreams(
+  pdf: Awaited<ReturnType<typeof PDFDocument.load>>,
+  page: number,
+) {
+  const contents = pdf.getPage(page).node.Contents();
   return contents instanceof PDFArray
     ? contents.asArray().map((ref) => pdf.context.lookup(ref))
     : [contents];
@@ -31,38 +36,42 @@ export type DrawnHorizontalLine = {
   x1: number;
   x2: number;
   y: number;
+  /** The stroke colour's red, green and blue, each 0 to 1. */
+  color: [number, number, number];
 };
 
-/** Read the text operands emitted by the renderer's returned PDF bytes. */
+/** Read the text operands emitted on one page of the renderer's returned PDF bytes. */
 export async function drawnStrings(
   bytes: ArrayBuffer | Uint8Array,
+  page = 0,
 ): Promise<string[]> {
-  const pdf = await PDFDocument.load(bytes);
-  const strings: string[] = [];
-  for (const stream of contentStreams(pdf)) {
-    if (!(stream instanceof PDFRawStream)) continue;
-    const text = Buffer.from(decodePDFRawStream(stream).decode()).toString(
-      "latin1",
-    );
-    for (const [, hex] of text.matchAll(/<([0-9A-Fa-f]+)>\s*Tj/g)) {
-      strings.push(Buffer.from(hex ?? "", "hex").toString("latin1"));
-    }
-  }
-  return strings;
+  return (await drawnText(bytes, page)).map((row) => row.text);
 }
 
-/** Read text placement and font state from the first-page content operators. */
+/** Read text placement and font state from one page's content operators. */
 export async function drawnText(
   bytes: ArrayBuffer | Uint8Array,
+  page = 0,
 ): Promise<DrawnText[]> {
-  const content = await drawnContent(bytes);
+  return textOf(await drawnContent(bytes, page));
+}
+
+/** Every page's drawn text, in page order. */
+export async function drawnPages(
+  bytes: ArrayBuffer | Uint8Array,
+): Promise<DrawnText[][]> {
+  const pdf = await PDFDocument.load(bytes);
+  return pdf.getPages().map((_, page) => textOf(contentOf(pdf, page)));
+}
+
+function textOf(content: string): DrawnText[] {
   const rows: DrawnText[] = [];
   let font = "";
   let size = 0;
   let x = 0;
   let y = 0;
   const operations =
-    /\/([^\s]+)\s+(-?\d+(?:\.\d+)?)\s+Tf|1\s+0\s+0\s+1\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+Tm|<([0-9A-Fa-f]+)>\s+Tj/g;
+    /\/([^\s]+)\s+(-?\d+(?:\.\d+)?)\s+Tf|1\s+0\s+0\s+1\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+Tm|<([0-9A-Fa-f]*)>\s+Tj/g;
   for (const match of content.matchAll(operations)) {
     if (match[1]) {
       font = match[1];
@@ -85,11 +94,12 @@ export async function drawnText(
   return rows;
 }
 
-/** Read rectangles emitted by the renderer, used to prove boxed summaries. */
+/** Read rectangles emitted by the renderer, used to prove none is drawn. */
 export async function drawnRectangles(
   bytes: ArrayBuffer | Uint8Array,
+  page = 0,
 ): Promise<DrawnRectangle[]> {
-  const content = await drawnContent(bytes);
+  const content = await drawnContent(bytes, page);
   const directRectangles = [
     ...content.matchAll(
       /(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+re/g,
@@ -113,33 +123,62 @@ export async function drawnRectangles(
   return [...directRectangles, ...pathRectangles];
 }
 
-/** Read horizontal rules emitted by the renderer's first-page content. */
+/** Read horizontal rules emitted on one page, with the colour each is stroked in. */
 export async function drawnHorizontalLines(
   bytes: ArrayBuffer | Uint8Array,
+  page = 0,
 ): Promise<DrawnHorizontalLine[]> {
-  const content = await drawnContent(bytes);
+  const content = await drawnContent(bytes, page);
   return [
     ...content.matchAll(
-      /(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+m\s+(?:\1\s+\2\s+m\s+)?(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+l\s+S/g,
+      /(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+RG\s+\d+(?:\.\d+)?\s+w\s+\[\]\s+0\s+d\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+m\s+(?:\4\s+\5\s+m\s+)?(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+l\s+S/g,
     ),
   ]
-    .filter((match) => Number(match[2]) === Number(match[4]))
+    .filter((match) => Number(match[5]) === Number(match[7]))
     .map((match) => ({
-      x1: Number(match[1]),
-      x2: Number(match[3]),
-      y: Number(match[2]),
+      x1: Number(match[4]),
+      x2: Number(match[6]),
+      y: Number(match[5]),
+      color: [Number(match[1]), Number(match[2]), Number(match[3])],
     }));
 }
 
-/** Return the raw first-page streams when a test needs a font/content proof. */
+/** Return one page's raw streams when a test needs a font/content proof. */
 export async function drawnContent(
   bytes: ArrayBuffer | Uint8Array,
+  page = 0,
 ): Promise<string> {
-  const pdf = await PDFDocument.load(bytes);
-  return contentStreams(pdf)
+  return contentOf(await PDFDocument.load(bytes), page);
+}
+
+function contentOf(
+  pdf: Awaited<ReturnType<typeof PDFDocument.load>>,
+  page: number,
+): string {
+  return contentStreams(pdf, page)
     .filter((stream): stream is PDFRawStream => stream instanceof PDFRawStream)
     .map((stream) =>
       Buffer.from(decodePDFRawStream(stream).decode()).toString("latin1"),
     )
     .join("\n");
+}
+
+/** Where a drawn string ends, measured in the standard face it was drawn in. */
+export async function textRight(): Promise<(row: DrawnText) => number> {
+  const pdf = await PDFDocument.create();
+  const regular = await pdf.embedFont(StandardFonts.Helvetica);
+  const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+  return (row) =>
+    row.x +
+    (row.font.includes("Bold") ? bold : regular).widthOfTextAtSize(
+      row.text,
+      row.size,
+    );
+}
+
+/** The first row drawing exactly `text`, failing the test when none does. */
+export function drawnRow(rows: readonly DrawnText[], text: string): DrawnText {
+  const row = rows.find((candidate) => candidate.text === text);
+  expect(row, `expected rendered text ${text}`).toBeDefined();
+  return row as DrawnText;
 }

@@ -92,7 +92,7 @@ The conventions, each visible in the existing directories:
   sight. Never a generic name (`Card`, `Panel`, `Header`) — it collides
   across capabilities and shadows the primitive it composes. The one
   exception is `page-blocks`: `FactCard`, `FactCardSkeleton`, `NoteList`,
-  `StageRail` and `EmptyPanel` take no prefix, because every site page
+  `StageRail` take no prefix, because every site page
   composes them, as Q115 in `complete-vault-collector-flow` decided.
 - **One component per file, satellites share the basename.** `<name>.tsx`,
   `<name>.stories.tsx`, `<name>.figma.ts`, `<name>.css` plus `.css.d.ts`, and
@@ -174,7 +174,7 @@ one locale rule:
   marks (`“` `”`, U+201C/U+201D) in rendered copy. Do not use straight ASCII
   `'` or `"` for contractions or quoted speech.
 - **Modal titles** — Title Case for English `DialogTitle` / Modal headings
-  (`Sign In to Add to Cart`, `Sign In to Grade10`). Short prepositions such as
+  (`Sign In to Grade10`). Short prepositions such as
   `to` stay lower when they are not the first word. Not a sentence.
 - **Button labels** — Title Case for English `Button` labels
   (`Complete Order Setup`, `Add New Address`, `Add to Cart`). Short

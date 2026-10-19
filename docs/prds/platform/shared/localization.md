@@ -8,6 +8,9 @@ Each brand states which languages its site speaks and which one is the default.
 Every user-facing string then comes out of that brand's catalogs — no surface
 carries copy of its own — while anything a merchant or a seller typed renders
 in the language it was written in rather than being translated at read time.
+One exception: an auction listing's title and description, which an operator
+may write in each language the brand speaks and a collector then reads in
+their own — [Auction Management · Listings](/p/grade10-admin/auction/management#listings).
 
 One shared vocabulary of keys names every string. A brand answers only the keys
 that say something about itself (its name, who runs it, what its surfaces are
@@ -20,7 +23,10 @@ preferences; an explicit pick applies immediately and wins on every return.
 Each language answers at its own public address so search engines and shared
 links land in the right one, each page declares its active language for
 assistive technology, and the sign-in email arrives in the language of the page
-the sign-in started from. Admin panels are out of scope by decision — operator
+the sign-in started from. A failure notice reads in the page's language too:
+the platform names what kind of failure it was - no connection, a fault on our
+side, a refused request, an answer the page cannot read - and the catalogs say
+it, while what the server said stays in the logs. Admin panels are out of scope by decision — operator
 copy is literals.
 
 :::callout{kind="warning"}

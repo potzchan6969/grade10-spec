@@ -15,8 +15,8 @@
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Empty catalogue | No tiles; retry control | `grade10-site-store-product-listing-US-02` |
-| Offline retry | Connectivity banner with retry | `grade10-site-store-product-listing-US-02` |
+| Empty catalogue | No tiles; retry control | `g10.store-product-listing.US2` |
+| Offline retry | Connectivity banner with retry | `g10.store-product-listing.US2` |
 
      State is the short name. Shows is what is on screen — controls, copy,
      what is hidden. Anchor is the journey id from user-journeys.md, or a

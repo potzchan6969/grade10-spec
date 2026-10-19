@@ -41,6 +41,7 @@ import type {
   CartItemCopy,
   CartItemSummary,
   HeldPromoCode,
+  OrderDiscountRow,
   PointsState,
   PromoNotice,
   PromoState,
@@ -66,8 +67,8 @@ function promoNoticeKey(notice: PromoNotice): string {
     : notice.title;
 }
 
-/** Height + opacity reveal for promo discount ↔ “Use promo code” swap. */
-function PromoSectionReveal({
+/** Height + opacity reveal for a footer row that comes and goes. */
+function FooterSectionReveal({
   open,
   children,
 }: {
@@ -101,6 +102,31 @@ function PromoSectionReveal({
   );
 }
 
+type LeavingCartItem = { item: CartItemSummary; index: number };
+
+function settledRemovals(
+  previous: readonly CartItemSummary[],
+  next: readonly CartItemSummary[],
+  removedIds: ReadonlySet<string>,
+): LeavingCartItem[] {
+  const nextIds = new Set(next.map((item) => item.id));
+  return previous.flatMap((item, index) =>
+    removedIds.has(item.id) && !nextIds.has(item.id) ? [{ item, index }] : [],
+  );
+}
+
+function withLeaving(
+  items: readonly CartItemSummary[],
+  leaving: readonly LeavingCartItem[],
+) {
+  const rows = items.map((item) => ({ item, left: false }));
+  for (const { item, index } of leaving) {
+    if (items.some((live) => live.id === item.id)) continue;
+    rows.splice(Math.min(index, rows.length), 0, { item, left: true });
+  }
+  return rows;
+}
+
 function prefersReducedMotion() {
   return (
     typeof window !== "undefined" &&
@@ -112,6 +138,7 @@ type CartItemProps = {
   item: CartItemSummary;
   copy: CartItemCopy;
   loading?: boolean;
+  interactionPending?: boolean;
   onQuantityChange?: (quantity: number) => void;
   onRemove?: () => void;
   onClickProduct?: () => void;
@@ -140,6 +167,7 @@ const CART_ITEM_SKELETON_FIXTURE: CartItemSummary = {
 function CartItemContent({
   item,
   copy,
+  interactionPending = false,
   onQuantityChange,
   onRemove,
   onClickProduct,
@@ -166,19 +194,29 @@ function CartItemContent({
   const showLowStockWarning = isAdjusted && !adjustedWarningDismissed;
 
   const handleQuantityChange = (quantity: number) => {
+    if (interactionPending) return;
     if (isAdjusted) {
       setAdjustedWarningDismissed(true);
     }
     onQuantityChange?.(quantity);
   };
 
+  const handleRemove = () => {
+    if (!interactionPending && !item.pending) onRemove?.();
+  };
+
+  const handleProductClick = () => {
+    if (!interactionPending) onClickProduct?.();
+  };
+
   return (
     <HStack
       gap="md"
       vAlign="start"
-      className={cn("w-full py-2", className)}
+      className={cn("w-full flex-wrap py-2 sm:flex-nowrap", className)}
       data-slot="cart-item"
       data-status={item.status || "default"}
+      aria-busy={item.pending || undefined}
     >
       {/* The name button beside it is the control; the thumbnail repeats it
           for a pointer only. */}
@@ -186,7 +224,8 @@ function CartItemContent({
         aria-hidden
         tabIndex={-1}
         type="button"
-        onClick={onClickProduct}
+        disabled={interactionPending}
+        onClick={handleProductClick}
         className={cn(
           "relative size-16 shrink-0 cursor-pointer overflow-hidden rounded-lg border border-border bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
           isSoldOut && "opacity-50",
@@ -196,7 +235,7 @@ function CartItemContent({
           <img
             src={item.imageSrc}
             alt={item.imageAlt || item.name}
-            className="size-full object-cover"
+            className="size-full object-contain"
           />
         ) : (
           <div className="size-full bg-muted" />
@@ -207,7 +246,8 @@ function CartItemContent({
       <VStack gap="xs" className="min-w-0 flex-1">
         <button
           type="button"
-          onClick={onClickProduct}
+          disabled={interactionPending}
+          onClick={handleProductClick}
           className={cn(
             "w-full cursor-pointer text-left text-sm font-medium leading-5 text-foreground hover:underline focus-visible:outline-none",
             isSoldOut && "opacity-50",
@@ -222,10 +262,14 @@ function CartItemContent({
           className={cn("w-full whitespace-nowrap", isSoldOut && "opacity-50")}
         >
           <span className="text-sm font-normal leading-5 text-foreground">
+            {isDiscounted ? (
+              <span className="sr-only">{copy.salePriceLabel} </span>
+            ) : null}
             {item.price}
           </span>
           {isDiscounted ? (
             <span className="text-sm font-normal leading-5 text-secondary-foreground line-through">
+              <span className="sr-only">{copy.listPriceLabel} </span>
               {item.originalPrice}
             </span>
           ) : null}
@@ -266,16 +310,34 @@ function CartItemContent({
             {item.remainingLabel}
           </span>
         ) : null}
+
+        {item.failed ? (
+          <span
+            role="alert"
+            data-slot="cart-item-failed"
+            className="w-full text-xs font-semibold leading-4 text-destructive"
+          >
+            {item.failed}
+          </span>
+        ) : null}
       </VStack>
 
-      {/* Action: StepperInput or Sold-Out Remove */}
-      <div className={cn("shrink-0", !isSoldOut && "w-28")}>
+      {/* Action: StepperInput or Sold-Out Remove — wraps to a full-width row
+          under the item on narrow drawers. */}
+      <div
+        className={cn(
+          "flex w-full justify-end sm:w-auto sm:shrink-0",
+          !isSoldOut && "sm:w-28",
+        )}
+      >
         {isSoldOut ? (
           <IconButton
             size="sm"
             variant="outline"
             aria-label={copy.removeItemLabel}
-            onClick={onRemove}
+            aria-busy={item.pending || undefined}
+            disabled={interactionPending}
+            onClick={handleRemove}
           >
             <Trash aria-hidden size={14} />
           </IconButton>
@@ -289,7 +351,8 @@ function CartItemContent({
             incrementLabel={copy.increaseQtyLabel}
             max={item.maxQuantity}
             min={1}
-            onDecrementAtMin={onRemove}
+            disabled={interactionPending}
+            onDecrementAtMin={handleRemove}
             onValueChange={handleQuantityChange}
             size="md"
             value={item.quantity}
@@ -303,6 +366,8 @@ function CartItemContent({
 const CART_ITEM_FIXTURE = (
   <CartItemContent
     copy={{
+      salePriceLabel: "Sale price",
+      listPriceLabel: "Was",
       lowStockWarning: "Low stock. Quantity adjusted",
       soldOutLabel: "Sold Out",
       removeItemLabel: "Remove item",
@@ -435,6 +500,7 @@ type CartDrawerBodyProps = {
   emptyTitle: string;
   emptyDescription?: string;
   loading?: boolean;
+  interactionPending?: boolean;
   onQuantityChange?: (itemId: string, quantity: number) => void;
   onRemoveItem?: (itemId: string) => void;
   onItemClick?: (itemId: string) => void;
@@ -454,6 +520,7 @@ function CartDrawerBody({
   emptyTitle,
   emptyDescription,
   loading = false,
+  interactionPending = false,
   onQuantityChange,
   onRemoveItem,
   onItemClick,
@@ -461,7 +528,17 @@ function CartDrawerBody({
 }: CartDrawerBodyProps) {
   const [exitingIds, setExitingIds] = useState(() => new Set<string>());
   const exitTimersRef = useRef<Map<string, number>>(new Map());
-  const isEmpty = items.length === 0 && !loading;
+  const interactionPendingRef = useRef(interactionPending);
+  interactionPendingRef.current = interactionPending;
+  const [removedIds, setRemovedIds] = useState(() => new Set<string>());
+  const [leaving, setLeaving] = useState<readonly LeavingCartItem[]>([]);
+  const [previousItems, setPreviousItems] = useState(items);
+  if (previousItems !== items) {
+    const left = settledRemovals(previousItems, items, removedIds);
+    setPreviousItems(items);
+    if (left.length > 0) setLeaving((prev) => [...prev, ...left]);
+  }
+  const isEmpty = items.length === 0 && leaving.length === 0 && !loading;
 
   useEffect(() => {
     return () => {
@@ -494,8 +571,41 @@ function CartDrawerBody({
     });
   }, [items]);
 
+  useEffect(() => {
+    if (!interactionPending) return;
+    for (const timerId of exitTimersRef.current.values()) {
+      window.clearTimeout(timerId);
+    }
+    exitTimersRef.current.clear();
+    setExitingIds((prev) => (prev.size === 0 ? prev : new Set()));
+  }, [interactionPending]);
+
+  // A line that owns its removal leaves after the consumer drops it.
+  useEffect(() => {
+    if (leaving.length === 0) return;
+    const timerId = window.setTimeout(() => {
+      setLeaving((prev) => prev.filter((entry) => !leaving.includes(entry)));
+      setRemovedIds((prev) => {
+        const next = new Set(prev);
+        for (const entry of leaving) next.delete(entry.item.id);
+        return next;
+      });
+    }, CART_ITEM_EXIT_MS);
+    return () => window.clearTimeout(timerId);
+  }, [leaving]);
+
   const requestRemove = (itemId: string) => {
-    if (exitingIds.has(itemId)) return;
+    if (interactionPendingRef.current || exitingIds.has(itemId)) return;
+
+    const line = items.find((item) => item.id === itemId);
+    if (line?.pending !== undefined) {
+      if (line.pending) return;
+      if (!prefersReducedMotion()) {
+        setRemovedIds((prev) => new Set(prev).add(itemId));
+      }
+      onRemoveItem?.(itemId);
+      return;
+    }
 
     if (prefersReducedMotion()) {
       onRemoveItem?.(itemId);
@@ -505,6 +615,15 @@ function CartDrawerBody({
     setExitingIds((prev) => new Set(prev).add(itemId));
     const timerId = window.setTimeout(() => {
       exitTimersRef.current.delete(itemId);
+      if (interactionPendingRef.current) {
+        setExitingIds((prev) => {
+          if (!prev.has(itemId)) return prev;
+          const next = new Set(prev);
+          next.delete(itemId);
+          return next;
+        });
+        return;
+      }
       // Keep `itemId` in exitingIds until `items` drops it — clearing here
       // would expand the row again for a frame before the parent re-renders.
       onRemoveItem?.(itemId);
@@ -530,9 +649,9 @@ function CartDrawerBody({
           icon={<ShoppingCart aria-hidden weight="regular" />}
         />
       ) : (
-        items.map((item, index) => {
-          const exiting = exitingIds.has(item.id);
-          const hasRowBelow = index < items.length - 1;
+        withLeaving(items, leaving).map(({ item, left }, index, rows) => {
+          const exiting = left || exitingIds.has(item.id);
+          const hasRowBelow = index < rows.length - 1;
 
           return (
             <div
@@ -560,6 +679,7 @@ function CartDrawerBody({
                     item={item}
                     copy={copy}
                     loading={loading}
+                    interactionPending={interactionPending}
                     onQuantityChange={(q) => onQuantityChange?.(item.id, q)}
                     onRemove={() => requestRemove(item.id)}
                     onClickProduct={() => onItemClick?.(item.id)}
@@ -581,9 +701,12 @@ type CartDrawerFooterProps = {
   loading?: boolean;
   /** Show summary amount skeletons while keeping cart rows mounted. */
   summaryLoading?: boolean;
+  /** Disable cart interactions while a cart operation is in flight. */
+  interactionPending?: boolean;
   /** Disable tender controls and checkout while a tender choice is saving. */
   tenderPending?: boolean;
   checkoutDisabled?: boolean;
+  orderDiscounts?: readonly OrderDiscountRow[];
   promoState?: PromoState;
   /**
    * When set, shown once as a toast (e.g. promo cleared after the cart
@@ -594,8 +717,8 @@ type CartDrawerFooterProps = {
   promoNotice?: PromoNotice;
   /**
    * Points tender. Pass a state object to show Use points; omit or `null` to
-   * hide (e.g. while balance is loading). Checkout is members-only — there is
-   * no guest checkout path. Does not debit the loyalty ledger; the consumer
+   * hide (e.g. while balance is loading, or for a guest, who earns none).
+   * Does not debit the loyalty ledger; the consumer
    * applies a draft discount only, and the balance moves when the order is paid.
    */
   pointsState?: PointsState | null;
@@ -610,24 +733,40 @@ type CartDrawerFooterProps = {
   onRemovePoints?: () => void;
   /**
    * Starts checkout. May return a promise (e.g. create Shopify session).
-   * Checkout is members-only — the app authenticates before opening this
-   * drawer or before `onCheckout` runs. Attach the one applied promo code
+   * Attach the one applied promo code
    * (typed or held) and any points amount to the draft order, then redirect
    * to Shopify. The button stays on the redirecting label until navigation
    * succeeds. On rejection, the button restores and a toast shows
    * `checkoutFailed`. The shared component does not perform the redirect.
+   * With `checkoutPending` set, the consumer owns the outcome instead.
    */
   onCheckout?: () => Promise<void> | void;
+  /**
+   * The consumer's checkout in flight, drawn on the button until the shopper
+   * has left. Set it, `false` included, to own checkout's state; left unset,
+   * the button follows `onCheckout`'s promise.
+   */
+  checkoutPending?: boolean;
+  /** The refusal of the last checkout, shown under the button. */
+  checkoutFailed?: string;
+  /**
+   * Sign-in offer for a signed-out shopper. When provided — with
+   * `copy.signInAction` set — a quiet line under the checkout button offers
+   * sign-in, flanked by `copy.signInPrompt` and `copy.signInSuffix`; a guest
+   * checks out with `onCheckout` unchanged. Disabled under the same pending
+   * rules as checkout.
+   */
+  onSignIn?: () => void;
   className?: string;
 };
 
 /**
  * Product / Cart / Cart Drawer Footer (`4791:2773`).
  *
- * Renders subtotal, applied promo/points lines, compact promo-code and Use
- * points rows (typed amount — partial redeem so promo codes can still use
- * points), shipping, estimated total, and checkout. Enter/held-list UI lives
- * in `CartPromoSheet`, not inline here.
+ * Renders subtotal, order discount rows, applied promo/points lines, compact
+ * promo-code and Use points rows (typed amount — partial redeem so promo codes
+ * can still use points), shipping, estimated total, and checkout.
+ * Enter/held-list UI lives in `CartPromoSheet`, not inline here.
  */
 function CartDrawerFooter({
   subtotal,
@@ -635,8 +774,10 @@ function CartDrawerFooter({
   shippingEstimate,
   loading = false,
   summaryLoading = false,
+  interactionPending = false,
   tenderPending = false,
   checkoutDisabled = false,
+  orderDiscounts = [],
   promoState = { status: "collapsed" },
   promoNotice,
   pointsState = null,
@@ -649,13 +790,19 @@ function CartDrawerFooter({
   onUseMaxPoints,
   onRemovePoints,
   onCheckout,
+  checkoutPending,
+  checkoutFailed,
+  onSignIn,
   className,
 }: CartDrawerFooterProps) {
   const amountsLoading = loading || summaryLoading;
+  const controlsPending = interactionPending || tenderPending;
   const [pointsInput, setPointsInput] = useState("");
   const [isVerifyingPoints, setIsVerifyingPoints] = useState(false);
-  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [redirectingLocally, setIsRedirecting] = useState(false);
+  const isRedirecting = checkoutPending ?? redirectingLocally;
   const pointsInputId = useId();
+  const checkoutFailedId = useId();
   const lastAppliedRef = useRef<AppliedPromo | null>(null);
   const lastAppliedPointsRef = useRef<AppliedPoints | null>(null);
   const [discountMounted, setDiscountMounted] = useState(
@@ -682,6 +829,11 @@ function CartDrawerFooter({
     lastAppliedPointsRef.current = pointsState;
   }
   const appliedView = isApplied ? promoState : lastAppliedRef.current;
+  const hasOrderDiscounts = orderDiscounts.length > 0;
+  const lastOrderDiscountsRef = useRef(orderDiscounts);
+  if (hasOrderDiscounts) {
+    lastOrderDiscountsRef.current = orderDiscounts;
+  }
   const appliedPointsView = isPointsApplied
     ? pointsState
     : lastAppliedPointsRef.current;
@@ -701,9 +853,10 @@ function CartDrawerFooter({
               size="xs"
               variant="secondary"
               render={<button type="button" />}
-              disabled={tenderPending || isVerifyingPoints || isRedirecting}
+              disabled={controlsPending || isVerifyingPoints || isRedirecting}
               onClick={() => {
-                if (tenderPending || isVerifyingPoints || isRedirecting) return;
+                if (controlsPending || isVerifyingPoints || isRedirecting)
+                  return;
                 onUseMaxPoints?.();
               }}
             >
@@ -771,7 +924,7 @@ function CartDrawerFooter({
 
   const handleApplyPoints = async () => {
     if (
-      tenderPending ||
+      controlsPending ||
       !pointsInput.trim() ||
       isVerifyingPoints ||
       isRedirecting
@@ -793,11 +946,17 @@ function CartDrawerFooter({
     if (
       loading ||
       summaryLoading ||
-      tenderPending ||
+      controlsPending ||
       checkoutDisabled ||
       isRedirecting
     )
       return;
+    if (checkoutPending !== undefined) {
+      Promise.resolve(onCheckout?.()).catch((error: unknown) =>
+        globalThis.reportError(error),
+      );
+      return;
+    }
     setIsRedirecting(true);
     try {
       await onCheckout?.();
@@ -809,6 +968,7 @@ function CartDrawerFooter({
   };
 
   const handlePointsKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (controlsPending) return;
     if (e.key === "Enter") {
       e.preventDefault();
       handleApplyPoints();
@@ -821,7 +981,7 @@ function CartDrawerFooter({
       className={cn("w-full shrink-0 border-t border-border p-6", className)}
       data-slot="cart-drawer-footer"
     >
-      {/* Line items: subtotal → promo slot → points slot → shipping */}
+      {/* Lines: subtotal → order discounts → promo → points → shipping */}
       <VStack gap="none" className="w-full">
         <HStack
           gap="none"
@@ -839,11 +999,34 @@ function CartDrawerFooter({
           </CartAmountSkeleton>
         </HStack>
 
+        <FooterSectionReveal open={hasOrderDiscounts}>
+          {lastOrderDiscountsRef.current.map((row, index) => (
+            <HStack
+              // biome-ignore lint/suspicious/noArrayIndexKey: two discounts may share a title
+              key={index}
+              gap="none"
+              vAlign="center"
+              className="w-full justify-between pb-2"
+              data-slot="cart-order-discount"
+            >
+              <span className="text-sm font-normal leading-5 text-foreground">
+                {row.label}
+              </span>
+              <CartAmountSkeleton loading={amountsLoading}>
+                {rollValue(row.amount, {
+                  className: "text-sm font-medium leading-5 text-success",
+                  loading: amountsLoading,
+                })}
+              </CartAmountSkeleton>
+            </HStack>
+          ))}
+        </FooterSectionReveal>
+
         {/* Promo slot — trigger or applied Discount; always above points */}
         {discountMounted || promoTriggerMounted ? (
           <VStack gap="none" className="w-full">
             {discountMounted && appliedView ? (
-              <PromoSectionReveal open={isApplied}>
+              <FooterSectionReveal open={isApplied}>
                 <HStack
                   gap="none"
                   vAlign="center"
@@ -851,16 +1034,16 @@ function CartDrawerFooter({
                 >
                   <HStack gap="xs" vAlign="center">
                     <span className="text-sm font-normal leading-5 text-foreground">
-                      Discount ({appliedView.code})
+                      {appliedView.label}
                     </span>
                     {onRemovePromo ? (
                       <Link
                         size="sm"
                         variant="error"
                         render={<button type="button" />}
-                        disabled={tenderPending}
+                        disabled={controlsPending}
                         onClick={() => {
-                          if (!tenderPending) onRemovePromo?.();
+                          if (!controlsPending) onRemovePromo?.();
                         }}
                       >
                         {copy.removePromo}
@@ -873,17 +1056,17 @@ function CartDrawerFooter({
                     </span>
                   </CartAmountSkeleton>
                 </HStack>
-              </PromoSectionReveal>
+              </FooterSectionReveal>
             ) : null}
 
             {promoTriggerMounted && onPromoStateChange ? (
-              <PromoSectionReveal open={!isApplied}>
+              <FooterSectionReveal open={!isApplied}>
                 <VStack gap="none" className="w-full pb-2">
                   <button
                     type="button"
-                    disabled={tenderPending}
+                    disabled={controlsPending}
                     onClick={() => {
-                      if (!tenderPending) {
+                      if (!controlsPending) {
                         onPromoStateChange?.({ status: "expanded" });
                       }
                     }}
@@ -896,7 +1079,7 @@ function CartDrawerFooter({
                     </span>
                   </button>
                 </VStack>
-              </PromoSectionReveal>
+              </FooterSectionReveal>
             ) : null}
           </VStack>
         ) : null}
@@ -905,7 +1088,7 @@ function CartDrawerFooter({
         {showPoints && (pointsCreditMounted || pointsTriggerMounted) ? (
           <VStack gap="none" className="w-full">
             {pointsCreditMounted && appliedPointsView ? (
-              <PromoSectionReveal open={isPointsApplied}>
+              <FooterSectionReveal open={isPointsApplied}>
                 <HStack
                   gap="none"
                   vAlign="center"
@@ -920,9 +1103,9 @@ function CartDrawerFooter({
                         size="sm"
                         variant="error"
                         render={<button type="button" />}
-                        disabled={tenderPending}
+                        disabled={controlsPending}
                         onClick={() => {
-                          if (!tenderPending) onRemovePoints?.();
+                          if (!controlsPending) onRemovePoints?.();
                         }}
                       >
                         {copy.removePoints}
@@ -935,19 +1118,19 @@ function CartDrawerFooter({
                     </span>
                   </CartAmountSkeleton>
                 </HStack>
-              </PromoSectionReveal>
+              </FooterSectionReveal>
             ) : null}
 
             {pointsTriggerMounted ? (
-              <PromoSectionReveal open={!isPointsApplied}>
+              <FooterSectionReveal open={!isPointsApplied}>
                 <VStack gap="none" className="w-full pb-2">
                   {onPointsStateChange ? (
                     <button
                       type="button"
                       aria-expanded={!!isPointsExpanded}
-                      disabled={tenderPending}
+                      disabled={controlsPending}
                       onClick={() => {
-                        if (!tenderPending) {
+                        if (!controlsPending) {
                           onPointsStateChange({
                             status: isPointsExpanded ? "collapsed" : "expanded",
                           });
@@ -968,7 +1151,7 @@ function CartDrawerFooter({
                     </button>
                   ) : null}
 
-                  <PromoSectionReveal open={!!isPointsExpanded}>
+                  <FooterSectionReveal open={!!isPointsExpanded}>
                     {onApplyPoints ? (
                       <HStack gap="sm" vAlign="start" className="w-full pt-2">
                         <div className="flex-1">
@@ -982,11 +1165,11 @@ function CartDrawerFooter({
                             step={1}
                             status={pointsErrorMessage ? "error" : "default"}
                             message={pointsContext}
-                            disabled={tenderPending || isVerifyingPoints}
+                            disabled={controlsPending || isVerifyingPoints}
                             onClear={
                               pointsInput
                                 ? () => {
-                                    if (tenderPending) return;
+                                    if (controlsPending) return;
                                     setPointsInput("");
                                     if (pointsErrorMessage) {
                                       onPointsStateChange?.({
@@ -997,7 +1180,7 @@ function CartDrawerFooter({
                                 : undefined
                             }
                             onChange={(e) => {
-                              if (tenderPending) return;
+                              if (controlsPending) return;
                               setPointsInput(e.target.value);
                               if (pointsErrorMessage) {
                                 onPointsStateChange?.({ status: "expanded" });
@@ -1009,11 +1192,7 @@ function CartDrawerFooter({
                         <Button
                           size="md"
                           variant="outline"
-                          disabled={
-                            tenderPending ||
-                            !pointsInput.trim() ||
-                            isVerifyingPoints
-                          }
+                          disabled={controlsPending || !pointsInput.trim()}
                           loading={isVerifyingPoints}
                           onClick={handleApplyPoints}
                         >
@@ -1023,9 +1202,9 @@ function CartDrawerFooter({
                     ) : (
                       pointsContext
                     )}
-                  </PromoSectionReveal>
+                  </FooterSectionReveal>
                 </VStack>
-              </PromoSectionReveal>
+              </FooterSectionReveal>
             ) : null}
           </VStack>
         ) : null}
@@ -1052,22 +1231,63 @@ function CartDrawerFooter({
         </CartAmountSkeleton>
       </HStack>
 
-      <Button
-        size="lg"
-        variant="default"
-        disabled={
-          loading ||
-          summaryLoading ||
-          tenderPending ||
-          checkoutDisabled ||
-          isRedirecting
-        }
-        loading={isRedirecting}
-        onClick={handleCheckout}
-        className="w-full"
-      >
-        {isRedirecting ? copy.checkoutRedirecting : copy.checkoutButton}
-      </Button>
+      <VStack gap="sm" className="w-full">
+        <Button
+          size="lg"
+          variant="default"
+          disabled={
+            loading || summaryLoading || controlsPending || checkoutDisabled
+          }
+          loading={isRedirecting}
+          aria-describedby={checkoutFailed ? checkoutFailedId : undefined}
+          onClick={handleCheckout}
+          className="w-full"
+        >
+          {isRedirecting ? copy.checkoutRedirecting : copy.checkoutButton}
+        </Button>
+
+        {checkoutFailed && !isRedirecting ? (
+          <span
+            id={checkoutFailedId}
+            role="alert"
+            data-slot="cart-checkout-failed"
+            className="w-full text-center text-xs font-semibold leading-4 text-destructive"
+          >
+            {checkoutFailed}
+          </span>
+        ) : null}
+
+        {onSignIn && copy.signInAction ? (
+          <div className="flex w-full flex-wrap items-baseline justify-center gap-x-1 text-sm font-normal leading-5 text-secondary-foreground">
+            {copy.signInPrompt ? <span>{copy.signInPrompt}</span> : null}
+            <Link
+              render={<button type="button" />}
+              size="sm"
+              disabled={
+                loading ||
+                summaryLoading ||
+                controlsPending ||
+                checkoutDisabled ||
+                isRedirecting
+              }
+              onClick={() => {
+                if (
+                  !loading &&
+                  !summaryLoading &&
+                  !controlsPending &&
+                  !checkoutDisabled &&
+                  !isRedirecting
+                ) {
+                  onSignIn();
+                }
+              }}
+            >
+              {copy.signInAction}
+            </Link>
+            {copy.signInSuffix ? <span>{copy.signInSuffix}</span> : null}
+          </div>
+        ) : null}
+      </VStack>
     </VStack>
   );
 }
@@ -1076,9 +1296,14 @@ type CartPromoSheetProps = {
   open: boolean;
   copy: CartDrawerFooterCopy;
   promoState: PromoState;
-  /** Live held codes only — omit expired/void; filtering is consumer-owned. */
+  /** Live held codes only — omit expired/void; filtering is consumer-owned.
+   * `null` hides the member empty state and loyalty CTA — a guest's sheet. */
   heldPromoCodes?: readonly HeldPromoCode[] | null;
+  /** Codes open to everyone, merged with the held list under one "Promo
+   * codes" heading; guests and members alike can pick or type one. */
+  publicPromoCodes?: readonly HeldPromoCode[];
   selectedHeldPromoId?: string | null;
+  interactionPending?: boolean;
   tenderPending?: boolean;
   onClose: () => void;
   onPromoStateChange?: (next: PromoState) => void;
@@ -1098,7 +1323,9 @@ function CartPromoSheet({
   copy,
   promoState,
   heldPromoCodes = null,
+  publicPromoCodes = [],
   selectedHeldPromoId = null,
+  interactionPending = false,
   tenderPending = false,
   onClose,
   onPromoStateChange,
@@ -1106,6 +1333,7 @@ function CartPromoSheet({
   onSelectHeldPromo,
   onBrowseLoyalty,
 }: CartPromoSheetProps) {
+  const controlsPending = interactionPending || tenderPending;
   const [promoInput, setPromoInput] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const inputId = useId();
@@ -1115,8 +1343,14 @@ function CartPromoSheet({
   const showHeldSection = heldPromoCodes != null;
   const heldList =
     heldPromoCodes && heldPromoCodes.length > 0 ? heldPromoCodes : null;
-  const applicableHeld = heldList?.filter((c) => c.applicable) ?? [];
-  const inapplicableHeld = heldList?.filter((c) => !c.applicable) ?? [];
+  const applicable = [
+    ...(heldList?.filter((c) => c.applicable) ?? []),
+    ...publicPromoCodes.filter((c) => c.applicable),
+  ];
+  const inapplicable = [
+    ...(heldList?.filter((c) => !c.applicable) ?? []),
+    ...publicPromoCodes.filter((c) => !c.applicable),
+  ];
 
   useEffect(() => {
     if (!open) {
@@ -1126,7 +1360,7 @@ function CartPromoSheet({
   }, [open]);
 
   const handleApply = async () => {
-    if (tenderPending || !promoInput.trim() || isVerifying) return;
+    if (controlsPending || !promoInput.trim() || isVerifying) return;
     setIsVerifying(true);
     try {
       const success = await onApplyPromo?.(promoInput.trim());
@@ -1139,7 +1373,7 @@ function CartPromoSheet({
   };
 
   const handleKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
-    if (tenderPending) return;
+    if (controlsPending) return;
     if (e.key === "Enter") {
       e.preventDefault();
       handleApply();
@@ -1187,9 +1421,9 @@ function CartPromoSheet({
                 value={promoInput}
                 status={errorMessage ? "error" : "default"}
                 message={errorMessage}
-                disabled={tenderPending || isVerifying || !open}
+                disabled={controlsPending || isVerifying || !open}
                 onChange={(e) => {
-                  if (tenderPending) return;
+                  if (controlsPending) return;
                   setPromoInput(e.target.value);
                   if (errorMessage) {
                     onPromoStateChange?.({ status: "expanded" });
@@ -1201,9 +1435,7 @@ function CartPromoSheet({
             <Button
               size="md"
               variant="outline"
-              disabled={
-                tenderPending || !promoInput.trim() || isVerifying || !open
-              }
+              disabled={controlsPending || !promoInput.trim() || !open}
               loading={isVerifying}
               onClick={handleApply}
             >
@@ -1212,79 +1444,72 @@ function CartPromoSheet({
           </HStack>
         ) : null}
 
-        {showHeldSection ? (
-          heldList ? (
-            <VStack gap="md" className="w-full">
-              {applicableHeld.length > 0 ? (
-                <VStack gap="sm" className="w-full">
-                  <span className="text-xs font-medium leading-4 text-secondary-foreground">
-                    {copy.yourPromoCodes}
-                  </span>
-                  <VStack gap="sm" className="w-full">
-                    {applicableHeld.map((code) => {
-                      const selected = selectedHeldPromoId === code.id;
-                      return (
-                        <PromoTicket
-                          key={code.id}
-                          code={code}
-                          selected={selected}
-                          action={
-                            onSelectHeldPromo ? (
-                              <Button
-                                size="sm"
-                                variant="secondary"
-                                disabled={tenderPending || isVerifying || !open}
-                                onClick={() => {
-                                  if (!tenderPending) {
-                                    onSelectHeldPromo?.(code.id);
-                                  }
-                                }}
-                              >
-                                {copy.applyHeldPromo}
-                              </Button>
-                            ) : null
+        {applicable.length > 0 && copy.publicPromoCodes ? (
+          <VStack gap="sm" className="w-full">
+            <span className="text-xs font-medium leading-4 text-secondary-foreground">
+              {copy.publicPromoCodes}
+            </span>
+            <VStack gap="sm" className="w-full">
+              {applicable.map((code) => (
+                <PromoTicket
+                  key={code.id}
+                  code={code}
+                  selected={selectedHeldPromoId === code.id}
+                  action={
+                    onSelectHeldPromo ? (
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        disabled={controlsPending || isVerifying || !open}
+                        onClick={() => {
+                          if (!controlsPending) {
+                            onSelectHeldPromo?.(code.id);
                           }
-                        />
-                      );
-                    })}
-                  </VStack>
-                </VStack>
-              ) : null}
-
-              {inapplicableHeld.length > 0 ? (
-                <VStack gap="sm" className="w-full">
-                  <span className="text-xs font-medium leading-4 text-secondary-foreground">
-                    {copy.notValidPromoCodes}
-                  </span>
-                  <VStack gap="sm" className="w-full">
-                    {inapplicableHeld.map((code) => (
-                      <PromoTicket key={code.id} code={code} muted />
-                    ))}
-                  </VStack>
-                </VStack>
-              ) : null}
+                        }}
+                      >
+                        {copy.applyHeldPromo}
+                      </Button>
+                    ) : null
+                  }
+                />
+              ))}
             </VStack>
-          ) : (
-            <EmptyState
-              compact
-              title={copy.noHeldPromoCodes}
-              icon={<Tag aria-hidden weight="regular" />}
-              actions={
-                onBrowseLoyalty ? (
-                  <Button
-                    size="md"
-                    variant="secondary"
-                    disabled={tenderPending || !open}
-                    onClick={() => {
-                      if (!tenderPending) onBrowseLoyalty();
-                    }}
-                  >
-                    {copy.browseLoyaltyOffers}
-                  </Button>
-                ) : undefined
-              }
-            />
-          )
+          </VStack>
+        ) : null}
+
+        {inapplicable.length > 0 ? (
+          <VStack gap="sm" className="w-full">
+            <span className="text-xs font-medium leading-4 text-secondary-foreground">
+              {copy.notValidPromoCodes}
+            </span>
+            <VStack gap="sm" className="w-full">
+              {inapplicable.map((code) => (
+                <PromoTicket key={code.id} code={code} muted />
+              ))}
+            </VStack>
+          </VStack>
+        ) : null}
+
+        {showHeldSection && !heldList && publicPromoCodes.length === 0 ? (
+          <EmptyState
+            compact
+            title={copy.noHeldPromoCodes}
+            icon={<Tag aria-hidden weight="regular" />}
+            actions={
+              onBrowseLoyalty ? (
+                <Button
+                  size="md"
+                  variant="secondary"
+                  disabled={controlsPending || !open}
+                  onClick={() => {
+                    if (!controlsPending) onBrowseLoyalty();
+                  }}
+                >
+                  {copy.browseLoyaltyOffers}
+                </Button>
+              ) : undefined
+            }
+          />
         ) : null}
       </VStack>
     </VStack>
@@ -1302,14 +1527,21 @@ type CartDrawerProps = {
   loading?: boolean;
   /** Show only summary amount skeletons while keeping product rows available. */
   summaryLoading?: boolean;
+  /** Disable cart interactions while a cart operation is in flight. */
+  interactionPending?: boolean;
   /** Prevent overlapping tender writes; defaults to false for existing callers. */
   tenderPending?: boolean;
   /** Keep the cart visible while the consumer confirms an update. */
   checkoutDisabled?: boolean;
   onFetchStatusAndPrice?: () => Promise<void> | void;
+  orderDiscounts?: readonly OrderDiscountRow[];
   promoState?: PromoState;
-  /** Live held codes only — omit expired/void; filtering is consumer-owned. */
+  /** Live held codes only — omit expired/void; filtering is consumer-owned.
+   * `null` hides the member section entirely — a guest's list. */
   heldPromoCodes?: readonly HeldPromoCode[] | null;
+  /** Codes open to everyone, merged with the held list under one "Promo
+   * codes" heading; guests and members alike can pick or type one. */
+  publicPromoCodes?: readonly HeldPromoCode[];
   selectedHeldPromoId?: string | null;
   /**
    * When set, the footer shows it once as a toast (promo cleared after cart
@@ -1333,6 +1565,11 @@ type CartDrawerProps = {
   /** Opens Account → Loyalty from the empty held-promo state (new tab when wired). */
   onBrowseLoyalty?: () => void;
   onCheckout?: () => Promise<void> | void;
+  /** Checkout's state when the consumer owns it — see `CartDrawerFooterProps`. */
+  checkoutPending?: boolean;
+  checkoutFailed?: string;
+  /** Sign-in offer for a signed-out shopper — see `CartDrawerFooterProps`. */
+  onSignIn?: () => void;
   className?: string;
 };
 
@@ -1345,11 +1582,11 @@ type CartDrawerProps = {
  * - On cart open: fetches product status and price info via `onFetchStatusAndPrice` or controlled `loading`.
  *   During loading, each cart item, header count badge, subtotal, discount amount, points amount, and estimated total
  *   display as Boneyard skeleton; the empty-cart empty state is hidden; checkout is disabled.
- * - Footer: after subtotal (and any applied Discount / Points lines), compact
- *   **Promo code · Select or enter code ›** and **Use points** rows align like
- *   shipping. Promo opens a nested sheet; points stay typed amount on this layer
- *   (partial redeem). Shopper copy never says “coupon”. Checkout attaches both
- *   to the Shopify draft.
+ * - Footer: after subtotal (and any order discount, applied Discount / Points
+ *   lines), compact **Promo code · Select or enter code ›** and **Use points**
+ *   rows align like shipping. Promo opens a nested sheet; points stay typed
+ *   amount on this layer (partial redeem). Shopper copy never says “coupon”.
+ *   Checkout attaches both to the Shopify draft.
  * - Scroll-fade: body displays shadcn scroll-fade top/bottom masks when items overflow.
  * - Dismissal: Closes via ✕ button, clicking dimmed backdrop overlay, or pressing Esc.
  *   When the nested promo sheet is open, Esc and backdrop collapse the sheet first;
@@ -1371,11 +1608,14 @@ function CartDrawer({
   copy,
   loading,
   summaryLoading = false,
+  interactionPending = false,
   tenderPending = false,
   onFetchStatusAndPrice,
   checkoutDisabled,
+  orderDiscounts,
   promoState,
   heldPromoCodes,
+  publicPromoCodes,
   selectedHeldPromoId,
   promoNotice,
   pointsState,
@@ -1393,6 +1633,9 @@ function CartDrawer({
   onItemClick,
   onBrowseLoyalty,
   onCheckout,
+  checkoutPending,
+  checkoutFailed,
+  onSignIn,
   className,
 }: CartDrawerProps) {
   const [isFetching, setIsFetching] = useState(false);
@@ -1515,6 +1758,7 @@ function CartDrawer({
             emptyTitle={copy.emptyTitle}
             emptyDescription={copy.emptyDescription}
             loading={isLoading}
+            interactionPending={interactionPending}
             onQuantityChange={onQuantityChange}
             onRemoveItem={onRemoveItem}
             onItemClick={onItemClick}
@@ -1527,8 +1771,10 @@ function CartDrawer({
               shippingEstimate={shippingEstimate}
               loading={isLoading}
               summaryLoading={isSummaryLoading}
+              interactionPending={interactionPending}
               tenderPending={tenderPending}
               checkoutDisabled={checkoutDisabled}
+              orderDiscounts={orderDiscounts}
               promoState={promoState}
               promoNotice={promoNotice}
               pointsState={pointsState}
@@ -1541,6 +1787,9 @@ function CartDrawer({
               onUseMaxPoints={onUseMaxPoints}
               onRemovePoints={onRemovePoints}
               onCheckout={onCheckout}
+              checkoutPending={checkoutPending}
+              checkoutFailed={checkoutFailed}
+              onSignIn={onSignIn}
             />
           ) : null}
         </VStack>
@@ -1551,7 +1800,9 @@ function CartDrawer({
           copy={copy.footer}
           promoState={promoState ?? { status: "collapsed" }}
           heldPromoCodes={heldPromoCodes}
+          publicPromoCodes={publicPromoCodes}
           selectedHeldPromoId={selectedHeldPromoId}
+          interactionPending={interactionPending}
           tenderPending={tenderPending}
           onClose={() => onPromoStateChange?.({ status: "collapsed" })}
           onPromoStateChange={onPromoStateChange}

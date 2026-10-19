@@ -1,6 +1,5 @@
 ---
 title: Expiry Reminders
-spec: grade10-site/loyalty/expiry-reminders
 order: 10
 ---
 
@@ -8,34 +7,34 @@ order: 10
 
 | Rule | Value |
 | --- | --- |
-| Lead times | 🚧 One reminder, 30 days before the day, when the profile's warning starts |
-| Smallest balance reminded about | 🚧 Any balance of 1 point or more |
-| Clock | 🚧 Asia/Hong_Kong, the same clock the window runs on |
-| Repeats | 🚧 One reminder per member, per expiry date, per lead time |
+| Lead times | One reminder, 30 days before the day, when the profile's warning starts |
+| Smallest balance reminded about | Any balance of 1 point or more |
+| Clock | Asia/Hong_Kong, the same clock the window runs on |
+| Repeats | One reminder per member, per expiry date, per lead time |
 
 ## Raising a Reminder
 
-🚧 The programme works out, whenever asked, which members are owed a
+The programme works out, whenever asked, which members are owed a
 reminder.
 
-- 🚧 **Owed by the balance's own date** - a member is owed a reminder once
+- **Owed by the balance's own date** - a member is owed a reminder once
   their balance expires within a lead time, the day exactly that far away
   included, and they still hold points that expire on it - [Points](/p/grade10-site/loyalty/points#expiry)
-- 🚧 **No lead-time setting, no reminder** - a programme without a lead-time
+- **No lead-time setting, no reminder** - a programme without a lead-time
   setting owes no reminder and still starts
-- 🚧 **Lead times that cannot work are refused** - a lead-time setting written
+- **Lead times that cannot work are refused** - a lead-time setting written
   with no lead in it, a lead repeated, a lead under 1 day, or a lead as long
   as the shortest the window can run or longer, 365 days on 12 months, stops
-  the programme from starting
-- 🚧 **Named by its lead** - the reminder carries which lead time raised it,
+  the programme from starting, naming what it refuses
+- **Named by its lead** - the reminder carries which lead time raised it,
   so two lead times on one date are two reminders and never one repeated
-- 🚧 **Raised once** - the same member, day and lead time raise one reminder,
+- **Raised once** - the same member, day and lead time raise one reminder,
   however often the programme looks
-- 🚧 **Dropped when the day moves** - buying, redeeming, an operator
+- **Dropped when the day moves** - buying, redeeming, an operator
   restarting the window, or a grant or a correction onto a balance brought to
   nothing moves the day, and a reminder still owed against the day it
   replaced is dropped - [Points](/p/grade10-site/loyalty/points#expiry)
-- 🚧 **Dropped when there is nothing left** - the balance lapsing, or a
+- **Dropped when there is nothing left** - the balance lapsing, or a
   claw-back, a correction or a deleted account bringing it to nothing, drops
   what is still owed
 - 🚧 **Owed again when points come back** - points a reversal gives back, or
@@ -43,21 +42,47 @@ reminder.
   day still running, so a member brought to nothing is owed the same reminder
   again while that day is within a lead time, never a second one -
   [Points](/p/grade10-site/loyalty/points#expiry)
-- 🚧 **Gone at once** - a reminder stops being owed the moment its day moves,
+- **Gone at once** - a reminder stops being owed the moment its day moves,
   its balance empties, the balance lapses or the programme starts without its
-  lead time, with nothing waiting on a nightly pass
+  lead time, with nothing waiting on a nightly pass, whether or not anything
+  has read it
+
+:::example{title="A reminder from 30 days before the day" id="reminder-thirty-days"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2026/12/03 | 31 days before the day · nothing owed | 0 | 15 |
+| 2026/12/04 | 30 days before the day · reminder owed, 15 points | 0 | 15 |
+| 2026/12/10 | campaign grant · takes 2027/01/03 · same reminder, 115 points | +100 | 115 |
+| 2027/01/03 | lapse · reminder gone | −115 | 0 |
+
+The grant leaves the day in place, so the count changes and no second
+reminder is raised.
+:::
+
+:::example{title="Buying drops the reminder" id="reminder-day-moves"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2026/12/04 | reminder owed for 2027/01/03, 15 points | 0 | 15 |
+| 2026/12/10 | earn → lapses 2027/12/10 · reminder dropped | +10 | 25 |
+| 2027/11/10 | reminder owed for 2027/12/10, 25 points | 0 | 25 |
+
+Nothing is owed for the new day until it is 30 days away.
+:::
 
 ## What a Reminder Holds
 
-- 🚧 **The member** - who it is owed to
-- 🚧 **The day** - the day their balance expires
-- 🚧 **The points** - how many of their points expire on it, kept current
-  while the day stands
-- 🚧 **The lead time** - which one raised it
+- **The member** - who it is owed to
+- **The day** - the day their balance expires
+- **The points** - how many of their points expire on it, kept current
+  while the day stands; a grant, a correction, a claw-back or a reversal that
+  leaves the day in place changes the count and raises no second reminder
+- **The lead time** - which one raised it
 
 ## Delivery
 
-🚧 A reminder says that one is owed; it is not a message. Nothing reads it
+A reminder says that one is owed; it is not a message. Nothing reads it
 yet, so no member is told anything.
 
 ## Carrying a Reminder
@@ -66,6 +91,12 @@ yet, so no member is told anything.
   in a wallet, the site itself, or more than one. Product
 - ❓ **Declining reminders** - whether a member can turn them off, and where.
   Product
+
+:::detail{title="Code map" for="engineer"}
+- **Lead times** - `expiry.reminderLeadDays` in the programme config,
+  `packages/app-env/src/loyalty.ts`
+- **The read and its policy** - [docs/architecture/loyalty.md](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
+:::
 
 :::detail{title="Product decisions" for="pm"}
 A member who loses points they meant to spend has been failed by the

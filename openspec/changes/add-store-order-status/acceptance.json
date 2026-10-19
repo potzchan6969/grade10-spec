@@ -1,14 +1,15 @@
 {
   "version": 2,
   "change": "add-store-order-status",
-  "baseline": "bca1397b9f11d3db0a899a4cdde883d7ef9a8543c54f6fe46cbe5bbacce728db",
-  "fingerprint": "14937de5182250d34f2739bb99801acfa0131176519b75c6e7811df370aceeaa",
+  "baseline": "43fb26f067a0f94745d4db65a1998234e924f01e9364d992a27673b2f06234be",
+  "fingerprint": "1de191562f9b74c40fefd73387218cac750579496f85a3ec3429b7a8fc36792e",
   "reviewedBy": "ecchochan",
-  "acceptedAt": "2026-10-07T12:08:28.461Z",
+  "acceptedAt": "2026-10-08T13:34:53.564Z",
+  "supersedes": "07bb57b7f04e7c207f08de647e7b7db09d9c80f326aa7dfa9791688f206e58af",
   "artifacts": [
     {
       "path": "docs/prds/products/grade10-site/commerce/order-status.md#badges",
-      "sha256": "09195785a8a358a33e3dbaea1eeb194124e316db6c7dcd9d4f11d74b02ac9899",
+      "sha256": "f75b0b87071e4a074dfedd37c75e0f1c73adf3ec6c5b978e082c19dcc2acf968",
       "role": "prd-source"
     },
     {
@@ -23,7 +24,7 @@
     },
     {
       "path": "docs/prds/products/grade10-site/commerce/order-status.md#updates-from-shopify",
-      "sha256": "ae7922429d7e55be651605124789b0ee093f89f8f36ee51e91d60653766a22ee",
+      "sha256": "8f3fe3cda172781a58839c6b2922c8b4ba8bfce0e672f7894b455d999deeba74",
       "role": "prd-source"
     },
     {
@@ -33,22 +34,22 @@
     },
     {
       "path": "openspec/changes/add-store-order-status/decisions.md",
-      "sha256": "202b40458510a5d865b3ba2b96a6f710e02798fff82206ca7b0adba7e8795223",
+      "sha256": "52c224e22ba53ece30f29d2834aac903735aef8840b96733b9087f800e7eaee5",
       "role": "change-input"
     },
     {
       "path": "openspec/changes/add-store-order-status/proposal.md",
-      "sha256": "b9b47a90468dec93b9a1b3d41afb21004bec878e9861277c9430809f31d5d377",
+      "sha256": "d471de78dd81340d8ceb3566867ded62bf443ef159c63e097735f72585ae36ba",
       "role": "change-input"
     },
     {
       "path": "openspec/changes/add-store-order-status/specs/grade10-site/commerce/order-status/feature-tcs.md",
-      "sha256": "7239af7dfdfa9dd02ebf9b82e73b739918aa552b47f8a5c3bc11f751af1732d2",
+      "sha256": "da97ae15558884b7b769205e487e5191b504437de8ab8bdf544e40266d220a9a",
       "role": "change-input"
     },
     {
       "path": "openspec/changes/add-store-order-status/specs/grade10-site/commerce/order-status/spec.md",
-      "sha256": "9eab0c6157290c7e865dcbad0579fb0a590d87969980864a8982696d15df735a",
+      "sha256": "6ff18f4214bcc1d6e35939361e16a420e201cd243d6ce09a590ef5d7b3d78cf4",
       "role": "change-input"
     },
     {
@@ -73,17 +74,17 @@
     },
     {
       "path": "openspec/changes/add-store-order-status/tech-design.md",
-      "sha256": "b544a15983b1662f7554e25aeb54c5332cf522d9ec27ad7cf3510b959d67b50a",
+      "sha256": "2bb15bc217dc3d6737a1750b86ad9f5734e767dc5faca2bd5c91ebed792263e9",
       "role": "change-input"
     },
     {
       "path": "openspec/specs/grade10-site/commerce/order-status/feature-tcs.md",
-      "sha256": "7239af7dfdfa9dd02ebf9b82e73b739918aa552b47f8a5c3bc11f751af1732d2",
+      "sha256": "17303288297ba8a6cb3b9e4fbf51b9550fd68d647bdd7578718d81aec89dbb32",
       "role": "durable-result"
     },
     {
       "path": "openspec/specs/grade10-site/commerce/order-status/spec.md",
-      "sha256": "64a831a220677abf935136ff475c577bc7aa7069440c159198f7feb83997115b",
+      "sha256": "1aeef8565269a36af562a9ad1562dbfb23b31e20b27ccc2973f14a5b74275d04",
       "role": "durable-result"
     },
     {

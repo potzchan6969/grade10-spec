@@ -13,9 +13,9 @@ destination, and every control that does something.
   - `SiteHeader`: shared header composition with application-supplied content and session
   - Public types: `SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession`
 - Header controls
-  - Handler-gated: search, account, cart, Profile, My Orders, and Membership
-    render only when their handler is supplied, or, for account and cart,
-    their slot; Membership also needs its copy
+  - Handler-gated: search, account, cart, Profile, My Orders, My Auctions,
+    and Membership render only when their handler is supplied, or, for
+    account and cart, their slot; Membership also needs its copy
   - No wishlist: the header does not offer a wishlist control
   - Account menu: Sign In when signed out; signed in, an initial avatar above
     the sign-in email, or the account label alone with no email, above the
@@ -28,6 +28,9 @@ destination, and every control that does something.
   - Cart slot: a `cartSlot` on `Nav` replaces the built-in cart control and
     never runs `onCartClick`
   - Cart count: `SiteHeader` shows a round brand indicator on the cart icon for the supplied active-line count; hidden when empty or omitted
+  - Pending session: while the application passes a pending session,
+    `SiteHeader` shows a placeholder the size of the account icon in the
+    account entry's place, with nothing to press and nothing read aloud
 - External links
   - New-tab destinations: a `NavLink` marked `external` opens in a new tab with
     `rel="noopener noreferrer"` in primary nav (wide bar and compact drawer)
@@ -271,8 +274,8 @@ entry.
 take all brand, navigation, locale, and destination content through props.
 
 **No application state** - It SHALL NOT fetch, route, or read application
-session stores itself - the application supplies `session` as `"signed-out"` or
-`"signed-in"`.
+session stores itself - the application supplies `session` as `"pending"`,
+`"signed-out"`, or `"signed-in"`.
 
 **Signed out** - When `session` is `"signed-out"`, `SiteHeader` SHALL render a
 primary Sign In button (not the account icon) and SHALL invoke the supplied
@@ -282,21 +285,29 @@ sign-in handler when that button is activated.
 account icon and SHALL open a menu that shows a small (`xs`) initial avatar
 above `accountEmail`, both above the items. When `accountEmail` is not
 supplied, the menu SHALL show `copy.accountMenuLabel` in its place and no
-avatar. The items SHALL include at minimum My Auctions and Sign Out. The
+avatar. The items SHALL include at minimum Sign Out. The
 menu SHALL NOT include KYC. Activating each item SHALL invoke the matching
 supplied handler.
 
+**Pending** - When `session` is `"pending"`, `SiteHeader` SHALL render a
+design-system `Skeleton` in the account entry's place: round, 40 CSS pixels
+across - the account icon's footprint - at every breakpoint. It SHALL render
+no Sign In button, no account icon, and no account menu. The placeholder SHALL
+NOT take focus, SHALL NOT invoke any supplied handler when activated, and SHALL
+expose no role, name, or busy state to assistive technology.
+
 **Sign Out label** - The account menu's sign-out item SHALL read "Sign Out".
 
-**Profile, Cart, search, My Orders, and Membership** - Profile, Cart, search,
-My Orders, and Membership SHALL remain absent unless the application
-supplies their handlers; Membership additionally requires `copy.membership`.
-The account menu's items SHALL follow the fixed order Profile, My Orders, My
-Auctions, Membership, Sign Out, each of Profile, My Orders, and Membership
-omitted independently wherever its own handler (and, for Membership, its
-copy) is not supplied, opening directly on whichever item is next. The menu
-SHALL offer no item beyond these five, so `SiteHeaderProps` and
-`SiteHeaderCopy` take no handler or label for a second orders item.
+**Profile, Cart, search, My Orders, My Auctions, and Membership** - Profile,
+Cart, search, My Orders, My Auctions, and Membership SHALL remain absent
+unless the application supplies their handlers; Membership additionally
+requires `copy.membership`. The account menu's items SHALL follow the fixed
+order Profile, My Orders, My Auctions, Membership, Sign Out, each of
+Profile, My Orders, My Auctions, and Membership omitted independently
+wherever its own handler (and, for Membership, its copy) is not supplied,
+opening directly on whichever item is next. The menu SHALL offer no item
+beyond these five, so `SiteHeaderProps` and `SiteHeaderCopy` take no handler
+or label for a second orders item.
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-ff5 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-15 - An application imports SiteHeader
@@ -474,6 +485,60 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
 - **GIVEN** an application renders `SiteHeader`
 - **WHEN** it passes `onOrders`, or `orders` in `copy`
 - **THEN** its type check refuses each
+
+#### Scenario: shared-ui-site-chrome-SC-44 - Signed in with no My Auctions handler
+**Serves:** Header controls - the account menu omits My Auctions until its own handler is supplied
+
+- **GIVEN** `session` is `"signed-in"` and no `onMyAuctions` handler is
+  supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu offers Sign Out, and every other gated item whose own
+  handler is supplied
+- **AND** the menu does not offer My Auctions
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-nal rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-45 - A pending session holds the account entry's place
+**Serves:** Header controls - the application holds the account entry's place while it waits for the session
+
+- **GIVEN** `session` is `"pending"`, with `onSignIn`, Sign In copy, and a
+  cart handler supplied
+- **WHEN** `SiteHeader` renders at the wide breakpoint, or below it
+- **THEN** a `Skeleton` sits in the account entry's place, beside the cart
+  control
+- **AND** no Sign In button, account icon control, or account menu appears
+- **AND** the other supplied controls render
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-khj rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-47 - The account placeholder takes the account icon's footprint
+**Serves:** Header controls - the application holds the account entry's place while it waits for the session
+
+- **GIVEN** `session` is `"pending"`, with `onSignIn` and a cart handler
+  supplied
+- **WHEN** `SiteHeader` renders at the wide breakpoint, or below it
+- **THEN** the `Skeleton` is 40 CSS pixels wide and high, with fully rounded
+  corners
+- **AND** its box is the same size as the account icon's when `session` is
+  `"signed-in"`
+- **AND** when `session` changes to `"signed-in"`, no other control's box
+  changes
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-z5y rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-46 - The account placeholder cannot be pressed or focused
+**Serves:** Header controls - a collector who meets the placeholder by pointer or keyboard
+
+- **GIVEN** `session` is `"pending"`, with `onSignIn` and `onSignOut` supplied
+- **WHEN** the collector clicks the placeholder, or moves focus through the
+  header with the keyboard
+- **THEN** no supplied handler is invoked, and focus never lands on the
+  placeholder
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-79a rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-48 - The account placeholder is silent to assistive technology
+**Serves:** Header controls - a collector who meets the placeholder by screen reader
+
+- **GIVEN** `session` is `"pending"`
+- **WHEN** assistive technology reads the header
+- **THEN** the placeholder exposes no role, name, or busy state
 
 ### Requirement: Compact viewports open navigation from a left menu drawer
 

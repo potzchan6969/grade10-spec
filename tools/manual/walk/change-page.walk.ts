@@ -134,14 +134,18 @@ test("shared-planning-change-stages-SC-58 - the Your turn card", async () => {
     )
     .toBeVisible();
   await expect
-    .element(card.getByText("Engineer: read", { exact: true }))
+    .element(
+      card.getByText("Engineer: read the plan and challenge the tech design", {
+        exact: true,
+      }),
+    )
     .toBeVisible();
 });
 
 /**
  * `shared-planning-change-stages-SC-17` ("A hand nobody has named") read on
  * the change page's own hands table rather than a card: `demo-planned`
- * names no role at all, so every one of the six SHALL still read as a row,
+ * names no role at all, so every one of the five SHALL still read as a row,
  * open, the engineer among them.
  */
 test("shared-planning-change-stages-SC-17 - the hands table with an open role", async () => {
@@ -160,6 +164,14 @@ test("shared-planning-change-stages-SC-17 - the hands table with an open role", 
   await expect
     .element(hands.getByText("open", { exact: true }).first())
     .toBeVisible();
+  // Five rows, the tech PIC retired.
+  const open = Array.from(rowFor("Hands").querySelectorAll("*")).filter(
+    (one) => one.children.length === 0 && one.textContent === "open",
+  );
+  expect(open).toHaveLength(5);
+  await expect
+    .element(hands.getByText("Tech PIC", { exact: true }))
+    .not.toBeInTheDocument();
 });
 
 test("shared-planning-change-stages-SC-07 - either waiver stands for its design", async () => {

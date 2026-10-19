@@ -125,7 +125,7 @@ That is how the work reaches an engineer. The application repository has no plan
 | `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
 | `ui_waived: "<why>"` | The designer, or the author | A change nothing a reader sees moves on, so it draws no `ui-design.md` | The stage ladder, which reads it as the UI design; the change page, which shows it as not owed |
 | `purpose_rewritten:` with `<capability>: "<why>"` | The author | A delta whose Purpose replaces a durable Purpose the change makes untrue; `<capability>` is its path under `openspec/specs/` | `pnpm accept:preflight` and `pnpm spec:accept`, check `fold:purpose`, which warns with the line instead of refusing |
-| `hands:` with `<role>: @handle` | The product manager at the interview's end, Assign on the locally run manual, or `pnpm plan hand` | From the interview's end; one handle for each of `pm`, `design`, `tech`, `qa`, `dev`, `release` | The board and the change page, for whose turn it is; the notify workflow, for who is told; `pnpm check:manual`, rule `hands` |
+| `hands:` with `<role>: @handle` | The product manager at the interview's end, Assign on the locally run manual, or `pnpm plan hand` | From the interview's end; one handle for each of `pm`, `design`, `qa`, `dev`, `release` | The board and the change page, for whose turn it is; the notify workflow, for who is told; `pnpm check:manual`, rule `hands` |
 | `landed_by:` with `<artifact>: @handle` | The landing — `pnpm run plan:land`, or the person's own push through it | In the same commit as the artifact it names | The change page, beside each artifact; `pnpm check:manual`, rule `landed_by` |
 | `reviewed:` with `<artifact>: <content id>` | The round's re-read | When an artifact is read again against what is before it | The freshness read, which shows an artifact behind until the id matches; `archive:preflight`'s behind gate, which refuses the fold while one still does not |
 | `thread: <channel>/<ts>` | The round, from the first planning-channel message about the change | Once, and never rewritten | Every message, which links the thread rather than the change page |
@@ -176,6 +176,8 @@ Every wait:
 - **Lowers no bar.** The page the change marks still needs its 🚧 line, the proposal still needs its `## Why`, and the moment a delta exists the requirements are validated in full.
 
 A wait on `specs` and `skip_specs: true` are opposites and never appear together: one says requirements are coming, the other that none are owed.
+
+A question about a look waits in one designer's change per capability, extended by the next question on it: `awaiting: ui-design` naming the designer, `hands: design` set, and no `awaiting: specs`. A look-only answer closes it with `skip_specs: true` and `skip_specs_why`; an answer that moves a requirement replaces the wait with a delta. The feature names no dependency on it and ships its interim meanwhile.
 
 ### 6. Keep component contracts aligned
 

@@ -10,3 +10,11 @@ depends_on:
 hands:
   pm: "@ecchochan"
 ui_waived: "the designer approved these post-sale surfaces without a ui-design.md"
+reviewed:
+  proposal: 2361de35
+  decisions: 2184bb5e
+  user-journeys: 1bc9c260
+  tech-design: b2597ebb
+  specs: cb0cd14b
+  test-cases: b2597ebb
+  tasks: "16756900"

@@ -37,20 +37,24 @@ describe("a local moment, day and clock", () => {
 describe("a Chinese or Korean month keeps its unit in a collector date", () => {
   const at = Date.UTC(2026, 8, 1, 12, 0);
 
+  // Chinese orders year, month, day and joins a moment with a space; Korean
+  // keeps the day-first platform order and the comma the English shape uses.
   it.each([
-    ["zh-Hant", "1 9月 2026"],
-    ["zh-Hans", "1 9月 2026"],
-    ["ko", "1 9월 2026"],
+    ["zh-Hant", "2026年9月1日", " "],
+    ["zh-Hans", "2026年9月1日", " "],
+    ["ko", "1 9월 2026", ", "],
   ] as const)(
     "%s reads September as the same month the UTC day reads",
-    (locale, day) => {
+    (locale, day, join) => {
       const options = { locale, timeZone: "Asia/Hong_Kong" };
 
       expect(formatDay(at, options)).toBe(day);
-      expect(formatMoment(at, options)).toBe(`${day}, 20:00`);
-      expect(formatZonedLocalMoment(at, options)).toBe(`${day}, 20:00 HKT`);
+      expect(formatMoment(at, options)).toBe(`${day}${join}20:00`);
+      expect(formatZonedLocalMoment(at, options)).toBe(
+        `${day}${join}20:00 HKT`,
+      );
       expect(formatCollectorDeadline(at, { ...options, prefix: "Ends" })).toBe(
-        `Ends ${day}, 20:00 HKT`,
+        `Ends ${day}${join}20:00 HKT`,
       );
     },
   );

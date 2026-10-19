@@ -12,6 +12,7 @@ const { auctionListing } = getMessages("grade10", "en");
 
 const COPY = {
   zoom: auctionListing.clickToZoom,
+  zoomInstructions: auctionListing.zoomInstructions,
   previous: auctionListing.previousImage,
   next: auctionListing.nextImage,
   images: auctionListing.auctionImages,
@@ -41,7 +42,7 @@ const THREE_IMAGES = [
 ] as const;
 
 const meta = {
-  title: "Auction Listing/ListingLotGallery",
+  title: "Auction/Display/Blocks/ListingLotGallery",
   component: ListingLotGallery,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -103,16 +104,21 @@ export const SeveralImages: Story = {
       canvas.getByRole("img", { name: "Lot image 2, back" }),
     ).toHaveAttribute("src", THREE_IMAGES[1].src);
 
-    await userEvent.click(canvas.getByRole("button", { name: COPY.zoom }));
-    const page = within(document.body);
-    const zoomDialog = await page.findByRole("dialog", { name: COPY.zoom });
-    expect(
-      within(zoomDialog).getByRole("img", { name: "Lot image 2, back" }),
-    ).toHaveAttribute("src", THREE_IMAGES[1].zoomSrc);
-    await userEvent.keyboard("{Escape}");
+    // Hovering the frame raises the lens, and the magnified copy reads the
+    // image's zoom source.
+    const lens = canvas.getByRole("group", { name: /^Hover to magnify/ });
+    await userEvent.pointer({ target: lens });
     await waitFor(() =>
       expect(
-        page.queryByRole("dialog", { name: COPY.zoom }),
+        canvasElement.querySelector<HTMLImageElement>(
+          `[data-slot="lens-magnifier"] img[src="${THREE_IMAGES[1].zoomSrc}"]`,
+        ),
+      ).toBeInTheDocument(),
+    );
+    await userEvent.unhover(lens);
+    await waitFor(() =>
+      expect(
+        canvasElement.querySelector('[data-slot="lens-magnifier"]'),
       ).not.toBeInTheDocument(),
     );
     expect(canvas.getByText("2 / 3")).toBeInTheDocument();
@@ -127,23 +133,26 @@ export const SeveralImages: Story = {
     expect(
       canvas.getByRole("img", { name: "Lot image 3, detail" }),
     ).toHaveAttribute("src", THREE_IMAGES[2].src);
-    await userEvent.click(canvas.getByRole("button", { name: COPY.zoom }));
-    const selectedZoomDialog = await page.findByRole("dialog", {
-      name: COPY.zoom,
+
+    // Focused, the lens answers arrow keys itself — they move the magnifier
+    // and do not step the carousel.
+    const activeLens = canvas.getByRole("group", {
+      name: /^Hover to magnify/,
     });
-    expect(
-      within(selectedZoomDialog).getByRole("img", {
-        name: "Lot image 3, detail",
-      }),
-    ).toHaveAttribute("src", THREE_IMAGES[2].zoomSrc);
-    await userEvent.click(
-      within(selectedZoomDialog).getByRole("button", {
-        name: "Close dialog",
-      }),
-    );
+    activeLens.focus();
+    await userEvent.keyboard("{ArrowRight}");
     await waitFor(() =>
       expect(
-        page.queryByRole("dialog", { name: COPY.zoom }),
+        canvasElement.querySelector<HTMLImageElement>(
+          `[data-slot="lens-magnifier"] img[src="${THREE_IMAGES[2].zoomSrc}"]`,
+        ),
+      ).toBeInTheDocument(),
+    );
+    expect(canvas.getByText("3 / 3")).toBeInTheDocument();
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() =>
+      expect(
+        canvasElement.querySelector('[data-slot="lens-magnifier"]'),
       ).not.toBeInTheDocument(),
     );
 
@@ -259,19 +268,16 @@ export const SingleImage: Story = {
     expect(
       canvas.queryByRole("navigation", { name: "Auction images" }),
     ).not.toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("button", { name: COPY.zoom }));
-    const page = within(document.body);
-    const zoomDialog = await page.findByRole("dialog", { name: COPY.zoom });
-    expect(
-      within(zoomDialog).getByRole("img", { name: "Lot image, front" }),
-    ).toHaveAttribute("src", source("detail", "single"));
-    await userEvent.click(
-      within(zoomDialog).getByRole("button", { name: "Close dialog" }),
-    );
+    // No zoom source was given — the magnified copy falls back to the main
+    // source.
+    const lens = canvas.getByRole("group", { name: /^Hover to magnify/ });
+    await userEvent.pointer({ target: lens });
     await waitFor(() =>
       expect(
-        page.queryByRole("dialog", { name: COPY.zoom }),
-      ).not.toBeInTheDocument(),
+        canvasElement.querySelector<HTMLImageElement>(
+          `[data-slot="lens-magnifier"] img[src="${source("detail", "single")}"]`,
+        ),
+      ).toBeInTheDocument(),
     );
   },
 };
@@ -295,8 +301,6 @@ export const EmptyGallery: Story = {
     expect(
       canvas.queryByRole("navigation", { name: "Auction images" }),
     ).not.toBeInTheDocument();
-    expect(
-      canvas.queryByRole("button", { name: COPY.zoom }),
-    ).not.toBeInTheDocument();
+    expect(canvas.queryByRole("group")).not.toBeInTheDocument();
   },
 };

@@ -294,10 +294,12 @@ artifacts:
 
       ## Writing a journey
 
-      `### <capability>-US-<n>: <title>`, then three labeled lines:
+      `### <app>.<domain>-<capability>.US<n>: <title>`, then three labeled
+      lines. The path remains the ownership source; `<app>` is its configured
+      display code:
 
       ```
-      ### grade10-admin-auction-listing-US-01: Operator saves an unfinished listing and comes back to it
+      ### g10adm.auction-listing.US1: Operator saves an unfinished listing and comes back to it
 
       **As an** auction operator,
       **I want** to save a listing before I know every fact about the card,
@@ -361,12 +363,12 @@ artifacts:
       under a `## Retired` section at the bottom of the durable file:
 
       ```
-      - `grade10-site-store-product-listing-US-04` - Collector searches the catalogue by keyword ·
+      - `g10.store-product-listing.US4` - Collector searches the catalogue by keyword ·
         removed in `remove-listing-search` · 2026-09-14
       ```
 
       One line, not the journey. Archived suites still carry
-      `**Trace:** grade10-site-store-product-listing-US-04`; delete the journey
+      `**Trace:** g10.store-product-listing.US4`; delete the journey
       outright and that join breaks with nothing left to recover it from.
     requires:
       - decisions
@@ -464,7 +466,7 @@ artifacts:
   - id: tech-design
     required: false
     teammate: engineer
-    hand: tech
+    hand: dev
     # `tech-design.md` is `.claude/agents/tech.md`'s own subject, so its four
     # readings (`system-design.md`'s "Where a Reader Applies It" row) run
     # every round, whatever the draft touched.
@@ -664,11 +666,11 @@ artifacts:
       - `### Requirement: <name>` with SHALL or MUST, never should or may. Every
         `###` under a requirements section is a `### Requirement:` and never a
         group heading.
-      - `#### Scenario: <capability>-SC-<n> - <title>`, where `<capability>` is
-        the capability's path with slashes as hyphens:
-        `grade10-site/store/product-listing` issues
-        `grade10-site-store-product-listing-SC-01`. The journey and case ids
-        beside it are spelled from the same token.
+      - `#### Scenario: <app>.<domain>-<capability>.SC<n> - <title>`, where the
+        path still owns the scenario and `<app>` is its configured display code:
+        `grade10-site/store/product-listing` displays
+        `g10.store-product-listing.SC1`. Existing `trace:scenario` marker ids
+        never change; this is only the human-facing heading.
         **Exactly four hashes** - three, or a bullet, fails silently.
       - Every requirement carries at least one scenario, and every scenario is
         decidable by a test or a manual pass.
@@ -681,11 +683,11 @@ artifacts:
       - Ids are permanent. Number from 01 within a capability, never renumber one
         that exists, and read the ids already issued before adding one. A renamed
         or moved capability goes on issuing the prefix it always issued.
-      - **Cite an id exactly as the heading spells it, inside backticks.** Only a
-        capability's first id takes its prefix from the path, so a prefix is read
-        and never reconstructed: `grade10-site/auction/winner-order` issues
-        `winner-order-SC-04` while its neighbour issues
-        `grade10-site-auction-account-record-SC-20`. Shortening the second one
+      - **Cite an id exactly as the heading spells it, inside backticks.** A
+        capability's display prefix comes from its path and app mapping, so a
+        prefix is read and never reconstructed: `grade10-site/auction/winner-order`
+        displays `g10.auction-winner-order.SC4` while its neighbour displays
+        `g10.auction-account-record.SC20`. Shortening the second one
         names nothing. Outside backticks nothing reads a citation at all - a bare
         id in a `## Reconciliation` row or a design table goes stale unseen.
       - Money is an integer count of minor units plus an ISO 4217 code, never a
@@ -699,8 +701,8 @@ artifacts:
       `**GIVEN**` / `**WHEN**`:
 
       ```
-      #### Scenario: grade10-site-store-product-listing-SC-14 - Filter yields nothing
-      **Serves:** grade10-site-store-product-listing-US-02 - narrowing the catalogue by set
+      #### Scenario: g10.store-product-listing.SC14 - Filter yields nothing
+      **Serves:** g10.store-product-listing.US2 - narrowing the catalogue by set
 
       **WHEN** a collector applies a filter that matches no product
       **THEN** the catalogue SHALL show the empty state and keep the filter applied
@@ -710,7 +712,7 @@ artifacts:
 
       | Anchor | Written as | For |
       | --- | --- | --- |
-      | This capability's journey | `<capability>-US-<n>` | A rule somebody walks here |
+      | This capability's journey | `<app>.<domain>-<capability>.US<n>` | A rule somebody walks here |
       | Another capability's journey | `<product>/<domain>/<capability>#<journey-id>` | A rule somebody walks elsewhere and this capability enforces |
       | A `## Feature set` root group | the group name, verbatim | A rule with no actor: a derivation, an idempotency, a refusal the system raises against itself |
 
@@ -782,7 +784,7 @@ artifacts:
       ```
       | State | Shows | Anchor |
       | --- | --- | --- |
-      | Empty catalogue | No tiles; retry control | `grade10-site-store-product-listing-SC-14` |
+      | Empty catalogue | No tiles; retry control | `g10.store-product-listing.SC14` |
       | Offline retry | Connectivity banner with retry | **Out of suite:** the shell's connectivity banner, stated in `shared/ui/site-chrome` |
       ```
 
@@ -927,10 +929,12 @@ artifacts:
       Without it, a pass that finds nothing and a pass that never happened look
       identical in git.
 
-      Scenario ids may appear there **only while the change is open**. Archive
+      Scenario ids may appear there **only while the change is open**. Existing
+      scenario marker ids are never rewritten; only the human-facing heading
+      follows the current display form. Archive
       fold and `tcs-review` both strip them, leaving the dispositions and the
       reasons. Write each one in backticks and in full - `Folded as
-      grade10-site-auction-account-record-SC-56`, never a bare `SC-56`. A bare
+      g10.auction-account-record.SC56`, never a bare `SC56`. A bare
       id is read by nothing, so a later renumber leaves the row naming a
       scenario the change has stopped issuing and no check says so.
 
@@ -960,7 +964,6 @@ artifacts:
       - decisions
       - user-journeys
       - ui-design
-      - tech-design
   - id: tasks
     required: true
     teammate: engineer

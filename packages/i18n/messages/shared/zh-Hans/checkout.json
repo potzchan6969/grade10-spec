@@ -56,16 +56,16 @@
     "blocked": "付款前请先修正标记的项目。",
     "removed": "商店已不再销售的 {count} 项已从购物车中移除。",
     "remove": "移除",
-    "writeFailed": "你的更改没有送达商店。请再试一次。"
+    "writeFailed": "你的更改没有送达商店。请再试一次。",
+    "soldOut": "{title} 已售罄。",
+    "unavailable": "{title} 已不再销售。",
+    "reduced": "{title}：仅剩 {count} 件，已减少你的数量。",
+    "repriced": "{title} 现价 {price}。",
+    "filledShort": "{title}：商店只能供应 {count} 件。"
   },
   "line": {
     "soldOut": "已售罄",
     "adjusted": "仅剩 {count} 件，已调整数量"
-  },
-  "identity": {
-    "title": "请先核验身份才能购买",
-    "message": "订单金额达 {threshold} 或以上需先核验身份，而此购物车的金额为 {goods}。请先在你的账户核验身份，再回来付款。",
-    "action": "前往你的账户"
   },
   "refusal": {
     "not_found": "没有这个优惠码。",
@@ -85,12 +85,16 @@
     "wrong_channel": "此优惠码不能在这里使用。",
     "birthday_unavailable": "此优惠码要等计划记录了你的生日才可使用。",
     "not_eligible": "此优惠码不能用于此购物车。",
-    "idempotency_conflict": "此优惠码正用于另一个结账，请稍后再试。",
+    "idempotency_conflict": "此优惠码已用于另一张订单。",
+    "held_elsewhere": "较早的一张订单仍带着此优惠码。",
+    "took_too_long": "此结账处理时间过长，请再提交一次。",
     "one_coupon": "每单只可用一个优惠码。",
     "riding_elsewhere": "此优惠码已用于另一个未完成的结账。",
     "no_tender": "这里不能使用奖励优惠码。",
     "wallet_unavailable": "暂时无法读取你的奖励，请稍后再试。",
-    "gift_refused": "此优惠码赠送的商品暂时无法加入。"
+    "gift_refused": "此优惠码赠送的商品暂时无法加入。",
+    "site_discount_wins": "网站优惠为这张订单减得更多，商店会改用网站优惠；此优惠码会保留在你的钱包。",
+    "shop_refused": "商店不接受此优惠码用于这张订单。"
   },
   "pointsRefusal": {
     "noMember": "积分只供计划会员使用。",

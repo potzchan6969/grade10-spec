@@ -1,7 +1,8 @@
 ## User journeys
 
-### grade10-site-commerce-commerce-US-06: Shopper meets the identity bar at checkout
+**Walked by:** nobody on their own - a checkout that asks nothing about identity
+is walked by the store's checkout journeys in `grade10-site/store/checkout`
 
-**As a** shopper buying goods worth the bar or more,
-**I want** to be told before paying that a verified identity is needed, and where to get one,
-**so that** I am not charged for an order the store cannot complete, and I know what to do next.
+## Retired
+
+- `grade10-site-commerce-commerce-US-06` - Shopper meets the identity bar at checkout · dropped 2026-10-13: Grade10 never required a sign-in or a verified identity for a checkout

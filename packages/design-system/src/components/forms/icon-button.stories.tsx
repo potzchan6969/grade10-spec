@@ -3,7 +3,7 @@ import { XIcon } from "lucide-react";
 import { IconButton } from "./icon-button";
 
 const meta = {
-  title: "Components/IconButton",
+  title: "Design System/Forms/IconButton",
   component: IconButton,
   tags: ["autodocs"],
   args: { children: <XIcon />, "aria-label": "Close" },
@@ -30,6 +30,9 @@ export const Medium: Story = { args: { size: "md" } };
 export const ExtraSmall: Story = { args: { size: "xs" } };
 
 export const Disabled: Story = { args: { disabled: true } };
+
+/** Its work is out: Button's spinner in the glyph's place, still focusable. */
+export const Loading: Story = { args: { loading: true } };
 
 export const Variants: Story = {
   render: (args) => (

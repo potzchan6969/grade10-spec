@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, screen, userEvent, within } from "storybook/test";
+import { useState } from "react";
+import { expect, fn, screen, userEvent, waitFor, within } from "storybook/test";
 import { BookingManageCard } from "./booking-manage-card";
 import {
   CANCELLED_RECORD,
@@ -10,7 +11,7 @@ import {
 } from "./fixtures";
 
 const meta = {
-  title: "Appointment Booking/BookingManageCard",
+  title: "Appointment/Booking/Blocks/BookingManageCard",
   component: BookingManageCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -97,4 +98,107 @@ export const Ended: Story = {
 
 export const WithError: Story = {
   args: { error: "That time was just taken. Pick another." },
+};
+
+/** A move in flight draws busy on Move alone, and a second press does nothing. */
+export const MovePending: Story = {
+  args: { movePending: true },
+  play: async ({ args, canvasElement }) => {
+    const move = within(canvasElement).getByRole("button", {
+      name: "Move the visit",
+    });
+    expect(move).toHaveAttribute("aria-busy", "true");
+    move.click();
+    expect(args.onMove).not.toHaveBeenCalled();
+  },
+};
+
+/** A refused move says why on the card, and Move presses again. */
+export const MoveRefused: Story = {
+  args: { moveFailed: "That time was just taken. Pick another." },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "That time was just taken. Pick another.",
+    );
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Move the visit" }),
+    );
+    expect(args.onMove).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** The dialog stays open and busy while the cancel runs; it closes as the result. */
+export const CancelHeldUntilCancelled: Story = {
+  render: function Render(args) {
+    const [pending, setPending] = useState(false);
+    const [record, setRecord] = useState(args.record);
+    return (
+      <BookingManageCard
+        {...args}
+        cancelPending={pending}
+        onCancel={() => {
+          args.onCancel();
+          setPending(true);
+          setTimeout(() => {
+            setPending(false);
+            setRecord(CANCELLED_RECORD);
+          }, 800);
+        }}
+        record={record}
+      />
+    );
+  },
+  play: async ({ args, canvasElement }) => {
+    await userEvent.click(
+      within(canvasElement).getByRole("button", { name: "Cancel the visit" }),
+    );
+    const dialog = await screen.findByRole("dialog", {
+      name: "Cancel this visit?",
+    });
+    const confirm = within(dialog).getByRole("button", {
+      name: "Yes, cancel it",
+    });
+    await userEvent.click(confirm);
+    await waitFor(() => expect(confirm).toHaveAttribute("aria-busy", "true"));
+    expect(dialog).toBeInTheDocument();
+    confirm.click();
+    expect(args.onCancel).toHaveBeenCalledTimes(1);
+    await waitFor(
+      () =>
+        expect(
+          screen.queryByRole("dialog", { name: "Cancel this visit?" }),
+        ).toBeNull(),
+      { timeout: 3000 },
+    );
+  },
+};
+
+/** A refused cancel shows in the open dialog, whose confirm presses again. */
+export const CancelRefused: Story = {
+  args: {
+    cancelPending: false,
+    cancelFailed: "We couldn't cancel this visit. Try again.",
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "We couldn't cancel this visit. Try again.",
+    );
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Cancel the visit" }),
+    );
+    const dialog = await screen.findByRole("dialog", {
+      name: "Cancel this visit?",
+    });
+    expect(within(dialog).getByRole("alert")).toHaveTextContent(
+      "We couldn't cancel this visit. Try again.",
+    );
+    expect(canvas.queryByRole("alert")).toBeNull();
+    await userEvent.click(
+      within(dialog).getByRole("button", { name: "Yes, cancel it" }),
+    );
+    expect(args.onCancel).toHaveBeenCalledTimes(1);
+    expect(dialog).toBeInTheDocument();
+  },
 };

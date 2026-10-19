@@ -1,6 +1,5 @@
 ---
 title: Rewards
-spec: grade10-site/loyalty/programme
 order: 3
 reviewed: 2026-10-06
 ---
@@ -27,7 +26,7 @@ Both kinds state:
   beside them
 - **Combines with** — which of the shop's own product, order and
   shipping discounts the coupon stacks with; the store default where the
-  reward states none — [Discounts](/p/grade10-site/store/discounts)
+  reward states none — [Discounts](/p/grade10-site/store/discounts#authoring-rules)
 
 | Reward | Discount | Scope | Minimum spend |
 | --- | --- | --- | --- |
@@ -55,6 +54,7 @@ variant alone, so a coupon scoped to named products or a filter is online only
 What a member can buy right now: in stock, inside its window, not archived.
 Stock reads as a yes or no, never a count.
 
+- 🎨 **Read signed out** - cost and coupon validity, never stock or edits
 - **One debit** - a single debit of the balance, oldest points first
 - **All or nothing** - a balance short of the cost is refused whole, never
   part paid
@@ -63,10 +63,23 @@ Stock reads as a yes or no, never a count.
 - **Nothing is held** - points are spent at the moment of taking, not reserved
 - **What the coupon needs, before the points go** - the basket it has to
   reach, and the one channel it is good at where there is only one
-- 🚧 **Online only on the menu** - a reward scoped to named products or a
-  catalog filter reads online only, whatever channels it names
 
-:::example{title="Buying from the shop"}
+::story{id="loyalty-rewards-blocks-rewardmenu--coupon-limits-are-stated" title="What a coupon needs, on the menu"}
+
+- 🚧 🎨 **Online only on the menu** - a reward scoped to named products or a
+  catalog filter reads online only, whatever channels it names
+- 🚧 **Twice costs once** - a redemption sent again, reload or not, records one
+- **A collection window** - a reward collected in person states the window it
+  must be collected in; a money-off coupon states its validity instead
+
+::story{id="loyalty-rewards-blocks-rewardmenu--collection-window-is-stated" title="A collection window, stated"}
+
+- **Refused** - a refused redemption says why on its own row, and can be
+  pressed again
+
+::story{id="loyalty-rewards-blocks-rewardmenu--redeem-failed" title="A refused redemption"}
+
+:::example{title="Buying from the shop" id="shop-buy-and-short"}
 | Step | Event | Points | Balance |
 | --- | --- | --- | --- |
 | Holds | 700 points already earned |  | 700 |
@@ -76,7 +89,7 @@ Stock reads as a yes or no, never a count.
 The second buy takes nothing; the balance stays at 200.
 :::
 
-::story{id="loyalty-membership-rewardmenu--default" title="The reward shop"}
+::story{id="loyalty-rewards-blocks-rewardmenu--default" title="The reward shop"}
 
 ## Using a Reward
 
@@ -89,7 +102,7 @@ carrying the definition it was bought under.
   checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
   lines
-- **Applied at the counter** — for a scope the till can match, inside the
+- 🎨 **Applied at the counter** — for a scope the till can match, inside the
   till session: staff apply it from the member's panel, or the member opens
   it on their phone and the till scans it; a product coupon's code is minted
   when chosen, for that sale alone, never shown as the coupon, and a gift
@@ -97,6 +110,8 @@ carrying the definition it was bought under.
   [Reward Types](#reward-types)
 - **Used by the paid order** — the paid order is what marks the coupon
   used, never a vendor's lagging count
+- 🚧 **A free item is never added** — its coupon needs the line in the
+  basket, or it is refused as Nothing matches
 - **One discount at a time** — an order carries one discount at a time,
   and a reward is in that count, so a free item and a money-off coupon are
   two sales
@@ -127,13 +142,14 @@ Every reward the programme knows, on sale or not; the
 | Cost | Points per redemption, copied onto the redemption when it is made |
 | Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken - [Authoring a Reward](/p/grade10-site/loyalty/operator-console#authoring-a-reward) |
 | Stock | Optional; a stocked reward is never oversold |
+| Coupon validity | Whole days the coupon runs, copied onto the coupon when redeemed, so changing it never shortens a coupon already taken |
 | Window | Optional; outside it the reward cannot be redeemed |
 | Archived | Retired, still readable in the member's own history |
 
 - **How it is obtained** `TBC` - no field carries it, so every live reward
   is on sale
-- **Units per redemption** `TBC` - a reward is taken one at a time until
-  the per-redemption and per-day bounds are chosen
+- **One unit per redemption** - a reward is taken one at a time; a member
+  who wants two redeems twice
 - ❓ **The physical catalog** - which items, and their point prices; Product's
   call
 
@@ -145,16 +161,18 @@ A reversal takes back a coupon the member still holds and returns the
 points that bought it — both move together, or the member ends up holding
 one and not the other. It is an operator's move, never a member's.
 
+- 🚧 **On the record** — in the operator log, with who and why
 - **Unused reverses** — the coupon is voided, and the points go back to the
   day the balance still runs to, even onto a balance brought to nothing, so a
   reversal never lengthens the life of points
 - **Used does not** — a used coupon stays used; cancelling or refunding the
   order that carried it changes nothing, and the points stay spent
-- 🚧 **Claimed by a sale does not** — refused, naming that sale, until the
+- **Claimed by a sale does not** — refused, naming that sale, until the
   sale gives the coupon back
 - **A lapsed balance does not** — there is nothing left to return into
 - **Tier is untouched** — a redemption never touched tier progress, so
   reversing one leaves it exactly where it was
+- 🚧 **Stock** — a unit goes back only where the redemption took one
 
 Where a reversal is refused and the member is still owed something, an
 operator gives rather than takes back:
@@ -163,7 +181,7 @@ operator gives rather than takes back:
   for
 - **Grant points instead** — where the reward no longer suits them
 
-:::example{title="Reversing a redemption"}
+:::example{title="Reversing a redemption" id="reverse-unused"}
 | Step | Event | Points | Balance |
 | --- | --- | --- | --- |
 | Holds | 500 points |  | 500 |
@@ -173,6 +191,16 @@ operator gives rather than takes back:
 
 Points paid against a bill are returned by their own rules —
 [Paying with Points](/p/grade10-site/loyalty/paying-with-points).
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Units per redemption | Decided | One. A member who wants two redeems twice; the reward menu offers no quantity. Decided 2026-10-18. | Product |
+:::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Quantity off the reward menu** - the menu's quantity stepper and its stories (`QuantityChangeIsReported`, `QuantityAtBound`) go, since a reward is taken one unit at a time; blocked on the designer, whose look the block is - Design
+:::
 
 :::detail{title="Code map" for="engineer"}
 - **Rewards service** — `packages/loyalty/backend/src/services/rewards`,

@@ -35,7 +35,7 @@ const SLIDES: FeaturedAuctionsBannerSlide[] = [
       "Front page image for 1997 Pocket Monsters Carddass Checklist, PSA 10",
     href: "https://grade10.com/auction/listings/carddass-checklist",
     currentBidMinor: 8_216_000,
-    currency: "HKD",
+    currency: "USD",
     countdown: { kind: "ends", atMs: CLOSE_MS },
   },
   {
@@ -47,7 +47,7 @@ const SLIDES: FeaturedAuctionsBannerSlide[] = [
       "Front page image for 1997 Pocket Monsters Carddass 000 Bandai Starters, PSA 10",
     href: "https://grade10.com/auction/listings/63261275",
     currentBidMinor: 14_706_400,
-    currency: "HKD",
+    currency: "USD",
     countdown: { kind: "ends", atMs: CLOSE_MS + 86_400_000 },
   },
   {
@@ -59,19 +59,19 @@ const SLIDES: FeaturedAuctionsBannerSlide[] = [
       "Front page image for 2025 Pokemon Simplified Chinese Mew Ex, PSA 10",
     href: "https://grade10.com/auction/listings/mew-upcoming",
     currentBidMinor: 36_505_723,
-    currency: "HKD",
+    currency: "USD",
     countdown: { kind: "opens", atMs: OPEN_MS },
   },
 ];
 
 /**
  * Featured carousel contract stories. The quiet All auctions grid lives under
- * Auction List/All Auctions. Full page chrome (Featured + All auctions) lives
- * under Pages/Auction/Auction List → Default. Earlier row/pair explorations live under
+ * Auction/Display/Auction List/All Auctions. Full page chrome (Featured + All auctions) lives
+ * under Auction/Display/Auction List → Default. Earlier row/pair explorations live under
  * Featured Auctions/Archived.
  */
 const meta = {
-  title: "Auction List/Featured Auctions",
+  title: "Auction/Display/Blocks/FeaturedAuctionsBanner",
   component: FeaturedAuctionsBanner,
   parameters: {
     layout: "fullscreen",

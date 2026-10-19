@@ -70,7 +70,7 @@ function OrderHistoryCard({
         tabIndex={0}
       >
         <div
-          className="flex w-max min-w-full items-center gap-4"
+          className="flex w-max min-w-full items-stretch gap-4"
           data-slot="order-history-card-slot"
         >
           {children}

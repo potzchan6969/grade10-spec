@@ -17,7 +17,7 @@ capability is the component contract underneath it.
   Watching sections; each lot shows Auction (image, title, close), Current
   Bid, Status (a badge, or the application's no-standing placeholder),
   Email alerts, and Unwatch only when the application supplies a watch toggle
-- 🚧 **Small viewport** — below `md`, each lot is a stacked card with identity,
+- **Small viewport** — below `md`, each lot is a stacked card with identity,
   inline current bid, Status when labelled, and a footer for Email alerts and
   Unwatch or View order; the whole card opens the lot or Winner Order; from
   `md`, the five-column table
@@ -50,8 +50,8 @@ capability is the component contract underneath it.
   outrun the write, and one row's switch never moves another's
 
 :::detail{title="Code map" for="engineer"}
-- **Blocks** — `AuctionRecord`, `AuctionRecordRow`, `AuctionRecordEmpty`,
-  `AuctionRecordTabs` and `WatchButton`, in `packages/ui`
+- **Blocks** — `AuctionRecord`, `AuctionRecordRow`, `AuctionRecordEmpty` and
+  `WatchButton`, in `packages/ui`
 - **Retiring** — `WatchingList` and `BiddingList`, with the one-table
   redesign
 :::

@@ -1,20 +1,23 @@
 # shared/ui/auction-listing Test Cases
 
-**Status:** pending-review · 0/36
-**Drafts styled:** 2026-10-06, tcs-rules r4
+**Status:** pending-review · 0/47
+**Drafts styled:** 2026-10-13, tcs-rules r5
+**Out of suite:** none
 
-## shared-ui-auction-listing-US1: The listing surface's rendering contract
+## Background
 
-**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/auction/listing-page`, which composes the blocks
+* The catalogue tile `AuctionLotCard` is a preview part, not a `@grade10/ui` export: it renders under Auction / Display / Screens / Auction List in the preview workbench, and its `locale` and `timeZone` props are settable in the Controls panel.
 
-**As an** application composing the shared lot gallery,
-**I want** several images to show a left thumbnail rail only when the gallery
-is wide enough for that rail beside the main frame,
-**so that** a stacked column keeps a clear stage with previous/next and
-progress instead of a crowded second rail.
+## g10.shared-auction-listing.US1: The listing surface's rendering contract
+
+**Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/auction/listing-page`, which composes the blocks
+
+**As an** application composing the shared bid panel,
+**I want** the panel to never offer an amount the supplied currency ceiling refuses,
+**so that** the collector reads the limit instead of a broken raise form.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-qgl rev=1 covers=g10.shared-auction-listing.SC-w7x,g10.shared-auction-listing.SC-tzp -->
-### shared-ui-auction-listing-US1-TC1-1: Buyer fee shows inline at 20%
+### g10.shared-auction-listing.US1-TC1: Buyer fee shows inline at 20%
 
 **Classification:**
 
@@ -45,7 +48,7 @@ progress instead of a crowded second rail.
 * Step 3: no buyer-fee tooltip opens.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-5tu rev=1 covers=g10.shared-auction-listing.SC-w7x,g10.shared-auction-listing.SC-tzp -->
-### shared-ui-auction-listing-US1-TC2-1: Signed-out panel omits the fee line
+### g10.shared-auction-listing.US1-TC2: Signed-out panel omits the fee line
 
 **Classification:**
 
@@ -74,7 +77,7 @@ progress instead of a crowded second rail.
 * The buyer-fee line is absent.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-lwb rev=1 covers=g10.shared-auction-listing.SC-7o5,g10.shared-auction-listing.SC-t9f,g10.shared-auction-listing.SC-2s5 -->
-### shared-ui-auction-listing-US1-TC3-1: Chips step from the current bid for a non-leader
+### g10.shared-auction-listing.US1-TC3: Chips step from the current bid for a non-leader
 
 Runs once per row of **Test data**.
 
@@ -93,17 +96,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing in `<currency>`.
 * The viewer has no maximum on the listing.
-* The listing has an accepted bid at <current bid>.
+* The listing has an accepted bid at `<current bid>`.
 
 **Test data:**
 
-| Currency | Current bid | Increment | Chip 1× | Chip 2× | Chip 4× |
-| --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 1000 (HK$10) | 21000 | 22000 | 24000 |
-| JPY | 20000 (¥20,000) | 500 (¥500) | 20500 | 21000 | 22000 |
-| USD | 100 ($1), a first bid at a 0 start's opening price | 100 ($1) | 200 | 300 | 500 |
+| `<currency>` | `<current bid>` | `<increment>` | `<chip 1×>` | `<chip 2×>` | `<chip 4×>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| HKD | 20000 | 1000 | 21000 | 22000 | 24000 | `<current bid>`: (HK$200); `<increment>`: (HK$10) |
+| JPY | 20000 | 500 | 20500 | 21000 | 22000 | `<current bid>`: (¥20,000); `<increment>`: (¥500) |
+| USD | 100 | 100 | 200 | 300 | 500 | `<current bid>`: ($1), a first bid at a 0 start's opening price; `<increment>`: ($1) |
 
 **Steps:**
 
@@ -113,11 +116,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: three chips read <current bid> plus 1×, 2× and 4× <increment>.
-* Step 3: the amount entered is the 2× chip's amount.
+* Step 2: three chips read `<chip 1×>`, `<chip 2×>` and `<chip 4×>`, equal to `<current bid>` plus 1×, 2× and 4× `<increment>`.
+* Step 3: the amount entered is `<chip 2×>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-tcx rev=1 covers=g10.shared-auction-listing.SC-7o5,g10.shared-auction-listing.SC-t9f,g10.shared-auction-listing.SC-2s5 -->
-### shared-ui-auction-listing-US1-TC4-1: Chips step from a leader's committed maximum
+### g10.shared-auction-listing.US1-TC4: Chips step from a leader's committed maximum
 
 Runs once per row of **Test data**.
 
@@ -136,14 +139,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing.
-* The viewer leads with a committed maximum of <leader maximum> over a current bid of <current bid>.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing in `<currency>`.
+* The viewer leads with a committed maximum of `<leader maximum>` over a current bid of `<current bid>`.
 
 **Test data:**
 
-| Currency | Current bid | Leader maximum | Increment | Chip 1× | Chip 2× | Chip 4× |
-| --- | --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 30000 (HK$300) | 1000 (HK$10) | 31000 | 32000 | 34000 |
+| `<currency>` | `<current bid>` | `<leader maximum>` | `<increment>` | `<chip 1×>` | `<chip 2×>` | `<chip 4×>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| HKD | 20000 | 30000 | 1000 | 31000 | 32000 | 34000 | `<current bid>`: (HK$200); `<leader maximum>`: (HK$300); `<increment>`: (HK$10) |
 
 **Steps:**
 
@@ -152,11 +155,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Three chips read <leader maximum> plus 1×, 2× and 4× <increment>.
-* No chip reads <current bid> plus an increment.
+* Three chips read `<chip 1×>`, `<chip 2×>` and `<chip 4×>`, equal to `<leader maximum>` plus 1×, 2× and 4× `<increment>`.
+* No chip reads `<current bid>` plus an increment.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-7vc rev=2 covers=g10.shared-auction-listing.SC-7o5,g10.shared-auction-listing.SC-t9f,g10.shared-auction-listing.SC-2s5 -->
-### shared-ui-auction-listing-US1-TC5-2: Before any bid, chip 1× is the opening price
+### g10.shared-auction-listing.US1-TC5: Before any bid, chip 1× is the opening price
 
 Runs once per row of **Test data**.
 
@@ -175,16 +178,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing.
-* The listing has no accepted bid and a starting price of <starting price>.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing in `<currency>`.
+* The listing has no accepted bid and a starting price of `<starting price>`.
 
 **Test data:**
 
-| Currency | Starting price | Opening price | Increment | Chip 1× | Chip 2× | Chip 4× |
-| --- | --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 20000, the starting price | 1000 (HK$10) | 20000 | 22000 | 24000 |
-| USD | 0 | 100 ($1), the lowest increment | 100 ($1) | 100 | 300 | 500 |
-| HKD | 0 | 1000 (HK$10), the lowest increment | 1000 (HK$10) | 1000 | 3000 | 5000 |
+| `<currency>` | `<starting price>` | `<opening price>` | `<increment>` | Chip 1× | `<chip 2×>` | `<chip 4×>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| HKD | 20000 | 20000 | 1000 | 20000 | 22000 | 24000 | `<starting price>`: (HK$200); `<opening price>`: the starting price; `<increment>`: (HK$10) |
+| USD | 0 | 100 | 100 | 100 | 300 | 500 | `<opening price>`: ($1), the lowest increment; `<increment>`: ($1) |
+| HKD | 0 | 1000 | 1000 | 1000 | 3000 | 5000 | `<opening price>`: (HK$10), the lowest increment; `<increment>`: (HK$10) |
 
 **Steps:**
 
@@ -194,14 +197,14 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: chip 1× reads <opening price> itself, not <opening price> plus an increment.
+* Step 2: chip 1× reads `<opening price>` itself, not `<opening price>` plus an increment.
 * Step 2: chip 1× is captioned as the next eligible bid.
-* Step 2: chips 2× and 4× read <chip 2×> and <chip 4×>, <opening price> plus two and four increments.
+* Step 2: chips 2× and 4× read `<chip 2×>` and `<chip 4×>`, `<opening price>` plus two and four times `<increment>`.
 * Step 2: on a 0 start, no chip reads 0.
-* Step 3: the amount entered is <opening price>.
+* Step 3: the amount entered is `<opening price>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-gk7 rev=1 covers=g10.shared-auction-listing.SC-dv0 -->
-### shared-ui-auction-listing-US1-TC6-1: A leader's typed raise starts above their maximum
+### g10.shared-auction-listing.US1-TC6: A leader's typed raise starts above their maximum
 
 Runs once per row of **Test data**.
 
@@ -220,15 +223,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing.
-* The viewer leads with a committed maximum of <leader maximum> over a current bid of <current bid>.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing in `<currency>`.
+* The viewer leads with a committed maximum of `<leader maximum>` over a current bid of `<current bid>`.
 
 **Test data:**
 
-| Currency | Current bid | Leader maximum | Next minimum | Raise floor | Chip 1× |
-| --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 30000 (HK$300) | 21000 | 30100, the maximum plus 100 | 31000 |
-| HKD | 20000 (HK$200) | 20000 (HK$200) | 21000 | 21000, the next minimum | 21000 |
+| `<currency>` | `<current bid>` | `<leader maximum>` | `<next minimum>` | `<raise floor>` | `<chip 1×>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| HKD | 20000 | 30000 | 21000 | 30100 | 31000 | `<current bid>`: (HK$200); `<leader maximum>`: (HK$300); `<raise floor>`: the maximum plus 100 |
+| HKD | 20000 | 20000 | 21000 | 21000 | 21000 | `<current bid>`: (HK$200); `<leader maximum>`: (HK$200); `<raise floor>`: the next minimum |
 
 **Steps:**
 
@@ -238,11 +241,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: the minimum is the greater of <next minimum> and <leader maximum> plus 100.
-* Step 3: the 1× chip reads <leader maximum> plus one increment, not the floor, where the two differ.
+* Step 2: the minimum `<raise floor>` is the greater of `<next minimum>` and `<leader maximum>` plus 100.
+* Step 3: the 1× chip reads `<chip 1×>`, equal to `<leader maximum>` plus one increment, not the floor, where the two differ.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ijc rev=1 covers=g10.shared-auction-listing.SC-emk,g10.shared-auction-listing.SC-i3i -->
-### shared-ui-auction-listing-US1-TC7-1: Blocks import by name and the gallery stands alone
+### g10.shared-auction-listing.US1-TC7: Blocks import by name and the gallery stands alone
 
 **Classification:**
 
@@ -272,7 +275,7 @@ Runs once per row of **Test data**.
 * Step 2: the gallery renders both images with no bid panel.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-8cq rev=1 covers=g10.shared-auction-listing.SC-v9a,g10.shared-auction-listing.SC-4sr -->
-### shared-ui-auction-listing-US1-TC8-1: Each gallery view reads its own source, else the main one
+### g10.shared-auction-listing.US1-TC8: Each gallery view reads its own source, else the main one
 
 Runs once per row of **Test data**.
 
@@ -291,14 +294,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingGallery` with two images, the first given the sources in **Test data**.
+* Storybook renders `ListingGallery` with two images, the first given thumbnail source `<thumb source>`, main source `<main source>` and zoom source `<zoom source>`.
 
 **Test data:**
 
-| Thumb source | Main source | Zoom source | Strip shows | Main frame shows | Zoom shows |
+| `<thumb source>` | `<main source>` | `<zoom source>` | `<strip shows>` | `<main frame shows>` | `<zoom shows>` |
 | --- | --- | --- | --- | --- | --- |
 | `<thumb url>` | `<main url>` | `<zoom url>` | `<thumb url>` | `<main url>` | `<zoom url>` |
 | none | `<main url>` | none | `<main url>` | `<main url>` | `<main url>` |
+
+| Field | Value |
+| --- | --- |
+| main url | The supplied main source of the first gallery image, distinct from the thumbnail and zoom sources; bind its URL only |
+| thumb url | The supplied thumbnail source of the first gallery image; bind its URL only |
+| zoom url | The supplied zoom source of the first gallery image, distinct from the thumbnail and main sources; bind its URL only |
 
 **Steps:**
 
@@ -309,12 +318,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the strip shows <strip shows>.
-* Step 2: the main frame shows <main frame shows>.
-* Step 4: the zoom shows <zoom shows>.
+* Step 1: the strip shows `<strip shows>`.
+* Step 2: the main frame shows `<main frame shows>`.
+* Step 4: the zoom shows `<zoom shows>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-04g rev=1 covers=g10.shared-auction-listing.SC-e6o,g10.shared-auction-listing.SC-96b,g10.shared-auction-listing.SC-1a8,g10.shared-auction-listing.SC-nlz,g10.shared-auction-listing.SC-ed7,g10.shared-auction-listing.SC-ln3 -->
-### shared-ui-auction-listing-US1-TC9-1: The strip shows only for several images
+### g10.shared-auction-listing.US1-TC9: The strip shows only for several images
 
 Runs once per row of **Test data**.
 
@@ -333,11 +342,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingGallery` with <image count> images.
+* Storybook renders `ListingGallery` with `<image count>` images.
 
 **Test data:**
 
-| Image count | Outcome |
+| `<image count>` | `<outcome>` |
 | --- | --- |
 | 0 | Nothing renders; no previous or next control |
 | 1 | The image renders with no thumbnail strip |
@@ -349,10 +358,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The gallery reads as <outcome>.
+* The gallery reads as `<outcome>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-bow rev=1 covers=g10.shared-auction-listing.SC-ogg,g10.shared-auction-listing.SC-0gu,g10.shared-auction-listing.SC-ptk -->
-### shared-ui-auction-listing-US1-TC10-1: Accessible names are the copy the application supplies
+### g10.shared-auction-listing.US1-TC10: Accessible names are the copy the application supplies
 
 **Classification:**
 
@@ -381,7 +390,7 @@ Runs once per row of **Test data**.
 * No accessible name is text the blocks supply themselves.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-53e rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi -->
-### shared-ui-auction-listing-US1-TC11-1: Bid rows read in the supplied locale and time zone
+### g10.shared-auction-listing.US1-TC11: Bid rows read in the supplied locale and time zone
 
 Runs once per row of **Test data**.
 
@@ -402,12 +411,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingBidHistoryList` with locale <locale> and time zone <time zone>.
+* Storybook renders `ListingBidHistoryList` with locale `<locale>` and time zone `<time zone>`.
 * One row was accepted 5 minutes ago, and one at 2026-09-01T12:00:00Z.
 
 **Test data:**
 
-| Locale | Time zone | Older row reads |
+| `<locale>` | `<time zone>` | `<older row reads>` |
 | --- | --- | --- |
 | en | Asia/Hong_Kong | 1 Sep 2026, 20:00 |
 | en | Asia/Tokyo | 1 Sep 2026, 21:00 |
@@ -422,13 +431,13 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the recent row reads in relative form, in <locale>.
-* Step 2: the older row reads <older row reads>; a zh-Hant month's wording is not asserted.
+* Step 1: the recent row reads in relative form, in `<locale>`.
+* Step 2: the older row reads `<older row reads>`; a zh-Hant month's wording is not asserted.
 * Step 2: no zone name follows the older row's time.
 * Each row keeps its accepted instant as data.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-7dq rev=1 covers=g10.shared-auction-listing.SC-ast,g10.shared-auction-listing.SC-h3u,g10.shared-auction-listing.SC-mm6 -->
-### shared-ui-auction-listing-US1-TC12-1: The owner opens their bidding from the recent-bids header
+### g10.shared-auction-listing.US1-TC12: The owner opens their bidding from the recent-bids header
 
 **Classification:**
 
@@ -462,7 +471,7 @@ Runs once per row of **Test data**.
 * Step 3: columns are amount and time only, no bid-type column.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-2dw rev=1 covers=g10.shared-auction-listing.SC-ast,g10.shared-auction-listing.SC-h3u,g10.shared-auction-listing.SC-mm6 -->
-### shared-ui-auction-listing-US1-TC13-1: Personal bid history with no rows renders nothing
+### g10.shared-auction-listing.US1-TC13: Personal bid history with no rows renders nothing
 
 **Classification:**
 
@@ -491,7 +500,7 @@ Runs once per row of **Test data**.
 * The recent-bids header still renders.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-0tl rev=1 covers=g10.shared-auction-listing.SC-yr9,g10.shared-auction-listing.SC-c86,g10.shared-auction-listing.SC-53a,g10.shared-auction-listing.SC-6dn -->
-### shared-ui-auction-listing-US1-TC14-1: Each dialog tab lists its own rows
+### g10.shared-auction-listing.US1-TC14: Each dialog tab lists its own rows
 
 **Classification:**
 
@@ -526,7 +535,7 @@ Runs once per row of **Test data**.
 * No maximum summary shows in the dialog.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-1nb rev=1 covers=g10.shared-auction-listing.SC-o4b,g10.shared-auction-listing.SC-wri,g10.shared-auction-listing.SC-1qn,g10.shared-auction-listing.SC-89v,g10.shared-auction-listing.SC-s3o,g10.shared-auction-listing.SC-srg,g10.shared-auction-listing.SC-ji6,g10.shared-auction-listing.SC-b43,g10.shared-auction-listing.SC-z9r,g10.shared-auction-listing.SC-92g,g10.shared-auction-listing.SC-b9p,g10.shared-auction-listing.SC-7da,g10.shared-auction-listing.SC-ujz,g10.shared-auction-listing.SC-egd -->
-### shared-ui-auction-listing-US1-TC15-1: The bid card follows the enrollment signal
+### g10.shared-auction-listing.US1-TC15: The bid card follows the enrollment signal
 
 Runs once per row of **Test data**.
 
@@ -545,11 +554,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` <signal> on an open listing.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `<signal>` on an open listing.
 
 **Test data:**
 
-| Signal | Bid action | Quick bids and custom field | Standing and fee line |
+| `<signal>` | `<bid action>` | `<quick bids and custom field>` | `<standing and fee line>` |
 | --- | --- | --- | --- |
 | `signed-out` | Offers sign-in | Not offered for bidding | Absent |
 | `needs-card` | Opens setup | Visible, disabled | Fee line shown |
@@ -563,13 +572,13 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the bid action reads as <bid action>.
-* Step 2: chips and custom field behave as <quick bids and custom field>.
-* Step 3: the bid action does <bid action>.
-* Standing and the fee line are <standing and fee line>.
+* Step 1: the bid action reads as `<bid action>`.
+* Step 2: chips and custom field behave as `<quick bids and custom field>`.
+* Step 3: the bid action does `<bid action>`.
+* Standing and the fee line are `<standing and fee line>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-edg rev=1 covers=g10.shared-auction-listing.SC-o4b,g10.shared-auction-listing.SC-wri,g10.shared-auction-listing.SC-1qn,g10.shared-auction-listing.SC-89v,g10.shared-auction-listing.SC-s3o,g10.shared-auction-listing.SC-srg,g10.shared-auction-listing.SC-ji6,g10.shared-auction-listing.SC-b43,g10.shared-auction-listing.SC-z9r,g10.shared-auction-listing.SC-92g,g10.shared-auction-listing.SC-b9p,g10.shared-auction-listing.SC-7da,g10.shared-auction-listing.SC-ujz,g10.shared-auction-listing.SC-egd -->
-### shared-ui-auction-listing-US1-TC16-1: Setup waits on a card and an attestation
+### g10.shared-auction-listing.US1-TC16: Setup waits on a card and an attestation
 
 Runs once per row of **Test data**.
 
@@ -592,7 +601,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Card entered | Attestation checked | Continue |
+| `<card entered>` | `<attestation checked>` | `<continue>` |
 | --- | --- | --- |
 | No | No | Disabled |
 | Yes | No | Disabled |
@@ -601,16 +610,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Set the card field to <card entered>.
-2. Set the attestation to <attestation checked>.
+1. Set the card field to `<card entered>`.
+2. Set the attestation to `<attestation checked>`.
 3. Read the continue control.
 
 **Expected Results:**
 
-* Continue is <continue>.
+* Continue is `<continue>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-8vb rev=1 covers=g10.shared-auction-listing.SC-8xx -->
-### shared-ui-auction-listing-US1-TC17-1: A supplied accessory sits at the recent-bids header's end
+### g10.shared-auction-listing.US1-TC17: A supplied accessory sits at the recent-bids header's end
 
 **Classification:**
 
@@ -640,7 +649,7 @@ Runs once per row of **Test data**.
 * Step 2: the header renders with nothing in that place.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-npr rev=2 covers=g10.shared-auction-listing.SC-ik3 -->
-### shared-ui-auction-listing-US1-TC18-2: A lost standing shows the badge and no banner
+### g10.shared-auction-listing.US1-TC18: A lost standing shows the badge and no banner
 
 **Classification:**
 
@@ -669,192 +678,263 @@ Runs once per row of **Test data**.
 * Step 1: the standing reads Did not win.
 * Step 2: no banner shows on the card.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC19-1: Draft at the ceiling is accepted
+<!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=4 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-q3n -->
+### g10.shared-auction-listing.US1-TC19: Draft at the USD ceiling is accepted
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, release
-* **Layer:** unit
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** Custom maximum ceiling
-
-**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` → CustomMaximumCeiling with the
-  custom maximum field empty.
-
-**Steps:**
-
-1. Enter `9999999999` into the custom maximum field.
-
-**Expected Results:**
-
-* The draft shown is `9999999999`.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-ygd rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC20-1: Typed digit past the ceiling restores the prior draft
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Layer:** unit
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** Custom maximum ceiling
-
-**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` → CustomMaximumCeiling with
-  custom maximum draft `9999999999`.
-
-**Steps:**
-
-1. Type one more digit into the custom maximum field.
-
-**Expected Results:**
-
-* The draft remains `9999999999`.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-35i rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC21-1: Paste past the ceiling from empty stays empty
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Layer:** unit
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** Custom maximum ceiling
-
-**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` → CustomMaximumCeiling with the
-  custom maximum field empty.
-
-**Steps:**
-
-1. Paste `10000000000` into the custom maximum field.
-
-**Expected Results:**
-
-* The draft remains empty.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC22-1: Paste past the ceiling restores the prior draft
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Layer:** unit
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** Custom maximum ceiling
-
-**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` → CustomMaximumCeiling with
-  custom maximum draft `500`.
-
-**Steps:**
-
-1. Paste `99999999999` into the custom maximum field.
-
-**Expected Results:**
-
-* The draft remains `500`.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-bfp rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC23-1: Fractional paste that exceeds after whole-major cleaning restores the prior draft
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Layer:** unit
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** Custom maximum ceiling
-
-**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` → CustomMaximumCeiling with
-  custom maximum draft `500`.
-
-**Steps:**
-
-1. Paste `10000000000.99` into the custom maximum field.
-
-**Expected Results:**
-
-* The draft remains `500`.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC24-1: Raise path restores on overshoot
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
+* **Type:** functional
+* **Suites:** regression
 * **Layer:** unit
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** Custom maximum ceiling
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` → Leading (raise private
-  maximum) with custom maximum draft `9999999999`.
+* The bid panel receives a USD ceiling of `<ceiling>` and is rendered for an open listing in `<mode>`.
+
+**Test data:**
+
+| `<mode>` | `<ceiling>` | Fixture notes |
+| --- | --- | --- |
+| Set maximum | USD10,000,000 | whole major units |
+| Raise maximum | USD10,000,000 | whole major units |
 
 **Steps:**
 
-1. Type `1` into the custom maximum field.
+1. Enter `<ceiling>` in the custom maximum field.
+2. Read the field value and Place Bid state.
+3. Commit the maximum and read the callback amount.
 
 **Expected Results:**
 
-* The draft remains `9999999999`.
+* The field retains `<ceiling>`.
+* Place Bid remains available.
+* The callback receives 1000000000 minor units in USD.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-ftm rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC25-1: Over-ceiling refuse shows no dedicated error
+<!-- trace:case id=g10.shared-auction-listing.TC-ygd rev=3 covers=g10.shared-auction-listing.SC-8ym -->
+### g10.shared-auction-listing.US1-TC20: Typing past the USD ceiling keeps the draft at its limit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Custom maximum ceiling
+
+**Pre-conditions:**
+
+* The custom maximum field uses the USD ceiling `<ceiling>`.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| ceiling | USD10,000,000 | whole major units (fixed configured ceiling) |
+| over ceiling | USD10,000,001 | (fixed boundary, one USD over) |
+
+**Steps:**
+
+1. Type `<over ceiling>` into the custom maximum field.
+2. Read the field value and validation message.
+
+**Expected Results:**
+
+* The typed draft stops at `<ceiling>`.
+* No maximum or invalid amount message appears.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-35i rev=3 covers=g10.shared-auction-listing.SC-wdd -->
+### g10.shared-auction-listing.US1-TC21: Pasting above the USD ceiling clamps the field
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Custom maximum ceiling
+
+**Pre-conditions:**
+
+* The custom maximum field is empty and uses the USD ceiling `<ceiling>`.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| ceiling | USD10,000,000 | whole major units (fixed configured ceiling) |
+| over ceiling | USD10,000,001 | (fixed boundary, one USD over) |
+
+**Steps:**
+
+1. Paste `<over ceiling>` into the custom maximum field.
+2. Read the field value.
+
+**Expected Results:**
+
+* The field value becomes `<ceiling>`.
+* The field does not display HKD or JPY cap choices.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=3 covers=g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-qdv -->
+### g10.shared-auction-listing.US1-TC22: Oversized replacement of a draft becomes the ceiling
+
+Runs once per row of **Test data**, in both set and raise modes.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** release
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
+* The custom maximum draft is `500`.
+
+**Test data:**
+
+| `<currency>` | `<replacement>` | `<entry>` | `<ceiling>` |
+| --- | --- | --- | --- |
+| USD | 10000001 | Paste | 10000000 |
+| USD | 10000001 | Selected multi-character insertText | 10000000 |
+| USD | 10000001 | Fill with multi-character insertText | 10000000 |
+
+**Steps:**
+
+1. Select the existing custom maximum draft.
+2. Replace it using `<entry>` with replacement `<replacement>`.
+3. Read the displayed draft and reviewed amount.
+
+**Expected Results:**
+
+* The displayed draft equals `<ceiling>`.
+* The reviewed amount agrees with the corrected draft.
+* No ceiling message appears.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-bfp rev=3 covers=g10.shared-auction-listing.SC-y2e -->
+### g10.shared-auction-listing.US1-TC23: Oversized fractional paste becomes the ceiling after cleaning
+
+Runs once per row of **Test data**, in both set and raise modes.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** release
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
+* The custom maximum draft is `500`.
+
+**Test data:**
+
+| `<currency>` | `<paste>` | `<ceiling>` |
+| --- | --- | --- |
+| USD | 10000001.99 | 10000000 |
+| USD | 999999999999999999999999999999.99 | 10000000 |
+
+**Steps:**
+
+1. Select the existing custom maximum draft.
+2. Paste `<paste>` into the custom maximum field.
+
+**Expected Results:**
+
+* The fractional suffix is discarded without rounding.
+* The displayed draft equals `<ceiling>`.
+* The reviewed amount agrees with the corrected draft.
+* No ceiling message appears.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=3 covers=g10.shared-auction-listing.SC-xxl -->
+### g10.shared-auction-listing.US1-TC24: Raise field retains typed draft and clamps replacement
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** release
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` in `<currency>`, in raise mode.
+* The collector leads with a committed maximum below `500`.
+* The raise custom maximum draft equals `<ceiling>`.
+
+**Test data:**
+
+| `<currency>` | `<ceiling>` | `<replacement>` |
+| --- | --- | --- |
+| USD | 10000000 | 10000001 |
+
+**Steps:**
+
+1. Append `1` to the raise custom maximum field.
+2. Read the displayed draft.
+3. Select the draft and paste `<replacement>`.
+4. Read the displayed draft.
+5. Set the draft to `500`, put the caret at its end.
+6. Paste `<replacement>` without selecting the draft.
+7. Read the displayed draft and reviewed amount.
+8. Repeat steps 5 to 7 in set mode.
+
+**Expected Results:**
+
+* Step 2: the displayed draft remains `<ceiling>`.
+* Step 4: the displayed draft equals `<ceiling>`.
+* Steps 7 and 8: paste clamps to `<ceiling>`.
+* The reviewed amount agrees with every corrected draft.
+* No ceiling message appears in either mode.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-ftm rev=3 covers=g10.shared-auction-listing.SC-z2x -->
+### g10.shared-auction-listing.US1-TC25: Ceiling correction shows no maximum or invalid amount message
+
+Runs once in set mode and once in raise mode.
 
 **Classification:**
 
@@ -864,29 +944,42 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** unit
-* **Automation status:** manual
+* **Layer:** e2e
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
+
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` → CustomMaximumCeiling; the
-  seeded `500` is cleared and `60500`, the listing's floor of HKD 60,500, is
-  entered, so no message shows under the custom maximum field.
+* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
+* The custom maximum draft is `60500`.
+* The listing's next minimum is at or below `60500`.
+* No message appears beside the custom maximum field.
+
+**Test data:**
+
+| `<currency>` | `<paste>` | `<ceiling>` |
+| --- | --- | --- |
+| USD | 10000001 | 10000000 |
 
 **Steps:**
 
-1. Paste `99999999999` into the custom maximum field.
-2. Observe the panel around the custom maximum field.
+1. Select the existing draft and paste `<paste>`.
+2. Read the custom maximum field and surrounding messages.
 
 **Expected Results:**
 
-* The draft remains `60500`.
-* No invalid-amount, below-floor or too-large message appears.
+* The displayed draft equals `<ceiling>`.
+* No maximum-bid, invalid-amount or below-floor message appears.
+* The reviewed amount agrees with the corrected draft.
+* No ceiling message appears.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-g02 rev=1 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7 -->
-### shared-ui-auction-listing-US1-TC26-1: Fractional paste at the ceiling after cleaning is accepted
+<!-- trace:case id=g10.shared-auction-listing.TC-g02 rev=3 covers=g10.shared-auction-listing.SC-6n7 -->
+### g10.shared-auction-listing.US1-TC26: Fractional paste at the currency ceiling is accepted
+
+Runs once in set mode and once in raise mode.
 
 **Classification:**
 
@@ -896,26 +989,39 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** unit
-* **Automation status:** manual
+* **Layer:** e2e
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
+
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` → CustomMaximumCeiling with the
-  custom maximum draft `500`.
+* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
+* The custom maximum draft is `500`.
+
+**Test data:**
+
+| `<currency>` | `<paste>` | `<ceiling>` |
+| --- | --- | --- |
+| USD | 10000000.99 | 10000000 |
 
 **Steps:**
 
-1. Paste `9999999999.99` into the custom maximum field.
+1. Select the existing draft and paste `<paste>`.
+2. Read the displayed draft and reviewed amount.
+3. Commit the maximum and read the callback amount.
 
 **Expected Results:**
 
-* The draft shown is `9999999999`.
+* The fractional suffix is discarded without rounding.
+* The displayed draft equals `<ceiling>`.
+* The reviewed amount agrees with the displayed draft.
+* The callback receives the ceiling in integer minor units.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-4f9 rev=1 covers=g10.shared-auction-listing.SC-13j,g10.shared-auction-listing.SC-alr,g10.shared-auction-listing.SC-4a9 -->
-### shared-ui-auction-listing-US1-TC27-1: Closed sold Recent bids show a winner crown
+### g10.shared-auction-listing.US1-TC27: Closed sold Recent bids show a winner crown
 
 **Classification:**
 
@@ -932,8 +1038,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` → ClosedSoldEqualMax: a closed sold lot whose first Recent bids row is the viewer's and has `isWinner` true, with bid history copy `winner` set to `Winner`.
-* Storybook renders `ListingAuctionBidCard` → Default: a live lot whose Recent bids rows carry no `isWinner`, with the same copy.
+* Storybook renders `ListingAuctionBidCard` → ClosedSoldEqualMax: a closed sold listing whose first Recent bids row is the viewer's and has `isWinner` true, with bid history copy `winner` set to `Winner`.
+* Storybook renders `ListingAuctionBidCard` → Default: a live listing whose Recent bids rows carry no `isWinner`, with the same copy.
 
 **Steps:**
 
@@ -946,7 +1052,7 @@ Runs once per row of **Test data**.
 * Step 2: no row shows a crown.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-8pk rev=1 covers=g10.shared-auction-listing.SC-13j,g10.shared-auction-listing.SC-alr,g10.shared-auction-listing.SC-4a9 -->
-### shared-ui-auction-listing-US1-TC28-1: Equal-max non-leader shows earlier-leads tip
+### g10.shared-auction-listing.US1-TC28: Equal-max non-leader shows earlier-leads tip
 
 **Classification:**
 
@@ -976,7 +1082,7 @@ Runs once per row of **Test data**.
 * Step 2: the tooltip reads When maximums match, the earlier one leads.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-1bg rev=1 covers=g10.shared-auction-listing.SC-13j,g10.shared-auction-listing.SC-alr,g10.shared-auction-listing.SC-4a9 -->
-### shared-ui-auction-listing-US1-TC29-1: No crown without its name
+### g10.shared-auction-listing.US1-TC29: No crown without its name
 
 **Classification:**
 
@@ -993,7 +1099,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ListingAuctionBidCard` renders ClosedSoldEqualMax's args - a closed sold lot whose first Recent bids row has `isWinner` true - with bid history copy that leaves `winner` unset.
+* `ListingAuctionBidCard` renders ClosedSoldEqualMax's args - a closed sold listing whose first Recent bids row has `isWinner` true - with bid history copy that leaves `winner` unset.
 
 **Steps:**
 
@@ -1004,8 +1110,8 @@ Runs once per row of **Test data**.
 * No row shows a crown.
 * No row carries an accessible name the copy does not supply, Winner included.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-pz8 rev=1 covers=g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-as2 -->
-### shared-ui-auction-listing-US1-TC55-1: A catalogue tile close follows the viewer zone
+<!-- trace:case id=g10.shared-auction-listing.TC-pz8 rev=2 covers=g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-as2 -->
+### g10.shared-auction-listing.US1-TC55: A catalogue tile close follows the viewer zone
 
 **Classification:**
 
@@ -1022,11 +1128,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The same close instant is rendered on `AuctionCard` once with `Asia/Hong_Kong` and once with `America/New_York`.
+* The same close instant is rendered on a closed `AuctionLotCard` once with `Asia/Hong_Kong` and once with `America/New_York`.
 
 **Steps:**
 
-1. Read each card's Ends / Opens / Closed line.
+1. Read each tile's close line.
 
 **Expected Results:**
 
@@ -1035,7 +1141,7 @@ Runs once per row of **Test data**.
 * The New York line names `EDT` and does not contain `HKT`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-38a rev=1 covers=g10.shared-auction-listing.SC-nlz -->
-### shared-ui-auction-listing-US1-TC30-1: Wide ListingLotGallery shows a left rail
+### g10.shared-auction-listing.US1-TC30: Wide ListingLotGallery shows a left rail
 
 **Classification:**
 
@@ -1066,7 +1172,7 @@ Runs once per row of **Test data**.
 * Previous and next remain available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-5ba rev=1 covers=g10.shared-auction-listing.SC-ed7 -->
-### shared-ui-auction-listing-US1-TC31-1: Stacked ListingLotGallery hides the rail
+### g10.shared-auction-listing.US1-TC31: Stacked ListingLotGallery hides the rail
 
 **Classification:**
 
@@ -1099,7 +1205,7 @@ Runs once per row of **Test data**.
 * Carousel progress remains available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-j0c rev=1 covers=g10.shared-auction-listing.SC-ln3 -->
-### shared-ui-auction-listing-US1-TC32-1: One ListingLotGallery image has no rail
+### g10.shared-auction-listing.US1-TC32: One ListingLotGallery image has no rail
 
 **Classification:**
 
@@ -1130,7 +1236,7 @@ Runs once per row of **Test data**.
 * Previous and next are not available.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-dmy rev=1 covers=g10.shared-auction-listing.SC-1mh -->
-### shared-ui-auction-listing-US1-TC33-1: Empty ListingLotGallery has no item or navigation
+### g10.shared-auction-listing.US1-TC33: Empty ListingLotGallery has no item or navigation
 
 **Classification:**
 
@@ -1159,8 +1265,8 @@ Runs once per row of **Test data**.
 * No gallery item is shown.
 * Previous and next are not available.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-n6b rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
-### shared-ui-auction-listing-US1-TC57-1: A tile's close line takes the supplied locale and zone together
+<!-- trace:case id=g10.shared-auction-listing.TC-n6b rev=2 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
+### g10.shared-auction-listing.US1-TC57: A tile's close line takes the supplied locale and zone together
 
 Runs once per row of **Test data**.
 
@@ -1177,11 +1283,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** Bid history
 
-**Decided by:** `packages/ui/src/blocks/auction-listing/auction-card.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `AuctionCard` closing at 2027-09-01T12:00:00Z with locale zh-Hant and time zone <viewer zone>.
+* The preview workbench renders a closed `AuctionLotCard` closing at 2027-09-01T12:00:00Z with locale zh-Hant and time zone <viewer zone>.
 
 **Test data:**
 
@@ -1200,7 +1306,7 @@ Runs once per row of **Test data**.
 * The line names <zone name>, in English though the locale is zh-Hant, and not HKT.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ae5 rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
-### shared-ui-auction-listing-US1-TC58-1: A bid row's display text replaces its formatted time
+### g10.shared-auction-listing.US1-TC58: A bid row's display text replaces its formatted time
 
 **Classification:**
 
@@ -1220,14 +1326,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Storybook renders `ListingBidHistoryList` with locale en and time zone Asia/Hong_Kong.
-* One row carries an accepted instant and the display text <display text>.
+* One row carries an accepted instant and the display text `<display text>`.
 * One row carries only an accepted instant, 2026-09-01T12:00:00Z.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| <display text> | `DISPLAY-TEXT-MARKER`, a string no date formatter could produce |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| display text | DISPLAY-TEXT-MARKER | a string no date formatter could produce |
 
 **Steps:**
 
@@ -1236,9 +1342,386 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the row shows <display text> as supplied.
+* Step 1: the row shows `<display text>` as supplied.
 * Step 1: no date, clock or zone name shows beside it.
 * Step 2: the row reads 1 Sep 2026, 20:00.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-dej rev=2 covers=g10.shared-auction-listing.SC-huw -->
+### g10.shared-auction-listing.US1-TC59: A quick bid above the ceiling is offered at the ceiling
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Quick bids
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` in `<currency>`.
+* The collector leads with `<committed maximum>`.
+* The configured increment `<increment>` produces the corrected chip amounts `<chips offered>`; the stepped bids before clamping hold at least one amount above `<ceiling>` and at least one below it.
+
+**Test data:**
+
+| `<currency>` | `<ceiling>` | `<committed maximum>` | `<increment>` | `<chips offered>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- |
+| USD | 10000000 | 9999800 | 100 | 9999900, 10000000 | All amounts are whole major units; the 2x and 4x amounts both land on the ceiling and merge to one chip |
+| USD | 10000000 | 9999700 | 100 | 9999800, 9999900, 10000000 | All amounts are whole major units |
+
+| Field | Value |
+| --- | --- |
+| ceiling minor units | 1000000000 |
+
+**Steps:**
+
+1. Read each quick-bid chip's caption and amount.
+2. Select the chip whose stepped amount exceeds the ceiling.
+3. Commit the maximum and read the callback amount.
+
+**Expected Results:**
+
+* Every chip amount is at or below `<ceiling>`.
+* A chip whose stepped amount exceeds the ceiling shows `<ceiling>` and is captioned as the auction's limit, not the amount's delta.
+* A chip at or below the ceiling keeps its stepped amount and caption.
+* Committing a clamped chip passes `<ceiling minor units>`, equal to `<ceiling>` × 100 in USD minor units.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-w4r rev=2 covers=g10.shared-auction-listing.SC-atq -->
+### g10.shared-auction-listing.US1-TC60: Chips clamped onto the same amount merge to one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Quick bids
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` in USD.
+* The collector leads with a committed maximum of `9999900`, and the increment is `100`, so all three stepped amounts land at or above the `10000000` ceiling.
+
+**Steps:**
+
+1. Read the quick-bid chip row.
+2. Select the chip and commit.
+
+**Expected Results:**
+
+* The row shows one chip at `10000000`, captioned as the limit; no duplicate amount appears twice.
+* The callback receives `1000000000` minor units.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-9rx rev=2 covers=g10.shared-auction-listing.SC-v6g,g10.shared-auction-listing.SC-1mi -->
+### g10.shared-auction-listing.US1-TC61: A maximum at the ceiling collapses the entry group
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** `Raise floor`, `Ceiling reached`
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` in USD with the `10000000` ceiling.
+* The whole-major-unit fixture has the collector leading with maximum `<committed maximum>` and current bid `<current bid>`.
+
+**Test data:**
+
+| `<committed maximum>` | `<current bid>` | Floor driving the collapse |
+| --- | --- | --- |
+| 10000000 | 1200 | maximum plus the minimum raise |
+| 9999950 | 9999950 | minimum next bid 10000050, already above the ceiling |
+
+**Steps:**
+
+1. Read the raise group on the bid panel.
+2. Look for quick-bid chips, the custom maximum field and the bid action.
+3. Read the status row and the copy under it.
+
+**Expected Results:**
+
+* No quick-bid chip, no custom maximum field and no bid action render.
+* A status row leads with Max: `<committed maximum>`.
+* The row carries the private-maximum explanation behind its Info tooltip and one line that the auction accepts no higher amount; the raise mechanism line does not appear.
+* The buyer-fee line still renders.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-5dh rev=2 covers=g10.shared-auction-listing.SC-cfl -->
+### g10.shared-auction-listing.US1-TC62: A listing priced past the ceiling offers no entry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Ceiling reached
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` in USD with the `10000000` ceiling.
+* The listing's minimum next bid is above the ceiling.
+* The collector holds no maximum on the listing.
+
+**Steps:**
+
+1. Read the bid panel's entry group.
+
+**Expected Results:**
+
+* No quick-bid chip, no custom maximum field and no bid action render.
+* A status row names the ceiling amount and a line that bidding has reached the highest amount the auction accepts.
+* The buyer-fee line still renders.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-swf rev=2 covers=g10.shared-auction-listing.SC-rnz -->
+### g10.shared-auction-listing.US1-TC63: The collapse outranks the card setup lock
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** `Ceiling reached`, `Bid enrollment`
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` under the needs-card enrollment signal.
+* The collector leads with a committed maximum at the USD ceiling.
+
+**Steps:**
+
+1. Read the bid panel's entry group.
+
+**Expected Results:**
+
+* The collapsed status row renders; the disabled chips, custom field and link-card action do not.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-oem rev=1 covers=g10.shared-auction-listing.SC-2wv -->
+### g10.shared-auction-listing.US1-TC64: A digit appended at the ceiling is kept by paste and dropped by typing
+
+Runs once in set mode and once in raise mode.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Custom maximum ceiling
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
+* The custom maximum draft equals the USD ceiling of `10000000` and the caret is at its end.
+
+**Steps:**
+
+1. Append `1` by paste and read the displayed draft.
+2. Set the draft to `10000000` again, append `1` by typing and read the displayed draft.
+
+**Expected Results:**
+
+* Step 1: the displayed draft reads `10000000`, the USD ceiling.
+* Step 2: the displayed draft reads `10000000`, the previous draft.
+* No ceiling message appears in either step.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-9l4 rev=1 covers=g10.shared-auction-listing.SC-teu,g10.shared-auction-listing.SC-v9a -->
+### g10.shared-auction-listing.US1-TC65: The lens follows the pointer and reads the zoom source
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** Gallery magnification
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-lot-gallery.stories.tsx`
+
+**Pre-conditions:**
+
+* Storybook or preview renders a gallery whose selected image supplies
+  distinct `src` and `zoomSrc`.
+
+**Steps:**
+
+1. Render the gallery.
+2. Move the pointer over the main frame.
+3. Check the lens and the image it renders.
+
+**Expected Results:**
+
+* A magnifier lens shows at the pointer position.
+* The magnified image inside the lens requests `zoomSrc`.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-ar2 rev=1 covers=g10.shared-auction-listing.SC-4sr -->
+### g10.shared-auction-listing.US1-TC66: A missing zoom source magnifies the main one
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Gallery sources
+
+**Pre-conditions:**
+
+* Storybook or preview renders a gallery whose selected image supplies only
+  `src` and `alt`.
+
+**Steps:**
+
+1. Render the gallery.
+2. Move the pointer over the main frame.
+
+**Expected Results:**
+
+* The lens shows and its magnified image requests `src`.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-jd4 rev=1 covers=g10.shared-auction-listing.SC-bk7,g10.shared-auction-listing.SC-53x -->
+### g10.shared-auction-listing.US1-TC67: A focused lens moves with arrows, never steps, and hides on Escape
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** Gallery magnification
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-lot-gallery.stories.tsx`, `packages/design-system/src/components/display/lens.stories.tsx`
+
+**Pre-conditions:**
+
+* Storybook or preview renders a gallery with several images.
+
+**Steps:**
+
+1. Focus the lens group over the main frame.
+2. Press an arrow key.
+3. Press Escape.
+
+**Expected Results:**
+
+* The lens shows on focus and moves within the frame on each arrow key.
+* The gallery does not step to another image while the lens moves.
+* Escape hides the lens.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-br7 rev=1 covers=g10.shared-auction-listing.SC-qlq -->
+### g10.shared-auction-listing.US1-TC68: A touch pointer raises no lens and a swipe still steps
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Gallery magnification
+
+**Pre-conditions:**
+
+* Storybook or preview renders a gallery with several images on a touch
+  pointer.
+
+**Steps:**
+
+1. Move a touch pointer over the main frame.
+2. Swipe across the gallery.
+
+**Expected Results:**
+
+* No lens is shown.
+* The swipe steps the gallery to the next image.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-v48 rev=1 covers=g10.shared-auction-listing.SC-qyd,g10.shared-auction-listing.SC-73b -->
+### g10.shared-auction-listing.US1-TC69: Non-selected slides and video carry no focusable lens
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Gallery magnification
+
+**Pre-conditions:**
+
+* Storybook renders a `ListingLotGallery` with several images, and a
+  `ListingGallery` whose selected item is a video.
+
+**Steps:**
+
+1. Tab through the lot gallery.
+2. Move the pointer over the selected video item.
+
+**Expected Results:**
+
+* Only the selected slide's lens group takes focus in the lot gallery.
+* The video item shows no lens, and its own controls keep working.
 
 ## Raised
 
@@ -1272,6 +1755,23 @@ Runs once per row of **Test data**.
 - Activity time reads relative below seven days and as a local moment from seven days.
 - A zone name on a tile or a bid card is English in every language: the zone's short name in US English, HKT for Hong Kong, and an offset where US English has none.
 - The tile's Ends, Opens and Closed words stay English in every language, and a Chinese month's wording is not asserted by these cases; a month that reads as a bare number goes to the bug lane.
+- The field uses the listing currency's bid ceiling: USD 10,000,000, HKD 80,000,000 and JPY 5,000,000,000 whole major units (Q1).
+- An appended typed digit above the ceiling retains the valid draft; oversized paste or replacement becomes the ceiling after whole-major cleaning (Q2, Q5).
+- Ceiling correction shows no maximum-bid or invalid-amount message; set and raise share the rule (Q3, Q5).
+- The field uses the listing currency's bid ceiling: USD 10,000,000, HKD 80,000,000 and JPY 5,000,000,000 whole major units (`cap-custom-maximum-at-currency-ceiling` Q1).
+- Chips step 1×, 2× and 4× the increment - from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1.
+- Ceiling correction of a typed draft shows no maximum-bid or invalid-amount message; set and raise share the rule.
+- A lost standing on the bid card is the Did not win badge alone; that the card was not charged is said on My Auctions, never on the lot card.
+- None this run. The blind reading raised the question whether the HKD and JPY ceilings stay as dead branches; it went to `decisions.md` `## Raised` and landed as Q26.
+- Magnification happens in place under a pointer-following lens; the
+  magnifier button and zoom dialog are gone (decisions Q1).
+- A touch pointer raises nothing, and no fallback replaces the dialog on
+  touch (decisions Q2).
+- The lens group takes the consumer's `zoom` plus optional
+  `zoomInstructions` as its accessible name; the magnified copy stays
+  hidden from assistive technology (decisions Q3).
+- `zoomSrc` feeds the magnified view and still falls back to `src`
+  (decisions Q4).
 
 ## Reconciliation
 
@@ -1475,6 +1975,71 @@ openspec/changes/archive/.
 | `shared-ui-auction-listing-SC-13` for the personal bidding dialog's rows | **Out of suite:** the dialog (`ListingUserBidHistory`) takes the same required `locale` and `timeZone`; the store's type check holds the props and `listing-user-bid-history.stories.tsx` renders it. The scenario names a bid card only |
 
 **Uncovered anchors:** none for `Localized activity`.
+
+**Run:** QA1 read only the frozen behavioral bundle at `/private/tmp/issue-1008-01a11f70-1791528937777/qa1-input`: outline, journeys, proposal, decisions, UI states, linked PRDs, configuration, continuity cases and the auction domain suite. It was denied Requirements, scenario markers and coverage, technical design, tasks, reconciliation and archives. QA2 read that bundle, independent Dev output and durable continuity markers at checkpoint `7e827ba031b8083adb5d16105a7bae40e689d3e2`, against fetched main `68548f870`.
+
+| Blind case | Disposition | Scenario claims verified |
+| --- | --- | --- |
+| US1-TC19-2 | **Folded in** - exact ceilings in USD/HKD/JPY; both modes and callback units | SC-38, SC-58 |
+| US1-TC20-2 | **Folded in** - native single-digit append retains the prior draft; includes prior drafts below the ceiling to distinguish restoration from clamping | SC-39, typed branch of SC-60 |
+| US1-TC21-2 | **Folded in** - native paste into empty field becomes the ceiling in both modes | SC-40 |
+| US1-TC22-2 | **Folded in** - selected paste and multi-character replacement become the ceiling; fill using insertText is replacement | SC-41, SC-59 |
+| US1-TC23-2 | **Folded in** - fractional paste is cleaned before clamping, including amounts beyond safe Number precision | SC-42 |
+| US1-TC24-2 | **Folded in** - raise shares append restoration and replacement correction; appended paste clamps in both modes | SC-43, SC-59, pasted branch of SC-60 |
+| US1-TC25-2 | **Folded in** - correction alone shows no ceiling, invalid-amount or below-floor copy | No-copy clauses of SC-38 to SC-43 and SC-53; SC-59, SC-60 |
+| US1-TC26-2 | **Folded in** - fractional paste at the cleaned ceiling is accepted without rounding; both modes and committed minor units | SC-53, SC-58 |
+
+- **Native operations** - The browser walk drives keyboard append, selection replacement, multi-character fill and paste. Shared component regressions check actual input DOM, draft/review state and callback units together. Every corrected draft agrees with the reviewed amount. Existing cleaning, clear and ordinary below-ceiling paths remain focused money/component regressions in tasks 1.1 and 1.4.
+- **Consumer contract** - The required `view.ceilingMinor` is supplied with currency by the consumer from `bidCeiling(currency)`. Type checks in tasks 1.4 and 2.3 verify required migration; the adapter regression in task 2.1 verifies policy wiring. Shared code does not duplicate currency policy.
+- **Superseded reading** - Empty-on-paste and restore-on-paste are rejected by Q1/Q2/Q5. SC-40 to SC-43 keep issued titles for CLI identity; their current result clauses control the cases. No case is dropped.
+- **Continuity** - Unchanged cases remain in the durable suite and are retained by the acceptance fold; they are not copied into this narrow active suite. The changed ceiling anchor lists current scenarios in source order. TC19 to TC26 remain draft at revision 2.
+- **Tasks** - Group 1 owns shared input, helper/component tests, fixtures and source/type/story verification. Groups 2 and 4 own consumer wiring and native collector walks. This records planned verification, not executed test results.
+- **Questions** - None. Frozen Q1 to Q5 settle the ceiling branches. QA2 adds executable detail without changing anchors or product decisions.
+
+**Run:** QA1 read the frozen anchors - the feature-set groups, the walked-by-nobody journeys line, the proposal, the decisions and the UI states - and drafted cases without the requirement texts or scenarios. QA2 reconciled each case against the scenarios Dev wrote, adding the `covers` links below.
+
+| Blind case | Disposition | Scenario claims verified |
+| --- | --- | --- |
+| US1-TC59 | **Folded in** - a stepped amount above the ceiling is offered at the ceiling and captioned as the limit; unclamped chips keep their stepped amount; a committed clamped chip passes the ceiling in minor units | SC-61 |
+| US1-TC60 | **Folded in** - chips clamped onto the same amount merge to one chip | SC-62 |
+| US1-TC61 | **Folded in** - both collapse readings: a maximum at the ceiling and a floor pushed past it by the minimum next bid; the row leads with `Max`, keeps the Info explanation, drops the raise-mechanism line and keeps the buyer fee | SC-63, SC-64 |
+| US1-TC62 | **Folded in** - a viewer holding no maximum sees the ceiling amount and the limit line, with the fee line intact | SC-65 |
+| US1-TC63 | **Folded in** - the collapse renders ahead of the needs-card lock | SC-66 |
+
+- **Continuity** - Unchanged cases stay in the durable suite and are retained by the acceptance fold; they are not copied into this active suite.
+- **Tasks** - Group 1 owns the shared helpers, component, catalogs, fixtures, stories and verification; group 2 owns consumer copy supply; the walk is group 3. This records planned verification, not executed test results.
+- **Questions** - None. Q1 to Q5 settle the collapse, the trigger, the fee line and the clamp.
+
+**Cases** - All 14 cases remain drafts. `TC-fb2@4` covers SC-9e0 and SC-q3n; `TC-ygd@3` SC-8ym; `TC-35i@3` SC-wdd; `TC-jr1@3` SC-z2x and SC-qdv; `TC-bfp@3` SC-y2e; `TC-hsy@3` SC-xxl; `TC-ftm@3` SC-z2x; `TC-g02@3` SC-6n7; `TC-dej@2` SC-huw; `TC-w4r@2` SC-atq; `TC-9rx@2` SC-v6g and SC-1mi; `TC-5dh@2` SC-cfl; `TC-swf@2` SC-rnz; and `TC-oem@1` SC-2wv. `TC-fb2` was repaired in place at rev4 to assert the exact 1,000,000,000 USD-minor-unit callback in both set and raise routes. No case was added.
+
+**Scenario coverage** - The 16 linked scenarios are fully asserted. `SC-7o5`, `SC-t9f`, `SC-2s5` and `SC-dv0` remain out of suite and are exercised by their existing durable cases. Those unchanged durable rows still have older HKD/JPY fixtures for archive reconciliation. Automated `Decided by` labels on draft cases are not execution evidence. `TC-19` remains a draft manual case after the callback repair. No contradictory assertion remains.
+
+**Run:** no blind pass - a carrier repoint: `AuctionCard` is removed and the tile deadline requirement moves to `AuctionLotCard`, the tile the catalogue draws. The two tile cases were revised in place; no case joins or leaves.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| US1-TC55 | Revised as US1-TC55-2, rev 2 | Its carrier is now a closed `AuctionLotCard`; the expected zone names are unchanged |
+| US1-TC57 | Revised as US1-TC57-2, rev 2 | Its carrier is now the preview workbench tile; the deciding formatter test `packages/date/src/local.test.ts` is unchanged, same rows and results |
+
+**Run:** Not a blind pass — the change was written code-first on its own
+decision (decisions Q6), so these cases were drafted with sight of the
+implementation and the delta scenarios. This reconciliation maps each
+modified and added anchor to a case, records what the durable suite already
+carries, and names what remains pending.
+
+| Finding | Disposition |
+| --- | --- |
+| The pointer raises the lens over the selected image | Covered by `shared-ui-auction-listing-SC-67` / `g10.shared-auction-listing.US1-TC65` (`TC-9l4`) |
+| A focused lens moves with arrows, never steps, and hides on Escape | Covered by `shared-ui-auction-listing-SC-68`, `shared-ui-auction-listing-SC-69` / `g10.shared-auction-listing.US1-TC67` (`TC-jd4`) |
+| A touch pointer raises no lens and a swipe still steps | Covered by `shared-ui-auction-listing-SC-70` / `g10.shared-auction-listing.US1-TC68` (`TC-br7`) |
+| Non-selected slides and video carry no focusable lens | Covered by `shared-ui-auction-listing-SC-71`, `shared-ui-auction-listing-SC-72` / `g10.shared-auction-listing.US1-TC69` (`TC-v48`) |
+| The magnified view requests `zoomSrc` | Modified `shared-ui-auction-listing-SC-03` (`SC-v9a`) is covered by `g10.shared-auction-listing.US1-TC65` (`TC-9l4`) |
+| An omitted zoom source magnifies `src` | Modified `shared-ui-auction-listing-SC-04` (`SC-4sr`) is covered by `g10.shared-auction-listing.US1-TC66` (`TC-ar2`) |
+| Labels, including `zoomInstructions`, come from the consumer | Durable `g10.shared-auction-listing.US1-TC10` carries modified `shared-ui-auction-listing-SC-08`; no new case needed |
+| Raised questions from the reading | None — Q1–Q6 settled the dialog removal, the touch limitation, the accessible name, the zoom source, the package, and the order |
+
+**Uncovered anchors:** none. Post-hoc `covers` links for the modified
+source scenarios land on TC65 and TC66.
 
 ### Manual
 

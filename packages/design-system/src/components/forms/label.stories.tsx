@@ -4,7 +4,7 @@ import { Input } from "./input";
 import { Label } from "./label";
 
 const meta = {
-  title: "Components/Label",
+  title: "Design System/Forms/Label",
   component: Label,
   tags: ["autodocs"],
   args: { children: "Email" },

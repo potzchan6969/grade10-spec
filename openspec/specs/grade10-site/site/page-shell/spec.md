@@ -19,24 +19,28 @@ it.
 - Session-independent chrome
   - Chrome before the session: the header and the footer render before the
     session has resolved
-  - Stable layout: no chrome control appears, disappears, or moves when the
-    session arrives
+  - Stable layout: no chrome control appears or disappears when the session
+    arrives; only the account entry's own change in width moves the language
+    and search controls on the wide header
+  - Account placeholder: until the session first answers, the account entry
+    is a placeholder the size of the account icon, with nothing to press; a
+    first read that fails shows Sign In, and a later read keeps the entry
+    shown unless it finds a different session
 - Account control
   - Session-aware entry: a primary Sign In button when signed out, the
     account icon when signed in
   - Account menu: signed in, the sign-in email with its initial avatar above
     My Auctions and Sign Out; Profile joins first wherever the account page is
     carried, and My Orders ahead of My Auctions once Store answers; Sign Out
-    stays last; KYC, My Auction Orders and any item whose page the site
+    stays last; KYC and any item whose page the site
     withholds stay out
   - Account page sign-out: the account page offers Sign Out wherever it is
     carried
-- Members-only cart
-  - Sign-in before the cart: the Cart control opens sign-in while no session
-    is signed in, and the drawer stays closed
-  - The cart the ask was for: the drawer opens by itself once the session
-    arrives, and nothing is left waiting when the ask is dismissed
-  - Active-line count: header and drawer agree without opening the drawer; unknown and signed-out counts stay hidden
+- Cart for anyone
+  - One press to the cart: the Cart control opens the drawer whether or not a
+    session is signed in, on a member's cart or the cart this browser holds
+  - Active-line count: header and drawer agree without opening the drawer; an
+    unknown count stays hidden
 - Links only to real surfaces
   - Controls with surfaces behind them: search and cart stay absent until the
     site answers them
@@ -92,12 +96,17 @@ region.
 
 The site SHALL render the header and the footer before the session has
 resolved. The account entry's presentation and destination SHALL depend on the
-session: signed out shows a primary Sign In button; signed in shows the account
-icon that opens the account menu. What the Cart control opens and whether its
-count badge appears SHALL depend on the session too, and nothing else in the
-chrome SHALL. No chrome control SHALL appear, disappear, or move when the
-session arrives. The cart count badge SHALL NOT change the presence or
-position of the Cart control.
+session: before it first answers the account entry is the placeholder; signed
+out shows a primary Sign In button; signed in shows the account icon that opens
+the account menu. Whose cart the Cart control opens and counts SHALL depend on
+the session too, and nothing else in the chrome SHALL.
+
+When the session arrives, no other chrome control SHALL appear or disappear.
+The only controls that SHALL move are those to the account entry's left - the
+language control, and search where the site answers it, on the wide header -
+and only by the account entry's own change in width. The Cart control SHALL
+NOT move. The cart count badge SHALL NOT change the presence or position of
+the Cart control.
 
 <!-- trace:scenario id=g10.site-page-shell.SC-9ud rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-04 - A first paint while the session resolves
@@ -107,15 +116,21 @@ position of the Cart control.
 - **THEN** the header and the footer are already rendered
 - **AND** the content region shows that the surface is loading
 
-<!-- trace:scenario id=g10.site-page-shell.SC-yxt rev=2 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-yxt rev=3 -->
 #### Scenario: grade10-site-site-page-shell-SC-05 - No layout shift when the session arrives
 **Serves:** grade10-site-site-page-shell-US-02 - Collector sees the chrome before the session resolves
 
 - **GIVEN** a page rendered while the session was resolving
 - **WHEN** the session resolves
 - **THEN** the account entry matches the session (Sign In when signed out,
-  account icon when signed in)
-- **AND** no other chrome control appears, disappears, or moves
+  account icon when signed in), in the placeholder's place
+- **AND** no other chrome control appears or disappears
+- **AND** the Cart control stays where it was
+- **AND** on a wide viewport the language control, and search where the site
+  answers it, move left by the account entry's change in width: not at all
+  for the account icon, and by Sign In's width less 40 CSS pixels for Sign In
+- **AND** every other control, the primary navigation and the compact bar's
+  controls included, stays where it was
 - **AND** a cart count badge that later appears for a signed-in member leaves
   the Cart control where it was
 
@@ -344,46 +359,21 @@ the full viewport.
 - **AND** the account entry remains in the bar
 - **AND** the menu panel leaves a visible gutter beside the viewport edge
 
-### Requirement: The Cart control asks for sign-in before it opens the cart
+### Requirement: The Cart control opens the cart for anyone
 
-While no session is signed in, activating the Cart control SHALL open the
-site's sign-in dialog and SHALL NOT open the cart drawer. A session that is
-still resolving counts as none, so the control asks.
+Activating the Cart control SHALL open the cart drawer and SHALL NOT ask for
+sign-in. A signed-in member's drawer SHALL show their cart; a signed-out
+collector's drawer SHALL show the cart this browser holds.
 
-When sign-in succeeds and the collector remains on the surface they asked
-from, the site SHALL open the cart drawer they pressed for. When they dismiss
-the dialog without signing in, they SHALL remain signed out with no drawer
-open, and the site SHALL NOT open one later.
-
-While a session is signed in, activating the Cart control SHALL open the cart
-drawer.
-
-<!-- trace:scenario id=g10.site-page-shell.SC-g63 rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-g63 rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-21 - A signed-out collector presses Cart
 **Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
 
-- **GIVEN** a signed-out collector on a surface whose header offers Cart
+- **GIVEN** a signed-out collector on a surface whose header offers Cart, and
+  a line in the cart this browser holds
 - **WHEN** they activate the Cart control
-- **THEN** the sign-in dialog opens over the surface
-- **AND** the cart drawer does not open
-
-<!-- trace:scenario id=g10.site-page-shell.SC-ew2 rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-22 - Sign-in opens the cart they asked for
-**Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
-
-- **GIVEN** a signed-out collector who opened sign-in from the Cart control
-- **WHEN** they sign in successfully and remain on that surface
-- **THEN** the cart drawer opens
-- **AND** the sign-in dialog is closed
-
-<!-- trace:scenario id=g10.site-page-shell.SC-d19 rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-23 - Dismissing sign-in opens nothing
-**Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
-
-- **GIVEN** a signed-out collector who opened sign-in from the Cart control
-- **WHEN** they dismiss the dialog without signing in
-- **THEN** they remain signed out on that surface
-- **AND** no cart drawer is open
+- **THEN** the cart drawer opens and shows that line
+- **AND** no sign-in dialog opens
 
 <!-- trace:scenario id=g10.site-page-shell.SC-tj7 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-24 - A member presses Cart
@@ -394,13 +384,14 @@ drawer.
 - **THEN** the cart drawer opens
 - **AND** no sign-in dialog opens
 
-### Requirement: The header shows the member cart's reviewed active-line count
+### Requirement: The header shows the current cart's reviewed active-line count
 
 On every surface whose header offers Cart, the site SHALL supply the header
-and drawer title with the same active-line count from the current member's
-reviewed basket. Each distinct active line SHALL count once, irrespective of
-quantity. Active lines include `default` and `adjusted` lines and exclude
-`soldOut` and `unavailable` lines. Checkout eligibility alone SHALL NOT
+and drawer title with the same active-line count from the current cart's
+reviewed basket: the signed-in member's, or the cart this browser holds.
+Each distinct active line SHALL count once, irrespective of quantity. Active
+lines include `default` and `adjusted` lines and exclude `soldOut` and
+`unavailable` lines. Checkout eligibility alone SHALL NOT
 determine the count.
 
 The header SHALL show the full positive count in wide and compact layouts.
@@ -458,14 +449,14 @@ The count SHALL NOT introduce a Cart control on a surface that omits it.
 
 ### Requirement: The cart count refreshes without opening the drawer
 
-The site SHALL review the member's basket on cart hydration and after settled
+The site SHALL review the current basket on cart hydration and after settled
 cart mutations, with the drawer open or closed, and when the drawer opens and
 on retry after a failed review. Once review succeeds, the header SHALL reflect
 that reviewed basket without requiring the collector to open the drawer.
 
-Before the member has a verified count, pending hydration or review SHALL
-show no badge. During a later review for the same member, the header SHALL
-retain that member's last verified count until the review completes, including
+Before the current cart has a verified count, pending hydration or review
+SHALL show no badge. During a later review of the same cart, the header SHALL
+retain that cart's last verified count until the review completes, including
 when the refresh follows a failed cart update. A failed review SHALL hide the
 badge; a successful review SHALL replace it with the newly verified count.
 The header SHALL NOT show a badge skeleton or invent a count from unreviewed lines.
@@ -537,21 +528,24 @@ A change made on another device SHALL appear after the next review.
 - **AND** opening the drawer reviews the basket, and the header and the drawer
   title both display `3`
 
-### Requirement: The cart count belongs only to the current member
+### Requirement: The cart count belongs only to the current cart
 
-The site SHALL omit the count while the session is unresolved or signed out.
-When session ownership changes, it SHALL clear the previous member's count
-immediately and await the current member's reviewed basket. A late response
-for a previous session SHALL NOT restore or replace the current count.
+The site SHALL omit the count while the session is unresolved. A signed-out
+collector's count SHALL be that of the cart this browser holds. When session
+ownership changes, the site SHALL clear the previous count immediately and
+await the current cart's reviewed basket. A late response for a previous
+session SHALL NOT restore or replace the current count.
 
-<!-- trace:scenario id=g10.site-page-shell.SC-b9m rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-50 - Signed-out and unresolved sessions have no count
+<!-- trace:scenario id=g10.site-page-shell.SC-b9m rev=2 -->
+#### Scenario: grade10-site-site-page-shell-SC-50 - An unresolved session has no count, and a guest counts this browser's cart
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
-- **GIVEN** a surface whose header offers Cart
-- **WHEN** its session is unresolved or signed out
+- **GIVEN** a surface whose header offers Cart, and `2` active lines in the
+  cart this browser holds
+- **WHEN** its session is unresolved
 - **THEN** the header displays no count badge
-- **AND** the Cart control remains available under its existing sign-in rule
+- **AND** once the session resolves signed out, the badge displays `2`
+- **AND** the Cart control stays available throughout
 
 <!-- trace:scenario id=g10.site-page-shell.SC-z8c rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-51 - Signing out clears the previous member's count
@@ -595,9 +589,9 @@ SHALL start sign-out.
 
 **Sign Out label** - The menu's sign-out item SHALL read "Sign Out".
 
-**Not offered** - The menu SHALL NOT offer KYC or My Auction Orders.
+**Not offered** - The menu SHALL NOT offer KYC.
 
-<!-- trace:scenario id=g10.site-page-shell.SC-y2l rev=2 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-y2l rev=3 -->
 #### Scenario: grade10-site-site-page-shell-SC-56 - Account menu once Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu once Store answers
 
@@ -605,7 +599,7 @@ SHALL start sign-out.
 - **WHEN** they activate the account control
 - **THEN** My Orders comes immediately before My Auctions
 - **AND** Sign Out is the last item
-- **AND** the menu does not offer KYC or My Auction Orders
+- **AND** the menu does not offer KYC
 
 <!-- trace:scenario id=g10.site-page-shell.SC-04a rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-57 - Sign out from the menu
@@ -697,3 +691,154 @@ SHALL start sign-out.
 - **GIVEN** a signed-in collector on a build that carries the account page, with the account menu open
 - **WHEN** they activate Profile
 - **THEN** they arrive at the account page
+
+### Requirement: The account entry holds its place until the session first answers
+
+Until the session first answers, the header SHALL hold the account entry's
+place with a placeholder, so a signed-in collector is never offered Sign In.
+The account entry SHALL be in one of these states:
+
+| State | When | Shows |
+| --- | --- | --- |
+| Placeholder | From the first paint until the session first answers, including in a page the site writes before anybody's session is read | A round placeholder 40 CSS pixels across, the account icon's footprint, in the account entry's place; nothing to focus or press, and nothing read aloud |
+| Account icon | The latest read that did not fail returned a signed-in session | The account icon that opens the account menu |
+| Sign In | The latest read that did not fail returned no session, or every read so far has failed | The primary Sign In button |
+
+**First answer** - The session first answers when its first read since the
+page loaded returns a signed-in session, returns no session, or fails. A read
+that answers that the collector has no session, including a refusal saying
+they are not signed in, returns no session; a read fails only when it returns
+neither a session nor that answer. Moving between surfaces SHALL NOT bring the
+placeholder back; a reload SHALL start over at it, with no session remembered
+from before.
+
+**Both widths** - The placeholder SHALL be the same size on a wide viewport
+and in the compact bar, where it SHALL sit beside Cart when the header offers
+Cart.
+
+**Once** - After the first answer the account entry SHALL NOT return to the
+placeholder. While the session is read again, the header SHALL keep the entry
+already shown until that read returns a session other than the one shown. A
+later read that fails SHALL keep the entry already shown; a later read that
+returns no session SHALL show Sign In.
+
+**No timer** - The site SHALL NOT replace the placeholder after a time of its
+own; the placeholder SHALL show until the session answers.
+
+<!-- trace:scenario id=g10.site-page-shell.SC-3s6 rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-68 - The account entry is a placeholder until the session answers
+**Serves:** grade10-site-site-page-shell-US-09 - a collector opening the site before their session has answered
+
+- **GIVEN** a viewport at the wide breakpoint, or 375 CSS pixels wide
+- **WHEN** a collector opens any surface the shell wraps and the session has
+  not yet answered
+- **THEN** the account entry's place in the header bar holds a round
+  placeholder 40 CSS pixels across, beside Cart in the compact bar when the
+  header offers Cart
+- **AND** neither Sign In nor the account icon appears
+
+<!-- trace:scenario id=g10.site-page-shell.SC-gua rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-75 - The placeholder cannot be focused or pressed
+**Serves:** grade10-site-site-page-shell-US-09 - a collector who reaches the placeholder by pointer or keyboard
+
+- **GIVEN** a header showing the placeholder
+- **WHEN** the collector clicks it, or moves focus through the header with the
+  keyboard
+- **THEN** nothing opens and the address does not change
+- **AND** focus never lands on the placeholder
+
+<!-- trace:scenario id=g10.site-page-shell.SC-0lr rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-76 - Assistive technology reads nothing for the placeholder
+**Serves:** grade10-site-site-page-shell-US-09 - a collector using a screen reader before their session has answered
+
+- **GIVEN** a header showing the placeholder
+- **WHEN** assistive technology reads the header
+- **THEN** it reads nothing for the placeholder, and announces no loading
+
+<!-- trace:scenario id=g10.site-page-shell.SC-tah rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-69 - A page written before any session is read shows the placeholder
+**Serves:** grade10-site-site-page-shell-US-09 - a collector whose browser shows the written page before the site's scripts run
+
+- **GIVEN** a page the site writes before anybody's session is read
+- **WHEN** a browser shows that page before the site's scripts have taken it
+  over
+- **THEN** the account entry is the placeholder
+- **AND** Sign In does not appear
+
+<!-- trace:scenario id=g10.site-page-shell.SC-i26 rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-77 - The placeholder stays when the scripts take a written page over
+**Serves:** grade10-site-site-page-shell-US-09 - a collector whose browser shows the written page before the site's scripts run
+
+- **GIVEN** a written page showing the placeholder
+- **WHEN** the site's scripts take the page over before the session answers
+- **THEN** the placeholder stays in the account entry's place
+- **AND** Sign In does not appear before the session answers
+
+<!-- trace:scenario id=g10.site-page-shell.SC-31a rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-70 - A signed-in collector goes straight to the account icon
+**Serves:** grade10-site-site-page-shell-US-09 - a returning collector who is already signed in
+
+- **GIVEN** a collector who is signed in
+- **WHEN** they open the site and their session answers
+- **THEN** the account icon takes the placeholder's place
+- **AND** Sign In does not appear at any point from the first paint to the
+  account icon
+
+<!-- trace:scenario id=g10.site-page-shell.SC-qnl rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-71 - A failed session read shows Sign In
+**Serves:** grade10-site-site-page-shell-US-09 - a visitor whose session cannot be read
+
+- **GIVEN** a header showing the placeholder
+- **WHEN** the session's first read fails
+- **THEN** Sign In takes the placeholder's place
+- **AND** activating Sign In leads to sign-in
+
+<!-- trace:scenario id=g10.site-page-shell.SC-gmi rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-72 - A re-read keeps the entry already shown
+**Serves:** grade10-site-site-page-shell-US-09 - a collector coming back to the tab after the session has answered
+
+- **GIVEN** a header showing Sign In, or the account icon, after the session
+  first answered
+- **WHEN** the collector moves to another surface, or the session is read
+  again, as when they come back to the tab
+- **THEN** the header keeps showing that entry while the read is under way
+- **AND** the placeholder does not return
+- **AND** the entry changes only when that read returns a session other than
+  the one shown
+
+<!-- trace:scenario id=g10.site-page-shell.SC-uqh rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-73 - A slow session read keeps the placeholder
+**Serves:** grade10-site-site-page-shell-US-09 - a signed-in collector on a slow connection
+
+- **GIVEN** a signed-in collector whose header shows the placeholder
+- **WHEN** a minute passes and the session read has neither answered nor
+  failed
+- **THEN** the header still shows the placeholder, and Sign In has not
+  appeared
+- **AND** moving to another surface while the read is under way keeps the
+  placeholder
+- **AND** when the read then answers, the account icon takes the
+  placeholder's place
+
+<!-- trace:scenario id=g10.site-page-shell.SC-ra1 rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-74 - A later read that fails keeps the entry already shown
+**Serves:** grade10-site-site-page-shell-US-09 - a signed-in collector whose connection drops after the session has answered
+
+- **GIVEN** a header showing the account icon after the session first answered
+- **WHEN** a later read of the session fails without returning a session
+- **THEN** the account icon stays, and neither Sign In nor the placeholder
+  appears
+- **AND** when a later read returns no session, as after signing out
+  elsewhere, Sign In takes the account icon's place
+
+<!-- trace:scenario id=g10.site-page-shell.SC-nuz rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-78 - Signing in or out after the first answer does not bring the placeholder back
+**Serves:** grade10-site-site-page-shell-US-09 - a collector who signs in or out after the session has answered
+
+- **GIVEN** a header showing Sign In, or the account icon, after the session
+  first answered
+- **WHEN** the collector signs in from Sign In, or signs out from the account
+  menu, on that page
+- **THEN** the account entry changes straight to the account icon, or to Sign
+  In
+- **AND** the placeholder does not show at any point

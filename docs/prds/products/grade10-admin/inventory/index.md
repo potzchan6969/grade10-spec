@@ -22,10 +22,15 @@ and for stock, the number that matters is whether it reconciles — available
 plus every hold, grouped by who holds it, equal to what the house actually
 has.
 
-## Items
-
-- **One object, one owner** — an item is one physical object and who owns
-  it, apart from stock — [Items](/p/grade10-admin/inventory/items)
+| Page | What it holds |
+| --- | --- |
+| [Products and Stock](/p/grade10-admin/inventory/catalog) | The catalogue, house stock, its holds and Cert IDs |
+| [Items](/p/grade10-admin/inventory/items) | One record per physical object, and who owns it |
+| [Locations](/p/grade10-admin/inventory/locations) | Every place an item can be, caps, labels and counts |
+| [Transit](/p/grade10-admin/inventory/transit) | Moves between places, shipments and what arrives |
+| [Intake and Release](/p/grade10-admin/inventory/intake) | How items come into custody and how they leave |
+| [Services and Hand-offs](/p/grade10-admin/inventory/services) | Which service acts on an item, and passing it to the next |
+| [Inventory Console](/p/grade10-admin/inventory/console) | The item page, scanning, receiving, the transit board and counts |
 
 ## Product Assets
 
@@ -46,12 +51,23 @@ has.
   does not change the listing.
 
 :::detail{title="Product decisions" for="pm"}
+Three records count physical things and never meet: the catalogue counts
+house stock and the auction's holds, the register holds objects only the
+vault marks, and Shopify counts the shop's retail stock. The owner asks for
+inventory every downstream service builds on - the vault, grading, store
+consignment and auction consignment. The design is
+[Inventory and Services Design](/references/inventory-and-services-design).
+
 Reusable media belongs on the catalogue product so Auction listings of that
 product can start from material already checked once. Listing galleries keep
 their own copy at Save; later product-gallery edits do not rewrite a lot.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| One record per object | Decided | Every object the house touches is an item, whoever owns it: a Cert record links to one the custodian owns and a grading card is one from hand-in, so a slab never has two identities - decided under the owner's delegation, 2026-10-08 | Product |
+| Interchangeable stock | Decided | Stock nobody could tell apart, such as sealed boxes, stays a count on its product - decided under the owner's delegation, 2026-10-08 | Product |
+| Places and moves are inventory's | Decided | Every service asks inventory where an item is and to move it; none keeps a place of its own - decided under the owner's delegation, 2026-10-08 | Product |
+| The shop's own stock | Decided | Shopify keeps the shop's retail stock; a consigned item is published to the store and its sale comes back - decided under the owner's delegation, 2026-10-08 | Product |
 | Media owner | Decided | Catalogue product, not a Cert ID or physical unit. Cert-tagged source media is a later change. | Product |
 | Media policy | Decided | Same accepted types, 100 MiB maximum, and gallery bounds as Auction listing media. | Product |
 | Storefront product media | Decided | Out of scope; product assets prepare Auction material only. | Product |

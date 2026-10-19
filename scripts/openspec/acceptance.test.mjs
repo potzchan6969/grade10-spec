@@ -774,7 +774,7 @@ const TEMPLATE_FILL = [
   ["requirement name", "Search results"],
   ["requirement text", "The system SHALL return the items the query matches."],
   ["scenario name", "Results match"],
-  ["<capability>-US-<n>", "Search"],
+  ["<app>.<domain>-<capability>.US<n>", "site.search-search.US1"],
   ["the walk this rule sits on", "a reader searches"],
   ["condition", "a reader searches"],
   ["expected outcome", "matching items appear"],
@@ -794,7 +794,9 @@ function deltaFromTemplate() {
       assert.ok(fill || alone, `fill the template placeholder "${lead}"`);
       return fill?.[1] ?? "";
     })
-    .replaceAll("<capability>", "site-search");
+    .replaceAll("<app>", "site")
+    .replaceAll("<domain>", "search")
+    .replaceAll("<capability>", "search");
 }
 
 test("a change written from the spec template folds into a new durable spec", () => {
@@ -806,7 +808,10 @@ test("a change written from the spec template folds into a new durable spec", ()
   assert.match(durable, /## Purpose\n\nReaders find items\. They search/);
   assert.match(durable, /## Feature set\n\n- Search\n {2}- Query: find/);
   assert.match(durable, /### Requirement: Search results/);
-  assert.match(durable, /#### Scenario: site-search-SC-01 - Results match/);
+  assert.match(
+    durable,
+    /#### Scenario: site.search-search.SC1 - Results match/,
+  );
   assert.deepEqual(
     prepared.contractTargets.find(
       (one) => one.path === "openspec/specs/site/search/spec.md",
@@ -1267,6 +1272,38 @@ test("acceptance rejects incomplete rename instructions and unresolved visible c
     acceptanceReadiness(unresolved.root, CHANGE).join("\n"),
     /unresolved TBC/,
   );
+});
+
+test("shared-planning-change-stages-SC-79 - acceptance names each open Raised row with its recommendation and whose it is, and not a closed one", () => {
+  const { root } = sandbox();
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/decisions.md"),
+    [
+      "## Decisions",
+      "",
+      "| Q | Asked | Decided | Instead of |",
+      "| --- | --- | --- | --- |",
+      "| Q1 | Does a refund take the point back? | Yes - decided by the round | No |",
+      "",
+      "## Raised",
+      "",
+      "| Capability | Raised | Landed |",
+      "| --- | --- | --- |",
+      "| site/search | Does a refund take the point back? A: yes. B: no. recommended: A | Q1 |",
+      "| site/search | Which day is a tier judged on? A: the order's. B: today. recommended: A |  |",
+      "| site/search | Is a scheduled lot open to bid on? | ❓ design - nobody has said |",
+      "",
+    ].join("\n"),
+  );
+
+  const refused = acceptanceReadiness(root, CHANGE).filter((one) =>
+    one.includes("## Raised"),
+  );
+
+  assert.deepEqual(refused, [
+    "decisions.md ## Raised still holds an open row - site/search: Which day is a tier judged on? A: the order's. B: today. - recommended: A - the pm's to answer, or QA2's to close on its recommendation",
+    "decisions.md ## Raised still holds an open row - site/search: Is a scheduled lot open to bid on? - no recommendation - the design's to answer, or QA2's to close on its recommendation",
+  ]);
 });
 
 test("acceptance accepts a populated reconciliation table and rejects its empty template", () => {
@@ -1863,6 +1900,27 @@ test("suite fold puts a revised case where its earlier revision stood", () => {
     merged,
     /<!-- trace:case id=g\.search\.TC-a1 rev=2 [^\n]*-->\n### site-search-US1-TC2-2:/,
   );
+});
+
+test("suite fold puts deprecated cases at the bottom of their journey", () => {
+  const merged = merge(
+    suiteOf(
+      group(
+        1,
+        caseBlock("site-search-US1-TC1-1", "actual"),
+        caseBlock("site-search-US1-TC2-1", "deprecated"),
+        caseBlock("site-search-US1-TC3-1", "draft"),
+      ),
+    ),
+    suiteOf(group(1, caseBlock("site-search-US1-TC4-1", "actual"))),
+  );
+  const order = [...merged.matchAll(/^### (\S+):/gm)].map((one) => one[1]);
+  assert.deepEqual(order, [
+    "site-search-US1-TC1-1",
+    "site-search-US1-TC3-1",
+    "site-search-US1-TC4-1",
+    "site-search-US1-TC2-1",
+  ]);
 });
 
 test("suite fold keeps the marker above a journey's first case when the change rewrites the journey", () => {

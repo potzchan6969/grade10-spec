@@ -4,21 +4,19 @@
 
 ## Why
 
-The cart-header backend gives the store one active cart, saved-invoice reuse, retirement of older invoices after edits and protection for a later cart when payment settles. The frontend integrates those behaviors while retaining every published checkout requirement, including safe repetition and recovery.
+The cart drawer already reviews the basket and tender, but Pay still needs to send them through the store's existing checkout request and show its answer. This change connects the drawer to the current backend without changing the backend.
 
 ## What Changes
 
-- **Current decision** - Review on open and make a fresh server payment decision at Pay, including a repeated Pay for an existing invoice.
-- **Purchase identity** - Carry the same purchase across Pay, reload, response loss and terminal replay; use the server's saved invoice or lifecycle answer.
-- **Changed cart** - Persist line and tender changes before Pay; ignore stale response effects and refresh orders as older invoices retire.
-- **Payment return** - Poll the existing order and re-read the active cart and tender; preserve a later edited or rebuilt cart.
-- **Readiness** - Include backend prerequisites for concurrency, provider-dispatch recovery and terminal replay where the branch falls short of the durable contract. Frontend fixtures cannot clear those gates.
+- **Current decision** - Review on open, wait for cart and tender writes, and let the existing checkout request make the Pay decision.
+- **Current request** - Send the reviewed lines with their seen prices, the accepted coupon, and positive points or no points field when none are spent.
+- **One Pay at a time** - Accept one Pay per drawer and disable its actions while the answer is pending, using `add-store-cart-drawer-ui`'s pending-operation scope. Changes from another tab or session still invalidate older answers.
+- **Answers** - Use the existing feedback for refusal, named lines, verification, settling and failure. A lost answer is not retried by itself.
+- **Payment return** - Poll the order, read the cart and tender again once it is paid, and keep the static Your Orders link on both Shopify confirmation pages.
 
 ## Non-Goals
 
-- **Operations** - No deployment, migration execution, production data operation, provider configuration change or real payment in this planning run.
-- **Surfaces** - No public guest checkout, standalone checkout page, embedded payment form, new order badge or order-specific Shopify return link.
-- **Local workarounds** - No new dependency, duplicate quote/order client, browser-owned invoice authority, local settlement, points hold or variant-based cart deletion.
+See [Non-Goals](decisions.md#non-goals).
 
 ## Product Record
 
@@ -28,7 +26,7 @@ The cart-header backend gives the store one active cart, saved-invoice reuse, re
 
 ### Modified
 
-- `grade10-site/store/checkout` - retain the complete durable contract and add cart-header integration, current decision on reuse, retirement visibility and conditional cart conversion.
+- `grade10-site/store/checkout` - add the drawer's Pay integration, one Pay at a time and the paid cart refresh. The published requirement "A checkout intent is safe to repeat" is not modified.
 
 ### Preserved Dependencies
 
@@ -39,7 +37,7 @@ The cart-header backend gives the store one active cart, saved-invoice reuse, re
 ## Impact
 
 - **Applications** - Grade10's drawer and orders; shared store-frontend clients and fixtures; ZZZ and operator adapters remain compatibility consumers.
-- **Backend** - Integrate `feature/g10-cart-header-v1` at its final revision and verify remaining durable guarantees before marking the complete integration delivered. Technical design identifies each prerequisite and its evidence.
+- **Backend** - None. The merged cart-header backend is used as it is; its guarantees are verified by `add-checkout-purchase-safety`.
 - **Shared UI** - Reuse existing drawer, order blocks and translations; no new export or badge.
 - **History** - Preserve acceptance snapshots, first implementation baseline, completed tasks and case IDs. New work receives new task addresses; acceptance names the prior fingerprint with `--supersedes`.
 
@@ -49,10 +47,12 @@ No platform impact: authentication, localization and routing contracts remain un
 
 ## Decisions
 
-The product owner's 2026-10-07 instruction is authoritative: "the frontend should be integrated all changes from the backend and the requirements from the specs". It supersedes the pending frontend-only amendment. Unsupported requirements remain required; backend limitations are not accepted product behavior.
+On 2026-10-09, @kinisworking kept this change to the frontend and moved the backend guarantees to a separate change ([Q24](decisions.md)). It supersedes the 2026-10-07 instruction for this change. The durable requirements are not weakened.
 
 ## References
 
 - [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
+- [Cart Pending Operations](../../../docs/prds/products/grade10-site/store/cart.md#pending-operations)
+- [Drawer Pending Scope](../add-store-cart-drawer-ui/proposal.md#pending-operations)
 - [Technical design](tech-design.md)
 - [Delivery tasks](tasks.md)

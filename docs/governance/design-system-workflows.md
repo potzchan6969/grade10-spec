@@ -97,14 +97,14 @@ The operative rule, from the ownership table: **a component may not offer a vari
 
 ## Blocks and views
 
-Three homes, and the first that fits is the answer:
+Three homes, and the first that fits is the answer. Where each one's stories go in the workbench, and how screens, states, Scenarios and prototypes are drawn: [Storybook](storybook.md).
 
 
 | It is                                                 | Home                                                     | Preview                                                      |
 | ----------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
 | A primitive                                           | `packages/design-system/src/components/<group>/`         | `pnpm run storybook:design-system`                           |
 | A compound block a capability spec names              | `packages/ui/src/blocks/<product-context>-<capability>/` | `pnpm run storybook:ui`                                      |
-| An assembly — a page, put together once for one route | The **consuming application**                            | `apps/preview/src/pages`, via `pnpm run storybook:workbench` |
+| An assembly — a page, put together once for one route | The **consuming application**                            | `apps/preview/src/pages/<domain>/<feature>/`, via `pnpm storybook` |
 
 
 `packages/ui/src/blocks/` is one flat level of **capability** directories. The namespace is the capability, never the page: a page is an assembly, so its sections belong to the capabilities they express and the page itself never gets a directory. If the capability's directory exists, the block joins it; if the spec exists but no directory does, create one; if no spec exists, the spec comes first.
@@ -172,7 +172,7 @@ Recorded so they are not mistaken for coverage. The full lists are in [`design-c
 
 Each artifact is the sole authority over exactly one thing and no artifact owns two — the table in [`design-code-sync.md`, "Ownership"](design-code-sync.md#ownership), with the designer's pre-flight checklist at ["For designers: before you create or change a component"](design-code-sync.md#for-designers-before-you-create-or-change-a-component).
 
-On the specification side the split is a handoff, not a hierarchy. **A PM writes the proposal, decisions and journeys, then a designer adds optional UI design** — `/workflow-plan` and `/workflow-design`, following the corresponding planning skills. One `/planning-dev` invocation runs fresh isolated QA1, Dev and QA2 contexts: QA1 drafts cases blind to scenarios, Dev writes technical design and requirement scenarios, and QA2 reconciles them against the frozen anchors. An anchor change invalidates both readings and restarts them in fresh contexts. The same human answers questions and accepts once with the preflight fingerprint; acceptance publishes the durable contract before implementation. `/workflow-specify`, `/workflow-tech` and `/workflow-tasks` are compatibility routes to that integrated planning invocation. Each artifact stays in the same change, because engineering never opens a change in the application repository.
+On the specification side the split is a handoff, not a hierarchy. **A PM writes the proposal, decisions and journeys, then a designer adds optional UI design** — `/workflow-plan` and `/workflow-design`, following the corresponding planning skills. One `/planning-dev` invocation runs fresh isolated QA1, Dev and QA2 contexts: QA1 drafts cases blind to scenarios, Dev writes technical design and requirement scenarios, and QA2 reconciles them against the frozen anchors. An anchor change restarts both readings for its affected dependencies, following [Planning and Review Efficiency](planning-review-efficiency.md#planning-restarts). The same human answers questions and accepts once with the preflight fingerprint; acceptance publishes the durable contract before implementation. `/workflow-specify` and `/workflow-tasks` are compatibility routes to that integrated planning invocation. Each artifact stays in the same change, because engineering never opens a change in the application repository.
 
 Owners are claimed at pickup, never assigned at planning time: `pnpm plan claim` / `unclaim` / `done` / `undone` run from the application repository and each push one commit to this store's `main`. A checkmark goes in after the code is pushed, not when it is written. Format, the who-writes-what table, and the silent parser failures: [`task-ownership.md`](task-ownership.md).
 

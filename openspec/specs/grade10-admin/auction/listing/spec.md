@@ -9,7 +9,7 @@ images or videos from product assets or direct uploads, frozen when saved,
 chosen for the selected physical unit with deliberate cross-Cert additions,
 call one off while it has not closed, and get a lot's stock back, with a
 one-step Relist, when its listing closes with no winner. Named image sizes and
-optional alt live in `grade10-site/auction/listing-media`.
+optional alt live in `grade10-site/auction/listing-media`. An operator also writes a listing's title and description in English, Traditional Chinese and Simplified Chinese, reads each back on the detail page, and finds a listing by a title in any language.
 
 ## Feature set
 
@@ -26,14 +26,19 @@ optional alt live in `grade10-site/auction/listing-media`.
     reconciliation reference
   - Generated slug: a saved draft starts with a distinct title-and-code address
     that an operator can replace
+- Listing currency
+  - USD only: the listing form offers no currency choice and stores USD when none is supplied
+  - Earlier lots: HKD or JPY listing currencies are overwritten to USD with amounts and history unchanged
+  - Other currencies refused: HKD, JPY or any other currency is refused on a draft, create or update, by the form and API
 - Prices and window
   - Writable before publish: starting price, close, extension duration, and cap can change until the listing is live
-  - Starting price of 0: a draft and create accept 0 in USD, HKD and JPY; a negative, non-whole or empty price is refused, and empty is never stored as 0
+  - Starting price of 0: a draft and create accept 0 in USD; a negative, non-whole or empty price is refused, and empty is never stored as 0
 - Publish
   - Now or scheduled: a created listing publishes immediately or at a set time
 - Call off
   - Before close: an operator withdraws a listing that has not closed
   - Closed is frozen: a closed listing cannot be rewritten here
+  - Reusable address: call off releases the original slug for another listing
 - Gallery
   - One to eight uploads: images or videos, stored as uploaded, ordered, first item as the catalogue card
   - Combined sources: selected product assets and listing-only uploads form one ordered gallery
@@ -66,6 +71,8 @@ optional alt live in `grade10-site/auction/listing-media`.
   - Released note: an Unsold listing says its stock was released, and when
   - Relist: an Unsold listing's row in the Listings table opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
   - Earlier holds freed: holds left by earlier Unsold closes are released once
+  - Relist public address: Relist Save frees the Unsold source's slug and assigns it to the new draft in one transaction; the new draft keeps its own listing code; both listings' activity records the transfer; no redirect table
+  - Relisted badge: once Relist Save linked a successor, the Unsold source shows Relisted beside Unsold on its listing detail header and in the Listings table Status column
 - Unit-aware source selection
   - For a selected Cert record, the main selector offers the product's untagged source media and media tagged to that record. Every Cert record has a Cert ID.
   - Other media tagged to a printed-Cert record stays outside the main selector; the separately labelled drawer contains only that media, grouped and named by the printed Cert ID, which an explicit Add to listing action names.
@@ -74,6 +81,22 @@ optional alt live in `grade10-site/auction/listing-media`.
   - Adding a source item copies its bytes and current alt text into the listing gallery.
   - Listing alt text and order remain editable; later source changes do not change the listing copy.
   - Direct listing uploads and the existing one-to-eight gallery rules remain available.
+- Texts in each language
+  - Entered per language: the create and edit forms take a title and a description in English, Traditional Chinese and Simplified Chinese
+  - English is the base: only the English title is required, and a translation holds the same limits
+  - Empty translation: a blank or whitespace-only translation counts as not written
+  - Frozen with the listing: a closed or called-off listing cannot have a translation written
+- Reading the Copy block
+  - One language choice: a single choice switches the title and the description together
+  - Fallback marked: a language with no text shows the English text, marked as the fallback
+- What staff quote
+  - English title stays: the slug, the listing code, the Listings table and every staff reference stay on the English title
+- Listings search
+  - Translated titles: the search matches the English title and every translated title, in whichever language the operator types
+- Relist
+  - Every language carried: a relist draft opens with all three texts
+- Title and description in each language
+  - Every language carried: a listing keeps English, Traditional Chinese and Simplified Chinese titles and descriptions; Relist carries every language across
 
 ## Requirements
 
@@ -82,8 +105,8 @@ optional alt live in `grade10-site/auction/listing-media`.
 An authorized operator SHALL save an Auction listing as a draft without every
 required field. A draft save SHALL NOT require title, slug, starting price,
 currency, starts at, scheduled close at, or media. A supplied currency SHALL
-be USD, HKD, or JPY; Grade10 SHALL refuse another currency and leave the draft
-unchanged.
+be USD. Grade10 SHALL refuse another currency, HKD and JPY included, and
+leave the draft unchanged.
 
 The draft form and write contract SHALL NOT offer or accept a listing-level
 minimum increment.
@@ -147,24 +170,36 @@ minimum increment.
 - **AND** the draft reads back 0, not an empty price
 - **AND** the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-h88 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-164 - Draft rejects HKD and JPY
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** a draft listing in `USD`
+- **WHEN** an operator sets its currency to HKD, then to JPY
+- **THEN** Grade10 refuses each write
+- **AND** the currency is unchanged
+
 ### Requirement: Create validates required fields on the form and the API
 
 Create SHALL require a title, slug, starting price, starts at, scheduled close
-at, media, and one supported currency. When omitted, currency SHALL default to
-HKD. The form and API SHALL reject an unsupported currency independently.
+at, media, and a currency of USD. When omitted, currency SHALL default to USD.
+The form and API SHALL reject any other currency independently.
 
-The form SHALL present USD, HKD, and JPY as its only currency choices and
-SHALL NOT display a minimum-increment field. The selected currency's Grade10
-schedule governs the listing's bid floor.
+The form SHALL state USD and offer no currency choice, and SHALL NOT display
+a minimum-increment field. Grade10's USD schedule governs the listing's bid
+floor.
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-mmr rev=1 -->
+SC-57 retains its historical title and id. Its body requires the API to
+refuse a non-USD create; the form offers no currency control.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-mmr rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-06 - Operator creates a filled draft
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
-- **GIVEN** a complete draft with currency JPY and no minimum-increment value
+- **GIVEN** a complete draft with currency USD and no minimum-increment value
 - **WHEN** an authorized operator creates the listing
 - **THEN** Grade10 creates it
-- **AND** its bid floor uses the JPY schedule
+- **AND** its bid floor uses the USD schedule
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-jr4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-07 - Create without a title is refused on the form and the API
@@ -214,15 +249,23 @@ schedule governs the listing's bid floor.
 - **WHEN** an operator creates it
 - **THEN** Grade10 refuses and leaves it published
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-dal rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-dal rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-57 - Create refuses an unsupported currency on the form and API
 **Serves:** Create and catalogue - create refuses an unsupported currency on the form and API
 
 - **GIVEN** a complete draft with currency EUR
 - **WHEN** an operator creates the listing
-- **THEN** the form prevents the request and names currency
-- **AND** an API create with EUR is refused
+- **THEN** the API refuses the create
 - **AND** the listing remains a draft
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ja8 rev=2 -->
+#### Scenario: grade10-admin-auction-listing-SC-165 - Create refuses HKD and JPY through the API
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** a complete draft with currency HKD, and another with currency JPY
+- **WHEN** an operator creates each listing
+- **THEN** the API refuses both creates
+- **AND** each listing remains a draft
 
 ### Requirement: Catalogue fields an operator may write
 
@@ -289,10 +332,11 @@ listing's public address `/auction/listings/<slug>`.
   refused, including when the other listing is `closed` or `settled`. A
   listing rewriting its own slug to the same value is not a collision. A
   `canceled` listing SHALL NOT keep the slug it held before cancel: that
-  original value is free for another listing.
+  original value is free for another listing. This applies to listings called
+  off before or after this rule is delivered.
 - Slug SHALL be writable while `draft` or `created`. A write of slug on a
   `published`, `closed`, `settled`, or `canceled` listing SHALL be refused,
-  except the rewrite Grade10 applies when the listing is canceled.
+  except the release Grade10 applies when the listing is canceled.
 - A collector SHALL receive a `published`, `closed`, or `settled` listing by
   opening `/auction/listings/<slug>`. A slug that names no such listing
   SHALL be not found. A `draft`, `created`, or `canceled` listing SHALL NOT
@@ -373,14 +417,29 @@ listing's public address `/auction/listings/<slug>`.
 - **THEN** Grade10 refuses the write
 - **AND** `/auction/listings/charizard-psa-9` still returns that listing
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-xck rev=1 -->
+#### Scenario: g10adm.auction-listing.SC155 - Field exit and Save accept a released address
+**Serves:** grade10-admin-auction-listing-US-73 - the operator selects an available address before saving
+
+- **GIVEN** a called-off listing formerly used slug charizard-psa-9 and no listing now holds it
+- **WHEN** an operator leaves Slug with charizard-psa-9 on another draft and saves
+- **THEN** the editor reports available and Save stores that slug on the draft without exposing the called-off listing
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-yml rev=1 -->
+#### Scenario: g10adm.auction-listing.SC156 - Existing called-off addresses become reusable
+**Serves:** grade10-admin-auction-listing-US-03 - the operator creates a replacement for an earlier withdrawn lot
+
+- **GIVEN** a listing called off before this rule was delivered previously held charizard-psa-9
+- **WHEN** an operator saves and creates another complete draft using charizard-psa-9
+- **THEN** the new listing holds the slug and becomes created; the old listing retains its listing code and bidder history without retaining that slug
+
 ### Requirement: Prices and window are writable before publish
 
 While a listing is `draft` or `created`, an authorized operator SHALL be able
 to set:
 
-- **Currency** — an operator chooses an ISO 4217 three-letter code from the
-  platform's supported currency list. Omitted at create SHALL store Grade10's
-  store currency (`HKD`).
+- **Currency** — `USD`, the only value accepted. Omitted at create SHALL store
+  `USD`. Any other value SHALL be refused on the form and on the API.
 - **Starting price** — integer minor units, 0 or greater, when set. 0 is a
   set starting price and satisfies create; it is not an empty one. Empty is
   allowed only while `draft`.
@@ -395,6 +454,12 @@ to set:
   `draft`. When both starts at and scheduled close at are set, scheduled
   close at MUST be after starts at. At create, scheduled close at MUST also
   be after now.
+- A write that sets starts at or scheduled close at to a time not after now
+  SHALL be refused on the admin form and on the API. A value left as stored,
+  compared to the minute, SHALL NOT be refused, so a listing whose opening has
+  passed still saves its other fields.
+- The admin form SHALL show each of these refusals under its field while the
+  operator types, before Save.
 - **Extension duration (seconds)** — how long extended bidding runs after the
   scheduled close, and after each bid during it, per
   `grade10-site/auction/auction`. A whole number ≥ 0. Zero turns extended
@@ -409,7 +474,8 @@ A listing SHALL carry no extension window, and this form SHALL NOT offer one.
 
 Scenario `grade10-admin-auction-listing-SC-27` keeps its title with its id. The
 title is historical: any extension window is now refused, with or without a
-duration.
+duration. Scenario `grade10-admin-auction-listing-SC-125a` keeps its title
+with its id too: the title is historical, and the stored currency is `USD`.
 
 A write of any of these fields on a `published`, `closed`, `settled`, or
 `canceled` listing SHALL be refused. The effective close is not an operator
@@ -420,13 +486,13 @@ test-mode payment credentials instead of live money, so the house can
 rehearse a sale. A write of sandbox on a `created` or later listing SHALL
 be refused.
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-rj8 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-rj8 rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-24 - Operator corrects a created listing's starting price
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
-- **GIVEN** a created listing with starting price 100000 minor units `HKD`
+- **GIVEN** a created listing with starting price 100000 minor units `USD`
 - **WHEN** an authorized operator sets starting price to 150000 minor units
-- **THEN** Grade10 stores 150000 minor units `HKD`
+- **THEN** Grade10 stores 150000 minor units `USD`
 - **AND** the listing remains created
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-o1z rev=1 -->
@@ -483,28 +549,28 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-rhp rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-rhp rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-125 - Create accepts a starting price of 0
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a no-reserve lot that opens at nothing
 
-- **GIVEN** three drafts complete except for price, in `USD`, `HKD`, and `JPY`
-- **WHEN** an authorized operator sets each starting price to 0 minor units and creates each listing
-- **THEN** the form and the API accept each create
-- **AND** each listing is created with a starting price of 0 minor units in its currency
+- **GIVEN** a draft complete except for price, in `USD`
+- **WHEN** an authorized operator sets its starting price to 0 minor units and creates the listing
+- **THEN** the form and the API accept the create
+- **AND** the listing is created with a starting price of 0 minor units in `USD`
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-v2q rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-v2q rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-125a - Create with 0 and no currency stores HKD 0
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft complete except for price, with no currency chosen
 - **WHEN** a create is sent to the API with a starting price of 0 minor units
-- **THEN** the listing is created with a starting price of 0 minor units `HKD`
+- **THEN** the listing is created with a starting price of 0 minor units `USD`
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-hze rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-hze rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-126 - Create refuses a negative starting price on the API
 **Serves:** grade10-admin-auction-listing-US-03 - A script cannot create what the form refuses
 
-- **GIVEN** a draft complete except for price, in `HKD`
+- **GIVEN** a draft complete except for price, in `USD`
 - **WHEN** a create is sent straight to the API with a starting price of -1 minor unit
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
@@ -518,13 +584,13 @@ be refused.
 - **THEN** Grade10 refuses the create
 - **AND** the draft's starting price stays empty, not 0
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-rfu rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-rfu rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-128 - Operator lowers a created listing's starting price to 0
 **Serves:** grade10-admin-auction-listing-US-03 - Operator turns a priced lot into a no-reserve one before it goes live
 
-- **GIVEN** a created listing with a starting price of 1000000 minor units `JPY`
+- **GIVEN** a created listing with a starting price of 1000000 minor units `USD`
 - **WHEN** an authorized operator sets its starting price to 0 minor units
-- **THEN** Grade10 stores 0 minor units `JPY`
+- **THEN** Grade10 stores 0 minor units `USD`
 - **AND** the listing remains created
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-fcs rev=1 -->
@@ -535,6 +601,35 @@ be refused.
 - **WHEN** an authorized operator publishes it now
 - **THEN** the listing is published
 - **AND** its slug opens the public listing
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-bcv rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-149 - Moving starts at into the past is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a draft listing whose starts at is tomorrow
+- **WHEN** an operator sets starts at to a time not after now and saves
+- **THEN** the admin form shows the refusal under Starts at before Save
+- **AND** the API refuses the same write
+- **AND** the stored starts at is unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-d7l rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-150 - Moving scheduled close at into the past is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a created listing whose scheduled close at is next week
+- **WHEN** an operator sets scheduled close at to a time not after now
+- **THEN** the admin form shows the refusal under Close before Save
+- **AND** the API refuses the same write
+- **AND** the listing remains created with its stored close
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-s0s rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-151 - A starts at left as stored saves after it passes
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a created listing whose stored starts at has passed
+- **WHEN** an operator changes its title and saves without touching starts at
+- **THEN** Grade10 stores the new title
+- **AND** starts at is unchanged
 
 ### Requirement: Publish happens now or at a scheduled time
 
@@ -549,12 +644,24 @@ timestamp that MUST be after now.
   or later listing SHALL be refused.
 - A publish at that is not after now SHALL be refused on the admin form and
   on the API. Create SHALL refuse if publish at is set and not after now.
+- Publish at MUST NOT be after starts at; a publish at equal to starts at is
+  allowed. A write that would put publish at after starts at, by changing
+  either, SHALL be refused on the admin form and on the API.
+- While a `created` listing has publish at set, the admin form SHALL name
+  under Publish at each field its publish still needs that the form holds
+  empty: product, inventory unit, title, slug, starting price, starts at,
+  scheduled close at, and media.
 - When publish at is unset, the listing SHALL stay `created` until an
   operator publishes it.
 - When publish at arrives and the listing is `created`, Grade10 SHALL
   publish it without a further operator action.
 - A `draft` listing SHALL NOT be published, by hand or when publish at
   arrives. Publish of a listing that is not `created` SHALL be refused.
+
+Publishing a `created` listing by hand SHALL clear its publish at. When the
+listing has publish at set, the admin form SHALL ask the operator to confirm
+first and SHALL say that the scheduled time is removed. Without publish at,
+the form SHALL publish on the press, also when starts at has passed.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-del rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-29 - Operator publishes a created listing immediately
@@ -624,6 +731,52 @@ timestamp that MUST be after now.
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains published
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-ow2 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-147 - A publish at after starts at is refused
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing whose starts at is 2030-01-10 10:00
+- **WHEN** an operator sets publish at to 2030-01-10 11:00
+- **THEN** the admin form shows the refusal under Publish at before Save
+- **AND** the API refuses the same write
+- **AND** the stored publish at is unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ji9 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-148 - A publish at equal to starts at is accepted
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing whose starts at is 2030-01-10 10:00
+- **WHEN** an operator sets publish at to 2030-01-10 10:00 and saves
+- **THEN** Grade10 stores that publish at
+- **AND** the listing remains created
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-i7s rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-152 - Publish now on a scheduled listing asks first and clears publish at
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing with publish at set in the future
+- **WHEN** an operator presses Publish
+- **THEN** the admin form asks for confirmation and says the scheduled time is removed
+- **AND** on confirming, the listing is published
+- **AND** its publish at is cleared
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-2mk rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-153 - Publish now without publish at publishes after starts at passed
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing with no publish at, whose starts at has passed
+  and whose scheduled close at is in the future
+- **WHEN** an operator presses Publish
+- **THEN** the listing is published without a confirmation
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-npx rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-154 - A scheduled created listing names what its publish still needs
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
+
+- **GIVEN** a created listing with publish at set
+- **WHEN** the operator empties its title in the form
+- **THEN** the form names title under Publish at as a field the publish still needs
+
 ### Requirement: Operator may call off a listing that has not closed
 
 An operator authorized to call a listing off SHALL cancel a listing that is
@@ -642,14 +795,16 @@ opened and whether or not it has accepted bids. Cancel of a `created`
 listing SHALL be allowed even when a publish at is still in the future;
 Grade10 SHALL NOT later publish a listing that was canceled.
 
-When the listing has a canonical slug, cancel SHALL preserve it unchanged.
-The slug SHALL remain permanently reserved and the canceled listing SHALL
-continue to answer at `/auction/listings/<canonical slug>` with its public
-listing page. Call off removes the listing from browse and search; it does not
-make the canonical address inaccessible or release it for reuse. A listing
-with no slug SHALL stay without one.
-The same URL-preservation rule SHALL apply when Grade10 cancels the listing
-because its sale was canceled.
+When the listing has a slug, cancel SHALL release its original value as part
+of the same successful cancellation. The canceled listing SHALL NOT retain
+that slug or answer at its former address. Grade10 SHALL NOT create an alias,
+redirect, or alternate public address for the called-off listing. A listing
+with no slug SHALL stay without one. The same release rule SHALL apply when
+Grade10 cancels the listing because its campaign was canceled.
+
+Cancel SHALL preserve the listing code, its permanent reservation and the
+bidder's account record. Closed and settled listing slugs SHALL remain
+reserved.
 
 Cancel from an operator who is not authorized to call a listing off SHALL
 be refused, and the listing and slug SHALL be unchanged.
@@ -712,18 +867,16 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains canceled
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-ysx rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-ysx rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-42 - Cancel rewrites the slug and frees the original
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
-- **GIVEN** a published listing whose id is
-  `auc_550e8400-e29b-41d4-a716-446655440000` and whose slug is
-  `charizard-psa-9`
+- **GIVEN** a published listing whose slug is charizard-psa-9
 - **WHEN** an authorized operator calls it off
-- **THEN** Grade10 keeps slug `charizard-psa-9`
-- **AND** `/auction/listings/charizard-psa-9` continues to return that listing
-- **AND** the slug remains unavailable to every later listing
+- **THEN** Grade10 releases charizard-psa-9 for another listing
+- **AND** the listing no longer answers at that address
 - **AND** the listing is absent from browse and search
+- **AND** its listing code and bidder history are retained
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-lj7 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-43 - Cancel of a draft with no slug does not invent one
@@ -745,11 +898,28 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the listing remains published
 - **AND** its slug is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-euk rev=1 -->
+#### Scenario: g10adm.auction-listing.SC157 - Campaign cancellation releases each called-off address
+**Serves:** grade10-admin/auction/campaign#grade10-admin-auction-campaign-US-05 - the operator withdraws the campaign and its remaining lots
+
+- **GIVEN** a campaign contains draft, created and published listings with slugs and a closed listing
+- **WHEN** the operator cancels the campaign and its eligible listings are called off
+- **THEN** each successfully called-off listing releases its original slug under the listing cancel rules; the closed listing retains its slug and outcome
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ejg rev=1 -->
+#### Scenario: g10adm.auction-listing.SC158 - Competing drafts reserve one released address
+**Serves:** grade10-admin-auction-listing-US-73 - the operator receives the authoritative result when another draft saves first
+
+- **GIVEN** a called-off listing has released charizard-psa-9 and two drafts select it
+- **WHEN** the operators save both drafts concurrently
+- **THEN** at most one draft holds charizard-psa-9; the other Save is refused as reserved and leaves its stored slug unchanged
+
 ### Requirement: A closed listing cannot be rewritten here
 
 A listing in `closed`, `settled`, or `canceled` SHALL reject every catalogue,
-price, window, sandbox, publish at, and media write from this form. Its facts
-are the record of what was offered and sold.
+translation, price, window, sandbox, publish at, and media write from this form. Its facts
+are the record of what was offered and sold. Its editor SHALL show no control
+to write a translation, like its other fields.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-ztg rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-45 - Closed listing rejects a title edit
@@ -759,6 +929,23 @@ are the record of what was offered and sold.
 - **WHEN** an operator changes its title
 - **THEN** Grade10 refuses the write
 - **AND** the title is unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-21e rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-194 - Closed listing rejects a translation
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
+
+- **GIVEN** a closed listing and a called-off listing
+- **WHEN** an operator writes a Traditional Chinese title on each
+- **THEN** Grade10 refuses both writes
+- **AND** each listing's translations are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-kzb rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-195 - A frozen listing's editor offers no translation inputs
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
+
+- **GIVEN** a closed listing, a settled listing and a called-off listing
+- **WHEN** an operator opens each in the listing editor
+- **THEN** none shows an input for a Traditional Chinese or Simplified Chinese title or description
 
 ### Requirement: Listing media is an ordered gallery of one to eight uploads
 
@@ -1814,14 +2001,26 @@ condition holds, and SHALL NOT show it otherwise; no other row SHALL offer it:
 | Operator | Holds the `auction:operate` grant |
 
 1. Relist SHALL open the listing editor filled in with the Unsold listing's
-   product, quantity, Cert ID choice, title, copy, starting price, currency and
-   gallery.
-2. The editor SHALL start with no slug, listing code or window; every other
-   field SHALL start as on any new draft.
-3. Nothing SHALL be stored and no stock SHALL be held until the operator saves.
-   Relist activated again SHALL open another unsaved editor.
+   product, quantity, Cert ID choice, title and copy in every language,
+   starting price, currency, gallery and slug.
+2. The editor SHALL start with no listing code or window; every other field
+   SHALL start as on any new draft.
+3. Nothing SHALL be stored and no stock SHALL be held until the operator saves,
+   except that the first media upload SHALL make that Save before the upload,
+   so the media has a listing to belong to; a later Save SHALL update that
+   same draft. Relist activated again SHALL open another unsaved editor.
 4. Save SHALL be an ordinary draft save that records which listing it was
-   relisted from, and the Unsold listing SHALL NOT change.
+   relisted from. In the same transaction Save SHALL free the Unsold source's
+   former slug and store the form's slug on the new draft. When the form slug
+   is empty, Save SHALL store the ordinary title-and-code generated slug for
+   the new draft's listing code and SHALL still free the source's former slug.
+   The new draft SHALL receive its own listing code. The Unsold listing's other
+   fields SHALL NOT change. Both listings' activity SHALL name the slug the new
+   draft holds and the other listing by listing code and English title when
+   present, else the listing id. Grade10 SHALL NOT create a redirect or alias
+   for the move. Once that Save linked a successor, the Unsold source's listing
+   detail header and its Listings table Status column SHALL show a **Relisted**
+   badge beside **Unsold**.
 
 The gallery SHALL be copied into the new listing, so later edits to either
 gallery do not change the other.
@@ -1840,7 +2039,8 @@ listing:
 The editor SHALL show the refusal's name inline.
 
 Every refusal of an ordinary draft save, such as available stock below the
-quantity, SHALL apply as well.
+quantity or a slug held by a listing other than this Relist source, SHALL
+apply as well.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-4ez rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-135 - Relist opens the editor with the lot filled in
@@ -1848,12 +2048,12 @@ quantity, SHALL apply as well.
 
 - **GIVEN** an Unsold listing in no campaign whose stock was released, with a
   product, a Cert ID choice, quantity three, a title, copy, a starting price, a
-  currency and a two-item gallery
+  currency, a two-item gallery and slug `umbreon-v-alt`
 - **WHEN** an operator holding `auction:operate` activates Relist on its row in
   the Listings table
 - **THEN** the editor shows the same product, Cert ID choice, quantity, title,
-  copy, starting price, currency and both gallery items
-- **AND** it has no window, slug or listing code yet
+  copy, starting price, currency, both gallery items and slug `umbreon-v-alt`
+- **AND** it has no window or listing code yet
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-lc6 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-136 - Relist stores nothing until Save
@@ -1864,7 +2064,8 @@ quantity, SHALL apply as well.
 - **WHEN** the operator leaves without saving
 - **THEN** no listing is stored and available is unchanged
 - **AND** when the operator instead saves, a new draft holds three units,
-  available falls by three and the Unsold listing is unchanged
+  available falls by three and the Unsold listing's product, quantity and
+  outcome stay as they were
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-z9c rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-137 - Relist shows on the row of a released Unsold listing only
@@ -1910,6 +2111,19 @@ quantity, SHALL apply as well.
 - **WHEN** an operator holding `auction:operate` opens the Listings table
 - **THEN** the Unsold listing's row shows no Relist
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-rlb rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-218 - Relisted badge on the Unsold source after Relist Save
+**Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
+
+- **GIVEN** an Unsold listing whose Relist editor was saved as a new draft
+- **WHEN** an operator opens that Unsold listing's detail page and the Listings
+  table
+- **THEN** the detail header shows a Relisted badge beside Unsold
+- **AND** the Listings table Status column for that row shows Relisted beside
+  Unsold
+- **AND** an Unsold listing that has never been Relisted shows Unsold without
+  Relisted
+
 <!-- trace:scenario id=g10adm.auction-listing.SC-2m4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-144 - Only the first of two Relist editors saves
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
@@ -1931,6 +2145,97 @@ quantity, SHALL apply as well.
 - **THEN** each is refused, as not Unsold, in a campaign and stock not released
   in turn
 - **AND** no listing is stored and available is unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-5ry rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-196 - Relist carries every language
+**Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
+
+- **GIVEN** an Unsold listing in no campaign whose stock was released, with a Traditional Chinese title and description and a Simplified Chinese title but no Simplified Chinese description
+- **WHEN** an operator holding `auction:operate` activates Relist on its row and saves the draft
+- **THEN** the editor opened with all three titles and the two descriptions written
+- **AND** the new draft stores the same titles and descriptions, and no Simplified Chinese description
+- **AND** the Unsold listing's texts are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ace rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-209 - Relist Save moves the source slug onto the new draft
+**Serves:** grade10-admin-auction-listing-US-09 - a shared link keeps working for the lot that will sell again
+
+- **GIVEN** an Unsold listing in no campaign whose stock was released, whose
+  slug is `umbreon-v-alt` and whose listing code is `LK423`
+- **WHEN** an operator holding `auction:operate` activates Relist, leaves the
+  prefilled slug as `umbreon-v-alt`, and saves the draft
+- **THEN** the new draft holds slug `umbreon-v-alt` and a listing code other
+  than `LK423`
+- **AND** the Unsold source no longer holds `umbreon-v-alt` and still holds
+  code `LK423`
+- **AND** no redirect or alias is stored
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-d22 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-210 - Relist Save stores a replaced slug and frees the source's former address
+**Serves:** grade10-admin-auction-listing-US-09 - the operator may choose another address before Save
+
+- **GIVEN** an Unsold listing whose slug is `umbreon-v-alt`, opened by Relist
+  with that slug filled in
+- **WHEN** the operator sets Slug to `umbreon-again` and saves
+- **THEN** the new draft holds `umbreon-again`
+- **AND** the Unsold source no longer holds `umbreon-v-alt`
+- **AND** `umbreon-v-alt` is free for another listing
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-359 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-211 - The shared address is not found between Relist Save and Publish
+**Serves:** grade10-admin-auction-listing-US-09 - draft and created still stay off the public address
+
+- **GIVEN** Relist Save has moved slug `umbreon-v-alt` onto a new draft
+- **WHEN** a collector opens `/auction/listings/umbreon-v-alt` before that
+  draft is published
+- **THEN** Grade10 answers as not found
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-fde rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-212 - After Publish the shared address opens the successor
+**Serves:** grade10-admin-auction-listing-US-09 - a shared link opens the live lot
+
+- **GIVEN** Relist Save moved slug `umbreon-v-alt` onto a new draft that is
+  later published
+- **WHEN** a collector opens `/auction/listings/umbreon-v-alt`
+- **THEN** Grade10 returns that published successor
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-eaf rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-213 - Activity on both listings names the transferred slug
+**Serves:** grade10-admin-auction-listing-US-09 - operators see that the public address moved
+
+- **GIVEN** Relist Save moved slug `umbreon-v-alt` from an Unsold listing whose
+  listing code is `LK423` and English title is `Umbreon V` onto a new draft
+  whose listing code is `MN891` and English title is `Umbreon V`
+- **WHEN** an operator opens activity on the Unsold source and on the new draft
+- **THEN** each listing shows an entry that names `umbreon-v-alt` and the other
+  listing by listing code and English title
+- **AND** the source entry names `MN891` and `Umbreon V`
+- **AND** the draft entry names `LK423` and `Umbreon V`
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ib3 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-217 - Clearing the Relist slug stores a generated address and frees the source
+**Serves:** grade10-admin-auction-listing-US-09 - the operator may clear the address before Save
+
+- **GIVEN** an Unsold listing titled `Umbreon V` whose slug is `umbreon-v-alt`,
+  opened by Relist with that slug filled in
+- **WHEN** the operator clears Slug and saves
+- **THEN** the new draft stores a title-and-code slug built from `Umbreon V` and
+  its new listing code
+- **AND** the Unsold source no longer holds `umbreon-v-alt`
+- **AND** `umbreon-v-alt` is free for another listing
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-8b7 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-214 - After Relist Save the Unsold source no longer reserves its former slug
+**Serves:** grade10-admin-auction-listing-US-73 - collision follows who currently holds the address
+
+- **GIVEN** Relist Save moved slug `umbreon-v-alt` from an Unsold listing onto
+  a new draft, and a second unrelated draft
+- **WHEN** an operator sets the second draft's slug to `umbreon-v-alt` and
+  saves
+- **THEN** Grade10 refuses the write because the Relist draft holds that slug
+- **AND** when the Relist draft instead holds a different slug, Save of
+  `umbreon-v-alt` on the second draft is accepted and the Unsold source still
+  does not hold it
 
 ### Requirement: Holds left by earlier Unsold closes are released once
 
@@ -2238,7 +2543,10 @@ overwriting an address they chose.
   one hyphen, hyphen collapse, and trim. It SHALL append one hyphen and the
   lower-case listing code. Before appending, Grade10 SHALL truncate the title
   portion so the complete slug is at most 64 characters. When normalization
-  yields no title words, it SHALL use `lot` as the title portion.
+  yields no title words, it SHALL use `lot` as the title portion. When the
+  Save carries a non-empty form slug, including a Relist Save that keeps or
+  replaces the Unsold source's slug, Grade10 SHALL store that form slug and
+  SHALL NOT replace it with the generated value.
 - **Title edits** - When a later title edit occurs while the stored slug equals
   the immediately preceding generated value, Grade10 SHALL replace only its
   title portion and retain the same lower-case code suffix. It SHALL NOT
@@ -2248,6 +2556,8 @@ overwriting an address they chose.
   report whether it is available. The helper text SHALL state: `Slug must be
   unique. Completed, expired, and unsold listings also reserve their
   addresses.` The check SHALL NOT disclose another listing's private details.
+  For an unsaved Relist editor, the Unsold source's current slug SHALL report
+  as available to that Relist draft.
 - **Authoritative save** - Save SHALL remain authoritative. If another listing
   claims a slug after an available field-exit check, Grade10 SHALL refuse the
   Save and leave the draft's stored slug unchanged.
@@ -2299,3 +2609,464 @@ overwriting an address they chose.
 - **GIVEN** Slug reported available on a draft and another listing later claims that slug
 - **WHEN** the operator saves the draft
 - **THEN** Grade10 refuses the Save and leaves the draft's stored slug unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-c90 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-215 - Relist field exit treats the source slug as available
+**Serves:** grade10-admin-auction-listing-US-73 - the operator learns the transferred address is free for this Relist draft
+
+- **GIVEN** an Unsold listing whose slug is `umbreon-v-alt`, opened by Relist
+  with that slug filled in and not yet saved
+- **WHEN** the operator leaves Slug with `umbreon-v-alt`
+- **THEN** the editor reports available
+- **AND** the check does not expose the Unsold listing's private details
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-c83 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-216 - Relist Save does not overwrite a form slug with a generated address
+**Serves:** grade10-admin-auction-listing-US-73 - a transferred or chosen address survives first Save
+
+- **GIVEN** an Unsold listing titled `Umbreon V` whose slug is `umbreon-v-alt`,
+  opened by Relist
+- **WHEN** the operator saves with slug `umbreon-v-alt` still in the form
+- **THEN** the new draft stores `umbreon-v-alt`
+- **AND** it does not store a title-and-new-code slug built from the new
+  listing code
+
+### Requirement: A listing is priced in USD and no earlier listing keeps another currency
+
+Every Auction listing SHALL carry the currency `USD`, the bid currency. The
+listing form SHALL offer no currency choice, and the API SHALL accept no
+currency other than `USD` on a draft, a create or an update. When a write
+omits the currency, Grade10 SHALL store `USD`.
+
+Once, before this change is live, Grade10 SHALL overwrite the currency of every
+listing that holds `HKD` or `JPY` with `USD`. The overwrite SHALL leave every
+amount, bid, auto-bid maximum, status and date unchanged and SHALL convert
+nothing. Every such listing is test data.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-zzf rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-159 - The form offers no currency choice
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** an authorized operator on a new listing
+- **WHEN** they open the listing form
+- **THEN** the form states the currency as USD and offers no other choice
+- **AND** no currency control can be changed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-28a rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-160 - A create without a currency stores USD
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** a draft complete except for currency
+- **WHEN** an authorized operator creates the listing
+- **THEN** Grade10 creates it with currency `USD`
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-et0 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-161 - An HKD or JPY write is refused by the API
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** a created listing in `USD`
+- **WHEN** an update sent straight to the API sets its currency to HKD, then
+  to JPY
+- **THEN** Grade10 refuses each write
+- **AND** the listing's currency and amounts are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-adx rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-162 - An earlier HKD listing is overwritten to USD with its amounts unchanged
+**Serves:** Listing currency - an earlier HKD or JPY listing is overwritten to USD with nothing converted
+
+- **GIVEN** a created listing in `HKD` with a starting price of 100000 minor
+  units
+- **AND** a published listing in `JPY` with a current bid of 150000 minor units
+- **WHEN** the one-time currency overwrite runs
+- **THEN** the first reads a starting price of 100000 minor units `USD`
+- **AND** the second reads a current bid of 150000 minor units `USD`
+- **AND** each listing's status, bids and dates are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-c58 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-163 - The overwrite touches only HKD and JPY listings
+**Serves:** Listing currency - an earlier HKD or JPY listing is overwritten to USD with nothing converted
+
+- **GIVEN** a listing in `USD` with a current bid of 20000 minor units
+- **WHEN** the one-time currency overwrite runs
+- **THEN** the listing is unchanged
+
+### Requirement: An operator writes a listing's title and description in each language
+
+While a listing is `draft`, `created` or `published`, an authorized operator
+SHALL be able to write, beside the English title and copy, a title and a
+description in Traditional Chinese (`zh-Hant`) and in Simplified Chinese
+(`zh-Hans`), on the create and edit forms. Only the English title is required,
+as before. A translation is optional and holds the limits of the English text:
+a title of 1 to 200 characters and a description of up to 4,000, counted as
+typed. A title is trimmed on save. A translated title or description that is
+empty or only spaces counts as not written and is stored as none.
+
+An update that omits the translations SHALL leave every stored one unchanged;
+one that names them SHALL replace all of them, so a language the operator
+cleared is stored as none. A draft MAY hold a translated title with no English
+title; Create SHALL refuse it exactly as it refuses a missing English title.
+Whoever may edit a listing's title and description today may write the
+translations; no new permission exists.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-eo6 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-170 - An operator writes a title and description in each language
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a draft with an English title and an English description
+- **WHEN** an authorized operator saves a Traditional Chinese and a Simplified Chinese title and description
+- **THEN** Grade10 stores all three titles and all three descriptions
+- **AND** the English title and description are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ze7 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-171 - A listing is created with no translation
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a draft with an English title and every other required field, and no translated text
+- **WHEN** an authorized operator creates it
+- **THEN** Grade10 creates the listing
+- **AND** it reads in every language exactly as it did before translations existed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-56a rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-172 - A translation holds the limits of the English text
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a draft
+- **WHEN** an operator saves a Traditional Chinese title of 201 characters
+- **THEN** Grade10 refuses the save and stores no translation
+- **WHEN** they save a Simplified Chinese description of 4,001 characters
+- **THEN** Grade10 refuses the save and stores no translation
+- **WHEN** they save a title of 200 characters and a description of 4,000 characters in either language
+- **THEN** Grade10 stores both
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-gg1 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-173 - A translated title is trimmed and the limit counts what was typed
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a draft
+- **WHEN** an operator saves a Traditional Chinese title with a space before and after its text
+- **THEN** Grade10 stores the title without the spaces
+- **WHEN** they save a title of 200 characters with a space before and after it
+- **THEN** Grade10 refuses the save, because 202 characters were typed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-i3e rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-174 - A blank translation counts as not written
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a draft
+- **WHEN** an operator saves a Traditional Chinese title and a Simplified Chinese description made only of spaces
+- **THEN** Grade10 stores no Traditional Chinese title and no Simplified Chinese description
+- **AND** the listing's Copy block marks both as the English fallback
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-17a rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-175 - A draft may hold a Chinese title and Create needs the English one
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a draft with a Traditional Chinese title and no English title
+- **WHEN** an operator saves it
+- **THEN** Grade10 stores the draft with the Traditional Chinese title
+- **WHEN** they create it with every other required field
+- **THEN** Grade10 refuses the create for the missing English title
+- **AND** the draft is unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-vyp rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-176 - Saving without translations leaves them
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a draft holding a Traditional Chinese title and description
+- **WHEN** an operator saves a new English description and names no translations
+- **THEN** the English description changes
+- **AND** the Traditional Chinese title and description are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ap7 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-177 - A save naming translations replaces all of them
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a draft holding Traditional Chinese and Simplified Chinese titles
+- **WHEN** an operator saves only a Simplified Chinese title
+- **THEN** Grade10 stores the Simplified Chinese title and no Traditional Chinese text
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-8ee rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-178 - A published listing's translations can change like its copy
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a published listing with an English title and no translation
+- **WHEN** an authorized operator writes a Traditional Chinese title and description
+- **THEN** Grade10 stores them
+- **AND** the English title, prices and window are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-mku rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-179 - The grant that edits a title writes its translations
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** an operator who may edit a listing's title and copy, and one who may not
+- **WHEN** each saves a Traditional Chinese title on a draft
+- **THEN** Grade10 stores the first operator's title
+- **AND** refuses the second operator's, storing nothing
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-jyk rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-199 - An operator who cannot edit a listing sees no translation inputs
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a draft listing and an operator who may read listings but not edit their title and copy
+- **WHEN** they open the listing in the editor
+- **THEN** it shows no input for a Traditional Chinese or Simplified Chinese title or description
+
+### Requirement: The Copy block reads a listing's texts in one chosen language
+
+The listing's detail page SHALL show the title and the description of its Copy
+block in a language chosen once for the whole block, with three buttons
+labelled EN, 繁中 and 简中. The block SHALL open in English and SHALL
+remember no choice. Each text SHALL fall back on its own: a field with no text
+in the chosen language SHALL show the English text of that field, marked as the
+English fallback, and one Chinese SHALL never stand in for the other.
+
+Where the English text is empty and a Chinese text is written, a language with no
+text shows an empty text, not marked as a fallback. A closed, settled or
+called-off listing's Copy block still switches language for reading.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-z8j rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-180 - The Copy block opens in English
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a listing with Traditional Chinese and Simplified Chinese texts
+- **WHEN** an operator opens its detail page
+- **THEN** the Copy block shows the English title and description
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-0sv rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-181 - One choice switches the title and the description together
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a listing with a title and a description in each language
+- **WHEN** an operator chooses Traditional Chinese for the Copy block
+- **THEN** the title and the description both show their Traditional Chinese text
+- **AND** the block offers no second choice for either field
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-jiz rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-182 - A language with no text shows the English text marked as the fallback
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a listing with a Simplified Chinese title and no Simplified Chinese description
+- **WHEN** an operator chooses Simplified Chinese
+- **THEN** the title shows its Simplified Chinese text with no mark
+- **AND** the description shows the English description, marked as the English fallback
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-let rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-183 - The other Chinese is never borrowed
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a listing with a Traditional Chinese title and no Simplified Chinese text
+- **WHEN** an operator chooses Simplified Chinese
+- **THEN** the title shows the English title, marked as the English fallback
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ilx rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-184 - The choice is not remembered
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** an operator who chose Traditional Chinese for a listing's Copy block
+- **WHEN** they open that listing's detail page again, or another listing's
+- **THEN** the Copy block opens in English
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-mt4 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-197 - A listing nobody translated shows the English text in each Chinese choice
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a listing with an English title and description and no translation
+- **WHEN** an operator chooses Traditional Chinese and then Simplified Chinese for the Copy block
+- **THEN** each choice shows the English title and description, each marked as the English fallback
+
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-lna rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-207 - A language with no text over an empty English text shows an empty text
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a draft with a Traditional Chinese description and an empty English description
+- **WHEN** an operator chooses Traditional Chinese, and then Simplified Chinese, for the Copy block
+- **THEN** Traditional Chinese shows its description
+- **AND** Simplified Chinese shows an empty description, not marked as a fallback
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-qhj rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-208 - A frozen listing's Copy block still switches language
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a closed listing and a called-off listing with Traditional Chinese texts
+- **WHEN** an operator opens each detail page and chooses Traditional Chinese for the Copy block
+- **THEN** the title and the description show their Traditional Chinese text
+
+### Requirement: The Listings search finds a listing by a translated title
+
+The admin Listings search SHALL match a listing whose English title or any
+translated title holds the typed term, anywhere in the title and in any case,
+whichever language the operator types. It SHALL match titles only: a
+description in any language is not searched, and Traditional and Simplified
+Chinese are not folded into each other. Every other part of the search is
+unchanged, and a listing found by a translated title SHALL show its English
+title in the table.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-6es rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-185 - A translated title finds the listing
+**Serves:** grade10-admin-auction-listing-US-77 - Operator finds a listing by a translated title
+
+- **GIVEN** a listing with the Traditional Chinese title "寶可夢 噴火龍" and another with an unrelated title
+- **WHEN** an operator searches the Listings table for "噴火龍"
+- **THEN** only the first listing is listed
+- **AND** its row shows its English title
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-orh rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-186 - A Simplified Chinese title finds the listing
+**Serves:** grade10-admin-auction-listing-US-77 - Operator finds a listing by a translated title
+
+- **GIVEN** a listing with the Simplified Chinese title "宝可梦 喷火龙"
+- **WHEN** an operator searches for "喷火龙"
+- **THEN** that listing is listed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-1x3 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-187 - The English title still finds the listing
+**Serves:** grade10-admin-auction-listing-US-77 - Operator finds a listing by a translated title
+
+- **GIVEN** a listing titled "Charizard 1st Edition" with translated titles
+- **WHEN** an operator searches for "charizard"
+- **THEN** that listing is listed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-d0k rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-188 - A part of a translated title in any case matches
+**Serves:** grade10-admin-auction-listing-US-77 - Operator finds a listing by a translated title
+
+- **GIVEN** a listing with the Traditional Chinese title "PSA 10 噴火龍"
+- **WHEN** an operator searches for "psa 10"
+- **THEN** that listing is listed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-46l rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-189 - A description is not searched
+**Serves:** grade10-admin-auction-listing-US-77 - Operator finds a listing by a translated title
+
+- **GIVEN** a listing whose Traditional Chinese description holds "首版" and no title holds it
+- **WHEN** an operator searches for "首版"
+- **THEN** that listing is not listed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-4uh rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-190 - The two Chinese scripts are not folded
+**Serves:** grade10-admin-auction-listing-US-77 - Operator finds a listing by a translated title
+
+- **GIVEN** a listing whose only Chinese title is the Traditional Chinese "噴火龍"
+- **WHEN** an operator searches for the Simplified Chinese spelling "喷火龙"
+- **THEN** that listing is not listed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-eg4 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-191 - A draft with only a Chinese title is found
+**Serves:** grade10-admin-auction-listing-US-77 - Operator finds a listing by a translated title
+
+- **GIVEN** a draft with a Traditional Chinese title and no English title
+- **WHEN** an operator searches for part of that title
+- **THEN** the draft is listed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-12q rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-198 - An edit or a clear moves what the search finds
+**Serves:** grade10-admin-auction-listing-US-77 - Operator finds a listing by a translated title
+
+- **GIVEN** a listing found by its Traditional Chinese title "噴火龍"
+- **WHEN** an operator changes that title to "水箭龜" and searches for each
+- **THEN** only "水箭龜" finds the listing
+- **WHEN** they clear the translated title and search for "水箭龜"
+- **THEN** the listing is not listed
+
+### Requirement: What staff quote stays on the English title
+
+A translation SHALL change no text staff read or the platform sends. The slug,
+the listing code, the Listings table, the order and invoice screens, emails,
+push messages and Slack alerts and the gallery alt text SHALL keep the English
+title. The collector-side surfaces that keep it are owned by
+`grade10-site/auction/listing-page`. A collector quotes the listing's address,
+which is the same in every language.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-55h rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-192 - Translations leave the slug and the code alone
+**Serves:** What staff quote - English title stays
+
+- **GIVEN** a saved draft with an English title, a generated slug and a listing code
+- **WHEN** an operator writes Traditional Chinese and Simplified Chinese titles
+- **THEN** the slug and the listing code are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-71p rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-193 - Staff and sent texts keep the English title
+**Serves:** What staff quote - English title stays
+
+- **GIVEN** a listing with a Traditional Chinese title that closes with a winner
+- **WHEN** the Listings table, the winner's order and invoice screens, the won email and the Slack alert show the lot
+- **THEN** each names the lot by its English title
+
+### Requirement: Labs listing seeds are written in every language
+
+Every listing the admin Labs seeds (the standalone fixtures, the draft, live
+and winner lots, the test stage and the campaign pair) SHALL carry a
+Traditional Chinese and a Simplified Chinese title and description, and its
+product a name and a description in both, with an English description. A
+product an earlier seed recovered is not rewritten. A lot whose title is
+generated gets a translated prefix and generic copy.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-q52 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-200 - A seeded lot carries every language
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** the Labs
+- **WHEN** a developer seeds a standalone fixture, a draft, a live lot, a winner lot, the test stage and a campaign pair
+- **THEN** each listing has a Traditional Chinese and a Simplified Chinese title and description
+- **AND** each new product has a name and a description in both, and an English description
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-pnv rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-201 - A recovered product is not rewritten
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a product an earlier seed left behind with its own texts
+- **WHEN** a developer seeds a lot that recovers it
+- **THEN** the product's name, description and translations are as they were
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-53a rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-202 - A generated title is translated by prefix
+**Serves:** grade10-admin-auction-listing-US-75 - Operator writes a listing's title and description in each language
+
+- **GIVEN** a Labs lot whose English title is generated
+- **WHEN** it is seeded
+- **THEN** its Traditional Chinese and Simplified Chinese titles carry a translated prefix
+- **AND** its descriptions are generic copy in each language
+
+### Requirement: The customer view previews the lot in each language
+
+The customer view, the preview of the lot page in a listing's editor and
+record, SHALL offer English, Traditional Chinese and Simplified Chinese on both
+its desktop and its phone frame. The lot page title SHALL follow the chosen
+language and fall back to the English title; one Chinese SHALL never stand in
+for the other. Image alt text stays on the English title. The view draws no
+description.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-xiv rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-203 - The customer view offers three languages on both frames
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a listing's customer view
+- **WHEN** an operator opens the desktop frame and then the phone frame
+- **THEN** each offers EN, 繁中 and 简中
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-de8 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-204 - The lot page title follows the chosen language
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a listing with Traditional Chinese and Simplified Chinese titles
+- **WHEN** an operator chooses 繁中 and then 简中
+- **THEN** the lot page title shows that language's title each time
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-l45 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-205 - The customer view falls back to English and never borrows the other Chinese
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a listing with a Traditional Chinese title and no Simplified Chinese title
+- **WHEN** an operator chooses 简中
+- **THEN** the lot page title shows the English title
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-mid rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-206 - The customer view keeps English alt text and draws no description
+**Serves:** grade10-admin-auction-listing-US-76 - Operator reads a listing's texts in each language
+
+- **GIVEN** a listing with translated titles, descriptions and an image
+- **WHEN** an operator chooses 繁中 in the customer view
+- **THEN** the image's alt text is the English title
+- **AND** the view shows no description

@@ -273,6 +273,18 @@ describe("the design states a change draws", () => {
     expect(lines(result, "dressed")).toEqual([]);
   });
 
+  it("passes a state closed by a scenario in the `<app>.<domain>-<capability>.SC<n>` form", async () => {
+    const result = await check(
+      store({
+        design: designText([
+          "- **Empty** — `alpha-US-01` — `g10.demo-alpha.SC2`",
+          "- **Error** — `alpha-US-01` — `g10.demo-alpha.SC2`",
+        ]),
+      }),
+    );
+    expect(lines(result, "dressed")).toEqual([]);
+  });
+
   it("passes a state closed by an out-of-suite line", async () => {
     const result = await check(
       store({

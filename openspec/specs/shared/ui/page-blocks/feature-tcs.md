@@ -1,7 +1,7 @@
 # shared/ui/page-blocks Test Cases
 
-**Status:** pending-review · 0/16
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Status:** pending-review · 0/15
+**Drafts styled:** 2026-10-13, tcs-rules r4
 
 ## Background
 
@@ -10,16 +10,16 @@
 * A callback a block reports logs in the Actions panel under its own name. A story's own checks run when it opens and show in the Interactions panel; before a step that clicks, return the story to its start there and clear the Actions panel.
 * The Controls panel changes a story's props in place; a step that plays the consumer's part sets them there.
 
-## shared-ui-page-blocks-US1: The page parts site pages compose
+## g10.shared-page-blocks.US1: The page parts site pages compose
 
 **Walked by:** nobody on their own - a component contract site pages compose; the journeys of the vault's collector capabilities (`grade10-site/vault/*`) and grading's collector capabilities (`grade10-site/grading/*`) are what reach it.
 
 **As a** consuming site page,
-**I want** titled fact cards, note lists, stage rails and empty panels through props alone,
+**I want** titled fact cards, note lists and stage rails through props alone,
 **so that** every site page composes store blocks instead of drawing its own.
 
-<!-- trace:case id=g10.shared-page-blocks.TC-aau rev=1 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
-### shared-ui-page-blocks-US1-TC1-1: Every named page block exports from the package entry
+<!-- trace:case id=g10.shared-page-blocks.TC-aau rev=2 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
+### g10.shared-page-blocks.US1-TC1: Every named page block exports from the package entry
 
 **Classification:**
 
@@ -41,17 +41,17 @@
 **Steps:**
 
 1. List every component exported under the `shared/ui/page-blocks` comment.
-2. Match the list against the five named blocks the capability declares.
+2. Match the list against the four named blocks the capability declares.
 3. Find each component's prop type and copy type beside it.
 
 **Expected Results:**
 
-* `FactCard`, `FactCardSkeleton`, `NoteList`, `StageRail` and `EmptyPanel` are all exported.
-* No other component is exported under that comment.
+* `FactCard`, `FactCardSkeleton`, `NoteList` and `StageRail` are all exported.
+* No other component is exported under that comment; `EmptyPanel` resolves nowhere.
 * Each export carries its own `<Name>Props` type and a `<Name>Copy` type for its words.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-tq2 rev=1 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
-### shared-ui-page-blocks-US1-TC2-1: No page block reads a catalogue, fetches, routes or stores
+### g10.shared-page-blocks.US1-TC2: No page block reads a catalogue, fetches, routes or stores
 
 **Classification:**
 
@@ -82,7 +82,7 @@
 * No block fetches, stores, routes or subscribes to data.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-j63 rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
-### shared-ui-page-blocks-US1-TC3-1: A fact card with every part draws them in order
+### g10.shared-page-blocks.US1-TC3: A fact card with every part draws them in order
 
 **Classification:**
 
@@ -99,19 +99,25 @@
 
 **Pre-conditions:**
 
-* The Every Part story gives `FactCard` a <card title>, a line under it, a lead, two rows with a <rows label>, a body line and one action.
+* The Every Part story gives `FactCard` a `<card title>`, a line under it, a lead, two rows with a `<rows label>`, a body line and one action.
+
+* The With Figures fixture supplies rows `<rows>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <card title> | `Our offer` |
-| <rows label> | `The offer's figures` |
-| <rows> | `Loan` · `HK$8,000.00`, `Interest for the term` · `HK$480.00` |
+| card title | Our offer |
+| rows label | The offer's figures |
+| rows | `Loan` · `HK$8,000.00`, `Interest for the term` · `HK$480.00` |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / FactCard / Every Part at <grade10 ui workbench url>.
+1. Open Page Blocks / FactCard / Every Part at `<grade10 ui workbench url>`.
 2. Read the card from its title down.
 3. Find the region a screen reader lands on, by its name.
 4. Find the table among the card's parts, by its name.
@@ -119,11 +125,11 @@
 **Expected Results:**
 
 * The card reads the title, the line under it, the lead, the rows, the body, then the action.
-* The card is one region named <card title>.
-* The rows are one table named <rows label>, one row per label and value.
+* The card is one region named `<card title>`.
+* The rows are one table named `<rows label>`, one row per label and value.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-0td rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
-### shared-ui-page-blocks-US1-TC4-1: Rows alone name their table by the card's title
+### g10.shared-page-blocks.US1-TC4: Rows alone name their table by the card's title
 
 **Classification:**
 
@@ -140,27 +146,31 @@
 
 **Pre-conditions:**
 
-* The Rows Only story gives `FactCard` a <card title> and rows, with no rows label, lead, body or action.
+* The Rows Only story gives `FactCard` a `<card title>` and rows, with no rows label, lead, body or action.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <card title> | `What we keep` |
+| card title | What we keep |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / FactCard / Rows Only at <grade10 ui workbench url>.
+1. Open Page Blocks / FactCard / Rows Only at `<grade10 ui workbench url>`.
 2. Find the table by its name.
 3. Read the card below its title.
 
 **Expected Results:**
 
-* The table is named <card title>.
+* The table is named `<card title>`.
 * Nothing is drawn under the title but the table: no line, lead, body or action.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-29c rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
-### shared-ui-page-blocks-US1-TC5-1: A card with no rows draws no table
+### g10.shared-page-blocks.US1-TC5: A card with no rows draws no table
 
 **Classification:**
 
@@ -179,27 +189,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Body Only story gives `FactCard` a title and a body line, and its rows as the row says.
+* The Body Only story gives `FactCard` a title and a body line, and rows `<rows given>`.
 
 **Test data:**
 
-| Rows given | Outcome |
+| `<rows given>` | `<expected outcome>` |
 | --- | --- |
 | none | the title and the body line; no table |
 | an empty list | the title and the body line; no table |
 
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / FactCard / Body Only at <grade10 ui workbench url>.
-2. Set the rows in the Controls panel as the row says.
+1. Open Page Blocks / FactCard / Body Only at `<grade10 ui workbench url>`.
+2. Set the rows in the Controls panel to `<rows given>`.
 3. Read the card.
 
 **Expected Results:**
 
-* The card reads as the row's outcome says.
+* The card reads as follows: `<expected outcome>`.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-skf rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
-### shared-ui-page-blocks-US1-TC6-1: Loading cards are one busy status, placeholders hidden
+### g10.shared-page-blocks.US1-TC6: Loading cards are one busy status, placeholders hidden
 
 **Classification:**
 
@@ -216,28 +230,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Two story gives `FactCardSkeleton` a count of 2 and a <loading label>.
+* The Two story gives `FactCardSkeleton` a count of 2 and a `<loading label>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <loading label> | `Loading your cases…` |
+| loading label | Loading your cases… |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / FactCardSkeleton / Two at <grade10 ui workbench url>.
+1. Open Page Blocks / FactCardSkeleton / Two at `<grade10 ui workbench url>`.
 2. Count the placeholder cards.
 3. List the status regions a screen reader announces.
 
 **Expected Results:**
 
 * Two placeholder cards are drawn.
-* One busy status is announced, named <loading label>.
+* One busy status is announced, named `<loading label>`.
 * No placeholder is announced on its own.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-rfs rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
-### shared-ui-page-blocks-US1-TC7-1: A count below one draws no loading cards
+### g10.shared-page-blocks.US1-TC7: A count below one draws no loading cards
 
 **Classification:**
 
@@ -254,26 +272,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `FactCardSkeleton` is given a <loading label>.
+* `FactCardSkeleton` is given a `<loading label>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <loading label> | `Loading your cases…` |
-| <count below one> | `0` |
+| loading label | Loading your cases… |
+| count below one | 0 |
 
 **Steps:**
 
-1. Render `FactCardSkeleton` with <count below one> as its count.
+1. Render `FactCardSkeleton` with `<count below one>` as its count.
 
 **Expected Results:**
 
-* The render throws an error naming <count below one>.
+* The render throws an error naming `<count below one>`.
 * No status and no placeholder is drawn.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-we2 rev=1 covers=g10.shared-page-blocks.SC-l8d,g10.shared-page-blocks.SC-df6,g10.shared-page-blocks.SC-44p -->
-### shared-ui-page-blocks-US1-TC8-1: Dividers fall between two lines, never after the last
+### g10.shared-page-blocks.US1-TC8: Dividers fall between two lines, never after the last
 
 **Classification:**
 
@@ -292,29 +310,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The story the row names gives `NoteList` its lines.
+* The story `<story>` gives `NoteList` its lines.
 
 **Test data:**
 
-| Story | Lines | Dividers |
-| --- | --- | --- |
-| Before You Come Storage | 3: verified, bring, sign the custody agreement | under the first and the second; none under the third |
-| Before You Come Financed | 4: verified, bring, sign both agreements, the money follows | under the first, the second and the third |
-| One | 1 | none |
+| `<story>` | `<lines>` | `<dividers>` | Fixture notes |
+| --- | --- | --- | --- |
+| Before You Come Storage | 3 | under the first and the second; none under the third | `<lines>`: verified, bring, sign the custody agreement |
+| Before You Come Financed | 4 | under the first, the second and the third | `<lines>`: verified, bring, sign both agreements, the money follows |
+| One | 1 | none | · |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / NoteList / the row's story at <grade10 ui workbench url>.
+1. Open Page Blocks / NoteList / `<story>` at `<grade10 ui workbench url>`.
 2. Read the lines in order.
 3. Look for a divider under each line.
 
 **Expected Results:**
 
-* The lines read in the order given.
-* A divider sits where the row says, and none under the last line.
+* The lines read in this order: `<lines>`.
+* A divider sits at `<dividers>`, and none under the last line.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-22r rev=1 covers=g10.shared-page-blocks.SC-l8d,g10.shared-page-blocks.SC-df6,g10.shared-page-blocks.SC-44p -->
-### shared-ui-page-blocks-US1-TC9-1: A line carrying a link keeps its link
+### g10.shared-page-blocks.US1-TC9: A line carrying a link keeps its link
 
 **Classification:**
 
@@ -331,26 +353,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The With Link Item story gives `NoteList` Before you come for a collector not yet verified: its first line holds a <verify link> and the in-person line.
+* The With Link Item story gives `NoteList` Before you come for a collector not yet verified: its first line holds a `<verify link>` and the in-person line.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| verify link | Verify now | to `/vault/verify` |
+
 | Field | Value |
 | --- | --- |
-| <verify link> | `Verify now`, to `/vault/verify` |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / NoteList / With Link Item at <grade10 ui workbench url>.
-2. Find the <verify link> in the first line.
+1. Open Page Blocks / NoteList / With Link Item at `<grade10 ui workbench url>`.
+2. Find the `<verify link>` in the first line.
 
 **Expected Results:**
 
-* The first line holds <verify link> as a link to its address, then the in-person line.
+* The first line holds `<verify link>` as a link to its address, then the in-person line.
 * Every other line reads as given.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-z3a rev=1 covers=g10.shared-page-blocks.SC-l8d,g10.shared-page-blocks.SC-df6,g10.shared-page-blocks.SC-44p -->
-### shared-ui-page-blocks-US1-TC10-1: An empty note list draws nothing
+### g10.shared-page-blocks.US1-TC10: An empty note list draws nothing
 
 **Classification:**
 
@@ -369,9 +395,15 @@ Runs once per row of **Test data**.
 
 * The Empty story gives `NoteList` no lines.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / NoteList / Empty at <grade10 ui workbench url>.
+1. Open Page Blocks / NoteList / Empty at `<grade10 ui workbench url>`.
 2. Look for a list in the story's canvas.
 
 **Expected Results:**
@@ -379,7 +411,7 @@ Runs once per row of **Test data**.
 * No list and no divider is drawn.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-xrp rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
-### shared-ui-page-blocks-US1-TC11-1: The rail marks the stage reached and every stage around it
+### g10.shared-page-blocks.US1-TC11: The rail marks the stage reached and every stage around it
 
 **Classification:**
 
@@ -398,30 +430,34 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The story the row names gives `StageRail` its stages and the current one.
+* The story `<story>` gives `StageRail` stages `<stages>` and current stage `<current stage>`.
 
 **Test data:**
 
-| Story | Stages | Current | Done | To come |
+| `<story>` | `<stages>` | `<current stage>` | `<done stages>` | `<future stages>` |
 | --- | --- | --- | --- | --- |
 | Financed Mid | Request, Valued, Offer, Agreed, Signed, Vault, Loan, Home | Signed | Request, Valued, Offer, Agreed | Vault, Loan, Home |
 | Storage Lane | Request, Valued, Agreed, Signed, Vault, Home | Vault | Request, Valued, Agreed, Signed | Home |
 | Wizard First | Describe, Photograph, Review | Describe | none | Photograph, Review |
 
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / StageRail / the row's story at <grade10 ui workbench url>.
+1. Open Page Blocks / StageRail / `<story>` at `<grade10 ui workbench url>`.
 2. Read the stages in order.
 3. Find the stage a screen reader hears as current.
 
 **Expected Results:**
 
-* The stages read in the row's order.
-* Current is in progress and is the one current step.
-* The row's Done stages read done, its To come stages still to come.
+* The stages read in order: `<stages>`.
+* `<current stage>` is in progress and is the one current step.
+* The stages `<done stages>` read done, the stages `<future stages>` still to come.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-xr0 rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
-### shared-ui-page-blocks-US1-TC12-1: An ended case stays at its stage with the ending's word
+### g10.shared-page-blocks.US1-TC12: An ended case stays at its stage with the ending's word
 
 **Classification:**
 
@@ -438,27 +474,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Ended story gives `StageRail` the financed lane, Offer as the current stage and <ending word>.
+* The Ended story gives `StageRail` the financed lane, Offer as the current stage and `<ending word>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <ending word> | `Declined` |
+| ending word | Declined |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / StageRail / Ended at <grade10 ui workbench url>.
+1. Open Page Blocks / StageRail / Ended at `<grade10 ui workbench url>`.
 2. Read the current stage and the line under it.
 3. Read every later stage.
 
 **Expected Results:**
 
-* Offer is in progress, with <ending word> under it.
+* Offer is in progress, with `<ending word>` under it.
 * Every stage after Offer reads still to come.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-hab rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
-### shared-ui-page-blocks-US1-TC13-1: A stage the rail does not hold is refused by name
+### g10.shared-page-blocks.US1-TC13: A stage the rail does not hold is refused by name
 
 **Classification:**
 
@@ -479,21 +519,21 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| <stage not held> | `loan`, a financed-lane stage the storage lane skips |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| stage not held | loan | a financed-lane stage the storage lane skips |
 
 **Steps:**
 
-1. Render `StageRail` with <stage not held> as the current stage.
+1. Render `StageRail` with `<stage not held>` as the current stage.
 
 **Expected Results:**
 
-* The render throws an error naming <stage not held>.
+* The render throws an error naming `<stage not held>`.
 * No rail is drawn.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-8jg rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
-### shared-ui-page-blocks-US1-TC14-1: A narrow screen scrolls the rail, not the page
+### g10.shared-page-blocks.US1-TC14: A narrow screen scrolls the rail, not the page
 
 **Classification:**
 
@@ -512,9 +552,15 @@ Runs once per row of **Test data**.
 
 * The Narrow story draws the financed lane's eight stages in a 320-pixel frame.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / StageRail / Narrow at <grade10 ui workbench url>.
+1. Open Page Blocks / StageRail / Narrow at `<grade10 ui workbench url>`.
 2. Scroll the rail sideways.
 3. Scroll the page sideways.
 
@@ -523,39 +569,8 @@ Runs once per row of **Test data**.
 * The rail scrolls to show Home.
 * The page does not scroll sideways.
 
-<!-- trace:case id=g10.shared-page-blocks.TC-vgl rev=1 covers=g10.shared-page-blocks.SC-kyu -->
-### shared-ui-page-blocks-US1-TC15-1: An empty panel reads its title and reports its way out
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Nothing here yet
-
-**Pre-conditions:**
-
-* The With Action story gives `EmptyPanel` a title and a Start action, and no line.
-
-**Steps:**
-
-1. Open Page Blocks / EmptyPanel / With Action at <grade10 ui workbench url>.
-2. Clear the Actions panel.
-3. Click Start a submission.
-
-**Expected Results:**
-
-* Step 1: the title reads, with no line under it.
-* Step 3: the action logs once.
-
-<!-- trace:case id=g10.shared-page-blocks.TC-dwb rev=1 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
-### shared-ui-page-blocks-US1-TC16-1: A block carries the slot it is given, or its own
+<!-- trace:case id=g10.shared-page-blocks.TC-dwb rev=2 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
+### g10.shared-page-blocks.US1-TC16: A block carries the slot it is given, or its own
 
 **Classification:**
 
@@ -572,7 +587,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Each of the five page blocks has one story without a slot and one with a slot.
+* Each of the four page blocks has one story without a slot and one with a slot.
 
 **Steps:**
 
@@ -580,7 +595,6 @@ Runs once per row of **Test data**.
 2. Open Page Blocks / FactCardSkeleton / Two and inspect the status's root; then open With Slot and inspect it again.
 3. Open Page Blocks / NoteList / Before You Come Storage and inspect the list's root; then open With Slot and inspect it again.
 4. Open Page Blocks / StageRail / Financed Mid and inspect the rail's root and the stepper inside it; then open With Slot and inspect the rail's root again.
-5. Open Page Blocks / EmptyPanel / Title And Description and inspect the panel's root; then open With Action and inspect it again.
 
 **Expected Results:**
 
@@ -588,7 +602,35 @@ Runs once per row of **Test data**.
 * Step 2: the root carries `data-slot="stack"`, then `data-slot="vault-cases-loading"`.
 * Step 3: the root carries `data-slot="list"`, then `data-slot="vault-case-before-you-come"`.
 * Step 4: the rail's root carries no `data-slot` and the stepper carries `data-slot="stepper"`; then the rail's root carries `data-slot="vault-case-stages"`.
-* Step 5: the root carries `data-slot="empty-state"`, then `data-slot="grading-home-submissions-empty"`.
+
+<!-- trace:case id=g10.shared-page-blocks.TC-vgl rev=2 covers=none -->
+### g10.shared-page-blocks.US1-TC15: An empty panel reads its title and reports its way out
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** The export contract
+
+**Pre-conditions:**
+
+* `EmptyPanel` is removed; the Page Blocks sidebar no longer lists it.
+
+**Steps:**
+
+1. Open Page Blocks at <grade10 ui workbench url>.
+2. Look for an EmptyPanel entry.
+
+**Expected Results:**
+
+* No EmptyPanel entry exists; the behaviour it covered is the design system's EmptyState, tested under Design System / Display / EmptyState.
 
 ## Reconciliation
 
@@ -599,3 +641,11 @@ Runs once per row of **Test data**.
 | The fact card, loading, note list and stage rail cases | Moved | From `shared/ui/vault-case`, `US1-TC4-1` to `US1-TC15-1`, renamed to `US1-TC3-1` to `US1-TC14-1`, their scenarios `SC-04` to `SC-17` renamed to `shared-ui-page-blocks-SC-03` to `SC-16`; the raised rows Q113 and Q114 stand as settled there |
 | `shared-ui-page-blocks-US1-TC1-1`, `-TC2-1`, `-TC15-1`, `-TC16-1` | Written with the move | The export contract, the reach, the empty panel and the slot, each reaching the one scenario that states it |
 | The coordinator's cases | Blind reading owed | `US1-TC1-1`, `-TC2-1`, `-TC15-1` and `-TC16-1` get a blind QA1 pass at the post-build suite review; acceptance does not wait on it |
+
+**Run:** no blind pass - a removal change: the export and slot cases were revised in place for four blocks, and the empty-panel case deprecated as the behaviour it walked is the design system's `EmptyState`, whose suite covers it.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| US1-TC1 | Revised as US1-TC1-2, rev 2 | The contract names four blocks; the case now also expects `EmptyPanel` to resolve nowhere |
+| US1-TC15 | Deprecated as US1-TC15-2, rev 2 | The requirement and `EmptyPanel` are removed; the drawing is `EmptyState`'s own suite |
+| US1-TC16 | Revised as US1-TC16-2, rev 2 | Its fifth step walked `EmptyPanel`'s slot; the four remaining blocks keep theirs |

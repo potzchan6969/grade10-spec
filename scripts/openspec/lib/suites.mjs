@@ -48,28 +48,26 @@ export const FILE_STATUSES = [
 export const CASE_STATUSES = ["draft", "actual", "deprecated"];
 /** Values that were `Type` before tcs-rules r2 and are `Suites` now. */
 export const LEGACY_TYPES = ["smoke", "regression"];
+/** Former classifications remain readable until cases are reviewed under r6. */
+export const LEGACY_CLASSIFICATIONS = {
+  Severity: ["normal"],
+  Type: ["acceptance", "integration"],
+  Suites: ["release", "exploratory"],
+};
 export const PROPERTIES = [
-  ["Severity", ["blocker", "critical", "major", "normal", "minor", "trivial"]],
+  ["Severity", ["blocker", "critical", "major", "minor", "trivial"]],
   ["Priority", ["high", "medium", "low"]],
   ["Status", CASE_STATUSES],
   ["Behaviour", ["positive", "negative", "destructive"]],
   [
     "Type",
-    [
-      "functional",
-      "acceptance",
-      "usability",
-      "security",
-      "performance",
-      "compatibility",
-      "integration",
-    ],
+    ["functional", "usability", "security", "performance", "compatibility"],
   ],
   // Added in tcs-rules r2. Missing on a suite written before it: a warning,
   // not an error, so the store migrates one reviewed suite at a time.
   [
     "Suites",
-    ["smoke", "regression", "release", "exploratory", "none"],
+    ["acceptance", "smoke", "regression", "health-check", "prod", "none"],
     true,
     true,
   ],
@@ -204,7 +202,7 @@ export function capabilityId(root, filePath) {
     .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
 }
 
-/** `openspec/specs/grade10-site/auction/` issues `grade10-site-auction-e2e-*`. */
+/** Legacy composed prefix retained while older suites migrate to level scopes. */
 export function domainPrefix(root, dir) {
   const rel = relative(root, dir)
     .replace(/^openspec\/specs\//, "")
@@ -218,6 +216,49 @@ export function productPrefix(root, dir) {
     .replace(/^openspec\/specs\//, "")
     .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
   return `${rel.split("/")[0]}-e2e`;
+}
+
+/** Display prefixes for composed-suite headings and markers. Legacy prefixes
+ * remain accepted while suites migrate to these level-separated forms. */
+function appDisplayCode(product) {
+  return (
+    {
+      "grade10-site": "g10",
+      "grade10-admin": "g10adm",
+      "grade10-store": "g10str",
+      "zzz-site": "zzz",
+      "zzz-admin": "zzzadm",
+    }[product] ?? product
+  );
+}
+
+export function modernDomainPrefix(root, dir) {
+  const rel = relative(root, dir)
+    .replace(/^openspec\/specs\//, "")
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
+  const [product, domain] = rel.split("/");
+  const app = appDisplayCode(product);
+  return `${app}.${domain}-dmn`;
+}
+
+/** Display prefix for a product-level suite. */
+export function modernProductPrefix(root, dir) {
+  const rel = relative(root, dir)
+    .replace(/^openspec\/specs\//, "")
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
+  const product = rel.split("/")[0];
+  const app = appDisplayCode(product);
+  return `${app}-pdt`;
+}
+
+/** Display prefix for a feature-level suite. */
+export function modernFeaturePrefix(root, dir) {
+  const rel = relative(root, dir)
+    .replace(/^openspec\/specs\//, "")
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
+  const [product, domain, capability] = rel.split("/");
+  const app = appDisplayCode(product);
+  return `${app}.${domain}-${capability}`;
 }
 
 /** The `decisions.md` of the change this suite sits in, if it sits in one at
@@ -283,15 +324,24 @@ export function readSpecIds(specPath) {
   // it; the change's suite owes a section to the journeys it adds or modifies.
   const context = new Set();
   let section = "";
+  const journeyHeading =
+    /^###\s+([A-Za-z0-9][A-Za-z0-9.-]*\.(?:US-?\d+[a-z]?)|[\w-]+-US-?\d+[a-z]?)\b:\s*(.+?)\s*$/;
+  const scenarioMarker = /^<!--\s*trace:scenario\s+id=(\S+)/;
   for (const line of `${text}\n${stories}`.split("\n")) {
     const h = line.match(/^##\s+(.+?)\s*$/);
     if (h) section = h[1];
-    const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
+    const j = line.match(journeyHeading);
     if (j && section === "REMOVED User journeys") retired.add(j[1]);
     else if (j) journeys.set(j[1], j[2]);
     if (j && section === "Context user journeys") context.add(j[1]);
-    const r = section === "Retired" && line.match(/^[-*]\s+`([\w-]+-US-\d+)`/);
+    const r =
+      section === "Retired" &&
+      line.match(
+        /^[-*]\s+`([A-Za-z0-9][A-Za-z0-9.-]*\.(?:US-?\d+[a-z]?)|[\w-]+-US-?\d+[a-z]?)`/,
+      );
     if (r) retired.add(r[1]);
+    const marker = line.match(scenarioMarker);
+    if (marker) scenarios.add(marker[1]);
     const s = line.match(SCENARIO_HEADING);
     if (s) scenarios.add(s[1]);
     const inline = line.match(SCENARIO_BULLET);
@@ -429,7 +479,11 @@ export function readPlatformIds(dir, root = null) {
 export function issuedPrefix(spec) {
   if (!spec) return null;
   const [id] = [...spec.journeys.keys(), ...spec.scenarios];
-  return id ? id.replace(/-(?:US|SC)-\d+$/, "") : null;
+  return id
+    ? id
+        .replace(/\.(?:US|SC)-?[0-9a-z]+$/i, "")
+        .replace(/-(?:US|SC)-?[0-9a-z]+$/i, "")
+    : null;
 }
 
 // --- the suite itself ------------------------------------------------------
@@ -439,7 +493,7 @@ export function issuedPrefix(spec) {
 function blockAfter(lines, from) {
   const body = [];
   for (let j = from; j < lines.length; j++) {
-    if (/^(\*\*|#{2,3}\s|---)/.test(lines[j])) break;
+    if (/^(\*\*|#{2,4}\s|---)/.test(lines[j])) break;
     body.push(lines[j]);
   }
   return body;
@@ -513,6 +567,62 @@ function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
   for (const path of values) tc.decidedBy.push({ path, line: at + 1 });
 }
 
+const WALK_CASE_REFERENCE =
+  /(?:^|[`\s])((?:[a-z0-9][\w.-]*\.)?TC-([0-9a-z]{3}))\s*\(\s*US-?(\d+)\s*-\s*TC-?(\d+)\s*\)/gi;
+const DISPLAY_CASE_REFERENCE =
+  /(?:^|[`\s])([a-z0-9][\w.-]*\.US-?(\d+)-TC-?(\d+))(?=[`\s.,;)]|$)/gi;
+
+/** Read only the executable references in `## Walk` sections. Walk prose is
+ * deliberately not interpreted here: the validator can prove that a route
+ * points at an existing case and local case reference, including a full stable
+ * id when a composed walk crosses suite files, while the case remains the
+ * authority for the observation itself. Pairing checks without a case id stay
+ * prose and do not create observations. */
+export function parseWalks(text) {
+  const lines = text.split("\n");
+  const walks = [];
+  let current = null;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const heading = /^##\s+(Walk\b.*)$/i.exec(line);
+    if (heading) {
+      current = { title: heading[1], line: i + 1, refs: [] };
+      walks.push(current);
+      continue;
+    }
+    if (/^##\s+/.test(line)) {
+      current = null;
+      continue;
+    }
+    if (!current) continue;
+    DISPLAY_CASE_REFERENCE.lastIndex = 0;
+    for (const match of line.matchAll(DISPLAY_CASE_REFERENCE)) {
+      const fullId = match[1].toLowerCase();
+      walks.at(-1).refs.push({
+        id: fullId.slice(fullId.lastIndexOf(".") + 1),
+        caseId: fullId,
+        journeyNum: Number(match[2]),
+        tcNum: Number(match[3]),
+        line: i + 1,
+      });
+    }
+    WALK_CASE_REFERENCE.lastIndex = 0;
+    for (const match of line.matchAll(WALK_CASE_REFERENCE)) {
+      const fullId = match[1];
+      const id = `TC-${match[2]}`.toLowerCase();
+      const ref = {
+        id,
+        journeyNum: Number(match[3]),
+        tcNum: Number(match[4]),
+        line: i + 1,
+      };
+      if (fullId.includes(".")) ref.caseId = fullId.toLowerCase();
+      current.refs.push(ref);
+    }
+  }
+  return walks;
+}
+
 /** Split a suite into its header, journey sections and cases. Current format only;
  *  older shapes are detected and reported rather than parsed into silence.
  *
@@ -530,6 +640,10 @@ export function parseSuite(text) {
     reviewed: null,
     reviewedLapsed: null,
     journeys: [],
+    // Cases met while no journey heading was open. They are in no journey's
+    // count, so the caller refuses them by name instead of leaving the
+    // review progress to disagree with the file.
+    orphans: [],
     legacy: new Set(),
     // The blind reading's own output: what the isolated input did not settle.
     // Tracked as present-or-absent and as empty-or-not, because an absent
@@ -541,9 +655,12 @@ export function parseSuite(text) {
   };
   let journey = null;
   let tc = null;
+  let ungrouped = false;
+  let caseMarker = null;
 
   const pushCase = () => {
     if (tc && journey) journey.cases.push(tc);
+    else if (tc) suite.orphans.push({ id: tc.id, line: tc.line });
     tc = null;
   };
   const pushJourney = () => {
@@ -554,10 +671,17 @@ export function parseSuite(text) {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    const marker = line.match(/^<!--\s*trace:case\s+id=(\S+)\s+rev=(\d+)/);
+    if (marker) {
+      caseMarker = { id: marker[1], rev: Number(marker[2]) };
+      continue;
+    }
+    if (/^##\s/.test(line)) caseMarker = null;
 
     const meta = line.match(/^##\s+(Raised|Settled|Reconciliation)\s*$/);
     if (meta) {
       pushJourney();
+      ungrouped = false;
       const key = meta[1].toLowerCase();
       const body = [];
       for (let j = i + 1; j < lines.length && !/^##\s/.test(lines[j]); j++) {
@@ -566,6 +690,17 @@ export function parseSuite(text) {
       suite[key] = body.filter(
         (one) => one.trim() && !one.trim().startsWith("<!--"),
       ).length;
+      continue;
+    }
+
+    if (/^##\s+Ungrouped\s*$/.test(line)) {
+      pushJourney();
+      ungrouped = true;
+      continue;
+    }
+    if (/^##\s+Walk\b/.test(line)) {
+      pushJourney();
+      ungrouped = false;
       continue;
     }
 
@@ -611,18 +746,41 @@ export function parseSuite(text) {
       }
     }
 
-    const jh = line.match(/^##\s+(([\w-]+)-US-?(\d+)):\s*(.+?)\s*$/);
+    const jh = line.match(
+      /^##\s+(([\w.-]+)-US-?(\d+)|([\w.-]+)\.US-?(\d+)):\s*(.+?)\s*$/,
+    );
     if (jh) {
       pushJourney();
+      ungrouped = false;
       journey = {
-        capability: jh[2],
-        num: Number(jh[3]),
+        capability: jh[2] ?? jh[4],
+        num: Number(jh[3] ?? jh[5]),
         raw: jh[1],
         hyphenated: /-US-\d+$/.test(jh[1]),
-        title: jh[4],
+        title: jh[6],
         line: i + 1,
         story: [],
         cases: [],
+      };
+      continue;
+    }
+    const uh = ungrouped
+      ? line.match(
+          /^###\s+(([\w.-]+)-US-?(\d+)|([\w.-]+)\.US-?(\d+)):\s*(.+?)\s*$/,
+        )
+      : null;
+    if (uh) {
+      pushJourney();
+      journey = {
+        capability: uh[2] ?? uh[4],
+        num: Number(uh[3] ?? uh[5]),
+        raw: uh[1],
+        hyphenated: /-US-\d+$/.test(uh[1]),
+        title: uh[6],
+        line: i + 1,
+        story: [],
+        cases: [],
+        ungrouped: true,
       };
       continue;
     }
@@ -634,26 +792,50 @@ export function parseSuite(text) {
       continue;
     }
 
-    const ch = line.match(/^###\s+(\S+):\s*(.+?)\s*$/);
+    const modern = line.match(
+      /^(###|####)\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):\s*(.+?)\s*$/,
+    );
+    const display = !modern
+      ? line.match(/^(###|####)\s+(\S+\.US-?(\d+)-TC-?(\d+)):\s*(.+?)\s*$/)
+      : null;
+    const legacy =
+      !modern && !display
+        ? ungrouped
+          ? line.match(/^####\s+(\S+):\s*(.+?)\s*$/)
+          : line.match(/^###\s+(\S+):\s*(.+?)\s*$/)
+        : null;
+    const ch = modern ?? display ?? legacy;
     if (ch) {
       pushCase();
-      const id = ch[1];
-      const journeyScoped = id.match(
-        /^([\w-]+)-US-?(\d+)-TC-?(\d+)(?:-(\d+))?$/,
-      );
+      const id = modern ? modern[2] : display ? display[2] : legacy[1];
+      const journeyScoped = modern
+        ? [modern[0], journey?.capability ?? null, modern[3], modern[4]]
+        : display
+          ? [
+              display[0],
+              display[2].replace(/\.US-?\d+-TC-?\d+$/, ""),
+              display[3],
+              display[4],
+            ]
+          : id.match(/^([\w-]+)-US-?(\d+)-TC-?(\d+)(?:-(\d+))?$/);
       if (!journeyScoped)
-        suite.legacy.add(
-          "case ids that are not `<capability>-US<n>-TC<m>-<v>`",
-        );
+        suite.legacy.add("case ids that are not `<scope>.US<n>-TC<m>`");
       tc = {
         id,
+        markerId: caseMarker?.id ?? null,
+        markerRev: caseMarker?.rev ?? null,
         capability: journeyScoped?.[1] ?? null,
         journeyNum: journeyScoped ? Number(journeyScoped[2]) : null,
         tcNum: journeyScoped ? Number(journeyScoped[3]) : null,
-        version: journeyScoped?.[4] ? Number(journeyScoped[4]) : null,
+        version: modern
+          ? null
+          : journeyScoped?.[4]
+            ? Number(journeyScoped[4])
+            : null,
+        modern: Boolean(modern || display),
         journeyScoped: Boolean(journeyScoped),
-        hyphenated: /-US-\d+-TC-\d+/.test(id),
-        title: ch[2],
+        hyphenated: !modern && !display && /-US-\d+-TC-\d+/.test(id),
+        title: modern ? modern[5] : display ? display[5] : legacy[2],
         line: i + 1,
         props: new Map(),
         propOrder: [],
@@ -681,6 +863,7 @@ export function parseSuite(text) {
         // the classification block" is measured from.
         propLine: null,
       };
+      caseMarker = null;
       continue;
     }
 
@@ -744,7 +927,7 @@ export function parseSuite(text) {
         let seenBlank = false;
         for (let j = i + 1; j < lines.length; j++) {
           const t = lines[j];
-          if (/^(\*\*|#{2,3}\s|---)/.test(t)) break;
+          if (/^(\*\*|#{2,4}\s|---)/.test(t)) break;
           if (t.trim() === "") {
             if (parts.join("").trim() !== "") break;
             if (seenBlank) break;
@@ -777,7 +960,7 @@ export function parseSuite(text) {
       if (/^\*\*Steps:\*\*/.test(line)) {
         for (let j = i + 1; j < lines.length; j++) {
           const t = lines[j];
-          if (/^(\*\*|#{2,3}\s|---)/.test(t)) break;
+          if (/^(\*\*|#{2,4}\s|---)/.test(t)) break;
           if (/^\s*\d+\.\s+\S/.test(t)) {
             tc.steps++;
             tc.stepTexts.push(t.trim().replace(/^\d+\.\s+/, ""));
@@ -929,9 +1112,14 @@ export function readSuite(root, filePath) {
   const spec = composed
     ? readDomainIds(dir)
     : readSpecIds(join(dir, "spec.md"));
-  const capability = composed
-    ? domainPrefix(root, dir)
-    : (issuedPrefix(spec) ?? basename(dir));
+  const capability =
+    level === "platform"
+      ? "platform"
+      : level === "product"
+        ? modernProductPrefix(root, dir)
+        : level === "domain"
+          ? modernDomainPrefix(root, dir)
+          : (issuedPrefix(spec) ?? basename(dir));
   const cases = [];
   for (const j of suite.journeys)
     for (const tc of j.cases) cases.push({ ...tc, journey: j });
@@ -972,7 +1160,9 @@ export function caseIndex(root, paths) {
     let lineNo = 0;
     for (const line of readFileSync(p, "utf8").split("\n")) {
       lineNo += 1;
-      const h = line.match(/^###\s+(\S+?):/);
+      const h = line.match(
+        /^(?:###|####)\s+((?:\S+\.US-?\d+-TC-?\d+)|(?:\S+\.TC-[0-9a-z]+)|(?:\S+-TC\d+(?:-\d+)?))(?:\s+\(US-?(\d+)-TC-?(\d+)\))?:/,
+      );
       if (h) {
         id = h[1];
         if (!index.has(id))
@@ -980,6 +1170,16 @@ export function caseIndex(root, paths) {
             level,
             rel,
             line: lineNo,
+            journeyNum: h[2]
+              ? Number(h[2])
+              : /\.US-?(\d+)-TC-?\d+$/.exec(h[1])
+                ? Number(/\.US-?(\d+)-TC-?\d+$/.exec(h[1])[1])
+                : null,
+            tcNum: h[3]
+              ? Number(h[3])
+              : /\.US-?\d+-TC-?(\d+)$/.exec(h[1])
+                ? Number(/\.US-?\d+-TC-?(\d+)$/.exec(h[1])[1])
+                : null,
             traces: [],
             status: null,
           });

@@ -109,8 +109,8 @@ recommended no cart. Six cards, the order of the similar picks and the heading
 `decisions.md` and `user-journeys.md` reach `main` in that order with
 `@ecchochan` on each — US-01 the picks the shop chose, US-02 similar cards
 where a card has none, US-03 a stock keeper's picks in Shopify admin, seen
-within the mirror's refresh. The designer and the tech PIC are told in the same
-thread, and everything after the journeys is read again.
+within the mirror's refresh. The designer alone is told in the same thread,
+and everything after the journeys is read again.
 
 ## *Designer* — **The rail**
 

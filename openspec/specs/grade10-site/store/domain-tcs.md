@@ -1,7 +1,7 @@
 # grade10-site/store Cross-Feature E2E Test Cases
 
-**Status:** pending-review · 0/8
-**Drafts styled:** 2026-10-06, tcs-rules r4
+**Status:** pending-review · 0/9
+**Drafts styled:** 2026-10-13, tcs-rules r5
 
 ## grade10-site-store-e2e-US1: Collector enters a collection and opens a product
 
@@ -397,6 +397,63 @@ Runs once per row of **Test data**.
 * Step 5 opens a new tab; the first tab stays on Store Locator.
 * Step 6 shows Google Maps at 13 Pak Sha Road, Causeway Bay, Hong Kong.
 
+---
+
+## g10.store-dmn.US11: Shopkeeper scans a shelf product and opens its store page
+
+**As a** shopkeeper,
+**I want** the product the scanner names to open on its store page with the
+same title, price and availability,
+**so that** what I tell a customer at the shelf is what the store sells them
+online.
+
+<!-- trace:case id=g10.store-dmn.TC-xk6 rev=2 covers=g10.store-shelf-scanning.SC-n6w -->
+### g10.store-dmn.US11-TC1: Scanned product opens its own page with the same answer
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** g10.store-shelf-scanning.US1, g10.store-shelf-scanning.US2, g10.store-shelf-scanning.US3, g10.store-shelf-scanning.US4, grade10-site-store-product-page-US-01, grade10-site-store-product-page-US-04
+
+**Pre-conditions:**
+
+* The site under test is a build that carries the store surfaces.
+* admin(shopkeeper) has the shop's scanner link open on a phone.
+* `<product>` is published to the store and on the scanner since its last change.
+
+**Test data:**
+
+| `<product>` | `<availability>` |
+| --- | --- |
+| A raw card with its one item for sale | Available |
+| A card with nothing for sale | Sold out |
+| One slab of a card the store lists as two or more slabs, each naming its inventory item | Available |
+
+**Steps:**
+
+1. Point the camera at `<product>` on the shelf, at its label where it is a slab.
+2. Read the title, price and availability the scan shows.
+3. Open the store page link on the scan.
+4. Read the title, price and purchase area on the page.
+
+**Expected Results:**
+
+* Step 2 names `<product>` and reads `<availability>`, with no stock count.
+* Step 2 shows grade and cert for the slab row only.
+* Step 3 opens `<product>`'s own store page, not another copy's.
+* Step 4's title and price match step 2's.
+* Step 4's purchase area reads `<availability>`.
+
 ## Reconciliation
 
 **Run:** 2026-10-07 · carried US4-TC1-1 with its id, revision and words, so its marker names every scenario that serves `grade10-site-store-discounts-US-04` in this change; the path it walks is unchanged.
@@ -411,3 +468,9 @@ Runs once per row of **Test data**.
 - **Identical path** - `pnpm run tcs:validate` warns that US1-TC1-2 and the durable US1-TC1-1 walk one path; they are one case at two revisions, and the fold keeps revision 2 alone
 
 **Run:** 2026-10-06, the domain check of `activate-listing-tile-by-name` at QA2: the change touches `grade10-site/store/product-listing` and `grade10-site/store/product-page`, and US1-TC1 traces both.
+
+**Run:** QA2 on 2026-10-13. US11-TC1 moves to rev 2: its slab row now points
+the camera at the slab's label, because Q36 offers a slab whose label is not
+read in the pick, without grade or cert. It covers
+`g10.store-shelf-scanning.SC27`; the shelf-scanning suite's reconciliation
+records the rest.

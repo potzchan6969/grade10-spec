@@ -10,7 +10,6 @@
 export const LINE_SKILLS = Object.freeze({
   "workflow-plan": "proposal.md",
   "workflow-design": "ui-design.md",
-  "workflow-tech": "tech-design.md",
   "workflow-specify": "spec.md",
   "workflow-tasks": "tasks.md",
   "workflow-build": "task group",

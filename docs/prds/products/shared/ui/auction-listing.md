@@ -15,7 +15,7 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 | --- | --- |
 | Buyer fee on the panel | 🚧 **20%** on top of the winning bid, always on, never behind a tooltip |
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment |
-| Custom maximum | Whole major units only, up to **9,999,999,999** |
+| Custom maximum | Whole USD units only, up to the USD [bid ceiling](/p/grade10-site/auction/bidding#auction-logic) |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
 | Empty bid count | **No bids yet** while the lot is open; **No bids** when it is closed |
 | Lot title under the breadcrumb | Smaller title size on a small viewport; larger from tablet |
@@ -26,10 +26,14 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   zoom source, and falls back to the main source when a thumb or a zoom is
   not given, so one image can be a small file in the strip and a large one
   under the magnifier
-- **The strip** — one item shows no thumbnail strip; 🚧 several show a left
+- **The strip** - one item shows no thumbnail strip; several show a left
   rail when the gallery is wide enough for it beside the main frame, and
   otherwise step with previous/next and progress only; no items render
   nothing and offer no previous or next
+- **The magnifier** — a lens follows the pointer over the selected image
+  and enlarges what is beneath it at the zoom source's size; focused, it
+  moves with the arrow keys and Escape hides it; a touch pointer never
+  raises it, and there is no zoom dialog — [Lens](https://ui.ballmac.com/components/lens)
 - **On its own** — the gallery renders without the bid panel, so a lot can
   be shown before it can be bid on
 
@@ -38,17 +42,20 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 ## Bid History
 
 - **Accepted instants** — each row keeps the accepted time as data
-- 🚧 **Localized** — recent activity reads in relative form and older activity
+- **Localized** — recent activity reads in relative form and older activity
   in the viewer's local zone; the application supplies the locale, the
   time zone and the activity copy, and a non-timestamp state may supply its
   own display text; collector deadline and catalogue tile close lines use
   the same locale and zone, and a deadline that shows a clock names the
   viewer's zone: its short name in US English, HKT in Hong Kong, or an offset
   such as GMT+9 where US English has none
-- 🚧 **Closed lot** - the bid card names the viewer's zone after a closed lot's
+- **Closed lot** - the bid card names the viewer's zone after a closed lot's
   close time when it shows a clock, as it does after an open lot's deadline; a
   close day alone names none
   ([Dates and Times](/p/platform/shared/dates-and-times))
+- **Catalogue tile** — the tile carrying the close line is the catalogue's
+  `AuctionLotCard`: a closed lot draws a collector deadline naming the
+  viewer's zone, and the shared `AuctionCard` block leaves the package
 - **Winner after close** — when the lot is closed and sold, the winning
   public row shows a primary crown after the amount (`isWinner`; accessible
   name from consumer copy)
@@ -100,15 +107,20 @@ cancelled.
 
 - **Whole units only** — a typed decimal mark is refused, and a pasted
   fraction keeps its whole major units with no rounding
-- **Ceiling** — a maximum above 9,999,999,999 whole major units cannot be
-  typed or pasted; the previous valid draft stays, nothing is clamped, and
-  no message says why
+- **Ceiling** - extra typed digits stop at the USD bid ceiling; an oversized paste or replacement becomes that ceiling, without a maximum-bid message
 - 🚧 **Quick bids** — three chips at 1×, 2× and 4× the listing increment:
   from the current bid when the collector does not lead, from their committed
   maximum when they do; before any bid, chip 1× is the opening price itself
 - 🚧 **A leader's typed raise** — starts at the greater of the listing's next
   minimum and their maximum plus 100 minor units; that floor is not the first
   chip
+- **Chips at the ceiling** — a quick bid computed above the USD bid
+  ceiling is offered at the ceiling, captioned as the limit; two chips landing
+  on the same amount collapse to one
+- 🚧 **No amount left** — when nothing legal remains to offer — the collector's
+  maximum already at the ceiling, or the lot's next minimum above it — chips,
+  the custom field and the bid action give way to the amount reached and a
+  line that this auction accepts no higher amount; the buyer-fee line stays
 - **A moved floor** — Place Bid is the commitment, and a floor that moved
   meanwhile uses the panel's stale-floor recovery
 
@@ -132,11 +144,11 @@ cancelled.
   window, and while the lot is in extended bidding the Time left label reads
   **Time left (extended)**
 
-::story{id="auction-listing-listingauctionbidcard--outbid" title="The bid panel after being outbid"}
+::story{id="auction-bidding-blocks-listingauctionbidcard--outbid" title="The bid panel after being outbid"}
 
-::story{id="auction-listing-listingauctionbidcard--custom-maximum-ceiling" title="Custom maximum ceiling"}
+::story{id="auction-bidding-blocks-listingauctionbidcard-custom-maximum--custom-maximum-ceiling" title="Custom maximum ceiling"}
 
-::story{id="auction-listing-listingdetails--default" title="The details section"}
+::story{id="auction-display-blocks-listinglotmeta--default" title="The details section"}
 
 :::detail{title="Code map" for="engineer"}
 - **Blocks** — `ListingLotHeader`, `ListingGallery`, `ListingAuctionBidCard`,
@@ -154,4 +166,6 @@ code mapping — so these stories are the reference until frames are produced.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Bid enrollment | Decided | Its own part of the feature set: the setup blocks, their gates, and the signal the bid card reads. | Product |
+| Gallery strip | Decided | Several images show a left rail only when it fits beside the main frame. Stacked galleries keep previous/next and progress, with no strip under the stage. The rule covers `ListingLotGallery`; `ListingGallery` keeps its existing strip behavior, and the width threshold stays in code. The rail uses `thumb`, the main frame uses `detail`, and zoom uses `zoom` for the selected image. | Product |
+| Magnifier | Decided | Magnification is in place under the pointer at the zoom source; focused arrows move it and Escape hides it; a touch pointer never raises it; there is no zoom dialog. The lens lives in the design system; both galleries compose it. | Product |
 :::

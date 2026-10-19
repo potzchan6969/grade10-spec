@@ -1,7 +1,11 @@
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
-import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
+import {
+  discoverSpecs,
+  readSpecs,
+  readTestCases,
+} from "../src/store/read-specs.mts";
 import { writeStore } from "./tmp-store";
 
 const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
@@ -99,6 +103,47 @@ describe("spec entries", () => {
   });
 });
 
+describe("case headings in every form the store writes", () => {
+  const caseText = (heading: string, trace: string) =>
+    [
+      `### ${heading}`,
+      "",
+      "* **Status:** draft",
+      "* **Automation status:** manual",
+      `* **Trace:** ${trace}`,
+      "",
+    ].join("\n");
+  const suite = readTestCases(
+    [
+      "# Alpha Test Cases",
+      "",
+      "**Status:** pending-review",
+      "",
+      "## Walk 1: Reader follows the thing",
+      "",
+      caseText(
+        "g10.demo-alpha.US1-TC1: Reader asks for the thing",
+        "g10.demo-alpha.US1",
+      ),
+      caseText(
+        "g10.demo-alpha.TC-ue2 (US1-TC2): Reader asks again",
+        "g10.demo-alpha.US1, g10.demo-beta.US2",
+      ),
+      caseText("alpha-US1-TC3-1: Reader asks a third time", "alpha-US-01"),
+      caseText("alpha-TC-04: Reader asks for a scenario", "alpha-SC-02"),
+    ].join("\n"),
+  );
+
+  it("reads each case under the id its heading displays, with its traces", () => {
+    expect(suite.cases.map(({ id, traces }) => [id, traces])).toEqual([
+      ["g10.demo-alpha.US1-TC1", ["g10.demo-alpha.US1"]],
+      ["g10.demo-alpha.TC-ue2", ["g10.demo-alpha.US1", "g10.demo-beta.US2"]],
+      ["alpha-US1-TC3-1", ["alpha-US-01"]],
+      ["alpha-TC-04", ["alpha-SC-02"]],
+    ]);
+  });
+});
+
 describe("error containment", () => {
   const broken = specs.find((spec) => spec.id === "demo-product/broken");
 
@@ -154,6 +199,18 @@ describe("a spec issuing one id twice", () => {
     });
     expect(entry.error?.message).toMatch(
       /scenario `alpha-SC-01` is issued twice, at line 13 and line 18/,
+    );
+  });
+
+  it("refuses two scenarios wearing one `<app>.<domain>-<capability>.SC<n>` id", () => {
+    const entry = written({
+      [SPEC]: specText(
+        "g10.demo-alpha.SC1 - it happens",
+        "g10.demo-alpha.SC1 - it repeats",
+      ),
+    });
+    expect(entry.error?.message).toMatch(
+      /scenario `g10.demo-alpha.SC1` is issued twice, at line 13 and line 18/,
     );
   });
 
@@ -263,6 +320,57 @@ describe("the shape a change's journeys file is written in", () => {
       "alpha-US-02",
       "alpha-US-03",
     ]);
+  });
+
+  it("reads modern and legacy journey ids with their full story", () => {
+    const entry = journeys(
+      [
+        "## User journeys",
+        "",
+        story("g10.auction-bidder-suspension.US1", "A modern journey"),
+        story("alpha-US-02", "A legacy journey"),
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeUndefined();
+    expect(
+      entry.journeys?.map(({ id, title, text }) => ({ id, title, text })),
+    ).toEqual([
+      {
+        id: "g10.auction-bidder-suspension.US1",
+        title: "A modern journey",
+        text: "**As a** collector,\n**I want** the thing,\n**so that** it is done.",
+      },
+      {
+        id: "alpha-US-02",
+        title: "A legacy journey",
+        text: "**As a** collector,\n**I want** the thing,\n**so that** it is done.",
+      },
+    ]);
+  });
+
+  it("refuses malformed modern journey ids and headings", () => {
+    for (const heading of [
+      "g10.auction-bidder-suspension.US-1: A malformed id",
+      "g10.auction-bidder-suspension.US1 A missing colon",
+    ]) {
+      const entry = journeys(
+        [
+          "## User journeys",
+          "",
+          `### ${heading}`,
+          "",
+          "**As a** collector,",
+          "**I want** the thing,",
+          "**so that** it is done.",
+        ].join("\n"),
+      );
+      expect(entry.journeysError).toEqual({
+        file: JOURNEYS,
+        line: 3,
+        message:
+          "a journey heading is `### <scope>.US<n>: <title>` or the legacy `### <capability>-US-<n>: <title>`",
+      });
+    }
   });
 
   it("holds a file whose delta sections are all empty", () => {

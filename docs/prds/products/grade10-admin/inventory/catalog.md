@@ -14,6 +14,16 @@ product history.
 - **Product hierarchy** — IP, Category, and Item are the complete product identity
 - **Product entry identity** — product names may repeat; import resolution
   uses the name, exact taxonomy tuple, and typed product values
+- **Name and description in each language** — a product keeps its name and
+  description as written today, and an inventory admin may add the same two in
+  Traditional Chinese and in Simplified Chinese, on the product editor and in
+  the Details section of the product page, which switches both with one
+  language choice. A language left empty shows the English text, marked as the
+  fallback; the other Chinese is never borrowed. Lists, history, holds and every
+  staff reference stay on the English name, an import never clears a
+  translation, and the product search also finds a product by a translated
+  name. The store pages read them in a later change —
+  [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
 - **Required classification** — one reusable IP, Item, and Category tag
 - **PriceCharting identity** — a confirmed provider match with its canonical
   link and stable provider id

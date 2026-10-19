@@ -1,6 +1,6 @@
 # grade10-site/store/checkout Test Cases
 
-**Status:** pending-review · 0/19
+**Status:** pending-review · 0/28
 **Drafts styled:** 2026-09-28, tcs-rules r4
 
 ## grade10-site-store-checkout-US1: Collector sends a current cart to hosted payment
@@ -578,23 +578,23 @@
 * No order moves to paid.
 * The event is recorded for diagnosis and no replacement order is created.
 
-## grade10-site-store-checkout-US4: Signed-out collector is asked to sign in
+## grade10-site-store-checkout-US4: Signed-out collector checks out as a guest
 
 **As a** collector who is not signed in,
-**I want** checkout to explain the identity requirement,
-**so that** I can sign in before an order or payment is started.
+**I want** to pay for my cart without making an account,
+**so that** I can buy once without signing up.
 
-<!-- trace:case id=g10.store-checkout.TC-nos rev=1 covers=g10.store-checkout.SC-f06 -->
-### grade10-site-store-checkout-US4-TC1-1: Public checkout requires a member session
+<!-- trace:case id=g10.store-checkout.TC-nos rev=4 covers=g10.store-checkout.SC-f06,g10.store-checkout.SC-wet -->
+### grade10-site-store-checkout-US4-TC1-4: A signed-out collector pays the basket and a public code as a guest
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** acceptance
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -602,24 +602,402 @@
 
 **Pre-conditions:**
 
-* customer is signed out on the public checkout route
+* customer is signed out on <grade10 store url>.
+* This browser's cart holds `<basket>`.
+* `<public code>` is applied in the drawer.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<basket>` | A ready basket |
+| `<public code>` | A code open to everyone that the shop accepts for `<basket>` |
 
 **Steps:**
 
-1. Try to continue to payment.
-2. Read the sign-in outcome.
+1. Open Cart and press Check Out as Guest.
+2. Read the hosted invoice.
+3. Open Cart again.
 
 **Expected Results:**
 
-* The sign-in surface is shown.
-* No public Grade10 order or Shopify checkout is created.
-* A typed email is not accepted as public identity proof.
+* Step 1 asks nobody to sign in and opens one Shopify hosted invoice.
+* Step 2 carries the lines of `<basket>` and `<public code>`, with no reward coupon or points.
+* Step 3 shows an empty cart.
+
+<!-- trace:case id=g10.store-checkout.TC-j40 rev=1 covers=g10.store-checkout.SC-1yf -->
+### grade10-site-store-checkout-US4-TC10-1: A paid guest order keeps its address and belongs to nobody
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-04
+
+**Pre-conditions:**
+
+* A guest order for `<basket>` is open on Shopify's page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<basket>` | A ready basket |
+| `<buyer email>` | An address with no Grade10 account |
+
+**Steps:**
+
+1. Pay the invoice on Shopify's page, typing `<buyer email>`.
+2. Read the order once Shopify reports it paid.
+3. Look for an account at `<buyer email>`.
+4. Read the points earned on the order.
+5. As an operator, claim the order for a member.
+
+**Expected Results:**
+
+* Step 2 shows the order paid, holding `<buyer email>` and naming no owner.
+* Step 3 finds no account.
+* Step 4 finds no points earned.
+* Step 5 is refused, and the order still names no owner.
+
+<!-- trace:case id=g10.store-checkout.TC-rm4 rev=1 covers=g10.store-checkout.SC-2g0 -->
+### grade10-site-store-checkout-US4-TC11-1: A guest checkout carrying a session is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-04
+
+**Pre-conditions:**
+
+* customer is signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<basket>` | A ready basket |
+
+**Steps:**
+
+1. Send a guest checkout request for `<basket>` with customer's session.
+2. Read the orders the store holds for it.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 2 finds no guest order.
+
+<!-- trace:case id=g10.store-checkout.TC-p4d rev=1 covers=g10.store-checkout.SC-p4c -->
+### grade10-site-store-checkout-US4-TC12-1: A member's code typed by a guest is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-04
+
+**Pre-conditions:**
+
+* customer is signed out on <grade10 store url>.
+* This browser's cart holds `<basket>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<basket>` | A ready basket |
+| `<member code>` | A live code minted to another member |
+
+**Steps:**
+
+1. Open Cart, type `<member code>` and apply it.
+2. Read the refusal.
+
+**Expected Results:**
+
+* Step 1 applies no code.
+* Step 2 reads as a code that does not exist, and names no owner, spend or expiry.
+
+---
+
+## grade10-site-store-checkout-US9: Buyer finds a guest order again
+
+**As a** collector who checked out as a guest,
+**I want** the order link, Continue, and a later sign-in with the same address
+to lead me back to that order,
+**so that** buying without an account never loses the purchase.
+
+<!-- trace:case id=g10.store-checkout.TC-gd6 rev=1 covers=g10.store-checkout.SC-g6e -->
+### grade10-site-store-checkout-US9-TC1-1: The mailed link opens the guest order
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-09
+
+**Pre-conditions:**
+
+* A guest order is paid, and its link has arrived in Shopify's confirmation email.
+* customer is <session>.
+
+**Test data:**
+
+| `<session>` |
+| --- |
+| signed out |
+| signed in as another member |
+
+**Steps:**
+
+1. Open the link from the email.
+2. Read the page.
+
+**Expected Results:**
+
+* Step 2 shows the order's items, money and progress.
+* Nothing asks customer to sign in.
+* The page tells search engines not to index it.
+
+<!-- trace:case id=g10.store-checkout.TC-puy rev=1 covers=g10.store-checkout.SC-kl3 -->
+### grade10-site-store-checkout-US9-TC2-1: A wrong order link shows not-found
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-09
+
+**Pre-conditions:**
+
+* A guest order is paid, and a member's order exists.
+
+**Test data:**
+
+| `<link>` |
+| --- |
+| `/orders/<unknown order id>#<the guest order's secret>` |
+| `/orders/<the member's order id>#<any secret>` |
+| `/orders/<the guest order id>#<a wrong secret>` |
+| `/orders/<the guest order id>`, with no secret |
+
+**Steps:**
+
+1. Open `<link>`.
+2. Read the page.
+
+**Expected Results:**
+
+* Step 2 shows the site's not-found page.
+* Nothing about either order is shown.
+
+<!-- trace:case id=g10.store-checkout.TC-ru6 rev=2 covers=g10.store-checkout.SC-pxw -->
+### grade10-site-store-checkout-US9-TC3-2: Your Orders lists a guest order under the member's address
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-09
+
+**Pre-conditions:**
+
+* A guest order was paid under `<member email>`.
+* The member at `<member email>` has no order of their own.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<member email>` | The address a member signs in with |
+
+**Steps:**
+
+1. Sign in as `<member email>`.
+2. Open Your Orders.
+3. Read the guest order's owner and points as an operator.
+
+**Expected Results:**
+
+* Step 2 lists the guest order.
+* Step 3 shows the order names the member at `<member email>` as its owner
+  and earned no points.
+
+<!-- trace:case id=g10.store-checkout.TC-kco rev=1 covers=g10.store-checkout.SC-gxp -->
+### grade10-site-store-checkout-US9-TC4-1: Continue opens the order just paid
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-09
+
+**Pre-conditions:**
+
+* customer is <buyer> and has paid a checkout on Shopify in this browser.
+
+**Test data:**
+
+| `<buyer>` | What opens |
+| --- | --- |
+| a guest | the guest order's private page |
+| a signed-in member | the member's own order under their profile |
+
+**Steps:**
+
+1. Press Continue on Shopify's Thank you page.
+2. Read the page Grade10 opens.
+
+**Expected Results:**
+
+* Step 2 opens the order just paid, as the row says.
+
+<!-- trace:case id=g10.store-checkout.TC-0zy rev=1 covers=g10.store-checkout.SC-lrv -->
+### grade10-site-store-checkout-US9-TC5-1: With no order remembered, Continue falls back
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-09
+
+**Pre-conditions:**
+
+* This browser holds <record>.
+* customer is <session>.
+
+**Test data:**
+
+| `<record>` | `<session>` | Lands on |
+| --- | --- | --- |
+| no checkout | signed in | Your Orders |
+| no checkout | signed out | the store |
+| a checkout Continue already opened | signed out | the store |
+| a checkout more than a day old | signed in | Your Orders |
+
+**Steps:**
+
+1. Open `/orders/latest`.
+2. Read where the browser lands.
+
+**Expected Results:**
+
+* Step 2 lands where the row says.
+
+<!-- trace:case id=g10.store-checkout.TC-q8w rev=1 covers=g10.store-checkout.SC-q8v -->
+### grade10-site-store-checkout-US9-TC6-1: A joined guest order earns nothing when it completes
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-09
+
+**Pre-conditions:**
+
+* A guest order for `<basket>` was paid under `<member email>`, and no item
+  is fulfilled yet.
+* The member at `<member email>` holds `<balance>` points.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<basket>` | A ready basket of eligible goods |
+| `<member email>` | The address a member signs in with |
+| `<balance>` | The member's points balance before the order |
+
+**Steps:**
+
+1. Sign in as `<member email>`.
+2. Fulfil every item of the order in Shopify.
+3. Read the points earned on the order and the member's balance.
+
+**Expected Results:**
+
+* Step 1 joins the order to the member's account.
+* Step 3 shows no points earned on the order, and a balance of `<balance>`.
 
 ## Settled
 
 - Shopify is the hosted payment page; Grade10 is the order of record.
-- The public storefront is signed-in-member only; typed email remains an
-  operator test path in development and staging.
+- The public storefront takes a member or a guest; a guest pays the basket
+  and at most a public code, and the order earns no points; it joins the
+  account that proves its address. Typed email remains an operator test path
+  in development and staging.
 - Shipping and tax are calculated by Shopify after address entry.
 - One checkout intent owns repeated Pay, reload and response-loss recovery.
 - A paid transition, not the provider return, releases the member cart.

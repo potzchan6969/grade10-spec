@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/5
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
-## grade10-site-site-typography-US1: Every surface answers the brand-sans contract
+## g10.site-typography.US1: Every surface answers the brand-sans contract
 
 **Walked by:** nobody on their own — a site-wide brand-type contract; every
 collector journey under `grade10-site/site/*`, `grade10-site/store/*`,
@@ -17,7 +17,7 @@ brand's Gibson sans,
 to, not a generic fallback.
 
 <!-- trace:case id=g10.site-typography.TC-94a rev=1 covers=g10.site-typography.SC-wxa,g10.site-typography.SC-6rg,g10.site-typography.SC-45e -->
-### grade10-site-site-typography-US1-TC1-1: Document head requests the Adobe Fonts kit on load
+### g10.site-typography.US1-TC1: Document head requests the Adobe Fonts kit on load
 
 **Classification:**
 
@@ -49,7 +49,7 @@ to, not a generic fallback.
 ---
 
 <!-- trace:case id=g10.site-typography.TC-pal rev=1 covers=g10.site-typography.SC-wxa,g10.site-typography.SC-6rg,g10.site-typography.SC-45e -->
-### grade10-site-site-typography-US1-TC2-1: Body and heading text render in the brand sans
+### g10.site-typography.US1-TC2: Body and heading text render in the brand sans
 
 **Classification:**
 
@@ -84,7 +84,7 @@ to, not a generic fallback.
 ---
 
 <!-- trace:case id=g10.site-typography.TC-55c rev=1 covers=g10.site-typography.SC-6z2 -->
-### grade10-site-site-typography-US1-TC3-1: Same kit and family load across unrelated products
+### g10.site-typography.US1-TC3: Same kit and family load across unrelated products
 
 **Classification:**
 
@@ -118,7 +118,7 @@ to, not a generic fallback.
 ---
 
 <!-- trace:case id=g10.site-typography.TC-y84 rev=1 covers=g10.site-typography.SC-wxa,g10.site-typography.SC-6rg,g10.site-typography.SC-45e -->
-### grade10-site-site-typography-US1-TC4-1: No second brand-sans stylesheet is present
+### g10.site-typography.US1-TC4: No second brand-sans stylesheet is present
 
 **Classification:**
 
@@ -152,7 +152,7 @@ to, not a generic fallback.
 ---
 
 <!-- trace:case id=g10.site-typography.TC-8jw rev=1 covers=g10.site-typography.SC-wxa,g10.site-typography.SC-6rg,g10.site-typography.SC-45e -->
-### grade10-site-site-typography-US1-TC5-1: Blocked kit request falls back without an error surface
+### g10.site-typography.US1-TC5: Blocked kit request falls back without an error surface
 
 **Classification:**
 

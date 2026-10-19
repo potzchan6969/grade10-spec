@@ -12,5 +12,213 @@
   "save": "儲存",
   "signIn": "登入",
   "signOut": "登出",
-  "signOutFailed": "登出失敗 — 請再試一次。"
+  "signOutFailed": "登出失敗 — 請再試一次。",
+  "sign": {
+    "loading": "正在開啟你的文件…",
+    "noTokenTitle": "這條連結不完整",
+    "noTokenMessage": "請按收到的原樣開啟我們寄給你的連結。",
+    "loadFailedTitle": "無法開啟你的文件",
+    "loadFailedMessage": "請檢查網絡連線，然後再次開啟連結。",
+    "documentFailed": "無法顯示這份文件。請聯絡準備文件的人。",
+    "emptyPacketTitle": "這裡沒有需要簽署的文件",
+    "emptyPacketMessage": "這些文件沒有正確準備。請告知準備文件的人。",
+    "disclosureTitle": "電子簽署",
+    "disclosureFallback": "你同意以電子方式簽署這些文件，你的電子簽署與親筆簽署具同等效力。我們會記錄時間、這部裝置及你所看到的內容。",
+    "agreeLabel": "同意並開始閱讀",
+    "agreeingLabel": "正在記錄你的同意…",
+    "agreeFailed": "無法記錄你對電子簽署的同意。請再試一次。",
+    "packetExpiry": "這些文件可於 {when} 前簽署。",
+    "declineLabel": "我不想簽署",
+    "declineConfirmTitle": "不簽署？",
+    "declineConfirmMessage": "所有文件都不會封存，全部文件都會撤回，包括你在此已簽署的文件。你可告訴我們原因。",
+    "declineReasonLabel": "原因（可選填）",
+    "declineConfirmLabel": "不簽署",
+    "declineCancelLabel": "返回",
+    "decliningLabel": "正在拒絕…",
+    "declineFailed": "無法記錄你不想簽署的決定。請再試一次。",
+    "declinedTitle": "你選擇不簽署",
+    "declinedMessage": "沒有任何文件被封存，全部文件已撤回。準備文件的人會與你聯絡。",
+    "rosterLabel": "今天需要簽署：共 {total} 份文件",
+    "rosterEntry": "{position}. {title} — {state}",
+    "rosterStateSigned": "已簽署",
+    "rosterStateCurrent": "現在這份",
+    "rosterStatePending": "尚待簽署",
+    "documentStep": "{title} — 第 {position} 份，共 {total} 份",
+    "movedOn": "你已簽署{signed}。下一份是{next}。",
+    "pageLabel": "文件第 {page} 頁，共 {pageCount} 頁",
+    "pageStatus": "第 {page} 頁，共 {pageCount} 頁",
+    "pageNoText": "這一頁是掃描件，沒有可朗讀的文字。簽署前請準備文件的人讀給你聽。",
+    "pageFailed": "無法顯示這一頁。在顯示之前請勿簽署，請聯絡準備文件的人。",
+    "previousLabel": "上一頁",
+    "nextLabel": "下一頁",
+    "readStatus": "已閱讀 {viewed} 頁，共 {pageCount} 頁",
+    "integrityWarning": "這份文件與準備的內容不符。請勿簽署，並告知準備文件的人。",
+    "consentLabel": "我已閱讀{title}並同意簽署",
+    "consentFailed": "無法記錄你的勾選。請再次勾選方格。",
+    "signatureLabel": "在此簽署{title}",
+    "clearSignatureLabel": "清除簽名",
+    "signatureDrawOption": "手寫簽名",
+    "signatureTypeOption": "輸入簽名",
+    "signatureTypedNameLabel": "在此輸入你的姓名以簽署",
+    "signatureCaptured": "已擷取你的簽名。",
+    "signatureEmpty": "尚未簽名。",
+    "signatureTypedFailed": "這部裝置無法把你輸入的內容轉成簽名。請改為手寫簽名。",
+    "signatureTypedCaption": "輸入式簽名",
+    "fullNameLabel": "你的法定姓名（與身份證明文件相同）",
+    "heldNameHint": "必須與你已核實的身份證明文件上的姓名相同。",
+    "postalAddressLabel": "你的通訊地址",
+    "postalAddressHint": "只會用於寄發書面通知。",
+    "submitLabel": "簽署{title}",
+    "submittingLabel": "正在簽署…",
+    "missingPages": "簽署前請閱讀每一頁。",
+    "missingConsent": "請勾選方格，確認你已閱讀。",
+    "missingSignature": "請在上方方格內簽名。",
+    "missingName": "請輸入身份證明文件上的法定姓名。",
+    "missingPostalAddress": "請填上你的通訊地址。",
+    "signUnconfirmed": "送出簽名後我們未收到回應，因此暫時無法確定是否已記錄。請勿再次簽署 — 請先查看結果。",
+    "signRecheckLabel": "查看結果",
+    "sealedTitle": "已簽署並封存",
+    "sealedMessage": "所有文件均已簽署並封存。請保留下方的指紋碼：它證明自你簽署後內容沒有更改。",
+    "sealedManifestLabel": "你所簽署全部文件的指紋碼",
+    "sealedDocumentsLabel": "你簽署了甚麼",
+    "downloadLabel": "下載{title}",
+    "downloadingLabel": "正在下載…",
+    "downloadFailed": "下載未能完成。副本在我們寄給你的電郵內。",
+    "downloadExpiry": "你可在 {when} 前從此畫面下載。之後，副本在我們寄給你的電郵內。",
+    "sealedIntegrityWarning": "下載的副本與你簽署內容的指紋碼不符，因此沒有儲存。你的簽署已記錄；我們電郵給你的才是已封存的副本。",
+    "signedTitle": "你的簽名已記錄",
+    "signedMessage": "文件封存前，還有其他人需要簽署。",
+    "disclosureTick": "我已閱讀以上內容，並同意以電子方式審閱及簽署。",
+    "identityChecked": "你的身分證明文件已於 {day} 核實。",
+    "venueLine": "由 Grade10 {venue} 準備",
+    "caseLine": "編號 {reference} · {subject}",
+    "caseOnly": "編號 {reference}",
+    "linkClock": "連結尚餘 {remaining} 有效",
+    "readToEndFirst": "請先閱讀至最後一頁",
+    "continueLabel": "繼續簽署",
+    "comesNext": "第 {position} 份，共 {total} 份 — 下一份是{next}",
+    "comesLast": "第 {position} 份，共 {total} 份 — 這是最後一份",
+    "readAgainLabel": "重新閱讀",
+    "signSummary": "{title} — 已閱讀 {viewed}/{pageCount} 頁",
+    "nextUp": "下一份：{title}",
+    "sealedAt": "封存時間：{time}",
+    "sealedMessageMailed": "所有文件均已簽署並封存。我們已把副本電郵至 {email}。請保留下方的指紋碼：它證明自你簽署後內容沒有更改。",
+    "sealedDigest": "{digest} · 封存於 {when}",
+    "nextStepsTitle": "接下來",
+    "nextSteps": {
+      "consignmentSellsTitle": "售出時",
+      "consignmentSellsDetail": "我們會通知你售價及付款日期。",
+      "consignmentTermTitle": "寄賣期屆滿前",
+      "consignmentTermDetail": "我們會通知你可作的選擇。",
+      "partnerTitle": "每項交易附加一份附表",
+      "partnerDetail": "每項交易都會依據本協議簽署一份交易附表。"
+    },
+    "nothingMore": "你無需再做任何事。",
+    "doneLabel": "完成",
+    "refusal": {
+      "TOKEN_INVALID": {
+        "title": "這條簽署連結無效",
+        "message": "請向準備文件的人索取新的簽署連結。"
+      },
+      "TOKEN_EXPIRED": {
+        "title": "這條簽署連結已過期",
+        "message": "為保障你的安全，簽署連結的有效時間很短。請索取新的連結。"
+      },
+      "TOKEN_CONSUMED": {
+        "title": "這條簽署連結已被取代",
+        "message": "這些文件已有更新的連結，只有最新的連結有效。請開啟我們最新寄給你的連結。"
+      },
+      "TOKEN_CONFLICT": {
+        "title": "此連結已在另一部裝置開啟",
+        "message": "為保障你的安全，簽署連結只可在首部開啟它的裝置上使用。請在該裝置繼續，或索取新連結。"
+      },
+      "PACKET_VOIDED": {
+        "title": "這批文件已撤回",
+        "message": "已由新的一批取代。請索取現行文件的連結。"
+      },
+      "PACKET_EXPIRED": {
+        "title": "這批文件已過期",
+        "message": "文件準備至今太久，現在不能簽署。請要求重新準備。"
+      },
+      "PACKET_COMPLETED": {
+        "title": "這些文件已經簽署",
+        "message": "此連結已在你簽署時使用，無法再次開啟。已封存的副本在我們寄給你的電郵內。"
+      },
+      "PACKET_DECLINED": {
+        "title": "沒有簽署任何文件",
+        "message": "沒有任何文件被封存，全部文件已撤回。準備文件的人會與你聯絡。"
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "這份文件不屬於今次簽署",
+        "message": "請重新載入頁面，查看需要你簽署的文件。"
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "這一份你已經簽署",
+        "message": "請重新載入頁面，繼續簽署尚未完成的文件。"
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "請先閱讀每一頁",
+        "message": "把整份文件看完，然後才簽署。"
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "這份文件沒有這一頁",
+        "message": "請重新載入頁面，再從頭閱讀文件。"
+      },
+      "CONSENT_REQUIRED": {
+        "title": "請先確認你同意",
+        "message": "請勾選方格，確認你已閱讀文件並同意簽署。"
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "請先同意以電子方式簽署",
+        "message": "簽署任何文件前，請先閱讀關於電子簽署的說明並表示同意。"
+      },
+      "KYC_REQUIRED": {
+        "title": "尚未記錄你的身分核對",
+        "message": "你的身份核實尚未記錄。請聯絡準備這些文件的人。"
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "這不是你證件上的姓名",
+        "message": "此姓名與你已核實的身份證明文件不符。請輸入身份證明文件上的法定姓名。"
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "還未輪到你",
+        "message": "這批文件要由其他人先簽署。"
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "你已經全部簽妥",
+        "message": "你不用再做甚麼。可以關閉這個頁面。"
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "這不是你開始簽署時所用的姓名",
+        "message": "今次簽署的所有文件都用同一個姓名。請用你之前簽署時的姓名，或索取一批新文件。"
+      },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "需要你的通訊地址",
+        "message": "請在通訊地址一欄填上地址，然後簽署。"
+      },
+      "SIGNATURE_INVALID": {
+        "title": "無法辨識這個簽名",
+        "message": "請清除簽名方格，再簽一次。"
+      },
+      "SOURCE_MISSING": {
+        "title": "無法載入文件",
+        "message": "請準備文件的人重新準備。"
+      },
+      "SOURCE_TAMPERED": {
+        "title": "文件與準備好的版本不符",
+        "message": "請勿簽署。請準備文件的人重新準備。"
+      },
+      "FONT_MISSING": {
+        "title": "文件暫時無法顯示",
+        "message": "尚未簽署任何內容。字型恢復前無法顯示文件，請稍後再試。"
+      },
+      "CONFLICT": {
+        "title": "今次簽署已在別處完成",
+        "message": "這個頁面開啟期間，另一部裝置已完成或撤回簽署。"
+      }
+    },
+    "staging": "測試環境 · 測試資料，不會真正簽署",
+    "signingAt": "grade10.com/sign",
+    "once": "此連結只可使用一次，並只限於這部裝置。"
+  }
 }

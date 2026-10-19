@@ -1,0 +1,66 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "5c6a7673141167cd8247b117625f3ecde887aad76df81e5699e74231b1fea7ce"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ae6e566198539f58de8f85570d5081850d6039b3",
+    "capturedAt": "2026-10-14T04:13:28.112Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-store-cart-drawer-ui/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A signed-in collector sees current tender facts and chooses points",
+          "Requirement: Drawer actions continue to a product address or create checkout directly",
+          "Requirement: Drawer changes stay on the current cart",
+          "Requirement: Pending drawer operations hold actions until work ends",
+          "Requirement: Points changes retain an accepted quote and choice",
+          "Requirement: The cart opens over the current site surface",
+          "Requirement: The drawer gates Checkout at the verification bar",
+          "Requirement: The drawer presents only review-backed facts",
+          "Requirement: The drawer reviews the current cart"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Consumer pending operations disable drawer actions",
+          "Requirement: Consumer pending tender prevents conflicting actions"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "5c93986361fec31656b98c48c92e026d3d1b5360",
+      "components": [
+        "web"
+      ]
+    }
+  ]
+}

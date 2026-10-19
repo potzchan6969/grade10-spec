@@ -20,7 +20,12 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
 import { TRIGGERS, WHOLE_CHANGE } from "../../../tools/manual/src/api/types.ts";
 import { sectionLinesOf } from "../../../tools/manual/src/content/sections.ts";
-import { outline } from "../../../tools/manual/src/store/markdown.mts";
+import {
+  CASE_ID,
+  JOURNEY_ID,
+  outline,
+  SCENARIO_ID,
+} from "../../../tools/manual/src/store/markdown.mts";
 import {
   applyPerspectives,
   bugPerspectives,
@@ -508,10 +513,19 @@ const spanOf = (lines, heads, index) => {
   };
 };
 
-/** The ids a section can cite, in the store's grammar: a case
- * (`…-US1-TC2-1`), a scenario (`…-SC-12`) or a journey (`…-US-03`). */
-const ID =
-  /[a-z0-9][a-z0-9-]*?-(?:US-?\d+[a-z]?-TC\d+-\d+|SC-\d+[a-z]?|US-\d+[a-z]?)(?![\w-])/g;
+/** The ids a section can cite, in the store's grammar: a scenario, a case or
+ * a journey. */
+const ID = new RegExp(
+  `(?:${SCENARIO_ID.source}|${CASE_ID.source}|${JOURNEY_ID.source})(?![\\w-])`,
+  "g",
+);
+const IS_SCENARIO = new RegExp(`^${SCENARIO_ID.source}$`);
+const IS_CASE = new RegExp(`^${CASE_ID.source}$`);
+/** The id a heading issues: a scenario, a case, or a journey as a journeys
+ * file or a suite's section spells it (`…-US-03`, `…-US3`, `….US3`). */
+const HEADING_ID = new RegExp(
+  `^(?:Scenario:\\s+)?(${SCENARIO_ID.source}|${CASE_ID.source}|[a-z0-9][a-z0-9.-]*\\.US-?\\d+[a-z]?|[a-z0-9][a-z0-9-]*?-US-?\\d+[a-z]?)\\b`,
+);
 const isId = (text) => {
   ID.lastIndex = 0;
   const match = ID.exec(text);
@@ -567,13 +581,10 @@ const issuedBy = (root, dir) => {
           own.kept.push(spanOf(lines, heads, index));
         return;
       }
-      const id =
-        /^(?:Scenario:\s+)?([a-z0-9][a-z0-9-]*?-(?:US-?\d+[a-z]?(?:-TC\d+-\d+)?|SC-\d+[a-z]?))\b/.exec(
-          head.heading,
-        )?.[1];
+      const id = HEADING_ID.exec(head.heading)?.[1];
       if (!id) return;
       opens(index);
-      if (/-SC-/.test(id)) {
+      if (IS_SCENARIO.test(id)) {
         const at = (level) =>
           heads.findLastIndex((one, j) => j < index && one.level === level);
         const requirement = at(3);
@@ -587,7 +598,7 @@ const issuedBy = (root, dir) => {
             spanOf(lines, heads, requirement === -1 ? index : requirement),
           ],
         });
-      } else if (/-TC\d+-\d+$/.test(id))
+      } else if (IS_CASE.test(id))
         issued.set(id, { file, ranges: [spanOf(lines, heads, index)] });
       else if (file.endsWith("/feature-tcs.md"))
         casesOf.set(journeyKey(file, id), {

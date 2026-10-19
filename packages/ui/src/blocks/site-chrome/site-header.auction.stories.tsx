@@ -7,7 +7,7 @@ import {
 } from "./site-header.story-shared";
 
 const meta = {
-  title: "Site Chrome/SiteHeader/Auction first",
+  title: "Site/Page Shell/Blocks/SiteHeader/Auction first",
   component: SiteHeader,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

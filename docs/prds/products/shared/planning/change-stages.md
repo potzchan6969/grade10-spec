@@ -44,9 +44,9 @@ A change is in exactly one planning or delivery stage, proven by a file on
   unknown or stale in an environment; a deploy never waits for archive
 - 🚧 **Drafted, then landed on your word** — each planning artifact reaches
   `main` only when its hand lands it, and the landing records whose word it was
-- 🚧 **The Design stage draws the UI alone** — Designed is proven by
+- **The Design stage draws the UI alone** — Designed is proven by
   `ui-design.md` or `ui_waived` and nothing else; the designer is its one hand
-- 🚧 **The tech design inside planning** — Dev writes `tech-design.md` in the
+- **The tech design inside planning** — Dev writes `tech-design.md` in the
   planning run, after QA1 freezes the blind cases and before the scenarios,
   and it proves Specified beside the requirements and the suite; a question it
   cannot settle is a Raised row, which holds acceptance
@@ -105,7 +105,7 @@ keeps its availability visible with both active and archived changes.
 
 One handle per role on each change.
 
-- 🚧 **Five roles** — the tech PIC is retired: the engineer who will build the
+- **Five roles** — the tech PIC is retired: the engineer who will build the
   change challenges the tech design before acceptance, the human who accepts
   the plan judges it whole, and `tech-design.md` is the engineer's
 
@@ -140,7 +140,7 @@ Slack tells one person, once per move, in the change's thread.
 | --- | --- | --- |
 | A change reaches a hand: a stage lands, the decisions and the journeys complete Proposed, or a hand is taken off | That hand, by direct message; the role's channel when the change names nobody for it | The change, the stage, the thread to answer in, the command to paste |
 | A change reaches Implementation complete | Its QA hand, by direct message | The change, the accepted implementation identity and the run sheet to walk |
-| 🚧 What moved reaches their artifacts | Each hand it reaches, one message per person per landing | What moved, before and after, and which of their artifacts it holds |
+| What moved reaches their artifacts | Each hand it reaches, one message per person per landing | What moved, before and after, and which of their artifacts it holds |
 | 🚧 An artifact lands from a terminal | The change's thread | What landed, whose word landed it, the stage now, and whose turn it is |
 | A change is proposed, accepted, claimed, completed or archived | The channel, once the manual has deployed it | Each change that crossed one, under its milestone |
 | Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; behind for 7 days; waiting; freed by a dependency |
@@ -204,7 +204,7 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | --- | --- | --- | --- |
 | Stage | Decided | Eight stages are derived from files on `main`; deployment availability comes from GitHub Deployments and never changes the stage. | Product |
 | Planning readings | Decided | QA1 writes isolated cases from the frozen anchors; Dev writes the delivery design and artifacts independently; QA2 reconciles both. | Product, QA, Engineering |
-| 🚧 Human questions | Decided | One human resolves every question still open before accepting the plan; a raised question the held test does not hold closes as decided by the round. An open question prevents acceptance. | Product |
+| Human questions | Decided | One human resolves every question still open before accepting the plan; a raised question the held test does not hold closes as decided by the round. An open question prevents acceptance. | Product |
 | Human QA | Decided | QA does not review the planned suite as an execution verdict. Human QA happens after implementation, using a deployed environment when needed. | Product, QA |
 | Who drafts | Decided | The change's agent drafts artifacts; each hand lands its own artifacts. The landing records whose word it was. | Product, Engineering |
 | Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |

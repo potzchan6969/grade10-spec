@@ -42,21 +42,43 @@ const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
 const ACCOUNT_EMAIL = "collector@example.com";
 
 /** Storybook ids for vault proposal pages (workbench deep links). */
-const VAULT_BOOK_VISIT_STORY_ID = "pages-appointment-book-visit--default";
-const VAULT_CONFIRMATION_STORY_ID = "pages-appointment-confirmation--default";
-const VAULT_MY_VISITS_STORY_ID = "pages-appointment-appointments--default";
+const VAULT_BOOK_VISIT_STORY_ID =
+  "appointment-booking-screens-book-visit--default";
+const VAULT_CONFIRMATION_STORY_ID =
+  "appointment-booking-screens-confirmation--default";
+const VAULT_MY_VISITS_STORY_ID =
+  "appointment-booking-screens-appointments--default";
 const VAULT_MANAGE_VISIT_STORY_ID = VAULT_MY_VISITS_STORY_ID;
-const INTAKE_TRACKER_STORY_ID = "pages-submissions--in-progress";
-const VAULT_PORTFOLIO_STORY_ID = "pages-vault-portfolio--filled";
-const VAULT_ITEM_DETAIL_STORY_ID = "pages-vault-item-detail--in-vault";
-const VAULT_RETRIEVAL_STORY_ID = "pages-vault-request-retrieval--default";
+const INTAKE_TRACKER_STORY_ID =
+  "submissions-intake-tracker-screens-intake-tracker--in-progress";
+const VAULT_PORTFOLIO_STORY_ID = "vault-portfolio-screens-portfolio--filled";
+const VAULT_ITEM_DETAIL_STORY_ID =
+  "vault-portfolio-screens-asset-detail--graded";
+const VAULT_RETRIEVAL_STORY_ID =
+  "vault-portfolio-screens-asset-detail-retrieval-dialog--default";
 /** Storybook ids for vault item-card assemblies (workbench deep links). */
-const VAULT_ITEM_CARD_IN_VAULT_STORY_ID =
-  "pages-vault-vault-item-card--in-vault";
-const VAULT_ITEM_CARD_RETRIEVAL_STORY_ID =
-  "pages-vault-vault-item-card--retrieval-pending";
+const VAULT_ASSET_CARD_IN_VAULT_STORY_ID =
+  "vault-portfolio-parts-vaultassetcard--in-vault";
+const VAULT_ASSET_CARD_LIVE_AUCTION_STORY_ID =
+  "vault-portfolio-parts-vaultassetcard--live-auction";
+const VAULT_ASSET_CARD_LISTED_STORY_ID =
+  "vault-portfolio-parts-vaultassetcard--listed";
+const VAULT_ASSET_CARD_RETRIEVAL_STORY_ID =
+  "vault-portfolio-parts-vaultassetcard--retrieval-pending";
+/** Detail variants for listed and auction-bound assets. */
+const VAULT_ITEM_DETAIL_LISTED_STORY_ID =
+  "vault-portfolio-screens-asset-detail--listed";
+const VAULT_ITEM_DETAIL_LIVE_AUCTION_STORY_ID =
+  "vault-portfolio-screens-asset-detail--live-auction";
+const VAULT_ITEM_DETAIL_RETRIEVAL_PENDING_STORY_ID =
+  "vault-portfolio-screens-asset-detail--retrieval-pending";
+/** Workbench destinations the detail page links out to for live holdings. */
+const AUCTION_LOT_LIVE_STORY_ID =
+  "auction-display-screens-lot-details--live-auto-leading";
+const STORE_PRODUCT_DETAIL_STORY_ID =
+  "store-product-page-screens-product-detail--default";
 const ACTIVE_INTAKE_ALERT_STORY_ID =
-  "pages-vault-active-intake-alert--with-submissions";
+  "vault-portfolio-parts-activeintakealert--with-submissions";
 
 const VAULT_SUBMIT_STORY_ID = VAULT_BOOK_VISIT_STORY_ID;
 
@@ -69,11 +91,8 @@ const VAULT_BOOK_VISIT_HREF = storyHref(VAULT_BOOK_VISIT_STORY_ID);
 const VAULT_SUBMIT_HREF = VAULT_BOOK_VISIT_HREF;
 const VAULT_ITEM_DETAIL_HREF = storyHref(VAULT_ITEM_DETAIL_STORY_ID);
 const VAULT_RETRIEVAL_HREF = storyHref(VAULT_RETRIEVAL_STORY_ID);
-const VAULT_ITEM_CARD_IN_VAULT_HREF = storyHref(
-  VAULT_ITEM_CARD_IN_VAULT_STORY_ID,
-);
-const VAULT_ITEM_CARD_RETRIEVAL_HREF = storyHref(
-  VAULT_ITEM_CARD_RETRIEVAL_STORY_ID,
+const VAULT_ASSET_CARD_IN_VAULT_HREF = storyHref(
+  VAULT_ASSET_CARD_IN_VAULT_STORY_ID,
 );
 const ACTIVE_INTAKE_ALERT_HREF = storyHref(ACTIVE_INTAKE_ALERT_STORY_ID);
 const INTAKE_TRACKER_HREF = storyHref(INTAKE_TRACKER_STORY_ID);
@@ -104,10 +123,28 @@ type VaultAssetStatus =
   | "Signing"
   | "Imaging"
   | "In Vault"
-  | "Retrieval pending"
-  | "Listed on Auction";
+  | "Retrieval Pending"
+  | "Live Auction"
+  | "Listed";
 
 type ValuationSource = "Declared" | "Intake estimate" | "Market";
+
+type VaultAssetValuePotential = {
+  gradedEstimateHkd: number;
+  upsidePercent: number;
+};
+
+type VaultAssetCustodyLogItem = {
+  label: string;
+  description: string;
+  state: "completed" | "upcoming";
+};
+
+type VaultAssetDocument = {
+  label: string;
+  action?: string;
+  href?: string;
+};
 
 type VaultAsset = {
   id: string;
@@ -115,12 +152,27 @@ type VaultAsset = {
   category: RegisterCategory;
   categoryLabel: string;
   condition: ItemCondition;
+  conditionDescription?: string;
   grade: string;
   cert: string | null;
   vaultId: string | null;
+  location?: string;
   status: VaultAssetStatus;
   estimateHkd: number;
   valuationSource: ValuationSource;
+  estimateChangePercent?: number;
+  valuePotential?: VaultAssetValuePotential;
+  /** ISO date vaulted — drives "Recently added" sorting. */
+  vaultedAt?: string;
+  /** Listing fields for `Listed` assets. */
+  listedAt?: string;
+  listedHkd?: number;
+  /** Auction fields for `Live Auction` assets. */
+  currentBidHkd?: number;
+  /** ISO timestamp the auction ends — drives "Ending Soonest" sorting. */
+  auctionEndsAt?: string;
+  custodyLog?: VaultAssetCustodyLogItem[];
+  documents?: VaultAssetDocument[];
   imageSrc: string;
 };
 
@@ -131,8 +183,9 @@ type VaultAsset = {
  */
 const PORTFOLIO_HOLDING_STATUSES: readonly VaultAssetStatus[] = [
   "In Vault",
-  "Retrieval pending",
-  "Listed on Auction",
+  "Retrieval Pending",
+  "Live Auction",
+  "Listed",
 ];
 
 function isPortfolioHolding(asset: VaultAsset): boolean {
@@ -152,6 +205,7 @@ const VAULT_ASSETS: VaultAsset[] = [
     status: "In Vault",
     estimateHkd: 98000,
     valuationSource: "Intake estimate",
+    vaultedAt: "2026-10-12",
     imageSrc: SCAN_IMAGE,
   },
   {
@@ -163,9 +217,12 @@ const VAULT_ASSETS: VaultAsset[] = [
     grade: "Raw",
     cert: null,
     vaultId: "G10-VLT-004910",
-    status: "In Vault",
+    status: "Listed",
     estimateHkd: 72000,
     valuationSource: "Intake estimate",
+    vaultedAt: "2026-09-28",
+    listedAt: "2026-10-20",
+    listedHkd: 88000,
     imageSrc: SCAN_IMAGE,
   },
   {
@@ -177,20 +234,218 @@ const VAULT_ASSETS: VaultAsset[] = [
     grade: "PSA 9",
     cert: "27710412",
     vaultId: "G10-VLT-004755",
-    status: "Retrieval pending",
+    status: "Retrieval Pending",
     estimateHkd: 156000,
     valuationSource: "Intake estimate",
+    vaultedAt: "2026-08-15",
+    imageSrc: SCAN_IMAGE,
+  },
+  {
+    id: "va-004",
+    name: "1997 Pocket Monsters Checklist Carddass",
+    category: "trading-card",
+    categoryLabel: "Trading card · Carddass",
+    condition: "Graded",
+    grade: "PSA 10 Gem Mint",
+    cert: "63261276",
+    vaultId: "G10-VLT-004822",
+    status: "Live Auction",
+    estimateHkd: 30000,
+    valuationSource: "Intake estimate",
+    vaultedAt: "2026-10-05",
+    currentBidHkd: 10000,
+    auctionEndsAt: "2026-10-24T18:00:00+08:00",
+    imageSrc: SCAN_IMAGE,
+  },
+  {
+    id: "va-005",
+    name: "1909-S VDB Lincoln Cent",
+    category: "coin",
+    categoryLabel: "Coin · Wheat penny",
+    condition: "Graded",
+    grade: "PCGS MS65",
+    cert: "88420117",
+    vaultId: "G10-VLT-004899",
+    status: "Live Auction",
+    estimateHkd: 45000,
+    valuationSource: "Intake estimate",
+    vaultedAt: "2026-09-10",
+    currentBidHkd: 52000,
+    auctionEndsAt: "2026-10-27T18:00:00+08:00",
+    imageSrc: SCAN_IMAGE,
+  },
+  {
+    id: "va-006",
+    name: "Pokémon Illustrator Promo",
+    category: "trading-card",
+    categoryLabel: "Trading card · Promo",
+    condition: "Raw",
+    grade: "Raw",
+    cert: null,
+    vaultId: "G10-VLT-004945",
+    status: "Listed",
+    estimateHkd: 120000,
+    valuationSource: "Intake estimate",
+    vaultedAt: "2026-10-18",
+    listedAt: "2026-10-25",
+    listedHkd: 150000,
     imageSrc: SCAN_IMAGE,
   },
 ];
 
 const PORTFOLIO_ASSETS = VAULT_ASSETS.filter(isPortfolioHolding);
 
+/**
+ * Detailed fixtures for the asset detail page, aligned with the Figma
+ * "Vaulted Asset" frames. The first item is graded; the second is raw.
+ */
+const VAULT_ASSET_DETAILS: VaultAsset[] = [
+  {
+    id: "va-detail-graded",
+    name: "1997 Pocket Monsters Checklist Carddass",
+    category: "trading-card",
+    categoryLabel: "Trading card · Carddass",
+    condition: "Graded",
+    conditionDescription: "Graded, Gem Mint",
+    grade: "PSA 10 Gem Mint",
+    cert: "63261276",
+    vaultId: "G10-VLT-004821",
+    location: "Crown Fine Art, Hong Kong",
+    status: "In Vault",
+    estimateHkd: 98000,
+    valuationSource: "Intake estimate",
+    estimateChangePercent: 12.4,
+    custodyLog: [
+      {
+        label: "Stored in vault",
+        description: "Crown Fine Art, 12 Oct 2026",
+        state: "completed",
+      },
+      {
+        label: "Valuation recorded - HK$98,000",
+        description: "Intake estimate by Grade10 specialist, 12 Oct 2026",
+        state: "upcoming",
+      },
+      {
+        label: "Authentication & inspection passed",
+        description: "Cert checked against the PSA registry, 11 Oct 2026",
+        state: "upcoming",
+      },
+      {
+        label: "Received at Grade10 intake",
+        description: "Drop-off, Hong Kong Grade10 Store, 10 Oct 2026",
+        state: "upcoming",
+      },
+    ],
+    documents: [
+      { label: "Vault intake certificate", action: "PDF" },
+      {
+        label: "PSA cert report",
+        action: "View",
+        href: "https://www.psacard.com/cert/63261276",
+      },
+      { label: "Insurance schedule", action: "PDF" },
+      { label: "High-res imagery", action: "ZIP" },
+    ],
+    imageSrc: SCAN_IMAGE,
+  },
+  {
+    id: "va-detail-raw",
+    name: "1997 Pocket Monsters Checklist Carddass",
+    category: "trading-card",
+    categoryLabel: "Trading card · Carddass",
+    condition: "Raw",
+    conditionDescription: "Raw, Lightly Played",
+    grade: "Raw",
+    cert: null,
+    vaultId: "G10-VLT-004821",
+    location: "Crown Fine Art, Hong Kong",
+    status: "In Vault",
+    estimateHkd: 98000,
+    valuationSource: "Intake estimate",
+    estimateChangePercent: 12.4,
+    valuePotential: {
+      gradedEstimateHkd: 180000,
+      upsidePercent: 83,
+    },
+    custodyLog: [
+      {
+        label: "Stored in vault",
+        description: "Crown Fine Art, 12 Oct 2026",
+        state: "completed",
+      },
+      {
+        label: "Valuation recorded - HK$98,000",
+        description: "Intake estimate by Grade10 specialist, 12 Oct 2026",
+        state: "upcoming",
+      },
+      {
+        label: "Authentication & inspection passed",
+        description: "Physical inspection by Grade10 specialist, 11 Oct 2026",
+        state: "upcoming",
+      },
+      {
+        label: "Received at Grade10 intake",
+        description: "Drop-off, Hong Kong Grade10 Store, 10 Oct 2026",
+        state: "upcoming",
+      },
+    ],
+    documents: [
+      { label: "Vault intake certificate", action: "PDF" },
+      { label: "Insurance schedule", action: "PDF" },
+      { label: "High-res imagery", action: "ZIP" },
+    ],
+    imageSrc: SCAN_IMAGE,
+  },
+];
+
+/** Detail fixture for a store-listed holding — summary links out to the product page. */
+const VAULT_LISTED_ASSET_DETAIL: VaultAsset = {
+  ...VAULT_ASSET_DETAILS[0],
+  id: "va-detail-listed",
+  status: "Listed",
+  estimateChangePercent: undefined,
+  listedAt: "2026-10-20",
+  listedHkd: 120000,
+  custodyLog: [
+    {
+      label: "Listed in the Grade10 Store",
+      description: "Listed at HK$120,000, 20 Oct 2026",
+      state: "completed",
+    },
+    ...(VAULT_ASSET_DETAILS[0].custodyLog ?? []).map((step) => ({
+      ...step,
+      state: "upcoming" as const,
+    })),
+  ],
+};
+
+/** Detail fixture for an auction-bound holding — summary links out to the lot. */
+const VAULT_LIVE_AUCTION_ASSET_DETAIL: VaultAsset = {
+  ...VAULT_ASSET_DETAILS[0],
+  id: "va-detail-live-auction",
+  status: "Live Auction",
+  estimateChangePercent: undefined,
+  currentBidHkd: 110000,
+  auctionEndsAt: "2026-11-05T18:00:00+08:00",
+  custodyLog: [
+    {
+      label: "Listed for auction",
+      description: "Opening bid HK$10,000, 22 Oct 2026",
+      state: "completed",
+    },
+    ...(VAULT_ASSET_DETAILS[0].custodyLog ?? []).map((step) => ({
+      ...step,
+      state: "upcoming" as const,
+    })),
+  ],
+};
+
 const PORTFOLIO_SUMMARY = {
   itemCount: PORTFOLIO_ASSETS.length,
   totalEstimateHkd: PORTFOLIO_ASSETS.reduce((sum, a) => sum + a.estimateHkd, 0),
-  valuationNote: "Estimates use intake when set; otherwise declared value",
-  feeStatus: "Launch offer — storage free until 2026-12-31",
+  feeLabel: "Complimentary",
+  feeHint: "Launch offer. Free until 31 Dec 2026",
 };
 
 const VAULT_SITE_HEADER = {
@@ -200,6 +455,7 @@ const VAULT_SITE_HEADER = {
     cart: "Cart",
     signIn: "Sign In",
     menu: "Menu",
+    search: "Search",
     menuTitle: "Menu",
     language: "Language",
     accountMenuLabel: "Account",
@@ -300,7 +556,6 @@ const VAULT_FOOTER = {
 const VISIT_TIME_ZONE = "Asia/Hong_Kong";
 /** Shop-local today the Book Visit calendar is drawn on. */
 const VISIT_TODAY = "2026-09-01";
-const VISIT_TODAY_DATE = new Date(2026, 8, 1);
 /** Last bookable day: three months from today. */
 const VISIT_HORIZON = "2026-12-01";
 const VISIT_MIN_MONTH = "2026-09";
@@ -374,6 +629,35 @@ const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
 
 const SHOP_NAME = "Hong Kong Grade10 Store";
 const SHOP_ADDRESS = "13 Pak Sha Road, Causeway Bay, Hong Kong";
+
+/** The holding after a retrieval request — pending admin approval, listing and retrieval locked. */
+function withRetrievalRequested(asset: VaultAsset): VaultAsset {
+  return {
+    ...asset,
+    status: "Retrieval Pending",
+    custodyLog: [
+      {
+        label: "Retrieval requested",
+        description: `Awaiting approval, pickup at ${SHOP_NAME}, 24 Oct 2026`,
+        state: "completed",
+      },
+      ...(asset.custodyLog ?? []).map((step) => ({
+        ...step,
+        state: "upcoming" as const,
+      })),
+    ],
+  };
+}
+
+const VAULT_RETRIEVAL_PENDING_ASSET_DETAIL = withRetrievalRequested({
+  ...VAULT_ASSET_DETAILS[0],
+  id: "va-detail-retrieval-pending",
+});
+
+const RETRIEVAL_REQUESTED_TOAST = {
+  title: "Retrieval requested",
+  description: `We’ll confirm your pickup window at ${SHOP_NAME}.`,
+};
 
 const GRADING_VISIT_SERVICE: BookingService = {
   id: "svc_grading",
@@ -660,27 +944,61 @@ function statusBadgeVariant(
     case "Signing":
     case "Imaging":
       return "info";
-    case "Retrieval pending":
+    case "Retrieval Pending":
       return "warning";
-    case "Listed on Auction":
+    case "Live Auction":
+    case "Listed":
       return "brand";
     default:
       return "default";
   }
 }
 
-/** Item-card story for this portfolio holding (grid → card assembly). */
+/** Asset-card story for this portfolio holding (grid → card assembly). */
 function vaultItemCardStoryId(asset: VaultAsset): string {
-  if (asset.status === "Retrieval pending") {
-    return VAULT_ITEM_CARD_RETRIEVAL_STORY_ID;
+  switch (asset.status) {
+    case "Retrieval Pending":
+      return VAULT_ASSET_CARD_RETRIEVAL_STORY_ID;
+    case "Live Auction":
+      return VAULT_ASSET_CARD_LIVE_AUCTION_STORY_ID;
+    case "Listed":
+      return VAULT_ASSET_CARD_LISTED_STORY_ID;
+    default:
+      return VAULT_ASSET_CARD_IN_VAULT_STORY_ID;
   }
-  return VAULT_ITEM_CARD_IN_VAULT_STORY_ID;
 }
 
-/** Page the card opens — detail, or retrieval when pickup is pending. */
+/** Page the card opens — the asset detail variant for its status. */
 function vaultItemRelatedStoryId(asset: VaultAsset): string {
-  if (asset.status === "Retrieval pending") return VAULT_RETRIEVAL_STORY_ID;
+  if (asset.status === "Listed") return VAULT_ITEM_DETAIL_LISTED_STORY_ID;
+  if (asset.status === "Live Auction") {
+    return VAULT_ITEM_DETAIL_LIVE_AUCTION_STORY_ID;
+  }
+  if (asset.status === "Retrieval Pending") {
+    return VAULT_ITEM_DETAIL_RETRIEVAL_PENDING_STORY_ID;
+  }
   return VAULT_ITEM_DETAIL_STORY_ID;
+}
+
+/**
+ * Price line on the portfolio card — the amount and label follow the
+ * asset's status: live bids read BID PRICE, store listings LISTED PRICE,
+ * everything else the intake estimate.
+ */
+function assetPrice(asset: VaultAsset): { label: string; amountHkd: number } {
+  if (asset.status === "Live Auction") {
+    return {
+      label: "Bid price",
+      amountHkd: asset.currentBidHkd ?? asset.estimateHkd,
+    };
+  }
+  if (asset.status === "Listed") {
+    return {
+      label: "Listed price",
+      amountHkd: asset.listedHkd ?? asset.estimateHkd,
+    };
+  }
+  return { label: "Intake estimate", amountHkd: asset.estimateHkd };
 }
 
 export type {
@@ -688,13 +1006,18 @@ export type {
   RegisterCategory,
   ValuationSource,
   VaultAsset,
+  VaultAssetCustodyLogItem,
+  VaultAssetDocument,
   VaultAssetStatus,
+  VaultAssetValuePotential,
 };
 export {
   ACCOUNT_EMAIL,
   ACTIVE_INTAKE_ALERT_HREF,
   ACTIVE_INTAKE_ALERT_STORY_ID,
   APPOINTMENTS_COPY,
+  AUCTION_LOT_LIVE_STORY_ID,
+  assetPrice,
   assetSubtitle,
   BOOK_VISIT_NAV_COPY,
   BOOK_VISIT_SERVICES,
@@ -716,14 +1039,22 @@ export {
   PORTFOLIO_SUMMARY,
   prepTipsForService,
   REGISTER_CATEGORIES,
+  RETRIEVAL_REQUESTED_TOAST,
   SCAN_IMAGE,
   SERVICE_PICKER_COPY,
   SHOP_ADDRESS,
   SHOP_NAME,
   SLOT_PICKER_COPY,
+  STORE_PRODUCT_DETAIL_STORY_ID,
   SUMMARY_COPY,
   slotsForVisitDay,
   statusBadgeVariant,
+  VAULT_ASSET_CARD_IN_VAULT_HREF,
+  VAULT_ASSET_CARD_IN_VAULT_STORY_ID,
+  VAULT_ASSET_CARD_LISTED_STORY_ID,
+  VAULT_ASSET_CARD_LIVE_AUCTION_STORY_ID,
+  VAULT_ASSET_CARD_RETRIEVAL_STORY_ID,
+  VAULT_ASSET_DETAILS,
   VAULT_ASSETS,
   VAULT_BOOK_VISIT_HREF,
   VAULT_BOOK_VISIT_STORY_ID,
@@ -731,12 +1062,13 @@ export {
   VAULT_CONFIRMATION_STORY_ID,
   VAULT_DROP_OFF_SERVICE,
   VAULT_FOOTER,
-  VAULT_ITEM_CARD_IN_VAULT_HREF,
-  VAULT_ITEM_CARD_IN_VAULT_STORY_ID,
-  VAULT_ITEM_CARD_RETRIEVAL_HREF,
-  VAULT_ITEM_CARD_RETRIEVAL_STORY_ID,
   VAULT_ITEM_DETAIL_HREF,
+  VAULT_ITEM_DETAIL_LISTED_STORY_ID,
+  VAULT_ITEM_DETAIL_LIVE_AUCTION_STORY_ID,
+  VAULT_ITEM_DETAIL_RETRIEVAL_PENDING_STORY_ID,
   VAULT_ITEM_DETAIL_STORY_ID,
+  VAULT_LISTED_ASSET_DETAIL,
+  VAULT_LIVE_AUCTION_ASSET_DETAIL,
   VAULT_MANAGE_VISIT_HREF,
   VAULT_MANAGE_VISIT_STORY_ID,
   VAULT_MY_VISITS_HREF,
@@ -744,6 +1076,7 @@ export {
   VAULT_PORTFOLIO_HREF,
   VAULT_PORTFOLIO_STORY_ID,
   VAULT_RETRIEVAL_HREF,
+  VAULT_RETRIEVAL_PENDING_ASSET_DETAIL,
   VAULT_RETRIEVAL_STORY_ID,
   VAULT_SITE_HEADER,
   VAULT_SUBMIT_HREF,
@@ -758,7 +1091,8 @@ export {
   VISIT_RECORD,
   VISIT_SLOTS,
   VISIT_TIME_ZONE,
-  VISIT_TODAY_DATE,
+  VISIT_TODAY,
   vaultItemCardStoryId,
   vaultItemRelatedStoryId,
+  withRetrievalRequested,
 };

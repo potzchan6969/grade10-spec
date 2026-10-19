@@ -1,15 +1,14 @@
 ---
 title: Coupons
-spec: grade10-site/loyalty/programme
 order: 5
 reviewed: 2026-10-06
 ---
 
 A coupon is Grade10's own instrument: what a redemption leaves the member
-holding, and what an order carries to spend it. Grade10 prices it against
-the order's lines; a Shopify discount — a code, or at the till a gift's line
-discounted to nothing — is only how that price reaches the order and how the
-checkout shows it, never what decides it.
+holding, and what an order carries to spend it. Grade10 decides whether the
+member may spend it on the order's lines; online, the shop prices it, from a
+Shopify discount code carrying the coupon's own value — a 10% coupon is a 10%
+code — and the cut the buyer pays is the shop's own figure.
 
 ::image{src="assets/diagrams/coupon-life.svg" alt="A coupon from redeemed or granted, to available, to claimed by a sale, to used when that order is paid, with the Shopify discount code a claim mints above it"}
 
@@ -29,42 +28,55 @@ so redefining the reward never rewrites a coupon a member already holds —
 | Expiry | Read off the clock, never written down |
 
 - **Expired is spent** — an unused coupon past its end returns nothing, and is counted as breakage
+- 🚧 **Its own clock** — the balance lapsing neither ends it nor moves it
+- 🚧 **States** — the member reads each as available, used, void or expired
+- 🚧 **Never at an auction** — no coupon applies to an auction purchase
 - **Birthday month** `TBC` — a definition can hold a coupon to the month of
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused
 
-🚧 **The picture** - the coupon list shown here draws no code and no copy
+**The picture** - the coupon list shown here draws no code and no copy
 action, since a reward coupon carries none
 
-::story{id="loyalty-membership-couponlist--default" title="The coupons a member holds"}
+::story{id="loyalty-coupons-blocks-couponlist--wallet" title="The coupons a member holds"}
+
+- **Codes withheld** - a surface that must not show codes masks every one with
+  the same word
+
+::story{id="loyalty-coupons-blocks-couponlist--masked" title="Codes masked"}
 
 ## Applying one
 
 | Channel | How it lands |
 | --- | --- |
 | Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
-| At the till | For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
+| At the till | 🎨 For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
 
 - **Answered before chosen** — the drawer answers every coupon against the
   cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
-- 🚧 **Nothing is held** — a coupon stays available until a paid order spends
+
+::story{id="store-cart-blocks-cartdrawerfooter-promo-sheet--held-promo-sheet" title="Held coupons, answered against the cart"}
+
+- **Nothing is held** — a coupon stays available until a paid order spends
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)
-- 🚧 **The newest claim is the only live one** — choosing a coupon again takes
+- **The newest claim is the only live one** — choosing a coupon again takes
   it off every earlier sale first
-- 🚧 **A sale that ends gives it back** — a counter sale nobody paid releases
+- 🚧 **Two sales at once** — two sales claiming one coupon at the same moment
+  leave one live claim, and neither is told the coupon is unavailable
+- **A sale that ends gives it back** — a counter sale nobody paid releases
   its coupon when a newer promise retires it, or an hour after its last plan,
   not the next day
-- 🚧 **An online checkout that took the money keeps it** — and so does one the shop will not close,
+- **An online checkout that took the money keeps it** — and so does one the shop will not close,
   or a sale still being submitted, for its first five minutes; the claim is refused
-- 🚧 **A sale that gave it back can take it again** — a till sale carries it
+- **A sale that gave it back can take it again** — a till sale carries it
   on the plan after a refused one; a sale the shop collected never does
 - **A sale that beats it** — where the two cannot stack the shop keeps the
   larger cut and the coupon goes back to the wallet —
-  [Discounts](/p/grade10-site/store/discounts)
+  [Discounts](/p/grade10-site/store/discounts#order-of-application)
 - **The order's one discount** — a reward coupon is in that count; points
   paid against the bill, free shipping and the site's own discounts sit
-  outside it — [Discounts](/p/grade10-site/store/discounts)
+  outside it — [Discounts](/p/grade10-site/store/discounts#one-discount-at-a-time)
 
 :::detail{title="One coupon, two sales" for="engineer"}
 - **One conditional write decides it** — the claim lands only where the coupon
@@ -80,7 +92,7 @@ action, since a reward coupon carries none
 - **Before the commit** — the request's own guard, on every exit
 - **After it** — a release attempt as the write lands, then the outbox,
   retried until an hour past the programme's sweep
-- 🚧 **A claim whose order was never written** — released by the next claim on
+- **A claim whose order was never written** — released by the next claim on
   that coupon once the claim is five minutes old
 - **Under all three** — the programme releases any claim still standing 25 hours
   after it was made: an expired online order's once its code is dead, or one
@@ -91,7 +103,7 @@ action, since a reward coupon carries none
 
 ## Cases
 
-:::flow{title="Online" case="Retaken, then paid" diagram="assets/diagrams/coupon-retaken-paid.svg"}
+:::flow{title="Online" id="online-retaken-paid" case="Retaken, then paid" diagram="assets/diagrams/coupon-retaken-paid.svg"}
 ## *Member* — **Reaches checkout with a coupon**
 A code is minted for the cart, ephemeral.
 
@@ -102,7 +114,7 @@ Frees the earlier cart's claim and code, and claims it there instead.
 The paid order stamps it used. The earlier cart was cancelled with its code, so it cannot pay.
 :::
 
-:::flow{title="At the till" case="Walked away" diagram="assets/diagrams/coupon-walked-away.svg"}
+:::flow{title="At the till" id="till-walked-away" case="Walked away" diagram="assets/diagrams/coupon-walked-away.svg"}
 ## *Shopkeeper* — **Applies it at the till**
 From the member's panel, or the member opens it on their phone and the till scans it.
 
@@ -116,7 +128,7 @@ An hour after its last plan, not a day.
 Its code is deactivated, or a gift's line stays on the cart, and the coupon is back in the wallet. A sale paid anyway is settled as [Spending one](#spending-one) says.
 :::
 
-:::flow{title="At the till" case="Claimed again, then paid" diagram="assets/diagrams/coupon-till-retaken-paid.svg"}
+:::flow{title="At the till" id="till-retaken-paid" case="Claimed again, then paid" diagram="assets/diagrams/coupon-till-retaken-paid.svg"}
 ## *Shopkeeper* — **Applies it on a sale**
 A product coupon's code is minted the moment it is chosen.
 
@@ -127,7 +139,7 @@ Frees the earlier sale's claim and code, and claims it there instead.
 An earlier sale paid with its old code spends nothing, and is reported.
 :::
 
-:::flow{title="Refused" case="🚧 An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
+:::flow{title="Refused" id="refused-earlier-sale-stands" case="An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
 ## *Member* — **Picks a coupon**
 An earlier sale of theirs is carrying it.
 
@@ -143,7 +155,7 @@ They read that an earlier sale holds the cut, never that the coupon is unavailab
 
 ## Refusals
 
-The member reads which refusal answered; no basket quietly loses a coupon.
+🎨 The member reads which refusal answered; no basket quietly loses a coupon.
 
 ### Coupon
 
@@ -152,11 +164,11 @@ The member reads which refusal answered; no basket quietly loses a coupon.
 | Not held | Not a coupon this member holds; a code bound to another member is answered as one nobody minted |
 | Not standing | Already spent, or otherwise not available |
 | Expired | Its own validity passed |
-| Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; presented from the member's phone it reads `This coupon cannot be used on this sale.` |
+| 🎨 Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; presented from the member's phone it reads `This coupon cannot be used on this sale.` |
 | 🚧 Online only by scope | A coupon scoped to named products or a catalog filter, presented at the till from the member's phone, whatever channels it names; it reads as Wrong channel does |
 | Not eligible | The definition's eligibility is not met |
-| 🚧 An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
-| 🚧 Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
+| An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
+| 🎨 Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
 
 ### Basket
 
@@ -168,15 +180,17 @@ The member reads which refusal answered; no basket quietly loses a coupon.
 | Every line free | Every eligible line is already fully discounted |
 | The cut will not split | The amount cannot be divided across the eligible lines |
 | Gift already held | A gift whose variant the basket already carries |
+| Site discount gives more | The shop's own automatic discount and this coupon cannot both apply, and the automatic takes more; the coupon stays in the wallet |
+| Refused by the shop | The shop would not apply the coupon's code to this basket |
 
 ## Spending one
 
 **The paid order stamps it used, and nothing else does.** A coupon on a draft
 nobody paid was never spent.
 
-- 🚧 **A sale that did not carry it did not spend it** — a counter sale whose
+- **A sale that did not carry it did not spend it** — a counter sale whose
   cut the shop never gave hands the coupon back
-- 🚧 **A code collected after it was let go** — reported to an operator with
+- **A code collected after it was let go** — reported to an operator with
   the order on it; the paid sale spends the coupon unless another sale
   claims it
 - **Used has no way back** — cancelling or refunding that order leaves the
@@ -227,8 +241,14 @@ are on [Discounts](/p/grade10-site/store/discounts).
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| A rate at the shop's rate | Decided | Online, a percentage coupon is minted as a percentage code, so the shop takes the rate as it rounds it rather than a fixed amount the store worked out. A ceiling the rate would pass is minted as that ceiling, in money, because a shop code caps no rate. At the till a coupon is still minted as the store's own cut. | Product |
 | Deactivating a code | Decided | It never refuses a claim. The shop honours a code a cart already carries, so settlement guards the money and the deactivation is retried. | Product |
 | What the member is shown | Decided | A coupon a sale claims reads as it would unclaimed: no claimed state, no sale named, and nothing said when a claim moves. A till spend they were told had landed is still corrected if its sale is abandoned unpaid. | Product |
 | An online order that expires | Decided | It keeps its claim until its code can no longer be collected, and the programme's clock then releases it. A counter sale gives its coupon back at its hour. | Engineering |
 | A code collected after it was let go | Decided | The paid sale spends the coupon where no other sale claims it, so a counter sale that pays with its old code costs the member the coupon once. Where another sale claims it, that sale spends it and the paid one is reported. | Product |
+:::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Walk on staging** - leave an online checkout and a counter sale each holding a coupon, spend both coupons elsewhere, pay a counter sale past its hour with its old code, and be refused by name where an earlier checkout will not close; blocked on staging - QA
+- [ ] **Read the coupon list on the published page** - confirm the coupon list this page shows draws no code and no copy action; blocked on a person reading the published manual - design
 :::

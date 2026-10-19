@@ -9,7 +9,7 @@ import { OrderDetailsDeliveryStatus } from "./order-details-delivery-status";
 import { resolveDeliverySteps } from "./resolve-delivery-steps";
 
 const meta = {
-  title: "Store Order Detail/OrderDetailsDeliveryStatus",
+  title: "Store/Order Detail/Blocks/OrderDetailsDeliveryStatus",
   component: OrderDetailsDeliveryStatus,
   tags: ["autodocs"],
   args: {
@@ -25,7 +25,7 @@ const trackOrder = meta.args.onTrackOrder;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Order Placed → Shipped → Completed, with Track Order. */
+/** Order Placed → Shipping → Completed, with Track Order. */
 export const ShippedDelivery: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -34,7 +34,7 @@ export const ShippedDelivery: Story = {
   },
 };
 
-/** Order Placed → Shipped → Completed, past the tracking window. */
+/** Order Placed → Shipping → Completed, past the tracking window. */
 export const ShippedDeliveryWithoutTrack: Story = {
   args: {
     trackOrder: false,

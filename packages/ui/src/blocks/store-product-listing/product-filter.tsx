@@ -15,6 +15,7 @@ import {
   AutocompleteInput,
   AutocompleteItem,
   AutocompleteList,
+  AutocompleteLoading,
 } from "@grade10/design-system/components/forms/autocomplete";
 import { CheckboxList } from "@grade10/design-system/components/forms/checkbox-list";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
@@ -48,6 +49,8 @@ type ProductFilterCopy = {
   searchLabel?: string;
   /** Empty suggestion panel. Defaults to Figma Autocomplete copy. */
   searchEmpty?: string;
+  /** Shown while suggestions are pending. Defaults to Figma Autocomplete copy. */
+  searchSearching?: string;
 };
 
 type SuggestionItem = {
@@ -72,6 +75,11 @@ type ProductFilterProps = {
    * Commit still reports either way.
    */
   searchSuggestions?: readonly SearchSuggestionGroup[];
+  /**
+   * Suggestions for the draft are still on their way: the panel shows its
+   * searching row in place of the empty line and invents no row.
+   */
+  searchPending?: boolean;
   /** Enter with no row highlighted — free-text commit. */
   onSearchCommit?: (value: string) => void;
   /** Activating a suggestion row. */
@@ -137,6 +145,7 @@ function ProductFilter({
   onSearchChange,
   onSearchClear,
   searchSuggestions,
+  searchPending = false,
   onSearchCommit,
   onSearchSuggestionSelect,
   groups,
@@ -163,7 +172,7 @@ function ProductFilter({
     () => toAutocompleteGroups(searchSuggestions),
     [searchSuggestions],
   );
-  const suggestionsProvided = searchSuggestions != null;
+  const suggestionsProvided = searchSuggestions != null || searchPending;
   const hasSuggestionRows = suggestionGroups.length > 0;
   const draft = searchValue ?? "";
 
@@ -278,9 +287,15 @@ function ProductFilter({
               />
               {suggestionsProvided ? (
                 <AutocompleteContent data-slot="product-filter-search-suggestions">
-                  <AutocompleteEmpty>
-                    {copy.searchEmpty ?? "No results found."}
-                  </AutocompleteEmpty>
+                  {searchPending ? (
+                    <AutocompleteLoading data-slot="product-filter-search-pending">
+                      {copy.searchSearching ?? "Searching..."}
+                    </AutocompleteLoading>
+                  ) : (
+                    <AutocompleteEmpty>
+                      {copy.searchEmpty ?? "No results found."}
+                    </AutocompleteEmpty>
+                  )}
                   <AutocompleteList>
                     {(group: SuggestionListGroup) => (
                       <AutocompleteGroup key={group.value} items={group.items}>

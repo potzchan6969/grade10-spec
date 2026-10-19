@@ -3,7 +3,7 @@ import { useState } from "react";
 import { OtpInput } from "./otp-input";
 
 const meta = {
-  title: "Components/OtpInput",
+  title: "Design System/Forms/OtpInput",
   component: OtpInput,
   tags: ["autodocs"],
   args: {

@@ -1,7 +1,7 @@
 ---
 title: Shopify Integration
-spec: grade10-site/store/membership
 order: 7
+reviewed: 2026-10-14
 ---
 
 Shopify is the online checkout and the till: it prices the basket, takes the
@@ -36,6 +36,11 @@ records the order, and the programme moves the balance once.
   Shopify for nothing
 - **Verified email only** — the drain writes nothing to the shop until the
   member's email is verified
+- **Adopted only on a verified email** — a Shopify customer that already
+  exists joins an existing account only through an email the platform
+  verified; an email a buyer or staff typed attaches nothing
+- **An account made by a purchase** — pairs with the customer that purchase
+  created
 - **A conflict parks** — a customer already carrying another member's key is
   left for an operator to see and clear by hand
 - **A retry lands once** — pairing retried after a lost response finds the
@@ -49,7 +54,9 @@ records the order, and the programme moves the balance once.
 - **Erasure** — a customer this platform created is deleted; a customer it
   adopted keeps its record and loses the key. Where Shopify refuses to delete
   one over its orders, the platform files Shopify's own erasure request and
-  waits for the acknowledgment
+  waits for the acknowledgment. Once erasure starts, no repair or retry
+  brings the customer back, and one a racing retry created is found and
+  removed
 
 ## Online Checkout
 
@@ -79,7 +86,11 @@ Every online checkout is a Shopify draft order and its invoice.
   environment; one brand switch turns it off on both channels, as an
   emergency stop, and nothing already promised or paid is touched
 
-:::flow{title="Online checkout" case="Paid" diagram="assets/diagrams/shopify-online-paid.svg"}
+❓ The flows below still grant the earn on the paid order — the old trigger.
+An order earns when it completes — [Points](/p/grade10-site/loyalty/points#rules).
+The points spent still leave on the paid order.
+
+:::flow{title="Online checkout" id="online-paid" case="Paid" diagram="assets/diagrams/shopify-online-paid.svg"}
 ## *Member* — **Chooses points and a coupon**
 On the store's own `/checkout` page, before Shopify has seen the basket.
 
@@ -169,7 +180,7 @@ The bytes are verified, the delivery is deduped on Shopify's webhook id, and the
 The promised points are debited, scaled to what the shop applied and never above the promise; the coupon is marked used; the earn lands on the same goods — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) and [Points](/p/grade10-site/loyalty/points)
 :::
 
-:::flow{title="Online checkout" case="Abandoned or replaced" diagram="assets/diagrams/shopify-online-abandoned.svg"}
+:::flow{title="Online checkout" id="online-abandoned" case="Abandoned or replaced" diagram="assets/diagrams/shopify-online-abandoned.svg"}
 ## *Member* — **Leaves the invoice unpaid**
 Or opens another checkout, which supersedes this one.
 
@@ -180,7 +191,7 @@ A newer checkout deletes the older draft before it asks for anything, so that in
 No order event was ever written, so the balance never changed and the whole of it is offered again at the next checkout.
 :::
 
-:::flow{title="Online checkout" case="Refunded" diagram="assets/diagrams/shopify-online-refunded.svg"}
+:::flow{title="Online checkout" id="online-refunded" case="Refunded" diagram="assets/diagrams/shopify-online-refunded.svg"}
 ## *Member* — **Returns the goods**
 Some of them, or all of them.
 
@@ -214,8 +225,21 @@ does at each checkout is on [Coupons](/p/grade10-site/loyalty/coupons).
   sweep, and is ingested once either way
 - **A refund before the order** — one naming an order not yet recorded
   fetches and records that order first
+- **The site's own checkout** — an order the store's checkout created is
+  never recorded a second time
+- **A refund with no owner yet** — kept once, and replayed in order when the
+  sale gets an owner
+- **One claim** — a second claimer is refused, naming who holds the sale; a
+  revoked claim takes back the points it granted
+- **Same rule on both channels** — the till earns on the goods after its
+  discounts, points spent included, by the rule on
+  [Points](/p/grade10-site/loyalty/points#qualification-criteria); a sale
+  whose qualifying goods cannot be worked out is refused earning and
+  attribution, never priced from a guess
 - **Attribution** — through the customer on the sale, or later by an operator
-  where the sale was rung up before the member joined
+  where the sale was rung up before the member joined; a sale nobody can own
+  is marked a walk-in instead —
+  [Purchases Before the Account](/p/grade10-site/loyalty/membership#purchases-before-the-account)
 
 ## POS Extension
 
@@ -223,20 +247,24 @@ The loyalty terminal is a Shopify POS UI extension.
 
 | Surface | Job | Spends |
 | --- | --- | --- |
-| Home tile | Opens the modal; badges only "membership unavailable" | Never |
-| Modal | Identify, read the panel, spend, confirm a collection | Through a session |
-| Customer details badge | The member's name, tier and balance for any paired customer staff find in Shopify's own search | Never |
+| 🎨 Home tile | Opens the modal; badges only "membership unavailable" | Never |
+| 🎨 Modal | Identify, read the panel, spend, confirm a collection | Through a session |
+| 🎨 Customer details badge | The member's name, tier and balance for any paired customer staff find in Shopify's own search | Never |
 
 - **Three apps** — development, staging and production, each extension-only
   with no server, no scopes and no admin access of its own; a manager
   activates a version per location and pins the tile
-- **The sale always goes on** — every refusal leaves staff in a normal sale
+- **The sale always goes on** — every refusal leaves staff in a normal sale;
+  an outdated extension takes membership off the till the same way
 
 ### Member Name
 
-- **The member's name** - on the badge and in the modal, the one the site
-  shows, sent whole; 會員 while the account service cannot name them -
+- 🚧 🎨 **The member's name** - on the badge and in the modal, the one the site
+  shows: the name chosen for the shop, else the account name, else the
+  address before the `@`; sent whole, uncut -
   [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card#on-the-pass)
+- 🚧 🎨 **Account service down** - a name chosen for the shop still shows; a member
+  without one shows as 會員
 
 ### Session
 
@@ -244,6 +272,7 @@ The loyalty terminal is a Shopify POS UI extension.
 | --- | --- |
 | Life | **10 minutes** |
 | Bound to | **The shop and the member**, never the staff label |
+| Member confirms | **Nothing** on their own phone |
 
 | Arm | Identifies by | Spends | Collects | Switch |
 | --- | --- | --- | --- | --- |
@@ -255,10 +284,22 @@ The loyalty terminal is a Shopify POS UI extension.
 | Phone | A number staff type | With Phone spend | Only when it may spend | Phone lookup · Phone spend |
 | Cart customer | The customer already on the sale | With Cart spend | Always | Cart identify · Cart spend |
 
-- **A miss says nothing** — a staff-typed email matching no member answers
+- 🎨 **Single use** — the QR and the short code are short-lived and taken once;
+  a used code is refused, naming where and when it was first used, and
+  repeated failed entries pause entry for that shop
+- **Recorded** — every lookup, read and spend, with how the member was
+  identified and the staff and location labels the till sends; an email
+  lookup keeps the account, never the address
+- 🎨 **A miss says nothing** — a staff-typed email matching no member answers
   only that none was found, and repeated lookups are throttled
-- **A lookup that finds nobody** — the member stays on the sale with the
+- 🎨 **A lookup that finds nobody** — the member stays on the sale with the
   points and coupons staff chose, and the panel says what the lookup answered
+- **A lookup that finds another member** — replaces the first; what starts
+  after acts for the new member only, and nothing started before moves the
+  till back
+- 🎨 **Panel** — the member's name, tier, points to spend, progress in the
+  qualifying window, tier renewal and lapse dates, recent activity, and open
+  coupons, the store's own and the member's rewards alike
 - **Attach** — the terminal sets the customer on the cart and checks it;
   spending stays off until the cart's customer is the paired one, no staff
   order discount is on the sale, and what the shop's offers leave of the
@@ -267,9 +308,9 @@ The loyalty terminal is a Shopify POS UI extension.
   plans in 5 minutes
 - **Discount on the cart** — the store's order id first, then the points
   discount; the promise is trimmed to what the cart shows
-- **Shown before it commits** — points spent, money still due, balance after
+- 🎨 **Shown before it commits** — points spent, money still due, balance after
   and points this sale will earn, priced by the platform
-- **Confirm** — the button locks while it runs, so a double tap spends once
+- 🎨 **Confirm** — the button locks while it runs, so a double tap spends once
 - **Undo before tender** — staff remove the discounts, then the order id, and
   the promise is dropped
 - **No reversal at the till** — undoing before tender only drops the
@@ -278,8 +319,21 @@ The loyalty terminal is a Shopify POS UI extension.
 - **Expiry** — a promise nobody tenders expires after 1 hour; a sale the cart
   pays after that still settles
 - **Earning** — the customer on the sale is enough, terminal or not
+- 🎨 **Member told once it settles** — with the points, the amount and the
+  location, when the sale is paid or the till trims to what landed; never at
+  Apply, and never with the code
+- 🎨 **Correction** — a spend the member was told landed, on a sale then left
+  unpaid, sends a correction notice; a sale that never got that far sends
+  nothing
+- 🚧 **Older title at the till** — on a sale carrying the store's order id, a
+  "Points" discount counts as the member's points and comes off before the
+  order id, like "Deduction from Points"; only the sale's one custom
+  fixed-amount discount counts, never an offer or a code titled the same
+- 🚧 🎨 **A points title nobody marked** — on a sale with no order id, a discount
+  under either title is somebody else's; the panel offers no points, no
+  coupons and no Apply until staff remove it
 
-:::flow{title="At the till" case="Paid" diagram="assets/diagrams/shopify-till-paid.svg"}
+:::flow{title="At the till" id="till-paid" case="Paid" diagram="assets/diagrams/shopify-till-paid.svg"}
 ## *Shopkeeper* — **Rings up the sale**
 In Shopify POS, as any other sale.
 
@@ -329,7 +383,7 @@ The order id on the cart is a claim, not proof: it binds only where the shop's o
 The same debit and the same earn as online, recorded against the counter rather than the online store.
 :::
 
-:::flow{title="At the till" case="Guest sale, claimed later" diagram="assets/diagrams/shopify-till-guest.svg"}
+:::flow{title="At the till" id="till-guest-sale" case="Guest sale, claimed later" diagram="assets/diagrams/shopify-till-guest.svg"}
 ## *Shopkeeper* — **Rings up a guest sale**
 Nobody is identified, or the terminal is off, or the programme did not answer. Staff are told which, and the sale goes on as an ordinary sale.
 
@@ -337,13 +391,13 @@ Nobody is identified, or the terminal is off, or the programme did not answer. S
 No order id on the cart, so there is no promise to bind to.
 
 ## *Store* — **Recorded with no owner**
-The sale is recorded with its goods priced and nobody named. A customer on the sale is looked at again on every pass — 5 minutes after the sale, then hourly, and given up on after 30 days.
+The sale is recorded with its goods priced and nobody named. A customer on the sale is looked at again on every pass — 5 minutes after the sale, then hourly, and given up on after 30 days. A customer that never finds a member in that time is logged as an error, so a pairing that failed is seen.
 
 ## *Loyalty* — **Earns when the sale is paired**
-The earn is priced on the goods that sale settled, whenever the sale gets an owner. Past the 30 days an operator claims the sale by hand, with what they saw recorded beside their name — [Purchases Before the Account](/p/grade10-site/loyalty/profile#purchases-before-the-account)
+The earn is priced on the goods that sale settled, whenever the sale gets an owner. Past the 30 days an operator claims the sale by hand, with what they saw recorded beside their name — [Purchases Before the Account](/p/grade10-site/loyalty/membership#purchases-before-the-account)
 :::
 
-:::flow{title="At the till" case="Undone before tender" diagram="assets/diagrams/shopify-till-undone.svg"}
+:::flow{title="At the till" id="till-undone" case="Undone before tender" diagram="assets/diagrams/shopify-till-undone.svg"}
 ## *Shopkeeper* — **Takes the benefits off**
 The gift lines, then the coupon discounts, then the points discount, and the store's order id last, because a sale paid while the id is on the cart still binds to its row. The id stays on while a coupon code is on the sale, because Shopify will not remove one code at a time.
 
@@ -448,4 +502,11 @@ for the points spent. Retitling orders already paid.
 | --- | --- | --- | --- |
 | Title | Decided | "Deduction from Points", the owner's choice, because "Points" reads as a count of points rather than money taken off. English, like "Coupon": a discount title is one value written into Shopify and is not translated. | Product |
 | Older title | Decided | "Points" counts as the same discount for as long as orders exist, because a paid order keeps the title it was paid with. | Product |
+:::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Release 1 tablet walk** - on the staging tablet, a spend, a strip and a paid sale settle as before, and a discount keyed as "Deduction from Points" keeps its whole title on the cart row, the order summary and the paid order; blocked on the staging tablet - @ecchochan
+- [ ] **Release 1 in production** - deploy the store, have every location's manager activate the till version, and record its client version for the release 2 gate; blocked on production deploys and every location's manager - @ecchochan
+- [ ] **Release 2 walk on staging** - a spend online and at the till passes the till's write confirmation under "Deduction from Points", and the cart row, the printed receipt and the paid order show it whole; record the walk and a new recording of the three sales in the verification doc; blocked on staging and a staging till version from the branch - @ecchochan
+- [ ] **Release 2 in production** - once every location runs release 1 and the audit rows show no older client for 7 days, merge, deploy the store and publish the till version, with release notes naming release 1 the oldest version that may be activated; blocked on the release gate - @ecchochan
 :::

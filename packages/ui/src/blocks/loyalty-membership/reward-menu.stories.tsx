@@ -4,7 +4,7 @@ import { BALANCE, REWARDS } from "./fixtures";
 import { RewardMenu } from "./reward-menu";
 
 const meta = {
-  title: "Loyalty Membership/RewardMenu",
+  title: "Loyalty/Rewards/Blocks/RewardMenu",
   component: RewardMenu,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -117,5 +117,33 @@ export const Empty: Story = {
       message: "No rewards to redeem right now.",
       action: { label: "Refresh", onAction: fn() },
     },
+  },
+};
+
+/** The redeeming row draws busy; the other rows stay pressable. */
+export const Redeeming: Story = {
+  args: { busyRewardId: "voucher-50" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [busy, other] = canvas.getAllByRole("button", { name: "Redeem" });
+    expect(busy).toHaveAttribute("aria-busy", "true");
+    expect(other).toBeEnabled();
+    expect(other).not.toHaveAttribute("aria-busy");
+  },
+};
+
+/** A refused redemption says why on its own row, which is pressable again. */
+export const RedeemFailed: Story = {
+  args: {
+    failedRewardId: "sleeves",
+    redeemFailed: "This reward has just run out.",
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const alert = canvas.getByRole("alert");
+    expect(alert).toHaveTextContent("This reward has just run out.");
+    const row = alert.closest('[data-slot="reward-menu-item"]') as HTMLElement;
+    await userEvent.click(within(row).getByRole("button", { name: "Redeem" }));
+    expect(args.onRedeem).toHaveBeenCalledWith("sleeves", 1);
   },
 };

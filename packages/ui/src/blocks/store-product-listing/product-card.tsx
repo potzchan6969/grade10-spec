@@ -5,12 +5,20 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { Skeleton } from "boneyard-js/react";
 import type { ReactNode } from "react";
 import skeletonImage from "./product-card.fixture.png";
-import { ProductCardActivation } from "./product-card-activation";
+import {
+  ProductCardActivation,
+  productCardOpens,
+} from "./product-card-activation";
 import type { ProductCardImageCopy } from "./product-card-image";
-import { ProductCardImage } from "./product-card-image";
+import { ProductCardImageWell } from "./product-card-image";
 
 /** What a tile says whichever product is in it. */
-type ProductCardCopy = ProductCardImageCopy;
+type ProductCardCopy = ProductCardImageCopy & {
+  /** Read before the price charged when a list price is struck, never shown. */
+  salePriceLabel?: string;
+  /** Read before the struck list price, never shown. */
+  listPriceLabel?: string;
+};
 
 type ProductCardProps = {
   copy: ProductCardCopy;
@@ -56,6 +64,12 @@ type ProductCardProps = {
    * A sold-out product shows none: there is nothing left to be running out of.
    */
   remainingLabel?: ReactNode;
+  /**
+   * Why the last cart change was refused, in the consumer's own words. The
+   * consumer moves the control back to the cart's quantity; the tile says why
+   * beneath it until the consumer clears it.
+   */
+  cartFailed?: string;
   /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
   /**
@@ -114,14 +128,18 @@ function ProductCardContent({
   cartCount,
   maxCartQuantity,
   remainingLabel,
+  cartFailed,
   onCartQuantityChange,
   onClick,
   href,
 }: ProductCardContentProps) {
   const onSale = originalPrice != null && !soldOut;
-  const opens =
-    (onClick != null || href != null) &&
-    (!soldOut || onCartQuantityChange == null);
+  const opens = productCardOpens({
+    onClick,
+    href,
+    soldOut,
+    onCartQuantityChange,
+  });
 
   return (
     <VStack
@@ -131,7 +149,7 @@ function ProductCardContent({
       data-sold-out={soldOut || undefined}
       gap="none"
     >
-      <ProductCardImage
+      <ProductCardImageWell
         cartCount={cartCount}
         copy={copy}
         discounted={originalPrice != null}
@@ -140,9 +158,10 @@ function ProductCardContent({
         inCart={inCart}
         maxCartQuantity={maxCartQuantity}
         name={name}
-        href={opens ? href : undefined}
+        href={href}
         onCartQuantityChange={onCartQuantityChange}
-        onClick={opens ? onClick : undefined}
+        onClick={onClick}
+        pointerOnly
         soldOut={soldOut}
       />
 
@@ -174,10 +193,16 @@ function ProductCardContent({
                 : "font-normal text-card-foreground",
             )}
           >
+            {originalPrice != null && copy.salePriceLabel ? (
+              <span className="sr-only">{copy.salePriceLabel} </span>
+            ) : null}
             {price}
           </p>
           {originalPrice != null ? (
             <p className="text-base font-normal text-secondary-foreground line-through">
+              {copy.listPriceLabel ? (
+                <span className="sr-only">{copy.listPriceLabel} </span>
+              ) : null}
               {originalPrice}
             </p>
           ) : null}
@@ -185,6 +210,16 @@ function ProductCardContent({
         {!soldOut && remainingLabel != null ? (
           <Text data-slot="product-card-remaining" size="sm" tone="error">
             {remainingLabel}
+          </Text>
+        ) : null}
+        {cartFailed ? (
+          <Text
+            data-slot="product-card-cart-failed"
+            role="alert"
+            size="sm"
+            tone="error"
+          >
+            {cartFailed}
           </Text>
         ) : null}
       </VStack>

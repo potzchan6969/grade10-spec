@@ -12,15 +12,15 @@ requirements. Today's vault product is shop custody with an optional loan —
 
 - **Service flow** — Cursor canvas
   `canvases/vault-digital-twin-flow.canvas.tsx` (open beside chat)
-- **Collector UI** — Storybook workbench (`pnpm run storybook:workbench`):
-  - `Pages/Appointment/Book Visit`
-  - `Pages/Appointment/Confirmation`
-  - `Pages/Appointment/Appointments`
-  - `Pages/Submissions`
-  - `Pages/Submissions/Item Card`
-  - `Pages/Vault/Portfolio`
-  - `Pages/Vault/Item Detail`
-  - `Pages/Vault/Request Retrieval`
+- **Collector UI** — Storybook workbench (`pnpm storybook`):
+  - `Appointment/Booking/Screens/Book Visit`
+  - `Appointment/Booking/Screens/Confirmation`
+  - `Appointment/Booking/Screens/Appointments`
+  - `Submissions/Intake Tracker/Screens/Intake Tracker`
+  - `Submissions/Intake Tracker/Parts/IntakeItemCard`
+  - `Vault/Portfolio/Screens/Portfolio`
+  - `Vault/Portfolio/Screens/Asset Detail`
+  - `Vault/Portfolio/Screens/Asset Detail/Retrieval Dialog`
 
 ## Settled Decisions
 

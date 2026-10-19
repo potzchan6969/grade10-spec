@@ -3,8 +3,10 @@
 import {
   Avatar,
   AvatarFallback,
+  AvatarImage,
   avatarInitial,
 } from "@grade10/design-system/components/display/avatar";
+import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { StatusIndicator } from "@grade10/design-system/components/display/status-indicator";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import {
@@ -25,7 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@grade10/design-system/components/overlays/dropdown-menu";
-import { ShoppingBag, User } from "@phosphor-icons/react";
+import { CircleNotch, ShoppingBag, User } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
 /**
@@ -43,12 +45,10 @@ type SiteHeaderCopy = NavCopy & {
   submissions?: string;
   /** Store-launch membership destination. TBC — shown only with `onMembership`. */
   membership?: string;
-  /** Optional authenticated orders destination label. */
-  orders?: string;
   signOut: string;
 };
 
-type SiteHeaderSession = "signed-out" | "signed-in";
+type SiteHeaderSession = "pending" | "signed-out" | "signed-in";
 
 type SiteHeaderProps = {
   copy: SiteHeaderCopy;
@@ -75,16 +75,22 @@ type SiteHeaderProps = {
    * falls back to `copy.accountMenuLabel`.
    */
   accountEmail?: string;
+  /**
+   * The collector's profile image, shown in the menu's avatar beside the
+   * email. Omitted, or failing to load, the avatar shows the email's initial.
+   */
+  accountAvatarSrc?: string;
   onProfile?: () => void;
   onMyOrders?: () => void;
-  onMyAuctions: () => void;
+  onMyAuctions?: () => void;
   /** Opens Submissions. Omitted unless this handler is supplied. */
   onSubmissions?: () => void;
   /** Store-launch membership item. TBC — omitted unless this handler is supplied. */
   onMembership?: () => void;
-  /** Opens the consumer-owned authenticated orders destination. */
-  onOrders?: () => void;
   onSignOut: () => void;
+  /** Sign-out is running: its item spins and keeps the menu open, and the
+   * account button spins while the menu is closed. */
+  signOutPending?: boolean;
   /**
    * Opens the account menu on first paint. Stories that are the layout SoT for
    * the open menu pass this; production leaves it unset.
@@ -96,14 +102,17 @@ type SiteHeaderProps = {
 /**
  * Grade10 site header: design-system `Nav` plus session-aware account entry.
  *
- * Signed out shows a primary Sign In button. Signed in shows the account icon
+ * Pending holds the account entry's place with a silent 40px round
+ * placeholder, the account icon's footprint, until the application knows the
+ * session; it takes no focus and no press. Signed out shows a primary Sign In
+ * button. Signed in shows the account icon
  * and a menu with the email's initial avatar above the sign-in email, then
- * My Auctions, then Sign Out (destructive, separated). Cart, search, Profile, My Orders,
- * Submissions, Membership, and Orders stay optional via handlers — Profile joins first
+ * the supplied items, then Sign Out (destructive, separated). Cart, search,
+ * Profile, My Orders, My Auctions,
+ * Submissions, and Membership stay optional via handlers — Profile joins first
  * once its handler is supplied, My Orders joins ahead of My Auctions once
- * Store answers, Submissions joins after My Auctions once its copy and handler
- * are supplied, Membership joins after that once its copy and handler are
- * supplied, and Orders joins after that once both its copy and handler are
+ * Store answers, My Auctions joins once its handler is supplied, Submissions joins after My Auctions once its copy and handler
+ * are supplied, and Membership joins after that once its copy and handler are
  * supplied. When cart is present,
  * `SiteHeader` owns the active-line count badge on the cart icon
  * (`cartItemCount`), matching the cart drawer title. On compact viewports,
@@ -130,13 +139,14 @@ function SiteHeader({
   cartItemCount,
   onSignIn,
   accountEmail,
+  accountAvatarSrc,
   onProfile,
   onMyOrders,
   onMyAuctions,
   onSubmissions,
   onMembership,
-  onOrders,
   onSignOut,
+  signOutPending = false,
   accountMenuDefaultOpen,
   className,
 }: SiteHeaderProps) {
@@ -147,25 +157,31 @@ function SiteHeader({
     myAuctions,
     submissions,
     membership,
-    orders,
     signOut,
     ...navCopy
   } = copy;
 
-  const accountSlot =
+  const signedInMenu =
     session === "signed-in" ? (
       <DropdownMenu defaultOpen={accountMenuDefaultOpen}>
         <DropdownMenuTrigger
           className="[&_svg]:transition-none [&[data-popup-open]_svg]:rotate-0"
           render={
             <IconButton
-              aria-label={navCopy.account ?? "Account"}
+              aria-busy={signOutPending || undefined}
+              aria-label={navCopy.account}
               size="md"
               variant="ghost"
             />
           }
         >
-          <User aria-hidden size={14} />
+          {signOutPending ? (
+            <span aria-hidden className="inline-flex animate-spin">
+              <CircleNotch size={14} />
+            </span>
+          ) : (
+            <User aria-hidden size={14} />
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-48 w-auto">
           <DropdownMenuGroup>
@@ -173,8 +189,11 @@ function SiteHeader({
               {accountEmail ? (
                 <VStack gap="xs" hAlign="start">
                   <Avatar size="xs">
+                    {accountAvatarSrc ? (
+                      <AvatarImage alt="" src={accountAvatarSrc} />
+                    ) : null}
                     <AvatarFallback aria-hidden>
-                      {avatarInitial(accountEmail)}
+                      {avatarInitial(accountEmail.split("@")[0] ?? "")}
                     </AvatarFallback>
                   </Avatar>
                   {accountEmail}
@@ -191,9 +210,11 @@ function SiteHeader({
                 {myOrders}
               </DropdownMenuItem>
             ) : null}
-            <DropdownMenuItem onClick={onMyAuctions}>
-              {myAuctions}
-            </DropdownMenuItem>
+            {onMyAuctions != null ? (
+              <DropdownMenuItem onClick={onMyAuctions}>
+                {myAuctions}
+              </DropdownMenuItem>
+            ) : null}
             {submissions && onSubmissions ? (
               <DropdownMenuItem onClick={onSubmissions}>
                 {submissions}
@@ -204,17 +225,26 @@ function SiteHeader({
                 {membership}
               </DropdownMenuItem>
             ) : null}
-            {orders && onOrders ? (
-              <DropdownMenuItem onClick={onOrders}>{orders}</DropdownMenuItem>
-            ) : null}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={onSignOut} variant="destructive">
+          <DropdownMenuItem
+            closeOnClick={false}
+            onClick={onSignOut}
+            pending={signOutPending}
+            variant="destructive"
+          >
             {signOut}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ) : undefined;
+
+  const accountSlot =
+    session === "pending" ? (
+      <Skeleton aria-hidden className="size-10 shrink-0 rounded-full" />
+    ) : (
+      signedInMenu
+    );
 
   const showCartBadge =
     onCartClick != null && cartItemCount != null && cartItemCount > 0;
@@ -224,9 +254,7 @@ function SiteHeader({
       <span className="relative inline-flex shrink-0">
         <IconButton
           aria-label={
-            showCartBadge
-              ? `${navCopy.cart ?? "Cart"} (${cartItemCount})`
-              : (navCopy.cart ?? "Cart")
+            showCartBadge ? `${navCopy.cart} (${cartItemCount})` : navCopy.cart
           }
           onClick={onCartClick}
           size="md"

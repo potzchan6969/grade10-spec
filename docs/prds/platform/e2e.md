@@ -14,7 +14,7 @@ cookies, and real worker APIs. Unit and backend lanes stay in
 | Target | Local complete stack only for the first lane: nginx + Docker Postgres + workers + SPA. Never production. |
 | Environment | Dev-only endpoints run under `ENVIRONMENT` in `development` \| `testing` \| `e2e` (`assertDevEndpointsAllowed`). Staging and production refuse them, so this lane cannot run against a deployed stack. Prefer `e2e` when the stack is dedicated to Playwright. |
 | Site under test | Unified Grade10 site at `https://grade10.dev` (`apps/frontend/grade10`, dev service `web`). |
-| Session | Real cookies through nginx. Cookie parent domain is `.grade10.dev`, shared with `api.grade10.dev` and `admin.grade10.dev`. |
+| Session | Real cookies through nginx. Cookie parent domain is `.grade10.dev`, shared with `api.grade10.dev` and `admin.grade10.dev`. The site and the console hold a session each, `better-auth.session_token` and `better-auth-console.session_token`, side by side in one jar; the origin of a call picks the one it is answered on, and a spec that needs both signs in twice. The isolated stack's host-only cookies on `127.0.0.1` share one jar across the site, the console and the gateway the same way, told apart by name alone. |
 | Data | Create and reset state through auth/store HTTP APIs. Never open Postgres/Neon from Playwright. |
 | Honesty | Seed the precondition or fail. Never `test.skip` / guarded `if (data)` that can pass vacuously. |
 | Queries | Role and accessible name, not CSS class or test id. |

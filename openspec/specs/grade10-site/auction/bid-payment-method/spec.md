@@ -20,6 +20,7 @@ invoice preview.
 - Premium disclosure
   - Bid-panel rate: the buyer's premium is shown as 20% of the winning bid
   - Amount withheld: the calculated premium amount is absent until an invoice exists
+  - USD bid: the panel shows the 20% premium rate for the USD bid without a calculated amount or invoice total
 - Card on file
   - No card hold: committing or raising a maximum takes nothing from the card
     and waits on no payment provider
@@ -29,33 +30,40 @@ invoice preview.
   - No card: a bid with no linked card is refused, and the bid form asks for one
   - Locked card: a bid on another card after the first accepted bid is refused,
     and the bid form says the lot's card is locked
+- Linked card
+  - One card per lot: the linked method carries to new lots and locks after the first accepted bid
+  - No card charge at bid: the winner pays later through the invoice
 
 ## Requirements
 
 ### Requirement: The bid panel discloses the buyer-premium rate
 
 The listing bid panel SHALL show the buyer's premium rate as **20%** of the
-winning bid before a collector submits a bid. The panel SHALL show the rate in
-all supported auction currencies and SHALL not show a calculated premium amount,
+winning bid before a collector submits a bid. The panel SHALL show the rate
+for the USD winning bid only, per `grade10-site/auction/bid-increments`, and
+SHALL not show a calculated premium amount,
 an invoice total, or a premium line amount before an invoice exists.
 
-<!-- trace:scenario id=g10.auction-bid-payment-method.SC-x21 rev=1 -->
+SC-17 retains its historical title and id. Its body discloses the premium
+rate for USD only; HKD and JPY are not bid currencies.
+
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-x21 rev=2 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-16 - Bid panel shows the premium rate
 **Serves:** grade10-site-auction-bid-payment-method-US-04 - Collector understands the buyer-premium rate before bidding
 
-- **GIVEN** a collector opens an active auction listing
+- **GIVEN** a collector opens an active USD auction listing
 - **WHEN** the bid panel is rendered
 - **THEN** it shows that the buyer's premium rate is 20% of the winning bid
 - **AND** it shows no calculated premium amount or invoice total
 
-<!-- trace:scenario id=g10.auction-bid-payment-method.SC-oeb rev=1 -->
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-oeb rev=2 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-17 - Premium rate is consistent across currencies
 **Serves:** grade10-site-auction-bid-payment-method-US-04 - Collector understands the buyer-premium rate before bidding
 
-- **GIVEN** a collector opens active listings in USD, HKD, and JPY
-- **WHEN** they read each bid panel
-- **THEN** each panel shows the buyer's premium rate as 20%
-- **AND** no panel shows a currency-specific premium amount
+- **GIVEN** a collector opens an active USD listing
+- **WHEN** they read its bid panel
+- **THEN** it shows the USD premium rate as 20%
+- **AND** no HKD or JPY listing or bid amount is used to show another rate
 
 ### Requirement: A bid stands on the linked card, which the first accepted bid locks to the listing
 

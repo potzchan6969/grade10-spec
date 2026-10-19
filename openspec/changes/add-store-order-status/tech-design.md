@@ -14,9 +14,8 @@ grade10 application repository's.
 - **Stored facts** - `store.orders` keeps `status`, the Store's own money
   lifecycle, which folds a void into `canceled` and a partial refund into
   `refunded`, and `fulfillment_status`, Shopify's `displayFulfillmentStatus`
-  verbatim. It keeps no financial status, cancel instant, archive instant or
-  return status, and the Shopify order query fetches neither `closedAt` nor
-  `returnStatus`.
+  verbatim. It keeps no financial status, cancel instant or return status,
+  and the Shopify order query does not fetch `returnStatus`.
 - **One writer** - `pullSettlementSnapshot` in
   `packages/grade10-store/backend/src/services/fulfillment/refresh.ts` is the
   only writer of `fulfillment_status`. It reads the order through the Admin
@@ -60,7 +59,7 @@ one-mapping obligation. These decisions say where each lands.
 ### One pure rule in the Store contracts package
 
 `orderStatus(facts)` lives in `packages/grade10-store/contracts/src/orderStatus.ts`,
-exported as `@grade10/store-contracts/order-status`. It takes only the five
+exported as `@grade10/store-contracts/order-status`. It takes only the four
 stored columns that carry the four facts, and returns the badge and the note
 identifier. Its input type is a `Pick` of `StoreOrder`, so the compiler
 refuses a rule that reads origin, the Store status, shipments, money or time.
@@ -68,6 +67,10 @@ refuses a rule that reads origin, the Store status, shipments, money or time.
 - **Normalisation inside** - each value is lower-cased, and anything outside
   the accepted set reads as the fact's default, so a caller passes Shopify's
   GraphQL spelling untouched
+- **Grouping exported** - `orderConcluded(facts)` answers whether nothing is
+  left to happen on the order, for Your Orders' Past group: the badge
+  `orderStatus` returns is `completed` or `canceled`, or `refunded` with the
+  normalised payment state `refunded` or fulfilment state `fulfilled`
 - **Vocabulary exported** - `ORDER_STATUS_BADGES` (5) and `ORDER_STATUS_NOTES`
   (18) as `as const` tuples; the badge union is assignable to the shared
   `OrderHistoryFulfillmentStatus`, which keeps `pickup`
@@ -89,7 +92,7 @@ The row holds Shopify's facts verbatim; no column holds a badge or a note.
 
 ### The settled-order pull writes the facts, from GraphQL only
 
-`updateSettlementSnapshot` writes the four new fact columns whole, beside
+`updateSettlementSnapshot` writes the three new fact columns whole, beside
 `fulfillment_status`, under the same claim guard. They are current state, so
 a read overwrites them rather than filling nulls; a pull that misses writes
 nothing and leaves the order due.
@@ -98,16 +101,20 @@ nothing and leaves the order due.
   vocabulary (`partial` for `PARTIALLY_FULFILLED`) and carry no return
   status, so two sources would give one order two answers
 
-### A held order is read until Shopify closes or cancels it
+### An order is read hourly until it is canceled or 90 days old
 
-The `fulfillment` cron's due set becomes the orders Shopify still holds open,
-judged by order state instead of by the badge. This deletes the SQL mirror of
-Completed and `ORDER_COMPLETION_CASES`.
+The `fulfillment` cron's due set becomes every order Shopify holds that is not
+canceled, judged by order state instead of by the badge. Shopify's archive
+flag is not read (Q28), so a concluded order stays in the Open arm for its 90
+days: a return on it reaches the row within the hour, as the page says. A
+canceled order leaves the arm, since rule 1 fixes its badge and only a refund
+or a shipment, each marked by its webhook, can still change its note. This
+deletes the SQL mirror of Completed and `ORDER_COMPLETION_CASES`.
 
 | Arm | Selects | Window |
 | --- | --- | --- |
 | Due | `payment_ref` and `read_due_at` set, and `fulfillment_checked_at` null, before `read_due_at`, or 5 minutes old or more | None |
-| Open | `payment_ref` set, `canceled_at` and `closed_at` null, `fulfillment_checked_at` null or 55 minutes old or more | Placed in the last 90 days |
+| Open | `payment_ref` set, `canceled_at` null, `fulfillment_checked_at` null or 55 minutes old or more | Placed in the last 90 days |
 
 The claim ranks what the arms select, so neither a retry nor the backfill
 holds back a fresh mark or an hourly re-check.
@@ -149,7 +156,7 @@ order's `read_due_at` to now in one statement keyed by provider and
 again; the service answers that one `duplicate`, and the route marks again. A
 claimed pull that is written, or answered `notFound`, clears the mark only
 where `read_due_at` is no later than its claim; any other miss leaves it, so a
-later tick asks again, open order or archived. An order paid in full,
+later tick asks again, inside the Open arm or outside it. An order paid in full,
 refunded or canceled is then read by the next one-minute trigger. A void or an
 expiry arrives on no subscribed topic, so it reaches the row through the Open
 arm within the hour, as the page says. The row is the work list, so no new
@@ -160,8 +167,8 @@ table is needed.
   `refreshOnFulfillmentEvent` pulls, and a failed mark answers 500. The route
   answers a missed pull 200
   (`packages/grade10-store/backend/src/routes/webhooks.ts:204-215`), so
-  without the mark a shipment on an archived order that the pull misses is
-  never read, past what the page says
+  without the mark a shipment on a canceled or older order that the pull
+  misses is never read, past what the page says
 - **Idempotent** - a redelivery, `duplicate` included, moves the mark
   forward. A mark set while a pull is in flight is later than that pull's
   claim, so the write leaves it and the next tick reads the order again
@@ -169,8 +176,8 @@ table is needed.
   was last asked about and backs a failing provider off; `read_due_at` says a
   read is owed, and only a written read or a `notFound` clears it
 - **Rejected: nulling `fulfillment_checked_at` as the mark** - the claim
-  stamps it before the provider answers, so a missed read of an archived or
-  canceled order clears the mark, and the Open arm never selects it again
+  stamps it before the provider answers, so a missed read of a canceled or
+  older order clears the mark, and the Open arm never selects it again
 - **Rejected: pulling inside the webhook** - a pull that misses after taking
   the claim leaves the order unread for an hour; the mark leaves it due
 
@@ -190,18 +197,19 @@ the 5-minute trigger claims all three ranks. Every other pass stays on the
   the full 5 minutes, plus Shopify's delivery, so the 5-minute bound fails on
   a healthy system and its alarm cannot tell that from a backlog
 
-### Your Orders lists orders Shopify holds, grouped by order state
+### Your Orders lists orders Shopify holds, grouped by a finished badge
 
 `add-grade10-customer-order-pages`' order-history requirement owns both rules
-(Q15, Q16); this change builds them, because each needs its backend read or
+(Q15, Q29); this change builds them, because each needs its backend read or
 its stored facts.
 
 - **Listing** - `buildOrdersForUserQuery` lists a web order only once it has a
   `payment_ref`; a till sale keeps its paid or refunded gate
   (`packages/grade10-store/backend/src/repositories/orders.ts:297-300`)
-- **Grouping** - `projectOrderHistory` puts an order with `canceledAt` or
-  `closedAt` set in Past and every other order in Active, and
-  `isPastOrderStatus`, which groups by badge
+- **Grouping** - `projectOrderHistory` puts an order in Past when
+  `orderConcluded` holds and every other order in Active, so a partly
+  refunded order still owed items, and a held or scheduled order whatever its
+  refund, stay Active (Q29); `isPastOrderStatus`, which groups by badge
   (`packages/grade10-store/frontend/src/features/orders/checkout/presentation/projections.ts:62-63`),
   is deleted
 
@@ -214,7 +222,7 @@ surface's `statusOf` returns `orderStatus(order).badge`.
 
 ## Database Schema
 
-`store.orders` gains five nullable columns: four of Shopify's facts, written
+`store.orders` gains four nullable columns: three of Shopify's facts, written
 only by the settled-order pull, and the mark that a read is owed. The badge
 and note are derived and never stored.
 
@@ -222,7 +230,6 @@ and note are derived and never stored.
 | --- | --- | --- | --- | --- |
 | `financial_status` | `text` | yes | none | `displayFinancialStatus`, verbatim |
 | `canceled_at` | `timestamptz` | yes | none | `cancelledAt` |
-| `closed_at` | `timestamptz` | yes | none | `closedAt`, set exactly when `closed` is true |
 | `return_status` | `text` | yes | none | `returnStatus`, verbatim |
 | `read_due_at` | `timestamptz` | yes | none | None: set to now by a payment or fulfilment webhook and to `created_at` by the backfill, cleared by a written read or a `notFound` |
 
@@ -246,9 +253,10 @@ and note are derived and never stored.
 
 | Function | Input | Output | Writes |
 | --- | --- | --- | --- |
-| `orderStatus` (contracts) | `{ canceledAt, closedAt, financialStatus, fulfillmentStatus, returnStatus }` | `{ badge, note }`, `note` null where no rule matches | Nothing; no clock, no I/O |
-| `pullSettlementSnapshot` | Order row, optional `claimedAt` | `written`, `missed` with reason, or `failed` | The snapshot and the four fact columns, one UPDATE |
-| `updateSettlementSnapshot` | Adds `financialStatus`, `canceledAt`, `closedAt`, `returnStatus` | `void` | Overwrites the four fact columns where the claim still holds; under a claim, sets `read_due_at` null where it is no later than `claimedAt` |
+| `orderStatus` (contracts) | `{ canceledAt, financialStatus, fulfillmentStatus, returnStatus }` | `{ badge, note }`, `note` null where no rule matches | Nothing; no clock, no I/O |
+| `orderConcluded` (contracts) | The same input | `boolean` | Nothing; no clock, no I/O |
+| `pullSettlementSnapshot` | Order row, optional `claimedAt` | `written`, `missed` with reason, or `failed` | The snapshot and the three fact columns, one UPDATE |
+| `updateSettlementSnapshot` | Adds `financialStatus`, `canceledAt`, `returnStatus` | `void` | Overwrites the three fact columns where the claim still holds; under a claim, sets `read_due_at` null where it is no later than `claimedAt` |
 | `claimOrdersDueForRead` (replaces `claimUndeliveredOrders`) | `now`, `staleBefore`, `retryBefore`, `createdAfter`, `limit`, `unansweredOnly` | Claimed rows | Stamps `fulfillment_checked_at`, `FOR UPDATE SKIP LOCKED` |
 | `markOrderReadDue` | `provider`, `paymentRef`, `now` | `{ marked: boolean }` | `read_due_at = now` |
 | `clearOrderReadDue` | `orderId`, `claimedAt` | `void` | `read_due_at` null where it is no later than `claimedAt` |
@@ -258,18 +266,19 @@ and note are derived and never stored.
 trigger; the repository owns all SQL;
 the provider adapter owns the GraphQL read. Each flow writes one order row.
 
-**Example** - a paid web order archived by the shop after its parcel left:
+**Example** - a paid web order shipped in two parcels:
 
-| Step | `financial_status` | `fulfillment_status` | `closed_at` | `canceled_at` | `return_status` | Badge |
-| --- | --- | --- | --- | --- | --- | --- |
-| Settled, not yet read | null | null | null | null | null | Processing |
-| Cron read, parcel left | `PAID` | `FULFILLED` | null | null | `NO_RETURN` | Shipped |
-| Hourly read, shop archived it | `PAID` | `FULFILLED` | `2026-10-05T09:12Z` | null | `NO_RETURN` | Completed |
-| `refunds/create`, marked due, read the next minute | `PARTIALLY_REFUNDED` | `FULFILLED` | `2026-10-05T09:12Z` | null | `RETURNED` | Refunded |
+| Step | `financial_status` | `fulfillment_status` | `canceled_at` | `return_status` | Badge |
+| --- | --- | --- | --- | --- | --- |
+| Settled, not yet read | null | null | null | null | Processing |
+| Cron read, not yet shipped | `PAID` | `UNFULFILLED` | null | `NO_RETURN` | Processing |
+| `fulfillments/create`, first parcel left | `PAID` | `PARTIALLY_FULFILLED` | null | `NO_RETURN` | Shipped |
+| `fulfillments/create`, second parcel left | `PAID` | `FULFILLED` | null | `NO_RETURN` | Completed |
+| `refunds/create`, marked due, read the next minute | `PARTIALLY_REFUNDED` | `FULFILLED` | null | `RETURNED` | Refunded |
 
-The last row carries note `items-returned-partial-refund`. Once closed it
-leaves the Open arm; the refund webhook's mark brings it back, and stays
-until a read is written.
+The Shipped row carries note `some-items-shipped` and the last row
+`items-returned-partial-refund`. The order stays in the Open arm until it is
+90 days old.
 
 ```mermaid
 flowchart LR
@@ -288,10 +297,10 @@ flowchart LR
 
 ## API Contracts
 
-`checkout.listOrders` and `checkout.getOrder` return four additive fields on
+`checkout.listOrders` and `checkout.getOrder` return three additive fields on
 `orderSchema` in `packages/grade10-store/contracts/src/schemas.ts`:
-`financialStatus` and `returnStatus` as nullable strings, and `canceledAt` and
-`closedAt` as nullable dates. The frontend `Order` model and its mapper carry
+`financialStatus` and `returnStatus` as nullable strings, and `canceledAt` as
+a nullable date. The frontend `Order` model and its mapper carry
 them unchanged. No field is removed and no procedure is added.
 
 ## Risks / Trade-offs
@@ -299,9 +308,9 @@ them unchanged. No field is removed and no procedure is added.
 - **[Risk] Your Orders shows an older badge than Order Details just
   refreshed** → both read one row, so the gap closes on the next list fetch;
   payment webhooks mark the order due, so the next minute's trigger reads it,
-  and any other change within the hour for an order Shopify holds open placed
-  in the last 90 days; an older or archived order is read again only when a
-  payment or fulfilment webhook marks it due (Q23, Q24)
+  and any other change within the hour for an order placed in the last 90
+  days that is not canceled; a canceled or older order is read again only
+  when a payment or fulfilment webhook marks it due (Q23, Q28)
 - **[Risk] More than 20 orders marked due in one minute** → unanswered marks
   are read first, oldest mark first, on every trigger, so the 5-minute bound
   holds while marks stay within 20 a minute; the due-mark gauge in
@@ -311,14 +320,11 @@ them unchanged. No field is removed and no procedure is added.
   hourly re-checks, so it costs only a read they leave; counted on
   `commerce.fulfillment_refresh.missed` with its reason. An order the provider
   answers `notFound` for has its mark cleared and is counted the same way
-- **[Risk] A shop that never archives keeps every order in the Open arm, past
-  the cron's 240 reads an hour** → the claim reads the oldest check first, so
-  every order is still reached, later than the hour; the open-order gauge in
-  Observability alarms past 55 minutes, and the batch is raised. Migration
-  step 3 shows the batch fits before the backfill runs
-- **[Risk] An order reopened after Shopify archived it keeps Completed** →
-  it leaves the Open arm once closed, and is read again only on a payment
-  or fulfilment webhook's mark, as the page says (Q24)
+- **[Risk] The Open arm holds every order not canceled placed in the last 90
+  days, past the cron's 240 reads an hour** → the claim reads the oldest check
+  first, so every order is still reached, later than the hour; the open-order
+  gauge in Observability alarms past 55 minutes, and the batch is raised.
+  Migration step 3 shows the batch fits before the backfill runs
 - **[Risk] `returnStatus` needs an access scope the app lacks, and the whole
   order query fails** → checked against the dev shop before the query ships
   (Migration Plan, step 1); a missing scope joins the ops scope list before
@@ -333,13 +339,14 @@ them unchanged. No field is removed and no procedure is added.
   asked since the migration and no unanswered mark is older than 5 minutes in
   that environment; until then the pages read the interim adapter
 - **[Risk] The Open arm's first pass delays the hourly re-check** → the
-  widened arm first reads every order placed in the last 90 days that it has
-  not read within the hour, till sales and archived web orders included,
+  widened arm first reads every order with a `payment_ref` placed in the last
+  90 days that it has not read within the hour, canceled ones included, since
+  `canceled_at` is unread until that first pull; till sales and concluded web orders included,
   longest unread first, so an undelivered order's re-check waits behind them
   for that pass; shipment events and Order Details reads still refresh it.
   The backfill of older orders takes only reads ranks 1 and 2 leave
-- **[Risk] A paid till sale never reaches fulfilled and archived in Shopify,
-  so it reads Processing** → checked on the staging shop before the frontend
+- **[Risk] A paid till sale never reaches fulfilled in Shopify, so it reads
+  Processing** → checked on the staging shop before the frontend
   switch; if so, it goes back to the product manager, as Q12 says
 
 ## Observability
@@ -363,24 +370,22 @@ longer fits, and the batch is raised.
 ## Migration Plan
 
 1. **Check the read** - run the extended order query against the dev shop:
-   it returns `closedAt` and `returnStatus` under the app's current scopes,
-   and a counter sale rung through the POS simulator reports
-   `FULFILLED` and `closed`
+   it returns `returnStatus` under the app's current scopes, and a counter
+   sale rung through the POS simulator reports `FULFILLED` and `PAID`
 2. **Backend** - migration in both store backends, the wire fields, the
    writer, the cron's due set, the one-minute trigger and its dispatch, the
    webhook mark and the Shopify-held listing, deployed together. The badge
    does not change yet: the pages still use the interim adapter
-3. **Backfill** - before it, count the orders with a `payment_ref` placed in
-   the last 90 days and the older ones, and record each count over 240 an
-   hour as its drain time: the first is the Open arm's first pass, the second
-   runs in the reads left over. If the first pass is past 4 hours, raise the
-   batch for it. Count also the orders Shopify holds open placed in the last
-   90 days, which the Open arm reads once an hour from then on, and record it
-   against 240 an hour: past it, raise the batch before the backfill. The
+3. **Backfill** - before it, count three sets of orders with a `payment_ref`
+   and record each over 240 an hour: every one placed in the last 90 days is
+   the Open arm's first pass; those of them the Store status does not show
+   canceled are its hourly load from then on; the older ones are the backfill,
+   run in the reads left over. If the first pass is past 4 hours, or the
+   hourly load is past 240, raise the batch before the backfill. The
    Migrate workflow then applies the migration; watch the count of orders the
    backfill marked and not yet asked fall to zero
 4. **Frontend** - the projections switch to `orderStatus` and group Your
-   Orders by order state, the adapter and the SQL mirror are deleted, and the
+   Orders by a finished badge, the adapter and the SQL mirror are deleted, and the
    admin surface follows
 5. **Rollback** - revert the frontend to the adapter; the columns are
    additive and stay

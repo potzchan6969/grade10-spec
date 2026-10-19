@@ -21,8 +21,12 @@ import {
 } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
 import {
+  CASE_ID,
   findSection,
   findSectionAnywhere,
+  ID_END,
+  ID_START,
+  JOURNEY_ID,
   outline,
   SCENARIO_ID,
   type Section,
@@ -48,14 +52,11 @@ const REQUIREMENT = "Requirement:";
 const SCENARIO_HEADING = new RegExp(
   `^Scenario:\\s*(?:(${SCENARIO_ID.source})\\s+-\\s+)?(.+)$`,
 );
-const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
-/** A case id is journey-scoped, `<capability>-US<n>-TC<m>-<v>`
- * (`docs/governance/specs-to-test-cases.md`, Naming). Older suites still
- * carry the hyphenated `-US-<n>-TC-<m>` and the flat `<capability>-TC-<n>`,
- * and both stay readable: an issued id is permanent, so a suite is never
- * renumbered to a newer shape. */
-const CASE_HEADING =
-  /^([a-z0-9][a-z0-9-]*?-(?:US-?\d+-)?TC-?\d+(?:-\d+)?):\s*(.+)$/;
+const JOURNEY_HEADING = new RegExp(`^(${JOURNEY_ID.source}):\\s*(.+)$`);
+/** A case heading displays its id, or its stable marker id and suite-local
+ * reference (`g10adm.console-daily-reminder.TC-ue2 (US1-TC1)`). */
+const MARKED_CASE_HEADING = /^(\S+)\s+\(US-?\d+-TC-?\d+\):\s*(.+)$/;
+const CASE_HEADING = new RegExp(`^(${CASE_ID.source}):\\s*(.+)$`);
 /** The anchor a scenario serves, on its own line under the heading and above
  * `**GIVEN**` / `**WHEN**`. Machine-read up to the first dash; the prose after
  * it is for a human. The anchor is a journey id, or a `## Feature set` root group
@@ -72,10 +73,13 @@ const FEATURE_GROUP = /^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/;
  * `rules.user-journeys`): a policy, a package contract, a convention. */
 const WALKED_BY_NOBODY = /^\*\*Walked by:\*\*\s+nobody\b/m;
 const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
-/** What a `**Trace:**` names: the journey the case walks, in the spec's
- * canonical `-US-<n>` form. A scenario id is the older shape, and still
- * resolves — the suite beside a spec that predates journeys traces those. */
-const TRACE_ID = /[a-z0-9][a-z0-9-]*-(?:US|SC)-\d+/g;
+/** What a `**Trace:**` names: the journey the case walks. A scenario id is
+ * the older shape, and still resolves — the suite beside a spec that predates
+ * journeys traces those. */
+const TRACE_ID = new RegExp(
+  `${ID_START}(?:${JOURNEY_ID.source}|${SCENARIO_ID.source})${ID_END}`,
+  "g",
+);
 /** Persistent file statuses. Historical archives may still say `in-review`;
  * the reader normalizes that old partial-review meaning to `pending-review`.
  */
@@ -277,7 +281,7 @@ export function readJourney(section: Section): Journey {
   if (!match) {
     throw new StoreFileError(
       section.line,
-      "a journey heading is `### <capability>-US-<n>: <title>`",
+      "a journey heading is `### <scope>.US<n>: <title>` or the legacy `### <capability>-US-<n>: <title>`",
     );
   }
   return { id: match[1], title: match[2], text: section.body.trimEnd() };
@@ -360,7 +364,7 @@ const REMOVED_JOURNEYS = "REMOVED User journeys";
 /** Where that tombstone lands. A change writes `## REMOVED User journeys`;
  * archive turns it into a one-line `## Retired` entry in the durable file. */
 const RETIRED_JOURNEYS = "Retired";
-const JOURNEY_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
+const JOURNEY_IDS = new RegExp(JOURNEY_ID.source, "g");
 
 /**
  * A `user-journeys.md`, whole: the journey-bearing sections, each holding a
@@ -410,7 +414,7 @@ export function readRetiredJourneys(text: string): string[] {
   for (const heading of [RETIRED_JOURNEYS, REMOVED_JOURNEYS]) {
     const section = findSectionAnywhere(roots, heading);
     if (!section) continue;
-    for (const id of section.raw.match(JOURNEY_ID) ?? []) found.add(id);
+    for (const id of section.raw.match(JOURNEY_IDS) ?? []) found.add(id);
   }
   return [...found];
 }
@@ -472,7 +476,7 @@ function readScenario(section: Section): Scenario {
   if (!match) {
     throw new StoreFileError(
       section.line,
-      "a scenario heading is `#### Scenario: [<capability>-SC-<n> - ]<name>`",
+      "a scenario heading is `#### Scenario: [<scenario id> - ]<name>`",
     );
   }
   const scenario: Scenario = { name: match[2], text: section.body };
@@ -503,7 +507,9 @@ export function readTestCases(text: string): TestSuite {
   const found: { section: Section; id: string; title: string }[] = [];
   const visit = (sections: Section[]): void => {
     for (const section of sections) {
-      const match = CASE_HEADING.exec(section.heading);
+      const match =
+        MARKED_CASE_HEADING.exec(section.heading) ??
+        CASE_HEADING.exec(section.heading);
       if (match) {
         found.push({ section, id: match[1], title: match[2] });
         continue;

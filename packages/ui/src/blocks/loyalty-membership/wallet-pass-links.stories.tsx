@@ -19,7 +19,7 @@ const apple = {
 };
 
 const meta = {
-  title: "Loyalty membership/WalletPassLinks",
+  title: "Loyalty/Wallet Member Card/Blocks/WalletPassLinks",
   component: WalletPassLinks,
   args: {
     copy,
@@ -46,6 +46,90 @@ export const Default: Story = {
   },
 };
 
+/**
+ * Each wallet's own artwork as the save action, its whole label read as the
+ * control's name. Google's is its published button; Apple's is a placeholder
+ * until Apple's licensed badge is added.
+ */
+export const VendorArtwork: Story = {
+  args: {
+    wallets: [
+      { ...google, artwork: { wallet: "google" } },
+      { ...apple, artwork: { wallet: "apple" } },
+    ],
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const add = canvas.getByRole("button", { name: "Add to Google Wallet" });
+    await expect(add.querySelector("img")).toHaveAttribute(
+      "data-artwork",
+      "vendor",
+    );
+    await expect(
+      canvas
+        .getByRole("button", { name: "Add to Apple Wallet" })
+        .querySelector("img"),
+    ).toHaveAttribute("data-artwork", "placeholder");
+    await userEvent.click(add);
+    await expect(args.onAdd).toHaveBeenCalledWith("google");
+  },
+};
+
+/** Google's button in the member's own language. */
+export const VendorArtworkTraditionalChinese: Story = {
+  args: {
+    wallets: [
+      {
+        id: "google",
+        offer: { label: "新增至 Google 錢包" },
+        artwork: { wallet: "google", language: "zh-Hant" },
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      canvas.getByRole("button", { name: "新增至 Google 錢包" }),
+    ).toBeVisible();
+  },
+};
+
+/** A mint in flight under the artwork: never dimmed, and a second tap waits. */
+export const VendorArtworkAdding: Story = {
+  args: {
+    wallets: [{ ...google, adding: true, artwork: { wallet: "google" } }],
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const add = canvas.getByRole("button", { name: "Add to Google Wallet" });
+    await expect(add).toHaveAttribute("aria-disabled", "true");
+    await userEvent.click(add);
+    await expect(args.onAdd).not.toHaveBeenCalled();
+  },
+};
+
+/** Minted: the artwork becomes the install link, under the same name. */
+export const VendorArtworkSaveable: Story = {
+  args: {
+    wallets: [
+      {
+        id: "apple",
+        offer: {
+          label: "Add to Apple Wallet",
+          saveUrl: "https://example.com/pass.pkpass",
+        },
+        artwork: { wallet: "apple" },
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(
+      canvas.getByRole("link", { name: "Add to Apple Wallet" }),
+    ).toHaveAttribute("href", "https://example.com/pass.pkpass");
+  },
+};
+
 /** One mint in flight. That wallet's control waits, and only that one. */
 export const AddingOne: Story = {
   args: { wallets: [{ ...google, adding: true }, apple] },
@@ -55,7 +139,7 @@ export const AddingOne: Story = {
     // tap minting a second pass and voiding the first.
     await expect(
       canvas.getByRole("button", { name: "Add to Google Wallet" }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     await expect(
       canvas.getByRole("button", { name: "Add to Apple Wallet" }),
     ).toBeEnabled();
@@ -187,7 +271,7 @@ export const EndingOne: Story = {
     const canvas = within(canvasElement);
     await expect(
       canvas.getByRole("button", { name: "End your Google Wallet pass" }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     await expect(
       canvas.getByRole("button", { name: "End your Apple Wallet pass" }),
     ).toBeEnabled();
@@ -214,10 +298,10 @@ export const EachWalletItsOwnState: Story = {
     const canvas = within(canvasElement);
     await expect(
       canvas.getByRole("button", { name: "End your Google Wallet pass" }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     await expect(
       canvas.getByRole("button", { name: "Add to Apple Wallet" }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
   },
 };
 

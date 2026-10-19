@@ -987,7 +987,7 @@ Stage (b).
       `admin.signingLink` (`grade10-admin-grading-counter-SC-45`)
 - [x] 15.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 15.10 Refuse a production seal with `SETTING_UNAPPROVED` while any
+- [x] 15.10 Refuse a production seal with `SETTING_UNAPPROVED` while any
       setting the document prints has no `approved_by`, naming it, its test
       red first; then run 15.9's checks (Q139,
       `grade10-admin-grading-counter-SC-115`)
@@ -1395,7 +1395,7 @@ Stage (c).
       tracking together, and writing one `notices` row per submission so a
       double-click is a no-op (`grade10-admin-grading-counter-SC-65`,
       `grade10-admin-grading-counter-SC-66`)
-- [ ] 20.4 Run the pinned `notice_period_days` from the posting date (see 20.6), offer nothing further
+- [x] 20.4 Run the pinned `notice_period_days` from the posting date (see 20.6), offer nothing further
       once they have passed, and leave the cards the collector's
       (`grade10-admin-grading-counter-SC-67`,
       `grade10-admin-grading-counter-SC-68`,
@@ -1404,7 +1404,7 @@ Stage (c).
       `grade10-site-grading-collector-notifications-SC-15`)
 - [x] 20.5 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 20.6 Write `0007_notice_period.sql` as the Migration Plan names it; then
+- [x] 20.6 Write `0007_notice_period.sql` as the Migration Plan names it; then
       `notice_period_days` in `GRADING_SEEDED_SETTINGS`, pinned as the
       seventh term and read by `noticeEnds`, clause 6 and the notice letter,
       `pinnedTermsOf` throwing on a term missing and `NOTICE_PERIOD_DAYS`
@@ -1425,7 +1425,8 @@ Stage (c).
       `grade10-admin-grading-counter-SC-68`,
       `grade10-site-grading-submission-lifecycle-SC-36`,
       `grade10-site-grading-submission-lifecycle-SC-37`)
-- [ ] 20.8 Skip every rung, the storage letter, the notice and the ready letter
+      — partly: the console walks read the 90 days pinned (`grade10-admin-grading-counter-US12-TC4-2`, `grade10-admin-grading-counter-US12-TC5-2`); the site's two cases wait on the redesigned submission page (Q147); not run — blocked: the isolated stack needs Docker
+- [x] 20.8 Skip every rung, the storage letter, the notice and the ready letter
       for a submission with no card left on the ladder, and count every rung
       on the `Asia/Hong_Kong` day, its tests red first; then run 20.5's checks
       (Q146, `grade10-site-grading-submission-lifecycle-SC-64`,
@@ -1537,7 +1538,8 @@ the slow lane of 21.8; walk 34 decides them.
       21.10's checks (`grade10-site-grading-dropoff-booking-SC-31`,
       `grade10-site-grading-dropoff-booking-SC-28`,
       `grade10-site-grading-submission-plan-SC-64`)
-- [ ] 21.12 Send the list-saved message once from the daily sweep for a plan kept
+      — superseded: grading books no visit of its own since the diary took booking (Grade10 PR #957, `add-multi-store-appointments`), so no `dropoff_missed`, `dropoff_cancelled` or `dropoff_detached` is written and no visit ends to restart the clock from; `planClockAt` and the clock-start index stand ready
+- [x] 21.12 Send the list-saved message once from the daily sweep for a plan kept
       with no drop-off booked as the `planLinks` list, `plan_link_sent` joining
       `ONCE_PER_SUBMISSION_KINDS`, never on the collector leaving the page, the
       plan read as it stands when the sweep runs (Q145); a plan already mailed
@@ -1551,6 +1553,7 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-submission-plan-SC-38`,
       `grade10-site-grading-collector-notifications-SC-26`,
       `grade10-site-grading-collector-notifications-SC-28`)
+      (the plan walk left with the collector's pages, Q147; the sweep's letter is proven in `packages/grading/backend/test/sweeps/dueLetters.repo.test.ts`)
 
 ## 22. The letters (grade10) (owner: @ecchochan)
 
@@ -1620,11 +1623,11 @@ fixtures through `external/grade10-spec`. Stage (c).
       failure as the vault does
 - [x] 22.9 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
-- [ ] 22.10 Print the shop's weekly hours from the diary and the shop phone in every
+- [x] 22.10 Print the shop's weekly hours from the diary and the shop phone in every
       letter's footer, and name the brand's main shop, the setting
       `main_shop_id`, on a submission with no visit (Q135, Q136,
       `grade10-site-grading-collector-notifications-SC-27`)
-- [ ] 22.11 Hold a sweep letter that would print an unset value in production:
+- [x] 22.11 Hold a sweep letter that would print an unset value in production:
       the row stays due and unclaimed and `grading.sweep.repair` names the
       value, its test red first (`grade10-site-grading-collector-notifications-SC-30`)
 
@@ -1684,7 +1687,7 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
       site's own grading client, each block failing on its own, the ask
       withheld while any hold of either product stands and each named in the
       collector's words (`grade10-site-vault-retention-and-erasure-SC-33`)
-- [ ] 23.9 Date `retentionReviews` from the later of a submission's terminal event
+- [x] 23.9 Date `retentionReviews` from the later of a submission's terminal event
       and the day nothing is owed either way, and refuse an erasure while money
       is due on a submission at any status, a repayment included, its tests
       red first; then run 23.7's checks (Q20,
@@ -2223,7 +2226,7 @@ Needs group 10's exports and group 25's recorded worker. Stage (b).
       naming its kind and the record read back under the card, its tests
       red first; needs 19.9; then run 28.6's checks
       (`grade10-admin-grading-counter-SC-109`)
-- [ ] 28.12 Badge Transfer unconfirmed on a row whose transfer payout has no
+- [x] 28.12 Badge Transfer unconfirmed on a row whose transfer payout has no
       `received_at`, and count those on the To settle tile beside every kind
       due, its tests red first; then run 28.6's checks (Q140,
       `grade10-admin-grading-counter-SC-112`)
@@ -2384,7 +2387,8 @@ lands. Stage (c).
 - [ ] 30.8 Verify: `pnpm run test`, `pnpm run check:app-bundles`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
-- [ ] 30.9 Read the notice period off the detail's pinned terms in
+      — partly: the grading suites, `check:libs`, the typecheck and lint pass; `check:app-bundles` fails on the base, where the auction's winner-order view reads `@grade10/i18n`'s root into the console's orders chunk, and the stories lane was not run
+- [x] 30.9 Read the notice period off the detail's pinned terms in
       `PostNoticeDialog` and the timeline's notice entry, the detail carrying
       `noticePeriodDays`, its tests red first; needs 20.6; then run 30.8's
       checks (`grade10-admin-grading-counter-SC-67`)
@@ -2441,7 +2445,7 @@ Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
       and 29.9
 - [ ] 31.6 Render the grading nav item from the `chrome` key task 1.6 added, so
       the collector reaches `/grading` from the shell
-- [ ] 31.7 Verify: `pnpm run test`, `pnpm run check:libs`,
+- [x] 31.7 Verify: `pnpm run test`, `pnpm run check:libs`,
       `pnpm run typecheck`, `pnpm run lint`
 - [ ] 31.8 Make `grading` `prerendered` and public as `book` is, once 31.2
       has landed: its head meta, the `/tc` and `/sc` variants, the sitemap
@@ -2476,6 +2480,7 @@ Both walks drive these routes, so it lands with stage (b).
       `apps/frontend/grade10/e2e/helpers/env.ts`
 - [ ] 32.6 Verify: `pnpm run test:backend`, `pnpm run test:e2e:smoke` on the
       isolated stack, `pnpm run typecheck`, `pnpm run lint`
+      — blocked: `pnpm run test:e2e:smoke` needs the isolated stack, which needs Docker
 - [x] 32.7 Seed a customer-bookable diary service under the slug `grading` at
       the isolated stack's start, so the site's `/book?service=grading` link
       resolves on the dev and e2e stacks; then run 32.6's checks
@@ -2738,7 +2743,7 @@ rest lands. Stage (c).
       no address failing loudly by name; `SubmissionDetail` carrying no
       address (`grade10-admin-grading-counter-SC-66`,
       `grade10-admin-grading-counter-SC-105`)
-- [ ] 36.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 36.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 37. Delete the grading blocks (grade10-spec) (owner: @ecchochan)

@@ -19,8 +19,8 @@ made.
 - **Where** — `admin.grade10.com/vault` for the shop and
   `grade10.com/vault/sign#<token>` for the iPad; one host and a path per
   surface, and a vanity domain redirects to it
-- **The collector's address** — mailed links keep `grade10.com/vault/cases/<id>`
-  and `grade10.com/vault/verify#<secret>`, which land on the not-found surface
+- **The collector's address** - mailed links keep `grade10.com/vault/cases/<id>`,
+  which lands on the not-found surface
   until the collector's screens ship —
   [Collector Pages](/p/grade10-site/vault/collector-pages#messages)
 - **Money** — the brand's currency in whole cents, recorded by a person
@@ -38,6 +38,7 @@ made.
 | Page | What it holds |
 | --- | --- |
 | [Collector Pages](/p/grade10-site/vault/collector-pages) | What a collector does on their own case, and what they hear |
+| [Portfolio](/p/grade10-site/vault/portfolio) | What a collector holds in the vault, and the acts on one item |
 | [Case Lifecycle](/p/grade10-site/vault/case-lifecycle) | The fourteen statuses, the two lanes, the timers, the exits |
 | [Loan and Money](/p/grade10-site/vault/loan-and-money) | The arithmetic, the policy the brand lends under, the money records and corrections, the ledger |
 | [Documents and Signing](/p/grade10-site/vault/documents-and-signing) | The three documents, the ceremony, consent, copies, verification |

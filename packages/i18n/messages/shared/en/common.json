@@ -12,5 +12,213 @@
   "save": "Save",
   "signIn": "Sign in",
   "signOut": "Sign Out",
-  "signOutFailed": "Sign-out failed — try again."
+  "signOutFailed": "Sign-out failed — try again.",
+  "sign": {
+    "loading": "Opening your documents…",
+    "noTokenTitle": "This link is incomplete",
+    "noTokenMessage": "Open the link we sent you, exactly as it arrived.",
+    "loadFailedTitle": "We could not open your documents",
+    "loadFailedMessage": "Check your connection, then open the link again.",
+    "documentFailed": "This document could not be displayed. Ask the person who prepared it.",
+    "emptyPacketTitle": "There is nothing here to sign",
+    "emptyPacketMessage": "These documents were not prepared properly. Tell the person who prepared them.",
+    "disclosureTitle": "Signing electronically",
+    "disclosureFallback": "You agree to sign these documents electronically, and your signature counts as a handwritten one. We record the time, this device and the text you were shown.",
+    "agreeLabel": "Agree and start reading",
+    "agreeingLabel": "Recording your agreement…",
+    "agreeFailed": "We could not record your agreement to sign electronically. Try again.",
+    "packetExpiry": "These documents can be signed until {when}.",
+    "declineLabel": "I do not want to sign",
+    "declineConfirmTitle": "Do not sign?",
+    "declineConfirmMessage": "Nothing is sealed and every document is withdrawn, even one you signed here. You can tell us why.",
+    "declineReasonLabel": "Why (optional)",
+    "declineConfirmLabel": "Do not sign",
+    "declineCancelLabel": "Go back",
+    "decliningLabel": "Declining…",
+    "declineFailed": "We could not record that you do not want to sign. Try again.",
+    "declinedTitle": "You chose not to sign",
+    "declinedMessage": "Nothing was sealed and every document is withdrawn. The person who prepared them will be in touch.",
+    "rosterLabel": "What you are signing today: {total} documents",
+    "rosterEntry": "{position}. {title} — {state}",
+    "rosterStateSigned": "signed",
+    "rosterStateCurrent": "you are here",
+    "rosterStatePending": "still to sign",
+    "documentStep": "{title} — document {position} of {total}",
+    "movedOn": "You have signed the {signed}. Next is the {next}.",
+    "pageLabel": "Document page {page} of {pageCount}",
+    "pageStatus": "Page {page} of {pageCount}",
+    "pageNoText": "This page is a scan, so there is no text on it to read out. Ask the person who prepared it to read it to you before you sign.",
+    "pageFailed": "This page could not be shown. Do not sign until it is; ask the person who prepared it.",
+    "previousLabel": "Previous page",
+    "nextLabel": "Next page",
+    "readStatus": "{viewed} of {pageCount} pages read",
+    "integrityWarning": "This document does not match what was prepared. Do not sign; tell the person who prepared it.",
+    "consentLabel": "I have read the {title} and agree to sign it",
+    "consentFailed": "We could not record your tick. Tick the box again.",
+    "signatureLabel": "Sign the {title} here",
+    "clearSignatureLabel": "Clear signature",
+    "signatureDrawOption": "Draw my signature",
+    "signatureTypeOption": "Type my signature",
+    "signatureTypedNameLabel": "Type your name here to sign",
+    "signatureCaptured": "Your signature has been captured.",
+    "signatureEmpty": "No signature yet.",
+    "signatureTypedFailed": "This device could not turn what you typed into a signature. Draw your signature instead.",
+    "signatureTypedCaption": "Typed signature",
+    "fullNameLabel": "Your legal name, as on your ID",
+    "heldNameHint": "It must match the name on your verified ID.",
+    "postalAddressLabel": "Your postal address",
+    "postalAddressHint": "Used only to send you written notice.",
+    "submitLabel": "Sign the {title}",
+    "submittingLabel": "Signing…",
+    "missingPages": "Please read every page before signing.",
+    "missingConsent": "Please tick the box to confirm you have read it.",
+    "missingSignature": "Please sign in the box above.",
+    "missingName": "Type your legal name as it appears on your ID.",
+    "missingPostalAddress": "Please type your postal address.",
+    "signUnconfirmed": "We did not hear back after your signature was sent, so we cannot yet say whether it was recorded. Do not sign again — check what happened instead.",
+    "signRecheckLabel": "Check what happened",
+    "sealedTitle": "Signed and sealed",
+    "sealedMessage": "Every document is signed and sealed. Keep the fingerprint below: it shows nothing has changed since you signed.",
+    "sealedManifestLabel": "Fingerprint of everything you signed",
+    "sealedDocumentsLabel": "What you signed",
+    "downloadLabel": "Download the {title}",
+    "downloadingLabel": "Downloading…",
+    "downloadFailed": "The download did not finish. Your copies are in the email we sent you.",
+    "downloadExpiry": "You can download from this screen until {when}. After that, your copies are in the email we sent you.",
+    "sealedIntegrityWarning": "The copy that downloaded does not match the fingerprint of what you signed, so it was not saved. Your signature is recorded; the copies we email you are the sealed ones.",
+    "signedTitle": "Your signatures are recorded",
+    "signedMessage": "Others still have to sign before these documents are sealed.",
+    "disclosureTick": "I have read this and agree to review and sign electronically.",
+    "identityChecked": "Your ID was checked on {day}.",
+    "venueLine": "Prepared at Grade10 {venue}",
+    "caseLine": "Reference {reference} · {subject}",
+    "caseOnly": "Reference {reference}",
+    "linkClock": "Link valid for {remaining}",
+    "readToEndFirst": "Read to the end first",
+    "continueLabel": "Continue to sign",
+    "comesNext": "{position} of {total} — the {next} comes next",
+    "comesLast": "{position} of {total} — the last one",
+    "readAgainLabel": "Read it again",
+    "signSummary": "{title} — read {viewed} of {pageCount} pages",
+    "nextUp": "Next: the {title}",
+    "sealedAt": "Sealed {time}",
+    "sealedMessageMailed": "Every document is signed and sealed. We emailed your copies to {email}. Keep the fingerprint below: it shows nothing has changed since you signed.",
+    "sealedDigest": "{digest} · sealed {when}",
+    "nextStepsTitle": "What happens now",
+    "nextSteps": {
+      "consignmentSellsTitle": "When one sells",
+      "consignmentSellsDetail": "We tell you the price, and when you are paid.",
+      "consignmentTermTitle": "Before the term ends",
+      "consignmentTermDetail": "We write to you with your choices.",
+      "partnerTitle": "Each deal adds a schedule",
+      "partnerDetail": "A deal schedule is signed under this agreement for each deal."
+    },
+    "nothingMore": "Nothing more is needed from you.",
+    "doneLabel": "Done",
+    "refusal": {
+      "TOKEN_INVALID": {
+        "title": "This signing link is not valid",
+        "message": "Ask the person who prepared it for a new signing link."
+      },
+      "TOKEN_EXPIRED": {
+        "title": "This signing link has expired",
+        "message": "Signing links last a short while for your safety. Ask for a new one."
+      },
+      "TOKEN_CONSUMED": {
+        "title": "This signing link was replaced",
+        "message": "A newer link was made for these documents, and only the newest one works. Open the newest link we sent you."
+      },
+      "TOKEN_CONFLICT": {
+        "title": "This link is open on another device",
+        "message": "For your safety, a signing link works only on the first device that opens it. Carry on there, or ask for a new link."
+      },
+      "PACKET_VOIDED": {
+        "title": "These documents were withdrawn",
+        "message": "A newer set replaced them. Ask for the link to the current documents."
+      },
+      "PACKET_EXPIRED": {
+        "title": "These documents have expired",
+        "message": "They were prepared too long ago to sign now. Ask for them to be prepared again."
+      },
+      "PACKET_COMPLETED": {
+        "title": "These documents are already signed",
+        "message": "This link was used when you signed, and it cannot open again. Your sealed copies are in the email we sent you."
+      },
+      "PACKET_DECLINED": {
+        "title": "Nothing was signed",
+        "message": "Nothing was sealed and every document is withdrawn. The person who prepared them will be in touch."
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "That document is not part of this signing",
+        "message": "Reload the page to see the documents you were asked to sign."
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "You have already signed that one",
+        "message": "Reload the page to carry on with whatever is still left to sign."
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "Please read every page first",
+        "message": "Move through the whole document, then sign."
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "That page is not in this document",
+        "message": "Reload the page and read the document through again."
+      },
+      "CONSENT_REQUIRED": {
+        "title": "Please confirm you agree first",
+        "message": "Tick the box confirming you have read the document and agree to sign it."
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "Please agree to sign electronically first",
+        "message": "Read the notice about signing electronically and agree to it before signing anything."
+      },
+      "KYC_REQUIRED": {
+        "title": "Your identity check is not recorded yet",
+        "message": "Your identity check is not recorded yet. Ask the person who prepared these documents."
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "That is not the name on your ID",
+        "message": "This does not match the name on your verified ID. Type your legal name as it appears on your ID."
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "It is not your turn yet",
+        "message": "Someone else has to sign these documents before you do."
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "You have already signed everything",
+        "message": "Nothing further is needed from you. You can close this page."
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "That is not the name you started signing under",
+        "message": "Everything in this session is signed under one name. Use the name on your earlier signature, or ask for a fresh set of documents."
+      },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "Your postal address is needed",
+        "message": "Type it on the postal address line, then sign."
+      },
+      "SIGNATURE_INVALID": {
+        "title": "That signature could not be read",
+        "message": "Clear the signature box and sign again."
+      },
+      "SOURCE_MISSING": {
+        "title": "The document could not be loaded",
+        "message": "Ask the person who prepared it to prepare it again."
+      },
+      "SOURCE_TAMPERED": {
+        "title": "The document does not match what was prepared",
+        "message": "Do not sign. Ask the person who prepared it to prepare it again."
+      },
+      "FONT_MISSING": {
+        "title": "The document cannot be drawn right now",
+        "message": "Nothing has been signed. The documents cannot be drawn until their font is restored; try again later."
+      },
+      "CONFLICT": {
+        "title": "This signing was finished elsewhere",
+        "message": "Another device completed or withdrew it while this page was open."
+      }
+    },
+    "staging": "Staging · test data, nothing is signed for real",
+    "signingAt": "grade10.com/sign",
+    "once": "This link works once, on this device only."
+  }
 }

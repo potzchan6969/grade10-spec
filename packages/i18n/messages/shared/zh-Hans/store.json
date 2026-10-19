@@ -19,6 +19,13 @@
   "sale": "特价",
   "searchLabel": "搜索商品",
   "searchPlaceholder": "搜索…",
+  "searchEmpty": "未找到结果。",
+  "searchSearching": "搜索中…",
+  "searchChip": "“{query}”",
+  "searchProducts": "商品",
+  "searchFilters": "筛选",
+  "searchWorld": "世界",
+  "searchType": "类型",
   "seeAllWorlds": "查看全部世界",
   "showResults": "显示结果",
   "soldOut": "已售罄",
@@ -29,5 +36,7 @@
   "sortPriceAsc": "价格由低至高",
   "sortPriceDesc": "价格由高至低",
   "collections": "系列",
-  "title": "商店"
+  "title": "商店",
+  "salePriceLabel": "特价",
+  "listPriceLabel": "原价"
 }

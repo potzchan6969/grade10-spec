@@ -18,7 +18,7 @@ pnpm openspec instructions ui-design --change <change>
 
 ## Design Reference
 
-- **Inventory** - Check Storybook, `packages/design-system`, `packages/ui` and `packages/i18n` before naming components, tokens or copy. The design reference grounds the outline and requirements in what exists.
+- **Inventory** - Check Storybook (`pnpm storybook` files a feature's screens and blocks under its manual page; drawing states there is the `storybook-workbench` skill), `packages/design-system`, `packages/ui` and `packages/i18n` before naming components, tokens or copy. The design reference grounds the outline and requirements in what exists.
 - **Citations** - Cite the relevant inventory in `ui-design.md` wherever a reader would otherwise have to guess. Use exact component export names from the capability contract.
 - **Missing work** - Flag each missing primitive variant, token, compound component or message key so the task plan can carry it. Use the [repository layer owners](../../../AGENTS.md#sources-of-truth); invoke `design-system-primitives` for primitive work and `design-tokens` for token work.
 - **Design parity** - A primitive may not add a variant or size the Figma component set lacks. Record a real code/design disagreement as an OpenSpec change; follow [Design Code Sync](../../../docs/governance/design-code-sync.md).
@@ -28,7 +28,7 @@ pnpm openspec instructions ui-design --change <change>
 - **Frames** - Follow the loaded schema for screens and Figma links. If a frame is missing, record `awaiting:` using [Waiting for an input](../../../docs/governance/prd-and-openspec.md#waiting-for-an-input); describe no replacement screen.
 - **States** - Use the loaded schema's States table and issued anchors. If no journey or durable root group fits, tell the journey owner to add one; do not invent it.
 - **Scenarios** - Do not cite scenario ids or fill in requirement dispositions. `/planning-dev` writes the requirements and closes every row with its scenario or `**Out of suite:**` naming where the state is stated instead.
-- **Product detail** - Put a state or variant on the PRD first only when it changes what the reader can do, see counted or is refused; replace the superseded outcome line with one `🚧` line. Breakpoints, tokens, labels and loading, empty, error or edge treatments stay in the States table and have a `::story` card on the PRD. Record a scope change in `decisions.md` before changing this file.
+- **Product detail** - Put a state or variant on the PRD first only when it changes what the reader can do, see counted or is refused; replace the superseded outcome line with one `🚧` line. Breakpoints, tokens, labels, loading, empty, error or edge treatments, the frame and the story stay in the States table and have a `::story` card on the PRD. A question about a look never holds the feature: it ships an interim built from the store's existing blocks and tokens, written as the shipped state in its `ui-design.md`, and the question waits in one designer's change per capability, through `awaiting: ui-design` naming the designer with `hands: design` set. Record a scope change in `decisions.md` before changing this file.
 - **Layout and behavior** - Figma owns layout, the capability spec owns behavior, and `tech-design.md` owns technical decisions. Link to those sources instead of restating them.
 
 - **Questions** - Use the [Clarification Request](../../../AGENTS.md#questions-and-blockers) for unresolved design choices.

@@ -27,7 +27,7 @@ and fixtures, never a running worker.
   for missing grades and provider failures.
 - [x] 2.3 Make card-price-SC-10 through card-price-SC-13 pass with fixed CSV
   row, preview, candidate-confirmation, and atomic-import contracts.
-- [ ] 2.4 Verify with `pnpm run typecheck`, `pnpm run lint`, and focused
+- [x] 2.4 Verify with `pnpm run typecheck`, `pnpm run lint`, and focused
   inventory contract tests.
 
 ## 3. Migrate inventory card identity (grade10) (owner: @htonyl)
@@ -42,7 +42,7 @@ and fixtures, never a running worker.
 - [x] 3.3 Make card-price-SC-10 through card-price-SC-13 pass with expiring
   import previews and rows, including the row limit, candidate confirmation,
   expiry index, and cleanup sweep state.
-- [ ] 3.4 Verify with `pnpm run db:drizzle:generate`, `pnpm run
+- [x] 3.4 Verify with `pnpm run db:drizzle:generate`, `pnpm run
   check:migrations`, `pnpm run test:backend`, and `pnpm run typecheck`.
 
 ## 4. Serve and refresh the reference (grade10) (owner: @htonyl)
@@ -65,7 +65,7 @@ and fixtures, never a running worker.
   parsing, persisted preview/candidate confirmation, and one-transaction
   product creation that rolls back every row on a concurrent duplicate or
   write refusal.
-- [ ] 4.7 Verify with `pnpm run test:backend`, `pnpm run cf-typegen`, `pnpm
+- [x] 4.7 Verify with `pnpm run test:backend`, `pnpm run cf-typegen`, `pnpm
   run typecheck`, and `pnpm run lint`.
 
 ## 5. Present card identity and prices (grade10) (owner: @htonyl)
@@ -82,7 +82,7 @@ and fixtures, never a running worker.
 - [x] 5.4 Make card-price-SC-10 through card-price-SC-13 pass with CSV upload,
   row validation, all-candidate confirmation, and a single atomic import
   action that does not offer product updates.
-- [ ] 5.5 Verify with `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`,
+- [x] 5.5 Verify with `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`,
   and `pnpm run build`.
 
 ## 6. Trigger Auction-aware freshness (grade10) (owner: @htonyl)
@@ -90,5 +90,5 @@ and fixtures, never a running worker.
 - [x] 6.1 Make card-price-SC-08 pass by emitting the inventory refresh request
   when a Grade10 Auction listing for the linked product becomes active, without
   exposing PriceCharting credentials or adding external-marketplace events.
-- [ ] 6.2 Verify with `pnpm run test:backend`, `pnpm run typecheck`, and
+- [x] 6.2 Verify with `pnpm run test:backend`, `pnpm run typecheck`, and
   `pnpm run lint`.

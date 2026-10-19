@@ -42,7 +42,9 @@ themes and Figma are both projections of it. And every requirement row has a
 propose action on the locally-run manual (the hosted site is read-only):
 proposing takes thirty seconds in the browser, and everything after it is an
 agent's job — the card on [Board](/in-flight) names the command to hand
-over, or hand the change id to a PM or engineer.
+over, or hand the change id to a PM or engineer. The workbench Storybook
+(`pnpm storybook`) follows this manual's domains and pages, so a feature's
+screens, states and flows sit under the same words as its page here.
 
 - [My turn](/my-turn) — what is on you, across every change in flight: the
   open questions addressed to you, then what is yours now, then what is coming.
@@ -106,8 +108,9 @@ classified cases, is
   services with the most decisions per line of code.
 - [Pending](/pending) — the specified changes with no plan yet, oldest first.
   Taking one is writing its `tasks.md`.
-- [Working a change](/guides/working-a-change) — `/workflow-tech` and `/workflow-tasks`, the
-  groups each with its test task first, and the walk the last group leaves.
+- [Working a change](/guides/working-a-change) — `/planning-dev`, which writes the
+  tech design and the plan in one run, the groups each with its test task
+  first, and the walk the last group leaves.
 - [Writing the manual](/guides/writing-the-manual) — the page grammar, for when
   you document what you built.
 

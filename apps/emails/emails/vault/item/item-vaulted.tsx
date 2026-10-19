@@ -1,0 +1,41 @@
+import { hkDate } from "@/emails/_components/format";
+import { ItemLetter } from "@/emails/vault/_components/item-letter";
+
+import {
+  previewItem,
+  previewItemFooterLines,
+} from "@/emails/vault/item-fixtures";
+
+export type ItemVaultedProps = {
+  vaultedAt?: string;
+};
+
+export default function ItemVaultedEmail({
+  vaultedAt = previewItem.vaultedAt,
+}: ItemVaultedProps) {
+  const { itemTitle } = previewItem;
+
+  return (
+    <ItemLetter
+      block={{
+        lotTitle: itemTitle,
+        listingUrl: previewItem.url,
+        primaryImageUrl: previewItem.imageUrl,
+        lotSubtext: `${previewItem.grade} · Cert ${previewItem.cert}`,
+        highlight: { label: "In the vault since", value: hkDate(vaultedAt) },
+        details: [{ label: "Vault Storage ID", value: previewItem.vaultId }],
+      }}
+      cta={{ href: previewItem.url, label: "See your item" }}
+      footer={{
+        lines: [...previewItemFooterLines],
+      }}
+      heading="Safely stored"
+      lead={`${itemTitle} is now in our vault.`}
+      preheader={`${itemTitle} is safely stored.`}
+    />
+  );
+}
+
+ItemVaultedEmail.PreviewProps = {
+  vaultedAt: previewItem.vaultedAt,
+} satisfies ItemVaultedProps;

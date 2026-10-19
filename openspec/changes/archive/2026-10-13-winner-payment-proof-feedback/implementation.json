@@ -1,0 +1,107 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "87e432b05db234b6bb8046d7d9b4d0f1593edf16be0b7d1e5e1798e741940f99"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "a2367ff3ce2f2edb249768b1aea47481d6b10ca4",
+    "capturedAt": "2026-10-06T17:20:06.311Z",
+    "targets": [
+      {
+        "path": "openspec/changes/winner-payment-proof-feedback/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The winner uploads payment proof once"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "3503f78e42841d6aa9619e66d1bcc25756638c20",
+      "components": [
+        "web"
+      ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+      "components": [
+        "preview"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "Codex",
+    "reviewedAt": "2026-10-13T07:07:17.137194Z",
+    "changes": [
+      {
+        "path": "openspec/changes/winner-payment-proof-feedback/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Only the Storybook navigation path changed. The proof form, success, failure and page flow are unchanged."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The rolling suite now has route cases and later accepted sibling coverage. US9-TC2, US9-TC14 and US9-TC30 retain success, failed-draft retention and blocked busy leave.",
+        "evidence": [
+          "2026-10-13: focused preview browser run passed 19/19 delivery, payment and submit-payment-proof stories; standalone how-to-pay passed 3/3 at 7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+          "2026-10-13: AuctionWinnerOrderPage.test.tsx passed 78 tests with 1 expected unrelated bank-refund failure at application commit 2ad66c014c02d8a36443c4bb8ee8e84ed3d80577; merged proof-feedback implementation 3503f78e42841d6aa9619e66d1bcc25756638c20",
+          "Store PR1036 head 248174ca703e2fd3816860f415c4da0c062347da passed Test and Test cases workflows."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The rolling feature set adds accepted bank-rail and sibling outcomes. Its proof summary is shorter, while the named proof requirement retains success, failure and busy behavior.",
+        "evidence": [
+          "2026-10-13: focused preview browser run passed 19/19 delivery, payment and submit-payment-proof stories; standalone how-to-pay passed 3/3 at 7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+          "2026-10-13: AuctionWinnerOrderPage.test.tsx passed 78 tests with 1 expected unrelated bank-refund failure at application commit 2ad66c014c02d8a36443c4bb8ee8e84ed3d80577; merged proof-feedback implementation 3503f78e42841d6aa9619e66d1bcc25756638c20",
+          "Requirement: The winner uploads payment proof once retains SC-119, SC-218, SC-219 and SC-220."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: The winner uploads payment proof once"
+        ],
+        "classification": "semantic",
+        "reason": "The toast rules now specify localized Simplified Chinese and Traditional Chinese copy. Approved English copy and state transitions are unchanged.",
+        "evidence": [
+          "2026-10-13: focused preview browser run passed 19/19 delivery, payment and submit-payment-proof stories; standalone how-to-pay passed 3/3 at 7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+          "2026-10-13: AuctionWinnerOrderPage.test.tsx passed 78 tests with 1 expected unrelated bank-refund failure at application commit 2ad66c014c02d8a36443c4bb8ee8e84ed3d80577; merged proof-feedback implementation 3503f78e42841d6aa9619e66d1bcc25756638c20",
+          "32ea655c43401d36a5767169db7d089f65bca170 adds proofFeedback catalogs; 2026-10-13 inspection confirms complete en, zh-Hans and zh-Hant entries and application reads them through t()."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "Later accepted sibling changes add cancellation, partial-payment and reopened-address journeys US-13, US-20 and US-23. The bank-transfer proof journey US-09 is unchanged.",
+        "evidence": [
+          "Accepted sibling contracts: 9fb8774df5f5eebacc0248bec4f48a5a39c6cd5a, 397cc76f44a1f7213527312bd3d627c15af5c814 and 85fe49c153d8776e5d0abfd2385098ae2c86010e; current US13-TC1, US20-TC1 and US23-TC1/2/4-11 record those separate journeys.",
+          "Scoped comparison confirms US-09 unchanged."
+        ]
+      }
+    ]
+  }
+}

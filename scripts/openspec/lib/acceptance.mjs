@@ -36,6 +36,7 @@ import {
   reusedInChange,
 } from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
+import { idsMainHolds } from "../spec-issue.mjs";
 import { git, textAt } from "../store-main.mjs";
 import { foldGroups, holding, labelOf, splitGroups } from "./feature-set.mjs";
 import { foldChecks, purposeOf } from "./fold-checks.mjs";
@@ -214,7 +215,11 @@ function claimsFeatureSet(sections) {
 }
 
 function usId(heading) {
-  return /([a-z0-9][a-z0-9-]*-US-\d+[a-z]?)/i.exec(heading)?.[1] ?? null;
+  return (
+    /([a-z0-9][a-z0-9.-]*\.US-?\d+[a-z]?|[a-z0-9][a-z0-9-]*-US-?\d+[a-z]?)/i.exec(
+      heading,
+    )?.[1] ?? null
+  );
 }
 
 function journeyIds(text) {
@@ -334,7 +339,12 @@ function mergeJourneys(
       oldRetired?.raw.split("\n").filter((line) => line.trim() !== "") ?? [];
     const known = new Set(
       priorLines
-        .map((line) => /([a-z0-9][a-z0-9-]*-US-\d+[a-z]?)/i.exec(line)?.[1])
+        .map(
+          (line) =>
+            /([a-z0-9][a-z0-9.-]*\.US-?\d+[a-z]?|[a-z0-9][a-z0-9-]*-US-?\d+[a-z]?)/i.exec(
+              line,
+            )?.[1],
+        )
         .filter(Boolean),
     );
     for (const id of retired)
@@ -347,7 +357,11 @@ function mergeJourneys(
 
 function readRetiredIds(sections) {
   const retired = sectionByName(sections, "Retired");
-  return [...(retired?.raw.match(/[a-z0-9][a-z0-9-]*-US-\d+[a-z]?/gi) ?? [])];
+  return [
+    ...(retired?.raw.match(
+      /[a-z0-9][a-z0-9.-]*\.US-?\d+[a-z]?|[a-z0-9][a-z0-9-]*-US-?\d+[a-z]?/gi,
+    ) ?? []),
+  ];
 }
 
 function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
@@ -525,9 +539,11 @@ const SUITE_LISTS = ["Raised", "Settled", "Out of suite"];
 const SUITE_SECTIONS = new Set([
   "Background",
   "Reconciliation",
+  "Ungrouped",
   ...SUITE_LISTS,
 ]);
-const JOURNEY_GROUP = /^(.+?-US-?(\d+)([a-z]?))\b/i;
+const JOURNEY_GROUP = /^((?:.+?\.US-?(\d+)([a-z]?)|.+?-US-?(\d+)([a-z]?)))\b/i;
+const WALK_SECTION = /^Walk\b/i;
 
 function paragraphs(text) {
   return (text ?? "")
@@ -690,7 +706,37 @@ function withTransitionStatus(text, foldedOn, previousText = null) {
   );
 }
 
-const CASE_HEADING = /(\S+-TC\d+)-(\d+)\b/i;
+const MODERN_CASE_HEADING = /^(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):/i;
+const DISPLAY_CASE_HEADING = /^(\S+\.US-?(\d+)-TC-?(\d+)):/i;
+const LEGACY_CASE_HEADING = /(\S+-TC\d+)-(\d+)\b/i;
+
+function caseHeading(heading) {
+  const display = DISPLAY_CASE_HEADING.exec(heading);
+  if (display)
+    return {
+      id: display[1],
+      tc: Number(display[3]),
+      revision: null,
+      modern: true,
+    };
+  const modern = MODERN_CASE_HEADING.exec(heading);
+  if (modern)
+    return {
+      id: modern[1],
+      tc: Number(modern[3]),
+      revision: null,
+      modern: true,
+    };
+  const legacy = LEGACY_CASE_HEADING.exec(heading);
+  return legacy
+    ? {
+        id: legacy[1],
+        tc: Number(legacy[1].match(/-TC(\d+)$/i)?.[1]),
+        revision: Number(legacy[2]),
+        modern: false,
+      }
+    : null;
+}
 
 const CASE_MARKER = /\n*(<!-- trace:case [^\n]*-->)$/;
 
@@ -701,7 +747,7 @@ const CASE_MARKER = /\n*(<!-- trace:case [^\n]*-->)$/;
 function markedCases(group, capability) {
   const sections = group.children;
   for (const section of sections)
-    if (!CASE_HEADING.test(section.heading))
+    if (!caseHeading(section.heading))
       throw new Error(
         `${capability}: \`### ${section.heading}\` under \`## ${group.heading}\` is not a test case the fold can place; fold it by hand into the change's suite`,
       );
@@ -724,13 +770,24 @@ function markedCases(group, capability) {
  *  to the new revision. An older revision means the change was written
  *  against a suite that has since moved on. */
 function mergeCases(existing, incoming, capability) {
-  const revisionOf = (one) => Number(CASE_HEADING.exec(one.section.heading)[2]);
+  const revisionOf = (one) => {
+    const parsed = caseHeading(one.section.heading);
+    if (!parsed) return null;
+    if (!parsed.modern) return parsed.revision;
+    const marker = /\brev=(\d+)/.exec(one.marker ?? "");
+    return marker ? Number(marker[1]) : null;
+  };
   const cases = new Map(existing.map((one) => [caseNumber(one.section), one]));
   for (const one of incoming) {
     const number = caseNumber(one.section);
     const prior = cases.get(number);
     const rev = revisionOf(one);
-    if (prior && rev < revisionOf(prior))
+    if (
+      prior &&
+      rev !== null &&
+      revisionOf(prior) !== null &&
+      rev < revisionOf(prior)
+    )
       throw new Error(
         `${capability}: ${number}-${rev} is an older revision than the durable suite's ${number}-${revisionOf(prior)}; write the change's case against it`,
       );
@@ -740,17 +797,41 @@ function mergeCases(existing, incoming, capability) {
         : prior?.marker;
     cases.set(number, { ...one, marker: one.marker ?? inherited ?? null });
   }
-  return [...cases.values()];
+  return [...cases.values()].sort((a, b) => {
+    const deprecated = (one) =>
+      /\*\*Status:\*\*\s*deprecated\b/i.test(one.section.raw);
+    return Number(deprecated(a)) - Number(deprecated(b));
+  });
 }
 
 function caseNumber(section) {
-  return CASE_HEADING.exec(section.heading)[1];
+  const parsed = caseHeading(section.heading);
+  if (!parsed) throw new Error(`cannot read case heading: ${section.heading}`);
+  return parsed.modern ? `TC${parsed.tc}` : parsed.id;
 }
 
 /** Each `TC<m>` once in a suite, whatever its revision: the rule
  *  `tcs:validate` holds the store to. */
 function refuseRepeatedCases(text, capability, where, remedy) {
   const seen = new Set();
+  const seenModern = new Set();
+  for (const [, id] of text.matchAll(
+    /^#{3,4}\s+(\S+)\s+\(US-?\d+-TC-?\d+\):/gim,
+  )) {
+    const number = id;
+    if (seenModern.has(number))
+      throw new Error(
+        `${capability}: test case ${number} appears more than once in ${where}; ${remedy}`,
+      );
+    seenModern.add(number);
+  }
+  for (const [, id] of text.matchAll(/^#{3,4}\s+(\S+\.US-?\d+-TC-?\d+):/gim)) {
+    if (seenModern.has(id))
+      throw new Error(
+        `${capability}: test case ${id} appears more than once in ${where}; ${remedy}`,
+      );
+    seenModern.add(id);
+  }
   for (const [, number] of text.matchAll(/^###\s+(\S+-TC\d+)-\d+\b/gim)) {
     if (seen.has(number))
       throw new Error(
@@ -785,6 +866,7 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
       if (
         section.level === 2 &&
         !SUITE_SECTIONS.has(section.heading) &&
+        !WALK_SECTION.test(section.heading) &&
         !JOURNEY_GROUP.test(section.heading)
       )
         throw new Error(
@@ -794,11 +876,21 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
   });
   const [current, delta] = docs;
   const named = (doc, name) => sectionByName(doc.sections, name)?.raw;
-  const groupsOf = (doc) =>
-    doc.sections.filter(
+  const groupsOf = (doc) => [
+    ...doc.sections.filter(
       (section) => section.level === 2 && JOURNEY_GROUP.test(section.heading),
-    );
-  const groupId = (section) => JOURNEY_GROUP.exec(section.heading)[1];
+    ),
+    ...(
+      doc.sections.find((section) => section.heading === "Ungrouped")
+        ?.children ?? []
+    )
+      .filter(
+        (section) => section.level === 3 && JOURNEY_GROUP.test(section.heading),
+      )
+      .map((section) => ({ ...section, ungrouped: true })),
+  ];
+  const groupId = (section) =>
+    `${section.ungrouped ? "ungrouped:" : ""}${JOURNEY_GROUP.exec(section.heading)[1]}`;
   const ruled = /\n+---$/;
   refuseRepeatedCases(
     texts[0],
@@ -823,13 +915,17 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
       added,
       capability,
     );
-    const rendered = [`## ${incoming.heading}`, body.trim()].filter(Boolean);
+    const rendered = [
+      `${incoming.ungrouped ? "###" : "##"} ${incoming.heading}`,
+      body.trim(),
+    ].filter(Boolean);
     for (const { section, marker } of cases)
       rendered.push(
         `${marker ? `${marker}\n` : ""}${renderSection(section).replace(ruled, "")}`,
       );
     currentGroups.set(groupId(incoming), {
       heading: incoming.heading,
+      ungrouped: incoming.ungrouped,
       render: rendered.join("\n\n"),
     });
   }
@@ -841,18 +937,42 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
     );
   }
   const usOrder = (section) => {
-    const [, , number, letter] = JOURNEY_GROUP.exec(section.heading);
+    const match = JOURNEY_GROUP.exec(section.heading);
+    const number = match[2] ?? match[4];
+    const letter = match[3] ?? match[5];
     return Number(number) + (letter ? letter.charCodeAt(0) / 1000 : 0);
   };
-  const groups = [...currentGroups.values()]
-    .sort((a, b) => usOrder(a) - usOrder(b))
+  const orderedGroups = [...currentGroups.values()].sort(
+    (a, b) => usOrder(a) - usOrder(b),
+  );
+  const normalGroups = orderedGroups
+    .filter((section) => !section.ungrouped)
     .map((section) => section.render ?? renderSection(section));
+  const ungroupedGroups = orderedGroups
+    .filter((section) => section.ungrouped)
+    .map((section) => section.render ?? renderSection(section));
+  const groups = [
+    ...normalGroups,
+    ...(ungroupedGroups.length
+      ? [`## Ungrouped\n\n${ungroupedGroups.join("\n\n")}`]
+      : []),
+  ];
   const separator = [current, delta].some((doc) =>
     groupsOf(doc).some((section) => ruled.test(section.raw)),
   )
     ? "\n\n---\n\n"
     : "\n\n";
   const parts = [suiteHeader(current.header, delta.header)];
+  const walks = (
+    delta.sections.some(
+      (section) => section.level === 2 && WALK_SECTION.test(section.heading),
+    )
+      ? delta.sections
+      : current.sections
+  ).filter(
+    (section) => section.level === 2 && WALK_SECTION.test(section.heading),
+  );
+  parts.push(...walks.map((section) => renderSection(section)));
   const background = appendMissing(
     named(current, "Background"),
     named(delta, "Background"),
@@ -1379,20 +1499,32 @@ export function acceptanceReadiness(
           (line) =>
             /^\s*\|/.test(line) && !/^\s*\|\s*(?:Capability|---)/.test(line),
         );
-      if (
-        rows.some(
-          (line) =>
-            /<!--|(?:\bTBC\b|❓)/iu.test(line) ||
-            line
-              .split("|")
-              .slice(1, -1)
-              .some((cell) => cell.trim() === ""),
-        )
-      )
-        errors.push("decisions.md ## Raised still has an unanswered row");
+      for (const line of rows) {
+        if (/^\s*\|\s*<!--/.test(line)) continue;
+        const cells = line
+          .split("|")
+          .slice(1, -1)
+          .map((cell) => cell.trim());
+        const open =
+          /(?:\bTBC\b|❓)/iu.test(line) || cells.some((cell) => cell === "");
+        if (open) errors.push(openRaisedRow(cells));
+      }
     }
   }
   return errors;
+}
+
+/**
+ * One open Raised row as acceptance names it: the capability, the question,
+ * the recommendation it carries and whose answer it waits on — the role a ❓
+ * in its Landed cell names, or the product manager, who resolves every
+ * question before acceptance.
+ */
+function openRaisedRow([capability = "", raised = "", landed = ""]) {
+  const recommended = /recommended:\s*(.+?)\s*$/i.exec(raised)?.[1];
+  const question = raised.replace(/\s*recommended:.*$/i, "").trim();
+  const role = /❓\s+([a-z][a-z0-9._-]*)/.exec(landed)?.[1] ?? "pm";
+  return `decisions.md ## Raised still holds an open row - ${capability || "(no capability)"}: ${question || "(no question)"}${recommended ? ` - recommended: ${recommended}` : " - no recommendation"} - the ${role}'s to answer, or QA2's to close on its recommendation`;
 }
 
 function baselineOf(root, outputs) {
@@ -1558,6 +1690,19 @@ export function acceptanceGate(prepared, command) {
     prepared.changeId,
   ]);
   if (changes) refuse("validate:changes", changes);
+  // Acceptance reads the fetched `main`, not the branch alone: an id another
+  // change landed first is refused before a fingerprint names it.
+  for (const held of idsMainHolds(prepared.root, prepared.changeId, {
+    accepted: existsSync(
+      join(
+        prepared.root,
+        "openspec/changes",
+        prepared.changeId,
+        "acceptance.json",
+      ),
+    ),
+  }))
+    refuse("issued", held);
   for (const finding of foldChecks(prepared))
     (finding.level === "warn" ? warnings : failures).push(finding);
   const tree = foldedTree(prepared);
@@ -1999,6 +2144,12 @@ export function acceptChange(
     throw new Error(
       `durable baseline changed since preflight (now ${prepared.baselineFingerprint}); run accept:preflight again and review the result`,
     );
+  const held = idsMainHolds(root, changeId, {
+    accepted: existsSync(
+      join(root, "openspec/changes", changeId, "acceptance.json"),
+    ),
+  });
+  if (held.length > 0) throw new Error(held.join("\n"));
   const backups = new Map();
   const changeDir = join(root, "openspec", "changes", changeId);
   const record = join(changeDir, "acceptance.json");

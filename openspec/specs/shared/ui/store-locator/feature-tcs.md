@@ -9,7 +9,7 @@
 * A story renders its block from props alone, with no network, application state, routing or browser storage behind it.
 * The Controls panel changes a story's props in place; a step that plays the consumer's part sets them there.
 
-## shared-ui-store-locator-US1: The Location & Hours block
+## g10.shared-store-locator.US1: The Location & Hours block
 
 **Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/store-locator`, which composes the block.
 
@@ -18,7 +18,7 @@
 **so that** every application shows the one shop the same way without a copy of its own.
 
 <!-- trace:case id=g10.shared-store-locator.TC-c18 rev=1 covers=g10.shared-store-locator.SC-al8 -->
-### shared-ui-store-locator-US1-TC1-1: StoreLocator exports from the package entry and holds no copy
+### g10.shared-store-locator.US1-TC1: StoreLocator exports from the package entry and holds no copy
 
 **Classification:**
 
@@ -53,7 +53,7 @@
 * Step 4 finds no store name, address, hours or Maps address written in.
 
 <!-- trace:case id=g10.shared-store-locator.TC-haj rev=1 covers=g10.shared-store-locator.SC-7zw,g10.shared-store-locator.SC-pyw,g10.shared-store-locator.SC-2cu,g10.shared-store-locator.SC-xyp,g10.shared-store-locator.SC-4q9 -->
-### shared-ui-store-locator-US1-TC2-1: Supplied name, address and hours show as given
+### g10.shared-store-locator.US1-TC2: Supplied name, address and hours show as given
 
 **Classification:**
 
@@ -70,16 +70,20 @@
 
 **Pre-conditions:**
 
-* The `StoreLocator` block's default story is open on <grade10 ui workbench url>.
+* The `StoreLocator` block's default story is open on `<grade10 ui workbench url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<store name>` | Test Shop Kowloon |
-| `<address lines>` | 1 Test Street; Mong Kok; Hong Kong, in that order |
-| `<hours rows>` | Monday 10am – 6pm; Tuesday closed, in that order |
-| `<maps destination>` | A Google Maps address for 1 Test Street, Mong Kok |
+| store name | Test Shop Kowloon |
+| address lines | 1 Test Street; Mong Kok; Hong Kong, in that order |
+| hours rows | Monday 10am – 6pm; Tuesday closed, in that order |
+| maps destination | A Google Maps address for 1 Test Street, Mong Kok |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -98,7 +102,7 @@
 * Step 6 opens `<maps destination>` in a new tab.
 
 <!-- trace:case id=g10.shared-store-locator.TC-nio rev=1 covers=g10.shared-store-locator.SC-7zw,g10.shared-store-locator.SC-pyw,g10.shared-store-locator.SC-2cu,g10.shared-store-locator.SC-xyp,g10.shared-store-locator.SC-4q9 -->
-### shared-ui-store-locator-US1-TC3-1: The map is one named keyboard stop and the only way to Maps
+### g10.shared-store-locator.US1-TC3: The map is one named keyboard stop and the only way to Maps
 
 **Classification:**
 
@@ -115,13 +119,17 @@
 
 **Pre-conditions:**
 
-* The `StoreLocator` block's default story is open on <grade10 ui workbench url>.
+* The `StoreLocator` block's default story is open on `<grade10 ui workbench url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<map name>` | Open Test Shop in Google Maps |
+| map name | Open Test Shop in Google Maps |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 

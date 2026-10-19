@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "4eac72a3e5ef72b675edd2dc6b7b6028a372475778b733274f5ce4af08fad2c2"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "a87b1b6df7241d463b65b86b85b97d5a785bc7ae",
+    "capturedAt": "2026-10-14T07:52:36.845Z",
+    "targets": [
+      {
+        "path": "openspec/changes/show-account-skeleton-until-session-answers/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The account entry holds its place until the session first answers",
+          "Requirement: The chrome does not wait for the session"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: SiteHeader composes Nav with session-aware account entry"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "41abee572e634cef13e0d664b854d6991651feb3",
+      "components": [
+        "web"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "Claude Sonnet 5.5, for @seankcw",
+    "reviewedAt": "2026-10-15T06:33:43Z",
+    "changes": [
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "a2784ad6a wrapped the angle-bracket test-data parameters in backticks, eleven lines. With backticks removed from both, the file at the claimed baseline and the file now are byte-for-byte identical; case ids, revisions, steps and expected results are unchanged."
+      }
+    ]
+  }
+}

@@ -12,7 +12,7 @@ import {
 } from "./site-header.auction-store.story-shared";
 
 const meta = {
-  title: "Site Chrome/SiteHeader/Auction & Store/Cart count",
+  title: "Site/Page Shell/Blocks/SiteHeader/Auction & Store/Cart count",
   component: SiteHeader,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -21,6 +21,11 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+/** A cart word other than `Cart`, so a test cannot pass on a made-up word. */
+const BASKET_ARGS = {
+  copy: { ...AUCTION_STORE_BASE_ARGS.copy, cart: "Basket" },
+};
 
 function countPlay(
   count: number,
@@ -32,10 +37,17 @@ function countPlay(
       `${scenario} - Full count ${count}${compact ? " at 375px" : ""}`,
       async () => {
         const canvas = within(canvasElement);
-        const cart = canvas.getByRole("button", { name: `Cart (${count})` });
+        const cart = canvas.getByRole("button", { name: `Basket (${count})` });
         const account = canvas.getByRole("button", { name: "Account" });
-        const badge = cartBadge(canvasElement) as HTMLElement;
+        const badge = cartBadge(canvasElement, "Basket") as HTMLElement;
         expect(cart).toBeVisible();
+        // The badged control is the cart slot Nav renders, with no built-in
+        // cart control beside it, and its count is hidden from assistive
+        // technology because the control's name already says it.
+        expect(canvas.getAllByRole("button", { name: /Basket|Cart/ })).toEqual([
+          cart,
+        ]);
+        expect(badge).toHaveAttribute("aria-hidden", "true");
         expect(account).toBeVisible();
         expect(badge).toBeVisible();
         expect(badge).toHaveAttribute("data-variant", "brand");
@@ -94,40 +106,60 @@ function countPlay(
   };
 }
 
-/** Cart control present; count badge hidden. */
+/** Cart control present; a count of 0 shows no badge. */
 export const EmptyNoBadge: Story = {
   name: "Empty — no badge",
-  args: { cartItemCount: 0 },
+  args: { ...BASKET_ARGS, cartItemCount: 0 },
   play: async ({ canvasElement, step }) => {
     await step("shared-ui-site-chrome-SC-23 - EmptyNoBadge", async () => {
       const canvas = within(canvasElement);
       expect(
         canvas.getByRole("button", { name: "Sign In" }),
       ).toBeInTheDocument();
-      expect(canvas.getByRole("button", { name: "Cart" })).toBeInTheDocument();
-      expect(cartBadge(canvasElement)).toBeNull();
+      expect(
+        canvas.getByRole("button", { name: "Basket" }),
+      ).toBeInTheDocument();
+      expect(cartBadge(canvasElement, "Basket")).toBeNull();
     });
+  },
+};
+
+/** Cart control present; an omitted count shows no badge. */
+export const OmittedCountNoBadge: Story = {
+  name: "Omitted count — no badge",
+  args: { ...BASKET_ARGS, cartItemCount: undefined },
+  play: async ({ canvasElement, step }) => {
+    await step(
+      "shared-ui-site-chrome-SC-23 - OmittedCountNoBadge",
+      async () => {
+        const canvas = within(canvasElement);
+        expect(
+          canvas.getByRole("button", { name: "Basket" }),
+        ).toBeInTheDocument();
+        expect(cartBadge(canvasElement, "Basket")).toBeNull();
+      },
+    );
   },
 };
 
 /** Brand count shows `1`. Signed in — lines require a session. */
 export const Count1: Story = {
   name: "1 item",
-  args: { session: "signed-in", cartItemCount: 1 },
+  args: { ...BASKET_ARGS, session: "signed-in", cartItemCount: 1 },
   play: countPlay(1, "shared-ui-site-chrome-SC-24"),
 };
 
 /** Brand count shows `3` — same full count the drawer title badge would show. */
 export const Count3: Story = {
   name: "3 items",
-  args: { session: "signed-in", cartItemCount: 3 },
+  args: { ...BASKET_ARGS, session: "signed-in", cartItemCount: 3 },
   play: countPlay(3, "shared-ui-site-chrome-SC-25"),
 };
 
 /** Counts above two digits stay complete instead of `99+`. */
 export const Count123: Story = {
   name: "123 items",
-  args: { session: "signed-in", cartItemCount: 123 },
+  args: { ...BASKET_ARGS, session: "signed-in", cartItemCount: 123 },
   play: countPlay(123, "shared-ui-site-chrome-SC-26"),
 };
 
@@ -177,7 +209,7 @@ export const NoCartHandler: Story = {
     cartItemCount: 3,
   },
   play: async ({ canvasElement, step }) => {
-    await step("shared-ui-site-chrome-SC-04 - NoCartHandler", async () => {
+    await step("shared-ui-site-chrome-SC-41 - NoCartHandler", async () => {
       const canvas = within(canvasElement);
       expect(canvas.queryByRole("button", { name: /Cart/ })).toBeNull();
       expect(

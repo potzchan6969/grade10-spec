@@ -3,7 +3,7 @@ import { ChartLineIcon, SettingsIcon, UserIcon } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 const meta = {
-  title: "Components/Tabs",
+  title: "Design System/Display/Tabs",
   component: Tabs,
   tags: ["autodocs"],
 } satisfies Meta<typeof Tabs>;

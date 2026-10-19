@@ -1,13 +1,41 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** pending-review · 0/117
-**Drafts styled:** 2026-10-05, tcs-rules r4
+**Status:** pending-review · 0/162
+**Drafts styled:** 2026-10-14, tcs-rules r5
 
-**Out of suite:** grade10-admin-auction-listing-SC-64, grade10-admin-auction-listing-SC-65, grade10-admin-auction-listing-SC-66, grade10-admin-auction-listing-SC-67
+**Out of suite:** grade10-admin-auction-listing-SC-176 - the listing service's save test, task 2.1 in `tasks.md`, because the editor always names the translations it holds and no route in the console sends an omitted object; grade10-admin-auction-listing-SC-177 - the same test, which saves a named object that holds fewer languages than the stored one; grade10-admin-auction-listing-SC-200, grade10-admin-auction-listing-SC-201 and grade10-admin-auction-listing-SC-202 - the Labs seed tests of task 2.8, because the Labs are a local developer panel the suite does not walk; grade10-admin-auction-listing-SC-203, grade10-admin-auction-listing-SC-204, grade10-admin-auction-listing-SC-205 and grade10-admin-auction-listing-SC-206 - the customer view tests of task 4.6, added after the blind pass; they stay without a case until QA2 or human review writes one; grade10-admin-auction-listing-SC-207 and grade10-admin-auction-listing-SC-208 - the Copy block tests of task 4.1, added after the blind pass
+
+## Walk 1: Relist keeps the shared address through to Publish
+
+**Starting state:**
+
+- admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+- `<unsold_source>` closed Unsold in no campaign, its stock is released, it has never been relisted, and it holds `<shared_slug>` and `<source_code>`.
+- customer A can open `/auction/listings/<shared_slug>` in a second session.
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing outside a campaign, stock released, never relisted |
+| `<shared_slug>` | The canonical slug `<unsold_source>` holds before Relist |
+| `<source_code>` | The listing code of `<unsold_source>` |
+
+### Route
+
+1. Click Relist on `<unsold_source>`'s row and read the Slug field.
+   - The editor shows `<shared_slug>` filled in. `g10adm.auction-listing.US9-TC11`
+2. Save the Relist draft without changing the slug.
+   - The new draft holds `<shared_slug>` and a listing code other than `<source_code>`. `g10adm.auction-listing.US9-TC12`
+   - Both listings' activity name the transfer of `<shared_slug>` and the other listing. `g10adm.auction-listing.US9-TC12`
+3. As customer A, open `/auction/listings/<shared_slug>` while the successor is still a draft.
+   - The address is not found. `g10adm.auction-listing.US4-TC21`
+4. Create the successor if needed, then Publish now, and open `/auction/listings/<shared_slug>` again.
+   - The page opens the published successor, not `<unsold_source>`. `g10adm.auction-listing.US4-TC22`
 
 ## grade10-admin-auction-listing-US1: Operator saves an unfinished listing and comes back to it
 
-**As an** auction operator,
+**As a** auction operator,
 **I want** to save a listing before I know every fact about the card,
 **so that** I can start from the item in front of me and finish once the rest arrives.
 
@@ -23,9 +51,11 @@
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -63,7 +93,7 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -80,8 +110,8 @@
 * Step 2 still shows the listing as a draft.
 * Step 2 shows the starting price empty.
 
-<!-- trace:case id=g10adm.auction-listing.TC-qk8 rev=2 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
-### grade10-admin-auction-listing-US1-TC3-2: Draft refuses a negative or non-whole starting price
+<!-- trace:case id=g10adm.auction-listing.TC-qk8 rev=3 -->
+### grade10-admin-auction-listing-US1-TC3-3: Draft refuses a negative or non-whole starting price
 
 Runs once per row of **Test data**.
 
@@ -100,23 +130,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds the grant to set an auction's prices and window) is on `<grade10 auction admin listings url>`.
-* `<listing_1>` is a draft in the row's currency with starting price 100000 minor units.
+* admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
+* `<listing_1>` is a draft in USD with starting price 100000 minor units.
 
 **Test data:**
 
-| Currency | Starting price entered | Why refused |
-| --- | --- | --- |
-| USD | -1 minor unit (-$0.01) | Negative, one minor unit below the 0 boundary |
-| HKD | -1 minor unit (-HK$0.01) | Negative, one minor unit below the 0 boundary |
-| JPY | -1 minor unit (-¥1) | Negative, one minor unit below the 0 boundary |
-| USD | 0.5 minor units ($0.005) | Not a whole number of minor units |
-| JPY | 0.5 minor units (¥0.5) | Not a whole number of minor units |
+| Starting price entered | Why refused |
+| --- | --- |
+| -1 minor unit (-$0.01) | Negative, one minor unit below the 0 boundary |
+| 0.5 minor units ($0.005) | Not a whole number of minor units |
 
 **Steps:**
 
 1. Open `<listing_1>`.
-2. Replace the starting-price text with the row's currency amount.
+2. Replace the starting-price text with the row's amount.
 3. Click Save.
 4. Reopen `<listing_1>`.
 5. Read its starting price and status.
@@ -124,7 +151,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3 refuses the save.
-* Step 5 reads the original price in the row's currency, not empty.
+* Step 5 reads the original price in USD, not empty.
 * Step 5 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-09o rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
@@ -143,7 +170,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -183,7 +210,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -198,8 +225,8 @@ Runs once per row of **Test data**.
 * Step 1 refuses the save.
 * Step 1 stores no listing.
 
-<!-- trace:case id=g10adm.auction-listing.TC-uka rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso,g10adm.auction-listing.SC-a6f -->
-### grade10-admin-auction-listing-US1-TC6-1: Draft keeps a starting price of 0 apart from an empty one
+<!-- trace:case id=g10adm.auction-listing.TC-uka rev=2 -->
+### grade10-admin-auction-listing-US1-TC6-2: Draft keeps a starting price of 0 apart from an empty one
 
 **Classification:**
 
@@ -210,43 +237,41 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* <listing_2> is a draft in HKD with a title and no starting price.
-* <listing_3> is a draft in HKD with a title and starting price 100000 minor units.
+* `<listing_2>` is a draft in USD with a title and no starting price.
+* `<listing_3>` is a draft in USD with a title and starting price 100000 minor units.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_2> | A draft, currency HKD, starting price empty |
-| <listing_3> | A draft, currency HKD, starting price 100000 minor units |
-| Starting price | 0 minor units (HK$0.00) |
+| `<listing_2>` | A draft, currency USD, starting price empty |
+| `<listing_3>` | A draft, currency USD, starting price 100000 minor units |
+| Starting price | 0 minor units (USD0.00) |
 
 **Steps:**
 
-1. Open <listing_2>.
+1. Open `<listing_2>`.
 2. Enter a starting price of 0.
 3. Save the draft.
-4. Reopen <listing_2>.
+4. Reopen `<listing_2>`.
 5. Read its starting price.
-6. Open <listing_3>.
+6. Open `<listing_3>`.
 7. Clear its starting price.
 8. Save the draft.
-9. Reopen <listing_3>.
+9. Reopen `<listing_3>`.
 10. Read its starting price.
 
 **Expected Results:**
 
 * Step 3 saves; the listing remains a draft.
-* Step 5 reads 0 minor units HKD, not empty.
+* Step 5 reads 0 minor units USD, not empty.
 * Step 8 saves; the listing remains a draft.
 * Step 10 reads empty, not 0.
 
@@ -274,7 +299,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -306,7 +331,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -389,7 +414,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -429,7 +454,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -500,7 +525,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -536,7 +561,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -598,8 +623,8 @@ Runs once per row of **Test data**.
 **I want** the listing checked against everything an auction needs at the moment I create it,
 **so that** nothing incomplete can reach a bidder.
 
-<!-- trace:case id=g10adm.auction-listing.TC-igg rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
-### grade10-admin-auction-listing-US3-TC1-1: Operator creates a filled draft
+<!-- trace:case id=g10adm.auction-listing.TC-igg rev=2 -->
+### grade10-admin-auction-listing-US3-TC1-2: Operator creates a filled draft
 
 **Classification:**
 
@@ -610,25 +635,23 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
 * admin(auction operator) is on <grade10 auction admin listings url>.
-* A draft has a title, slug charizard-psa-9, starting price 100000 minor units, minimum increment 5000 minor units, currency HKD, a future start, a close after that start, and one JPEG.
+* A draft has a title, slug `<slug>`, starting price 100000 minor units, minimum increment 5000 minor units, currency USD, a future start, a close after that start, and one JPEG.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Slug | charizard-psa-9 (1 to 64 lower-case hyphenated words) |
+| `<slug>` | charizard-psa-9 (1 to 64 lower-case hyphenated words) |
 | Starting price | 100000 minor units (any whole amount of 0 or more) |
 | Minimum increment | 5000 minor units |
-| Currency | HKD |
+| Currency | USD |
 
 **Steps:**
 
@@ -657,7 +680,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -693,7 +716,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -727,7 +750,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -761,7 +784,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -795,7 +818,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -829,7 +852,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -893,9 +916,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -930,7 +955,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -971,7 +996,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1012,7 +1037,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1029,8 +1054,8 @@ Runs once per row of **Test data**.
 * Step 1 accepts the save.
 * Step 2 shows neither draft occupying a slug.
 
-<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
-### grade10-admin-auction-listing-US3-TC13-1: Create can reuse a canceled listing's original slug
+<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=4 covers=g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-yml -->
+### grade10-admin-auction-listing-US3-TC13-4: Create can reuse a canceled listing's original slug
 
 **Classification:**
 
@@ -1045,30 +1070,54 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Blocked:** Listing spec author — reconcile SC-21 allowing canceled-slug reuse with the cancel requirement and SC-42 preserving the canonical slug permanently; identifier decision Q16 chooses preservation. Do not execute this contradictory expectation until its source scenario is reconciled.
 
 **Pre-conditions:**
 
 * admin(auction operator) is on `<grade10 auction admin listings url>`.
-* A canceled listing previously used slug charizard-psa-9.
-* A draft has every required field set, including slug charizard-psa-9.
+* `<original_listing>` is called off, previously used `<released_slug>`, and retains `<original_code>`.
+* `<replacement>` is a complete saved draft with a different slug.
+* admin(holds auction:operate) is on the Listings page.
+* `<original_bidder>` placed accepted bids on `<original_listing>` before call off.
+* Its original bidder history was recorded before replacement Save/Create.
+
+Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Slug | charizard-psa-9 (1 to 64 lower-case hyphenated words) |
+| `<original_listing>` | `<released_slug>` | `<original_code>` | `<replacement>` |
+| --- | --- | --- | --- |
+| A listing called off during this release | Its original valid slug | Its reserved code | A complete draft for another available unit |
+| A listing called off before this release | Its original valid slug | Its reserved code | A complete draft for another available unit |
 
 **Steps:**
 
-1. Open the draft.
-2. Create the draft.
-3. Read the canceled listing's slug.
+1. Open `<replacement>`.
+2. Enter `<released_slug>` in the slug field.
+3. Leave the slug field.
+4. Click Save.
+5. Create the replacement.
+6. Open `<original_listing>` in Listings.
+7. Read its status and code.
+8. As `<original_bidder>`, open My Auctions.
+9. Read `<original_listing>`'s row and bid history.
+10. Open the public address for `<released_slug>`.
+11. Inspect its response and page.
 
 **Expected Results:**
 
-* Step 2 shows the draft as created.
-* Step 3 shows the canceled listing still without charizard-psa-9.
+* Step 3 reports no unavailable-slug error.
+* Step 4 saves `<released_slug>`.
+* Step 5 creates `<replacement>` without collision.
+* Step 7 shows canceled and `<original_code>`.
+* `<original_listing>` no longer holds `<released_slug>`.
+* The replacement's code differs from `<original_code>`.
+* Step 9 retains the original listing identity and accepted bid history.
+* The row says the original bidder's card was not charged.
+* The original row has no navigation to `<replacement>`.
+* Save/Create did not move history to the replacement.
+* Step 10 returns 404 while the created replacement is unpublished.
+* Step 11 shows Page not found with no original-lot data.
+* The canceled original is not publicly exposed by Save/Create.
 
 <!-- trace:case id=g10adm.auction-listing.TC-xtt rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC14-1: Create cannot reuse a closed listing's slug
@@ -1086,7 +1135,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1113,8 +1162,8 @@ Runs once per row of **Test data**.
 * Step 3 still shows the draft as a draft.
 * Step 4 still returns the closed listing.
 
-<!-- trace:case id=g10adm.auction-listing.TC-8u6 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
-### grade10-admin-auction-listing-US3-TC15-1: Operator corrects a created listing's starting price
+<!-- trace:case id=g10adm.auction-listing.TC-8u6 rev=2 -->
+### grade10-admin-auction-listing-US3-TC15-2: Operator corrects a created listing's starting price
 
 **Classification:**
 
@@ -1125,34 +1174,32 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* A created listing has starting price 100000 minor units HKD.
+* A created listing has starting price 100000 minor units USD.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Starting price | 150000 minor units (any whole amount of 0 or more, other than 100000) |
-| Currency | HKD |
+| `<new price>` | 150000 minor units (any whole amount of 0 or more, other than 100000) |
+| Currency | USD |
 
 **Steps:**
 
 1. Open that listing.
-2. Set the starting price to 150000 minor units.
+2. Set the starting price to `<new price>`.
 3. Save the listing.
 4. Read its starting price and status.
 
 **Expected Results:**
 
-* Step 4 shows 150000 minor units HKD.
+* Step 4 shows `<new price>` USD.
 * Step 4 still shows the listing as created.
 
 <!-- trace:case id=g10adm.auction-listing.TC-4sr rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
@@ -1171,7 +1218,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1235,9 +1282,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
 
 **Pre-conditions:**
 
@@ -1273,9 +1322,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
 
 **Pre-conditions:**
 
@@ -1300,10 +1351,8 @@ Runs once per row of **Test data**.
 * Step 1 creates the listing.
 * Step 2 reads 1800 seconds (30 minutes).
 
-<!-- trace:case id=g10adm.auction-listing.TC-h7v rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
-### grade10-admin-auction-listing-US3-TC21-1: Create accepts a starting price of 0 in each currency
-
-Runs once per row of **Test data**.
+<!-- trace:case id=g10adm.auction-listing.TC-h7v rev=2 -->
+### grade10-admin-auction-listing-US3-TC21-2: Create accepts a starting price of 0 in USD
 
 **Classification:**
 
@@ -1314,42 +1363,32 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** regression, release
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* <listing_4> is a draft in the row's currency with a title, a slug, a start, a close after both the start and now, one image, and the stock hold its draft took, and no starting price.
-
-**Test data:**
-
-| Currency | Starting price entered | Read-back before saving |
-| --- | --- | --- |
-| USD | 0 minor units | A formatted zero amount in USD, with USD's decimal places |
-| HKD | 0 minor units | A formatted zero amount in HKD, with HKD's decimal places |
-| JPY | 0 minor units | A formatted zero amount in JPY, with JPY's decimal places |
+* `<listing_4>` is a draft in USD with a title, a slug, a start, a close after both the start and now, one image, and the stock hold its draft took, and no starting price.
 
 **Steps:**
 
-1. Open <listing_4>.
-2. Enter the row's starting price.
+1. Open `<listing_4>`.
+2. Enter a starting price of 0.
 3. Read the starting price's formatted read-back.
 4. Create the listing.
-5. Reopen <listing_4>.
+5. Reopen `<listing_4>`.
 6. Read its starting price.
 
 **Expected Results:**
 
-* Step 3 shows the row's read-back, with no error on the field.
+* Step 3 shows a formatted zero amount in USD, with USD's decimal places, and no error on the field.
 * Step 4 shows the listing as created.
-* Step 6 reads 0 minor units in the row's currency.
+* Step 6 reads 0 minor units USD.
 
-<!-- trace:case id=g10adm.auction-listing.TC-fc7 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
-### grade10-admin-auction-listing-US3-TC22-1: API create refuses a negative or non-whole starting price
+<!-- trace:case id=g10adm.auction-listing.TC-fc7 rev=2 -->
+### grade10-admin-auction-listing-US3-TC22-2: API create refuses a negative or non-whole starting price
 
 Runs once per row of **Test data**.
 
@@ -1369,17 +1408,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_5>` is a draft in the row's currency with every create requirement set and starting price 0 minor units.
+* `<listing_5>` is a draft in USD with every create requirement set and starting price 0 minor units.
 
 **Test data:**
 
-| Currency | Starting price sent with create |
-| --- | --- |
-| USD | -1 minor unit |
-| HKD | -1 minor unit |
-| JPY | -1 minor unit |
-| HKD | 0.5 minor units |
-| JPY | 0.5 minor units |
+| Starting price sent with create |
+| --- |
+| -1 minor unit |
+| 0.5 minor units |
 
 **Steps:**
 
@@ -1390,7 +1426,7 @@ Runs once per row of **Test data**.
 
 * Step 1 is refused.
 * Step 2 reads the listing as a draft.
-* Step 2 reads starting price 0 minor units in the row's currency.
+* Step 2 reads starting price 0 minor units USD.
 
 <!-- trace:case id=g10adm.auction-listing.TC-1h5 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
 ### grade10-admin-auction-listing-US3-TC23-1: API create with no starting price is refused, not stored as 0
@@ -1406,9 +1442,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
 
 **Pre-conditions:**
 
@@ -1434,8 +1472,8 @@ Runs once per row of **Test data**.
 * Step 2 reads the listing as a draft.
 * Step 2 reads the starting price empty, not 0.
 
-<!-- trace:case id=g10adm.auction-listing.TC-ebb rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
-### grade10-admin-auction-listing-US3-TC24-1: Operator lowers a created listing's starting price to 0
+<!-- trace:case id=g10adm.auction-listing.TC-ebb rev=2 -->
+### grade10-admin-auction-listing-US3-TC24-2: Operator lowers a created listing's starting price to 0
 
 **Classification:**
 
@@ -1446,40 +1484,38 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
 
 **Pre-conditions:**
 
 * admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* <listing_7> is created and unpublished, currency JPY, starting price 1000000 minor units.
+* `<listing_7>` is created and unpublished, currency USD, starting price 1000000 minor units.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_7> | A created, unpublished listing, currency JPY, starting price 1000000 minor units (¥1,000,000) |
+| `<listing_7>` | A created, unpublished listing, currency USD, starting price 1000000 minor units (USD10,000) |
 | Starting price | 0 minor units |
 
 **Steps:**
 
-1. Open <listing_7>.
+1. Open `<listing_7>`.
 2. Set the starting price to 0.
 3. Save the listing.
-4. Reopen <listing_7>.
+4. Reopen `<listing_7>`.
 5. Read its starting price and status.
 
 **Expected Results:**
 
 * Step 3 saves.
-* Step 5 reads 0 minor units JPY.
+* Step 5 reads 0 minor units USD.
 * Step 5 reads the listing as created.
 
-<!-- trace:case id=g10adm.auction-listing.TC-g4v rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
-### grade10-admin-auction-listing-US3-TC25-1: API create with 0 and no currency creates as HKD 0
+<!-- trace:case id=g10adm.auction-listing.TC-g4v rev=2 covers=grade10-admin-auction-listing-SC-160 -->
+### grade10-admin-auction-listing-US3-TC25-2: API create with 0 and no currency creates as USD 0
 
 **Classification:**
 
@@ -1503,7 +1539,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| listing_10 | A draft, currency not chosen, starting price empty, every other create requirement set |
+| `<listing_10>` | A draft, currency not chosen, starting price empty, every other create requirement set |
 | Starting price | 0 minor units |
 
 **Steps:**
@@ -1515,17 +1551,120 @@ Runs once per row of **Test data**.
 
 * Step 1 is accepted.
 * Step 2 reads the listing as created.
-* Step 2 reads starting price 0 minor units HKD.
+* Step 2 reads starting price 0 minor units USD.
 
-<!-- trace:case id=g10adm.auction-listing.TC-m53 rev=1 covers=g10adm.auction-listing.SC-mmr -->
-### grade10-admin-auction-listing-US3-TC26-1: Currency change reformats the same minor-unit price
+<!-- trace:case id=g10adm.auction-listing.TC-ow9 rev=1 covers=g10adm.auction-listing.SC-bcv -->
+### grade10-admin-auction-listing-US3-TC27-1: Moving starts at into the past is refused
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A draft opens tomorrow.
+
+**Steps:**
+
+1. Open that draft.
+2. Set starts at to a time not after now.
+3. Save the draft.
+4. Reopen the draft and read its starts at.
+
+**Expected Results:**
+
+* Step 2 shows a refusal under Starts at before Save.
+* Step 3 refuses the save.
+* Step 4 still shows tomorrow's opening.
+
+<!-- trace:case id=g10adm.auction-listing.TC-d11 rev=1 covers=g10adm.auction-listing.SC-d7l -->
+### grade10-admin-auction-listing-US3-TC28-1: Moving scheduled close at into the past is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing closes next week.
+
+**Steps:**
+
+1. Open that listing.
+2. Set scheduled close at to a time not after now.
+3. Save the listing.
+4. Reopen the listing and read its close and status.
+
+**Expected Results:**
+
+* Step 2 shows a refusal under Close before Save.
+* Step 3 refuses the save.
+* Step 4 still shows next week's close and the listing as created.
+
+<!-- trace:case id=g10adm.auction-listing.TC-pqm rev=1 covers=g10adm.auction-listing.SC-s0s -->
+### grade10-admin-auction-listing-US3-TC29-1: A starts at left as stored saves after it passes
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
 * **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) holds an API session.
+* `<listing_1>` is a created listing whose stored starts at has passed.
+
+**Steps:**
+
+1. Save `<listing_1>` with a new title and its stored starts at, to the minute.
+2. Read `<listing_1>`.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 shows the new title and the same starts at.
+
+<!-- trace:case id=g10adm.auction-listing.TC-nsg rev=1 covers=g10adm.auction-listing.SC-17a -->
+### g10adm.auction-listing.US3-TC30: A draft may start from a Chinese title, but Create needs the English one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
@@ -1535,17 +1674,56 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
-* `<listing_13>` is a draft with every create requirement set except the starting price and currency.
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_7>` is a draft with every other field Create needs, a Traditional Chinese title and no English title.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| listing_13 | A draft with every create requirement set except starting price and currency |
-| Starting price | 20 minor units |
-| First currency | JPY |
-| Changed currency | HKD |
+| listing_7 | A draft with a product, quantity, starting price, slug, window, media and Traditional Chinese title `<traditional title>`, English title empty |
+| english title | Charizard PSA 10 |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+
+**Steps:**
+
+1. Open `<listing_7>`.
+2. Click Save.
+3. Reload `<listing_7>`.
+4. Click Create.
+5. Reload `<listing_7>`.
+6. Enter `<english title>` as the English title.
+7. Click Create.
+
+**Expected Results:**
+
+* Step 2 saves the draft with no English title.
+* Step 3 shows the Traditional Chinese title as entered and the English title empty.
+* Step 4 refuses Create and names the English title.
+* Step 5 shows `<listing_7>` still a draft.
+* Step 7 creates the listing.
+
+<!-- trace:case id=g10adm.auction-listing.TC-m53 rev=2 -->
+### grade10-admin-auction-listing-US3-TC26-2: Currency change reformats the same minor-unit price
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Deprecated:** the form offers no currency choice, so a currency change no longer exists to reformat a price.
+
+**Pre-conditions:**
+
+* `<listing_13>` is a draft with every create requirement set except the starting price and currency.
 
 **Steps:**
 
@@ -1555,15 +1733,10 @@ Runs once per row of **Test data**.
 4. Read the formatted starting price.
 5. Select HKD.
 6. Read the formatted starting price.
-7. Create the listing.
-8. Reopen `<listing_13>`.
 
 **Expected Results:**
 
-* Step 4 reads JPY 20.
-* Step 6 reads HKD 0.20.
-* Step 7 shows the listing as created.
-* Step 8 reads a starting price of 20 minor units HKD.
+* No currency can be selected: the form offers no currency choice.
 
 ---
 
@@ -1589,7 +1762,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1623,7 +1796,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1658,7 +1831,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1694,7 +1867,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1730,7 +1903,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1774,7 +1947,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1814,7 +1987,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1854,7 +2027,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1888,7 +2061,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1924,7 +2097,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1958,7 +2131,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1992,7 +2165,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2026,7 +2199,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2058,7 +2231,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2099,7 +2272,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2126,6 +2299,263 @@ Runs once per row of **Test data**.
 * Step 3 is refused.
 * Step 5 reads 100000 minor units HKD.
 
+<!-- trace:case id=g10adm.auction-listing.TC-mwk rev=1 covers=g10adm.auction-listing.SC-ow2 -->
+### grade10-admin-auction-listing-US4-TC16-1: A publish at after starts at is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing opens on 2030-01-10 at 10:00.
+
+**Steps:**
+
+1. Open that listing.
+2. Set publish at to 2030-01-10 11:00.
+3. Save the listing.
+4. Reopen the listing and read its publish at.
+
+**Expected Results:**
+
+* Step 2 shows a refusal under Publish at before Save.
+* Step 3 refuses the save.
+* Step 4 shows no publish at.
+
+<!-- trace:case id=g10adm.auction-listing.TC-pc6 rev=1 covers=g10adm.auction-listing.SC-ji9 -->
+### grade10-admin-auction-listing-US4-TC17-1: A publish at equal to starts at is accepted
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) holds an API session.
+* `<listing_1>` is a created listing that opens on 2030-01-10 at 10:00.
+
+**Steps:**
+
+1. Set publish at on `<listing_1>` to 2030-01-10 10:00.
+2. Read `<listing_1>`.
+
+**Expected Results:**
+
+* Step 1 is accepted.
+* Step 2 shows publish at 2030-01-10 10:00 and the listing as created.
+
+<!-- trace:case id=g10adm.auction-listing.TC-dcp rev=1 covers=g10adm.auction-listing.SC-i7s -->
+### grade10-admin-auction-listing-US4-TC18-1: Publish now on a scheduled listing asks first and clears publish at
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has a publish at in the future.
+
+**Steps:**
+
+1. Select that listing and press Publish.
+2. Read the confirmation.
+3. Confirm.
+4. Read the listing's status and publish at.
+
+**Expected Results:**
+
+* Step 2 names the scheduled time and says publishing now removes it.
+* Step 4 shows the listing as published with no publish at.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rw9 rev=1 covers=g10adm.auction-listing.SC-2mk -->
+### grade10-admin-auction-listing-US4-TC19-1: Publish now without publish at publishes after starts at passed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has no publish at, its opening has passed and its close is in the future.
+
+**Steps:**
+
+1. Select that listing and press Publish.
+2. Read the listing's status.
+
+**Expected Results:**
+
+* Step 1 asks for no confirmation.
+* Step 2 shows the listing as published.
+
+<!-- trace:case id=g10adm.auction-listing.TC-705 rev=1 covers=g10adm.auction-listing.SC-npx -->
+### grade10-admin-auction-listing-US4-TC20-1: A scheduled created listing names what its publish still needs
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin listings url>.
+* A created listing has a publish at in the future.
+
+**Steps:**
+
+1. Open that listing.
+2. Empty its title.
+3. Read the message under Publish at.
+
+**Expected Results:**
+
+* Step 3 names title as a field the publish still needs.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rlf rev=1 covers=g10adm.auction-listing.SC-359 -->
+### g10adm.auction-listing.US4-TC21: Shared address is not found between Relist Save and Publish
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, it has never been relisted, and it holds `<shared_slug>`.
+* A Relist Save from `<unsold_source>` has stored `<successor>` with `<shared_slug>`.
+* customer A is on `<g10 site url>` in a second session.
+
+**Test data:**
+
+| `<successor>` state after Relist Save |
+| --- |
+| Draft, unpublished |
+| Created, unpublished |
+
+**Steps:**
+
+1. Bring `<successor>` to the row's state after Relist Save, keeping `<shared_slug>`.
+2. As customer A, open `/auction/listings/<shared_slug>`.
+3. Read the response and page.
+4. Open `<unsold_source>` in admin and confirm it no longer holds `<shared_slug>`.
+
+**Expected Results:**
+
+* Step 2 is not found.
+* Step 3 shows Page not found with no Unsold-lot data from `<unsold_source>` and no successor catalogue card.
+* Step 4 shows `<unsold_source>` without `<shared_slug>`.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rlx rev=1 covers=g10adm.auction-listing.SC-fde -->
+### g10adm.auction-listing.US4-TC22: Shared address opens the Relist successor after Publish
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-04
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, it has never been relisted, and it holds `<shared_slug>` and `<source_code>` before Relist.
+* customer A is on `<g10 site url>` in a second session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing outside a campaign, stock released, never relisted |
+| `<shared_slug>` | The canonical slug `<unsold_source>` holds before Relist |
+| `<source_code>` | The listing code of `<unsold_source>` |
+
+**Steps:**
+
+1. Click Relist on `<unsold_source>`'s row.
+2. Save the Relist draft with `<shared_slug>` unchanged.
+3. Create the successor if Create still needs a step, then Publish now.
+4. As customer A, open `/auction/listings/<shared_slug>`.
+5. Read the lot page's identity against the successor's listing code.
+6. Confirm `<unsold_source>` still shows `<source_code>` and no longer answers at `<shared_slug>`.
+
+**Expected Results:**
+
+* Step 4 opens the published successor.
+* Step 5 shows the successor's listing code, not `<source_code>`.
+* Step 6 leaves `<unsold_source>` closed Unsold under `<source_code>` with no public answer at `<shared_slug>`.
+* No second address or redirect is required to reach the successor.
+
 ---
 
 ## grade10-admin-auction-listing-US5: Operator calls a listing off before it closes
@@ -2150,7 +2580,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2184,7 +2614,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2221,7 +2651,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2259,7 +2689,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2293,7 +2723,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2327,7 +2757,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2345,8 +2775,8 @@ Runs once per row of **Test data**.
 * Step 2 refuses the cancel.
 * Step 3 still shows the listing as canceled.
 
-<!-- trace:case id=g10adm.auction-listing.TC-z2r rev=2 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
-### grade10-admin-auction-listing-US5-TC7-2: Cancel preserves the canonical slug and its public page
+<!-- trace:case id=g10adm.auction-listing.TC-z2r rev=4 covers=g10adm.auction-listing.SC-xck,g10adm.auction-listing.SC-ysx -->
+### grade10-admin-auction-listing-US5-TC7-4: Call off releases the original slug for saving
 
 **Classification:**
 
@@ -2366,6 +2796,8 @@ Runs once per row of **Test data**.
 * admin(holds the grant to call off listings) is on `<grade10 auction admin listings url>`.
 * `<cancel_slug_listing>` is published, has not closed, and holds `<reserved_slug>`.
 * `<reuse_slug_draft>` is a separate editable draft with a different saved slug.
+* `<original_bidder>` has recorded accepted bids on `<cancel_slug_listing>`.
+* `<original_code>` and the original account history were recorded before call off.
 
 **Test data:**
 
@@ -2377,17 +2809,30 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open `<cancel_slug_listing>` and call it off.
-2. Reopen the listing and read its slug.
-3. Open `<grade10 auction url>/listings/<reserved_slug>`.
-4. Open `<reuse_slug_draft>` from Listings.
-5. Enter `<reserved_slug>` in its slug field and click Save.
+1. Open `<cancel_slug_listing>`.
+2. Call it off.
+3. Open `<reuse_slug_draft>` from Listings.
+4. Enter `<reserved_slug>` in its slug field.
+5. Leave the slug field.
+6. Click Save.
+7. Open the original public address for `<reserved_slug>`.
+8. Search the auction catalogue for the original listing title.
+9. Reopen `<cancel_slug_listing>` in admin.
+10. As `<original_bidder>`, open My Auctions.
+11. Read the original listing's row and bid history.
 
 **Expected Results:**
 
-* Step 2 shows `<reserved_slug>` unchanged.
-* Step 3 still opens the called-off listing's public page.
-* Step 5 refuses reuse of `<reserved_slug>`.
+* Step 2 shows `<cancel_slug_listing>` as canceled.
+* Step 5 reports no unavailable-slug error.
+* Step 6 saves `<reserved_slug>` on `<reuse_slug_draft>`.
+* Step 7 returns 404 with Page not found, never the canceled lot.
+* Step 8 finds no canceled lot in browse or search.
+* Step 9 shows canceled with `<original_code>` unchanged and reserved.
+* Step 11 retains the original listing and accepted bid history.
+* The row says the card was not charged.
+* The original account row has no link to the new holder.
+* `<cancel_slug_listing>` stays canceled.
 
 <!-- trace:case id=g10adm.auction-listing.TC-uyd rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC8-1: Cancel of a draft with no slug does not invent one
@@ -2405,7 +2850,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2439,7 +2884,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2474,7 +2919,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2508,7 +2953,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2551,7 +2996,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2581,7 +3026,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2613,7 +3058,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2657,7 +3102,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2689,7 +3134,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2726,9 +3171,11 @@ surface for the same figure.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2761,7 +3208,7 @@ surface for the same figure.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2793,7 +3240,7 @@ surface for the same figure.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2825,7 +3272,7 @@ surface for the same figure.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2844,8 +3291,8 @@ surface for the same figure.
 ## grade10-admin-auction-listing-US9: Operator lists an unsold lot again
 
 **As an** auction operator,
-**I want** the stock of a listing that closed with no winner to come back on its own, and a Relist on that listing,
-**so that** a card nobody bought goes back on sale without me hunting for its stock.
+**I want** the stock of a listing that closed with no winner to come back on its own, and a Relist on that listing that keeps the lot's public address,
+**so that** a card nobody bought goes back on sale without me hunting for its stock, and a shared link still opens the live lot.
 
 <!-- trace:case id=g10adm.auction-listing.TC-tjt rev=2 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC1-2: Unsold close releases the hold with no operator step
@@ -2954,8 +3401,8 @@ Runs once per row of **Test data**.
 * Step 3 shows no released-stock note.
 * Step 4 reads the row's stock outcome.
 
-<!-- trace:case id=g10adm.auction-listing.TC-xzh rev=2 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
-### grade10-admin-auction-listing-US9-TC3-2: Relist from the row opens a new draft holding stock on Save
+<!-- trace:case id=g10adm.auction-listing.TC-xzh rev=3 -->
+### grade10-admin-auction-listing-US9-TC3-3: Relist from the row opens a new draft holding stock on Save
 
 **Classification:**
 
@@ -2981,10 +3428,10 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An Unsold listing for `<product_3>` with `No Cert ID`, quantity `<quantity>`, a title, copy, starting price `<price>`, currency JPY, a gallery of three items, slug `<slug_3>`, listing code `<code_3>`, extension 600 seconds, a taxonomy category, a start and close, and a history |
+| `<listing_3>` | An Unsold listing for `<product_3>` with `No Cert ID`, quantity `<quantity>`, a title, copy, starting price `<price>`, currency USD, a gallery of three items, slug `<slug_3>`, listing code `<code_3>`, extension 600 seconds, a taxonomy category, a start and close, and a history |
 | `<product_3>` | The product `<listing_3>` sold nothing of, regular stock without Cert IDs |
 | `<quantity>` | 2 units (any quantity from 1 to 500) |
-| `<price>` | JPY 8000 (any positive whole amount) |
+| `<price>` | USD80 (any positive whole amount) |
 | `<available before>` | 5 units (at least `<quantity>`) |
 | `<available after Save>` | 3 units: `<available before>` minus `<quantity>` |
 
@@ -3004,7 +3451,7 @@ Runs once per row of **Test data**.
 
 * Step 2 shows a new draft, not `<listing_3>`.
 * Step 2: product `<product_3>`, `No Cert ID`, quantity `<quantity>`, and `<listing_3>`'s title and copy.
-* Step 2: starting price `<price>`, currency JPY, the same gallery in the same order.
+* Step 2: starting price `<price>`, currency USD, the same gallery in the same order.
 * Step 2: no start or close, no campaign, no bids, no history.
 * Step 2: extension, taxonomy and sandbox read as on a new blank draft.
 * Step 3 still reads `<available before>`.
@@ -3315,6 +3762,287 @@ Runs once per row of **Test data**.
 * Step 9 shows one new draft relisted from <listing_12>, and <listing_12>'s row offers no Relist.
 * Step 10 reads <available after>.
 
+<!-- trace:case id=g10adm.auction-listing.TC-icj rev=1 -->
+### g10adm.auction-listing.US9-TC10: Relist opens a draft carrying every written language
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-09
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_16>` closed Unsold, its stock is released and it holds `<texts written>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_16 | A listing that closed Unsold with English title `<english title>`, English description `<english description>` and `<texts written>` |
+| english title | Charizard PSA 10 |
+| english description | 1999 Base Set, clean front. |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| traditional description | 1999 年基本系列，正面無瑕。 |
+| simplified title | 宝可梦 喷火龙 PSA 10 |
+| simplified description | 1999 年基本系列，正面无瑕。 |
+
+| texts written |
+| --- |
+| English, Traditional Chinese and Simplified Chinese, title and description |
+| English and Traditional Chinese only |
+
+**Steps:**
+
+1. Click Relist on the row of `<listing_16>`.
+2. Read the title and description of each language on the new draft.
+3. Click Save.
+4. Reload the new draft.
+5. Read the title and description of each language.
+6. Open `<listing_16>` and read its texts.
+
+**Expected Results:**
+
+* Step 2 shows each text `<listing_16>` holds, in its own language.
+* Step 2 shows each language `<listing_16>` left empty still empty.
+* Step 5 shows the same texts as step 2.
+* Step 6 shows `<listing_16>` unchanged.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rls rev=1 -->
+### g10adm.auction-listing.US9-TC11: Relist editor prefills the source slug
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-09
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, it has never been relisted, and it holds `<shared_slug>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing outside a campaign, stock released, never relisted |
+| `<shared_slug>` | The canonical slug `<unsold_source>` holds |
+
+**Steps:**
+
+1. Click Relist on `<unsold_source>`'s row.
+2. Read the Slug field on the new draft before Save.
+3. Leave the editor without saving.
+4. Confirm `<unsold_source>` still holds `<shared_slug>`.
+
+**Expected Results:**
+
+* Step 2 shows `<shared_slug>` filled in.
+* Step 2 does not show a new title-and-code slug built from a fresh listing code.
+* Step 4 leaves `<unsold_source>` unchanged; nothing was stored.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rlt rev=1 covers=g10adm.auction-listing.SC-ace,g10adm.auction-listing.SC-eaf,g10adm.auction-listing.SC-c83 -->
+### g10adm.auction-listing.US9-TC12: Relist Save transfers the source slug, keeps a distinct listing code, and records activity on both
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-09
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, it has never been relisted, and it holds `<shared_slug>`, `<source_code>` and English title `<source_title>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing outside a campaign, stock released, never relisted |
+| `<shared_slug>` | The canonical slug `<unsold_source>` holds before Relist |
+| `<source_code>` | The listing code of `<unsold_source>` |
+| `<source_title>` | The English title of `<unsold_source>` |
+
+**Steps:**
+
+1. Click Relist on `<unsold_source>`'s row.
+2. Confirm Slug shows `<shared_slug>`.
+3. Click Save.
+4. Read the new draft's slug, listing code and English title.
+5. Open `<unsold_source>` and read its slug and listing code.
+6. Read activity on `<unsold_source>`.
+7. Read activity on the new draft.
+
+**Expected Results:**
+
+* Step 3 saves the Relist draft.
+* Step 4 shows slug `<shared_slug>`, a listing code other than `<source_code>`, and English title `<source_title>` (not a title-and-new-code slug).
+* Step 5 shows `<source_code>` still, with no slug held.
+* Step 6 holds an activity entry that names `<shared_slug>` and the new draft by its listing code and English title.
+* Step 7 holds an activity entry that names `<shared_slug>` and `<unsold_source>` by `<source_code>` and `<source_title>`.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rlc rev=1 covers=g10adm.auction-listing.SC-d22 -->
+### g10adm.auction-listing.US9-TC13: Relist Save stores a replaced slug and frees the source address
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-09
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, it has never been relisted, and it holds `<shared_slug>` and `<source_code>`.
+* `<replacement_slug>` is a valid unused slug different from `<shared_slug>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing outside a campaign, stock released, never relisted |
+| `<shared_slug>` | The canonical slug `<unsold_source>` holds before Relist |
+| `<source_code>` | The listing code of `<unsold_source>` |
+| `<replacement_slug>` | A valid unused slug different from `<shared_slug>` |
+
+**Steps:**
+
+1. Click Relist on `<unsold_source>`'s row.
+2. Replace the Slug field with `<replacement_slug>`.
+3. Click Save.
+4. Read the new draft's slug and listing code.
+5. Open `<unsold_source>` and read its slug.
+6. Open a separate editable draft and enter `<shared_slug>` in Slug, then leave the field.
+
+**Expected Results:**
+
+* Step 3 saves the Relist draft.
+* Step 4 shows `<replacement_slug>` and a listing code other than `<source_code>`.
+* Step 5 shows `<unsold_source>` holding no slug.
+* Step 6 reports no unavailable-slug error for `<shared_slug>`.
+
+<!-- trace:case id=g10adm.auction-listing.TC-u8m rev=1 covers=g10adm.auction-listing.SC-ib3 -->
+### g10adm.auction-listing.US9-TC14: Clearing the Relist slug stores a generated address and frees the source
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-09
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, it has never been relisted, and it holds `<shared_slug>`, `<source_code>` and English title `<source_title>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing outside a campaign, stock released, never relisted |
+| `<shared_slug>` | The canonical slug `<unsold_source>` holds before Relist |
+| `<source_code>` | The listing code of `<unsold_source>` |
+| `<source_title>` | The English title of `<unsold_source>` |
+
+**Steps:**
+
+1. Click Relist on `<unsold_source>`'s row.
+2. Confirm Slug shows `<shared_slug>`.
+3. Clear the Slug field.
+4. Click Save.
+5. Read the new draft's slug and listing code.
+6. Open `<unsold_source>` and read its slug.
+7. Open a separate editable draft and enter `<shared_slug>` in Slug, then leave the field.
+
+**Expected Results:**
+
+* Step 4 saves the Relist draft.
+* Step 5 shows a title-and-code slug built from `<source_title>` and the new draft's listing code, not `<shared_slug>`.
+* Step 5 shows a listing code other than `<source_code>`.
+* Step 6 shows `<unsold_source>` holding no slug.
+* Step 7 reports no unavailable-slug error for `<shared_slug>`.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rlb rev=1 covers=g10adm.auction-listing.SC-rlb -->
+### g10adm.auction-listing.US9-TC15: Relisted badge on the Unsold source after Relist Save
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-09
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, and Relist Save has already stored a successor draft from it.
+* `<other_unsold>` closed Unsold, never Relisted.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing whose Relist was saved |
+| `<other_unsold>` | An Unsold listing that has never been Relisted |
+
+**Steps:**
+
+1. Open `<unsold_source>`'s listing detail page.
+2. Return to the Listings table and find `<unsold_source>`'s row.
+3. Find `<other_unsold>`'s row.
+
+**Expected Results:**
+
+* Step 1 shows Relisted beside Unsold in the detail header.
+* Step 2 shows Relisted beside Unsold in the Status column.
+* Step 3 shows Unsold without Relisted.
+
 ---
 
 ## grade10-admin-auction-listing-US11: Operator starts a Cert-specific listing with its usual media
@@ -3340,6 +4068,8 @@ document the unit I selected.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3425,6 +4155,8 @@ document the unit I selected.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
@@ -3466,6 +4198,8 @@ selected unit's normal media.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3509,6 +4243,8 @@ selected unit's normal media.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
@@ -3551,7 +4287,7 @@ selected unit's normal media.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3594,6 +4330,8 @@ copy's photographs apply.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-13
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3645,6 +4383,8 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
@@ -3686,7 +4426,7 @@ changes later.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3727,6 +4467,8 @@ changes later.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3773,6 +4515,8 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Inventory operator with existing Inventory media-management authority) is on <grade10 Inventory media manager url>.
@@ -3814,6 +4558,8 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Inventory operator with existing Inventory media-management authority) is on <grade10 Inventory media manager url>.
@@ -3852,6 +4598,8 @@ changes later.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3896,6 +4644,8 @@ changes later.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
+
 **Pre-conditions:**
 
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
@@ -3933,6 +4683,8 @@ changes later.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3973,7 +4725,7 @@ changes later.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4013,6 +4765,8 @@ changes later.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4346,8 +5100,8 @@ changes later.
 * `LK423` remains unavailable.
 * The later listing receives a different code.
 
-<!-- trace:case id=g10adm.auction-listing.TC-1jo rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
-### grade10-admin-auction-listing-US72-TC11-1: Cancel preserves the canonical URL and does not release it
+<!-- trace:case id=g10adm.auction-listing.TC-1jo rev=3 -->
+### grade10-admin-auction-listing-US72-TC11-3: Call off keeps its code after address reuse
 
 **Classification:**
 
@@ -4364,21 +5118,35 @@ changes later.
 
 **Pre-conditions:**
 
-* A published listing has canonical URL `<listing_url>` and code `<listing_code>`.
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<called_off_listing>` was published with `<original_slug>` and `<listing_code>`, then called off.
+* `<later_listing>` is a complete editable draft with a different saved slug.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| called_off_listing | A called-off listing retained in admin |
+| original_slug | Its former public slug |
+| listing_code | Its permanent allocated code |
+| later_listing | A draft for a separate available inventory unit |
 
 **Steps:**
 
-1. Call the listing off.
-2. Open `<listing_url>` directly.
-3. Search for the listing in browse and search.
-4. Attempt to create another listing with the same canonical URL.
+1. Open `<later_listing>`.
+2. Enter `<original_slug>` in its slug field.
+3. Click Save.
+4. Create `<later_listing>`.
+5. Read its listing code.
+6. Open `<called_off_listing>`.
+7. Read its listing code.
 
 **Expected Results:**
 
-* `<listing_url>` still serves the called-off listing's public page.
-* The listing is absent from browse and search.
-* The canonical URL and `<listing_code>` remain permanently reserved.
-* A later listing cannot claim `<listing_url>`.
+* Step 3 saves the released slug on `<later_listing>`.
+* Step 5 shows a code different from `<listing_code>`.
+* Step 7 still shows `<listing_code>`.
+* `<called_off_listing>` stays canceled.
 
 ---
 
@@ -4400,9 +5168,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4430,9 +5200,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4458,9 +5230,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4488,9 +5262,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4517,9 +5293,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4549,9 +5327,11 @@ changes later.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/draft.spec.ts`
 
 **Pre-conditions:**
 
@@ -4567,6 +5347,1338 @@ changes later.
 * Save is refused with an unavailable-slug result.
 * The draft's stored slug remains unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-wrn rev=2 covers=g10adm.auction-listing.SC-ejg -->
+### grade10-admin-auction-listing-US73-TC7-2: Competing reuse saves leave only one slug holder
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* admin A and admin B hold auction:operate in separate sessions.
+* A called-off listing has released `<original_slug>`.
+* `<draft_a>` and `<draft_b>` are saved complete drafts with different slugs.
+* Each admin is editing one draft, before either Save occurs.
+* Both Save actions can be submitted concurrently in the two independent contexts.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| original_slug | The called-off listing's original valid slug |
+| draft_a and draft_b | Complete drafts for separate available units, with different titles |
+
+**Steps:**
+
+1. In both contexts, enter `<original_slug>`.
+2. In both contexts, leave the slug field.
+3. Submit both Save actions concurrently, without awaiting either response.
+4. Read both Save results.
+5. Reopen both drafts.
+6. Create the draft whose Save succeeded.
+7. Publish that draft.
+8. Open the address for `<original_slug>`.
+
+**Expected Results:**
+
+* Step 2 reports the released slug available in both contexts.
+* Step 4 contains exactly one successful Save and one unavailable-slug refusal.
+* Either draft can succeed; exactly one holds `<original_slug>`.
+* Step 5 keeps the refused draft's original saved slug unchanged.
+* The called-off listing stays canceled with its original code.
+* Step 8 returns the successful holder only.
+* It returns neither the refused draft nor the called-off listing.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rlv rev=1 covers=g10adm.auction-listing.SC-c90 -->
+### g10adm.auction-listing.US73-TC8: Leaving Slug on a Relist draft treats the Unsold source address as available
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, it has never been relisted, and it still holds `<shared_slug>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing outside a campaign, stock released, never relisted, still holding `<shared_slug>` |
+| `<shared_slug>` | The canonical slug `<unsold_source>` holds |
+
+**Steps:**
+
+1. Click Relist on `<unsold_source>`'s row.
+2. Confirm Slug shows `<shared_slug>`.
+3. Leave the Slug field.
+4. Read the field-exit availability result.
+5. Confirm `<unsold_source>` still holds `<shared_slug>` because Save has not run.
+
+**Expected Results:**
+
+* Step 4 reports `<shared_slug>` available to this Relist draft.
+* Step 4 does not name a collision with `<unsold_source>`.
+* Step 5 leaves `<unsold_source>` holding `<shared_slug>` until Save.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rl9 rev=1 -->
+### g10adm.auction-listing.US73-TC9: Leaving Slug still reports a collision for another retained Unsold address
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, it has never been relisted, and it holds `<shared_slug>`.
+* `<other_unsold>` is a different Unsold listing that still holds `<other_slug>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing outside a campaign, stock released, never relisted |
+| `<shared_slug>` | The canonical slug `<unsold_source>` holds |
+| `<other_unsold>` | A different Unsold listing that still holds its slug |
+| `<other_slug>` | The canonical slug `<other_unsold>` holds |
+
+**Steps:**
+
+1. Click Relist on `<unsold_source>`'s row.
+2. Replace the Slug field with `<other_slug>`.
+3. Leave the Slug field.
+4. Read the field-exit availability result.
+5. Click Save.
+
+**Expected Results:**
+
+* Step 4 names a collision for `<other_slug>`.
+* Step 5 is refused while `<other_slug>` remains held by `<other_unsold>`.
+* The Relist exception applies only to `<unsold_source>`'s current slug, not to `<other_unsold>`.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rlw rev=1 covers=g10adm.auction-listing.SC-8b7 -->
+### g10adm.auction-listing.US73-TC10: After Relist Save a second draft cannot take the transferred slug while the Relist draft still holds it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<relist_draft>` was saved from Relist on `<unsold_source>` and still holds `<shared_slug>`.
+* `<unsold_source>` no longer holds `<shared_slug>`.
+* `<other_draft>` is an unrelated draft with no slug yet.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing that Relist Save already freed of `<shared_slug>` |
+| `<relist_draft>` | The Relist draft that still holds `<shared_slug>` |
+| `<other_draft>` | An unrelated draft with no slug yet |
+| `<shared_slug>` | `umbreon-v-alt` |
+| `<other_slug>` | A different available slug for `<relist_draft>` |
+
+**Steps:**
+
+1. On `<other_draft>`, set Slug to `<shared_slug>` and Save.
+2. Confirm Save is refused because `<relist_draft>` holds `<shared_slug>`, and `<unsold_source>` still does not hold it.
+3. On `<relist_draft>`, replace Slug with `<other_slug>` and Save.
+4. On `<other_draft>`, set Slug to `<shared_slug>` and Save.
+5. Confirm Save is accepted and `<unsold_source>` still does not hold `<shared_slug>`.
+
+**Expected Results:**
+
+* Step 1–2 refuse `<other_draft>` while `<relist_draft>` holds `<shared_slug>`.
+* Step 3 stores `<other_slug>` on `<relist_draft>`.
+* Step 4–5 accept `<shared_slug>` on `<other_draft>`; `<unsold_source>` never reserves it again.
+
+---
+
+## g10adm.auction-listing.US74: Operator prices a listing in USD
+
+**As a** auction operator,
+**I want** a listing to price in USD with no other currency to choose,
+**so that** I do not guess a currency for a lot every collector bids on in one unit.
+
+<!-- trace:case id=g10adm.auction-listing.TC-htj rev=1 covers=grade10-admin-auction-listing-SC-159 -->
+### g10adm.auction-listing.US74-TC1: The listing form offers no currency and a created listing reads USD
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-74
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) is on <grade10 auction admin listings url>.
+* `<listing_20>` is a new blank draft with a title.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_20>` | A new draft with a title and no currency chosen |
+| Starting price | 500 minor units (USD5.00; any whole amount of 0 or more) |
+
+**Steps:**
+
+1. Open `<listing_20>`.
+2. Look for a currency control beside the starting price.
+3. Enter a starting price of 500 minor units.
+4. Save the draft.
+5. Reopen `<listing_20>`.
+6. Read its starting price.
+
+**Expected Results:**
+
+* Step 2: no currency control is offered.
+* Step 4: the draft saves.
+* Step 6 reads 500 minor units USD.
+
+<!-- trace:case id=g10adm.auction-listing.TC-e4m rev=1 covers=grade10-admin-auction-listing-SC-164 -->
+### g10adm.auction-listing.US74-TC2: A draft refuses any currency other than USD
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-74
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) holds an API session.
+* `<listing_21>` is a draft in USD with starting price 100000 minor units.
+
+**Test data:**
+
+| Currency sent | Why this row |
+| --- | --- |
+| HKD | A retired listing currency |
+| JPY | A retired listing currency |
+| EUR | A currency the store never held, standing for any other |
+
+**Steps:**
+
+1. Send a draft save for `<listing_21>` with the row's currency.
+2. Read the API response for `<listing_21>`.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 2 reads currency USD and starting price 100000 minor units, unchanged.
+
+<!-- trace:case id=g10adm.auction-listing.TC-lej rev=2 covers=grade10-admin-auction-listing-SC-165,g10adm.auction-listing.SC-h88 -->
+### g10adm.auction-listing.US74-TC3: Create refuses any currency other than USD
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-74
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) holds an API session.
+* `<listing_22>` is a draft in USD with every create requirement set.
+
+**Test data:**
+
+| Currency sent | Why this row |
+| --- | --- |
+| HKD | A retired listing currency |
+| JPY | A retired listing currency |
+| EUR | A complete draft with an unsupported currency, as in the EUR create refusal |
+
+**Steps:**
+
+1. Send create for `<listing_22>` with the row's currency.
+2. Read the API response for `<listing_22>`.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 2 reads the listing as a draft in USD, not created.
+* For the EUR row, the API refuses create and the complete draft remains a draft.
+
+<!-- trace:case id=g10adm.auction-listing.TC-ctn rev=1 covers=grade10-admin-auction-listing-SC-161 -->
+### g10adm.auction-listing.US74-TC4: An update of a created listing refuses any currency other than USD
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-74
+
+**Pre-conditions:**
+
+* admin(holds the grant to set an auction's prices and window) holds an API session.
+* `<listing_23>` is a created listing in USD with starting price 100000 minor units.
+
+**Test data:**
+
+| Currency sent | Why this row |
+| --- | --- |
+| HKD | A retired listing currency |
+| JPY | A retired listing currency |
+
+**Steps:**
+
+1. Send an update for `<listing_23>` with the row's currency.
+2. Read the API response for `<listing_23>`.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 2 reads currency USD, starting price 100000 minor units and the listing still created.
+
+<!-- trace:case id=g10adm.auction-listing.TC-mig rev=1 covers=grade10-admin-auction-listing-SC-162 -->
+### g10adm.auction-listing.US74-TC5: Earlier HKD and JPY listings keep their amounts and history when converted to USD
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-74
+
+**Pre-conditions:**
+
+* Before migration, `<listing_24>` has the row's currency, starting price, bid records and listing history shown in **Test data**.
+* The migration has run.
+* admin(holds the grant to read auction listings) holds an API session.
+
+**Test data:**
+
+| Original currency | Starting price before migration | Bid and history records before migration |
+| --- | --- | --- |
+| HKD | 400000 minor units | Bid A: 500000 minor units; history: created, published, bid A recorded |
+| JPY | 400000 minor units | Bid A: 500000 minor units; history: created, published, bid A recorded |
+
+**Steps:**
+
+1. Read `<listing_24>` and its price and history after migration.
+
+**Expected Results:**
+
+* The listing currency reads USD.
+* The starting price remains 400000 minor units, Bid A remains 500000 minor units, and the history still contains created, published and bid A recorded, with no amount conversion or other entry change.
+
+---
+
+## g10adm.auction-listing.US75: Operator writes a listing's title and description in each language
+
+**As an** auction operator,
+**I want** to enter a listing's title and description in Traditional and Simplified Chinese beside the English,
+**so that** collectors who browse in those languages read the lot in their own.
+
+<!-- trace:case id=g10adm.auction-listing.TC-oxb rev=1 covers=g10adm.auction-listing.SC-eo6 -->
+### g10adm.auction-listing.US75-TC1: Operator writes all three languages on a listing and reads them back
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_1>` is a draft with a product, quantity, starting price and media, and an English title only.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_1 | A draft in USD whose English title is `<english title>` |
+| english title | Charizard PSA 10 |
+| english description | 1999 Base Set, clean front. |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| traditional description | 1999 年基本系列，正面無瑕。 |
+| simplified title | 宝可梦 喷火龙 PSA 10 |
+| simplified description | 1999 年基本系列，正面无瑕。 |
+
+**Steps:**
+
+1. Open `<listing_1>` from Listings.
+2. Enter `<english description>` as the English description.
+3. Enter `<traditional title>` and `<traditional description>` as the Traditional Chinese title and description.
+4. Enter `<simplified title>` and `<simplified description>` as the Simplified Chinese title and description.
+5. Click Save.
+6. Reload `<listing_1>`.
+7. Read the title and description of each language on the form.
+
+**Expected Results:**
+
+* Step 5 saves the draft.
+* Step 7 shows the English title and description as entered.
+* Step 7 shows the Traditional Chinese title and description as entered.
+* Step 7 shows the Simplified Chinese title and description as entered.
+
+<!-- trace:case id=g10adm.auction-listing.TC-foq rev=1 covers=g10adm.auction-listing.SC-ze7 -->
+### g10adm.auction-listing.US75-TC2: English alone is enough to create a listing
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_2>` is a draft with every field Create needs and an English title, and no Traditional or Simplified Chinese text.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_2 | A draft in USD with an English title, a product, quantity, starting price, slug, window and media |
+
+**Steps:**
+
+1. Open `<listing_2>` from Listings.
+2. Click Create.
+3. Reload `<listing_2>`.
+4. Read the title and description of each language on the form.
+
+**Expected Results:**
+
+* Step 2 creates the listing.
+* Step 4 shows the English title as entered.
+* Step 4 shows the Traditional Chinese title and description empty.
+* Step 4 shows the Simplified Chinese title and description empty.
+
+<!-- trace:case id=g10adm.auction-listing.TC-i3w rev=1 -->
+### g10adm.auction-listing.US75-TC3: Translation at the length limits is accepted
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_1>` is a draft with an English title and no Traditional or Simplified Chinese text.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_1 | A draft in USD whose English title is `<english title>` |
+| english title | Charizard PSA 10 |
+
+| language | title text | description text |
+| --- | --- | --- |
+| Traditional Chinese | 200 Chinese characters (the title limit) | 4000 characters (the description limit) |
+| Simplified Chinese | 1 Chinese character (the lower bound) | 1 character (any text under the limit) |
+
+**Steps:**
+
+1. Open `<listing_1>`.
+2. Enter `<title text>` as the title and `<description text>` as the description of `<language>`.
+3. Click Save.
+4. Reload `<listing_1>`.
+5. Read the title and description of `<language>`.
+
+**Expected Results:**
+
+* Step 3 saves the draft.
+* Step 5 shows `<title text>` with every character kept.
+* Step 5 shows `<description text>` with every character kept.
+
+<!-- trace:case id=g10adm.auction-listing.TC-56j rev=1 -->
+### g10adm.auction-listing.US75-TC4: Translation beyond the length limits is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_1>` is a draft with an English title and no Traditional or Simplified Chinese text.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_1 | A draft in USD whose English title is `<english title>` |
+| english title | Charizard PSA 10 |
+
+| field | text | why refused |
+| --- | --- | --- |
+| Traditional Chinese title | 201 Chinese characters | One above the 200 limit |
+| Simplified Chinese title | 200 Chinese characters followed by 1 space | The limit counts the characters as typed, so the space makes 201 |
+| Traditional Chinese description | 4001 characters | One above the 4,000 limit |
+| Simplified Chinese description | 3999 characters followed by 2 spaces | The limit counts the characters as typed, so the spaces make 4001 |
+
+**Steps:**
+
+1. Open `<listing_1>`.
+2. Enter `<text>` in `<field>`.
+3. Click Save.
+4. Reload `<listing_1>`.
+5. Read `<field>`.
+
+**Expected Results:**
+
+* Step 3 refuses the save and names `<field>`.
+* Step 5 shows `<field>` empty.
+
+<!-- trace:case id=g10adm.auction-listing.TC-hhy rev=1 covers=g10adm.auction-listing.SC-i3e -->
+### g10adm.auction-listing.US75-TC5: Blank translation counts as not written
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_3>` is a draft with an English title and description and a written Traditional Chinese title and description.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_3 | A draft in USD with `<english title>`, `<english description>`, `<traditional title>` and `<traditional description>` |
+| english title | Charizard PSA 10 |
+| english description | 1999 Base Set, clean front. |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| traditional description | 1999 年基本系列，正面無瑕。 |
+
+| field | input |
+| --- | --- |
+| Traditional Chinese title | Cleared to empty |
+| Traditional Chinese title | 3 spaces |
+| Traditional Chinese description | 3 spaces |
+
+**Steps:**
+
+1. Open `<listing_3>`.
+2. Set `<field>` to `<input>`.
+3. Click Save.
+4. Reload `<listing_3>`.
+5. Open the Copy block and choose Traditional Chinese.
+
+**Expected Results:**
+
+* Step 3 saves the draft.
+* Step 5 shows the English text for `<field>`, marked as the fallback.
+* Step 5 shows the other Traditional Chinese text still as written, not marked.
+
+<!-- trace:case id=g10adm.auction-listing.TC-kvr rev=1 -->
+### g10adm.auction-listing.US75-TC6: Translated title is trimmed on save
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_1>` is a draft with an English title and no Traditional Chinese text.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_1 | A draft in USD whose English title is `<english title>` |
+| english title | Charizard PSA 10 |
+| padded title | 2 spaces, `<traditional title>`, 2 spaces |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+
+**Steps:**
+
+1. Open `<listing_1>`.
+2. Enter `<padded title>` as the Traditional Chinese title.
+3. Click Save.
+4. Reload `<listing_1>`.
+5. Read the Traditional Chinese title.
+
+**Expected Results:**
+
+* Step 3 saves the draft.
+* Step 5 shows the title without its leading and trailing spaces.
+
+<!-- trace:case id=g10adm.auction-listing.TC-adp rev=1 -->
+### g10adm.auction-listing.US75-TC7: Translation can be edited on a draft, created or published listing
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_4>` is in status `<status>` and holds a written Traditional Chinese title.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_4 | A listing in status `<status>` with English title `<english title>` and Traditional Chinese title `<traditional title>` |
+| english title | Charizard PSA 10 |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| new traditional title | 寶可夢 噴火龍 初版 PSA 10 (any text under the 200 limit) |
+
+| status |
+| --- |
+| Draft |
+| Created |
+| Published |
+
+**Steps:**
+
+1. Open `<listing_4>`.
+2. Replace the Traditional Chinese title with `<new traditional title>`.
+3. Click Save.
+4. Reload `<listing_4>`.
+5. Read the Traditional Chinese title.
+
+**Expected Results:**
+
+* Step 3 saves the edit.
+* Step 5 shows `<new traditional title>`.
+* Step 5 shows `<listing_4>` still in status `<status>`.
+
+<!-- trace:case id=g10adm.auction-listing.TC-49e rev=1 covers=g10adm.auction-listing.SC-55h -->
+### g10adm.auction-listing.US75-TC8: Writing a translated title leaves the slug and listing code alone
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_5>` is a saved draft whose slug is still the generated value from its English title and code.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_5 | A saved draft with English title `<english title>` and the generated slug, unchanged by the operator |
+| english title | Charizard PSA 10 |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+
+**Steps:**
+
+1. Open `<listing_5>` and note its slug and listing code.
+2. Enter `<traditional title>` as the Traditional Chinese title.
+3. Click Save.
+4. Reload `<listing_5>`.
+5. Read the slug and listing code.
+6. Read the row for `<listing_5>` in Listings.
+
+**Expected Results:**
+
+* Step 5 shows the slug unchanged.
+* Step 5 shows the listing code unchanged.
+* Step 6 reads the English title.
+
+<!-- trace:case id=g10adm.auction-listing.TC-le3 rev=1 covers=g10adm.auction-listing.SC-kzb -->
+### g10adm.auction-listing.US75-TC9: Closed, settled and called-off listings offer no translation controls
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_6>` is in status `<status>` and holds a Traditional Chinese title.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_6 | A listing in status `<status>` with English title `<english title>` and Traditional Chinese title `<traditional title>` |
+| english title | Charizard PSA 10 |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+
+| status |
+| --- |
+| Closed |
+| Settled |
+| Called off |
+
+**Steps:**
+
+1. Open `<listing_6>`.
+2. Look for inputs to edit the Traditional Chinese and Simplified Chinese title and description.
+
+**Expected Results:**
+
+* Step 2 shows no input to edit a translation.
+* Step 2 shows no edit control for the English title or description either.
+* The Traditional Chinese title is unchanged.
+
+<!-- trace:case id=g10adm.auction-listing.TC-cfb rev=1 covers=g10adm.auction-listing.SC-21e -->
+### g10adm.auction-listing.US75-TC10: A translation write to a frozen listing is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(auction operator) is signed in.
+* `<listing_6>` is in status `<status>` and holds a Traditional Chinese title.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_6 | A listing in status `<status>` with English title `<english title>` and Traditional Chinese title `<traditional title>` |
+| english title | Charizard PSA 10 |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| new traditional title | 寶可夢 噴火龍 初版 PSA 10 |
+
+| status |
+| --- |
+| Closed |
+| Settled |
+| Called off |
+
+**Steps:**
+
+1. Send an update to `<listing_6>` that sets the Traditional Chinese title to `<new traditional title>`.
+2. Read `<listing_6>` through the API.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 2 shows the Traditional Chinese title unchanged.
+
+<!-- trace:case id=g10adm.auction-listing.TC-sp9 rev=1 -->
+### g10adm.auction-listing.US75-TC11: An admin who cannot edit a listing's texts cannot write translations
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-75
+
+**Pre-conditions:**
+
+* admin(can view listings but cannot edit a listing's title and description) is on `<grade10 auction admin listings url>`.
+* `<listing_4>` is a draft with an English title.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_4 | A draft with English title `<english title>` |
+| english title | Charizard PSA 10 |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+
+**Steps:**
+
+1. Open `<listing_4>`.
+2. Look for inputs to edit the Traditional Chinese and Simplified Chinese title and description.
+3. Send an update to `<listing_4>` that sets the Traditional Chinese title to `<traditional title>`.
+
+**Expected Results:**
+
+* Step 2 shows no input to edit a translation.
+* Step 3 is refused.
+* `<listing_4>` holds no Traditional Chinese title.
+
+---
+
+## g10adm.auction-listing.US76: Operator reads a listing's texts in each language
+
+**As an** auction operator,
+**I want** to switch the listing's Copy block between languages and see which ones I have not written,
+**so that** I can check what each collector will read and fill the gaps.
+
+<!-- trace:case id=g10adm.auction-listing.TC-v7h rev=1 covers=g10adm.auction-listing.SC-z8j -->
+### g10adm.auction-listing.US76-TC1: Copy block switches title and description together and opens in English again
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-76
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_8>` is a listing with all three languages written.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_8 | A listing with `<english title>`, `<english description>`, `<traditional title>`, `<traditional description>`, `<simplified title>` and `<simplified description>` |
+| english title | Charizard PSA 10 |
+| english description | 1999 Base Set, clean front. |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| traditional description | 1999 年基本系列，正面無瑕。 |
+| simplified title | 宝可梦 喷火龙 PSA 10 |
+| simplified description | 1999 年基本系列，正面无瑕。 |
+
+**Steps:**
+
+1. Open `<listing_8>`.
+2. Read the title and description in the Copy block.
+3. Choose Traditional Chinese in the Copy block's language choice.
+4. Read the title and description.
+5. Choose Simplified Chinese.
+6. Read the title and description.
+7. Reload `<listing_8>`.
+8. Read the language the Copy block shows.
+
+**Expected Results:**
+
+* Step 2 shows the English title and description, with no fallback mark.
+* Step 4 shows the Traditional Chinese title and description together, with no fallback mark.
+* Step 6 shows the Simplified Chinese title and description together, with no fallback mark.
+* Step 8 shows the Copy block in English again.
+
+<!-- trace:case id=g10adm.auction-listing.TC-x3s rev=1 covers=g10adm.auction-listing.SC-jiz -->
+### g10adm.auction-listing.US76-TC2: A language missing one text marks only that text as the fallback
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-76
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_9>` is a listing with a Traditional Chinese title and no Traditional Chinese description.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_9 | A listing with `<english title>`, `<english description>` and `<traditional title>`; no Traditional Chinese description |
+| english title | Charizard PSA 10 |
+| english description | 1999 Base Set, clean front. |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| traditional description | 1999 年基本系列，正面無瑕。 |
+
+**Steps:**
+
+1. Open `<listing_9>`.
+2. Choose Traditional Chinese in the Copy block's language choice.
+3. Read the title.
+4. Read the description.
+
+**Expected Results:**
+
+* Step 3 shows `<traditional title>`, not marked as the fallback.
+* Step 4 shows `<english description>`, marked as the fallback.
+
+<!-- trace:case id=g10adm.auction-listing.TC-7oa rev=1 -->
+### g10adm.auction-listing.US76-TC3: A listing with no translations reads English in each Chinese choice
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-76
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_10>` is a listing written before translations existed, with an English title and description only.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_10 | A listing with `<english title>` and `<english description>` only |
+| english title | Charizard PSA 10 |
+| english description | 1999 Base Set, clean front. |
+
+**Steps:**
+
+1. Open `<listing_10>`.
+2. Choose Traditional Chinese in the Copy block's language choice.
+3. Read the title and description.
+4. Choose Simplified Chinese.
+5. Read the title and description.
+6. Choose English.
+7. Read the title and description.
+
+**Expected Results:**
+
+* Step 3 shows `<english title>` and `<english description>`, both marked as the fallback.
+* Step 5 shows `<english title>` and `<english description>`, both marked as the fallback.
+* Step 7 shows `<english title>` and `<english description>`, not marked.
+
+<!-- trace:case id=g10adm.auction-listing.TC-tnk rev=1 covers=g10adm.auction-listing.SC-let -->
+### g10adm.auction-listing.US76-TC4: Traditional Chinese text is never shown as the Simplified Chinese fallback
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-76
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_9>` is a listing with Traditional Chinese text and no Simplified Chinese text.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_9 | A listing with `<english title>`, `<english description>`, `<traditional title>` and `<traditional description>`; no Simplified Chinese text |
+| english title | Charizard PSA 10 |
+| english description | 1999 Base Set, clean front. |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| traditional description | 1999 年基本系列，正面無瑕。 |
+
+**Steps:**
+
+1. Open `<listing_9>`.
+2. Choose Simplified Chinese in the Copy block's language choice.
+3. Read the title and description.
+
+**Expected Results:**
+
+* Step 3 shows `<english title>` and `<english description>`, both marked as the fallback.
+* Step 3 shows no Traditional Chinese character.
+
+---
+
+## g10adm.auction-listing.US77: Operator finds a listing by a translated title
+
+**As an** auction operator,
+**I want** the Listings search to match a title in any language,
+**so that** I find the lot from whichever name a collector or colleague quotes.
+
+<!-- trace:case id=g10adm.auction-listing.TC-lnj rev=1 covers=g10adm.auction-listing.SC-6es,g10adm.auction-listing.SC-orh,g10adm.auction-listing.SC-1x3,g10adm.auction-listing.SC-d0k -->
+### g10adm.auction-listing.US77-TC1: Listings search finds a listing by a part of its title in any language
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-77
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_11>` holds an English, a Traditional Chinese and a Simplified Chinese title, and no other listing's titles contain the fragment.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_11 | A listing with English title `Charizard PSA 10`, Traditional Chinese title `寶可夢 Pokémon TCG 噴火龍` and Simplified Chinese title `宝可梦 喷火龙` |
+
+| language typed | fragment | why this row |
+| --- | --- | --- |
+| English | harizar | Part of an English title, as today |
+| Traditional Chinese | 噴火 | Part of a Traditional Chinese title |
+| Simplified Chinese | 喷火 | Part of a Simplified Chinese title |
+| Latin letters in a translated title | pokémon tcg (lower case) | Matches any case; the Traditional Chinese title is `寶可夢 Pokémon TCG 噴火龍` |
+
+**Steps:**
+
+1. Type `<fragment>` in the Listings search.
+2. Read the rows.
+
+**Expected Results:**
+
+* Step 2 lists `<listing_11>` once.
+* Step 2 shows its row under the English title.
+
+<!-- trace:case id=g10adm.auction-listing.TC-rxg rev=1 -->
+### g10adm.auction-listing.US77-TC2: A listing matching in two languages is listed once
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-77
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_12>` has English title `Charizard Holo` and Traditional Chinese title `Charizard 噴火龍`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_12 | A listing whose English and Traditional Chinese titles both contain `Charizard` |
+
+**Steps:**
+
+1. Type `Charizard` in the Listings search.
+2. Read the rows.
+
+**Expected Results:**
+
+* Step 2 lists `<listing_12>` exactly once.
+
+<!-- trace:case id=g10adm.auction-listing.TC-zkm rev=1 covers=g10adm.auction-listing.SC-4uh -->
+### g10adm.auction-listing.US77-TC3: Listings search does not fold Traditional and Simplified Chinese
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-77
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_13>` has a Traditional Chinese title and no Simplified Chinese title.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_13 | A listing with English title `<english title>` and Traditional Chinese title `<traditional title>`; no Simplified Chinese title |
+| english title | Charizard PSA 10 |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| traditional fragment | 噴火龍 |
+| simplified fragment | 喷火龙 |
+
+**Steps:**
+
+1. Type `<simplified fragment>` in the Listings search.
+2. Read the rows.
+3. Type `<traditional fragment>` in the Listings search.
+4. Read the rows.
+
+**Expected Results:**
+
+* Step 2 does not list `<listing_13>`.
+* Step 4 lists `<listing_13>`.
+
+<!-- trace:case id=g10adm.auction-listing.TC-a79 rev=1 covers=g10adm.auction-listing.SC-46l -->
+### g10adm.auction-listing.US77-TC4: Listings search matches titles only, not descriptions
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-77
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_14>` has a Traditional Chinese description containing `<description fragment>` and no title containing it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_14 | A listing whose Traditional Chinese description contains `<description fragment>`; none of its titles do |
+| description fragment | 正面無瑕 |
+
+**Steps:**
+
+1. Type `<description fragment>` in the Listings search.
+2. Read the rows.
+
+**Expected Results:**
+
+* Step 2 does not list `<listing_14>`.
+
+<!-- trace:case id=g10adm.auction-listing.TC-mob rev=1 -->
+### g10adm.auction-listing.US77-TC5: Editing or clearing a translated title moves what the search finds
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-77
+
+**Pre-conditions:**
+
+* admin(auction operator) is on `<grade10 auction admin listings url>`.
+* `<listing_15>` is a listing with Traditional Chinese title `<traditional title>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_15 | A listing with English title `<english title>` and Traditional Chinese title `<traditional title>` |
+| english title | Charizard PSA 10 |
+| traditional title | 噴火龍 初版 |
+| new traditional title | 水箭龜 初版 |
+| old fragment | 噴火龍 |
+| new fragment | 水箭龜 |
+
+**Steps:**
+
+1. Replace the Traditional Chinese title of `<listing_15>` with `<new traditional title>` and click Save.
+2. Type `<old fragment>` in the Listings search and read the rows.
+3. Type `<new fragment>` in the Listings search and read the rows.
+4. Clear the Traditional Chinese title of `<listing_15>` and click Save.
+5. Type `<new fragment>` in the Listings search and read the rows.
+
+**Expected Results:**
+
+* Step 2 does not list `<listing_15>`.
+* Step 3 lists `<listing_15>`.
+* Step 5 does not list `<listing_15>`.
+
 ## Settled
 
 - Asset selection uses existing listing-edit authorization; unauthorized requests are refused.
@@ -4576,6 +6688,10 @@ changes later.
 - `grade10-admin-auction-listing-US-08-TC4` is `grade10-admin-auction-listing-US8-TC4`: renamed to the compact id form while still draft.
 - **Refused relist Save** - the editor shows the refusal's name inline, such as Already relisted (Q15)
 - **Relisted for good** - once a draft is saved from its Relist, the listing offers no second Relist, even if that draft is called off (Q18)
+- None this run. Every blind reading either folded into a scenario or went to `decisions.md` `## Raised`.
+- Transfer activity names the other listing by listing code and English title when present, else the listing id, and always the slug that moved (Q10)
+- Clearing the prefilled Relist slug before Save stores the ordinary title-and-code generated slug and still frees the source's former slug (Q11)
+- After Relist Save, the Unsold source shows Relisted beside Unsold on its detail header and Listings Status column (Q12)
 
 ## Reconciliation
 
@@ -4676,3 +6792,80 @@ record-retention case with no operator-facing control here).
 | US2-TC3 | [SC-48 and the gallery requirement](spec.md#requirement-listing-media-is-an-ordered-gallery-of-one-to-eight-uploads): store JPEG, MP4 and WebP in that order; deliver the public gallery in display order. [Listing media](../../../grade10-site/auction/listing-media/spec.md#requirement-the-details-page-shows-gallery-images-in-order) assigns playback to admin-listing but supplies no playback scenario. | Storage and display order are supported. The existing playback assertion and the added play step remain blocked on the listing spec author; an original public video path alone does not prove a player interaction. |
 | US3-TC13 and US5-TC7 | [SC-21](spec.md#scenario-grade10-admin-auction-listing-sc-21---create-can-reuse-a-canceled-listings-original-slug) permits reuse, while [the cancel requirement and SC-42 body](spec.md#requirement-operator-may-call-off-a-listing-that-has-not-closed) preserve the slug, its public page and its reservation. [Identifier decision Q16](../../../../changes/archive/2026-10-06-define-public-auction-identifiers/decisions.md#decisions) selects preservation. | US5-TC7 revision 2 follows SC-42's body. US3-TC13 stays blocked until the author reconciles SC-21 and the older slug requirement. |
 | US3-TC19 | [Prices and window, SC-27a](spec.md#requirement-prices-and-window-are-writable-before-publish): no extension duration supplied; create stores 1800 seconds. An explicit 0 disables extended bidding. | Revision 2 uses a draft with no duration supplied and an API create omitting the field. API is the chosen test mechanism, not a spec-mandated layer; it does not replace verification of the form's empty-field behavior. |
+
+**Run:** QA2, 2026-10-12. QA1 used frozen bundle `02ba99d366a1f619b3df386916067b23a31ec77462132a92d7eddd4bd474713f`. QA2 read both independent readings, all 3 deltas, the complete feature maps, current and durable journeys, durable context, and the linked owner decisions. Case dispositions were recorded before scenario links.
+
+- **Disposition** - All 21 listing scenarios have complete routes. TC-z2r@4 drives call off, released-slug field exit/Save, public refusal, browse/search removal and retained code/history. TC-yjr@4 saves and creates from earlier and current called-off rows, then checks the original code/history and public refusal. TC-wrn@2 submits both Saves concurrently, checks one holder and preserves the refused draft's stored slug. The campaign route TC-t49@4 covers SC157. Each covers link asserts the whole scenario without combining cases.
+- **Coverage** - Complete case and scenario dispositions, source locations, anchor coverage and carried baseline findings are in the QA2 handoff. Missing scenario links are explicit gaps, not inferred coverage.
+- **Decision** - All called-off original slugs are reusable, including earlier records. The eligible current holder answers; otherwise the address is not found. Codes stay reserved and do not become public routes. Bidder history stays with the original listing. Q1-Q4 are settled.
+- **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
+
+**Run:** QA2 repair pass, 2026-10-13, after the re-key to durable case ids and the lot-status Bidder exception repair. Read the 3 deltas, their journeys and the durable site and admin auction suites. Cases were reconciled against the delta scenarios' trace ids; no scenario text shaped a case, and only bodies the pass read were linked.
+
+- **Disposition** - Of 21 listing scenarios, 6 changed or new ones are linked here: SC-21 and SC156 to TC-yjr@4 (save, create and the original code and bidder history on earlier and current called-off rows), SC155 and SC-42 to TC-z2r@4 (field exit, Save, public 404, browse and search removal, retained code and history), SC158 to TC-wrn@2. SC157 is linked at domain to TC-t49@4. TC-1jo@3 (US72-TC11) stays unlinked: it checks the saved slug, a different code and the retained original code, but not field-exit availability (SC155), the created status or bidder history (SC156). The other 15 scenarios are unchanged durable copies that inherited durable cases cover; this suite does not claim them.
+- **Coverage** - No scenario in this delta is uncovered. No over-claimed case: each `covers` link was re-read against its steps and results. No case asserts the old outcome; durable US3-TC13 and US5-TC7 are superseded by TC-yjr@4 and TC-z2r@4. Finding for the spec owner: the heading of SC-42 still says the cancel rewrites the slug, which the requirement and tech design retire. Gap: the requirement says a collector receives a closed or settled listing at its slug, but SC-16 proves only a published one; the closed route is asserted by site listing-page TC-90g with no scenario.
+- **Decision** - None new. Q1-Q4 stay settled.
+- **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
+
+**Run:** Independent QA2, 2026-10-14. Reconciled the QA1 blind cases with the current delta scenarios against the frozen anchors. Read the current PRD, decisions, journeys, delta requirements, technical design and durable baseline.
+
+- **Retained:** All active case IDs, revisions, routes and classifications remain. All 14 active cases are draft.
+- **Covered:** `SC-159` by `US74-TC1`; `SC-160` by `US3-TC25`; `SC-164` by `US74-TC2`; `SC-165` and `SC-57` by `US74-TC3`; `SC-161` by `US74-TC4`; `SC-162` by `US74-TC5`. The EUR API row asserts `SC-57`'s refusal and unchanged-draft THEN. The active `SC-57` body asserts API behavior; its historical title and serving-anchor wording also mention the form, but the scenario's THEN does not assert a form refusal.
+- **Out of suite:** `SC-163` only. The one-time migration guard verifies the untouched USD row; the operator/API suite does not own that migration behavior. `SC-162` is covered by the migrated HKD and JPY rows and is removed from the old out-of-suite list.
+- **QA2 repair:** `US74-TC3` rev2 retains its API create route, adds an explicit complete EUR draft assertion, and covers the API THEN in `SC-57`.
+- **Anchors:** US-01, US-03, US-09 and US-74 have active cases.
+
+**Run:** 2026-10-14, QA2 in a fresh context, after QA1's blind pass (22 draft cases from the frozen anchors, `proposal.md`, `decisions.md` and the domain draft) and Dev's independent delta. It read this suite, the delta's `spec.md` and `user-journeys.md`, `decisions.md` with `## Raised`, `tech-design.md`, `tasks.md`, the [Auction Management](/p/grade10-admin/auction/management#listings) page, and the shipped code in grade10 where a claim needed it. No case was written or reworded from a scenario, and every case stays `draft`. QA1's own bundle line is not in the draft; the planning run adds it.
+
+- **Linked** - `g10adm.auction-listing.US3-TC30` asserts `grade10-admin-auction-listing-SC-175`; `US75-TC1` asserts `grade10-admin-auction-listing-SC-170`; `US75-TC2` asserts `grade10-admin-auction-listing-SC-171`; `US75-TC5` asserts `grade10-admin-auction-listing-SC-174` on its spaces rows; `US75-TC8` asserts `grade10-admin-auction-listing-SC-192`; `US75-TC9` asserts `grade10-admin-auction-listing-SC-195`; `US75-TC10` asserts `grade10-admin-auction-listing-SC-194`; `US76-TC1` asserts `grade10-admin-auction-listing-SC-180`; `US76-TC2` asserts `grade10-admin-auction-listing-SC-182`; `US76-TC4` asserts `grade10-admin-auction-listing-SC-183`; `US77-TC1` asserts `grade10-admin-auction-listing-SC-185`, `grade10-admin-auction-listing-SC-186`, `grade10-admin-auction-listing-SC-187` and `grade10-admin-auction-listing-SC-188`, one row each, on one route and one fixture; `US77-TC3` asserts `grade10-admin-auction-listing-SC-190`; `US77-TC4` asserts `grade10-admin-auction-listing-SC-189`
+- **Jointly asserted, not linked** - `grade10-admin-auction-listing-SC-172` is split between `US75-TC3` (the accepted limits) and `US75-TC4` (the refusals); `grade10-admin-auction-listing-SC-173` between `US75-TC6` (the trim) and `US75-TC4` (the typed count). No single case asserts either. Dev may split each scenario by branch, or a case may take the missing branch
+- **Partly asserted, not linked** - `grade10-admin-auction-listing-SC-178` by `US75-TC7`: it reads no price or window, and it edits a written title where the scenario writes a first one. `grade10-admin-auction-listing-SC-179` by `US75-TC11`: only the operator without the grant; the other side rests on every case that saves. `grade10-admin-auction-listing-SC-181` by `US76-TC1`: it reads the pair together and not that no second choice exists per field. `grade10-admin-auction-listing-SC-184` by `US76-TC1`: it reloads the same listing and reads no other listing's page. `grade10-admin-auction-listing-SC-196` by `US9-TC10`: its rows are all-written and English-plus-Traditional, so the per-text gap (a Simplified Chinese title with no Simplified Chinese description) is unwalked
+- **Uncovered** - `grade10-admin-auction-listing-SC-191` (a draft with only a Chinese title is found): `US3-TC30` makes such a draft and `US77-TC1` to `US77-TC4` search listings that carry an English title, so no case searches it. `grade10-admin-auction-listing-SC-193` (staff and sent texts) is spread over `US75-TC8` and `US77-TC1` (the table row), the domain case (the order screen) and `g10.shared-localization.US1-TC5` (the outbid and won emails): no case reads the invoice screen or the Slack alert, which task 2.1 tests
+- **Out of suite** - `grade10-admin-auction-listing-SC-176` and `grade10-admin-auction-listing-SC-177`: the editor's save payload carries the translations it holds (task 4.2), so no console route omits them or names fewer; the service test of task 2.1 is the verifier
+- **Carried** - `grade10-admin-auction-listing-SC-45` and `grade10-admin-auction-listing-SC-135` to `grade10-admin-auction-listing-SC-145` are unchanged scenarios; the durable suite holds their cases, and `US9-TC10` walks only the Relist languages beside them
+- **Cases with no scenario** - `US76-TC3` (an untranslated listing in each Chinese choice): the requirement's per-text fallback states it and `grade10-admin-auction-listing-SC-182` and `grade10-admin-auction-listing-SC-183` imply it; fold one scenario or keep the case on the requirement. `US77-TC2` (matching in two languages is listed once): `tech-design.md` D8 ORs the arms on one row, so a repeat cannot occur; keep as a guard or drop. `US77-TC5` (an edit or a clear moves what the search finds): real, and the scenarios state only the static find; fold. The Created row of `US75-TC7`: the requirement names `created`, and the scenarios name Published only
+- **Over-claimed** - `US75-TC4` expects the refusal to name the field, where the spec says only that the save is refused. `US75-TC9` expects no edit control for the English fields; the requirement says "like its other fields" and no scenario does. `US75-TC11` expects the editor to hide the inputs from an operator without the grant: `tech-design.md` D11 makes it so (`readOnly` is `ended || !mayEdit` in `ListingEditor.tsx`), and no scenario or decision states it. All three are real; fold the third as a scenario and trim or fold the first two
+- **Contradicted** - none between a case and a scenario. Between artifacts: the feature set's "a closed or called-off listing" leaves out settled, which the requirement and decision 22 name; `tech-design.md` says `editRefusal` also refuses a lot past its close, where the requirement lets any published listing take translations; and `tech-design.md` says the wire counts the title on the raw string for save and create, where `listings.create` takes `title` as `label` (trim, then count) and only `save` is raw. Decision 17 holds for translations either way, because D3 gives them the raw-string check
+- **Raised, settled** - every row this pass raised is landed in `decisions.md` (Q7 to Q40, the human's defaults); the open PM confirmations are Q43 and Q49 in `decisions.md`; no case waits on a row
+- **Anchors** - `grade10-admin-auction-listing-US-75`, `grade10-admin-auction-listing-US-76` and `grade10-admin-auction-listing-US-77` each hold cases, and the context journeys `grade10-admin-auction-listing-US-03` and `grade10-admin-auction-listing-US-09` hold `US3-TC30` and `US9-TC10`. The feature-set groups are carried through those journeys; no case traces a group on its own
+- **After the human's reply (2026-10-14)** - Dev folded scenarios for the cases that had none: `US76-TC3` is `grade10-admin-auction-listing-SC-197`, `US77-TC5` is `grade10-admin-auction-listing-SC-198`, `US75-TC11` is `grade10-admin-auction-listing-SC-199`. `US77-TC2` is dropped as a guard D8 makes structural. `grade10-admin-auction-listing-SC-191` stays uncovered by a case and is verified by task 2.2. Rows settled in `decisions.md` 32 and 33. The feature-set line still reads "a closed or called-off listing"; it is a frozen anchor and is left as written
+
+**Run:** QA2, 2026-10-15, in a fresh context for `transfer-relist-listing-slug`. Read this suite's draft cases, the delta `spec.md` (Purpose, Feature set, MODIFIED Relist / slug / generated-slug requirements and scenarios), `user-journeys.md`, `proposal.md`, `decisions.md` with Q1–Q11 and `## Raised`, `tech-design.md` and `tasks.md`. Denied regenerating cases from scenarios. Patched only for landed Q10/Q11: SC-213 and US9-TC12 activity naming; requirement Save empty-slug clause; added SC-217 and draft US9-TC14. Case dispositions were recorded before `covers` links. Every case stays `draft`. It is a statement, not proof.
+
+### Case dispositions
+
+| Case | Journey | Disposition |
+| --- | --- | --- |
+| `g10adm.auction-listing.US4-TC21` | US-04 | **Folded** — covers `grade10-admin-auction-listing-SC-211` (`g10adm.auction-listing.SC-359`). Draft and Created rows share one checking |
+| `g10adm.auction-listing.US4-TC22` | US-04 | **Folded** — covers `grade10-admin-auction-listing-SC-212` (`g10adm.auction-listing.SC-fde`) |
+| `g10adm.auction-listing.US9-TC11` | US-09 | **Folded in part** — walks Relist slug prefill and leave-without-Save (Q4). Does not assert every THEN of `grade10-admin-auction-listing-SC-135` or `grade10-admin-auction-listing-SC-136`; those stay with the durable Relist suite. No `covers` |
+| `g10adm.auction-listing.US9-TC12` | US-09 | **Folded** — covers `grade10-admin-auction-listing-SC-209`, `grade10-admin-auction-listing-SC-213` and `grade10-admin-auction-listing-SC-216` (`SC-ace`, `SC-eaf`, `SC-c83`) on one Relist Save that keeps the prefilled slug. Activity results aligned to Q10 |
+| `g10adm.auction-listing.US9-TC13` | US-09 | **Folded** — covers `grade10-admin-auction-listing-SC-210` (`SC-d22`). Replace-and-free path also exercises the free branch of SC-214; held-collision coverage is US73-TC10 |
+| `g10adm.auction-listing.US9-TC14` | US-09 | **Folded** — added for Q11; covers `grade10-admin-auction-listing-SC-217` (`SC-ib3`) |
+| `g10adm.auction-listing.US73-TC8` | US-73 | **Folded** — covers `grade10-admin-auction-listing-SC-215` (`SC-c90`) |
+| `g10adm.auction-listing.US73-TC9` | US-73 | **Cases with no scenario** — Relist field-exit and Save still collide with another Unsold holder (Q7). Related to durable `grade10-admin-auction-listing-SC-122` on a Relist editor; no change scenario states that path. Keep as a guard or fold a Relist-scoped scenario |
+
+### covers links added
+
+| Case marker | covers |
+| --- | --- |
+| `g10adm.auction-listing.TC-rlf` | `g10adm.auction-listing.SC-359` |
+| `g10adm.auction-listing.TC-rlx` | `g10adm.auction-listing.SC-fde` |
+| `g10adm.auction-listing.TC-rlt` | `g10adm.auction-listing.SC-ace`, `g10adm.auction-listing.SC-eaf`, `g10adm.auction-listing.SC-c83` |
+| `g10adm.auction-listing.TC-rlc` | `g10adm.auction-listing.SC-d22` |
+| `g10adm.auction-listing.TC-u8m` | `g10adm.auction-listing.SC-ib3` |
+| `g10adm.auction-listing.TC-rlv` | `g10adm.auction-listing.SC-c90` |
+
+### Uncovered / over-claimed / contradictions
+
+- **Uncovered (change scenarios)** — none after US73-TC10 covers `grade10-admin-auction-listing-SC-214` (`SC-8b7`)
+- **Partly asserted, not linked** — `grade10-admin-auction-listing-SC-135` and `grade10-admin-auction-listing-SC-136` by US9-TC11 (slug prefill and leave-without-Save only)
+- **Carried** — `grade10-admin-auction-listing-SC-135` to `grade10-admin-auction-listing-SC-145`, `grade10-admin-auction-listing-SC-196`, and baseline slug scenarios `grade10-admin-auction-listing-SC-16` to `grade10-admin-auction-listing-SC-23`, `g10adm.auction-listing.SC155`, `g10adm.auction-listing.SC156`, `grade10-admin-auction-listing-SC-118` to `grade10-admin-auction-listing-SC-123`: unchanged carried scenarios; the durable suite holds their cases beside this change's Relist-address cases
+- **Over-claimed** — none. US4-TC21 / US4-TC22 add admin identity checks beyond the public THEN; they do not contradict the scenarios
+- **Contradictions** — none between a case and a scenario after the Q10/Q11 patches. Tech-design already had empty form slug → generate and activity naming the slug; Q10/Q11 only sharpened the activity label and the cleared-slug path
+- **Raised** — nothing new; Q10 and Q11 were already landed. Duplicate Raised rows for those questions were removed
+
+### Anchor coverage
+
+- Journeys `grade10-admin-auction-listing-US-04`, `grade10-admin-auction-listing-US-09` and `grade10-admin-auction-listing-US-73` each hold draft cases
+- Feature-set leaves Relist public address, Slug as public key and Generated slug / field exit are walked through those journeys; no case traces a feature-set group alone

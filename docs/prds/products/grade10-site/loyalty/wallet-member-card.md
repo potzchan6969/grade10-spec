@@ -1,6 +1,5 @@
 ---
 title: Member Card in a Wallet
-spec: grade10-site/store/wallet-member-card
 order: 8
 reviewed: 2026-10-06
 ---
@@ -9,8 +8,8 @@ reviewed: 2026-10-06
 
 | Wallet | Code | Identifies | Spends and collects | Offered |
 | --- | --- | --- | --- | --- |
-| Google | Made on the phone from a secret the pass holds · rotates · one use | Every visit, no signal needed | Yes | 🚧 Yes, once every Google step of [Setting Up](#detail-setting-up) is done |
-| Apple | Made by Grade10 and printed into the pass · never changes | Every visit, no signal needed | No — the member opens the card on the site; fixed in code, not a switch | 🚧 Yes, once every Apple step of [Setting Up](#detail-setting-up) is done |
+| Google | Made on the phone from a secret the pass holds · rotates · good in its own period and one either side · one use | Every visit, no signal needed | Yes | 🚧 Yes, once every Google step of [Setting Up](#detail-setting-up) is done |
+| Apple | Made by Grade10 and printed into the pass · never changes · the tenth visit scans as the first | Every visit, no signal needed | No — refused at the counter, not hidden; the member opens the card on the site; fixed in code, not a switch | 🚧 Yes, once every Apple step of [Setting Up](#detail-setting-up) is done |
 
 A pass is a rendering of the member card, never a second source of it. What
 it solves is distribution: a code that has to be fetched cannot live on a lock
@@ -24,6 +23,13 @@ Apple code identifies and moves nothing.
   last successful fetch rather than the outage, and a boundary would make the
   whole fleet due at once; the exposure is bounded instead by the Apple
   session spending nothing
+- **A scan opens the card's session** — from an Apple pass, the panel only
+- **Counted apart** — a pass identification is recorded apart from the card,
+  naming its wallet. Only a Google pass proves the member's own phone was there
+- 🚧 **Only whole wallets are offered** — Google needs its issuer and both
+  secrets; Apple needs the pass type identifier, the certificate, the push
+  credential and `WALLET_PASS_AUTH_KEY`. A deployment offers only the wallets
+  it carries
 - **No NFC** — in either wallet: no certified reader at the counter, and Apple
   needs an entitlement besides
 - **Nothing else on the pass** — no offers, stamps or messages
@@ -43,19 +49,26 @@ Apple code identifies and moves nothing.
 
 ## On the Pass
 
-- **Shows** — the member's name, the tier they hold, and the points they can
+- 🎨 **Shows** — the member's name, the tier they hold, and the points they can
   spend
+- 🎨 **As of** — the pass says when what it shows was current
 - **Name** — the one the site shows: the name chosen for the shop, else the
   account name, else the address before the `@`; carried whole, and the wallet
   app lays it out
 - **A name that cannot be read** — the refresh fails and the pass stays as it
   was, name included, until a later lap reads it
+- 🚧 **A placeholder name** — the name older records carry counts as no name
+  chosen for the shop
 - 🚧 **A name chosen for the shop** — needs no account service, so the pass
   refreshes with it through an outage, whoever else the same lap refreshes
 - **Language** — the membership page's own words, in every language the site
   speaks; the phone picks, and a phone set to none of them reads the brand's
   default, English for Grade10
-- **Apple note** — the pass says "Identifies you at the counter. Points are
+- 🎨 **Google pass artwork** — the class's logo, the issuer's name, the
+  programme's name and one background colour; none is drawn yet
+- 🎨 **Apple pass artwork** — the icon and logo at every scale, the
+  programme's name, and the background and label colours; none is drawn yet
+- 🎨 **Apple note** — the pass says "Identifies you at the counter. Points are
   spent from this page.", so a pass that identifies and cannot spend never
   reads as broken
 
@@ -63,31 +76,61 @@ Apple code identifies and moves nothing.
 
 - **Three states** — live, ended or erased; only a live pass identifies
   anybody
-- **From `/membership`** — the member adds a pass from their own page
+- **From `/membership`** — the member adds a pass from their own page, which
+  names the wallets they carry a pass in, with the ending beside each
+
+::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--held-both-ends-each" title="Wallets held, an ending beside each"}
+
+- **Install link after the tap** — the link that installs a pass exists only
+  once the member has asked for the pass, since its address is a credential
+
 - 🚧 **The save action's look** - each wallet's own artwork: Apple's "Add to
   Apple Wallet" badge and Google's "Add to Google Wallet" button, as both
-  vendors' brand guidelines expect
+  vendors' brand guidelines expect; a screen reader reads its whole label
+
+::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--vendor-artwork" title="Each wallet's own save action"}
+
+- 🎨 **Apple's badge** — the save action draws a marked placeholder until
+  Apple's licensed "Add to Apple Wallet" badge replaces it, downloaded by a
+  person under the Wallet Marketing Agreement
+
+- **Each wallet apart** — a pass held in one wallet never hides the other's
+  offer; adding, ending and a failure are shown per wallet, and a failure
+  stays, naming its wallet, after the other wallet's act succeeds
+
+::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--one-wallet-failed" title="One wallet failed, the other fine"}
+
+- **Passes that cannot be read** — the page says it could not check, never
+  shows an empty offer, and keeps the ending
+
+::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--unreachable" title="Passes that could not be read"}
+
 - **One per wallet** — added and ended independently of the other
 - **A new pass replaces the old** — adding a second pass to a wallet already
   holding one ends the earlier pass first
-- **Ending** — immediate; the vendor's own copy is discharged by the sweep
+- **Ending** — one action, at once: every code the pass makes identifies
+  nobody, on the phone or not, and a new pass is a tap away. The vendor's own
+  copy is discharged by the sweep
 - **Removing it is not ending** — deleting the pass from the phone's wallet
   app changes nothing about the membership
-- 🚧 **Operator ending** - for a member whose phone is gone. An operator
+- 🚧 🎨 **Operator ending** - for a member whose phone is gone. An operator
   holding `store:write` ends one wallet's pass from the member's record, which
-  names the wallets the member holds, and confirms the wallet first. It ends
+  names the wallets the member holds, and confirms the wallet first; declined,
+  it ends nothing. The other wallet's pass stays live. It ends
   at once, as the member's own does, and the member is sent no message. It
   ends the pass the wallet holds when the operator confirms, a pass the member
   added after the record opened included. The
   audit trail records who ended which wallet and when. An ending that finds no
   live pass ends nothing, the record says no pass was held, and the audit
   trail records the attempt as ending nothing. Without `store:write` the record
-  names no wallet and offers no ending, and a request for either is refused. A
+  names no wallet and offers no ending, and a request for either is refused as
+  forbidden, never as though no pass existed; the pass stays live. A
   record whose wallets cannot be read says so and offers no ending, never that
   the member holds none
-- **Welcome message** — carries no save action, in either wallet
-- **Erasure** — the row stays, armed and empty; the secret goes, so a device
-  fetching the pass sees nobody. Google is told; Apple keeps no copy
+- 🎨 **Welcome message** — carries no save action, in either wallet
+- **Erasure** — the pass identifies nobody from that moment, whatever the
+  phone shows, and a device fetching it sees nobody. Google is told until it
+  confirms; Apple keeps no copy, and its phones are forgotten
 
 ## Staying Current
 
@@ -98,7 +141,8 @@ Apple code identifies and moves nothing.
 | Due | **Four ways** — the instant an unrecorded change falls due, the daily floor, a change in the programme's ledger or tier log, and a name saved on the profile, best effort |
 | Order | **Changed passes first** — the sweep reads the programme's ledger and tier log and brings those passes forward — then each wallet's refresh, then what the vendor is owed |
 
-- **A spend or an earn reaches the pass on the next lap**
+- **A spend, an earn, a redemption or a correction** — reaches the pass on
+  the next lap
 - **A new name** — a name saved on the profile reaches the pass on the next
   lap, and within the daily floor at the latest; a change to the account name
   reaches it within the daily floor
@@ -293,4 +337,14 @@ for ZZZ.
 | Reason for an operator ending | Decided | None typed. The cause is always the lost phone, the act moves no value, and the member adds a new pass in a tap | Product |
 | Message to the member | Decided | None. The member asked for the ending, and their own page shows the wallet no longer held | Product |
 | Ending on one's own record | Decided | Allowed. Their own page ends it anyway, and an ending widens nothing | Product |
+:::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Google enrolment** - create the issuer account in Demo Mode, complete the Business Profile and the payments profile, request publishing access until Google's review accepts the save action, and carry the class from draft to approved; blocked on the Google Pay & Wallet Console account - operations
+- [ ] **Google service account and secrets** - create the service account and its key, set the two Google secrets, then record the issuer, the class and the service account for staging and production; blocked on Google enrolment - engineering
+- [ ] **Apple enrolment** - enrol in the Developer Program in the organisation's name, name the owner by role, and register the staging and production pass type identifiers; blocked on the D-U-N-S number and the legal-entity check - operations
+- [ ] **Pass web service hostname** - fix it before the first pass exists; blocked on Apple enrolment - engineering
+- [ ] **Apple certificate, push key and secrets** - take the certificate and its key, create the push key scoped to the pass type identifier, set the Apple secrets, then record the identifiers; blocked on Apple enrolment - engineering
+- [ ] **Device test on an iPhone** - name the phone's holder by role, push to it three ways, record which produces a list request, and write the push credential and header it settles into Apple step 9 of Setting Up; blocked on the Apple certificate and push key - engineering
+- [ ] **Walk on staging** - on a real phone, save a pass on each wallet from its own save action, be identified at the counter, then end one from the member's record and see the counter no longer identify the member by it; blocked on both enrolments - QA
 :::

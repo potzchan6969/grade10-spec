@@ -5,7 +5,7 @@ import { ORDER_HISTORY_COPY } from "./fixtures";
 import { OrderHistoryCardHeader } from "./order-history-card-header";
 
 const meta = {
-  title: "Store Order History/OrderHistoryCardHeader",
+  title: "Store/Order History/Blocks/OrderHistoryCardHeader",
   component: OrderHistoryCardHeader,
   tags: ["autodocs"],
   args: {

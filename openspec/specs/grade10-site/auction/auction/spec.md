@@ -23,9 +23,12 @@ card.
 - Public contract
   - Listing and extension terms: a consumer reads the scheduled close, the recorded close, the extension duration, and the cap
   - Service time: a public read gives the auction service's clock
-- Identity bar on a bid
-  - Held at the storefront: a bid at or above the bar is held before the auction hears of it
-  - A verified bidder above the bar bids; another is sent to verify
+- Identity on a bid
+  - Held at the storefront: a bid at or above the bar, or any new or raised maximum from an account Grade10 asked to verify, is held before the auction hears of it
+  - A bidder holding what is asked bids; another is sent to verify
+  - US$15,000 bar: a bid of US$15,000 or more is held at the storefront before the auction hears of it
+  - USD comparison: every bid and the bar use USD, so the storefront compares them without conversion
+  - Forward only: a maximum that already stands keeps bidding
 - Closing a due lot
   - Closed at the close: a lot is settled at its deadline by whichever reaches it first - the lot's own alarm, then a read that finds it overdue
   - Sweep as the net: the five-minute sweep still settles any lot nobody reached
@@ -57,8 +60,7 @@ card.
 - Refused attempts
   - Not a bid: a refused attempt writes no bid, no standing and no history,
     and moves nobody's row
-  - Said on the bid form: the refusal shows on the bid form, in words that
-    name what the bidder can do
+  - Said on the bid form: refusals show inline in existing words except an above-ceiling response, which shows no maximum-bid message, automatic retry or response-driven field reset
   - Operator-side record: each refusal is one structured operational log
     naming the bidder, the lot, the code, the amount and the floor or ceiling
   - Lost answer: a bid whose answer is lost on the way back reads as placed
@@ -66,20 +68,33 @@ card.
 - Erased leader
   - Runner-up takes the lead: the highest maximum left leads, priced from the
     maxima left and never above the price before the erasure
+- Closing a lot the house leads
+  - Reads sold: the public facts read sold at the current bid, to the house's pseudonym
+  - Winner's order: the close opens the order for the internal bidder as for any winner, and charges nobody
 
 ## Requirements
 
-### Requirement: A bid at or above the identity bar needs a verified bidder
+### Requirement: A bid needs what the identity bar and the account's requests ask for
 
-The storefront that forwards a bid SHALL compare the bid's amount to the
-brand's bar before the auction hears of it. At or above the bar it SHALL
-forward the bid only for a bidder whose standing is `verified` on the day of
-the bid, and SHALL otherwise refuse the bid naming that a verified identity is
-needed and where to verify, and the auction records nothing.
-Below the bar a bid SHALL ask nothing about identity. On a brand that deploys
-no identity store the bar SHALL not exist.
+The storefront that forwards a bid SHALL decide what the bid requires before
+the auction hears of it. The bid SHALL require every subject the account's
+requests name, as `grade10-site/store/account-identity` defines them, and a
+verified person when its amount is at or above the bar. The bar is
+US$15,000, 1500000 minor units in USD; every bid is in USD, so the comparison
+converts nothing. The storefront SHALL read the account's standing only when
+the bid requires something, and SHALL forward the bid only when the account
+holds every subject it requires on the day of the bid. Otherwise it SHALL
+refuse the bid naming what is needed, with a Verify link that opens the
+verification page and returns to the listing, and the auction records
+nothing. On a brand that deploys no identity store the bar SHALL not exist.
 
-<!-- trace:scenario id=g10.auction-auction.SC-uhh rev=2 -->
+An unmet request SHALL hold every new or raised maximum, at any amount and in any
+currency. A maximum that already stands SHALL keep bidding automatically, as
+it does under a suspension. Below the bar, with no request, a bid SHALL ask
+nothing about identity. On a brand that deploys no identity store, or where
+identity is switched off, the bar and requests SHALL not exist.
+
+<!-- trace:scenario id=g10.auction-auction.SC-uhh rev=3 -->
 #### Scenario: grade10-site-auction-auction-SC-16 - An unverified bidder above the bar is held at the storefront
 **Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
@@ -89,6 +104,8 @@ no identity store the bar SHALL not exist.
   auction records no bid
 - **AND** the bid form says: Bids this high need a verified identity. Verify
   from your account, then bid again.
+- **AND** it offers a Verify link to the verification page that returns to
+  the listing
 
 <!-- trace:scenario id=g10.auction-auction.SC-d78 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-17 - A verified bidder above the bar bids
@@ -98,12 +115,52 @@ no identity store the bar SHALL not exist.
 - **WHEN** they place a bid of the bar or more
 - **THEN** the bid is forwarded to the auction as any other
 
-<!-- trace:scenario id=g10.auction-auction.SC-ndj rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-ndj rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-18 - A bid below the bar asks nothing
 **Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
-- **GIVEN** any signed-in bidder
+- **GIVEN** a signed-in bidder whose account has no request
 - **WHEN** they place a bid below the bar
+- **THEN** no standing is read, and the bid is forwarded as any other
+
+<!-- trace:scenario id=g10.auction-auction.SC-mo5 rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-112 - A request holds a bid below the bar
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a signed-in bidder whose account has an unmet `person` request
+- **WHEN** they place a bid of the listing's lowest increment
+- **THEN** the bid is refused as needing a verified identity, and the auction
+  records no bid
+- **AND** the bid form says: We asked you to verify before you bid again.
+- **AND** it offers a Verify link to the verification page that returns to
+  the listing
+
+<!-- trace:scenario id=g10.auction-auction.SC-pfh rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-113 - A standing maximum keeps bidding under a request
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a bidder whose maximum stands on a listing, and a request then
+  made of their account that it does not meet
+- **WHEN** another bidder bids below that maximum
+- **THEN** the standing maximum answers automatically as before
+- **AND** a raise of that maximum by its owner is refused as needing a
+  verified identity
+
+<!-- trace:scenario id=g10.auction-auction.SC-l64 rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-110 - A bid of exactly the bar is held
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a signed-in bidder whose standing is `unverified`
+- **WHEN** they place a bid of 1500000 minor units in USD
+- **THEN** the bid is refused as needing a verified identity, and the
+  auction records no bid
+
+<!-- trace:scenario id=g10.auction-auction.SC-99a rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-111 - A bid just under the bar asks nothing
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a signed-in bidder whose standing is `unverified`
+- **WHEN** they place a bid of 1499900 minor units in USD
 - **THEN** no standing is read and the bid is forwarded as any other
 
 ### Requirement: Auction listing facts are available
@@ -112,8 +169,13 @@ Grade10 SHALL publish a catalogue of Auction listings. It SHALL NOT publish or
 represent Auction Buy Now listings in this capability.
 
 Auction listings SHALL be absolute: when a listing closes with accepted bids,
-the highest accepted bid wins. Grade10 SHALL NOT configure, store, return, or
-evaluate a reserve amount, reserve state, or reserve-based no-sale outcome.
+the highest accepted bid wins, and that bid may be the house's, placed for an
+internal bid under `grade10-admin/auction/internal-bid`. Grade10 SHALL NOT
+configure, store, return, or evaluate a reserve amount, reserve state, or
+reserve-based no-sale outcome. An internal bid is a house maximum, not a
+reserve: no public fact names it, and a lot the house wins closes as
+"A lot the house leads at its close is sold to its internal bidder" sets
+out.
 
 All money facts SHALL be an integer count of minor units paired with an ISO
 4217 currency code. A listing's applicable fee, currency, region, and deadline
@@ -975,14 +1037,23 @@ lot is settled at its close"; that close moves the version, and the refusal
 does not. The bidder's record SHALL never show a refused attempt.
 
 The bid form SHALL say why under the bid action, in the words below, and
-nowhere else: never in a toast, and never in the words the server sent.
+nowhere else: never in a toast, and never in the words the server sent. An
+above-ceiling response SHALL show no maximum-bid message or generic refusal
+message, SHALL NOT reset the custom field from the response, and SHALL NOT
+automatically retry.
+
+A maximum below the minimum next bid the page shows SHALL NOT be sent: the
+custom field says Min: {amount} with that minimum, and the bid action stays
+disabled. `AMOUNT_TOO_LOW` answers a minimum that moved after the page showed
+it.
 
 | Refused when | Code | The bid form says |
 | --- | --- | --- |
 | The amount is not a whole count of minor units above zero, checked by the bid form before it sends | None: the request is never sent | Enter a valid amount. |
-| At or above the identity bar without a verified identity, at the storefront | `IDENTITY_REQUIRED` | Bids this high need a verified identity. Verify from your account, then bid again. |
-| Below the minimum next bid | `AMOUNT_TOO_LOW` | Minimum bid is {amount}. with the minimum next bid |
-| Above the currency's ceiling | `AMOUNT_TOO_HIGH` | Maximum bid is {amount}. with the ceiling |
+| At or above the identity bar without a verified identity, at the storefront | `IDENTITY_REQUIRED` | Bids this high need a verified identity. Verify from your account, then bid again. with a Verify link |
+| A request the account does not meet, at the storefront | `IDENTITY_REQUIRED` | We asked you to verify before you bid again. with a Verify link |
+| Below the minimum next bid, after it moved past the one the page showed | `AMOUNT_TOO_LOW` | Minimum bid is {amount}. with the minimum next bid |
+| Above the currency's ceiling | `AMOUNT_TOO_HIGH` | No message |
 | Not above the bidder's own maximum on the listing | `MAXIMUM_NOT_RAISED` | Your new maximum must be higher than your current one. |
 | No linked card, or the bidder was never registered with one | `PAYMENT_METHOD_REQUIRED`, `NOT_REGISTERED` | Link a card to bid. |
 | Another card after the first accepted bid on the listing | `PAYMENT_METHOD_REFUSED` | This listing's card is locked after the first accepted bid. |
@@ -995,21 +1066,22 @@ minor units above zero before `INVALID_AMOUNT` can be answered, so the bid form
 never shows that code. Where several refusals apply, the first in this order
 answers: unknown listing, not biddable, not registered, suspended, banned, erased
 bidder, another currency, above the ceiling, maximum not raised, below the
-minimum, no card, another card. The storefront answers the identity bar before
-the auction hears of the bid.
+minimum, no card, another card. The storefront answers the identity bar and the
+account's requests before the auction hears of the bid.
 
 Each refusal the auction service answers SHALL be one structured operational
 log entry at the auction service, naming the bidder, the listing, the code, the
 maximum sent and, where the refusal names one, the floor or the ceiling: the
 minimum next bid or the currency's highest maximum. The entry is for operators and SHALL NOT reach the bidder's record.
 
-<!-- trace:scenario id=g10.auction-auction.SC-rl3 rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-rl3 rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-89 - A refused first bid leaves no trace
 **Serves:** grade10-site-auction-auction-US-14 - a collector's first bid on a lot is refused because the price moved
 
 - **GIVEN** an open `HKD` listing at a current bid of 120000 HKD minor units,
   whose minimum next bid is 124000 HKD minor units, and a collector with a
-  linked card and no bid on it
+  linked card and no bid on it, whose page still shows a minimum next bid of
+  122000 HKD minor units
 - **WHEN** they submit a maximum of 122000 HKD minor units
 - **THEN** the bid form says Minimum bid is {amount}. with 124000 HKD minor
   units
@@ -1017,12 +1089,13 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
   history
 - **AND** the current bid, the leader and the bid count are unchanged
 
-<!-- trace:scenario id=g10.auction-auction.SC-lu0 rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-lu0 rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-90 - An Outbid bidder's refused raise leaves their row where it was
 **Serves:** grade10-site-auction-auction-US-14 - an Outbid bidder's raise is refused because the price moved
 
 - **GIVEN** bidder B, Outbid with a maximum of 110000 HKD minor units on an
-  open `HKD` listing whose minimum next bid is 124000 HKD minor units
+  open `HKD` listing whose minimum next bid is 124000 HKD minor units, B's
+  page still showing a minimum next bid of 122000 HKD minor units
 - **WHEN** B submits a maximum of 122000 HKD minor units
 - **THEN** the bid form says Minimum bid is {amount}. with 124000 HKD minor
   units
@@ -1030,20 +1103,21 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
 - **AND** B's maximum stays 110000 HKD minor units and their bidding history
   gains no entry
 
-<!-- trace:scenario id=g10.auction-auction.SC-fnt rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-fnt rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-91 - Each refusal reads in its own words
 **Serves:** grade10-site-auction-auction-US-14 - the bidder reads why a bid was refused
 
 - **WHEN** a bid is refused for any reason the refusal table names
-- **THEN** the bid form shows that row's words under the bid action
+- **THEN** the bid form shows that row's words under the bid action, except
+  an above-ceiling response, which shows no message
 - **AND** no toast opens
 
-<!-- trace:scenario id=g10.auction-auction.SC-nh5 rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-nh5 rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-92 - The server's words never reach the bid form
 **Serves:** grade10-site-auction-auction-US-14 - a refusal the bid form has no words of its own for
 
-- **WHEN** the auction refuses a bid with a code the table gives no words of
-  its own, or with a message of its own
+- **WHEN** the auction refuses a bid with a code other than `AMOUNT_TOO_HIGH`
+  that the table gives no words of its own, or with a message of its own
 - **THEN** the bid form says Your bid did not go through.
 - **AND** none of the server's message shows
 
@@ -1058,6 +1132,16 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
   units
 - **AND** nothing of the refusal reaches the bidder's record, bidding history
   or My Auctions
+<!-- trace:scenario id=g10.auction-auction.SC-cfg rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-103 - A defensive above-ceiling answer shows no message
+
+**Serves:** grade10-site-auction-auction-US-14 - the bidder reviews their amount after a defensive refusal
+
+- **GIVEN** an open listing and a bidder reviewing a custom maximum
+- **WHEN** the service answers `AMOUNT_TOO_HIGH`, with or without a ceiling or a server message
+- **THEN** no maximum-bid message, generic refusal message or toast appears
+- **AND** the response does not reset the custom draft or submit another attempt
+- **AND** the refused bid leaves every record and listing fact unchanged as required above
 
 ### Requirement: A bid whose answer is lost reads as placed when the bidder's standing holds it
 
@@ -1204,3 +1288,63 @@ before, so the price stays.
   bidding off, re-stood with A leading at 12500 USD minor units
 - **WHEN** its scheduled close passes
 - **THEN** it closes sold to A at 12500 USD minor units
+
+### Requirement: A lot the house leads at its close is sold to its internal bidder
+
+When a listing's leading bid at its effective close is the house's, Grade10
+SHALL close it sold, and the winner SHALL be the internal bidder of
+`grade10-admin/auction/internal-bid` that the listing's internal bid names:
+
+| Reader | What the close reads as |
+| --- | --- |
+| A collector, and every public listing fact | Ended, sold at the current bid to the house's listing pseudonym, as any sold lot reads |
+| Grade10's records | The lot's one winner order, opened for the internal bidder and flagged internal, per `grade10-site/auction/winner-order`; no invoice at the close and no charge to any card |
+
+Everything else about the close SHALL be as "A due lot is settled at its
+close" sets out: the same deadline, the same settlers, and settling twice
+changing nothing. The letters the close owes are
+`grade10-site/auction/notifications`'s.
+
+<!-- trace:scenario id=g10.auction-auction.SC-a4f rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-109 - A lot the house wins reads sold
+**Serves:** grade10-site-auction-auction-US-01 - a collector reads a closed lot the house won as any absolute close
+
+- **GIVEN** an `HKD` listing where the house, shown as Bidder 2, leads at
+  31000 HKD minor units over collector A, shown as Bidder 1
+- **WHEN** the listing closes and a collector reads it
+- **THEN** it reads Ended, sold at 31000 HKD minor units
+- **AND** the public history marks Bidder 2's bid at 31000 as the winning bid
+
+<!-- trace:scenario id=g10.auction-auction.SC-cqt rev=2 -->
+#### Scenario: grade10-site-auction-auction-SC-106 - A lot only the house bid on closes sold at the opening price
+**Serves:** grade10-site-auction-auction-US-01 - a collector reads a lot only the house bid on as any lone-bid close
+
+- **GIVEN** an open `HKD` listing with extended bidding on, a starting price
+  of 20000 HKD minor units, and one bid: the house's at 20000, committed
+  before its scheduled close
+- **WHEN** the scheduled close arrives and extended bidding ends with no other
+  bid
+- **THEN** a collector reads it Ended, sold at 20000 HKD minor units
+- **AND** Grade10 opens the internal bidder's order at a winning bid of 20000
+  HKD minor units
+
+<!-- trace:scenario id=g10.auction-auction.SC-14a rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-107 - A lot the house wins opens its internal bidder's order
+**Serves:** `Closing a lot the house leads` - the settle finds the house on top
+
+- **GIVEN** the listing of `grade10-site-auction-auction-SC-109`, whose
+  internal bid names Harbour Cards
+- **WHEN** it closes
+- **THEN** Grade10 opens one winner order for Harbour Cards, flagged
+  internal, at a winning bid of 31000 HKD minor units, with no invoice
+- **AND** nothing is charged to any bidder's card
+
+<!-- trace:scenario id=g10.auction-auction.SC-msc rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-108 - Settling a house win twice opens one order
+**Serves:** `Closing a lot the house leads` - the timer and a read reach the close together
+
+- **GIVEN** an `HKD` listing past its effective close with the house leading
+- **WHEN** its timer and a read settle it at the same moment
+- **THEN** it is closed once, sold at its current bid to the house's
+  pseudonym
+- **AND** Grade10 holds one winner order for its internal bidder

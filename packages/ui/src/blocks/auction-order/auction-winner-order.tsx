@@ -9,6 +9,16 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@grade10/design-system/components/overlays/dialog";
+import { toast } from "@grade10/design-system/components/overlays/toast";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -19,11 +29,18 @@ import {
   ArrowCounterClockwise,
   ArrowUpRight,
   Bank,
+  CircleNotch,
   FilePdf,
   Hourglass,
   Info,
 } from "@phosphor-icons/react";
-import { type ReactNode, useLayoutEffect, useRef } from "react";
+import {
+  type ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { PaymentMethodCard } from "../payment-method/payment-method-card";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -36,6 +53,7 @@ import {
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type {
   AuctionWinnerOrderAlert,
+  AuctionWinnerOrderBankDetails,
   AuctionWinnerOrderCopy,
   AuctionWinnerOrderPdf,
   AuctionWinnerOrderProps,
@@ -106,12 +124,16 @@ function SummaryRow({
   emphasize = false,
   muted = false,
   tooltip,
+  subtext,
+  footnote,
 }: {
   label: string;
   value: string;
   emphasize?: boolean;
   muted?: boolean;
   tooltip?: string;
+  subtext?: string;
+  footnote?: string;
 }) {
   const labelNode = tooltip ? (
     <HStack className="min-w-0" gap="xs" vAlign="center">
@@ -120,10 +142,11 @@ function SummaryRow({
         <Tooltip>
           <TooltipTrigger
             aria-label={tooltip}
-            className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            onPointerDown={(event) => event.preventDefault()}
-            render={<Info aria-hidden size={12} />}
-          />
+            className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+            closeOnClick={false}
+          >
+            <Info aria-hidden size={12} />
+          </TooltipTrigger>
           <TooltipContent>{tooltip}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -134,7 +157,7 @@ function SummaryRow({
 
   return (
     <div
-      className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:gap-4"
+      className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-2 sm:gap-x-4"
       data-slot="winner-order-summary-line"
     >
       <span
@@ -146,17 +169,48 @@ function SummaryRow({
       >
         {labelNode}
       </span>
-      <span
-        className={cn(
-          "shrink-0 text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
-          emphasize && "text-base font-semibold",
-          muted && "text-secondary-foreground",
-        )}
-      >
-        {value}
+      <span className="flex shrink-0 flex-col items-end">
+        <span
+          className={cn(
+            "text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
+            emphasize && "text-base font-semibold",
+            muted && "text-secondary-foreground",
+          )}
+        >
+          {value}
+        </span>
+        {subtext ? (
+          <span
+            className="mt-0.5 text-right text-xs leading-4 whitespace-nowrap tabular-nums text-secondary-foreground"
+            data-slot="winner-order-summary-subtext"
+          >
+            {subtext}
+          </span>
+        ) : null}
       </span>
+      {footnote ? (
+        <span
+          className="col-span-2 mt-0.5 text-left text-xs leading-4 text-secondary-foreground"
+          data-slot="winner-order-summary-footnote"
+        >
+          {footnote}
+        </span>
+      ) : null}
     </div>
   );
+}
+
+function useFailedToast(failed?: string) {
+  const lastToastedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!failed) {
+      lastToastedRef.current = null;
+      return;
+    }
+    if (lastToastedRef.current === failed) return;
+    lastToastedRef.current = failed;
+    toast.error(failed);
+  }, [failed]);
 }
 
 function PdfLink({
@@ -170,9 +224,11 @@ function PdfLink({
   pdf: AuctionWinnerOrderPdf;
   className?: string;
 }) {
-  const { href, onOpen } = pdf;
+  const { href, onOpen, pending, failed } = pdf;
+  useFailedToast(failed);
   return (
     <Link
+      aria-busy={pending ? true : undefined}
       aria-label={ariaLabel}
       className={className}
       href={href ?? "#view-pdf"}
@@ -180,40 +236,64 @@ function PdfLink({
         onOpen
           ? (event) => {
               event.preventDefault();
-              onOpen();
+              if (!pending) onOpen();
             }
           : undefined
       }
       size="sm"
       variant="secondary"
     >
-      <FilePdf aria-hidden size={14} weight="regular" />
+      {pending ? (
+        <span aria-hidden className="inline-flex animate-spin">
+          <CircleNotch size={14} weight="bold" />
+        </span>
+      ) : (
+        <FilePdf aria-hidden size={14} weight="regular" />
+      )}
       {label}
     </Link>
   );
 }
 
-function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
+function ActionFailed({ message }: { message?: string }) {
+  if (!message) return null;
   return (
-    <Alert
-      actions={
-        alert.action ? (
-          <Button onClick={alert.action.onPress} size="sm" variant="outline">
-            {alert.action.label}
-          </Button>
-        ) : undefined
-      }
-      description={
-        alert.description ? (
-          <span className="whitespace-pre-line">{alert.description}</span>
-        ) : undefined
-      }
-      dismissible={false}
-      layout={alert.description ? "block" : "inline"}
-      role={alert.role ?? "alert"}
-      status={alert.status}
-      title={alert.title}
-    />
+    <Text as="p" role="alert" size="sm" tone="error">
+      {message}
+    </Text>
+  );
+}
+
+function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
+  const { action } = alert;
+  return (
+    <>
+      <Alert
+        actions={
+          action ? (
+            <Button
+              loading={action.pending}
+              onClick={action.onPress}
+              size="sm"
+              variant="outline"
+            >
+              {action.label}
+            </Button>
+          ) : undefined
+        }
+        description={
+          alert.description ? (
+            <span className="whitespace-pre-line">{alert.description}</span>
+          ) : undefined
+        }
+        dismissible={false}
+        layout={alert.description ? "block" : "inline"}
+        role={alert.role ?? "alert"}
+        status={alert.status}
+        title={alert.title}
+      />
+      <ActionFailed message={action?.failed} />
+    </>
   );
 }
 
@@ -323,6 +403,8 @@ function ProgressCard({
           className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           data-slot="winner-order-progress-rail"
           ref={railRef}
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: the rail scrolls sideways on a narrow screen, and a scroll container takes focus so a keyboard can scroll it.
+          tabIndex={0}
         >
           <Stepper
             aria-label={copy.orderProgress}
@@ -369,7 +451,7 @@ function LotCard({
         {lot.imageSrc ? (
           <img
             alt=""
-            className="absolute inset-0 size-full object-contain p-0.5"
+            className="absolute inset-0 size-full object-cover"
             src={lot.imageSrc}
           />
         ) : null}
@@ -382,7 +464,11 @@ function LotCard({
         >
           {lot.title}
         </Text>
-        <Text className="tabular-nums" size="sm" weight="medium">
+        <Text
+          className="tabular-nums text-secondary-foreground"
+          size="sm"
+          weight="regular"
+        >
           {copy.winningBid}: {lot.winningBid}
         </Text>
       </VStack>
@@ -414,11 +500,74 @@ function LotCard({
   );
 }
 
+type BankDetailsDialogProps = {
+  bankDetails: AuctionWinnerOrderBankDetails;
+  copy: AuctionWinnerOrderCopy;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+};
+
+function BankDetailsDialog({
+  bankDetails,
+  copy,
+  onOpenChange,
+  open,
+}: BankDetailsDialogProps) {
+  return (
+    <Dialog onOpenChange={onOpenChange} open={open}>
+      <DialogContent
+        className="max-h-[min(640px,calc(100dvh-2rem))] min-h-0"
+        showCloseButton
+      >
+        <DialogHeader>
+          <DialogTitle>{bankDetails.title}</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
+          {bankDetails.qrSrc ? (
+            <img
+              alt={copy.bankDetailsQrAlt}
+              className="mx-auto size-40 rounded-lg border border-border object-contain"
+              src={bankDetails.qrSrc}
+            />
+          ) : null}
+          <dl className="grid w-full gap-3">
+            {bankDetails.rows.map((row) => (
+              <div
+                className="grid gap-1 sm:grid-cols-[minmax(0,12rem)_minmax(0,1fr)] sm:gap-4"
+                key={`${row.label}-${row.value}`}
+              >
+                <dt className="text-sm font-medium text-secondary-foreground">
+                  {row.label}
+                </dt>
+                <dd className="break-words text-sm text-foreground">
+                  {row.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          {bankDetails.note ? (
+            <p className="text-sm leading-5 text-secondary-foreground">
+              {bankDetails.note}
+            </p>
+          ) : null}
+        </DialogBody>
+        <DialogFooter>
+          <DialogClose render={<Button size="md" variant="outline" />}>
+            {copy.bankDetailsClose}
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function OrderSummary({
   copy,
+  onViewBankDetails,
   summary,
 }: {
   copy: AuctionWinnerOrderCopy;
+  onViewBankDetails?: () => void;
   summary: AuctionWinnerOrderProps["summary"];
 }) {
   const { pay } = summary;
@@ -429,9 +578,11 @@ function OrderSummary({
         gap="none"
         vAlign="center"
       >
-        <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
-          {copy.orderSummary}
-        </h2>
+        <HStack gap="sm" vAlign="center">
+          <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
+            {copy.orderSummary}
+          </h2>
+        </HStack>
         {summary.invoicePdf ? (
           <PdfLink
             ariaLabel={summary.invoicePdf.ariaLabel ?? copy.invoicePdf}
@@ -444,22 +595,49 @@ function OrderSummary({
       <VStack className="w-full" gap="sm" hAlign="stretch">
         {summary.lines.map((line) => (
           <SummaryRow
+            footnote={line.footnote}
             key={line.label}
             label={line.label}
             muted={line.muted}
+            subtext={line.subtext}
             tooltip={line.tooltip}
             value={line.value}
           />
         ))}
       </VStack>
-      {summary.total ? (
+      {summary.total || summary.convertedTotal ? (
+        <>
+          <hr className="w-full border-border" />
+          {summary.total ? (
+            <SummaryRow
+              emphasize
+              footnote={summary.total.footnote}
+              label={summary.total.label}
+              muted={summary.total.muted}
+              subtext={summary.total.subtext}
+              value={summary.total.value}
+            />
+          ) : null}
+          {summary.convertedTotal ? (
+            <SummaryRow
+              emphasize
+              footnote={summary.convertedTotal.footnote}
+              label={summary.convertedTotal.label}
+              muted={summary.convertedTotal.muted}
+              value={summary.convertedTotal.value}
+            />
+          ) : null}
+        </>
+      ) : null}
+
+      {summary.convertedFee ? (
         <>
           <hr className="w-full border-border" />
           <SummaryRow
-            emphasize
-            label={summary.total.label}
-            muted={summary.total.muted}
-            value={summary.total.value}
+            footnote={summary.convertedFee.footnote}
+            label={summary.convertedFee.label}
+            muted={summary.convertedFee.muted}
+            value={summary.convertedFee.value}
           />
         </>
       ) : null}
@@ -473,7 +651,7 @@ function OrderSummary({
                 size="sm"
                 variant="outline"
               >
-                {copy.view}
+                {copy.refundDetails}
               </Button>
             ) : undefined
           }
@@ -492,23 +670,26 @@ function OrderSummary({
           <Button
             className="w-full"
             disabled={pay.disabled}
-            loading={pay.loading}
+            loading={pay.loading || pay.pending}
             onClick={pay.onPress}
             size="md"
           >
             {pay.label}
           </Button>
+          <ActionFailed message={pay.failed} />
           {pay.secondary ? (
             <Button
               className="w-full"
-              disabled={pay.disabled || pay.loading}
-              onClick={pay.secondary.onPress}
+              disabled={pay.disabled || pay.loading || pay.pending}
+              loading={pay.secondary.pending}
+              onClick={onViewBankDetails ?? pay.secondary.onPress}
               size="md"
               variant="outline"
             >
               {pay.secondary.label}
             </Button>
           ) : null}
+          <ActionFailed message={pay.secondary?.failed} />
           {pay.deadline ? (
             <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
               {pay.deadline}
@@ -571,6 +752,7 @@ function AddressBlock({
 }: {
   delivery: NonNullable<AuctionWinnerOrderProps["delivery"]>;
 }) {
+  useFailedToast(delivery.confirm?.failed);
   return (
     <VStack className="w-full" gap="sm" hAlign="start">
       {delivery.value ? (
@@ -586,6 +768,7 @@ function AddressBlock({
         <VStack className="w-full" gap="sm" hAlign="stretch">
           <Button
             className="w-full"
+            loading={delivery.confirm.pending}
             onClick={delivery.confirm.onPress}
             size="md"
           >
@@ -610,10 +793,18 @@ function OrderSidebar({
   receipts = [],
   delivery,
   billing,
+  bankDetails,
 }: Pick<
   AuctionWinnerOrderProps,
-  "copy" | "summary" | "paymentMethod" | "receipts" | "delivery" | "billing"
+  | "copy"
+  | "summary"
+  | "paymentMethod"
+  | "receipts"
+  | "delivery"
+  | "billing"
+  | "bankDetails"
 >) {
+  const [bankDetailsOpen, setBankDetailsOpen] = useState(false);
   const methodCard =
     paymentMethod && paymentMethod.kind !== "text" ? paymentMethod : null;
   const methodText = paymentMethod?.kind === "text" ? paymentMethod : null;
@@ -635,7 +826,14 @@ function OrderSidebar({
           gap="md"
           hAlign="stretch"
         >
-          <OrderSummary copy={copy} summary={summary} />
+          <OrderSummary
+            copy={copy}
+            onViewBankDetails={() => {
+              summary.pay?.secondary?.onPress();
+              if (bankDetails) setBankDetailsOpen(true);
+            }}
+            summary={summary}
+          />
         </VStack>
         {hasLowerSection ? (
           <VStack className="w-full p-4 sm:p-6" gap="lg" hAlign="stretch">
@@ -668,6 +866,14 @@ function OrderSidebar({
           </VStack>
         ) : null}
       </Card>
+      {bankDetails ? (
+        <BankDetailsDialog
+          bankDetails={bankDetails}
+          copy={copy}
+          onOpenChange={setBankDetailsOpen}
+          open={bankDetailsOpen}
+        />
+      ) : null}
     </aside>
   );
 }
@@ -693,6 +899,7 @@ function AuctionWinnerOrder({
   receipts,
   delivery,
   billing,
+  bankDetails,
 }: AuctionWinnerOrderProps) {
   const revealed = useFirstPaintReveal();
   const mainStaggerIndex = progress ? 1 : 0;
@@ -774,6 +981,7 @@ function AuctionWinnerOrder({
           staggerIndex={sidebarStaggerIndex}
         >
           <OrderSidebar
+            bankDetails={bankDetails}
             billing={billing}
             copy={copy}
             delivery={delivery}
@@ -788,6 +996,8 @@ function AuctionWinnerOrder({
 }
 
 export type {
+  AuctionPaymentRail,
+  AuctionWinnerOrderBankDetails,
   AuctionWinnerOrderCopy,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,

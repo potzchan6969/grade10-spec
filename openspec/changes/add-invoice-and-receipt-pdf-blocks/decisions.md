@@ -5,7 +5,11 @@
   production, superseding both this repository's DOM sketch-turned-component
   and the fact that `grade10` had to build its own copy at all (Q18).
 - Carry every line the pdf-lib renderer already draws, as data the caller
-  supplies — no new content, no new requirement.
+  supplies - no new amount and no new requirement on what a line means. How
+  the items and their amounts are laid out changes in Q31-Q35.
+- Draw an order's items as rows on both documents, each with Winning Bid,
+  Buyer's Premium and Total, so a document with several items reads as one
+  table (Q31, Q32).
 - Route every label the renderer draws through a `copy` argument, matching
   the no-i18n-in-`@grade10/ui` rule every other block already follows (Q20).
 
@@ -30,6 +34,19 @@
   document's content, controls or visibility.
 - Inferring a winner's zone from their address, phone country or the PDF
   reader's machine after issue.
+- Combining lots into one invoice or receipt. Each invoice still holds one
+  lot, as `winner-order` requires; the table only makes the documents ready for
+  more items (Q31).
+- Taking anything from the reference sample beyond its item table and the
+  lines under it: its header block with auction name and order and payment
+  status rows, its brand mark, its footer notice and its `$` amount marks. The
+  sample names a private person and their address, so the store does not keep
+  it.
+- Changing the order of the charges under the table, the Subtotal,
+  Payment Processing Fee and Order Total summary, or the receipt's payment
+  breakdown.
+- Computing an amount in the block. Every item amount and the Item Total
+  amounts arrive preformatted, as every other amount does.
 
 ## Decisions
 
@@ -65,9 +82,35 @@
 | Q28 | Which Bill To and Ship To fields are optional, and what does an omitted one leave? | Company, phone, address line 2 and state are optional; recipient, address line 1, the locality line and country are required. An omitted optional line is withheld, with no blank line reserved. Amends Q11. Carried by the Party address requirement, SC-31 and SC-32 - the planning owner | Keep phone required as Q11 had it; or reserve blank lines so every block is the same height |
 | Q29 | Which bank rails does a bank transfer invoice show? | Only the rails Grade10 has enabled; a disabled rail leaves no heading, details or empty column. Amends Q22. Carried by the Bank details requirements and TC45 to TC48 - the planning owner | Always show three fixed columns, leaving disabled ones empty |
 | Q30 | Where does Tax sit on the documents? | An optional per-order Tax line, supplied as `taxLine`, rendered between Insurance and Subtotal, inside the Subtotal. Carried by the tax-line requirement and SC-52 and SC-53, folded with add-winner-order-tax-line - the planning owner | A separate Tax summary after Subtotal |
+| Q31 | Does the PDF only draw several items, or does one invoice cover several lots? | The documents draw several items; each invoice still holds one lot - decided by the round Carried by the item table requirement (SC-56 to SC-60) and, unchanged, by the `winner-order` requirement of one invoice per lot | One invoice for several lots - it reverses the `winner-order` rule of one invoice and one order per lot and reaches the order, quote, deadline, payment and shipment, so it is its own change led by the product manager |
+| Q32 | Does a one-item invoice keep the flat Description and Amount list? | One item table on every invoice and receipt; one item reads as one row - decided by the round Carried by the item table requirement (SC-56, SC-57, SC-60) | The flat list for one item and the table for two or more - the block would carry two layouts, with existing PDFs unchanged |
+| Q33 | Does the table end in an Item Total row that totals each column, including for one item? | Yes, on every document, so there is one layout - decided by the round Carried by the item table requirement (SC-56, SC-57) and the render-only requirement (SC-61) | Leave the row out for one item - it repeats the row above it, and the block then draws two layouts, which Q32 refused |
+| Q34 | What happens when the items do not fit one page? | The table continues on the next page under the repeated column header, an item row never splits across pages, and Item Total and the summary stay together, with a receipt's four payment breakdown lines kept whole - decided by the round Carried by the continuation requirement (SC-62 to SC-65) and the A4 pages requirement (SC-67, SC-68) | One page with smaller type - rows turn unreadable past a few items; splitting a row at the page edge, as the reference sample does when a title's last line lands alone on page 2 |
+| Q35 | Is a Figma frame drawn before the item table is built? | No; the PDFs have never had a frame, so the table is built from the requirements and previewed in Storybook, and the block changes only after the person's Design Override yes - decided by the round Carried by the Screens section of `ui-design.md`, with no requirement | Draw the table in Figma first - it would be the only frame for these PDFs, with nothing keeping it level with the renderer |
+| Q36 | Where does the issuer block sit on a document of several pages? | At the foot of the last page only, with no page numbers or continuation notes added - decided by the round Carried by the issuer block requirement (SC-66, SC-76) and, for no page numbers or continuation notes, the continuation requirement (SC-73) | On every page - it repeats the issuer on each sheet and reserves room under every page of the table; a page number line - nobody asked for one |
+| Q37 | Does a PDF already stored keep its old layout? | Yes; the archive keeps the bytes of the first open, so an invoice or receipt opened before this ships keeps its layout, and the first open after it ships draws the table - decided by the round Carried by the `winner-order` requirement Records the winner keeps, unchanged, with no requirement here | Re-draw every stored PDF - it changes a document the winner may already have filed or sent, and it needs the archive purged |
+| Q38 | How does the item table behave where no scenario said - an empty list, a page end, wide text, a blank or missing value? | The renderer refuses to render an empty item list. A continuation page repeats only the column header, and a page holding only Item Total, the charges and the summary repeats it too, with no item row moved over. The charges and Tax stay with Item Total and the summary. Bank details and a receipt's Payment section each stay whole across a page end. The page keeps room for the issuer block, so it never takes a page of its own, and it is pinned to the bottom edge of the last page as the renderer does today. A title word wider than the Item column breaks inside the word. Amount columns widen to their widest amount. A divider stays under the column header. A title the standard font cannot draw, with no embedded font supplied, fails to render. An empty title draws its row with a blank Item cell. All three Item Total amounts are required - decided by the round Carried by the continuation (SC-73 to SC-75), issuer block (SC-66, SC-76), item table (SC-59, SC-72), refusal (SC-69, SC-70) and render-only (SC-27) requirements | Drawing an empty list as a header and an Item Total row - a document with nothing to bill is a fault the caller should hear about, not a blank table; shrinking or wrapping an over-wide amount - one figure would read as two; a placeholder glyph for a character the font cannot draw - it hides a wrong font choice; placing the issuer block after the last content - the page edge would move with the content |
+| Q39 | Does the block refuse a document it cannot draw whole, and does one input always give the same bytes? | Yes to both. A row taller than a page cannot stay whole and be drawn, so Q34 and Q38 with failing loudly give the refusal. The renderer already stamps a document's own date, so two renders match and the archive can serve stored bytes as a cache - the planning owner. Carried by the refusal requirement (SC-71) and the render-only requirement (SC-77) | Drawing the row cut or shrunk to fit - Q34 and Q38 refuse both; stamping the time of the render - two first opens would store different bytes |
+| Q40 | Does the Subtotal, Payment Processing Fee and Order Total summary keep its border? | No. The three lines sit under the charges with no border drawn around them, and the rule above Order Total stays. Amends the first design, which drew a box around the three lines. Carried by `SC-3` and the cases `TC53` and `TC64` - the author, after reviewing the rendered PDFs | Keeping the border the first design drew around the three lines |
+| Q41 | Do the item table's amounts show a currency? | No. Winning Bid, Buyer's Premium and Total carry no currency in the item rows and in the Item Total row; the charges and the summary under the table keep theirs. The block draws the strings it is given, so the caller formats the table's amounts without a currency - the author, after reviewing the rendered PDFs | Keeping `HKD` on every amount of the table |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
 | `shared/ui/invoice-and-receipt-pdf` | Whether `replacesInvoice.documentLink` changes the PDF or only travels through the data contract | Q27 |
+| `shared/ui/invoice-and-receipt-pdf` | What a document with an empty item list draws: the column header and an Item Total row with no item row, no table, or a refusal to render. The input covers one item and several, not none | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | What a continuation page repeats besides the column header: the title and issuer mark, the meta rows, the party blocks, or nothing else. The input names only the repeated column header | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | When only the Item Total row and the summary move to the next page, whether that page repeats the column header above the Item Total row, and whether at least one item row must move with them | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | Which rows keep with the Item Total row at a page end: only the summary, or also the Shipping & Handling, Insurance and Tax rows. The input keeps Item Total with the summary and says nothing of the charges between them | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | Whether the Bank details section stays whole across a page end, and whether it stays with the summary above it. The page rules name the table, the summary, the payment breakdown and the issuer block, not Bank details | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | When the table and the summary fit a page but the issuer block does not, what moves to the next page: the issuer block alone, or the summary with it. The one-page rule counts the rest of the document without saying which part gives way | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | Whether the issuer block is pinned to the bottom edge of the last page or placed after the last content on it. The Feature set says at the foot of the sheet; an existing case reads directly after the order-value summary when no bank details are given | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | Whether a document of several pages carries a page number or a continuation note. Q36 leaves it open with a recommendation of none; the suite asserts only the issuer block's single appearance on the last page | Q36 |
+| `shared/ui/invoice-and-receipt-pdf` | How a title word wider than the Item column (a long serial or address with no space) draws: broken inside the word, shrunk, or overflowing into the amount columns | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | What is drawn for a title with characters the standard face cannot draw when no embedded face is supplied: a placeholder glyph, the characters dropped, or a refusal to render | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | How an amount string wider than its column draws: wrapped, shrunk, overflowing or refused. The input states no column widths | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | Whether a divider still separates the column header from the first item row, as the retired Description and Amount header had one | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | What an Item Total row draws when one of its three amounts is missing: a blank cell, a dash or a refusal. The input says the amounts are supplied, not that all three are required | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | What an item with an empty title draws: the row with its amounts and a blank Item cell, or a refusal | Q38 |
+| `shared/ui/invoice-and-receipt-pdf` | Whether a receipt's Payment section (the transfer reference) stays whole across a page end, and whether it stays with the summary above it or with the payment breakdown below it. The page rules name the four payment breakdown lines, not the Payment section. Raised at QA2, from the tech design's list of blocks | Q38 |

@@ -1,4 +1,5 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
+import { DetailRow } from "@grade10/design-system/components/display/detail-row";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
@@ -158,26 +159,11 @@ function ListingLotMeta({
         <Text className="font-semibold">{copy.aboutThisLot}</Text>
 
         {hasFacts ? (
-          <VStack className="w-full" gap="xs">
+          <VStack className="w-full" gap="none">
             {facts.map((fact) => (
-              <HStack
-                className="w-full"
-                gap="sm"
-                hAlign="space-between"
-                key={fact.label}
-                wrap
-              >
-                <Text
-                  className="shrink-0 uppercase text-secondary-foreground"
-                  size="sm"
-                  weight="medium"
-                >
-                  {fact.label}
-                </Text>
-                <Text className="min-w-0 text-right" size="sm" weight="medium">
-                  {fact.value}
-                </Text>
-              </HStack>
+              <DetailRow key={fact.label} label={fact.label}>
+                {fact.value}
+              </DetailRow>
             ))}
           </VStack>
         ) : null}

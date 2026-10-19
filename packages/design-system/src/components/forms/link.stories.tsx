@@ -3,14 +3,14 @@ import { ExternalLinkIcon } from "lucide-react";
 import { Link } from "./link";
 
 const meta = {
-  title: "Components/Link",
+  title: "Design System/Forms/Link",
   component: Link,
   tags: ["autodocs"],
   args: { children: "Link", href: "#link" },
   argTypes: {
     variant: {
       control: "inline-radio",
-      options: ["default", "secondary", "error"],
+      options: ["default", "secondary", "error", "brand"],
     },
     size: { control: "inline-radio", options: ["default", "sm", "xs"] },
   },
@@ -22,11 +22,12 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 export const Secondary: Story = { args: { variant: "secondary" } };
 export const ErrorTone: Story = { args: { variant: "error" } };
+export const Brand: Story = { args: { variant: "brand" } };
 
 export const Small: Story = { args: { size: "sm" } };
 export const ExtraSmall: Story = { args: { size: "xs" } };
 
-/** Every tone collapses to the same disabled colour in Figma. `<a>` has no
+/** Disabled keeps the tone's colour at `Opacity/opacity-50`. `<a>` has no
  * `disabled` attribute, so this renders as `aria-disabled`. */
 export const Disabled: Story = { args: { disabled: true } };
 
@@ -45,7 +46,7 @@ export const Sizes: Story = {
 export const Tones: Story = {
   render: (args) => (
     <div className="flex items-baseline gap-4">
-      {(["default", "secondary", "error"] as const).map((variant) => (
+      {(["default", "secondary", "error", "brand"] as const).map((variant) => (
         <Link key={variant} {...args} variant={variant}>
           {variant}
         </Link>

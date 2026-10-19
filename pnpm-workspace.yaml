@@ -9,6 +9,10 @@ packages:
 allowBuilds:
   esbuild: true
 enableGlobalVirtualStore: true
+# pnpm 11 installs before every `pnpm run` by default. Inside grade10, where
+# the root install already populates this checkout's packages, that install
+# brings in a second React and breaks grade10's tests. Install explicitly.
+verifyDepsBeforeRun: false
 # next-themes ships types that reference the React namespace without depending on
 # @types/react. Under the global virtual store its package directory sits outside
 # this workspace, so TypeScript cannot find those types by directory walk.

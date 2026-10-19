@@ -11,8 +11,25 @@ test("planning text lands on main and owes the planning checks", () => {
     "openspec/changes/add-x/proposal.md",
     "docs/prds/products/grade10/x.md",
   ];
-  assert.equal(classify(paths).route, "main");
-  assert.deepEqual(ids(paths), ["biome", "changes", "test-cases", "manual"]);
+  assert.deepEqual(ids(paths), [
+    "biome",
+    "changes",
+    "test-cases",
+    "manual",
+    "pages",
+    "stories",
+  ]);
+});
+
+test("a cases file owes the page checks", () => {
+  assert.deepEqual(ids(["docs/cases/grade10/x.md"]), [
+    "biome",
+    "changes",
+    "test-cases",
+    "manual",
+    "pages",
+    "stories",
+  ]);
 });
 
 test("a status-only push validates just the changes it moved", () => {
@@ -27,46 +44,67 @@ test("a status-only push validates just the changes it moved", () => {
 test("an archived change's status file is not a status-only push", () => {
   assert.deepEqual(
     ids(["openspec/changes/archive/2026-10-01-add-x/tasks.md"]),
-    ["biome", "changes", "test-cases", "manual"],
+    ["biome", "changes", "test-cases", "manual", "stories"],
   );
 });
 
-test("a shared surface goes through a pull request and names itself", () => {
+test("a shared surface owes the fast checks and the agent parity check", () => {
   const paths = [
     "openspec/changes/add-x/proposal.md",
     "packages/ui/src/blocks/a.tsx",
     "AGENTS.md",
   ];
-  const { route, shared } = classify(paths);
-  assert.equal(route, "pr");
-  assert.deepEqual(shared, ["packages/ui/src/blocks/a.tsx", "AGENTS.md"]);
-  assert.ok(ids(paths).includes("parity"));
+  assert.deepEqual(ids(paths), [
+    "biome",
+    "changes",
+    "test-cases",
+    "manual",
+    "stories",
+    "parity",
+  ]);
 });
 
-test("a durable spec and a schema land differently", () => {
-  assert.equal(classify(["openspec/specs/grade10/a/b/spec.md"]).route, "main");
-  assert.equal(
-    classify(["openspec/schemas/grade10-planning/schema.yaml"]).route,
-    "pr",
+test("a durable spec, a schema and root config owe the checks their paths carry", () => {
+  const planning = ["biome", "changes", "test-cases", "manual", "stories"];
+  assert.deepEqual(ids(["openspec/specs/grade10/a/b/spec.md"]), planning);
+  assert.deepEqual(
+    ids(["openspec/schemas/grade10-planning/schema.yaml"]),
+    planning,
   );
-  assert.equal(classify(["openspec/config.yaml"]).route, "pr");
+  assert.deepEqual(ids(["openspec/config.yaml"]), planning);
 });
 
-test("anything outside planning text is shared, a new path included", () => {
+test("anything outside planning text owes at least the formatter, a new path included", () => {
   for (const path of [
     "README.md",
     "PRODUCT.md",
     ".vscode/settings.json",
     ".gitmodules",
   ]) {
-    assert.equal(classify([path]).route, "pr", path);
+    assert.deepEqual(ids([path]), ["biome"], path);
   }
 });
 
-test("every page, reference and governance doc lands on main and owes the planning checks", () => {
+test("every page, reference and governance doc owes the planning checks", () => {
   const paths = ["docs/references/a.md", "docs/governance/b.md"];
-  assert.equal(classify(paths).route, "main");
-  assert.deepEqual(ids(paths), ["biome", "changes", "test-cases", "manual"]);
+  assert.deepEqual(ids(paths), [
+    "biome",
+    "changes",
+    "test-cases",
+    "manual",
+    "stories",
+  ]);
+});
+
+test("a story or a block owes the story check", () => {
+  assert.deepEqual(
+    ids(["apps/preview/src/pages/store/cart/cart.stories.tsx"]),
+    ["biome", "stories"],
+  );
+  assert.deepEqual(ids(["packages/ui/src/blocks/store-cart/cart-item.tsx"]), [
+    "biome",
+    "stories",
+  ]);
 });
 
 test("changesOf names each active change once", () => {
@@ -88,7 +126,6 @@ const line = (remoteRef, local = B, remote = A) =>
   `refs/heads/x ${local} ${remoteRef} ${remote}`;
 const context = (sent, overrides = {}) => ({
   gated: undefined,
-  allowShared: false,
   head: B,
   clean: true,
   pathsOf: () => sent,
@@ -119,16 +156,12 @@ test("the hook passes a commit a gated tool already checked", () => {
   assert.deepEqual(result, { refusals: [], paths: [] });
 });
 
-test("the hook refuses a shared surface on main unless asked", () => {
+test("the hook gates a shared surface pushed to main, as it gates planning text", () => {
   const sent = ["scripts/a.mjs"];
-  const refused = review([line("refs/heads/main")], context(sent));
-  assert.equal(refused.refusals.length, 1);
-  assert.match(refused.refusals[0], /scripts\/a\.mjs/);
-  const allowed = review(
-    [line("refs/heads/main")],
-    context(sent, { allowShared: true }),
-  );
-  assert.deepEqual(allowed, { refusals: [], paths: sent });
+  assert.deepEqual(review([line("refs/heads/main")], context(sent)), {
+    refusals: [],
+    paths: sent,
+  });
 });
 
 test("the hook refuses what the working tree cannot stand for", () => {

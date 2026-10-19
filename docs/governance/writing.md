@@ -109,24 +109,20 @@ nearest your task and keep it open while you draft.
 
 - **A line earns its place** — the reader would act differently without
   it: a value, a set they can meet, an outcome they can see, a decision. A
-  line a stated rule implies is the spec's; a case that only proves a rule
-  is the suite's; how a surface arranges, labels or sizes an outcome is
-  the design record's; how the code does it is the architecture doc's.
-  The page is the essence a reader expands from, never the expansion: the
-  manual renders the suite under its `::cases` block, the change's artifacts on its Board
-  entry, and the architecture doc from the engineer block's links
-- **The spec holds the contract** — a testable statement lives in
-  `openspec/specs/` and nowhere else. A page states the rule in its own
-  words and links the capability; it never restates, and never cites a
-  scenario id (`…-SC-32`)
+  case that only proves a rule is the cases file's; how a surface arranges,
+  labels or sizes an outcome is the story's; how the code does it is the
+  architecture doc's. The page is the essence a reader expands from, never
+  the expansion
+- **The page holds the contract** — a rule is stated once, on its page, in
+  a form a test can check: a value in a table, an order in a flow, a worked
+  number in an example. A page never cites a scenario id (`…-SC-32`); an
+  example's `id` is an attribute the manual does not show -
+  [Page First](page-first.md)
 - **A page holds what it owns** — a sibling's rule appears as its outcome
   and a link: `the tier is judged again at once — [Tiers](…)`. What a
   sibling says about this page's topic moves here, so a thin page is built
   from what its siblings and the index hold of it, and nothing is said
   twice
-- **The spec is linked, never embedded** — the frontmatter names it and
-  the manual shows it; a `::spec` block, or a section listing the specs
-  the page documents, is deleted
 - **The engineer block is a code map** — the config name, the module, the
   architecture doc, as names and links, nothing else. Ledger kinds, keys,
   locks, metrics, columns and what was tried are deleted; the architecture

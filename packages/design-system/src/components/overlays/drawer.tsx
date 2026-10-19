@@ -192,11 +192,17 @@ function DrawerContent({
   );
 }
 
-function DrawerCloseIcon({ className }: { className?: string }) {
+function DrawerCloseIcon({
+  className,
+  label = "Close drawer",
+}: {
+  className?: string;
+  label?: string;
+}) {
   return (
     <DrawerPrimitive.Close
       data-slot="drawer-close"
-      render={<IconButton aria-label="Close drawer" className={className} />}
+      render={<IconButton aria-label={label} className={className} />}
     >
       <X aria-hidden />
     </DrawerPrimitive.Close>
@@ -211,10 +217,13 @@ function DrawerCloseIcon({ className }: { className?: string }) {
 function DrawerHeader({
   className,
   showCloseButton = true,
+  closeLabel,
   children,
   ...props
 }: ComponentProps<"div"> & {
   showCloseButton?: boolean;
+  /** The close button's name, in the reader's language. */
+  closeLabel?: string;
 }) {
   return (
     <div
@@ -226,7 +235,7 @@ function DrawerHeader({
       {...props}
     >
       <div className="flex min-w-0 flex-1 flex-col gap-2">{children}</div>
-      {showCloseButton ? <DrawerCloseIcon /> : null}
+      {showCloseButton ? <DrawerCloseIcon label={closeLabel} /> : null}
     </div>
   );
 }

@@ -15,11 +15,15 @@ authoritative event data.
   - Named components: gallery, bid panel, and details from the package entry
   - Reusable parts: the gallery renders without the bid panel
 - Gallery sources
-  - Distinct addresses: thumbnail, main frame, and zoom each have their own source
-  - Fallback to src: an omitted thumb or zoom uses the main source
+  - Distinct addresses: thumbnail, main frame, and magnifier each have their own source
+  - Fallback to src: an omitted thumb or magnifier source uses the main source
 - Gallery strip
   - Several items: more than one image shows a strip; one item does not
   - Lot gallery by width: ListingLotGallery shows a left rail when wide enough beside the stage; stacked keeps previous/next and progress only
+- Gallery magnification
+  - In place: a lens follows the pointer over the selected image; focused, it moves with the arrow keys and Escape hides it
+  - Not touch: a touch pointer never raises the lens, and the lens never blocks scroll or swipe
+  - No dialog: no zoom dialog, and no magnifier button opens one
 - Consumer labels
   - Supplied copy: accessible names come from the application
 - Bid history
@@ -51,19 +55,31 @@ authoritative event data.
   - Leader base: chips add those steps to the committed maximum
   - Field base: chips add those steps to the current public bid
   - Opening base: before any bid, chip 1x is the opening price, the next eligible bid
+  - Ceiling clamp: a chip above the supplied ceiling is offered at the ceiling, captioned as the limit
+  - Merged chips: chips landing on the same amount merge to one
 - Raise floor
   - Leader minimum: a typed raise starts at the maximum plus 100 minor units
   - Separate from chips: the first chip is not that typed minimum
+  - Ceiling bound: a raise floor above the ceiling leaves no legal amount
 - Lost standing
   - Badge only: Did not win remains, with no banner
 - Custom maximum ceiling
-  - Major-unit cap: draft cannot exceed 9,999,999,999 whole major units
-  - Restore on overshoot: paste or keystroke that would exceed leaves the previous valid draft
-  - No ceiling error copy: refuse is silent, same feel as refusing a decimal mark
+  - Major-unit cap: USD 10,000,000 whole major units, the one cap; the HKD and JPY caps retire
+  - Restore on overshoot: an appended typed digit that would exceed the cap leaves the prior draft
+  - No ceiling error copy: no maximum-bid or invalid-amount message solely for the ceiling correction
+  - Replacement and paste: an oversized cleaned amount becomes the currency cap
+  - Whole-major cleaning: discard a pasted fractional suffix without rounding before checking the cap
+  - Set and raise: the same field rule; exactly the cap is accepted
+  - Currency policy: the consuming application supplies the USD ceiling; the block chooses no bid currency
 - Public bid history outcome
   - Winner crown: closed sold winning row shows a primary crown after the amount
   - Equal-max tip: a row tied on amount with a row above it shows an Info tip in the amount tone
   - Live lots: no winner crown
+- Ceiling reached
+  - Collapsed entry: no chips, no custom field and no bid action when no legal amount exists
+  - Two readings: the collector's own maximum leads the row, or the lot's ceiling does
+  - Fee stays: the buyer-fee line survives the collapse
+  - Precedence: the collapse outranks the needs-card lock
 
 ## Requirements
 
@@ -98,30 +114,31 @@ reuse the gallery without the bid panel.
 ### Requirement: A gallery image has distinct thumbnail, main, and zoom sources
 
 `ListingGalleryImage` SHALL accept `src` for the main frame, `thumbSrc` for
-the thumbnail strip, `zoomSrc` for the zoom dialog, `alt` as the accessible
-name, and optional `thumbLabel` as the thumbnail's accessible name (falling
-back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
-`src`. The gallery SHALL NOT fetch, derive, or rewrite those addresses.
+the thumbnail strip, `zoomSrc` for the magnified lens view, `alt` as the
+accessible name, and optional `thumbLabel` as the thumbnail's accessible
+name (falling back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that
+slot SHALL use `src`. The gallery SHALL NOT fetch, derive, or rewrite those
+addresses.
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-v9a rev=1 -->
+<!-- trace:scenario id=g10.shared-auction-listing.SC-v9a rev=2 -->
 #### Scenario: shared-ui-auction-listing-SC-03 - Distinct sources are used in each slot
 **Serves:** Gallery sources - distinct sources are used in each slot
 
 - **GIVEN** a gallery image whose `thumbSrc`, `src`, and `zoomSrc` are three
   different addresses
 - **WHEN** it is rendered with at least one other image (so the strip is
-  shown) and the collector opens zoom
+  shown) and the collector magnifies the main frame
 - **THEN** the thumbnail requests `thumbSrc`
 - **AND** the main frame requests `src`
-- **AND** the zoom dialog requests `zoomSrc`
+- **AND** the magnified view requests `zoomSrc`
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-4sr rev=1 -->
+<!-- trace:scenario id=g10.shared-auction-listing.SC-4sr rev=2 -->
 #### Scenario: shared-ui-auction-listing-SC-04 - Omitted sources fall back to src
 **Serves:** Gallery sources - omitted sources fall back to src
 
 - **GIVEN** a gallery image that supplies only `src` and `alt`
 - **WHEN** it is rendered
-- **THEN** the main frame, and zoom, request `src`
+- **THEN** the main frame, and the magnified view, request `src`
 
 ### Requirement: The gallery matches how many items it was given
 
@@ -161,17 +178,20 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 ### Requirement: A control has no copy of its own
 
 `ListingGallery` SHALL receive a required `copy` object
-(`ListingGalleryCopy`) with `zoom`, `previous`, and `next` from the consumer.
-It SHALL NOT supply default user-visible copy for those slots.
+(`ListingGalleryCopy`) with `zoom`, `previous`, and `next`, and an optional
+`zoomInstructions` for the magnifier group, from the consumer.
+`ListingLotGallery` SHALL receive its copy the same way. Neither gallery
+SHALL supply default user-visible copy for those slots.
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-ogg rev=1 -->
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ogg rev=2 -->
 #### Scenario: shared-ui-auction-listing-SC-08 - Labels come from the consumer
 **Serves:** Consumer labels - labels come from the consumer
 
 - **GIVEN** a gallery rendered with
-  `copy={{ zoom: "Click to zoom", previous: "Previous image", next: "Next image" }}`
+  `copy={{ zoom: "Hover to magnify", zoomInstructions: "Move the pointer or use the arrow keys; Escape hides the magnifier", previous: "Previous image", next: "Next image" }}`
 - **WHEN** it renders
-- **THEN** those strings are the accessible names and visible zoom hint
+- **THEN** those strings are the magnifier group's accessible name and the
+  controls' names
 - **AND** no other language appears in those slots
 
 ### Requirement: Extension explanation copy reflects the listing policy
@@ -238,9 +258,11 @@ line. A closed lot's close is a collector deadline: when it shows a clock it
 SHALL be stated in that zone and SHALL name the viewer's zone, as an open lot's
 deadline does, and when it shows only a day it SHALL name none.
 
-`AuctionCard` SHALL require `locale` and `timeZone` and SHALL format its
-static Ends / Opens / Closed line as a collector deadline in that zone, naming
-the viewer's zone.
+The catalogue lot tile `AuctionLotCard` SHALL require `locale` and `timeZone`.
+A tile whose lot has not closed SHALL keep the countdown it draws and SHALL
+read its open or close as a collector deadline in that zone to a screen
+reader; a closed tile SHALL draw that collector deadline, with a closed
+prefix, as its close line. Either line names the viewer's zone.
 
 The viewer's zone is named as `shared/dates-and-times` names it: its short name
 in US English (`HKT`, `EDT`), or its offset in English where US English has none
@@ -259,8 +281,8 @@ in US English (`HKT`, `EDT`), or its offset in English where US English has none
 #### Scenario: shared-ui-auction-listing-SC-55 - A catalogue tile close follows the viewer
 **Serves:** Bid history - catalogue tile close follows the viewer
 
-- **GIVEN** the same close instant rendered on `AuctionCard` for `Asia/Hong_Kong` and `America/New_York`
-- **WHEN** each card renders its clock line
+- **GIVEN** the same close instant rendered on a closed `AuctionLotCard` for `Asia/Hong_Kong` and `America/New_York`
+- **WHEN** each tile's close line is read
 - **THEN** the clock values differ
 - **AND** the Hong Kong line names `HKT`
 - **AND** the New York line names `EDT` and does not contain `HKT`
@@ -629,38 +651,66 @@ the current bid plus those multiples, except that before any bid the 1×
 amount SHALL be the view's minimum bid, the opening price itself; the 2× and
 4× amounts still add their multiples to the current bid on the view.
 
+A stepped amount above the view's ceiling SHALL be offered at the ceiling,
+captioned as the auction's limit rather than the amount's delta. Chips that
+would show the same amount SHALL merge to one chip, so the row MAY hold fewer
+than three chips.
+
 The first chip SHALL NOT be replaced by the typed raise floor.
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-7o5 rev=1 -->
+<!-- trace:scenario id=g10.shared-auction-listing.SC-7o5 rev=2 -->
 #### Scenario: shared-ui-auction-listing-SC-35 - A leader's chips step from the committed max
 **Serves:** Quick bids - a leader's chips step from the committed max
 
-- **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
+- **GIVEN** a USD listing whose current bid is 120000 minor units, whose
   increment is 4000 minor units, and whose viewer leads with a maximum of
   200000 minor units
 - **WHEN** the bid card renders quick-bid chips
-- **THEN** the three amounts are 204000, 208000, and 216000 HKD minor units
+- **THEN** the three amounts are 204000, 208000, and 216000 USD minor units
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-t9f rev=1 -->
+<!-- trace:scenario id=g10.shared-auction-listing.SC-t9f rev=2 -->
 #### Scenario: shared-ui-auction-listing-SC-36 - A collector who does not lead steps from the current bid
 **Serves:** Quick bids - a collector who does not lead steps from the current bid
 
-- **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
+- **GIVEN** a USD listing whose current bid is 120000 minor units, whose
   increment is 4000 minor units, and whose viewer has a maximum of 116000
   minor units and does not lead
 - **WHEN** the bid card renders quick-bid chips
-- **THEN** the three amounts are 124000, 128000, and 136000 HKD minor units
+- **THEN** the three amounts are 124000, 128000, and 136000 USD minor units
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-2s5 rev=1 -->
+<!-- trace:scenario id=g10.shared-auction-listing.SC-2s5 rev=2 -->
 #### Scenario: shared-ui-auction-listing-SC-52 - Before any bid chip 1x is the opening price
 **Serves:** Quick bids - a collector meets the chips on a lot nobody has bid on
 
-- **GIVEN** an HKD listing with no accepted bid, whose view carries an
+- **GIVEN** a USD listing with no accepted bid, whose view carries an
   opening price of 48000 minor units as both its minimum bid and its current
   bid, and an increment of 2000 minor units
 - **WHEN** the bid card renders quick-bid chips
-- **THEN** the three amounts are 48000, 52000, and 56000 HKD minor units
+- **THEN** the three amounts are 48000, 52000, and 56000 USD minor units
 - **AND** the 48000 chip is captioned as the next eligible bid
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-huw rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-61 - A chip stepping past the ceiling is offered at the ceiling
+**Serves:** Quick bids - a chip above the ceiling is offered at the ceiling
+
+- **GIVEN** a USD listing whose current bid is 120000 minor units, whose
+  increment is 10000 minor units, whose ceiling is 1000000000 minor units,
+  and whose viewer leads with a maximum of 999970000 minor units
+- **WHEN** the bid card renders quick-bid chips
+- **THEN** the three amounts are 999980000, 999990000, and 1000000000 USD
+  minor units
+- **AND** the last chip is captioned as the auction's limit
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-atq rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-62 - Chips that clamp to the same amount merge to one
+**Serves:** Quick bids - chips clamped onto the same amount merge to one
+
+- **GIVEN** a USD listing whose increment is 10000 minor units, whose ceiling
+  is 1000000000 minor units, and whose viewer leads with a maximum of
+  999990000 minor units
+- **WHEN** the bid card renders quick-bid chips
+- **THEN** the row shows one chip at 1000000000 USD minor units, captioned as
+  the auction's limit
 
 ### Requirement: A leader's typed raise floor is max plus 100 minor units
 
@@ -669,16 +719,30 @@ that maximum, `ListingAuctionBidCard` SHALL set the custom-maximum minimum to
 the greater of the listing's minimum next bid and that maximum plus 100
 minor units. That floor SHALL NOT be used as the first quick-bid amount.
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-dv0 rev=1 -->
+A raise floor that exceeds the view's ceiling SHALL leave no legal amount,
+and the card SHALL offer no amount entry.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-dv0 rev=2 -->
 #### Scenario: shared-ui-auction-listing-SC-37 - A leader's typed minimum stays max plus $1
 **Serves:** Raise floor - a leader's typed minimum stays max plus $1
 
-- **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
+- **GIVEN** a USD listing whose current bid is 120000 minor units, whose
   increment is 4000 minor units, whose minimum next bid is 124000 minor
   units, and whose viewer leads with a maximum of 200000 minor units
 - **WHEN** the bid card renders the custom maximum field
-- **THEN** the field's minimum is 200100 HKD minor units
-- **AND** the first quick-bid amount remains 204000 HKD minor units
+- **THEN** the field's minimum is 200100 USD minor units
+- **AND** the first quick-bid amount remains 204000 USD minor units
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-1mi rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-63 - A raise floor above the ceiling leaves no entry
+**Serves:** Raise floor - a raise floor above the ceiling leaves no legal amount
+
+- **GIVEN** a USD listing whose current bid is 999995000 minor units, whose
+  increment is 10000 minor units, whose ceiling is 1000000000 minor units,
+  and whose viewer leads with a maximum of 999995000 minor units
+- **WHEN** the bid card renders
+- **THEN** no quick-bid chip, no custom maximum field and no bid action
+  render
 
 ### Requirement: Bid card discloses the buyer fee inline
 
@@ -732,91 +796,127 @@ and SHALL render no banner under that standing.
 
 ### Requirement: Custom maximum entry respects a major-unit ceiling
 
-A custom maximum has a ceiling, and an edit past it is refused without a
-message.
+`ListingAuctionBidCard` SHALL accept a custom private-maximum draft up to the listing's ceiling, USD 10000000 whole major units. Its consumer SHALL supply that ceiling in integer minor units on the existing currency-bearing bid view; the shared block SHALL NOT choose currency policy.
 
-**Major-unit cap** - `ListingAuctionBidCard` SHALL accept a custom
-private-maximum draft only when the whole major-unit integer is at most
-9,999,999,999, regardless of listing currency.
+| Currency | Ceiling (minor units) | Whole-major ceiling |
+| --- | --- | --- |
+| USD | 1000000000 | 10000000 |
 
-**After cleaning** - The ceiling applies after whole-major cleaning (non-digits
-stripped; a decimal mark and its fraction discarded).
+USD is the one bid currency, so this is the one ceiling. There is no ceiling
+for any other currency.
 
-**Restore on overshoot** - An edit — typed or pasted — whose cleaned major-unit
-value would exceed that ceiling SHALL leave the previous valid draft unchanged,
-including when that draft is empty.
+**After cleaning** - The ceiling SHALL apply after whole-major cleaning: non-digits are stripped and a decimal mark and its fraction are discarded without rounding.
 
-**No clamp** - The field SHALL NOT clamp the draft to the ceiling.
+**Typed append** - An appended typed digit whose cleaned whole-major value exceeds the ceiling SHALL leave the previous valid draft unchanged.
 
-**At the ceiling** - Exactly 9,999,999,999 SHALL be accepted.
+**Replacement and paste** - An oversized replacement or paste SHALL show the currency's whole-major ceiling, including a paste into an empty field or a paste appended to an existing draft.
 
-**No ceiling error copy** - The refuse alone SHALL NOT show an invalid-amount
-or below-floor message.
+**At the ceiling** - Exactly the ceiling SHALL be accepted, including a fractional paste whose whole-major result equals it.
 
-**Set and raise** - Set and raise private maximum share this field and this
-rule.
+**No ceiling error copy** - Ceiling correction alone SHALL NOT show a maximum-bid, invalid-amount or below-floor message.
 
-**Committed amounts** - Committed amounts remain an integer count of minor
-units at or above the existing floor rules.
+**Set and raise** - Set and raise private maximum SHALL share this field and rule.
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-9e0 rev=1 -->
+**Committed amounts** - Committed amounts remain an integer count of minor units at or above the existing floor rules.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-9e0 rev=3 -->
 #### Scenario: shared-ui-auction-listing-SC-38 - A draft at the ceiling is accepted
-**Serves:** Custom maximum ceiling - a draft at the ceiling is accepted
+**Serves:** Custom maximum ceiling - the collector reviews a corrected custom amount before committing
 
-- **GIVEN** an HKD listing bid panel whose custom maximum field is empty
-- **WHEN** a collector enters `9999999999` into the custom maximum field
-- **THEN** the draft shown is `9999999999`
+- **GIVEN** a USD listing bid panel whose custom maximum field is empty
+- **WHEN** a collector enters `10000000` into the custom maximum field
+- **THEN** the draft shown is `10000000`
+- **AND** no message appears solely because of the ceiling correction
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-8ym rev=1 -->
+<!-- trace:scenario id=g10.shared-auction-listing.SC-8ym rev=3 -->
 #### Scenario: shared-ui-auction-listing-SC-39 - A typed digit beyond the ceiling restores the previous draft
-**Serves:** Custom maximum ceiling - a typed digit beyond the ceiling restores the previous draft
+**Serves:** Custom maximum ceiling - the collector reviews a corrected custom amount before committing
 
-- **GIVEN** an HKD listing bid panel whose custom maximum draft is `9999999999`
-- **WHEN** a collector types `0` into the custom maximum field
-- **THEN** the draft remains `9999999999`
+- **GIVEN** a USD listing bid panel whose custom maximum draft is `10000000`
+- **WHEN** a collector appends a typed `0`
+- **THEN** the draft remains `10000000`
+- **AND** no message appears solely because of the ceiling correction
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-wdd rev=1 -->
+<!-- trace:scenario id=g10.shared-auction-listing.SC-wdd rev=3 -->
 #### Scenario: shared-ui-auction-listing-SC-40 - A paste beyond the ceiling from an empty field stays empty
-**Serves:** Custom maximum ceiling - a paste beyond the ceiling from an empty field stays empty
+**Serves:** Custom maximum ceiling - the collector reviews a corrected custom amount before committing
 
-- **GIVEN** an HKD listing bid panel with the custom maximum field empty
-- **WHEN** a collector pastes `10000000000` into the custom maximum field
-- **THEN** the draft remains empty
-- **AND** no invalid-amount message appears solely because of the rejected
-  paste
+**Historical title** - The issued title is retained; the result below replaces empty-on-paste with the currency ceiling.
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-z2x rev=1 -->
+- **GIVEN** a USD listing bid panel whose custom maximum field is empty
+- **WHEN** a collector pastes `10000001`
+- **THEN** the draft shown is `10000000`
+- **AND** no message appears solely because of the ceiling correction
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-z2x rev=3 -->
 #### Scenario: shared-ui-auction-listing-SC-41 - A paste beyond the ceiling restores the prior draft
-**Serves:** Custom maximum ceiling - a paste beyond the ceiling restores the prior draft
+**Serves:** Custom maximum ceiling - the collector reviews a corrected custom amount before committing
 
-- **GIVEN** an HKD listing bid panel whose custom maximum draft is `500`
-- **WHEN** a collector pastes `99999999999` into the custom maximum field
-- **THEN** the draft remains `500`
+**Historical title** - The issued title is retained; the result below replaces paste restoration with the currency ceiling.
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-y2e rev=1 -->
+- **GIVEN** a USD listing bid panel whose custom maximum draft is `500`
+- **WHEN** a collector replaces it by pasting `99999999999`
+- **THEN** the draft shown is `10000000`
+- **AND** no message appears solely because of the ceiling correction
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-y2e rev=3 -->
 #### Scenario: shared-ui-auction-listing-SC-42 - A fractional paste that exceeds after whole-major cleaning restores the prior draft
-**Serves:** Custom maximum ceiling - a fractional paste that exceeds after whole-major cleaning restores the prior draft
+**Serves:** Custom maximum ceiling - the collector reviews a corrected custom amount before committing
 
-- **GIVEN** an HKD listing bid panel whose custom maximum draft is `500`
-- **WHEN** a collector pastes `10000000000.99` into the custom maximum field
-- **THEN** the draft remains `500`
+**Historical title** - The issued title is retained; the result below uses the currency ceiling after cleaning.
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-xxl rev=1 -->
+- **GIVEN** a USD listing bid panel whose custom maximum draft is `500`
+- **WHEN** a collector pastes `10000001.99`
+- **THEN** the draft shown is `10000000`
+- **AND** no message appears solely because of the ceiling correction
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-xxl rev=3 -->
 #### Scenario: shared-ui-auction-listing-SC-43 - Raise path restores on overshoot
-**Serves:** Custom maximum ceiling - raise path restores on overshoot
+**Serves:** Custom maximum ceiling - the collector reviews a corrected custom amount before committing
 
-- **GIVEN** an HKD listing bid panel showing Raise your private maximum whose
-  custom maximum draft is `9999999999`
-- **WHEN** a collector types `1` into the custom maximum field
-- **THEN** the draft remains `9999999999`
+- **GIVEN** a USD listing bid panel showing Raise your private maximum whose custom maximum draft is `10000000`
+- **WHEN** a collector appends a typed `1`
+- **THEN** the draft remains `10000000`
+- **AND** no message appears solely because of the ceiling correction
 
-<!-- trace:scenario id=g10.shared-auction-listing.SC-6n7 rev=1 -->
+<!-- trace:scenario id=g10.shared-auction-listing.SC-6n7 rev=3 -->
 #### Scenario: shared-ui-auction-listing-SC-53 - A fractional paste at the ceiling after cleaning is accepted
-**Serves:** Custom maximum ceiling - a fractional paste at the ceiling after cleaning is accepted
+**Serves:** Custom maximum ceiling - the collector reviews a corrected custom amount before committing
 
-- **GIVEN** an HKD listing bid panel whose custom maximum draft is `500`
-- **WHEN** a collector pastes `9999999999.99` into the custom maximum field
-- **THEN** the draft shown is `9999999999`
+- **GIVEN** a USD listing bid panel whose custom maximum draft is `500`
+- **WHEN** a collector pastes `10000000.99`
+- **THEN** the draft shown is `10000000`
+- **AND** no message appears solely because of the ceiling correction
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-q3n rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-58 - Every supported currency accepts its ceiling in set and raise
+**Serves:** Custom maximum ceiling - the collector reviews an amount in the listing currency through either maximum mode
+
+This scenario keeps its title with its id. The title is historical: USD is the
+one supported currency.
+
+- **GIVEN** a USD bid panel in set or raise mode with an eligible floor below its ceiling
+- **WHEN** the collector enters `10000000` and commits
+- **THEN** the draft stays at `10000000` and the callback receives 1000000000 USD minor units
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-qdv rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-59 - Oversized replacement uses each currency's ceiling
+**Serves:** Custom maximum ceiling - the collector reviews an amount in the listing currency through either maximum mode
+
+This scenario keeps its title with its id. The title is historical: USD is the
+one supported currency.
+
+- **GIVEN** a USD bid panel in set or raise mode with a valid draft
+- **WHEN** the collector replaces the draft with `10000001`, by typing or paste
+- **THEN** the draft shows `10000000`, without a ceiling message
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-2wv rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-60 - A pasted suffix uses the ceiling while a typed suffix restores
+**Serves:** Custom maximum ceiling - the collector reviews an amount in the listing currency through either maximum mode
+
+- **GIVEN** a USD bid panel in set or raise mode whose draft equals its ceiling
+- **WHEN** the collector appends an extra digit by paste or by typing
+- **THEN** paste leaves the ceiling shown, typing retains the previous draft, and neither shows a ceiling message
 
 ### Requirement: Public bid history marks the closed winner and equal-max priority
 
@@ -932,3 +1032,124 @@ SHALL render no item and SHALL NOT present previous/next as available.
 - **WHEN** it renders
 - **THEN** no image is shown
 - **AND** previous and next are not available
+
+### Requirement: The bid panel offers no entry when no amount is legal
+
+When the amount floor exceeds the view's ceiling, `ListingAuctionBidCard`
+SHALL render no quick-bid chips, no custom maximum field and no bid action.
+It SHALL render a status row naming the amount reached and a line that the
+auction accepts no higher amount.
+
+A viewer holding a committed maximum SHALL see that maximum lead the row,
+with the private-maximum explanation behind its Info trigger. A viewer
+holding none SHALL see the ceiling amount lead the row. The raise-mechanism
+line SHALL NOT render.
+
+The buyer-fee line SHALL render while the viewer is signed in. The collapse
+SHALL take precedence over the needs-card enrollment lock.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-v6g rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-64 - A maximum at the ceiling collapses the entry group
+**Serves:** Ceiling reached - the collector's maximum leads the collapsed row
+
+- **GIVEN** a USD listing whose ceiling is 1000000000 minor units and whose
+  viewer leads with a maximum of 1000000000 minor units
+- **WHEN** the bid card renders
+- **THEN** no quick-bid chip, no custom maximum field and no bid action
+  render
+- **AND** a status row leads with the viewer's maximum of 1000000000 minor
+  units, then a line that the auction accepts no higher amount
+- **AND** the buyer-fee line renders
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-cfl rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-65 - A lot priced past the ceiling offers no entry
+**Serves:** Ceiling reached - the lot's ceiling leads the collapsed row
+
+- **GIVEN** a USD listing whose minimum next bid exceeds the 1000000000
+  minor-unit ceiling and whose viewer holds no maximum
+- **WHEN** the bid card renders
+- **THEN** no quick-bid chip, no custom maximum field and no bid action
+  render
+- **AND** a status row names the ceiling amount and a line that bidding has
+  reached the highest amount the auction accepts
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-rnz rev=2 -->
+#### Scenario: shared-ui-auction-listing-SC-66 - The collapse outranks the card setup lock
+**Serves:** Ceiling reached - the collapse precedes the enrollment lock
+
+- **GIVEN** a USD listing under the needs-card enrollment signal whose viewer
+  leads with a maximum of 1000000000 minor units
+- **WHEN** the bid card renders
+- **THEN** the collapsed status row renders
+- **AND** the disabled chips, custom field and link-card action do not render
+
+### Requirement: A gallery magnifies the selected image in place
+
+`ListingGallery` and `ListingLotGallery` SHALL magnify the selected image in
+place: a lens follows the pointer over the main frame and renders the
+image's magnified view inside it. Leaving the frame SHALL hide the lens.
+
+The lens SHALL be a focusable group. While focused, each arrow key SHALL
+move it within the frame and Escape SHALL hide it. The magnified content
+inside the lens SHALL be hidden from assistive technology and unreachable
+by keyboard.
+
+A touch pointer SHALL NOT raise the lens, and the lens SHALL NOT block
+scrolling or slide swiping. `ListingLotGallery` SHALL make only the
+selected slide's lens focusable. `ListingGallery` SHALL present no lens on
+a video item. Neither gallery SHALL present a zoom dialog or a control
+that opens one.
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-teu rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-67 - The pointer raises the lens over the selected image
+**Serves:** Gallery magnification - the lens follows the pointer
+
+- **GIVEN** a gallery whose selected item is an image
+- **WHEN** the pointer moves over the main frame
+- **THEN** a magnifier lens is shown at the pointer position
+- **AND** it magnifies the area beneath it
+- **WHEN** the pointer leaves the frame
+- **THEN** the lens is hidden
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-bk7 rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-68 - A focused lens moves with the arrow keys
+**Serves:** Gallery magnification - arrows move the focused lens
+
+- **GIVEN** a gallery whose lens group is focused
+- **WHEN** an arrow key is pressed
+- **THEN** the lens moves within the frame
+- **AND** the gallery does not step to another image
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-53x rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-69 - Escape hides the lens
+**Serves:** Gallery magnification - Escape hides the lens
+
+- **GIVEN** a gallery whose lens is shown
+- **WHEN** Escape is pressed
+- **THEN** the lens is hidden
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-qlq rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-70 - A touch pointer does not raise the lens
+**Serves:** Gallery magnification - a touch pointer raises nothing
+
+- **GIVEN** a gallery whose selected item is an image
+- **WHEN** a touch pointer moves over the main frame
+- **THEN** no lens is shown
+- **AND** a swipe still steps the gallery
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-qyd rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-71 - Only the selected slide's lens is focusable
+**Serves:** Gallery magnification - non-selected slides stay out of the tab order
+
+- **GIVEN** a `ListingLotGallery` with several images
+- **WHEN** the collector tabs through the gallery
+- **THEN** only the selected slide's lens group takes focus
+
+<!-- trace:scenario id=g10.shared-auction-listing.SC-73b rev=1 -->
+#### Scenario: shared-ui-auction-listing-SC-72 - A video item has no lens
+**Serves:** Gallery magnification - video carries no magnifier
+
+- **GIVEN** a `ListingGallery` whose selected item is a video
+- **WHEN** the pointer moves over it
+- **THEN** no lens is shown
+- **AND** the video's own controls keep working

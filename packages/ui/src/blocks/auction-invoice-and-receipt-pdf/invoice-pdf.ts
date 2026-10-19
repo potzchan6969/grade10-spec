@@ -1,30 +1,28 @@
 import type { PDFPage } from "pdf-lib";
-import { PDFDocument } from "pdf-lib";
 import type {
   Fonts,
+  PdfBlock,
   PdfDocumentCopy,
+  PdfItemRow,
+  PdfItemTotal,
   PdfLineItem,
   PdfPartyAddress,
   PdfRenderOptions,
 } from "./pdf-document";
 import {
-  A4_HEIGHT,
   A4_WIDTH,
   addressLines,
   BODY_SIZE,
-  drawIssuer,
-  drawLineItems,
   drawMetaRow,
-  drawParties,
   drawRuleSpan,
   drawText,
-  drawTitle,
   formatDateTime,
   INK,
   LINE_HEIGHT,
-  loadFonts,
   MARGIN,
+  measuredBlock,
   RIGHT_EDGE,
+  renderDocument,
   SMALL_SIZE,
   wrap,
 } from "./pdf-document";
@@ -65,7 +63,7 @@ export type InvoicePdfBankRails = {
   fps?: { fpsId: string; beneficiary: string };
   hkLocalTransfer?: {
     bankAndCode: string;
-    beneficiary: string;
+    beneficiary?: string;
     accountNo: string;
   };
   reference: string;
@@ -77,7 +75,9 @@ export type InvoicePdfReplacement = {
 
 /** The only values an invoice renderer is allowed to consume. */
 export type InvoicePdfData = {
-  listingTitle: string;
+  /** One row per item, in the order drawn. */
+  items: readonly PdfItemRow[];
+  itemTotal: PdfItemTotal;
   /** The display identifier a consumer already formatted, not a row id. */
   invoiceNumber: string;
   sentAt: Date;
@@ -86,7 +86,9 @@ export type InvoicePdfData = {
   paymentMethod: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
+  /** The charges under the item table and the keyed summary rows. */
   lineItems: readonly InvoicePdfLineItem[];
+  /** The only route for Tax, drawn after the other charges. */
   taxLine?: InvoicePdfLineItem | null;
   replacesInvoice?: InvoicePdfReplacement | null;
   /** Given only on a bank-transfer invoice; omitted renders no Bank details section at all. */
@@ -224,29 +226,13 @@ function drawBankReferenceNote(
 /**
  * A full-width "Bank details" section below the order value, given only on
  * a bank-transfer invoice: one equal-width column for each enabled rail, a
- * divider, then the reference note. Omitted entirely -
- * heading, columns and note - when `bankRails` is not given.
+ * divider, then the reference note. It moves to the next page whole.
  */
-function drawBankRails(
-  page: PDFPage,
+function bankDetailsBlock(
   fonts: Fonts,
-  data: Pick<InvoicePdfData, "bankRails" | "copy">,
-  y: number,
-): number {
-  const { bankRails, copy } = data;
-  if (!bankRails) return y;
-
-  drawText(
-    page,
-    fonts.bold,
-    copy.bankDetailsHeading,
-    MARGIN,
-    y,
-    BODY_SIZE,
-    INK,
-  );
-  y -= LINE_HEIGHT * 1.6;
-
+  bankRails: InvoicePdfBankRails,
+  copy: InvoicePdfCopy,
+): PdfBlock {
   const columns: { heading: string; rows: [string, string][] }[] = [];
   if (bankRails.swift) {
     columns.push({
@@ -268,84 +254,86 @@ function drawBankRails(
     });
   }
   if (bankRails.hkLocalTransfer) {
+    const rows: [string, string][] = [
+      [copy.bankAndCodeLabel, bankRails.hkLocalTransfer.bankAndCode],
+    ];
+    if (bankRails.hkLocalTransfer.beneficiary !== undefined) {
+      rows.push([copy.beneficiaryLabel, bankRails.hkLocalTransfer.beneficiary]);
+    }
+    rows.push([copy.accountNoLabel, bankRails.hkLocalTransfer.accountNo]);
     columns.push({
       heading: copy.hkLocalTransferLabel,
-      rows: [
-        [copy.bankAndCodeLabel, bankRails.hkLocalTransfer.bankAndCode],
-        [copy.beneficiaryLabel, bankRails.hkLocalTransfer.beneficiary],
-        [copy.accountNoLabel, bankRails.hkLocalTransfer.accountNo],
-      ],
+      rows,
     });
   }
-  if (columns.length === 0) return y;
+  const columnWidth = (A4_WIDTH - MARGIN * 2) / Math.max(columns.length, 1);
 
-  const columnWidth = (A4_WIDTH - MARGIN * 2) / columns.length;
+  return measuredBlock((page, y) => {
+    drawText(
+      page,
+      fonts.bold,
+      copy.bankDetailsHeading,
+      MARGIN,
+      y,
+      BODY_SIZE,
+      INK,
+    );
+    y -= LINE_HEIGHT * 1.6;
+    if (columns.length === 0) return y;
 
-  const columnTop = y;
-  let bottom = columnTop;
-  for (const [index, column] of columns.entries()) {
-    let columnY = columnTop;
-    const x = MARGIN + columnWidth * index;
-    drawText(page, fonts.bold, column.heading, x, columnY, SMALL_SIZE, INK);
-    columnY -= LINE_HEIGHT;
-    for (const [label, value] of column.rows) {
-      columnY = drawWrappedRow(
-        page,
-        fonts,
-        label,
-        value,
-        x,
-        columnWidth - LINE_HEIGHT,
-        columnY,
-      );
+    const columnTop = y;
+    let bottom = columnTop;
+    for (const [index, column] of columns.entries()) {
+      let columnY = columnTop;
+      const x = MARGIN + columnWidth * index;
+      drawText(page, fonts.bold, column.heading, x, columnY, SMALL_SIZE, INK);
+      columnY -= LINE_HEIGHT;
+      for (const [label, value] of column.rows) {
+        columnY = drawWrappedRow(
+          page,
+          fonts,
+          label,
+          value,
+          x,
+          columnWidth - LINE_HEIGHT,
+          columnY,
+        );
+      }
+      bottom = Math.min(bottom, columnY);
     }
-    bottom = Math.min(bottom, columnY);
-  }
-  y = bottom - LINE_HEIGHT * 0.5;
+    y = bottom - LINE_HEIGHT * 0.5;
 
-  y = drawRuleSpan(page, MARGIN, RIGHT_EDGE, y, { gap: LINE_HEIGHT });
-  return drawBankReferenceNote(
-    page,
-    fonts,
-    copy.bankReferenceNoteLabel,
-    bankRails.reference,
-    y,
-  );
+    y = drawRuleSpan(page, MARGIN, RIGHT_EDGE, y, { gap: LINE_HEIGHT });
+    return drawBankReferenceNote(
+      page,
+      fonts,
+      copy.bankReferenceNoteLabel,
+      bankRails.reference,
+      y,
+    );
+  });
 }
 
-/** Render one deterministic A4 invoice from an immutable invoice snapshot. */
-export async function InvoicePdf(
+/** Render one deterministic invoice of A4 pages from an immutable invoice snapshot. */
+export function InvoicePdf(
   data: InvoicePdfData,
   options: InvoicePdfRenderOptions = {},
 ): Promise<ArrayBuffer> {
-  const pdf = await PDFDocument.create();
-  pdf.setProducer("grade10 auction invoices");
-  pdf.setCreationDate(data.sentAt);
-  pdf.setModificationDate(data.sentAt);
-
-  const fonts = await loadFonts(pdf, options.fontBytes, options.boldFontBytes);
-
-  const page = pdf.addPage([A4_WIDTH, A4_HEIGHT]);
-  let y = A4_HEIGHT - MARGIN;
-  y = drawTitle(page, fonts, data.copy.documentTitle, data.issuerName, y);
-  y = drawMetaBlock(page, fonts, data, y);
-  y = drawRuleSpan(page, MARGIN, RIGHT_EDGE, y, { gap: LINE_HEIGHT * 1.5 });
-  y = drawParties(page, fonts, data.billTo, data.shipTo, data.copy, y);
-  y = drawLineItems(
-    page,
-    fonts,
-    data.listingTitle,
-    data.lineItems,
-    data.taxLine,
-    data.copy,
-    y,
-  );
-  if (data.bankRails) y -= LINE_HEIGHT;
-  drawBankRails(page, fonts, data, y);
-  drawIssuer(page, fonts, data.issuerName, data.issuerEmail);
-
-  const bytes = await pdf.save({ useObjectStreams: false });
-  const output = new Uint8Array(bytes.byteLength);
-  output.set(bytes);
-  return output.buffer;
+  const { bankRails } = data;
+  return renderDocument({
+    producer: "grade10 auction invoices",
+    date: data.sentAt,
+    data,
+    options,
+    drawMeta: (page, fonts, y) => drawMetaBlock(page, fonts, data, y),
+    trailing: (fonts) =>
+      bankRails
+        ? [
+            {
+              what: "Bank details",
+              block: bankDetailsBlock(fonts, bankRails, data.copy),
+            },
+          ]
+        : [],
+  });
 }

@@ -1,0 +1,87 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "7f9db83c3f0b41c50f6ef366e00057feda1c21952a58fdff6ed7708be542d12b"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "d15ea06495a517aed27ed3fd0201ee9186fd5ef2",
+    "capturedAt": "2026-10-13T19:25:33.576Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+        "anchors": [
+          "Requirement: A Won row opens its auction order"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction-orders/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction-orders/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Each row offers View lot and the action its status needs",
+          "Requirement: Empty and failed reads",
+          "Requirement: No separate auction orders page is served",
+          "Requirement: The list holds one row per won order"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction-orders/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Signed-in collectors open what the build carries from the account menu"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: The auction-order surface exports",
+          "Requirement: The winner-order surface exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "36964d9ac2c2452ae0d59abfaa7fcd8bf20eaddd",
+      "components": ["storybook"],
+      "verifiedBy": "htonyl",
+      "verification": "PR #1157 passed every required check on head 28908ee45cda1eee2f8051a6aba5511b95618c53 and merged as this commit. The public export regression, retained My Auctions story walk, shared UI suite and complete cart-picture lane pass. No grade10 application source or dependency update is required; its existing pin already contains the production removal."
+    }
+  ]
+}

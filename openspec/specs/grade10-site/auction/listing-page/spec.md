@@ -12,7 +12,7 @@ A lot address names one lot by the id the catalogue already addresses it by.
 Every requirement of `grade10-site/site/crawlable-pages` binds it — it is a public
 surface, so its title, description, share metadata and sitemap treatment are
 that capability's, per lot rather than per page. What a bid must clear, when a
-close extends and how a lot is settled stay `grade10-site/auction/auction`'s.
+close extends and how a lot is settled stay `grade10-site/auction/auction`'s. The card, the lot page and the lot's share metadata read in the page's language, with English where no text was written.
 
 ## Feature set
 
@@ -43,8 +43,8 @@ close extends and how a lot is settled stay `grade10-site/auction/auction`'s.
 - Catalogue and sitemap
   - Opened from the catalogue: the catalogue reaches a lot's own address
     without a page load
-  - No lot in the sitemap: which lots the auction publishes is unknown at build
-    time, so no entry is a lot address
+  - Lots in the sitemap: every lot the catalogue holds is listed when the
+    sitemap is fetched, and none is an unfilled parameter
 - Live lot updates
   - Without a reload: another page's accepted bid, an extension or a close
     shows with the new price, bid count and close
@@ -75,9 +75,13 @@ close extends and how a lot is settled stay `grade10-site/auction/auction`'s.
   - Title stays the reference: a collector and support continue to identify
     and quote a lot by its title and its address, exactly as before the
     listing code existed
-  - Canonical address: a called-off listing is removed from browse and search
-    but remains directly accessible at its canonical address; explicit hard
-    deletion is outside this change and its page accessibility is unspecified
+  - Called-off address: the original slug becomes available for reuse; an
+    eligible new holder answers there, otherwise the address is not found
+- Lot in the reader's language
+  - Page language: the card and the lot page show the title and description in the language the page is read in
+  - English fallback: a language with no text shows the English text, and one Chinese is never shown in place of the other
+  - Share metadata: the page title, meta description and Open Graph title and description follow the page's language
+  - Reference stays English: support identifies a lot by its English title and its address
 
 ## Requirements
 
@@ -110,7 +114,11 @@ reads is the one the address names, not the catalogue it was reached from.
 
 A lot address SHALL carry Open Graph title, description and URL naming that
 lot and its own canonical address, readable without executing scripts. A
-shared lot link SHALL NOT unfurl as the auction catalogue.
+shared lot link SHALL NOT unfurl as the auction catalogue. The page title, the
+meta description and the Open Graph title and description SHALL follow the
+language of the address, with the fallback of the page: a Traditional Chinese
+address unfurls in Traditional Chinese, and a Simplified Chinese address of a
+lot with only Traditional Chinese text unfurls in English.
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-mda rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-03 - A preview fetcher reads a lot
@@ -121,6 +129,24 @@ shared lot link SHALL NOT unfurl as the auction catalogue.
   naming that lot and its own address
 - **AND** none of them names the auction catalogue in its place
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-yu8 rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-70 - A Traditional Chinese link unfurls in Traditional Chinese
+**Serves:** grade10-site-auction-listing-page-US-02 - Collector shares a lot link
+
+- **GIVEN** a published lot with a Traditional Chinese title and description
+- **WHEN** its Traditional Chinese address is fetched and no script executes
+- **THEN** the page title and `og:title` carry the Traditional Chinese title
+- **AND** the meta description and `og:description` are made from the Traditional Chinese description
+- **AND** `og:url` is that address
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-7b2 rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-71 - A link in a language with no text unfurls in English
+**Serves:** grade10-site-auction-listing-page-US-02 - Collector shares a lot link
+
+- **GIVEN** a published lot with a Traditional Chinese title and description and no Simplified Chinese text
+- **WHEN** its Simplified Chinese address is fetched and no script executes
+- **THEN** the page title, `og:title`, meta description and `og:description` carry the English title and description
+
 ### Requirement: An address that names no lot is refused
 
 The catalogue SHALL be what decides whether an id names a published lot,
@@ -128,10 +154,13 @@ asked when the address is asked for. An address under the auction's lots
 naming no published lot SHALL answer with status 404 and the site's not-found
 screen, never an empty lot page and never the catalogue.
 
-The address of a Draft lot SHALL give the same 404 response, even if it was
-once published. A called-off lot's canonical address SHALL continue to serve
-its public listing page after it is removed from browse and search, as
-`grade10-site/auction/lot-status` defines.
+The address SHALL be resolved against the current slug holder. A draft,
+created or called-off lot SHALL NOT answer as a public lot. A called-off
+listing's released address SHALL answer 404 when no published, closed or
+settled listing now holds it. When an eligible new listing holds the address,
+the response SHALL serve that new listing with its own title, description
+and canonical metadata. The same outcome SHALL apply to server-rendered
+responses and client-fetched listing data.
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-s88 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-04 - An id the catalogue publishes no lot for
@@ -158,6 +187,30 @@ its public listing page after it is removed from browse and search, as
 - **WHEN** an address naming that lot is fetched
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the site's Page not found screen
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-b49 rev=1 -->
+#### Scenario: g10.auction-listing-page.SC54 - A released address with no holder is not found
+**Serves:** grade10-site-auction-listing-page-US-03 - the collector opens the former address of a withdrawn lot
+
+- **GIVEN** a called-off lot has released its former slug and no other listing holds it
+- **WHEN** a collector fetches the former address without scripts and then requests the same address through client navigation
+- **THEN** the served response is 404 with Page not found; client lookup returns no public lot and the existing not-found surface, with no alias or redirect to the called-off lot
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-l9n rev=1 -->
+#### Scenario: g10.auction-listing-page.SC55 - A reused address serves the new public holder
+**Serves:** grade10-site-auction-listing-page-US-01 - the collector reads the lot currently offered at the shared address
+
+- **GIVEN** another listing has taken a called-off lot's former slug and is published, closed or settled
+- **WHEN** a collector fetches that address without scripts and reads it after scripts load
+- **THEN** the served page, title, description, canonical URL and Open Graph metadata name the new holder; client-fetched data and the hydrated page name that same new lot
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-w3i rev=1 -->
+#### Scenario: g10.auction-listing-page.SC56 - A draft or created holder remains private
+**Serves:** grade10-site-auction-listing-page-US-03 - the collector follows a released address before its new holder is public
+
+- **GIVEN** a draft or created listing holds the original slug released by a called-off lot
+- **WHEN** the address is fetched and its client-fetched lot data is requested
+- **THEN** the response is 404 with Page not found and no public lot data; neither the new private listing nor the called-off lot is exposed
 
 ### Requirement: A served lot becomes live without blanking
 
@@ -192,9 +245,10 @@ carry on from what was served rather than disagreeing with it.
 The catalogue SHALL open a lot's own address from that lot, without a page
 load.
 
-The sitemap lists the surfaces the build writes a document for, and a lot is
-not one of them: which lots the auction publishes is not known when the site
-is built.
+The sitemap SHALL list every lot the catalogue holds, read when it is fetched
+rather than when the site is built, as `grade10-site/site/crawlable-pages`
+requires of every public address. No entry SHALL carry an unfilled parameter
+in place of a lot.
 
 <!-- trace:scenario id=g10.auction-listing-page.SC-fl9 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-08 - A lot is opened from the catalogue
@@ -204,13 +258,14 @@ is built.
 - **WHEN** they open a lot it lists
 - **THEN** that lot's address is what they are on, showing that lot's page
 
-<!-- trace:scenario id=g10.auction-listing-page.SC-aga rev=1 -->
-#### Scenario: grade10-site-auction-listing-page-SC-09 - The sitemap names no lot
+<!-- trace:scenario id=g10.auction-listing-page.SC-aga rev=2 -->
+#### Scenario: grade10-site-auction-listing-page-SC-09 - The sitemap lists each published lot
 **Serves:** grade10-site-auction-listing-page-US-05 - Collector reaches a lot from the catalogue
 
+- **GIVEN** a published lot the catalogue holds
 - **WHEN** the sitemap is fetched
-- **THEN** no entry is a lot address
-- **AND** none carries an unfilled parameter in place of one
+- **THEN** that lot's address is listed as an absolute URL of the serving environment
+- **AND** none carries an unfilled parameter in place of a lot
 
 ### Requirement: A lot's page offers to watch it
 
@@ -413,16 +468,16 @@ live updates stay anonymous.
   returns
 - **THEN** the page shows the new current bid and bid count without a reload
 
-<!-- trace:scenario id=g10.auction-listing-page.SC-7c2 rev=1 -->
+<!-- trace:scenario id=g10.auction-listing-page.SC-7c2 rev=2 -->
 #### Scenario: grade10-site-auction-listing-page-SC-43 - A leader outbid from another page reads Outbid without a reload
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
-- **GIVEN** a signed-in bidder leading an open `HKD` lot at 120000 minor units,
+- **GIVEN** a signed-in bidder leading an open `USD` lot at 120000 minor units,
   with its page open
 - **WHEN** another bidder's bid of 130000 minor units is accepted from another
   page
 - **THEN** the bidder's page shows the current bid 130000 minor units and their
-  standing Outbid, with 134000 minor units as the minimum next valid bid,
+  standing Outbid, with 132500 minor units as the minimum next valid bid,
   without a reload
 - **AND** the live update that reached the page names neither bidder
 
@@ -616,121 +671,6 @@ The lot page SHALL set the public Recent bids flags that
 - **THEN** customer B's row at that amount carries the Info tip
 - **AND** customer A's row at that amount carries none
 
-### Requirement: The listing code is only exposed through the canonical address
-
-Every listing carries a stable opaque listing code, allocated on its first
-saved draft. A generated canonical address ends with that code in lower case;
-the public page does not make the code a separate field or an alternate route.
-
-- **Canonical address** - A listing that keeps its generated slug SHALL answer
-  at `/auction/listings/<normalized title>-<lowercase code>`. The canonical
-  URL and `og:url` SHALL use that address.
-- **No separate field** - The server-rendered page, embedded state,
-  client-fetched data, visible page fields, `og:title`, `og:description`, page
-  title and meta description SHALL NOT expose a labelled listing-code or
-  payment-reference field. A previously cached preview MAY persist; Grade10
-  provides no purge or regeneration guarantee.
-- **Sitemap** - No sitemap entry SHALL expose a listing-code field.
-- **Not-found response** - The response for an address naming no listing or a
-  draft lot SHALL NOT contain the listing code, including in any error detail.
-- **Does not resolve as an address** - The listing code SHALL NOT work as an
-  alternate way to reach the lot's address; fetching the auction's
-  lot-address path with the listing code in place of the lot's own address
-  SHALL answer the same as any address naming no published lot.
-- **Called-off direct address** - Calling a listing off SHALL remove it from
-  browse and search while its canonical address remains directly accessible.
-  The listing code SHALL remain a non-route and SHALL NOT be accepted as the
-  public address. Explicit hard deletion is outside this change; this
-  requirement does not state what its page does.
-- **Stays true once an order exists** - Once the code becomes the order's
-  payment reference on other surfaces, this capability SHALL continue to
-  expose it only through the canonical URL suffix.
-
-#### Scenario: grade10-site-auction-listing-page-SC-20 - The served response uses the generated canonical address
-**Serves:** Public identifier - the collector opens the code-backed canonical address without receiving a separate identifier field
-
-- **GIVEN** a published lot with generated slug `charizard-psa-10-lk423`
-- **WHEN** its address is fetched and no script executes
-- **THEN** the canonical address is `/auction/listings/charizard-psa-10-lk423`
-- **AND** the response exposes no labelled listing-code or payment-reference field
-
-<!-- trace:scenario id=g10.auction-listing-page.SC-oq9 rev=1 -->
-#### Scenario: grade10-site-auction-listing-page-SC-21 - A shared lot preview uses the canonical address
-**Serves:** grade10-site-auction-listing-page-US-10 - Collector shares the lot by its title and canonical URL
-
-- **GIVEN** a published lot with generated slug `charizard-psa-10-lk423`
-- **WHEN** a preview fetcher reads the lot's address
-- **THEN** `og:url` is `/auction/listings/charizard-psa-10-lk423`
-- **AND** `og:title`, `og:description`, the page title and meta description contain no labelled listing-code or payment-reference field
-
-#### Scenario: grade10-site-auction-listing-page-SC-22 - Client-fetched lot data carries no separate listing code
-**Serves:** Public identifier - the page does not expose the code as data apart from its canonical address
-
-- **GIVEN** a published lot with its listing code allocated
-- **WHEN** scripts finish loading and the page's client code requests lot
-  data over the network
-- **THEN** no response body carries a separate listing-code or payment-reference field
-
-<!-- trace:scenario id=g10.auction-listing-page.SC-51n rev=1 -->
-#### Scenario: grade10-site-auction-listing-page-SC-23 - Support resolves a lot from its title alone
-**Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a lot and is identified by title, not a code neither of them has
-
-- **GIVEN** a collector contacting support about a published lot
-- **WHEN** support looks up the lot the collector names
-- **THEN** support identifies it from the lot's title and address
-- **AND** neither the collector nor support needs or is shown the listing
-  code to do so
-
-#### Scenario: grade10-site-auction-listing-page-SC-24 - A not-found response carries no listing code
-**Serves:** Public identifier - the guard extending to the refusal path, not only lots that resolve
-
-- **GIVEN** an address under the auction's lots naming no published lot
-- **WHEN** the address is fetched
-- **THEN** the response is the site's Page not found screen
-- **AND** nothing in the response, including any error detail, names a
-  listing code
-
-#### Scenario: grade10-site-auction-listing-page-SC-25 - The page does not display the listing code once scripts run
-**Serves:** Public identifier - the page keeps the code out of labelled collector-facing fields after scripts finish
-
-- **GIVEN** a published lot's generated canonical address
-- **WHEN** scripts finish running
-- **THEN** the same lot remains on screen with its served title, description
-  and standing
-- **AND** neither the rendered page nor its current source contains a labelled listing-code or payment-reference field
-
-#### Scenario: grade10-site-auction-listing-page-SC-26 - A listing code does not resolve as a lot address
-**Serves:** Public identifier - the guard against the code working as another way to reach or identify a lot
-
-- **GIVEN** a published lot with its listing code allocated
-- **WHEN** the auction's lot-address path is fetched with that listing code
-  in place of the lot's own address
-- **THEN** the response answers the same as any address naming no published
-  lot
-- **AND** the site's not-found screen is shown, not that lot's page
-
-<!-- trace:scenario id=g10.auction-listing-page.SC-dc3 rev=1 -->
-#### Scenario: grade10-site-auction-listing-page-SC-27 - A public listing keeps the code out of labelled fields once an order exists
-**Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a won lot without a separate code field on the listing page
-
-- **GIVEN** a lot whose auction closed with a winning bid, so an order now
-  exists on it
-- **WHEN** its address is fetched on grade10-site
-- **THEN** the response and share preview use the canonical address
-- **AND** neither the response, its share preview, nor any client-fetched
-  data carries a labelled listing-code or payment-reference field
-
-#### Scenario: grade10-site-auction-listing-page-SC-28 - A called-off listing keeps its canonical address
-**Serves:** Public identifier - the canonical address remains usable after the lot leaves browse and search
-
-- **GIVEN** a listing whose code and canonical address were allocated
-- **WHEN** the listing is called off before close and its canonical address is
-  opened directly
-- **THEN** the address still resolves to that listing
-- **AND** the listing is absent from browse and search
-- **AND** substituting the listing code for the canonical address does not
-  resolve the listing
-
 ### Requirement: Recent bids avatars use the public email-derived letter
 
 The lot page SHALL map each public bid's avatar character from the Auction
@@ -764,3 +704,256 @@ list draws.
 - **WHEN** another collector whose email local part begins with `m` places an accepted public bid
 - **THEN** the new Recent Bids row's avatar shows `M` without a reload
 - **AND** the row's readable standing label remains a listing pseudonym or You
+
+### Requirement: Listing code remains separate from public address lookup
+
+Every listing carries a stable opaque listing code, allocated on its first
+saved draft. A generated canonical address ends with that code in lower case;
+the public page does not make the code a separate field or an alternate route.
+
+- **Canonical address** - A listing that keeps its generated slug SHALL answer
+  at `/auction/listings/<normalized title>-<lowercase code>`. The canonical
+  URL and `og:url` SHALL use that address.
+- **No separate field** - The server-rendered page, embedded state,
+  client-fetched data, visible page fields, `og:title`, `og:description`, page
+  title and meta description SHALL NOT expose a labelled listing-code or
+  payment-reference field. A previously cached preview MAY persist; Grade10
+  provides no purge or regeneration guarantee.
+- **Sitemap** - No sitemap entry SHALL expose a listing-code field.
+- **Not-found response** - The response for an address naming no listing or a
+  draft lot SHALL NOT contain the listing code, including in any error detail.
+- **Does not resolve as an address** - The listing code SHALL NOT work as an
+  alternate way to reach the lot's address; fetching the auction's
+  lot-address path with the listing code in place of the lot's own address
+  SHALL answer the same as any address naming no published lot.
+- **Called-off address** - Calling a listing off SHALL release its original
+  slug. The address SHALL follow current-holder lookup under "An address
+  that names no lot is refused". The listing code SHALL remain permanently
+  reserved, remain a non-route and SHALL NOT be accepted as an alternate
+  public address. Explicit hard deletion is outside this requirement.
+- **Stays true once an order exists** - Once the code becomes the order's
+  payment reference on other surfaces, this capability SHALL continue to
+  expose it only through the canonical URL suffix.
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-rop rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-20 - The served response uses the generated canonical address
+**Serves:** Public identifier - the collector opens the code-backed canonical address without receiving a separate identifier field
+
+- **GIVEN** a published lot with generated slug `charizard-psa-10-lk423`
+- **WHEN** its address is fetched and no script executes
+- **THEN** the canonical address is `/auction/listings/charizard-psa-10-lk423`
+- **AND** the response exposes no labelled listing-code or payment-reference field
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-oq9 rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-21 - A shared lot preview uses the canonical address
+**Serves:** grade10-site-auction-listing-page-US-10 - Collector shares the lot by its title and canonical URL
+
+- **GIVEN** a published lot with generated slug `charizard-psa-10-lk423`
+- **WHEN** a preview fetcher reads the lot's address
+- **THEN** `og:url` is `/auction/listings/charizard-psa-10-lk423`
+- **AND** `og:title`, `og:description`, the page title and meta description contain no labelled listing-code or payment-reference field
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-2d9 rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-22 - Client-fetched lot data carries no separate listing code
+**Serves:** Public identifier - the page does not expose the code as data apart from its canonical address
+
+- **GIVEN** a published lot with its listing code allocated
+- **WHEN** scripts finish loading and the page's client code requests lot
+  data over the network
+- **THEN** no response body carries a separate listing-code or payment-reference field
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-51n rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-23 - Support resolves a lot from its title alone
+**Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a lot and is identified by title, not a code neither of them has
+
+- **GIVEN** a collector contacting support about a published lot
+- **WHEN** support looks up the lot the collector names
+- **THEN** support identifies it from the lot's title and address
+- **AND** neither the collector nor support needs or is shown the listing
+  code to do so
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-suj rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-24 - A not-found response carries no listing code
+**Serves:** Public identifier - the guard extending to the refusal path, not only lots that resolve
+
+- **GIVEN** an address under the auction's lots naming no published lot
+- **WHEN** the address is fetched
+- **THEN** the response is the site's Page not found screen
+- **AND** nothing in the response, including any error detail, names a
+  listing code
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-57v rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-25 - The page does not display the listing code once scripts run
+**Serves:** Public identifier - the page keeps the code out of labelled collector-facing fields after scripts finish
+
+- **GIVEN** a published lot's generated canonical address
+- **WHEN** scripts finish running
+- **THEN** the same lot remains on screen with its served title, description
+  and standing
+- **AND** neither the rendered page nor its current source contains a labelled listing-code or payment-reference field
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-kfl rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-26 - A listing code does not resolve as a lot address
+**Serves:** Public identifier - the guard against the code working as another way to reach or identify a lot
+
+- **GIVEN** a published lot with its listing code allocated
+- **WHEN** the auction's lot-address path is fetched with that listing code
+  in place of the lot's own address
+- **THEN** the response answers the same as any address naming no published
+  lot
+- **AND** the site's not-found screen is shown, not that lot's page
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-dc3 rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-27 - A public listing keeps the code out of labelled fields once an order exists
+**Serves:** grade10-site-auction-listing-page-US-11 - Collector contacts support about a won lot without a separate code field on the listing page
+
+- **GIVEN** a lot whose auction closed with a winning bid, so an order now
+  exists on it
+- **WHEN** its address is fetched on grade10-site
+- **THEN** the response and share preview use the canonical address
+- **AND** neither the response, its share preview, nor any client-fetched
+  data carries a labelled listing-code or payment-reference field
+
+### Requirement: The card and the lot page read in the page's language
+
+The card and the lot page SHALL show a lot's title, and the lot page its
+description, in the language the page is read in: English at the default
+address, Traditional Chinese under `/tc` and Simplified Chinese under `/sc`.
+Each text falls back on its own to the English text the lot already carries,
+where the operator wrote none in the page's language or wrote only spaces. One
+Chinese SHALL never be shown in place of the other. A lot with no translation
+reads exactly as it did before translations existed. The text is in the
+response HTML before any script runs, and it stays on screen when scripts take
+the page over and while the lot is followed live.
+
+An edit reaches a collector the next time the page loads or re-reads the lot;
+a page already open is not pushed the edit. A page language the brand has no
+field for reads English.
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-j2a rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-60 - A Traditional Chinese lot page reads Traditional Chinese
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a published lot with an English, a Traditional Chinese and a Simplified Chinese title and description
+- **WHEN** its Traditional Chinese address is fetched and no script executes
+- **THEN** the page's title and description elements and its head tags contain the Traditional Chinese title and description
+- **AND** none of them contains the English or the Simplified Chinese text
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-w5f rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-61 - The card reads the page's language
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a published lot with a Simplified Chinese title
+- **WHEN** a collector reads the auction catalogue at the Simplified Chinese address
+- **THEN** the lot's card shows the Simplified Chinese title
+- **AND** at the default address the same card shows the English title
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-iqj rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-62 - A Simplified Chinese reader of a Traditional-only lot reads English
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a published lot with a Traditional Chinese title and description and no Simplified Chinese text
+- **WHEN** its Simplified Chinese address is fetched and no script executes
+- **THEN** the response HTML contains the English title and description
+- **AND** it contains no Traditional Chinese text of the lot
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-sbq rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-63 - A missing text falls back on its own
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a published lot with a Traditional Chinese title and no Traditional Chinese description
+- **WHEN** its Traditional Chinese address is fetched
+- **THEN** the page shows the Traditional Chinese title
+- **AND** the English description
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-x0m rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-64 - A blank translation reads as not written
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a published lot whose Traditional Chinese title is only spaces
+- **WHEN** a collector reads the lot at its Traditional Chinese address and in the catalogue
+- **THEN** the page and the card show the English title
+- **AND** no empty title is shown
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-23r rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-65 - A lot with no translation reads as before
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a published lot written before translations existed
+- **WHEN** it is read at the default, the Traditional Chinese and the Simplified Chinese addresses
+- **THEN** each page and card shows the same English title and description
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-7kj rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-66 - The language survives the handover and the live lot
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a Traditional Chinese lot page served with a Traditional Chinese title and description
+- **WHEN** scripts run and the lot room delivers a bid
+- **THEN** the title and the description on screen are still the Traditional Chinese text
+- **AND** no loading placeholder or English text appears in between
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-ex9 rev=2 -->
+#### Scenario: grade10-site-auction-listing-page-SC-67 - An edit shows on the next load
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a collector reading a lot at its Traditional Chinese address
+- **WHEN** an operator changes the lot's Traditional Chinese title and the open page receives live frames
+- **THEN** the open page keeps the title it showed
+- **AND** the next load of the address, or the page's next re-read of the lot, shows the new title
+
+### Requirement: A lot's address and reference stay the same in every language
+
+A lot SHALL answer at the same slug under every language prefix, and support
+SHALL identify a lot by its English title and its address. Featured, My
+Auctions, the watchlist, the account record and the winner order pages keep the
+English title on a Chinese page.
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-xpl rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-68 - One slug in every language
+**Serves:** Lot in the reader's language - reference stays English
+
+- **GIVEN** a published lot with Traditional Chinese and Simplified Chinese titles
+- **WHEN** its address is read at the default, `/tc` and `/sc`
+- **THEN** each answers with the lot, and the slug in all three is the same
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-9yd rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-69 - Other surfaces keep the English title
+**Serves:** Lot in the reader's language - reference stays English
+
+- **GIVEN** a lot with a Traditional Chinese title that a collector watches and won
+- **WHEN** they read Featured, My Auctions, the watchlist, their account record and the winner order page on Traditional Chinese pages
+- **THEN** each names the lot by its English title
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-i12 rev=2 -->
+#### Scenario: grade10-site-auction-listing-page-SC-72 - Image alt text keeps the English title
+**Serves:** Lot in the reader's language - reference stays English
+
+- **GIVEN** a published lot with a Traditional Chinese title and an image with no alt text of its own
+- **WHEN** its Traditional Chinese address is fetched and its card is read in the catalogue
+- **THEN** the lot page's gallery images and the card's image and video label carry the English title
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-p4n rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-73 - A title with markup characters renders as text
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a published lot whose Traditional Chinese title is `<b>噴火龍</b> & "首版"`
+- **WHEN** its Traditional Chinese address is fetched and no script executes
+- **THEN** the page and the head tags carry that title as text, escaped
+- **AND** the page holds no element made from it
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-5uz rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-74 - Switching the page language switches the lot's texts
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a collector reading a lot at its Traditional Chinese address
+- **WHEN** they switch the page to Simplified Chinese and then to English
+- **THEN** the title and description show that language's text, or the English fallback, each time
+- **AND** the text of the language left is never shown again
+
+<!-- trace:scenario id=g10.auction-listing-page.SC-qi8 rev=1 -->
+#### Scenario: grade10-site-auction-listing-page-SC-75 - A page language with no field reads English
+**Serves:** grade10-site-auction-listing-page-US-16 - Collector reads a lot's title and description in their own language
+
+- **GIVEN** a published lot with Traditional Chinese and Simplified Chinese texts
+- **WHEN** it is read in a page language the brand has no field for
+- **THEN** the page shows the English title and description

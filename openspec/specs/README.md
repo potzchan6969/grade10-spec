@@ -32,7 +32,7 @@ A fifth directory is not an application:
 Inside a product, capabilities are grouped one level further by the domain they
 belong to, so a product with twenty capabilities reads as five groups rather than
 one alphabetical run: `grade10-site/site/*`, `grade10-site/store/*`, `grade10-site/auction/*`,
-`grade10-site/loyalty/*`, `grade10-site/vault/*`. The `shared` layer groups the same way — `shared/auth/*`,
+`grade10-site/vault/*`. The `shared` layer groups the same way — `shared/auth/*`,
 `shared/ui/*`, `shared/console/*`, `shared/design-sync/*` — except for the
 platform-wide formats, which sit bare because they belong to no group smaller
 than everything.

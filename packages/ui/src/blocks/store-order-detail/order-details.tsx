@@ -31,6 +31,9 @@ type OrderDetailsProps = {
   status: OrderDetailsFulfillmentStatus;
   placedOn: ReactNode;
   placedOnDateTime?: string;
+  /** A second sentence on the header's placement line — e.g. "Receipt sent
+   * to ada@example.com" on a guest's return from checkout. */
+  placedOnNote?: ReactNode;
   needHelp?: {
     href: string;
     label?: ReactNode;
@@ -95,6 +98,7 @@ function OrderDetails({
   status,
   placedOn,
   placedOnDateTime,
+  placedOnNote,
   needHelp,
   delivery,
   lines,
@@ -139,7 +143,7 @@ function OrderDetails({
   return (
     <VStack
       className={cn(
-        "w-full max-w-7xl gap-12 overflow-hidden px-8 pt-8 pb-16",
+        "w-full max-w-7xl gap-8 overflow-hidden px-4 pt-6 pb-12 sm:gap-12 sm:px-8 sm:pt-8 sm:pb-16",
         className,
       )}
       data-revealed={revealed || undefined}
@@ -153,15 +157,16 @@ function OrderDetails({
           orderId={orderId}
           placedOn={placedOn}
           placedOnDateTime={placedOnDateTime}
+          placedOnNote={placedOnNote}
           status={status}
           statusLabel={copy.status[status]}
         />
       </RevealGroup>
       <div
         className={cn(
-          "grid w-full items-start gap-12",
+          "grid w-full items-start gap-6 lg:gap-12",
           hasSidebar
-            ? "grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+            ? "grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
             : "grid-cols-1",
         )}
       >

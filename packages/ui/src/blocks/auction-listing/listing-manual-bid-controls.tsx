@@ -2,9 +2,9 @@ import type { InputStatus } from "@grade10/design-system/components/forms/input"
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import {
   currencyExponent,
-  formatMoney,
+  formatLotMoney,
+  formatLotMoneyPrefix,
   formatMoneyNumeric,
-  formatMoneyPrefix,
 } from "../../lib/format-money";
 
 type ListingManualBidControlsCopy = {
@@ -31,7 +31,7 @@ function ListingManualBidControls({
   hideLabel = false,
 }: ListingManualBidControlsProps) {
   const message = hideLabel
-    ? `Min. bid: ${formatMoney(minBidMinor, currency, { locale })} (current + ${formatMoney(incrementMinor, currency, { locale })})`
+    ? `Min. bid: ${formatLotMoney(minBidMinor, currency, { locale })} (current + ${formatLotMoney(incrementMinor, currency, { locale })})`
     : undefined;
 
   return (
@@ -41,7 +41,7 @@ function ListingManualBidControls({
       defaultValue={formatMoneyNumeric(minBidMinor, currency, locale)}
       label={hideLabel ? undefined : (copy.bidAmountLabel ?? "Place a bid")}
       message={message}
-      prefix={formatMoneyPrefix(currency, { locale })}
+      prefix={formatLotMoneyPrefix(currency, { locale })}
     />
   );
 }
@@ -83,7 +83,7 @@ function ListingAutoBidControls({
       min={minMaximumMinor / 10 ** exponent}
       onBlur={onBlur}
       onChange={(event) => onValueChange(event.target.value)}
-      prefix={formatMoneyPrefix(currency, { locale })}
+      prefix={formatLotMoneyPrefix(currency, { locale })}
       status={status}
       value={value}
     />

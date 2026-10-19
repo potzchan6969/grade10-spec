@@ -1,13 +1,13 @@
 import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { BookingLocationPicker } from "./booking-location-picker";
-import { CAUSEWAY_BAY, LOCATION_PICKER_COPY } from "./fixtures";
+import { BOARD_SHOPS, CAUSEWAY_BAY, LOCATION_PICKER_COPY } from "./fixtures";
 
 const { common } = getMessages("grade10", "en");
 
 const meta = {
-  title: "Appointment Booking/BookingLocationPicker",
+  title: "Appointment/Booking/Blocks/BookingLocationPicker",
   component: BookingLocationPicker,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -35,6 +35,33 @@ export const Default: Story = {
   },
 };
 
+/** The ticked shop reports again when picked, so Back then Continue is never
+ * stuck; before any pick nothing is ticked. */
+export const Repick: Story = {
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Hong Kong Grade10 Store/ }),
+    );
+    expect(args.onSelect).toHaveBeenCalledTimes(1);
+    expect(args.onSelect).toHaveBeenLastCalledWith(CAUSEWAY_BAY.id);
+  },
+};
+
+export const FirstPick: Story = {
+  args: { selectedId: undefined },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const radio = canvas.getByRole("radio", {
+      name: /Hong Kong Grade10 Store/,
+    });
+    expect(radio).not.toBeChecked();
+    await userEvent.click(radio);
+    expect(args.onSelect).toHaveBeenCalledTimes(1);
+    expect(args.onSelect).toHaveBeenLastCalledWith(CAUSEWAY_BAY.id);
+  },
+};
+
 export const Failed: Story = {
   args: {
     selectedId: undefined,
@@ -47,5 +74,22 @@ export const Failed: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("The shop could not be read.")).toBeInTheDocument();
+  },
+};
+
+/** The board's shops: today's hours, the earliest free time, the address
+ * where the shop has one, under the count. */
+export const Board: Story = {
+  args: {
+    copy: { title: "Pick a shop" },
+    description: "3 shops run Grading drop-off.",
+    locations: { status: "ready", data: BOARD_SHOPS },
+    selectedId: "loc_central",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("3 shops run Grading drop-off.")).toBeVisible();
+    expect(canvas.getByText("Earliest: today, 16:30")).toBeVisible();
+    expect(canvas.getByRole("radio", { name: /Central/ })).toBeChecked();
   },
 };

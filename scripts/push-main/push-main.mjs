@@ -2,18 +2,17 @@
 /**
  * Put the commits ahead of `origin/main` onto `main`:
  *
- *   pnpm push:main            rebase, gate, push to main (or open a PR)
- *   pnpm push:main --pr       always through a pull request
+ *   pnpm push:main            rebase, gate, push to main
+ *   pnpm push:main --pr       through a pull request that merges once green
  *   pnpm push:main --dry-run  rebase and gate, push nothing
  *
  * 1. refuse a dirty tree or nothing to push
  * 2. fetch and rebase onto origin/main; a conflict aborts the rebase and names
  *    the files, so the tree is exactly as it was
- * 3. route by path (`paths.mjs`): planning text goes straight to `main`, a
- *    shared surface goes through a pull request that merges itself once green
- * 4. run the fast gate (`gate.mjs`) on what the push sends
- * 5. push; `main` moving under the push is a fetch, rebase and gate again,
- *    three times at most
+ * 3. run the fast gate (`gate.mjs`, checks chosen by `paths.mjs`) on what the
+ *    push sends
+ * 4. push to `main`; `main` moving under the push is a fetch, rebase and gate
+ *    again, three times at most
  *
  * Exit 0 pushed (or dry run passed), 1 the gate failed, 2 refused or a
  * conflict, 3 the push kept losing its race.
@@ -64,14 +63,14 @@ function rebase() {
 
 function gate() {
   const paths = changedPaths("origin/main");
-  const { route, shared, checks } = classify(paths);
+  const { checks } = classify(paths);
   const changes = changesOf(paths);
   console.error(
     `push:main: ${paths.length} path(s)${changes.length ? `, change(s) ${changes.join(", ")}` : ""}; ${checks.length} check(s)`,
   );
   const failed = runGate(paths);
   if (failed.length) stop(1, `gate failed: ${failed.join(", ")}`);
-  return { route: forcePr ? "pr" : route, shared };
+  return { route: forcePr ? "pr" : "main", paths };
 }
 
 function pushMain() {
@@ -87,7 +86,7 @@ function pushMain() {
   stop(2, `push refused:\n${ran.stderr.trim()}`);
 }
 
-function openPr(shared) {
+function openPr(paths) {
   let branch = git(["branch", "--show-current"]).stdout.trim();
   if (!branch || branch === "main") {
     branch = `push/${git(["rev-parse", "--short", "HEAD"]).stdout.trim()}`;
@@ -101,7 +100,7 @@ function openPr(shared) {
     `HEAD:refs/heads/${branch}`,
   ]);
   console.error(
-    `push:main: shared surface (${shared.slice(0, 5).join(", ")}${shared.length > 5 ? ", …" : ""}) goes through a pull request`,
+    `push:main: ${paths.length} path(s) go through a pull request, as --pr asks`,
   );
   const gh = (argv) => spawnSync("gh", argv, { cwd: ROOT, encoding: "utf8" });
   const existing = gh(["pr", "view", branch, "--json", "url", "-q", ".url"]);
@@ -138,7 +137,7 @@ if (
 
 for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
   rebase();
-  const { route, shared } = gate();
+  const { route, paths } = gate();
   if (dryRun) {
     console.error(
       `push:main: dry run, would go to ${route === "pr" ? "a pull request" : "main"}`,
@@ -146,7 +145,7 @@ for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
     process.exit(0);
   }
   if (route === "pr") {
-    openPr(shared);
+    openPr(paths);
     process.exit(0);
   }
   const pushed = pushMain();

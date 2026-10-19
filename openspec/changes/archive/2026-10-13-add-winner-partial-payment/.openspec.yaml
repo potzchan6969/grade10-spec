@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-09-17
+promoted_by: "@htonyl"
+depends_on:
+  - add-winner-bank-transfer
+decisions_carried: "none moved at archive; lasting partial-payment decisions already remain in docs/prds/products/grade10-site/auction/post-bidding.md Product decisions and docs/prds/products/grade10-admin/auction/management.md Product decisions. Delivered partial-payment outcomes are marked Decided; the Orders queue and other in-flight outcomes remain marked."

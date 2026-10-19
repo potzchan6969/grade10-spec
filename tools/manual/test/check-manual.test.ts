@@ -715,6 +715,56 @@ describe("one requirement two changes both fold", () => {
     ]);
   });
 
+  it("accepts an overlap whose dependent change is ordered after its prerequisite", async () => {
+    const root = changing(
+      "first",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/second/.openspec.yaml":
+          "schema: grade10-planning\ndepends_on:\n  - first\n",
+        "openspec/changes/second/proposal.md": proposal("Second"),
+        "openspec/changes/second/specs/demo-product/alpha/spec.md": [
+          "## MODIFIED Requirements",
+          "",
+          ...requirement("Alpha does things", "alpha-SC-01", "the next thing"),
+          "",
+        ].join("\n"),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "overlap")).toEqual([]);
+  });
+
+  it("keeps a cyclic dependency overlap as a failure", async () => {
+    const root = changing(
+      "first",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/first/.openspec.yaml":
+          "schema: grade10-planning\ndepends_on:\n  - second\n",
+        "openspec/changes/second/.openspec.yaml":
+          "schema: grade10-planning\ndepends_on:\n  - first\n",
+        "openspec/changes/second/proposal.md": proposal("Second"),
+        "openspec/changes/second/specs/demo-product/alpha/spec.md": [
+          "## MODIFIED Requirements",
+          "",
+          ...requirement("Alpha does things", "alpha-SC-01", "the next thing"),
+          "",
+        ].join("\n"),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "overlap")).toHaveLength(2);
+  });
+
   // Decides shared-planning-agent-rounds-US16-TC1-1.
   it("shared-planning-agent-rounds-SC-102 - names an ADDED block to the MODIFIED one of the same name in another change, however each is headed", async () => {
     const root = changing(
@@ -872,8 +922,8 @@ describe("permanent ids across the whole store", () => {
       ),
     });
     expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
-      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which `second` also issues — an id is issued once and never freed",
-      "openspec/changes/second/specs/demo-product/beta/spec.md — reuses `beta-SC-01`, which `first` also issues — an id is issued once and never freed",
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which `second` also issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move first`",
+      "openspec/changes/second/specs/demo-product/beta/spec.md — reuses `beta-SC-01`, which `first` also issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move second`",
     ]);
   });
 
@@ -885,8 +935,77 @@ describe("permanent ids across the whole store", () => {
         "## ADDED Requirements\n\n### Requirement: Beta was here\n\n#### Scenario: beta-SC-01 - it was here\n\n- **WHEN** asked\n- **THEN** it happened\n",
     });
     expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
-      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which the archived `add-beta` also issues — an id is issued once and never freed",
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which the archived `add-beta` also issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move first`",
     ]);
+  });
+
+  it("fails a `<app>.<domain>-<capability>.US<n>` journey an archived change issued", async () => {
+    const journeys = (title: string) =>
+      `## User journeys\n\n### g10.demo-alpha.US7: ${title}\n\nThey do it.\n`;
+    const root = changing(
+      "first",
+      issuing("alpha", ["g10.demo-alpha.SC9"]),
+      {
+        "openspec/changes/archive/2026-01-01-add-beta/proposal.md":
+          proposal("Add beta"),
+        "openspec/changes/archive/2026-01-01-add-beta/specs/demo-product/alpha/spec.md":
+          issuing("alpha", ["g10.demo-alpha.SC8"]),
+        "openspec/changes/archive/2026-01-01-add-beta/specs/demo-product/alpha/user-journeys.md":
+          journeys("Somebody else"),
+      },
+      journeys("Someone new"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `g10.demo-alpha.US7`, which the archived `add-beta` also issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move first`",
+    ]);
+  });
+
+  it("allocate-ids-across-open-changes - fails a case number another change issues under another trace id, at any suite level", async () => {
+    const suite = (trace: string, title: string) =>
+      [
+        "# demo-product/alpha Test Cases",
+        "",
+        "## alpha-US-01: Reader follows the thing",
+        "",
+        `<!-- trace:case id=${trace} rev=1 -->`,
+        `### alpha-US1-TC1-1: ${title}`,
+        "",
+      ].join("\n");
+    const root = changing("first", issuing("alpha", ["alpha-SC-71"]), {
+      "openspec/changes/first/specs/demo-product/alpha/feature-tcs.md": suite(
+        "g10.demo-alpha.TC-aaa",
+        "The count rises",
+      ),
+      "openspec/changes/second/proposal.md": proposal("Second"),
+      "openspec/changes/second/specs/demo-product/alpha/domain-tcs.md": suite(
+        "g10.demo-alpha.TC-bbb",
+        "Somebody else's case",
+      ),
+    });
+    const found = lines(await runChecks(root, NO_GIT), "issued");
+    expect(found).toContain(
+      "openspec/changes/first/specs/demo-product/alpha/feature-tcs.md — issues case `alpha-US1-TC1-1` under `g10.demo-alpha.TC-aaa`, which `second` issues under `g10.demo-alpha.TC-bbb` — a case number is issued once; move this change's ids with `pnpm run spec:issue move first`",
+    );
+  });
+
+  it("passes a case carried into a second change under its own trace id", async () => {
+    const suite = [
+      "# demo-product/alpha Test Cases",
+      "",
+      "<!-- trace:case id=g10.demo-alpha.TC-aaa rev=2 -->",
+      "### alpha-US1-TC1-2: The count rises, revised",
+      "",
+    ].join("\n");
+    const root = changing("first", issuing("alpha", ["alpha-SC-72"]), {
+      "openspec/changes/first/specs/demo-product/alpha/feature-tcs.md": suite,
+      "openspec/changes/second/proposal.md": proposal("Second"),
+      "openspec/changes/second/specs/demo-product/alpha/feature-tcs.md": suite,
+    });
+    expect(
+      lines(await runChecks(root, NO_GIT), "issued").filter((one) =>
+        one.includes("issues case"),
+      ),
+    ).toEqual([]);
   });
 
   it("passes a REMOVED requirement naming the ids an archived change issued", async () => {
@@ -923,7 +1042,7 @@ describe("permanent ids across the whole store", () => {
       ].join("\n"),
     );
     expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
-      "openspec/changes/reissuing/specs/demo-product/alpha/spec.md — ADDED `Alpha counts things` issues `alpha-SC-02`, which `demo-product/alpha` already issues — an id is issued once and never freed",
+      "openspec/changes/reissuing/specs/demo-product/alpha/spec.md — ADDED `Alpha counts things` issues `alpha-SC-02`, which `demo-product/alpha` already issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move reissuing`",
     ]);
   });
 
@@ -1034,6 +1153,34 @@ describe("a MODIFIED scenario restating a durable id", () => {
       "openspec/changes/restating/specs/demo-product/alpha/spec.md — MODIFIED `Alpha does things` restates `alpha-SC-01` under trace marker `g10.demo-alpha.SC-zzz`, which `demo-product/alpha` issues as `g10.demo-alpha.SC-a1b` — carry that marker, or give the scenario a new id",
     ]);
     expect(lines(result, "restated")).toEqual([]);
+  });
+
+  it("fails a durable `<app>.<domain>-<capability>.SC<n>` id under another marker", async () => {
+    const id = "g10.demo-alpha.SC1";
+    const root = changing(
+      "restating",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...marked(
+          id,
+          "g10.demo-alpha.SC-zzz",
+        )(requirement("Alpha does things", id, "the thing better")),
+        "",
+      ].join("\n"),
+      {
+        "openspec/specs/demo-product/alpha/spec.md": spec(
+          "Alpha",
+          marked(
+            id,
+            "g10.demo-alpha.SC-a1b",
+          )(requirement("Alpha does things", id, "the thing")),
+        ),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
+      `openspec/changes/restating/specs/demo-product/alpha/spec.md — MODIFIED \`Alpha does things\` restates \`${id}\` under trace marker \`g10.demo-alpha.SC-zzz\`, which \`demo-product/alpha\` issues as \`g10.demo-alpha.SC-a1b\` — carry that marker, or give the scenario a new id`,
+    ]);
   });
 
   it("warns on the durable id under no marker, naming the one to carry", async () => {
@@ -1249,45 +1396,6 @@ describe("a page committed before the specs it embeds", () => {
       `docs/prds/products/demo-product/moved.md — last committed 2026-01-01; \`demo-product/moved\` spec moved since this page was committed; last commit \`${sha}\` the specs`,
     ]);
     expect(result.findings.every((one) => one.level === "warn")).toBe(true);
-  });
-});
-
-describe("a 🚧 line and the change delivering it", () => {
-  const marked =
-    "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\n## Rules\n\n- 🚧 **Refunds** — the points come back\n";
-  const durable = {
-    "docs/prds/products/demo-product/alpha.md": marked,
-    "openspec/specs/demo-product/alpha/spec.md": spec(
-      "Alpha",
-      requirement("Alpha does things", "alpha-SC-01", "the thing"),
-    ),
-    "openspec/specs/demo-product/alpha/user-journeys.md": NOBODY,
-  };
-
-  it("fails the line when no in-flight change touches the page or its spec", async () => {
-    const result: Result = await runChecks(writeStore(durable), NO_GIT);
-    expect(lines(result, "marks")).toEqual([
-      "docs/prds/products/demo-product/alpha.md — 🚧 `Refunds — the points come back` under `Rules` — no in-flight change on `demo-product/alpha` delivers it",
-    ]);
-    expect(result.findings.find((one) => one.rule === "marks")?.level).toBe(
-      "fail",
-    );
-  });
-
-  it("is satisfied by a delta on the spec, or a proposal linking the section", async () => {
-    const byDelta = writeStore({
-      ...durable,
-      "openspec/changes/build-alpha/proposal.md": proposal("Build alpha"),
-      "openspec/changes/build-alpha/specs/demo-product/alpha/spec.md":
-        "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL do the thing.\n",
-    });
-    expect(lines(await runChecks(byDelta, NO_GIT), "marks")).toEqual([]);
-
-    const byLink = writeStore({
-      ...durable,
-      "openspec/changes/build-alpha/proposal.md": `${proposal("Build alpha")}\n## References\n\n- [Alpha · Rules](../../../docs/prds/products/demo-product/alpha.md#rules)\n`,
-    });
-    expect(lines(await runChecks(byLink, NO_GIT), "marks")).toEqual([]);
   });
 });
 

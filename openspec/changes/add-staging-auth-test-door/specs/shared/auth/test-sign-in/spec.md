@@ -2,7 +2,7 @@
 
 ## Purpose
 
-How the staging Actions job walks sign-in without the disposable `/dev` door:
+How the hosted Actions lanes, and a QA agent walking a manual pass, walk sign-in without the disposable `/dev` door:
 which run may call, which addresses it may act on, what it may do to them, and
 where the door stays closed. Collectors still walk `shared/auth/sign-in`.
 Operators still walk ban and role on `shared/auth/users`.
@@ -10,21 +10,27 @@ Operators still walk ban and role on `shared/auth/users`.
 ## Feature set
 
 - Who may call
-  - The door's own workflow: a run that proves it is this repository's Actions, running that one workflow from the main branch, on a dispatch a reviewer approved; every other caller is refused
+  - The door's own workflow: a run that proves it is this repository's Actions, running that one workflow from the main branch, on a dispatch a reviewer approved
+  - The QA token: a staging-only token committed to the repository, held by a QA agent, for capture, age and clear alone
+  - Every other caller is refused
 - Testers
-  - The tester domain: any address under the one domain Ops names, minted per run; an address outside it is refused, and an account is created when a move needs one
+  - The named testers: each environment's own, written into the code, and on staging and uat a unique plus-tag of one minted per run; any other address is refused, and an account is created when a move needs one
 - What the job may do
   - Capture the link: the last sign-in mail for a tester address, without a mailbox
   - Age the unused link: so an expired follow can be walked without waiting five minutes
   - Ban the address: so a banned follow can be walked without the Users desk
   - Prepare the address: so it holds `admin` before the link is followed
+  - Prepare a scoped role: so a unique plus-tag of the collector holds one operator role before the link is followed
   - Clear the sign-in limits: the wait between two mails and the count a caller may ask for, so a suite is not throttled as an attacker would be
+- Where it opens
+  - Staging and uat: every move
+  - Production, and preview with it: capture and clear alone, for the production collector
 - Closed
-  - Everywhere else: preview, production, and `/dev` on staging stay closed; the job does not mint a session without following the mail, does not unban, and does not seed store or auction data
+  - Everywhere else: local stacks open no move, and `/dev` stays closed on staging, uat and production; the job does not mint a session without following the mail, does not unban, and does not seed store or auction data
 
 ## ADDED Requirements
 
-### Requirement: Only the door's own workflow may call
+### Requirement: Only the door's own workflow and the QA token may call
 
 Which run the door acts for, and what a refused call leaves behind.
 
@@ -38,8 +44,13 @@ Which run the door acts for, and what a refused call leaves behind.
   a pull request started included, SHALL be refused
 - **An unapproved dispatch** — a call from a run whose dispatch no reviewer
   approved SHALL be refused
-- **Anyone else** — a call from a laptop, a fork, or another repository SHALL
-  be refused
+- **The QA token** — a call carrying the current QA token SHALL be acted on
+  for capture, age and clear on a tester address; the token is committed to
+  the repository, and staging alone accepts it
+- **The token's limits** — a ban or a prepare carrying only the QA token
+  SHALL be refused, and a token a later commit replaced SHALL be refused
+- **Anyone else** — a call from a laptop, a fork, or another repository that
+  carries no current QA token SHALL be refused
 - **A refused call** — a call the door refuses SHALL change nothing: no
   account, no role, no ban, no link, no limit
 
@@ -95,65 +106,85 @@ Which run the door acts for, and what a refused call leaves behind.
 #### Scenario: shared-auth-test-sign-in-SC-05 - A caller that is not this repository's Actions is refused
 **Serves:** Who may call - every other caller is refused
 
-- **GIVEN** a caller from a laptop, a fork, or another repository
+- **GIVEN** a caller from a laptop, a fork, or another repository, carrying no QA token
 - **WHEN** it calls the door
 - **THEN** the door refuses the call
 - **AND** nothing is changed
 
-### Requirement: Every move names an address under the tester domain
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-l73 rev=1 -->
+#### Scenario: shared-auth-test-sign-in-SC-94 - The QA token captures a tester's link
+**Serves:** Who may call - the QA agent walking a manual pass
+
+- **GIVEN** a call on staging carrying the current QA token, and a tester address holding an unused sign-in mail
+- **WHEN** it asks for that address's last sign-in mail
+- **THEN** the door returns the link
+
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-kgh rev=1 -->
+#### Scenario: shared-auth-test-sign-in-SC-95 - The QA token cannot ban, prepare, or outlive its rotation
+**Serves:** Who may call - the QA agent walking a manual pass
+
+- **GIVEN** a call on staging carrying only the QA token
+- **WHEN** it asks to ban or prepare a tester address, or carries a token a later commit replaced
+- **THEN** the door refuses the call
+- **AND** nothing is changed
+
+### Requirement: Every move names one of the environment's testers
 
 Which addresses the door acts on, and what it creates to act on one.
 
 - **The address** — every move SHALL name an address, and the door SHALL carry
-  it out only when that address is under the one tester domain Ops names
-- **Under the domain** — an address is under the domain when the part after
-  its last `@` is that domain and nothing more, read without regard to case; a
-  subdomain of it SHALL NOT count as under it
+  it out only when that address is one of the environment's testers
+- **The named testers** — each environment's testers are written into the
+  code, not configured: staging and uat each name four — a collector, a
+  plus-tag sibling, a ban-only and an admin-only address — and production
+  names its collector alone; any other environment names none
+- **A minted plus-tag** — on staging and uat, a unique plus-tag of a named
+  tester SHALL count as a tester for capture, age and clear, and a unique
+  plus-tag of the collector for ban, prepare and a scoped role; production
+  counts no plus-tag
+- **Case** — an address SHALL be matched without regard to case
 - **A plus tag** — two addresses that differ only by a plus tag SHALL be two
   addresses, each acted on and each holding its own last mail
-- **Minted per run** — an address under that domain SHALL be acted on whether
-  or not it has been seen before; the door SHALL hold no list of addresses
-- **Outside the domain** — a move naming an address outside that domain SHALL
-  be refused, and that address SHALL be unchanged
+- **Anyone else** — a move naming any other address SHALL be refused, and that
+  address SHALL be unchanged
 - **No address** — a move naming no address SHALL be refused; the door SHALL
   NOT read a missing address as a default one
 - **An account the move needs** — WHEN a move needs an account for a tester
   address that has never signed in, the door SHALL create the account, then
   put it in the state the move names
 - **The send** — the door SHALL NOT skip or replace a sign-in send to a tester
-  address; the mail goes the ordinary way. Whether a catch-all inbox takes it
-  is Ops, not this door
+  address; the mail goes the ordinary way
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-4tc rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-06 - An address a run minted is acted on
-**Serves:** Testers - any address under the tester domain
+**Serves:** Testers - a unique plus-tag of a named tester
 
-- **GIVEN** an address under the tester domain that the run minted for itself
+- **GIVEN** a unique plus-tag of the staging collector that the run minted for itself
 - **WHEN** the door's own workflow calls a move on it
 - **THEN** the door carries out that move
 - **AND** it does not require that address to have been named before
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-n68 rev=1 -->
-#### Scenario: shared-auth-test-sign-in-SC-07 - An address outside the tester domain is refused
-**Serves:** Testers - an address outside the domain is refused
+#### Scenario: shared-auth-test-sign-in-SC-07 - An address that is no tester is refused
+**Serves:** Testers - any other address is refused
 
-- **GIVEN** an address that is not under the tester domain
+- **GIVEN** an address that is neither a named tester nor a plus-tag of one
 - **WHEN** the door's own workflow calls a move on it
 - **THEN** the door refuses the call
 - **AND** that address is unchanged
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-y6k rev=1 -->
-#### Scenario: shared-auth-test-sign-in-SC-30 - An address under a subdomain of the tester domain is refused
-**Serves:** Testers - an address outside the domain is refused
+#### Scenario: shared-auth-test-sign-in-SC-30 - A plus-tag on production is refused
+**Serves:** Testers - any other address is refused
 
-- **GIVEN** an address whose domain is a subdomain of the tester domain
+- **GIVEN** a plus-tag of the production collector
 - **WHEN** the door's own workflow calls a move on it
 - **THEN** the door refuses the call
 - **AND** that address is unchanged
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-wse rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-31 - Two addresses differing only by a plus tag are two subjects
-**Serves:** Testers - any address under the tester domain
+**Serves:** Testers - a unique plus-tag of a named tester
 
 - **GIVEN** two tester addresses that differ only by a plus tag, each of which
   asked for a sign-in link
@@ -161,11 +192,10 @@ Which addresses the door acts on, and what it creates to act on one.
 - **THEN** it receives that address's link, not the other's
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-u90 rev=1 -->
-#### Scenario: shared-auth-test-sign-in-SC-34 - An address whose domain is in mixed case is acted on
-**Serves:** Testers - any address under the tester domain
+#### Scenario: shared-auth-test-sign-in-SC-34 - A named tester in mixed case is acted on
+**Serves:** Testers - the named testers
 
-- **GIVEN** an address under the tester domain, written with its domain in
-  mixed case
+- **GIVEN** a named tester's address, written in mixed case
 - **WHEN** the door's own workflow calls a move on it
 - **THEN** the door carries out that move
 
@@ -181,7 +211,7 @@ Which addresses the door acts on, and what it creates to act on one.
 #### Scenario: shared-auth-test-sign-in-SC-09 - A ban creates the account of an address that never signed in
 **Serves:** Testers - an account is created when a move needs one
 
-- **GIVEN** an address under the tester domain that has never signed in
+- **GIVEN** a unique plus-tag of the collector that has never signed in
 - **WHEN** the door's own workflow bans it
 - **THEN** an account exists for that address
 - **AND** that account is banned
@@ -190,16 +220,16 @@ Which addresses the door acts on, and what it creates to act on one.
 #### Scenario: shared-auth-test-sign-in-SC-10 - A prepare creates the account of an address that never signed in
 **Serves:** Testers - an account is created when a move needs one
 
-- **GIVEN** an address under the tester domain that has never signed in
+- **GIVEN** a unique plus-tag of the collector that has never signed in
 - **WHEN** the door's own workflow prepares it
 - **THEN** an account exists for that address
 - **AND** that account holds `admin`
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-bap rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-11 - A sign-in mail to a tester address is sent the ordinary way
-**Serves:** Testers - any address under the tester domain
+**Serves:** Testers - the named testers
 
-- **GIVEN** an address under the tester domain
+- **GIVEN** a tester address
 - **WHEN** that address asks for a sign-in link
 - **THEN** the mail is sent the ordinary way
 - **AND** the door neither skips nor replaces that send
@@ -359,6 +389,26 @@ How a console case reaches a signed-in admin.
 - **WHEN** that address's sign-in link is followed
 - **THEN** the session holds `admin`
 
+### Requirement: Prepare a scoped role on a minted collector address
+
+How an operator walk gets an account that holds one scoped role.
+
+- **The role** — on staging and uat the door SHALL put one of `staff`,
+  `support`, `finance`, `treasurer` or `auditor` on the account for a unique
+  plus-tag of that environment's collector, creating the account when absent
+- **Never a named tester** — the door SHALL refuse a scoped role for a named
+  tester, so the testers the lanes rely on keep the roles they document
+- **Not `admin`** — `admin` SHALL stay on prepare; the door SHALL refuse it, or
+  any role outside the five, here
+
+#### Scenario: shared-auth-test-sign-in-SC-96 - A minted collector address holds a scoped role
+**Serves:** What the job may do - prepare a scoped role
+
+- **GIVEN** a unique plus-tag of the staging collector
+- **WHEN** the door's own workflow prepares it as `finance`
+- **THEN** the account for that address holds `finance`
+- **AND** a named tester asked for the same role is refused and unchanged
+
 ### Requirement: Clearing the sign-in limits frees a tester from the throttle
 
 How a suite asks for mail after mail without being held as an attacker.
@@ -403,51 +453,55 @@ How a suite asks for mail after mail without being held as an attacker.
 - **THEN** no second mail is sent to the second address
 - **AND** it is told to wait
 
-### Requirement: The door is open on staging only
+### Requirement: The door opens where a hosted lane runs
 
-Where the door answers, and which door stays shut beside it.
+Where the door answers, which moves it answers there, and which door stays
+shut beside it.
 
-- **Staging** — the door SHALL answer on staging and nowhere else
-- **Preview and production** — a call to the door on preview or on production
-  SHALL be refused and SHALL change nothing; preview runs the production
-  backends
+- **Staging and uat** — the door SHALL answer every move on staging and on uat
+- **Production** — on production the door SHALL answer capture and clear
+  alone, for the production collector; age, ban, prepare and a scoped role
+  SHALL be refused and SHALL change nothing. Preview runs the production
+  backends, so it answers as production does
+- **Anywhere else** — a local or disposable stack SHALL open no move
 - **The disposable door** — the disposable `/dev` door SHALL stay closed on
-  staging: a call to it SHALL be refused
+  staging, uat and production: a call to it SHALL be refused
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-tx7 rev=1 -->
-#### Scenario: shared-auth-test-sign-in-SC-23 - The door on preview is refused
-**Serves:** Closed - preview stays closed
+#### Scenario: shared-auth-test-sign-in-SC-23 - Preview answers as production does
+**Serves:** Where it opens - production, and preview with it
 
 - **GIVEN** the door's own workflow, from the main branch, on a dispatch a
   reviewer approved
-- **WHEN** it calls a move against preview
+- **WHEN** it asks preview to age, ban or prepare an address
 - **THEN** the call is refused
 - **AND** nothing is changed
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-56z rev=1 -->
-#### Scenario: shared-auth-test-sign-in-SC-24 - The door on production is refused
-**Serves:** Closed - production stays closed
+#### Scenario: shared-auth-test-sign-in-SC-24 - Production captures and clears for its collector alone
+**Serves:** Where it opens - production, and preview with it
 
 - **GIVEN** the door's own workflow, from the main branch, on a dispatch a
   reviewer approved
-- **WHEN** it calls a move against production
-- **THEN** the call is refused
-- **AND** nothing is changed
+- **WHEN** it captures the production collector's last sign-in mail, and asks
+  production to ban that collector
+- **THEN** it receives the link
+- **AND** the ban is refused and nothing is changed
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-u3l rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-25 - The disposable door on staging is refused
-**Serves:** Closed - `/dev` on staging stays closed
+**Serves:** Closed - `/dev` stays closed on every hosted environment
 
 - **WHEN** anyone calls the disposable `/dev` door on staging
 - **THEN** the call is refused
 - **AND** no session is created
 
-### Requirement: The door makes no move beyond those five
+### Requirement: The door makes no move beyond those six
 
 What the door will not do for the caller it accepts.
 
-- **The set** — capture, age, ban, prepare, and clear are the whole set, and
-  the door SHALL refuse any other move
+- **The set** — capture, age, ban, prepare, a scoped role, and clear are the
+  whole set, and the door SHALL refuse any other move
 - **No session** — the door SHALL NOT create a session, or anything that
   stands for one, for any address; a session comes from following the mail, on
   `shared/auth/sign-in`'s terms

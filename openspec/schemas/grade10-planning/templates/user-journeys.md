@@ -4,9 +4,9 @@
      openspec/schemas/grade10-planning/schema.yaml, which
      `openspec instructions user-journeys` prints above this shape. -->
 
-<!-- <capability> is the capability's path with slashes as hyphens:
-     grade10-site/store/product-listing issues
-     grade10-site-store-product-listing-SC-01, -US-01, -US1-TC1-1. -->
+<!-- <product>/<domain>/<capability> remains the path owner. Its app display
+     code supplies the human-facing anchor, for example
+     g10.store-product-listing.US1. -->
 
 ## Context user journeys
 <!-- Every journey this change's scenarios or cases anchor on, copied from the
@@ -15,7 +15,7 @@
 
 ## ADDED User journeys
 
-### <capability>-US-01: <!-- Collector does the thing -->
+### <app>.<domain>-<capability>.US1: <!-- Collector does the thing -->
 
 **As a** <!-- role the spec already names -->,
 **I want** <!-- capability -->,

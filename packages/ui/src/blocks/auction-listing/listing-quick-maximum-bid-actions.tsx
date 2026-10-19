@@ -12,14 +12,21 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info } from "@phosphor-icons/react";
-import { type FormEvent, type KeyboardEvent, useMemo, useState } from "react";
-import type { ShippedLocale } from "../../lib/format-datetime";
 import {
-  formatMoney,
+  type ClipboardEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  formatLotMoney,
+  formatLotMoneyPrefix,
   formatMoneyNumeric,
-  formatMoneyPrefix,
 } from "../../lib/format-money";
 import {
+  type CustomMaximumEditOrigin,
   isMaximumBelowFloor,
   parseExactMoneyDraftToMinor,
   quickMaximumPresetAmount,
@@ -73,6 +80,12 @@ type ListingQuickMaximumBidActionsCopy = {
   amountAboveMaximum: string;
   /** Primary action when amount entry is locked until a card is linked. */
   linkACardToBid: string;
+  /** Line under the collapsed row when the viewer's maximum already is the ceiling. */
+  maximumAtCeiling: string;
+  /** e.g. "Bidding has reached {amount}, the highest this auction accepts." — collapsed row without a viewer maximum. */
+  biddingAtCeiling: string;
+  /** Caption on a chip offered at the ceiling, e.g. "Limit". */
+  ceilingChip: string;
 };
 
 type BidAuthorizationStatus = "idle" | "pending" | "error";
@@ -80,7 +93,7 @@ type BidAuthorizationStatus = "idle" | "pending" | "error";
 type ListingQuickMaximumBidActionsProps = {
   copy: ListingQuickMaximumBidActionsCopy;
   view: ListingAuctionBidView;
-  locale: ShippedLocale;
+  locale: string;
   onCommitMaximum: (amountMinor: number) => void;
   /** When true, presets and custom amount stay visible but are not interactive. */
   amountEntryLocked?: boolean;
@@ -104,6 +117,35 @@ function defaultPresetKey(presets: MaximumPreset[]): string | null {
   return presets[Math.floor(presets.length / 2)]?.key ?? null;
 }
 
+/** Chips landing on the same amount — several clamped to the ceiling — merge to one. */
+function uniquePresetsByAmount(presets: MaximumPreset[]): MaximumPreset[] {
+  const seen = new Set<number>();
+  const unique: MaximumPreset[] = [];
+  for (const preset of presets) {
+    if (seen.has(preset.amountMinor)) continue;
+    seen.add(preset.amountMinor);
+    unique.push(preset);
+  }
+  return unique;
+}
+
+function PrivateMaximumInfo({ label }: { label: string }) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger
+          aria-label={label}
+          className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+          closeOnClick={false}
+        >
+          <Info aria-hidden size={12} />
+        </TooltipTrigger>
+        <TooltipContent>{label}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
 function ListingQuickMaximumBidActions({
   copy,
   view,
@@ -123,24 +165,43 @@ function ListingQuickMaximumBidActions({
     viewerMaximumMinor: view.viewerMaximumMinor,
     standing: view.standing,
     currentBidMinor: view.currentBidMinor,
+    ceilingMinor: view.ceilingMinor,
   });
-  const floorMaximumMinor = maximumFloor.floorMinor;
+  const floorMaximumMinor = maximumFloor?.floorMinor ?? null;
 
   const [selectedPresetKey, setSelectedPresetKey] = useState<string | null>(
     null,
   );
   const [customDraft, setCustomDraft] = useState("");
+  const pendingPasteRef = useRef<{
+    raw: string;
+    origin: "paste";
+  } | null>(null);
+  const [previousViewerMaximumMinor, setPreviousViewerMaximumMinor] = useState(
+    view.viewerMaximumMinor,
+  );
+  // An accepted commit moves the viewer's maximum, and the floor above the
+  // spent draft. A refused one settles to idle with the maximum unmoved, so
+  // its draft stays to be corrected or sent again.
+  if (previousViewerMaximumMinor !== view.viewerMaximumMinor) {
+    setPreviousViewerMaximumMinor(view.viewerMaximumMinor);
+    setCustomDraft("");
+    setSelectedPresetKey(null);
+  }
 
   const presets = useMemo((): MaximumPreset[] => {
+    if (floorMaximumMinor == null) return [];
     const formatDelta = (deltaMinor: number) =>
-      `$${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
+      `${formatLotMoneyPrefix(view.currency, { locale })}${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
     const raiseDeltaTemplate = isLeadingWithMaximum
       ? copy.amountAboveMaximum
       : copy.amountAboveCurrent;
+    const ceilingCaption = (amountMinor: number) =>
+      amountMinor >= view.ceilingMinor ? copy.ceilingChip : null;
 
     const fromCurrent = PRESET_INCREMENTS.flatMap(
       ({ multiples, captionKey }): MaximumPreset[] => {
-        const amountMinor = quickMaximumPresetAmount({
+        const preset = quickMaximumPresetAmount({
           multiples,
           isLeadingWithMaximum,
           hasBids: view.hasBids,
@@ -148,19 +209,23 @@ function ListingQuickMaximumBidActions({
           incrementMinor: view.incrementMinor,
           currentBidMinor: view.currentBidMinor,
           viewerMaximumMinor: view.viewerMaximumMinor,
+          ceilingMinor: view.ceilingMinor,
         });
-        if (amountMinor == null) return [];
-        const caption = isLeadingWithMaximum
-          ? raiseDeltaTemplate.replace(
-              "{amount}",
-              formatDelta(amountMinor - (view.viewerMaximumMinor ?? 0)),
-            )
-          : captionKey === "nextEligible"
-            ? copy.nextEligibleBid
-            : raiseDeltaTemplate.replace(
+        if (preset == null) return [];
+        const { amountMinor } = preset;
+        const caption =
+          ceilingCaption(amountMinor) ??
+          (isLeadingWithMaximum
+            ? raiseDeltaTemplate.replace(
                 "{amount}",
-                formatDelta(view.incrementMinor * multiples),
-              );
+                formatDelta(amountMinor - (view.viewerMaximumMinor ?? 0)),
+              )
+            : captionKey === "nextEligible"
+              ? copy.nextEligibleBid
+              : raiseDeltaTemplate.replace(
+                  "{amount}",
+                  formatDelta(view.incrementMinor * multiples),
+                ));
         return [
           {
             key: `current-${multiples}`,
@@ -172,38 +237,46 @@ function ListingQuickMaximumBidActions({
       },
     );
 
-    if (fromCurrent.length > 0) return fromCurrent;
+    if (fromCurrent.length > 0) return uniquePresetsByAmount(fromCurrent);
 
     // Keep the fallback resilient if a future currency schedule makes the
     // regular presets fall below the raise floor.
     const fallbackSteps = isLeadingWithMaximum ? [1, 2, 4] : [0, 2, 4];
-    return fallbackSteps.map((steps) => {
-      const amountMinor = isLeadingWithMaximum
+    const fallback = fallbackSteps.flatMap((steps): MaximumPreset[] => {
+      const stepped = isLeadingWithMaximum
         ? (view.viewerMaximumMinor ?? floorMaximumMinor) +
           view.incrementMinor * steps
         : floorMaximumMinor + view.incrementMinor * steps;
+      const amountMinor = Math.min(stepped, view.ceilingMinor);
+      if (amountMinor < floorMaximumMinor) return [];
       const deltaMinor = isLeadingWithMaximum
         ? amountMinor - (view.viewerMaximumMinor ?? 0)
         : view.incrementMinor * steps;
       const isFloor = steps === 0;
       const caption =
-        isFloor && !isLeadingWithMaximum
+        ceilingCaption(amountMinor) ??
+        (isFloor && !isLeadingWithMaximum
           ? copy.nextEligibleBid
-          : raiseDeltaTemplate.replace("{amount}", formatDelta(deltaMinor));
-      return {
-        key: `floor-${steps}`,
-        caption,
-        amountMinor,
-        immediate: isFloor && !isLeadingWithMaximum,
-      };
+          : raiseDeltaTemplate.replace("{amount}", formatDelta(deltaMinor)));
+      return [
+        {
+          key: `floor-${steps}`,
+          caption,
+          amountMinor,
+          immediate: isFloor && !isLeadingWithMaximum,
+        },
+      ];
     });
+    return uniquePresetsByAmount(fallback);
   }, [
     copy.amountAboveCurrent,
     copy.amountAboveMaximum,
+    copy.ceilingChip,
     copy.nextEligibleBid,
     floorMaximumMinor,
     isLeadingWithMaximum,
     locale,
+    view.ceilingMinor,
     view.currency,
     view.currentBidMinor,
     view.hasBids,
@@ -211,6 +284,36 @@ function ListingQuickMaximumBidActions({
     view.viewerMaximumMinor,
   ]);
 
+  if (floorMaximumMinor == null) {
+    const reachedMinor = view.viewerMaximumMinor ?? view.ceilingMinor;
+    const reachedLabel = formatLotMoney(reachedMinor, view.currency, {
+      locale,
+    });
+    return (
+      <VStack
+        className="w-full rounded-(--radius-xl) border px-4 py-3"
+        gap="xs"
+      >
+        <HStack gap="xs" vAlign="center">
+          <Text className="tabular-nums" size="sm" weight="medium">
+            {hasCommittedMaximum
+              ? copy.currentMaximum.replace("{amount}", reachedLabel)
+              : reachedLabel}
+          </Text>
+          {hasCommittedMaximum ? (
+            <PrivateMaximumInfo label={copy.privateMaximumTooltip} />
+          ) : null}
+        </HStack>
+        <Text className="text-secondary-foreground" size="xs">
+          {hasCommittedMaximum
+            ? copy.maximumAtCeiling
+            : copy.biddingAtCeiling.replace("{amount}", reachedLabel)}
+        </Text>
+      </VStack>
+    );
+  }
+
+  const floorMinor = floorMaximumMinor;
   const customActive = customDraft.trim() !== "";
   const customMinor = customActive
     ? parseExactMoneyDraftToMinor(customDraft, view.currency)
@@ -245,7 +348,7 @@ function ListingQuickMaximumBidActions({
     hasCommittedMaximum && view.viewerMaximumMinor != null
       ? copy.currentMaximum.replace(
           "{amount}",
-          formatMoney(view.viewerMaximumMinor, view.currency, { locale }),
+          formatLotMoney(view.viewerMaximumMinor, view.currency, { locale }),
         )
       : null;
 
@@ -263,7 +366,7 @@ function ListingQuickMaximumBidActions({
     commitMinor != null
       ? actionTemplate.replace(
           "{amount}",
-          formatMoney(commitMinor, view.currency, { locale }),
+          formatLotMoney(commitMinor, view.currency, { locale }),
         )
       : actionTemplate
           .replace(" to {amount}", "")
@@ -271,7 +374,7 @@ function ListingQuickMaximumBidActions({
           .replace(" · {amount}", "")
           .replace("{amount}", "");
 
-  const floorAmountLabel = formatMoney(floorMaximumMinor, view.currency, {
+  const floorAmountLabel = formatLotMoney(floorMaximumMinor, view.currency, {
     locale,
   });
   const customPlaceholder = copy.customAmountPlaceholder.replace(
@@ -286,18 +389,50 @@ function ListingQuickMaximumBidActions({
     setCustomDraft("");
   }
 
+  function handleCustomPaste(event: ClipboardEvent<HTMLInputElement>) {
+    if (amountEntryLocked) return;
+    const pending = {
+      origin: "paste" as const,
+      raw: event.clipboardData.getData("text"),
+    };
+    pendingPasteRef.current = pending;
+    window.setTimeout(() => {
+      if (pendingPasteRef.current === pending) {
+        pendingPasteRef.current = null;
+      }
+    }, 0);
+  }
+
   function handleCustomChange(event: FormEvent<HTMLInputElement>) {
     if (amountEntryLocked) return;
     const target = event.currentTarget;
+    const pendingPaste = pendingPasteRef.current;
+    pendingPasteRef.current = null;
+    const raw =
+      target.value === "" && pendingPaste?.raw
+        ? pendingPaste.raw
+        : target.value;
+    const nativeEvent = event.nativeEvent as InputEvent;
+    const data = nativeEvent.data;
+    const editOrigin: CustomMaximumEditOrigin =
+      pendingPaste?.origin ??
+      (nativeEvent.inputType === "insertText" &&
+      data != null &&
+      /^[0-9]$/.test(data) &&
+      raw === `${customDraft}${data}`
+        ? "typed-append"
+        : "replacement");
     const sanitized = sanitizeCustomMaximumDraft(
-      target.value,
+      raw,
       view.currency,
       customDraft,
+      view.ceilingMinor,
+      editOrigin,
     );
     // Ceiling refuse leaves React state unchanged. A controlled type=number
     // input will keep painting the rejected value unless we reset the DOM.
     if (sanitized === customDraft) {
-      target.value = customDraft;
+      target.value = sanitized;
       return;
     }
     setCustomDraft(sanitized);
@@ -323,7 +458,10 @@ function ListingQuickMaximumBidActions({
       event.preventDefault();
       return;
     }
-    const data = (event.nativeEvent as InputEvent).data;
+    const nativeEvent = event.nativeEvent as InputEvent;
+    if (nativeEvent.inputType === "insertFromPaste") return;
+    pendingPasteRef.current = null;
+    const data = nativeEvent.data;
     if (data === "." || data === ",") {
       event.preventDefault();
     }
@@ -331,7 +469,7 @@ function ListingQuickMaximumBidActions({
 
   function handleUseMinimum() {
     if (amountEntryLocked) return;
-    setCustomDraft(wholeMajorDraftFromMinor(floorMaximumMinor, view.currency));
+    setCustomDraft(wholeMajorDraftFromMinor(floorMinor, view.currency));
     setSelectedPresetKey(null);
   }
 
@@ -341,22 +479,20 @@ function ListingQuickMaximumBidActions({
     setSelectedPresetKey(defaultPresetKey(presets));
   }
 
+  const authorizing = authorizationStatus === "pending";
+
   function handlePlaceBid() {
     if (amountEntryLocked) {
       onLinkCard?.();
       return;
     }
-    if (authorizationStatus === "pending") return;
+    if (authorizing) return;
     if (commitValidation?.ok !== true) return;
     onCommitMaximum(commitValidation.amountMinor);
   }
 
   const primaryLabel = amountEntryLocked ? copy.linkACardToBid : placeBidLabel;
-  const primaryDisabled = amountEntryLocked
-    ? false
-    : authorizationStatus === "pending"
-      ? true
-      : !canPlaceBid;
+  const primaryDisabled = !amountEntryLocked && !canPlaceBid;
 
   const customInvalid = customActive && (customMinor == null || maximumInvalid);
   const helperMessage = !customActive ? undefined : customMinor == null ? (
@@ -389,18 +525,7 @@ function ListingQuickMaximumBidActions({
           >
             {heading}
           </Text>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger
-                aria-label={copy.privateMaximumTooltip}
-                className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
-                closeOnClick={false}
-              >
-                <Info aria-hidden size={12} />
-              </TooltipTrigger>
-              <TooltipContent>{copy.privateMaximumTooltip}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <PrivateMaximumInfo label={copy.privateMaximumTooltip} />
         </HStack>
         {currentMaximumLabel != null ? (
           <Text
@@ -423,9 +548,13 @@ function ListingQuickMaximumBidActions({
           role="group"
         >
           {presets.map((preset) => {
-            const amountLabel = formatMoney(preset.amountMinor, view.currency, {
-              locale,
-            });
+            const amountLabel = formatLotMoney(
+              preset.amountMinor,
+              view.currency,
+              {
+                locale,
+              },
+            );
             const selected =
               !amountEntryLocked && selectedPreset?.key === preset.key;
             const accessibleName = (
@@ -476,9 +605,10 @@ function ListingQuickMaximumBidActions({
           onClear={
             amountEntryLocked || !customActive ? undefined : handleClearCustom
           }
+          onPaste={handleCustomPaste}
           onKeyDown={handleCustomKeyDown}
           placeholder={customPlaceholder}
-          prefix={formatMoneyPrefix(view.currency, { locale })}
+          prefix={formatLotMoneyPrefix(view.currency, { locale })}
           status={amountEntryLocked || !customInvalid ? "default" : "error"}
           value={customDraft}
         />
@@ -488,7 +618,7 @@ function ListingQuickMaximumBidActions({
         <Button
           className="w-full"
           disabled={primaryDisabled}
-          loading={authorizationStatus === "pending"}
+          loading={authorizing}
           onClick={handlePlaceBid}
           size="md"
         >

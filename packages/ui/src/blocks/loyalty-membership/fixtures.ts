@@ -1,9 +1,9 @@
+import { formatDay } from "@grade10/date";
 import {
   FIXTURE_LOYALTY_ADJUST_DAY,
   FIXTURE_LOYALTY_PURCHASE_DAY,
   FIXTURE_LOYALTY_REDEEM_DAY,
 } from "../../lib/datetime-fixtures";
-import { formatDay } from "../../lib/format-datetime";
 import type { ActivityEntry, CouponItem, RewardMenuItem } from "./types";
 
 /* Grade10's own programme content, for the examples only. A consumer supplies

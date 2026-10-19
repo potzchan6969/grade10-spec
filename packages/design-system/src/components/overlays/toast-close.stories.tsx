@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ToastClose } from "./toast-close";
 
 const meta = {
-  title: "Components/Toast Close",
+  title: "Design System/Overlays/ToastClose",
   component: ToastClose,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

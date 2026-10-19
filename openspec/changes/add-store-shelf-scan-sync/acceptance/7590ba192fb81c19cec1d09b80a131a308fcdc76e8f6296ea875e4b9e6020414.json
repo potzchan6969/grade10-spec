@@ -1,0 +1,136 @@
+{
+  "version": 2,
+  "change": "add-store-shelf-scan-sync",
+  "baseline": "ee6936709a83cef1f222ad585bc956b7b33f5ef7af4dd6b22de3410904c43e2e",
+  "fingerprint": "7590ba192fb81c19cec1d09b80a131a308fcdc76e8f6296ea875e4b9e6020414",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-13T06:32:35.627Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/commerce/product-status.md#availability",
+      "sha256": "9de45388e5b79c9e1c850c333634f510a0c846a5d460fe0aa087adce31b1a4f8",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/product-listing.md#product-data",
+      "sha256": "fba58f1348fb8e6758ed25e42fc22a14fbcf9b2b46a5cc943a8cb2665ac28ef0",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/shelf-scanning.md#on-the-shelf",
+      "sha256": "b51befc16393a7d2b46d1e4b63ba949b9ce818e4b8c4d9f1ce9ad9a94320a261",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/shelf-scanning.md#photos",
+      "sha256": "a2ad7d793d5e9aba04ba5a4a8626c8a3f96a3f39c65ac4a65e2fcb1a6e35e8f7",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/shelf-scanning.md#recognition",
+      "sha256": "e227bf60dac50681fc6dbc49ac0f8da6ee1e099063c23d55a878653cd564f3ba",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/shelf-scanning.md#slabs",
+      "sha256": "c22cfc3f0d8b0b63ac0338e54c529274c670f11116bdd64a6d29095e5cfe8df3",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/shelf-scanning.md#what-the-scanner-holds",
+      "sha256": "376813dac6fdd6eca007532be1c667514ee9a5a2f0dfa569ee7e789a504c87c4",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-store-shelf-scan-sync/decisions.md",
+      "sha256": "532738303684cbf071c2b77e038fabf8f45626a4554fa048837be32670e179e4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-shelf-scan-sync/proposal.md",
+      "sha256": "569ceff42a18a308c8f51e2730a1ad7fc35eedbefbd06d2b7d3a205cee5c8d94",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-shelf-scan-sync/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "7a76fa7ce030552192c624cd26c7fc9cfcc420dfc72c8f9cf4e222cdc8ed7a68",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-shelf-scan-sync/specs/grade10-site/store/shelf-scanning/feature-tcs.md",
+      "sha256": "63b2f4a92b9ccf96405024e560da44b6dc8eac939632c5fdd696db73893128d7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-shelf-scan-sync/specs/grade10-site/store/shelf-scanning/spec.md",
+      "sha256": "c21124bbc1756d990e6ab8ab45e30205e85cf71e79c4892f2cd8cdd6b4eb5e9b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-shelf-scan-sync/specs/grade10-site/store/shelf-scanning/user-journeys.md",
+      "sha256": "4648aeb4b06c3e3d813db7d17a71cc6fb3b3dd551e9f65735abbf91615c73577",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-shelf-scan-sync/tech-design.md",
+      "sha256": "2d6517a6ed6b35f24f480a6c7f3af6d57cde16a4440e0c744fc3a2383990ddd4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-shelf-scan-sync/ui-design.md",
+      "sha256": "b3e5c0adf7b4d8898a651c92443743f5452ce5dd76764f61345f463f696fdf39",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "a15ac6f0c829e5b552aad1da11953d8e953149fe274c8e8494cf8b70b69dd049",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/shelf-scanning/feature-tcs.md",
+      "sha256": "63b2f4a92b9ccf96405024e560da44b6dc8eac939632c5fdd696db73893128d7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/shelf-scanning/spec.md",
+      "sha256": "740972a9d6d49c0331475ce80bd9a43cff78e0a398f6b5339699d6d41097ef1f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/shelf-scanning/user-journeys.md",
+      "sha256": "08a6613d52874e04a31bc181fb2b44343f6977ec8d6e2709bf12071a8ab24a8b",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-store-shelf-scan-sync/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/shelf-scanning/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/shelf-scanning/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A scan shows the store's answer",
+        "Requirement: A slab names its own unit",
+        "Requirement: A store product is named before the shared card catalogue",
+        "Requirement: Shopkeepers open the scanner from one fixed link",
+        "Requirement: The scanner holds every published store product",
+        "Requirement: The scanner learns new photos every hour"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/shelf-scanning/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

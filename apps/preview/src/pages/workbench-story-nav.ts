@@ -1,54 +1,59 @@
 /** Storybook story id for a closed won Auction Lot Details assembly. */
 const AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID =
-  "pages-auction-auction-lot-details--closed-won-payment-due";
+  "auction-display-screens-lot-details--closed-won-payment-due";
 
 /** Storybook story id for the filled Order History page assembly. */
-const ORDER_HISTORY_STORY_ID = "pages-store-store-order-history-page--filled";
+const ORDER_HISTORY_STORY_ID =
+  "store-order-history-screens-order-history--filled";
 
 /** Storybook story id for the filled Order Details page assembly. */
-const ORDER_DETAILS_STORY_ID = "pages-store-store-order-details-page--filled";
+const ORDER_DETAILS_STORY_ID =
+  "store-order-detail-screens-order-details--filled";
 
 /** Storybook story id for the Store Locator page assembly. */
-const STORE_LOCATOR_STORY_ID = "pages-store-locator-page--default";
+const STORE_LOCATOR_STORY_ID =
+  "store-store-locator-screens-store-locator--default";
 
 /** Storybook story id for the Terms of Service page assembly. */
-const TERMS_OF_SERVICE_STORY_ID = "pages-legal--terms-of-service";
+const TERMS_OF_SERVICE_STORY_ID =
+  "site-carried-surfaces-screens-legal--terms-of-service";
 
 /** Storybook story id for the Privacy Policy page assembly. */
-const PRIVACY_POLICY_STORY_ID = "pages-legal--privacy-policy";
+const PRIVACY_POLICY_STORY_ID =
+  "site-carried-surfaces-screens-legal--privacy-policy";
 /** Storybook story id for the My Auctions page assembly (list → Winner Order). */
 const MY_AUCTIONS_PAGE_STORY_ID =
-  "pages-auction-my-auctions-page--post-auction";
+  "auction-bidding-screens-my-auctions--post-auction";
 
 /** Winner Order story ids — one per derived standing a Won row may open. */
 const WINNER_ORDER_AWAITING_ADDRESS_STORY_ID =
-  "my-auctions-winner-order-settlement--awaiting-address";
+  "auction-post-bidding-screens-winner-order-setup--awaiting-setup";
 const WINNER_ORDER_EXPIRED_SETUP_STORY_ID =
-  "my-auctions-winner-order-settlement--expired-setup";
+  "auction-post-bidding-screens-winner-order-setup--expired-setup";
 const WINNER_ORDER_PREPARING_INVOICE_STORY_ID =
-  "my-auctions-winner-order-settlement--preparing-invoice";
+  "auction-post-bidding-screens-winner-order-setup--preparing-invoice";
 const WINNER_ORDER_PENDING_PAYMENT_STORY_ID =
-  "my-auctions-winner-order-payment--pending-payment";
+  "auction-post-bidding-screens-winner-order-payment--pending-payment";
 const WINNER_ORDER_PAYMENT_VERIFYING_STORY_ID =
-  "my-auctions-winner-order-payment--payment-verifying";
+  "auction-post-bidding-screens-winner-order-payment--payment-verifying";
 const WINNER_ORDER_EXPIRED_INVOICE_STORY_ID =
-  "my-auctions-winner-order-payment--expired-invoice";
+  "auction-post-bidding-screens-winner-order-payment--expired-invoice";
 const WINNER_ORDER_PARTIALLY_PAID_STORY_ID =
-  "my-auctions-winner-order-payment--partially-paid";
+  "auction-post-bidding-screens-winner-order-payment--partially-paid";
 const WINNER_ORDER_PROCESSING_STORY_ID =
-  "my-auctions-winner-order-delivery--processing";
+  "auction-post-bidding-screens-winner-order-delivery--processing";
 const WINNER_ORDER_SHIPPED_STORY_ID =
-  "my-auctions-winner-order-delivery--shipped";
+  "auction-post-bidding-screens-winner-order-delivery--shipped";
 const WINNER_ORDER_DELIVERED_STORY_ID =
-  "my-auctions-winner-order-delivery--delivered";
+  "auction-post-bidding-screens-winner-order-delivery--delivered";
 const WINNER_ORDER_CANCELLED_STORY_ID =
-  "my-auctions-winner-order-closed--cancelled";
+  "auction-post-bidding-screens-winner-order-closed--cancelled";
 const WINNER_ORDER_REFUNDED_STORY_ID =
-  "my-auctions-winner-order-closed--refunded";
+  "auction-post-bidding-screens-winner-order-closed--refunded";
 const WINNER_ORDER_REFUND_DETAILS_STORY_ID =
-  "my-auctions-winner-order-refund-details--closing-refund";
+  "auction-post-bidding-screens-winner-order-refund-details--closing-refund";
 const WINNER_ORDER_EMAIL_GRADE10_STORY_ID =
-  "my-auctions-winner-order-email-grade10--payment-overdue";
+  "auction-post-bidding-screens-winner-order-email-grade10--payment-overdue";
 
 /** Manager href that opens a story in the workbench (`?path=/story/…`). */
 function storyHref(storyId: string): string {
@@ -81,6 +86,34 @@ const AUCTION_LOT_DETAILS_HREF = storyHref(
 /** Preview href for Winner Order → My Auctions list. */
 const MY_AUCTIONS_PAGE_HREF = storyHref(MY_AUCTIONS_PAGE_STORY_ID);
 
+/** Storybook story id for the Press page assembly. */
+const PRESS_PAGE_STORY_ID = "site-press-screens-press--default";
+
+/** Storybook story id for the press-release article assembly. */
+const PRESS_ARTICLE_STORY_ID = "site-press-screens-press-release--default";
+
+/** Storybook story id for the Media Coverage page assembly. */
+const MEDIA_COVERAGE_PAGE_STORY_ID =
+  "site-media-coverage-screens-media-coverage--default";
+
+/**
+ * Real routes that resolve to a page story in the workbench: the href
+ * stays the surface's true address and a click in the canvas jumps to
+ * that route's story. Add a row when a page story lands.
+ */
+const ROUTE_STORY_IDS: Record<string, string> = {
+  "/media-coverage": MEDIA_COVERAGE_PAGE_STORY_ID,
+  "/press-releases": PRESS_PAGE_STORY_ID,
+};
+
+/**
+ * Route prefixes that resolve to a page story when no exact route matches:
+ * every release slug opens the one article template story.
+ */
+const ROUTE_PREFIX_STORY_IDS: Record<string, string> = {
+  "/press-releases/": PRESS_ARTICLE_STORY_ID,
+};
+
 /** Jump the workbench Storybook iframe to another page story. */
 function navigateToStory(storyId: string) {
   const target = window.top ?? window;
@@ -108,10 +141,19 @@ function interceptWorkbenchStoryLinks(event: MouseEvent) {
   if (!href) return;
 
   const match = /(?:\?|&)path=\/story\/([^&#]+)/.exec(href);
-  if (!match) return;
+  // A trailing slash means the list route, not a slug under it.
+  const route =
+    href.length > 1 && href.endsWith("/") ? href.slice(0, -1) : href;
+  const storyId = match
+    ? decodeURIComponent(match[1])
+    : (ROUTE_STORY_IDS[route] ??
+      Object.entries(ROUTE_PREFIX_STORY_IDS).find(([prefix]) =>
+        route.startsWith(prefix),
+      )?.[1]);
+  if (!storyId) return;
 
   event.preventDefault();
-  navigateToStory(decodeURIComponent(match[1]));
+  navigateToStory(storyId);
 }
 
 export {
@@ -120,11 +162,14 @@ export {
   HELP_HREF,
   HELP_NAV_ITEM,
   interceptWorkbenchStoryLinks,
+  MEDIA_COVERAGE_PAGE_STORY_ID,
   MY_AUCTIONS_PAGE_HREF,
   MY_AUCTIONS_PAGE_STORY_ID,
   navigateToStory,
   ORDER_DETAILS_STORY_ID,
   ORDER_HISTORY_STORY_ID,
+  PRESS_ARTICLE_STORY_ID,
+  PRESS_PAGE_STORY_ID,
   PRIVACY_POLICY_HREF,
   PRIVACY_POLICY_STORY_ID,
   STORE_LOCATOR_HREF,

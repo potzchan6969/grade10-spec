@@ -29,12 +29,11 @@ The product listing lets collectors browse the catalogue and open a product.
   whatever the current narrowing counts behind it, zero included, so the
   collector can see what a narrowing (their own or a sibling's) starved and
   undo it
-- 🚧 **Filter on a small screen** — a Filter control opens a left drawer for
-  worlds and types; the catalogue search field stays on the listing outside
-  that drawer
-- 🚧 **Worlds and Types as tabs on a small screen** — inside the filter drawer
-  the two facet groups sit as tabs so expanding worlds does not push types
-  down the scroll; the wide sidebar still stacks them
+- **Sale** — a card on sale shows the lower price with the higher struck
+  through — [Discounts](/p/grade10-site/store/discounts#where-each-shows)
+- ❓ **A conditional offer on the tile** — a spend threshold, a quantity or a
+  buy-x-get-y has no price to show, and the tile does not yet draw an offer's
+  name; until Design draws one, the product page names it. Design confirms
 - **Cart on a small screen** — where a tile sells, the cart control stays
   visible without hover on a narrow viewport and on touch
 - **Search and sort** — both describe the whole catalogue, never the cards
@@ -73,13 +72,13 @@ The product listing lets collectors browse the catalogue and open a product.
 Details Page, as the photo does; a sold-out card opens neither, because the
 listing sells.
 
-**Signed-out Add to cart** — opens the sign-in dialog titled
-**Sign In to Add to Cart**; no guest cart; after a successful sign-in the
-add completes when practical.
+**Signed-out Add to cart** - adds the line to the cart this browser holds,
+with no sign-in; signing in later moves those lines into the member's cart -
+[Cart Drawer](/p/grade10-site/store/cart#reviewing-the-cart)
 
 ## Adaptive Filter
 
-🚧 **Narrow pills** — below the wide breakpoint the listing shows the result
+**Narrow pills** — below the wide breakpoint the listing shows the result
 count and pills for sort and each facet group (Worlds, Types). Sort opens a
 bottom drawer and applies on choose. A facet pill opens a bottom drawer for
 that group; Show Results applies the draft; Clear empties that group’s draft.
@@ -94,15 +93,15 @@ The listing search field lives with the filters on a wide viewport. Narrow
 chrome has no search. Typing drafts locally; Enter or a suggestion
 selection is what acts.
 
-- 🚧 **Suggestions while typing** — matching products and matching world or
+- **Suggestions while typing** — matching products and matching world or
   type filters, at most five of each, over the whole catalogue even when
   facets are already on; store hits only
-- 🚧 **Filter hit** — a world or type suggestion shows the choice's name,
+- **Filter hit** — a world or type suggestion shows the choice's name,
   and World or Type beside it
-- 🚧 **Empty and waiting** — no match shows that nothing matched; while hits
+- **Empty and waiting** — no match shows that nothing matched; while hits
   are still resolving the field shows it is searching; Enter still commits
   the typed words either way
-- 🚧 **Commit and pick** — Enter puts free text in force as a dismissible
+- **Commit and pick** — Enter puts free text in force as a dismissible
   chip with the other applied filters and clears the field; picking a product
   opens that product and clears the field; picking a filter applies that
   facet, clears the field, and does not put free text in force
@@ -121,15 +120,15 @@ The listing answers from the store's mirror of the shop's catalogue.
   sells out or brings back reaches the cards, the counts and the sidebar
   within seconds, the same at every location; the store reads the product back
   from the shop rather than trusting the report
-- 🚧 **The re-read as the net** — the store reads the whole catalogue again
+- **The re-read as the net** — the store reads the whole catalogue again
   every 5 minutes, so a change the shop never reported shows within 5 minutes
-- 🚧 **No collector waits on the mirror** — a listing view answers from the
+- **No collector waits on the mirror** — a listing view answers from the
   copy its own location holds, and the location asks the mirror for a newer one
   at most every 3 seconds, however many collectors it is serving
 - 🚧 **A quiet location answers too** — the first collector at a location that
   has not served the listing waits on no read of the catalogue, and gets the
   cards, counts and sidebar everyone else gets
-- 🚧 **While the shop is unreachable** — the cards, the counts and the sidebar
+- **While the shop is unreachable** — the cards, the counts and the sidebar
   keep answering from the mirror until the shop answers again; opening a
   product and the cart's review wait on the shop
 - **What still lags** — a product's own page and a listing narrowed to a
@@ -158,11 +157,11 @@ A location past 3 seconds asks the mirror for the copy's number, and takes the c
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952" title="Filter panel"}
 
-::story{id="pages-store-product-list-page--default" title="The listing, whole"}
+::story{id="store-product-listing-screens-product-list--default" title="The listing, whole"}
 
-::story{id="store-product-listing-productbrowse-states--no-match" title="A narrowing nothing matches"}
+::story{id="store-product-listing-blocks-productbrowse-states--no-match" title="A narrowing nothing matches"}
 
-::story{id="store-product-listing-productbrowse-states--empty-catalog" title="A catalogue with nothing in it"}
+::story{id="store-product-listing-blocks-productbrowse-states--empty-catalog" title="A catalogue with nothing in it"}
 
 :::detail{title="Product decisions" for="pm"}
 A collector arrives knowing what they collect — a world, a kind of card — and
@@ -202,7 +201,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | Collection with facets | ❓ Open | Whether a collection and a facet can be applied together; nothing in the catalogue's own reads prevents it. | Product |
 | Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
 | Price order | Decided | A card for sale lists before a sold-out one in every order, latest at rest included. A price order sorts on the lowest price of every variant, which can differ from the one item's price the tile shows. `list-cards-for-sale-first` writes both into the listing spec. | Product |
-| Price order on the tile's price | ❓ Open | Whether a price order sorts on the one item's price the tile shows instead, so the first card in a lowest-price order shows the lowest price on the listing. Recommended: yes. Asked in `list-cards-for-sale-first`. | Product |
+| Price order on the tile's price | Decided | A price order keeps sorting on the lowest price of every variant, as it runs; sorting on the tile's own price would move the backend and leave a collection on the shop's own price sort. Decided by agent in `list-cards-for-sale-first` (Q2), 2026-10-16; Product may reopen it. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |
 | The count above the grid is the same count | Decided | The number over the listing is the catalogue's own over the whole narrowed set, the rule the facet counts already follow, so a choice's count is the size of the listing choosing it opens. Counting the cards on screen instead read the page size back as the shop's size and grew as the collector read on, leaving the one question a count answers — whether it is worth going on — the one it could not. A narrowing whose first page has not arrived says nothing, because `0 products` is a claim the catalogue never made. | Engineering |
@@ -212,8 +211,8 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | A starved facet is still offered | Decided | Once a query is in force, nothing behind a choice is the query's doing rather than the shop's. Hiding the group would strand the collector, and a selection nobody can undo is a trap. | Design |
 | No facets, no panel | Decided | A shop that has configured none gets no facet group and no message in its place; search and sort stay. It is not a fault the collector is told about. | Product |
 | Utility row | Decided | Help, Shipping and Orders & Returns do not sit under the filter. Where Help and store or auction documentation live is still open on [Page Shell](/p/grade10-site/site/page-shell). | Product |
-| Sign-in to add | Decided | A signed-out Add to cart opens the sign-in dialog. There is no guest cart and no guest checkout. After sign-in the add completes when practical. | Product |
-| Sign-in title from add | Decided | The dialog title is **Sign In to Add to Cart** (Title Case, as Modal titles are) — why, not the bare **Sign In to Grade10**. Header Sign In and other entry points keep **Sign In to Grade10**. Cart, not bag. | Product |
+| Guest cart | Decided | A signed-out Add to cart adds to the cart this browser holds; a guest checks out from it. Supersedes sign-in to add. Cart, not bag. | Product |
+| Site discounts on the tile | Decided | The shop's own automatic discounts are read from the shop, refreshed every minute, and shown as [Discounts](/p/grade10-site/store/discounts#where-each-shows) sets out; a discount that waits on a basket is the cart's to price. A discount an app computes is not shown, because what it reaches cannot be read. | Product |
 | No stock on browse | Decided | The listing and the product page show no remaining count, no scarcity cue and no cap on a requested quantity from a stock count. The cart's review is the only authority for a quantity, and Cart explains a short fill. | Product |
 | Links the site owes | ❓ Open | The footer still draws destinations the site does not yet answer. Settling that departure belongs to page-shell; the listing no longer adds a second one. | Product |
 | Search stays on the listing | Decided | The field lives with the listing filters, not in the site header. Auction has no search surface yet, and a nav search would read as site-wide find. | Design |

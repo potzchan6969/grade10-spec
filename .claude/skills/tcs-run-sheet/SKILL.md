@@ -1,156 +1,166 @@
 ---
 name: tcs-run-sheet
-description: Pick the test cases a manual pass should walk and write them to a new tab of the run spreadsheet. Use when QA or a PM asks for a test run, a regression pass, a smoke pass, or the cases affected by a feature or a change. Invoke as /tcs-run-sheet <what to walk>, for example /tcs-run-sheet regression or /tcs-run-sheet auction and related sign-in features.
+description: Pick cases for a manual pass, print a trial Google Sheet, and finalize one recorded snapshot per run. Use for test runs, regression passes, smoke passes, and cases affected by a change. Invoke as /tcs-run-sheet <what to walk>.
 ---
 
 # Writing a Run Sheet
 
-A run tab is a snapshot: written once, pinned to a commit, never resynced. It
-is where a tester marks results, and the store never reads it back.
+| Record | Value |
+| --- | --- |
+| Print target | PROD Sheet unless the person asks for Sandbox Sheet; selected by `sandbox` |
+| Test environment | Tester target: `staging-1`, `staging-2`, `uat`, `preview` or `prod`; default `staging-1`; selected by `env`, independently of print target |
+| Identity | Spreadsheet id and run id; tab name and `gid` can change before merge |
+| Trial | Temporary Sheet registry and workflow artifact; no commit |
+| Finalized | Human-confirmed snapshot; one message-only print commit, reusing the current feature branch |
+| Merged | Immutable; a later pass is a new run |
 
-Your job is the selection. Whatever the request, it ends as an explicit list of
-case ids that a human confirms before anything is written — a run whose
-contents cannot be restated is a run nobody can repeat.
+Execution results stay in Sheets, never in a suite or a print commit. A structured commit message records printed case identities and revisions.
 
-## The two kinds of request
+The print target chooses the spreadsheet. The test environment says where the tester
+executes the cases. Printing to PROD Sheet does not mean testing against `prod`.
+Historical `staging` and `production` records stay readable; explicit legacy inputs
+normalize to `staging-1` and `prod` for new selections.
 
-**A filter.** `regression`, `smoke on the store`, `every high-priority case`.
-These are properties the suites already carry, so resolve them with the
-script's own flags rather than by reading files:
+## Selection
 
-```bash
-pnpm run tcs:run-sheet -- --name regression --suites regression --dry-run
+- **Property filters** — `--suites`, `--priority` and `--level` intersect. A comma-separated value matches any value of that property
+- **Scope** — `--scope <path>` selects eligible cases whose suite path contains that capability or domain path. It also narrows property filters and explicit ids
+- **Explicit ids** — `--cases` or `--cases-file` wins over property filters. Repeated ids print once. A missing, deprecated or otherwise ineligible explicit id stops the run
+- **Changed scope** — `--changed-since <sha>` selects whole suites affected by changed specs, PRDs or suites. It cannot combine with explicit ids. It is a scope hint, not proof each case changed
+- **Eligibility** — `actual` cases, automated included. Add `--include-draft` only when requested; drafts are grey. `deprecated` never prints. Use `--exclude-automated` only when requested
+- **Judgment** — read the capability's spec, journeys, feature suite and relevant domain suite; resolve the request to explicit ids
+- **Intentional exclusions** — record ids and reasons in a JSON array, `[{"id":"...","reason":"..."}]`. Several ids may use the same reason. The array removes cases from property-filter selections. An id cannot be both explicitly selected and excluded. Natural filter exclusions need no individual reason. Intentionally removing an eligible case from an explicit reprint list requires a reason
+- **Copied runs** — `--copy-run <id>` takes a merged run's ids, resolves the latest accepted cases and creates a new run. Missing or deprecated ids stop for a revised selection. The new record names its source run
+
+## Filter Semantics
+
+This is the reference for filter behaviour, not a claim that the command or Sheet implements it. Filter implementation and validation are separate work.
+
+| Selection | Combines With | Meaning |
+| --- | --- | --- |
+| Different fields | AND | A case meets every selected field condition |
+| Multiple Suites | AND | A case carries every selected suite tag |
+| Multiple Severity values | OR | A case has any selected severity |
+
+```text
+Domain = auction
+AND Suites contains acceptance
+AND Type = functional
+AND Severity IN (blocker, critical)
 ```
 
-**A judgment.** `auction and related sign-in features`, `everything a bidder
-touches when the increment ladder changes`. No property expresses these, so
-read for them: the capability's `spec.md`, its `user-journeys.md`, the
-`feature-tcs.md` beside them, and the domain suite above them. Then collapse
-what you found to ids and pass them explicitly:
+- **Result** — functional cases in the auction domain and acceptance set whose severity is blocker or critical
+- **More suite tags** — adding prod also requires production suitability; it can only retain or reduce the result set
+- **Sheet visibility** — filtering changes which cases are shown, not whether a case is excluded from the run, executed or passed
+- **Other multi-select fields** — this reference does not settle their semantics
 
-```bash
-pnpm run tcs:run-sheet -- --name auction-signin --cases-file /tmp/pick.txt --dry-run
-```
+## Printing
 
-Cross levels freely. A feature case and the domain case that crosses it belong
-in the same pass when the request covers both.
-
-## The steps
-
-1. **Resolve the request** to a selection, by either route above. Automated
-   cases are in by default. Drafts stay out unless the person asked for them.
-2. **Dry run it.** Pass `--include-automated` unless they asked to leave
-   automated cases out. `--dry-run` prints every case it would write and
-   touches no network. Read the list yourself first: a case that does not
-   belong is cheaper to drop now than to explain in the tab.
-3. **Show the list and stop.** Group by capability (or by file). Name the
-   count, how many are draft, how many are already automated, and what you
-   left out on purpose. Ask whether the coverage is correct. Ask Env
-   (`staging` or `production`); if they do not name one, use staging. Do not
-   dispatch until they say the coverage is, or name what to add or drop.
-4. **Dispatch**, only after that yes. The run tab is written by CI, which
-   holds the only credentials:
+1. **Refresh main** — `git fetch origin main`. Real writes fetch latest main themselves; the dry run reads the pinned Git snapshot and makes no network calls
+2. **Dry-run the selection** — `pnpm tcs:run-sheet --name auction --scope grade10-site/auction --include-draft --sha origin/main --dry-run`. Use the requested eligibility flags, not this example's draft flag by default
+3. **Show coverage and stop** — group the printed ids by path. Give selected, draft and automated counts, exclusions with reasons, environment and fingerprint. Wait for the person's confirmation before any Sheet write. A request to make a run does not confirm its contents
+4. **Dispatch the confirmed fingerprint** — CI holds the credentials. Use the exact selection and flags from the dry run:
 
    ```bash
    gh workflow run run-sheet.yml \
-     -f name=<run name> \
-     -f selection="<the request, in their words>" \
-     -f cases="<id,id,id>" \
-     -f env=staging \
-     -f include_automated=true
+     -f action=print -f name=auction \
+     -f selection="auction regression" \
+     -f cases="<confirmed comma-separated ids>" \
+     -f confirmed="<printed fingerprint>" -f env=staging-1
    ```
 
-   Pass `suites=`, `priority=`, `level=` or `scope=` instead of `cases=` when a
-   filter resolved it. Add `include_draft=true` only when the person asked for
-   drafts. Omit `include_automated` (or pass `false`) only when they asked to
-   leave automated cases out.
+   Pass filters instead of `cases` when they resolved the list. Changing the
+   selection route can change the fingerprint; dry-run the actual dispatch
+   arguments. Pass `exclusions` as JSON where needed. Add `sandbox=true` only
+   for an explicitly requested sandbox sheet, not merely a feature test run.
+   Sandbox uses `TCS_SHEET_SANDBOX_ID`; never hardcode that id.
+   To test unmerged suite changes, use `--sandbox --source-ref <commit>` in
+   the preview and pass that same commit as workflow input `source_ref`.
+   Production refuses this option. Sandbox source overrides must target the
+   configured sandbox sheet and cannot target the production sheet.
 
-   **Env.** Ask which environment the pass is walked against (`staging` or
-   `production`). If they do not name one, use `staging`. Pass `-f env=<name>`
-   on either sheet — sandbox and production both record it on the Summary row.
+5. **Report the run** — give run id, tab name, URL, fingerprint and workflow run id. A production write uploads `run-record`; trial receipts are not committed
 
-   **Sandbox.** Production is the default. Add `-f sandbox=true` only when they
-   asked to write to the sandbox sheet, a test spreadsheet, or not production.
-   Asking for a test run of a feature is not that. The sandbox spreadsheet id
-   lives in the repository variable `TCS_SHEET_SANDBOX_ID`; do not put it in a
-   command, a skill, or the code.
+## Reprinting
 
-   **Overwrite.** A run already written is left alone. Rewrite it only when
-   they ask to redo a run **this conversation created**, and name that run id.
-   Then add `-f overwrite=<id>` (and `-f sandbox=true` if that write was a
-   sandbox write). The writer recreates the same tab title and overwrites that
-   run's four Summary rows. It does not delete anything else.
+- **Identity** — use `overwrite=<run id>` only after the person names the run this conversation created. Changing its name or TC scope keeps that run id
+- **Confirmation** — dry-run the revised arguments and confirm coverage before dispatch. The fingerprint covers rendered content, selected ids and revisions, scope, exclusions, name and environment. A source SHA change alone does not require a rewrite
+- **Unchanged** — identical trial content writes no cells and creates no commit
+- **Changed** — the writer recreates the run tab and replaces its Summary block and temporary record. The `gid` changes. Existing result marks are discarded; walk the finalized print
+- **Finalized** — explicitly cancel finalization before reprinting. Dispatch `action=reopen` with `run_id`; download its trial receipt and run `pnpm tcs:run-record --record <receipt> --cancel`. This removes only that run branch's local print commit. Do not publish a trial
+- **Merged** — the writer refuses reopening and reprinting. Offer a new run using the merged selection
+- **Missing or renamed tab** — stop. Report run id, expected tab name, `gid` and link. The person restores the tab in Sheets; do not invent a suffix or replacement tab
+- **Legacy run** — a run printed before the registry exists cannot be overwritten or finalized. Create a new run; do not infer its old coverage from current suites
 
-   If the writer prints that Summary and the tabs disagree, or that a new
-   write's title is already taken, show them the printed register. Do not
-   invent a suffix, pick another id, or delete a tab.
+## Finalizing
 
-5. **Report the tab.** Give them the run id, the tab name and the link the job
-   prints.
+1. **Confirm finalization** — the person names the run and confirms its printed fingerprint. Dispatch `action=finalize`, `run_id` and `confirmed`. The writer checks selected cases against latest main; changed cases require a reprint and renewed coverage confirmation
+2. **Download the finalized receipt** — `gh run download <workflow-run-id> --name run-record --dir /tmp/run-<id>`. Repeating finalization exports the same snapshot without resyncing it
+3. **Create its commit** — from a clean checkout run `pnpm tcs:run-record --record /tmp/run-<id>/run-record.json`. It reuses the current feature branch and creates one empty commit with the format below. On main only, it creates a dedicated run branch. Identical printed metadata creates no new commit. No JSON file is committed
+4. **Replace before merge** — after explicit reopening, reprinting and refinalizing, use `--replace` if the old local print commit remains. The command only amends this run's empty HEAD commit; a print commit below later work or a commit changing files refuses. Preserve rule commits. If already published, update only the affected branch with `git push --force-with-lease`. Never rewrite main
+5. **Publish through a PR** — only after finalization. Require the `tcs/run-finalized` check before merge. It compares printed metadata with the live finalized registry and refuses cancelled, stale, missing or renamed prints. Keep one print commit per run. Rule changes may share the branch and PR, in separate commits
 
-## What to tell them
+No source-suite change automatically updates a finalized run.
 
-- **Four surfaces and `Notes` are theirs.** `Web`, `Mobile`, `Auto web` and
-  `Auto mobile` are separate answers: one case can pass in a browser and fail
-  on a phone. The case to their left and the classification to their right are
-  locked, and an edit there is refused at the cell. A wrong case is fixed in
-  `openspec/`, not in the sheet.
-- **Prefill follows Testability.** `manual` only: Web and Mobile `to_do`, Auto
-  `n/a`. `automation` only: Web and Mobile `n/a`, Auto `to_do` even when no
-  script has landed. `automation, manual`: Web and Mobile `to_do`; Auto `to_do`
-  if **Automation status** is `automated`, else `n/a`. `skipped` is a case
-  somebody chose not to walk. The pass rate ignores `n/a` and counts `skipped`
-  against the run.
-- **A per-row case prints once per value row.** A case that says `Runs once
-  per row of **Test data**.` becomes one sheet row for each body row of its
-  run table. The header and the `| --- |` line are names. Each row keeps the
-  case id, and the Summary counts each printed row. A `<name>` in the
-  pre-conditions, the steps, and the expected results is filled from that row
-  when the name is a column of the run table. The value is wrapped in square
-  brackets: `End <session to end>` prints as `End [The session naming the site]`,
-  and a value that is already a placeholder prints as `[<zzz sign-in url>]`.
-  A column that is not a `<name>` in the sentence stays in the Test data cell,
-  and the sentence stays as written. A `<name>` that matches no run-table
-  column stays in angle brackets. The match ignores backticks and one pair of
-  angle brackets on the header, and it is case-sensitive, so `Closed lot` does
-  not fill `<closed lot>`. A `Field | Value` table is shared setup: it is
-  copied into every row's Test data cell, and its names stay `<name>` in the
-  sentence, including inside a filled run cell. A case whose only table is
-  `Field | Value` stays one sheet row, and the reminder line stays on its
-  steps. On an expanded row that line is left off. The `n/a` prefill is copied
-  onto each row.
-- **The Summary tab gives each run four rows**, one per surface, grouped under
-  the first. Identity, env and the commit sit once, on that first row. Marking a
-  cell moves the counts; no second sync is needed.
-- **The sheet walks products in a fixed order.** Shared, then Grade10 site
-  (site, auction, vault, grading, loyalty, commerce, and any other domain of
-  that product), then the store (`grade10-site/store`), then Grade10 admin,
-  then ZZZ site, then ZZZ admin. Inside a band the files stay in path order,
-  and a file's journeys stay in journey order. A product outside these six
-  follows them.
-- **Sort inside the `Walk` filter view, not the sheet.** A sheet-level sort
-  would lift the cases out from under their journey banners. The journeys of
-  one file fold under a row that names the file (`shared/auth/sign-in`). The
-  Summary tab has no filter view: it is a register.
-- **Do not rename or delete the tab.** The Summary rows point at it by name,
-  and Google Sheets cannot prevent either — they will read `tab missing`.
-- **Automated cases land on the tab.** Their Auto columns start at `to_do`.
-  They are left out only when the person asked to leave them out.
+## Run Records
 
-## What not to do
+Trial provenance lives in the Google Sheet `_Run records` tab and the workflow artifact.
+Finalized print metadata lives only in the commit message. Do not add repo JSON.
+Use a `chore(auction): record <run name> printed run` subject, then this exact body:
 
-- **Do not write a tab nobody confirmed.** The coverage list is the
-  conversation. A yes to "write a run" is not a yes to this list.
-- **Do not overwrite a run this conversation did not create.** A redo is
-  `--overwrite` of that id, after they ask; it is not a second tab and not
-  a new run id.
-- **Do not delete a tab or empty the Summary.** A new run is a new tab. Run
-  ids count up. Clearing the spreadsheet is not this skill. An occupied
-  title is a refusal the person resolves in the sheet UI.
-- **Do not take `deprecated` cases.** The spec stopped stating them; walking one
-  proves nothing. The script refuses them outright.
-- **Do not put results back in the store.** A suite carries no execution record
-  — `docs/governance/specs-to-test-cases.md` says so, and a run lives in the
-  sheet.
-- **Do not edit the spreadsheet by hand to fix a layout.** The layout is
-  `scripts/openspec/lib/run-sheet-layout.mjs`; change it there.
+```text
+Run: <tab name>
+Sheet: <spreadsheet ID>
+Tab: <gid>
+Test environment: <provided or default>
+Source: <commit SHA>
+
+Printed cases:
+- g10.auction-dmn.US12-TC3 | TC-k4p@4
+- g10.auction-bid-increments.US1-TC5 | TC-kyx@2
+```
+
+- **Identity** — the full tab name includes its run id. Sheet identity and source SHA identify the printed snapshot
+- **Cases** — one line per selected TC, in print order. Use the stable marker suffix and its actual revision. For a source without a marker, write `- <case id> | unmarked`; never invent a revision
+- **Last print** — search the same spreadsheet's most recent merged print commit for the TC identity and revision. Heading ids can change; use the marker with its capability scope when comparing revisions
+- **Limits** — the message records ids and revisions, not content digests or execution results. Case content changes must bump the source marker revision
+- **Merge** — merged print commits are immutable. Preserve their message bodies through merge; do not squash multiple runs into a message that drops their records
+
+Temporary receipts and the Sheet registry still carry the full snapshot needed before
+finalization. Do not commit those JSON receipts. A copied merged run takes the recorded
+case ids with drafts and automated cases eligible, resolves current suites and confirms
+its new coverage before printing.
+
+The workflow-owned checker reads candidate Git messages as data, verifies their format
+and matches them to live finalized Sheet records. It does not execute candidate files.
+Configure `tcs/run-finalized` as a required PR check.
+
+| Code | Path |
+| --- | --- |
+| Writer | `scripts/openspec/run-sheet.mjs` |
+| Temporary receipt and fingerprint | `scripts/openspec/lib/run-sheet-records.mjs` |
+| Printed message format and lookup | `scripts/openspec/lib/printed-run-message.mjs` |
+| Local commit | `scripts/openspec/run-sheet-record.mjs` |
+| Merge verification | `scripts/openspec/verify-run-record.mjs`; the workflow embeds the same checker for bootstrap without running candidate files |
+
+## Printed Cases
+
+- **Order** — specs folder path, then numeric US, then numeric TC. One capability header holds its selected journeys and cases. US1 precedes US12
+- **Case id** — the displayed id ends with the trace marker suffix: `g10.auction-bid-increments.US1-TC5 (TC-kyx)`. Selection still uses the original id. Every expanded row repeats the suffix. A legacy case without a marker keeps its original id
+- **Data** — `Field | Value` setup and single-row column tables fill matching placeholders in Steps and Expected Results. Names match case-sensitively, ignoring header backticks and outer angle brackets. Values print as `[value]`, without enclosing backticks. Missing names and shared fields with several different values print as `` `<name>` ``
+- **Readable lists** — each Test data item and Expected Results item prints with `- `. Test data field labels omit Markdown backticks and outer angle brackets
+- **Row data** — expanded rows keep their own table values and only shared fields referenced by pre-conditions, Steps, Expected Results or those row values. Include indirect dependencies; omit shared fields overridden by a row column. Conflicting values for a referenced shared field remain visible; correct them in the source
+- **Pre-conditions** — retain placeholders as `` `<name>` ``; never substitute them
+- **Multiple rows** — a case saying `Runs once per row of **Test data**.` expands once per run-table value row. Shared setup fills each row; row values take precedence. Filled values are not recursively substituted. Test data remains visible; the per-row reminder is omitted on expanded rows
+- **Four surfaces** — Web, Mobile, Auto web and Auto mobile are separate results. `manual` only: Web/Mobile `to_do`, Auto `n/a`; `automation` only: Web/Mobile `n/a`, Auto `to_do`; mixed: Web/Mobile `to_do`, Auto `to_do` only when automated, otherwise `n/a`
+- **Editing** — the four results and Notes belong to the tester. Case and classification cells are locked. Sort in the Walk filter view, not at sheet level; fix wrong case content in its source suite
+- **Tab order** — Summary first, then run tabs by descending numeric run id. A reprint keeps its run id and position in that order. Other tabs follow the runs
+- **Summary** — four rows per run, one per surface. Identity, environment and source SHA appear on the first. `n/a` is excluded from the pass rate; `skipped` counts against it
+
+## Boundaries
+
+- **Credentials** — only the workflow writes Sheets. Do not edit layout by hand; change `scripts/openspec/lib/run-sheet-layout.mjs`
+- **Results** — never put execution results into suites or print commits
+- **A failed row** — the sheet posts nothing itself. QA says it in one sentence in the change's thread, naming the case id and what failed; the sheet keeps the row marked failed
+- **Tabs** — never delete other runs, clear Summary, or rename tabs manually
+- **Verification** — test the writer with fixtures or sandbox only after its coverage is confirmed. Never dispatch a production print to validate code changes

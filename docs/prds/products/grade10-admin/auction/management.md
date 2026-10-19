@@ -14,11 +14,11 @@ the card is in the winner's hands. The collector's half is
 
 | Rule | Value |
 | --- | --- |
-| Currency | **USD**, **HKD** or **JPY**, one per listing; **HKD** when omitted |
-| Bid floor | The currency's price schedule — [Bidding · Bid Increments](/p/grade10-site/auction/bidding#auction-logic); no minimum-increment field |
+| Currency | **USD** for every listing; **USD** when omitted |
+| Bid floor | The USD price schedule — [Bidding · Bid Increments](/p/grade10-site/auction/bidding#auction-logic); no minimum-increment field |
 | Title | Required at create; **1 to 200** characters |
 | Copy | Optional; at most **4,000** characters |
-| Slug | **1 to 64** characters, lower-case words joined by hyphens, unique among every listing |
+| Slug | **1 to 64** characters, lower-case words joined by hyphens, unique among the listings that hold one; a called-off listing holds none |
 | Quantity | **1 to 500** units of the chosen product; **1** when a product is picked |
 | Extension | **1,800 seconds** when omitted; **0** turns extended bidding off; an optional cap, and a cap below the duration is a hard final deadline |
 | Gallery | **1 to 8** images or videos of at most **100 MiB** each, stored as uploaded; a draft may hold none |
@@ -39,23 +39,57 @@ the card is in the winner's hands. The collector's half is
   again at the API, so a script cannot slip past what the form refuses
 - **Prices read back** — each price shows as a formatted decimal amount
   before saving, so its decimal placement can be checked
-- **Starting price of 0** — a listing in USD, HKD or JPY can start at
-  **0**; its first bid must still reach the currency's lowest increment
+- **Starting price of 0** — a listing can start at **0**; its first bid must
+  still reach the USD lowest increment
 - **Sandbox** — set only while draft: the listing runs on test-mode payment
   credentials, so the house can rehearse a sale
 - **Stock** — saving a draft with a product and a quantity holds that stock;
   a changed quantity moves the hold, changing the product warns that Save
   moves it, create is refused without a matching hold, and a call-off
   releases it
+- **A consigned lot** - consignment makes it as a draft from the item, its
+  photographs and facts; it takes no stock hold, and its starting price is
+  the consignment's floor, which an operator here cannot change
 - **Cert ID** - creating a listing takes an explicit choice of one Cert ID
   of the selected product, or `No Cert ID` for regular stock without a Cert
   record; each Cert ID can have its own live listing, and only one
+- **Title and description in each language** — a listing keeps its title and
+  description as written today, and an operator may add the same two in
+  Traditional Chinese and in Simplified Chinese, on the create and edit forms
+  and on the listing's Copy block, which switches both with one language
+  choice. A language left empty shows the title and description already on the
+  listing, marked as the fallback; the other Chinese is never borrowed. The
+  slug, the listing code, the Listings table and everything staff quote stay on
+  the English title. Relist carries every language across. The Listings search
+  also finds a listing by a translated title
+- **Customer view in each language** — the preview of the lot page in a
+  listing's editor and record offers EN, 繁中 and 简中 on its desktop and phone
+  frames; the lot page title follows the choice, falls back to English, never
+  borrows the other Chinese, and the image alt text stays English
+- **Customer view description** — the preview draws no description, because
+  its lot-page block needs shipping copy and badges
+- **Language control** — the Copy block switches language with three
+  buttons, EN, 繁中 and 简中, like the customer view's strip, rather than a
+  dropdown, because the console dropdown fails the phone touch target
+- **Labs seeds in each language** — every Labs listing seed writes
+  Traditional and Simplified Chinese titles and descriptions on the listing and
+  names and descriptions on its product; a recovered product is left alone
 - 🚧 **Slug helper** — the first saved draft receives a title-and-code slug:
   lower-case title words, then its lower-case listing code. The helper follows
   title edits only while the operator has left that generated value unchanged.
   An operator may replace it. Leaving the Slug field checks the chosen value
   and names a collision before Save; a slug already held by a completed,
-  expired or unsold listing remains unavailable
+  expired or unsold listing remains unavailable, except the Unsold source of
+  a Relist, whose address moves to the new draft on Save
+- **Relist keeps the public address** — Relist Save frees the Unsold
+  source's slug and assigns that same slug to the new draft in one
+  transaction, so a shared link opens the live successor once it is
+  published. The new draft still receives its own listing code. No redirect
+  table. Both listings' activity logs record the transfer. The Unsold source
+  shows Relisted beside Unsold once Relist Save linked a successor
+- **A relist's first photo saves it** — Relist stores nothing until Save,
+  except that the first media upload makes that Save first, so the photo has
+  a listing to belong to; a later Save keeps the same draft
 - 🚧 **Listing code** — a stable opaque 5-character code, always leading with
   2 letters, allocated on the first saved draft and shown read-only in the
   Listings table and on its admin screen under the existing listing-read
@@ -66,12 +100,21 @@ the card is in the winner's hands. The collector's half is
   Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
 - **Publish** — a created listing is ready but not visible; publishing is a
-  separate move, now or at a Publish at after now that can be cleared
-- **Call off** — any time before the close, bids or not; the stock is
-  released, the listing leaves browse and search, and its canonical
-  slug remains reserved and directly accessible. Its listing code stays
-  reserved and never resolves as a route; explicit hard deletion is outside
-  this rule
+  separate move, now or at a Publish at after now and no later than the
+  start, that can be cleared
+- **Publish now** — publishes at once, even after the start; on a listing
+  with a Publish at it asks first, because publishing now removes that time
+- **Schedule as typed** — a Publish at, start or close in the past, a close
+  not after the start, or a Publish at after the start shows under its field
+  before Save; a time left as stored is not refused, so a listing whose start
+  has passed still saves
+- **Publish still needs** — a created listing with a Publish at names under
+  it each field its publish still needs
+- **Call off** - any time before the close, bids or not; the stock is
+  released and the listing leaves browse and search. Its former address is
+  available for another listing, and so is the address of a listing called
+  off earlier. Its listing code stays reserved and never resolves as a route;
+  explicit hard deletion is outside this rule
 - **Unsold close** — a listing that closes with no winner releases its
   stock hold at that moment, and the units are available again. The listing's page says the stock was released, with
   the date. An operator does nothing to get the stock back — [Products and
@@ -81,13 +124,17 @@ the card is in the winner's hands. The collector's half is
   each shows in the inventory history as released by that clean-up
 - **Relist** — an Unsold listing offers Relist, which opens a new draft
   with the same product, quantity, Cert ID choice, title, copy, price, currency
-  and gallery. The draft takes its own stock hold on Save, gets its own slug
-  and listing code, sets its own window, and carries no bids or history from
-  the closed one. Campaign, reserve, extension, taxonomy and sandbox start as
-  on any new draft. Relist shows on an Unsold listing only, to an operator who
-  can operate auctions; nothing is stored until Save. It shows on the
+  and gallery, and with the source's slug filled in. The draft takes its own
+  stock hold on Save, keeps that slug (or another the operator chose), gets
+  its own listing code, sets its own window, and carries no bids or history
+  from the closed one. Campaign,
+  reserve, extension, taxonomy and sandbox start as on any new draft. Relist
+  shows on an Unsold listing, never on one a collector won, to an operator
+  who can operate auctions; nothing is stored until Save. It shows on the
   listing's row in the Listings table, once its stock was released, and not
-  on a listing in a campaign or one already relisted
+  on a listing in a campaign or one already relisted. A consigned lot is
+  relisted from its consignment, and reads Relist from consignment with its
+  reference
 - **Media** — an operator can choose reusable assets from the selected
   inventory product or upload media directly to the listing, then order every
   item together. A chosen product asset becomes part of the listing on Save:
@@ -95,7 +142,7 @@ the card is in the winner's hands. The collector's half is
   A direct-upload file joins the gallery when it is dropped or chosen; an item
   joins, is replaced, removed or re-captioned until the close — [Auction
   Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
-- 🚧 **Uploading and ordering** - files an operator drops or chooses are stored
+- **Uploading and ordering** - files an operator drops or chooses are stored
   at once, several at a time, after the last item, with no preview to confirm;
   a replacement stores the same way. The operator drags items into order, and
   the new order holds as soon as it is dropped, except while inventory assets
@@ -106,19 +153,34 @@ the card is in the winner's hands. The collector's half is
   adds it. A `No Cert ID` listing represents regular stock, has no Cert record,
   and starts with untagged product media. Each selected source is copied into
   the listing gallery.
+- **Internal bid** - on a Created or Published listing, an admin with
+  `auction:reserve` sets one house maximum and picks one internal bidder. Its
+  rules, Save limits, listing edits and Not placed state are on [Internal
+  Bid](/p/grade10-admin/auction/internal-bid)
+- **Internal bidders** - a reserve holder manages profiles with a name,
+  unique email label and required billing address; a profile has no site
+  account. Admins enter a neutral recipient in the address, never the profile's
+  name. The email label is fixed after the profile has bid - [Internal
+  Bid](/p/grade10-admin/auction/internal-bid)
+- **Internal bidder win** - a reserve holder sees the listing flagged as
+  won by its internal bidder. Other operators see an ordinary won lot with
+  Open order - [Internal Bid](/p/grade10-admin/auction/internal-bid)
 - 🚧 **Extended bidding** - a published lot past its scheduled close and still
   taking bids reads Extended in the Listings table; its status does not change
 - 🚧 **Open order** - a won lot's row opens its order in Orders
 - **Watchers** — opening Stats on a listing shows how many collectors watch
   that lot, across both brands; interest, not a count of expected bidders; the
   Listings table does not show the count
-- **Refused** — a currency outside the three, or a starting price that is not
+- 🚧 **Refused** — a currency other than USD, or a starting price that is not
   a whole amount of 0 or more; a slug of the wrong shape, or one another listing
   holds; two categories from one taxonomy, or a published or canceled
-  campaign; a close not after the start, or a close or Publish at not after
-  now at create; a ninth media item, an unsupported or empty file, or
+  campaign; a close not after the start, a Publish at after the start, a
+  start, close or Publish at typed not after now, or a close not after now at
+  create; a ninth media item, an unsupported or empty file, or
   removing the last item once created; prices, window, slug or sandbox on a
-  published listing, and every write on a closed, settled or canceled one
+  published listing, and every write on a closed, settled or canceled one;
+  the starting price or currency of a consigned lot; a refund that writes off
+  a consigned lot not yet delivered
 
 :::detail{title="Listings code map" for="engineer"}
 - **Close** — `sweeps/close.ts`
@@ -181,7 +243,7 @@ order.
 | Payment window | **7 calendar days** from send |
 | 🚧 Address window | **48 hours** from actual close for the winner to confirm setup, which locks it; a reasoned operator reopen of unconfirmed Setup Overdue gives a fresh **48 hours**; after confirmation only an operator changes it |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
-| Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
+| Buyer's premium | **20%** of the USD winning bid or the one USD minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
 | Status | Segment | Primary action | Waited since |
 | --- | --- | --- | --- |
@@ -200,6 +262,9 @@ order.
   Test badge on a sandbox lot, the rule behind the status in one sentence, how
   long it has waited, and one primary action, with every other action that
   applies now under More
+- **Internal order** - flagged Internal; other operators read the buyer as
+  House, and a reserve holder sees the profile - [Internal
+  Bid](/p/grade10-admin/auction/internal-bid)
 - **The winner** - name, registered email and phone, never a payment-provider
   identifier, beside the deadline, the reissue count and the suspension state
 - 🚧 **One timeline** - the invoice log, the fulfilment log and comments,
@@ -243,6 +308,15 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Waited** - from when the status began, or from a flag. Setup Overdue is
   the status at the 48-hour address deadline and nothing else is marked:
   Preparing Invoice carries no mark, and no wait changes a status
+- **Daily reminder** - flagged orders and orders that have waited 48 hours
+  for an invoice, a proof check or a dispatch are listed in a dialog until the
+  operator closes it for the day, and in Slack at 08:00, with the day's new
+  listings - [Daily Reminder](/p/grade10-admin/console/daily-reminder)
+- **Lifecycle Slack** - Auction posts once to the same Slack channel when a
+  listing goes live, ends or is extended, and when an order becomes overdue or
+  is flagged, only after that usual step completes and only when both the bot
+  token and the channel are set; otherwise the send is skipped -
+  [Daily Reminder · Lifecycle Alerts](/p/grade10-admin/console/daily-reminder#lifecycle-alerts)
 - 🚧 **Search and filters** - by the start of a listing code, any invoice ID
   the order held, the winner's email or a payment's reference; one status of
   the segment's, then a cancellation
@@ -254,13 +328,27 @@ on winner, In transit, Closed and All, opening on Needs action.
   winning bid and the premium, enters Shipping & Handling (zero allowed) and
   optional Insurance (above zero), reads the Payment Processing Fee, the
   total and the deadline to the minute, and sends, which starts the 7 days
-- 🚧 **Tax** — a third quoted amount beside Shipping & Handling and
+- **Tax** — a third quoted amount beside Shipping & Handling and
   Insurance, optional and above zero. Grade10 computes no rate: the operator
   decides what is owed and enters it
 - 🚧 **Billing address** — shown beside the delivery address on the quote;
   send is refused while the order has none, and the edit before send adds
   it; an address recorded by phone asks for billing too, same as delivery by
   default
+- 🚧 **Invoice in the settlement currency** — the winner chooses USD or HKD at
+  order setup, and the invoice is issued in that currency. An internal order
+  uses HKD settlement and FPS set automatically, with no winner setup or
+  operator setup step. The operator still quotes and sends its invoice, and types
+  every amount in USD, the bank transfer fee included; for an HKD order Grade10
+  converts each line at the fixed rate and shows the operator no rate —
+  [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
+- **Historical bank rail** - An ordinary order already confirmed for bank
+  transfer may have no recorded rail. The operator reads that rail as unknown;
+  current Finance configuration is not used to guess it. The confirmed setup,
+  sent invoice amounts and currencies, and existing instruction artifact stay
+  unchanged. A future edit, first send when no invoice exists, or reissue
+  requires a currently offered rail. A new setup record also requires one, and
+  the internal or house order still follows its HKD and FPS rule
 - 🚧 **Payment Processing Fee** - a card invoice's fee is Grade10's own: the
   Stripe card rule for the order's currency, grossed up so Grade10 keeps the
   Subtotal whole, read-only with the rule it came from. With no card rule for
@@ -277,13 +365,16 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Edit before send** — at the winner's request the operator changes the
   address, the method or both, with a reason the log keeps beside the old and
   new values; the order stays Preparing Invoice. Bank transfer is refused
-  where Grade10 holds no bank details for the order's currency
+  where Grade10 holds no bank details for the order's currency, and an
+  unrecorded historical rail must be completed with a currently offered rail
 - 🚧 **Reissue** — one action for any change after send, on a pending or
-  expired invoice: address, method, fee, shipping, insurance, tax, and the
+  expired invoice: address, settlement currency, payment method or rail, fee,
+  shipping, insurance, tax, and the
   deadline kept or restarted, with a reason and at least one change; no limit,
   each logged with its count, and the buyer's reissue history across all their
   orders shown before another is granted. The replaced invoice reads
-  Replaced, and its ID still finds the order
+  Replaced, and its ID still finds the order. A rail-only change counts, such
+  as FPS to HK Local or USD HK Local to International via SWIFT
 - 🚧 **Checking proof** — the operator opens the winner's files on the
   order page, then confirms, with their own files
   if they wish, or returns the invoice to pending with a reason the winner
@@ -316,14 +407,14 @@ on winner, In transit, Closed and All, opening on Needs action.
   received; 1 to 5 private proof files; and a reason. Never on a card invoice,
   which is reissued as bank transfer first
 
-- 🚧 **Partially Paid** — the deadline stops for good, and what will not be
+- **Partially Paid** — the deadline stops for good, and what will not be
   paid off is settled by hand outside Grade10
 
 | Total with this payment | The next payment | What happens |
 | --- | --- | --- |
-| 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid, and updating it to Paid is refused |
-| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; this payment brings the total to 90% or more, and every later payment under 100% asks again |
-| 🚧 Any | Exactly the balance | Closes on its own; the order reads Preparing Shipment |
+| Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid, and updating it to Paid is refused |
+| 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; this payment brings the total to 90% or more, and every later payment under 100% asks again |
+| Any | Exactly the balance | Closes on its own; the order reads Preparing Shipment |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 
 ### Address Confirmation Window
@@ -337,17 +428,18 @@ on winner, In transit, Closed and All, opening on Needs action.
   the form closed. Both
   paths refuse once an address is confirmed, an invoice is sent or the order is
   cancelled
-- 🚧 **Recording a method** — recording setup refuses a payment method the
-  order's currency does not offer: card where Payment Settings holds no card
-  fee rule for it, bank transfer where Grade10 holds no bank details; a reopen
-  is still allowed when the currency offers neither
+- 🚧 **Recording a method** — recording setup refuses a payment method or rail
+  the order's currency does not offer, or one whose card rule or bank details
+  are not configured. Internal orders use their automatic HKD and FPS values
+  and need no setup action; the operator still prepares and sends the invoice
 
 ### Order Cancellation
 
 | Cancelling an order | Value |
 | --- | --- |
 | 🚧 Its reason | One category — Non-payment, Missed setup, Winner asked, Lot issue or Other — and a note, both required; the queue filters cancelled orders by category |
-| 🚧 What the dialog states | Before the operator confirms: the lot goes back to stock, no runner-up is offered it, the winner is emailed, a suspension stays, and the cancel cannot be undone |
+| 🚧 What the dialog states | Before the operator confirms: the lot goes back to stock, no runner-up is offered it, the collector winner is emailed, a suspension stays, and the cancel cannot be undone |
+| 🚧 Internal order confirmation | The dialog says no letter is sent |
 | The lot | Back to stock with no runner-up offer, its hammer price and bid history kept for audit and never carried into a new listing |
 | 🚧 Relisting it | The order links to its lot, which an operator relists by hand; nothing is relisted on its own |
 | 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, Finance sends the money back outside Grade10, and an operator with payment processing clears the flag with a reason and any return reference once it has gone |
@@ -406,7 +498,7 @@ money is not necessarily the person who dispatches cards.
 
 ## Payment Settings
 
-The buyer-premium minimums and the Stripe card fee rule that prices a card
+The buyer-premium minimum and the Stripe card fee rule that prices a card
 invoice's payment processing fee, as the Payment settings tab under
 `/auction`. A bank transfer invoice's fee is the operator's own, per
 [Auction Management · Payment](#payment); Payment Settings holds no rule for
@@ -414,28 +506,29 @@ it.
 
 | Rule | Value |
 | --- | --- |
-| Minimum charge | One amount per currency, zero or more; **0** in USD, HKD and JPY at first |
-| 🚧 Card fee rule | One per currency: a percentage of at least 0 and below 100, to two decimal places, and a fixed amount of zero or more; or no rule, and half a rule is refused |
-| 🚧 At rollout | Nothing is stored until the first save; Finance sets HKD **3.4% + HK$2.35** |
-| 🚧 Typed as | The currency's major units, `2.35` for HK$2.35, stored as minor units |
+| Premium minimum | One USD amount, **0** at first; it applies to the USD winning bid |
+| Card rule per settlement currency | One rule for USD and one for HKD; Finance sets each percentage and fixed amount |
+| Currencies held | USD and HKD, the two settlement currencies. The premium minimum is one USD amount, read in the bid currency |
+| Card fee rule | One per currency: a percentage of at least 0 and below 100, to two decimal places, and a fixed amount of zero or more; or no rule, and half a rule is refused |
+| At launch | A USD card rule is required. Card is unavailable in a settlement currency until its rule is saved |
+| Typed as | Percent and fixed amount in the settlement currency's major units, stored as minor units |
 | Who | 🚧 Operators with payment processing, `auction:payment`; others neither read nor change it |
-| Saved | Whole, replacing all three currencies' rules at once and recording the operator and the time; a new value applies to card invoices sent or reissued after it, and never re-prices a sent one |
+| Saved | Whole, replacing both settlement currencies' rules at once and recording the operator and the time; a new value applies to card invoices sent or reissued after it, and never re-prices a sent one |
 | Refused | A missing or unsupported currency, a negative amount or one finer than the currency's smallest unit, or a read or save without that access — nothing stored changes |
 
 - 🚧 **Live example** - each card fee shows, as it is typed, the fee a card
   invoice charges on a subtotal of 1,000 in its currency, grossed up so
   Grade10 keeps the whole subtotal once Stripe takes its fee from the whole
   charge
-- 🚧 **USD and JPY** - no card rule at launch: until Finance saves one for a
-  currency, a winner in it is not offered card at order setup and reads that
-  card is not yet available there, and no card invoice in it can be sent
+- 🚧 **Card fee example** - the live example uses the configured percentage
+  and fixed amount for each settlement currency; it shows the fee needed for
+  Grade10 to keep the subtotal whole after Stripe takes its fee
 
-| Subtotal | Stripe card fee | Card fee charged | Order total |
+| Subtotal | Configured card rule | Card fee charged | Order total |
 | --- | --- | --- | --- |
-| HK$1,000.00 | 3.4% + HK$2.35 | HK$37.63 | HK$1,037.63 |
-| HK$3,120.00 | 3.4% + HK$2.35 | HK$112.25 | HK$3,232.25 |
+| USD 1,000.00 | USD rule | Calculated from the configured rule | Subtotal plus fee |
+| HK$1,000.00 | HKD rule | Calculated from the configured rule | Subtotal plus fee |
 
-::story{id="auction-admin-payment-settings--loaded" title="Payment settings loaded"}
 
 ## Grants
 
@@ -444,14 +537,16 @@ it.
 | Drafting, editing, publishing and calling off a listing or a campaign | `auction:write` and `auction:operate` | `staff` |
 | 🚧 Opening Orders, an order and its proof files, and commenting; attaching a proof file takes the grant of its action | `auction:read` - reading | `staff`, `finance`, `treasurer` and `admin` |
 | Sending and reissuing an invoice, recording a payment, checking proof, cancelling, reopening, recording or changing setup | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
-| 🚧 Clearing a flag, and Payment Settings: the premium minimums and the card fee rule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
+| 🚧 Clearing a flag, and Payment Settings: the premium minimum and the card fee rule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
 | Dispatch and delivery | `auction:shipment` - shipment processing | `staff` and `admin` |
 | Recording a refund | `auction:refund` - refund processing | `staff` and `admin` |
+| Setting and reading internal bids and internal bidder profiles; reading the profile behind a House bid or win | `auction:reserve` - secret-floor access | `admin` |
 | 🚧 Making a test winner, outside production | `auction:operate` and `user:create` | `admin` |
 
-- 🚧 **A control the operator lacks** - stays listed and disabled, naming the
-  access it needs, such as Needs payment processing, and the server refuses
-  it too - [Roles](/p/shared/auth/roles)
+- 🚧 **A control the operator lacks** - it stays listed and disabled, naming
+  the access it needs, such as Needs payment processing; the server refuses
+  it too. Internal-bid and internal-bidder profile controls are hidden
+  without `auction:reserve` - [Roles](/p/shared/auth/roles)
 - 🚧 **Reasons** - an edit before send, a reissue, a recorded payment or
   refund, a cancel, a returned proof, a setup change and a cleared flag each
   need one; a send and a confirmed proof need none. Every entry names the
@@ -470,6 +565,7 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 | Where | Local, staging, staging-2 and UAT only; never production or a preview, whose console carries no Test tab |
 | Email | The operator's own address with a `+qa-<code>` tag, checked by Grade10, so every letter lands in their own inbox. The same address makes one test winner; one that holds a verified account is refused |
 | The lot | `Test lot <code>`, a sandbox lot closed through the real close, now or up to 30 days back, so its order and letters are the real ones; never biddable |
+| Bid and settlement | The sandbox lot bids in USD. Its test winner chooses USD or HKD settlement and an offered payment method at order setup, with nothing preselected |
 | Sign-in | The ordinary sign-in link, which the console emails to the test address after making it and again on request; opened in a private window, so the operator stays signed in |
 
 - 🚧 **The list** - Winners in the Test tab lists test winners newest first,
@@ -486,7 +582,7 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service)
-- **Fixture tabs** — `LOCAL_FIXTURES_ENABLED`: the Campaign and Listings tabs seed and drop fixture listings, local dev only
+- **Fixture tabs** — `LOCAL_FIXTURES_ENABLED`: the Campaign and Listings tabs seed and drop fixture listings, local dev only; every Labs seed fills the Chinese texts (`devFixtures/fixtureTranslations.ts`)
 - **Winners** — `trpc/routers/testWinners.ts` on the `testBids` middleware; the Test tab ships only in pre-production builds
 :::
 
@@ -500,11 +596,13 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 ::cases{id="grade10-admin/auction/post-sale"}
 
 ::cases{id="grade10-admin/auction/payment-settings"}
+
+::cases{id="grade10-admin/auction/internal-bid"}
 :::
 
 :::detail{title="Product decisions" for="pm"}
-An operator chooses the auction currency but not the increments that shape its
-bidding: one schedule keeps a lot's opening price accessible and its later
+Every lot uses USD, and an operator does not choose its increments: one
+schedule keeps a lot's opening price accessible and its later
 competition proportionate without asking anyone to predict the close. Orders
 is the operator's close-out surface: a worklist that says what needs doing,
 and one page per order that keeps the winner contact, money, delivery state
@@ -512,23 +610,31 @@ and timeline together, with payment and shipment as separate jobs.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
-| Auction operator | Creating a listing | Chooses a supported currency without predicting its closing price. |
-| Finance operator | Reviews or updates the premium minimums and the card fee rule | Sees one minimum and one card rule per currency, and saves them whole. |
+| Auction operator | Creating a listing | Sets the USD starting price without predicting its closing price. |
+| Finance operator | Reviews or updates the premium minimum and card fee rules | Sees one USD minimum and one card rule per settlement currency, and saves them whole. |
 | Other operator | Opens Auction without payment processing | Cannot read or change the payment settings. |
 | QA | Needs to walk a winner's order | Makes a test winner in one step outside production and signs in with the ordinary link. |
 
-**Not in scope.** Operator editing of the increment schedules; currency
-conversion or added currencies; per-listing floors; changing Stripe account
+**Not in scope.** Operator editing of the increment schedule; settlement
+currency conversion rules or added currencies; per-listing floors; changing Stripe account
 settings.
 
 **Decisions.**
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| Called-off address reuse | Decided | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
+| Internal bid | Decided | One USD house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Other operators see placed bids labelled House, with their public amounts and Accepted At; they see no account, profile or maximum, and no row or commit time before the first house bid. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
+| House win | Decided | Collectors read the lot as sold; the internal order is flagged Internal, opens as Preparing Invoice and uses HKD settlement and bank transfer on FPS at close. It uses the profile's billing address for delivery and billing, with a neutral recipient entered by an admin. There is no setup step or invoice at close; an operator sends the invoice by hand. The order sends no letters. Chosen over Bought in with no order, which the author dropped. | Product (@htonyl) |
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
-| Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
+| Bid currency | Decided | USD is the single bid currency for every listing, with one shared increment schedule and one ceiling. The winner chooses USD or HKD settlement. | Product |
+| Payment Settings currencies | Decided | USD and HKD are the settlement currencies. Each has one card fee rule; the premium minimum is one USD amount. A USD card rule is required at launch. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
+| Schedule order | Decided | Publish at, then the start, then the close; a Publish at at the start is allowed. Each typed time must be after now, and a stored time that has passed is kept, so a live listing still saves. Publish now ignores the order and removes the Publish at after asking. Chosen over warnings only, which let a listing publish already closed. | Product |
+| A consigned lot | Decided | Consignment makes it as a draft with no stock hold and owns its start price, which is the consignment's floor, and its relist. | Product |
 | Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
+| A relist's first upload | Decided | The first media upload in a Relist editor makes the Relist Save, holding stock and moving the slug, and later Saves keep that draft. Holding uploads until Save was ruled out: the editor would have to stage media with no listing behind it. | Product |
+| Relist public address | Decided | Relist Save moves the Unsold source's slug onto the new draft and frees it on the source, in one transaction; the new draft keeps its own listing code. Chosen over a redirect from the old address, so one canonical URL stays with the lot that is live. Activity on both listings records the transfer. | Product (@jeff) |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |
 | Cert-aware inventory media | Decided | A Cert listing's main selector offers untagged product media and media tagged to that Cert; other Cert media sits in a labelled drawer and joins only through an explicit Add that names the source Cert ID. A No Cert ID listing starts with untagged media only. Existing listing-edit authority covers the drawer; selected sources are copied into the gallery snapshot. | Product |
@@ -538,14 +644,14 @@ settings.
 | Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason, reopens only an unconfirmed Setup Overdue order before invoice send; a reopen gives a fresh 48 hours and its reopened window derives Awaiting Setup. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 | Premium minimum | 🚧 In flight | Under Auction because auction invoices use it; behind payment processing, `auction:payment`, because changing it changes the amount collected. Chosen over the settlement grant, which only `admin` holds, so finance could not keep the settings it owns. | Product and finance |
-| Payment processing fee | 🚧 In flight | The invoice's payment method decides. A card invoice's fee is Grade10's own: the Stripe card rule per currency, grossed up so Grade10 keeps the subtotal whole; with no rule for the currency, the invoice cannot be sent or reissued. A bank transfer invoice's fee is the operator's own; a sent invoice never re-prices, and Finance enters the card rule at rollout. Chosen over reading the provider's fees at send, which Stripe cannot answer - [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice). | Product and finance |
+| Payment processing fee | 🚧 In flight | The invoice's payment method decides. A card invoice's fee is Grade10's own: the configured Stripe card rule for its settlement currency, grossed up so Grade10 keeps the subtotal whole; a USD rule is required at launch. A bank transfer invoice's fee is the operator's own; a sent invoice never re-prices. Chosen over reading the provider's fees at send, which Stripe cannot answer - [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice). | Product and finance |
 | A reissue's fee | 🚧 In flight | Editable only where the reissued invoice is bank transfer, starting from the current invoice while the method stays. A switch to card prices it from the card rule; a switch to bank transfer starts it empty. Chosen over always pricing it from the schedule, which undoes a fee the operator agreed with the winner. | Product and finance |
 | Orders workspace | 🚧 In flight | One worklist in segments with counts - Needs action, Waiting on winner, In transit, Closed, All - and one page per order with one primary action and each action in its own dialog. Chosen over a listing-level queue beside a separate winner orders tab, which split one order across two surfaces. | Product and Operations |
 | What was seen is sent | 🚧 In flight | The send and the reissue carry the total the operator read and are refused when Grade10 now prices the order differently. Chosen over sending whatever the server computes, which can bill a total nobody saw. | Product and finance |
 | Money that lands | 🚧 In flight | A card payment is always recorded, and one the invoice did not expect carries a flag until an operator clears it with a reason. On an expired invoice it pays the invoice, since it paid the whole total; on a replaced or cancelled invoice, at an amount that differs, or on an invoice in any state that cannot take a card payment, it counts toward nothing and blocks nothing, and finance returns it outside Grade10. Chosen over refusing or dropping it, which loses track of money Grade10 holds, and over never moving a status, which leaves an expired invoice the winner paid in full to be settled a second time. | Product and finance |
-| Test winners | 🚧 In flight | Outside production, one action makes a test account on the operator's own tagged address that won a closed sandbox lot through the real close, so its letters go out. It signs in with the ordinary link in a private window, and Cancel is the order's own. Chosen over seeding an order around the real close, which skipped its letters, and over a sign-in link of its own, which auth would have to guard. | Product and Engineering |
+| Test winners | Decided | Outside production, one action makes a test account on the operator's own tagged address that won a USD-bid sandbox lot through the real close. The test winner confirms the address, settlement currency and an offered payment method with nothing preselected; the operator then prepares and sends its invoice. The real winner letters go out. It signs in with the ordinary link in a private window, and Cancel is the order's own. Chosen over seeding an order around the real close, which skipped its letters, and over a sign-in link of its own, which auth would have to guard. | Product and Engineering |
 | How long an order waited | 🚧 In flight | Each row and order page shows how long the order has waited in its status. Setup Overdue is the status at the 48-hour address deadline, and Preparing Invoice carries no mark; its payment timer starts at send. Chosen over a second Overdue mark beside the Setup Overdue status, which also marked the operator's own queue after 72 hours. | Product |
-| Partial payment stays operator-only | 🚧 In flight | Recorded through Record payment, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
+| Partial payment stays operator-only | Decided | Recorded through Record payment, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
 | Who records a refund | Decided | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:payment`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |
 | Refund money path | Decided | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
 | One refund, any amount | Decided | One refund per order. A closing refund ends it as Refunded. An overpayment returns only the difference and the order keeps its status. Chosen over every refund, including an overpayment, ending as Refunded. | Product and finance |

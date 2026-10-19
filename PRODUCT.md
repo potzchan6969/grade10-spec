@@ -41,8 +41,8 @@ The `grade10-planning` schema under `openspec/schemas/` governs the lifecycle. `
 
 Preview and review run through Storybook:
 
-- `pnpm storybook` — page assemblies in `apps/preview`
-- `pnpm storybook:workbench` — assemblies plus both packages' stories (published at https://storybook.grade10-stg.com)
+- `pnpm storybook` — the workbench: every story, by the manual's domains and pages (published at https://storybook.grade10-stg.com); rules in `docs/governance/storybook.md`
+- `pnpm storybook:pages` — page assemblies in `apps/preview` alone
 - `pnpm storybook:design-system` / `pnpm storybook:ui` — focused single-package views
 
 Consuming applications add this repository as a Git submodule, pin a SHA, and implement their own routing, data, stores, and adapters against the shared contracts.

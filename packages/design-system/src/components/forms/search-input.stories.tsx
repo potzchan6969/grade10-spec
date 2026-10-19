@@ -7,7 +7,7 @@ import { SearchInput } from "./search-input";
  * be able to show an error is an open question on `add-input-components`.
  */
 const meta = {
-  title: "Components/SearchInput",
+  title: "Design System/Forms/SearchInput",
   component: SearchInput,
   tags: ["autodocs"],
   args: { label: "Search Field", placeholder: "Search..." },

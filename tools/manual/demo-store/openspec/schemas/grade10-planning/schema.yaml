@@ -496,7 +496,7 @@ artifacts:
   - id: tech-design
     required: false
     teammate: engineer
-    hand: tech
+    hand: dev
     perspectives:
       - name: tech
         when: [always]
@@ -958,7 +958,6 @@ artifacts:
       - decisions
       - user-journeys
       - ui-design
-      - tech-design
   - id: tasks
     required: true
     teammate: engineer

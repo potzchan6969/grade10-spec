@@ -72,20 +72,19 @@ const EXTENSIONS = new Set([
   ".json",
 ]);
 
-/** An id is a prefix, a kind, and a number: `grade10-site-auction-listing-page-SC-01`,
- * `grade10-site-auction-listing-page-US-01`. Suites in the store carry a case id as
- * `grade10-site-auction-listing-page-US1-TC1-1` — a shape the spec rules do not describe and the
- * manual's own reader does not match — so the kind's dash and the prefix's
- * case are both optional here. Reading an id nobody governs is better than
- * refusing to look it up. */
-const ID_SOURCE = "[A-Za-z0-9][A-Za-z0-9-]*-(?:SC|US|TC)-?\\d+(?:-\\d+)*";
+/** An id is a prefix, a kind, and a number. The current human-facing form is
+ * `g10.auction-listing.US1` or `g10.auction-listing.US1-TC1`; older marker and
+ * prose ids remain readable during migration. Reading an id nobody governs is
+ * better than refusing to look it up. */
+const ID_SOURCE =
+  "(?:[A-Za-z0-9][A-Za-z0-9.-]*\\.(?:SC|US)\\d+(?:-TC\\d+)?|[A-Za-z0-9][A-Za-z0-9-]*-(?:SC|US|TC)-?\\d+(?:-\\d+)*)";
 const ID = new RegExp(`^${ID_SOURCE}$`);
 /** The same token, found in running text: never a fragment of a longer one. */
 const ID_IN_TEXT = new RegExp(
   `(?<![A-Za-z0-9-])${ID_SOURCE}(?![A-Za-z0-9-])`,
   "g",
 );
-const KIND_SUFFIX = /-(?:SC|US|TC)-?\d.*$/;
+const KIND_SUFFIX = /(?:\.(?:SC|US)\d.*|-(?:SC|US|TC)-?\d.*)$/;
 const HEADING = /^(#{1,6})\s+(.*)$/;
 
 function walk(dir, out = []) {
@@ -118,7 +117,8 @@ export function scan(files) {
     if (
       !text.includes("-SC-") &&
       !text.includes("-US-") &&
-      !text.includes("-TC-")
+      !text.includes("-TC-") &&
+      !/(?:\.(?:SC|US)\d)/.test(text)
     ) {
       continue;
     }

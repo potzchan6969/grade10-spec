@@ -5,5 +5,33 @@
   "bioLabel": "簡介",
   "editLabel": "編輯個人檔案",
   "emptyBio": "尚未填寫簡介。",
-  "memberSince": "{date} 起成為會員"
+  "memberSince": "{date} 起成為會員",
+  "chooseAvatar": "選擇相片",
+  "removeAvatar": "移除相片",
+  "avatarAlt": "你的頭像",
+  "displayNameRequired": "請輸入顯示名稱。",
+  "displayNameTooLong": "顯示名稱最多 {max} 個字元。",
+  "bioTooLong": "簡介最多 {max} 個字元。",
+  "nothingToSave": "沒有需要儲存的內容。",
+  "avatarType": "請選擇 JPEG、PNG 或 WebP 圖片。",
+  "avatarTooLarge": "圖片最大 5 MB。",
+  "saveFailed": "無法儲存你的個人檔案，請再試一次。",
+  "consignments": {
+    "view": {
+      "new": "已收到申請",
+      "toprice": "已收件",
+      "tosign": "待簽署",
+      "tolist": "已簽署",
+      "onsale": "發售中",
+      "sold": "已售出",
+      "payout": "款項即將支付",
+      "ended": "已結束：請選擇下一步",
+      "returning": "正寄回給你",
+      "closed": "已完結"
+    },
+    "sellerLine": "賣家：{name}",
+    "sellerLineSub": "透過 Grade10 寄賣的收藏家。卡片由我們保管，並由我們收款及處理退貨。",
+    "lotSellerLine": "寄賣者：{name}",
+    "lotSellerLineSub": "透過 Grade10 拍賣出售。卡片由我們保管，並由我們收款及交付。"
+  }
 }

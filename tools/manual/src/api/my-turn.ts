@@ -1,7 +1,13 @@
 import { handleOf } from "../../../../scripts/openspec/lib/handle.mjs";
 import { byLastMoved } from "./derive";
-import { handOf, laterRolesOf } from "./stages";
-import type { ChangeEntry, OpenQuestion, Role, SchemaArtifact } from "./types";
+import { behindOf, handOf, handOfArtifact, laterRolesOf } from "./stages";
+import type {
+  BehindArtifact,
+  ChangeEntry,
+  OpenQuestion,
+  Role,
+  SchemaArtifact,
+} from "./types";
 
 /**
  * What is on one handle, across every change in flight: the open questions
@@ -16,11 +22,15 @@ import type { ChangeEntry, OpenQuestion, Role, SchemaArtifact } from "./types";
 
 export type MyTurnQuestion = { change: ChangeEntry; question: OpenQuestion };
 export type MyTurnChange = { change: ChangeEntry; roles: Role[] };
+/** An artifact of the reader's that is behind, until they read it again or
+ * land it: a small move holds nothing, so this is where it stays in view. */
+export type MyTurnRead = { change: ChangeEntry; behind: BehindArtifact };
 
 export type MyTurn = {
   questions: MyTurnQuestion[];
   now: MyTurnChange[];
   later: MyTurnChange[];
+  toRead: MyTurnRead[];
 };
 
 /** The roles of these `hands` names for this one handle — one comparison,
@@ -47,6 +57,7 @@ export function myTurnOf(
   const questions: MyTurnQuestion[] = [];
   const now: MyTurnChange[] = [];
   const later: MyTurnChange[] = [];
+  const toRead: MyTurnRead[] = [];
 
   for (const change of [...changes].sort(byLastMoved)) {
     for (const question of change.questions ?? []) {
@@ -55,6 +66,12 @@ export function myTurnOf(
     }
 
     const artifacts = schemas[change.schema] ?? [];
+    for (const behind of behindOf(change, artifacts)) {
+      const role = handOfArtifact(behind.artifact, artifacts);
+      const named = role ? change.hands?.[role] : undefined;
+      if (named !== undefined && handleOf(named) === held)
+        toRead.push({ change, behind });
+    }
     const onNow = rolesHeldBy(
       change.hands,
       handOf(change, change.stage, artifacts),
@@ -72,5 +89,5 @@ export function myTurnOf(
     if (onLater.length > 0) later.push({ change, roles: onLater });
   }
 
-  return { questions, now, later };
+  return { questions, now, later, toRead };
 }

@@ -4,9 +4,12 @@
      them, across a product's domains is <product>/product-tcs.md, and across
      products is platform-tcs.md. Above feature level a case composes two or
      more journeys and its **Trace:** names each of them, the heading id is
-     <product>-<domain>-e2e-US<n> (product: <product>-e2e-US<n>; platform:
-     platform-e2e-US<n>), and product and platform carry no coverage
-     obligation - they are smoke passes.
+     <app>.<domain>-dmn.US<n> (product: <app>-pdt.US<n>; platform:
+     platform.US<n>), and product and platform carry no coverage
+     obligation - they are smoke passes. Case headings use
+     <app>.<domain>-<capability>.US<n>-TC<m>,
+     <app>.<domain>-dmn.US<n>-TC<m>, <app>-pdt.US<n>-TC<m> or
+     platform.US<n>-TC<m>.
 
      An INDEPENDENT reading of the user-journeys.md and feature set beside this
      file, written without sight of the spec's ## Requirements — never derived
@@ -17,35 +20,65 @@
      planning-dev, reconcile with QA2, and check with `pnpm run tcs:validate`.
      Human QA uses tcs-review after implementation is deployed and available. -->
 
-<!-- <capability> is the capability's path with slashes as hyphens:
-     grade10-site/store/product-listing issues
-     grade10-site-store-product-listing-SC-01, -US-01, -US1-TC1-1. -->
+<!-- <scope> is the stable marker prefix, for example
+     g10.auction-account-record. The human-facing heading uses the journey and
+     case numbers: g10.auction-account-record.US1-TC2. The trace:case marker
+     above it keeps its own immutable machine id. -->
 
 # <product>/<domain>/<capability> Test Cases
 
 **Status:** pending-review · 0/<number of draft cases>
 **Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>
 
-## <capability>-US<n>: <!-- journey title, copied from user-journeys.md -->
+<!-- Walks come first. A walk carries Starting state, optional Shared test data,
+     and Route. It references each case once or more; it never repeats a case
+     definition or creates an observation. A feature walk stays in this
+     capability. Higher-level routes belong in the parent suite. -->
+
+## Walk 1: <title>
+
+**Starting state:**
+
+- <state that places the actor at the route's entry point>
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<fixture>` | <fixture or value> |
+
+### Route
+
+1. <action that moves the tester to the next route point>.
+   - <observation to record> `g10.<domain>-<capability>.US1-TC1`
+2. <action that opens an alternative route>.
+   a. <condition and observation> `g10.<domain>-<capability>.US1-TC2`
+   b. <condition and observation> `g10.<domain>-<capability>.US1-TC3`
+
+<!-- Cases referenced by a walk are printed once under their owning journey.
+     A case referenced only by a higher-level walk is printed under Ungrouped,
+     grouped by journey. -->
+
+## <app>.<domain>-<capability>.US<n>: <!-- journey title, copied from user-journeys.md -->
 
 **As a** <role>,
 **I want** <goal>,
 **so that** <reason>.
 
-### <capability>-US<n>-TC1-1: <!-- clean descriptive title -->
+### <app>.<domain>-<capability>.US<n>-TC<m>: <!-- clean descriptive title -->
 
 **Classification:**
 
-* **Severity:** blocker | critical | major | normal | minor | trivial
+* **Severity:** blocker | critical | major | minor | trivial
 * **Priority:** high | medium | low
 * **Status:** draft
 * **Behaviour:** positive | negative | destructive
-* **Type:** functional | acceptance | usability | security | performance | compatibility | integration
-* **Suites:** smoke | regression | release | none
+* **Type:** functional | usability | security | performance | compatibility
+* **Suites:** acceptance | smoke | regression | health-check | prod | none
 * **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
-* **Trace:** <capability>-US-<n>
+* **Trace:** <app>.<domain>-<capability>.US<n>
 <!-- or, for a capability whose journeys file says **Walked by:** nobody, a
      ## Feature set root group name matched verbatim. Never a scenario id. -->
 
@@ -62,6 +95,40 @@
 **Expected Results:**
 
 * <!-- from THEN -->
+
+<!-- Repeat the journey sections in file order. After all walked cases, print
+     cases that belong to no walk at this level under the following groups. -->
+
+## Ungrouped
+
+### <app>.<domain>-<capability>.US<n>: <!-- journey title -->
+
+#### <app>.<domain>-<capability>.US<n>-TC<m>: <!-- clean descriptive title -->
+
+**Classification:**
+
+* **Severity:** blocker | critical | major | minor | trivial
+* **Priority:** high | medium | low
+* **Status:** draft
+* **Behaviour:** positive | negative | destructive
+* **Type:** functional | usability | security | performance | compatibility
+* **Suites:** acceptance | smoke | regression | health-check | prod | none
+* **Layer:** e2e | api | unit
+* **Automation status:** manual
+* **Testability:** automation | manual | automation, manual
+* **Trace:** <app>.<domain>-<capability>.US<n>
+
+**Pre-conditions:**
+
+* <state>
+
+**Steps:**
+
+1. <step>
+
+**Expected Results:**
+
+* <result>
 
 <!-- The blind reading's raised questions are not a section here. They go to
      the change's decisions.md, under its ## Raised table, one row per point the

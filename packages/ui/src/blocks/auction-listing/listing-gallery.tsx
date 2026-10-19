@@ -1,14 +1,8 @@
+import { Lens } from "@grade10/design-system/components/display/lens";
 import { Text } from "@grade10/design-system/components/display/text";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import {
-  Dialog,
-  DialogBody,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   CaretLeft,
@@ -25,7 +19,7 @@ type ListingGalleryImage = {
   src: string;
   /** Thumbnail strip. Falls back to `src`. */
   thumbSrc?: string;
-  /** Zoom dialog. Falls back to `src`. Ignored for video. */
+  /** Magnified lens view. Falls back to `src`. Ignored for video. */
   zoomSrc?: string;
   alt: string;
   /** Accessible name for the thumbnail. Defaults to `alt`. */
@@ -34,8 +28,13 @@ type ListingGalleryImage = {
 
 /** The words the gallery says, whichever lot it is showing. */
 type ListingGalleryCopy = {
-  /** Names the zoom affordance over the photo. */
+  /** Names the magnifier hint over the photo and the lens group. */
   zoom: string;
+  /**
+   * Appended to `zoom` in the lens's accessible name — how the magnifier is
+   * driven (pointer, arrow keys, Escape).
+   */
+  zoomInstructions?: string;
   /** Accessible names for the two step controls. */
   previous: string;
   next: string;
@@ -53,17 +52,15 @@ function isVideo(item: ListingGalleryImage | undefined): boolean {
 
 /**
  * Left column of a product page: the main photo or video, a thumbnail strip,
- * and zoom for images. Selected index and the zoom dialog are presentation
- * state. Source addresses are consumer-owned — the gallery never rewrites them.
+ * and a magnifying lens for images. Selected index is presentation state.
+ * Source addresses are consumer-owned — the gallery never rewrites them.
  */
 function ListingGallery({ images, copy, className }: ListingGalleryProps) {
   const [index, setIndex] = useState(0);
-  const [zoomOpen, setZoomOpen] = useState(false);
   const item = images[index];
   const many = images.length > 1;
   const video = isVideo(item);
   const step = (delta: number) => {
-    setZoomOpen(false);
     setIndex((current) => (current + delta + images.length) % images.length);
   };
 
@@ -85,17 +82,26 @@ function ListingGallery({ images, copy, className }: ListingGalleryProps) {
               <track kind="captions" label="English" srcLang="en" />
             </video>
           ) : (
-            <button
-              className="absolute inset-0 cursor-pointer border-0 bg-transparent p-0"
-              onClick={() => setZoomOpen(true)}
-              type="button"
+            <Lens
+              className="block size-full rounded-none focus-visible:ring-inset"
+              instructions={copy.zoomInstructions}
+              key={`${item.src}:${item.alt}`}
+              label={copy.zoom}
+              magnified={
+                <img
+                  alt=""
+                  className="size-full object-contain"
+                  src={item.zoomSrc ?? item.src}
+                />
+              }
             >
               <img
                 alt={item.alt}
-                className="size-full object-contain"
+                className="pointer-events-none size-full object-contain"
+                draggable={false}
                 src={item.src}
               />
-            </button>
+            </Lens>
           )
         ) : null}
         {!video && item ? (
@@ -147,12 +153,11 @@ function ListingGallery({ images, copy, className }: ListingGalleryProps) {
                 className={cn(
                   "relative h-16 w-12 overflow-hidden rounded-sm border bg-muted",
                   thumbIndex === index
-                    ? "border-foreground"
+                    ? "border-primary-border"
                     : "border-transparent",
                 )}
                 key={`${thumbSrc}:${thumb.thumbLabel ?? thumb.alt}`}
                 onClick={() => {
-                  setZoomOpen(false);
                   setIndex(thumbIndex);
                 }}
                 type="button"
@@ -185,28 +190,6 @@ function ListingGallery({ images, copy, className }: ListingGalleryProps) {
             );
           })}
         </HStack>
-      ) : null}
-      {/* Mounted only while zoomed, rather than held open with its content
-          shut: a dialog that outlives its own close keeps the last visit's
-          state, and this one would keep the image the collector zoomed two
-          photos ago. */}
-      {item && !video && zoomOpen ? (
-        <Dialog onOpenChange={setZoomOpen} open>
-          <DialogContent className="sm:max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>{copy.zoom}</DialogTitle>
-            </DialogHeader>
-            {/* Only an image scrolls here, so the body takes focus itself for a
-                keyboard to scroll it. */}
-            <DialogBody tabIndex={0}>
-              <img
-                alt={item.alt}
-                className="w-full"
-                src={item.zoomSrc ?? item.src}
-              />
-            </DialogBody>
-          </DialogContent>
-        </Dialog>
       ) : null}
     </VStack>
   );

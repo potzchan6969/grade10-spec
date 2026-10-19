@@ -1,6 +1,6 @@
 # grade10-site/appointment/booking Test Cases
 
-**Status:** pending-review · 0/22
+**Status:** pending-review · 0/24
 **Drafts styled:** 2026-09-05, tcs-rules r2
 
 ## grade10-site-appointment-booking-US1: Collector books a grading visit without an account
@@ -386,6 +386,70 @@ Client-side JavaScript execution is disabled in the browser settings.
 * The sitemap lists all three addresses.
 
 ---
+
+<!-- trace:case id=g10.appointment-booking.TC-d38 rev=1 covers=g10.appointment-booking.SC-njr -->
+### grade10-site-appointment-booking-US1-TC11-1: Shop step holds whichever service is picked
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-appointment-booking-US-01
+
+**Pre-conditions:**
+
+* `<grading service>` is offered at `<shop A>` only.
+* `<second service>` is offered at `<shop A>` and `<shop B>`.
+
+**Steps:**
+
+1. Navigate to `<grade10 booking url>`.
+2. Observe the steps shown.
+3. Pick `<grading service>` and press Continue.
+4. Observe the steps and the shop list.
+
+**Expected Results:**
+
+* Step 2 shows Service, Shop, Time and Details.
+* Step 4 shows the same four steps, the flow on the shop step, and `<shop A>` alone, already picked.
+
+<!-- trace:case id=g10.appointment-booking.TC-l52 rev=1 covers=g10.appointment-booking.SC-09a -->
+### grade10-site-appointment-booking-US1-TC12-1: No shop step when every service has one shop
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-appointment-booking-US-01
+
+**Pre-conditions:**
+
+* Every customer-bookable service is offered at `<shop A>` only.
+
+**Steps:**
+
+1. Navigate to `<grade10 booking url>`.
+2. Pick `<grading service>` and press Continue.
+3. Observe the steps and the visit summary.
+
+**Expected Results:**
+
+* Step 3 shows Service, Time and Details, the flow on the time step.
+* The summary holds no shop row.
 
 ## grade10-site-appointment-booking-US2: Collector manages a visit after booking it
 

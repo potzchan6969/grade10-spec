@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CheckIcon } from "lucide-react";
+import { expect, within } from "storybook/test";
 import {
   Avatar,
   AvatarBadge,
@@ -13,7 +14,7 @@ import {
 const SRC = "https://github.com/shadcn.png";
 
 const meta = {
-  title: "Components/Avatar",
+  title: "Design System/Display/Avatar",
   component: Avatar,
   tags: ["autodocs"],
   args: { size: "lg" },
@@ -42,13 +43,43 @@ export const Fallback: Story = {
   ),
 };
 
-/** One character — first letter of the email local part. */
+/** One character — a caller holding an email passes the part before the `@`. */
 export const FromEmail: Story = {
   render: () => (
     <Avatar>
-      <AvatarFallback>{avatarInitial("user@gmail.com")}</AvatarFallback>
+      <AvatarFallback>{avatarInitial("user")}</AvatarFallback>
     </Avatar>
   ),
+};
+
+const INITIALS: readonly (readonly [string, string])[] = [
+  ["陳大文", "陳"],
+  ["Ångström", "Å"],
+  ["@kitlam", "K"],
+  ["ßeta", "ß"],
+  ["🃏🃏", "?"],
+  ["", "?"],
+];
+
+/** The first letter or digit in any script, read from the whole value. */
+export const InitialsInAnyScript: Story = {
+  render: () => (
+    <div className="flex items-end gap-3">
+      {INITIALS.map(([label]) => (
+        <Avatar key={label} aria-label={label || "empty"}>
+          <AvatarFallback>{avatarInitial(label)}</AvatarFallback>
+        </Avatar>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    for (const [label, initial] of INITIALS) {
+      await expect(canvas.getByLabelText(label || "empty")).toHaveTextContent(
+        initial,
+      );
+    }
+  },
 };
 
 export const Sizes: Story = {
@@ -84,13 +115,11 @@ export const WithBadge: Story = {
 export const Group: Story = {
   render: () => (
     <AvatarGroup>
-      {["user@gmail.com", "alice@example.com", "john@example.com"].map(
-        (email) => (
-          <Avatar key={email}>
-            <AvatarFallback>{avatarInitial(email)}</AvatarFallback>
-          </Avatar>
-        ),
-      )}
+      {["user", "alice", "john"].map((name) => (
+        <Avatar key={name}>
+          <AvatarFallback>{avatarInitial(name)}</AvatarFallback>
+        </Avatar>
+      ))}
       <AvatarGroupCount>+3</AvatarGroupCount>
     </AvatarGroup>
   ),

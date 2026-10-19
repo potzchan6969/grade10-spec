@@ -38,9 +38,9 @@ export type WatchButtonCopy = {
   watchAriaLabel: string;
   unwatchAriaLabel: string;
   pending?: string;
-  /** Toast once the application confirms watched. */
+  /** Toast once a press or toast action settles on watched. */
   watchedToast?: WatchToastCopy;
-  /** Toast once the application confirms unwatched. */
+  /** Toast once a press or toast action settles on unwatched. */
   unwatchedToast?: WatchToastCopy;
 };
 
@@ -63,7 +63,10 @@ export type EmailAlertsCopy = {
 
 export type WatchButtonProps = {
   watched: boolean;
+  /** The owner's write or read is in flight; the control stays focusable and refuses a second press. */
   pending?: boolean;
+  /** The owner's refusal of the last press, shown beside the control. */
+  failed?: string;
   copy: WatchButtonCopy;
   onPress: () => void;
   disabled?: boolean;
@@ -91,10 +94,6 @@ export type AuctionRecordCopy = {
   emailAlertsColumn: string;
   /** Status when the collector has not bid. */
   noStanding: string;
-  /** @deprecated Prefer one-table My Auctions; kept for AuctionRecordTabs. */
-  watchingHeading?: string;
-  /** @deprecated Prefer one-table My Auctions; kept for AuctionRecordTabs. */
-  biddingHeading?: string;
   emptyTitle: string;
   emptyDescription: string;
   browseCatalogue: string;
@@ -118,20 +117,6 @@ export type AuctionRecordRowCopy = Pick<
   "openListing" | "openBidding" | "noStanding" | "viewOrder"
 >;
 
-/** @deprecated Prefer AuctionRecord one-table page; kept for transitional imports. */
-export type AuctionRecordTabsProps = {
-  activeTab: "watching" | "bidding";
-  copy: {
-    watchingHeading?: string;
-    biddingHeading?: string;
-    watching?: string;
-    bidding?: string;
-  };
-  onTabChange: (tab: "watching" | "bidding") => void;
-  children?: ReactNode;
-  className?: string;
-};
-
 export type AuctionRecordRowProps = {
   title: string;
   state: AuctionRecordRowState;
@@ -149,11 +134,17 @@ export type AuctionRecordRowProps = {
   copy?: AuctionRecordRowCopy;
   onOpen?: () => void;
   watched?: boolean;
+  /** The owner's Unwatch is in flight; the control stays focusable and refuses a second press. */
   watchPending?: boolean;
+  /** The owner's refusal of the last Unwatch, shown on the row. */
+  watchFailed?: string;
   watchCopy?: WatchButtonCopy;
   onWatchToggle?: () => void;
   emailAlerts?: boolean;
+  /** The owner's alerts write is in flight; the switch stays pressable. */
   emailAlertsPending?: boolean;
+  /** The owner's refusal of the last alerts change, shown under the switch. */
+  emailAlertsFailed?: string;
   emailAlertsDisabled?: boolean;
   emailAlertsCopy?: EmailAlertsCopy;
   onEmailAlertsChange?: (enabled: boolean) => void;

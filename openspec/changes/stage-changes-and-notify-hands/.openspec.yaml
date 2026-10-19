@@ -3,5 +3,13 @@ promoted_by: "@ecchochan"
 created: 2026-09-17
 hands:
   pm: "@ecchochan"
-  tech: "@ecchochan"
   dev: "@ecchochan"
+reviewed:
+  proposal: c4c0e115
+  specs: c805985f
+  test-cases: d5c9a87d
+  tasks: 8c3efb9f
+  decisions: d3aede45
+  user-journeys: a0e19012
+  ui-design: bc99f144
+  tech-design: bc99f144

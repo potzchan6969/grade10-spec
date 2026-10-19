@@ -34,6 +34,40 @@ function durableSuite(one) {
   return one.read.rel.startsWith("openspec/specs/");
 }
 
+/**
+ * A changed-since selection is intentionally scope-based, not text-based: a
+ * changed spec, PRD or suite selects the cases owned by the matching suite
+ * level. It never tries to infer which individual assertion changed.
+ */
+function suiteScope(read) {
+  const path = read.rel
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "")
+    .replace(/^openspec\/specs\//, "");
+  if (read.level === "platform") return "";
+  if (read.level === "product") return path.replace(/\/product-tcs\.md$/, "");
+  if (read.level === "domain") return path.replace(/\/domain-tcs\.md$/, "");
+  return path.replace(/\/feature-tcs\.md$/, "");
+}
+
+export function matchesChangedScope(read, changedPaths) {
+  if (!changedPaths || changedPaths.length === 0) return true;
+  if (read.level === "platform")
+    return changedPaths.some(
+      (path) => path.startsWith("openspec/") || path.startsWith("docs/prds/"),
+    );
+  const scope = suiteScope(read);
+  return changedPaths.some((path) => {
+    if (path === read.rel) return true;
+    const marker = `/${scope}`;
+    return (
+      path.includes(`${marker}/`) ||
+      path.includes(`${marker}.`) ||
+      path.endsWith(marker) ||
+      path.startsWith(`${scope}/`)
+    );
+  });
+}
+
 /** Everything the store holds, as one flat list of candidates. */
 export function readCandidates(root, scope = null) {
   const out = [];
@@ -64,11 +98,14 @@ export function selectCases(candidates, options = {}) {
     level = null,
     includeDraft = false,
     includeAutomated = false,
+    changedPaths = null,
   } = options;
 
   const allowed = new Set(includeDraft ? ["actual", "draft"] : ["actual"]);
   const wanted =
-    ids === null ? null : ids.map((one) => one.trim()).filter(Boolean);
+    ids === null
+      ? null
+      : [...new Set(ids.map((one) => one.trim()).filter(Boolean))];
 
   const byId = new Map();
   for (const one of candidates) {
@@ -124,6 +161,7 @@ export function selectCases(candidates, options = {}) {
   const wantLevel = level ? list(level) : null;
 
   for (const one of candidates) {
+    if (!matchesChangedScope(one.read, changedPaths)) continue;
     if (wantLevel && !wantLevel.includes(one.read.level)) continue;
     if (
       wantPriority &&
@@ -253,21 +291,84 @@ function sharedRowsOf(tc) {
   return (tc.tables ?? []).filter(isSharedTable).flatMap((table) => table.rows);
 }
 
-/** Replace a run-table `<name>` with `[cell]`. A name from `Field | Value`,
- *  and a name that matches no column, stay in angle brackets. The cell is
- *  copied as written, so a placeholder inside it is not filled again. */
-function fillSlots(text, columns) {
-  return text.replace(/<([^<>]+)>/g, (whole, name) =>
-    columns.has(name) ? `[${columns.get(name)}]` : whole,
+/** Unfilled slots have one source-like spelling; filled values are plain text. */
+export function fillSlots(text, columns = new Map()) {
+  return String(text).replace(
+    /`<([^<>`]+)>`|<([^<>`]+)>/g,
+    (_whole, quoted, bare) => {
+      const name = quoted ?? bare;
+      return columns.has(name) ? `[${columns.get(name)}]` : `\`<${name}>\``;
+    },
   );
 }
 
-function dataLines(shared, headers, row) {
-  const lines = shared.map(
-    (cells) => `${cells[0]}: ${cells.slice(1).join(" | ")}`,
+function sharedColumns(tc) {
+  const columns = new Map();
+  const multiple = new Set();
+  const entries = [...sharedRowsOf(tc)];
+  if (!tc.perRow) {
+    for (const table of runTablesOf(tc)) {
+      if (table.rows.length === 1)
+        table.headers.forEach((header, index) => {
+          entries.push([header, table.rows[0][index] ?? ""]);
+        });
+    }
+  }
+  for (const row of entries) {
+    const key = columnKey(row[0]);
+    const value = row[1] ?? "";
+    if (multiple.has(key)) continue;
+    if (columns.has(key) && columns.get(key) !== value) {
+      columns.delete(key);
+      multiple.add(key);
+    } else columns.set(key, value);
+  }
+  return columns;
+}
+
+export function displayCaseId(tc) {
+  const marker = tc.markerId?.match(/(?:^|\.)(TC-[\w-]+)$/)?.[1];
+  return marker ? `${tc.id} (${marker})` : tc.id;
+}
+
+function relevantSharedRows(tc, fill) {
+  const rowKeys = new Set(fill.headers.map(columnKey));
+  const values = new Map();
+  for (const cells of fill.shared) {
+    const key = columnKey(cells[0]);
+    if (!values.has(key)) values.set(key, []);
+    values.get(key).push(cells.slice(1).join(" | "));
+  }
+  fill.headers.forEach((header, index) => {
+    values.set(columnKey(header), [fill.row[index] ?? ""]);
+  });
+  const used = new Set();
+  const queue = [
+    tc.preconditions,
+    ...tc.stepTexts,
+    ...tc.expectedTexts,
+    ...fill.row,
+  ];
+  for (let i = 0; i < queue.length; i++) {
+    for (const match of String(queue[i]).matchAll(/<([^<>`]+)>/g)) {
+      const key = match[1];
+      if (used.has(key)) continue;
+      used.add(key);
+      queue.push(...(values.get(key) ?? []));
+    }
+  }
+  return fill.shared.filter(
+    (cells) =>
+      used.has(columnKey(cells[0])) && !rowKeys.has(columnKey(cells[0])),
   );
-  headers.forEach((header, i) => {
-    lines.push(`${header}: ${row[i] ?? ""}`);
+}
+
+function dataLines(tc, fill) {
+  const lines = relevantSharedRows(tc, fill).map(
+    (cells) => `- ${columnKey(cells[0])}: ${cells.slice(1).join(" | ")}`,
+  );
+  fill.headers.forEach((header, i) => {
+    lines.push(`- ${columnKey(header)}: ${fill.row[i] ?? ""}`);
   });
   return lines.join("\n");
 }
@@ -287,27 +388,23 @@ function dataLines(shared, headers, row) {
  */
 export function caseRow({ read, tc }, fill = null) {
   const { product, domain, capability } = splitCapability(read.capabilityId);
-  const columns = fill?.columns;
-  const stepTexts = columns
-    ? tc.stepTexts.map((one) => fillSlots(one, columns))
-    : tc.stepTexts;
+  const columns = new Map([...sharedColumns(tc), ...(fill?.columns ?? [])]);
+  const stepTexts = tc.stepTexts.map((one) => fillSlots(one, columns));
   const steps = stepTexts.map((one, i) => `${i + 1}. ${one}`);
   if (tc.perRow && !fill) steps.unshift("Runs once per row of Test data.");
-  const expectedTexts = columns
-    ? tc.expectedTexts.map((one) => fillSlots(one, columns))
-    : tc.expectedTexts;
+  const expectedTexts = tc.expectedTexts.map((one) => fillSlots(one, columns));
   const surfaces = surfacePrefill(tc);
   const cells = {
-    "Case ID": tc.id,
+    "Case ID": displayCaseId(tc),
     Title: tc.title,
-    "Pre-conditions": columns
-      ? fillSlots(tc.preconditions, columns)
-      : tc.preconditions,
+    "Pre-conditions": fillSlots(tc.preconditions),
     "Test data": fill
-      ? dataLines(fill.shared, fill.headers, fill.row)
-      : tc.testData.map((r) => `${r.field}: ${r.value}`).join("\n"),
+      ? dataLines(tc, fill)
+      : tc.testData
+          .map((r) => `- ${columnKey(r.field)}: ${r.value}`)
+          .join("\n"),
     Steps: steps.join("\n"),
-    "Expected results": expectedTexts.join("\n"),
+    "Expected results": expectedTexts.map((one) => `- ${one}`).join("\n"),
     ...surfaces,
     Product: product,
     Domain: domain,
@@ -375,7 +472,7 @@ export function buildGrid(picked) {
   const lines = [];
   let lastFile = null;
   let last = null;
-  for (const one of picked) {
+  for (const one of inReadingOrder(picked)) {
     const file = one.read.capabilityId ?? "";
     if (file !== lastFile) {
       rows.push(capabilityRow(file));
@@ -397,42 +494,15 @@ export function buildGrid(picked) {
   return { rows, lines };
 }
 
-/** Walk bands, in the order a tester meets them. The store is its own band
- *  inside Grade10 site. A path outside these six follows them. */
-const WALK_BANDS = [
-  "shared",
-  "grade10-site",
-  "grade10-site/store",
-  "grade10-admin",
-  "zzz-site",
-  "zzz-admin",
-];
-
-/** The band of a suite path. The longest matching prefix wins, so the store
- *  keeps its own band inside Grade10 site. */
-export function walkBand(rel) {
-  const path = String(rel)
-    .replace(/^openspec\/changes\/[^/]+\/specs\//, "")
-    .replace(/^openspec\/specs\//, "");
-  let best = -1;
-  WALK_BANDS.forEach((band, index) => {
-    const hit = path === band || path.startsWith(`${band}/`);
-    if (hit && (best === -1 || band.length > WALK_BANDS[best].length))
-      best = index;
-  });
-  return best === -1 ? WALK_BANDS.length : best;
-}
-
-/** Picked cases in walk order: product band, then source path, then journey,
- *  then case number. A tester walks a journey at a time, and the run tab is
- *  grouped by journey, so the order is the grouping. */
+/** Paths group the sheet; journey and case numbers sort numerically. */
 export function inReadingOrder(picked) {
   return [...picked].sort(
     (a, b) =>
-      walkBand(a.read.rel) - walkBand(b.read.rel) ||
-      a.read.rel.localeCompare(b.read.rel) ||
-      (a.tc.journeyNum ?? 0) - (b.tc.journeyNum ?? 0) ||
+      a.read.capabilityId.localeCompare(b.read.capabilityId, "en") ||
+      a.read.rel.localeCompare(b.read.rel, "en") ||
+      (a.tc.journeyNum ?? a.tc.journey?.num ?? 0) -
+        (b.tc.journeyNum ?? b.tc.journey?.num ?? 0) ||
       (a.tc.tcNum ?? 0) - (b.tc.tcNum ?? 0) ||
-      a.tc.id.localeCompare(b.tc.id),
+      a.tc.id.localeCompare(b.tc.id, "en", { numeric: true }),
   );
 }

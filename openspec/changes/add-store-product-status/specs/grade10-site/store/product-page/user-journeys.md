@@ -15,17 +15,11 @@ product page.
 **so that** the card I opened is the one I land on, at an address that answers
 on its own.
 
-### grade10-site-store-product-page-US-11: Collector signs in to add from the product page
+### grade10-site-store-product-page-US-11: Collector adds from the product page without signing in
 
 **As a** signed-out collector on a product page,
-**I want** Add to cart to open sign-in instead of building a guest cart,
-**so that** I only hold lines I can take to members-only checkout.
-
-### grade10-site-store-product-page-US-12: Collector sees why sign-in is asked when adding from the product page
-
-**As a** signed-out collector on a product page,
-**I want** the sign-in dialog to say I am signing in to add to cart,
-**so that** I know why the shop stopped the add.
+**I want** Add to cart to put the line in a cart this browser keeps,
+**so that** I can buy without an account, and keep the line if I sign in.
 
 ### grade10-site-store-product-page-US-13: Collector shares a card and the preview shows it
 

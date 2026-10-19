@@ -1,18 +1,19 @@
 # shared/ui/auction-order Test Cases
 
-**Status:** pending-review · 0/22
-**Drafts styled:** 2026-09-22, tcs-rules r3
+**Status:** pending-review · 0/26
+**Drafts styled:** 2026-10-13, tcs-rules r5
+**Out of suite:** shared-ui-auction-order-SC-15, shared-ui-auction-order-SC-16, shared-ui-auction-order-SC-17, shared-ui-auction-order-SC-19, shared-ui-auction-order-SC-20
 
-## shared-ui-auction-order-US1: Address form component contract
+## g10.shared-auction-order.US1: Address form component contract
 
-**Walked by:** nobody on their own — a component contract; phone and address kind on the form are walked through `grade10-site/auction/winner-order`, which composes the block
+**Walked by:** nobody on their own - a component contract; the order detail and the address form are walked through `grade10-site/auction/winner-order`, which composes the blocks
 
 **As a** customer,
-**I want** the shared address form to collect personal or company addresses with a country-aware phone,
-**so that** Winner Order setup can confirm delivery and billing through one contract.
+**I want** the shared blocks to render what the application supplies,
+**so that** Winner Order composes one contract instead of drawing its own.
 
 <!-- trace:case id=g10.shared-auction-order.TC-g8b rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC1-1: Personal is selected and Company Name is hidden
+### g10.shared-auction-order.US1-TC1: Personal is selected and Company Name is hidden
 
 **Classification:**
 
@@ -42,7 +43,7 @@
 * Company Name is not shown.
 
 <!-- trace:case id=g10.shared-auction-order.TC-fco rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC2-1: Company selection shows Company Name as required
+### g10.shared-auction-order.US1-TC2: Company selection shows Company Name as required
 
 **Classification:**
 
@@ -72,7 +73,7 @@
 * Company Name is shown and marked required.
 
 <!-- trace:case id=g10.shared-auction-order.TC-k7g rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC3-1: Switching to Company reveals Company Name
+### g10.shared-auction-order.US1-TC3: Switching to Company reveals Company Name
 
 **Classification:**
 
@@ -102,7 +103,7 @@
 * Personal-only layout no longer hides Company Name.
 
 <!-- trace:case id=g10.shared-auction-order.TC-fgm rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC4-1: Switching to Personal hides Company Name
+### g10.shared-auction-order.US1-TC4: Switching to Personal hides Company Name
 
 **Classification:**
 
@@ -131,7 +132,7 @@
 * Company Name is not shown.
 
 <!-- trace:case id=g10.shared-auction-order.TC-pqy rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC5-1: Company confirm without Company Name is refused
+### g10.shared-auction-order.US1-TC5: Company confirm without Company Name is refused
 
 **Classification:**
 
@@ -160,7 +161,7 @@
 * An error appears beside Company Name.
 
 <!-- trace:case id=g10.shared-auction-order.TC-08m rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC6-1: Phone country starts with nothing selected
+### g10.shared-auction-order.US1-TC6: Phone country starts with nothing selected
 
 **Classification:**
 
@@ -190,7 +191,7 @@
 * The phone field shows the empty-country chrome (globe, no calling code).
 
 <!-- trace:case id=g10.shared-auction-order.TC-fih rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC7-1: Confirm without phone country is refused
+### g10.shared-auction-order.US1-TC7: Confirm without phone country is refused
 
 **Classification:**
 
@@ -220,7 +221,7 @@
 * An error appears beside Phone.
 
 <!-- trace:case id=g10.shared-auction-order.TC-sou rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC8-1: Confirm with country but no digits is refused
+### g10.shared-auction-order.US1-TC8: Confirm with country but no digits is refused
 
 **Classification:**
 
@@ -250,7 +251,7 @@
 * An error appears beside Phone.
 
 <!-- trace:case id=g10.shared-auction-order.TC-t7g rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC9-1: Country and digits allow confirm
+### g10.shared-auction-order.US1-TC9: Country and digits allow confirm
 
 **Classification:**
 
@@ -278,16 +279,16 @@
 
 **Steps:**
 
-1. Fill the form using **Test data**.
+1. Fill the required form fields, selecting phone country `<Phone country>` and entering `<Phone digits>`.
 2. Click Confirm.
 
 **Expected Results:**
 
 * Confirm succeeds.
-* The confirm callback receives the entered phone country and digits.
+* The confirm callback receives phone country `<Phone country>` and digits `<Phone digits>`.
 
 <!-- trace:case id=g10.shared-auction-order.TC-m3r rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC10-1: Parseable phone is exported as E.164
+### g10.shared-auction-order.US1-TC10: Parseable phone is exported as E.164
 
 **Classification:**
 
@@ -316,16 +317,16 @@
 
 **Steps:**
 
-1. Fill the form using **Test data**.
+1. Fill the required form fields, selecting phone country `<Phone country>` and entering `<Phone digits>`.
 2. Click Confirm.
 3. Read the phone value in the confirm payload.
 
 **Expected Results:**
 
-* The exported phone reads **Expected E.164**.
+* The exported phone reads `<Expected E.164>`.
 
 <!-- trace:case id=g10.shared-auction-order.TC-ygt rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC11-1: Unusual phone format is still accepted
+### g10.shared-auction-order.US1-TC11: Unusual phone format is still accepted
 
 **Classification:**
 
@@ -354,7 +355,7 @@
 
 **Steps:**
 
-1. Fill the form using **Test data**.
+1. Fill the required form fields, selecting phone country `<Phone country>` and entering `<Phone digits>`.
 2. Click Confirm.
 
 **Expected Results:**
@@ -363,7 +364,7 @@
 * The form does not refuse the number for hard libphonenumber validity.
 
 <!-- trace:case id=g10.shared-auction-order.TC-1gj rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC12-1: Address line 1 and postal code are required
+### g10.shared-auction-order.US1-TC12: Address line 1 and postal code are required
 
 **Classification:**
 
@@ -380,16 +381,16 @@
 
 Runs once per row of **Test data**.
 
+**Pre-conditions:**
+
+* `AuctionAddressForm` is rendered with `<empty field>` blank and the other required fields filled.
+
 **Test data:**
 
-| Empty field | Other required fields |
+| `<empty field>` | Other required fields |
 | --- | --- |
 | Address line 1 | Filled |
 | Postal code | Filled |
-
-**Pre-conditions:**
-
-* `AuctionAddressForm` is rendered with the row's empty field blank and the other required fields filled.
 
 **Steps:**
 
@@ -398,10 +399,10 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Confirm does not succeed.
-* An error appears beside the empty required field.
+* An error appears beside `<empty field>`.
 
 <!-- trace:case id=g10.shared-auction-order.TC-czf rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC13-1: Address line 2 may be left empty
+### g10.shared-auction-order.US1-TC13: Address line 2 may be left empty
 
 **Classification:**
 
@@ -430,7 +431,7 @@ Runs once per row of **Test data**.
 * Address line 2 is empty in the confirm payload.
 
 <!-- trace:case id=g10.shared-auction-order.TC-h1k rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC14-1: State may be left empty
+### g10.shared-auction-order.US1-TC14: State may be left empty
 
 **Classification:**
 
@@ -459,7 +460,7 @@ Runs once per row of **Test data**.
 * State is empty in the confirm payload.
 
 <!-- trace:case id=g10.shared-auction-order.TC-ga6 rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC15-1: Apt, Suite, and Building field is not collected
+### g10.shared-auction-order.US1-TC15: Apt, Suite, and Building field is not collected
 
 **Classification:**
 
@@ -488,7 +489,7 @@ Runs once per row of **Test data**.
 * No Apt., Suite, or Building field is shown.
 
 <!-- trace:case id=g10.shared-auction-order.TC-l1e rev=1 covers=g10.shared-auction-order.SC-7db -->
-### shared-ui-auction-order-US1-TC16-1: Confirm exports address kind with delivery values
+### g10.shared-auction-order.US1-TC16: Confirm exports address kind with delivery values
 
 **Classification:**
 
@@ -518,7 +519,7 @@ Runs once per row of **Test data**.
 * Delivery includes the entered company name and other delivery fields.
 
 <!-- trace:case id=g10.shared-auction-order.TC-xlg rev=1 covers=g10.shared-auction-order.SC-7db -->
-### shared-ui-auction-order-US1-TC17-1: Confirm exports phone with delivery values
+### g10.shared-auction-order.US1-TC17: Confirm exports phone with delivery values
 
 **Classification:**
 
@@ -548,7 +549,7 @@ Runs once per row of **Test data**.
 * When parseable, delivery phone reads E.164.
 
 <!-- trace:case id=g10.shared-auction-order.TC-y94 rev=1 covers=g10.shared-auction-order.SC-7db -->
-### shared-ui-auction-order-US1-TC18-1: The form renders on its own with supplied props
+### g10.shared-auction-order.US1-TC18: The form renders on its own with supplied props
 
 **Classification:**
 
@@ -578,7 +579,7 @@ Runs once per row of **Test data**.
 * Confirm and Cancel are visible and wired to their callbacks.
 
 <!-- trace:case id=g10.shared-auction-order.TC-joz rev=1 covers=g10.shared-auction-order.SC-7db -->
-### shared-ui-auction-order-US1-TC19-1: Supplied values and errors render as controlled props
+### g10.shared-auction-order.US1-TC19: Supplied values and errors render as controlled props
 
 **Classification:**
 
@@ -608,7 +609,7 @@ Runs once per row of **Test data**.
 * Step 2 shows the updated phone value and no Phone error.
 
 <!-- trace:case id=g10.shared-auction-order.TC-g9u rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
-### shared-ui-auction-order-US1-TC20-1: Application-supplied field errors render beside named fields
+### g10.shared-auction-order.US1-TC20: Application-supplied field errors render beside named fields
 
 **Classification:**
 
@@ -635,8 +636,8 @@ Runs once per row of **Test data**.
 
 * Each supplied error appears beside its named field.
 
-<!-- trace:case id=g10.shared-auction-order.TC-1f8 rev=1 covers=g10.shared-auction-order.SC-qy4 -->
-### shared-ui-auction-order-US1-TC21-1: The current step decides every step's state
+<!-- trace:case id=g10.shared-auction-order.TC-1f8 rev=2 covers=g10.shared-auction-order.SC-i3e -->
+### g10.shared-auction-order.US1-TC21: The current step decides every step's state
 
 **Classification:**
 
@@ -665,8 +666,8 @@ Runs once per row of **Test data**.
 * Payment reads current.
 * Shipping and Completed read upcoming.
 
-<!-- trace:case id=g10.shared-auction-order.TC-fjf rev=1 covers=g10.shared-auction-order.SC-ofq -->
-### shared-ui-auction-order-US1-TC22-1: A press is reported, never acted on
+<!-- trace:case id=g10.shared-auction-order.TC-fjf rev=2 covers=g10.shared-auction-order.SC-qb6 -->
+### g10.shared-auction-order.US1-TC22: A press is reported, never acted on
 
 **Classification:**
 
@@ -694,12 +695,153 @@ Runs once per row of **Test data**.
 * The pay callback is called once.
 * No network request is made.
 
+<!-- trace:case id=g10.shared-auction-order.TC-bu1 rev=3 covers=g10.shared-auction-order.SC-z03,g10.shared-auction-order.SC-m7x -->
+### g10.shared-auction-order.US1-TC27: HKD summary keeps USD lines and orders both totals
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Order detail
+
+**Pre-conditions:**
+
+* `AuctionWinnerOrder` is rendered for an HKD order with USD line items and totals.
+
+
+* The summary receives USD line items `<USD line items>`, USD total `<USD total>`, HKD total `<HKD total>` and HKD card fee `<HKD card fee>`.
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| USD line items | 10100, 2020 and 1001 minor units |
+| USD total | 13121 minor units |
+| HKD total | 103100 minor units |
+| HKD card fee | 3873 minor units |
+
+**Steps:**
+
+1. Read the line items and totals from top to bottom.
+
+**Expected Results:**
+
+* The three line items remain in USD.
+* Order Total shows 13121 minor units in USD, then 103100 minor units in HKD.
+* The fee reads 3873 minor units in HKD after the separator, below both totals.
+* Neither total includes the fee.
+
+<!-- trace:case id=g10.shared-auction-order.TC-p6m rev=2 covers=g10.shared-auction-order.SC-hc5 -->
+### g10.shared-auction-order.US1-TC28: Bank details show only the supplied rail
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Order detail
+
+**Pre-conditions:**
+
+* `AuctionWinnerOrder` receives details for `<selected rail>`.
+
+**Test data:**
+
+| `<selected rail>` |
+| --- |
+| FPS |
+| HK Local |
+| International via SWIFT |
+
+**Steps:**
+
+1. Choose View Bank Details.
+2. Read the dialog.
+
+**Expected Results:**
+
+* One dialog shows only the selected rail's details and reference.
+* No rail tabs or copy controls appear.
+
+<!-- trace:case id=g10.shared-auction-order.TC-mvr rev=1 covers=g10.shared-auction-order.SC-k6i -->
+### g10.shared-auction-order.US1-TC32: Summary shows one total when conversion is absent
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Order detail
+
+**Pre-conditions:**
+
+* The summary receives a USD total and no converted total.
+
+**Steps:**
+
+1. Read the summary totals.
+
+**Expected Results:**
+
+* One USD Order Total appears.
+* No amount is derived or converted by the block.
+
+<!-- trace:case id=g10.shared-auction-order.TC-9r5 rev=1 covers=g10.shared-auction-order.SC-8eq -->
+### g10.shared-auction-order.US1-TC33: Order detail omits controls it was not given
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Order detail
+
+**Pre-conditions:**
+
+* The order summary receives no invoice PDF and no pay control.
+
+**Steps:**
+
+1. Read the order summary and look for an invoice link or pay control.
+
+**Expected Results:**
+
+* The summary shows its supplied lines.
+* No invoice link or pay control appears.
+
 ## Settled
 
 - Non-parseable phone still exports the entered value; E.164 only when parseable
 - Soft local refuse beside Phone / Company Name when the application has not supplied an error; application-supplied errors still win
 - First and last name stay required on Personal and Company
 - Personal is the default kind when the application supplies no initial kind
+- None this run. The blind reading raised nothing that needed an answer here; the one contract question went to `decisions.md` `## Raised` and landed as Q26.
 
 ## Reconciliation
 
@@ -720,3 +862,15 @@ Runs once per row of **Test data**.
 | Same-as-delivery billing payload omit vs repeat | **Raised, folded into spec** lightly via the matching scenario (same kind and phone for billing when Same as delivery) |
 
 **Uncovered anchors:** none for feature set groups `Address form fields`, `Address form export`. Billing address form behaviour for this change is covered by modified the matching scenario and durable SC-05/SC-06.
+
+**Run:** removal reconciliation, 2026-10-12, for `remove-my-auction-orders`, `shared/ui/auction-order`. The exports requirement is removed and restated as "The winner-order surface exports" with fresh scenario ids; `TC-1f8` and `TC-fjf` move `covers` from the retired `g10.shared-auction-order.SC-qy4`/`SC-ofq` to `SC-i3e`/`SC-qb6` at rev 2. Every other case stays — none names the list, row or empty blocks.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `shared-ui-auction-order-SC-01` to `SC-04`, `SC-13`, `SC-14` | Retired with their requirement | Restated as `SC-15` to `SC-20` under "The winner-order surface exports"; `SC-02`'s row assertion becomes the non-export check `SC-16` |
+| `g10.shared-auction-order.TC-1f8`, `TC-fjf` | Kept, re-linked | Same steps and results; `covers` moves to the restated scenarios |
+| The list, row and empty blocks | No case | No durable case covered them; the public-exports test and task 1.1's expectation cover the removal |
+
+**Cases** - All 11 cases remain drafts. `TC-2fz@1` covers SC-cdc; `TC-3cr@1` SC-8j6; `TC-giz@1` and `TC-kiy@1` SC-7if; `TC-bu1@3` SC-z03 and SC-m7x; `TC-p6m@2` SC-hc5; `TC-62a@1` SC-pd1; `TC-pm2@1` SC-nxj; `TC-y6r@1` SC-bzz; `TC-mvr@1` SC-k6i; and `TC-9r5@1` SC-8eq. `TC-25` asserts USD methods Card, HK Local and SWIFT without FPS, and HKD methods Card, FPS and HK Local without SWIFT. `TC-26` checks each HKD bank rail separately.
+
+**Scenario coverage** - Eleven of 16 scenarios are covered. `SC-xdd` and `SC-tm6` use the public-exports test; `SC-10a` uses durable `TC-g9u` and `TC-l1e`; `SC-i3e` uses durable `TC-1f8`; and `SC-qb6` uses durable `TC-fjf`. These scenarios describe unchanged behavior. `TC-giz` and `TC-kiy` fully assert the USD/HKD method partition and separate bank rails.

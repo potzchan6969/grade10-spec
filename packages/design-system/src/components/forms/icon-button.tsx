@@ -1,9 +1,10 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import { LoaderCircleIcon } from "lucide-react";
 
 const iconButtonVariants = cva(
-  "group/icon-button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) border border-transparent bg-clip-padding transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-[background-color,border-color,color,box-shadow,opacity] motion-reduce:active:translate-y-0 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/icon-button inline-flex shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) border border-transparent bg-clip-padding transition-[background-color,border-color,color,box-shadow,transform,opacity] duration-150 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 data-loading:pointer-events-none data-loading:opacity-50 motion-reduce:transition-[background-color,border-color,color,box-shadow,opacity] motion-reduce:active:translate-y-0 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -30,7 +31,10 @@ const iconButtonVariants = cva(
 );
 
 type IconButtonProps = ButtonPrimitive.Props &
-  VariantProps<typeof iconButtonVariants>;
+  VariantProps<typeof iconButtonVariants> & {
+    /** Swaps the glyph for Button's spinner and ignores presses while staying focusable (`aria-busy`, `aria-disabled`). */
+    loading?: boolean;
+  };
 
 /**
  * An icon-only button. It has no visible label, so give it an accessible name —
@@ -53,14 +57,31 @@ function IconButton({
   className,
   variant = "outline",
   size = "sm",
+  loading = false,
+  disabled,
+  focusableWhenDisabled,
+  children,
   ...props
 }: IconButtonProps) {
   return (
     <ButtonPrimitive
       data-slot="icon-button"
+      data-loading={loading || undefined}
+      aria-busy={loading || undefined}
+      disabled={disabled || loading}
+      focusableWhenDisabled={focusableWhenDisabled || loading}
       className={cn(iconButtonVariants({ variant, size, className }))}
       {...props}
-    />
+    >
+      {loading ? (
+        <>
+          <LoaderCircleIcon aria-hidden="true" className="animate-spin" />
+          <span className="sr-only">{children}</span>
+        </>
+      ) : (
+        children
+      )}
+    </ButtonPrimitive>
   );
 }
 

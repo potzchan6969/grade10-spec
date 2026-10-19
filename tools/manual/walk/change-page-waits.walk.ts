@@ -49,7 +49,7 @@ test("shared-planning-change-stages-SC-21 - a wait, dated or not, on the change 
   await expect
     .element(
       chips.getByText(
-        "waiting on the tech PIC to say whether the queue can carry it",
+        "waiting on the engineer to say whether the queue can carry it",
         { exact: true },
       ),
     )

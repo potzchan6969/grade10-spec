@@ -10,6 +10,7 @@ How several products share one repository so a new product is an assembly job, n
 ### One product = one domain = one auth worker = one user base
 
 - The session cookie's scope is the product's registrable domain, never broader
+- One scope holds two cookie names, one session each: the customer site's `better-auth.*` and the admin console's `better-auth-console.*`. Signing in on one does not sign in the other, in either brand ([Admin Access Control](/platform/admin-access))
 - Sessions never cross products; a person using two products holds two unrelated accounts
 - Cross-product account linking is a product decision to record before building — nothing here assumes it
 - The one exception is the shared auction service, where users of both products bid on the same unit as anonymous rivals ([Auction Service](/platform/auction-service))
@@ -21,6 +22,7 @@ Every row exists once per product and is never shared; sharing any of them would
 | Boundary | Grade10 | ZZZ |
 | --- | --- | --- |
 | Session cookie domain | `.grade10.dev` / `.grade10.com` | `.zzz.dev` / `.zzz.com` |
+| Session cookie names | `better-auth.*` (site), `better-auth-console.*` (console) | the same two names on its own domain |
 | Auth worker + `BETTER_AUTH_SECRET` | `grade10-auth` | `zzz-auth` |
 | Trusted origins (credentialed API access) | grade10 apps only | zzz apps only |
 | Identity database | `stg-/prd-grade10-auth` | `stg-/prd-zzz-auth` |

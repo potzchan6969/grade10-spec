@@ -473,23 +473,23 @@ dismiss the dialog or reload the surface. Nothing SHALL announce the close.
 
 WHEN a session arrives for a surface where the person was refused an action
 and sign-in was asked of them, that surface SHALL carry out that action — the
-add, the bid, the navigation they were stopped before — without the person
+bid, the navigation they were stopped before — without the person
 activating it again, and SHALL carry it out at most once. The action SHALL be
 attempted against the world as it stands: one that can no longer be done SHALL
 be refused the way that action is ordinarily refused, and SHALL NOT be passed
 over in silence. WHEN nothing was refused on that surface, it SHALL carry out
 nothing beyond closing the dialog.
 
-<!-- trace:scenario id=g10.shared-sign-in.SC-wiy rev=1 -->
+<!-- trace:scenario id=g10.shared-sign-in.SC-wiy rev=2 -->
 #### Scenario: shared-auth-sign-in-SC-52 - The refused action is carried out
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
-- **GIVEN** a collector who was stopped from adding an item to their cart and
-  asked for a sign-in link on that surface
+- **GIVEN** a collector who was stopped from placing a bid on a lot and asked
+  for a sign-in link on that surface
 - **WHEN** they follow that link elsewhere on this device and return to the
   surface that asked
-- **THEN** that item is in their cart
-- **AND** they did not activate the add a second time
+- **THEN** that bid stands on the lot
+- **AND** they did not activate the bid a second time
 
 <!-- trace:scenario id=g10.shared-sign-in.SC-laa rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-53 - The refused navigation is carried out
@@ -525,29 +525,29 @@ nothing beyond closing the dialog.
 - **AND** the action it refused is not carried out
 - **AND** nothing on it announces that the follow failed
 
-<!-- trace:scenario id=g10.shared-sign-in.SC-lws rev=1 -->
+<!-- trace:scenario id=g10.shared-sign-in.SC-lws rev=2 -->
 #### Scenario: shared-auth-sign-in-SC-56 - An action that can no longer be done is refused, not skipped
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
-- **GIVEN** a collector who was stopped from adding an item to their cart and
-  asked for a sign-in link on that surface
-- **AND** that item can no longer be added by the time they return
+- **GIVEN** a collector who was stopped from placing a bid on a lot and asked
+  for a sign-in link on that surface
+- **AND** that bid can no longer be placed by the time they return
 - **WHEN** they follow that link elsewhere on this device and return to the
   surface that asked
 - **THEN** the surface reports the refusal that action is ordinarily refused
   with
 - **AND** it does not pass the action over in silence
 
-<!-- trace:scenario id=g10.shared-sign-in.SC-m9z rev=1 -->
+<!-- trace:scenario id=g10.shared-sign-in.SC-m9z rev=2 -->
 #### Scenario: shared-auth-sign-in-SC-57 - The refused action is carried out once, not once per return
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
-- **GIVEN** a collector who was stopped from adding an item to their cart,
-  asked for a sign-in link on that surface, and had the add carried out when
-  the session arrived
+- **GIVEN** a collector who was stopped from placing a bid on a lot, asked for
+  a sign-in link on that surface, and had the bid placed when the session
+  arrived
 - **WHEN** they leave that surface and return to it again
-- **THEN** the add is not carried out a second time
-- **AND** their cart holds that item once
+- **THEN** the bid is not placed a second time
+- **AND** the lot holds that bid once
 
 ### Requirement: A sign-in link lasts five minutes
 
@@ -1119,6 +1119,7 @@ console has no toasts.
 
 - **GIVEN** a sign-in link asked from the console that is expired, used,
   superseded or invalid
+- **AND** nobody is signed in to the console
 - **WHEN** anyone follows that link
 - **THEN** no session is created
 - **AND** they are on the console's own sign-in page
@@ -1134,6 +1135,18 @@ console has no toasts.
 - **THEN** no session is created
 - **AND** they are on the console's own sign-in page
 - **AND** the page states inline that they cannot sign in
+
+#### Scenario: shared-auth-sign-in-SC-115 - A failed console-asked link leaves a signed-in operator in the console
+**Serves:** shared-auth-sign-in-US-12 - Operator follows a sign-in link and only the console is signed in
+
+- **GIVEN** a sign-in link asked from the console that is expired, used,
+  superseded or invalid
+- **AND** an operator signed in to the console
+- **WHEN** the operator follows that link
+- **THEN** no session is created or changed
+- **AND** they are in the console, signed in as before
+- **AND** the reason is not left on the address
+- **AND** no toast is shown
 
 ### Requirement: A sign-in signs in the surface that asked for it
 

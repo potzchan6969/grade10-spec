@@ -35,8 +35,12 @@ type RewardMenuProps = {
   quantities?: Readonly<Record<string, number>>;
   onQuantityChange?: (rewardId: string, quantity: number) => void;
   onRedeem: (rewardId: string, quantity: number) => void;
-  /** The reward whose redemption is in flight; its control shows busy. */
+  /** The reward whose redemption is in flight; its control shows busy and stays focusable. */
   busyRewardId?: string;
+  /** The reward whose last redemption was refused; `redeemFailed` shows on its row. */
+  failedRewardId?: string;
+  /** Why the redemption of `failedRewardId` was refused. */
+  redeemFailed?: string;
   className?: string;
 };
 
@@ -46,6 +50,7 @@ type RewardRowProps = {
   balance: number;
   quantity: number;
   busy: boolean;
+  failed?: string;
   onQuantityChange?: (rewardId: string, quantity: number) => void;
   onRedeem: (rewardId: string, quantity: number) => void;
 };
@@ -56,6 +61,7 @@ function RewardRow({
   balance,
   quantity,
   busy,
+  failed,
   onQuantityChange,
   onRedeem,
 }: RewardRowProps) {
@@ -118,9 +124,11 @@ function RewardRow({
       ) : null}
       <HStack align="center" gap="sm">
         <Button
-          disabled={!affordable || busy}
+          disabled={!affordable}
           loading={busy}
-          onClick={() => onRedeem(item.id, quantity)}
+          onClick={() => {
+            if (!busy) onRedeem(item.id, quantity);
+          }}
           size="sm"
           type="button"
           variant="outline"
@@ -138,6 +146,17 @@ function RewardRow({
           </Text>
         ) : null}
       </HStack>
+      {failed ? (
+        <Text
+          as="p"
+          data-slot="reward-menu-failed"
+          role="alert"
+          size="sm"
+          tone="error"
+        >
+          {failed}
+        </Text>
+      ) : null}
     </VStack>
   );
 }
@@ -157,6 +176,8 @@ function RewardMenu({
   onQuantityChange,
   onRedeem,
   busyRewardId,
+  failedRewardId,
+  redeemFailed,
   className,
 }: RewardMenuProps) {
   return (
@@ -187,6 +208,7 @@ function RewardMenu({
                 balance={balance}
                 busy={busyRewardId === item.id}
                 copy={copy}
+                failed={failedRewardId === item.id ? redeemFailed : undefined}
                 item={item}
                 onQuantityChange={onQuantityChange}
                 onRedeem={onRedeem}

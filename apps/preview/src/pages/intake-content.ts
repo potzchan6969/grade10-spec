@@ -1,3 +1,4 @@
+import { formatMediumMoment } from "@grade10/date";
 import { formatHkd, SCAN_IMAGE, SHOP_NAME } from "./vault-content";
 
 type IntakeService = "vault" | "grading" | "auction-listing" | "store-listing";
@@ -27,22 +28,6 @@ type IntakeItemRow = {
   completed: boolean;
 };
 
-/** Storybook ids for intake item-card assemblies (workbench deep links). */
-const INTAKE_ITEM_CARD_IN_SCANNING_STORY_ID =
-  "pages-submissions-item-card--in-scanning";
-const INTAKE_ITEM_CARD_VAULTED_STORY_ID =
-  "pages-submissions-item-card--vaulted";
-const INTAKE_ITEM_CARD_GRADING_STORY_ID =
-  "pages-submissions-item-card--grading-in-transit";
-
-function intakeItemCardStoryId(item: IntakeItemRow): string {
-  if (item.service === "grading") return INTAKE_ITEM_CARD_GRADING_STORY_ID;
-  if (item.completed || item.status === "Vaulted") {
-    return INTAKE_ITEM_CARD_VAULTED_STORY_ID;
-  }
-  return INTAKE_ITEM_CARD_IN_SCANNING_STORY_ID;
-}
-
 const SERVICE_LABELS: Record<IntakeService, string> = {
   vault: "Vault",
   grading: "Grading",
@@ -51,7 +36,7 @@ const SERVICE_LABELS: Record<IntakeService, string> = {
 };
 
 const LIST_FILTER_LABELS: Record<IntakeListFilter, string> = {
-  "in-progress": "In progress",
+  "in-progress": "In Progress",
   completed: "Completed",
   all: "All",
 };
@@ -63,12 +48,10 @@ const SUBMISSION_B = "SUB-2026-99110";
 const HANDED_IN_A = Date.UTC(2026, 8, 14, 4, 30);
 const HANDED_IN_B = Date.UTC(2026, 8, 10, 6, 0);
 
+const HAND_IN_CLOCK = { locale: "en-HK", timeZone: "Asia/Hong_Kong" };
+
 function handInLine(item: IntakeItemRow): string {
-  const when = new Intl.DateTimeFormat("en-HK", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "Asia/Hong_Kong",
-  }).format(new Date(item.handedInAt));
+  const when = formatMediumMoment(item.handedInAt, HAND_IN_CLOCK);
   return `${HAND_IN_METHOD_SHORT} · ${item.shop} · ${when}`;
 }
 
@@ -275,10 +258,6 @@ export {
   groupBySubmission,
   handInLine,
   IN_PROGRESS_ITEMS,
-  INTAKE_ITEM_CARD_GRADING_STORY_ID,
-  INTAKE_ITEM_CARD_IN_SCANNING_STORY_ID,
-  INTAKE_ITEM_CARD_VAULTED_STORY_ID,
-  intakeItemCardStoryId,
   isVaulted,
   LIST_FILTER_LABELS,
   SERVICE_LABELS,

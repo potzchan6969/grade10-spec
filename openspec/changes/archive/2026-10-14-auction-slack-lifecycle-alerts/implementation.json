@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "3a9c0703d48c3c09ce268c23f6033f901ec46deaffb03241dfc9532b270eb694"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "103c3ece4167d58900b0ccc2aa70c8785ede6c6c",
+    "capturedAt": "2026-10-13T22:43:16.388Z",
+    "targets": [
+      {
+        "path": "openspec/changes/auction-slack-lifecycle-alerts/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Auction posts a warning Slack when an order becomes overdue or is flagged",
+          "Requirement: Auction posts lifecycle Slack when a listing goes live, ends or is extended",
+          "Requirement: Lifecycle Slack posts are best effort and never hold the bid or order path",
+          "Requirement: Slack posts the day's lists at 08:00 Hong Kong time",
+          "Requirement: Still Waiting lists the orders that have waited 48 hours for an operator action",
+          "Requirement: The channel and token come from the environment",
+          "Requirement: The console shows an operator the rows their grants allow",
+          "Requirement: The daily dialog opens on each entry until the operator closes it that Hong Kong day",
+          "Requirement: The lists agree with Needs you and mark nothing",
+          "Requirement: Today reads in three columns"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/console/daily-reminder/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "880f97efac828bbcc8636db315d37f69b96a0bc2",
+      "components": [
+        "admin",
+        "auction-service"
+      ]
+    }
+  ]
+}

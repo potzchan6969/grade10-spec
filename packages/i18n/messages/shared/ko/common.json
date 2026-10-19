@@ -12,5 +12,213 @@
   "save": "저장",
   "signIn": "로그인",
   "signOut": "로그아웃",
-  "signOutFailed": "로그아웃하지 못했습니다 — 다시 시도해 주세요."
+  "signOutFailed": "로그아웃하지 못했습니다 — 다시 시도해 주세요.",
+  "sign": {
+    "loading": "서류를 여는 중…",
+    "noTokenTitle": "링크가 완전하지 않습니다",
+    "noTokenMessage": "보내 드린 링크를 받은 그대로 여세요.",
+    "loadFailedTitle": "서류를 열지 못했습니다",
+    "loadFailedMessage": "연결 상태를 확인한 뒤 링크를 다시 열어 주세요.",
+    "documentFailed": "이 문서를 표시할 수 없습니다. 문서를 준비한 담당자에게 문의하세요.",
+    "emptyPacketTitle": "서명할 서류가 없습니다",
+    "emptyPacketMessage": "문서가 올바르게 준비되지 않았습니다. 문서를 준비한 담당자에게 알려 주세요.",
+    "disclosureTitle": "전자 서명",
+    "disclosureFallback": "이 문서에 전자 서명하는 데 동의하며, 전자 서명은 자필 서명과 같은 효력을 가집니다. 시간, 이 기기, 표시된 내용을 기록합니다.",
+    "agreeLabel": "동의하고 읽기 시작",
+    "agreeingLabel": "동의를 기록하는 중…",
+    "agreeFailed": "전자 서명 동의를 기록하지 못했습니다. 다시 시도해 주세요.",
+    "packetExpiry": "이 서류는 {when}까지 서명하실 수 있습니다.",
+    "declineLabel": "서명하지 않겠습니다",
+    "declineConfirmTitle": "서명하지 않으시겠습니까?",
+    "declineConfirmMessage": "아무것도 봉인되지 않으며 여기서 서명한 문서를 포함해 모든 문서가 철회됩니다. 이유를 알려 주셔도 됩니다.",
+    "declineReasonLabel": "이유(선택)",
+    "declineConfirmLabel": "서명하지 않기",
+    "declineCancelLabel": "돌아가기",
+    "decliningLabel": "거부하는 중…",
+    "declineFailed": "서명하지 않겠다는 의사를 기록하지 못했습니다. 다시 시도해 주세요.",
+    "declinedTitle": "서명하지 않기로 하셨습니다",
+    "declinedMessage": "아무것도 봉인되지 않았으며 모든 문서가 철회되었습니다. 문서를 준비한 담당자가 연락드릴 것입니다.",
+    "rosterLabel": "오늘 서명할 서류: 총 {total}건",
+    "rosterEntry": "{position}. {title} — {state}",
+    "rosterStateSigned": "서명 완료",
+    "rosterStateCurrent": "현재 서류",
+    "rosterStatePending": "서명 예정",
+    "documentStep": "{title} — {total}건 중 {position}번째",
+    "movedOn": "{signed} 서명이 끝났습니다. 다음은 {next}입니다.",
+    "pageLabel": "서류 {pageCount}쪽 중 {page}쪽",
+    "pageStatus": "{pageCount}쪽 중 {page}쪽",
+    "pageNoText": "이 페이지는 스캔본이라 읽어 줄 텍스트가 없습니다. 서명하기 전에 문서를 준비한 담당자에게 읽어 달라고 요청하세요.",
+    "pageFailed": "이 페이지를 표시할 수 없습니다. 표시될 때까지 서명하지 말고 문서를 준비한 담당자에게 문의하세요.",
+    "previousLabel": "이전 쪽",
+    "nextLabel": "다음 쪽",
+    "readStatus": "{pageCount}쪽 중 {viewed}쪽 읽음",
+    "integrityWarning": "이 문서는 준비된 내용과 일치하지 않습니다. 서명하지 말고 문서를 준비한 담당자에게 알려 주세요.",
+    "consentLabel": "{title}을(를) 읽었으며 서명에 동의합니다",
+    "consentFailed": "체크 표시를 기록하지 못했습니다. 상자에 다시 표시해 주세요.",
+    "signatureLabel": "여기에 {title} 서명",
+    "clearSignatureLabel": "서명 지우기",
+    "signatureDrawOption": "서명 그리기",
+    "signatureTypeOption": "서명 입력하기",
+    "signatureTypedNameLabel": "서명하시려면 여기에 성명을 입력해 주세요",
+    "signatureCaptured": "서명이 입력되었습니다.",
+    "signatureEmpty": "아직 서명이 없습니다.",
+    "signatureTypedFailed": "이 기기에서 입력한 내용을 서명으로 바꿀 수 없습니다. 대신 서명을 그려 주세요.",
+    "signatureTypedCaption": "입력한 서명",
+    "fullNameLabel": "신분증에 적힌 법적 이름",
+    "heldNameHint": "인증된 신분증의 이름과 일치해야 합니다.",
+    "postalAddressLabel": "우편 주소",
+    "postalAddressHint": "서면 통지를 보낼 때만 사용됩니다.",
+    "submitLabel": "{title} 서명하기",
+    "submittingLabel": "서명 중…",
+    "missingPages": "서명하기 전에 모든 쪽을 읽어 주세요.",
+    "missingConsent": "읽으셨음을 확인하는 상자에 표시해 주세요.",
+    "missingSignature": "위 상자에 서명해 주세요.",
+    "missingName": "신분증에 적힌 대로 법적 이름을 입력하세요.",
+    "missingPostalAddress": "우편 주소를 입력해 주세요.",
+    "signUnconfirmed": "서명을 보낸 뒤 응답을 받지 못해 아직 기록 여부를 확인할 수 없습니다. 다시 서명하지 마세요 — 대신 결과를 확인해 주세요.",
+    "signRecheckLabel": "결과 확인",
+    "sealedTitle": "서명 및 봉인 완료",
+    "sealedMessage": "모든 문서가 서명되고 봉인되었습니다. 아래 지문을 보관하세요. 서명한 뒤로 아무것도 바뀌지 않았음을 보여 줍니다.",
+    "sealedManifestLabel": "서명하신 전체 서류의 지문",
+    "sealedDocumentsLabel": "서명하신 서류",
+    "downloadLabel": "{title} 내려받기",
+    "downloadingLabel": "내려받는 중…",
+    "downloadFailed": "다운로드가 완료되지 않았습니다. 사본은 보내 드린 이메일에 있습니다.",
+    "downloadExpiry": "{when}까지 이 화면에서 다운로드할 수 있습니다. 그 뒤에는 보내 드린 이메일에서 사본을 확인하세요.",
+    "sealedIntegrityWarning": "다운로드한 사본이 서명한 문서의 지문과 일치하지 않아 저장하지 않았습니다. 서명은 기록되었으며, 이메일로 보내 드리는 사본이 봉인된 사본입니다.",
+    "signedTitle": "서명이 기록되었습니다",
+    "signedMessage": "서류가 봉인되기 전에 다른 분들의 서명이 남아 있습니다.",
+    "disclosureTick": "위 내용을 읽었으며 전자 방식으로 검토하고 서명하는 데 동의합니다.",
+    "identityChecked": "신분증은 {day}에 확인되었습니다.",
+    "venueLine": "Grade10 {venue}에서 준비",
+    "caseLine": "참조 {reference} · {subject}",
+    "caseOnly": "참조 {reference}",
+    "linkClock": "링크 유효 시간 {remaining}",
+    "readToEndFirst": "먼저 끝까지 읽어 주세요",
+    "continueLabel": "서명하러 가기",
+    "comesNext": "{total}건 중 {position}번째 — 다음은 {next}입니다",
+    "comesLast": "{total}건 중 {position}번째 — 마지막 서류입니다",
+    "readAgainLabel": "다시 읽기",
+    "signSummary": "{title} — {pageCount}쪽 중 {viewed}쪽 읽음",
+    "nextUp": "다음: {title}",
+    "sealedAt": "봉인 시각 {time}",
+    "sealedMessageMailed": "모든 문서가 서명되고 봉인되었습니다. 사본을 {email}(으)로 이메일로 보냈습니다. 아래 지문을 보관하세요. 서명한 뒤로 아무것도 바뀌지 않았음을 보여 줍니다.",
+    "sealedDigest": "{digest} · {when} 봉인",
+    "nextStepsTitle": "이제 진행되는 일",
+    "nextSteps": {
+      "consignmentSellsTitle": "판매되면",
+      "consignmentSellsDetail": "판매 가격과 지급일을 알려 드립니다.",
+      "consignmentTermTitle": "기간이 끝나기 전에",
+      "consignmentTermDetail": "선택하실 수 있는 사항을 안내해 드립니다.",
+      "partnerTitle": "거래마다 일정표가 추가됩니다",
+      "partnerDetail": "각 거래마다 이 계약에 따라 거래 일정표에 서명합니다."
+    },
+    "nothingMore": "더 하실 일은 없습니다.",
+    "doneLabel": "완료",
+    "refusal": {
+      "TOKEN_INVALID": {
+        "title": "이 서명 링크는 유효하지 않습니다",
+        "message": "문서를 준비한 담당자에게 새 서명 링크를 요청하세요."
+      },
+      "TOKEN_EXPIRED": {
+        "title": "이 서명 링크는 기한이 지났습니다",
+        "message": "안전을 위해 서명 링크는 짧은 시간만 유효합니다. 새 링크를 요청해 주세요."
+      },
+      "TOKEN_CONSUMED": {
+        "title": "이 서명 링크는 새 링크로 바뀌었습니다",
+        "message": "이 문서에 대해 더 새로운 링크가 만들어졌으며 가장 새 링크만 작동합니다. 보내 드린 가장 새 링크를 여세요."
+      },
+      "TOKEN_CONFLICT": {
+        "title": "이 링크는 다른 기기에서 열려 있습니다",
+        "message": "안전을 위해 서명 링크는 처음 연 기기에서만 작동합니다. 그 기기에서 계속하거나 새 링크를 요청하세요."
+      },
+      "PACKET_VOIDED": {
+        "title": "이 서류는 철회되었습니다",
+        "message": "새로 준비된 서류로 대체되었습니다. 현재 서류의 링크를 요청해 주세요."
+      },
+      "PACKET_EXPIRED": {
+        "title": "이 서류는 기한이 지났습니다",
+        "message": "준비한 지 오래되어 지금은 서명할 수 없습니다. 다시 준비해 달라고 요청해 주세요."
+      },
+      "PACKET_COMPLETED": {
+        "title": "이 문서는 이미 서명되었습니다",
+        "message": "이 링크는 서명할 때 사용되어 다시 열 수 없습니다. 봉인된 사본은 보내 드린 이메일에 있습니다."
+      },
+      "PACKET_DECLINED": {
+        "title": "서명된 서류가 없습니다",
+        "message": "아무것도 봉인되지 않았으며 모든 문서가 철회되었습니다. 문서를 준비한 담당자가 연락드릴 것입니다."
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "그 서류는 이번 서명에 포함되어 있지 않습니다",
+        "message": "페이지를 새로 고쳐 서명하셔야 할 서류를 확인해 주세요."
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "그 서류에는 이미 서명하셨습니다",
+        "message": "페이지를 새로 고쳐 남은 서류를 이어서 서명해 주세요."
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "먼저 모든 쪽을 읽어 주세요",
+        "message": "서류를 끝까지 넘겨 보신 뒤에 서명해 주세요."
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "그 쪽은 이 서류에 없습니다",
+        "message": "페이지를 새로 고친 뒤 서류를 처음부터 다시 읽어 주세요."
+      },
+      "CONSENT_REQUIRED": {
+        "title": "먼저 동의를 확인해 주세요",
+        "message": "서류를 읽었고 서명에 동의한다는 상자에 표시해 주세요."
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "먼저 전자 서명에 동의해 주세요",
+        "message": "어떤 서류든 서명하시기 전에 전자 서명 안내를 읽고 동의해 주세요."
+      },
+      "KYC_REQUIRED": {
+        "title": "신원 확인이 아직 기록되지 않았습니다",
+        "message": "신원 확인이 아직 기록되지 않았습니다. 문서를 준비한 담당자에게 문의하세요."
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "신분증에 적힌 성명과 다릅니다",
+        "message": "인증된 신분증의 이름과 일치하지 않습니다. 신분증에 적힌 대로 법적 이름을 입력하세요."
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "아직 차례가 아닙니다",
+        "message": "이 서류에는 다른 분이 먼저 서명해야 합니다."
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "모든 서류에 서명하셨습니다",
+        "message": "더 하실 일은 없습니다. 이 페이지를 닫으셔도 됩니다."
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "서명을 시작하신 성명과 다릅니다",
+        "message": "이번 절차의 모든 서류는 같은 성명으로 서명합니다. 앞서 서명하신 성명을 사용하시거나, 새 서류를 요청해 주세요."
+      },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "우편 주소가 필요합니다",
+        "message": "우편 주소 칸에 주소를 입력한 뒤 서명해 주세요."
+      },
+      "SIGNATURE_INVALID": {
+        "title": "서명을 읽지 못했습니다",
+        "message": "서명 상자를 지우고 다시 서명해 주세요."
+      },
+      "SOURCE_MISSING": {
+        "title": "서류를 불러오지 못했습니다",
+        "message": "문서를 준비한 담당자에게 다시 준비해 달라고 요청하세요."
+      },
+      "SOURCE_TAMPERED": {
+        "title": "서류가 준비된 내용과 일치하지 않습니다",
+        "message": "서명하지 마세요. 문서를 준비한 담당자에게 다시 준비해 달라고 요청하세요."
+      },
+      "FONT_MISSING": {
+        "title": "지금은 서류를 표시할 수 없습니다",
+        "message": "아무것도 서명되지 않았습니다. 글꼴이 복구될 때까지 문서를 표시할 수 없습니다. 나중에 다시 시도하세요."
+      },
+      "CONFLICT": {
+        "title": "이 서명은 다른 곳에서 마무리되었습니다",
+        "message": "이 페이지가 열려 있는 동안 다른 기기에서 완료하거나 철회했습니다."
+      }
+    },
+    "staging": "스테이징 · 테스트 데이터이며 실제로 서명되지 않습니다",
+    "signingAt": "grade10.com/sign",
+    "once": "이 링크는 이 기기에서 한 번만 사용할 수 있습니다."
+  }
 }

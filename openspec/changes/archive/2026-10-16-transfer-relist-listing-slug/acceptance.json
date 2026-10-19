@@ -1,0 +1,84 @@
+{
+  "version": 2,
+  "change": "transfer-relist-listing-slug",
+  "baseline": "5da32c7a9f47142c816707dcbd03c826962d63d77da51d17533e0882981a8956",
+  "fingerprint": "9d0d2a53409b775b9ef348cd063eae592e1f21b175aea8aff13f4345ef4c9214",
+  "reviewedBy": "mason5991",
+  "acceptedAt": "2026-10-16T19:04:50.358Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#listings",
+      "sha256": "456d061de4db9ade80d188dec842703f7d6145fc9a4d78164743b247aabbd111",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/display.md#listing-code",
+      "sha256": "caca3597e38580831990fd2578bfd20ff10f5b7f8fefa68da70801c46527817f",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/transfer-relist-listing-slug/decisions.md",
+      "sha256": "fc9b84100d4ec7a9141197d78212aa976c831d4d0a78288003ba2f8720089345",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/transfer-relist-listing-slug/proposal.md",
+      "sha256": "b272919d44bdaef79235bc33e5e6ef4ac8ba94db75de88838490c068054f6654",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/transfer-relist-listing-slug/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "ef88af37d88ab9db49c98e14cc24b8fe3be31e96fd850bff622398e06f0bc237",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/transfer-relist-listing-slug/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "6d7009262778f1fcbce20f08c81ab766d0c91bff8e271b902b3d58a327258cf0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/transfer-relist-listing-slug/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "21612f73479d7272fdf2698376e271e3d013e9d96e8601dbfc79f25f520f2cf3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/transfer-relist-listing-slug/tech-design.md",
+      "sha256": "e5c7d2688da243502be7a629fc692a4b572a668caf0275f293247621a3698fd9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "7f6e4f9c112b467e56796e1bb01354ac7463e6565e14384229ec90583adbfa27",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "9fca5857067a17addf08f0177d2cf9e05ecc09ebdbeda6af9ee420a21fe5fcc2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "b7144d415b13e7a07d97244a06fafd53202ff9ef2d4b923b168240654b2b91a4",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A saved draft receives an editable generated slug",
+        "Requirement: Relist opens a new draft from an Unsold listing"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

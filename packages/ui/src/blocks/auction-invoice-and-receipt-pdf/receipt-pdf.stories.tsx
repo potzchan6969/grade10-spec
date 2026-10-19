@@ -1,8 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+import { expect, waitFor } from "storybook/test";
 import {
   BANK_TRANSFER_RECEIPT,
+  LONG_TABLE_RECEIPT,
   SAMPLE_RECEIPT,
+  SEVERAL_ITEMS_RECEIPT,
   WITH_TAX_RECEIPT,
 } from "./fixtures";
 import { PdfPreview } from "./pdf-preview";
@@ -10,25 +13,12 @@ import type { ReceiptPdfData } from "./receipt-pdf";
 import { ReceiptPdf } from "./receipt-pdf";
 
 function ReceiptPdfPreview({ data }: { data: ReceiptPdfData }) {
-  const [bytes, setBytes] = useState<ArrayBuffer | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setBytes(null);
-    void ReceiptPdf(data).then((rendered) => {
-      if (!cancelled) setBytes(rendered);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [data]);
-
-  if (!bytes) return <p>Generating...</p>;
-  return <PdfPreview bytes={bytes} />;
+  const pdf = useMemo(() => ReceiptPdf(data), [data]);
+  return <PdfPreview pdf={pdf} />;
 }
 
 const meta = {
-  title: "Auction Invoice And Receipt Pdf/ReceiptPdf",
+  title: "Auction/Post Bidding/Blocks/ReceiptPdf",
   component: ReceiptPdfPreview,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -47,4 +37,22 @@ export const BankTransfer: Story = {
 
 export const WithTax: Story = {
   args: { data: WITH_TAX_RECEIPT },
+};
+
+export const SeveralItems: Story = {
+  args: { data: SEVERAL_ITEMS_RECEIPT },
+};
+
+export const LongTable: Story = {
+  args: { data: LONG_TABLE_RECEIPT },
+  play: async ({ canvasElement }) => {
+    await waitFor(
+      () =>
+        expect(
+          canvasElement.querySelectorAll('[data-slot="pdf-preview-canvas"]')
+            .length,
+        ).toBeGreaterThanOrEqual(2),
+      { timeout: 15_000 },
+    );
+  },
 };

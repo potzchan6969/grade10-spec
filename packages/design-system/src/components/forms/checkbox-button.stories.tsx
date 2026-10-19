@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CheckboxButton } from "./checkbox-button";
 
 const meta = {
-  title: "Components/CheckboxButton",
+  title: "Design System/Forms/CheckboxButton",
   component: CheckboxButton,
   tags: ["autodocs"],
   args: { "aria-label": "Select" },

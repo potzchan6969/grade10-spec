@@ -222,7 +222,7 @@ describe("the loop's continuation on the card", () => {
       changeEntry("written-up", [delta()], { stage: "specified" }),
     ]);
     expect(html).toContain("/workflow-specify written-up");
-    expect(html).toContain("Product manager: read");
+    expect(html).toContain("Product manager: resolve the open Raised rows");
   });
 
   it("hands a complete change to /archive-change", () => {

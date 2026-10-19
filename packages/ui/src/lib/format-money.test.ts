@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   currencyExponent,
@@ -5,11 +6,37 @@ import {
   formatMoneyNumeric,
   formatMoneyPrefix,
   fromMinorUnits,
+  SUPPORTED_CURRENCY_CODES,
   splitFormattedMoney,
   toMinorUnits,
 } from "./format-money";
 
 const LOCALE = "en-HK";
+
+const MONEY_PAGE = new URL(
+  "../../../../docs/prds/platform/shared/money-amounts.md",
+  import.meta.url,
+);
+
+function currenciesStatedByPage(): Record<string, number> {
+  const stated: Record<string, number> = {};
+  for (const line of readFileSync(MONEY_PAGE, "utf8").split("\n")) {
+    const row = /^\| (\d) \| ([A-Z]{3}(?:, [A-Z]{3})*) \|$/.exec(line);
+    if (!row) continue;
+    for (const code of row[2].split(", ")) stated[code] = Number(row[1]);
+  }
+  return stated;
+}
+
+describe("the currency table", () => {
+  it("holds exactly the codes and digits the money-amounts page states", () => {
+    const stated = currenciesStatedByPage();
+    expect(SUPPORTED_CURRENCY_CODES).toEqual(Object.keys(stated).sort());
+    for (const code of SUPPORTED_CURRENCY_CODES) {
+      expect(currencyExponent(code)).toBe(stated[code]);
+    }
+  });
+});
 
 describe("currencyExponent", () => {
   it("returns ISO 4217 exponents", () => {

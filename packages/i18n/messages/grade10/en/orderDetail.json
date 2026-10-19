@@ -1,10 +1,12 @@
 {
   "title": "Order Details",
   "orderId": "Order {id}",
+  "receiptSentTo": "Receipt sent to {email}.",
   "loading": "Loading order details…",
   "error": "We couldn’t load this order. Try again.",
   "retry": "Try again",
   "notFound": "Order not found",
+  "notFoundLinkDescription": "Check the link in your order email.",
   "needHelp": "Need help?",
   "table": {
     "items": "Items",
@@ -46,5 +48,28 @@
     "pickup": "Ready for Pickup",
     "canceled": "Canceled",
     "refunded": "Refunded"
+  },
+  "ask": {
+    "guest": {
+      "title": "Add this order to your account",
+      "body": "Sign in to see it with your other orders.",
+      "bodyCompleted": "Sign in to see it with your other orders."
+    },
+    "member": {
+      "title": "Is this your order?",
+      "body": "Sign in to see it in your account."
+    },
+    "added": {
+      "title": "Order added to your account",
+      "action": "View order"
+    },
+    "anotherEmail": {
+      "title": "This order was not added",
+      "body": "It was placed with {email}. We can send a sign-in link there to add it.",
+      "action": "Send link"
+    },
+    "sent": {
+      "title": "Sign-in link sent to {email}"
+    }
   }
 }

@@ -3,6 +3,10 @@
 
 // shared/ui/appointment-booking
 export {
+  BookingActionBar,
+  type BookingActionBarProps,
+} from "./blocks/appointment-booking/booking-action-bar";
+export {
   BookingConfirmation,
   type BookingConfirmationCopy,
   type BookingConfirmationProps,
@@ -23,6 +27,10 @@ export {
   type BookingManageCardProps,
 } from "./blocks/appointment-booking/booking-manage-card";
 export {
+  BookingNotice,
+  type BookingNoticeProps,
+} from "./blocks/appointment-booking/booking-notice";
+export {
   BookingServicePicker,
   type BookingServicePickerCopy,
   type BookingServicePickerProps,
@@ -34,13 +42,17 @@ export {
 } from "./blocks/appointment-booking/booking-slot-picker";
 export {
   BookingSummary,
+  BookingSummaryBar,
+  type BookingSummaryBarProps,
   type BookingSummaryCopy,
   type BookingSummaryProps,
+  type BookingSummaryRow,
 } from "./blocks/appointment-booking/booking-summary";
 export type {
   BookingAnswerLine,
   BookingAnswers,
   BookingDay,
+  BookingDayKind,
   BookingDetailsValues,
   BookingLocation,
   BookingQuestion,
@@ -50,6 +62,111 @@ export type {
   BookingService,
   BookingSlot,
 } from "./blocks/appointment-booking/types";
+export type {
+  VisitAct,
+  VisitCancelReason,
+  VisitFact,
+  VisitFullDayShop,
+  VisitLateChoice,
+  VisitListRow,
+  VisitNoticeIcon,
+  VisitNoticeTone,
+  VisitTone,
+  VisitWaitService,
+  VisitWaitShop,
+} from "./blocks/appointment-visit/types";
+// shared/ui/appointment-visit
+export {
+  VisitActRow,
+  type VisitActRowProps,
+} from "./blocks/appointment-visit/visit-act-row";
+export {
+  VisitBody,
+  type VisitBodyCopy,
+  type VisitBodyProps,
+  type VisitNoticeAt,
+  type VisitNoticeCopy,
+} from "./blocks/appointment-visit/visit-body";
+export {
+  VisitBookedPass,
+  type VisitBookedPassCopy,
+  type VisitBookedPassProps,
+} from "./blocks/appointment-visit/visit-booked-pass";
+export {
+  VisitCancelPanel,
+  type VisitCancelPanelCopy,
+  type VisitCancelPanelProps,
+  type VisitCancelRefund,
+} from "./blocks/appointment-visit/visit-cancel-panel";
+export {
+  VisitFacts,
+  type VisitFactsCopy,
+  type VisitFactsProps,
+} from "./blocks/appointment-visit/visit-facts";
+export {
+  VisitFullDay,
+  type VisitFullDayCopy,
+  type VisitFullDayProps,
+} from "./blocks/appointment-visit/visit-full-day";
+export {
+  type VisitLateHereCopy,
+  VisitLatePanel,
+  type VisitLatePanelCopy,
+  type VisitLatePanelProps,
+} from "./blocks/appointment-visit/visit-late-panel";
+export {
+  VisitLinkOpensNothing,
+  type VisitLinkOpensNothingCopy,
+  type VisitLinkOpensNothingProps,
+} from "./blocks/appointment-visit/visit-link-opens-nothing";
+export {
+  VisitList,
+  type VisitListCopy,
+  type VisitListProps,
+} from "./blocks/appointment-visit/visit-list";
+export {
+  VisitMine,
+  type VisitMineCopy,
+  type VisitMineProps,
+} from "./blocks/appointment-visit/visit-mine";
+export {
+  VisitMovePanel,
+  type VisitMovePanelCopy,
+  type VisitMovePanelProps,
+} from "./blocks/appointment-visit/visit-move-panel";
+export {
+  VisitPass,
+  type VisitPassCopy,
+  type VisitPassProps,
+  type VisitPassSize,
+} from "./blocks/appointment-visit/visit-pass";
+export {
+  VisitPhaseHeader,
+  type VisitPhaseHeaderCopy,
+  type VisitPhaseHeaderProps,
+} from "./blocks/appointment-visit/visit-phase-header";
+export {
+  VisitReconnecting,
+  type VisitReconnectingCopy,
+  type VisitReconnectingProps,
+} from "./blocks/appointment-visit/visit-reconnecting";
+export {
+  type VisitRefusal,
+  VisitRefusedBook,
+  type VisitRefusedBookCopy,
+  type VisitRefusedBookProps,
+} from "./blocks/appointment-visit/visit-refused-book";
+export {
+  VisitTicketBody,
+  type VisitTicketBodyCopy,
+  type VisitTicketBodyProps,
+} from "./blocks/appointment-visit/visit-ticket-body";
+export {
+  VisitWaitBody,
+  type VisitWaitBodyCopy,
+  type VisitWaitBodyProps,
+  type VisitWaitNoticeCopy,
+} from "./blocks/appointment-visit/visit-wait-body";
 // shared/ui/invoice-and-receipt-pdf
 export {
   InvoicePdf,
@@ -62,6 +179,8 @@ export {
 } from "./blocks/auction-invoice-and-receipt-pdf/invoice-pdf";
 export type {
   PdfDocumentCopy,
+  PdfItemRow,
+  PdfItemTotal,
   PdfLineItem,
   PdfPartyAddress,
 } from "./blocks/auction-invoice-and-receipt-pdf/pdf-document";
@@ -75,13 +194,7 @@ export {
   type ReceiptPdfRenderOptions,
   receiptBreakdown,
 } from "./blocks/auction-invoice-and-receipt-pdf/receipt-pdf";
-export {
-  AuctionCard,
-  type AuctionCardBadge,
-  type AuctionCardCopy,
-  type AuctionCardProps,
-  type AuctionCardWhen,
-} from "./blocks/auction-listing/auction-card";
+export { AuctionCatalogueCardSkeleton } from "./blocks/auction-listing/auction-catalogue-card-skeleton";
 export {
   FeaturedAuctionsBanner,
   type FeaturedAuctionsBannerCopy,
@@ -124,7 +237,6 @@ export {
 } from "./blocks/auction-listing/listing-bid-enrollment";
 export { ListingBidHistoryList } from "./blocks/auction-listing/listing-bid-history-list";
 export {
-  CUSTOM_MAXIMUM_MAJOR_CEILING,
   formatMinimumMaximumCaption,
   isMaximumBelowFloor,
   minNextBidMinor,
@@ -226,24 +338,13 @@ export {
   auctionPhoneSoftReady,
 } from "./blocks/auction-order/auction-address-form";
 export {
-  AuctionOrderEmpty,
-  type AuctionOrderEmptyProps,
-} from "./blocks/auction-order/auction-order-empty";
-export {
-  AuctionOrderList,
-  type AuctionOrderListProps,
-} from "./blocks/auction-order/auction-order-list";
-export {
-  AuctionOrderRow,
-  type AuctionOrderRowCopy,
-  type AuctionOrderRowProps,
-} from "./blocks/auction-order/auction-order-row";
-export {
   AuctionPhoneField,
   type AuctionPhoneFieldProps,
 } from "./blocks/auction-order/auction-phone-field";
 export {
+  type AuctionPaymentRail,
   AuctionWinnerOrder,
+  type AuctionWinnerOrderBankDetails,
   type AuctionWinnerOrderCopy,
   type AuctionWinnerOrderProps,
   type AuctionWinnerOrderStep,
@@ -256,7 +357,6 @@ export type {
 export { AuctionRecord } from "./blocks/auction-record/auction-record";
 export { AuctionRecordEmpty } from "./blocks/auction-record/auction-record-empty";
 export { AuctionRecordRow } from "./blocks/auction-record/auction-record-row";
-export { AuctionRecordTabs } from "./blocks/auction-record/auction-record-tabs";
 export type {
   AuctionRecordCopy,
   AuctionRecordEmptyProps,
@@ -264,7 +364,6 @@ export type {
   AuctionRecordRowCopy,
   AuctionRecordRowProps,
   AuctionRecordRowState,
-  AuctionRecordTabsProps,
   EmailAlertsCopy,
   EmailAlertsToastCopy,
   WatchButtonCopy,
@@ -303,6 +402,12 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
+// shared/ui/consignment-mine
+export {
+  ConsignmentSellerLine,
+  type ConsignmentSellerLineCopy,
+  type ConsignmentSellerLineProps,
+} from "./blocks/consignment-mine/consignment-seller-line";
 // shared-ui/loyalty-membership
 export {
   ActivityList,
@@ -315,17 +420,12 @@ export {
   type CouponListProps,
 } from "./blocks/loyalty-membership/coupon-list";
 export {
-  MemberCard,
-  type MemberCardCopy,
-  type MemberCardProps,
-  type MemberCardState,
-  type MemberCardUse,
-} from "./blocks/loyalty-membership/member-card";
-export {
-  MembershipSummary,
-  type MembershipSummaryCopy,
-  type MembershipSummaryProps,
-} from "./blocks/loyalty-membership/membership-summary";
+  MemberPass,
+  type MemberPassCopy,
+  type MemberPassProps,
+  type MemberPassState,
+  type MemberPassVariant,
+} from "./blocks/loyalty-membership/member-pass";
 export {
   RewardMenu,
   type RewardMenuCopy,
@@ -334,7 +434,14 @@ export {
 export {
   ScanPlate,
   type ScanPlateProps,
+  type ScanPlateVariant,
 } from "./blocks/loyalty-membership/scan-plate";
+export {
+  TierCard,
+  type TierCardCopy,
+  type TierCardProps,
+  type TierCardVariant,
+} from "./blocks/loyalty-membership/tier-card";
 export type {
   ActivityEntry,
   CouponItem,
@@ -342,6 +449,7 @@ export type {
   RewardMenuItem,
 } from "./blocks/loyalty-membership/types";
 export {
+  type WalletPassArtwork,
   WalletPassLinks,
   type WalletPassLinksCopy,
   type WalletPassLinksProps,
@@ -350,11 +458,6 @@ export {
   type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";
 // shared/ui/page-blocks
-export {
-  EmptyPanel,
-  type EmptyPanelCopy,
-  type EmptyPanelProps,
-} from "./blocks/page-blocks/empty-panel";
 export {
   FactCard,
   type FactCardCopy,
@@ -418,6 +521,7 @@ export type {
   CartItemStatus,
   CartItemSummary,
   HeldPromoCode,
+  OrderDiscountRow,
   PointsState,
   PromoNotice,
   PromoState,
@@ -442,6 +546,13 @@ export {
   type StoreSectionHeaderProps,
 } from "./blocks/store-home/store-section-header";
 export type { StoreCollectionSummary } from "./blocks/store-home/types";
+// shared/ui/store-locator
+export {
+  StoreLocator,
+  type StoreLocatorCopy,
+  type StoreLocatorHoursRow,
+  type StoreLocatorProps,
+} from "./blocks/store-locator/store-locator";
 export { loyaltyPointsHeading } from "./blocks/store-order-detail/loyalty-points-heading";
 // shared-ui/store-order-detail
 export {
@@ -607,32 +718,6 @@ export {
   type ProfileFormProps,
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
-export {
-  ACTIVITY_RELATIVE_MAX_MS,
-  type ActivityTimeCopy,
-  formatActivityAt,
-  formatCalendarDayLabel,
-  formatCollectorDeadline,
-  formatDay,
-  formatDeadline,
-  formatEvent,
-  formatListingClosed,
-  formatListingEnds,
-  formatListingOpens,
-  formatLocalDay,
-  formatLocalMoment,
-  formatLocalTime,
-  formatMoment,
-  formatRelativeAt,
-  formatViewerZoneName,
-  formatZonedLocalMoment,
-  formatZonedLocalTime,
-  isPastActivityCap,
-  JUST_NOW_MAX_MS,
-  resolveActivityNow,
-  resolveShippedLocale,
-  type ShippedLocale,
-} from "./lib/format-datetime";
 export {
   currencyExponent,
   DEFAULT_LISTING_CURRENCY,

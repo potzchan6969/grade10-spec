@@ -4,7 +4,7 @@
 
 | Surface | Layout source | Figma |
 | --- | --- | --- |
-| Cart Drawer with promo and points disclosures | Existing `Store Cart/CartDrawer` and `Store Cart/CartDrawerFooter` Storybook compositions; extend them with the states below | [Historical Cart Drawer frame](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev) |
+| Cart Drawer with promo and points disclosures | Existing `Store/Cart/Blocks/CartDrawer` and `Store/Cart/Blocks/CartDrawerFooter` Storybook compositions; extend them with the states below | [Historical Cart Drawer frame](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev) |
 
 No new frame or layout is introduced. Storybook remains the review source for
 the callback-presence variants; the historical Figma frame is reference only.
@@ -28,8 +28,8 @@ required.
 
 | State | Spec scenarios | Storybook source |
 | --- | --- | --- |
-| Promo context with no typed-apply or held-code callback; supplied code details and refusal remain visible | `shared-ui-store-cart-SC-32` | `Store Cart/CartDrawerFooter` and `Store Cart/CartDrawer` read-only interaction coverage |
-| Promo context with typed-apply and held-code callbacks | `shared-ui-store-cart-SC-33` | `Store Cart/CartDrawerFooter` and `Store Cart/CartDrawer` interactive interaction coverage |
-| Points context with no points-apply or Use max callback; supplied balance, ceiling, and rate remain visible | `shared-ui-store-cart-SC-34` | `Store Cart/CartDrawerFooter` read-only interaction coverage |
-| Points context with points-apply and Use max callbacks | `shared-ui-store-cart-SC-35` | `Store Cart/CartDrawerFooter` interactive interaction coverage |
-| Partial callback matrix; only the action owned by a missing callback is absent | `shared-ui-store-cart-SC-36` | `Store Cart/CartDrawerFooter` and `Store Cart/CartDrawer` callback-matrix interaction coverage |
+| Promo context with no typed-apply or held-code callback; supplied code details and refusal remain visible | `shared-ui-store-cart-SC-32` | `Store/Cart/Blocks/CartDrawerFooter` and `Store/Cart/Blocks/CartDrawer` read-only interaction coverage |
+| Promo context with typed-apply and held-code callbacks | `shared-ui-store-cart-SC-33` | `Store/Cart/Blocks/CartDrawerFooter` and `Store/Cart/Blocks/CartDrawer` interactive interaction coverage |
+| Points context with no points-apply or Use max callback; supplied balance, ceiling, and rate remain visible | `shared-ui-store-cart-SC-34` | `Store/Cart/Blocks/CartDrawerFooter` read-only interaction coverage |
+| Points context with points-apply and Use max callbacks | `shared-ui-store-cart-SC-35` | `Store/Cart/Blocks/CartDrawerFooter` interactive interaction coverage |
+| Partial callback matrix; only the action owned by a missing callback is absent | `shared-ui-store-cart-SC-36` | `Store/Cart/Blocks/CartDrawerFooter` and `Store/Cart/Blocks/CartDrawer` callback-matrix interaction coverage |

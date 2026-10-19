@@ -1,4 +1,14 @@
 export {
+  addDays,
+  atOrBefore,
+  calendarDaysBetween,
+  endOfDayAfter,
+  firstOfMonth,
+  hourOf,
+  startOfDayAfter,
+  wholeMonthsBetween,
+} from "./arithmetic.ts";
+export {
   dayValue,
   endOfDay,
   formatCalendarDay,
@@ -15,6 +25,12 @@ export {
   formatZonedLocalTime,
   type ViewerClock,
 } from "./local.ts";
+export { platformLanguageOf } from "./locales.ts";
+export {
+  formatDocumentMoment,
+  formatMediumDay,
+  formatMediumMoment,
+} from "./off-platform.ts";
 export { PLATFORM_LOCALE, PLATFORM_ZONE } from "./platform.ts";
 export {
   ACTIVITY_RELATIVE_MAX_MS,
@@ -45,6 +61,7 @@ export {
 export {
   formatTimeRange,
   formatViewerZoneName,
+  shortMonthName,
   weekdayName,
   weekdayRangeName,
   zoneName,

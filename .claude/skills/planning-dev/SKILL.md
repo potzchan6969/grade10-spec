@@ -10,6 +10,12 @@ description: Plan and accept one OpenSpec change in one invocation: QA1 writes b
   unresolved decisions, acceptance review and publication.
 - **Inputs** - Honor recorded decisions and existing user authorization. Ask
   only about unresolved choices; do not repeat settled readiness reviews.
+- **The PRD** - QA and Dev put on the PRD only what their row of
+  [What Does Not Go on the PRD](../../../docs/governance/prd-and-openspec.md#what-does-not-go-on-the-prd)
+  allows: a rule no spec states as one ❓ line, a constraint that changes an
+  outcome as one 🚧 or ❓ line. Cases, mechanisms and scenarios stay in their
+  own artifacts; run `docs/governance/writing.md`'s `Cut` pass on any line
+  added.
 - **Cases** - Planning produces draft cases. Human classification and execution
   belong to `tcs-review` and `tcs-run-sheet` after deployment.
 
@@ -21,9 +27,12 @@ decisions, journeys, UI design where present, and the relevant
 in their source artifacts before acceptance. Do not invent an answer.
 
 Write the `spec.md` outline: `## Purpose` and `## Feature set`. Freeze the
-complete anchors: the journey set plus the feature-set root groups. If an
-anchor changes after a reading starts, invalidate QA1 and Dev and restart both
-in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
+complete anchors: the journey set plus the feature-set root groups. Apply
+[Planning and Review Efficiency](../../../docs/governance/planning-review-efficiency.md)
+for input identities, blind snapshots, dependency-based restarts, gate receipts
+and compact handoffs. An anchor edit restarts both independent readings for
+the affected scope; uncertain dependencies restart the whole run. Patch
+non-anchor clarifications explicitly, then rerun QA2.
 
 ## Decision Sweep
 
@@ -49,11 +58,9 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    complete. Derive scenarios from the PRD, journeys, UI design and technical
    design: the requirements pass reads `tech-design.md` beside
    `ui-design.md`; a requirement contradicting either is not written. A
-   requirement that reaches a design another hand owns writes a dated wait on
-   them rather than writing over them:
-   `awaiting: tech-design: "<date>, <requirement> re-read - @<tech>"`. It is
-   cleared by their edit or by that artifact's `reviewed:` line, and it holds
-   no stage. Use `docs/governance/task-ownership.md` for groups and owners.
+   question the design cannot settle is a row in `decisions.md`'s
+   `## Raised`, never a dated wait on another hand; it holds acceptance
+   only, resolved by the product manager with the engineer's challenge. Use `docs/governance/task-ownership.md` for groups and owners.
    Before QA2, check the draft's structure, trace markers and overlaps:
 
    ```bash
@@ -62,9 +69,21 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
 
    A refusal is a Dev repair; rerun the check before starting QA2.
 3. **QA2** - Reconciliation. In a fresh context, reconcile each blind case
-   and scenario against the anchors in `feature-tcs.md`. Record whether a case
-   was folded, rejected with reason, raised for the human or remains uncovered.
-   Put unresolved product questions in `decisions.md`'s `## Raised` table.
+   and scenario against the anchors in `feature-tcs.md`. Do not regenerate from
+   scenarios. First record each case's disposition; then add post-hoc `covers`
+   links for the scenarios whose THEN is fully asserted by that case. One case
+   may link multiple scenarios when one route, starting state and checking
+   fully assert each. Record uncovered scenarios, over-claimed cases and
+   contradictions separately from anchor coverage. Put unresolved product
+   questions in `decisions.md`'s `## Raised` table, each with its options and
+   `recommended: <option>`. Close every row the
+   [held test](../../../docs/governance/specs-to-test-cases.md#raised)
+   does not hold on its recommendation: a `Decisions` row written
+   `<answer> - decided by the round`, naming its source - the settling page
+   line where one exists - and the answer in the suite's `## Settled`;
+   rows one source settles share one `Q<n>`. Only a held row stays open; a
+   contradiction between the readings is always held. Return
+   source-linked coverage and dispositions for the acceptance reviewer.
 4. **Resolve and Check** - A question the readings cannot settle goes to the
    same human, as a numbered `Q<n>` row, and is put to them as a
    [Clarification Request](../../../AGENTS.md#questions-and-blockers).
@@ -88,11 +107,14 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    Reconcile, do not merge: each change keeps its own scope, acceptance and
    verdict, and a slow change never holds the others once ownership and order
    are settled.
-6. **Review** - In a fresh context, run `accept-review`; a cluster is reviewed
-   as one run. Accept only on its `Ready to accept` verdict. Batch findings by source owner for repair. Follow `accept-review`
-   for the ledger and rerun criteria, including changed requirement text.
-7. **Accept and Publish** - With the human's acceptance authorization, obtain
-   the current baseline and accept the reviewed plan:
+6. **Review** - Settle the source revision, gather the review packet and gate
+   receipts, then dispatch an independent `accept-review` reader; a cluster
+   is reviewed as one run. Accept only on its `Ready to accept` verdict. Batch
+   findings by source owner for repair. Pass the prior ledger and repair diff
+   on a rerun; the owning skill decides when to expand its scope.
+7. **Accept and Publish** - With the human's acceptance authorization, reuse
+   the matching acceptance receipt or refresh it when inputs or baseline
+   changed, then accept the reviewed plan:
 
    ```bash
    pnpm accept:preflight <change>
@@ -110,9 +132,10 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
 
 Every external implementation change needs `tech-design.md`; use
 `design_waived: <why>` only for work wholly in this store. Each scenario has
-an anchor in `**Serves:**`; each case has one in `**Trace:**`. Reconciliation
-does not add scenario ids to blind cases. Task groups include tests before
-implementation, verification, and a final end-to-end walk.
+an anchor in `**Serves:**`; each case has one in `**Trace:**`.
+Reconciliation may add post-hoc scenario ids to a case marker's optional
+`covers` list, but generation never derives a case from them. Task groups
+include tests before implementation, verification, and a final end-to-end walk.
 
 ## Completion
 

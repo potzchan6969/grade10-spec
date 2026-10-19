@@ -5,7 +5,7 @@ import { LISTING_COPY, PRODUCTS } from "./fixtures";
 import { ProductResultsPanel } from "./product-results-panel";
 
 const meta = {
-  title: "Store Product Listing/ProductResultsPanel",
+  title: "Store/Product Listing/Blocks/ProductResultsPanel",
   component: ProductResultsPanel,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

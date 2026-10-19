@@ -2,11 +2,11 @@
 
 ### Site header with cart count
 
-Layout SoT: Storybook `site-chrome-siteheader-auction-store-cart-count--empty-no-badge`,
-`site-chrome-siteheader-auction-store-cart-count--count-1`,
-`site-chrome-siteheader-auction-store-cart-count--count-3`,
-`site-chrome-siteheader-auction-store-cart-count--count-123`, and
-`site-chrome-siteheader-auction-store-cart-count--compact-count-3`.
+Layout SoT: Storybook `site-page-shell-blocks-siteheader-auction-store-cart-count--empty-no-badge`,
+`site-page-shell-blocks-siteheader-auction-store-cart-count--count-1`,
+`site-page-shell-blocks-siteheader-auction-store-cart-count--count-3`,
+`site-page-shell-blocks-siteheader-auction-store-cart-count--count-123`, and
+`site-page-shell-blocks-siteheader-auction-store-cart-count--compact-count-3`.
 
 Figma `Nav` (`4171:9937`) remains an early chrome reference only — Storybook
 is the layout source of truth for the cart count overlay (same rule as
@@ -14,7 +14,7 @@ auction-first site header).
 
 ### Design-system Nav cart slot
 
-Layout SoT: Storybook under `Components/Nav/` for the built-in cart control
+Layout SoT: Storybook under `Design System/Layout/Nav/` for the built-in cart control
 without a count. Compound headers that need a count replace that control via
 `cartSlot` — composition lives on `SiteHeader`, not on `Nav`.
 
@@ -48,7 +48,7 @@ inline label beside the title. The header overlay uses `StatusIndicator`
 | Count `123` | Full digits `123`; no `99+` truncation | `shared-ui-site-chrome-SC-26` |
 | Cart slot composition | Badged cart control rendered through `Nav`'s `cartSlot` | `shared-ui-site-chrome-SC-24` |
 | Cart handler absent | No cart control and no count, whatever count is supplied | `shared-ui-site-chrome-SC-41` |
-| Signed-out (no guest cart) | Cart control present once Store answers; no badge | **Out of suite:** same treatment as empty/omitted (`shared-ui-site-chrome-SC-23`); no guest count |
+| Signed-out | Cart control present once Store answers; the badge counts the cart this browser holds | **Out of suite:** the host supplies the guest's count as it does a member's (`shared-ui-site-chrome-SC-24`) |
 | Count unknown (hydrating) | No badge until the host supplies `cartItemCount > 0` | **Out of suite:** host omits the prop or passes `0`; no loading API on `SiteHeader` |
 
 ### Application Cart Count
@@ -63,5 +63,5 @@ The application reuses the existing Auction & Store cart-count stories and share
 | Cart unavailable | Neither control nor badge | `grade10-site-site-page-shell-SC-45` |
 | Closed drawer after hydration or a cart update | Current reviewed count without opening | `grade10-site-site-page-shell-SC-46`, `grade10-site-site-page-shell-SC-47` |
 | Initial loading or failed review | Neither a badge nor a skeleton; the Cart control stays | `grade10-site-site-page-shell-SC-48`, `grade10-site-site-page-shell-SC-49` |
-| Signed out or switching members | No previous-member count | `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-51`, `grade10-site-site-page-shell-SC-52` |
+| Signed out or switching members | No previous session's count; a guest sees this browser's cart's count | `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-51`, `grade10-site-site-page-shell-SC-52` |
 | Same-member refresh | Last verified count stays until success; failure hides it | `grade10-site-site-page-shell-SC-53` |

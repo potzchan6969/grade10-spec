@@ -10,8 +10,8 @@ import { cliArgs } from "./lib/args.mjs";
 import {
   messagesOf,
   milestonesBetween,
-  newlyBehind,
   readingOf,
+  toldBetween,
 } from "./lib/moves.mjs";
 import { deliver, readSentKeys } from "./lib/notify.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
@@ -455,7 +455,7 @@ async function keysOnly(root, base, head, touched) {
 export function rereadMatrixOf(touched, base, head, suppressed) {
   const ids = new Set([
     ...touched.keys(),
-    ...newlyBehind(base, head).map((one) => one.id),
+    ...toldBetween(base, head).map((one) => one.id),
   ]);
   const matrix = [];
   for (const id of ids) {

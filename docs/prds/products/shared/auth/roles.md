@@ -22,7 +22,7 @@ can hold roles it should not, but it cannot invent a permission for one.
   and `admin`; collecting auction money: sending and reissuing an invoice,
   recording a payment, checking proof and cancelling an order — [Auction
   Management](/p/grade10-admin/auction/management#grants)
-- 🚧 **Payment Settings** — the premium minimums and the fee schedule sit
+- **Payment Settings** — the premium minimums and the fee schedule sit
   under `auction:payment`, so finance keeps them — [Auction Management ·
   Payment Settings](/p/grade10-admin/auction/management#payment-settings)
 - **Refund processing** — `auction:refund`, held by `staff` and `admin`;
@@ -57,7 +57,7 @@ list every product shares; a permission outside the list grants nothing.
 | `loyalty` | `read` · `adjust` · `invite` · `catalog` · `finance` · `demote` · `cancel` |
 | `auction` | `read` · `write` · `operate` · `reserve` · `moderate` · `settle` · `payment` · `refund` · `shipment` |
 | `vault` | `read` · `operate` · `approve` · `payout` |
-| `kyc` | `read` |
+| `kyc` | `read` · `request` |
 | `grading` | `read` · `operate` · `approve` |
 | `appointment` | `read` · `manage` |
 | `inventory` | `read` · `write` |
@@ -65,9 +65,12 @@ list every product shares; a permission outside the list grants nothing.
 
 - **No `finance` resource** — lending is the vault's financed lane, so its
   cases and money sit under `vault`
-- **Identity documents** — `kyc:read` reaches the identity capture and the
-  signed document printed from it; reading a vault case does not, and there is
-  no `kyc:write`
+- **Identity documents** - `kyc:read` reaches the identity capture, the
+  signed document printed from it, and an account's Identity card; reading a
+  vault case does not, and there is no `kyc:write`
+- **Requiring a verification** - `kyc:request`, held by `admin` alone;
+  requiring an account to verify its person or its business, and dropping
+  that request - [Users](/p/grade10-admin/console/user-directory#identity)
 
 ### Vault, Split by Cost
 

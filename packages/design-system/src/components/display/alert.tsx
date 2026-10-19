@@ -49,8 +49,8 @@ type AlertProps = Omit<ComponentProps<"div">, "title"> &
     /** Figma's `description` TEXT property. Block layout only — omit to hide. */
     description?: ReactNode;
     /**
-     * Figma's `icon` INSTANCE_SWAP on `status=default` only. Status variants
-     * draw their own icon; this replaces the default bell.
+     * Figma's `icon` INSTANCE_SWAP. When provided it replaces the status icon
+     * while keeping the status shell and icon colour.
      */
     icon?: ReactNode;
     /**
@@ -116,7 +116,7 @@ function Alert({
   const iconSize = isInline ? 16 : 20;
   const iconWellClass = isInline ? "size-5" : "size-6";
   const resolvedIcon =
-    resolvedStatus === "default" && icon != null ? (
+    icon != null ? (
       icon
     ) : (
       <StatusIcon aria-hidden size={iconSize} weight="bold" />

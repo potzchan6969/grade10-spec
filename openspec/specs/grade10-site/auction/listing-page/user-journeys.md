@@ -95,3 +95,9 @@ disagrees with what the document carried.
 **I want** each Recent Bids avatar on the lot to show that bidder's email
 initial while the label stays Bidder N,
 **so that** I can tell who bid what without reading a name or email.
+
+### grade10-site-auction-listing-page-US-16: Collector reads a lot's title and description in their own language
+
+**As a** collector,
+**I want** the card and the lot page to show the lot's title and description in the language I browse in,
+**so that** I understand the card before I bid on it.

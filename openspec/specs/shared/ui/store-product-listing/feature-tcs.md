@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/17
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## shared-ui-store-product-listing-US1: What the listing surface holds
+## g10.shared-store-product-listing.US1: What the listing surface holds
 
 **Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface
 **As a** shopper reading a surface that composes the listing's tiles,
@@ -11,7 +11,7 @@
 **so that** a tile reads the same wherever the store draws it.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-oqz rev=1 covers=none -->
-### shared-ui-store-product-listing-US1-TC1-1: Sold-out tile with an activation target still opens its card
+### g10.shared-store-product-listing.US1-TC1: Sold-out tile with an activation target still opens its card
 
 **Classification:**
 
@@ -43,7 +43,7 @@
 * No cart control is drawn on the tile.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-mzb rev=1 covers=g10.shared-store-product-listing.SC-rzq -->
-### shared-ui-store-product-listing-US1-TC2-1: Tile drawn with no cart control does not require cart copy
+### g10.shared-store-product-listing.US1-TC2: Tile drawn with no cart control does not require cart copy
 
 **Classification:**
 
@@ -75,7 +75,7 @@
 * No cart wording appears on the tile.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-o4i rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC3-1: Tile given its address opens as a link
+### g10.shared-store-product-listing.US1-TC3: Tile given its address opens as a link
 
 **Classification:**
 
@@ -109,7 +109,7 @@
 * Step 3 opens the product in a new tab from each link and reports nothing, and the first tab stays where it was.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-e05 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC4-1: Name opens the product the same way as the photo
+### g10.shared-store-product-listing.US1-TC4: Name opens the product the same way as the photo
 
 Runs once per row of **Test data**.
 
@@ -128,16 +128,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProductCard` is open in Storybook, drawn as the row's **Story**, showing `<product_1>`.
+* `ProductCard` is open in Storybook, drawn as `<story>`, showing `<product_1>`.
 * `<product_1>` is not sold out, and the tile is given an activation callback.
-* The tile's cart handler is as the row's **Cart handler** says.
+* The tile's cart handler is as `<cart handler>` says.
 
 **Test data:**
 
-| Product | Story | Cart handler | Cart control |
+| Product | `<story>` | `<cart handler>` | `<cart control>` |
 | --- | --- | --- | --- |
 | `<product_1>` | Named Once | supplied, so the tile sells | shows on the photo |
 | `<product_1>` | Named Once Not Selling | not supplied, so the tile does not sell | none, on hover or on focus |
+
+| Field | Value |
+| --- | --- |
+| product_1 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
 
 **Steps:**
 
@@ -153,10 +157,10 @@ Runs once per row of **Test data**.
 * Step 2 logs one tile activation for `<product_1>`.
 * Step 4 logs one tile activation for `<product_1>`, the same as step 2.
 * Step 4 logs nothing else: no cart change, no second activation.
-* The cart control is as the row's **Cart control** says while the pointer is over the photo and while focus is in the tile.
+* The cart control is as `<cart control>` says while the pointer is over the photo and while focus is in the tile.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-5vw rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC5-1: Name in the browse grid opens its own product
+### g10.shared-store-product-listing.US1-TC5: Name in the browse grid opens its own product
 
 **Classification:**
 
@@ -176,6 +180,13 @@ Runs once per row of **Test data**.
 * `ProductBrowse` is open in Storybook, drawn as its Default story, with a product activation callback supplied.
 * The grid shows at least two products not sold out, `<product_1>` first and `<product_2>` second.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| product_1 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
+| product_2 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
+
 **Steps:**
 
 1. Open Storybook's Actions panel and clear it.
@@ -189,7 +200,7 @@ Runs once per row of **Test data**.
 * Step 4 logs one product activation, for `<product_1>`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-rny rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC6-1: Name is plain at rest and underlined on hover
+### g10.shared-store-product-listing.US1-TC6: Name is plain at rest and underlined on hover
 
 **Classification:**
 
@@ -221,7 +232,7 @@ Runs once per row of **Test data**.
 * Step 3 removes the underline.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-63a rev=1 covers=g10.shared-store-product-listing.SC-ou9,g10.shared-store-product-listing.SC-xip,g10.shared-store-product-listing.SC-nh0,g10.shared-store-product-listing.SC-sz8,g10.shared-store-product-listing.SC-ry5,g10.shared-store-product-listing.SC-7v7 -->
-### shared-ui-store-product-listing-US1-TC7-1: Name is the tile's one keyboard stop to open, and opens from the keyboard
+### g10.shared-store-product-listing.US1-TC7: Name is the tile's one keyboard stop to open, and opens from the keyboard
 
 **Classification:**
 
@@ -240,6 +251,12 @@ Runs once per row of **Test data**.
 
 * `ProductCard` is open in Storybook, drawn as its Named Once story, showing `<product_1>`, not sold out, with an activation callback and a cart handler.
 * A screen reader is on for step 7.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| product_1 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
 
 **Steps:**
 
@@ -260,7 +277,7 @@ Runs once per row of **Test data**.
 * Step 7 announces one control named for `<product_1>`; the photo is not announced.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-rg1 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC8-1: Sold-out name and photo stay inert on a tile that sells
+### g10.shared-store-product-listing.US1-TC8: Sold-out name and photo stay inert on a tile that sells
 
 Runs once per row of **Test data**.
 
@@ -281,15 +298,20 @@ Runs once per row of **Test data**.
 
 * `ProductCard` is open in Storybook, drawn as its Sold Out story, showing `<product_3>`.
 * `<product_3>` is sold out, and the tile is given a cart handler.
-* The tile's way in is as the row's **Way in** says, set in the story's controls.
+* The tile's way in is as `<way in>` says, set in the story's controls.
 
 **Test data:**
 
-| Product | Way in | Outcome |
+| Product | `<way in>` | Expected outcome |
 | --- | --- | --- |
 | `<product_3>` | an activation callback and `<product_3 address>`, as the story draws them | name and photo inert, no link |
 | `<product_3>` | an activation callback alone, as the listing gives its cards | name and photo inert |
 | `<product_3>` | `<product_3 address>` alone, no activation callback | name and photo inert, no link |
+
+| Field | Value |
+| --- | --- |
+| product_3 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
+| product_3 address | The product prepared with the availability, address and story conditions in the pre-conditions; bind its public address only |
 
 **Steps:**
 
@@ -309,7 +331,7 @@ Runs once per row of **Test data**.
 * Neither the name nor the photo is offered as a link or a button.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-lbw rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC9-1: No activation callback and no address leave name and photo inert
+### g10.shared-store-product-listing.US1-TC9: No activation callback and no address leave name and photo inert
 
 **Classification:**
 
@@ -329,6 +351,12 @@ Runs once per row of **Test data**.
 * `ProductCard` is open in Storybook, drawn as its Inert story, showing `<product_1>`.
 * `<product_1>` is not sold out, and the tile is given a cart handler and neither an activation callback nor an address.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| product_1 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
+
 **Steps:**
 
 1. Open Storybook's Actions panel and clear it.
@@ -346,7 +374,7 @@ Runs once per row of **Test data**.
 * Neither the name nor the photo is offered as a link or a button.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-xph rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC10-1: Sold-out name and photo open on a tile that does not sell
+### g10.shared-store-product-listing.US1-TC10: Sold-out name and photo open on a tile that does not sell
 
 **Classification:**
 
@@ -365,6 +393,12 @@ Runs once per row of **Test data**.
 
 * `ProductCard` is open in Storybook, drawn as its Sold Out Opens Where Nothing Sells story, showing `<product_3>`.
 * `<product_3>` is sold out, and the tile is given an activation callback and no cart handler.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| product_3 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
 
 **Steps:**
 
@@ -385,7 +419,7 @@ Runs once per row of **Test data**.
 * Step 7 lands focus on the name, underlined, not on the photo.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-64a rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye -->
-### shared-ui-store-product-listing-US1-TC11-1: Name is a link where the tile is given an address alone
+### g10.shared-store-product-listing.US1-TC11: Name is a link where the tile is given an address alone
 
 Runs once per row of **Test data**.
 
@@ -404,15 +438,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProductCard` is open in Storybook, drawn as the row's **Story**, showing the row's **Product**.
-* The tile is given the row's **Address** and no activation callback, and no cart handler.
+* `ProductCard` is open in Storybook, drawn as `<story>`, showing `<product>`.
+* The tile is given `<product address>` and no activation callback, and no cart handler.
 
 **Test data:**
 
-| Product | Story | Address | Sold out |
+| `<product>` | `<story>` | `<product address>` | Sold out |
 | --- | --- | --- | --- |
 | `<product_1>` | Address Only | `<product_1 address>` | no |
 | `<product_3>` | Sold Out Opens As A Link | `<product_3 address>` | yes, sold-out treatment shown |
+
+| Field | Value |
+| --- | --- |
+| product_1 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
+| product_1 address | The product prepared with the availability, address and story conditions in the pre-conditions; bind its public address only |
+| product_3 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
+| product_3 address | The product prepared with the availability, address and story conditions in the pre-conditions; bind its public address only |
 
 **Steps:**
 
@@ -427,13 +468,13 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2 underlines the name.
-* Steps 3 and 4 each open the row's **Address** in a new tab; the story's tab stays where it was.
+* Steps 3 and 4 each open `<product address>` in a new tab; the story's tab stays where it was.
 * Step 6 never stops on the photo.
-* Step 7 follows the row's **Address** in the story's frame.
+* Step 7 follows `<product address>` in the story's frame.
 * The Actions panel logs no tile activation throughout.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-1vn rev=1 covers=g10.shared-store-product-listing.SC-ou9,g10.shared-store-product-listing.SC-xip,g10.shared-store-product-listing.SC-nh0,g10.shared-store-product-listing.SC-sz8,g10.shared-store-product-listing.SC-ry5,g10.shared-store-product-listing.SC-7v7 -->
-### shared-ui-store-product-listing-US1-TC12-1: Photo used alone opens where a tile would, as its own stop
+### g10.shared-store-product-listing.US1-TC12: Photo used alone opens where a tile would, as its own stop
 
 Runs once per row of **Test data**.
 
@@ -452,16 +493,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProductCardImage` is open in Storybook on its own, drawn as the row's **Story**, showing the row's **Product** and given its name.
-* The photo is given an activation callback, and a cart handler as the row's **Cart handler** says.
+* `ProductCardImage` is open in Storybook on its own, drawn as `<story>`, showing `<product>` and given its name.
+* The photo is given an activation callback, and a cart handler as `<cart handler>` says.
 * A screen reader is on for step 5.
 
 **Test data:**
 
-| Product | Story | Cart handler | Outcome |
+| `<product>` | `<story>` | `<cart handler>` | `<expected outcome>` |
 | --- | --- | --- | --- |
 | `<product_1>`, not sold out | Opens Alone | not supplied | Step 3 lands focus on the photo; step 4 logs one tile activation for `<product_1>`; step 5 announces one control named for `<product_1>`; step 6 logs one more |
 | `<product_3>`, sold out | Sold Out Where It Sells | supplied | Step 3 never lands focus on the photo; step 4 logs nothing; step 5 announces no control named for `<product_3>`; step 6 logs nothing |
+
+| Field | Value |
+| --- | --- |
+| product_1 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
+| product_3 | The product prepared with the availability, address and story conditions in the pre-conditions; bind its product identity only |
 
 **Steps:**
 
@@ -474,10 +520,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Steps 3 to 6 go as the row's **Outcome** says.
+* Steps 3 to 6 go as `<expected outcome>` says.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-d6j rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
-### shared-ui-store-product-listing-US1-TC15-1: Photo draws as supplied in an available, on-sale or in-cart tile
+### g10.shared-store-product-listing.US1-TC15: Photo draws as supplied in an available, on-sale or in-cart tile
 
 Runs once per row of **Test data**.
 
@@ -496,19 +542,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ProductCardImage` in the story the row names.
+* Storybook renders `ProductCardImage` in story `<story>`.
 
 **Test data:**
 
-| Tile status | Story | Photo |
+| `<tile status>` | `<story>` | Photo |
 | --- | --- | --- |
-| Available | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--default` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-| On sale | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--sale` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-| In cart | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--in-cart` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| Available | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--default` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| On sale | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--sale` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| In cart | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--in-cart` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui storybook url | The Grade10 UI Storybook URL in the test environment; bind its URL only |
+| white-fill photo url | The white-background product photo source selected in this fixture; bind its image URL only |
 
 **Steps:**
 
-1. Navigate to the row's story.
+1. Navigate to `<story>`.
 2. In the story's Controls panel, set the image source to `<white-fill photo url>`.
 3. Open `<white-fill photo url>` in a new tab.
 4. Compare the tile's photo with the file in that tab.
@@ -516,13 +567,13 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 shows the tile in the row's status, photo in its grey well.
+* Step 1 shows the tile in `<tile status>`, photo in its grey well.
 * Step 4: the photo's white fill reads white, as in the file.
 * Step 4: the photo's colours match the file, with no grey cast.
 * Step 5: the photo's computed blend mode is `normal`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-ema rev=1 covers=g10.shared-store-product-listing.SC-ta3 -->
-### shared-ui-store-product-listing-US1-TC16-1: Sold-out photo draws as supplied under the sold-out treatment
+### g10.shared-store-product-listing.US1-TC16: Sold-out photo draws as supplied under the sold-out treatment
 
 Runs once per row of **Test data**.
 
@@ -541,18 +592,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ProductCardImage` sold out, in the story the row names.
+* Storybook renders `ProductCardImage` sold out, in story `<story>`.
 
 **Test data:**
 
-| Where the tile is | Story | Photo |
+| Surface | `<story>` | Photo |
 | --- | --- | --- |
-| A surface that sells, where the tile stays inert | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--sold-out` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-| A surface that does not sell, where the tile opens | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--sold-out-with-handler` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| A surface that sells, where the tile stays inert | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--sold-out` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| A surface that does not sell, where the tile opens | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--sold-out-with-handler` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui storybook url | The Grade10 UI Storybook URL in the test environment; bind its URL only |
+| white-fill photo url | The white-background product photo source selected in this fixture; bind its image URL only |
 
 **Steps:**
 
-1. Navigate to the row's story.
+1. Navigate to `<story>`.
 2. In the story's Controls panel, set the image source to `<white-fill photo url>`.
 3. Inspect the photo in the browser's developer tools.
 
@@ -563,7 +619,7 @@ Runs once per row of **Test data**.
 * Step 3: the photo's computed blend mode is `normal`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-5u0 rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
-### shared-ui-store-product-listing-US1-TC17-1: Every store surface drawing the tile shows the photo as supplied
+### g10.shared-store-product-listing.US1-TC17: Every store surface drawing the tile shows the photo as supplied
 
 Runs once per row of **Test data**.
 
@@ -586,15 +642,21 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Surface | Where | Product |
+| Surface | `<page>` | Product |
 | --- | --- | --- |
 | Product listing | `<grade10 store url>/store/collections`, the tile of `<white-fill product>` | `<white-fill product>`, for sale, its photo on a white studio fill, wider than it is tall |
 | Store home's row of cards | `<grade10 store url>/store`, the merchandised row, the tile of `<white-fill product>` | `<white-fill product>`, for sale, its photo on a white studio fill, wider than it is tall |
 | You May Also Like | `<grade10 store url>/store/products/<a product whose rail lists it>`, the rail's tile of `<white-fill product>` | `<white-fill product>`, for sale, its photo on a white studio fill, wider than it is tall |
 
+| Field | Value |
+| --- | --- |
+| a product whose rail lists it | A staged product included in the product rail under test; bind its product identity only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| white-fill product | The staged product with the white-background photo used by this case; bind its product identity only |
+
 **Steps:**
 
-1. Navigate to the row's page.
+1. Navigate to `<page>`.
 2. Scroll to the tile of `<white-fill product>`.
 3. Open the tile photo's file in a new tab.
 4. Compare the tile's photo with the file in that tab.
@@ -607,7 +669,7 @@ Runs once per row of **Test data**.
 * Step 5: the photo's computed blend mode is `normal`.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-pov rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
-### shared-ui-store-product-listing-US1-TC18-1: Non-square photo shows whole in every tile status
+### g10.shared-store-product-listing.US1-TC18: Non-square photo shows whole in every tile status
 
 Runs once per row of **Test data**.
 
@@ -631,32 +693,32 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Status | Outcome |
+| `<status>` | Expected outcome |
 | --- | --- |
 | Available | whole photo, the well beside it |
 | On sale | whole photo, the well beside it |
 | Sold out | whole photo, faded, the well beside it |
 | In cart | whole photo, the well beside it |
 
-| Field | Value |
-| --- | --- |
-| `<portrait photo>` | `product-card.portrait.fixture.png`, taller than wide |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| portrait photo | product-card.portrait.fixture.png | taller than wide |
 
 **Steps:**
 
-1. Find the well that draws `<portrait photo>` in the row's **Status**.
+1. Find the well that draws `<portrait photo>` in `<status>`.
 2. Look at the photo's top and bottom edges.
 3. Look at the space left and right of the photo.
 
 **Expected Results:**
 
-* Step 1 shows the well square, in the row's **Status**.
+* Step 1 shows the well square, in `<status>`.
 * Step 2: the photo's top and bottom edges meet the well's top and bottom, nothing cut off.
 * Step 3: the well's own background fills an equal space on each side of the photo.
 * Sold out row: the whole photo is faded.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-vn1 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
-### shared-ui-store-product-listing-US1-TC19-1: Landscape, square and small photos each show whole
+### g10.shared-store-product-listing.US1-TC19: Landscape, square and small photos each show whole
 
 Runs once per row of **Test data**.
 
@@ -680,7 +742,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Story | Photo | Shape | Outcome |
+| `<story>` | `<photo>` | Shape | `<expected outcome>` |
 | --- | --- | --- | --- |
 | Non Square Photo | `<landscape photo>` | wider than tall | left and right edges meet the well; the well fills above and below equally |
 | Default | `<square photo>` | square, at the limit | the photo fills the well; no well shows beside it; only its corners round with the well's |
@@ -688,24 +750,24 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<landscape photo>` | `product-card.landscape.fixture.png` |
-| `<square photo>` | `product-card.fixture.png` |
-| `<small photo>` | `product-card.small.fixture.png` |
+| landscape photo | product-card.landscape.fixture.png |
+| square photo | product-card.fixture.png |
+| small photo | product-card.small.fixture.png |
 
 **Steps:**
 
-1. Open the row's **Story**.
-2. Find the available well that draws the row's **Photo**.
-3. Compare the well with the row's **Photo** opened on its own.
+1. Open `<story>`.
+2. Find the available well that draws `<photo>`.
+3. Compare the well with `<photo>` opened on its own.
 
 **Expected Results:**
 
 * Step 2 shows the well square.
-* Step 3 matches the row's **Outcome**.
-* Step 3: every edge of the photo opened on its own also shows in the well, all but the corners the row's **Outcome** rounds.
+* Step 3 matches `<expected outcome>`.
+* Step 3: every edge of the photo opened on its own also shows in the well, all but the corners `<expected outcome>` rounds.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-e18 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
-### shared-ui-store-product-listing-US1-TC20-1: Slab tile shows the whole slab on every store surface
+### g10.shared-store-product-listing.US1-TC20: Slab tile shows the whole slab on every store surface
 
 Runs once per row of **Test data**.
 
@@ -727,12 +789,12 @@ Runs once per row of **Test data**.
 * `<slab card>` is for sale on the staging storefront, its first photo `<slab photo>`.
 * `<slab card>` is in the Main Page's merchandised row, by the recipe "Put a card in the Main Page's merchandised row".
 * `<slab card>` is a pick on `<another card>`, by the recipe "Choose picks on a staging-shop card".
-* The browser window is the row's **Viewport** wide.
+* The browser window is `<viewport>` wide.
 * The pointer rests outside the tile for `<slab card>`.
 
 **Test data:**
 
-| Surface | Page | Viewport | Outcome |
+| Surface | `<page>` | `<viewport>` | Expected outcome |
 | --- | --- | --- | --- |
 | Store listing | `<grade10 browse listing url>` | 1440 pixels | whole slab in the tile |
 | Store listing | `<grade10 browse listing url>` | 390 pixels | whole slab in the tile |
@@ -741,13 +803,18 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<slab card>` | a graded slab for sale, not in the cart |
-| `<slab photo>` | a studio photo of the whole slab, label to base, taller than wide, shot on white so its edges show against the well |
-| `<another card>` | any other card for sale on the staging storefront |
+| slab card | a graded slab for sale, not in the cart |
+| slab photo | a studio photo of the whole slab, label to base, taller than wide, shot on white so its edges show against the well |
+| another card | any other card for sale on the staging storefront |
+
+| Field | Value |
+| --- | --- |
+| grade10 browse listing url | The Grade10 public browse-listing URL for `<slab card>` in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to the row's **Page**.
+1. Navigate to `<page>`.
 2. Scroll to the tile for `<slab card>`.
 3. Look at the slab's label at the top of the photo.
 4. Look at the slab's base at the bottom of the photo.

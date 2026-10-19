@@ -5,5 +5,33 @@
   "bioLabel": "소개",
   "editLabel": "프로필 수정",
   "emptyBio": "아직 소개가 없습니다.",
-  "memberSince": "{date}부터 함께하고 있습니다"
+  "memberSince": "{date}부터 함께하고 있습니다",
+  "chooseAvatar": "사진 선택",
+  "removeAvatar": "사진 삭제",
+  "avatarAlt": "내 프로필 사진",
+  "displayNameRequired": "표시 이름을 입력하세요.",
+  "displayNameTooLong": "표시 이름은 최대 {max}자까지 입력할 수 있습니다.",
+  "bioTooLong": "소개는 최대 {max}자까지 입력할 수 있습니다.",
+  "nothingToSave": "저장할 내용이 없습니다.",
+  "avatarType": "JPEG, PNG 또는 WebP 사진을 선택하세요.",
+  "avatarTooLarge": "사진은 최대 5MB까지 가능합니다.",
+  "saveFailed": "프로필을 저장하지 못했습니다. 다시 시도하세요.",
+  "consignments": {
+    "view": {
+      "new": "요청 접수됨",
+      "toprice": "입고됨",
+      "tosign": "서명 대기",
+      "tolist": "서명 완료",
+      "onsale": "판매 중",
+      "sold": "판매됨",
+      "payout": "지급 예정",
+      "ended": "종료: 다음 단계를 선택하세요",
+      "returning": "반송 중",
+      "closed": "완료"
+    },
+    "sellerLine": "판매자: {name}",
+    "sellerLineSub": "Grade10을 통해 판매하는 수집가입니다. 카드 보관, 결제 및 반품은 저희가 처리합니다.",
+    "lotSellerLine": "위탁자: {name}",
+    "lotSellerLineSub": "Grade10 경매를 통해 판매합니다. 카드 보관, 결제 및 인도는 저희가 처리합니다."
+  }
 }

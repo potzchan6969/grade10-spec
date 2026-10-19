@@ -6,7 +6,12 @@ hands:
   dev: "@seankcw"
 depends_on:
   - close-overdue-address-confirmation
-ui_waived: "The change moves the existing PDF renderer into the shared package
-  without adding a reader-facing layout or state."
 reviewed:
-  user-journeys: 0d8ef232
+  user-journeys: 344e8f11
+  proposal: 2ed196f0
+  decisions: f2cb2613
+  tech-design: 7b22fb75
+  test-cases: 4fc04cd0
+  ui-design: 5f5883fe
+  specs: 7dae3485
+  tasks: abcf99f1

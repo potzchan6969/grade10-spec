@@ -13,13 +13,13 @@ and load more as the shopper scrolls.
 
 ## Product Tile
 
-🚧 **Whole photo** - the square well shows the whole photo, centred and as
+**Whole photo** - the square well shows the whole photo, centred and as
 large as it fits; leftover space is the well, not a cropped edge. Where a photo
 reaches into the well's rounded corners, it rounds with them. Available, on
 sale, sold out and in cart all do this. A photo that grows on hover may lose its
 edges until the pointer leaves.
 
-🚧 **Photo as supplied** - the photo is not blended into the well. Available,
+**Photo as supplied** - the photo is not blended into the well. Available,
 on sale, sold out and in cart all do this; a sold-out photo takes its sold-out
 treatment over it.
 
@@ -28,14 +28,14 @@ does too, the same way the photo does, and shows it by an underline on hover
 and on keyboard focus; a sold-out tile's name stays inert where the tile
 sells, and a name that does not open is plain text.
 
-🚧 **One stop to open** - the name is the tile's only keyboard stop for
+**One stop to open** - the name is the tile's only keyboard stop for
 opening the product and the one control a screen reader announces for it, so
 each product is announced once; the photo opens on a pointer press only.
 
-🚧 **Photo on its own** - used without its tile, the photo opens where a tile
+**Photo on its own** - used without its tile, the photo opens where a tile
 would, and is its own keyboard stop, named for the product.
 
-🚧 **A link** - a tile that opens, given its product's page, is a link to
+**A link** - a tile that opens, given its product's page, is a link to
 it: it can open in a new tab, and its address can be copied -
 [You May Also Like](/p/grade10-site/store/cross-sell)'s tiles
 
@@ -44,7 +44,7 @@ a sold-out tile still opens its product, sold-out treatment and all -
 [You May Also Like](/p/grade10-site/store/cross-sell), and the
 [Main Page](/p/grade10-site/store/home)'s row of cards
 
-🚧 **No cart words where it does not sell** - a tile that draws no cart
+**No cart words where it does not sell** - a tile that draws no cart
 control needs no cart word from the surface
 
 **Cart on a small screen** - where the tile sells, the round cart control
@@ -53,7 +53,7 @@ viewport with a fine pointer it still appears on hover or keyboard focus.
 
 ## Adaptive Filter
 
-🚧 **Narrow pills** — below the wide breakpoint: result count and pills for
+**Narrow pills** — below the wide breakpoint: result count and pills for
 sort and each facet group; bottom drawers; no listing search. Facet drawers
 draft until Show Results. Wide keeps the sidebar and chip header.
 
@@ -62,12 +62,12 @@ draft until Show Results. Wide keeps the sidebar and chip header.
 On a wide viewport the listing search field sits with the filters. Narrow
 chrome has no search. The application decides which hits to show.
 
-- 🚧 **Supplied groups** — while they type, the field shows the product and
+- **Supplied groups** — while they type, the field shows the product and
   filter groups it is given; it invents none
-- 🚧 **Searching and empty** — while hits resolve it shows searching and
+- **Searching and empty** — while hits resolve it shows searching and
   invents no row; when nothing matched it says so; Enter still reports a
   commit either way
-- 🚧 **Commit and pick** — submitting with no row highlighted reports a
+- **Commit and pick** — submitting with no row highlighted reports a
   search commit; activating a row reports that suggestion; the surface does
   not navigate or apply filters
 
@@ -127,17 +127,17 @@ The tile reports the quantity change and the application updates the cart.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155" title="Product Card — historical, superseded by Storybook"}
 
-::story{id="store-product-listing-productbrowse--default" title="The whole browse surface"}
+::story{id="store-product-listing-blocks-productbrowse--default" title="The whole browse surface"}
 
-::story{id="store-product-listing-productbrowse-states--no-match" title="A search that matched nothing"}
+::story{id="store-product-listing-blocks-productbrowse-states--no-match" title="A search that matched nothing"}
 
-::story{id="store-product-listing-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
+::story{id="store-product-listing-blocks-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
 
-::story{id="store-product-listing-productcardimage--default" title="The whole photo in the well"}
+::story{id="store-product-listing-blocks-productcardimage--non-square-photo" title="The whole photo in the well"}
 
-::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}
+::story{id="store-product-listing-blocks-productcardimage--sold-out" title="A sold-out product tile"}
 
-::story{id="store-product-listing-productcard--sold-out-opens-where-nothing-sells" title="A sold-out tile that opens where nothing sells"}
+::story{id="store-product-listing-blocks-productcard--sold-out-opens-where-nothing-sells" title="A sold-out tile that opens where nothing sells"}
 
 :::detail{title="Product decisions" for="pm"}
 The surface displays what a consuming application supplies and decides none of

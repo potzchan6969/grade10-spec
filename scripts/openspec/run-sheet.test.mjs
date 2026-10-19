@@ -39,6 +39,7 @@ import {
   SURFACE_END,
   SURFACES,
   summaryRows,
+  tabOrderRequests,
   tabTitle,
 } from "./lib/run-sheet-layout.mjs";
 import {
@@ -47,11 +48,11 @@ import {
   caseRow,
   caseRows,
   inReadingOrder,
+  matchesChangedScope,
   selectCases,
   surfacePrefill,
-  walkBand,
 } from "./lib/select-cases.mjs";
-import { isAutomated, parseSuite } from "./lib/suites.mjs";
+import { isAutomated, parseSuite, parseWalks } from "./lib/suites.mjs";
 
 const SUITE = `# demo/thing/widget Test Cases
 
@@ -187,6 +188,140 @@ const candidates = journey.cases.map((tc) => ({
   },
   tc: { ...tc, journey },
 }));
+
+const MODERN_SUITE = `# demo/thing/widget Test Cases
+
+**Status:** pending-review · 0/2
+
+## Walk 1: Fill and confirm
+
+### Route
+
+1. Fill the form.
+
+## demo-thing-widget-US1: Somebody does a thing
+
+**As a** collector,
+**I want** a thing,
+**so that** it is done.
+
+### g10.auction-account-record.TC-s25 (US1-TC1): The thing happens
+
+**Steps:**
+
+1. Open the thing.
+
+**Expected Results:**
+
+* The thing is open.
+
+## Ungrouped
+
+### demo-thing-widget-US1: Somebody does a thing
+
+#### g10.auction-account-record.TC-k8m (US1-TC2): The other thing happens
+
+**Steps:**
+
+1. Open the other thing.
+
+**Expected Results:**
+
+* The other thing is open.
+`;
+
+test("a modern case heading and an ungrouped case keep their references", () => {
+  const modern = parseSuite(MODERN_SUITE);
+  assert.equal(modern.journeys.length, 2);
+  assert.equal(
+    modern.journeys[0].cases[0].id,
+    "g10.auction-account-record.TC-s25",
+  );
+  assert.equal(modern.journeys[0].cases[0].modern, true);
+  assert.equal(modern.journeys[1].ungrouped, true);
+  assert.equal(
+    modern.journeys[1].cases[0].id,
+    "g10.auction-account-record.TC-k8m",
+  );
+});
+
+test("the human-facing US/TC case heading parses without a duplicate local reference", () => {
+  const parsed = parseSuite(
+    [
+      "## g10.auction-bidder-suspension.US1: A bidder is suspended",
+      "",
+      "### g10.auction-bidder-suspension.US1-TC1: An expired invoice suspends bidding",
+      "",
+      "**Steps:**",
+      "",
+      "1. Open the auction.",
+      "",
+      "**Expected Results:**",
+      "",
+      "* Bidding is suspended.",
+    ].join("\n"),
+  );
+  assert.equal(parsed.journeys[0].raw, "g10.auction-bidder-suspension.US1");
+  assert.equal(
+    parsed.journeys[0].cases[0].id,
+    "g10.auction-bidder-suspension.US1-TC1",
+  );
+  assert.equal(parsed.journeys[0].cases[0].journeyNum, 1);
+  assert.equal(parsed.journeys[0].cases[0].tcNum, 1);
+});
+
+test("walk parsing keeps stable case refs and their local US/TC references", () => {
+  const [walk] = parseWalks(
+    [
+      "## Walk 1: Fill and confirm",
+      "",
+      "### Route",
+      "",
+      "1. Open the form.",
+      "   - The form is open. `TC-s25 (US1-TC2)`",
+      "2. Submit a valid form.",
+      "   a. The form is accepted. `TC-k8m (US2-TC3)`",
+    ].join("\n"),
+  );
+  assert.equal(walk.title, "Walk 1: Fill and confirm");
+  assert.deepEqual(walk.refs, [
+    { id: "tc-s25", journeyNum: 1, tcNum: 2, line: 6 },
+    { id: "tc-k8m", journeyNum: 2, tcNum: 3, line: 8 },
+  ]);
+});
+
+test("a composed walk parses a full lower-level case id and ignores pairing checks", () => {
+  const [walk] = parseWalks(
+    [
+      "## Walk 1: Admin publishes, site displays",
+      "",
+      "### Route",
+      "",
+      "1. Admin creates `listing_a`.",
+      "   - Pairing check: record the listing id.",
+      "   - `g10adm.auction-listing.TC-2hq (US1-TC1)`",
+      "2. Site opens the same listing id.",
+      "   - Pairing check: the site id matches the admin id.",
+      "   - `g10.auction-listing-page.TC-8kx (US1-TC1)`",
+    ].join("\n"),
+  );
+  assert.deepEqual(walk.refs, [
+    {
+      id: "tc-2hq",
+      caseId: "g10adm.auction-listing.tc-2hq",
+      journeyNum: 1,
+      tcNum: 1,
+      line: 7,
+    },
+    {
+      id: "tc-8kx",
+      caseId: "g10.auction-listing-page.tc-8kx",
+      journeyNum: 1,
+      tcNum: 1,
+      line: 10,
+    },
+  ]);
+});
 
 test("a case carries the text of its steps, not only their count", () => {
   const [tc] = journey.cases;
@@ -443,15 +578,15 @@ test("a run table prints once per value row, with the cell in square brackets", 
   );
   assert.equal(
     at(rows[0], "Expected results"),
-    "Step 3 no longer lists [The session naming the site].\nStep 3 lists only [The session naming the console].",
+    "- Step 3 no longer lists [The session naming the site].\n- Step 3 lists only [The session naming the console].",
   );
   assert.equal(
     at(rows[0], "Pre-conditions"),
-    "<subject account> holds [The session naming the site].",
+    "`<subject account>` holds `<session to end>`.",
   );
   assert.equal(
     at(rows[0], "Test data"),
-    "<session to end>: The session naming the site\n<session that remains>: The session naming the console",
+    "- session to end: The session naming the site\n- session that remains: The session naming the console",
   );
   assert.equal(at(rows[0], "Web"), "to_do");
   assert.equal(at(rows[0], "Auto web"), "n/a");
@@ -459,32 +594,32 @@ test("a run table prints once per value row, with the cell in square brackets", 
   assert.equal(at(rows[0], "Steps").includes("Runs once per row"), false);
 });
 
-test("shared Field | Value stays in the cell, and a plain column is not filled into the sentence", () => {
+test("shared Field | Value fills steps on each row; preconditions keep placeholders", () => {
   const rows = caseRows(perRowCase(1));
   assert.equal(rows.length, 2);
   assert.equal(
     at(rows[1], "Pre-conditions"),
-    "customer is on <grade10 sign-in url> naming [<zzz sign-in url>], signed out.",
+    "customer is on `<grade10 sign-in url>` naming `<off-brand location>`, signed out.",
   );
   assert.equal(
     at(rows[1], "Steps"),
-    "1. Submit <collector email> at the email step.\n2. Follow the link.",
+    "1. Submit [collector@example.com, an address with an account] at the email step.\n2. Follow the link.",
   );
   assert.equal(
     at(rows[1], "Expected results"),
-    "The collector lands on this brand.\nThe collector is not sent to [<zzz sign-in url>].\nGrade10 answers as the row states.",
+    "- The collector lands on this brand.\n- The collector is not sent to [<zzz sign-in url>].\n- Grade10 answers as the row states.",
   );
   assert.equal(
     at(rows[0], "Expected results"),
-    "The collector lands on this brand.\nThe collector is not sent to [https://collector-rewards.example.com/claim].\nGrade10 answers as the row states.",
+    "- The collector lands on this brand.\n- The collector is not sent to [https://collector-rewards.example.com/claim].\n- Grade10 answers as the row states.",
   );
   assert.equal(
     at(rows[1], "Test data"),
-    "`<collector email>`: collector@example.com, an address with an account\n`<off-brand location>`: <zzz sign-in url>\n`<why it is off brand>`: another brand of this store",
+    "- collector email: collector@example.com, an address with an account\n- off-brand location: <zzz sign-in url>\n- why it is off brand: another brand of this store",
   );
 });
 
-test("a name inside a run cell stays, and the shared name in the sentence stays", () => {
+test("a filled cell is not recursively expanded; shared slots outside it are filled", () => {
   const [row] = caseRows(perRowCase(2));
   assert.equal(
     at(row, "Steps"),
@@ -492,15 +627,15 @@ test("a name inside a run cell stays, and the shared name in the sentence stays"
   );
   assert.equal(
     at(row, "Expected results"),
-    "The person enters [the same account, not a second one].\nNo second account exists for <link-created email>.",
+    "- The person enters [the same account, not a second one].\n- No second account exists for [collector-link@example.com, an account created by an emailed link].",
   );
   assert.equal(
     at(row, "Pre-conditions"),
-    "<link-created email> has an account created by an emailed link.",
+    "`<link-created email>` has an account created by an emailed link.",
   );
   assert.equal(
     at(row, "Test data"),
-    "`<link-created email>`: collector-link@example.com, an account created by an emailed link\n`<method>`: A later emailed link at <link-created email>\n`<outcome>`: the same account, not a second one",
+    "- link-created email: collector-link@example.com, an account created by an emailed link\n- method: A later emailed link at <link-created email>\n- outcome: the same account, not a second one",
   );
 });
 
@@ -508,20 +643,23 @@ test("a header matches case-sensitively, so Closed lot does not fill <closed lot
   const [row] = caseRows(perRowCase(3));
   assert.equal(
     at(row, "Pre-conditions"),
-    "<closed lot> is closed as the row states.",
+    "`<closed lot>` is closed as the row states.",
   );
-  assert.equal(at(row, "Steps"), "1. Navigate to <closed lot url>.");
+  assert.equal(at(row, "Steps"), "1. Navigate to `<closed lot url>`.");
   assert.equal(
     at(row, "Test data"),
-    "Closed lot: Sold, with a winner\nViewer: customer(signed in)",
+    "- Closed lot: Sold, with a winner\n- Viewer: customer(signed in)",
   );
 });
 
-test("a column table without the per-row line stays one row, unfilled", () => {
+test("a single-row column table fills a case without expanding it", () => {
   const rows = caseRows(perRowCase(4));
   assert.equal(rows.length, 1);
-  assert.equal(at(rows[0], "Steps"), "1. End <session to end>.");
-  assert.equal(at(rows[0], "Expected results"), "<session to end> is gone.");
+  assert.equal(at(rows[0], "Steps"), "1. End [The session naming the site].");
+  assert.equal(
+    at(rows[0], "Expected results"),
+    "- [The session naming the site] is gone.",
+  );
 });
 
 test("a per-row case adds one grid line per value row", () => {
@@ -557,6 +695,21 @@ test("a durable suite wins when a change repeats the case id", () => {
   });
   assert.equal(picked[0].read.rel, base.read.rel);
   assert.equal(picked[0].tc.title, base.tc.title);
+});
+
+test("changed-since selection follows the suite scope without selecting by scenario text", () => {
+  const feature = candidates[0].read;
+  assert.equal(
+    matchesChangedScope(feature, ["docs/prds/products/demo/thing/widget.md"]),
+    true,
+  );
+  assert.equal(
+    matchesChangedScope(feature, [
+      "docs/prds/products/demo/other-capability.md",
+    ]),
+    false,
+  );
+  assert.equal(matchesChangedScope(feature, []), true);
 });
 
 test("shared-planning-agent-rounds-SC-61 - an automated case is left out by default, and reported", () => {
@@ -685,9 +838,9 @@ test("a row carries the case, its prefilled results, and its filter axes", () =>
   );
   assert.equal(
     at(row, "Expected results"),
-    "The thing is open.\nIt reads true.",
+    "- The thing is open.\n- It reads true.",
   );
-  assert.equal(at(row, "Test data"), "`<a thing>`: A thing worth 12000000");
+  assert.equal(at(row, "Test data"), "- a thing: A thing worth 12000000");
   assert.equal(at(row, "Product"), "demo");
   assert.equal(at(row, "Domain"), "thing");
   assert.equal(at(row, "Capability"), "widget");
@@ -818,10 +971,10 @@ test("journeys of two files fold under their capability paths", () => {
   const caps = lines
     .map((line, i) => (line.kind === "capability" ? rows[i][0] : null))
     .filter(Boolean);
-  assert.deepEqual(caps, ["shared/auth/sign-out", "demo/thing/widget"]);
+  assert.deepEqual(caps, ["demo/thing/widget", "shared/auth/sign-out"]);
 });
 
-test("a run walks shared, Grade10 site, the store, admin, then ZZZ", () => {
+test("a run follows specs folder order rather than fixed product bands", () => {
   const paths = [
     "openspec/specs/zzz-admin/site/home/feature-tcs.md",
     "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
@@ -843,22 +996,15 @@ test("a run walks shared, Grade10 site, the store, admin, then ZZZ", () => {
   assert.deepEqual(
     inReadingOrder(picked).map((one) => one.read.rel),
     [
-      "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+      "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
       "openspec/specs/grade10-site/analytics/home/feature-tcs.md",
       "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
       "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
-      "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
-      "openspec/specs/zzz-site/site/home/feature-tcs.md",
+      "openspec/specs/shared/auth/sign-in/feature-tcs.md",
       "openspec/specs/zzz-admin/site/home/feature-tcs.md",
+      "openspec/specs/zzz-site/site/home/feature-tcs.md",
     ],
   );
-  assert.equal(
-    walkBand(
-      "openspec/changes/some-change/specs/grade10-site/store/checkout/feature-tcs.md",
-    ),
-    2,
-  );
-  assert.equal(walkBand("openspec/specs/demo/thing/widget/feature-tcs.md"), 6);
 });
 
 test("admin banners use the fall orange, product banners the noble green", () => {
@@ -886,10 +1032,16 @@ test("draft stone grey is not the result to_do grey", () => {
   assert.notDeepEqual(DRAFT_BACKGROUND, RESULT_COLORS.to_do);
 });
 
-test("env defaults to staging and refuses anything else", () => {
+test("tester environment defaults to staging-1 and rejects print targets", () => {
   assert.equal(envOf(undefined), DEFAULT_ENV);
-  assert.equal(envOf(""), "staging");
-  assert.equal(envOf("Production"), "production");
+  assert.equal(envOf(""), "staging-1");
+  assert.equal(envOf("Production"), "prod");
+  assert.equal(envOf("staging"), "staging-1");
+  for (const env of ["staging-1", "staging-2", "uat", "preview", "prod"]) {
+    assert.equal(envOf(env), env);
+  }
+  assert.equal(envOf("sandbox"), null);
+  assert.equal(envOf(" UAT "), "uat");
   assert.equal(envOf("lab"), null);
 });
 
@@ -1036,4 +1188,246 @@ test("shared-planning-agent-rounds-SC-78 - a left-out case naming no test says s
     "  demo-thing-widget-US1-TC9-1 - decided by no named test",
     "  demo-thing-widget-US1-TC8-1 - scripts/a.test.mjs, tools/manual/test/b.test.ts",
   ]);
+});
+
+test("a single shared setup fills Steps and Expected, never Pre-conditions", () => {
+  const one = candidates[0];
+  const tc = {
+    ...one.tc,
+    perRow: false,
+    preconditions: "customer(not watching `<lot_2>`) is on <lot_2 url>.",
+    tables: [
+      {
+        headers: ["Field", "Value"],
+        rows: [
+          ["lot_2", "An open lot taking bids"],
+          ["first bid", "The next valid bid shown on the bid panel"],
+        ],
+      },
+    ],
+    stepTexts: [
+      "Place `<first bid>` from the bid panel.",
+      "Reload <lot_2 url>.",
+    ],
+    expectedTexts: ["<lot_2> shows once, Your Standing Leading."],
+  };
+  const [row] = caseRows({ ...one, tc });
+  assert.equal(
+    at(row, "Steps"),
+    "1. Place [The next valid bid shown on the bid panel] from the bid panel.\n2. Reload `<lot_2 url>`.",
+  );
+  assert.equal(
+    at(row, "Expected results"),
+    "- [An open lot taking bids] shows once, Your Standing Leading.",
+  );
+  assert.equal(
+    at(row, "Pre-conditions"),
+    "customer(not watching `<lot_2>`) is on `<lot_2 url>`.",
+  );
+});
+
+test("trace marker suffix is printed without changing the selected id", () => {
+  const marked = parseSuite(
+    SUITE.replace(
+      "### demo-thing-widget-US1-TC1-1:",
+      "<!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=3 covers=g10.auction-bid-increments.SC-vqb -->\n### demo-thing-widget-US1-TC1-1:",
+    ),
+  );
+  const tc = marked.journeys[0].cases[0];
+  assert.equal(tc.markerId, "g10.auction-bid-increments.TC-kyx");
+  assert.equal(tc.markerRev, 3);
+  assert.equal(marked.journeys[0].cases[1].markerId, null);
+  assert.equal(
+    at(caseRow({ ...candidates[0], tc }), "Case ID"),
+    "demo-thing-widget-US1-TC1-1 (TC-kyx)",
+  );
+  assert.equal(tc.id, "demo-thing-widget-US1-TC1-1");
+});
+
+test("unsorted selection is grouped once by folder and numerically by US and TC", () => {
+  const read = {
+    rel: "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+    capabilityId: "grade10-site/auction/listing-page",
+    level: "feature",
+  };
+  const picked = [
+    [12, 20],
+    [1, 12],
+    [2, 1],
+    [12, 1],
+    [1, 2],
+    [1, 1],
+  ].map(([us, tc]) => ({
+    read,
+    tc: {
+      ...candidates[0].tc,
+      perRow: false,
+      journeyNum: us,
+      tcNum: tc,
+      id: `g10.auction-listing-page.US${us}-TC${tc}`,
+      journey: {
+        raw: `g10.auction-listing-page.US${us}`,
+        title: `Journey ${us}`,
+      },
+    },
+  }));
+  const grid = buildGrid(picked);
+  assert.deepEqual(
+    grid.lines
+      .filter((line) => line.kind === "case")
+      .map((line) => line.one.tc.id),
+    [
+      "g10.auction-listing-page.US1-TC1",
+      "g10.auction-listing-page.US1-TC2",
+      "g10.auction-listing-page.US1-TC12",
+      "g10.auction-listing-page.US2-TC1",
+      "g10.auction-listing-page.US12-TC1",
+      "g10.auction-listing-page.US12-TC20",
+    ],
+  );
+  assert.equal(
+    grid.lines.filter((line) => line.kind === "capability").length,
+    1,
+  );
+  assert.equal(grid.rows[0][0], "grade10-site/auction/listing-page");
+  assert.deepEqual(
+    grid.lines
+      .filter((line) => line.kind === "journey")
+      .map((line) => line.key),
+    [
+      "g10.auction-listing-page.US1",
+      "g10.auction-listing-page.US2",
+      "g10.auction-listing-page.US12",
+    ],
+  );
+});
+
+test("explicit duplicate ids print only once", () => {
+  const result = selectCases(candidates, {
+    ids: [candidates[0].tc.id, candidates[0].tc.id],
+  });
+  assert.equal(result.picked.length, 1);
+});
+
+test("several values for one shared field stay visible without choosing an arbitrary value", () => {
+  const one = candidates[0];
+  const tc = {
+    ...one.tc,
+    perRow: false,
+    tables: [
+      {
+        headers: ["Field", "Value"],
+        rows: [
+          ["media type", "JPEG"],
+          ["media type", "PNG"],
+          ["lot", "An open lot"],
+        ],
+      },
+    ],
+    stepTexts: ["Upload <media type> to <lot>."],
+    expectedTexts: ["<media type> is accepted."],
+  };
+  const [row] = caseRows({ ...one, tc });
+  assert.equal(at(row, "Steps"), "1. Upload `<media type>` to [An open lot].");
+  assert.equal(at(row, "Expected results"), "- `<media type>` is accepted.");
+});
+
+test("tabs follow Summary in descending numeric run order", () => {
+  const sheets = [
+    { properties: { sheetId: 1, title: "2-older" } },
+    { properties: { sheetId: 2, title: "_Run records" } },
+    { properties: { sheetId: 3, title: "10-latest" } },
+    { properties: { sheetId: 4, title: "5-reprinted" } },
+    { properties: { sheetId: 9, title: "Summary" } },
+    { properties: { sheetId: 8, title: "Notes" } },
+  ];
+  assert.deepEqual(
+    tabOrderRequests(sheets, 9).map((request) => request.updateSheetProperties),
+    [
+      { properties: { sheetId: 9, index: 0 }, fields: "index" },
+      { properties: { sheetId: 3, index: 1 }, fields: "index" },
+      { properties: { sheetId: 4, index: 2 }, fields: "index" },
+      { properties: { sheetId: 1, index: 3 }, fields: "index" },
+    ],
+  );
+});
+
+test("expanded rows retain only shared data used by that row, including preconditions and indirect dependencies", () => {
+  const one = candidates[0];
+  const tc = {
+    ...one.tc,
+    perRow: true,
+    preconditions: "<listing> exists; <unavailable url> has no listing.",
+    stepTexts: ["Fetch <surface>.", "Open <sitemap url>."],
+    expectedTexts: ["The head names <identity>.", "Status is <status>."],
+    tables: [
+      {
+        headers: ["`<surface>`", "`<identity>`", "`<status>`"],
+        rows: [
+          ["Catalogue at <auction url>", "Catalogue title", "200"],
+          ["<listing>'s address", "<listing>'s title", "200"],
+          ["<unavailable url>", "Not found", "404"],
+        ],
+      },
+      {
+        headers: ["Field", "Value"],
+        rows: [
+          ["listing", "A published listing"],
+          ["unavailable url", "An absent listing address"],
+          ["auction url", "<base url>/auction"],
+          ["base url", "https://example.com"],
+          ["sitemap url", "https://example.com/sitemap"],
+          ["unused", "Do not print"],
+          ["surface", "Overridden by this row"],
+        ],
+      },
+    ],
+  };
+  const rows = caseRows({ ...one, tc });
+  assert.equal(rows.length, 3);
+  for (const row of rows) {
+    const data = at(row, "Test data");
+    assert.ok(data.includes("- listing: A published listing"));
+    assert.ok(data.includes("- unavailable url: An absent listing address"));
+    assert.ok(data.includes("- sitemap url: https://example.com/sitemap"));
+    assert.equal(data.includes("unused:"), false);
+    assert.equal(data.includes("Overridden by this row"), false);
+    assert.equal(data.includes("`<surface>`:"), false);
+  }
+  assert.ok(
+    at(rows[0], "Test data").includes("- auction url: <base url>/auction"),
+  );
+  assert.ok(
+    at(rows[0], "Test data").includes("- base url: https://example.com"),
+  );
+  assert.equal(at(rows[1], "Test data").includes("auction url:"), false);
+  assert.equal(at(rows[2], "Test data").includes("base url:"), false);
+  assert.ok(at(rows[2], "Test data").endsWith("- status: 404"));
+  assert.equal(
+    at(rows[0], "Expected results"),
+    "- The head names [Catalogue title].\n- Status is [200].",
+  );
+});
+
+test("shared data dependency cycles terminate and unused cycles stay out", () => {
+  const tc = {
+    ...candidates[0].tc,
+    perRow: true,
+    preconditions: "None.",
+    stepTexts: ["Read <surface>."],
+    expectedTexts: ["It is visible."],
+    tables: [
+      { headers: ["surface"], rows: [["<a>"]] },
+      {
+        headers: ["Field", "Value"],
+        rows: [
+          ["a", "<b>"],
+          ["b", "<a>"],
+          ["unused", "<unused>"],
+        ],
+      },
+    ],
+  };
+  const [row] = caseRows({ ...candidates[0], tc });
+  assert.equal(at(row, "Test data"), "- a: <b>\n- b: <a>\n- surface: <a>");
 });

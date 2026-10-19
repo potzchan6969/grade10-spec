@@ -21,24 +21,18 @@ name: Manual
 # against a local dev server, never here.
 
 on:
+  # Every push, unfiltered: the open page's banner promises the site rebuilds
+  # on its own, and a path filter made that false on every push touching none
+  # of the watched paths.
   push:
     branches: [main]
-    paths:
-      - "tools/manual/**"
-      - "tools/openspec-viewer"
-      - "scripts/openspec-viewer/**"
-      - "docs/prds/**"
-      - "docs/references/**"
-      - "openspec/**"
-      - "packages/design-system/**"
-      - "packages/ui/**"
-      - ".design-sync/**"
-      - ".github/workflows/manual.yml"
-      - "package.json"
-  # Design sync dispatches this after committing a changed report. A push made
-  # with the default GITHUB_TOKEN triggers no workflow, so the paths entry above
-  # cannot carry the nightly's verdict on its own — that is what left a
-  # designer-side rename waiting for the next unrelated engineer push.
+  # Lint's Biome fix push, and Design sync's report commit, are made with the
+  # default GITHUB_TOKEN, which starts no workflow; this catches the first up
+  # once Lint finishes, and Design sync dispatches below.
+  workflow_run:
+    workflows: [Lint]
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
   repository_dispatch:
     types: [deployment-evidence-updated]
@@ -122,7 +116,11 @@ jobs:
       - name: Check the manual
         run: pnpm run check:manual:pages
 
+      # The banner on an open page listens to the relay this names; with the
+      # variable unset the build writes no relay and the banner stays dark.
       - name: Build
+        env:
+          RELAY_URL: ${{ vars.RELAY_URL }}
         run: pnpm run manual:build
 
       - name: Deploy

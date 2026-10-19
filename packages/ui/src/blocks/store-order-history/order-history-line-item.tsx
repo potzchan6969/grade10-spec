@@ -52,7 +52,7 @@ function OrderHistoryLineItem({
         {imageSrc ? (
           <img
             alt={imageAlt}
-            className="absolute inset-0 size-full object-cover"
+            className="absolute inset-0 size-full object-contain"
             src={imageSrc}
           />
         ) : null}
@@ -63,7 +63,7 @@ function OrderHistoryLineItem({
         hAlign="stretch"
         vAlign="center"
       >
-        <p className="w-full font-medium">{product}</p>
+        <p className="line-clamp-2 w-full font-medium">{product}</p>
         <p className="w-full font-normal">{total}</p>
       </VStack>
     </div>

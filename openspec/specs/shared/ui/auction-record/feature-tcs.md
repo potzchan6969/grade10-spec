@@ -3,14 +3,14 @@
 **Status:** pending-review · 0/1
 **Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## shared-ui-auction-record-US1: Content ownership
+## g10.shared-auction-record.US1: Content ownership
 
 **As an** application,
 **I want** the shared record surface to render supplied status copy,
 **so that** order-state vocabulary stays owned by the application.
 
 <!-- trace:case id=g10.shared-auction-record.TC-6rs rev=1 covers=g10.shared-auction-record.SC-bab,g10.shared-auction-record.SC-jun,g10.shared-auction-record.SC-tft,g10.shared-auction-record.SC-xe3,g10.shared-auction-record.SC-rup -->
-### shared-ui-auction-record-US1-TC1-1: The record surface calls the mixed column Status
+### g10.shared-auction-record.US1-TC1: The record surface calls the mixed column Status
 
 **Classification:**
 

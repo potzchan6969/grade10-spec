@@ -4,7 +4,7 @@ import { StoreHomeHero } from "./store-home-hero";
 import heroImage from "./store-home-hero.fixture.png";
 
 const meta = {
-  title: "Store Home/StoreHomeHero",
+  title: "Store/Home/Blocks/StoreHomeHero",
   component: StoreHomeHero,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

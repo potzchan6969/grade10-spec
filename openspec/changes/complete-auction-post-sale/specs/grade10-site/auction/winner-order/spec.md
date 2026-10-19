@@ -19,42 +19,60 @@
 
 ### Requirement: The winner chooses a payment method with the address
 
-The winner picks card or bank transfer at the same time as the delivery
-address, and the pick locks with it.
+The winner picks a settlement currency and a payment method at the same time as
+the delivery address, and the picks lock with it.
 
 **Chosen with the address** - When the winner confirms a delivery address on
 an auction order, Winner Order SHALL also ask how they will pay:
 
-1. Choose card or bank transfer.
-2. Read the fee range Grade10 sets for each method.
-3. Confirm the address and the method together.
+1. Choose USD or HKD as the settlement currency, per "The winner chooses a
+   settlement currency at order setup".
+2. Choose a payment method that currency offers.
+3. Read the fee range Grade10 sets for each method.
+4. Confirm the address, the currency and the method together.
 
-**No preselection** - Grade10 SHALL preselect neither method and SHALL record
-the chosen method on the order.
+**No preselection** - Grade10 SHALL preselect no currency and no method, and
+SHALL record the chosen method on the order. Until the winner picks a
+currency, Winner Order SHALL offer no method.
 
-**Fee range at the choice** - The fee range for each method SHALL be fixed
-text Grade10 sets:
+**Methods by currency** - The methods follow the settlement currency picked:
+
+| Settlement currency | Methods offered |
+| --- | --- |
+| HKD | Card, FPS, HK Local |
+| USD | Card, HK Local, International via SWIFT |
+
+FPS, HK Local and International via SWIFT are bank rails. Each rail SHALL be
+its own choice at setup, and Grade10 SHALL NOT offer one bank transfer choice
+that lists the rails after the winner confirms. A rail is a bank transfer
+method, and the order SHALL record the rail the winner picked.
+
+**Fee range at the choice** - The fee range for each method SHALL be text
+Grade10 sets:
 
 | Method | Reads |
 | --- | --- |
-| Card | `Card fee about 3.4% + a fixed amount` |
-| Bank transfer | `Bank fee set on your invoice` |
+| Card | `Card fee about {percentage}% + a fixed amount` |
+| FPS, HK Local, International via SWIFT | `Bank fee set on your invoice` |
 
-The bank transfer text SHALL name no amount, since an operator sets that fee
-on the invoice.
+`{percentage}` SHALL be the percentage of the card fee rule Payment Settings
+holds for the currency picked, as Finance saved it. Finance MAY set it to any
+value Payment Settings accepts, and the text SHALL read that value, not a fixed
+figure. The bank rail text SHALL name no amount, since an operator sets that
+fee on the invoice.
 
 **Offered where Grade10 can take it** - Grade10 SHALL offer each method only
 where it can take the payment:
 
 | Method | Offered where |
 | --- | --- |
-| Card | Payment Settings holds a card fee rule for the order's currency, per `grade10-admin/auction/payment-settings` |
-| Bank transfer | Grade10 holds bank details for the order's currency |
+| Card | Payment Settings holds a card fee rule for the settlement currency, per `grade10-admin/auction/payment-settings` |
+| A bank rail | Grade10 holds that rail's bank details |
 
 | Where | Bank details Grade10 holds |
 | --- | --- |
-| Outside production | A sample HKD account |
-| Production | The HKD account Finance confirms; none until then |
+| Outside production | Sample accounts for each rail |
+| Production | The accounts Finance confirms for each rail; none until then |
 
 **Card not yet available** - In a currency with no card fee rule, the choice
 SHALL show card as not yet available in that currency, and the winner SHALL
@@ -62,118 +80,207 @@ NOT be able to choose it. Once Finance saves a card fee rule for the currency,
 card SHALL be offered on every order in it that the winner has not yet
 confirmed.
 
-**Neither method** - Where neither method is offered, Winner Order SHALL say
-that payment is not yet available in the order's currency and offer Contact
-Us, per "Contact Us opens a copy-first ready email", and Grade10 SHALL refuse
-a confirmation as one with no method chosen. The setup deadline SHALL keep
-running: the order reads Setup Overdue once it passes, as any unconfirmed
-order does, and an operator reopens or records setup by hand, per
-`grade10-admin/auction/post-sale`.
+**Currency change** - A winner who switches currency before confirming SHALL
+keep the method they chose only where the new currency offers it. Otherwise
+Grade10 SHALL clear the method, preselect none and refuse a confirmation until
+the winner chooses one.
+
+**Neither method** - Where the currency offers neither card nor a bank rail,
+Winner Order SHALL say that payment is not yet available in the order's
+currency and offer Contact Us, per "Contact Us opens a copy-first ready
+email", and Grade10 SHALL refuse a confirmation as one with no method chosen.
+The setup deadline SHALL keep running: the order reads Setup Overdue once it
+passes, as any unconfirmed order does, and an operator reopens or records setup
+by hand, per `grade10-admin/auction/post-sale`.
 
 **Refused** - Grade10 SHALL refuse a confirmation with no method chosen, and
-SHALL refuse a method where it is not offered. A refused confirmation SHALL
-record neither the address nor the method.
+SHALL refuse a method the settlement currency does not offer or that is not
+offered where Grade10 cannot take it. A refused confirmation SHALL record
+neither the address, the currency nor the method.
 
 **Locked on confirmation** - Until the winner confirms, they SHALL be able to
-change the method freely. Once they confirm, the method locks for the winner,
-per "The delivery address locks when the invoice is sent".
+change the currency and the method freely. Once they confirm, both lock for the
+winner, per "The delivery address locks when the invoice is sent". An operator
+MAY change either before the invoice is sent, and on a reissue after, per
+`grade10-admin/auction/post-sale`.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-v59 rev=1 -->
+Scenarios `winner-order-SC-92` and `winner-order-SC-226` keep their titles
+with their ids. The titles are historical: each rail is offered or withheld on
+its own bank details, and card on its own rule.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-oyi rev=1 -->
+#### Scenario: winner-order-SC-293 - HKD offers card, FPS and HK Local
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup, where Payment Settings holds an
+  HKD card fee rule and Grade10 holds FPS, HK Local and SWIFT bank details
+- **WHEN** the winner picks HKD
+- **THEN** card, FPS and HK Local are offered, each as its own choice
+- **AND** International via SWIFT is not offered
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-crs rev=1 -->
+#### Scenario: winner-order-SC-294 - USD offers card, HK Local and SWIFT
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup, where Payment Settings holds a
+  USD card fee rule and Grade10 holds FPS, HK Local and SWIFT bank details
+- **WHEN** the winner picks USD
+- **THEN** card, HK Local and International via SWIFT are offered, each as its
+  own choice
+- **AND** FPS is not offered
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-4lj rev=1 -->
+#### Scenario: winner-order-SC-295 - Switching currency clears a method the new currency does not offer
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD and
+  International via SWIFT, and has not confirmed
+- **WHEN** the winner switches the currency to HKD
+- **THEN** no method is selected
+- **AND** a confirmation without a new choice is refused
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-6un rev=1 -->
+#### Scenario: winner-order-SC-296 - Switching currency keeps a method both currencies offer
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD and HK
+  Local, and has not confirmed
+- **WHEN** the winner switches the currency to HKD
+- **THEN** HK Local stays selected
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-vbp rev=1 -->
+#### Scenario: winner-order-SC-297 - USD card waits for a USD card fee rule
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD, where
+  Payment Settings holds no USD card fee rule and Grade10 holds HK Local and
+  SWIFT bank details
+- **WHEN** the winner reaches the payment method choice
+- **THEN** card reads that it is not yet available in USD and cannot be chosen
+- **AND** HK Local and International via SWIFT are offered
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-rge rev=1 -->
+#### Scenario: winner-order-SC-298 - A method the currency does not offer is refused
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD
+- **WHEN** a confirmation carrying FPS reaches Grade10
+- **THEN** Grade10 refuses it
+- **AND** the order records neither the address, the currency nor the method
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-v59 rev=2 -->
 #### Scenario: winner-order-SC-90 - The method is recorded with the address
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order in HKD Awaiting Setup, where Grade10 holds HKD
-  bank details
-- **WHEN** the winner confirms a delivery address and chooses bank transfer
-- **THEN** the order records bank transfer as its payment method
+- **GIVEN** an auction order in Awaiting Setup, where Grade10 holds FPS bank
+  details
+- **WHEN** the winner confirms a delivery address, picks HKD and chooses FPS
+- **THEN** the order records bank transfer as its payment method, on the FPS
+  rail
 - **AND** the order derives as Preparing Invoice
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-8dl rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-8dl rev=2 -->
 #### Scenario: winner-order-SC-91 - The choice shows a fee range and no bank transfer amount
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order in HKD Awaiting Setup, where Grade10 holds HKD
-  bank details and Payment Settings holds an HKD card fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD, where
+  Grade10 holds FPS and HK Local bank details and Payment Settings holds an
+  HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
 - **THEN** card reads `Card fee about 3.4% + a fixed amount`
-- **AND** bank transfer reads `Bank fee set on your invoice`, naming no amount
-- **AND** neither method is selected
+- **AND** FPS and HK Local each read `Bank fee set on your invoice`, naming no
+  amount
+- **AND** no method is selected
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-1aa rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-o4y rev=1 -->
+#### Scenario: winner-order-SC-303 - The card fee range reads the percentage of the currency picked
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup, where Payment Settings holds an
+  HKD card fee rule of 3.4 per cent and a USD card fee rule of 4.4 per cent
+- **WHEN** the winner picks USD, then switches to HKD
+- **THEN** card reads `Card fee about 4.4% + a fixed amount` under USD
+- **AND** card reads `Card fee about 3.4% + a fixed amount` under HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1aa rev=2 -->
 #### Scenario: winner-order-SC-92 - A currency with no bank details offers card only
 **Serves:** Payment method - bank transfer only where bank details are set up
 
-- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
-  holds a USD card fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD, where
+  Grade10 holds HK Local bank details and no FPS bank details, and Payment
+  Settings holds an HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
-- **THEN** only card is offered
-- **AND** a confirmation carrying bank transfer for that order is refused
+- **THEN** card and HK Local are offered
+- **AND** FPS is not offered
+- **AND** a confirmation carrying FPS for that order is refused
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-pt5 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-pt5 rev=2 -->
 #### Scenario: winner-order-SC-93 - The method can change until the winner confirms
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** an auction order in HKD Awaiting Setup, where Grade10 holds HKD
-  bank details and Payment Settings holds an HKD card fee rule, on which the
-  winner has chosen card and not yet confirmed
-- **WHEN** the winner changes the choice to bank transfer and confirms the address
-- **THEN** the order records bank transfer
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD, where
+  Grade10 holds HK Local bank details and Payment Settings holds an HKD card
+  fee rule, on which the winner has chosen card and not yet confirmed
+- **WHEN** the winner changes the choice to HK Local and confirms the address
+- **THEN** the order records bank transfer, on the HK Local rail
 - **AND** the order derives as Preparing Invoice
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-wn1 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-wn1 rev=2 -->
 #### Scenario: winner-order-SC-94 - A confirmation with no method is refused
 **Serves:** Payment method - card or bank transfer recorded with the address
 
-- **GIVEN** an auction order in HKD Awaiting Setup
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD
 - **WHEN** the winner confirms a delivery address without choosing a method
 - **THEN** Grade10 refuses the confirmation
 - **AND** the order is still Awaiting Setup
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-er5 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-er5 rev=2 -->
 #### Scenario: winner-order-SC-226 - Production offers card only until Finance confirms the account
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** an auction order in HKD Awaiting Setup in production, where
-  Grade10 holds no HKD bank details and Payment Settings holds an HKD card
-  fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD, in
+  production, where Grade10 holds no FPS and no HK Local bank details and
+  Payment Settings holds an HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
 - **THEN** only card is offered
-- **AND** a confirmation carrying the home address and bank transfer is refused
+- **AND** a confirmation carrying the home address and FPS is refused
 - **AND** the order holds no delivery address and no method
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-7y2 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-7y2 rev=2 -->
 #### Scenario: winner-order-SC-248 - A currency with no card fee rule does not offer card
 **Serves:** Payment method - card only where Finance set a card fee rule
 
-- **GIVEN** an auction order in HKD Awaiting Setup outside production, where
-  Grade10 holds the sample HKD bank details and Payment Settings holds no HKD
-  card fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD,
+  outside production, where Grade10 holds the sample bank details and Payment
+  Settings holds no HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
 - **THEN** card reads that it is not yet available in HKD and cannot be chosen
-- **AND** bank transfer is offered
+- **AND** FPS and HK Local are offered
 - **AND** a confirmation carrying card for that order is refused
 - **AND** the order holds no delivery address and no method
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-cz1 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-cz1 rev=2 -->
 #### Scenario: winner-order-SC-249 - A currency with neither method cannot confirm setup
 **Serves:** Payment method - card only where Finance set a card fee rule
 
-- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
-  holds no USD card fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD, where
+  Payment Settings holds no USD card fee rule and Grade10 holds no HK Local
+  and no SWIFT bank details
 - **WHEN** the winner reaches the payment method choice
 - **THEN** the page says payment is not yet available in USD and offers
   Contact Us
-- **AND** neither card nor bank transfer can be chosen
+- **AND** neither card nor a bank rail can be chosen
 - **AND** Grade10 refuses a confirmation of the delivery address
 - **AND** the order is still Awaiting Setup, holding no delivery address and no
   method
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-ii6 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-ii6 rev=2 -->
 #### Scenario: winner-order-SC-257 - The setup deadline runs where no method is offered
 **Serves:** winner-order-US-07 - Winner misses the address deadline
 
-- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
-  holds no USD card fee rule, whose winner has not confirmed setup
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD, where
+  Payment Settings holds no USD card fee rule and Grade10 holds no HK Local
+  and no SWIFT bank details, whose winner has not confirmed setup
 - **WHEN** 48 hours pass from the lot's close
 - **THEN** the order reads Setup Overdue
 - **AND** an operator holding payment processing can reopen or record its

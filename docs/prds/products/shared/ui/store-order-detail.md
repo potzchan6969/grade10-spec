@@ -15,19 +15,19 @@ does not know.
 
 ## Optional Sections
 
-🚧 **Composed detail** — applications can assemble the reusable Order Details
+**Composed detail** — applications can assemble the reusable Order Details
 body from supplied header, item, money, delivery, payment and address facts
 
-🚧 **Honest omission** — payment, address, delivery, loyalty and individual
+**Honest omission** — payment, address, delivery, loyalty and individual
 money rows disappear independently when the application has no fact to show
 
-🚧 **Supplied action** — tracking stays a display-only action until the
+**Supplied action** — tracking stays a display-only action until the
 application provides the callback that owns the navigation
 
 ## Designs
 
-::story{id="store-order-detail-orderdetails--item-coupon" title="A complete order detail"}
+::story{id="store-order-detail-blocks-orderdetails--item-coupon" title="A complete order detail"}
 
-::story{id="store-order-detail-orderdetails--no-optional-groups" title="Only supplied order facts"}
+::story{id="store-order-detail-blocks-orderdetails--no-optional-groups" title="Only supplied order facts"}
 
-::story{id="store-order-detail-orderdetailssidebar--paid-total-only" title="A paid total without a subtotal"}
+::story{id="store-order-detail-blocks-orderdetailssidebar--paid-total-only" title="A paid total without a subtotal"}

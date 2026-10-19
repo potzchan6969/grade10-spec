@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "062cd6a4a86f9c3b05a48ab2dfb04c2a788a6cc0dc26943f2e8530a9ef089c6b"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "eaac2ac06d7b6bc216db1aea287fe83078fcd761",
+    "capturedAt": "2026-10-13T07:07:17.137194Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-winner-how-to-pay-rails/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A bank transfer invoice shows how to pay"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+      "components": [
+        "preview"
+      ]
+    }
+  ]
+}

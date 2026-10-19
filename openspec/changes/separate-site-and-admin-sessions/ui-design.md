@@ -47,7 +47,7 @@ Existing exports, named exactly:
 
 Nothing is needed from `packages/design-system` or `packages/ui`: no variant,
 size or token is missing, so no work lands in this store. The site's toasts
-reuse `LinkFollowToasts` stories (`auth-sign-in-link-follow-toasts--*`) as they
+reuse `LinkFollowToasts` stories (`auth-sign-in-blocks-linkfollowtoasts--*`) as they
 are.
 
 Missing, all in grade10 and flagged for `tasks.md` (groups 4 and 5):

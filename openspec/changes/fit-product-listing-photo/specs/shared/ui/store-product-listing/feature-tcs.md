@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/3
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
-## shared-ui-store-product-listing-US1: What the listing surface holds
+## g10.shared-store-product-listing.US1: What the listing surface holds
 
 **Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface
 **As a** shopper reading a surface that composes the listing's tiles,
@@ -11,7 +11,7 @@
 **so that** a tile reads the same wherever the store draws it.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-pov rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
-### shared-ui-store-product-listing-US1-TC18-1: Non-square photo shows whole in every tile status
+### g10.shared-store-product-listing.US1-TC18: Non-square photo shows whole in every tile status
 
 Runs once per row of **Test data**.
 
@@ -60,7 +60,7 @@ Runs once per row of **Test data**.
 * Sold out row: the whole photo is faded.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-vn1 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
-### shared-ui-store-product-listing-US1-TC19-1: Landscape, square and small photos each show whole
+### g10.shared-store-product-listing.US1-TC19: Landscape, square and small photos each show whole
 
 Runs once per row of **Test data**.
 
@@ -109,7 +109,7 @@ Runs once per row of **Test data**.
 * Step 3: every edge of the photo opened on its own also shows in the well, all but the corners the row's **Outcome** rounds.
 
 <!-- trace:case id=g10.shared-store-product-listing.TC-e18 rev=1 covers=g10.shared-store-product-listing.SC-3ob,g10.shared-store-product-listing.SC-9ml,g10.shared-store-product-listing.SC-vgm,g10.shared-store-product-listing.SC-bz2,g10.shared-store-product-listing.SC-0cf,g10.shared-store-product-listing.SC-oxx,g10.shared-store-product-listing.SC-7pj,g10.shared-store-product-listing.SC-d3u,g10.shared-store-product-listing.SC-e9w,g10.shared-store-product-listing.SC-14a,g10.shared-store-product-listing.SC-t2f,g10.shared-store-product-listing.SC-30a,g10.shared-store-product-listing.SC-uoy,g10.shared-store-product-listing.SC-la7,g10.shared-store-product-listing.SC-exb,g10.shared-store-product-listing.SC-eds,g10.shared-store-product-listing.SC-0xx,g10.shared-store-product-listing.SC-yv9,g10.shared-store-product-listing.SC-3n1,g10.shared-store-product-listing.SC-ck1,g10.shared-store-product-listing.SC-z64,g10.shared-store-product-listing.SC-ezf,g10.shared-store-product-listing.SC-iye,g10.shared-store-product-listing.SC-ws9,g10.shared-store-product-listing.SC-ta3,g10.shared-store-product-listing.SC-8fs,g10.shared-store-product-listing.SC-vsm -->
-### shared-ui-store-product-listing-US1-TC20-1: Slab tile shows the whole slab on every store surface
+### g10.shared-store-product-listing.US1-TC20: Slab tile shows the whole slab on every store surface
 
 Runs once per row of **Test data**.
 

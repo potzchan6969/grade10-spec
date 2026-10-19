@@ -1,13 +1,11 @@
 {
   "card": {
     "expired": "이 코드는 만료되었습니다",
-    "expiresIn": "남은 시간",
-    "fallbackCode": "또는 이 코드를 읽어 주세요",
     "inStore": "매장",
     "qrAlt": "스캔할 수 있는 회원 코드",
-    "refresh": "새 코드",
-    "secondsUnit": "초",
-    "used": "이 코드는 이미 사용되었습니다",
+    "refresh": "새로고침",
+    "refreshesIn": "남은 시간",
+    "shortCode": "짧은 코드",
     "walletAdd": "{wallet}에 추가",
     "walletAddFailed": "{wallet}에 추가하지 못했습니다. 다시 시도해 주세요.",
     "walletApple": "Apple 지갑",
@@ -23,7 +21,7 @@
   },
   "page": {
     "title": "멤버십",
-    "card": "회원 카드",
+    "card": "회원 패스",
     "rewards": "리워드",
     "activity": "내역",
     "spend": "장바구니에 사용",
@@ -68,7 +66,8 @@
     "validFor": "교환 후 {days}일간 유효",
     "minimumSpend": "{amount} 이상 구매 시",
     "onlyOnline": "온라인 스토어 전용",
-    "onlyInStore": "매장 전용"
+    "onlyInStore": "매장 전용",
+    "redeemFailed": "리워드를 교환하지 못했습니다. 다시 시도해 주세요."
   },
   "quantityRefusal": {
     "wholeUnits": "{name}은(는) 낱개 단위로만 교환할 수 있습니다.",

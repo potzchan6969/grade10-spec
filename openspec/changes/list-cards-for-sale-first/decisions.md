@@ -18,9 +18,10 @@
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
 | Q1 | Does a card for sale list before a sold-out one, and in which orders? | In every order: latest product, lowest price and highest price, at rest and inside a collection. The order asked for holds within each group. Grade10 runs it (`packages/grade10-store/backend/src/services/catalog/browse.ts:87-92`, `collection.ts:52-54`) - decided by the product owner on the recommendation, 2026-10-07, as `add-store-product-status` Q6 | For sale first in the price orders only; no grouping, so the first card in a lowest-price order may be one nobody can buy |
-| Q2 | Which price does a price order sort on? | ❓ Product - recommended: the price the tile shows, the one item's price, so the first card in a lowest-price order shows the lowest price on the listing. Grade10 sorts on the lowest price of every variant (`packages/grade10-store/backend/src/services/catalog/projection.ts:136-141`), so the recommendation adds a backend change | The lowest price of every variant, as runs, where a card can list ahead of one whose tile shows a lower price |
+| Q2 | Which price does a price order sort on? | The lowest price among the card's variants, as Grade10 runs it (`packages/grade10-store/backend/src/services/catalog/projection.ts`); carried by `Order and free text describe the whole catalogue` and its scenario SC-58. Decided by agent, 2026-10-16: the conservative option - no backend change, and a collection's order stays the shop's own price sort; the tile's price as the basis can come back as its own change | The price the tile shows, the one item's price - a backend change in `services/catalog/`, and a collection the store would have to order itself |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| grade10-site/store/product-listing | Delivery reading, 2026-10-16: the proposal held the price basis open, which left the requirement unwritable - does a price order sort on the tile's price or the cheapest variant? | Q2 |

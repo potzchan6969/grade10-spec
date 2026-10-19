@@ -7,7 +7,7 @@ import {
 } from "./product-filter.story-shared";
 
 const meta = {
-  title: "Store Product Listing/ProductFilter/Search",
+  title: "Store/Product Listing/Blocks/ProductFilter/Search",
   component: ProductFilter,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -121,5 +121,34 @@ export const GroupsOmitted: Story = {
     await userEvent.keyboard("{Enter}");
     expect(args.onSearchCommit).toHaveBeenCalledWith("zzz");
     expect(canvas.queryByRole("listbox")).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Scenario: shared-ui-store-product-listing-SC-74 - Pending suggestions show
+ * searching. The field shows its searching row and invents no suggestion row;
+ * Enter still commits.
+ */
+export const Pending: Story = {
+  render: (args) => <ProductFilter {...args} />,
+  args: {
+    searchValue: "abyss",
+    searchSuggestions: undefined,
+    searchPending: true,
+    copy: { ...productFilterArgs.copy, searchSearching: "Searching…" },
+  },
+  parameters: {
+    a11y: { config: { rules: [{ id: "aria-hidden-focus", enabled: false }] } },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole("combobox", { name: "Search products" });
+    await userEvent.click(field);
+    const popup = within(document.body);
+    expect(await popup.findByText("Searching…")).toBeInTheDocument();
+    expect(popup.queryAllByRole("option")).toHaveLength(0);
+    expect(popup.queryByText("No results found.")).not.toBeInTheDocument();
+    await userEvent.keyboard("{Enter}");
+    expect(args.onSearchCommit).toHaveBeenCalledWith("abyss");
   },
 };

@@ -4,7 +4,7 @@ import { Nav } from "./nav";
 import { NAV_BASE_ARGS } from "./nav.story-shared";
 
 const meta = {
-  title: "Components/Nav/Language",
+  title: "Design System/Layout/Nav/Language",
   component: Nav,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

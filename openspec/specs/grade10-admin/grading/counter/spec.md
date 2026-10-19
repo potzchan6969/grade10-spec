@@ -17,15 +17,16 @@ the buttons follow is `grade10-site/grading/submission-lifecycle`.
 - The queue
   - Cut by what waits: every status belongs to exactly one view, and the rest
     are queries
-  - Today, cut where the rows are: the shop's own day decides it, with the
-    day's drop-offs in a strip above
+  - Today, cut where the rows are: what was opened on the shop's own day
+    decides it
   - Rows that explain themselves: a badge names why a submission is waiting on
     somebody, derived at the read and never stored
   - Tiles over the counter: what is closing, what is with graders, what is
     ready and uncollected, and what is still to settle
 - Hand-in at the counter
-  - Find it or write it: the day's booking opens its submission, and a
-    walk-in's list is written at the desk with the collector
+  - Find it or write it: a booked submission opens from the queue, a visit the
+    diary hands to the counter opens one, and a walk-in's list is written at
+    the desk with the collector
   - Card by card with the collector: present, a condition note, the declared
     value against its reference, and two photographs that reach the
     collector's page
@@ -36,7 +37,7 @@ the buttons follow is `grade10-site/grading/submission-lifecycle`.
   - No hand-in without a paid line: the submission stays booked, the seal
     stands, and the cards go home with the collector
   - The safe's cap refuses at the desk: a hand-in that would carry the safe
-    past its cap books the next drop-off instead
+    past its cap books the next visit instead
   - Labels and check in: one label per card, the cards sealed in with the
     printed list, and the intake receipt out
 - Refusing a card
@@ -104,13 +105,13 @@ the buttons follow is `grade10-site/grading/submission-lifecycle`.
     approve, which edits them
   - A verified session: as the vault's, in production
   - Filed under its submission: every act is on the audit chain
-  - Staff hear nothing: the badges, the tiles and the day's strip are the
+  - Staff hear nothing: the badges and the tiles are the
     signal
 - Acts by grant and status
   - Shown only where they can run: an act absent is better than an act refused
-  - Cancel on the collector's word: only before the visit starts and before a
-    card is checked or refused, never once the cards have left, the drop-off
-    going with it and nobody emailed
+  - Cancel on the collector's word: only before a card is checked or
+    refused, never once the cards have left, and nobody
+    emailed
   - The worker refuses independently: a submission that moved under the
     operator is refused by name rather than written over
 
@@ -132,17 +133,13 @@ belong to exactly one of the first six:
 | Back | `returned` |
 | Ready | `ready` |
 | Closed | `collected`, `cancelled`, `expired` |
-| Today | every submission that has not ended whose drop-off falls on the shop's own calendar day |
+| Today | every submission opened on the shop's own calendar day that has not ended, earliest first, a `planned` one excepted |
 
 **Drafts** - a `planned` submission SHALL appear in no view until it is booked.
 
 **The day** - the Today cut SHALL be made where the rows are read, on the
 brand's own zone `Asia/Hong_Kong`, so that the view and the badge beside it
 cannot disagree across a midnight.
-
-**The strip** - above the rows the queue SHALL show the day's drop-offs in slot
-order, each naming the time, the collector, the submission, the cards and the
-grader and level, with one line saying that pickups walk in.
 
 **Paging** - the queue SHALL page newest-touched first on a cursor over what
 the page stopped reading, never on an offset, and SHALL answer 50 rows by
@@ -152,13 +149,13 @@ more remain, read rather than inferred from the page being full.
 **Nothing to show** - a view with no row SHALL say so and SHALL still offer
 every cut.
 
-<!-- trace:scenario id=g10adm.grading-counter.SC-9l0 rev=1 -->
+<!-- trace:scenario id=g10adm.grading-counter.SC-9l0 rev=2 -->
 #### Scenario: grade10-admin-grading-counter-SC-01 - Today is the shop's day
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
-- **GIVEN** a drop-off booked for later today at the shop, read early in the morning there while the date in Coordinated Universal Time is still yesterday's
+- **GIVEN** a submission opened a minute past the shop's midnight, read there while the date in Coordinated Universal Time is still the day before
 - **WHEN** the Today view is read
-- **THEN** the drop-off's submission is in it
+- **THEN** the submission is in it
 
 <!-- trace:scenario id=g10adm.grading-counter.SC-h3e rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-02 - Every status has exactly one home
@@ -167,11 +164,11 @@ every cut.
 - **WHEN** the six status views are read together
 - **THEN** every status but `planned` appears in exactly one of them
 
-<!-- trace:scenario id=g10adm.grading-counter.SC-yss rev=1 -->
-#### Scenario: grade10-admin-grading-counter-SC-03 - A plan nobody booked stays off the queue
+<!-- trace:scenario id=g10adm.grading-counter.SC-yss rev=2 -->
+#### Scenario: grade10-admin-grading-counter-SC-03 - A plan not yet brought to the desk stays off the queue
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
-- **GIVEN** a submission that is `planned` with no drop-off booked
+- **GIVEN** a submission that is `planned`
 - **WHEN** every view is read
 - **THEN** it is in none of them
 
@@ -192,21 +189,20 @@ every cut.
 - **WHEN** it is read
 - **THEN** it says there is nothing in it, and every other cut is still offered
 
-<!-- trace:scenario id=g10adm.grading-counter.SC-vj8 rev=1 -->
-#### Scenario: grade10-admin-grading-counter-SC-85 - The day's strip carries the drop-offs in slot order
+<!-- trace:scenario id=g10adm.grading-counter.SC-vj8 rev=2 -->
+#### Scenario: grade10-admin-grading-counter-SC-85 - Today lists only what was opened on the shop's day
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
-- **GIVEN** two drop-offs booked for today, one earlier than the other
-- **WHEN** the queue is read
-- **THEN** the strip above the rows carries both in slot order, each naming the time, the collector, the submission, the cards and the grader and level
-- **AND** one line says that pickups walk in
+- **GIVEN** submissions opened days ago and a walk-in handed in today
+- **WHEN** the Today view is read
+- **THEN** it lists the walk-in and none of the older ones, whatever their status
 
 ### Requirement: A row says why its submission is waiting on somebody
 
 A row carries enough to work the counter from without opening the submission.
 
 **The row** - each row SHALL carry the submission id, the collector, the number
-of cards, the grader and level, the status word the collector reads, the visit,
+of cards, the grader and level, the status word the collector reads,
 when it was last touched, and every reason the submission is waiting on
 somebody.
 
@@ -214,7 +210,6 @@ somebody.
 
 | Badge | Raised when |
 | --- | --- |
-| Visit today | the submission's drop-off falls on the shop's own day |
 | Batch closes today | the submission is handed in and its batch's cut-off falls on the shop's own day |
 | Due back | the batch's estimated day back has come |
 | Running late | the batch is past its estimated day back |
@@ -233,13 +228,13 @@ own dates, never stored, and the console and the worker SHALL derive them the
 same way. Every day count above SHALL be read from its setting rather than
 compiled in.
 
-<!-- trace:scenario id=g10adm.grading-counter.SC-0zy rev=1 -->
-#### Scenario: grade10-admin-grading-counter-SC-06 - A drop-off today badges the row
+<!-- trace:scenario id=g10adm.grading-counter.SC-0zy rev=2 -->
+#### Scenario: grade10-admin-grading-counter-SC-06 - A booked row carries no badge for its day
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
-- **GIVEN** a booked submission whose drop-off falls on the shop's own day
+- **GIVEN** a booked submission opened on the shop's own day
 - **WHEN** the queue is read
-- **THEN** its row badges the visit today
+- **THEN** its row carries no badge
 
 <!-- trace:scenario id=g10adm.grading-counter.SC-3i7 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-07 - Cards ready a month badge as uncollected
@@ -279,12 +274,12 @@ compiled in.
 - **WHEN** the queue is read
 - **THEN** the submission's row badges the message as not sent
 
-<!-- trace:scenario id=g10adm.grading-counter.SC-cc0 rev=1 -->
+<!-- trace:scenario id=g10adm.grading-counter.SC-cc0 rev=2 -->
 #### Scenario: grade10-admin-grading-counter-SC-86 - A row is worked from without opening the submission
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
 - **WHEN** the queue is read
-- **THEN** each row carries the submission id, the collector, the number of cards, the grader and level, the status word the collector reads, the visit, when it was last touched, and every reason the submission is waiting on somebody
+- **THEN** each row carries the submission id, the collector, the number of cards, the grader and level, the status word the collector reads, when it was last touched, and every reason the submission is waiting on somebody
 
 ### Requirement: Four tiles stand over the counter
 
@@ -337,8 +332,9 @@ The queue SHALL carry these four:
 The hand-in runbook SHALL run these steps in order, and no step SHALL be
 offered before the one above it is done:
 
-1. **Find it or write it** — the day's booking opens its submission and the
-   visit is started at the desk; where nobody booked, the counter opens a
+1. **Find it or write it** — a booked submission opens at the card check from
+   the queue, and a visit the diary hands to the counter opens a submission
+   prefilled from the visit; where nobody booked, the counter opens a
    submission at the desk and writes the list card by card with the collector,
    one card at a time.
 2. **Check each card with the collector** — Present, a condition note, the
@@ -361,8 +357,8 @@ offered before the one above it is done:
    into the intake bag with the printed list, the submission moved to
    `checked_in`, and the intake receipt issued with the sealed agreement.
 
-**Where two submissions share one drop-off**, each SHALL run its own hand-in,
-and the other SHALL be named under the visit.
+**Where two submissions come from one visit**, each SHALL run its own hand-in,
+and the open form's visit panel SHALL list what the visit has opened.
 
 **One paid order, one submission** - the first submission to record a paid
 order SHALL claim it; another submission presenting the same order, at any
@@ -370,13 +366,13 @@ level, SHALL be refused by name with nothing written, and recording the order
 again on the submission that claimed it SHALL answer that submission's own
 lines.
 
-<!-- trace:scenario id=g10adm.grading-counter.SC-0sq rev=1 -->
-#### Scenario: grade10-admin-grading-counter-SC-14 - The day's booking opens its submission
+<!-- trace:scenario id=g10adm.grading-counter.SC-0sq rev=2 -->
+#### Scenario: grade10-admin-grading-counter-SC-14 - A booked submission opens at the card check
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
-- **GIVEN** a drop-off booked for today
-- **WHEN** the operator opens it from the day's strip and starts the visit at the desk
-- **THEN** its submission's hand-in runbook opens at the card check
+- **GIVEN** a booked submission opened today
+- **WHEN** the operator opens it from the Today view
+- **THEN** its hand-in runbook opens at the card check
 
 <!-- trace:scenario id=g10adm.grading-counter.SC-lbh rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-15 - A walk-in's list is written at the desk
@@ -436,11 +432,11 @@ lines.
 - **THEN** each card is given its own intake label and intake id, the submission moves to `checked_in`, and the intake receipt goes out with the sealed agreement
 
 #### Scenario: grade10-admin-grading-counter-SC-21 - A second submission on one visit runs its own hand-in
-**Serves:** grade10-site/grading/dropoff-booking#grade10-site-grading-dropoff-booking-US-04 - a collector brings a second list to the drop-off the first one owns
+**Serves:** grade10-admin-grading-counter-US-02 - the operator takes a second list from one visit through the desk
 
-- **GIVEN** two submissions on one drop-off
+- **GIVEN** two submissions opened from one visit
 - **WHEN** the operator opens either runbook
-- **THEN** it names the other under the visit, and each is checked, signed, paid and checked in on its own
+- **THEN** each is checked, signed, paid and checked in on its own
 
 <!-- trace:scenario id=g10adm.grading-counter.SC-92s rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-88 - A card declared at the level's ceiling is checked in at that level
@@ -471,15 +467,15 @@ submission agreement is not sealed.
 **No paid line** - a hand-in SHALL be refused by name while any card owing a
 fee has no paid line. The submission stays `booked`, the sealed agreement
 stands, and the cards go home with the collector; the till is run again, or
-another drop-off is booked.
+another visit is booked.
 
 **The safe's cap** - a hand-in that would carry the declared value held in the
 safe past `grading.safe_declared_cap` SHALL be refused by name at the desk, and
-the counter SHALL offer the next drop-off instead. The value held counts the
+the counter SHALL offer the next visit instead. The value held counts the
 declared value of every card in a `checked_in`, `returned` or `ready`
 submission whose outcome has not taken it out of the safe, ready slabs
 included. The desk SHALL read the cap before the first card is checked, and
-SHALL book the next drop-off rather than open the till when the list would
+SHALL book the next visit rather than open the till when the list would
 pass it.
 
 <!-- trace:scenario id=g10adm.grading-counter.SC-imm rev=1 -->
@@ -490,20 +486,20 @@ pass it.
 - **WHEN** the operator checks the cards in
 - **THEN** it is refused by name and the submission stays `booked`
 
-<!-- trace:scenario id=g10adm.grading-counter.SC-xas rev=1 -->
+<!-- trace:scenario id=g10adm.grading-counter.SC-xas rev=2 -->
 #### Scenario: grade10-admin-grading-counter-SC-23 - No paid line, no hand-in
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
 - **GIVEN** a sealed agreement and a till run that failed, so no fee line was written
 - **WHEN** the operator checks the cards in
-- **THEN** it is refused by name, the submission stays `booked` with its seal standing, and the counter offers running the till again or booking another drop-off
+- **THEN** it is refused by name, the submission stays `booked` with its seal standing, and the counter offers running the till again or booking another visit
 
 #### Scenario: grade10-admin-grading-counter-SC-24 - A hand-in past the safe's cap is refused at the desk
 **Serves:** grade10-admin/grading/batches#grade10-admin-grading-batches-US-05 - the operator keeps the declared value in the safe under its cap
 
 - **GIVEN** a cap of 30000000 HKD minor units, 28000000 HKD minor units already held, and a submission declaring 3000000 HKD minor units
 - **WHEN** the operator checks the cards in
-- **THEN** it is refused by name and the counter offers the next drop-off
+- **THEN** it is refused by name and the counter offers the next visit
 
 #### Scenario: grade10-admin-grading-counter-SC-108 - The desk reads the safe before the first card is checked
 **Serves:** grade10-admin/grading/batches#grade10-admin-grading-batches-US-05 - the operator keeps the declared value in the safe under its cap
@@ -511,7 +507,7 @@ pass it.
 - **GIVEN** a cap of 30000000 HKD minor units, 29900000 HKD minor units already held, and a booked submission declaring 200000 HKD minor units
 - **WHEN** the operator opens its hand-in
 - **THEN** before any card is checked the desk says the list would carry the safe past its cap, by name
-- **AND** it offers the next drop-off, and the till is not opened
+- **AND** it offers the next visit, and the till is not opened
 
 ### Requirement: A refused card carries its reason in the collector's words and is never charged
 
@@ -892,7 +888,7 @@ the jobs.
 
 | Surface | What an operator does there |
 | --- | --- |
-| Header | read the summary, the status word, the declared total, what is due, what came back ungraded and the batch it is in; reach the collector by email, phone and click-to-chat templates; work the drop-off or the pickup |
+| Header | read the summary, the status word, the declared total, what is due, what came back ungraded and the batch it is in; reach the collector by email, phone and click-to-chat templates; work the pickup |
 | Cards | read each card's intake id, declared value, level and the level it was moved to, grade and certificate in the grader's words, and its outcome; check, add, refuse or withdraw a card where the status allows |
 | Money | read what was paid at hand-in with the till's reference, the upcharge, the storage accrued, what is still to settle, refunds and payouts; record a settlement, waive an upcharge or a card's storage, record or reverse a payout |
 | Documents | read the sealed documents with their fingerprints; show one on the iPad, copy its link, or send it again |
@@ -1347,9 +1343,9 @@ written, naming the owner who owes it.
 
 A figure a collector was quoted or signed for stays the figure.
 
-**At booking** - the fee-sheet row the submission is priced on SHALL be pinned
-to it when the drop-off is booked, or at hand-in for a submission written at
-the desk.
+**At the desk** - the fee-sheet row the submission is priced on SHALL be pinned
+to it when the list is opened, or at hand-in for a submission written at the
+desk.
 
 **At signing** - every figure the submission agreement prints SHALL be pinned
 when that agreement is minted: the storage fee per card per month, the day it
@@ -1391,8 +1387,8 @@ so a section an operator cannot use is not offered.
 
 | Grant | Held by | What it opens |
 | --- | --- | --- |
-| `grading:read` | staff, admin | the queue with its badges, tiles and day strip; one submission with its cards, money, documents and timeline; the settings, read-only |
-| `grading:operate` | staff, admin | starting the visit, checking, adding and refusing a card, minting a document, recording the fee paid, handing in, withdrawing a card, handing back, opening a vault case for a slab, posting the written notice, sending a document or the grades message again; opening, closing and shipping a batch, recording its stage and its estimate, recording it arrived, entering the manifest and the invoice, resolving or adding a line, scanning, recording an exception, and finishing receiving |
+| `grading:read` | staff, admin | the queue with its badges and tiles; one submission with its cards, money, documents and timeline; the settings, read-only |
+| `grading:operate` | staff, admin | checking, adding and refusing a card, minting a document, recording the fee paid, handing in, withdrawing a card, handing back, opening a vault case for a slab, posting the written notice, sending a document or the grades message again; opening, closing and shipping a batch, recording its stage and its estimate, recording it arrived, entering the manifest and the invoice, resolving or adding a line, scanning, recording an exception, and finishing receiving |
 | `grading:approve` | staff, admin | waiving an upcharge or a card's storage, recording and reversing a payout, marking a transfer payout received, and writing a setting or a fee-sheet row |
 
 **The settings** - `grading:read` SHALL open the settings read-only, and only
@@ -1402,7 +1398,7 @@ so a section an operator cannot use is not offered.
 the acts of each.
 
 **Nothing is sent to staff** - no email or push SHALL go to staff: the queue's
-badges, its tiles and the day's strip are the whole signal.
+badges and its tiles are the whole signal.
 
 <!-- trace:scenario id=g10adm.grading-counter.SC-m3l rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-75 - The console shows only what the operator may do
@@ -1432,7 +1428,7 @@ badges, its tiles and the day's strip are the whole signal.
 **Serves:** The grants - a shift learns what is waiting by reading the counter's own screen and nowhere else
 
 - **WHEN** a submission becomes ready, runs late or falls due for the notice
-- **THEN** no email or push goes to any member of staff, and the queue's badges, tiles and day strip carry it instead
+- **THEN** no email or push goes to any member of staff, and the queue's badges and tiles carry it instead
 
 <!-- trace:scenario id=g10adm.grading-counter.SC-xnx rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-99 - A read holder opens the settings and changes nothing
@@ -1505,8 +1501,8 @@ An act absent is better than an act refused, and the console is never the guard.
 | Act | Grant | Offered at |
 | --- | --- | --- |
 | Open the submission, its documents and its money | read | every status |
-| Start the visit, check, add or refuse a card, mint the agreement, record the fee paid, hand in | operate | `planned`, `booked` |
-| Cancel the submission | operate | `planned`, `booked`, before the visit starts and before a card is checked or refused |
+| Check, add or refuse a card, mint the agreement, record the fee paid, hand in | operate | `planned`, `booked` |
+| Cancel the submission | operate | `planned`, `booked`, before a card is checked or refused |
 | Withdraw a card | operate | `checked_in`, until its batch closes |
 | Mint the hand-back receipt, hand over, open a vault case for a slab | operate | `ready` |
 | Hand back a card whose payout was reversed | operate | `collected` |
@@ -1520,11 +1516,11 @@ An act absent is better than an act refused, and the console is never the guard.
 | Mark a transfer payout received | approve | `returned`, `ready`, `collected` |
 | Write a setting or a fee-sheet row | approve | every status |
 
-**Cancel** - cancelling a submission SHALL never be offered once its visit has
-started, once the counter has checked or refused a card on its list, or once
-the cards have been handed in; from then the desk refuses the cards instead.
-Staff SHALL cancel only on the collector's word, the drop-off SHALL go with the
-submission, and the collector SHALL be sent no message.
+**Cancel** - cancelling a submission SHALL never be offered once the counter
+has checked or refused a card on its list, or once the cards have been handed
+in; from then the desk refuses the cards instead.
+Staff SHALL cancel only on the collector's word, and the collector SHALL be
+sent no message.
 
 **The worker** - an act SHALL be refused by name by the worker, independently
 of what the console offered, when the submission has moved since the console
@@ -1555,28 +1551,26 @@ console SHALL read it again.
 - **WHEN** the other sends an act the submission no longer allows
 - **THEN** it is refused by name, the submission keeps what the first operator wrote, and the console reads it again
 
-<!-- trace:scenario id=g10adm.grading-counter.SC-4rb rev=1 -->
+<!-- trace:scenario id=g10adm.grading-counter.SC-4rb rev=2 -->
 #### Scenario: grade10-admin-grading-counter-SC-106 - Staff cancel a booked submission on the collector's word
 **Serves:** grade10-admin-grading-counter-US-14 - the operator calls a submission off for a collector who asked
 
-- **GIVEN** a booked submission whose visit has not started, none of whose
-  cards the counter has checked or refused, and a collector who asked the shop
+- **GIVEN** a booked submission none of whose cards the counter has checked
+  or refused, and a collector who asked the shop
   to call it off
 - **WHEN** an operator holding `grading:operate` cancels it from its page and
   confirms
-- **THEN** the submission is cancelled and its drop-off is cancelled with it
+- **THEN** the submission is cancelled
 - **AND** the cancel is filed under the submission on the audit trail, with
   who did it
 - **AND** the collector is sent no message
 
-<!-- trace:scenario id=g10adm.grading-counter.SC-tiv rev=1 -->
-#### Scenario: grade10-admin-grading-counter-SC-107 - Cancel is withheld once the visit's start time comes or a card is checked or refused
+<!-- trace:scenario id=g10adm.grading-counter.SC-tiv rev=2 -->
+#### Scenario: grade10-admin-grading-counter-SC-107 - Cancel is withheld once a card is checked or refused
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
-- **GIVEN** a booked submission whose visit's start time has come, another one
-  of whose cards the counter checked before its visit's start time, and a third
-  whose first card the counter refused before its visit's start time, the desk
-  having started early on both
+- **GIVEN** a booked submission one of whose cards the counter checked, and
+  another whose first card the counter refused
 - **WHEN** an operator opens each submission's page
 - **THEN** cancel is offered on none of them
 - **AND** a cancel sent for any of them is refused by name, and the submission

@@ -1,0 +1,10 @@
+schema: grade10-planning
+created: 2026-10-13
+design_waived: "Built before this record on the shop's site-discount read and the quote's held list; the tasks name each"
+reviewed:
+  proposal: 3de8067f
+  decisions: a6c96420
+  user-journeys: badc192f
+  ui-design: ab66c54f
+  specs: 0e27106d
+  tasks: 76ece8f5

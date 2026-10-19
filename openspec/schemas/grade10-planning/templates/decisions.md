@@ -66,7 +66,10 @@
 
 <!-- The blind suite pass's own output, written here by the run that takes the
      two readings: every point the isolated input did not settle, as a question
-     for the author, with the capability whose pass raised it.
+     for the author, with the capability whose pass raised it, its options
+     and `recommended: <option>`. QA2 closes every row the held test does not
+     hold on its recommendation, as a Decisions row decided by the round
+     naming its source; only a held row stays open and holds acceptance.
 
      Every row lands before the change merges - as a `Decisions` row above, or
      as a ❓ on the capability's PRD naming who owes the answer. There is no

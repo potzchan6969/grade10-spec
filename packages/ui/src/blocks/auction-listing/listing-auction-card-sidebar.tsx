@@ -1,7 +1,6 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import type { ShippedLocale } from "../../lib/format-datetime";
 import type { ListingAuctionBidCardCopy } from "./listing-auction-bid-card";
 import { ListingAuctionBidCard } from "./listing-auction-bid-card";
 import { LISTING_LOT_SIDEBAR_CLASS } from "./listing-lot-layout";
@@ -40,7 +39,7 @@ type ListingAuctionCardSidebarProps = {
   bidCardFooter?: ReactNode;
   facts?: readonly ListingLotMetaFact[];
   marketComps?: ListingLotMarketComps;
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   authorizationStatus?: BidAuthorizationStatus;
   authorizationMessage?: string;

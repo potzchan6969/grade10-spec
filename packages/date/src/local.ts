@@ -1,4 +1,6 @@
 import type { Instant } from "./instant.ts";
+import { platformLanguageOf } from "./locales.ts";
+import { PLATFORM_LOCALE } from "./platform.ts";
 import { formatDay, formatTimeOfDay } from "./shapes.ts";
 import { formatViewerZoneName } from "./zone-names.ts";
 
@@ -18,7 +20,9 @@ export function formatZonedLocalMoment(
   at: Instant,
   clock: ViewerClock,
 ): string {
-  return `${formatDay(at, clock)}, ${formatZonedLocalTime(at, clock)}`;
+  const language = platformLanguageOf(clock.locale ?? PLATFORM_LOCALE);
+  const join = language === "zh-Hant" || language === "zh-Hans" ? " " : ", ";
+  return `${formatDay(at, clock)}${join}${formatZonedLocalTime(at, clock)}`;
 }
 
 /**

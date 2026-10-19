@@ -27,17 +27,17 @@ One round per artifact, and one per task group while the change is building.
 
 - 🚧 **Your word lands it** — nothing reaches `main` without your word, and
   whose is recorded
-- 🚧 **A question, not a guess** — a question raised by a reading or met by
+- **A question, not a guess** — a question raised by a reading or met by
   the round that moves scope, is costly to undo, needs a fact only you have, or
   divides the options by more than a task group of work is asked, never chosen:
   a numbered row in the change's decisions with the agent's recommendation, or
   a `❓` line on the page; every other closes on its recommendation as decided
   by the round, citing the page line where one settles it, and one reply from
   you overturns it
-- 🚧 **A raised question comes with its recommendation** — the blind reading
+- **A raised question comes with its recommendation** — the blind reading
   still raises each point its input did not settle, with the options and the
   one it recommends; a reading that raises nothing has failed
-- 🚧 **A question about a look never holds a feature** — the feature ships an
+- **A question about a look never holds a feature** — the feature ships an
   interim built from the store's existing blocks and tokens; a look that needs
   a new variant, token or block ships without that look; the question waits on
   the designer in one change per capability, listed under them on
@@ -59,7 +59,7 @@ One round per artifact, and one per task group while the change is building.
 - 🚧 **One human resolves what stays open** — a question stays open only when
   the test in **A question, not a guess** holds it; the same named human
   answers each before accepting the plan, and an open one holds acceptance
-- 🚧 **The engineer challenges the tech design** — there is no tech PIC: the
+- **The engineer challenges the tech design** — there is no tech PIC: the
   engineer who will build the change challenges the proposed system, its data
   flow and its rejected options before the plan is accepted, and the human who
   accepts judges the requirements and the suite whole; a question the tech
@@ -147,19 +147,19 @@ An artifact is drawn from what is before it, the page's marks first.
   every artifact after it in order and redraws each one the landing reached, on
   the branch, for its hand's word; where nothing reached one, the thread says
   so, and it is read again on its hand's word
-- 🚧 **Nothing is built on what moved unread** — an artifact lands only when
+- **Nothing is built on what moved unread** — an artifact lands only when
   nothing major before it moved unread; the fold refuses a behind delta; a
   tick, a claim and a wait are never held
-- 🚧 **What moved, quoted** — each hand it reaches is told in one message per
+- **What moved, quoted** — each hand it reaches is told in one message per
   landing: a decision row, a requirement or a case, or the lines of any other
   artifact or page section before theirs, before and after
-- 🚧 **Major holds, small tells** — what moved and is major holds what is drawn
+- **Major holds, small tells** — what moved and is major holds what is drawn
   from it until its hand reads it again and says so; what is small holds
   nothing but the fold and stays on the hand's list until read
-- 🚧 **What counts as major** — everything that moves before an artifact but a
+- **What counts as major** — everything that moves before an artifact but a
   named small set: the proposal's Why, a decision row's Asked and Instead of
   cells, the open-question mark around a recommendation, and punctuation
-- 🚧 **Taking the recommendation moves nothing** — the drafts were drawn on it;
+- **Taking the recommendation moves nothing** — the drafts were drawn on it;
   an answer that overturns one is major, like any changed decision
 - 🚧 **Goals that moved are a question** — a re-read that finds a goal or a
   non-goal moved asks the product manager to extend, supersede or split, and
@@ -204,18 +204,18 @@ A journey, a scenario and a case each keep one id for life once it lands on
 - **Two branches at once** - the first to land keeps its ids; the second is
   refused at its landing, naming each journey or scenario id another change
   or `main` already holds
-- 🚧 **The next id** - issued by a command from the branch and the published
+- **The next id** - issued by a command from the branch and the published
   `main`, never counted by hand: a journey or scenario number within its
   capability, a case number within its journey, or a letter beside a named id
-- 🚧 **Moving a branch's ids** - the refusal names the one command that moves
+- **Moving a branch's ids** - the refusal names the one command that moves
   the branch's own ids above `main`'s, with every case id and citation built
   from them in the change
-- 🚧 **Case numbers** - a case number another change or `main` holds is
+- **Case numbers** - a case number another change or `main` holds is
   refused the same way, at every suite level
-- 🚧 **Acceptance reads `main`** - an id `main` holds is refused before a
+- **Acceptance reads `main`** - an id `main` holds is refused before a
   change is accepted; a change accepted on its branch and beaten to the
   landing moves its ids and is accepted again
-- 🚧 **One record, one id** - a scenario or a case copied into a second change
+- **One record, one id** - a scenario or a case copied into a second change
   keeps the trace id it already holds, however its title is reworded
 
 ## Checks

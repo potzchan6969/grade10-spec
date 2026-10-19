@@ -26,8 +26,15 @@ with tables and worked examples. Both:
 [`grade10-vault-digital-twin.md`](grade10-vault-digital-twin.md) is the
 proposal for optional Book a Visit (grading, vault drop-off, or other) at
 Causeway Bay, in-store registration, digitization, and a collector
-portfolio (Storybook `Pages/Appointment *` + `Pages/Vault *` + flow canvas);
+portfolio (Storybook `Appointment/*` + `Vault/*` + flow canvas);
 no change carries it yet.
+
+[`inventory-and-services-design.md`](inventory-and-services-design.md) is
+the design behind the owner's inventory brief: one item per physical object,
+the places it sits, how it moves, the marks and hand-offs between the vault,
+grading, the auction and consignment, store and auction consignment, a
+documents service, and the admin console; the inventory pages, Consignment
+and the Documents Service page carry it, and no change does yet.
 
 The `shopify-*` set is the working notes behind the
 `add-shopify-membership-pos` change: the umbrella plan, the checkout identity
@@ -59,3 +66,18 @@ is the legal wording the vault and grading print, drafted for counsel: the
 forfeiture notice, the notices clause, the licence line, the complaints
 footer, the collection statement, grading's clause 6 and the uncollected-cards
 notice, with where each value lives while it is unset.
+
+[`appointment-benchmarks.md`](appointment-benchmarks.md) is what Apple's
+Genius Bar, hybrid queue products and cal.com do for booked and walk-in
+visits, and what [Front Desk](../prds/products/grade10-admin/appointment/front-desk.md)
+and [Your Visit](../prds/products/grade10-site/appointment/visit.md) take from
+them.
+
+[`store-order-status-brief.md`](store-order-status-brief.md) is the brief
+behind Order Status: one row per note and each combination a decision settles
+by name, the badge and note the store gives it, and where the store records
+it, for `add-store-order-status`'s task 1.1 to check.
+
+[`store-process-cost.md`](store-process-cost.md) is what one accepted
+amendment cost in store commands, and six proposals to cut it; QA accepted
+all six, which become one change.

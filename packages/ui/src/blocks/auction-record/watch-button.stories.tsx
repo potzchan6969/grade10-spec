@@ -1,4 +1,4 @@
-import { Toast } from "@grade10/design-system/components/overlays/toast";
+import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
@@ -15,7 +15,7 @@ const undoUnwatch = fn();
  * Unwatch instead; this is the Bell control `ListingLotHeader` composes.
  */
 const meta = {
-  title: "Auction Listing/WatchButton",
+  title: "Auction/Bidding/Blocks/WatchButton",
   component: WatchButton,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
@@ -28,6 +28,14 @@ const meta = {
     ),
   ],
 } satisfies Meta<typeof WatchButton>;
+
+/** Toasts outlive a story in the shared frame; each announcing play starts clear. */
+async function clearToasts() {
+  toast.dismiss();
+  await waitFor(() =>
+    expect(document.querySelector("[data-sonner-toast]")).toBeNull(),
+  );
+}
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -112,6 +120,7 @@ export const WatchAnnounces: Story = {
   },
   render: () => <WatchWithToasts />,
   play: async ({ canvasElement }) => {
+    await clearToasts();
     openMyAuctions.mockClear();
     const canvas = within(canvasElement);
     const body = within(document.body);
@@ -140,6 +149,7 @@ export const UnwatchAnnounces: Story = {
   },
   render: () => <WatchWithToasts initialWatched />,
   play: async ({ canvasElement }) => {
+    await clearToasts();
     undoUnwatch.mockClear();
     const canvas = within(canvasElement);
     const body = within(document.body);
@@ -160,5 +170,105 @@ export const UnwatchAnnounces: Story = {
         canvas.getByRole("button", { name: "Unwatch this auction" }),
       ).toBeVisible(),
     );
+  },
+};
+
+/** The owner's write is in flight: busy, still focusable, a second press is refused. */
+export const Pending: Story = {
+  name: "Pending",
+  args: {
+    copy: WATCH_COPY,
+    onPress: watchPressed,
+    pending: true,
+    watched: true,
+  },
+  play: async ({ canvasElement }) => {
+    watchPressed.mockClear();
+    const button = within(canvasElement).getByRole("button", {
+      name: "Unwatch this auction",
+    });
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).toHaveAttribute("aria-disabled", "true");
+    button.focus();
+    expect(button).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    expect(watchPressed).not.toHaveBeenCalled();
+  },
+};
+
+/** The owner refused the last press: the refusal shows beside the control. */
+export const Refused: Story = {
+  name: "Refused",
+  args: {
+    copy: WATCH_COPY,
+    failed: "We could not watch this auction. Try again.",
+    onPress: watchPressed,
+    watched: false,
+  },
+  play: async ({ canvasElement }) => {
+    watchPressed.mockClear();
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "We could not watch this auction. Try again.",
+    );
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Watch this auction" }),
+    );
+    expect(watchPressed).toHaveBeenCalled();
+  },
+};
+
+function WatchRefusedOwner() {
+  const [watched, setWatched] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [failed, setFailed] = useState<string>();
+
+  return (
+    <WatchButton
+      copy={WATCH_COPY}
+      failed={failed}
+      onPress={() => {
+        setFailed(undefined);
+        setWatched(true);
+        setPending(true);
+        setTimeout(() => {
+          setWatched(false);
+          setPending(false);
+          setFailed("We could not watch this auction. Try again.");
+        }, 50);
+      }}
+      onWatchedToastAction={openMyAuctions}
+      pending={pending}
+      watched={watched}
+    />
+  );
+}
+
+/** A refused write moves back and says why; no Watched toast announces it. */
+export const RefusedRollbackIsSilent: Story = {
+  name: "Refused rollback is silent",
+  args: {
+    copy: WATCH_COPY,
+    onPress: watchPressed,
+    watched: false,
+  },
+  render: () => <WatchRefusedOwner />,
+  play: async ({ canvasElement }) => {
+    await clearToasts();
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Watch this auction" }),
+    );
+    await waitFor(() =>
+      expect(canvas.getByRole("alert")).toHaveTextContent(
+        "We could not watch this auction. Try again.",
+      ),
+    );
+    expect(
+      within(document.body).queryByText("Email alerts on for this auction"),
+    ).toBeNull();
+    expect(
+      canvas.getByRole("button", { name: "Watch this auction" }),
+    ).not.toHaveAttribute("aria-busy");
   },
 };

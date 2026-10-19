@@ -22,16 +22,17 @@
  *              landing that carries somebody's uncommitted edit is not a
  *              landing
  *   2 hand     Resolve the hand once: with `.round/relay.json` naming a wake,
- *              the wake's sender, and a wake with no sender lands only
- *              `--reviewed`; otherwise `git config user.email` through the
+ *              the wake's sender, and a wake with no sender lands nothing,
+ *              a read again included; otherwise `git config user.email` through the
  *              team map, refusing an e-mail the map does not name and a
  *              handle that is not the hand of the stage, naming whose word it
  *              waits on; `--as @handle` is taken only where it resolves to
  *              the same e-mail. Everything after this reads that one value
  *   3 main     `git fetch origin main`, record that sha as `MAIN`, and rebase
  *              the change's branch on it
- *   4 behind   Refuse when `behindOf` names anything before the artifact, and
- *              name it and its hand; refuse while a `❓` row is open, naming
+ *   4 behind   Refuse when `behindOf` names a major move before the
+ *              artifact, and name it, what moved and its hand - a small move
+ *              is told and holds only the fold; refuse while a `❓` row is open, naming
  *              the rows, unless `--with-recommendations` takes them; the rows
  *              are read through the manual's own question reader, never a
  *              second parser. Bound to a wake, ask it once here whether it is
@@ -39,9 +40,10 @@
  *              under it cuts nothing (Q81)
  *   5 cut      Cut the landing commit `L` from `MAIN`: for an artifact, its
  *              own files (the schema's `generates:` glob), the change's
- *              `.openspec.yaml` with `landed_by:` and, with the flag, the
- *              `reviewed:` lines of the drafted artifacts after the
- *              decisions, `rounds.md` with the round's row, `decisions.md`
+ *              `.openspec.yaml` with `landed_by:` and the artifact's own
+ *              `reviewed:` line - a hand's landing is a hand's read - read
+ *              over `MAIN` with what the landing carries laid over it,
+ *              `rounds.md` with the round's row, `decisions.md`
  *              wherever the branch changed it - the flag's rewrite of the
  *              held rows, or the hand's own answer - and the pages the
  *              proposal links, which is the set `reread-guard.mjs` holds
@@ -255,44 +257,39 @@ const branch = git(["rev-parse", "--abbrev-ref", "HEAD"]);
 say("clean", `the tree is clean, on ${branch}`);
 
 // ── 2 hand — resolved once, and every step after this reads that one value ───
-// Skipped for `--reviewed`: a read that changes nothing is the change's agent
-// to land, not a hand's word, and a wake with no sender still lands one.
+// `--reviewed` too: a read again lands on its hand's word, as any landing does.
 let handle;
 let email;
-if (!reviewedOnly) {
-  if (wake) {
-    handle = String(wake.sender?.handle ?? "")
-      .replace(/^@/, "")
-      .trim()
-      .toLowerCase();
-    if (!handle) {
-      fail(
-        "this wake has no word behind it: nobody said land — only --reviewed lands here",
-      );
-    }
-  } else {
-    const map = readTeamMap(root);
-    email = git(["config", "user.email"]);
-    if (!email)
-      fail(
-        "`git config user.email` says nothing — a landing is somebody's word",
-      );
-    handle = handleOfEmail(map, email);
-    if (!handle) {
-      fail(
-        `${email} is named nowhere in ${TEAM_MAP} — a landing is recorded against a handle, and the map is the fix`,
-      );
-    }
+if (wake) {
+  handle = String(wake.sender?.handle ?? "")
+    .replace(/^@/, "")
+    .trim()
+    .toLowerCase();
+  if (!handle) {
+    fail(
+      "this wake has no word behind it: nobody said land, and a read again is its hand's word too",
+    );
   }
-  if (flags.as) {
-    const asked = flags.as.replace(/^@/, "").trim().toLowerCase();
-    if (asked !== handle) {
-      fail(
-        wake
-          ? `--as @${asked} does not match @${handle}, the relay's own sender — a landing is the run's word`
-          : `--as @${asked} does not resolve to ${email}, which ${TEAM_MAP} names @${handle} — a landing is the committer's word`,
-      );
-    }
+} else {
+  const map = readTeamMap(root);
+  email = git(["config", "user.email"]);
+  if (!email)
+    fail("`git config user.email` says nothing — a landing is somebody's word");
+  handle = handleOfEmail(map, email);
+  if (!handle) {
+    fail(
+      `${email} is named nowhere in ${TEAM_MAP} — a landing is recorded against a handle, and the map is the fix`,
+    );
+  }
+}
+if (flags.as) {
+  const asked = flags.as.replace(/^@/, "").trim().toLowerCase();
+  if (asked !== handle) {
+    fail(
+      wake
+        ? `--as @${asked} does not match @${handle}, the relay's own sender — a landing is the run's word`
+        : `--as @${asked} does not resolve to ${email}, which ${TEAM_MAP} names @${handle} — a landing is the committer's word`,
+    );
   }
 }
 
@@ -379,48 +376,90 @@ async function attemptLanding(attempt) {
   if (reviewedOnly) {
     against = readAgainst(read.entry, artifacts, artifact);
     if (against.refusal) fail(against.refusal);
-    say(
-      "hand",
-      "a read that changes nothing is the change's agent to land — no hand's word is asked",
-    );
-  } else {
-    const hand = read.entry.hands?.[role];
-    if (hand === undefined) {
-      fail(
-        `${change} names no ${role} — ${target} waits on that hand's word, and the record is the fix`,
-      );
-    }
-    if (hand.toLowerCase() !== handle) {
-      fail(
-        `${target} waits on @${hand}'s word, not @${handle}'s — reassigning the hand is the way around`,
-      );
-    }
-    say("hand", `@${handle} is the ${role} and the hand of ${target}`);
   }
+  const hand = read.entry.hands?.[role];
+  if (hand === undefined) {
+    fail(
+      `${change} names no ${role} — ${target} waits on that hand's word, and the record is the fix`,
+    );
+  }
+  if (hand.toLowerCase() !== handle) {
+    fail(
+      `${target} waits on @${hand}'s word, not @${handle}'s — reassigning the hand is the way around`,
+    );
+  }
+  say("hand", `@${handle} is the ${role} and the hand of ${target}`);
 
   /** The handle whose word one artifact of the change waits on, or nothing
    * where the change names no hand for its stage. */
   const whose = (id) => read.entry.hands?.[handOfArtifact(id, artifacts) ?? ""];
 
+  const tip = git(["rev-parse", "HEAD"]);
+  const base = group ? tip : MAIN;
+  // A git that refused is this reading broken, not a branch that changed
+  // nothing: it leaves through `fail`, as `heldIdsOf` does.
+  let changed = [];
+  try {
+    changed = changedPaths(root, MAIN, tip);
+  } catch (cause) {
+    fail(cause.message);
+  }
+  // Before what is behind: a group carries the branch whole, so an artifact whose text on the branch
+  // `main` does not hold would reach `main` with no hand's word behind it.
+  // Read off the text, never off a `landed_by:` line: a landed artifact
+  // redrawn on the branch is a draft again, and one whose text `main` holds
+  // already is nobody's draft whatever the record says. A file the branch
+  // took off `main` is the same reach with no draft to drop, and is named
+  // as what it is.
+  if (group) {
+    const drafts = [];
+    const removals = [];
+    for (const { id } of artifacts) {
+      if (GROUP_CARRIES.has(id)) continue;
+      const hand = whose(id);
+      for (const path of filesOf(changed, artifacts, id)) {
+        const line = hand ? `${path} — waits on @${hand}` : path;
+        (existsSync(join(root, path)) ? drafts : removals).push(line);
+      }
+    }
+    if (drafts.length > 0) {
+      fail(
+        `${target}'s landing carries a draft no hand has landed:\n${listed(drafts)}\nLand each on its hand's word, or drop the draft from the branch.`,
+      );
+    }
+    if (removals.length > 0) {
+      fail(
+        `${target}'s landing takes a schema artifact off main with no hand's word:\n${listed(removals)}\nLand the removal on its hand's word, or restore the file on the branch.`,
+      );
+    }
+  }
   // ── 4 behind, and the held rows (Q59, Q60) ────────────────────────────────
   // A task group is after every artifact: the plan it implements is the last
   // of them, so anything behind refuses it.
   const order = artifacts.map((one) => one.id);
   const at = group ? order.length : order.indexOf(artifact);
-  const behind = behindOf(read.entry, artifacts).filter(
+  const before = behindOf(read.entry, artifacts).filter(
     (one) => order.indexOf(one.artifact) < at,
   );
-  if (behind.length > 0) {
-    const [first] = behind;
+  const holding = before.filter((one) => one.holds);
+  if (holding.length > 0) {
+    const [first] = holding;
     const hand = whose(first.artifact);
-    // What the artifact is read again against: the items the commit dates
-    // single out, or the whole of what is before it where the recorded id is
-    // what says it moved.
+    const moved = first.moved
+      .filter((one) => one.major)
+      .map((one) =>
+        one.key === one.item ? one.item : `${one.item} ${one.key}`,
+      );
     fail(
-      `${first.artifact} is behind ${first.changed.join(", ")}${hand ? ` and waits on @${hand}` : ""} — it is read again before ${target} lands`,
+      `${first.artifact} is behind a major move — ${moved.join(", ")}${hand ? ` — and waits on @${hand}` : ""}: it is read again before ${target} lands`,
     );
   }
-  say("behind", `nothing before ${target} is behind`);
+  say(
+    "behind",
+    before.length > 0
+      ? `a small move before ${before.map((one) => one.artifact).join(", ")}, told and holding only the fold`
+      : `nothing before ${target} is behind`,
+  );
 
   // Skipped for --reviewed: a read that changes nothing asks nobody's word,
   // so it waits on no one's answer either. Read once, here, and every reader
@@ -473,45 +512,6 @@ async function attemptLanding(attempt) {
 
   // ── 5 cut ────────────────────────────────────────────────────────────────
   const cells = reviewedOnly ? undefined : rowOf(read, artifact, group);
-  const tip = git(["rev-parse", "HEAD"]);
-  const base = group ? tip : MAIN;
-  // A git that refused is this reading broken, not a branch that changed
-  // nothing: it leaves through `fail`, as `heldIdsOf` does.
-  let changed = [];
-  try {
-    changed = changedPaths(root, MAIN, tip);
-  } catch (cause) {
-    fail(cause.message);
-  }
-  // A group carries the branch whole, so an artifact whose text on the branch
-  // `main` does not hold would reach `main` with no hand's word behind it.
-  // Read off the text, never off a `landed_by:` line: a landed artifact
-  // redrawn on the branch is a draft again, and one whose text `main` holds
-  // already is nobody's draft whatever the record says. A file the branch
-  // took off `main` is the same reach with no draft to drop, and is named
-  // as what it is.
-  if (group) {
-    const drafts = [];
-    const removals = [];
-    for (const { id } of artifacts) {
-      if (GROUP_CARRIES.has(id)) continue;
-      const hand = whose(id);
-      for (const path of filesOf(changed, artifacts, id)) {
-        const line = hand ? `${path} — waits on @${hand}` : path;
-        (existsSync(join(root, path)) ? drafts : removals).push(line);
-      }
-    }
-    if (drafts.length > 0) {
-      fail(
-        `${target}'s landing carries a draft no hand has landed:\n${listed(drafts)}\nLand each on its hand's word, or drop the draft from the branch.`,
-      );
-    }
-    if (removals.length > 0) {
-      fail(
-        `${target}'s landing takes a schema artifact off main with no hand's word:\n${listed(removals)}\nLand the removal on its hand's word, or restore the file on the branch.`,
-      );
-    }
-  }
   // The pages the change may write, held to the exact set the guard holds
   // every push of this run to: the change's own directory is carried by the
   // legs above this one, artifact by artifact, so the pages are what is left
@@ -556,20 +556,16 @@ async function attemptLanding(attempt) {
     written.set(roundsPath(change), rounds.text);
     say("cut", `round ${rounds.round}: ${rounds.row}`);
   }
-  // The drafts after the decisions were drawn from the decisions this landing
-  // carries — the recommendations the flag took, or the hand's own answer —
-  // so the same commit records them as read again against them and nothing
-  // goes behind (Q60).
-  if (carriesDecisions) {
-    const reread = await reviewedAfterDecisions(tip, written, order, changed);
-    if (reread.length > 0) {
-      lines.push(...reread.map(([id, content]) => ["reviewed", id, content]));
-      say(
-        "cut",
-        `read again against ${ids === "" ? "the decisions" : ids}: ${reread
-          .map(([id]) => id)
-          .join(", ")}`,
-      );
+  // A hand's landing is a hand's read: the artifact's own `reviewed:` line,
+  // read over `MAIN` with what this landing carries laid over it, the tree
+  // `main` will hold. No answer marks any other draft read: a taken
+  // recommendation is no move, and an overturned one is a major move its
+  // drafts' hands read again (`tell-each-hand-what-moved` Q6).
+  if (!reviewedOnly && !group) {
+    const own = await reviewedOfLanding(MAIN, carried, written, artifact);
+    if (own !== undefined) {
+      lines.push(["reviewed", artifact, own]);
+      say("cut", `reviewed: ${artifact}: ${own}`);
     }
   }
   if (lines.length > 0) written.set(recordPath(), recordText(lines));
@@ -696,7 +692,7 @@ async function attemptLanding(attempt) {
   say("branch", `${branch} rebased onto ${short(commit)} and pushed`);
   const took = held.length > 0 ? ` — took ${ids} as recommended` : "";
   console.log(
-    `\n✓ ${target} of ${change} landed${reviewedOnly ? "" : ` by @${handle}`}${took}`,
+    `\n✓ ${target} of ${change} ${reviewedOnly ? "read again" : "landed"} by @${handle}${took}`,
   );
   return true;
 }
@@ -815,20 +811,23 @@ function worktreeAt(commit) {
 }
 
 /**
- * The `reviewed:` lines a landing that carries the decisions owes: one per
- * artifact after them that the branch drafted, in the grammar
- * `lib/reviewed.mjs` writes.
- *
- * Read off the branch tip with this landing's own written files laid over
- * it — never off `L`'s tree, which carries `main`'s draft of everything this
- * landing does not itself land: an id computed there would say the drafts
- * were read against texts the run never saw, and every one of them would go
- * behind on the next reading.
+ * The `reviewed:` id the landed artifact is read against: what is before it on
+ * `MAIN` with this landing's carried files, at the branch tip, and its written
+ * files laid over it — the tree `main` holds once it lands. Nothing where the
+ * artifact is drawn from nothing in this change.
  */
-async function reviewedAfterDecisions(tip, written, order, changed) {
-  const from = order.indexOf("decisions");
-  if (from === -1) return [];
-  const at = worktreeAt(tip);
+async function reviewedOfLanding(main, carried, written, id) {
+  const at = worktreeAt(main);
+  // The checkout is clean and at `tip`, so a carried file is read off it.
+  for (const path of carried) {
+    const file = join(at, path);
+    if (!existsSync(join(root, path))) {
+      rmSync(file, { force: true });
+      continue;
+    }
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, readFileSync(join(root, path)));
+  }
   for (const [path, text] of written) {
     const file = join(at, path);
     mkdirSync(dirname(file), { recursive: true });
@@ -837,14 +836,8 @@ async function reviewedAfterDecisions(tip, written, order, changed) {
   const read = await readChangeEntry(at, change).catch((cause) =>
     fail(cause.message),
   );
-  const lines = [];
-  for (const id of order.slice(from + 1)) {
-    if (filesOf(changed, read.artifacts, id).length === 0) continue;
-    const against = readAgainst(read.entry, read.artifacts, id);
-    if (against.refusal) continue;
-    lines.push([id, against.content]);
-  }
-  return lines;
+  const against = readAgainst(read.entry, read.artifacts, id);
+  return against.refusal ? undefined : against.content;
 }
 
 /** The artifact id a target names: the schema's id, or the file it generates.
@@ -1039,6 +1032,19 @@ function askedCell(value) {
  * so it says so rather than leaving a rebase in progress behind.
  */
 function fetchMain() {
+  // What moved is read off the history: a shallow clone cannot find the
+  // commit that wrote a `reviewed:` line, so it is deepened first.
+  if (git(["rev-parse", "--is-shallow-repository"]) === "true") {
+    const deepened = spawnSync("git", ["fetch", "--quiet", "--unshallow"], {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    if (deepened.status !== 0)
+      fail(
+        `the clone is shallow and would not deepen, so what moved cannot be read:\n${deepened.stderr ?? ""}`,
+      );
+  }
   const main = storeMain(root, { fetch: "always" });
   if (!main) fail("origin has no main to land on");
   const rebased = spawnSync("git", ["rebase", "--quiet", main.commit], {

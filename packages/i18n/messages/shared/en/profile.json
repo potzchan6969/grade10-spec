@@ -5,5 +5,33 @@
   "bioLabel": "Bio",
   "editLabel": "Edit profile",
   "emptyBio": "No bio yet.",
-  "memberSince": "Member since {date}"
+  "memberSince": "Member since {date}",
+  "chooseAvatar": "Choose picture",
+  "removeAvatar": "Remove picture",
+  "avatarAlt": "Your profile picture",
+  "displayNameRequired": "Enter a display name.",
+  "displayNameTooLong": "Display name can be at most {max} characters.",
+  "bioTooLong": "Bio can be at most {max} characters.",
+  "nothingToSave": "Nothing to save.",
+  "avatarType": "Choose a JPEG, PNG or WebP picture.",
+  "avatarTooLarge": "Picture can be at most 5 MB.",
+  "saveFailed": "Could not save your profile. Try again.",
+  "consignments": {
+    "view": {
+      "new": "Request received",
+      "toprice": "Received",
+      "tosign": "Ready to sign",
+      "tolist": "Signed",
+      "onsale": "On sale",
+      "sold": "Sold",
+      "payout": "Payout on its way",
+      "ended": "Ended: choose what happens next",
+      "returning": "On its way back to you",
+      "closed": "Closed"
+    },
+    "sellerLine": "Sold by {name}",
+    "sellerLineSub": "A collector selling through Grade10. We hold the card, take payment and handle returns.",
+    "lotSellerLine": "Consigned by {name}",
+    "lotSellerLineSub": "Selling through Grade10 Auctions. We hold the card, take payment and deliver it."
+  }
 }

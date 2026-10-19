@@ -10,3 +10,6 @@ hands:
   dev: tester
 depends_on:
   - demo-planned
+reviewed:
+  proposal: 355a7f65
+  tasks: f5914656

@@ -107,8 +107,9 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 
 - `createCheckout` takes a user id and an email as arguments and asks nothing about where they came from, so the order machine is already identity-agnostic
 - Three things make checkout a signed-in act: `authedProcedure` on the store's checkout procedures, `orders.user_id` being non-null, and `order_events.user_id` — which is the one that leaves the building, since it is the only identity loyalty and analytics ever see
-- Guest checkout, if it is ever wanted, is those three plus an ownership proof and a claim flow — not a change to the machine. Matching a provider's customer by email stays out: a buyer types whatever they like into a hosted checkout
-- Deferring it is free only while no order exists. Loyalty mints a member for any id handed to it and neither it nor Mixpanel has a merge primitive, so once real orders land, identities a later claim flow would want to reconcile are already accumulating. The store is signed-in-only until that decision is made deliberately
+- A guest checkout is an order marked guest: no `user_id` at checkout, so no account is minted and loyalty never sees it. The email Shopify's page took is kept on the order. The order gets its owner from the account whose proven email it was placed under - at payment when that account exists, otherwise when a sign-in proves that email, by a magic link to it or a Google account under it
+- 🚧 A guest order earns nothing, joined or not: loyalty never hears of it
+- Matching a provider's customer by email stays out: a buyer types whatever they like into a hosted checkout, so only an account's proven email ever links a guest order
 - The checkout URL is a bearer link: Shopify binds no session to it, so whoever holds it can pay, and the order settles to whoever created the cart. Nothing available here closes that, and recording the payer's email would not — it changes no ownership and no read path
 
 ### A settlement is bound to the cart that paid for it
@@ -158,7 +159,7 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 ### The money facts a settlement queues are drained by whoever settled it
 
 - `order_events` rows are written in the transaction that changes the status, so the fact exists if the order moved. Delivery is a separate, at-least-once pass
-- Three things ask the queue to move, and all three defer it on a connection of their own so nothing waits on a consumer: the provider webhook, the reconcile pass, and a buyer's own read of their order. Every settlement path drains what it queued — a `refunded` transition queues a claw-back exactly as `paid` queues an earn, and `queuesOrderEvent` is the one place that says which do
+- Three things ask the queue to move, and all three defer it on a connection of their own so nothing waits on a consumer: the provider webhook, the reconcile pass, and a buyer's own read of their order. Every settlement path drains what it queued — a `refunded` transition queues a claw-back exactly as `paid` queues an earn, and the earn is queued when the order completes - [Points](/p/grade10-site/loyalty/points#backend-flow). `queuesOrderEvent` is the one place that says which do
 - Deferring only accelerates: the row is durable and the cron reaches it regardless, so a drain that never runs costs a buyer one tick, never their points
 - Retries double from a minute to an hour; past the twelfth attempt the drain stops offering a row. `storeAdmin.orderEvents.retryStuck` is how a person hands them back once whatever refused them is fixed — it rewinds the count, so a released row gets the whole ladder again
 

@@ -5,3 +5,11 @@ hands:
   pm: "@ecchochan"
   dev: "@ecchochan"
 ui_waived: "a staff-console change built from the console's existing confirm dialog and badge, with no new look"
+reviewed:
+  proposal: e1b069d0
+  decisions: c19353e0
+  tech-design: 0a118077
+  specs: f4628d37
+  test-cases: 0a118077
+  tasks: 3d7589fe
+  user-journeys: 2aef430a

@@ -16,9 +16,9 @@
 
 <!-- The user journeys live in user-journeys.md beside this file, never in it. -->
 
-<!-- <capability> is the capability's path with slashes as hyphens:
-     grade10-site/store/product-listing issues
-     grade10-site-store-product-listing-SC-01, -US-01, -US1-TC1-1. -->
+<!-- <product>/<domain>/<capability> remains the path owner. Its app display
+     code supplies the human-facing scenario anchor, for example
+     g10.store-product-listing.SC1. Existing trace:scenario marker ids never change. -->
 
 <!-- Everything below is the second pass, written after the blind suite and
      the reconciliation. `openspec instructions specs` carries the rules for
@@ -29,8 +29,8 @@
 ### Requirement: <!-- requirement name -->
 <!-- requirement text -->
 
-#### Scenario: <capability>-SC-01 - <!-- scenario name -->
-**Serves:** <!-- <capability>-US-<n>; or <product>/<domain>/<capability>#<journey-id> for another capability's journey; or a Feature set root group, for a rule with no actor --> - <!-- the walk this rule sits on, prose -->
+#### Scenario: <app>.<domain>-<capability>.SC1 - <!-- scenario name -->
+**Serves:** <!-- <app>.<domain>-<capability>.US<n>; or <product>/<domain>/<capability>#<journey-id> for another capability's journey; or a Feature set root group, for a rule with no actor --> - <!-- the walk this rule sits on, prose -->
 
 - **WHEN** <!-- condition -->
 - **THEN** <!-- expected outcome -->

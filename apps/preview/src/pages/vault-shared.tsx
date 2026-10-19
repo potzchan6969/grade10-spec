@@ -1,19 +1,22 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@grade10/design-system/components/display/card";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { SiteHeader } from "@grade10/ui";
+import { cn } from "@grade10/design-system/lib/utils";
+import { LISTING_LOT_GRID_CLASS, SiteHeader } from "@grade10/ui";
 import { Package, Vault } from "@phosphor-icons/react";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { VAULT_FOOTER, VAULT_SITE_HEADER } from "./vault-content";
+
+/**
+ * Mount-time page entrance — sections rise 8px, cross-blur 2px and fade in
+ * over 300ms on the smooth-out ease (transitions.dev tokens), staggered by
+ * `delay-*` per section. Mount-only; reduced-motion renders instantly.
+ */
+const PAGE_ENTER_CLASS =
+  "animate-in fade-in-0 slide-in-from-bottom-2 blur-in-[2px] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] fill-mode-backwards motion-reduce:animate-none";
 
 function VaultPageShell({
   children,
@@ -34,6 +37,27 @@ function VaultPageShell({
           }
         >
           {children}
+        </div>
+      </main>
+      <Footer {...VAULT_FOOTER} />
+    </div>
+  );
+}
+
+function VaultItemDetailPageShell({
+  children,
+  header,
+}: {
+  children: ReactNode;
+  header?: ReactNode;
+}) {
+  return (
+    <div className="flex min-h-svh flex-col bg-background">
+      <SiteHeader {...VAULT_SITE_HEADER} />
+      <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 pb-16 sm:px-8">
+        <div className="flex flex-col gap-8 pt-8 sm:gap-12 lg:pt-12">
+          {header}
+          <div className={LISTING_LOT_GRID_CLASS}>{children}</div>
         </div>
       </main>
       <Footer {...VAULT_FOOTER} />
@@ -67,7 +91,7 @@ function PageHeader({
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div className="flex max-w-2xl flex-col gap-2">
-        <h1 className="font-heading text-3xl font-medium tracking-tight text-balance md:text-4xl">
+        <h1 className="font-heading text-3xl font-semibold tracking-tight text-balance md:text-4xl">
           {title}
         </h1>
         {description ? (
@@ -118,67 +142,6 @@ function PageSection({
   );
 }
 
-function SummaryStat({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: ReactNode;
-  hint?: ReactNode;
-}) {
-  return (
-    <Card className="gap-0" data-slot="vault-summary-stat">
-      <CardHeader className="gap-1.5 pb-0">
-        <CardDescription className="text-secondary-foreground">
-          {label}
-        </CardDescription>
-        <CardTitle className="font-heading text-2xl font-medium tracking-tight tabular-nums md:text-3xl">
-          {value}
-        </CardTitle>
-      </CardHeader>
-      {hint ? (
-        <CardContent className="pt-2">
-          <Text className="text-secondary-foreground" size="xs">
-            {hint}
-          </Text>
-        </CardContent>
-      ) : (
-        <div className="h-2" />
-      )}
-    </Card>
-  );
-}
-
-function PortfolioSummary({
-  itemCount,
-  estimate,
-  feeLabel,
-  feeHint,
-  valuationHint,
-}: {
-  itemCount: number;
-  estimate: string;
-  feeLabel: string;
-  feeHint: string;
-  valuationHint: string;
-}) {
-  return (
-    <section
-      aria-label="Portfolio summary"
-      className="grid gap-3 sm:grid-cols-3 sm:gap-4"
-    >
-      <SummaryStat label="Total Item Count" value={itemCount} />
-      <SummaryStat
-        label="Total Estimated Value"
-        value={estimate}
-        hint={valuationHint}
-      />
-      <SummaryStat label="Storage Fees" value={feeLabel} hint={feeHint} />
-    </section>
-  );
-}
-
 function ProposalBanner({
   title = "Proposal notes",
   children,
@@ -224,6 +187,48 @@ function VaultEmptyState({
   );
 }
 
+/** Bottom rule only while stuck — at rest the bar sits flush with the page. */
+function StickyTabBar({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = useState(false);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry) return;
+      setStuck(!entry.isIntersecting);
+    });
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <>
+      <div
+        aria-hidden
+        className="pointer-events-none h-px w-full"
+        ref={sentinelRef}
+      />
+      <div
+        className={cn(
+          "sticky top-0 z-10 -mx-4 bg-background/95 px-4 py-3 backdrop-blur-sm supports-backdrop-filter:bg-background/90 sm:-mx-6 sm:px-6 md:-mx-8 md:px-8",
+          stuck && "border-b border-border",
+          className,
+        )}
+      >
+        {children}
+      </div>
+    </>
+  );
+}
+
 /** Label left, value right — adidas / Glow metadata row. */
 function FactRow({
   label,
@@ -256,14 +261,49 @@ function FactRow({
   );
 }
 
+/**
+ * The note a wireframe carries at its top: the design still to settle, and the
+ * manual page the screen reads from. Not a block; drawn only in prototypes.
+ */
+function PrototypeNote({
+  manualPath,
+  settles,
+}: {
+  manualPath: string;
+  settles: string;
+}) {
+  return (
+    <aside
+      aria-label="Not yet designed"
+      className="flex flex-col gap-2 rounded-2xl border border-dashed border-border bg-muted/40 p-4"
+      role="note"
+    >
+      <Text size="sm" weight="medium">
+        Not yet designed
+      </Text>
+      <Text size="sm" tone="secondary">
+        The design must still settle {settles} Manual page:{" "}
+        <Link
+          href={`https://spec.grade10-stg.com/p/grade10-site/${manualPath}`}
+        >
+          {manualPath}
+        </Link>
+        .
+      </Text>
+    </aside>
+  );
+}
+
 export {
   AppointmentPageShell,
   FactRow,
+  PAGE_ENTER_CLASS,
   PageHeader,
   PageSection,
-  PortfolioSummary,
   ProposalBanner,
-  SummaryStat,
+  PrototypeNote,
+  StickyTabBar,
   VaultEmptyState,
+  VaultItemDetailPageShell,
   VaultPageShell,
 };

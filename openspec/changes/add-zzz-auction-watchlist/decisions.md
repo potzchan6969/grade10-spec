@@ -25,6 +25,8 @@
 | Q2 | Same meaning of watch as Grade10? | Yes — shared auction rules; ZZZ only adds its surfaces (recommended) | A ZZZ-only watch table or a softer "favourite" with different semantics |
 | Q3 | What surfaces does ZZZ need for watching? | Listing page, catalogue tile, and watched list — the hosts the Grade10 change already fills (recommended) | Watched list alone, or waiting on full auction parity before any watch control |
 | Q4 | Does this change rewrite shared contracts? | No — depends on `add-auction-watchlist` for the record and RPCs (recommended) | Duplicating watch writes in the ZZZ store worker |
+| Q5 | ZZZ has no auction surface; what is the smallest one watching needs? | Decided by agent - a listing page at `/auction/listings/<listing id>` and the watched list at `/auction/watching`, linked from the profile; the catalogue tile waits for a ZZZ catalogue, which ZZZ's gateway does not route | A full catalogue on ZZZ, which needs the auction service routed through ZZZ's gateway and a ZZZ auction PRD |
+| Q6 | How is a ZZZ listing addressed? | Decided by agent - by listing id, the key the store's listing read takes | By slug, which needs the catalogue read ZZZ does not carry |
 
 ## Raised
 

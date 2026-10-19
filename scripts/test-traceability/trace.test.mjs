@@ -117,6 +117,141 @@ test("case initialization copies the heading version into the marker revision", 
   }
 });
 
+test("case initialization can create an anchor-only marker before QA2 links scenarios", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture({
+    marker: false,
+    headingRevision: 2,
+  });
+  try {
+    const target =
+      "### grade10-site-store-product-listing-US1-TC1-2: Listing opens";
+    const result = runCli([
+      "init",
+      "case",
+      "--file",
+      caseFile,
+      "--target",
+      target,
+      "--app",
+      "g10",
+      "--product",
+      "store",
+      "--capability",
+      "product-listing",
+      "--store-root",
+      storeRoot,
+      "--dry-run",
+    ]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /trace:case id=.* rev=2\s*-->/);
+    assert.doesNotMatch(result.stdout, /covers=/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+/** A copy of the fixture's durable case in an open change's suite, as a
+ * second change carries it: its heading revised, no marker yet. */
+function copiedCase(storeRoot, heading) {
+  const dir = resolve(
+    storeRoot,
+    "openspec/changes/carry-it/specs/grade10-site/store/product-listing",
+  );
+  mkdirSync(dir, { recursive: true });
+  const file = resolve(dir, "feature-tcs.md");
+  writeFileSync(
+    file,
+    `# Store Product Listing Test Cases\n\n${heading}\n\n* **Trace:** grade10-site-store-product-listing-US-01\n`,
+  );
+  return file;
+}
+
+const initCase = (storeRoot, file, target) =>
+  runCli([
+    "init",
+    "case",
+    "--file",
+    file,
+    "--target",
+    target,
+    "--app",
+    "g10",
+    "--product",
+    "store",
+    "--capability",
+    "product-listing",
+    "--store-root",
+    storeRoot,
+    "--dry-run",
+  ]);
+
+test("shared-planning-agent-rounds-US-22 - a case copied into a second change keeps the trace id its readable id holds", () => {
+  const { root, storeRoot } = createSuiteFixture();
+  try {
+    const target =
+      "### grade10-site-store-product-listing-US1-TC1-2: Listing opens, revised";
+    const file = copiedCase(storeRoot, target);
+    const result = initCase(storeRoot, file, target);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(
+      result.stdout,
+      /trace:case id=g10\.store-product-listing\.TC-001 rev=2/,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("a copied case whose readable id is held with no marker is refused", () => {
+  const { root, storeRoot } = createSuiteFixture({ marker: false });
+  try {
+    const target =
+      "### grade10-site-store-product-listing-US1-TC1-2: Listing opens";
+    const file = copiedCase(storeRoot, target);
+    const result = initCase(storeRoot, file, target);
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /held with no trace marker/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate accepts an anchor-only active case marker", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture();
+  try {
+    writeFileSync(
+      caseFile,
+      readFileSync(caseFile, "utf8").replace(
+        " covers=g10.store-product-listing.SC-001",
+        "",
+      ),
+    );
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("report distinguishes an anchor-only case from a deprecated empty link", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture();
+  try {
+    writeFileSync(
+      caseFile,
+      readFileSync(caseFile, "utf8").replace(
+        " covers=g10.store-product-listing.SC-001",
+        "",
+      ),
+    );
+    const result = runCli(["report", "--store-root", storeRoot]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /Scenario-link pending cases: 1/);
+    assert.match(result.stdout, /covers=\(pending QA2\)/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("batch initialization allocates stable ids for mirrored cases and planned scenarios", () => {
   const root = mkdtempSync(resolve(tmpdir(), "trace-batch-test-"));
   const storeRoot = resolve(root, "store");
@@ -556,6 +691,42 @@ test("validate requires the case marker revision to match the heading version", 
     assert.match(
       result.stdout,
       /marker revision 2 must match heading revision 1/,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate uses the marker revision for a modern case heading", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture({ revision: 2 });
+  try {
+    const contents = readFileSync(caseFile, "utf8").replace(
+      /^### .*$/m,
+      "### g10.store-product-listing.TC-001 (US1-TC1): Listing opens",
+    );
+    writeFileSync(caseFile, contents);
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /Suite cases checked: 1 \(unmarked: 0\)/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("validate accepts the human-facing US/TC case heading while keeping marker identity", () => {
+  const { root, storeRoot, caseFile } = createSuiteFixture({ revision: 2 });
+  try {
+    const contents = readFileSync(caseFile, "utf8").replace(
+      /^### .*$/m,
+      "### g10.store-product-listing.US1-TC1: Listing opens",
+    );
+    writeFileSync(caseFile, contents);
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    assert.match(result.stdout, /Suite cases checked: 1 \(unmarked: 0\)/);
+    assert.match(
+      readFileSync(caseFile, "utf8"),
+      /trace:case id=g10\.store-product-listing\.TC-001 rev=2 covers=/,
     );
   } finally {
     rmSync(root, { recursive: true, force: true });

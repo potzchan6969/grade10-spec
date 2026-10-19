@@ -63,7 +63,7 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
     .toBeVisible();
 
   // The page's own order: the open questions' section, then "On you now",
-  // then "Yours later" - read off the DOM order itself rather than off
+  // then "Yours later", then what tester reads again - read off the DOM order itself rather than off
   // text offsets, which two changes sharing a title would leave ambiguous.
   await expect
     .element(page.getByRole("heading", { level: 2, name: "Yours later" }))
@@ -71,7 +71,12 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
   const headings = Array.from(document.querySelectorAll("h2")).map((heading) =>
     heading.textContent?.trim(),
   );
-  expect(headings).toEqual(["Open questions", "On you now", "Yours later"]);
+  expect(headings).toEqual([
+    "Open questions",
+    "On you now",
+    "Yours later",
+    "To read again",
+  ]);
 
   const questions = page.elementLocator(sectionFor("Open questions"));
   await expect

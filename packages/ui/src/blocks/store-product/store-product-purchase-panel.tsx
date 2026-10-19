@@ -1,3 +1,4 @@
+import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { StepperInput } from "@grade10/design-system/components/forms/stepper-input";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
@@ -14,6 +15,8 @@ type StoreProductPurchasePanelCopy = {
 };
 
 type StoreProductPurchasePanelProps = {
+  /** Why the last add was refused, already worded; shown under the button. */
+  addFailed?: string;
   copy: StoreProductPurchasePanelCopy;
   loading?: boolean;
   onAddToCart: () => void;
@@ -23,6 +26,7 @@ type StoreProductPurchasePanelProps = {
 };
 
 function StoreProductPurchasePanel({
+  addFailed,
   copy,
   loading = false,
   onAddToCart,
@@ -68,6 +72,11 @@ function StoreProductPurchasePanel({
       >
         {label}
       </Button>
+      {addFailed ? (
+        <Text role="alert" size="sm" tone="error">
+          {addFailed}
+        </Text>
+      ) : null}
     </VStack>
   );
 }

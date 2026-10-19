@@ -1,0 +1,102 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "d06cdc2bf644f7ba31ab12c55cbb7113afa4f91255710f6f00e752e49330ae7a"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "aadd3f6046c64b07a8fd418fc6e84312f9ed033a",
+    "capturedAt": "2026-10-06T17:19:55.361Z",
+    "targets": [
+      {
+        "path": "openspec/changes/winner-order-tracking-link/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Winner Order makes the tracking number the carrier link"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+      "components": [
+        "preview"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "Codex",
+    "reviewedAt": "2026-10-13T07:07:17.137194Z",
+    "changes": [
+      {
+        "path": "openspec/changes/winner-order-tracking-link/ui-design.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The design adds the accepted plain-text fallback when no tracker link was recorded and updates the Storybook navigation path. Linked Shipped and Delivered states remain.",
+        "evidence": [
+          "2026-10-13: focused preview browser run passed 19/19 delivery, payment and submit-payment-proof stories; standalone how-to-pay passed 3/3 at 7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+          "db848d74e4d9595635c10aab09335801faa27630 implements the fallback; winner-order.delivery.stories.tsx covers Shipped, ShippedWithoutTrackerLink and Delivered."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The rolling suite now has route cases and later accepted sibling coverage. US2-TC2, US2-TC14, US2-TC20 and US2-TC56 retain linked tracking and the no-link fallback.",
+        "evidence": [
+          "2026-10-13: focused preview browser run passed 19/19 delivery, payment and submit-payment-proof stories; standalone how-to-pay passed 3/3 at 7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+          "Store PR1036 head 248174ca703e2fd3816860f415c4da0c062347da passed Test and Test cases workflows."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The rolling feature set adds accepted sibling capabilities and makes tracking conditional on a recorded tracker link. These additions preserve the linked Shipped and Delivered outcomes.",
+        "evidence": [
+          "2026-10-13: focused preview browser run passed 19/19 delivery, payment and submit-payment-proof stories; standalone how-to-pay passed 3/3 at 7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+          "The named tracking requirement retains SC-251 and SC-252 and adds SC-276; db848d74e4d9595635c10aab09335801faa27630 implements this refinement."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: Winner Order makes the tracking number the carrier link"
+        ],
+        "classification": "semantic",
+        "reason": "SC-251 and SC-252 now state that the tracker link exists. SC-276 adds plain text when none exists, with no carrier name or separate Track shipment control.",
+        "evidence": [
+          "2026-10-13: focused preview browser run passed 19/19 delivery, payment and submit-payment-proof stories; standalone how-to-pay passed 3/3 at 7f332912c1e8bd66bea90d4bacff970d25e2df2e",
+          "db848d74e4d9595635c10aab09335801faa27630; https://github.com/9gag/grade10-spec/pull/1036 records verified Delivery stories and screenshots."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "Later accepted sibling changes add cancellation, partial-payment and reopened-address journeys US-13, US-20 and US-23. The tracking journey US-02 is unchanged.",
+        "evidence": [
+          "Accepted sibling contracts: 9fb8774df5f5eebacc0248bec4f48a5a39c6cd5a, 397cc76f44a1f7213527312bd3d627c15af5c814 and 85fe49c153d8776e5d0abfd2385098ae2c86010e; current US13-TC1, US20-TC1 and US23-TC1/2/4-11 record those separate journeys.",
+          "Scoped comparison confirms US-02 unchanged."
+        ]
+      }
+    ]
+  }
+}

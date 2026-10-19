@@ -11,9 +11,10 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "storybook": "storybook dev",
     "build-storybook": "storybook build",
-    "test:stories": "vitest run",
+    "test:stories": "vitest run && pnpm run test:cart-pictures",
+    "test:cart-pictures": "playwright test --config test/cart-pictures.config.ts",
     "code-connect:publish": "figma connect publish --exit-on-unreadable-files",
-    "bones:build": "boneyard-js build \"http://localhost:6010/iframe.html?id=store-product-listing-productcard--boneyard-capture&viewMode=story&globals=mode:dark;colorTheme:grade10\" --force --no-scan"
+    "bones:build": "boneyard-js build \"http://localhost:6010/iframe.html?id=store-product-listing-blocks-productcard--boneyard-capture&viewMode=story&globals=mode:dark;colorTheme:grade10\" --force --no-scan"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -24,6 +25,7 @@
     "./lib/*": "./src/lib/*.ts"
   },
   "dependencies": {
+    "@grade10/date": "workspace:*",
     "@grade10/design-system": "workspace:*",
     "@pdf-lib/fontkit": "^1.1.1",
     "@phosphor-icons/react": "^2.1.10",

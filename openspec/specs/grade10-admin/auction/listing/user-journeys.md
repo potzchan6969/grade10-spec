@@ -110,3 +110,30 @@ changes later.
 **As an** auction operator,
 **I want** a saved draft to suggest a listing slug from its title and stable code,
 **so that** I can start with a distinct public address and learn before Save when a chosen address is already reserved.
+
+### grade10-admin-auction-listing-US-74: Operator prices a listing in USD
+
+**As an** auction operator,
+**I want** a listing to price in USD with no other currency to choose,
+**so that** I do not guess a currency for a lot every collector bids on in one unit.
+
+An earlier HKD or JPY listing keeps every amount and its history when its
+currency becomes USD.
+
+### grade10-admin-auction-listing-US-75: Operator writes a listing's title and description in each language
+
+**As an** auction operator,
+**I want** to enter a listing's title and description in Traditional and Simplified Chinese beside the English,
+**so that** collectors who browse in those languages read the lot in their own.
+
+### grade10-admin-auction-listing-US-76: Operator reads a listing's texts in each language
+
+**As an** auction operator,
+**I want** to switch the listing's Copy block between languages and see which ones I have not written,
+**so that** I can check what each collector will read and fill the gaps.
+
+### grade10-admin-auction-listing-US-77: Operator finds a listing by a translated title
+
+**As an** auction operator,
+**I want** the Listings search to match a title in any language,
+**so that** I find the lot from whichever name a collector or colleague quotes.

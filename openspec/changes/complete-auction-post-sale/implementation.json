@@ -1,0 +1,409 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "2617613598e0d5cb306203567db6665450e377d783ca07f7634b1dcec87ce7c5"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "5e81c99640a29ec0167180dd51d028c06f623bff",
+    "capturedAt": "2026-10-08T18:00:44.403Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Operators manage auction currency premium minimums",
+          "Requirement: Operators manage the Stripe card fee rule"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A queue row shows when its lot is in extended bidding",
+          "Requirement: A send or reissue carries the total the operator read",
+          "Requirement: An operator action sent twice happens once",
+          "Requirement: An operator edits the address or method before send",
+          "Requirement: An operator reopens the address form",
+          "Requirement: An operator resolves an unpaid order",
+          "Requirement: Delivery address",
+          "Requirement: Dispatch and delivery are recorded on the order",
+          "Requirement: Fulfilment log history",
+          "Requirement: History is append-only and retained",
+          "Requirement: Invoice log history",
+          "Requirement: Listing outcomes",
+          "Requirement: Manual settlement records the method and its proof",
+          "Requirement: Money that lands is always recorded",
+          "Requirement: Operators can record one bounded refund and its stock outcome",
+          "Requirement: Operators work each listing from the queue through delivered",
+          "Requirement: Order dates and times read in Hong Kong time",
+          "Requirement: Payment and shipment are separate grants",
+          "Requirement: Payment states",
+          "Requirement: Shipment states",
+          "Requirement: The Listings table shows extended bidding and a won lot's order",
+          "Requirement: The order detail explains its status",
+          "Requirement: The order detail shows how long an order has waited",
+          "Requirement: The payment processing fee follows the invoice's payment method",
+          "Requirement: The queue shows one outcome per lot",
+          "Requirement: Trail fields",
+          "Requirement: Winner contact fields",
+          "Requirement: Winner fields"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A test winner signs in with the ordinary link",
+          "Requirement: An operator makes a test winner in one step",
+          "Requirement: The Test tab lists test winners"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Post-close letters"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An auction order carries two writable status fields",
+          "Requirement: Permitted transitions"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An unfinished card payment leaves the invoice payable",
+          "Requirement: An unsaved one-time address stays on the order until setup ends",
+          "Requirement: Billing Add Address uses the delivery Country/Region picker",
+          "Requirement: Contact Us opens a copy-first ready email",
+          "Requirement: Country/Region names follow the account's language",
+          "Requirement: The bid-time hold is released, never captured",
+          "Requirement: The winner chooses a payment method with the address",
+          "Requirement: The winner pays a sent invoice by the method it was sent for"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "b93d8b3568fc064f57f2b9c03662158e3757bd30",
+      "components": [
+        "admin",
+        "auction-service",
+        "store-service",
+        "web"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-15T17:57:19.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/paymentSettings.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/operations/orders/ordersModule.test.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/spec.md",
+        "anchors": [
+          "Requirement: Operators manage auction currency premium minimums"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/paymentSettings.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/operations/orders/ordersModule.test.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/spec.md",
+        "anchors": [
+          "Requirement: Operators manage the Stripe card fee rule"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/paymentSettings.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/operations/orders/ordersModule.test.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/orders.spec.ts",
+          "apps/backend/grade10/auction/test/db/trpc/router.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/orderActions.test.ts",
+          "apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: A send or reissue carries the total the operator read"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/orders.spec.ts",
+          "apps/backend/grade10/auction/test/db/trpc/router.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/orderActions.test.ts",
+          "apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: An operator edits the address or method before send"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/orders.spec.ts",
+          "apps/backend/grade10/auction/test/db/trpc/router.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/orderActions.test.ts",
+          "apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: An operator reopens the address form"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/orders.spec.ts",
+          "apps/backend/grade10/auction/test/db/trpc/router.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/orderActions.test.ts",
+          "apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: The order detail explains its status"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/orders.spec.ts",
+          "apps/backend/grade10/auction/test/db/trpc/router.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/orderActions.test.ts",
+          "apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: The payment processing fee follows the invoice's payment method"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/orders.spec.ts",
+          "apps/backend/grade10/auction/test/db/trpc/router.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/orderActions.test.ts",
+          "apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/testWinners.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/test/winners/presentation/views/TestWinnersPanel.test.tsx"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+        "anchors": [
+          "Requirement: An operator makes a test winner in one step"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/trpc/testWinners.spec.ts",
+          "packages/grade10-auction/admin-frontend/src/features/test/winners/presentation/views/TestWinnersPanel.test.tsx"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/order-status.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "packages/grade10-auction/frontend/src/features/orders/winner-order/winnerOrderView.test.ts",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: The winner chooses a payment method with the address"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice, add-auction-internal-bid and the HKD Order Summary change. The post-sale delivery covers the order, quote, payment-fee and test-winner surfaces; the USD quote and rail requirements are delivered by those changes' own tasks, not by this one. Acknowledged by the owner.",
+        "evidence": [
+          "packages/grade10-auction/frontend/src/features/orders/winner-order/winnerOrderView.test.ts",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys complete-auction-post-sale delivers."
+      }
+    ]
+  }
+}

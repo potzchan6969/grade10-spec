@@ -1,0 +1,13 @@
+schema: grade10-planning
+created: 2026-10-13
+hands:
+  dev: "@kinisworking"
+reviewed:
+  proposal: 867a9d5d
+  decisions: a12f45f3
+  user-journeys: 9983facc
+  ui-design: 5c825ef0
+  tech-design: 5c825ef0
+  specs: 3b27061f
+  test-cases: 3f3af0fc
+  tasks: 72b37a29

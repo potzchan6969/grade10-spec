@@ -1,0 +1,37 @@
+{
+  "heading": "Location & Hours",
+  "hoursHeading": "Hours",
+  "mapTitle": "Map of Hong Kong Grade10 Store",
+  "openMap": "Open Hong Kong Grade10 Store in Google Maps",
+  "address": "13 Pak Sha Road, Causeway Bay, Hong Kong",
+  "hours": {
+    "monday": {
+      "day": "Monday",
+      "hours": "11am – 9pm"
+    },
+    "tuesday": {
+      "day": "Tuesday",
+      "hours": "11am – 9pm"
+    },
+    "wednesday": {
+      "day": "Wednesday",
+      "hours": "11am – 9pm"
+    },
+    "thursday": {
+      "day": "Thursday",
+      "hours": "11am – 9pm"
+    },
+    "friday": {
+      "day": "Friday",
+      "hours": "11am – 9pm"
+    },
+    "saturday": {
+      "day": "Saturday",
+      "hours": "11am – 9pm"
+    },
+    "sunday": {
+      "day": "Sunday",
+      "hours": "11am – 9pm"
+    }
+  }
+}

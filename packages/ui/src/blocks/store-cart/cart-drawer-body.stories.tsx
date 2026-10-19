@@ -1,10 +1,11 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CartDrawerBody } from "./cart-drawer";
 import {
   DEFAULT_CART_COPY,
   OVERFLOW_CART_ITEMS,
+  PICTURE_CART_ITEM,
   SAMPLE_CART_ITEMS,
 } from "./fixtures";
 import type { CartItemSummary } from "./types";
@@ -21,11 +22,11 @@ const container: Decorator[] = [
  * Scrollable item container of the cart drawer (`4735:6493`).
  *
  * Owns list composition: overflow, empty, and mixed item states.
- * Per-row visuals live on [`CartItem`](?path=/docs/store-cart-cartitem--docs);
- * fetch-on-open loading lives on [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs).
+ * Per-row visuals live on [`CartItem`](?path=/docs/store-cart-blocks-cartitem--docs);
+ * fetch-on-open loading lives on [`CartDrawer`](?path=/docs/store-cart-blocks-cartdrawer--docs).
  */
 const meta = {
-  title: "Store Cart/CartDrawerBody",
+  title: "Store/Cart/Blocks/CartDrawerBody",
   component: CartDrawerBody,
   tags: ["autodocs"],
   decorators: container,
@@ -42,6 +43,12 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const Pictures: Story = {
+  args: {
+    items: [{ ...PICTURE_CART_ITEM, imageAlt: "  " }, SAMPLE_CART_ITEMS[1]],
+  },
+};
 
 /** Default list: cart items only */
 export const Default: Story = {
@@ -96,12 +103,41 @@ export const Empty: Story = {
     items: [],
   },
   play: async ({ canvasElement }) => {
+    // shared-ui-store-cart-SC-44
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Your cart is empty")).toBeInTheDocument();
+    const empty = canvasElement.querySelector('[data-slot="empty-state"]');
     expect(
-      canvas.getByText("Items you add will appear here"),
+      empty?.querySelector('[data-slot="empty-state-icon"]'),
     ).toBeInTheDocument();
+    expect(
+      empty?.querySelector('[data-slot="empty-state-title"]'),
+    ).toHaveTextContent("Your cart is empty");
+    expect(
+      empty?.querySelector('[data-slot="empty-state-description"]'),
+    ).toHaveTextContent("Items you add will appear here");
+    expect(
+      empty?.querySelector('[data-slot="empty-state-actions"]'),
+    ).toBeNull();
     expect(canvas.queryByRole("button")).not.toBeInTheDocument();
+  },
+};
+
+/** Shared interaction guard: rows remain visible and the list remains scrollable. */
+export const InteractionPending: Story = {
+  args: {
+    interactionPending: true,
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const body = canvasElement.querySelector('[data-slot="cart-drawer-body"]');
+    expect(body).toHaveClass("overflow-y-auto");
+    const remove = canvas.getAllByRole("button", { name: "Remove item" })[0];
+    expect(remove).toBeDisabled();
+    remove.click();
+    expect(args.onRemoveItem).not.toHaveBeenCalled();
+    expect(
+      canvas.getByText("1999 Pokémon Base Set #4 Charizard Holo PSA 10"),
+    ).toBeInTheDocument();
   },
 };
 
@@ -149,5 +185,79 @@ export const MixedItemStates: Story = {
       canvas.getByText("Low stock. Quantity adjusted"),
     ).toBeInTheDocument();
     expect(canvas.queryByText("Your cart is empty")).not.toBeInTheDocument();
+  },
+};
+
+const OWNED_ITEMS: readonly CartItemSummary[] = SAMPLE_CART_ITEMS.map(
+  (item) => ({ ...item, pending: false }),
+);
+const REMOVED_NAME = SAMPLE_CART_ITEMS[0].name;
+
+function rowOf(canvasElement: HTMLElement, name: string) {
+  const row = within(canvasElement)
+    .getByText(name)
+    .closest<HTMLElement>('[data-slot="cart-item"]');
+  if (!row) throw new Error(`no cart row for ${name}`);
+  return row;
+}
+
+/** A line that owns its removal stays, busy, until the consumer drops it, then leaves */
+export const LineRemovalPending: Story = {
+  render: (args) => {
+    const [items, setItems] = useState(OWNED_ITEMS);
+    return (
+      <CartDrawerBody
+        {...args}
+        items={items}
+        onRemoveItem={(id) => {
+          args.onRemoveItem?.(id);
+          setItems((prev) =>
+            prev.map((i) => (i.id === id ? { ...i, pending: true } : i)),
+          );
+          window.setTimeout(
+            () => setItems((prev) => prev.filter((i) => i.id !== id)),
+            600,
+          );
+        }}
+      />
+    );
+  },
+  play: async ({ canvasElement, args }) => {
+    const row = rowOf(canvasElement, REMOVED_NAME);
+    const remove = within(row).getByRole("button", { name: "Remove item" });
+    await userEvent.click(remove);
+    expect(args.onRemoveItem).toHaveBeenCalledWith(SAMPLE_CART_ITEMS[0].id);
+    expect(row).toHaveAttribute("aria-busy", "true");
+    expect(row).toBeVisible();
+    await userEvent.click(remove);
+    expect(args.onRemoveItem).toHaveBeenCalledTimes(1);
+    await waitFor(
+      () =>
+        expect(
+          within(canvasElement).queryByText(REMOVED_NAME),
+        ).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+  },
+};
+
+/** A refused removal keeps the row, says why on it, and the row is usable again */
+export const LineRemovalRefused: Story = {
+  args: {
+    items: [
+      { ...OWNED_ITEMS[0], failed: "Couldn’t remove this item. Try again." },
+      ...OWNED_ITEMS.slice(1),
+    ],
+  },
+  play: async ({ canvasElement, args }) => {
+    const row = rowOf(canvasElement, REMOVED_NAME);
+    expect(within(row).getByRole("alert")).toHaveTextContent(
+      "Couldn’t remove this item. Try again.",
+    );
+    expect(row).not.toHaveAttribute("aria-busy");
+    await userEvent.click(
+      within(row).getByRole("button", { name: "Remove item" }),
+    );
+    expect(args.onRemoveItem).toHaveBeenCalledWith(SAMPLE_CART_ITEMS[0].id);
   },
 };

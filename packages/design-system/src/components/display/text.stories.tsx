@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Text } from "./text";
 
 const meta = {
-  title: "Components/Text",
+  title: "Design System/Display/Text",
   component: Text,
   tags: ["autodocs"],
   args: { children: "The quick brown fox" },

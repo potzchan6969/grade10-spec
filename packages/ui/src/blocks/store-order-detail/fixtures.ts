@@ -51,7 +51,7 @@ const DELIVERY_STEPS: OrderDetailsDelivery["steps"] = [
     date: FIXTURE_ORDER_PLACED_DAY,
   },
   {
-    label: "Shipped",
+    label: "Shipping",
     date: FIXTURE_ORDER_SHIPPED_DAY,
   },
   {

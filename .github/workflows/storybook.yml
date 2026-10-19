@@ -18,6 +18,7 @@ on:
     branches: [main]
     paths:
       - "apps/preview/**"
+      - "packages/date/**"
       - "packages/design-system/**"
       - "packages/ui/**"
       - ".github/workflows/storybook.yml"

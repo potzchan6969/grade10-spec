@@ -89,6 +89,7 @@
 * Tab B still names <site account>, with <cart item> in its cart.
 * Tab B shows no signed-out message.
 
+<!-- trace:case id=g10.shared-sign-out.TC-vnx rev=1 -->
 ### shared-auth-sign-out-US3-TC2-1: Site sign-out leaves the console session open
 
 **Classification:**
@@ -100,9 +101,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-out-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`
 
 **Pre-conditions:**
 

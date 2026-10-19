@@ -20,6 +20,15 @@ The audience is the collector throughout. There are no operator journeys here;
 the admin consoles have their own shell and their own navigation, and are not
 part of this product.
 
+- ❓ Designer - **Three sections for a collector's own pages** - the
+  designer proposes the signed-in area split by what the items mean to the
+  collector: **Submissions** for items handed in and in service - grading,
+  warehousing, intake, final inspection; **Vault Portfolio** for assets
+  held in the vault, the collector's to manage; and **Consignments and
+  Sales** for items entrusted to sell - consignment status, transaction
+  history, commission and settlement. Buyer pages and seller pages stay
+  separate
+
 :::flow{title="Opening a surface cold"}
 ## The collector taps a link
 

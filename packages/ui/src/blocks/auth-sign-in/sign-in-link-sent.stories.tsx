@@ -4,7 +4,7 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { SignInLinkSent } from "./sign-in-link-sent";
 
 const meta = {
-  title: "Auth Sign In/SignInLinkSent",
+  title: "Auth/Sign In/Blocks/SignInLinkSent",
   component: SignInLinkSent,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -116,6 +116,20 @@ export const ResendReportsActivation: Story = {
   tags: ["!dev"],
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Resend" }));
+    expect(args.onResend).toHaveBeenCalledOnce();
+  },
+};
+
+/** A refused resend says why under Resend, which is pressable again. */
+export const ResendFailed: Story = {
+  name: "Resend refused",
+  args: { resendFailed: "We couldn't send the link. Try again." },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "We couldn't send the link. Try again.",
+    );
     await userEvent.click(canvas.getByRole("button", { name: "Resend" }));
     expect(args.onResend).toHaveBeenCalledOnce();
   },

@@ -14,7 +14,7 @@ const STATUSES: OrderHistoryFulfillmentStatus[] = [
 ];
 
 const meta = {
-  title: "Store Order History/OrderHistoryStatus",
+  title: "Store/Order History/Blocks/OrderHistoryStatus",
   component: OrderHistoryStatus,
   tags: ["autodocs"],
   args: {

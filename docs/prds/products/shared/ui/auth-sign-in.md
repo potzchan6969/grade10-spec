@@ -24,9 +24,9 @@ application supplies as the last node.
   hugging secondary Resend with a sixty-second countdown (**Resend (45)**). No
   Back control. The email-step action reads **Sign In with Email**.
 
-::story{id="auth-sign-in-signincard--link-sent" title="Link sent"}
+::story{id="auth-sign-in-blocks-signincard--link-sent" title="Link sent"}
 
-::story{id="auth-sign-in-signinlinksent--resend-cooldown" title="Resend countdown"}
+::story{id="auth-sign-in-blocks-signinlinksent--resend-cooldown" title="Resend countdown"}
 
 ## Boundaries
 

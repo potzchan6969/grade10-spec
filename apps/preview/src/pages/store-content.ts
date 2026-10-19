@@ -46,6 +46,7 @@ const STORE_SITE_HEADER = {
     cart: "Cart",
     signIn: "Sign In",
     menu: "Menu",
+    search: "Search",
     menuTitle: "Menu",
     language: "Language",
     accountMenuLabel: "Account",
@@ -87,7 +88,7 @@ const SOCIAL_ICON_PROPS = {
   weight: "fill",
 } as const;
 
-/** Shared chrome matching Components/Footer — Auction only and Store launch. */
+/** Shared chrome matching Design System/Layout/Footer — Auction only and Store launch. */
 const FOOTER_COPY = {
   attribution: "A division of MemeStrategy (HKEX: 2440)",
   copyright: "© 2026 Grade10. All rights reserved.",
@@ -129,7 +130,7 @@ const FOOTER_LEGAL_COLUMN = {
 };
 
 /**
- * Store-launch footer — Components/Footer → Store launch. Shop destinations
+ * Store-launch footer — Design System/Layout/Footer → Store launch. Shop destinations
  * and Store Locator join Docs and Legal; no bar legal duplicates.
  */
 const STORE_FOOTER = {
@@ -164,7 +165,7 @@ const STORE_FOOTER = {
 };
 
 /**
- * Auction-only footer — Components/Footer → Auction only. Brand, social,
+ * Auction-only footer — Design System/Layout/Footer → Auction only. Brand, social,
  * Docs, Privacy and Terms. No shop column and no bar legal duplicates.
  */
 const AUCTION_FOOTER = {
@@ -326,6 +327,8 @@ const STORE_HOME_PRODUCT_CARD_COPY = {
   removeFromCart: "Remove from cart",
   adjustQuantity: "Adjust cart quantity",
   sale: "SALE",
+  salePriceLabel: "Sale price",
+  listPriceLabel: "Was",
 };
 
 /** Cart drawer copy owned by the workbench the same way nav and footer copy are. */
@@ -335,6 +338,8 @@ const STORE_CART_COPY = {
     closeCartLabel: "Close cart",
   },
   item: {
+    salePriceLabel: "Sale price",
+    listPriceLabel: "Was",
     lowStockWarning: "Low stock. Quantity adjusted",
     soldOutLabel: "Sold Out",
     removeItemLabel: "Remove item",
@@ -369,6 +374,9 @@ const STORE_CART_COPY = {
     checkoutButton: "Proceed to Checkout",
     checkoutRedirecting: "Redirecting...",
     checkoutFailed: "Couldn’t open checkout",
+    signInAction: "Sign in",
+    signInSuffix: "for points and rewards",
+    publicPromoCodes: "Promo codes",
   },
   emptyTitle: "Your cart is empty",
   emptyDescription: "Items you add will appear here",

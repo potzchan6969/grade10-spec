@@ -23,3 +23,9 @@
 **As a** member of shop staff,
 **I want** a member's reward coupon, a product coupon or a gift, to settle at the till as surely as it does online,
 **so that** I can ring it up with the same confidence either channel gives me.
+
+### g10.store-discounts.US5: Collector finds a code open to everyone
+
+**As a** collector, signed in or not,
+**I want** the cart's code list to show the codes open to everyone,
+**so that** I can take a promotion without it being minted to me.

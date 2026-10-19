@@ -1,3 +1,9 @@
 schema: grade10-planning
 promoted_by: "@caspertsang99"
 created: 2026-09-21
+reviewed:
+  proposal: 75a55607
+  decisions: e880cd14
+  specs: 01bdc313
+  test-cases: fe8f788f
+  tasks: 9c42774d

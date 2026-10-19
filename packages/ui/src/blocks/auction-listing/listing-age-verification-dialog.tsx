@@ -67,7 +67,11 @@ type ListingAgeVerificationDialogProps = {
   copy: ListingAgeVerificationDialogCopy;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** The dialog stays open; the consumer closes it once the verification lands. */
   onConfirm: () => void;
+  confirmPending?: boolean;
+  /** A refused verification, shown under the fields. */
+  confirmFailed?: string;
 };
 
 type DobComboboxProps = {
@@ -185,6 +189,8 @@ function ListingAgeVerificationDialog({
   open,
   onOpenChange,
   onConfirm,
+  confirmPending = false,
+  confirmFailed,
 }: ListingAgeVerificationDialogProps) {
   const [dob, setDob] = useState<ListingAgeVerificationDob>({});
   const [error, setError] = useState<string | undefined>();
@@ -199,7 +205,7 @@ function ListingAgeVerificationDialog({
   const complete = isListingAgeVerificationComplete(dob);
 
   function handleConfirm() {
-    if (!complete) return;
+    if (!complete || confirmPending) return;
 
     if (!isListingAgeVerificationAdult(dob)) {
       setError(copy.underAgeError);
@@ -207,7 +213,6 @@ function ListingAgeVerificationDialog({
     }
 
     onConfirm();
-    onOpenChange(false);
   }
 
   function handleValueChange(nextValue: ListingAgeVerificationDob) {
@@ -224,7 +229,7 @@ function ListingAgeVerificationDialog({
         <DialogBody>
           <ListingAgeVerificationFields
             copy={copy}
-            error={error}
+            error={error ?? confirmFailed}
             onValueChange={handleValueChange}
             value={dob}
           />
@@ -237,7 +242,12 @@ function ListingAgeVerificationDialog({
           >
             {copy.cancel}
           </Button>
-          <Button disabled={!complete} onClick={handleConfirm} size="md">
+          <Button
+            disabled={!complete}
+            loading={confirmPending}
+            onClick={handleConfirm}
+            size="md"
+          >
             {copy.confirm}
           </Button>
         </DialogFooter>

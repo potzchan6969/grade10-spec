@@ -8,6 +8,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { readTeamMap, TEAM_MAP } from "../../../scripts/openspec/lib/team.mjs";
+import { storyIndex } from "../../../scripts/storybook/story-index.mjs";
 import { capabilitiesOf } from "../src/store/capabilities.mts";
 import { readText } from "../src/store/disk.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
@@ -212,11 +213,6 @@ export const RULES = [
     title: "MODIFIED scenarios restating a durable id with no trace marker",
   },
   {
-    key: "marks",
-    level: "fail",
-    title: "🚧 lines no in-flight change delivers",
-  },
-  {
     key: "fuse",
     level: "fail",
     title: "Page selectors an in-flight change would break",
@@ -398,13 +394,21 @@ export function createContext(roots, report, { specs, changes, stories }) {
   };
 }
 
-/** The workbench Storybook build is gitignored, so story ids are checkable
- * only where someone has built it. Never fetched over the network, and an
- * index half-written by an interrupted build is one more store file the
- * readers could not parse — never the end of the whole run. */
+/** Story ids come from the stories' own source, as the workbench would index
+ * them (`scripts/storybook/story-index.mjs`), so a card is checked with nothing
+ * built. Where the source holds no story or cannot be read - no TypeScript to
+ * parse it with - a built index stands in: the build is gitignored, never fetched over the
+ * network, and an index half-written by an interrupted build is one more store
+ * file the readers could not parse — never the end of the whole run. */
 export function readStoryIndex(root, add) {
   const dir = join(root, "apps", "preview");
   if (!existsSync(dir)) return null;
+  try {
+    const ids = new Set(Object.keys(storyIndex({ root }).entries));
+    if (ids.size) return { file: "the stories' source", ids };
+  } catch {
+    // No TypeScript where the store is mounted: read a build instead.
+  }
   const built = readdirSync(dir, { withFileTypes: true })
     .filter(
       (entry) =>

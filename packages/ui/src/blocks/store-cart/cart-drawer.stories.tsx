@@ -1,5 +1,5 @@
 import { Button } from "@grade10/design-system/components/forms/button";
-import { Toast } from "@grade10/design-system/components/overlays/toast";
+import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
@@ -9,12 +9,14 @@ import {
   DEFAULT_CART_COPY,
   formatStoryCreditHkd,
   OVERFLOW_CART_ITEMS,
+  PICTURE_CART_ITEM,
   parseStoryMoney,
   SAMPLE_CART_ITEMS,
   SAMPLE_HELD_DISCOUNTS,
   SAMPLE_HELD_PROMO_CODES,
   STORY_POINTS_MAX_HKD,
   storyCartEstimatedTotal,
+  storyPromoLabel,
 } from "./fixtures";
 import type {
   CartItemSummary,
@@ -37,22 +39,22 @@ function pointsCreditHkd(points: PointsState): number | null {
  * Product / Cart / Cart Drawer (`4735:6493` & `4674:3831`).
  *
  * Composition and end-to-end flows only. Layer-owned states live on:
- * - [`CartDrawerHeader`](?path=/docs/store-cart-cartdrawerheader--docs) — badge / close / badge bones
- * - [`CartDrawerBody`](?path=/docs/store-cart-cartdrawerbody--docs) — overflow / empty / mixed list
- * - [`CartDrawerFooter`](?path=/docs/store-cart-cartdrawerfooter--docs) — promo (type + held), points, checkout
- * - [`CartItem`](?path=/docs/store-cart-cartitem--docs) — sold out / adjusted / row bones
+ * - [`CartDrawerHeader`](?path=/docs/store-cart-blocks-cartdrawerheader--docs) — badge / close / badge bones
+ * - [`CartDrawerBody`](?path=/docs/store-cart-blocks-cartdrawerbody--docs) — overflow / empty / mixed list
+ * - [`CartDrawerFooter`](?path=/docs/store-cart-blocks-cartdrawerfooter--docs) — promo (type + held), points, checkout
+ * - [`CartItem`](?path=/docs/store-cart-blocks-cartitem--docs) — sold out / adjusted / row bones
  *
  * `Default` is the one interactive composed story (promo sheet + points).
  * Typed/held/points state matrix stays on CartDrawerFooter.
  * Site-sale × promo combine modes:
- * [`Auto Discount`](?path=/docs/store-cart-cartdrawer-auto-discount--docs).
+ * [`Auto Discount`](?path=/docs/store-cart-blocks-cartdrawer-auto-discount--docs).
  *
  * App handoff: checkout is members-only (no guest checkout). Wire
  * `onApplyPromo` / `onSelectHeldPromo` / `onApplyPoints` onto the Shopify
  * draft; `onCheckout` redirects. Copy must say promo code, not coupon.
  */
 const meta = {
-  title: "Store Cart/CartDrawer",
+  title: "Store/Cart/Blocks/CartDrawer",
   component: CartDrawer,
   tags: ["autodocs"],
   parameters: {
@@ -72,6 +74,12 @@ const meta = {
   },
 } satisfies Meta<typeof CartDrawer>;
 
+export const Pictures: StoryObj<typeof meta> = {
+  args: {
+    items: [{ ...PICTURE_CART_ITEM, status: "soldOut" }, SAMPLE_CART_ITEMS[0]],
+  },
+};
+
 export default meta;
 type Story = StoryObj<typeof meta>;
 
@@ -82,8 +90,39 @@ type Story = StoryObj<typeof meta>;
  */
 const drawer = () => within(document.body);
 
+const header = () =>
+  document.body.querySelector<HTMLElement>(
+    '[data-slot="cart-drawer-header"]',
+  ) as HTMLElement;
+
+/** The count beside the title, or null when the header shows none. */
+const headerBadge = () =>
+  header().querySelector("h2")?.nextElementSibling?.textContent ?? null;
+
+const headerBadgeLoading = () =>
+  header().querySelector('[aria-busy="true"]') !== null;
+
+const footer = () =>
+  document.body.querySelector<HTMLElement>('[data-slot="cart-drawer-footer"]');
+
+const rows = () =>
+  document.body.querySelectorAll<HTMLElement>('[data-slot="cart-item"]');
+
+const emptyState = () =>
+  document.body.querySelector<HTMLElement>('[data-slot="empty-state"]');
+
+/** Waits out the open read so assertions read rows, not their skeletons. */
+const settled = () =>
+  waitFor(() => {
+    expect(drawer().getByRole("dialog", { name: "Cart" })).toBeInTheDocument();
+    expect(document.body.querySelector('[aria-busy="true"]')).toBeNull();
+  });
+
 /** Default: signed-in cart with interactive promo sheet and points */
 export const Default: Story = {
+  args: {
+    items: [SAMPLE_CART_ITEMS[0], { ...SAMPLE_CART_ITEMS[1], quantity: 3 }],
+  },
   render: (args) => {
     const [open, setOpen] = useState(true);
     const [items, setItems] = useState<readonly CartItemSummary[]>(args.items);
@@ -134,7 +173,7 @@ export const Default: Story = {
           setSelectedHeldId(id);
           setPromo({
             status: "applied",
-            code: code.label,
+            label: storyPromoLabel(code.label),
             discountAmount: discount.amount,
           });
           setTotal(
@@ -147,7 +186,7 @@ export const Default: Story = {
             setSelectedHeldId(result.heldId);
             setPromo({
               status: "applied",
-              code: result.label,
+              label: storyPromoLabel(result.label),
               discountAmount: result.amount,
             });
             setTotal(
@@ -216,6 +255,16 @@ export const Default: Story = {
     expect(
       canvas.queryByRole("dialog", { name: "Promo code" }),
     ).not.toBeInTheDocument();
+
+    // shared-ui-store-cart-SC-23: the cart's two lines and nothing else.
+    expect(rows()).toHaveLength(2);
+    expect(
+      canvas.getByText("2000 Neo Genesis 1st Edition Lugia Holo #9 BGS 9.5"),
+    ).toBeInTheDocument();
+    expect(emptyState()).toBeNull();
+    // shared-ui-store-cart-SC-50: a line of 3 counts once.
+    expect(headerBadge()).toBe("2");
+    expect(footer()).toBeInTheDocument();
   },
 };
 
@@ -228,9 +277,17 @@ export const OverflowItems: Story = {
   },
   play: async () => {
     const canvas = drawer();
-    expect(
-      canvas.getByText("2016 Pokémon 20th Anniversary Mario Pikachu PSA 10"),
-    ).toBeInTheDocument();
+    // shared-ui-store-cart-SC-24: all six lines render and the list scrolls.
+    for (const item of OVERFLOW_CART_ITEMS) {
+      expect(canvas.getByText(item.name)).toBeInTheDocument();
+    }
+    expect(rows()).toHaveLength(OVERFLOW_CART_ITEMS.length);
+    const body = document.body.querySelector<HTMLElement>(
+      '[data-slot="cart-drawer-body"]',
+    );
+    expect(body).toHaveClass("scroll-fade");
+    expect(body && getComputedStyle(body).overflowY).toBe("auto");
+    expect(emptyState()).toBeNull();
     expect(canvas.queryByText("Your cart is empty")).not.toBeInTheDocument();
   },
 };
@@ -244,16 +301,229 @@ export const EmptyState: Story = {
   },
   play: async () => {
     const canvas = drawer();
-    expect(canvas.getByText("Your cart is empty")).toBeInTheDocument();
+    // shared-ui-store-cart-SC-25: icon, title and description; no action,
+    // no count and no footer.
+    const empty = emptyState();
+    expect(empty).toBeInTheDocument();
     expect(
-      canvas.getByText("Items you add will appear here"),
+      empty?.querySelector('[data-slot="empty-state-icon"]'),
     ).toBeInTheDocument();
+    expect(
+      empty?.querySelector('[data-slot="empty-state-title"]'),
+    ).toHaveTextContent(DEFAULT_CART_COPY.emptyTitle);
+    expect(
+      empty?.querySelector('[data-slot="empty-state-description"]'),
+    ).toHaveTextContent(DEFAULT_CART_COPY.emptyDescription ?? "");
+    expect(
+      empty?.querySelector('[data-slot="empty-state-actions"]'),
+    ).toBeNull();
+    expect(empty?.querySelector("button, a")).toBeNull();
+    expect(headerBadge()).toBeNull();
+    expect(footer()).toBeNull();
+    expect(rows()).toHaveLength(0);
     expect(
       canvas.queryByRole("button", { name: "Proceed to Checkout" }),
     ).not.toBeInTheDocument();
+  },
+};
+
+/** Empty state with no description: the icon and title alone */
+export const EmptyStateWithoutDescription: Story = {
+  args: {
+    items: [],
+    subtotal: "HK$0.00",
+    estimatedTotal: "HK$0.00",
+    copy: { ...DEFAULT_CART_COPY, emptyDescription: undefined },
+  },
+  play: async () => {
+    // shared-ui-store-cart-SC-41
+    const empty = emptyState();
+    expect(empty).toBeInTheDocument();
     expect(
-      canvas.queryByRole("button", { name: /Shop|Browse|Continue/i }),
-    ).not.toBeInTheDocument();
+      empty?.querySelector('[data-slot="empty-state-icon"]'),
+    ).toBeInTheDocument();
+    expect(
+      empty?.querySelector('[data-slot="empty-state-title"]'),
+    ).toHaveTextContent(DEFAULT_CART_COPY.emptyTitle);
+    expect(
+      empty?.querySelector('[data-slot="empty-state-description"]'),
+    ).toBeNull();
+    expect(
+      empty?.querySelector('[data-slot="empty-state-actions"]'),
+    ).toBeNull();
+    expect(footer()).toBeNull();
+  },
+};
+
+/**
+ * Loading a cart with lines: row, badge and amount skeletons, Checkout
+ * disabled. `loading` is an arg, so a tester ends the read from Controls.
+ */
+export const LoadingWithLines: Story = {
+  args: {
+    loading: true,
+    promoState: {
+      status: "applied",
+      label: storyPromoLabel("WELCOME100"),
+      discountAmount: "−HK$100.00",
+    },
+    estimatedTotal: "HK$42,600.00",
+  },
+  play: async ({ args }) => {
+    if (!args.loading) return;
+    // shared-ui-store-cart-SC-08
+    const canvas = drawer();
+    expect(headerBadgeLoading()).toBe(true);
+    expect(emptyState()).toBeNull();
+    const shownFooter = footer();
+    expect(shownFooter).toBeInTheDocument();
+    // Subtotal, discount and estimated total each hold a skeleton.
+    expect(
+      shownFooter?.querySelectorAll('[aria-busy="true"]').length,
+    ).toBeGreaterThanOrEqual(3);
+    expect(
+      canvas.getByRole("button", { name: "Proceed to Checkout" }),
+    ).toBeDisabled();
+    expect(
+      document.body.querySelector(
+        '[data-slot="cart-drawer-body"] [aria-busy="true"]',
+      ),
+    ).not.toBeNull();
+  },
+};
+
+/**
+ * Loading a cart with no lines: a blank body, a badge skeleton and no footer.
+ * `loading` is an arg; turned off, the empty state shows.
+ */
+export const LoadingNoLines: Story = {
+  args: {
+    loading: true,
+    items: [],
+    subtotal: "HK$0.00",
+    estimatedTotal: "HK$0.00",
+  },
+  play: async ({ args }) => {
+    if (!args.loading) return;
+    // shared-ui-store-cart-SC-40
+    expect(headerBadgeLoading()).toBe(true);
+    expect(rows()).toHaveLength(0);
+    expect(emptyState()).toBeNull();
+    expect(footer()).toBeNull();
+  },
+};
+
+const ONLY_DELISTED_ITEMS: readonly CartItemSummary[] = SAMPLE_CART_ITEMS.map(
+  (item) => ({ ...item }),
+);
+
+/**
+ * Every line turns `unavailable` after the open read: the drawer removes them
+ * with one toast and ends on the empty state.
+ */
+export const OnlyDelistedLines: Story = {
+  args: { onRemoveItem: fn() },
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+    const [items, setItems] =
+      useState<readonly CartItemSummary[]>(ONLY_DELISTED_ITEMS);
+
+    return (
+      <>
+        <Toast position="bottom-right" />
+        <div className="p-8">
+          <Button type="button" onClick={() => setOpen(true)}>
+            Open Cart
+          </Button>
+          <CartDrawer
+            {...args}
+            open={open}
+            onClose={() => setOpen(false)}
+            items={items}
+            onRemoveItem={(id) => {
+              args.onRemoveItem?.(id);
+              setItems((prev) => prev.filter((item) => item.id !== id));
+            }}
+            onFetchStatusAndPrice={async () => {
+              await new Promise((resolve) => setTimeout(resolve, 300));
+              setItems((prev) =>
+                prev.map((item) => ({ ...item, status: "unavailable" })),
+              );
+            }}
+          />
+        </div>
+      </>
+    );
+  },
+  play: async ({ args, canvasElement }) => {
+    // shared-ui-store-cart-SC-42
+    toast.dismiss();
+    await userEvent.click(
+      within(canvasElement).getByRole("button", { name: "Open Cart" }),
+    );
+    await settled();
+    await waitFor(() => expect(emptyState()).toBeInTheDocument());
+    await waitFor(() =>
+      expect(drawer().getAllByText("Items removed from cart")).toHaveLength(1),
+    );
+    expect(args.onRemoveItem).toHaveBeenCalledTimes(ONLY_DELISTED_ITEMS.length);
+    expect(rows()).toHaveLength(0);
+    expect(headerBadge()).toBeNull();
+    expect(footer()).toBeNull();
+  },
+};
+
+/** Every line sold out: listed with the footer, no count, no empty state */
+export const OnlySoldOutLines: Story = {
+  args: {
+    items: SAMPLE_CART_ITEMS.map((item) => ({
+      ...item,
+      status: "soldOut" as const,
+    })),
+  },
+  play: async () => {
+    // shared-ui-store-cart-SC-45
+    const canvas = drawer();
+    expect(rows()).toHaveLength(SAMPLE_CART_ITEMS.length);
+    expect(canvas.getAllByText("Sold Out")).toHaveLength(
+      SAMPLE_CART_ITEMS.length,
+    );
+    expect(emptyState()).toBeNull();
+    expect(headerBadge()).toBeNull();
+    expect(footer()).toBeInTheDocument();
+  },
+};
+
+const MIXED_UNAVAILABLE_NAME =
+  "1998 Japanese Base Set No Rarity Charmander PSA 10";
+
+/**
+ * One active, one sold-out and one unavailable line the consumer keeps: the
+ * badge counts the active line alone and the unavailable line never renders.
+ */
+export const MixedLineStates: Story = {
+  args: {
+    loading: false,
+    items: [
+      SAMPLE_CART_ITEMS[0],
+      { ...SAMPLE_CART_ITEMS[1], status: "soldOut" },
+      {
+        id: "item-unavailable",
+        name: MIXED_UNAVAILABLE_NAME,
+        price: "HK$3,200.00",
+        quantity: 1,
+        status: "unavailable",
+      },
+    ],
+    onRemoveItem: fn(),
+  },
+  play: async () => {
+    // shared-ui-store-cart-SC-05 and shared-ui-store-cart-SC-49
+    const canvas = drawer();
+    expect(headerBadge()).toBe("1");
+    expect(rows()).toHaveLength(2);
+    expect(canvas.queryByText(MIXED_UNAVAILABLE_NAME)).not.toBeInTheDocument();
+    expect(footer()).toBeInTheDocument();
   },
 };
 
@@ -458,6 +728,38 @@ export const TenderPendingWithOpenPromoSheet: Story = {
   },
 };
 
+/** Shared interaction guard: the cart can still be dismissed while mutations wait. */
+export const InteractionPending: Story = {
+  args: {
+    interactionPending: true,
+    promoState: { status: "collapsed" },
+    pointsState: null,
+    onClose: fn(),
+    onPromoStateChange: fn(),
+    onRemoveItem: fn(),
+    onCheckout: fn(),
+  },
+  play: async ({ args }) => {
+    const canvas = drawer();
+    await userEvent.click(
+      canvas.getByRole("button", {
+        name: DEFAULT_CART_COPY.header.closeCartLabel,
+      }),
+    );
+    expect(args.onClose).toHaveBeenCalledTimes(1);
+
+    const overlay = document.body.querySelector<HTMLElement>(
+      '[data-slot="drawer-overlay"]',
+    );
+    expect(overlay).toBeInTheDocument();
+    await userEvent.click(overlay as HTMLElement);
+    await userEvent.keyboard("{Escape}");
+    expect(args.onClose).toHaveBeenCalledTimes(3);
+    expect(args.onRemoveItem).not.toHaveBeenCalled();
+    expect(args.onCheckout).not.toHaveBeenCalled();
+  },
+};
+
 /** Simulates initial status and price fetch on cart open with transition to ready */
 export const FetchingOnOpen: Story = {
   render: (args) => {
@@ -548,6 +850,7 @@ export const UnavailableItemsRemoved: Story = {
   },
   play: async ({ canvasElement }) => {
     // Cart-validation SC-09: a withdrawn product is named as unavailable.
+    toast.dismiss();
     await userEvent.click(
       within(canvasElement).getByRole("button", { name: "Open Cart" }),
     );

@@ -8,7 +8,7 @@ import {
 } from "./tooltip";
 
 const meta = {
-  title: "Components/Tooltip",
+  title: "Design System/Overlays/Tooltip",
   component: Tooltip,
   tags: ["autodocs"],
   decorators: [

@@ -21,6 +21,10 @@ preview, and production are refused.
   dispatch, may capture the last sign-in mail, age an unused link, ban a
   tester address, prepare it to hold `admin`, and clear the sign-in limits
   that would otherwise throttle a suite as an attacker.
+- **A second caller: the QA agent.** An agent walking a manual pass on
+  staging captures a tester's link through the same door, with a
+  staging-only QA token committed to the repository: capture, age and
+  clear only (Q38, Q39).
 - **A tester domain.** Any address under one domain Ops names, minted per
   run, with a catch-all inbox so nothing bounces. Ban and prepare create the
   account when the address has never signed in.

@@ -192,6 +192,167 @@ const CANCELLED_RECORD: BookingRecord = {
   state: "cancelled",
 };
 
+/** The board's cast: Hong Kong, Thu 15 Oct 2026 at 14:20. */
+const BOARD_NOW_MS = Date.UTC(2026, 9, 15, 6, 20);
+/** Shop-local today the calendar marks. */
+const BOARD_TODAY = "2026-10-15";
+const BOARD_MONTH = "2026-10";
+
+const GRADE_FEE = "Grading fees are paid at the counter";
+const SLEEVES = "Bring the cards in sleeves.";
+const VAULT_FEE = "Vault fees: [VAULT FEE]";
+const PHOTO_ID = "Bring a photo ID.";
+
+const BOARD_GRADING_QUESTIONS: readonly BookingQuestion[] = [
+  {
+    key: "cards",
+    label: "How many cards?",
+    kind: "number",
+    required: true,
+    hint: "1 to 19 cards.",
+    min: 1,
+    max: 19,
+    error:
+      "Enter 1 to 19. For 20 or more, go back and choose Bulk grading drop-off.",
+  },
+  {
+    key: "company",
+    label: "Grading company",
+    kind: "select",
+    options: ["PSA", "BGS", "CGC", "Grade10"],
+    required: true,
+    placeholder: "Choose a company",
+  },
+  {
+    key: "sub",
+    label: "Submission",
+    kind: "short_text",
+    required: false,
+    hint: "Filled in when you book from a submission.",
+  },
+];
+
+const BOARD_SERVICES: readonly BookingService[] = [
+  {
+    id: "svc_drop",
+    slug: "grading-drop-off",
+    name: "Grading drop-off",
+    durationLabel: "30 min",
+    fit: "Choose this if you have fewer than 20 cards.",
+    notes: [GRADE_FEE, SLEEVES],
+    questions: BOARD_GRADING_QUESTIONS,
+  },
+  {
+    id: "svc_bulk",
+    slug: "bulk-grading-drop-off",
+    name: "Bulk grading drop-off",
+    durationLabel: "45 min",
+    fit: "Choose this if you have 20 to 100 cards.",
+    charge: "Deposit HK$100.00",
+    notes: [GRADE_FEE, SLEEVES],
+    questions: BOARD_GRADING_QUESTIONS.slice(0, 2),
+  },
+];
+
+const BOARD_VAULT_SERVICES: readonly BookingService[] = [
+  {
+    id: "svc_vault_in",
+    slug: "vault-drop-off",
+    name: "Vault drop-off",
+    durationLabel: "30 min",
+    fit: "Choose this to put graded cards, raw cards or sealed product in the vault.",
+    charge: "HK$300.00",
+    notes: [VAULT_FEE, PHOTO_ID],
+    questions: [],
+  },
+  {
+    id: "svc_vault_out",
+    slug: "vault-collection",
+    name: "Vault collection",
+    durationLabel: "30 min",
+    fit: "Choose this to take items out of the vault.",
+    notes: [VAULT_FEE, PHOTO_ID],
+    questions: [],
+  },
+];
+
+const BOARD_SHOPS: readonly BookingLocation[] = [
+  {
+    id: "loc_central",
+    slug: "central",
+    name: "Central",
+    address: "2/F, 18 Queen’s Road Central",
+    hours: "Open today 10:00 to 20:00",
+    earliest: "Earliest: today, 16:30",
+    timeZone: FIXTURE_TIME_ZONE,
+  },
+  {
+    id: "loc_causeway_bay",
+    slug: "causeway-bay",
+    name: "Causeway Bay",
+    address: "",
+    hours: "Open today 11:00 to 20:00",
+    earliest: "Earliest: Fri 16 Oct, 11:00",
+    timeZone: FIXTURE_TIME_ZONE,
+  },
+  {
+    id: "loc_kowloon_bay",
+    slug: "kowloon-bay",
+    name: "Kowloon Bay",
+    address: "",
+    hours: "Open today 10:00 to 19:00",
+    earliest: "Earliest: today, 17:00",
+    timeZone: FIXTURE_TIME_ZONE,
+  },
+];
+
+/** October at Central: nothing before today, the 17th full, Sundays open. */
+const OCTOBER_DAYS: readonly BookingDay[] = Array.from(
+  { length: 31 },
+  (_, index) => {
+    const day = index + 1;
+    const date = `2026-10-${String(day).padStart(2, "0")}`;
+    if (day < 15) return { date, available: false, kind: "unavailable" };
+    if (day === 17) return { date, available: false, kind: "full" };
+    if (day === 28) return { date, available: false, kind: "closed" };
+    return { date, available: true, kind: "open" };
+  },
+);
+
+/** One free start on a Hong Kong day, `HH:mm` local. */
+function hkSlot(date: string, time: string, minutes = 30): BookingSlot {
+  const [year, month, day] = date.split("-").map(Number);
+  const [hour, minute] = time.split(":").map(Number);
+  const start = Date.UTC(
+    year ?? 0,
+    (month ?? 1) - 1,
+    day ?? 1,
+    (hour ?? 0) - 8,
+    minute ?? 0,
+  );
+  return { start, end: start + minutes * 60_000, remaining: 1 };
+}
+
+/** Today at Central: four starts left. */
+const TODAY_SLOTS: readonly BookingSlot[] = [
+  "16:30",
+  "17:00",
+  "17:30",
+  "19:30",
+].map((time) => hkSlot("2026-10-15", time));
+
+/** Thu 22 Oct at Central: morning, afternoon and evening starts. */
+const THURSDAY_SLOTS: readonly BookingSlot[] = [
+  "10:00",
+  "11:30",
+  "12:00",
+  "14:00",
+  "15:00",
+  "16:30",
+  "18:00",
+  "19:00",
+].map((time) => hkSlot("2026-10-22", time));
+
 const SERVICE_PICKER_COPY: BookingServicePickerCopy = {
   title: "Choose a Service",
 };
@@ -201,37 +362,80 @@ const LOCATION_PICKER_COPY: BookingLocationPickerCopy = {
 };
 
 const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
-  dayTitle: "Pick a day",
   timeTitle: "Pick a time",
   previousMonth: "Previous month",
   nextMonth: "Next month",
   timesIn: "Times in",
-  pickADay: "Pick a day to see its times.",
+  pickADay: "Pick a day to see its free times.",
   noTimes: "Nothing is free on this day any more.",
+  heads: {
+    mon: "Mo",
+    tue: "Tu",
+    wed: "We",
+    thu: "Th",
+    fri: "Fr",
+    sat: "Sa",
+    sun: "Su",
+  },
+  weekdays: {
+    mon: "Mon",
+    tue: "Tue",
+    wed: "Wed",
+    thu: "Thu",
+    fri: "Fri",
+    sat: "Sat",
+    sun: "Sun",
+  },
+  full: "Full",
+  closed: "Closed",
+  todayDay: "Today, {day}",
+  stripTitle: "{from} to {to}",
+  earlierDays: "Earlier days",
+  laterDays: "Later days",
+  parts: { morning: "Morning", afternoon: "Afternoon", evening: "Evening" },
 };
 
 const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
-  title: "Your Details",
+  title: "Your details",
   name: "Name",
   email: "Email",
   phone: "Phone",
   phonePlaceholder: "+852 12345678",
   countrySearchPlaceholder: "e.g. United States",
+  emailHint: "We send the confirmation here.",
+  phoneHint: "So the shop can reach you on the day.",
+  phoneRequiredHint: "The shop calls before this visit.",
+  notes: "Notes",
+  notesHint: "Anything the shop should know.",
   optional: "optional",
-  nameMissing: "Tell us your name.",
-  emailMissing: "Tell us where to send the confirmation.",
-  emailInvalid: "That doesn’t look like an email address.",
-  phoneMissing: "Enter a phone number.",
+  nameMissing: "Enter your name.",
+  emailMissing: "Enter an email like name@example.com.",
+  emailInvalid: "Enter an email like name@example.com.",
+  phoneMissing: "Enter the whole phone number.",
+  phoneRequired: "Add a phone number. The shop calls before this visit.",
+  bookingAs: "Booking as",
   answerMissing: "This is needed to continue.",
+  chooseOne: "Choose at least one.",
+  chooseX: "Choose a {label}.",
   choose: "Choose",
-  submit: "Confirm Appointment",
+  submit: "Book",
+  forOther: {
+    label: "I’m booking for someone else",
+    name: "Their name",
+    hint: "We email the pass to you. Forward it to them.",
+    missing: "Enter their name.",
+  },
 };
 
 const SUMMARY_COPY: BookingSummaryCopy = {
-  title: "Your Visit",
+  title: "Your visit",
   service: "Service",
   location: "Shop",
-  when: "When",
+  when: "Time",
+  notChosen: "Not chosen yet",
+  change: "Change",
+  changeAria: "Change {what}",
+  span: "{day}, {from} to {to}",
 };
 
 const CONFIRMATION_COPY: BookingConfirmationCopy = {
@@ -261,6 +465,13 @@ const MANAGE_CARD_COPY: BookingManageCardCopy = {
 
 export {
   ALL_KINDS_QUESTIONS,
+  BOARD_GRADING_QUESTIONS,
+  BOARD_MONTH,
+  BOARD_NOW_MS,
+  BOARD_SERVICES,
+  BOARD_SHOPS,
+  BOARD_TODAY,
+  BOARD_VAULT_SERVICES,
   CANCELLED_RECORD,
   CAUSEWAY_BAY,
   CHECKED_IN_RECORD,
@@ -271,16 +482,20 @@ export {
   FIXTURE_BOOKING_NOW_MS,
   FIXTURE_MONTH,
   GRADING_SERVICE,
+  hkSlot,
   LATER_RECORD,
   LIVE_ANSWERS,
   LIVE_RECORD,
   LOCATION_PICKER_COPY,
   MANAGE_CARD_COPY,
+  OCTOBER_DAYS,
   SEPTEMBER_3_SLOTS,
   SEPTEMBER_DAYS,
   SERVICE_PICKER_COPY,
   SLOT_PICKER_COPY,
   STATE_LABELS,
   SUMMARY_COPY,
+  THURSDAY_SLOTS,
+  TODAY_SLOTS,
   VAULTING_SERVICE,
 };

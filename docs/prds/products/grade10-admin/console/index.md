@@ -19,6 +19,9 @@ console carries that neither supplies.
 - **Users (access desk)** — who holds what, standing, sessions, and grants;
   search by name or email; narrow and order the directory —
   [Users](/p/grade10-admin/console/user-directory)
+- **Daily reminder** — what is new since yesterday and what is still
+  waiting on the operator, in a dialog until they close it for the day, on
+  Today and in Slack — [Daily Reminder](/p/grade10-admin/console/daily-reminder)
 - **Roles & Permissions** — what each closed role grants and what each
   permission means, derived from the shipped mapping
 - **The Dev heading** — where a surface written for engineers rather than

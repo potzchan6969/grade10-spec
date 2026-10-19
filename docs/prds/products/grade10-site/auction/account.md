@@ -36,20 +36,25 @@ Link](/p/shared/auth/sign-in#following-the-link).
 - **Where the auction asks** — the bid panel, a watch and My Auctions each
   offer sign-in to a signed-out viewer and return them where they were —
   [Bidding · Auction Panel](/p/grade10-site/auction/bidding#auction-panel)
-- **Account page** — `grade10.com/profile`: the display name, the KYC card and
-  the notification switches — [Account](/p/grade10-site/account)
+- **Account page** - `grade10.com/profile`: the display name and the
+  notification switches; verification is on `grade10.com/verification` -
+  [Account](/p/grade10-site/account)
 
 ## Verified Identity
 
-- **The bar** — a bid of **HKD 120,000** or more asks for a verified
+- **The bar** — a bid of **USD 15,000** or more asks for a verified
   identity; below it, nothing is asked
-- **Checked once** — the collector verifies from their account page and is
-  recognised wherever Grade10 asks: at a bid, a high-value checkout or a vault
-  visit — [KYC](/p/grade10-site/account/kyc)
-- **Held, not refused** — a bid at or above the bar from an unverified
-  collector is held at the storefront and told where to verify; the auction
-  records nothing — [Bidding · Auction
-  Logic](/p/grade10-site/auction/bidding#auction-logic)
+- **A request** - an account Grade10 asked to verify its identity or its
+  business has every new or raised maximum held, at any amount, until it
+  passes - [KYC · Requests](/p/grade10-site/account/kyc#requests)
+- **Forward only** - a maximum that already stands keeps bidding, as it does
+  under a suspension
+- **Checked once** - the collector verifies on `grade10.com/verification` and
+  is recognised wherever Grade10 asks: at a bid or a
+  vault visit - [KYC](/p/grade10-site/account/kyc)
+- **Held, not refused** - a held bid is never sent to the auction, and the bid
+  form says why and offers **Verify**, which opens the verification page and
+  returns to the lot - [Bidding · Refusals](/p/grade10-site/auction/bidding#refusals)
 
 ## Delivery Address Management
 
@@ -85,7 +90,8 @@ book's own management is the one part nobody has specified.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Email paths | Decided | The sign-in link alone; the code is withdrawn — [Sign-In](/p/shared/auth/sign-in). | Product |
-| Verified bidder | Decided | A bid of HKD 120,000 or more needs a verified identity, checked once from the account and before the auction hears of the bid. | Product |
+| Verified bidder | Decided | A bid of USD 15,000 or more needs a verified identity, checked once from the account and before the auction hears of the bid. | Product |
+| Held on request | Decided | An account Grade10 asked to verify has every new or raised maximum held until it passes; a standing maximum keeps bidding, decided 2026-10-13. | Owner |
 | Saved address cap | Decided | Five named addresses per account; at the cap a one-time address still settles an order, and saving waits until one is removed. | Product (@tangconst) |
 | Managing the book | ❓ Open | No surface adds, edits or removes a saved address outside an order. | Product and design |
 | Store checkout | ❓ Open | Whether the store's checkout address and this book are one set. | Product |

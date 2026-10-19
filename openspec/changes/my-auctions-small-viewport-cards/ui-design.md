@@ -1,11 +1,11 @@
 # UI: My Auctions small-viewport cards
 
 Layout SoT for phone widths: Storybook
-**[Auction Card](?path=/story/my-auctions-auction-card--leading)**
+**[Auction Card](?path=/story/auction-bidding-blocks-auctionrecordrow--leading)**
 (`AuctionRecordRow` `presentation="card"`, one story per variant). Page
 composition:
-**[Filled — small viewport](?path=/story/my-auctions-my-auctions--filled-small-viewport)**
-and **Pages/Auction/My Auctions Page**. Desktop table remains Figma
+**[Filled — small viewport](?path=/story/auction-bidding-blocks-auctionrecord--filled-small-viewport)**
+and **Auction/Bidding/My Auctions**. Desktop table remains Figma
 `Auction Watchlist` (`6507:5463`). Figma card component:
 [`AcutionRecordCard`](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7005-1676)
 (`7005:1676`).
@@ -14,7 +14,7 @@ and **Pages/Auction/My Auctions Page**. Desktop table remains Figma
 
 ### My Auctions — small viewport
 
-::story{id="pages-auction-my-auctions-page--default" title="My Auctions"}
+::story{id="auction-bidding-screens-my-auctions--post-auction" title="My Auctions"}
 
 Below `md`: breadcrumbs, title + count badge, then a vertical list of lot
 cards. No sideways scroll of the lot list. From `md`: existing five-column
@@ -22,7 +22,7 @@ table.
 
 ### Auction card (small viewport)
 
-::story{id="my-auctions-auction-card--leading" title="Leading"}
+::story{id="auction-bidding-blocks-auctionrecordrow--leading" title="Leading"}
 
 Isolated card variants under **My Auctions / Auction Card**: Leading, Outbid,
 Watching, Ended, Didn’t win, Hold releasing, Awaiting Setup, Pending Payment.

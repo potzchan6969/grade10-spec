@@ -3,7 +3,7 @@ import { RadioList } from "./radio-list";
 import { RadioListItem } from "./radio-list-item";
 
 const meta = {
-  title: "Components/RadioList",
+  title: "Design System/Forms/RadioList",
   component: RadioList,
   tags: ["autodocs"],
 } satisfies Meta<typeof RadioList>;

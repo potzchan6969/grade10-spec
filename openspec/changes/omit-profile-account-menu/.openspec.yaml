@@ -1,7 +1,0 @@
-schema: grade10-planning
-created: 2026-09-25
-depends_on:
-  - nav-cart-count-badge
-hands:
-  design: "@tangconst"
-ui_waived: no new surface; the Auction first account-menu story holds the auction-launch menu, and the Auction & Store stories follow the interim Q7 records

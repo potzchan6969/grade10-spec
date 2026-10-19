@@ -37,8 +37,3 @@ costs and how to pay, and the notice to name the clause, the date to pay by
 and that a person decides,
 **so that** the message is a record I can act on without opening the page.
 
-### grade10-site-vault-collector-notifications-US-06: Collector is invited to verify before the visit
-
-**As a** collector with a visit booked and no identity on file,
-**I want** the invitation to name the visit, the slot and what to bring,
-**so that** I can verify at home and turn up prepared.

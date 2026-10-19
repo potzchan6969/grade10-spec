@@ -1,5 +1,10 @@
 import { getMessages } from "@grade10/i18n";
-import type { CartDrawerCopy, CartItemSummary, HeldPromoCode } from "./types";
+import type {
+  CartDrawerCopy,
+  CartItemSummary,
+  HeldPromoCode,
+  OrderDiscountRow,
+} from "./types";
 
 const { common } = getMessages("grade10", "en");
 
@@ -7,13 +12,6 @@ const { common } = getMessages("grade10", "en");
 const STORY_CART_SUBTOTAL_HKD = 42700;
 /** Max points bill-credit in Storybook stubs (1 pt = HK$1). */
 const STORY_POINTS_MAX_HKD = 1200;
-/** Sale subtotal after the storewide −10% special sale. */
-const STORY_SPECIAL_SALE_SUBTOTAL_HKD = 38430;
-/** Extra cut when SAVE20 stacks on the sale subtotal (折上折). */
-const STORY_STACKED_PROMO_CUT_HKD = 7686;
-/** Cut when SAVE20 replaces the site sale (20% of list). */
-const STORY_REPLACE_PROMO_CUT_HKD = 8540;
-
 function parseStoryMoney(value: string): number {
   return Number(String(value).replace(/[^0-9.]/g, "")) || 0;
 }
@@ -28,6 +26,11 @@ function formatStoryHkd(amount: number): string {
 /** Credit/discount display — Unicode minus (U+2212), not ASCII hyphen. */
 function formatStoryCreditHkd(amount: number): string {
   return `−${formatStoryHkd(amount)}`;
+}
+
+/** The consumer's label for an applied code or an order discount row. */
+function storyPromoLabel(name: string): string {
+  return `Discount (${name})`;
 }
 
 /**
@@ -48,33 +51,31 @@ function storyCartEstimatedTotal(
   return formatStoryHkd(total);
 }
 
-/** Cut when the storewide −10% special sale is named in the footer. */
-const STORY_SITE_SALE_CUT_HKD = 4270;
-const STORY_SITE_SALE_AMOUNT = formatStoryCreditHkd(STORY_SITE_SALE_CUT_HKD);
-const STORY_SITE_SALE_LABEL = "Store sale (−10%)";
-const STORY_LIST_SUBTOTAL = formatStoryHkd(STORY_CART_SUBTOTAL_HKD);
-const STORY_SPECIAL_SALE_SUBTOTAL = formatStoryHkd(
-  STORY_SPECIAL_SALE_SUBTOTAL_HKD,
-);
-const STORY_STACKED_PROMO_AMOUNT = formatStoryCreditHkd(
-  STORY_STACKED_PROMO_CUT_HKD,
-);
-const STORY_REPLACE_PROMO_AMOUNT = formatStoryCreditHkd(
-  STORY_REPLACE_PROMO_CUT_HKD,
-);
-const STORY_STACKED_TOTAL = formatStoryHkd(
-  STORY_SPECIAL_SALE_SUBTOTAL_HKD - STORY_STACKED_PROMO_CUT_HKD,
-);
-const STORY_REPLACE_TOTAL = formatStoryHkd(
-  STORY_CART_SUBTOTAL_HKD - STORY_REPLACE_PROMO_CUT_HKD,
-);
+/** An order-class site discount — 10% off the whole order over HK$10,000. */
+const STORY_ORDER_DISCOUNT: OrderDiscountRow = {
+  label: storyPromoLabel("Spend 10k 10% off"),
+  amount: formatStoryCreditHkd(4270),
+};
 
+function orderDiscountRows(root: ParentNode): HTMLElement[] {
+  return [
+    ...root.querySelectorAll<HTMLElement>('[data-slot="cart-order-discount"]'),
+  ];
+}
+
+function follows(earlier: Node, later: Node): boolean {
+  return Boolean(
+    earlier.compareDocumentPosition(later) & Node.DOCUMENT_POSITION_FOLLOWING,
+  );
+}
 const DEFAULT_CART_COPY: CartDrawerCopy = {
   header: {
     title: "Cart",
     closeCartLabel: "Close cart",
   },
   item: {
+    salePriceLabel: "Sale price",
+    listPriceLabel: "Was",
     lowStockWarning: "Low stock. Quantity adjusted",
     soldOutLabel: "Sold Out",
     removeItemLabel: "Remove item",
@@ -109,6 +110,9 @@ const DEFAULT_CART_COPY: CartDrawerCopy = {
     checkoutButton: "Proceed to Checkout",
     checkoutRedirecting: "Redirecting...",
     checkoutFailed: "Couldn’t open checkout",
+    signInAction: "Sign in",
+    signInSuffix: "for points and rewards",
+    publicPromoCodes: "Promo codes",
   },
   emptyTitle: "Your cart is empty",
   emptyDescription: "Items you add will appear here",
@@ -150,41 +154,36 @@ const SAMPLE_HELD_PROMO_CODES: readonly HeldPromoCode[] = [
   },
 ];
 
-/** Held list where every code is inapplicable — only the “Not valid” partition. */
-const SAMPLE_HELD_INAPPLICABLE_ONLY: readonly HeldPromoCode[] =
-  SAMPLE_HELD_PROMO_CODES.filter((c) => !c.applicable);
-
-/**
- * Held list while a non-combining site sale is on — SAVE20 is refused by
- * Shopify combine rules in the refuse scenario.
- */
-const SAMPLE_HELD_WITH_SITE_SALE_BLOCK: readonly HeldPromoCode[] = [
+/** Codes open to everyone — listed to guests and members under their own
+ * heading, never minted to a member. */
+const SAMPLE_PUBLIC_PROMO_CODES: readonly HeldPromoCode[] = [
   {
-    id: "held-save20",
-    label: "SAVE20",
-    title: "20% off order",
-    detailLabel: "Use by 31 Dec 2026",
-    applicable: false,
-    inapplicableReason: "Cannot combine with the store sale on this order",
+    id: "public-g10launch",
+    label: "G10LAUNCH",
+    title: "HK$200 discount",
+    detailLabel: "Use by 30 Nov 2026",
+    applicable: true,
   },
-  ...SAMPLE_HELD_PROMO_CODES.filter((c) => c.id !== "held-stack"),
-];
-
-/**
- * Held list when SAVE20 may stack or replace the site sale — ticket Apply is live.
- */
-const SAMPLE_HELD_WITH_SITE_SALE_STACKABLE: readonly HeldPromoCode[] = [
   {
-    id: "held-save20",
-    label: "SAVE20",
-    title: "20% off order",
+    id: "public-holiday",
+    label: "HOLIDAY26",
+    title: "5% discount",
     detailLabel: "Use by 31 Dec 2026",
     applicable: true,
   },
-  ...SAMPLE_HELD_PROMO_CODES.filter(
-    (c) => c.applicable && c.id !== "held-stack",
-  ),
+  {
+    id: "public-bigorder",
+    label: "BIGORDER",
+    title: "HK$1,000 discount",
+    detailLabel: "Use by 31 Mar 2026",
+    applicable: false,
+    inapplicableReason: "Add ~HK$50,000 more to use this promo code",
+  },
 ];
+
+/** Held list where every code is inapplicable — only the “Not valid” partition. */
+const SAMPLE_HELD_INAPPLICABLE_ONLY: readonly HeldPromoCode[] =
+  SAMPLE_HELD_PROMO_CODES.filter((c) => !c.applicable);
 
 const SAMPLE_CART_ITEMS: CartItemSummary[] = [
   {
@@ -204,36 +203,6 @@ const SAMPLE_CART_ITEMS: CartItemSummary[] = [
     status: "default",
   },
 ];
-
-/**
- * Storewide product special sale (−10%) on every line — compare-at is list
- * price. List subtotal HK$42,700 → sale subtotal HK$38,430.
- */
-const SPECIAL_SALE_CART_ITEMS: CartItemSummary[] = [
-  {
-    id: "item-1",
-    name: "1999 Pokémon Base Set #4 Charizard Holo PSA 10",
-    price: "HK$22,050.00",
-    originalPrice: "HK$24,500.00",
-    quantity: 1,
-    maxQuantity: 1,
-    status: "default",
-  },
-  {
-    id: "item-2",
-    name: "2000 Neo Genesis 1st Edition Lugia Holo #9 BGS 9.5",
-    price: "HK$16,380.00",
-    originalPrice: "HK$18,200.00",
-    quantity: 1,
-    maxQuantity: 3,
-    status: "default",
-  },
-];
-
-/** List prices for the same basket when a promo *replaces* the site sale. */
-const LIST_PRICE_CART_ITEMS: CartItemSummary[] = SAMPLE_CART_ITEMS.map(
-  (item) => ({ ...item }),
-);
 
 const OVERFLOW_CART_ITEMS: CartItemSummary[] = [
   ...SAMPLE_CART_ITEMS,
@@ -325,51 +294,159 @@ function applyTypedPromoInStories(
 }
 
 /**
- * Storybook stub for site-sale × typed-code combine modes.
- * - `refuse` — SAVE20 rejected; site sale stays on lines
- * - `stack` — SAVE20 cuts the post-sale subtotal; lines keep sale + compare-at
- * - `replace` — site sale lifts; SAVE20 cuts list alone
+ * The cart on the site sale every Auto Discount story shares. The quote owns
+ * every amount: each line's `price` is the price of one, a line the sale cuts
+ * carries its list price as `originalPrice`, and the Subtotal is each line's
+ * price times its quantity, leaving out sold-out and unavailable lines.
  */
-function applySiteSalePromoInStories(
-  code: string,
-  mode: "refuse" | "stack" | "replace",
-):
+const SITE_SALE_CHARIZARD: CartItemSummary = {
+  id: "sale-charizard",
+  name: "1999 Pokémon Base Set #4 Charizard Holo PSA 10",
+  price: "HK$22,050.00",
+  originalPrice: "HK$24,500.00",
+  quantity: 1,
+  maxQuantity: 1,
+  status: "default",
+};
+
+const SITE_SALE_LUGIA: CartItemSummary = {
+  id: "sale-lugia",
+  name: "2000 Neo Genesis 1st Edition Lugia Holo #9 BGS 9.5",
+  price: "HK$16,380.00",
+  originalPrice: "HK$18,200.00",
+  quantity: 2,
+  maxQuantity: 3,
+  status: "default",
+};
+
+const SITE_SALE_OFF_SALE: CartItemSummary = {
+  id: "off-sale-blue-eyes",
+  name: "2002 Yu-Gi-Oh! LOB Blue-Eyes White Dragon 1st Edition PSA 9",
+  price: "HK$8,900.00",
+  quantity: 1,
+  status: "default",
+};
+
+const SITE_SALE_SOLD_OUT: CartItemSummary = {
+  id: "sold-out-pikachu",
+  name: "1996 Japanese Basic Pikachu No Rarity Symbol PSA 9",
+  price: "HK$4,500.00",
+  quantity: 1,
+  status: "soldOut",
+};
+
+const SITE_SALE_UNAVAILABLE: CartItemSummary = {
+  id: "unavailable-umbreon",
+  name: "2003 Skyridge Umbreon Holo #H30 PSA 10",
+  price: "HK$12,000.00",
+  quantity: 1,
+  status: "unavailable",
+};
+
+const SITE_SALE_CART_ITEMS: readonly CartItemSummary[] = [
+  SITE_SALE_CHARIZARD,
+  SITE_SALE_LUGIA,
+  SITE_SALE_OFF_SALE,
+  SITE_SALE_SOLD_OUT,
+];
+
+/** The lines once a replacing code takes the sale from the Charizard alone. */
+const SITE_SALE_REPLACED_ITEMS: readonly CartItemSummary[] =
+  SITE_SALE_CART_ITEMS.map((item) => {
+    if (item.id !== SITE_SALE_CHARIZARD.id) return item;
+    const { originalPrice: _listPrice, ...line } = item;
+    return { ...line, price: "HK$24,500.00" };
+  });
+
+/** Each line's price times its quantity, leaving out sold-out and
+ * unavailable lines. */
+function storySubtotalHkd(items: readonly CartItemSummary[]): number {
+  return items
+    .filter(
+      (item) => item.status !== "soldOut" && item.status !== "unavailable",
+    )
+    .reduce(
+      (sum, item) => sum + parseStoryMoney(String(item.price)) * item.quantity,
+      0,
+    );
+}
+
+const SITE_SALE_SUBTOTAL_HKD = storySubtotalHkd(SITE_SALE_CART_ITEMS);
+const SITE_SALE_SUBTOTAL = formatStoryHkd(SITE_SALE_SUBTOTAL_HKD);
+/** SAVE20 stacked: 20% off the sale subtotal. */
+const STACKED_PROMO_CUT_HKD = Math.round(SITE_SALE_SUBTOTAL_HKD * 0.2);
+const STACKED_PROMO_AMOUNT = formatStoryCreditHkd(STACKED_PROMO_CUT_HKD);
+const STACKED_TOTAL = formatStoryHkd(
+  SITE_SALE_SUBTOTAL_HKD - STACKED_PROMO_CUT_HKD,
+);
+const REPLACED_SUBTOTAL_HKD = storySubtotalHkd(SITE_SALE_REPLACED_ITEMS);
+const REPLACED_SUBTOTAL = formatStoryHkd(REPLACED_SUBTOTAL_HKD);
+/** SAVE20 replacing: 20% off the list price of the line it takes. */
+const REPLACE_PROMO_CUT_HKD = Math.round(24500 * 0.2);
+const REPLACE_PROMO_AMOUNT = formatStoryCreditHkd(REPLACE_PROMO_CUT_HKD);
+const REPLACED_TOTAL = formatStoryHkd(
+  REPLACED_SUBTOTAL_HKD - REPLACE_PROMO_CUT_HKD,
+);
+
+/** The refusal a code meets on this cart, unlike any held ticket's reason. */
+const SITE_SALE_REFUSAL = "This promo code cannot stack on the site sale";
+
+/** Held codes on the site sale cart: SAVE20 and two more can apply, two cannot. */
+const SAMPLE_HELD_ON_SITE_SALE: readonly HeldPromoCode[] = [
+  {
+    id: "held-save20",
+    label: "SAVE20",
+    title: "20% off order",
+    detailLabel: "Use by 31 Dec 2026",
+    applicable: true,
+  },
+  ...SAMPLE_HELD_PROMO_CODES,
+];
+
+type SiteSaleOutcome =
   | {
       ok: true;
       label: string;
       amount: string;
       total: string;
-      items: CartItemSummary[];
+      items: readonly CartItemSummary[];
       subtotal: string;
     }
-  | { ok: false; error: string } {
+  | { ok: false; error: string };
+
+/**
+ * Storybook stub for a code that meets the site sale. The quote decides:
+ * - `refuse` - every code that could apply is refused with its own sentence
+ * - `stack` - SAVE20 cuts the sale subtotal; the lines keep the sale
+ * - `replace` - SAVE20 takes the sale from the Charizard and leaves it on
+ *   the Lugia
+ */
+function applySiteSalePromoInStories(
+  code: string,
+  mode: "refuse" | "stack" | "replace",
+): SiteSaleOutcome {
   const trimmed = code.trim().toUpperCase();
+  if (mode === "refuse") return { ok: false, error: SITE_SALE_REFUSAL };
   if (trimmed !== "SAVE20") {
     return { ok: false, error: "This promo code is invalid" };
-  }
-  if (mode === "refuse") {
-    return {
-      ok: false,
-      error: "Cannot combine with the store sale on this order",
-    };
   }
   if (mode === "stack") {
     return {
       ok: true,
       label: "SAVE20",
-      amount: STORY_STACKED_PROMO_AMOUNT,
-      total: STORY_STACKED_TOTAL,
-      items: SPECIAL_SALE_CART_ITEMS,
-      subtotal: STORY_SPECIAL_SALE_SUBTOTAL,
+      amount: STACKED_PROMO_AMOUNT,
+      total: STACKED_TOTAL,
+      items: SITE_SALE_CART_ITEMS,
+      subtotal: SITE_SALE_SUBTOTAL,
     };
   }
   return {
     ok: true,
     label: "SAVE20",
-    amount: STORY_REPLACE_PROMO_AMOUNT,
-    total: STORY_REPLACE_TOTAL,
-    items: LIST_PRICE_CART_ITEMS,
-    subtotal: STORY_LIST_SUBTOTAL,
+    amount: REPLACE_PROMO_AMOUNT,
+    total: REPLACED_TOTAL,
+    items: SITE_SALE_REPLACED_ITEMS,
+    subtotal: REPLACED_SUBTOTAL,
   };
 }
 
@@ -377,27 +454,47 @@ export {
   applySiteSalePromoInStories,
   applyTypedPromoInStories,
   DEFAULT_CART_COPY,
+  follows,
   formatStoryCreditHkd,
   formatStoryHkd,
-  LIST_PRICE_CART_ITEMS,
   OVERFLOW_CART_ITEMS,
+  orderDiscountRows,
   parseStoryMoney,
+  REPLACE_PROMO_AMOUNT,
+  REPLACED_SUBTOTAL,
+  REPLACED_TOTAL,
   SAMPLE_CART_ITEMS,
   SAMPLE_HELD_DISCOUNTS,
   SAMPLE_HELD_INAPPLICABLE_ONLY,
+  SAMPLE_HELD_ON_SITE_SALE,
   SAMPLE_HELD_PROMO_CODES,
-  SAMPLE_HELD_WITH_SITE_SALE_BLOCK,
-  SAMPLE_HELD_WITH_SITE_SALE_STACKABLE,
-  SPECIAL_SALE_CART_ITEMS,
+  SAMPLE_PUBLIC_PROMO_CODES,
+  SITE_SALE_CART_ITEMS,
+  SITE_SALE_CHARIZARD,
+  SITE_SALE_LUGIA,
+  SITE_SALE_OFF_SALE,
+  SITE_SALE_REFUSAL,
+  SITE_SALE_SOLD_OUT,
+  SITE_SALE_SUBTOTAL,
+  SITE_SALE_UNAVAILABLE,
+  STACKED_PROMO_AMOUNT,
+  STACKED_TOTAL,
   STORY_CART_SUBTOTAL_HKD,
-  STORY_LIST_SUBTOTAL,
+  STORY_ORDER_DISCOUNT,
   STORY_POINTS_MAX_HKD,
-  STORY_REPLACE_PROMO_AMOUNT,
-  STORY_REPLACE_TOTAL,
-  STORY_SITE_SALE_AMOUNT,
-  STORY_SITE_SALE_LABEL,
-  STORY_SPECIAL_SALE_SUBTOTAL,
-  STORY_STACKED_PROMO_AMOUNT,
-  STORY_STACKED_TOTAL,
   storyCartEstimatedTotal,
+  storyPromoLabel,
+  storySubtotalHkd,
+};
+
+import cartPictureUrl from "./assets/cart-picture.svg?url&no-inline";
+
+export const PICTURE_CART_ITEM = {
+  id: "picture-card",
+  name: "Gengar VMAX",
+  price: "HK$100.00",
+  quantity: 1,
+  maxQuantity: 3,
+  imageSrc: `${cartPictureUrl.split("?")[0]}?v=7`,
+  imageAlt: "Card front",
 };

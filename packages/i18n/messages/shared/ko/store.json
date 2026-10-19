@@ -19,6 +19,13 @@
   "sale": "세일",
   "searchLabel": "상품 검색",
   "searchPlaceholder": "검색…",
+  "searchEmpty": "검색 결과가 없습니다.",
+  "searchSearching": "검색 중…",
+  "searchChip": "“{query}”",
+  "searchProducts": "상품",
+  "searchFilters": "필터",
+  "searchWorld": "월드",
+  "searchType": "종류",
   "seeAllWorlds": "모든 월드 보기",
   "showResults": "결과 보기",
   "soldOut": "품절",
@@ -29,5 +36,7 @@
   "sortPriceAsc": "낮은 가격순",
   "sortPriceDesc": "높은 가격순",
   "collections": "컬렉션",
-  "title": "스토어"
+  "title": "스토어",
+  "salePriceLabel": "할인가",
+  "listPriceLabel": "정가"
 }

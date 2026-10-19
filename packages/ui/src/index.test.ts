@@ -1,5 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
+import type { CartDrawerBodyProps, CartDrawerCopy } from "./index";
 import * as publicEntry from "./index";
 
 const entry = readFileSync(new URL("./index.ts", import.meta.url), "utf8");
@@ -77,6 +78,118 @@ const GRADING_TYPES = [
   "GradingVaultCase",
 ];
 
+const VISIT_AND_CONSIGNMENT_BLOCKS = [
+  "VisitActRow",
+  "VisitBody",
+  "VisitBookedPass",
+  "VisitCancelPanel",
+  "VisitFacts",
+  "VisitFullDay",
+  "VisitLatePanel",
+  "VisitLinkOpensNothing",
+  "VisitList",
+  "VisitMovePanel",
+  "VisitPass",
+  "VisitPhaseHeader",
+  "VisitReconnecting",
+  "VisitRefusedBook",
+  "VisitTicketBody",
+  "VisitWaitBody",
+  "ConsignmentSellerLine",
+];
+
+const VISIT_AND_CONSIGNMENT_TYPES = [
+  "VisitAct",
+  "VisitActRowProps",
+  "VisitBodyCopy",
+  "VisitBodyProps",
+  "VisitBookedPassCopy",
+  "VisitBookedPassProps",
+  "VisitCancelPanelCopy",
+  "VisitCancelPanelProps",
+  "VisitCancelReason",
+  "VisitFact",
+  "VisitFactsCopy",
+  "VisitFactsProps",
+  "VisitFullDayCopy",
+  "VisitFullDayProps",
+  "VisitFullDayShop",
+  "VisitLateChoice",
+  "VisitLatePanelCopy",
+  "VisitLatePanelProps",
+  "VisitLinkOpensNothingCopy",
+  "VisitLinkOpensNothingProps",
+  "VisitListCopy",
+  "VisitListProps",
+  "VisitListRow",
+  "VisitMovePanelCopy",
+  "VisitMovePanelProps",
+  "VisitNoticeCopy",
+  "VisitPassCopy",
+  "VisitPassProps",
+  "VisitPhaseHeaderCopy",
+  "VisitPhaseHeaderProps",
+  "VisitReconnectingCopy",
+  "VisitReconnectingProps",
+  "VisitRefusal",
+  "VisitRefusedBookCopy",
+  "VisitRefusedBookProps",
+  "VisitTicketBodyCopy",
+  "VisitTicketBodyProps",
+  "VisitTone",
+  "VisitWaitBodyCopy",
+  "VisitWaitBodyProps",
+  "VisitWaitNoticeCopy",
+  "VisitWaitService",
+  "VisitWaitShop",
+  "ConsignmentSellerLineCopy",
+  "ConsignmentSellerLineProps",
+];
+
+const STORE_CART_BLOCKS = [
+  "CartDrawer",
+  "CartDrawerBody",
+  "CartDrawerFooter",
+  "CartDrawerHeader",
+  "CartItem",
+  "CartPromoSheet",
+  "PromoTicket",
+];
+
+const STORE_CART_TYPES = [
+  "CartDrawerBodyProps",
+  "CartDrawerCopy",
+  "CartDrawerFooterCopy",
+  "CartDrawerFooterProps",
+  "CartDrawerHeaderCopy",
+  "CartDrawerHeaderProps",
+  "CartDrawerProps",
+  "CartItemCopy",
+  "CartItemProps",
+  "CartItemStatus",
+  "CartItemSummary",
+  "CartPromoSheetProps",
+  "HeldPromoCode",
+  "OrderDiscountRow",
+  "PointsState",
+  "PromoNotice",
+  "PromoState",
+  "PromoTicketProps",
+];
+
+/* Every name the entry re-exports from the store-cart blocks, read off the
+ * entry's own text so a type export is seen as well as a value. */
+const storeCartNames = () =>
+  [
+    ...entry.matchAll(
+      /export (?:type )?\{([^}]*)\} from "\.\/blocks\/store-cart\/[^"]+";/g,
+    ),
+  ]
+    .flatMap((match) => (match[1] ?? "").split(","))
+    .map((name) => name.replace(/^\s*type\s+/, "").trim())
+    .filter(Boolean)
+    .sort();
+
 /* The collector's vault screens left the site for a new design, and the
  * store's blocks for them went with them. */
 const RETIRED_VAULT_NAMES = [
@@ -136,5 +249,48 @@ describe("the package entry", () => {
     const blocks = readdirSync(new URL("./blocks", import.meta.url));
 
     expect(blocks).not.toContain("vault-case");
+  });
+  it("exports the visit and consignment blocks and their types", () => {
+    expect(
+      VISIT_AND_CONSIGNMENT_BLOCKS.filter((name) => !(name in publicEntry)),
+    ).toEqual([]);
+    expect(
+      [...VISIT_AND_CONSIGNMENT_BLOCKS, ...VISIT_AND_CONSIGNMENT_TYPES].filter(
+        (name) => !exported(name),
+      ),
+    ).toEqual([]);
+  });
+
+  it("exports exactly the store-cart components and types (shared-ui-store-cart-SC-01)", () => {
+    expect(storeCartNames()).toEqual(
+      [...STORE_CART_BLOCKS, ...STORE_CART_TYPES].sort(),
+    );
+    expect(STORE_CART_BLOCKS.filter((name) => !(name in publicEntry))).toEqual(
+      [],
+    );
+  });
+
+  it("exports no placeholder cart slot (shared-ui-store-cart-SC-43)", () => {
+    expect(entry).not.toMatch(/\bCartItemSlot(Props)?\b/);
+    expect("CartItemSlot" in publicEntry).toBe(false);
+  });
+
+  it("requires the empty-cart title and takes an optional description (shared-ui-store-cart-SC-22)", () => {
+    expectTypeOf<CartDrawerCopy["emptyTitle"]>().toEqualTypeOf<string>();
+    expectTypeOf<CartDrawerCopy["emptyDescription"]>().toEqualTypeOf<
+      string | undefined
+    >();
+    expectTypeOf<CartDrawerBodyProps["emptyTitle"]>().toEqualTypeOf<string>();
+    expectTypeOf<CartDrawerBodyProps["emptyDescription"]>().toEqualTypeOf<
+      string | undefined
+    >();
+    // @ts-expect-error emptyTitle is required on the drawer copy
+    const copy: Pick<CartDrawerCopy, "emptyTitle"> = {};
+    // @ts-expect-error emptyTitle is required on the body props
+    const body: Pick<CartDrawerBodyProps, "emptyTitle"> = {};
+    const described: Pick<CartDrawerCopy, "emptyTitle" | "emptyDescription"> = {
+      emptyTitle: "Your cart is empty",
+    };
+    expect([copy, body, described]).toHaveLength(3);
   });
 });

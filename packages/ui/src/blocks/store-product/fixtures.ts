@@ -41,6 +41,8 @@ const DESCRIPTION_COPY = {
 
 const HEADER_COPY = {
   onlyLeft: (count: number) => `Only ${count} left`,
+  salePriceLabel: "Sale price",
+  listPriceLabel: "Was",
 };
 
 const METADATA_COPY = {

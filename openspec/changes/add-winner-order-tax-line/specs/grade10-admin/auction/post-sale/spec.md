@@ -17,53 +17,60 @@ An operator holding payment-processing SHALL prepare and send the invoice for
 an auction order in Preparing Invoice:
 
 1. Open the order and read the winner's confirmed delivery address, the
-   payment method the winner chose, the winning bid, and the buyer's premium.
+   settlement currency, the payment method the winner chose and, for bank
+   transfer, its rail, the winning bid, and the buyer's premium.
 2. Enter Shipping & Handling for that address, an integer count of minor
-   units of zero or more in the lot's currency.
+   units of zero or more in USD.
 3. Optionally add Insurance for that address, an integer count of minor units
-   greater than zero in the lot's currency.
+   greater than zero in USD.
 4. Optionally add Tax for the order, an integer count of minor units greater
-   than zero in the lot's currency.
+   than zero in USD.
 5. For bank transfer, enter the bank transfer fee: an integer count of minor
-   units of zero or more in the lot's currency, with no upper limit. An empty
-   field is zero, and a fee of zero reads Free to the winner.
-6. Read the subtotal, the payment processing fee, and the order total. For
-   card, Grade10 computes the fee from the card rule for the order's currency
-   in Payment Settings, per `grade10-admin/auction/payment-settings`, and the
-   operator does not enter it; for bank transfer, the fee is the amount
-   entered in step 5.
+   units of zero or more in USD, with no upper limit. An empty field is zero,
+   and a fee of zero reads Free to the winner.
+6. Read the subtotal, the payment processing fee, and the order total in the
+   settlement currency, per "The quote is typed in USD and read in the
+   settlement currency". For card, Grade10 computes the fee from the card rule
+   for the settlement currency in Payment Settings, per
+   `grade10-admin/auction/payment-settings`, and the operator does not enter
+   it; for bank transfer, the fee is the amount entered in step 5.
 7. Send the invoice.
 
 On send Grade10 SHALL issue the invoice with invoice status `pending`, an
 invoice reference, and the payment method, record Sent at, set the payment
 deadline to 7 calendar days from Sent at, lock the delivery address and the
 payment method, write a sent entry to the invoice log, and send the winner the
-invoice-sent letter, per `grade10-site/auction/notifications-order`.
+payment reminder letter, per `grade10-site/auction/notifications-order`.
 
 Grade10 SHALL refuse to send an invoice when the winner has confirmed no
-delivery address, when Shipping & Handling is missing, when Insurance or Tax is
+delivery address, when the order holds no settlement currency, or no rail for
+a bank transfer (an internal bidder's order reads its lot's USD and is sent
+as `grade10-admin/auction/internal-bid` states, with no currency or rail step), when
+Shipping & Handling is missing, when Insurance or Tax is
 added at zero, when a bank transfer invoice's fee is not an
 integer of zero or more, when Payment Settings holds no card rule for a card
-invoice's currency (`CARD_FEE_UNSET`), or when the order total the send
+invoice's settlement currency (`CARD_FEE_UNSET`), or when the order total the send
 carries differs from the one Grade10 prices on receipt (`QUOTE_CHANGED`). The
 `CARD_FEE_UNSET` refusal SHALL say the card fee for that currency is not set
 and point to Payment Settings. No send SHALL need the payment provider.
 An operator without payment-processing SHALL see the send control visible and
 disabled, and Grade10 SHALL refuse the same action on the server.
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-7jg rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-7jg rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-48 - Sending the invoice opens the payment window
 **Serves:** Quote and send - sending issues the invoice and starts the deadline
 
-- **GIVEN** an auction order in Preparing Invoice for bank transfer with a
-  winning bid of 250000 and a buyer's premium of 50000 minor units in HKD
+- **GIVEN** an auction order in HKD in Preparing Invoice for bank transfer on
+  FPS with a winning bid of 10000 and a buyer's premium of 2000 minor units in
+  USD
 - **AND** an operator holding payment-processing
-- **WHEN** they enter Shipping & Handling of 8000, Insurance of 4000 and a bank
-  transfer fee of 0 minor units in HKD and send the invoice at
+- **WHEN** they enter Shipping & Handling of 1000, Insurance of 400 and a bank
+  transfer fee of 0 minor units in USD and send the invoice at
   2026-09-12T09:00:00Z
-- **THEN** the invoice is `pending` with an order total of 312000 minor units
+- **THEN** the invoice is `pending` with an order total of 105300 minor units
   in HKD and a payment deadline of 2026-09-19T09:00:00Z
-- **AND** the delivery address and payment method are locked
+- **AND** the delivery address, settlement currency and payment method are
+  locked
 - **AND** the order derives as Pending Payment
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-rrz rev=1 -->
@@ -111,15 +118,15 @@ card rule.
   Settings
 - **AND** no invoice is issued
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-guq rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-guq rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-63 - An invoice sends without insurance
 **Serves:** Quote and send - insurance is optional
 
-- **GIVEN** an auction order in Preparing Invoice for bank transfer with a
-  winning bid of 250000 and a buyer's premium of 50000 minor units in HKD
+- **GIVEN** an auction order in HKD in Preparing Invoice for bank transfer with
+  a winning bid of 10000 and a buyer's premium of 2000 minor units in USD
 - **WHEN** an operator enters Shipping & Handling of 0 and a bank transfer fee
   of 0, adds no Insurance, and sends
-- **THEN** the invoice is `pending` with an order total of 300000 minor units in HKD
+- **THEN** the invoice is `pending` with an order total of 94200 minor units in HKD
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-xt3 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-68 - Insurance added at zero is refused
@@ -130,15 +137,16 @@ card rule.
 - **THEN** Grade10 refuses the send
 - **AND** no invoice is issued
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-75y rev=2 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-75y rev=3 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-117 - The quote shows the winner's method
 **Serves:** Quote and send - the winner's choice decides how the fee is priced
 
-- **GIVEN** an auction order in Preparing Invoice whose winner chose bank transfer
+- **GIVEN** an auction order in Preparing Invoice whose winner chose bank
+  transfer on the FPS rail
 - **WHEN** an operator holding payment-processing opens the quote
-- **THEN** the quote names bank transfer
-- **AND** asks for a bank transfer fee instead of showing a fee computed from
-  the card rule
+- **THEN** the quote names bank transfer and the FPS rail
+- **AND** asks for a bank transfer fee in USD instead of showing a fee computed
+  from the card rule
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-0l6 rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-118 - A blank bank transfer fee refuses the send
@@ -153,25 +161,29 @@ integer of zero or more refuses the send.
 - **THEN** Grade10 refuses the send
 - **AND** no invoice is issued
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-miq rev=2 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-miq rev=3 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-119 - A bank transfer fee has no cap and needs no provider fees
 **Serves:** Quote and send - zero or more, with no cap
 
-- **GIVEN** an auction order in Preparing Invoice for bank transfer with a subtotal of 312000 minor units in HKD
-- **WHEN** an operator enters a bank transfer fee of 500000 minor units in HKD and sends
-- **THEN** the invoice is `pending` with an order total of 812000 minor units in HKD
+- **GIVEN** an auction order in HKD in Preparing Invoice for bank transfer with
+  lines that total a subtotal of 105300 minor units in HKD
+- **WHEN** an operator enters a bank transfer fee of 50000 minor units in USD
+  and sends
+- **THEN** the invoice carries a bank transfer fee of 392500 minor units in HKD
+- **AND** the invoice is `pending` with an order total of 497800 minor units
+  in HKD
 
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-qv1 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qv1 rev=2 -->
 #### Scenario: post-sale-SC-155 - An invoice sends with tax
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
-- **GIVEN** an auction order in Preparing Invoice for bank transfer with lines
-  totalling 312000 minor units in HKD before Tax
-- **WHEN** an operator adds Tax of 6000 and a bank transfer fee of 0 minor units
-  in HKD and sends
-- **THEN** the invoice is `pending` with a Subtotal and order total of 318000
-  minor units in HKD
+- **GIVEN** an auction order in HKD in Preparing Invoice for bank transfer with
+  lines that total 105300 minor units in HKD before Tax
+- **WHEN** an operator adds Tax of 800 and a bank transfer fee of 0 minor units
+  in USD and sends
+- **THEN** the invoice is `pending` with Tax of 6300 minor units in HKD
+- **AND** its Subtotal and order total are 111600 minor units in HKD
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-36t rev=1 -->
 #### Scenario: post-sale-SC-156 - An invoice sends without tax
@@ -190,6 +202,42 @@ integer of zero or more refuses the send.
 - **THEN** Grade10 refuses the send
 - **AND** no invoice is issued
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-lxd rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-243 - A USD order's quote converts nothing
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in USD in Preparing Invoice for bank transfer on
+  HK Local with a winning bid of 250000 and a buyer's premium of 50000 minor
+  units in USD
+- **WHEN** an operator enters Shipping & Handling of 8000, Insurance of 4000
+  and a bank transfer fee of 0 minor units in USD and sends
+- **THEN** the invoice is `pending` with an order total of 312000 minor units
+  in USD
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-0op rev=3 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-253 - An internal bidder's order quotes USD and sends an HKD invoice on FPS
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an internal bidder's auction order in Preparing Invoice, flagged
+  internal, with HKD settlement and bank transfer on FPS, for a USD lot whose
+  winning bid is 10100 minor units and buyer's premium is 2020 minor units
+- **WHEN** an operator holding payment-processing quotes Shipping & Handling
+  of 1001 minor units and a bank transfer fee of 0, both in USD, then sends
+- **THEN** the quote names bank transfer on FPS and reads an invoice total of
+  103100 minor units in HKD
+- **AND** the invoice is `pending` with its USD facts and HKD settlement lines
+- **AND** the operator needed no currency or rail setup step before the send
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-b44 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-244 - The quote names the SWIFT rail
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in USD in Preparing Invoice whose winner chose
+  bank transfer on the International via SWIFT rail
+- **WHEN** an operator holding payment-processing opens the quote
+- **THEN** the quote names bank transfer and International via SWIFT, and no
+  other rail
+- **AND** asks for a bank transfer fee in USD
 
 ### Requirement: An operator reissues a sent invoice
 
@@ -204,12 +252,13 @@ whose invoice is `pending` or `expired`:
 
 1. Choose Reissue on the order.
 2. Change what the winner asked for or the operator decided: delivery address,
-   payment method, bank transfer fee, Shipping & Handling, Insurance, Tax. Each
-   starts from the current invoice.
+   settlement currency, payment method or rail, bank transfer fee, Shipping &
+   Handling, Insurance, Tax. Each starts from the current invoice.
 3. For bank transfer, read the bank transfer fee: prefilled from the current
-   invoice when it was bank transfer, empty after a switch from card. It
-   follows the quote's rules. For card, Grade10 computes the fee from the card
-   rule for the order's currency, as on the quote, and fixes it at send.
+   invoice when it was bank transfer, empty after a switch from card. It is
+   typed in USD and follows the quote's rules. For card, Grade10 computes the
+   fee from the card rule for the settlement currency, as on the quote, and
+   fixes it at send.
 4. Choose the deadline: keep the current one, or a fresh 7 days from the
    moment the new invoice is sent. On an `expired` invoice only a fresh 7 days
    is offered.
@@ -218,21 +267,31 @@ whose invoice is `pending` or `expired`:
 7. Send the new invoice.
 
 **At least one change** - Grade10 SHALL refuse a reissue that changes none of
-the delivery address, payment method, bank transfer fee, Shipping & Handling,
-Insurance, Tax or deadline. A new reason alone is not a change; a fresh 7 days is.
+the delivery address, settlement currency, payment method, bank transfer fee,
+Shipping & Handling, Insurance, Tax or deadline. A new reason alone is not a
+change; a fresh 7 days is. A change from one offered bank rail to another is a
+payment-method change, even when both choices are bank transfer.
 
 **On send** - On send Grade10 SHALL replace the current invoice with a new one
 carrying a new invoice ID, bank reference and internal audit number, per
 `grade10-site/auction/winner-order`, issue it as `pending` with the chosen
 deadline, lock the address and method it carries, write a reissued entry to
 the invoice log naming each part that changed, and send the winner the
-invoice-reissued letter.
+payment reminder letter, per `grade10-site/auction/notifications-order`.
 
 **Replaced invoice** - The replaced invoice SHALL hold no status of its own and
 SHALL NOT be written `cancelled`.
 
 **Payment method** - Only an operator SHALL change an invoice's payment method
-after send.
+or its settlement currency after send.
+
+**Settlement currency** - An operator MAY change the order's settlement
+currency, USD or HKD, on a reissue. The new invoice SHALL carry the new
+currency, with every line priced from the order's USD amounts, per
+`grade10-site/auction/winner-order`, and the replaced invoice SHALL keep its own
+currency and amounts. The method and rail the new invoice carries SHALL be ones
+the new currency offers, and Grade10 SHALL refuse a reissue that keeps one it
+does not.
 
 **Not while checked or paid** - Reissue SHALL NOT be offered, and SHALL be
 refused, on an invoice that is `payment_verifying` or `paid`.
@@ -246,15 +305,15 @@ transfer first, then settled manually at the new invoice's order total. Where
 the money arrived at the subtotal, the operator enters a bank transfer fee of
 0.
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-5km rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-5km rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-107 - A reissue keeps the deadline when the operator says so
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** an order in Pending Payment whose bank transfer invoice totals 312000 minor units in HKD, with a bank transfer fee of 0 and a payment deadline of 2026-09-19T09:00:00Z
-- **WHEN** an operator reissues it to a new address with Shipping & Handling 12000 and Insurance 4000 minor units in HKD, keeps the deadline, and sends with a reason
-- **THEN** the new invoice's order total is 316000 minor units in HKD
+- **GIVEN** an order in USD in Pending Payment whose bank transfer invoice totals 312000 minor units in USD, with a bank transfer fee of 0 and a payment deadline of 2026-09-19T09:00:00Z
+- **WHEN** an operator reissues it to a new address with Shipping & Handling 12000 and Insurance 4000 minor units in USD, keeps the deadline, and sends with a reason
+- **THEN** the new invoice's order total is 316000 minor units in USD
 - **AND** the payment deadline is still 2026-09-19T09:00:00Z
-- **AND** the operator saw 312000 and 316000 minor units in HKD before sending
+- **AND** the operator saw 312000 and 316000 minor units in USD before sending
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-dmi rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-108 - A reissue restarts the deadline when the operator says so
@@ -273,23 +332,23 @@ the money arrived at the subtotal, the operator enters a bank transfer fee of
 - **THEN** Grade10 refuses it
 - **AND** the current invoice, its amount, and its deadline are unchanged
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-oss rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-oss rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-110 - A switch from card leaves the bank transfer fee empty
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** an order in Pending Payment whose card invoice has a subtotal of 312000 and a fee of 11225 minor units in HKD
-- **WHEN** an operator reissues it and switches the method to bank transfer
+- **GIVEN** an order in USD in Pending Payment whose card invoice has a subtotal of 312000 and a fee of 11225 minor units in USD
+- **WHEN** an operator reissues it and switches the method to bank transfer on HK Local
 - **THEN** the bank transfer fee is empty
 - **AND** Grade10 refuses to send until a fee is entered
-- **AND** with a fee of 3000 entered, the new invoice is bank transfer at 315000 minor units in HKD
+- **AND** with a fee of 3000 entered, the new invoice is bank transfer at 315000 minor units in USD
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-7fn rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-7fn rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-111 - The bank transfer fee starts from the current invoice
 **Serves:** Resolving an unpaid order - the bank transfer fee starts from the previous invoice
 
-- **GIVEN** an order whose bank transfer invoice carries a bank transfer fee of 5000 minor units in HKD
+- **GIVEN** an order in USD whose bank transfer invoice carries a bank transfer fee of 5000 minor units in USD
 - **WHEN** an operator opens Reissue on it
-- **THEN** the bank transfer fee reads 5000 minor units in HKD
+- **THEN** the bank transfer fee reads 5000 minor units in USD
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-o4m rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-112 - An expired invoice is reissued with a fresh deadline
@@ -373,23 +432,71 @@ card rule.
 - **AND** the reissued entry names the deadline as the only changed part
 
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-qtj rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-qtj rev=2 -->
 #### Scenario: post-sale-SC-158 - A reissue changes tax
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** an order in Pending Payment whose invoice has no Tax
-- **WHEN** an operator reissues it with Tax of 6000 minor units in HKD and a
+- **GIVEN** an order in USD in Pending Payment whose invoice has no Tax
+- **WHEN** an operator reissues it with Tax of 6000 minor units in USD and a
   reason, changing nothing else
-- **THEN** the new invoice includes Tax of 6000 minor units in HKD
+- **THEN** the new invoice includes Tax of 6000 minor units in USD
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-kdq rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-kdq rev=2 -->
 #### Scenario: post-sale-SC-210 - A reissue removes tax
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** an order in Pending Payment whose invoice includes Tax of 6000
-  minor units in HKD
+- **GIVEN** an order in USD in Pending Payment whose invoice includes Tax of
+  6000 minor units in USD
 - **WHEN** an operator reissues it removing Tax and giving a reason, changing
   nothing else
 - **THEN** Grade10 accepts it as a change
 - **AND** the new invoice has no Tax line
 - **AND** its Subtotal is 6000 minor units lower than the replaced invoice's
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-2g5 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-245 - A reissue changes the settlement currency
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose bank transfer invoice on HK Local
+  is in HKD with a Winning Bid of 78500 minor units
+- **WHEN** an operator reissues it in USD, keeping HK Local, with a reason and
+  nothing else changed
+- **THEN** the new invoice is in USD with a Winning Bid of 10000 minor units
+- **AND** the replaced invoice still reads 78500 minor units in HKD
+- **AND** the reissued entry names the settlement currency as a changed part
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-4va rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-246 - A reissue that keeps a rail the new currency does not offer is refused
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose bank transfer invoice is in HKD
+  on FPS
+- **WHEN** an operator reissues it in USD, keeping FPS, with a reason
+- **THEN** Grade10 refuses the reissue
+- **AND** the current invoice is unchanged
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-r31 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-254 - A rail-only change from FPS to HK Local is a reissue change
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an order in Pending Payment whose HKD bank transfer invoice uses
+  FPS, and both FPS and HK Local details are configured for HKD
+- **WHEN** an operator reissues it on HK Local with the same currency, fee,
+  quote, address and deadline, and gives a reason
+- **THEN** Grade10 accepts the reissue because the bank rail changed
+- **AND** the new invoice snapshots HK Local details and the replaced invoice
+  keeps its FPS details unchanged
+- **AND** the reissued entry names the bank rail as a changed part
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-r32 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-255 - A rail-only change from HK Local to SWIFT is a reissue change
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an order in Pending Payment whose USD bank transfer invoice uses
+  HK Local, and both HK Local and SWIFT details are configured for USD
+- **WHEN** an operator reissues it on International via SWIFT with the same
+  currency, fee, quote, address and deadline, and gives a reason
+- **THEN** Grade10 accepts the reissue because the bank rail changed
+- **AND** the new invoice snapshots SWIFT details and the replaced invoice
+  keeps its HK Local details unchanged
+- **AND** the reissued entry names the bank rail as a changed part

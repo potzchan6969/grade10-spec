@@ -73,7 +73,7 @@ import {
 } from "./context.mjs";
 import { checkDeltas } from "./deltas.mjs";
 import { checkDense } from "./dense.mjs";
-import { checkMarkInProse, checkMarks } from "./marks.mjs";
+import { checkMarkInProse } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkPlanned, checkWalkLast } from "./planned.mjs";
 import { checkAcceptance } from "./qa.mjs";
@@ -193,7 +193,6 @@ export async function runChecks(
       "change section links not run — the store's own repository answers for the mounted store",
     );
   }
-  checkMarks(ctx, changes, pages);
   checkMarkInProse(ctx, pages);
   checkDense(ctx, pages);
 

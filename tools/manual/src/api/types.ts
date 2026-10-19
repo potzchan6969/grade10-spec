@@ -308,11 +308,11 @@ export type EnvironmentReceiptSummary = {
 export type ChangeLane = "proposed" | "specified" | "in-progress" | "complete";
 
 /**
- * The six roles, in the order a change passes through them. Declared here,
+ * The five roles, in the order a change passes through them. Declared here,
  * where `Role` is drawn from it; `scripts/openspec/lib/team.mjs` re-exports it
  * for the checks and the scripts, which read this module under plain node.
  */
-export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"] as const;
+export const ROLES = ["pm", "design", "qa", "dev", "release"] as const;
 
 /** A hand a change passes through. */
 export type Role = (typeof ROLES)[number];
@@ -351,7 +351,7 @@ export type OpenQuestion = {
    * for a line under a section the proposal links. */
   artifact: string;
   /** The role it is addressed to, which is where it is routed when the change
-   * names no hand for it. Any role a row names, the six or not. */
+   * names no hand for it. Any role a row names, the five or not. */
   role: string;
   /** The handle `hands:` names for that role, or the role itself where the
    * change names none. */
@@ -369,23 +369,40 @@ export type OpenQuestion = {
 export type BehindArtifact = {
   /** The schema artifact id. */
   artifact: string;
-  /** What the artifact is read again against, each item a linked page section
-   * as `<page>#<slug>` or an upstream artifact id: what a commit dates later
-   * than the artifact itself, or, with `whole`, everything before it. */
+  /** The items before it that moved, each a linked page section as
+   * `<page>#<slug>` or an upstream artifact id, in reading order; with
+   * `whole`, everything before it. */
   changed: string[];
-  /** Set where the recorded content id is what says the artifact moved. An id
-   * says something before it moved without saying which of them, so `changed`
-   * is the whole of what is before the artifact and every surface that names
-   * it says as much. */
+  /** Set where what moved could not be recovered — no `reviewed:` line, or no
+   * commit holding the before the line was read against — so the artifact is
+   * read again against all of it, and the move is major. */
   whole?: true;
+  /** What moved, unit by unit, quoted before and after. */
+  moved: Moved[];
+  /** Whether it holds the next landing drawn from it: a major move does, a
+   * small one is told and holds only the fold. */
+  holds: boolean;
   /** The day the artifact went behind — what the digest counts its seven days
-   * from. Where the commit dates are what say it moved, that is the oldest
-   * commit newer than the artifact: the first thing that moved after it was
-   * drawn. Where a recorded `reviewed:` id is, the id carries no date of its
-   * own and nothing older than the newest commit before the artifact is
-   * knowable, so that is the day. Absent only where no commit dates anything
-   * before the artifact, which is what a depth-1 checkout gives. */
+   * from: the newest commit among everything before it. Absent where no
+   * commit dates anything before it, which is what a depth-1 checkout gives. */
   since?: string;
+};
+
+/**
+ * One unit that moved before an artifact: a decision row keyed by its
+ * `Q<n>`, a requirement, a case, a section, or the whole item where it could
+ * not be split. `major` holds what is drawn from it; a small move is told.
+ */
+export type Moved = {
+  /** The item it sits in: an upstream artifact id or `<page>#<slug>`. */
+  item: string;
+  /** The unit's key inside the item. */
+  key: string;
+  /** The unit as it was read, absent for a unit added. */
+  before?: string;
+  /** The unit as it stands, absent for a unit removed. */
+  after?: string;
+  major: boolean;
 };
 
 /**
@@ -402,24 +419,16 @@ export type UpstreamRead = {
   /** Each thing before it, in that order: a linked page section as
    * `<page>#<slug>`, or an upstream artifact id. */
   items: string[];
-  /** The change's own artifacts that a commit dates later than this
-   * artifact's own newest commit — what says it is behind where no `reviewed:`
-   * line does. Absent where nothing before it is newer and where no commit
-   * dates the artifact, which is what a depth-1 checkout gives. A linked page
-   * section is never here: a commit on a page dates every section of it, so
-   * only a record line can say the linked one moved. */
-  newer?: string[];
-  /** The oldest commit date among `newer` — the first of the change's own
-   * artifacts to move after this one was drawn, which is the day it went
-   * behind. Carried onto `BehindArtifact` as `since` where the dates are what
-   * say it moved. Absent with `newer`. */
-  firstNewerOn?: string;
   /** The newest commit date among everything before the artifact, carried
    * onto `BehindArtifact` as `since` where a recorded `reviewed:` id is what
    * says it moved: an id cannot single out which item changed, so no older
    * day than this one can be claimed. Absent only where no commit dates
    * anything before the artifact. */
   beforeOn?: string;
+  /** What moved since the `reviewed:` line was read, where the line and the
+   * before it was read against were both recovered; absent where they were
+   * not, which `behindOf` reads as a whole, major move. */
+  moved?: Moved[];
 };
 
 /**
@@ -586,10 +595,6 @@ export type ChangeEntry = {
    * questions a linked page still carries — merged on here by `markQuestions`
    * when the snapshot is read, where the pages are at hand. */
   questions?: OpenQuestion[];
-  /** How many rows of `decisions.md`'s `## Raised` table have landed nowhere
-   * — the blind reading's questions, which the requirements are not settled
-   * without. Absent where every row landed or the file carries no table. */
-  raisedOpen?: number;
   /** The rounds this change has run, from `rounds.md`, one row per round in
    * landing order. Absent until the first round writes the file — a change
    * opened this morning owes no row, and an empty list is a file with a header
@@ -604,8 +609,7 @@ export type ChangeEntry = {
   stage: Stage;
   /** The artifact the ladder stopped at: what the change owes to reach the
    * next stage. Absent where the next rung is proven by something no hand
-   * writes — a ticked box, a deploy, a cut, the fold — and where the rung is
-   * held by a raised row rather than by a file. */
+   * writes — a ticked box, a deploy, a cut, the fold. */
   heldBy?: string;
   /** What the change says it is waiting for, from `.openspec.yaml`
    * `awaiting:` — an artifact id against the line its author wrote. */
@@ -623,9 +627,8 @@ export type SchemaArtifact = {
   teammate?: string;
   /** The role that answers for it — the hand a wait, an overlay and a landing
    * on this artifact are addressed to. Beside `teammate` rather than derived
-   * from it: the tech design and the task list are both the engineer's there,
-   * while the hand of one is the tech PIC and of the other whoever builds
-   * it. Absent where the schema names no hand. */
+   * from it: `teammate` says who writes a file, `hand` who is told about it.
+   * Absent where the schema names no hand. */
   hand?: Role;
   requires: string[];
   /** The artifacts this one's text is drawn from, in reading order — the
@@ -943,6 +946,9 @@ export type CheckoutStanding = {
    * a checkout with no `origin`, or a read that failed, leaves the counts
    * against whatever refs the clone already had. */
   fetchedAt?: string;
+  /** The latest read of `origin` failed after one that worked: the counts
+   * are as of `fetchedAt`, and the page says so. */
+  stale?: true;
 };
 
 /** `POST /api/pull` — the fast-forward onto `main`, or the line the reader is

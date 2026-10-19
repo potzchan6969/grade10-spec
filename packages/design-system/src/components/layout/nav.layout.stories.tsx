@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { Nav } from "./nav";
 import { NAV_BASE_ARGS, UTILITY_LINKS } from "./nav.story-shared";
 
 const meta = {
-  title: "Components/Nav/Layout",
+  title: "Design System/Layout/Nav/Layout",
   component: Nav,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -153,5 +153,8 @@ export const LanguageNested: Story = {
     const language = within(languageDialog);
     await userEvent.click(language.getByRole("link", { name: "繁體中文" }));
     expect(args.onLocaleChange).toHaveBeenCalledWith("zh-Hant");
+    await waitFor(() => {
+      expect(body.queryByRole("dialog")).not.toBeInTheDocument();
+    });
   },
 };

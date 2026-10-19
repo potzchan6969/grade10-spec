@@ -3,7 +3,7 @@ import { BreadcrumbEllipsis } from "./breadcrumb-ellipsis";
 import { Breadcrumbs } from "./breadcrumbs";
 
 const meta = {
-  title: "Components/BreadcrumbEllipsis",
+  title: "Design System/Display/BreadcrumbEllipsis",
   component: BreadcrumbEllipsis,
   tags: ["autodocs"],
   // A crumb is a list item: it renders inside the trail's list.

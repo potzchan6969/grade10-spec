@@ -15,8 +15,10 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { findRequirement } from "../src/api/requirements.ts";
 import { readText, readTextIfExists, walkFiles } from "../src/store/disk.mts";
+import { heldElsewhere, issuedIds } from "../src/store/issued-ids.mts";
 import {
   findSection,
+  JOURNEY_ID,
   outline,
   SCENARIO_ID,
   scenarioIdsIn,
@@ -50,7 +52,7 @@ import {
  * the delta, and one written here is read by nothing. */
 const CARRIED = new Set(["Purpose", "Feature set", "REMOVED Feature set"]);
 const ISSUED_ID = new RegExp(
-  `${SCENARIO_ID.source}|[a-z0-9][a-z0-9-]*-(?:US|TC)-\\d+`,
+  `${SCENARIO_ID.source}|${JOURNEY_ID.source}|[a-z0-9][a-z0-9-]*-TC-\\d+`,
   "g",
 );
 const LEADING_ID = new RegExp(`^(${SCENARIO_ID.source})\\b`);
@@ -77,6 +79,7 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   checkFolded(ctx, files, shape);
   checkOverlap(files, ctx.add);
   checkIssued(ctx, files, shape);
+  checkIssuedCases(ctx, changes);
   checkFuse(ctx, files, pages);
   checkAnchors(ctx, files);
   checkBlind(ctx, files, shape);
@@ -421,6 +424,7 @@ export function readDeltaFiles(root, changes) {
       const sections = deltaSections(text);
       files.push({
         change: change.id,
+        dependsOn: change.dependsOn ?? [],
         accepted: change.accepted === true,
         spec: delta.spec,
         file,
@@ -593,14 +597,21 @@ export function overlapClaims(files) {
 /** RULE `overlap`: two changes folding one requirement. A MODIFIED or a
  * REMOVED block archived second writes the first's text away, silently; an
  * ADDED block archived second fails outright, since the fold refuses to add
- * a name that exists. Either way each change is named to the other, with the
- * other's heading, so a person reads both before building on either
+ * a name that exists. A recorded dependency orders a stack: the upstream
+ * contract is accepted before its dependent one, so their shared requirement
+ * is intentional and must not make every unrelated pull request red. All
+ * other overlaps name each change to the other, with the other's heading,
+ * so a person reads both before building on either
  * (`shared-planning-agent-rounds-SC-102`). */
 function checkOverlap(files, add) {
   const claims = overlapClaims(files);
+  const dependencies = new Map(
+    files.map((one) => [one.change, new Set(one.dependsOn)]),
+  );
 
   for (const held of claims.values()) {
     if (new Set(held.map((one) => one.change)).size < 2) continue;
+    if (isOrdered(held, dependencies)) continue;
     for (const claim of held) {
       const others = held
         .filter((one) => one.change !== claim.change)
@@ -618,6 +629,27 @@ function checkOverlap(files, add) {
       );
     }
   }
+}
+
+/** A dependency stack can extend the same requirement in order. Both paths
+ * would be a cycle, which is not an order and remains an overlap failure. */
+function isOrdered(held, dependencies) {
+  const reaches = (from, target, seen = new Set()) => {
+    if (seen.has(from)) return false;
+    seen.add(from);
+    for (const next of dependencies.get(from) ?? []) {
+      if (next === target || reaches(next, target, seen)) return true;
+    }
+    return false;
+  };
+
+  return held.every((claim, index) =>
+    held.slice(index + 1).every((other) => {
+      const forward = reaches(claim.change, other.change);
+      const backward = reaches(other.change, claim.change);
+      return forward !== backward;
+    }),
+  );
 }
 
 /** RULE `issued`: `<capability>-SC/US/TC-<n>` is issued once, ever. The
@@ -669,7 +701,7 @@ function checkIssued(ctx, files, shape) {
       ctx.add(
         "issued",
         one.file,
-        `reuses \`${id}\`, which ${named} also issues — an id is issued once and never freed`,
+        `reuses \`${id}\`, which ${named} also issues — an id is issued once and never freed; ${moveHint(one.change)}`,
       );
     }
     // An accepted change's scenarios are the ones its acceptance published.
@@ -682,7 +714,7 @@ function checkIssued(ctx, files, shape) {
           ctx.add(
             "issued",
             one.file,
-            `${label(requirement)} issues \`${id}\`, which \`${durable.get(id)}\` already issues — an id is issued once and never freed`,
+            `${label(requirement)} issues \`${id}\`, which \`${durable.get(id)}\` already issues — an id is issued once and never freed; ${moveHint(one.change)}`,
           );
         }
       if (requirement.kind !== "modified") continue;
@@ -704,6 +736,41 @@ function checkIssued(ctx, files, shape) {
     }
   }
 }
+
+/** RULE `issued`, for cases: a case number is issued once at every suite
+ * level, read by its readable id with its `<v>` stripped and its trace id. A
+ * case carried with its own trace id is the same record; the same readable id
+ * under another trace id, in the durable suites or another change, is two. */
+function checkIssuedCases(ctx, changes) {
+  const all = issuedIds(ctx.roots.store);
+  for (const change of changes) {
+    if (change.status !== "in-flight") continue;
+    const mine = all.filter(
+      (one) => one.where === change.id && one.kind === "TC",
+    );
+    if (mine.length === 0) continue;
+    const others = change.accepted
+      ? all.filter((one) => one.where !== "durable")
+      : all;
+    for (const { id, by } of heldElsewhere(mine, others)) {
+      const named =
+        by.where === "durable"
+          ? `\`${by.file}\``
+          : by.where.startsWith("archive:")
+            ? `the archived \`${by.where.slice(8)}\``
+            : `\`${by.where}\``;
+      ctx.add(
+        "issued",
+        id.file,
+        `issues case \`${id.id}\` under \`${id.trace}\`, which ${named} issues under \`${by.trace}\` — a case number is issued once; ${moveHint(change.id)}`,
+      );
+    }
+  }
+}
+
+/** The command that moves a change's ids above every id `main` holds. */
+const moveHint = (change) =>
+  `move this change's ids with \`pnpm run spec:issue move ${change}\``;
 
 /** RULE `fuse`: a page selects a requirement by name, and a REMOVED or
  * RENAMED delta is about to move it. Archiving that change leaves the archive

@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ChevronRightIcon, PlusIcon } from "lucide-react";
-import { expect, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { Button } from "./button";
 
 const meta = {
-  title: "Components/Button",
+  title: "Design System/Forms/Button",
   component: Button,
   tags: ["autodocs"],
   args: { children: "Button" },
@@ -28,8 +28,23 @@ export const Destructive: Story = { args: { variant: "destructive" } };
 export const Medium: Story = { args: { size: "md" } };
 export const Small: Story = { args: { size: "sm" } };
 export const Disabled: Story = { args: { disabled: true } };
-/** `loading` shows a spinner and disables the button. */
-export const Loading: Story = { args: { loading: true, children: "Loading" } };
+/** `loading` shows a spinner and ignores presses, and the button keeps its focus. */
+export const Loading: Story = {
+  args: { loading: true, children: "Loading", onClick: fn() },
+  play: async ({ canvasElement, args }) => {
+    const button = within(canvasElement).getByRole("button", {
+      name: "Loading",
+    });
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).toHaveAttribute("aria-disabled", "true");
+    expect(button).not.toBeDisabled();
+    await userEvent.tab();
+    expect(button).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    button.click();
+    expect(args.onClick).not.toHaveBeenCalled();
+  },
+};
 export const DisabledOutline: Story = {
   args: { variant: "outline", disabled: true },
 };

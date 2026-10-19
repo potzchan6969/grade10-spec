@@ -98,13 +98,13 @@ describe("the message each hand of the stage is being sent", () => {
   });
 });
 
-describe("the stage that names the design pair", () => {
+describe("the stage that names the designer", () => {
   /** `shared-planning-agent-rounds-SC-81`'s own GIVEN: the proposal landed,
-   * the decisions and the journeys in, and both designs' hands named - which
+   * the decisions and the journeys in, and the designer's hand named - which
    * is the half of Proposed the product manager has already passed on. */
   const halfDesigned = gift({
     written: ["proposal", "decisions", "user-journeys"],
-    hands: { pm: "robin", design: "kim", tech: "erin" },
+    hands: { pm: "robin", design: "kim", dev: "erin" },
   });
   const html = render(halfDesigned, "proposed");
 
@@ -114,9 +114,9 @@ describe("the stage that names the design pair", () => {
     expect(html).toContain("/workflow-design gift-cards");
   });
 
-  it("shows the tech PIC theirs beside it, and nothing to the hand that passed it on", () => {
-    expect(html).toContain("@erin");
-    expect(html).toContain("/workflow-tech gift-cards");
+  it("shared-planning-change-stages-SC-15 - names the designer alone, and nothing to the hand that passed it on", () => {
+    expect(html).not.toContain("@erin");
+    expect(html).not.toContain("/workflow-tech");
     expect(html).not.toContain("@robin");
   });
 });
@@ -168,20 +168,34 @@ describe("the stages that say something else", () => {
     expect(html).not.toContain(">the run sheet<");
   });
 
-  it("tells the hand of a behind artifact what changed before it", () => {
+  it("shared-planning-agent-rounds-SC-128 - tells the hand of a behind artifact what moved before it, and whether it holds", () => {
     const behind = gift({
       stage: "planned",
       written: ["proposal", "decisions", "user-journeys", "tasks"],
       reviewed: { tasks: "stale" },
       upstream: {
-        tasks: { id: "fresh", items: ["decisions"], newer: ["decisions"] },
+        tasks: {
+          id: "fresh",
+          items: ["decisions"],
+          moved: [
+            {
+              item: "decisions",
+              key: "Q3",
+              before: "Every move holds",
+              after: "A major move holds",
+              major: true,
+            },
+          ],
+        },
       },
     });
     const html = render(behind, "planned");
 
-    expect(html).toContain("<strong>Behind</strong>");
+    expect(html).toContain("<strong>What moved</strong>");
     expect(html).toContain("tasks");
-    expect(html).toContain("decisions");
+    expect(html).toContain("Every move holds");
+    expect(html).toContain("A major move holds");
+    expect(html).toContain("until you read it again or land it");
   });
 
   it("says so for a stage that waits on no hand", () => {

@@ -59,6 +59,7 @@ export function Note({ children }: { children: ReactNode }) {
 }
 
 export type LetterShellProps = {
+  lang?: string;
   preheader: string;
   heading: string;
   /** `Hi Jasmine,` — the reader's own name. */
@@ -79,7 +80,7 @@ export type LetterShellProps = {
  * The shell every collector letter is written in: the heading, the greeting,
  * the lead, the letter's own blocks, then the line naming what the letter is
  * about and the shop's footer — which names the party by its registered name
- * and carries no copyright line, as the worker's does not.
+ * and ends with the copyright line.
  *
  * `Grade10EmailShell` here, `@grade10/email/render`'s `BaseLayout` in the
  * worker — the two shells cannot be shared, so this one is an unchecked copy
@@ -95,11 +96,12 @@ export function LetterShell({
   cta,
   trailer,
   footer,
+  lang,
 }: LetterShellProps) {
   const leadParagraphs = Array.isArray(lead) ? lead : [lead];
 
   return (
-    <Grade10EmailShell preheader={preheader}>
+    <Grade10EmailShell preheader={preheader} lang={lang}>
       <Heading as="h1" className="mb-4 mt-0 text-heading font-bold text-fg">
         {heading}
       </Heading>
@@ -122,7 +124,7 @@ export function LetterShell({
         </Text>
       ) : null}
       {trailer}
-      <EmailFooter {...footer} copyright={false} />
+      <EmailFooter {...footer} />
     </Grade10EmailShell>
   );
 }

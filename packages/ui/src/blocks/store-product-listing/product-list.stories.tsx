@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { useState } from "react";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { LISTING_COPY, PRODUCTS } from "./fixtures";
 import { ProductList } from "./product-list";
 
 const meta = {
-  title: "Store Product Listing/ProductList",
+  title: "Store/Product Listing/Blocks/ProductList",
   component: ProductList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -41,14 +42,41 @@ export const AddressedProducts: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const links = canvas.getAllByRole("link", { name: PRODUCTS[1].name });
-    expect(links).toHaveLength(2);
+    const name = canvas.getByRole("link", { name: PRODUCTS[1].name });
+    const tile = name.closest('[data-slot="product-card"]') as HTMLElement;
+    const links = [
+      name,
+      tile.querySelector('[data-slot="product-card-image"] a') as HTMLElement,
+    ];
+    expect(
+      canvas.getAllByRole("link", { name: PRODUCTS[1].name }),
+    ).toHaveLength(1);
     for (const link of links) {
       expect(link).toHaveAttribute("href", "/store/products/addressed");
     }
     expect(
       canvas.getByRole("button", { name: "Add to cart" }),
     ).toBeInTheDocument();
+  },
+};
+
+/** Scenario: shared-ui-store-product-listing-SC-87 - The product name
+ * activates the tile. Pressing one product's name, then its photo, reports
+ * that product's id each time. */
+export const NameAndPhotoOpenTheirProduct: Story = {
+  args: { onProductCartQuantityChange: fn() },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const product = PRODUCTS.find((each) => !each.soldOut) ?? PRODUCTS[0];
+    const name = canvas.getByRole("button", { name: product.name });
+    const tile = name.closest('[data-slot="product-card"]') as HTMLElement;
+    await userEvent.click(name);
+    await userEvent.click(
+      tile.querySelector('[data-slot="product-card-image"] img') as HTMLElement,
+    );
+    expect(args.onProductClick).toHaveBeenCalledTimes(2);
+    expect(args.onProductClick).toHaveBeenNthCalledWith(1, product.id);
+    expect(args.onProductClick).toHaveBeenNthCalledWith(2, product.id);
   },
 };
 
@@ -118,5 +146,39 @@ export const TileCeilingAndRemainingCount: Story = {
 
     await userEvent.click(increment, { pointerEventsCheck: 0 });
     expect(args.onProductCartQuantityChange).not.toHaveBeenCalled();
+  },
+};
+
+const REFUSAL = "The cart could not be changed. Try again.";
+
+function RefusingList() {
+  const [failed, setFailed] = useState<string>();
+  return (
+    <ProductList
+      copy={LISTING_COPY}
+      onProductCartQuantityChange={() => setFailed(REFUSAL)}
+      products={[
+        { ...PRODUCTS[1], id: "refused", inCart: false, cartFailed: failed },
+      ]}
+    />
+  );
+}
+
+/** A refused cart change shows on the tile it was pressed on, and the tile's
+ * control stays pressable for a retry. */
+export const CartChangeRefused: Story = {
+  render: () => <RefusingList />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("alert")).toBeNull();
+    const cart = canvas.getByRole("button", { name: "Add to cart" });
+
+    cart.focus();
+    await userEvent.keyboard("{Enter}");
+
+    await waitFor(() =>
+      expect(canvas.getByRole("alert")).toHaveTextContent(REFUSAL),
+    );
+    expect(cart).toBeEnabled();
   },
 };

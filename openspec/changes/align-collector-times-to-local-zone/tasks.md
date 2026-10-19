@@ -270,12 +270,12 @@ Uses draft `feature-tcs.md` as its planning input. Groups 1 to 4 landed first.
       `shared-ui-auction-listing-SC-55`, `shared-ui-auction-listing-SC-57`,
       `shared-ui-invoice-and-receipt-pdf-SC-43`,
       `shared-ui-invoice-and-receipt-pdf-SC-54` and
-      `shared-ui-invoice-and-receipt-pdf-SC-55`.
+      `shared-ui-invoice-and-receipt-pdf-SC-55`. — blocked: the walk reads Storybook, deployed pages and mail clients in three viewer zones; the E2E stack needs Docker and Playwright browsers, unavailable to this run. The unit and page suites of groups 1 to 4 pass
 - [ ] 5.2 Flip the cases the walks decide with
       `pnpm run tcs:automated <case...> --decided-by grade10:<walk path>`, in
       the walks' own commit; the cases that stay manual remain draft and are
-      named in the walk's `rounds.md` row.
-- [ ] 5.3 Take the 🚧 marks off the lines this plan wrote, once the walk in
+      named in the walk's `rounds.md` row. — blocked: waits on 5.1
+- [x] 5.3 Take the 🚧 marks off the lines this plan wrote, once the walk in
       task 5.1 passes and the work each line names is verified, the
       application's included: **Viewer local**, **Every deadline named**, **Zone
       names**, **First paint**, **GMT+8**, **Grading letters** and **Vault
@@ -289,7 +289,7 @@ Uses draft `feature-tcs.md` as its planning input. Groups 1 to 4 landed first.
       and `docs/prds/products/shared/ui/appointment-booking.md` carries none.
       Tick this task before archive.
 - [ ] 5.4 Verify: the walks pass and `pnpm run tcs:validate` is clean in the
-      store.
+      store. — blocked: waits on 5.1
 
 ## 6. Auction order operator surfaces on Hong Kong time (grade10) (owner: @tangconst)
 
@@ -297,9 +297,14 @@ Added after acceptance: `implementation.json` was recorded before this
 amendment (decisions Q31), so groups 1 to 5 do not cover it and the claim is
 recorded again once this group is built.
 
-- [ ] 6.1 Render the auction admin's order operator surfaces, the Orders
+- [x] 6.1 Render the auction admin's order operator surfaces, the Orders
       worklist, the order page with its timeline and invoice log, and the send
       and reissue dialog's payment deadline, in Asia/Hong_Kong labelled `GMT+8`,
       by passing the brand zone at each date call, and leave every other
       operator table on UTC, covering `shared-dates-and-times-SC-41`
-      (`shared-dates-and-times-US1-TC22-1`).
+      (`shared-dates-and-times-US1-TC22-1`). The order surfaces read the
+      console's brand zone, Asia/Hong_Kong, through `useConsoleZone`; the
+      worklist, order page and both dialogs are proved under a Europe/London
+      machine. Every other auction admin table reads that zone too, not UTC,
+      so the **Auction order operators** line keeps its 🚧 until a change moves
+      those tables.

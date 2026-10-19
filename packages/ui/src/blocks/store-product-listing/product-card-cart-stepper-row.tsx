@@ -13,6 +13,8 @@ type ProductCardCartStepperRowProps = {
   removeLabel?: string;
   onIncrement: () => void;
   onDecrement: () => void;
+  /** Whether the row is shown, so its buttons take the keyboard's stops. */
+  shown?: boolean;
   className?: string;
 };
 
@@ -28,6 +30,7 @@ function ProductCardCartStepperRow({
   removeLabel,
   onIncrement,
   onDecrement,
+  shown = true,
   className,
 }: ProductCardCartStepperRowProps) {
   const [roll, setRoll] = useState<"up" | "down" | null>(null);
@@ -65,6 +68,7 @@ function ProductCardCartStepperRow({
         }}
         onPointerDown={(event) => event.preventDefault()}
         size="sm"
+        tabIndex={shown ? 0 : -1}
         type="button"
         variant="ghost"
       >
@@ -100,6 +104,7 @@ function ProductCardCartStepperRow({
         }}
         onPointerDown={(event) => event.preventDefault()}
         size="sm"
+        tabIndex={shown ? 0 : -1}
         type="button"
         variant="ghost"
       >

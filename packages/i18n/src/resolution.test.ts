@@ -42,7 +42,6 @@ const PRODUCT_DETAIL_KEYS = [
   "shippingAndPickup",
   "shippingCalculatedAtCheckout",
   "shippingFee",
-  "hongKongGrade10Store",
   "freePickupAt",
   "onlyLeft",
   "showMore",
@@ -98,10 +97,12 @@ const ORDER_HISTORY_KEYS = [
 const ORDER_DETAIL_KEYS = [
   "title",
   "orderId",
+  "receiptSentTo",
   "loading",
   "error",
   "retry",
   "notFound",
+  "notFoundLinkDescription",
   "needHelp",
   "table.items",
   "table.subtotal",
@@ -132,6 +133,17 @@ const ORDER_DETAIL_KEYS = [
   "status.pickup",
   "status.canceled",
   "status.refunded",
+  "ask.guest.title",
+  "ask.guest.body",
+  "ask.guest.bodyCompleted",
+  "ask.member.title",
+  "ask.member.body",
+  "ask.added.title",
+  "ask.added.action",
+  "ask.anotherEmail.title",
+  "ask.anotherEmail.body",
+  "ask.anotherEmail.action",
+  "ask.sent.title",
 ].sort();
 
 const CART_DRAWER_KEYS = [
@@ -154,6 +166,10 @@ const CART_DRAWER_KEYS = [
   "footer.promoPlaceholder",
   "footer.removePromo",
   "footer.yourPromoCodes",
+  "footer.publicPromoCodes",
+  "footer.publicCodeTitle.amount",
+  "footer.publicCodeTitle.percentage",
+  "footer.publicCodeTitle.freeShipping",
   "footer.notValidPromoCodes",
   "footer.noHeldPromoCodes",
   "footer.browseLoyaltyOffers",
@@ -165,10 +181,13 @@ const CART_DRAWER_KEYS = [
   "footer.useMaxPoints",
   "footer.pointsRateLabel",
   "footer.removePoints",
+  "footer.discountLabel",
   "footer.pointsLabel",
   "footer.checkoutButton",
+  "footer.guestCheckoutButton",
   "footer.checkoutRedirecting",
   "footer.checkoutFailed",
+  "footer.signInSuffix",
   "emptyTitle",
   "emptyDescription",
   "unavailableItemsRemoved",
@@ -233,6 +252,19 @@ describe("what a brand and a language answer between them", () => {
       }
     },
   );
+
+  /* The store name is the brand's own: only a brand with a shop says it, in
+     every language it speaks, and a brand without one names none. */
+  it.each(localesOf("grade10"))("names grade10's shop in %s", (locale) => {
+    expect(getMessages("grade10", locale).product.hongKongGrade10Store).toEqual(
+      expect.any(String),
+    );
+  });
+
+  it("names no shop for zzz", () => {
+    const product = flatten(getMessages("zzz", "ko").product);
+    expect(product.hongKongGrade10Store).toBeUndefined();
+  });
 
   /* Scenario: The listing's filter panel names its facet groups, its
      invitation and its utility row in every language it serves. */

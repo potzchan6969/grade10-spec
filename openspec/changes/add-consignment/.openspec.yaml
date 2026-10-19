@@ -1,0 +1,12 @@
+schema: grade10-planning
+created: 2026-10-16
+awaiting:
+  specs: 2026-10-16, requirement deltas from /planning-dev
+hands:
+  pm: "@tangconst"
+reviewed:
+  proposal: f90c5cf5
+  decisions: 9a7ed302
+  tech-design: 269b73fd
+  specs: "73561418"
+  tasks: 34ab7bd1

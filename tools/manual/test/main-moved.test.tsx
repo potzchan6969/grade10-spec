@@ -187,6 +187,28 @@ describe("the checkout the manual is running out of", () => {
     expect(html).toContain("Pull");
   });
 
+  it("shared-planning-change-stages-SC-73 - says when the counts were last read once a read fails", () => {
+    const fetchedAt = new Date(Date.now() - 5 * 60_000).toISOString();
+    const html = render({
+      local: true,
+      standing: standing({ behind: 2, fetchedAt, stale: true }),
+    });
+
+    expect(html).toContain("Your checkout is 2 commits behind");
+    expect(html).toContain("Last read from <code");
+    expect(html).toMatch(/origin<\/code> 5 minutes ago\./);
+  });
+
+  it("names no read time while the reads work", () => {
+    const fetchedAt = new Date().toISOString();
+    const html = render({
+      local: true,
+      standing: standing({ behind: 2, fetchedAt }),
+    });
+
+    expect(html).not.toContain("Last read");
+  });
+
   it("counts one commit as one", () => {
     const html = render({ local: true, standing: standing({ behind: 1 }) });
 
@@ -207,7 +229,8 @@ describe("the checkout the manual is running out of", () => {
       standing: standing({ behind: 2, dirty: true }),
     });
 
-    expect(html).toContain("Your checkout has uncommitted work.");
+    expect(html).toContain("Your checkout is 2 commits behind");
+    expect(html).toContain("and has uncommitted work.");
     expect(html).not.toContain(">Pull<");
   });
 

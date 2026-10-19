@@ -23,8 +23,7 @@ type OrderHistoryStatusProps = {
 };
 
 /**
- * Visual status badge for order tracking. Displays the current fulfillment
- * state of an order. Supports both online and in-store order channels.
+ * Shows the order status the consumer chooses, with its label.
  *
  * Figma set `Product / Order / Order Status` (`4872:8537`). Axis `status`:
  * `completed` · `shipped` · `processing` · `pickup` · `canceled` · `refunded`.

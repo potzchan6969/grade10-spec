@@ -5,14 +5,14 @@
 
 **Out of suite:** none of this change's scenarios; the scenarios it restates unchanged keep their durable cases.
 
-## order-mail-US1: Post-close letters
+## g10.auction-notifications-order.US1: Post-close letters
 
 **As a** customer(winner),
 **I want** the letters Grade10 sends about my auction order,
 **so that** I know what to do next without guessing.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-i2x rev=1 covers=g10.auction-notifications-order.SC-bgc -->
-### order-mail-US1-TC55-1: A shipped letter with no tracker link leads with the order
+### g10.auction-notifications-order.US1-TC55: A shipped letter with no tracker link leads with the order
 
 **Classification:**
 

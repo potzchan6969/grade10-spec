@@ -1,0 +1,11 @@
+schema: grade10-planning
+created: 2026-09-25
+depends_on:
+  - nav-cart-count-badge
+hands:
+  design: "@tangconst"
+  dev: "@mason5991"
+ui_waived: no new surface; the Auction first account-menu story holds the
+  auction-launch menu, and the Auction & Store stories follow the interim Q7
+  records
+tasks_waived: "@tangconst: the e2e walk (3.1-3.4) is deferred - the menu composition is covered by the SiteShell unit tests (9gag/grade10 PR #1022) and the Storybook plays; the hosted-lane e2e lands with the e2e suite"

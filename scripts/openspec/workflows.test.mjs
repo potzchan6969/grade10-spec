@@ -258,15 +258,19 @@ test("the notifier verifies the run listing before choosing the last deployed he
   assert.match(step.run, /git merge-base --is-ancestor "\$base" "\$HEAD_SHA"/);
 });
 
-test("the manual deploys on every push the notifier reads", () => {
-  // A page landing can put an artifact behind, and its hand is told; a change
-  // moving is a milestone. Each must start a deploy, or the notifier never
-  // wakes for it.
+test("shared-planning-change-stages-SC-72 - the manual deploys on every push to main", () => {
+  // The open page's banner promises the site catches up on its own, so every
+  // push to `main` rebuilds it — a path filter made that false — and Lint's
+  // fix push, made with the default token, is caught by Lint finishing.
   const manual = YAML.parse(read(".github/workflows/manual.yml"));
-  for (const path of ["docs/prds/**", "openspec/**"]) {
-    assert.ok(manual.on.push.paths.includes(path), path);
-  }
-  assert.deepEqual(manual.on.push.branches, ["main"]);
+  assert.deepEqual(manual.on.push, { branches: ["main"] });
+  assert.deepEqual(manual.on.workflow_run, {
+    workflows: ["Lint"],
+    types: ["completed"],
+    branches: ["main"],
+  });
+  const build = manual.jobs.deploy.steps.find((step) => step.name === "Build");
+  assert.equal(build.env.RELAY_URL, "${{ vars.RELAY_URL }}");
 });
 
 test("the channel post falls back to the store's own channel", () => {
@@ -412,14 +416,51 @@ test("Test's jobs skip only what they do not read", () => {
 
   // Skipped on `false` alone, so a failed filter runs them rather than
   // reading green.
-  for (const name of ["stories", "walk"]) {
-    assert.equal(test.jobs[name].needs, "changes", name);
-    assert.equal(
-      test.jobs[name].if,
-      "${{ !cancelled() && needs.changes.outputs.code != 'false' }}",
-      name,
-    );
-  }
+  assert.equal(test.jobs.stories.needs, "changes");
+  assert.equal(
+    test.jobs.stories.if,
+    "${{ !cancelled() && needs.changes.outputs.code != 'false' }}",
+  );
+  assert.equal(test.jobs.walk.needs, "changes");
+  assert.equal(
+    test.jobs.walk.if,
+    "${{ !cancelled() && needs.changes.outputs.code != 'false' && needs.changes.outputs.tooling != 'false' }}",
+  );
+
+  // The manual, its walk and the store's scripts import one another, so one
+  // set names everything they read besides the store itself.
+  const tooling = new RegExp(step.env.TOOLING);
+  for (const path of [
+    "tools/manual/src/a.ts",
+    "tools/manual/walk/board.walk.ts",
+    "tools/openspec-viewer",
+    "tools/openspec-viewer/lib/a.mjs",
+    "scripts/openspec/validate-changes.mjs",
+    "scripts/storybook/check.mjs",
+    "scripts/design-sync/a.mjs",
+    "packages/ui/src/a.tsx",
+    "packages/design-system/src/a.tsx",
+    "packages/date/src/a.ts",
+    "openspec/schemas/grade10-planning/schema.yaml",
+    "openspec/config.yaml",
+    ".design-sync/report.json",
+    ".github/workflows/test.yml",
+    "package.json",
+    "pnpm-lock.yaml",
+  ])
+    assert.ok(tooling.test(path), `${path} skips the manual's tools`);
+  for (const path of [
+    PLAN,
+    "openspec/changes/some-change/proposal.md",
+    "openspec/specs/a/spec.md",
+    "docs/prds/a/b.md",
+    "packages/i18n/messages/shared/en/a.json",
+    "apps/preview/src/a.tsx",
+    "apps/emails/src/a.tsx",
+    "tools/relay/src/a.ts",
+  ])
+    assert.equal(tooling.test(path), false, `${path} runs the manual's tools`);
+  assert.match(step.run, /"\$EVENT" != pull_request/);
   const planOnly = new RegExp(step.env.PLAN_ONLY);
   assert.ok(planOnly.test(PLAN), "the tick's push runs catalogs");
   for (const path of [
@@ -428,15 +469,17 @@ test("Test's jobs skip only what they do not read", () => {
     "openspec/changes/some-change/proposal.md",
   ])
     assert.equal(planOnly.test(path), false, `${path} skips catalogs`);
-  for (const [name, command] of [
-    ["manual", "pnpm run test:manual"],
-    ["openspec", "pnpm run test:openspec"],
-    ["catalogs", "pnpm run test:catalogs"],
+  for (const [name, command, gate] of [
+    ["manual", "pnpm run test:manual", true],
+    ["openspec", "pnpm run test:openspec", true],
+    ["catalogs", "pnpm run test:catalogs", false],
   ]) {
     assert.equal(test.jobs[name].needs, "changes", name);
     assert.equal(
       test.jobs[name].if,
-      "${{ !cancelled() && needs.changes.outputs.plan != 'true' }}",
+      gate
+        ? "${{ !cancelled() && needs.changes.outputs.plan != 'true' && needs.changes.outputs.tooling != 'false' }}"
+        : "${{ !cancelled() && needs.changes.outputs.plan != 'true' }}",
       name,
     );
     assert.equal(test.jobs[name].steps.at(-1).run, command, name);

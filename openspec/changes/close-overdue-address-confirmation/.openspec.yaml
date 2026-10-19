@@ -3,3 +3,12 @@ created: 2026-09-16
 promoted_by: "@htonyl"
 depends_on:
   - complete-auction-post-sale
+reviewed:
+  proposal: 00adf4d9
+  decisions: 3a713fd7
+  ui-design: 11fa5982
+  specs: c7360832
+  test-cases: 0fc77264
+  tasks: 5a607d48
+  user-journeys: 0f5c0dc0
+  tech-design: 11fa5982
