@@ -3,7 +3,6 @@
 **Status:** reopened · 51/105
 **Drafts styled:** 2026-10-06, tcs-rules r4
 **Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-25
-**Out of suite:** shared-auth-sign-in-SC-34
 
 ## Background
 
