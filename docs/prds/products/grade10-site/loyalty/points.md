@@ -13,7 +13,7 @@ reviewed: 2026-10-06
 | Base rate | **1 point / $10** (qualifying goods after discounts) |
 | Multiplier | **Silver** 1×, **Gold** 1.2×, **Black** 1.7×, at the tier held before the order is priced, so an order that promotes earns at the old rate — [Tiers](/p/grade10-site/loyalty/tiers#earn-multiplier) |
 | Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** |
-| Timing | 🚧 **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter |
+| Timing | 🚧 **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter {#earn-on-completion} |
 
 ## Qualification Criteria
 
@@ -39,19 +39,16 @@ A fully discounted order earns nothing and writes no ledger entry.
 
 An order's earn is written once, the first time the order completes.
 
-- 🚧 **Complete** - every item fulfilled, paid or partly refunded, and goods
-  left after its refunds. A partly refunded order still completes, so the
-  earn never waits for the Completed badge
+- 🚧 **Complete** - by the [Timing](#earn-on-completion) rule, never the badge
 - 🚧 **Basis** - the goods paid for less those refunded at completion; every
-  later refund is read against it
+  later refund is read against it {#earn-basis}
 - **Till sale** - earns at the counter
 - 🚧 **Guest order** - never earns, joined to an account or not -
-  [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+  [Checkout](/p/grade10-site/store/checkout#guest-checkout) {#guest-never-earns}
 - **Delivery** - retried until the programme takes it, and taken once, so
   a purchase during an outage still earns, and never twice
 
-❓ The diagrams below still draw the earn starting from Order paid — the old
-trigger — and need redrawing to start from the order's completion.
+❓ The diagrams below still start the earn at Order paid; who redraws them from completion?
 
 :::flow{title="From a paid order to points" id="earn-normal" case="Normal" diagram="assets/diagrams/loyalty-pricing-an-order.svg"}
 ## *Shop* — **Order paid**
@@ -194,7 +191,7 @@ the member still holds from them.
   from that money; the gap is counted, spent points first, expired next
 - 🚧 **Refund before the earn** — a refund that lands before the order
   completes lowers what it earns on: the basis is the net paid at completion.
-  One after completion claws back as below
+  One after completion claws back as below {#refund-before-completion}
 - **Tier** — the contribution the points made leaves with them, and the tier
   is judged again at once — [Tiers](/p/grade10-site/loyalty/tiers)
 
@@ -294,18 +291,19 @@ counted as expired.
 A gift card never earned, so the store sends no goods for it.
 :::
 
-:::example{title="Two rates on one order" id="refund-two-rates" tier="Silver"}
-- PSA 10 Charizard slab $6,000
-- Booster box $1,000
+:::example{title="Refunded at the rate it earned" id="refund-at-earned-rate" tier="Silver"}
+- First order: PSA 10 Charizard slab $6,000
+- Next order: Booster box $1,000
 
 | Step | Event | Points | Balance |
 | --- | --- | --- | --- |
 | Earns | the slab, 600 pts × 1, which crosses the Gold gate | +600 | 600 |
-| Earns | the booster box, 100 pts × 1.2 | +120 | 720 |
+| Earns | the booster box on the next order, 100 pts × 1.2 | +120 | 720 |
 | Refunds | the booster box, $1,000 | −120 | 600 |
 
-The booster box is the money that earned at 1.2×, so it costs 120 back, not
-the 100 the slab's rate would price.
+The order that promotes earns at the old rate, so the booster box is the
+first money to earn at 1.2×, and it costs 120 back, not the 100 the slab's
+rate would price.
 :::
 
 ## Expiry
@@ -320,7 +318,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
 | A purchase or a redemption, even one too small to earn a point | Twelve months from that day |
 | A grant or a correction | Unchanged; those points take the date the balance already has |
 | A grant or a correction with nothing live to join | The later of twelve months from its own day and the day still running, which moves out to it; with neither ahead, it is written already lapsed |
-| 🚧 A refund, a claw-back, or a reward an operator hands over outright | Unchanged |
+| 🚧 A refund, a claw-back, or a reward an operator hands over outright | Unchanged {#refund-keeps-date} |
 | Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing |
 | An operator restarts the window | Twelve months from today — [Operator Console](/p/grade10-site/loyalty/operator-console) |
 | A record older than the window | Unchanged; those points are written already lapsed |
@@ -441,6 +439,11 @@ ledger for the audit, and count nothing.
 The window is calendar months, so a day the next year does not have lands
 on the last day of that month.
 :::
+
+## Always
+
+- 🚧 **Earned once** - at the first completion, however often it is reported {#earn-once}
+- 🚧 **In flight at cutover** - an order that earned at payment earns nothing again {#cutover-no-second-earn}
 
 :::detail{title="Product decisions" for="pm"}
 A member holds one balance and reads one day for it: every point they hold

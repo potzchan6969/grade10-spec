@@ -99,11 +99,11 @@ figure can hold money staff took off by hand; the debit still shows as Points
 put toward a purchase — [Histories](/p/grade10-site/loyalty/membership#histories)
 
 🚧 **Points to earn** — an order that will earn shows Points to Earn until it
-completes, then Points Earned — [Points](/p/grade10-site/loyalty/points)
+completes, then Points Earned — [Points](/p/grade10-site/loyalty/points) {#points-to-earn}
 
 🚧 **No points section** — an order that will not earn shows no points
 section at all: one canceled or refunded in full, or a guest order, joined
-to an account or not
+to an account or not {#no-points-section}
 
 **Amount marks** — summary lines use `$` with two decimals (`$1,770.00`),
 except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
