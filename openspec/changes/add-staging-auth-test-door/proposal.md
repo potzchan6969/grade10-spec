@@ -20,7 +20,8 @@ refused.
 
 - **A gated staging endpoint for sign-in tests.** One workflow, on a reviewed
   dispatch, may capture the last sign-in mail, expire an unused link, ban a
-  tester address, grant it to hold `admin`, and clear the sign-in limits
+  tester address, grant it to hold `admin`, set a scoped role on a plus-tag of
+  the collector, and clear the sign-in limits
   that would otherwise throttle a suite as an attacker.
 - **A second caller: the QA agent.** An agent walking a manual pass on
   staging captures a tester's link through the same endpoint, with a
@@ -57,9 +58,9 @@ See [Non-Goals](decisions.md#non-goals).
 
 - **Auth worker (staging, uat, production)** — the gated endpoint; `/dev` stays 403.
 - **Identity trail** — the endpoint's bans, grants and scoped roles are recorded under the caller's kind ([Audit Log](../../../docs/prds/products/grade10-site/account/audit.md#what-lands-on-the-trail)).
-- **Sign-in send (staging)** — record the last mail for a tester address so
+- **Sign-in send (staging, uat, production)** — record the last mail for a tester address so
   the workflow can capture it; Resend still delivers.
-- **Sign-in limits (staging)** — unchanged for every caller, and clearable for
+- **Sign-in limits (staging, uat, production)** — unchanged for every caller, and clearable for
   a tester address through the test endpoint.
 - **Grade10 Actions** — one workflow, on a reviewed dispatch, holds the token
   and calls the test endpoint in a workflow that checks out no pull-request code. Local

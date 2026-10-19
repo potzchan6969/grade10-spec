@@ -15,6 +15,7 @@
 - [ ] 2.8 Verify the QA token is refused off staging on uat, preview and production (`shared-auth-test-sign-in-SC-98`) — shipped as `qaTokenTestDoorMoves` returning no actions outside staging (decisions Q44); confirm with `pnpm run test:backend`
 - [x] 2.9 Admit the committed QA token for capture, expire and clear on staging alone, refusing it every other action and a rotated token (`shared-auth-test-sign-in-SC-94`, `shared-auth-test-sign-in-SC-95`, decisions Q39, Q50) — shipped as `testDoorQaTokenOr` and `qaTokenTestDoorMoves`
 - [x] 2.10 Mount each environment's actions and testers: staging and uat every action for their four named testers, production and preview capture and clear for production's named testers, local stacks none (`shared-auth-test-sign-in-SC-99` to `shared-auth-test-sign-in-SC-103`, decisions Q40, Q41) — shipped as `testDoorMoves` and `grade10TestDoorEmails`
+- [ ] 2.11 Answer every call the access check refuses — a wrong caller, an action the environment does not mount, a QA-token call outside its three actions — as the worker answers a path it does not have (decisions Q23) — not shipped: an unmounted action answers 404 and a wrong caller 403
 
 ## 3. The five actions (grade10)
 
@@ -28,7 +29,7 @@ Needs group 2 landed: every task here sits behind that gate and cannot be verifi
 - [x] 3.6 Clear the sign-in limits for the named address and for the caller — the wait between two mails and the count a caller may ask for — leaving another address's wait and another caller's count standing (`shared-auth-test-sign-in-SC-21`, `shared-auth-test-sign-in-SC-22`, `shared-auth-test-sign-in-SC-33`)
 - [x] 3.7 Hold the test endpoint to those five actions: no unban, no session generate, no store or auction seed, and no route to enable later (`shared-auth-test-sign-in-SC-26`, `shared-auth-test-sign-in-SC-27`, `shared-auth-test-sign-in-SC-28`) — six actions, per decisions Q42
 - [x] 3.8 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test:backend`
-- [ ] 3.9 Remove a generated plus-tag's account in the next cleanup after the run that generated it, and never a named tester's (`shared-auth-test-sign-in-SC-104`, decisions Q21) — not shipped: nothing removes them today
+- [ ] 3.9 Remove a generated plus-tag's account in the next daily cleanup after the run that generated it, and never a named tester's daily, each deletion on the identity trail as `test-endpoint-cleanup` (`shared-auth-test-sign-in-SC-104`, `shared-auth-audit-SC-47`, decisions Q21) — not shipped: nothing removes them today
 - [x] 3.10 Grant a scoped role on a unique plus-tag of the collector, refusing a named tester (`shared-auth-test-sign-in-SC-96`, decisions Q42) — shipped as `/test/prepare-role`
 
 ## 4. The staging E2E lane (grade10)

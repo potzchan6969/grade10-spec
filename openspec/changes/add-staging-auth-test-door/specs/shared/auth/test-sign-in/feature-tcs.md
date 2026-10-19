@@ -943,7 +943,7 @@ Runs once per row of **Test data**.
 
 **QA2 covers:** shared-auth-test-sign-in-SC-26, shared-auth-test-sign-in-SC-27, shared-auth-test-sign-in-SC-28.
 
-### g10.shared-test-sign-in.US1-TC25: A generated plus-tag's account is gone after the next cleanup
+### g10.shared-test-sign-in.US1-TC25: A generated plus-tag's account is gone after the next daily cleanup
 
 **Classification:**
 
@@ -958,6 +958,10 @@ Runs once per row of **Test data**.
 * **Testability:** manual
 * **Trace:** Testers
 
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-104
+
 **Pre-conditions:**
 
 * A run of the test-endpoint workflow is approved on staging.
@@ -966,7 +970,7 @@ Runs once per row of **Test data**.
 
 1. From that run, generate a unique plus-tag `<plus-tag address>` of the collector and ban it.
 2. Read the account for `<plus-tag address>` on staging.
-3. Wait for the next cleanup after the run to finish.
+3. Wait for the next daily cleanup after the run to finish.
 4. Read the account for `<plus-tag address>`, and for each named tester, on staging.
 
 **Expected Results:**
@@ -981,7 +985,7 @@ Run: QA2, 2026-10-19. Read the blind cases above, this change's `spec.md` scenar
 
 **Covered in full** - SC-01 (TC1), SC-06 (TC10), SC-07 (TC18), SC-12 (TC6), SC-19 (TC8), SC-20 (TC9), SC-21 (TC11), SC-25 (TC23), SC-26, SC-27, SC-28 (TC24), SC-94 (TC3), SC-101 (TC21), SC-103 (TC22). SC-NN is shared-auth-test-sign-in-SC-NN.
 
-**Not covered in full** - no case asserts the scenario: SC-02, SC-08, SC-09, SC-11, SC-13, SC-14, SC-15, SC-17, SC-18, SC-22, SC-23, SC-30, SC-31, SC-33, SC-34, SC-99. Partly asserted, see the case notes: SC-03, SC-04, SC-05, SC-32 (no nothing-changed check), SC-10, SC-16, SC-24, SC-29, SC-95, SC-96, SC-97, SC-98, SC-102. SC-100 is contradicted, below.
+**Not covered in full** - SC-104 is covered by TC25, added on 2026-10-19. no case asserts the scenario: SC-02, SC-08, SC-09, SC-11, SC-13, SC-14, SC-15, SC-17, SC-18, SC-22, SC-23, SC-30, SC-31, SC-33, SC-34, SC-99. Partly asserted, see the case notes: SC-03, SC-04, SC-05, SC-32 (no nothing-changed check), SC-10, SC-16, SC-24, SC-29, SC-95, SC-96, SC-97, SC-98, SC-102. SC-100 is contradicted, below.
 
 **Over-claimed** - TC5 (unique plus-tag per run), TC14 (non-tester row via the QA token), TC17 (wrong-token and customer-session rows). Each states behaviour no scenario states; fold into spec.md.
 

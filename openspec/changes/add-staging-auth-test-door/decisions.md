@@ -16,7 +16,7 @@
 - Unbanning through this endpoint
 - Store or auction seeds
 - Calling the test endpoint from a laptop, or from a run a pull request started, other than as Q38's QA agent
-- Removing the tester accounts a run leaves behind
+- Removing a named tester's account
 
 ## Decisions
 
@@ -62,7 +62,7 @@
 | Q38 | May an agent walking a manual QA pass call the test endpoint? | Yes, as a second caller beside Q16's workflow, so an agent signs in on staging without a mailbox. How it proves itself, and which actions it may make, is open on the page. | The workflow alone, which leaves agents unable to walk any signed-in case on staging. |
 | Q39 | How does Q38's agent prove itself? | A staging-only QA token committed to the repository, accepted only for a tester address and only to capture, expire and clear; a commit rotates it. Anyone who reads the repository can sign in as a tester on staging, accepted so a pass needs no setup. | Q2's refusal of a shared secret, kept for the workflow's own actions: the token never bans or grants. A token kept in the environment's secrets, which is safer and costs a setup step. |
 | Q40 | Which addresses does the shipped endpoint act on? | Superseding Q17 and Q25: each environment's named testers, written into `@grade10/auth-contracts` — four on staging, four on uat, the collector on production — and on staging and uat a unique plus-tag of one, generated per run. No tester-domain secret exists. Confirmed by the user, 2026-10-19: a small named set, written in the code, so each tester is easy to identify | A tester domain Ops names, which nobody named, so the test endpoint would still have no subjects |
-| Q41 | Where does the shipped endpoint open? | Superseding Q1: staging and uat every action; production, and preview with it, capture and clear for the production collector alone; local stacks none. Confirmed by the user, 2026-10-19, so a smoke test can check production and preview have not broken. Production names its own testers, today the collector alone; a new one is a commit | Staging only |
+| Q41 | Where does the shipped endpoint open? | Superseding Q1: staging and uat every action; production, and preview with it, capture and clear for production's named testers; local stacks none. Confirmed by the user, 2026-10-19, so a smoke test can check production and preview have not broken. Production names its own testers, today the collector alone; a new one is a commit | Staging only |
 | Q42 | Is there a sixth action? | Yes: a scoped role — `staff`, `support`, `finance`, `treasurer` or `auditor` — on a unique plus-tag of the collector, never a named tester and never `admin`. Confirmed by the user, 2026-10-19 | Grant granting `admin` alone, which leaves those walks unrunnable |
 | Q43 | May the QA token act on the admin-only tester? | No, on any environment. Decided by the user. The shipped code accepts the token for any tester on staging, so the grade10 change is task 2.6. | A token that reaches `admin`, which lets any reader of the repository grant `admin` on staging. |
 | Q44 | Does the QA token work off staging? | No. Staging alone accepts it, on uat, preview and production it is refused as any wrong caller. Preview runs production backends. Shipped as `qaTokenTestDoorMoves`. Decided by agent for staging ease: the token stays on the one environment it is committed for. | Uat with the token, which widens the committed secret to a second environment for no QA gain. |

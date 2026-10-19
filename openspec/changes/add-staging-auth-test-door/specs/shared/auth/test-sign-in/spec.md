@@ -181,7 +181,8 @@ Which addresses the test endpoint acts on, and what it creates to act on one.
 - **The send** — the test endpoint SHALL NOT skip or replace a sign-in send to a tester
   address; the mail goes the ordinary way
 - **Removing** — the account of a generated plus-tag SHALL be removed in the
-  next cleanup after the run that generated it; a named tester's account SHALL
+  next daily cleanup after the run that generated it, on the identity trail
+  (`shared/auth/audit`); a named tester's account SHALL
   never be removed
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-4tc rev=1 -->
@@ -206,7 +207,7 @@ Which addresses the test endpoint acts on, and what it creates to act on one.
 **Serves:** Testers - a unique plus-tag of a named tester
 
 - **GIVEN** a staging run that generated a unique plus-tag of the collector and banned it
-- **WHEN** the next cleanup after that run has finished
+- **WHEN** the next daily cleanup after that run has finished
 - **THEN** no account exists for that plus-tag
 - **AND** every named tester's account is still there
 
@@ -513,7 +514,7 @@ shut beside it.
 
 - **Staging and uat** — the test endpoint SHALL answer every action on staging and on uat
 - **Production** — on production the test endpoint SHALL answer capture and clear
-  alone, for the production collector; expire, ban, grant and a scoped role
+  alone, for production's named testers; expire, ban, grant and a scoped role
   SHALL be refused and SHALL change nothing. Preview runs the production
   backends, so it answers as production does
 - **Anywhere else** — a local or disposable stack SHALL open no action

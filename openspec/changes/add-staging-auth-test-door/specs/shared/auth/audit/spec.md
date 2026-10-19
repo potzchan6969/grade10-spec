@@ -3,7 +3,8 @@
 ## Feature set
 
 - Test-endpoint writes
-  - Ban, grant, scoped role: one entry each, under the caller's kind in place of a user id; capture, expire and clear write none
+  - Ban, grant, scoped role: one entry each, as `test-endpoint-workflow` in place of a user id; capture, expire and clear write none
+  - Plus-tag cleanup: the daily removal of a generated plus-tag's account is a deletion entry, as `test-endpoint-cleanup`
 
 ## ADDED Requirements
 
@@ -13,15 +14,18 @@ A ban, a grant and a scoped-role grant the test endpoint makes SHALL each be
 recorded on the identity audit trail as one entry, the same as the operator's
 own identity writes. When the action creates the account for an address that
 never signed in, that one entry SHALL name the action and the new user id, and
-the creation SHALL NOT write an entry of its own. The endpoint's callers have no
-user id and hold no role, so the entry SHALL name the caller's kind in place of
-the actor's user id and roles: `test-endpoint-workflow` for the test endpoint's
-own workflow, or `test-endpoint-qa-token` for the QA agent. The entry SHALL keep
+the creation SHALL NOT write an entry of its own. Only the test endpoint's own
+workflow can make these writes, and it has no user id and holds no role, so the
+entry SHALL name its kind, `test-endpoint-workflow`, in place of the actor's
+user id and roles. The entry SHALL keep
 the action, the subject's user id, whether it succeeded, and when, and SHALL NOT
 carry the token, the address, or an email. A ban, grant or scoped role the
-endpoint refuses for a caller its access check admitted SHALL be recorded as
-refused; a call the access check refuses has no caller kind and SHALL NOT write
-an entry. Capture, expire, and clear change no account and no role, so they
+endpoint refuses after its access check admitted the call SHALL be recorded as
+refused. The access check is the caller, the environment's actions and, for
+the QA token, its own three actions; a call it refuses SHALL NOT write an
+entry. The daily cleanup that removes a generated plus-tag's account SHALL
+record that deletion as any account deletion is, naming
+`test-endpoint-cleanup` in place of the actor's user id. Capture, expire, and clear change no account and no role, so they
 SHALL NOT write an entry. An action the trail cannot record SHALL NOT run, the
 same as any identity write.
 
@@ -70,6 +74,14 @@ same as any identity write.
 
 - **WHEN** a call carrying only the QA token asks to ban a tester address, and the endpoint refuses it
 - **THEN** the trail holds no entry for the call
+
+#### Scenario: shared-auth-audit-SC-47 - The cleanup's removal of a plus-tag account is on the trail
+**Serves:** shared-auth-audit-US-04 - Auditor traces an account lifecycle write
+
+- **GIVEN** a generated plus-tag whose account a staging run left behind
+- **WHEN** the daily cleanup removes that account
+- **THEN** the trail holds one deletion entry naming `test-endpoint-cleanup` and the removed user id
+- **AND** the entry carries no email
 
 #### Scenario: shared-auth-audit-SC-44 - A grant that changes nothing is on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded

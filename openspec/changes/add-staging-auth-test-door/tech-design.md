@@ -72,8 +72,7 @@ what the endpoint is held to.
 returns all six actions on `staging` and `uat`, `outbox` and `clear-limits` on
 `production`, and none elsewhere. The routes mount at `/test/*` from
 `packages/grade10-auth/backend/src/routes/testDoor.ts`, registered from
-`app.ts` beside `registerDevRoutes`, and `testDoorOnly` answers 404 for an
-action the environment does not mount. The existing refusal tests over `/dev`
+`app.ts` beside `registerDevRoutes`. The existing refusal tests over `/dev`
 on production and staging stay green untouched. *Rejected:* adding staging to
 `LOCAL_ENVIRONMENTS` behind a flag — one predicate then guards two threat
 models, and the next `/dev` route added is live on staging by default.
@@ -107,11 +106,21 @@ token in the environment's secrets, which is safer and costs every agent a
 setup step (Q39).
 
 **The QA token never reaches the admin-only tester (task 2.6).** Today the
-token's address check is `isTesterMailbox`, which admits the admin-only tester
-and its plus-tags. The token's path gains one more check: an address that
-folds to the admin-only tester, or to a plus-tag of it, is refused with the
-same answer as any wrong caller, so the refusal names no rule (Q43). The
-workflow's path is unchanged.
+token's address check is `isTesterMailbox`, which admits the admin-only tester.
+The token's path gains one more check: an address that folds to the admin-only
+tester is refused with the same answer as any wrong caller, so the refusal
+names no rule (Q43). A plus-tag of the admin-only tester never holds `admin`,
+since a grant takes a plus-tag of the collector only, so the token may still
+reach it. The workflow's path is unchanged.
+
+**Every refusal before the access check passes looks like a missing path (task
+2.11).** The access check is the caller, the environment's actions and, for the
+QA token, its own three actions. Today an action the environment does not mount
+answers 404 and a wrong caller answers 403, so a prober can tell the endpoint
+is on production and which actions it mounts there. Every call the access check
+refuses answers 404 with no body, as the worker answers a path it does not
+have (Q23). Only an admitted caller reads the `{ error }` shape, for an address
+that is no tester.
 
 **The subjects are named testers, not a domain.** `grade10TestDoorEmails` in
 `@grade10/auth-contracts` names four testers on staging and four on uat — a
@@ -154,16 +163,21 @@ the lane documents (Q42).
 
 **Every endpoint write lands on the identity trail (task 2.7).** Ban, grant and
 the scoped role call `appendAuditLog` from `@grade10/postgres/audit` in the
-same transaction as the write, as the operator's own identity writes do. The
-actor is the caller's kind — `test-endpoint-workflow` or
-`test-endpoint-qa-token` — in place of a user id, since neither caller has one
-(Q45). A refused ban writes a refused entry the same way (Q46). Capture, expire
+same transaction as the write, as the operator's own identity writes do. Only
+the workflow can make these writes, so the actor is `test-endpoint-workflow` in
+place of a user id (Q45). A ban, grant or scoped role refused after the access
+check, for an address that is no tester, writes a refused entry the same way
+(Q46). A ban that creates the account writes one entry naming `ban` and the new
+user id (Q53). Capture, expire
 and clear write nothing. The entry holds no token, address or email. A write
 the trail cannot record does not run.
 
-**Plus-tag accounts are removed in the next cleanup (task 3.9).** A scheduled
-cleanup on staging and uat deletes the account of every unique plus-tag the
-endpoint's runs generated, and never a named tester's (Q21).
+**Plus-tag accounts are removed in the next daily cleanup (task 3.9).** A
+daily scheduled handler on the staging and uat auth workers deletes the account
+of every unique plus-tag the endpoint's runs generated, and never a named
+tester's (Q21). Each deletion is on the identity trail as any account deletion
+is, naming `test-endpoint-cleanup` in place of the actor's user id, in the same
+transaction as the delete.
 
 **An action the endpoint does not offer has no handler.** There is no
 `/test/login` and no unban route; the router answers 404. A named handler is
@@ -231,8 +245,9 @@ GET  <url>                                                        → 302 + sess
 
 Six routes on the auth worker, all `POST` under `/auth/test/`, each requiring
 `Authorization: Bearer <github-oidc-token>` or, on staging, the
-`x-grade10-qa-token` header. Refusals answer the worker's standard `{ error }`
-shape; an action the environment does not mount answers 404. No existing
+`x-grade10-qa-token` header. A call the access check refuses answers 404 with no
+body; an admitted call naming an address that is no tester answers the
+worker's standard `{ error }` shape. No existing
 endpoint changes shape. `/dev/*` keeps answering 403 on every hosted stack.
 
 ## Risks / Trade-offs
@@ -255,13 +270,15 @@ endpoint changes shape. `/dev/*` keeps answering 403 on every hosted stack.
 
 ## Migration Plan
 
-No data migration. Tasks 2.6, 2.7 and 3.9 ship on the deployed endpoint:
+No data migration. Tasks 2.6, 2.7, 2.11 and 3.9 ship on the deployed endpoint:
 
 1. Deploy the admin-only refusal for the QA token. Agents lose nothing they
    were meant to hold.
 2. Deploy the trail entries. An endpoint write that cannot record its entry
    stops running, so check the trail's write path on staging first.
-3. Deploy the plus-tag cleanup on staging, then uat.
+3. Deploy the refusals as a missing path. Nothing an admitted caller does
+   changes.
+4. Deploy the plus-tag cleanup on staging, then uat.
 
 Rollback for any step is the previous worker; none changes data in place.
 

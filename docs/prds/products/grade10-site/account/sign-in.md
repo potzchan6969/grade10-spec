@@ -169,7 +169,7 @@ QA walks sign-in on the hosted stacks through a gated endpoint. Collectors never
 
 - **Named testers** — staging and uat each name four: a collector, a plus-tag sibling, a ban-only address and an admin-only address. Production names its own smoke testers, today the collector alone. They are written into the code, so each is easy to identify and a new tester is a commit
 - **A generated plus-tag** — on staging and uat, a run generates a unique plus-tag of a named tester, so a test that needs an unused address gets one. Ban, grant and a scoped role take a plus-tag of the collector only. Production takes no plus-tag
-- 🚧 **Removing** — accounts for generated plus-tags build up on staging and uat. Each is removed in the next cleanup after the run that generated it
+- 🚧 **Removing** — accounts for generated plus-tags build up on staging and uat. Each is removed in the next daily cleanup after the run that generated it
 
 ### What the Workflow May Do
 
@@ -182,7 +182,7 @@ Only for a tester address:
 - **Grant a scoped role** — `staff`, `support`, `finance`, `treasurer` or `auditor` on a unique plus-tag of the collector, never on a named tester
 - **Clear the sign-in limits** — the wait between two sign-in mails, and the cap on how many a caller may ask for, so a suite is not throttled as an attacker would be
 
-Ban and grant answer for an address that has never signed in. The account is created, then put in the state the action names. The collector still asks for the link the ordinary way. The workflow only captures, expires, bans, grants or clears.
+Ban and grant answer for an address that has never signed in. The account is created, then put in the state the action names. The collector still asks for the link the ordinary way. The workflow only captures, expires, bans, grants, sets a scoped role or clears.
 
 ### Closed
 
@@ -226,7 +226,7 @@ Measured on the share of email sign-ins that end in a session, from the send to 
 | Session generate without mail | Decided | No. Follow the captured link. | Product |
 | Unban | Decided | No. A run that needs an unbanned address generates one. | Product |
 | Store and auction seeds | Decided | Not this change. | Product |
-| Preview and production | Decided | Capture and clear for the collector alone. Preview is production backends. | Product |
+| Preview and production | Decided | Capture and clear for production's named testers. Preview is production backends. | Product |
 :::
 
 :::detail{title="Staging test code map" for="engineer"}
