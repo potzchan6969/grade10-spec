@@ -85,6 +85,10 @@ for.
 
 ::story{id="account-profile-blocks-profilecard--error-state" title="A read that failed"}
 
+:::detail{title="Test cases" for="qa"}
+::cases{id="grade10-site/store/account-profile"}
+:::
+
 :::detail{title="Product decisions" for="pm"}
 A collector arrives at a profile to adjust, never a blank form to fill, so the
 page is worth opening before they have saved anything.

@@ -5,7 +5,7 @@ order: 1
 reviewed: 2026-09-28
 ---
 
-People sign in with an emailed link, or with Google where the brand offers it. The session each sign-in makes, sign-out, and the staging test door that walks them are on this page too; their specs are `shared/auth/session`, `shared/auth/sign-out` and `shared/auth/test-sign-in`. There is no password and no code. A session covers the site or console it was made on, and no other brand. A return address the brand does not trust is ignored.
+People sign in with an emailed link, or with Google where the brand offers it. The session each sign-in makes, sign-out, and the staging test endpoint QA signs in through are on this page too; their specs are `shared/auth/session`, `shared/auth/sign-out` and `shared/auth/test-sign-in`. There is no password and no code. A session covers the site or console it was made on, and no other brand. A return address the brand does not trust is ignored.
 
 ## Google Sign-In
 
@@ -65,6 +65,10 @@ A link works once. A link that does not work creates no session.
 | Signed in as someone else, on the site | No switch. A toast names the link's email and offers **Switch** or **Stay**. Dismissing keeps the current session |
 
 - 🚧 **Console failures show on the sign-in page** — an expired, used, banned or different-account link lands on the console's sign-in page, and the message shows there, since the console has no toasts. Switch and Stay sit on the page too
+
+:::detail{title="Sign-in test cases" for="qa"}
+::cases{id="shared/auth/sign-in"}
+:::
 
 ## Session
 
@@ -145,13 +149,15 @@ The dialogs and messages above, as the design system draws them.
 
 QA walks sign-in on the hosted stacks through a gated endpoint. Collectors never see it.
 
+::changes{spec="shared/auth/test-sign-in"}
+
 ### Who May Call
 
 - **The lane's own workflow** — one workflow, from main, opens the test endpoint in an environment a reviewer approves. Proving the repository is not enough. A run a pull request starts is refused
 - **A QA agent** — an agent walking a manual pass on staging captures a tester's sign-in link through the test endpoint, so it signs in without a mailbox — [Manual QA Passes](https://github.com/9gag/grade10-spec/blob/main/docs/governance/manual-qa-passes.md)
 - **The QA token** — the agent proves itself with one token, committed to the repository so a pass needs no setup. Staging alone accepts it, and only for a tester address
 - **What the token may do** — capture, expire and clear on a tester address, and on staging alone. Never ban or grant. A holder can sign in as any tester on staging except the admin-only one
-- **The admin-only tester** — the token never reaches it, on any environment. Its link is followed by the workflow, which grants its `admin` before the follow
+- 🚧 **The admin-only tester** — the token never reaches it, on any environment. Its link is followed by the workflow, which grants its `admin` before the follow
 - **Rotating it** — a commit replaces the token, and the old one is refused from that deploy on. Anyone who reads the repository gets the new token too, so rotation cuts off only copies made earlier
 
 ### Where It Opens
