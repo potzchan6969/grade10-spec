@@ -33,6 +33,7 @@ export const PAGES = "docs/prds/products";
 export const CASES = "docs/cases";
 export const OPEN_WORK = "Open work";
 export const ALWAYS = "Always";
+export const AGENTS_LIMIT = 150;
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 /** A rule's explicit id, as `tools/manual/src/content/rule-ids.ts` hides it. */
 const RULE_ID = /\{#([^}\s]*)\}/g;
@@ -305,7 +306,7 @@ function rulesAt(root, base) {
  * file with no page, a row with no expected outcome. WARN: a page with a
  * cases file that still has examples without an id; given a `base`, a rule
  * id the base had and the page no longer holds, and an unmarked rule whose
- * promise changed under the same id. */
+ * promise changed under the same id. FAIL: `AGENTS.md` past its limit. */
 export function check(root = ROOT, { base } = {}) {
   const { pages, problems } = readPages(root);
   const failures = [...problems];
@@ -336,6 +337,15 @@ export function check(root = ROOT, { base } = {}) {
     const id = pageId(join(root, CASES), file);
     if (!known.has(id) && relative(join(root, CASES), file) !== "README.md") {
       failures.push(`${relative(root, file)} names no page: ${PAGES}/${id}.md`);
+    }
+  }
+  const agents = join(root, "AGENTS.md");
+  if (existsSync(agents)) {
+    const lines = readFileSync(agents, "utf8").trimEnd().split("\n").length;
+    if (lines > AGENTS_LIMIT) {
+      failures.push(
+        `AGENTS.md is ${lines} lines, over ${AGENTS_LIMIT} - it is a map; a new rule becomes a check or replaces one`,
+      );
     }
   }
   const before = base ? rulesAt(root, base) : null;

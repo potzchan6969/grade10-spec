@@ -191,3 +191,8 @@ title: Points
   );
   assert.match(warnings[1], /site\/points#till vanished/);
 });
+
+test("AGENTS.md past its limit fails", () => {
+  const root = store({ "AGENTS.md": "line\n".repeat(151) });
+  assert.match(check(root).failures[0], /AGENTS.md is 151 lines, over 150/);
+});
