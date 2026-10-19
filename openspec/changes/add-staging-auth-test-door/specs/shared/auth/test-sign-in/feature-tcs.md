@@ -42,6 +42,10 @@
 * The run shows this repository's Actions running the test-endpoint workflow from the main branch.
 * Step 3 is accepted and the endpoint returns a sign-in link for `<collector address>`.
 
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-01.
+
 ### g10.shared-test-sign-in.US1-TC2: A run not started by an approved dispatch from main is refused
 
 Runs once per row of **Test data**.
@@ -82,6 +86,10 @@ Runs once per row of **Test data**.
 * The row's outcome holds: the run does not open the endpoint.
 * The capture request returns no sign-in link.
 
+**QA2 disposition:** kept with a note - the refusal and the no-link check are asserted; "nothing is changed" in SC-03, SC-04 and SC-32 is not.
+
+**QA2 covers:** none.
+
 ### g10.shared-test-sign-in.US1-TC3: A QA agent with the committed staging token captures a named tester's sign-in link
 
 **Classification:**
@@ -119,6 +127,10 @@ Runs once per row of **Test data**.
 * Step 1 is accepted and returns the sign-in link.
 * Step 3 signs in as `<collector address>`.
 
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-94.
+
 ### g10.shared-test-sign-in.US1-TC4: A named tester with no account gets one when an action needs it
 
 **Classification:**
@@ -148,6 +160,10 @@ Runs once per row of **Test data**.
 
 * Step 2 is accepted.
 * An account for `<admin-only address>` exists after step 2 and holds `admin`.
+
+**QA2 disposition:** kept with a note - a named tester with no account; SC-10 states a plus-tag, so the named-tester start is not linked.
+
+**QA2 covers:** none.
 
 ### g10.shared-test-sign-in.US1-TC5: A staging run generates a unique plus-tag of a named tester on each run
 
@@ -179,6 +195,10 @@ Runs once per row of **Test data**.
 * `<plus-tag A>` and `<plus-tag B>` are each a plus-tag of one named tester.
 * `<plus-tag A>` and `<plus-tag B>` differ from each other.
 
+**QA2 disposition:** over-claimed - asserts that each run's generated plus-tag is unique; no scenario states it. Fold into spec.md as a scenario.
+
+**QA2 covers:** none.
+
 ### g10.shared-test-sign-in.US1-TC6: Capture returns the last sign-in mail link for a tester without a mailbox
 
 **Classification:**
@@ -208,6 +228,10 @@ Runs once per row of **Test data**.
 
 * Step 2 returns the link from the most recent sign-in mail for `<collector address>`.
 * Step 3 signs in as `<collector address>`, with no mailbox opened.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-12.
 
 ### g10.shared-test-sign-in.US1-TC7: Expiring an unused link refuses its follow without a five-minute wait
 
@@ -239,6 +263,10 @@ Runs once per row of **Test data**.
 * Step 2 is accepted.
 * Step 3 is refused as an expired link, and no session is created.
 
+**QA2 disposition:** kept with a note - the no-account-change check from SC-16 is not asserted.
+
+**QA2 covers:** none.
+
 ### g10.shared-test-sign-in.US1-TC8: Banning an address refuses a later sign-in follow
 
 **Classification:**
@@ -269,6 +297,10 @@ Runs once per row of **Test data**.
 * Step 2 is accepted.
 * Step 3 is refused as a banned account, and no session is created.
 
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-19.
+
 ### g10.shared-test-sign-in.US1-TC9: Granting the admin-only tester admin lets its followed link sign in as admin
 
 **Classification:**
@@ -298,6 +330,10 @@ Runs once per row of **Test data**.
 
 * Step 2 is accepted.
 * Step 3 signs in as `<admin-only address>` and the session holds `admin`.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-20.
 
 ### g10.shared-test-sign-in.US1-TC10: A scoped role granted to a generated plus-tag of the collector signs in with that role only
 
@@ -341,6 +377,10 @@ Runs once per row of **Test data**.
 * Step 2 is accepted.
 * Step 3 signs in as `<collector plus-tag>` holding the row's role.
 
+**QA2 disposition:** kept with a note - the title says "only" and the expected results do not; SC-96's named-tester refusal is not asserted.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-06.
+
 ### g10.shared-test-sign-in.US1-TC11: Clearing the sign-in limits stops the wait between mails and the count cap from throttling a suite
 
 **Classification:**
@@ -370,6 +410,10 @@ Runs once per row of **Test data**.
 
 * Step 2 is accepted.
 * Every request in step 3 receives a mail, with no throttle answer.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-21. The cap step does not reach SC-33, which clears after the cap is reached.
 
 ### g10.shared-test-sign-in.US1-TC12: Every action opens on staging and uat
 
@@ -407,6 +451,10 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Every action in step 2 is accepted on the row's environment.
+
+**QA2 disposition:** kept with a note - the scoped role is on a plus-tag, as Q42 settles; SC-100 names a named tester (see Reconciliation).
+
+**QA2 covers:** none.
 
 ### g10.shared-test-sign-in.US1-TC13: Capture and clear work on production and preview for the production collector
 
@@ -446,6 +494,10 @@ Runs once per row of **Test data**.
 
 * Steps 2 and 3 are accepted on the row's environment.
 
+**QA2 disposition:** kept with a note - steps 2 and 3 are asserted accepted, not the link returned; SC-24 and SC-102 are not fully asserted.
+
+**QA2 covers:** none.
+
 ### g10.shared-test-sign-in.US1-TC14: The QA token is refused for the admin-only tester and for an address that is not a tester
 
 Runs once per row of **Test data**.
@@ -483,6 +535,10 @@ Runs once per row of **Test data**.
 
 * The response refuses the request, and no sign-in link is returned.
 * The account for the row's address is unchanged and no session is created for it.
+
+**QA2 disposition:** over-claimed - the non-tester row through the QA token has no scenario; fold into spec.md as a scenario. The admin-only row matches SC-97 but does not assert that the refusal names no rule.
+
+**QA2 covers:** none.
 
 ### g10.shared-test-sign-in.US1-TC15: The QA token is refused for ban, grant and scoped-role actions on a tester
 
@@ -523,6 +579,10 @@ Runs once per row of **Test data**.
 * The response refuses the action.
 * The account for `<collector address>` is unchanged.
 
+**QA2 disposition:** kept with a note - asserts the ban and grant route of SC-95 only; the replaced-token route is not asserted.
+
+**QA2 covers:** none.
+
 ### g10.shared-test-sign-in.US1-TC16: The QA token is refused on production
 
 **Classification:**
@@ -550,6 +610,10 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The response refuses the request, and no sign-in link is returned.
+
+**QA2 disposition:** kept with a note - production only; SC-98's nothing-changed check and its uat and preview routes are not asserted.
+
+**QA2 covers:** none.
 
 ### g10.shared-test-sign-in.US1-TC17: Callers other than the workflow and the QA token are refused
 
@@ -589,6 +653,10 @@ Runs once per row of **Test data**.
 
 * The response refuses the request, and no sign-in link is returned.
 
+**QA2 disposition:** over-claimed - the wrong-token and signed-in customer-session rows have no scenario; fold into spec.md as a scenario. The no-credential row matches SC-05 but does not assert that nothing is changed.
+
+**QA2 covers:** none.
+
 ### g10.shared-test-sign-in.US1-TC18: An address that is not a named tester is refused, and no account is created for it
 
 Runs once per row of **Test data**.
@@ -627,6 +695,10 @@ Runs once per row of **Test data**.
 * The request is refused, and no sign-in link is returned.
 * No account exists for the row's address afterwards.
 
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-07.
+
 ### g10.shared-test-sign-in.US1-TC19: A sign-in mail older than fifteen minutes can no longer be captured
 
 **Classification:**
@@ -654,6 +726,10 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No sign-in link is returned for the old mail.
+
+**QA2 disposition:** kept with a note - SC-29's "call is not refused" is not asserted.
+
+**QA2 covers:** none.
 
 ### g10.shared-test-sign-in.US1-TC20: A scoped role is refused for every named tester
 
@@ -695,6 +771,10 @@ Runs once per row of **Test data**.
 * The grant is refused.
 * The row's tester does not hold `staff`.
 
+**QA2 disposition:** kept with a note - asserts the named-tester refusal in the staff role only; SC-96's plus-tag grant is not asserted.
+
+**QA2 covers:** none.
+
 ### g10.shared-test-sign-in.US1-TC21: Ban, grant, expire and scoped-role actions are refused on production
 
 Runs once per row of **Test data**.
@@ -735,6 +815,10 @@ Runs once per row of **Test data**.
 * The row's action is refused.
 * The account and its sign-in link for `<collector address>` are unchanged.
 
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-101. The ban row does not reach SC-24, which also asserts a link is received.
+
 ### g10.shared-test-sign-in.US1-TC22: Local stacks open no test-endpoint action
 
 **Classification:**
@@ -763,6 +847,10 @@ Runs once per row of **Test data**.
 
 * Both requests are refused.
 * No sign-in link is returned and no account changes.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-103.
 
 ### g10.shared-test-sign-in.US1-TC23: The disposable `/dev` endpoint stays closed on staging, uat and production
 
@@ -802,6 +890,10 @@ Runs once per row of **Test data**.
 
 * The endpoint answers closed, and no session is created.
 
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-25.
+
 ### g10.shared-test-sign-in.US1-TC24: The test-endpoint workflow does not generate a session, unban an address or seed store and auction data
 
 Runs once per row of **Test data**.
@@ -840,3 +932,23 @@ Runs once per row of **Test data**.
 
 * The row's outcome holds.
 * The account state and store or auction data are unchanged.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-26, shared-auth-test-sign-in-SC-27, shared-auth-test-sign-in-SC-28.
+
+## Reconciliation
+
+Run: QA2, 2026-10-19. Read the blind cases above, this change's `spec.md` scenarios, `decisions.md` (Q1 to Q51) and the procedure. Nothing else. Case steps and expected results are unchanged.
+
+**Covered in full** - SC-01 (TC1), SC-06 (TC10), SC-07 (TC18), SC-12 (TC6), SC-19 (TC8), SC-20 (TC9), SC-21 (TC11), SC-25 (TC23), SC-26, SC-27, SC-28 (TC24), SC-94 (TC3), SC-101 (TC21), SC-103 (TC22). SC-NN is shared-auth-test-sign-in-SC-NN.
+
+**Not covered in full** - no case asserts the scenario: SC-02, SC-08, SC-09, SC-11, SC-13, SC-14, SC-15, SC-17, SC-18, SC-22, SC-23, SC-30, SC-31, SC-33, SC-34, SC-99. Partly asserted, see the case notes: SC-03, SC-04, SC-05, SC-32 (no nothing-changed check), SC-10, SC-16, SC-24, SC-29, SC-95, SC-96, SC-97, SC-98, SC-102. SC-100 is contradicted, below.
+
+**Over-claimed** - TC5 (unique plus-tag per run), TC14 (non-tester row via the QA token), TC17 (wrong-token and customer-session rows). Each states behaviour no scenario states; fold into spec.md.
+
+**Contradictions** - SC-100 says uat sets a scoped role for a named tester. The requirement "Grant a scoped role" and SC-96 refuse that, and Q42 settles it: never a named tester. TC12 already uses a plus-tag. Dev corrects SC-100.
+
+**Repairs** - None. No case contradicts a settled decision.
+
+**Raised** - None unsettled; `decisions.md` is unchanged. Q48 and Q51 cite TC30 and TC13, which this suite no longer holds.

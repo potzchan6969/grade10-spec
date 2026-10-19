@@ -270,7 +270,7 @@ Which addresses the test endpoint acts on, and what it creates to act on one.
 **Serves:** Where it opens - staging and uat, every action
 
 - **GIVEN** a uat run of the test endpoint's workflow
-- **WHEN** it captures, expires, bans, grants, sets a scoped role or clears for a named tester
+- **WHEN** it captures, expires, bans, grants `admin` or clears for a named tester
 - **THEN** the endpoint carries out that action
 
 ### Requirement: Capture returns the last sign-in mail for the address named
