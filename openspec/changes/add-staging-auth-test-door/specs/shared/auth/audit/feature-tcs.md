@@ -373,10 +373,6 @@ Runs once per row of **Test data**.
 * The new entry records `ban`.
 * The new entry names `<caller kind>` in place of a user id.
 
-## shared-auth-audit-US-05: Auditor traces a second-factor write
-
-No case in this change. The test endpoint writes no second-factor entry, so the second-factor cases stay in the durable suite.
-
 ## Reconciliation
 
 **Run:** QA2, fresh context. Read: this file, the change's `specs/shared/auth/audit/spec.md` delta, the durable `openspec/specs/shared/auth/audit/spec.md` for the requirements the cases cite, and the change's `decisions.md`. Denied: everything else, including the archive.
