@@ -18,8 +18,9 @@ order: 1
 ## One Service
 
 - **Its own** - the documents service keeps every template, packet, signer,
-  signature and sealed file in its own database and bucket, as the KYC
-  service keeps identities
+  signature and sealed file in its own schema and bucket, inside the
+  commerce wall; it keeps a signer's name, email and phone and only a
+  masked ID number - [Account Data](/platform/account-data#postgres-by-default)
 - **One signing address** - `grade10.com/sign#<token>`; the vault's and
   grading's signing addresses lead to it
 - **The ceremony stands** - the packet, the consent, the refusal ladder, the
@@ -59,7 +60,7 @@ order: 1
   the new one
 
 :::detail{title="Product decisions" for="pm"}
-Signing is a library each product builds into its own database: the vault
+Signing is a library each product builds into its own schema: the vault
 and grading each hold their own packets, templates and signing address.
 Consignment, partner deals and a winner keeping a lot in the vault each need
 signed paper next, and each would build the same tables a third and a fourth

@@ -25,9 +25,9 @@ Every row exists once per product and is never shared; sharing any of them would
 | Session cookie names | `better-auth.*` (site), `better-auth-console.*` (console) | the same two names on its own domain |
 | Auth worker + `BETTER_AUTH_SECRET` | `grade10-auth` | `zzz-auth` |
 | Trusted origins (credentialed API access) | grade10 apps only | zzz apps only |
-| Identity database | `stg-/prd-grade10-auth` | `stg-/prd-zzz-auth` |
+| Identity | the auth wall of `grade10` in `stg-/prd-grade10` | the auth wall of `zzz` in `stg-/prd-zzz` |
 | Session KV namespace | grade10-auth's `CACHE` | zzz-auth's `CACHE` |
-| App databases | `grade10_store`, `grade10_loyalty` in `stg-/prd-grade10` | `zzz_store` in `stg-/prd-zzz` |
+| App data | the commerce wall of `grade10` in `stg-/prd-grade10` | the commerce wall of `zzz` in `stg-/prd-zzz` |
 | Loyalty worker + program config | `grade10-loyalty` | none — ZZZ runs no loyalty program |
 | Google OAuth client | grade10's (committed ID) | ZZZ's own, once created (empty ID keeps Google off) |
 | Email sender + catalog | `no-reply@grade10.*`, `@grade10/i18n` | `no-reply@zzz.*`, `apps/backend/zzz/auth/src/i18n.ts` |

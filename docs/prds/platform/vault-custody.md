@@ -15,7 +15,7 @@ A customer submits an item online, books a visit to a physical store, staff valu
 
 ### Grade10 Finance is the financed lane, not a service of its own
 
-- The loan belongs to the product that holds its collateral: one case, one database, one worker, and no second copy of intake, valuation, custody, documents and money.
+- The loan belongs to the product that holds its collateral: one case, one wall, one worker, and no second copy of intake, valuation, custody, documents and money.
 - What separates it is the counterparty, not the infrastructure: the custody agreement is the custodian's and the loan agreement is the lender's, two registered entities read out of one per-brand table.
 - The KYC service serves whatever product binds it, and the vault is the only one that does; a second product would join by minting its own entrypoint and declaring the binding.
 
@@ -78,7 +78,7 @@ terminal: declined | cancelled | expired | forfeited
 
 ### A booking is a relationship, not a case status
 
-- There is no `appointment_booked` status, because a status here would summarize rows living in another service's database.
+- There is no `appointment_booked` status, because a status here would summarize rows living in another service's wall.
 - The case caches the booking reference, its time, and its location for display; the appointment service is the source of truth and a repair list fixes the cache rather than trusting it.
 - A case with no booking still moves `submitted → under_valuation`, so somebody walking in without one costs no special case; every live status but `draft` can take a visit, so a case can be valued and offered before one is booked.
 
@@ -91,7 +91,7 @@ terminal: declined | cancelled | expired | forfeited
 - Nothing is ended on the cache alone: expiring a submitted case and recording a no-show both ask the diary first and repair the cache where the two disagree. With no diary to ask, nothing is ended at all — a case whose booking cannot be ruled out is left where it is.
 - A slot already behind us is not a customer who is coming in. The expiry lists ask whether the visit is still ahead, not merely whether one is booked; the no-show list closes a passed slot, and a case whose visit went by would otherwise sit outside every window for ever.
 - A missed visit ends a submitted case and nothing else: every other status keeps its case and closes the visit alone, because a customer who rebooked must not lose their case overnight. The first is told its request has closed, the second that we did not see them and the item is still here.
-- Repair lists close the gap the two databases leave from both sides: a terminal case still holding a future booking is cancelled idempotently until it sticks, and a case whose cache was lost between the remote call and the local write is found among recently touched cases and refilled from the diary.
+- Repair lists close the gap the two walls leave from both sides: a terminal case still holding a future booking is cancelled idempotently until it sticks, and a case whose cache was lost between the remote call and the local write is found among recently touched cases and refilled from the diary.
 - Every diary refusal folds into one vault code, `BOOKING_UNAVAILABLE`, so a customer screen cannot tell a slot that filled from one that is already in the past — the copy says to pick another time, and separating them would mean carrying the appointment service's own codes through the vault's vocabulary.
 
 ### The appointment service holds availability for a location, not the registry of locations
@@ -294,16 +294,16 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 | Package | Owns | Never knows |
 | --- | --- | --- |
 | `packages/appointment` | locations' availability rules, slot derivation, bookings, and their outcomes, plus its own worker | what a case is — the case reference is an opaque string |
-| `packages/doc-sign` | packets, their documents, signers, tokens, signatures, sign events, templates, the ceremony routes, and both the signer's ceremony and the operator's mint surface | which product it signs for; it is a library with no worker and no database of its own |
-| `packages/e-kyc` | the KYC service: the verified record and its per-product case bindings, the vocabulary, masking and hashing, the adult and expiry predicates, the per-product entrypoints, and the worker that owns the database and the capture bucket | anything about vaults, loans, or cases — a case reference is an opaque string |
+| `packages/doc-sign` | packets, their documents, signers, tokens, signatures, sign events, templates, the ceremony routes, and both the signer's ceremony and the operator's mint surface | which product it signs for; it is a library with no worker and no wall of its own |
+| `packages/e-kyc` | the KYC service: the verified record and its per-product case bindings, the vocabulary, masking and hashing, the adult and expiry predicates, the per-product entrypoints, and the worker that owns the wall and the capture bucket | anything about vaults, loans, or cases — a case reference is an opaque string |
 | `packages/vault` | the case, its transitions, valuation, custody, money, documents, uploads, notifications and sweeps | how a slot is derived or how a PDF is sealed |
 
 ### A generic package never learns what a case is
 
 - The booking, signing and identity packages take an opaque reference and give it back, so the vault can change what a case means without touching any of them.
-- doc-sign ships table factories the host worker instantiates into its own database, which is what lets a seal and its case event commit in one transaction.
+- doc-sign ships table factories the host worker instantiates into its own schema, which is what lets a seal and its case event commit in one transaction.
 - doc-sign also owns its tables' data lifecycle: `eraseCeremonyPersonalData` knows which columns hold the person and `claimedDocumentKeys` which columns claim bytes, so the vault's erasure and its documents storage area delegate to them rather than restating the columns — the vault keeps only its own decisions: which cases are erasable, and which area is swept. The full host contract is written on doc-sign's `types/ports.ts`.
-- e-kyc went the other way and owns a database, a bucket and a worker, because the record belongs to the person rather than to one product's case. Tables instantiated into the vault's database could only ever be read by the vault.
+- e-kyc went the other way and owns a wall, a bucket and a worker, because the record belongs to the person rather than to one product's case. Tables instantiated into the vault's wall could only ever be read by the vault.
 
 ### Vault admin is in-app pages, not an `admin-frontend` package
 
@@ -338,7 +338,7 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 | `apps/frontend/grade10/src/pages/vault` | the signing page |
 | `apps/admin/grade10/src/pages/{vault,appointments}` | the route shells that mount the panels; the case panels, the payout tab and the `wa.me` link builder live in `packages/vault/admin-frontend` |
 | `packages/grade10-auth/contracts/src/schemas.ts` | the `vault` and `appointment` statements and the roles that hold them |
-| `neondb/registry.sh` | the databases and their nightly backups; the vault and the KYC service are Neon projects of their own, all of them in `ap-southeast-1` |
+| `neondb/registry.sh` | the brand projects and their nightly backups, all of them in `ap-southeast-1`; the vault and the KYC service are walls of their own ([Account Data](/platform/account-data#postgres-by-default)) |
 
 ## Q & A
 
@@ -347,19 +347,19 @@ Erasure is an admin calling `erasure.erase`, which asks auth's guard first, as e
 - Why is there no signing provider port then?
   - A provider inverts the flow with its own hosted pages and webhooks, so an interface shaped around our ceremony would not fit one; the package boundary and the template contract are the seam that would.
 - Why is a booking not a case status?
-  - The booking lives in another service's database, and a status would be a copy of it that can be wrong; keeping it a relationship also gives walk-ins a path with no special case.
+  - The booking lives in another service's wall, and a status would be a copy of it that can be wrong; keeping it a relationship also gives walk-ins a path with no special case.
 - Why does the token ride in the URL fragment?
   - A fragment never reaches a server, so a live token cannot land in a log line or a `Referer` header the way a path segment would.
 - Why one item per case?
   - Money, documents, and custody all attach to one thing; a case holding three items would need every one of them to carry a share, and the policy is one index if that ever changes.
 - Why is every money operation recorded by a person in v1?
   - The transfers are real bank transfers made by staff, and a system that claimed to execute them would be recording an intention as a fact.
-- Why does verified identity get its own worker and database instead of tables in the vault?
-  - The record is about a person, not about a case. A second product needing the same person verified would otherwise have to photograph their passport again, and a table living in the vault's database could only ever be read by the vault. Moving it also put the legal names, birth dates and document photographs of every customer behind a credential nothing else holds.
+- Why does verified identity get its own worker and wall instead of tables in the vault?
+  - The record is about a person, not about a case. A second product needing the same person verified would otherwise have to photograph their passport again, and a table living in the vault's wall could only ever be read by the vault. Moving it also put the legal names, birth dates and document photographs of every customer behind a role nothing else holds.
 - Why keep `accepted` as its own status?
   - Agreeing terms and signing paper are separate moments in the store, and collapsing them later costs no schema change.
 - Why does the loan run on the vault's case rather than a service of its own?
-  - Its collateral is the item in the vault's own custody, so splitting them would put one agreement across two services and two databases; what a separate lender needs is its own name on the paper, which is a row in a table.
+  - Its collateral is the item in the vault's own custody, so splitting them would put one agreement across two services and two walls; what a separate lender needs is its own name on the paper, which is a row in a table.
 - Why does the term run from the payout rather than the offer?
   - Nothing is borrowed until the money moves, and every day between the offer, the acceptance and the signature is the customer's to spend — anchoring earlier would sell them a shorter loan than the paper names.
 

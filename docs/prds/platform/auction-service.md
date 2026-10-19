@@ -156,7 +156,7 @@ A lot's clock, price and result reach every open page within a second of the com
 
 ## Data model
 
-Own Postgres database (`grade10_auction` in the shared `stg-/prd-grade10` Neon project), pg schema `auction`, reached over Hyperdrive like every app database. Shape — columns, types, keys — lives in `src/db/schema/`, one file per table; this table states what each one means.
+Pg schema `auction` in the commerce wall of the `grade10` database (`stg-/prd-grade10`), reached over Hyperdrive like every wall ([Account Data](/platform/account-data#postgres-by-default)). Shape — columns, types, keys — lives in `src/db/schema/`, one file per table; this table states what each one means.
 
 | Table | Role |
 | --- | --- |
@@ -409,7 +409,7 @@ Two accounts — one per storefront: the receiver of the winner's payment is the
 | --- | --- |
 | `packages/grade10-auction/contracts` | the binding contract, the public state shape, and `getAuctionService` |
 | `packages/grade10-auth/contracts/src/rbac.ts` | the `auction` permission statement and the roles that hold it |
-| `neondb/registry.sh` + README | the `stg-/prd-grade10` projects holding `grade10_auction` (the targets.sh declaration enrolls nightly backups) |
+| `neondb/registry.sh` + README | the `stg-/prd-grade10` projects holding the `grade10` database (the targets.sh declaration names the `auction` schema and its wall) |
 | `packages/grade10-auction/backend` | the service itself: schema, bidding, sweeps, routers, the Hono app, `createAuctionWorker`, and the `./rpc` entrypoint factory |
 | `apps/backend/grade10/auction` | the deployment: targets.sh, embedded migrations, wrangler with the cron trigger, Hyperdrive, both R2 buckets, and the storefront list handed to `createAuctionWorker` — plus both test lanes, `test/db/` on pglite and `test/worker/` on workerd |
 | `packages/grade10-auction/frontend` | the `sales/auctions` feature slice the storefronts compose, as one `auctionModules` list |
