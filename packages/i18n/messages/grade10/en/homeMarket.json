@@ -72,15 +72,6 @@
   "news": {
     "eyebrow": "Press releases",
     "title": "Latest news",
-    "all": "All Press Releases",
-    "items": {
-      "cantonFair": "MemeStrategy (HKEX: 2440) and POKECOLOR Bring CARDJOY x Grade10 Card Show to the Canton Fair Complex in Guangzhou, China",
-      "ganaArt": "Grade10 and Gana Art Announce Plans to Establish Joint Venture to Advance South Korea’s Trading Card Culture, Showcasing Vision through THEMGOOD Debut at Seoul Art Week",
-      "benchmarkIndices": "Grade10 Launches World’s First TCG Market Benchmark Indices, Establishing Institutional Pricing Standards for Alternative Assets and Ushering Trading Cards into the Data-Driven Era",
-      "seoulAuction": "Grade10 Takes Its Trading Card Business to the Next Level with Official Entry into the South Korean Market, Partners with Leading Auction House Seoul Auction for Pokémon Card Exhibition and Private Sales Event",
-      "festConcludes": "MemeStrategy (HKEX: 2440)’s Premier Asian Trading Card Event Grade10 FEST Summer 2026 Concludes Successfully, Attracting Over 25,000 Attendees and Convening 120+ Local and International Exhibitors Over Three Days",
-      "festOpening": "Hong Kong’s Largest Card Show - Grade10 FEST Summer 2026 Grand Opening Today, Celebrating Pokémon’s 30th Anniversary with Hong Kong’s Largest Nostalgic Showcase! Tens of Millions of HKD Worth of Vintage Pokémon Cards on Display",
-      "financeLaunch": "MemeStrategy (HKEX: 2440) to launch Trading Card Financing Service “Grade10 Finance,” Asia’s First Trading Card Financing Service by a Listed Company, Unlocking Liquidity for Trading Cards and Building an Asia Collectibles Financial Ecosystem"
-    }
+    "all": "All Press Releases"
   }
 }
