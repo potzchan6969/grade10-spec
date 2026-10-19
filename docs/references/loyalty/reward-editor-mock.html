@@ -1,0 +1,643 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Reward Editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ink:#1B1918; --ink-2:#75726F; --ink-3:#9D9A97;
+  --bg:#FFFFFF; --bg-2:#FAFAF9; --bg-3:#F5F5F4; --line:#E6E5E5; --line-2:#D5D3D2;
+  --accent:#C4903D; --accent-ink:#FFFFFF; --accent-soft:#F7EEDD;
+  --ok:#66904B; --ok-soft:#E9F0E3; --warn:#B19A3A; --warn-soft:#F5F0DC; --err:#CF5844; --err-soft:#F9E5E1;
+  --radius:8px; --font:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#F2F0EC; --ink-2:#A8A39C; --ink-3:#7D7871;
+    --bg:#1B1918; --bg-2:#211F1D; --bg-3:#2A2725; --line:#3A3733; --line-2:#4A4641;
+    --accent:#D3A356; --accent-ink:#1B1918; --accent-soft:#3A2F1C;
+    --ok:#8DB56F; --ok-soft:#27331F; --warn:#CDB755; --warn-soft:#3A341B; --err:#E27461; --err-soft:#3E231F;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#F2F0EC; --ink-2:#A8A39C; --ink-3:#7D7871;
+  --bg:#1B1918; --bg-2:#211F1D; --bg-3:#2A2725; --line:#3A3733; --line-2:#4A4641;
+  --accent:#D3A356; --accent-ink:#1B1918; --accent-soft:#3A2F1C;
+  --ok:#8DB56F; --ok-soft:#27331F; --warn:#CDB755; --warn-soft:#3A341B; --err:#E27461; --err-soft:#3E231F;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-2);color:var(--ink);font:14px/1.5 var(--font);-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.frame{display:flex;min-height:100vh}
+.side{width:232px;flex:0 0 232px;background:var(--bg-2);border-right:1px solid var(--line);padding:20px 12px;display:none;flex-direction:column;gap:2px}
+@media(min-width:1100px){.side{display:flex}}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px 18px}
+.brand .dot{width:26px;height:26px;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);font-weight:600;font-size:12px}
+.brand b{display:block;font-size:15px}
+.brand span{font-size:11px;color:var(--ink-2)}
+.nav{padding:6px 10px;border-radius:6px;color:var(--ink-2);font-size:13px}
+.nav.on{background:var(--bg-3);color:var(--ink);font-weight:500}
+.nav.dim{opacity:.55}
+main{flex:1;min-width:0;padding-block:20px 60px;padding-inline:clamp(16px,3vw,36px)}
+.demo-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px;padding:6px;background:var(--bg-3);border-radius:10px;width:max-content;max-width:100%}
+.demo-tabs button{border:0;background:transparent;padding:6px 12px;border-radius:6px;color:var(--ink-2);font-size:13px}
+.demo-tabs button[aria-selected="true"]{background:var(--bg);color:var(--ink);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.demo-note{font-size:12px;color:var(--ink-3);margin:-14px 0 20px}
+.crumb{font-size:13px;color:var(--ink-2);margin-bottom:10px}
+.crumb a{color:inherit;text-decoration:none}
+.crumb a:hover{color:var(--ink)}
+.head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start;margin-bottom:22px}
+h1{font-size:20px;line-height:1.25;margin:0 0 4px;font-weight:600;text-wrap:balance}
+.sub{color:var(--ink-2);font-size:13px;margin:0;max-width:64ch}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start}
+@media(min-width:960px){.layout{grid-template-columns:minmax(0,1fr) 340px}}
+.form{display:flex;flex-direction:column;gap:18px;min-width:0}
+.panel{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.panel h2{font-size:14px;font-weight:600;margin:0}
+.panel .lede{color:var(--ink-2);font-size:13px;margin:-10px 0 0}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field>label,.field>.lbl{font-size:13px;font-weight:500}
+.hint{font-size:12px;color:var(--ink-2)}
+.hint.err{color:var(--err)}
+.hint.ok{color:var(--ok)}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.row>.field{flex:1 1 180px}
+input[type=text],input[type=number],input[type=date],textarea{width:100%;background:var(--bg);border:1px solid var(--line-2);border-radius:6px;padding:8px 10px;min-width:0}
+textarea{min-height:64px;resize:vertical}
+input:disabled{background:var(--bg-3);color:var(--ink-2)}
+.affix{display:flex;align-items:stretch;border:1px solid var(--line-2);border-radius:6px;overflow:hidden;background:var(--bg);max-width:260px}
+.affix input{border:0;border-radius:0}
+.affix span{display:flex;align-items:center;padding:0 10px;background:var(--bg-3);color:var(--ink-2);font-size:13px;white-space:nowrap}
+.affix.wide{max-width:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.card{border:1px solid var(--line-2);border-radius:var(--radius);padding:14px;background:var(--bg);text-align:left;display:flex;flex-direction:column;gap:6px;position:relative}
+.card b{font-size:14px;font-weight:600}
+.card span{font-size:12px;color:var(--ink-2)}
+.card[aria-checked="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent);background:var(--accent-soft)}
+.card[aria-checked="true"]::after{content:"";position:absolute;top:12px;right:12px;width:14px;height:14px;border-radius:50%;background:var(--accent);box-shadow:inset 0 0 0 3px var(--bg)}
+.seg{display:inline-flex;align-self:flex-start;max-width:100%;border:1px solid var(--line-2);border-radius:6px;overflow:hidden;background:var(--bg);flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:7px 12px;color:var(--ink-2);font-size:13px;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-checked="true"]{background:var(--bg-3);color:var(--ink);font-weight:500}
+.seg button:disabled{opacity:.45;cursor:not-allowed}
+.radios{display:flex;flex-direction:column;gap:8px}
+.radio{display:flex;gap:10px;align-items:flex-start;font-size:13px}
+.radio input{margin-top:3px}
+.radio .d{color:var(--ink-2);font-size:12px}
+.checks{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+.checks label{display:flex;gap:6px;align-items:center}
+.search{position:relative}
+.search input{padding-left:32px}
+.search::before{content:"";position:absolute;left:11px;top:11px;width:12px;height:12px;border:2px solid var(--ink-3);border-radius:50%}
+.search::after{content:"";position:absolute;left:21px;top:22px;width:6px;height:2px;background:var(--ink-3);transform:rotate(45deg)}
+.results{position:absolute;z-index:5;left:0;right:0;top:calc(100% + 4px);background:var(--bg);border:1px solid var(--line-2);border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.12);max-height:260px;overflow:auto}
+.results button{display:flex;width:100%;gap:10px;align-items:center;border:0;background:transparent;padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+.results button:last-child{border-bottom:0}
+.results button:hover{background:var(--bg-3)}
+.results .empty{padding:10px;color:var(--ink-2);font-size:13px}
+.thumb{width:28px;height:28px;border-radius:4px;flex:0 0 28px;background:linear-gradient(135deg,var(--bg-3),var(--line-2))}
+.picked{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.picked .it{display:flex;gap:10px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);font-size:13px}
+.picked .it:last-child{border-bottom:0}
+.picked .it .t{flex:1;min-width:0}
+.picked .it .t small{display:block;color:var(--ink-2);font-size:12px}
+.picked .it button{border:0;background:transparent;color:var(--ink-2);font-size:16px;line-height:1;padding:4px}
+.picked .none{padding:10px;color:var(--ink-2);font-size:13px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line-2);border-radius:999px;padding:4px 10px;background:var(--bg);font-size:12px;color:var(--ink-2)}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.notice{padding:10px 12px;border-radius:6px;font-size:13px;background:var(--bg-3);color:var(--ink-2);border:1px solid var(--line)}
+.notice.warn{background:var(--warn-soft);border-color:transparent;color:var(--ink)}
+.notice.err{background:var(--err-soft);border-color:transparent;color:var(--ink)}
+.bar{position:sticky;bottom:0;background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 -6px 20px rgba(0,0,0,.06)}
+.bar .why{font-size:13px;color:var(--ink-2)}
+.bar .why.ok{color:var(--ok)}
+.btn{border:1px solid var(--line-2);background:var(--bg);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:disabled{opacity:.5;cursor:not-allowed}
+.btn.sm{padding:5px 11px;font-size:12px}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+.rail{display:flex;flex-direction:column;gap:14px;position:sticky;top:20px}
+.rail h3{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2);margin:0 0 10px}
+.menu-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.menu-card .n{font-weight:600;font-size:15px}
+.menu-card .d{color:var(--ink-2);font-size:13px}
+.menu-card .meta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
+.menu-card .pts{font-weight:600;font-variant-numeric:tabular-nums}
+.menu-card .lim{font-size:12px;color:var(--ink-2)}
+.menu-card .redeem{align-self:flex-start;border:1px solid var(--line-2);border-radius:999px;padding:5px 12px;font-size:12px;background:var(--bg);color:var(--ink-2);pointer-events:none}
+.terms{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);padding:14px 16px;font-size:13px;line-height:1.55}
+.terms .sent{margin:0}
+.terms .sent b{font-weight:600}
+.basket{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg)}
+.basket summary{padding:12px 16px;cursor:pointer;font-size:13px;font-weight:500;list-style:none;display:flex;justify-content:space-between}
+.basket summary::after{content:"+";color:var(--ink-2)}
+.basket[open] summary::after{content:"–"}
+.basket .body{padding:0 16px 14px;display:flex;flex-direction:column;gap:10px}
+.lines{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.line{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}
+.line .q{width:44px;padding:4px 6px;border:1px solid var(--line-2);border-radius:4px;background:var(--bg)}
+.line .p{font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.verdict{border-radius:6px;padding:10px 12px;font-size:13px}
+.verdict.ok{background:var(--ok-soft)}
+.verdict.no{background:var(--err-soft)}
+.verdict b{display:block;font-weight:600;margin-bottom:2px}
+.split{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.slug{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px}
+.slug code{background:var(--bg-3);border:1px solid var(--line);border-radius:4px;padding:2px 8px;font:12px ui-monospace,Menlo,monospace}
+.badge{display:inline-block;border-radius:999px;padding:2px 9px;font-size:12px;background:var(--bg-3);color:var(--ink-2)}
+.badge.live{background:var(--ok-soft);color:var(--ok)}
+.badge.arch{background:var(--bg-3);color:var(--ink-2)}
+.badge.sched{background:var(--warn-soft);color:var(--warn)}
+.tbl-wrap{overflow-x:auto;background:var(--bg);border:1px solid var(--line);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:13px}
+th{text-align:left;font-weight:500;color:var(--ink-2);padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td .s{display:block;color:var(--ink-3);font-size:12px}
+td.num{font-variant-numeric:tabular-nums}
+td .acts{display:flex;gap:6px;flex-wrap:wrap}
+.hd-actions{display:flex;gap:8px;align-items:center}
+.list-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(prefers-reduced-motion:no-preference){.card,.seg button,.chip{transition:background .12s,border-color .12s}}
+</style>
+
+<div class="frame">
+  <aside class="side" aria-hidden="true">
+    <div class="brand"><div class="dot">G</div><div><b>Grade10</b><span>Admin console</span></div></div>
+    <div class="nav dim">Dashboard</div><div class="nav dim">Users</div><div class="nav dim">Store</div><div class="nav dim">Inventory</div><div class="nav dim">Auction</div><div class="nav dim">Members</div><div class="nav dim">Invitations</div><div class="nav on">Rewards</div><div class="nav dim">Liability</div><div class="nav dim">Audit</div>
+  </aside>
+  <main>
+    <div class="demo-tabs" role="tablist" aria-label="Views in this mock">
+      <button role="tab" aria-selected="true" data-view="new">New reward</button>
+      <button role="tab" aria-selected="false" data-view="edit">Edit an existing reward</button>
+      <button role="tab" aria-selected="false" data-view="list">Rewards list</button>
+    </div>
+    <p class="demo-note">Interactive mock. Every control on the editor works; the preview on the right follows what you fill in. Catalog rows are staging examples.</p>
+
+    <section id="view-editor">
+      <div class="crumb"><a href="#" data-view-link="list">← Rewards</a></div>
+      <div class="head">
+        <div>
+          <h1 id="ed-title">New reward</h1>
+          <p class="sub" id="ed-sub">A reward is a coupon a member buys with points. Members who already redeemed keep the price and terms they bought, whatever you change here.</p>
+        </div>
+      </div>
+
+      <div class="layout">
+        <div class="form">
+          <div class="panel" id="p-kind">
+            <h2>What the reward is</h2>
+            <div class="cards" role="radiogroup" aria-label="Kind">
+              <button class="card" role="radio" aria-checked="true" data-kind="money_off" id="k-money_off"><b>Money off</b><span>An amount or a percentage off the whole order, named products or variants, or a catalog filter.</span></button>
+              <button class="card" role="radio" aria-checked="false" data-kind="free_item" id="k-free_item"><b>Free item</b><span>One variant at nothing. The member can take it on its own.</span></button>
+              <button class="card" role="radio" aria-checked="false" data-kind="gift" id="k-gift"><b>Gift with a purchase</b><span>A free line for one variant, added once the basket reaches a minimum spend.</span></button>
+            </div>
+            <div class="notice warn" id="kind-edit-note" hidden>Changing the kind rewrites what the next redemption gets. Coupons already issued keep the terms they were bought under.</div>
+          </div>
+
+          <div class="panel" id="p-cut">
+            <h2 id="cut-title">What it takes off</h2>
+
+            <div id="money-fields">
+              <div class="field" style="margin-bottom:14px">
+                <span class="lbl">Discount</span>
+                <div class="seg" role="radiogroup" aria-label="Discount">
+                  <button role="radio" aria-checked="true" data-benefit="fixed" id="b-fixed">An amount</button>
+                  <button role="radio" aria-checked="false" data-benefit="percentage" id="b-percentage">A percentage</button>
+                </div>
+              </div>
+              <div class="row" id="fixed-row">
+                <div class="field">
+                  <label for="f-amount">Amount</label>
+                  <div class="affix"><span>HK$</span><input type="number" id="f-amount" value="20" min="1" step="1"></div>
+                </div>
+              </div>
+              <div class="row" id="pct-row" hidden>
+                <div class="field">
+                  <label for="f-rate">Rate</label>
+                  <div class="affix"><input type="number" id="f-rate" value="10" min="1" max="100" step="1"><span>%</span></div>
+                </div>
+                <div class="field">
+                  <label for="f-cap">Maximum discount</label>
+                  <div class="affix"><span>HK$</span><input type="number" id="f-cap" value="100" min="1" step="1"></div>
+                  <span class="hint">The most the rate may take off in all. Empty for no ceiling.</span>
+                </div>
+              </div>
+
+              <div class="field" style="margin-top:16px">
+                <span class="lbl">Scope</span>
+                <div class="seg" role="radiogroup" aria-label="Scope">
+                  <button role="radio" aria-checked="false" data-scope="whole_order" id="s-whole_order">The whole order</button>
+                  <button role="radio" aria-checked="false" data-scope="products" id="s-products">Named products</button>
+                  <button role="radio" aria-checked="true" data-scope="variants" id="s-variants">Named variants</button>
+                  <button role="radio" aria-checked="false" data-scope="facets" id="s-facets">A catalog filter</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="field" id="picker-field">
+              <label for="f-search" id="picker-label">Variants</label>
+              <div class="search">
+                <input type="text" id="f-search" placeholder="Search the catalog by name…" autocomplete="off">
+                <div class="results" id="results" hidden></div>
+              </div>
+              <div class="picked" id="picked"></div>
+              <span class="hint" id="picker-hint"></span>
+            </div>
+
+            <div class="field" id="facets-field" hidden>
+              <span class="lbl">Worlds</span>
+              <div class="chips" id="worlds"></div>
+              <span class="lbl" style="margin-top:6px">Types</span>
+              <div class="chips" id="types"></div>
+              <div class="notice" style="margin-top:4px">A filter is read online only. The till cannot read it, so this reward will be online-only.</div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="f-min" id="min-label">Minimum spend</label>
+                <div class="affix"><span>HK$</span><input type="number" id="f-min" placeholder="None" min="0" step="1"></div>
+                <span class="hint" id="min-hint">What the basket must hold before the coupon applies. Empty for none.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" id="p-terms">
+            <h2>Coupon terms</h2>
+            <div class="row">
+              <div class="field">
+                <label for="f-days">Valid for</label>
+                <div class="affix"><input type="number" id="f-days" value="30" min="1" step="1"><span>days after redemption</span></div>
+                <span class="hint" id="days-hint"></span>
+              </div>
+            </div>
+            <div class="field">
+              <span class="lbl">Where it can be spent</span>
+              <div class="seg" role="radiogroup" aria-label="Channels">
+                <button role="radio" aria-checked="false" data-ch="online" id="c-online">Online</button>
+                <button role="radio" aria-checked="false" data-ch="in_store" id="c-in_store">In store</button>
+                <button role="radio" aria-checked="true" data-ch="both" id="c-both">Both</button>
+              </div>
+              <span class="hint" id="ch-hint"></span>
+            </div>
+            <div class="field">
+              <span class="lbl">Stacks with the shop's own discounts</span>
+              <div class="radios" role="radiogroup">
+                <label class="radio"><input type="radio" name="comb" value="default" checked><span>Store default<br><span class="d">Product discounts and shipping discounts yes, order discounts no.</span></span></label>
+                <label class="radio"><input type="radio" name="comb" value="chosen"><span>Choose for this reward</span></label>
+              </div>
+              <div class="checks" id="comb-checks" hidden>
+                <label><input type="checkbox" id="cb-product" checked>Product discounts</label>
+                <label><input type="checkbox" id="cb-shipping" checked>Shipping discounts</label>
+                <label><input type="checkbox" id="cb-order">Order discounts</label>
+              </div>
+              <span class="hint">The shop's own discount settings decide the rest, so a discount allowed here can still be refused there.</span>
+            </div>
+          </div>
+
+          <div class="panel" id="p-menu">
+            <h2>On the menu</h2>
+            <div class="field">
+              <label for="f-name">Name</label>
+              <input type="text" id="f-name" value="HK$20 off a booster box">
+            </div>
+            <div class="field">
+              <label for="f-desc">Description</label>
+              <textarea id="f-desc">Take HK$20 off one Pokémon TCG sealed booster box.</textarea>
+              <span class="hint">Shown under the name. Leave empty for none.</span>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="f-cost">Cost</label>
+                <div class="affix"><input type="number" id="f-cost" value="20" min="1" step="1"><span>points</span></div>
+              </div>
+              <div class="field">
+                <span class="lbl">Stock</span>
+                <div class="seg" role="radiogroup" aria-label="Stock">
+                  <button role="radio" aria-checked="true" data-stock="unlimited" id="st-unlimited">Unlimited</button>
+                  <button role="radio" aria-checked="false" data-stock="limited" id="st-limited">Limited</button>
+                </div>
+                <div class="affix" id="stock-row" hidden style="margin-top:6px"><input type="number" id="f-stock" value="50" min="0" step="1"><span>units</span></div>
+              </div>
+            </div>
+            <div class="field">
+              <span class="lbl">Address</span>
+              <div class="slug" id="slug-row">
+                <code id="slug">hk-20-off-a-booster-box</code>
+                <button class="btn sm ghost" id="slug-edit" type="button">Edit</button>
+                <input type="text" id="f-slug" hidden style="max-width:280px">
+              </div>
+              <span class="hint" id="slug-hint">Proposed from the name. Permanent once created: a member's history points at it.</span>
+            </div>
+            <div class="field">
+              <span class="lbl">On the menu</span>
+              <div class="seg" role="radiogroup" aria-label="Window">
+                <button role="radio" aria-checked="true" data-win="always" id="w-always">From now, until archived</button>
+                <button role="radio" aria-checked="false" data-win="scheduled" id="w-scheduled">In a window</button>
+              </div>
+              <div class="row" id="win-row" hidden style="margin-top:6px">
+                <div class="field"><label for="f-from">Live from</label><input type="date" id="f-from" value="2026-10-01"><span class="hint">Empty means already.</span></div>
+                <div class="field"><label for="f-until">Live until</label><input type="date" id="f-until" value="2026-10-31"><span class="hint">Inclusive. Empty means until archived.</span></div>
+              </div>
+              <span class="hint err" id="win-hint" hidden>Ends before it starts.</span>
+            </div>
+          </div>
+
+          <div class="bar">
+            <span class="why" id="why"></span>
+            <div class="hd-actions">
+              <button class="btn" type="button">Cancel</button>
+              <button class="btn primary" id="save" type="button">Create reward</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="rail" aria-label="Preview">
+          <div>
+            <h3>On the member's menu</h3>
+            <div class="menu-card">
+              <div class="n" id="pv-name"></div>
+              <div class="d" id="pv-desc"></div>
+              <div class="meta"><span class="pts" id="pv-pts"></span><span class="lim" id="pv-lim"></span></div>
+              <span class="redeem">Redeem</span>
+            </div>
+          </div>
+          <div>
+            <h3>The coupon in one sentence</h3>
+            <div class="terms"><p class="sent" id="pv-sent"></p></div>
+          </div>
+          <details class="basket" id="basket" open>
+            <summary>Check against a basket</summary>
+            <div class="body">
+              <div class="lines" id="lines"></div>
+              <div class="split"><span>Basket</span><span id="bk-total"></span></div>
+              <div class="verdict" id="verdict"></div>
+              <span class="hint">A sample basket priced the way the checkout and the till price it. Change quantities to see the coupon refuse or apply.</span>
+            </div>
+          </details>
+        </aside>
+      </div>
+    </section>
+
+    <section id="view-list" hidden>
+      <div class="list-head">
+        <div>
+          <h1>Rewards</h1>
+          <p class="sub">What a member can spend points on. Archiving takes a reward off the menu; the redemptions it already made keep their name and price.</p>
+        </div>
+        <button class="btn primary" type="button" data-view-link="new">New reward</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Reward</th><th>Terms</th><th>Cost</th><th>Stock</th><th>On the menu</th><th>State</th><th></th></tr></thead>
+          <tbody id="list-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const CATALOG = [
+  {id:"p1",title:"Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",world:"Pokémon",type:"Sealed",variants:[{id:"v1",title:"Default Title",price:1180}]},
+  {id:"p2",title:"Pokémon TCG Sealed Booster Box – Ninja Spinner (M4)",world:"Pokémon",type:"Sealed",variants:[{id:"v2",title:"Default Title",price:1080}]},
+  {id:"p3",title:"Pokémon TCG Sealed Booster Box – 30th Celebration (M6a)",world:"Pokémon",type:"Sealed",variants:[{id:"v3",title:"Default Title",price:1380}]},
+  {id:"p4",title:"Pokémon TCG Sealed Booster Box – Storm Emeralda (M6)",world:"Pokémon",type:"Sealed",variants:[{id:"v4",title:"Default Title",price:1180}]},
+  {id:"p5",title:"Pokémon TCG Sealed Booster Box – Mega Dream (M2a)",world:"Pokémon",type:"Sealed",variants:[{id:"v5",title:"Default Title",price:980}]},
+  {id:"p6",title:"Pokémon TCG Sealed Booster Box – Inferno X (M2)",world:"Pokémon",type:"Sealed",variants:[{id:"v6",title:"Default Title",price:980}]},
+  {id:"p7",title:"Pokémon TCG Booster Pack – Abyss Eye (M5)",world:"Pokémon",type:"Sealed",variants:[{id:"v7",title:"Single pack",price:48},{id:"v7b",title:"Sleeve of 10",price:460}]},
+  {id:"p8",title:"One Piece Card Game Booster Box – OP-12",world:"One Piece",type:"Sealed",variants:[{id:"v8",title:"Japanese",price:720},{id:"v8b",title:"English",price:880}]},
+  {id:"p9",title:"Charizard ex 199/165 – PSA 10",world:"Pokémon",type:"Graded single",variants:[{id:"v9",title:"Cert 8812 3341",price:4200}]},
+  {id:"p10",title:"Grade10 Card Sleeves – Matte Black",world:"Accessories",type:"Accessory",variants:[{id:"v10",title:"Pack of 100",price:60}]},
+  {id:"p11",title:"Potatoz Plush Keyring",world:"Accessories",type:"Merch",variants:[{id:"v11",title:"Default Title",price:120}]},
+];
+const WORLDS = ["Pokémon","One Piece","Accessories"];
+const TYPES = ["Sealed","Graded single","Accessory","Merch"];
+const variantsOf = () => CATALOG.flatMap(p => p.variants.map(v => ({id:v.id, product:p, variant:v})));
+const VARIANTS = variantsOf();
+const findV = id => VARIANTS.find(x => x.id===id);
+const hk = n => "HK$" + Math.round(n).toLocaleString("en-HK");
+
+const S = {
+  mode:"new", kind:"money_off", benefit:"fixed", scope:"variants",
+  productIds:[], variantIds:["v1"], singleVariant:"v11", worlds:[], types:[],
+  channels:"both", comb:"default", stock:"unlimited", window:"always", slugEdited:false,
+  basket:[{id:"v1",q:1},{id:"v10",q:2}],
+};
+
+const $ = id => document.getElementById(id);
+const val = id => $(id).value;
+const num = id => { const v = parseFloat(val(id)); return Number.isFinite(v) ? v : null; };
+const slugify = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,48);
+
+function setRadioGroup(attr, value){
+  document.querySelectorAll(`[data-${attr}]`).forEach(b => b.setAttribute("aria-checked", String(b.dataset[attr]===value)));
+}
+
+function pickerConfig(){
+  if (S.kind==="free_item") return {label:"The item", single:true, hint:"One variant. Its coupon takes 100% off it."};
+  if (S.kind==="gift") return {label:"The gift", single:true, hint:"One variant, added to the order as a free line."};
+  if (S.scope==="products") return {label:"Products", single:false, hint:"Every variant of a picked product counts."};
+  return {label:"Variants", single:false, hint:""};
+}
+function selectedIds(){
+  if (S.kind!=="money_off") return S.singleVariant ? [S.singleVariant] : [];
+  return S.scope==="products" ? S.productIds : S.variantIds;
+}
+function togglePick(id){
+  const c = pickerConfig();
+  if (c.single){ S.singleVariant = id; }
+  else if (S.scope==="products"){ S.productIds = S.productIds.includes(id) ? S.productIds.filter(x=>x!==id) : [...S.productIds,id]; }
+  else { S.variantIds = S.variantIds.includes(id) ? S.variantIds.filter(x=>x!==id) : [...S.variantIds,id]; }
+  $("f-search").value=""; $("results").hidden=true; render();
+}
+function renderPicked(){
+  const c = pickerConfig(); $("picker-label").textContent=c.label; $("picker-hint").textContent=c.hint;
+  const ids = selectedIds(); const box = $("picked");
+  if (!ids.length){ box.innerHTML = `<div class="none">Nothing picked yet. Search above.</div>`; return; }
+  box.innerHTML = ids.map(id => {
+    if (S.kind==="money_off" && S.scope==="products"){ const p = CATALOG.find(p=>p.id===id); return `<div class="it"><div class="thumb"></div><div class="t">${p.title}<small>${p.variants.length} variant${p.variants.length>1?"s":""} · ${p.world} · ${p.type}</small></div><button type="button" aria-label="Remove" data-unpick="${id}">×</button></div>`; }
+    const v = findV(id); return `<div class="it"><div class="thumb"></div><div class="t">${v.product.title}<small>${v.variant.title} · ${hk(v.variant.price)}</small></div><button type="button" aria-label="Remove" data-unpick="${id}">×</button></div>`;
+  }).join("");
+}
+function renderResults(){
+  const q = val("f-search").trim().toLowerCase(); const box = $("results");
+  if (!q){ box.hidden=true; return; }
+  const byProduct = S.kind==="money_off" && S.scope==="products";
+  const rows = byProduct
+    ? CATALOG.filter(p=>p.title.toLowerCase().includes(q)).slice(0,8).map(p=>`<button type="button" data-pick="${p.id}"><div class="thumb"></div><div>${p.title}<small style="display:block;color:var(--ink-2)">${p.variants.length} variant${p.variants.length>1?"s":""}</small></div></button>`)
+    : VARIANTS.filter(x=>(x.product.title+" "+x.variant.title).toLowerCase().includes(q)).slice(0,8).map(x=>`<button type="button" data-pick="${x.id}"><div class="thumb"></div><div>${x.product.title}<small style="display:block;color:var(--ink-2)">${x.variant.title} · ${hk(x.variant.price)}</small></div></button>`);
+  box.innerHTML = rows.length ? rows.join("") : `<div class="empty">Nothing in the catalog matches “${val("f-search").trim()}”.</div>`;
+  box.hidden=false;
+}
+function renderChips(){
+  $("worlds").innerHTML = WORLDS.map(w=>`<button type="button" class="chip" aria-pressed="${S.worlds.includes(w)}" data-world="${w}">${w}</button>`).join("");
+  $("types").innerHTML = TYPES.map(t=>`<button type="button" class="chip" aria-pressed="${S.types.includes(t)}" data-type="${t}">${t}</button>`).join("");
+}
+
+function definition(){
+  const min = num("f-min");
+  if (S.kind==="gift") return {kind:"gift", variantId:S.singleVariant, min: min};
+  if (S.kind==="free_item") return {kind:"product", benefit:{kind:"percentage",rate:100,cap:null}, target:{kind:"variants",ids:S.singleVariant?[S.singleVariant]:[]}, min: min||0};
+  const benefit = S.benefit==="fixed" ? {kind:"fixed",amount:num("f-amount")} : {kind:"percentage",rate:num("f-rate"),cap:num("f-cap")};
+  const target = S.scope==="whole_order" ? {kind:"whole_order"} : S.scope==="products" ? {kind:"products",ids:S.productIds} : S.scope==="variants" ? {kind:"variants",ids:S.variantIds} : {kind:"facets",worlds:S.worlds,types:S.types};
+  return {kind:"product", benefit, target, min: min||0};
+}
+function scopeWords(t){
+  if (t.kind==="whole_order") return "the whole order";
+  if (t.kind==="products"){ if(!t.ids.length) return "named products (none picked yet)"; return t.ids.length===1 ? CATALOG.find(p=>p.id===t.ids[0]).title : `${t.ids.length} named products`; }
+  if (t.kind==="variants"){ if(!t.ids.length) return "named variants (none picked yet)"; if (t.ids.length===1){const v=findV(t.ids[0]); return `${v.product.title} (${v.variant.title})`;} return `${t.ids.length} named variants`; }
+  const parts=[]; if(t.worlds.length) parts.push(t.worlds.join(" or ")); if(t.types.length) parts.push(t.types.join(" or ").toLowerCase()); return parts.length ? `everything in ${parts.join(", ")}` : "a catalog filter (nothing chosen yet)";
+}
+function shortTerms(d, days, ch){
+  const bits=[];
+  if (d.kind==="gift"){ const v=d.variantId?findV(d.variantId):null; bits.push(v?`Gift: ${v.product.title}`:"Gift"); if(d.min) bits.push(`over ${hk(d.min)}`); }
+  else { const b=d.benefit; const t=d.target;
+    const cut = b.kind==="fixed" ? (b.amount?hk(b.amount):"HK$—") : (b.rate===100 ? "Free" : `${b.rate??"—"}%`);
+    const sc = t.kind==="whole_order" ? "order" : t.kind==="facets" ? "filter" : `${t.ids.length} ${t.kind===`products`?"product":"variant"}${t.ids.length===1?"":"s"}`;
+    bits.push(`${cut} off ${sc}`); if (b.kind==="percentage"&&b.cap) bits.push(`cap ${hk(b.cap)}`); if (d.min) bits.push(`min ${hk(d.min)}`); }
+  bits.push(`${days} days`); if (ch!=="both") bits.push(ch==="online"?"online only":"till only");
+  return bits.join(" · ");
+}
+function sentence(d, days, ch, comb){
+  const where = ch==="both" ? "online and at the till" : ch==="online" ? "online only" : "at the till only";
+  let s;
+  if (d.kind==="gift"){ const v=d.variantId?findV(d.variantId):null;
+    s = `Adds <b>${v?`${v.product.title} (${v.variant.title})`:"the gift"}</b> to the order free${d.min?` once the basket holds <b>${hk(d.min)}</b> or more`:" — <span style='color:var(--err)'>a gift needs a minimum spend</span>"}.`;
+  } else { const b=d.benefit, t=d.target;
+    const cut = b.kind==="fixed" ? `<b>${b.amount?hk(b.amount):"an amount"}</b>` : b.rate===100 ? `<b>100%</b>` : `<b>${b.rate??"—"}%</b>${b.cap?`, at most ${hk(b.cap)}`:""}`;
+    s = `Takes ${cut} off <b>${scopeWords(t)}</b>${d.min?`, on baskets of <b>${hk(d.min)}</b> or more`:""}.`;
+  }
+  const stack = comb.kind==="default" ? "Stacks with the shop's product and shipping discounts, not its order discounts (store default)."
+    : (()=>{const y=[];const n=[]; (comb.product?y:n).push("product"); (comb.shipping?y:n).push("shipping"); (comb.order?y:n).push("order"); return `Stacks with ${y.length?y.join(", ")+" discounts":"no shop discount"}${n.length?`, not ${n.join(", ")}`:""}.`;})();
+  return `${s} Valid <b>${days??"—"} days</b> from redemption, ${where}. ${stack}`;
+}
+function evaluate(d){
+  const lines = S.basket.map(l=>({...findV(l.id), q:l.q})).filter(l=>l.q>0);
+  const goods = lines.reduce((s,l)=>s+l.variant.price*l.q,0);
+  if (d.min && goods < d.min) return {ok:false, why:`Under the minimum spend`, detail:`Basket holds ${hk(goods)}, the coupon asks for ${hk(d.min)}.`, goods};
+  if (d.kind==="gift"){ if(!d.variantId) return {ok:false,why:"No gift picked",detail:"",goods}; if (lines.some(l=>l.id===d.variantId)) return {ok:false,why:"Gift already in the basket",detail:"The member already holds the gift's variant.",goods}; const v=findV(d.variantId); return {ok:true, why:`Adds ${v.product.title} free`, detail:`Worth ${hk(v.variant.price)}. Basket stays ${hk(goods)}.`, goods}; }
+  const t=d.target; const eligible = lines.filter(l => t.kind==="whole_order" || (t.kind==="variants" && t.ids.includes(l.id)) || (t.kind==="products" && t.ids.includes(l.product.id)) || (t.kind==="facets" && (!t.worlds.length||t.worlds.includes(l.product.world)) && (!t.types.length||t.types.includes(l.product.type))));
+  if (!eligible.length) return {ok:false, why:"Nothing in the basket matches the scope", detail:`Basket holds ${hk(goods)}.`, goods};
+  const pool = eligible.reduce((s,l)=>s+l.variant.price*l.q,0);
+  let cut = d.benefit.kind==="fixed" ? Math.min(d.benefit.amount||0, pool) : Math.min(pool*(d.benefit.rate||0)/100, d.benefit.cap ?? Infinity);
+  if (!cut) return {ok:false, why:"Nothing to take off", detail:"The discount is empty.", goods};
+  return {ok:true, why:`Takes ${hk(cut)} off`, detail:`${hk(goods)} → ${hk(goods-cut)} · ${eligible.length} of ${lines.length} line${lines.length>1?"s":""} eligible`, goods};
+}
+function renderBasket(d){
+  $("lines").innerHTML = S.basket.map((l,i)=>{const v=findV(l.id);return `<div class="line"><span>${v.product.title}<span class="s" style="display:block;color:var(--ink-3);font-size:12px">${v.variant.title} · ${hk(v.variant.price)}</span></span><input class="q" type="number" min="0" value="${l.q}" data-line="${i}" aria-label="Quantity"><span class="p">${hk(v.variant.price*l.q)}</span></div>`;}).join("");
+  const r = evaluate(d); $("bk-total").textContent = hk(r.goods);
+  $("verdict").className = "verdict " + (r.ok?"ok":"no"); $("verdict").innerHTML = `<b>${r.ok?"✓ ":"✕ "}${r.why}</b>${r.detail}`;
+}
+function missing(d, days){
+  if (d.kind==="gift" && !d.variantId) return "Pick the gift to save.";
+  if (d.kind==="gift" && !d.min) return "A gift needs a minimum spend to ride on.";
+  if (d.kind==="product"){ if (d.benefit.kind==="fixed" && !d.benefit.amount) return "Enter the amount to save."; if (d.benefit.kind==="percentage" && !d.benefit.rate) return "Enter the rate to save."; if (d.benefit.kind==="percentage" && d.benefit.rate>100) return "A rate cannot pass 100%."; const t=d.target; if ((t.kind==="variants"||t.kind==="products") && !t.ids.length) return `Pick at least one ${t.kind==="products"?"product":"variant"} to save.`; if (t.kind==="facets" && !t.worlds.length && !t.types.length) return "Choose at least one world or type to save."; }
+  if (!days) return "Say how many days the coupon is valid.";
+  if (!val("f-name").trim()) return "Give the reward a name.";
+  if (!num("f-cost")) return "Price the reward in points.";
+  if (S.window==="scheduled" && val("f-from") && val("f-until") && val("f-from") > val("f-until")) return "The window ends before it starts.";
+  return null;
+}
+function render(){
+  const editing = S.mode==="edit";
+  $("ed-title").textContent = editing ? val("f-name") || "Edit reward" : "New reward";
+  $("ed-sub").textContent = editing ? "Members who already redeemed keep the price and terms they bought, whatever you change here. Changes reach the menu on save." : "A reward is a coupon a member buys with points. Members who already redeemed keep the price and terms they bought, whatever you change here.";
+  $("save").textContent = editing ? "Save reward" : "Create reward";
+  $("kind-edit-note").hidden = !editing;
+  setRadioGroup("kind", S.kind); setRadioGroup("benefit", S.benefit); setRadioGroup("scope", S.scope); setRadioGroup("ch", S.channels); setRadioGroup("stock", S.stock); setRadioGroup("win", S.window);
+  $("money-fields").hidden = S.kind!=="money_off";
+  $("cut-title").textContent = S.kind==="gift" ? "What it adds" : "What it takes off";
+  $("fixed-row").hidden = S.benefit!=="fixed"; $("pct-row").hidden = S.benefit!=="percentage";
+  const showPicker = S.kind!=="money_off" || S.scope==="products" || S.scope==="variants";
+  $("picker-field").hidden = !showPicker; $("facets-field").hidden = !(S.kind==="money_off" && S.scope==="facets");
+  $("min-label").textContent = "Minimum spend"; $("min-hint").textContent = S.kind==="gift" ? "Required. What the basket must hold to earn the gift." : "What the basket must hold before the coupon applies. Empty for none.";
+  $("f-min").placeholder = S.kind==="gift" ? "Required" : "None";
+  const facetsOnline = S.kind==="money_off" && S.scope==="facets";
+  $("c-in_store").disabled = facetsOnline; $("c-both").disabled = facetsOnline; if (facetsOnline) S.channels="online"; setRadioGroup("ch", S.channels);
+  $("ch-hint").textContent = facetsOnline ? "Online only: the till cannot read a catalog filter." : "";
+  const chosen = S.comb==="chosen"; document.querySelector('input[name=comb][value=chosen]').checked = chosen; document.querySelector('input[name=comb][value=default]').checked = !chosen; $("comb-checks").hidden = !chosen;
+  $("stock-row").hidden = S.stock!=="limited"; $("win-row").hidden = S.window!=="scheduled";
+  const days = num("f-days"); const d = new Date(); d.setDate(d.getDate()+(days||0)); $("days-hint").textContent = days ? `Redeemed today, it expires ${d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}.` : "";
+  if (!editing && !S.slugEdited) $("slug").textContent = slugify(val("f-name")) || "—";
+  $("slug-edit").hidden = editing; $("slug-hint").textContent = editing ? "Permanent: a member's history points at it." : "Proposed from the name. Permanent once created: a member's history points at it.";
+  const winBad = S.window==="scheduled" && val("f-from") && val("f-until") && val("f-from") > val("f-until"); $("win-hint").hidden = !winBad;
+  renderPicked(); renderChips();
+  const def = definition(); const comb = {kind:S.comb, product:$("cb-product").checked, shipping:$("cb-shipping").checked, order:$("cb-order").checked};
+  $("pv-name").textContent = val("f-name").trim() || "Untitled reward"; $("pv-desc").textContent = val("f-desc").trim(); $("pv-desc").hidden = !val("f-desc").trim();
+  $("pv-pts").textContent = `${num("f-cost")??"—"} pts`;
+  const lim=[]; if (days) lim.push(`Valid ${days} days`); if (def.min) lim.push(`Min spend ${hk(def.min)}`); if (S.channels!=="both") lim.push(S.channels==="online"?"Online only":"In store only"); if (S.stock==="limited") lim.push("Limited stock");
+  $("pv-lim").textContent = lim.join(" · ");
+  $("pv-sent").innerHTML = sentence(def, days, S.channels, comb);
+  renderBasket(def);
+  const why = missing(def, days); $("why").textContent = why ?? (editing ? "Ready to save." : "Ready to create."); $("why").className = "why" + (why?"":" ok"); $("save").disabled = !!why;
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button, a"); if (!b) return;
+  if (b.dataset.view || b.dataset.viewLink){ e.preventDefault(); showView(b.dataset.view || b.dataset.viewLink); return; }
+  if (b.dataset.kind){ S.kind=b.dataset.kind; if (S.kind==="gift" && !num("f-min")) $("f-min").value=""; render(); }
+  if (b.dataset.benefit){ S.benefit=b.dataset.benefit; render(); }
+  if (b.dataset.scope){ S.scope=b.dataset.scope; if (S.scope!=="facets" && S.channels==="online" && !S.chWasOnline) S.channels="both"; render(); }
+  if (b.dataset.ch && !b.disabled){ S.channels=b.dataset.ch; S.chWasOnline = S.channels==="online"; render(); }
+  if (b.dataset.stock){ S.stock=b.dataset.stock; render(); }
+  if (b.dataset.win){ S.window=b.dataset.win; render(); }
+  if (b.dataset.pick){ togglePick(b.dataset.pick); }
+  if (b.dataset.unpick){ togglePick(b.dataset.unpick); }
+  if (b.dataset.world){ S.worlds = S.worlds.includes(b.dataset.world) ? S.worlds.filter(w=>w!==b.dataset.world) : [...S.worlds,b.dataset.world]; render(); }
+  if (b.dataset.type){ S.types = S.types.includes(b.dataset.type) ? S.types.filter(t=>t!==b.dataset.type) : [...S.types,b.dataset.type]; render(); }
+  if (b.id==="slug-edit"){ S.slugEdited=true; $("f-slug").value=$("slug").textContent; $("f-slug").hidden=false; $("slug").hidden=true; b.hidden=true; $("f-slug").focus(); }
+  if (b.dataset.editRow){ loadEdit(b.dataset.editRow); showView("edit"); }
+  if (b.dataset.dupRow){ loadEdit(b.dataset.dupRow); S.mode="new"; S.slugEdited=false; $("f-name").value = val("f-name") + " (copy)"; render(); showView("new", true); }
+});
+document.addEventListener("input", e => {
+  if (e.target.id==="f-search") return renderResults();
+  if (e.target.id==="f-slug"){ $("slug").textContent = slugify(e.target.value) || "—"; }
+  if (e.target.dataset.line!==undefined){ S.basket[+e.target.dataset.line].q = Math.max(0, parseInt(e.target.value)||0); }
+  if (e.target.name==="comb"){ S.comb = e.target.value; }
+  render();
+});
+document.addEventListener("change", e => { if (e.target.name==="comb"){ S.comb=e.target.value; render(); } });
+document.addEventListener("click", e => { if (!e.target.closest(".search")) $("results").hidden=true; });
+
+const REWARDS = [
+  {slug:"t3-order-fixed30", name:"T3 HK$30 off order", kind:"money_off", benefit:"fixed", amount:30, scope:"whole_order", days:30, ch:"both", cost:30, stock:null, state:"live", win:null},
+  {slug:"t1-order-10pct-cap100", name:"T1 10% off order, cap HK$100", kind:"money_off", benefit:"percentage", rate:10, cap:100, scope:"whole_order", days:30, ch:"both", cost:50, stock:null, state:"live", win:null},
+  {slug:"t2-order-10pct-min300", name:"T2 10% off order, min HK$300", kind:"money_off", benefit:"percentage", rate:10, cap:null, min:300, scope:"whole_order", days:30, ch:"both", cost:50, stock:null, state:"live", win:null},
+  {slug:"t4-facet-pokemon-10pct", name:"T4 10% off Pokémon", kind:"money_off", benefit:"percentage", rate:10, cap:null, scope:"facets", worlds:["Pokémon"], types:[], days:30, ch:"online", cost:50, stock:null, state:"live", win:null},
+  {slug:"t5-variant-fixed20", name:"T5 HK$20 off one variant", kind:"money_off", benefit:"fixed", amount:20, scope:"variants", ids:["v1"], days:30, ch:"both", cost:20, stock:null, state:"archived", win:null},
+  {slug:"t6-gift-potatoz", name:"T6 Free item over HK$1000", kind:"gift", giftId:"v11", min:1000, days:30, ch:"both", cost:80, stock:null, state:"live", win:null},
+  {slug:"free-sleeves", name:"A free pack of sleeves", kind:"free_item", giftId:"v10", days:14, ch:"in_store", cost:120, stock:40, state:"scheduled", win:"1 Oct → 31 Oct 2026"},
+];
+function termsOf(r){
+  const d = r.kind==="gift" ? {kind:"gift",variantId:r.giftId,min:r.min} : r.kind==="free_item" ? {kind:"product",benefit:{kind:"percentage",rate:100,cap:null},target:{kind:"variants",ids:[r.giftId]},min:r.min||0}
+    : {kind:"product",benefit: r.benefit==="fixed"?{kind:"fixed",amount:r.amount}:{kind:"percentage",rate:r.rate,cap:r.cap}, target: r.scope==="whole_order"?{kind:"whole_order"}:r.scope==="facets"?{kind:"facets",worlds:r.worlds,types:r.types}:{kind:"variants",ids:r.ids}, min:r.min||0};
+  return shortTerms(d, r.days, r.ch);
+}
+function renderList(){
+  $("list-body").innerHTML = REWARDS.map(r=>`<tr><td><strong style="font-weight:500">${r.name}</strong><span class="s">${r.slug}</span></td><td>${termsOf(r)}</td><td class="num">${r.cost}</td><td class="num" style="color:var(--ink-2)">${r.stock??"unlimited"}</td><td style="color:var(--ink-2)">${r.win??"Now, until archived"}</td><td><span class="badge ${r.state==="live"?"live":r.state==="scheduled"?"sched":"arch"}">${r.state}</span></td><td><div class="acts"><button class="btn sm" type="button" data-edit-row="${r.slug}">Edit</button><button class="btn sm" type="button" data-dup-row="${r.slug}">Duplicate</button>${r.state!=="archived"?`<button class="btn sm" type="button">Archive</button>`:""}</div></td></tr>`).join("");
+}
+function loadEdit(slug){
+  const r = REWARDS.find(x=>x.slug===slug); S.mode="edit"; S.kind=r.kind; S.slugEdited=true;
+  $("f-name").value=r.name; $("f-desc").value=""; $("f-cost").value=r.cost; $("slug").textContent=r.slug; $("f-days").value=r.days; S.channels=r.ch; S.chWasOnline=r.ch==="online";
+  S.stock = r.stock===null?"unlimited":"limited"; if (r.stock!==null) $("f-stock").value=r.stock; S.window = r.win?"scheduled":"always";
+  $("f-min").value = r.min ?? "";
+  if (r.kind==="money_off"){ S.benefit=r.benefit; if(r.benefit==="fixed") $("f-amount").value=r.amount; else { $("f-rate").value=r.rate; $("f-cap").value=r.cap??""; } S.scope=r.scope; S.variantIds=r.ids??[]; S.worlds=r.worlds??[]; S.types=r.types??[]; }
+  else { S.singleVariant=r.giftId; }
+  $("f-slug").hidden=true; $("slug").hidden=false;
+  render();
+}
+function showView(v, keep){
+  document.querySelectorAll(".demo-tabs [role=tab]").forEach(t=>t.setAttribute("aria-selected", String(t.dataset.view===v)));
+  $("view-list").hidden = v!=="list"; $("view-editor").hidden = v==="list";
+  if (v==="new" && !keep){ S.mode="new"; S.slugEdited=false; $("f-slug").hidden=true; $("slug").hidden=false; $("slug-edit").hidden=false; render(); }
+  if (v==="edit" && S.mode!=="edit") loadEdit("t5-variant-fixed20");
+  window.scrollTo({top:0});
+}
+renderList(); render();
+</script>
+
+</body></html>

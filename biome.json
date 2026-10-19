@@ -18,6 +18,7 @@
       "!packages/ui/src/blocks/loyalty-membership/wallet-artwork",
       "!.claude/skills/*/workflow.js",
       "!openspec/changes/**/*.html",
+      "!docs/references/**/*.html",
       "!openspec/changes/**/implementation.json",
       "!openspec/changes/**/acceptance.json",
       "!openspec/changes/**/acceptance"
