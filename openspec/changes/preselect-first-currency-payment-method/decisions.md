@@ -9,7 +9,7 @@
 
 - Confirming for the winner; the winner still confirms the address, the
   currency and the method together.
-- Changing what each currency offers, the fee wording at the choice, or
+- Changing what each currency offers, or
   the currency-switch rule — a switch still keeps only a method the new
   currency offers.
 - The account address book; only the payment step's opening selection
@@ -23,6 +23,7 @@
 | Q2 | Which method is preselected? | The first the settlement currency offers — card where a card fee rule applies, else the first offered bank rail | Card always, even where the currency cannot take it |
 | Q3 | What does a single-currency order show? | `Pay in {currency}` beside the label, no picker; the first offered method is preselected the same way | A one-entry picker, or the picker removed with the currency unnamed |
 | Q4 | Does a currency switch re-preselect? | No — the keep-or-clear rule stands: a method the new currency offers stays; otherwise the choice clears and a confirmation with no method is refused | Re-preselecting on every switch, which would silently re-arm a method the winner just moved away from |
+| Q5 | Do bank rails read a fee line at the choice? | No — card keeps its configured fee wording; bank rails read no fee line, since no fee is required for those options — Product (@tangconst), 2026-10-20 | Keeping `Bank fee set on your invoice`, which implies a fee the winner does not pay |
 
 ## Raised
 

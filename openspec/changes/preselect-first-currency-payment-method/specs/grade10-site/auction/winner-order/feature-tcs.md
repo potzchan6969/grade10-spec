@@ -81,7 +81,7 @@
 
 * HKD is the selected settlement currency.
 * Card reads `Card fee about 3.4% + a fixed amount` and is selected.
-* FPS and HK Local each read `Bank fee set on your invoice`, naming no amount.
+* FPS and HK Local read no fee line.
 
 <!-- trace:case id=g10.auction-winner-order.TC-wq7 rev=1 covers=g10.auction-winner-order.SC-zk3,g10.auction-winner-order.SC-mw8 -->
 ### g10.auction-winner-order.US25-TC9: The first offered method is preselected, and one currency names itself
