@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T08:08:55.257Z",
+  "generatedAt": "2026-10-20T15:04:25.905Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -107,6 +107,7 @@
     "Text Area": "warn",
     "Text Input": "skipped",
     "Tier Card": "warn",
+    "Tier Info Card": "warn",
     "Toast": "ok",
     "Toast / Close": "skipped",
     "Tooltip": "ok",
@@ -968,6 +969,10 @@
     "7204-11360": "Media Card",
     "7204-11432": "Media Card",
     "7204-11433": "Media Card",
+    "7227-1069": "Tier Info Card",
+    "7227-1070": "Tier Info Card",
+    "7227-863": "Tier Info Card",
+    "7229-7427": "How Points Work",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1140,6 +1145,9 @@
     ],
     "Tier Card": [
       "Tier Card.tier: no getEnum('tier') in any template — this Figma axis reaches no code prop"
+    ],
+    "Tier Info Card": [
+      "Tier Info Card: no code component (looked for src/components/**/tierinfocard.tsx or tierinfocard.tsx)"
     ],
     "Vault Asset Card": [
       "Vault Asset Card: no code component (looked for src/components/**/vaultassetcard.tsx or vaultassetcard.tsx)"
