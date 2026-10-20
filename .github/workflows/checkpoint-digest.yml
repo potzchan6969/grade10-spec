@@ -110,10 +110,32 @@ jobs:
             --cache-control "no-store" --only-show-errors
           echo "URL=$HOST/$PREFIX/$SHORT/index.html" >> "$GITHUB_ENV"
 
+      # One link per branch: its index.html opens the newest digest, and every
+      # digest's day bar reads days.json to reach the days before and after it.
+      # A list that cannot be read for any reason but its absence stops the run,
+      # so a failed read never starts the days over.
+      - name: Add the digest to the branch's days
+        run: |
+          endpoint="https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com"
+          if found=$(aws s3api head-object --bucket "$BUCKET" --key "$PREFIX/days.json" --endpoint-url "$endpoint" 2>&1); then
+            aws s3 cp "s3://$BUCKET/$PREFIX/days.json" days.json --endpoint-url "$endpoint" --only-show-errors
+          elif grep -q -E '\(404\)|Not Found' <<<"$found"; then
+            echo '{"days":[]}' > days.json
+          else
+            echo "$found"
+            exit 1
+          fi
+          node .claude/skills/checkpoint-digest/scripts/days.mjs days.json page/.digest/digest.json --commit "$SHORT" --out days
+          aws s3 cp days/days.json "s3://$BUCKET/$PREFIX/days.json" --endpoint-url "$endpoint" \
+            --content-type application/json --cache-control "no-store" --only-show-errors
+          aws s3 cp days/index.html "s3://$BUCKET/$PREFIX/index.html" --endpoint-url "$endpoint" \
+            --content-type "text/html; charset=utf-8" --cache-control "no-store" --only-show-errors
+          echo "LATEST=$HOST/$PREFIX/index.html" >> "$GITHUB_ENV"
+
       - name: Post the link to Slack
         run: |
-          node .claude/skills/checkpoint-digest/scripts/slack.mjs page/.digest/digest.json --url "$URL" --send | tee posted.json
-          echo "$URL" >> "$GITHUB_STEP_SUMMARY"
+          node .claude/skills/checkpoint-digest/scripts/slack.mjs page/.digest/digest.json --url "$URL" --latest "$LATEST" --send | tee posted.json
+          printf '%s\n\nEvery day: %s\n' "$URL" "$LATEST" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Move the checkpoint
         run: |

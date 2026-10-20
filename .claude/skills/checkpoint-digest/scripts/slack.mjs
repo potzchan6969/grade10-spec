@@ -1,5 +1,6 @@
 // Post a published digest to Slack: one message drawn from its data, with the page's link.
-// node slack.mjs <data.json> --url <page link> [--channel <id>] [--send] - without --send it prints what it would post and calls nothing.
+// node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--channel <id>] [--send] - without --send it prints what it would post and calls nothing.
+// The button opens --latest, the link that always shows the newest digest; each title opens its card on this digest's page.
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -14,14 +15,16 @@ const option = (name) => {
   return i === -1 ? undefined : args[i + 1];
 };
 const file = args.find(
-  (a, i) => !a.startsWith("--") && !/^--(url|channel)$/.test(args[i - 1]),
+  (a, i) =>
+    !a.startsWith("--") && !/^--(url|latest|channel)$/.test(args[i - 1]),
 );
 const url = option("url");
 if (!file || !url)
   fail(
-    "usage: node slack.mjs <data.json> --url <page link> [--channel <id>] [--send]",
+    "usage: node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--channel <id>] [--send]",
   );
 const page = url.split("#")[0];
+const latest = option("latest") ?? page;
 const data = JSON.parse(readFileSync(resolve(file), "utf8"));
 const channel = option("channel") ?? process.env.SLACK_CHANNEL;
 const token = process.env.SLACK_BOT_TOKEN;
@@ -79,7 +82,7 @@ function blocks() {
       {
         type: "button",
         text: { type: "plain_text", text: "Open the digest" },
-        url: page,
+        url: latest,
         style: "primary",
       },
     ],

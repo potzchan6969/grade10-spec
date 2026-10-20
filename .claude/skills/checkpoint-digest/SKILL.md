@@ -48,10 +48,12 @@ The workflow uploads the page, posts the link, then moves the checkpoint, in tha
 The post repeats the top of the page and its At a glance list, in the same order.
 
 - **Post head** - the title; the days the digest covers, the repository and branch, and the range, which opens GitHub's comparison of the two commits
-- **Post lead** - the reason, the numbers and an Open the digest button
+- **Post lead** - the reason, the numbers and an Open the digest button, which opens the branch's one link
 - **Post changes** - grouped by area as on the page: each change's kind, its title linking to its card, and who notices it; past 12 changes, one link to the rest
 - **Post follow-ups** - each owner first, linked to its row on the page
 - **Page** - every change drawn, at `reports/grade10-spec/digest/<branch>/<commit>/` on the reports host, behind the team's Cloudflare login; the host drops it 30 days after upload
+- **One link** - `reports/grade10-spec/digest/<branch>/index.html` always opens the newest digest; the run keeps `days.json` beside it (`scripts/days.mjs`), the digests of the last 29 days, newest first
+- **Days** - every digest page carries a day bar from that list: Earlier, a pick of every day, and Later; a day with two digests names each by its Hong Kong time
 - **Title** - `<Branch> Branch Digest`, such as `Main Branch Digest`
 - **Reason** - the two or three moves that matter most, in one line: `3 site pages proposed, the Accounts pages rewritten, and the company site catalogs added`
 - **Numbers** - the counts a reader would quote, four at most, each recounted from `facts.json`: commits, pull requests merged, changes proposed, changes archived

@@ -342,6 +342,35 @@
     color: var(--fg);
     font-weight: 650;
   }
+  .days {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+  .days a,
+  .days .off {
+    padding: 4px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--fg);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .days .off {
+    color: var(--muted);
+  }
+  .days select {
+    min-width: 0;
+    max-width: 100%;
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--bg);
+    color: var(--fg);
+    font: inherit;
+  }
   .numbers {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -2431,6 +2460,42 @@
       return new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", year: year ? "numeric" : undefined, timeZone: "UTC" }).format(d);
     }
 
+    // A published digest sits in its commit's folder beside days.json, the list its run keeps; anywhere else the bar stays hidden.
+    async function dayBar(bar) {
+      let all;
+      try {
+        const answer = await fetch("../days.json", { cache: "no-store" });
+        if (!answer.ok) return;
+        all = (await answer.json()).days ?? [];
+      } catch {
+        return;
+      }
+      const here = location.pathname
+        .split("/")
+        .filter((p) => p && p !== "index.html")
+        .at(-1);
+      const at = all.findIndex((d) => d.commit === here);
+      if (all.length < 2 || at === -1) return;
+      const href = (d) => `../${d.commit}/index.html`;
+      const time = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Hong_Kong" });
+      const label = (d) => {
+        const day = toDay(d.date);
+        const text = day ? dayText(day, false) : d.date;
+        return all.filter((o) => o.date === d.date).length > 1 && d.at ? `${text}, ${time.format(new Date(d.at))}` : text;
+      };
+      const step = (d, words) => (d ? h("a", { href: href(d), title: d.reason }, words) : h("span", { class: "off", "aria-disabled": "true" }, words));
+      bar.append(
+        step(all[at + 1], "\u2039 Earlier"),
+        h(
+          "select",
+          { "aria-label": "Day", onchange: (e) => location.assign(href(all[e.target.selectedIndex])) },
+          all.map((d, i) => h("option", { selected: i === at }, label(d))),
+        ),
+        step(all[at - 1], "Later \u203a"),
+      );
+      bar.hidden = false;
+    }
+
     // Word by word, what a value lost and what it gained.
     function wordDiff(a, b) {
       const split = (s) => String(s).match(/\s+|[\p{L}\p{N}_'’]+|[^\s\p{L}\p{N}_'’]/gu) ?? [];
@@ -2769,7 +2834,9 @@
               ? [h("strong", {}, dayText(to, true))]
               : [h("strong", {}, dayText(from, from.getUTCFullYear() !== to.getUTCFullYear())), " to ", h("strong", {}, dayText(to, true))]
             : null;
-        top.append(h("p", { class: "lead", html: md(DATA.reason) }), h("p", { class: "period run" }, dotted([days ? h("span", {}, days) : null, range])));
+        const bar = h("nav", { class: "days", "aria-label": "Digests by day", hidden: true });
+        top.append(h("p", { class: "lead", html: md(DATA.reason) }), h("p", { class: "period run" }, dotted([days ? h("span", {}, days) : null, range])), bar);
+        dayBar(bar);
       } else {
         top.append(verdict());
       }

@@ -61,6 +61,8 @@ const serve = (ctx) =>
     if (url === ORIGIN)
       return route.fulfill({ body: doc, contentType: "text/html" });
     const path = join(dir, decodeURIComponent(new URL(url).pathname));
+    // A digest's day list sits beside its published folder, never beside a draft; the bar stays hidden without it.
+    if (url === `${ORIGIN}days.json`) return route.fulfill({ status: 404 });
     if (!existsSync(path)) {
       note("FAIL", `missing file ${url.slice(ORIGIN.length)}`);
       return route.fulfill({ status: 404 });
