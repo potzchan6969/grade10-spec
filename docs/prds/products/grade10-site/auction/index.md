@@ -7,7 +7,7 @@ Grade10 Auction sells graded cards one lot at a time, and it is open to the
 public. A collector signs in,
 finds a lot, bids by naming the most they will pay, and after the close pays
 the invoice and receives the card. The four chapters follow that order: each
-states what runs, marks what is confirmed and being built and what is still
+states what runs, marks what is decided and not yet live, and what is still
 open, and names the capability that holds the rules.
 
 ## Chapters
