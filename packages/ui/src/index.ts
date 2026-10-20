@@ -432,11 +432,6 @@ export {
   type RewardMenuProps,
 } from "./blocks/loyalty-membership/reward-menu";
 export {
-  ScanPlate,
-  type ScanPlateProps,
-  type ScanPlateVariant,
-} from "./blocks/loyalty-membership/scan-plate";
-export {
   TierCard,
   type TierCardCopy,
   type TierCardProps,

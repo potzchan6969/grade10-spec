@@ -30,19 +30,9 @@
     "classes": "w-full bg-card p-5"
   },
   {
-    "label": "scan-plate/qr-flat",
+    "label": "member-pass/qr",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2266",
     "classes": "w-full max-w-56"
-  },
-  {
-    "label": "scan-plate/short-code-label",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2269",
-    "classes": "text-secondary-foreground uppercase"
-  },
-  {
-    "label": "scan-plate/short-code",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2272",
-    "classes": "font-sans text-2xl leading-8 font-medium text-foreground"
   },
   {
     "label": "member-pass/divider",
