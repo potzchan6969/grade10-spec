@@ -59,7 +59,7 @@
       "cardjoy": {
         "region": "中国内地",
         "title": "CARDJOY × Grade10",
-        "dek": "中国内地最大规模的 TCG 卡牌展会，盛大登陆杭州与上海。",
+        "dek": "中国内地最大规模的 TCG 卡牌展会，盛大登陆杭州、上海与广州。",
         "caption": "CARDJOY x Grade10 上海站",
         "poster": "CARDJOY × Grade10 精彩片段"
       }
@@ -80,6 +80,11 @@
         "title": "Seoul Auction 宝可梦卡牌展览及销售活动",
         "desc": "集换式卡牌首次在亚洲以高端艺术品的形式隆重登场。"
       },
+      "guangzhou2026": {
+        "date": "2026年9月",
+        "title": "CARDJOY x Grade10 广州站",
+        "desc": "广州站首度登陆广交会展馆，场地扩大至十万平方呎，汇聚超过 300 家参展商及超过 20,000 名参会人士。"
+      },
       "shanghai2026": {
         "date": "2026年6月",
         "title": "CARDJOY x Grade10 上海站",
@@ -96,6 +101,12 @@
     "eyebrow": "展会记录",
     "title": "见证收藏家社群的焦点时刻",
     "items": {
+      "guangzhou2026": {
+        "title": "CARDJOY x Grade10 广州站",
+        "desc": "CARDJOY x Grade10 首度登陆广州广交会展馆，场地扩大至十万平方呎，汇聚超过 300 家来自全球的参展商，吸引超过 20,000 名参会人士，并设历来最大的 JOYCon 卡牌展区。",
+        "photo": "广州广交会展馆内的 CARDJOY x Grade10 卡展现场。",
+        "facts": "十万平方呎 | 300+ 参展商 | 广州"
+      },
       "privateSale2026": {
         "title": "Seoul Auction 宝可梦卡牌展览及销售活动",
         "desc": "Seoul Auction × ZZZ × Grade10：由国际顶级拍卖行 Seoul Auction、ZZZ 与 Grade10 携手举办的卡牌展览及私人销售活动。这是集换式卡牌首次在亚洲以高端艺术品的形式隆重登场。",
@@ -133,6 +144,12 @@
     "title": "步步足迹　精彩见证",
     "latest": "最新",
     "events": {
+      "guangzhou2026": {
+        "date": "2026年9月",
+        "city": "广州",
+        "title": "CARDJOY x Grade10 广州站",
+        "recap": "首度登陆广交会展馆，汇聚超过 300 家参展商，吸引超过 20,000 名参会人士。"
+      },
       "summer2026": {
         "date": "2026年6月",
         "city": "香港",

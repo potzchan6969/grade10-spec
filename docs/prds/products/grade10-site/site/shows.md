@@ -23,16 +23,16 @@ answers without a session, like any public surface —
   pill link list that scrolls to each chapter: Hong Kong (Grade10 FEST HK
   with video and two editions), Overseas Partnership (Seoul Auction ×
   Gana Art with photo and caption), Chinese Mainland (CARDJOY × Grade10
-  with video and two editions)
+  with video and three editions)
 - 🚧 **Edition cards** — each edition carries a photo carousel, a date, a
   description, and a Press Release link to its `/press-releases/{slug}`
   article
 - 🚧 **Video presentations** — two chapters carry a poster-first YouTube
   container: the poster and a play affordance, and on click the embed
   plays inside the same container
-- 🚧 **Event records** — Every Show. A Milestone. lists the five editions
-  newest first: Seoul Auction, FEST Summer 2026, Shanghai, Hangzhou,
-  Festival 2025
+- 🚧 **Event records** — Every Show. A Milestone. lists the six editions
+  newest first: Guangzhou, Seoul Auction, FEST Summer 2026, Shanghai,
+  Hangzhou, Festival 2025
 - 🚧 **Responsive** — wide viewports draw the two-column hero, stats
   beside the photo, and editions side by side; narrow viewports stack
   everything at the page inset

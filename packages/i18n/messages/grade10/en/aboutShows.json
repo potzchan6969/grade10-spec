@@ -59,7 +59,7 @@
       "cardjoy": {
         "region": "Chinese Mainland",
         "title": "CARDJOY × Grade10",
-        "dek": "The largest TCG card show in Mainland China, held across Hangzhou and Shanghai.",
+        "dek": "The largest TCG card show in Mainland China, held across Hangzhou, Shanghai and Guangzhou.",
         "caption": "CARDJOY × Grade10 Shanghai",
         "poster": "CARDJOY × Grade10 highlights"
       }
@@ -80,6 +80,11 @@
         "title": "Seoul Auction Private Sale & Exhibition",
         "desc": "The first-ever fine art presentation of trading cards in Asia."
       },
+      "guangzhou2026": {
+        "date": "Sep 2026",
+        "title": "CARDJOY x Grade10 Guangzhou",
+        "desc": "A 100,000 sq ft show at Guangzhou's Canton Fair Complex with 300+ exhibitors and 20,000+ attendees."
+      },
       "shanghai2026": {
         "date": "Jun 2026",
         "title": "CARDJOY x Grade10 Shanghai",
@@ -96,6 +101,12 @@
     "eyebrow": "Event Record",
     "title": "Every Show. A Milestone.",
     "items": {
+      "guangzhou2026": {
+        "title": "CARDJOY × Grade10 Guangzhou",
+        "desc": "The tour's Guangzhou debut at the Canton Fair Complex: 100,000 sq ft, 300+ exhibitors, 20,000+ attendees and the largest JOYCon exhibition yet.",
+        "photo": "The CARDJOY x Grade10 card show at the Canton Fair Complex in Guangzhou.",
+        "facts": "100,000 sq ft | 300+ exhibitors | Guangzhou"
+      },
       "privateSale2026": {
         "title": "Seoul Auction Private Sale & Exhibition",
         "desc": "Seoul Auction × ZZZ × Grade10 - a trading card exhibition and private sales event hosted by the prestigious Seoul Auction, ZZZ, and Grade10. The first-ever fine art presentation of trading cards in Asia.",
@@ -133,6 +144,12 @@
     "title": "Every edition, on the record",
     "latest": "Latest",
     "events": {
+      "guangzhou2026": {
+        "date": "Sep 2026",
+        "city": "Guangzhou",
+        "title": "CARDJOY × Grade10 Guangzhou",
+        "recap": "Guangzhou debut at the Canton Fair Complex - 300+ exhibitors, 20,000+ attendees."
+      },
       "summer2026": {
         "date": "Jun 2026",
         "city": "Hong Kong",
