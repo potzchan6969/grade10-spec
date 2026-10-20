@@ -15,6 +15,7 @@ import { createElement, type ReactNode } from "react";
 import {
   HELP_NAV_ITEM,
   PRIVACY_POLICY_HREF,
+  SHOWS_NAV_ITEM,
   STORE_LOCATOR_HREF,
   TERMS_OF_SERVICE_HREF,
 } from "./workbench-story-nav";
@@ -71,6 +72,7 @@ const STORE_SITE_HEADER = {
     { label: "Store", href: "#shop", current: true },
     { label: "Auction", href: "#auction" },
     { label: "Store Locator", href: STORE_LOCATOR_HREF },
+    { ...SHOWS_NAV_ITEM },
     { ...HELP_NAV_ITEM },
   ],
   onLocaleChange: noop,
@@ -130,8 +132,22 @@ const FOOTER_LEGAL_COLUMN = {
 };
 
 /**
- * Store-launch footer — Design System/Layout/Footer → Store launch. Shop destinations
- * and Store Locator join Docs and Legal; no bar legal duplicates.
+ * The company pages: About, Shows, Press Releases and Media Coverage.
+ * Their chrome entry — the footer column ahead of Help and Legal.
+ */
+const FOOTER_COMPANY_COLUMN = {
+  heading: "COMPANY",
+  links: [
+    { label: "About", href: "/about" },
+    { label: "Shows", href: "/shows" },
+    { label: "Press Releases", href: "/press-releases" },
+    { label: "Media Coverage", href: "/media-coverage" },
+  ],
+};
+
+/**
+ * Store-launch footer — Design System/Layout/Footer → Store launch. Shop destinations,
+ * the company pages, and Store Locator join Docs and Legal; no bar legal duplicates.
  */
 const STORE_FOOTER = {
   copy: FOOTER_COPY,
@@ -153,6 +169,7 @@ const STORE_FOOTER = {
         { label: "Formula 1", href: "#formula-1" },
       ],
     },
+    FOOTER_COMPANY_COLUMN,
     {
       heading: "HELP",
       links: [
@@ -166,7 +183,8 @@ const STORE_FOOTER = {
 
 /**
  * Auction-only footer — Design System/Layout/Footer → Auction only. Brand, social,
- * Docs, Privacy and Terms. No shop column and no bar legal duplicates.
+ * the company pages, Docs, Privacy and Terms. No shop column and no bar legal
+ * duplicates.
  */
 const AUCTION_FOOTER = {
   copy: FOOTER_COPY,
@@ -175,6 +193,7 @@ const AUCTION_FOOTER = {
   socialLinks: FOOTER_SOCIAL_LINKS,
   legalLinks: [],
   columns: [
+    FOOTER_COMPANY_COLUMN,
     {
       heading: "HELP",
       links: [FOOTER_DOCS_LINK],

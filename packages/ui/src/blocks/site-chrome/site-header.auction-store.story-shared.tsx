@@ -11,6 +11,7 @@ export const STORE_NAV_ITEMS = [
   { label: "Store", href: "#store", current: true },
   { label: "Auction", href: "#auction" },
   { label: "Store Locator", href: STORE_LOCATOR_HREF },
+  { label: "Shows", href: "?path=/story/site-shows-screens-shows--default" },
   {
     label: "Help",
     href: "https://grade10.mintlify.io/",

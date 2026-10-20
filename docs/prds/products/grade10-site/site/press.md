@@ -42,8 +42,9 @@ answers without a session, like any public surface —
 - ❓ Product - **Filter semantics** - the frame draws an All Time
   dropdown with a checked item; the page treats it as a year filter
   rather than jump navigation to each group
-- ❓ Product - **Navigation entry** - where Press sits in the chrome is
-  undecided; the header marks no item current for the page today
+- **Navigation entry** — Press Releases sits in the footer's Company
+  column; the header lists no item for the page and marks nothing
+  current
 - **Content - release list** - the list carries the live
   `grade10.com/press-releases` record verbatim; the frame's items are
   placeholders

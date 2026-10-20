@@ -49,10 +49,17 @@ it.
     documentation host Product names
   - Current-surface marking: the navigation item owning the current address is
     marked, and none is when no item owns it
+- Company pages in the chrome
+  - Primary-nav Shows: the primary navigation lists Shows once the site
+    answers `/shows`, ahead of Help; the item marks current on `/shows` and
+    the addresses beneath
+  - Footer Company column: the footer lists the company pages the site
+    answers under a Company column ahead of Help and Legal: About, Shows,
+    Press Releases, Media Coverage
 - Collector help
-  - Header Help: primary nav lists Help after Store Locator when that item is
-    present, and after Auction on auction-only nav; Help opens the
-    documentation site in a new tab
+  - Header Help: primary nav lists Help last — after Shows when that item is
+    present, else Store Locator, else Auction on auction-only nav; Help opens
+    the documentation site in a new tab
 - Small-width resilience
   - No horizontal overflow: the shell reflows at 375 CSS pixels with every
     control still reachable
@@ -296,8 +303,9 @@ viewport, and in the compact menu drawer on a narrow viewport, whenever the
 primary navigation is auction-only or includes Store and other answered
 surfaces.
 
-**Its place** - When Store Locator is present in the primary navigation, Help
-SHALL follow it; on auction-only primary navigation, Help SHALL follow Auction.
+**Its place** - Help SHALL be the last primary-navigation item: it SHALL
+follow Shows when that item is present, else Store Locator when that item is
+present, else Auction on auction-only primary navigation.
 
 **Presentation** - Help SHALL use the same primary-nav link presentation as
 other primary items.
@@ -308,25 +316,27 @@ in a new browsing context. The current site surface SHALL remain open.
 **Isolated from the opener** - Help SHALL use the shared chrome's external link
 behaviour so the new tab is isolated from the opener.
 
-<!-- trace:scenario id=g10.site-page-shell.SC-o1e rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-o1e rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-25 - Help on auction-only and full nav
 **Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
 
 - **GIVEN** a wide viewport and a header whose primary nav is auction-only, or
   one that also lists Store and other answered surfaces
 - **WHEN** the header renders
-- **THEN** Help appears in the primary navigation after Auction on auction-only
-  nav, or after Store Locator when that item is present
+- **THEN** Help appears as the last item in the primary navigation — after
+  Shows when that item is present, else Store Locator when present, else
+  Auction on auction-only nav
 - **AND** activating it opens the documentation site in a new browsing context
 
-<!-- trace:scenario id=g10.site-page-shell.SC-53q rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-53q rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-26 - Help in the compact menu
 **Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
 
 - **GIVEN** a viewport 375 CSS pixels wide with Help supplied in primary nav
 - **WHEN** the collector opens the header menu
-- **THEN** Help is reachable in the drawer among the primary items after Auction
-  on auction-only nav, or after Store Locator when that item is present
+- **THEN** Help is reachable in the drawer as the last primary item — after
+  Shows when that item is present, else Store Locator when present, else
+  Auction on auction-only nav
 - **AND** activating it opens the documentation site in a new browsing context
 
 ### Requirement: Compact viewports reach navigation through the menu drawer

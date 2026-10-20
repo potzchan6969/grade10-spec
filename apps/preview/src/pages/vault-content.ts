@@ -23,6 +23,7 @@ import {
   HELP_NAV_ITEM,
   navigateToStory,
   PRIVACY_POLICY_HREF,
+  SHOWS_NAV_ITEM,
   STORE_LOCATOR_HREF,
   TERMS_OF_SERVICE_HREF,
 } from "./workbench-story-nav";
@@ -482,6 +483,7 @@ const VAULT_SITE_HEADER = {
     { label: "Auction", href: "#auction" },
     { label: "Vault", href: VAULT_PORTFOLIO_HREF, current: true },
     { label: "Store Locator", href: STORE_LOCATOR_HREF },
+    { ...SHOWS_NAV_ITEM },
     { ...HELP_NAV_ITEM },
   ],
   onLocaleChange: noop,

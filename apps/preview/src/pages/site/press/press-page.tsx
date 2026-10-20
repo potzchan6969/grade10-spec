@@ -47,8 +47,8 @@ function PressListItem({ item }: { item: PressItem }) {
 /**
  * The `/press-releases` surface as the app assembles it: `SiteHeader`, the
  * Figma Press frame — heading block, a year filter over the releases
- * grouped newest first — and `Footer`. No nav item is current — the entry
- * point is still undecided.
+ * grouped newest first — and `Footer`. No nav item is current — the
+ * page's entry is the footer's Company column.
  */
 function PressPage() {
   const reduceMotion = useReducedMotion();

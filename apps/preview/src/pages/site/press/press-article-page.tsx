@@ -196,7 +196,7 @@ function Block({ block }: { block: ArticleBlock }) {
  * breadcrumb, the release's title with its publish date and location
  * badges, the 1200:630 feature image, the body an editor composes, and
  * the three fixed sidebar cards — and `Footer`. No nav item is current —
- * the entry point is still undecided.
+ * the article's entry is the footer's Company column.
  */
 function PressArticlePage() {
   const reduceMotion = useReducedMotion();

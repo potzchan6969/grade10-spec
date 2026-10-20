@@ -23,8 +23,8 @@ without a session, like any public surface —
   vaulting services opens the vault page, Grade10 Finance opens `/finance`,
   Grade10 opens the front door
 
-- ❓ Product - **Navigation entry** - where the About entry sits in the
-  chrome is undecided; the header marks no item current for the page today
+- **Navigation entry** — About sits in the footer's Company column; the
+  header lists no item for the page and marks nothing current
 - ❓ Product - **Grade10 Finance destination** - the link opens `/finance`
   as today's page does; the destination it should carry is unconfirmed
 - ❓ Copy - **Parent-company wording** - the paragraph was tightened after a

@@ -45,7 +45,7 @@ function Segments({ segments }: { segments: readonly AboutSegment[] }) {
 /**
  * The `/about` surface as the app assembles it: `SiteHeader`, the Figma
  * About frame composed from design-system tokens and `Card`, and `Footer`.
- * No nav item is current — the entry point is still undecided.
+ * No nav item is current — About's entry is the footer's Company column.
  */
 function AboutPage() {
   const reduceMotion = useReducedMotion();

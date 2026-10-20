@@ -71,11 +71,17 @@ const PRIVACY_POLICY_HREF = storyHref(PRIVACY_POLICY_STORY_ID);
 /** TBC — provisional docs host for collector Help in the primary nav. */
 const HELP_HREF = "https://grade10.mintlify.io/";
 
-/** Primary-nav Help; after Store Locator when present, else after Auction. */
+/** Primary-nav Help; last — after Shows, else Store Locator, else Auction. */
 const HELP_NAV_ITEM = {
   label: "Help",
   href: HELP_HREF,
   external: true,
+} as const;
+
+/** Primary-nav Shows; before Help, after Store Locator when present. */
+const SHOWS_NAV_ITEM = {
+  label: "Shows",
+  href: "/shows",
 } as const;
 
 /** Preview href for Winner Order → lot details. */
@@ -85,6 +91,12 @@ const AUCTION_LOT_DETAILS_HREF = storyHref(
 
 /** Preview href for Winner Order → My Auctions list. */
 const MY_AUCTIONS_PAGE_HREF = storyHref(MY_AUCTIONS_PAGE_STORY_ID);
+
+/** Storybook story id for the About page assembly. */
+const ABOUT_PAGE_STORY_ID = "site-about-screens-about--default";
+
+/** Storybook story id for the Shows page assembly. */
+const SHOWS_PAGE_STORY_ID = "site-shows-screens-shows--default";
 
 /** Storybook story id for the Press page assembly. */
 const PRESS_PAGE_STORY_ID = "site-press-screens-press--default";
@@ -102,8 +114,10 @@ const MEDIA_COVERAGE_PAGE_STORY_ID =
  * that route's story. Add a row when a page story lands.
  */
 const ROUTE_STORY_IDS: Record<string, string> = {
+  "/about": ABOUT_PAGE_STORY_ID,
   "/media-coverage": MEDIA_COVERAGE_PAGE_STORY_ID,
   "/press-releases": PRESS_PAGE_STORY_ID,
+  "/shows": SHOWS_PAGE_STORY_ID,
 };
 
 /**
@@ -172,6 +186,7 @@ export {
   PRESS_PAGE_STORY_ID,
   PRIVACY_POLICY_HREF,
   PRIVACY_POLICY_STORY_ID,
+  SHOWS_NAV_ITEM,
   STORE_LOCATOR_HREF,
   STORE_LOCATOR_STORY_ID,
   storyHref,

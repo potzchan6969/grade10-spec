@@ -28,6 +28,15 @@ so a collector can reach checkout without returning to Store
 [Store Locator](/p/grade10-site/store/store-locator), which waits with the
 store; auction-first chrome has none
 
+**Shows** — the primary nav lists Shows once the site answers `/shows`,
+after Store Locator when that item is present and after Auction on
+auction-first, always ahead of Help; the header marks it current on
+`/shows` and the addresses beneath
+
+**Company column** — the footer lists the company pages the site answers
+under a Company column ahead of Help and Legal: About, Shows, Press
+Releases, Media Coverage
+
 **Copyright** — the footer's bottom bar reads the brand's copyright line in
 the page's language, with no year: "© Grade10. All rights reserved." in English,
 "© Grade10。保留所有權利。" in Simplified Chinese, "© Grade10。版權所有。" in
@@ -83,8 +92,9 @@ wherever it is carried
 ## Help
 
 Primary nav lists Help for auction-only and full nav (wide bar and compact
-menu). When Store Locator is in the chrome, Help follows it; on auction-first,
-Help follows Auction. It opens the documentation site in a new tab.
+menu). Help is the last primary item — it follows Shows when that item is
+present, else Store Locator, else Auction. It opens the documentation site
+in a new tab.
 
 **Compact menu** — below a 896px-wide container, the leading menu opens a left
 inset drawer for primary navigation and utilities; language opens a nested
@@ -157,4 +167,5 @@ holds - [Cart Drawer](/p/grade10-site/store/cart)
 | After the first answer | Decided | The placeholder does not come back. A later read keeps the entry already shown, a later read that fails keeps it too, and one that returns no session shows Sign In. Rejected showing the placeholder on every re-read, which turns a signed-out visitor's Sign In into the placeholder each time they return to the tab, and Sign In on any failed later read, which a signed-in collector on a weak connection would see. | Product |
 | A read that never answers | Decided | A first read that fails shows Sign In. The site sets no timer; the transport ends every read of the session two minutes after it starts, as a failed read, so no wait on it lasts for ever. Rejected a site timer, which could show Sign In to a slow but healthy read, no deadline, and a limit at each wait. | Product |
 | Controls beside the account entry | Decided | Only the language and search controls on the wide header move, by the change in the account entry's width; primary navigation, Cart and the compact bar stay. Rejected reserving Sign In's width, which would show the account icon in a wider space. | Product |
+| Company pages in the chrome | Decided | Shows joins the primary nav ahead of Help — after Store Locator when present, after Auction on auction-first — and the header marks it current on `/shows` and beneath; About, Shows, Press Releases and Media Coverage form the footer's Company column ahead of Help and Legal. Rejected primary-nav seats for the three corporate pages — the bar stays task surfaces — and a grouped nav item, which the flat item list does not carry. | Product (@tangconst) |
 :::
