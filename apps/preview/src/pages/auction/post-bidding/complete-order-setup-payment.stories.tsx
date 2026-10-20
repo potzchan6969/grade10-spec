@@ -62,10 +62,8 @@ export const PaymentMethod: Story = {
 
     await userEvent.click(modal.getByRole("radio", { name: /^HK Local\b/ }));
     expect(
-      within(modal.getByRole("radio", { name: /^HK Local\b/ })).getByText(
-        "Bank fee set on your invoice",
-      ),
-    ).toBeVisible();
+      modal.queryByText("Bank fee set on your invoice"),
+    ).not.toBeInTheDocument();
     expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
     await userEvent.click(modal.getByRole("radio", { name: /^Card\b/i }));
     expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();

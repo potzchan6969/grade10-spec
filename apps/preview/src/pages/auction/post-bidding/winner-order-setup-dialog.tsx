@@ -994,7 +994,6 @@ function WinnerOrderSetupDialog({
                         .filter((method) => method !== "card")
                         .map((method) => (
                           <RadioCard
-                            description="Bank fee set on your invoice"
                             key={method}
                             title={
                               method === "fps"
