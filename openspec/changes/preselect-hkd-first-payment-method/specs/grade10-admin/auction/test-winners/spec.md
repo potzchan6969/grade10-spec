@@ -3,7 +3,7 @@
 ## Feature set
 
 - Making a test winner
-  - Normal winner setup: the winner chooses USD or HKD and an offered payment method, with HKD and the currency's first offered method preselected
+  - Normal winner setup: the winner chooses USD or HKD and an offered payment method, with the first offered currency and its first offered method preselected
 
 ## MODIFIED Requirements
 
@@ -55,7 +55,7 @@ nothing twice.
 takes no bid. It lists as any closed sandbox lot does.
 
 The successful test winner SHALL use ordinary winner setup. The order SHALL
-offer USD or HKD and the payment choices offered for that currency, with HKD
+offer USD or HKD and the payment choices offered for that currency, with the first offered currency
 and the currency's first offered method preselected.
 
 <!-- trace:scenario id=g10adm.auction-test-winners.SC-pxq rev=3 -->
@@ -71,7 +71,7 @@ and the currency's first offered method preselected.
 - **AND** it holds an auction order in Awaiting Setup for a closed sandbox lot
   titled `Test lot <code>`, won at 100000 minor units in USD
 - **AND** order setup offers USD or HKD and the offered payment choices, with
-  HKD and the currency's first payment method preselected
+  the first offered currency and its first payment method preselected
 - **AND** the auction-won letter reaches that address
 
 <!-- trace:scenario id=g10adm.auction-test-winners.SC-wfn rev=1 -->

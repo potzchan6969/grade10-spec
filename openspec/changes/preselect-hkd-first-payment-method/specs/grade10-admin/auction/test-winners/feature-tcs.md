@@ -46,10 +46,10 @@
 * Before step 5, the account at that address has not signed in.
 * The inbox holds the auction-won letter for that lot, sent to that address.
 * Step 5 signs in as the test account and leaves the order in Awaiting Setup.
-* Step 6 offers USD or HKD and their offered payment choices, with HKD and its first offered payment method preselected.
+* Step 6 offers USD or HKD and their offered payment choices, with the first offered currency and its first offered payment method preselected.
 
 ## Reconciliation
 
 | Finding | Disposition |
 | --- | --- |
-| `TC-7qq` step 6 asserted no currency or method selected; SC-11 now preselects HKD and the first offered method | Revised to rev=4 |
+| `TC-7qq` step 6 asserted no currency or method selected; SC-11 now preselects the first offered currency and the first offered method | Revised to rev=4 |

@@ -10,7 +10,7 @@
 **so that** I pay in the currency my money is already in.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ayp rev=2 covers=g10.auction-winner-order.SC-o92 -->
-### g10.auction-winner-order.US24-TC1: Order setup offers USD and HKD with HKD preselected
+### g10.auction-winner-order.US24-TC1: Order setup offers USD and HKD with the first offered preselected
 
 **Classification:**
 
@@ -36,7 +36,7 @@
 
 **Expected Results:**
 
-* USD and HKD are offered; HKD is selected.
+* USD and HKD are offered; the first offered — USD — is selected.
 * Card, FPS and HK Local are offered, and Card is selected.
 * The setup is not yet confirmed; the order stays Awaiting Setup until the winner confirms.
 
@@ -75,7 +75,7 @@
 
 **Steps:**
 
-1. Choose the home address and read the HKD payment choices.
+1. Choose the home address, pick HKD and read its payment choices.
 
 **Expected Results:**
 
@@ -109,7 +109,7 @@ Runs once per row of **Test data**.
 
 | Row | Currencies offered | Card fee rule | Opens reading | Selected method |
 | --- | --- | --- | --- | --- |
-| Both | USD and HKD | HKD rule | Pay in picker, HKD selected | Card |
+| Both | USD and HKD | HKD rule | Pay in picker, USD selected | Card |
 | HKD only | HKD | HKD rule | `Pay in HKD`, no picker | Card |
 | HKD only, no card rule | HKD | none | `Pay in HKD`, no picker | FPS, card not selectable |
 
@@ -131,6 +131,6 @@ Runs once per row of **Test data**.
 
 | Finding | Disposition |
 | --- | --- |
-| `TC-ayp` asserted both currencies offered with neither selected; SC-278 now preselects HKD | Revised to rev=2, asserting HKD selected and the card method preselected |
+| `TC-ayp` asserted both currencies offered with neither selected; SC-278 now preselects the first offered currency | Revised to rev=2, asserting USD selected and the card method preselected |
 | `TC-jfi` asserted HKD fee wording with no method selected; SC-91 now selects card | Revised to rev=2, asserting card selected |
 | First-method preselection and the `Pay in {currency}` single-currency read had no case | Added `TC-wq7`, covering SC-305 and SC-306 |
