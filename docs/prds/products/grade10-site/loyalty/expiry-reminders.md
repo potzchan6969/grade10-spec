@@ -98,6 +98,10 @@ yet, so no member is told anything. {#tells-no-one}
 - **The read and its policy** - [docs/architecture/loyalty.md](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
 :::
 
+:::detail{title="Open work" for="engineer"}
+- [ ] **Query plan on staging** - run `EXPLAIN` on the expiring-lots read (`selectExpiringLots`) on a Neon branch of staging's loyalty database and record the plan; blocked on staging access - engineering
+:::
+
 :::detail{title="Product decisions" for="pm"}
 A member who loses points they meant to spend has been failed by the
 programme, not by their own inattention. Measured by the share of members who

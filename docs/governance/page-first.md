@@ -153,8 +153,8 @@ prints `Open OpenSpec change` under each page one names.
   `pnpm run trace validate` lists a test still citing one as retired, not
   broken, and names the id to cite
 - **Retired changes** - `openspec/retired-changes.tsv` names the pages each
-  folded change now lives on; its open tasks are their 🚧 lines and Open
-  work items. The planning and workflow skills carry on there when given
+  folded change now lives on; `retired-tasks.tsv` names the 🚧 line or Open
+  work item each unticked task became. The planning and workflow skills carry on there when given
   its name
 - **Adopting the gate** - `pages.mjs gate <app-dir> --seed > allow.txt`
   writes the first allowlist: every `## Always` id no test cites yet. It

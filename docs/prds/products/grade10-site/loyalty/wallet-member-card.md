@@ -348,9 +348,13 @@ for ZZZ.
 :::detail{title="Open work" for="engineer"}
 - [ ] **Google enrolment** - create the issuer account in Demo Mode, complete the Business Profile and the payments profile, request publishing access until Google's review accepts the save action, and carry the class from draft to approved; blocked on the Google Pay & Wallet Console account - operations
 - [ ] **Google service account and secrets** - create the service account and its key, set the two Google secrets, then record the issuer, the class and the service account for staging and production; blocked on Google enrolment - engineering
+- [ ] **Google class artwork** - the programme's logo, the issuer's name, the programme's name and one background colour; blocked on Google enrolment - design
 - [ ] **Apple enrolment** - enrol in the Developer Program in the organisation's name, name the owner by role, and register the staging and production pass type identifiers; blocked on the D-U-N-S number and the legal-entity check - operations
+- [ ] **Apple pass artwork** - the icon and logo at every scale, the programme's name, and the background and label colours; blocked on Apple enrolment - design
+- [ ] **Apple's licensed badge** - download Apple's "Add to Apple Wallet" badge under the Wallet Marketing Agreement and put it in place of the marked placeholder; blocked on Apple enrolment, since the badge is licensed only to a Developer Program member - design
 - [ ] **Pass web service hostname** - fix it before the first pass exists; blocked on Apple enrolment - engineering
 - [ ] **Apple certificate, push key and secrets** - take the certificate and its key, create the push key scoped to the pass type identifier, set the Apple secrets, then record the identifiers; blocked on Apple enrolment - engineering
 - [ ] **Device test on an iPhone** - name the phone's holder by role, push to it three ways, record which produces a list request, and write the push credential and header it settles into Apple step 9 of Setting Up; blocked on the Apple certificate and push key - engineering
+- [ ] **Launch check on every deployment** - run `pnpm run secrets --check` against every deployed store worker: before any issuer is recorded it names no wallet secret missing; once both wallets are set up it names none missing on staging or production, and staging's membership page offers both wallets; blocked on Cloudflare credentials and both enrolments - engineering
 - [ ] **Walk on staging** - on a real phone, save a pass on each wallet from its own save action, be identified at the counter, then end one from the member's record and see the counter no longer identify the member by it; blocked on both enrolments - QA
 :::

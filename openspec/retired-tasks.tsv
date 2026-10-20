@@ -1,0 +1,67 @@
+change	task	outcome	where
+add-account-profile	5.1 Bump the external/grade10-spec submodule	obsolete	app routine: the app pins the submodule and moves it in its own PR when it builds (AGENTS.md Sharing with consuming apps)
+add-account-profile	6.1 Create the AVATARS bucket	open-work	grade10-site/account/profile + Avatar bucket
+add-account-profile	7.1 One walk per journey on staging	open-work	grade10-site/account/profile + Walk on staging
+add-account-profile	7.2 Flip the cases the walks decide	obsolete	OpenSpec bookkeeping (tcs:automated)
+add-account-profile	7.3 Verify: walks pass against staging, tcs:validate	open-work	grade10-site/account/profile + Walk on staging (tcs:validate is OpenSpec bookkeeping)
+add-point-expiry-reminders	2.4 Verify: typecheck, lint, test:backend; EXPLAIN on a Neon branch of staging	open-work	grade10-site/loyalty/expiry-reminders + Query plan on staging (suites already pass)
+add-point-expiry-reminders	5.2 Verify: test:backend	covered	grade10-site/loyalty/expiry-reminders#owed-again; grade10-site/loyalty/points#refund-keeps-date
+add-point-expiry-reminders	6.3 Verify: test:backend, tcs:validate	covered	grade10-site/loyalty/expiry-reminders#owed-again (the walk passes; tcs:validate is OpenSpec bookkeeping)
+align-reward-editor-design	1.3 Take the 🚧 off Free item, Online only on the menu, Online only by scope	covered	grade10-site/loyalty/operator-console#free-item; grade10-site/loyalty/rewards#menu-online-only; grade10-site/loyalty/coupons#till-refuses-by-scope (Release step)
+align-reward-editor-design	7.1 rewards.spec.ts creates a reward scoped to named products with Both chosen	covered	grade10-site/loyalty/operator-console#online-only-saved
+align-reward-editor-design	7.2 rewards.spec.ts opens a reward stored through the admin API	covered	grade10-site/loyalty/operator-console#online-only-saved
+align-reward-editor-design	7.3 rewards.spec.ts member's reward menu reads Online store only	covered	grade10-site/loyalty/rewards#menu-online-only
+align-reward-editor-design	7.4 presented-coupon.spec.ts coupon scoped to named products refused	covered	grade10-site/loyalty/coupons#till-refuses-by-scope
+align-reward-editor-design	7.5 Verify: e2e rewards.spec.ts and presented-coupon.spec.ts pass	covered	grade10-site/loyalty/operator-console#online-only-saved; grade10-site/loyalty/rewards#menu-online-only; grade10-site/loyalty/coupons#till-refuses-by-scope
+confirm-loyalty-surface-looks	2.1 Walk the Coupons page; coupon list draws no code	open-work	grade10-site/loyalty/coupons + Read the coupon list on the published page
+draw-wallet-save-artwork	1.3 Apple's licensed badge replaces the placeholder SVG	open-work	grade10-site/loyalty/wallet-member-card + Apple's licensed badge
+draw-wallet-save-artwork	2.2 Google's publishing review accepts the save action	open-work	grade10-site/loyalty/wallet-member-card + Google enrolment
+draw-wallet-save-artwork	3.1 On staging, a member meets each wallet's own artwork	open-work	grade10-site/loyalty/wallet-member-card + Walk on staging
+earn-points-on-order-completion	3.1 On staging, an order earns when Completed, not when paid	open-work	grade10-site/loyalty/points + Walk on staging
+launch-wallet-passes	1.3 Link operator-ending tests with trace CLI, flip cases	obsolete	OpenSpec bookkeeping (trace link, tcs:automated)
+launch-wallet-passes	2.5 Link 2.1's tests with trace CLI, flip cases	obsolete	OpenSpec bookkeeping (trace link, tcs:automated)
+launch-wallet-passes	2.6 Verify: typecheck, lint, test:backend, admin and store-admin tests	covered	grade10-site/loyalty/wallet-member-card#operator-ending
+launch-wallet-passes	3.4 Link 3.1's tests with trace link --supports	obsolete	OpenSpec bookkeeping (trace link)
+launch-wallet-passes	3.5 Verify: unit suites and secrets --check --env=staging	open-work	grade10-site/loyalty/wallet-member-card + Launch check on every deployment (unit suites: grade10-site/loyalty/wallet-member-card#launch-check)
+launch-wallet-passes	4.1 Replace Apple step 9's open points after the device test	open-work	grade10-site/loyalty/wallet-member-card + Device test on an iPhone
+launch-wallet-passes	4.2 Verify: pnpm check:manual	open-work	grade10-site/loyalty/wallet-member-card + Device test on an iPhone (the check runs on its push)
+launch-wallet-passes	5.1 Create the Google issuer account in Demo Mode	open-work	grade10-site/loyalty/wallet-member-card + Google enrolment
+launch-wallet-passes	5.2 Complete the Business Profile and payments profile	open-work	grade10-site/loyalty/wallet-member-card + Google enrolment
+launch-wallet-passes	5.3 Request publishing access	open-work	grade10-site/loyalty/wallet-member-card + Google enrolment
+launch-wallet-passes	5.4 Give the class its artwork and words	open-work	grade10-site/loyalty/wallet-member-card + Google class artwork
+launch-wallet-passes	5.5 Create the class, draft to approved	open-work	grade10-site/loyalty/wallet-member-card + Google enrolment
+launch-wallet-passes	5.6 Create the service account, PKCS#8 key	open-work	grade10-site/loyalty/wallet-member-card + Google service account and secrets
+launch-wallet-passes	5.7 Set WALLET_GOOGLE_SERVICE_ACCOUNT_KEY and WALLET_PASS_KEY	open-work	grade10-site/loyalty/wallet-member-card + Google service account and secrets
+launch-wallet-passes	5.8 Record issuer, class, service account in packages/app-env	open-work	grade10-site/loyalty/wallet-member-card + Google service account and secrets
+launch-wallet-passes	5.9 Draw the save action as Google's own button	covered	grade10-site/loyalty/wallet-member-card#save-action-look (drawn); review acceptance is open work grade10-site/loyalty/wallet-member-card + Google enrolment
+launch-wallet-passes	5.10 Verify: secrets --check names no Google secret missing; staging offers Google Wallet	open-work	grade10-site/loyalty/wallet-member-card + Launch check on every deployment
+launch-wallet-passes	6.1 Enrol in the Apple Developer Program	open-work	grade10-site/loyalty/wallet-member-card + Apple enrolment
+launch-wallet-passes	6.2 Name the account's owner by role	open-work	grade10-site/loyalty/wallet-member-card + Apple enrolment
+launch-wallet-passes	6.3 Register two pass type identifiers	open-work	grade10-site/loyalty/wallet-member-card + Apple enrolment
+launch-wallet-passes	6.4 Give the pass its artwork and words	open-work	grade10-site/loyalty/wallet-member-card + Apple pass artwork
+launch-wallet-passes	6.5 Fix the pass web service's hostname	open-work	grade10-site/loyalty/wallet-member-card + Pass web service hostname
+launch-wallet-passes	6.6 Take the certificate and its key as PKCS#8	open-work	grade10-site/loyalty/wallet-member-card + Apple certificate, push key and secrets
+launch-wallet-passes	6.7 Create the APNs key, record its key id	open-work	grade10-site/loyalty/wallet-member-card + Apple certificate, push key and secrets
+launch-wallet-passes	6.8 Set the Apple secrets, record identifiers in packages/app-env	open-work	grade10-site/loyalty/wallet-member-card + Apple certificate, push key and secrets
+launch-wallet-passes	6.9 Push to the enrolled iPhone three ways	open-work	grade10-site/loyalty/wallet-member-card + Device test on an iPhone
+launch-wallet-passes	6.10 Draw the save action as Apple's licensed badge	open-work	grade10-site/loyalty/wallet-member-card + Apple's licensed badge
+launch-wallet-passes	6.11 Verify: secrets --check names no Apple secret missing; staging offers Apple Wallet	open-work	grade10-site/loyalty/wallet-member-card + Launch check on every deployment
+launch-wallet-passes	7.1 Run secrets --check against every deployed store worker	open-work	grade10-site/loyalty/wallet-member-card + Launch check on every deployment
+launch-wallet-passes	7.2 Verify: a member saves a pass on each wallet in staging and is identified	open-work	grade10-site/loyalty/wallet-member-card + Walk on staging
+launch-wallet-passes	8.2 Walk US-09 in wallet-pass-ending.spec.ts on the local stack	covered	grade10-site/loyalty/wallet-member-card#operator-ending (e2e written, not yet run)
+launch-wallet-passes	8.3 Walk US-09 in staging by hand on a real phone	open-work	grade10-site/loyalty/wallet-member-card + Walk on staging
+launch-wallet-passes	8.4 Link 8.2's tests with trace link --acceptance, flip cases	obsolete	OpenSpec bookkeeping (trace link, tcs:automated)
+launch-wallet-passes	8.5 Verify: test:e2e wallet-pass-ending.spec.ts; trace validate and report	covered	grade10-site/loyalty/wallet-member-card#operator-ending (trace validate/report is OpenSpec bookkeeping)
+name-points-discount-deduction	2.2 Walk the staging tablet	open-work	grade10-site/loyalty/shopify-integration + Release 1 tablet walk
+name-points-discount-deduction	2.3 Release 1 in production	open-work	grade10-site/loyalty/shopify-integration + Release 1 in production
+name-points-discount-deduction	3.4 Staging spend online and at the till under the new title	open-work	grade10-site/loyalty/shopify-integration + Release 2 walk on staging
+name-points-discount-deduction	3.5 Production: merge once every location runs release 1 for 7 days	open-work	grade10-site/loyalty/shopify-integration + Release 2 in production
+name-points-discount-deduction	4.1 Verification doc records the tablet walk and a new recording	open-work	grade10-site/loyalty/shopify-integration + Release 2 walk on staging
+name-points-discount-deduction	5.1 Payload examples carry Deduction from Points; 🚧 off once release 2 is live	open-work	grade10-site/loyalty/shopify-integration + Payload examples follow release 2
+name-points-discount-deduction	6.3 Mark the cases the walk decides with tcs:automated	obsolete	OpenSpec bookkeeping (tcs:automated)
+name-points-discount-deduction	6.4 Verify: store database lane, tcs:validate, validate:changes	obsolete	OpenSpec bookkeeping (tcs:validate, validate:changes); the store database lane already passes
+never-lock-a-coupon	12.3 Move the spec submodule to the commit carrying group 11's copy	obsolete	app routine: the app pins the submodule and moves it in its own PR when it builds (AGENTS.md Sharing with consuming apps)
+never-lock-a-coupon	14.1 Tests cite the scenarios they prove; SC-240 not proven	covered	grade10-site/loyalty/coupons#two-sales-at-once (the race loser is still refused as not_available; citing scenarios is OpenSpec bookkeeping)
+never-lock-a-coupon	16.1 On staging, coupons held, spent elsewhere, refused by name	open-work	grade10-site/loyalty/coupons + Walk on staging
+redesign-member-pass	3.1 Walk store-membership-US-02 on the workbench	open-work	grade10-site/loyalty/membership + Member pass on the workbench
+redesign-tier-card	3.1 Walk loyalty-programme-US-04 on the workbench	open-work	grade10-site/loyalty/membership + Tier card on the workbench
