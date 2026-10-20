@@ -291,6 +291,10 @@ function buildFacts(specTo, b, d) {
   const linked = new Set(
     Object.values(links).flatMap((l) => Object.values(l).flat()),
   );
+  for (const c of f.commits)
+    c.changes = Object.keys(links).filter((change) =>
+      Object.values(links[change]).flat().includes(c.sha.slice(0, 9)),
+    );
   return {
     repo: b.repo,
     ...f,
@@ -303,6 +307,32 @@ function buildFacts(specTo, b, d) {
 // The commits, pull requests, lines per area, authors and kinds of one repository's day.
 function repoFacts(cwd, d, areaList) {
   const span = `${d.from}..${d.to}`;
+  // Each commit's own files, so chunks.mjs can group the day's commits by what they touch.
+  const touched = new Map();
+  let at;
+  for (const line of lines(
+    gitIn(
+      cwd,
+      "log",
+      "--no-merges",
+      "--numstat",
+      "-M",
+      "--format=%x1e%H",
+      span,
+    ),
+  )) {
+    if (line.startsWith("\x1e")) {
+      at = line.slice(1);
+      touched.set(at, []);
+      continue;
+    }
+    const [added, removed, ...path] = line.split("\t");
+    touched.get(at)?.push({
+      path: renamedTo(path.join("\t")),
+      added: Number(added) || 0,
+      removed: Number(removed) || 0,
+    });
+  }
   const log = lines(
     gitIn(
       cwd,
@@ -314,6 +344,7 @@ function repoFacts(cwd, d, areaList) {
   ).map((line) => {
     const [sha, short, author, date, subject] = line.split("\x1f");
     const cc = subject.match(/^(\w+)(?:\(([^)]+)\))?!?:\s*(.*)$/);
+    const own = touched.get(sha) ?? [];
     return {
       sha,
       short,
@@ -323,6 +354,10 @@ function repoFacts(cwd, d, areaList) {
       type: cc?.[1] ?? null,
       scope: cc?.[2] ?? null,
       fresh: d.fresh.includes(sha),
+      areas: [...new Set(own.map((f) => areaOf(f.path, areaList)))],
+      changes: [...new Set(own.flatMap((f) => changeOf(f.path) ?? []))],
+      added: own.reduce((n, f) => n + f.added, 0),
+      removed: own.reduce((n, f) => n + f.removed, 0),
     };
   });
   const merges = lines(
@@ -343,10 +378,7 @@ function repoFacts(cwd, d, areaList) {
   const files = lines(gitIn(cwd, "diff", "--numstat", "-M", span)).map(
     (line) => {
       const [added, removed, ...path] = line.split("\t");
-      const name = path
-        .join("\t")
-        .replace(/\{[^}]* => ([^}]*)\}/, "$1")
-        .replace(/^.* => /, "");
+      const name = renamedTo(path.join("\t"));
       return {
         path: name,
         added: Number(added) || 0,
@@ -618,6 +650,20 @@ function endOfLastFriday(now = new Date()) {
 }
 
 // A path's area: the first that claims it, else, in the application, its app or package, else its top folder.
+// A rename's numstat path, such as a/{b => c}/d, read as where it now lives.
+function renamedTo(path) {
+  return path.replace(/\{[^}]* => ([^}]*)\}/, "$1").replace(/^.* => /, "");
+}
+
+// The OpenSpec change a path belongs to, active or archived.
+function changeOf(path) {
+  return (
+    path.match(/^openspec\/changes\/archive\/[\d-]+-([^/]+)\//)?.[1] ??
+    path.match(/^openspec\/changes\/(?!archive\/)([^/]+)\//)?.[1] ??
+    null
+  );
+}
+
 function areaOf(path, areaList) {
   const named = areaList.find(([, pattern]) => pattern.test(path))?.[0];
   if (named) return named;
