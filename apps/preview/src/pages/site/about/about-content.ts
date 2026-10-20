@@ -4,32 +4,20 @@
  * viewport); the body copy has since been tightened after a copywriting
  * review and no longer matches the Figma text verbatim.
  */
+import type { AboutLink, AboutPageContent } from "@grade10/ui";
 
 const MEMESTRATEGY_LOGO = new URL(
   "./memestrategy-logo.fixture.png",
   import.meta.url,
 ).href;
 
-/** A link target inside a running paragraph. */
-type AboutLink = {
-  readonly href: string;
-  /** Opens in a new tab with `rel="noopener noreferrer"`. */
-  readonly external?: boolean;
-};
-
-/** A run of paragraph text; `link` turns the run into an inline anchor. */
-type AboutSegment = {
-  readonly text: string;
-  readonly link?: AboutLink;
-};
-
-/** One row of the parent-company timeline. */
-type AboutMilestone = {
-  readonly date: string;
-  /** Status line under the date — “Coming soon” on the upcoming entry. */
-  readonly status?: string;
-  readonly body: readonly AboutSegment[];
-};
+const HAT_PRICE_INDEX_SHOT = new URL(
+  "./hat-price-index.fixture.jpg",
+  import.meta.url,
+).href;
+const PTCG100_SHOT = new URL("./ptcg100.fixture.jpg", import.meta.url).href;
+const PTCG500_SHOT = new URL("./ptcg500.fixture.jpg", import.meta.url).href;
+const OPCG100_SHOT = new URL("./opcg100.fixture.jpg", import.meta.url).href;
 
 const HOME_LINK: AboutLink = { href: "/" };
 
@@ -45,26 +33,6 @@ const GRADE10_AI_LINK: AboutLink = {
   href: "https://app.grade10.com/",
   external: true,
 };
-
-type AboutIndex = {
-  readonly name: string;
-  readonly href: string;
-  /** A line on what the index tracks, shown under its screenshot. */
-  readonly description: string;
-  /** Screenshot of the live index page. */
-  readonly shot: string;
-  readonly shotAlt: string;
-  /** Renders the Beta badge on indexes still in beta. */
-  readonly beta?: boolean;
-};
-
-const HAT_PRICE_INDEX_SHOT = new URL(
-  "./hat-price-index.fixture.jpg",
-  import.meta.url,
-).href;
-const PTCG100_SHOT = new URL("./ptcg100.fixture.jpg", import.meta.url).href;
-const PTCG500_SHOT = new URL("./ptcg500.fixture.jpg", import.meta.url).href;
-const OPCG100_SHOT = new URL("./opcg100.fixture.jpg", import.meta.url).href;
 
 const ABOUT_PAGE = {
   heading: "About Us",
@@ -137,7 +105,7 @@ const ABOUT_PAGE = {
         shotAlt: "OPCG100 — live index page",
         href: "https://index.grade10.com/opcg100",
       },
-    ] satisfies readonly AboutIndex[],
+    ],
   },
   parentCompany: {
     label: "Parent company",
@@ -185,8 +153,7 @@ const ABOUT_PAGE = {
       date: "Mar 2025",
       body: [{ text: "Completed a comprehensive brand revamp" }],
     },
-  ] satisfies readonly AboutMilestone[],
-};
+  ],
+} satisfies AboutPageContent;
 
-export type { AboutIndex, AboutLink, AboutMilestone, AboutSegment };
 export { ABOUT_PAGE };

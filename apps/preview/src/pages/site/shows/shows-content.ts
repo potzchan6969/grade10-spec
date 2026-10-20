@@ -6,6 +6,15 @@
  * The body copy has since been tightened after a copywriting review and no
  * longer matches the Figma text verbatim.
  */
+import type {
+  ShowChapter,
+  ShowRecord,
+  ShowStat,
+  ShowsPageBodyCopy,
+  ShowsPageContent,
+  UpcomingShow,
+} from "@grade10/ui";
+
 const SITE_ORIGIN = "https://grade10.com";
 
 const events = (path: string) => `${SITE_ORIGIN}/events/${path}`;
@@ -58,66 +67,6 @@ const hangzhouPhotos = [
   "photo-05.webp",
   "photo-06.webp",
 ].map((p) => photos("cardjoy-hangzhou-2026", p));
-
-/** A numbered upcoming entry in the hero card. */
-type UpcomingShow = {
-  readonly month: string;
-  readonly year: string;
-  readonly title: string;
-  readonly city: string;
-};
-
-/** A headline statistic in the Event Scale section. */
-type ShowStat = {
-  readonly label: string;
-  readonly value: string;
-  readonly detail: string;
-};
-
-/** One event edition card: carousel photos plus press-release destination. */
-type ShowEdition = {
-  readonly date: string;
-  readonly title: string;
-  readonly description: string;
-  readonly photos: readonly string[];
-  readonly pressRelease: string;
-};
-
-/** A regional chapter inside Event Formats. */
-type ShowChapter = {
-  /** Anchor id the tab list scrolls to. */
-  readonly id: string;
-  /** Short name shown on the pill tab. */
-  readonly tab: string;
-  /** Eyebrow label drawn beside the MapPin. */
-  readonly label: string;
-  readonly title: string;
-  readonly dek: string;
-  /** YouTube presentation; absent when the chapter has a still image. */
-  readonly video?: {
-    readonly poster: string;
-    readonly posterAlt: string;
-    readonly badge: string;
-    readonly youtubeId: string;
-  };
-  /** Still image with caption; absent when the chapter has a video. */
-  readonly image?: {
-    readonly src: string;
-    readonly alt: string;
-    readonly caption: string;
-  };
-  /** Chapter-level press-release link (ghost button). */
-  readonly pressRelease?: string;
-  readonly editions: readonly ShowEdition[];
-};
-
-/** One row of the Event Records timeline. */
-type ShowRecord = {
-  readonly year: string;
-  readonly title: string;
-  readonly description: string;
-  readonly image: { readonly src: string; readonly alt: string };
-};
 
 const SHOWS_PAGE = {
   hero: {
@@ -324,7 +273,17 @@ const SHOWS_PAGE = {
       },
     ] satisfies readonly ShowRecord[],
   },
+} satisfies ShowsPageContent;
+
+const SHOWS_COPY: ShowsPageBodyCopy = {
+  pressRelease: "Press Release",
+  playVideo: (badge) => `Play ${badge} video`,
+  videoTitle: (badge) => `${badge} video`,
+  photoAlt: (title, position, count) => `${title} — ${position} of ${count}`,
+  previousPhoto: (title) => `Previous ${title} photo`,
+  nextPhoto: (title) => `Next ${title} photo`,
+  photos: (title) => `${title} photos`,
+  photo: (title, position) => `${title} photo ${position}`,
 };
 
-export type { ShowChapter, ShowEdition, ShowRecord, ShowStat, UpcomingShow };
-export { SHOWS_PAGE };
+export { SHOWS_COPY, SHOWS_PAGE };

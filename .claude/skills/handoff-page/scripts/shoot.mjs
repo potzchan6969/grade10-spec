@@ -104,11 +104,18 @@ function checkout(rev) {
   const dir = join(tmpdir(), `shoot-${sha.slice(0, 9)}-${process.pid}`);
   git(repo, "worktree", "add", "-q", "--detach", dir, sha);
   worktree = { repo, dir };
-  execFileSync(
-    "pnpm",
-    ["install", "--offline", "--frozen-lockfile", "--ignore-scripts"],
-    { cwd: dir, stdio: "ignore", env: { ...process.env, CI: "true" } },
-  );
+  const install = (mode) =>
+    execFileSync(
+      "pnpm",
+      ["install", mode, "--frozen-lockfile", "--ignore-scripts"],
+      { cwd: dir, stdio: "ignore", env: { ...process.env, CI: "true" } },
+    );
+  // The local store holds every package the checkout uses, but not always the metadata an older lockfile asks for.
+  try {
+    install("--offline");
+  } catch {
+    install("--prefer-offline");
+  }
   workbench = join(dir, relative(repo, workbench));
 }
 

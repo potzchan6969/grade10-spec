@@ -487,6 +487,19 @@ export {
 } from "./blocks/payment-method/payment-method-card";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
+// grade10-site/site/about
+export {
+  AboutPageBody,
+  type AboutPageBodyProps,
+} from "./blocks/site-about/about-page-body";
+export type {
+  AboutIndex,
+  AboutLink,
+  AboutMilestone,
+  AboutPageContent,
+  AboutSegment,
+  AboutStatement,
+} from "./blocks/site-about/types";
 // shared/ui/site-chrome
 export {
   SiteHeader,
@@ -494,6 +507,79 @@ export {
   type SiteHeaderProps,
   type SiteHeaderSession,
 } from "./blocks/site-chrome/site-header";
+// grade10-site/site/media-coverage
+export {
+  MediaCoverageCard,
+  type MediaCoverageCardProps,
+} from "./blocks/site-media-coverage/media-coverage-card";
+export {
+  MediaCoverageGrid,
+  type MediaCoverageGridProps,
+} from "./blocks/site-media-coverage/media-coverage-grid";
+export type {
+  MediaCoverageContent,
+  MediaCoverageCopy,
+  MediaItem,
+} from "./blocks/site-media-coverage/types";
+// grade10-site/site/press
+export {
+  PressArticle,
+  type PressArticleProps,
+} from "./blocks/site-press/press-article";
+export {
+  PressArticleBlock,
+  type PressArticleBlockProps,
+} from "./blocks/site-press/press-article-block";
+export {
+  PressArticleFigure,
+  type PressArticleFigureProps,
+} from "./blocks/site-press/press-article-figure";
+export { pressArticleBlockKey } from "./blocks/site-press/press-article-keys";
+export {
+  PressArticleSegments,
+  type PressArticleSegmentsProps,
+} from "./blocks/site-press/press-article-segments";
+export {
+  PressReleaseList,
+  type PressReleaseListProps,
+} from "./blocks/site-press/press-release-list";
+export {
+  PressReleaseListItem,
+  type PressReleaseListItemProps,
+} from "./blocks/site-press/press-release-list-item";
+export type {
+  ArticleBlock,
+  ArticleContact,
+  ArticleFigure,
+  ArticleFigureBlock,
+  ArticleGalleryBlock,
+  ArticleHeadingBlock,
+  ArticleLink,
+  ArticleListBlock,
+  ArticleParagraphBlock,
+  ArticleQuoteBlock,
+  ArticleSegment,
+  ArticleSidebarCard,
+  PressArticleContent,
+  PressItem,
+  PressReleaseListContent,
+  PressReleaseListCopy,
+  PressYearGroup,
+} from "./blocks/site-press/types";
+// grade10-site/site/shows
+export {
+  ShowsPageBody,
+  type ShowsPageBodyProps,
+} from "./blocks/site-shows/shows-page-body";
+export type {
+  ShowChapter,
+  ShowEdition,
+  ShowRecord,
+  ShowStat,
+  ShowsPageBodyCopy,
+  ShowsPageContent,
+  UpcomingShow,
+} from "./blocks/site-shows/types";
 // shared/ui/store-cart
 export {
   CartDrawer,

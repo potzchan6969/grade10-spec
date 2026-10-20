@@ -331,6 +331,15 @@ function repoFacts(cwd, d, areaList) {
     const [short, subject] = line.split("\x1f");
     return { short, subject, pr: subject.match(/#(\d+)/)?.[1] ?? null };
   });
+  // Every pull request that landed on the branch: a merge commit, or a commit whose subject ends with its number.
+  const pulls = lines(
+    gitIn(cwd, "log", "--first-parent", "--format=%h%x1f%p%x1f%s", span),
+  ).flatMap((line) => {
+    const [short, parents, subject] = line.split("\x1f");
+    const pr = (subject.match(/^Merge pull request #(\d+)/) ??
+      subject.match(/\(#(\d+)\)$/))?.[1];
+    return pr ? [{ short, pr, subject, squashed: !parents.includes(" ") }] : [];
+  });
   const files = lines(gitIn(cwd, "diff", "--numstat", "-M", span)).map(
     (line) => {
       const [added, removed, ...path] = line.split("\t");
@@ -373,6 +382,7 @@ function repoFacts(cwd, d, areaList) {
     to: d.to,
     commits: log,
     merges,
+    pulls,
     authors,
     types,
     areas,
@@ -381,7 +391,14 @@ function repoFacts(cwd, d, areaList) {
 }
 
 function empty() {
-  return { commits: [], merges: [], authors: {}, types: {}, areas: {} };
+  return {
+    commits: [],
+    merges: [],
+    pulls: [],
+    authors: {},
+    types: {},
+    areas: {},
+  };
 }
 
 function advance() {

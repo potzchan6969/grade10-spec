@@ -67,7 +67,7 @@ The post repeats the top of the day's page, then lists what the run brought, in 
 - **Day bar** - every day's page carries one from that list: Earlier, a pick of every day, and Later
 - **Title** - `<Branch> Branch Digest`, such as `Main Branch Digest`
 - **Reason** - the two or three moves that matter most, in one line: `3 site pages proposed, the Accounts pages rewritten, and the company site catalogs added`
-- **Numbers** - the day's counts a reader would quote, four at most, each recounted from `facts.json`: commits and pull requests merged across both repositories, changes proposed, changes built or archived
+- **Numbers** - the day's counts a reader would quote, four at most, each recounted from `facts.json`: commits and pull requests merged across both repositories (`pulls`, merged or squashed), changes proposed, changes built or archived
 
 ### What Changed, by Area
 

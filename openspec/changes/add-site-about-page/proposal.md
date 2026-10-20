@@ -50,11 +50,16 @@ None.
 ## Impact
 
 - `apps/preview/src/pages/site/about/` — the page assembly, its content
-  module, its stories, and the MemeStrategy logo fixture.
+  module, its stories, and the MemeStrategy logo and index-screenshot
+  fixtures.
+- `packages/ui/src/blocks/site-about/` — the `AboutPageBody` block that
+  holds the page body. `AboutPageContent` gains a required `marketIndexes`
+  field and a new `AboutIndex` type; consuming applications must supply
+  the four index entries when they next adopt the block.
 - `docs/prds/products/grade10-site/site/about.md` — the capability's PRD
   page, already written.
-- The implementing site repo consumes the page through the shared chrome;
-  no new component export, no routing, no data fetching.
+- The implementing site repo consumes the body through `AboutPageBody`;
+  no routing, no data fetching.
 
 ## Follow-on changes
 
