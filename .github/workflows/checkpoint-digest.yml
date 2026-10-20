@@ -5,9 +5,11 @@ name: Checkpoint digest
 # top of main, and that push starts this run, so a session needs no gh and no
 # token. It uploads each day to the e2e reports bucket, posts each day's new
 # changes to the digest channel, and only then moves refs/checkpoints/<branch>
-# to the commit the run covers, with a lease on the value the run read. A run
-# that fails before the move leaves the checkpoint where it was, so the next
-# run redraws the same days and posts the same changes.
+# to the spec store commit the run covers and refs/checkpoints-of/<owner>/
+# <name>/<branch> to the application commit it covers, in one push with a lease
+# on each value the run read. A run that fails before the move leaves both
+# checkpoints where they were, so the next run redraws the same days and posts
+# the same changes.
 
 on:
   push:
@@ -88,7 +90,8 @@ jobs:
           node -e '
             const range = require("./page/.digest/range.json");
             if (range.branch !== process.env.BRANCH) throw new Error(`the pages cover ${range.branch}, not ${process.env.BRANCH}`);
-            const env = [`SAVED=${range.saved}`, `TO=${range.to}`];
+            const b = range.build ?? {};
+            const env = [`SAVED=${range.saved}`, `TO=${range.to}`, `BUILD_REPO=${b.repo ?? ""}`, `BUILD_SAVED=${b.saved ?? ""}`, `BUILD_TO=${b.to ?? ""}`];
             require("fs").appendFileSync(process.env.GITHUB_ENV, env.join("\n") + "\n");
           '
           echo "PREFIX=reports/grade10-spec/digest/${BRANCH//\//-}" >> "$GITHUB_ENV"
@@ -152,8 +155,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          build=()
+          [ -n "$BUILD_REPO" ] && build=(--build-repo "$BUILD_REPO" --build-to "$BUILD_TO" --build-from "$BUILD_SAVED")
           node .claude/skills/checkpoint-digest/scripts/checkpoint.mjs advance \
-            --branch "$BRANCH" --to "$TO" --from "$SAVED"
+            --branch "$BRANCH" --to "$TO" --from "$SAVED" "${build[@]}"
 
       - name: Delete the page branch
         run: gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/digest/$BRANCH"

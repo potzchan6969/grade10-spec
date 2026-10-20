@@ -1,7 +1,7 @@
 // Push the run's day pages, their shots and the run's range to digest/<branch>; the push starts the Checkpoint digest workflow,
 // which uploads each day, posts what the run brought to Slack and moves the checkpoint. No gh and no token: a git push is enough.
-// node publish.mjs <page.html>... --branch <b> --from <from> --to <to> --saved <saved, null on a first run>
-// from, to and saved are what range printed: the run's commits, and the checkpoint the workflow moves with a lease.
+// node publish.mjs <page.html>... --range <range.json>
+// range.json is what range printed: both repositories' commits, the checkpoints the workflow moves with a lease, and the fresh commits.
 import { execFileSync } from "node:child_process";
 import {
   cpSync,
@@ -25,29 +25,31 @@ const option = (name) => {
 };
 const first = args.findIndex((a) => a.startsWith("--"));
 const pages = first === -1 ? args : args.slice(0, first);
-const branch = option("branch");
-if (
-  !pages.length ||
-  !branch ||
-  !option("from") ||
-  !option("to") ||
-  option("saved") === undefined
-)
+if (!pages.length || !option("range"))
   throw new Error(
-    "usage: node publish.mjs <page.html>... --branch <b> --from <from> --to <to> --saved <saved, null on a first run>",
+    "usage: node publish.mjs <page.html>... --range <range.json>",
   );
+const read = JSON.parse(readFileSync(resolve(option("range")), "utf8"));
+const branch = read.branch;
 
 const git = (cwd, ...a) =>
   execFileSync("git", a, { cwd, encoding: "utf8" }).trim();
 const origin = git(process.cwd(), "remote", "get-url", "origin");
 const repo = origin.match(/github\.com[:/](.+?)(?:\.git)?$/)?.[1];
 if (!repo) throw new Error(`origin ${origin} is not a GitHub repository`);
-const commit = (rev) => git(process.cwd(), "rev-parse", `${rev}^{commit}`);
+const commit = (cwd, rev) => git(cwd, "rev-parse", `${rev}^{commit}`);
+// The dir stays here: the workflow needs each repository's run and its checkpoint, never a path on this machine.
+const runOf = (r, cwd) => ({
+  repo: r.repo,
+  from: commit(cwd, r.from),
+  to: commit(cwd, r.to),
+  saved: r.saved ? commit(cwd, r.saved) : "",
+});
 const range = {
   branch,
-  from: commit(option("from")),
-  to: commit(option("to")),
-  saved: /^(|null)$/.test(option("saved")) ? "" : commit(option("saved")),
+  ...runOf(read.spec, process.cwd()),
+  build: read.build ? runOf(read.build, read.build.dir) : null,
+  fresh: read.fresh,
 };
 const days = pages.map((file) => {
   const page = resolve(file);

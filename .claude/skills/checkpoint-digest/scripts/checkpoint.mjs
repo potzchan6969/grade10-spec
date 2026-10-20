@@ -1,9 +1,14 @@
 // The checkpoint a branch's digest starts from, the facts of what moved since it, and the step that moves it.
-// node checkpoint.mjs range   [--branch <b>] [--to <rev>]          - prints {branch, from, to, base, commits, days} as JSON
-// node checkpoint.mjs facts   --day <YYYY-MM-DD> [--branch <b>] [--to <rev>] [--from <rev>] - prints the facts one day's page is drawn from as JSON
+// The digest covers the spec store (this repository) and, with --build <dir>, the application repository built from it.
+// node checkpoint.mjs range   [--branch <b>] [--to <rev>] [--build <dir>] - prints the run's range as JSON: both repositories, the days and the fresh commits
+// node checkpoint.mjs facts   --day <YYYY-MM-DD> [--branch <b>] [--to <rev>] [--build <dir>] - prints the facts one day's page is drawn from as JSON
 // A day is a Hong Kong calendar day, and its page covers every commit that landed on the branch that day, whenever the digest runs.
-// node checkpoint.mjs advance --to <sha> [--branch <b>] [--from <sha>] - pushes refs/checkpoints/<b> to <sha>, refused if another run moved it first
+// node checkpoint.mjs advance --to <sha> [--from <sha>] [--build-repo <owner/name> --build-to <sha> [--build-from <sha>]] [--branch <b>]
+//   pushes refs/checkpoints/<b>, and the build checkpoint beside it, in one atomic push, refused if another run moved either first
+// The build checkpoint lives here, not in the application repository, so one token moves both: refs/checkpoints-of/<owner>/<name>/<b>
+// is a commit with no files whose subject is the application commit the last digest covered.
 import { execFileSync } from "node:child_process";
+import { resolve } from "node:path";
 
 const HK = 8 * 3600 * 1000;
 const REMOTE = process.env.CHECKPOINT_REMOTE ?? "origin";
@@ -29,24 +34,35 @@ const AREAS = [
   ["Tooling and CI", /^(scripts|tools|\.github)\//],
 ];
 
+// The application repository's areas: its agent skills, tooling and pin first, then each app and package by name.
+const BUILD_AREAS = [
+  ["Agent skills", /^\.(claude|codex|cursor|devin)\//],
+  ["Tooling and CI", /^(scripts|tools|\.github)\//],
+  ["Spec store pin", /^external\//],
+  ["Docs", /^docs\//],
+];
+
 const [command, ...rest] = process.argv.slice(2);
 const option = (name) => {
   const i = rest.indexOf(`--${name}`);
   return i === -1 ? undefined : rest[i + 1];
 };
-const git = (...a) =>
+const gitIn = (cwd, ...a) =>
   execFileSync("git", a, {
+    cwd,
     encoding: "utf8",
     maxBuffer: 256 * 1024 * 1024,
     stdio: ["ignore", "pipe", "pipe"],
   }).trim();
-const tryGit = (...a) => {
+const tryGitIn = (cwd, ...a) => {
   try {
-    return git(...a);
+    return gitIn(cwd, ...a);
   } catch {
     return undefined;
   }
 };
+const git = (...a) => gitIn(undefined, ...a);
+const tryGit = (...a) => tryGitIn(undefined, ...a);
 
 const branch =
   option("branch") ??
@@ -55,55 +71,118 @@ const branch =
 if (!branch || branch === "HEAD")
   fail("on a detached HEAD: pass --branch <name>");
 const ref = `refs/checkpoints/${branch}`;
+const buildDir =
+  (option("build") ?? process.env.CHECKPOINT_BUILD) &&
+  resolve(option("build") ?? process.env.CHECKPOINT_BUILD);
 
 if (command === "range") print(range());
-else if (command === "facts") print(facts(day(range(), option("day"))));
+else if (command === "facts") print(facts(range(), option("day")));
 else if (command === "advance") advance();
 else
   fail(
-    "usage: node checkpoint.mjs range|facts|advance [--branch <b>] [--to <rev>] [--from <rev>]",
+    "usage: node checkpoint.mjs range|facts|advance [--branch <b>] [--to <rev>] [--build <dir>]",
   );
 
 function range() {
-  if (tryGit("rev-parse", "--is-shallow-repository") === "true")
-    git("fetch", "--quiet", "--unshallow", REMOTE);
-  tryGit("fetch", "--quiet", REMOTE, `+${ref}:${ref}`);
-  const to = git("rev-parse", option("to") ?? "HEAD");
-  const saved = tryGit("rev-parse", "--verify", "--quiet", `${ref}^{commit}`);
-  let from = option("from") ? git("rev-parse", option("from")) : saved;
-  let base = option("from") ? "given" : "checkpoint";
-  if (from && tryGit("merge-base", "--is-ancestor", from, to) === undefined) {
+  unshallow(undefined);
+  fetchRef(ref);
+  const spec = run(undefined, {
+    repo: repoOf(undefined),
+    ref,
+    to: git("rev-parse", option("to") ?? "HEAD"),
+    saved: tryGit("rev-parse", "--verify", "--quiet", `${ref}^{commit}`),
+  });
+  let build = null;
+  if (buildDir) {
+    unshallow(buildDir);
+    gitIn(buildDir, "fetch", "--quiet", REMOTE, branch);
+    const repo = repoOf(buildDir);
+    if (!repo) fail(`${buildDir}: its ${REMOTE} is not a GitHub repository`);
+    const marker = markerRef(repo);
+    fetchRef(marker);
+    build = {
+      dir: buildDir,
+      ...run(buildDir, {
+        repo,
+        ref: marker,
+        to: gitIn(buildDir, "rev-parse", "FETCH_HEAD^{commit}"),
+        saved: markedCommit(marker),
+      }),
+    };
+  }
+  const both = [spec, build].filter(Boolean);
+  return {
+    branch,
+    commits: both.reduce((n, r) => n + r.commits, 0),
+    days: [...new Set(both.flatMap((r) => r.days))].sort(),
+    spec,
+    build,
+    fresh: both.flatMap((r) => r.fresh),
+  };
+}
+
+// One repository's run: from its checkpoint, or from the end of last Friday on a first run, to the branch head.
+function run(cwd, { repo, ref, to, saved }) {
+  let from = saved;
+  let base = "checkpoint";
+  if (cwd === undefined && option("from")) {
+    from = git("rev-parse", option("from"));
+    base = "given";
+  }
+  if (from && !exists(cwd, from)) {
+    // The checkpoint's commit is gone from the repository: start over as on a first run.
+    from = undefined;
+  } else if (
+    from &&
+    tryGitIn(cwd, "merge-base", "--is-ancestor", from, to) === undefined
+  ) {
     // The branch was rewritten past the checkpoint: start where the two still agree.
-    from = tryGit("merge-base", from, to);
+    from = tryGitIn(cwd, "merge-base", from, to);
     base = "merge-base";
   }
   if (!from) {
     from =
-      tryGit("rev-list", "-1", "--first-parent", `--before=${FIRST_RUN}`, to) ||
-      git("rev-list", "--max-parents=0", to).split("\n").pop();
+      tryGitIn(
+        cwd,
+        "rev-list",
+        "-1",
+        "--first-parent",
+        `--before=${FIRST_RUN}`,
+        to,
+      ) || gitIn(cwd, "rev-list", "--max-parents=0", to).split("\n").pop();
     base = "first-run";
   }
-  const commits = Number(git("rev-list", "--count", `${from}..${to}`));
+  const commits = Number(gitIn(cwd, "rev-list", "--count", `${from}..${to}`));
   // The days the new commits landed on, by the time each reached the branch.
   const days = [
     ...new Set(
-      git("log", "--first-parent", "--format=%cI", `${from}..${to}`)
+      gitIn(cwd, "log", "--first-parent", "--format=%cI", `${from}..${to}`)
         .split("\n")
         .filter(Boolean)
         .map(dayOf),
     ),
   ].sort();
-  return { branch, ref, saved: saved ?? null, from, to, base, commits, days };
+  const fresh = lines(gitIn(cwd, "rev-list", "--no-merges", to, `^${from}`));
+  return {
+    repo,
+    ref,
+    saved: saved ?? null,
+    from,
+    to,
+    base,
+    commits,
+    days,
+    fresh,
+  };
 }
 
-// The whole day, from the branch as it stood at the day's start to the last commit the day landed;
-// fresh names the day's commits this run brings, the ones the last post did not cover.
-function day(r, date) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? ""))
-    fail("facts needs --day <YYYY-MM-DD>: one of the days range prints");
+// The whole day in one repository, from the branch as it stood at the day's start to the last commit the day landed;
+// fresh names the day's commits this run brings, the ones the last post did not cover. Null when nothing landed that day.
+function daySpan(cwd, r, date) {
   const start = Date.parse(`${date}T00:00:00Z`) - HK;
   const before = (t) =>
-    tryGit(
+    tryGitIn(
+      cwd,
       "rev-list",
       "-1",
       "--first-parent",
@@ -111,57 +190,149 @@ function day(r, date) {
       r.to,
     );
   const to = before(start + 24 * 3600 * 1000);
-  if (!to || dayOf(git("show", "-s", "--format=%cI", to)) !== date)
-    fail(`nothing landed on ${r.branch} on ${date}`);
+  if (!to || dayOf(gitIn(cwd, "show", "-s", "--format=%cI", to)) !== date)
+    return null;
   const from =
-    before(start) || git("rev-list", "--max-parents=0", to).split("\n").pop();
-  const fresh = git("rev-list", "--no-merges", to, `^${from}`, `^${r.from}`)
-    .split("\n")
-    .filter(Boolean);
-  return { ...r, day: date, from, to, fresh };
+    before(start) ||
+    gitIn(cwd, "rev-list", "--max-parents=0", to).split("\n").pop();
+  const fresh = lines(
+    gitIn(cwd, "rev-list", "--no-merges", to, `^${from}`, `^${r.from}`),
+  );
+  return { from, to, fresh };
 }
 
-function facts(r) {
-  const span = `${r.from}..${r.to}`;
-  const log = git(
+function facts(r, date) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? ""))
+    fail("facts needs --day <YYYY-MM-DD>: one of the days range prints");
+  const specDay = daySpan(undefined, r.spec, date);
+  const buildDay = r.build && daySpan(r.build.dir, r.build, date);
+  if (!specDay && !buildDay) fail(`nothing landed on ${branch} on ${date}`);
+
+  const spec = specDay
+    ? specFacts(specDay)
+    : { from: null, to: null, ...empty() };
+  const build = buildDay
+    ? buildFacts(r.spec.to, r.build, buildDay)
+    : r.build && { repo: r.build.repo, from: null, to: null, ...empty() };
+  return {
+    branch,
+    repo: r.spec.repo,
+    day: date,
+    date,
+    fromDate: date,
+    base: r.spec.base,
+    ...spec,
+    build: build && { base: r.build.base, ...build },
+  };
+}
+
+function specFacts(d) {
+  const f = repoFacts(undefined, d, AREAS);
+  return {
+    ...f,
+    openspec: openspecMoves(f.files),
+    tokens: jsonDiff(d, f.files, /^packages\/design-system\/tokens\.json$/),
+    copy: jsonDiff(d, f.files, /^packages\/i18n\/messages\/.*\.json$/),
+    components: f.files
+      .filter((x) => /^(Primitives|Blocks)$/.test(x.area) && x.status !== "M")
+      .map((x) => `${x.status} ${x.path}`)
+      .slice(0, LIMIT),
+    files: undefined,
+  };
+}
+
+// The application's day, and which of its commits build which OpenSpec change: those a change's implementation
+// record names as its build, and those whose message names the change.
+function buildFacts(specTo, b, d) {
+  const f = repoFacts(b.dir, d, BUILD_AREAS);
+  const day = new Set(f.commits.map((c) => c.sha));
+  const links = {};
+  const link = (change, how, shas) => {
+    const hit = shas.filter((s) => day.has(s));
+    if (!hit.length) return;
+    links[change] ??= {};
+    links[change][how] = [
+      ...new Set([
+        ...(links[change][how] ?? []),
+        ...hit.map((s) => s.slice(0, 9)),
+      ]),
+    ];
+  };
+  for (const [change, commit] of builtBy(specTo, b.repo)) {
+    if (!exists(b.dir, commit)) continue;
+    // A merge builds everything it brought; a single commit builds itself.
+    const parents = gitIn(b.dir, "rev-list", "--parents", "-n", "1", commit)
+      .split(" ")
+      .slice(1);
+    link(
+      change,
+      "recorded",
+      parents.length > 1
+        ? lines(
+            gitIn(b.dir, "rev-list", "--no-merges", commit, `^${parents[0]}`),
+          )
+        : [commit],
+    );
+  }
+  const ids = changeIds(specTo).sort((a, z) => z.length - a.length);
+  for (const line of gitIn(
+    b.dir,
     "log",
     "--no-merges",
-    "--format=%H%x1f%h%x1f%an%x1f%aI%x1f%s",
-    span,
-  )
-    .split("\n")
-    .filter(Boolean)
-    .map((line) => {
-      const [sha, short, author, date, subject] = line.split("\x1f");
-      const cc = subject.match(/^(\w+)(?:\(([^)]+)\))?!?:\s*(.*)$/);
-      return {
-        sha,
-        short,
-        author,
-        date,
-        subject,
-        type: cc?.[1] ?? null,
-        scope: cc?.[2] ?? null,
-        fresh: r.fresh.includes(sha),
-      };
-    });
-  const merges = git(
-    "log",
-    "--merges",
-    "--first-parent",
-    "--format=%h%x1f%s",
-    span,
-  )
-    .split("\n")
-    .filter(Boolean)
-    .map((line) => {
-      const [short, subject] = line.split("\x1f");
-      return { short, subject, pr: subject.match(/#(\d+)/)?.[1] ?? null };
-    });
-  const files = git("diff", "--numstat", "-M", span)
-    .split("\n")
-    .filter(Boolean)
-    .map((line) => {
+    "--format=%H%x1f%B%x1e",
+    `${d.from}..${d.to}`,
+  ).split("\x1e")) {
+    const [sha, body = ""] = line.trim().split("\x1f");
+    const id = ids.find((id) =>
+      new RegExp(`(^|[^a-z0-9-])${id}($|[^a-z0-9-])`).test(body),
+    );
+    if (sha && id) link(id, "named", [sha]);
+  }
+  const linked = new Set(
+    Object.values(links).flatMap((l) => Object.values(l).flat()),
+  );
+  return {
+    repo: b.repo,
+    ...f,
+    files: undefined,
+    links,
+    unlinked: f.commits.filter((c) => !linked.has(c.sha.slice(0, 9))).length,
+  };
+}
+
+// The commits, pull requests, lines per area, authors and kinds of one repository's day.
+function repoFacts(cwd, d, areaList) {
+  const span = `${d.from}..${d.to}`;
+  const log = lines(
+    gitIn(
+      cwd,
+      "log",
+      "--no-merges",
+      "--format=%H%x1f%h%x1f%an%x1f%aI%x1f%s",
+      span,
+    ),
+  ).map((line) => {
+    const [sha, short, author, date, subject] = line.split("\x1f");
+    const cc = subject.match(/^(\w+)(?:\(([^)]+)\))?!?:\s*(.*)$/);
+    return {
+      sha,
+      short,
+      author,
+      date,
+      subject,
+      type: cc?.[1] ?? null,
+      scope: cc?.[2] ?? null,
+      fresh: d.fresh.includes(sha),
+    };
+  });
+  const merges = lines(
+    gitIn(cwd, "log", "--merges", "--first-parent", "--format=%h%x1f%s", span),
+  ).map((line) => {
+    const [short, subject] = line.split("\x1f");
+    return { short, subject, pr: subject.match(/#(\d+)/)?.[1] ?? null };
+  });
+  const files = lines(gitIn(cwd, "diff", "--numstat", "-M", span)).map(
+    (line) => {
       const [added, removed, ...path] = line.split("\t");
       const name = path
         .join("\t")
@@ -171,17 +342,15 @@ function facts(r) {
         path: name,
         added: Number(added) || 0,
         removed: Number(removed) || 0,
-        area: areaOf(name),
+        area: areaOf(name, areaList),
       };
-    });
+    },
+  );
   const status = new Map(
-    git("diff", "--name-status", "-M", span)
-      .split("\n")
-      .filter(Boolean)
-      .map((line) => {
-        const [s, ...paths] = line.split("\t");
-        return [paths.at(-1), s[0]];
-      }),
+    lines(gitIn(cwd, "diff", "--name-status", "-M", span)).map((line) => {
+      const [s, ...paths] = line.split("\t");
+      return [paths.at(-1), s[0]];
+    }),
   );
   for (const f of files) f.status = status.get(f.path) ?? "M";
 
@@ -199,48 +368,134 @@ function facts(r) {
   const types = {};
   for (const c of log)
     types[c.type ?? "other"] = (types[c.type ?? "other"] ?? 0) + 1;
-
   return {
-    ...r,
-    repo: repoOf(),
-    date: r.day,
-    fromDate: r.day,
+    from: d.from,
+    to: d.to,
     commits: log,
     merges,
     authors,
     types,
     areas,
-    openspec: openspecMoves(files),
-    tokens: jsonDiff(r, files, /^packages\/design-system\/tokens\.json$/),
-    copy: jsonDiff(r, files, /^packages\/i18n\/messages\/.*\.json$/),
-    components: files
-      .filter((f) => /^(Primitives|Blocks)$/.test(f.area) && f.status !== "M")
-      .map((f) => `${f.status} ${f.path}`)
-      .slice(0, LIMIT),
+    files,
   };
+}
+
+function empty() {
+  return { commits: [], merges: [], authors: {}, types: {}, areas: {} };
 }
 
 function advance() {
   const to = option("to");
   if (!to) fail("advance needs --to <sha>: the commit the digest was drawn to");
+  const refspecs = [];
+  const leases = [];
+  const updates = [];
   const sha = git("rev-parse", `${to}^{commit}`);
-  tryGit("fetch", "--quiet", REMOTE, `+${ref}:${ref}`);
+  fetchRef(ref);
   const now = tryGit("rev-parse", "--verify", "--quiet", ref) ?? "";
   const expected = option("from") ?? now;
   if (now !== expected)
     fail(
       `${ref} moved to ${now.slice(0, 7) || "nothing"} since this digest read ${expected.slice(0, 7) || "nothing"}; draw the digest again`,
     );
-  // The lease refuses the push when another run moved the checkpoint after this one read it.
-  git(
-    "push",
-    "--quiet",
-    REMOTE,
-    `--force-with-lease=${ref}:${expected}`,
-    `${sha}:${ref}`,
-  );
-  git("update-ref", ref, sha);
-  print({ branch, ref, from: expected || null, to: sha });
+  refspecs.push(`${sha}:${ref}`);
+  leases.push(`--force-with-lease=${ref}:${expected}`);
+  updates.push([ref, sha]);
+  const out = { branch, ref, from: expected || null, to: sha };
+
+  const repo = option("build-repo");
+  if (repo) {
+    const buildTo = option("build-to");
+    if (!/^[0-9a-f]{40}$/.test(buildTo ?? ""))
+      fail("advance needs --build-to <full sha> with --build-repo");
+    const marker = markerRef(repo);
+    fetchRef(marker);
+    const markerNow = tryGit("rev-parse", "--verify", "--quiet", marker) ?? "";
+    const buildNow = markedCommit(marker) ?? "";
+    const buildExpected = option("build-from") ?? buildNow;
+    if (buildNow !== buildExpected)
+      fail(
+        `${marker} moved to ${buildNow.slice(0, 7) || "nothing"} since this digest read ${buildExpected.slice(0, 7) || "nothing"}; draw the digest again`,
+      );
+    const tree = execFileSync(
+      "git",
+      ["hash-object", "-w", "-t", "tree", "--stdin"],
+      {
+        input: "",
+        encoding: "utf8",
+      },
+    ).trim();
+    const commit = git(
+      "commit-tree",
+      tree,
+      "-m",
+      buildTo,
+      "-m",
+      `The ${branch} digest of ${repo} covers ${buildTo}.`,
+    );
+    refspecs.push(`${commit}:${marker}`);
+    leases.push(`--force-with-lease=${marker}:${markerNow}`);
+    updates.push([marker, commit]);
+    out.build = { repo, ref: marker, from: buildExpected || null, to: buildTo };
+  }
+  // One atomic push with a lease on each value read: both checkpoints move, or neither does.
+  git("push", "--quiet", "--atomic", REMOTE, ...leases, ...refspecs);
+  for (const [r, s] of updates) git("update-ref", r, s);
+  print(out);
+}
+
+// The remote holds the checkpoint: a copy left here by an earlier run never stands in for one the remote lacks.
+function fetchRef(name) {
+  tryGit("update-ref", "-d", name);
+  tryGit("fetch", "--quiet", REMOTE, `+${name}:${name}`);
+}
+
+function markerRef(repo) {
+  return `refs/checkpoints-of/${repo}/${branch}`;
+}
+
+// The application commit a build checkpoint names, or nothing before its first run.
+function markedCommit(marker) {
+  const subject = tryGit("log", "-1", "--format=%s", marker);
+  return /^[0-9a-f]{40}$/.test(subject ?? "") ? subject : undefined;
+}
+
+// Every change, active or archived, whose implementation record names a commit of the repository.
+function builtBy(rev, repo) {
+  const out = [];
+  for (const path of lines(
+    tryGit("ls-tree", "-r", "--name-only", rev, "openspec/changes") ?? "",
+  )) {
+    const m = path.match(
+      /^openspec\/changes\/(?:archive\/[\d-]+-)?([^/]+)\/implementation\.json$/,
+    );
+    if (!m) continue;
+    for (const r of readJson(rev, path).repositories ?? [])
+      if (r.repository === repo && /^[0-9a-f]{7,40}$/.test(r.commit ?? ""))
+        out.push([m[1], r.commit]);
+  }
+  return out;
+}
+
+function changeIds(rev) {
+  return [
+    ...new Set(
+      lines(
+        tryGit("ls-tree", "-d", "--name-only", `${rev}:openspec/changes`) ?? "",
+      )
+        .filter((n) => n !== "archive")
+        .concat(
+          lines(
+            tryGit(
+              "ls-tree",
+              "-d",
+              "--name-only",
+              `${rev}:openspec/changes/archive`,
+            ) ?? "",
+          ).map((n) => n.replace(/^\d{4}-\d{2}-\d{2}-/, "")),
+        ),
+    ),
+  ];
 }
 
 function openspecMoves(files) {
@@ -280,11 +535,11 @@ function openspecMoves(files) {
   );
 }
 
-function jsonDiff(r, files, pattern) {
+function jsonDiff(d, files, pattern) {
   const out = [];
   for (const f of files.filter((f) => pattern.test(f.path))) {
-    const before = flatten(readJson(r.from, f.path));
-    const now = flatten(readJson(r.to, f.path));
+    const before = flatten(readJson(d.from, f.path));
+    const now = flatten(readJson(d.to, f.path));
     for (const key of new Set([...Object.keys(before), ...Object.keys(now)])) {
       if (before[key] === now[key]) continue;
       out.push({
@@ -316,6 +571,19 @@ function flatten(value, prefix = "", out = {}) {
   return out;
 }
 
+function unshallow(cwd) {
+  if (tryGitIn(cwd, "rev-parse", "--is-shallow-repository") === "true")
+    gitIn(cwd, "fetch", "--quiet", "--unshallow", REMOTE);
+}
+
+function exists(cwd, rev) {
+  return tryGitIn(cwd, "cat-file", "-e", `${rev}^{commit}`) !== undefined;
+}
+
+function lines(text) {
+  return text.split("\n").filter(Boolean);
+}
+
 function dayOf(iso) {
   return new Date(Date.parse(iso) + HK).toISOString().slice(0, 10);
 }
@@ -332,15 +600,19 @@ function endOfLastFriday(now = new Date()) {
   return new Date(midnight - HK).toISOString();
 }
 
-function areaOf(path) {
-  return (
-    AREAS.find(([, pattern]) => pattern.test(path))?.[0] ??
-    (path.includes("/") ? `${path.split("/")[0]}/` : "Root files")
-  );
+// A path's area: the first that claims it, else, in the application, its app or package, else its top folder.
+function areaOf(path, areaList) {
+  const named = areaList.find(([, pattern]) => pattern.test(path))?.[0];
+  if (named) return named;
+  if (areaList === BUILD_AREAS) {
+    const unit = path.match(/^(apps\/[^/]+\/[^/]+|packages\/[^/]+)\//)?.[1];
+    if (unit) return unit;
+  }
+  return path.includes("/") ? `${path.split("/")[0]}/` : "Root files";
 }
 
-function repoOf() {
-  const url = tryGit("remote", "get-url", REMOTE) ?? "";
+function repoOf(cwd) {
+  const url = tryGitIn(cwd, "remote", "get-url", REMOTE) ?? "";
   return url.match(/github\.com[:/](.+?)(?:\.git)?$/)?.[1] ?? null;
 }
 

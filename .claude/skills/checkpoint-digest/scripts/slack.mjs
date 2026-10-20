@@ -1,8 +1,8 @@
 // Post what a run brought to one day's digest: the day's changes whose commits are new since the last post, with the page's link.
-// node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--from <rev> --to <rev>] [--channel <id>] [--send]
-// Without --send it prints what it would post and calls nothing. The run's commits come from the data's range, or --from and --to.
+// node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--range <range.json>] [--channel <id>] [--send]
+// Without --send it prints what it would post and calls nothing. The run's fresh commits, in both repositories, come from the
+// range publish.mjs writes into the data, or from --range, the file range printed.
 // A day with no new change posts nothing. The button opens --latest, the link that always shows the newest digest.
-import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -18,13 +18,12 @@ const option = (name) => {
 };
 const file = args.find(
   (a, i) =>
-    !a.startsWith("--") &&
-    !/^--(url|latest|from|to|channel)$/.test(args[i - 1]),
+    !a.startsWith("--") && !/^--(url|latest|range|channel)$/.test(args[i - 1]),
 );
 const url = option("url");
 if (!file || !url)
   fail(
-    "usage: node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--from <rev> --to <rev>] [--channel <id>] [--send]",
+    "usage: node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--range <range.json>] [--channel <id>] [--send]",
   );
 const page = url.split("#")[0];
 const latest = option("latest") ?? page;
@@ -145,20 +144,16 @@ function blocks() {
   return out.slice(0, 50);
 }
 
-// The commits this run brought: the range the run read, never the day's, so an earlier post is not repeated.
+// The commits this run brought, in both repositories: the run's range, never the day's, so an earlier post is not repeated.
 function brought() {
-  const from = option("from") ?? data.range?.from;
-  const to = option("to") ?? data.range?.to;
-  if (!from || !to)
+  const fresh = option("range")
+    ? JSON.parse(readFileSync(resolve(option("range")), "utf8")).fresh
+    : data.range?.fresh;
+  if (!Array.isArray(fresh))
     fail(
-      "name the run's commits: --from and --to, or a range in the data as publish.mjs writes it",
+      "name the run's commits: --range <range.json>, or a range in the data as publish.mjs writes it",
     );
-  return execFileSync("git", ["rev-list", "--no-merges", to, `^${from}`], {
-    encoding: "utf8",
-    maxBuffer: 64 * 1024 * 1024,
-  })
-    .split("\n")
-    .filter(Boolean);
+  return fresh;
 }
 
 // One change: its kind, its title linked to its card, and who notices it.
