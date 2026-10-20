@@ -102,6 +102,11 @@ export function formatWeekday(day: string, locale: string): string {
   return renderCalendarDay(day, PATTERNS.weekday, locale);
 }
 
+/** A calendar day a record is filed under, month first: `Sep 15, 2026`. */
+export function formatDateline(day: string, locale: string): string {
+  return renderCalendarDay(day, PATTERNS.dateline, locale);
+}
+
 const UTC_MONTHS = [
   "Jan",
   "Feb",

@@ -58,6 +58,8 @@ export const PATTERNS = {
   monthNameAlone: "MMMM",
   /** A day named in full, heading a page about that day. */
   weekdayDay: "EEEE d MMM yyyy",
+  /** A calendar date a record is filed under, month first: a press release's. */
+  dateline: "MMM d, yyyy",
 } as const;
 
 /**
@@ -80,6 +82,7 @@ const ZH_PATTERNS: Partial<Record<keyof typeof PATTERNS, string>> = {
   monthAlone: "M月",
   monthNameAlone: "M月",
   weekdayDay: "yyyy年M月d日 EEEE",
+  dateline: "yyyy年M月d日",
 };
 
 const ZH_BY_PATTERN = new Map<string, string>(
