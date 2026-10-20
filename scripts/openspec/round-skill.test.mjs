@@ -291,7 +291,7 @@ test("shared-planning-agent-rounds-SC-16 - a remark on a page's marked lines", (
 });
 
 test("shared-planning-agent-rounds-SC-06 - the requirements' round takes two readings", () => {
-  const skill = claims(".claude/skills/planning-dev/SKILL.md");
+  const skill = claims(".claude/skills/planning-dev/LEGACY.md");
   assert.match(skill, /fresh.*QA1.*Dev.*QA2/i);
   assert.match(skill, /QA1.*without.*scenarios/i);
   assert.match(skill, /Dev.*technical design.*scenarios.*tasks/i);
@@ -301,7 +301,7 @@ test("shared-planning-agent-rounds-SC-06 - the requirements' round takes two rea
 });
 
 test("shared-planning-agent-rounds-SC-07 - a reading raises what it cannot settle", () => {
-  const skill = claims(".claude/skills/planning-dev/SKILL.md");
+  const skill = claims(".claude/skills/planning-dev/LEGACY.md");
   assert.match(skill, /question.*cannot settle.*same human/i);
 });
 
@@ -756,7 +756,7 @@ test("shared-planning-agent-rounds-SC-48 - a late answer reaches the requirement
 });
 
 test("shared-planning-agent-rounds-SC-108 - a question the tech design cannot settle is raised, never a wait", () => {
-  const skill = claims(".claude/skills/planning-dev/SKILL.md");
+  const skill = claims(".claude/skills/planning-dev/LEGACY.md");
   assert.match(
     skill,
     /the requirements pass reads `tech-design\.md` beside\s+`ui-design\.md`; a requirement contradicting either is not written/i,
@@ -949,7 +949,7 @@ test("current planning skills do not depend on next-version workflow wrappers", 
     );
   }
   assert.match(
-    claims(".claude/skills/planning-design/SKILL.md"),
+    claims(".claude/skills/planning-design/LEGACY.md"),
     /Start with `planning-pm`/,
   );
 });

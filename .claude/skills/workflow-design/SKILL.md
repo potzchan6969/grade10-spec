@@ -6,7 +6,7 @@ description: Run a round on a change's ui-design.md - the screens, the exports e
 # The Designer's Round
 
 - **Scope** - Draft `ui-design.md` for the named change from its linked PRD sections, proposal, decisions and journeys. A change with no user-facing surface records `ui_waived: <why>` instead.
-- **Artifact Rules** - Use [planning-design](../planning-design/SKILL.md) for the design reference, screens, components and States table. Read the enriched artifact instructions:
+- **Artifact Rules** - Use [planning-design](../planning-design/LEGACY.md) for the design reference, screens, components and States table. Read the enriched artifact instructions:
 
 ```bash
 openspec instructions ui-design --change <change>

@@ -6,7 +6,7 @@ description: Run a round on the product manager's three artifacts of a change - 
 # The Product Manager's Round
 
 - **Scope** - Accept a requested outcome or existing change id. Draft `proposal.md`, `decisions.md` and `specs/<capability>/user-journeys.md`, in that order.
-- **Artifact Rules** - Use [planning-pm](../planning-pm/SKILL.md) for the interview, PRD marks, artifact contents and delivery-planning handoff. The [Interview](../../../docs/governance/round-summary.md#interview) owns the questions.
+- **Artifact Rules** - Use [planning-pm](../planning-pm/LEGACY.md) for the interview, PRD marks, artifact contents and delivery-planning handoff. The [Interview](../../../docs/governance/round-summary.md#interview) owns the questions.
 - **Round** - Follow `workflow-round` ([skill](../workflow-round/SKILL.md)) once per artifact for readers, questions, summary and landing. Read each artifact's enriched instructions as you reach it:
 
 ```bash

@@ -5,7 +5,7 @@ description: Route implementation planning to the integrated planning-dev invoca
 
 # Task Planning Route
 
-- **Route** - `/workflow-tasks <change>` routes to [planning-dev](../planning-dev/SKILL.md). Pass the change and any task-planning input to its integrated planning run.
+- **Route** - `/workflow-tasks <change>` routes to [planning-dev](../planning-dev/LEGACY.md). Pass the change and any task-planning input to its integrated planning run.
 - **Task Contract** - Read the repository's enriched task instructions below. The template is the example; `scripts/openspec/tasks-template.test.mjs` holds the contract.
 
 ```bash

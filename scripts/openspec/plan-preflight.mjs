@@ -315,7 +315,7 @@ if (handOff.length) {
       "another change, a capability with no durable spec yet, a README row or shelf.",
     ),
   );
-  console.log(dim("The rule is in `.claude/skills/planning-dev/SKILL.md`."));
+  console.log(dim("The rule is in `.claude/skills/planning-dev/LEGACY.md`."));
 }
 
 // Renumbering is the hazard git cannot warn about: a claim is recorded against a group

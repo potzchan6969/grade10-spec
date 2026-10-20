@@ -38,4 +38,4 @@ Report:
 - unresolved decisions and cases blocked on execution details
 - validator results and cases awaiting QA2 post-hoc scenario linking
 
-Return the bundle and draft suite to [planning-dev](../planning-dev/SKILL.md). QA2 owns reconciliation, scenario comparison and `covers` links. Outside planning, route implementation-available suites to [tcs-review](../tcs-review/SKILL.md).
+Return the bundle and draft suite to [planning-dev](../planning-dev/LEGACY.md). QA2 owns reconciliation, scenario comparison and `covers` links. Outside planning, route implementation-available suites to [tcs-review](../tcs-review/SKILL.md).

@@ -48,7 +48,7 @@ if (missing.length) {
 
 const BASE = A.base || "origin/main";
 const SKILL = `${A.repo}/.claude/skills/accept-batch/SKILL.md`;
-const PLANNING = `${A.repo}/.claude/skills/planning-dev/SKILL.md`;
+const PLANNING = `${A.repo}/.claude/skills/planning-dev/LEGACY.md`;
 const branchOf = (c) => `docs/accept-${c}`;
 const wtOf = (c) => `${A.root}/${c}`;
 const gates = (c) =>

@@ -6,7 +6,7 @@ description: Review a planned OpenSpec change before `pnpm spec:accept` - the PR
 # Review Before Acceptance
 
 - **Scope** - Review a change after QA2 reconciliation and before acceptance, in a fresh context that did not write its plan. Leave planning sources untouched; this skill writes only the review ledger.
-- **Completion** - Deliver source-linked findings and a verdict per change. [Planning-dev](../planning-dev/SKILL.md) owns source repairs, QA restarts, acceptance and publication.
+- **Completion** - Deliver source-linked findings and a verdict per change. [Planning-dev](../planning-dev/LEGACY.md) owns source repairs, QA restarts, acceptance and publication.
 
 ## Flow
 

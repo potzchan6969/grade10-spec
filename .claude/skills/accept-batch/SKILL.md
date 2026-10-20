@@ -5,7 +5,7 @@ description: Take several active OpenSpec changes to Ready to accept together - 
 
 # Accept a Batch of Changes
 
-- **Scope** - Several active changes, each taken to an `accept-review` verdict of `Ready to accept`. The human still accepts each one with `pnpm spec:accept`, as [planning-dev](../planning-dev/SKILL.md) says; this skill never runs it.
+- **Scope** - Several active changes, each taken to an `accept-review` verdict of `Ready to accept`. The human still accepts each one with `pnpm spec:accept`, as [planning-dev](../planning-dev/LEGACY.md) says; this skill never runs it.
 - **Roles** - The orchestrator runs the gates, orders the stacks, asks the decision rule and makes the central decisions. Readers and apply agents each hold one change; a review holds one stack.
 - **Runner** - On Claude Code, run [`workflow.js`](workflow.js) with the Workflow tool for step 5 and steps 7 to 10; `args.step` picks `stocktake` or `apply`, and a missing argument stops the run. Elsewhere, run the same steps with one subagent per change, or by hand, in the order below.
 
@@ -22,7 +22,7 @@ description: Take several active OpenSpec changes to Ready to accept together - 
    ```
 
    `--stacks` joins the listed changes on a shared requirement, capability or page section, or on `depends_on`, and names the highest id each capability has issued. `--clusters` lists the requirements two changes share.
-2. **Order** - Take the stacks `--stacks` prints, in its order; within a stack, put the change that owns each shared requirement first. A change that shares nothing is a stack of one. For each stack of two or more, draft the [planning-dev](../planning-dev/SKILL.md) step 5 sheet for its first change's `reconciliation.md`: **Ownership** from `--clusters`, **Order** from the stack, and **Decisions** after step 6.
+2. **Order** - Take the stacks `--stacks` prints, in its order; within a stack, put the change that owns each shared requirement first. A change that shares nothing is a stack of one. For each stack of two or more, draft the [planning-dev](../planning-dev/LEGACY.md) step 5 sheet for its first change's `reconciliation.md`: **Ownership** from `--clusters`, **Order** from the stack, and **Decisions** after step 6.
 3. **Tooling First** - A gate that refuses a form the governance defines is a tool bug, not a change's problem. Fix every such bug on one branch with an audit of the category, land it through its pull request, and start step 7 only once it is on `main`. A change branch never edits `scripts/`, `tools/`, `packages/` or `apps/`.
 4. **Decision Rule** - Ask the human one rule, once, as a [Clarification Request](../../../AGENTS.md#questions-and-blockers). For example: take the recommendation unless it is an important business decision; designer asks go to design-phase changes.
 5. **Stock-Take** - One cheap read-only reader per change lists every open item: the scout's refusals that name its paths, open `## Raised` rows, ❓ and `TBC` lines on linked pages, `awaiting:` entries and open `accept-review.md` findings. Each item is `ours`, `human` or `designer`, with options, a recommendation and a business flag. Workflow args: `{ step: "stocktake", repo, changes, gates, mandate }`, where `gates` is the scout's output.
