@@ -1,5 +1,5 @@
 import type { SignInEmailFormCopy, SignInLinkSentCopy } from "@grade10/ui";
-import { AUTH_COPY } from "../auth-content";
+import { AUTH_COPY } from "../../auth/auth-content";
 
 const signIn = AUTH_COPY;
 

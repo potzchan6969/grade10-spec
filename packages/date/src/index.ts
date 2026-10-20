@@ -13,6 +13,7 @@ export {
   endOfDay,
   formatCalendarDay,
   formatCalendarDayLabel,
+  formatDateline,
   formatWeekday,
   formatWeekdayOfMonth,
   isCalendarDay,

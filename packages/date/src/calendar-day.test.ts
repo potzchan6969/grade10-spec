@@ -4,6 +4,7 @@ import {
   endOfDay,
   formatCalendarDay,
   formatCalendarDayLabel,
+  formatDateline,
   formatWeekday,
   formatWeekdayOfMonth,
   isCalendarDay,
@@ -125,6 +126,15 @@ describe("a stored calendar day, worded", () => {
   it("words a calendar day by its weekday, for a picker under a stated month or with its own", () => {
     expect(formatWeekdayOfMonth("2026-10-26", "en")).toBe("Mon 26");
     expect(formatWeekday("2026-10-30", "en")).toBe("Fri 30 Oct");
+  });
+
+  it("words a record's calendar day month first, largest unit first in Chinese", () => {
+    expect(formatDateline("2026-09-15", "en")).toBe("Sep 15, 2026");
+    expect(formatDateline("2026-09-07", "en")).toBe("Sep 7, 2026");
+    expect(formatDateline("2026-09-15", "zh-Hant")).toBe("2026年9月15日");
+    expect(() => formatDateline("2026-02-31", "en")).toThrow(
+      /not a calendar day/,
+    );
   });
 });
 

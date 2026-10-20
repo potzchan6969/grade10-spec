@@ -14,7 +14,8 @@ published.
 | [Release Editor](/p/grade10-admin/press/release-editor) | One release's words in each language, its images, and the preview |
 | [Media Coverage and Settings](/p/grade10-admin/press/coverage-and-settings) | The outlets' headlines, and the About blocks and contacts |
 | [Transfer](/p/grade10-admin/press/transfer) | Moving press from one environment to another as one file |
-| [Company Site](/p/grade10-site/site/company-site) | Where readers meet what is published |
+| [Press](/p/grade10-site/site/press) | Where readers meet the published releases |
+| [Media Coverage](/p/grade10-site/site/media-coverage) | Where readers meet the published coverage |
 
 ## Values
 

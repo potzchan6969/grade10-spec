@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { AUTH_COPY as signIn } from "../auth-content";
+import { AUTH_COPY as signIn } from "../../auth/auth-content";
 import {
   SIGN_IN_EMAIL,
   SIGN_IN_FROM_CART_TITLE,

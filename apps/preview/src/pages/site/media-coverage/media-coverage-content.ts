@@ -5,13 +5,11 @@
  * placeholder references. An entry is what an editor composes in the
  * admin portal: the publication, the title and the link — no date.
  */
-
-/** One media card: the story's publication, title and external link. */
-type MediaItem = {
-  readonly publication: string;
-  readonly title: string;
-  readonly href: string;
-};
+import type {
+  MediaCoverageContent,
+  MediaCoverageCopy,
+  MediaItem,
+} from "@grade10/ui";
 
 const MEDIA_COVERAGE_PAGE = {
   eyebrow: "In the News",
@@ -102,7 +100,8 @@ const MEDIA_COVERAGE_PAGE = {
       href: "https://www.stheadline.com/society/3545362/%E9%A6%AC%E5%B9%B4%E5%A5%87%E8%91%A9%E5%8F%B2%E4%B8%8A%E6%9C%80%E8%B2%B4%E5%AF%B6%E5%8F%AF%E5%A4%A2%E5%8D%A1%E9%80%BE128%E5%84%84%E5%A4%A9%E5%83%B9%E6%88%90%E4%BA%A4-%E5%88%B7%E6%96%B0%E5%81%A5%E5%8A%9B%E5%A3%AB%E4%B8%96%E7%95%8C%E7%B4%80%E9%8C%84-%E9%A6%99%E6%B8%AF%E8%BF%B7%E7%AD%96%E7%95%A5%E5%9C%98%E9%9A%8A%E8%A6%8B%E8%AD%89",
     },
   ] satisfies readonly MediaItem[],
-};
+} satisfies MediaCoverageContent;
 
-export type { MediaItem };
-export { MEDIA_COVERAGE_PAGE };
+const MEDIA_COVERAGE_COPY: MediaCoverageCopy = { readArticle: "Read article" };
+
+export { MEDIA_COVERAGE_COPY, MEDIA_COVERAGE_PAGE };

@@ -5,19 +5,11 @@
  * placeholder references. Dates follow the live page's `Sep 15, 2026`
  * month-first style, confirmed by design.
  */
-
-/** One row of the press list: the published date, title and article slug. */
-type PressItem = {
-  readonly date: string;
-  readonly title: string;
-  readonly href: string;
-};
-
-/** The releases published in one calendar year, newest first. */
-type PressYearGroup = {
-  readonly year: string;
-  readonly items: readonly PressItem[];
-};
+import type {
+  PressReleaseListContent,
+  PressReleaseListCopy,
+  PressYearGroup,
+} from "@grade10/ui";
 
 const PRESS_PAGE = {
   eyebrow: "Press",
@@ -151,7 +143,8 @@ const PRESS_PAGE = {
       ],
     },
   ] satisfies readonly PressYearGroup[],
-};
+} satisfies PressReleaseListContent;
 
-export type { PressItem, PressYearGroup };
-export { PRESS_PAGE };
+const PRESS_COPY: PressReleaseListCopy = { filterByYear: "Filter by year" };
+
+export { PRESS_COPY, PRESS_PAGE };

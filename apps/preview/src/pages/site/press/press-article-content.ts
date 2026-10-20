@@ -8,96 +8,17 @@
  * The block model is what an editor composes in the admin portal: the
  * template draws each element's style.
  */
+import type {
+  ArticleBlock,
+  ArticleContact,
+  ArticleSidebarCard,
+  PressArticleContent,
+} from "@grade10/ui";
 
 const SANITY = "https://cdn.sanity.io/images/np3rrxhs/production";
 
 const sanity = (id: string, width: number) =>
   `${SANITY}/${id}?w=${width}&fit=max&auto=format`;
-
-/** A link target inside running text. */
-type ArticleLink = {
-  readonly href: string;
-  /** Opens in a new tab with `rel="noopener noreferrer"`. */
-  readonly external?: boolean;
-};
-
-/** A run of body text; `bold` for emphasis, `link` for an inline anchor. */
-type ArticleSegment = {
-  readonly text: string;
-  readonly bold?: boolean;
-  readonly link?: ArticleLink;
-};
-
-/** A body paragraph. */
-type ArticleParagraphBlock = {
-  readonly type: "paragraph";
-  readonly segments: readonly ArticleSegment[];
-};
-
-/** A section heading inside the body; levels run h2 through h6. */
-type ArticleHeadingBlock = {
-  readonly type: "heading";
-  readonly level: 2 | 3 | 4 | 5 | 6;
-  readonly text: string;
-};
-
-/** A bullet or numbered list; each item is a run of segments. */
-type ArticleListBlock = {
-  readonly type: "list";
-  readonly ordered?: boolean;
-  readonly items: readonly (readonly ArticleSegment[])[];
-};
-
-/** A pull quote with its attribution line. */
-type ArticleQuoteBlock = {
-  readonly type: "quote";
-  readonly segments: readonly ArticleSegment[];
-  readonly cite: { readonly name: string; readonly role?: string };
-};
-
-/** One image: the optional caption renders as `figcaption`. */
-type ArticleFigure = {
-  readonly src: string;
-  readonly alt: string;
-  readonly caption?: string;
-};
-
-/** A standalone image in the body flow. */
-type ArticleFigureBlock = {
-  readonly type: "figure";
-  readonly figure: ArticleFigure;
-};
-
-/**
- * A photo grid: `span: "full"` takes the whole row, `half` shares it — the
- * frame's Photo Highlights pattern of one full figure over two halves.
- */
-type ArticleGalleryBlock = {
-  readonly type: "gallery";
-  readonly figures: readonly (ArticleFigure & {
-    readonly span?: "full" | "half";
-  })[];
-};
-
-type ArticleBlock =
-  | ArticleParagraphBlock
-  | ArticleHeadingBlock
-  | ArticleListBlock
-  | ArticleQuoteBlock
-  | ArticleFigureBlock
-  | ArticleGalleryBlock;
-
-/** A fixed card every article carries beside its body. */
-type ArticleSidebarCard = {
-  readonly title: string;
-  readonly body: string;
-};
-
-/** The Media Enquiries card's contact lines. */
-type ArticleContact = {
-  readonly name: string;
-  readonly link?: { readonly href: string; readonly label: string };
-};
 
 const PRESS_ARTICLE = {
   breadcrumb: {
@@ -321,17 +242,6 @@ const PRESS_ARTICLE = {
       ] satisfies readonly ArticleContact[],
     },
   },
-};
+} satisfies PressArticleContent;
 
-export type {
-  ArticleBlock,
-  ArticleContact,
-  ArticleFigure,
-  ArticleGalleryBlock,
-  ArticleLink,
-  ArticleListBlock,
-  ArticleQuoteBlock,
-  ArticleSegment,
-  ArticleSidebarCard,
-};
 export { PRESS_ARTICLE };
