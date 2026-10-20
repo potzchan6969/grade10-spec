@@ -437,6 +437,10 @@ export {
   type TierCardProps,
   type TierCardVariant,
 } from "./blocks/loyalty-membership/tier-card";
+export {
+  TierInfoCard,
+  type TierInfoCardProps,
+} from "./blocks/loyalty-membership/tier-info-card";
 export type {
   ActivityEntry,
   CouponItem,
