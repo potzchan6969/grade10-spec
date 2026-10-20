@@ -307,10 +307,14 @@ function AboutPage() {
                         </span>
                       </span>
                     </a>
-                    <p className="mt-4 flex items-center gap-2 text-secondary-foreground text-sm leading-5">
+                    <p className="mt-4 text-secondary-foreground text-sm leading-5">
                       {activeIndex.description}
                       {activeIndex.beta ? (
-                        <Badge size="sm" variant="outline">
+                        <Badge
+                          className="ml-2 align-middle"
+                          size="sm"
+                          variant="outline"
+                        >
                           Beta
                         </Badge>
                       ) : null}
