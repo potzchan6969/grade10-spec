@@ -19,9 +19,9 @@ system.
   viewport and stacked on a narrow one, and a quiet parent-company panel
   with the MemeStrategy mark and its milestones newest first.
 - **Links out of the page.** MemeStrategy, 9GAG and Grade10 AI open in a
-  new tab; vaulting services opens the vault page, Grade10 Finance opens
-  `/finance`, and the Grade10 mention in the milestones opens the front
-  door.
+  new tab, and the Grade10 mention in the milestones opens the front door.
+  Vaulting services and Grade10 Finance are named as plain text until they
+  launch.
 - **A composed page in the workbench.** `apps/preview` carries the page
   under `Site/About` at a wide and a narrow viewport, so the design system
   renders it before the site does.

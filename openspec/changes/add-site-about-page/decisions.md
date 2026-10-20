@@ -29,11 +29,12 @@
 | Q3 | Where does the Grade10 Finance link point? | `/finance`, matching the live page - decided by the round | Holding the link back - the destination it should carry long-term stays ❓ on the PRD |
 | Q4 | What does the change ship? | The Storybook page assembly and the manual page - decided by the round | Wider OpenSpec or production changes - routing and data belong to the implementing site |
 | Q5 | Does the page keep the Figma body copy verbatim? | Tightened copy applied after a copywriting review - decided by the round | Verbatim Figma text - the review found filler adjectives and unfalsifiable claims; the divergence is flagged for design to sync back |
+| Q6 | Do vaulting services and Grade10 Finance link out? | Plain text until they launch - decided by the round | Links to `/vault` and `/finance` - neither surface exists on day 1, so a link would land nowhere |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
 | `grade10-site/site/about` | Where does the About entry sit in the chrome? | ❓ on [About](/p/grade10-site/site/about) — the header marks no item current for the page today |
-| `grade10-site/site/about` | Where should the Grade10 Finance link lead long-term? | ❓ on [About](/p/grade10-site/site/about) — it opens `/finance` as today's page does |
+| `grade10-site/site/about` | Where should the Grade10 Finance mention lead once the service launches? | ❓ on [About](/p/grade10-site/site/about) — plain text until then |
 | `grade10-site/site/about` | Must the parent-company paragraph reproduce issuer boilerplate verbatim? | ❓ for the copy owner — the page carries tightened wording until then |

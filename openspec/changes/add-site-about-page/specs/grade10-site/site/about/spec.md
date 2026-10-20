@@ -77,9 +77,10 @@ tab when the surface is another site's:
 | MemeStrategy | `https://memestrategy.com.hk/` | yes |
 | 9GAG | `https://9gag.com/` | yes |
 | Grade10 AI | `https://app.grade10.com/` | yes |
-| vaulting services | the vault page | no |
-| Grade10 Finance | `/finance` | no |
 | Grade10 | the front door | no |
+
+A mention of a surface the site has not launched — vaulting services,
+Grade10 Finance — SHALL render as plain text, never a link.
 
 <!-- trace:scenario id=g10.site-about.SC-ozy rev=1 -->
 #### Scenario: grade10-site-site-about-SC-05 - A partner link opens in a new tab
@@ -92,6 +93,12 @@ tab when the surface is another site's:
 #### Scenario: grade10-site-site-about-SC-06 - A product link opens in place
 **Serves:** grade10-site-site-about-US-02 - Collector follows a link from About to a product or partner
 
-- **WHEN** a collector opens the vaulting services, Grade10 Finance or
-  Grade10 link
-- **THEN** the named surface SHALL open in place
+- **WHEN** a collector opens the Grade10 link in the milestones
+- **THEN** the front door SHALL open in place
+
+<!-- trace:scenario id=g10.site-about.SC-kxj rev=1 -->
+#### Scenario: grade10-site-site-about-SC-07 - A mention of an unlaunched surface is plain text
+**Serves:** grade10-site-site-about-US-02 - Collector follows a link from About to a product or partner
+
+- **WHEN** the page names vaulting services or Grade10 Finance
+- **THEN** each mention SHALL render as plain text, not a link

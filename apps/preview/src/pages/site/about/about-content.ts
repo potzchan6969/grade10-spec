@@ -32,8 +32,7 @@ type AboutMilestone = {
 };
 
 const HOME_LINK: AboutLink = { href: "/" };
-const VAULT_LINK: AboutLink = { href: "/vault" };
-const FINANCE_LINK: AboutLink = { href: "/finance" };
+
 const MEMESTRATEGY_LINK: AboutLink = {
   href: "https://memestrategy.com.hk/",
   external: true,
@@ -62,11 +61,7 @@ const ABOUT_PAGE = {
     heading: "What we do",
     body: [
       {
-        text: "Since 2023, we’ve hosted Hong Kong’s largest card shows, offered ",
-      },
-      { text: "vaulting services", link: VAULT_LINK },
-      {
-        text: ", and put real-time pricing and research in collectors’ hands through ",
+        text: "Since 2023, we’ve hosted Hong Kong’s largest card shows, offered vaulting services, and put real-time pricing and research in collectors’ hands through ",
       },
       { text: "Grade10 AI", link: GRADE10_AI_LINK },
       {
@@ -102,10 +97,8 @@ const ABOUT_PAGE = {
       date: "Q4 2026",
       status: "Coming soon",
       body: [
-        { text: "Launch of " },
-        { text: "Grade10 Finance", link: FINANCE_LINK },
         {
-          text: ", Asia’s first trading card financing service by a listed company",
+          text: "Launch of Grade10 Finance, Asia’s first trading card financing service by a listed company",
         },
       ],
     },

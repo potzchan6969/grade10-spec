@@ -1,6 +1,6 @@
 # grade10-site/site/about Test Cases
 
-**Status:** pending-review · 0/6
+**Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-17, tcs-rules r4
 
 ## grade10-site-site-about-US1: Collector learns who is behind Grade10
@@ -191,15 +191,40 @@ None.
 **Steps:**
 
 1. Navigate to <grade10 about url>.
-2. Open the vaulting services link.
-3. Return and open the Grade10 Finance link in the milestones.
-4. Return and open the Grade10 link in the milestones.
+2. Open the Grade10 link in the milestones.
 
 **Expected Results:**
 
-* Vaulting services opens the vault page in place.
-* Grade10 Finance opens `/finance` in place.
 * Grade10 opens the front door in place.
+
+<!-- trace:case id=g10.site-about.TC-jbx rev=1 covers=g10.site-about.SC-kxj -->
+### grade10-site-site-about-US2-TC3-1: A mention of an unlaunched surface is plain text
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-about-US-02
+
+**Pre-conditions:**
+None.
+
+**Steps:**
+
+1. Navigate to <grade10 about url>.
+2. Look for a link on the vaulting services mention and on the Grade10
+   Finance mention in the milestones.
+
+**Expected Results:**
+
+* Neither mention is a link; both render as plain text.
 
 ## Settled
 
