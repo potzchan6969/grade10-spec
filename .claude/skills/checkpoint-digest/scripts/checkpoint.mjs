@@ -254,7 +254,7 @@ function openspecMoves(files) {
       /^openspec\/changes\/archive\/[\d-]+-([^/]+)\//,
     );
     if (archived) {
-      if (f.status === "A") touch(archived[1], "archived");
+      if (f.status === "A" || f.status === "R") touch(archived[1], "archived");
       continue;
     }
     const change = f.path.match(/^openspec\/changes\/([^/]+)\/(.*)$/);
