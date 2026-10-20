@@ -1,11 +1,9 @@
 {
   "card": {
-    "expired": "此碼已過期",
     "inStore": "門市",
     "qrAlt": "你的會員碼，可供掃描的方格",
     "refresh": "更新",
     "refreshesIn": "尚餘",
-    "shortCode": "短碼",
     "walletAdd": "新增至{wallet}",
     "walletAddFailed": "未能新增至{wallet}，請重試。",
     "walletApple": "Apple 錢包",
