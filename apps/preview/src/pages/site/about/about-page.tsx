@@ -1,11 +1,5 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Card } from "@grade10/design-system/components/display/card";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
@@ -71,6 +65,9 @@ function AboutPage() {
   }, []);
 
   const pageIsRevealed = entered || Boolean(reduceMotion);
+  const [activeIndex, setActiveIndex] = useState(
+    ABOUT_PAGE.marketIndexes.indexes[0],
+  );
 
   return (
     <div className="flex min-h-svh w-full flex-col bg-background text-foreground">
@@ -151,68 +148,117 @@ function AboutPage() {
               transitionDelay: pageIsRevealed ? "200ms" : "0ms",
             }}
           >
-            <p className="font-medium text-secondary-foreground text-sm leading-5 uppercase">
-              {ABOUT_PAGE.marketIndexes.label}
-            </p>
-            <h2
-              className="font-semibold text-xl leading-7 sm:text-2xl sm:leading-8"
-              id="market-indexes-heading"
-            >
-              {ABOUT_PAGE.marketIndexes.heading}
-            </h2>
-            <p className="max-w-prose text-lg leading-7">
-              {ABOUT_PAGE.marketIndexes.body}
-            </p>
-            <Tabs
-              className="mt-4 gap-6 sm:mt-6"
-              defaultValue={ABOUT_PAGE.marketIndexes.indexes[0].name}
-            >
-              {/* The pill indicator drops an 8px/16px shadow; the negative
-                  margins give it room so the scroll clip doesn't crop it. */}
-              <div className="-mx-2 -my-8 overflow-x-auto px-2 py-8">
-                <TabsList variant="pill">
-                  {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => (
-                    <TabsTrigger key={index.name} value={index.name}>
-                      <span className="text-secondary-foreground tabular-nums">
-                        {String(order + 1).padStart(2, "0")}
-                      </span>
-                      {index.name}
-                      {index.beta ? <Badge size="sm">Beta</Badge> : null}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+            <div className="flex flex-col gap-6 sm:grid sm:grid-cols-5 sm:gap-16">
+              <div className="flex flex-col gap-2 sm:col-span-2 sm:gap-4">
+                <p className="font-medium text-secondary-foreground text-sm leading-5 uppercase">
+                  {ABOUT_PAGE.marketIndexes.label}
+                </p>
+                <h2
+                  className="font-semibold text-xl leading-7 sm:text-2xl sm:leading-8"
+                  id="market-indexes-heading"
+                >
+                  {ABOUT_PAGE.marketIndexes.heading}
+                </h2>
+                <p className="text-lg leading-7">
+                  {ABOUT_PAGE.marketIndexes.body}
+                </p>
+                {/* The design-system Tabs primitive is horizontal-only, so
+                    the index picker is a hand-rolled vertical tablist with
+                    the same roles and arrow-key model. */}
+                <div
+                  aria-label="Grade10 market indexes"
+                  aria-orientation="vertical"
+                  className="mt-2 flex flex-col gap-1 sm:mt-4"
+                  role="tablist"
+                >
+                  {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => {
+                    const selected = index.name === activeIndex.name;
+                    return (
+                      <button
+                        aria-controls="market-indexes-panel"
+                        aria-selected={selected}
+                        className={cn(
+                          "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left font-medium text-base leading-6 transition-colors duration-150 ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 motion-reduce:transition-none",
+                          selected
+                            ? "bg-muted text-foreground"
+                            : "text-secondary-foreground",
+                        )}
+                        id={`market-indexes-tab-${order}`}
+                        key={index.name}
+                        onClick={() => setActiveIndex(index)}
+                        onKeyDown={(event) => {
+                          if (
+                            event.key !== "ArrowDown" &&
+                            event.key !== "ArrowUp"
+                          ) {
+                            return;
+                          }
+                          event.preventDefault();
+                          const next =
+                            order +
+                            (event.key === "ArrowDown" ? 1 : -1) +
+                            ABOUT_PAGE.marketIndexes.indexes.length;
+                          const target =
+                            ABOUT_PAGE.marketIndexes.indexes[
+                              next % ABOUT_PAGE.marketIndexes.indexes.length
+                            ];
+                          setActiveIndex(target);
+                          document
+                            .getElementById(
+                              `market-indexes-tab-${ABOUT_PAGE.marketIndexes.indexes.indexOf(target)}`,
+                            )
+                            ?.focus();
+                        }}
+                        role="tab"
+                        tabIndex={selected ? 0 : -1}
+                        type="button"
+                      >
+                        <span className="text-secondary-foreground text-sm leading-5 tabular-nums">
+                          {String(order + 1).padStart(2, "0")}
+                        </span>
+                        <span className="flex flex-1 items-center gap-2">
+                          {index.name}
+                          {index.beta ? <Badge size="sm">Beta</Badge> : null}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-              {ABOUT_PAGE.marketIndexes.indexes.map((index) => (
-                <TabsContent key={index.name} value={index.name}>
-                  <a
-                    aria-label={`Visit the ${index.name}`}
-                    className="group block max-w-[860px] overflow-hidden rounded-2xl border border-border bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                    href={index.href}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    <span className="relative block">
-                      <img
-                        alt={index.shotAlt}
-                        className="aspect-[1346/1169] w-full object-cover object-top"
-                        decoding="async"
-                        height={1169}
-                        loading="lazy"
-                        src={index.shot}
-                        width={1346}
-                      />
-                      <span className="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-(--radius-full) bg-background/90 px-4 py-2 font-medium text-sm leading-5 opacity-0 shadow-sm backdrop-blur transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
-                        Visit index
-                        <ArrowUpRight aria-hidden size={16} />
-                      </span>
+              <div
+                aria-labelledby={`market-indexes-tab-${ABOUT_PAGE.marketIndexes.indexes.indexOf(activeIndex)}`}
+                className="sm:col-span-3"
+                id="market-indexes-panel"
+                role="tabpanel"
+              >
+                <a
+                  aria-label={`Visit the ${activeIndex.name}`}
+                  className="group block overflow-hidden rounded-2xl border border-border bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                  href={activeIndex.href}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <span className="relative block">
+                    <img
+                      alt={activeIndex.shotAlt}
+                      className="aspect-[1346/1169] w-full object-cover object-top"
+                      decoding="async"
+                      height={1169}
+                      loading="lazy"
+                      src={activeIndex.shot}
+                      width={1346}
+                    />
+                    <span className="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-(--radius-full) bg-background/90 px-4 py-2 font-medium text-sm leading-5 opacity-0 shadow-sm backdrop-blur transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
+                      Visit index
+                      <ArrowUpRight aria-hidden size={16} />
                     </span>
-                  </a>
-                  <p className="mt-4 text-secondary-foreground text-sm leading-5">
-                    {index.description}
-                  </p>
-                </TabsContent>
-              ))}
-            </Tabs>
+                  </span>
+                </a>
+                <p className="mt-4 text-secondary-foreground text-sm leading-5">
+                  {activeIndex.description}
+                </p>
+              </div>
+            </div>
           </section>
           <section
             aria-labelledby="parent-company-heading"
