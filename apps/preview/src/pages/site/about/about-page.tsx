@@ -135,7 +135,7 @@ function AboutPage() {
                   >
                     {block.heading}
                   </h2>
-                  <p className="text-lg leading-7">
+                  <p className="text-base leading-6 sm:text-lg sm:leading-7">
                     <Segments segments={block.body} />
                   </p>
                 </section>
@@ -164,7 +164,7 @@ function AboutPage() {
                 >
                   {ABOUT_PAGE.marketIndexes.heading}
                 </h2>
-                <p className="text-lg leading-7">
+                <p className="text-base leading-6 sm:text-lg sm:leading-7">
                   {ABOUT_PAGE.marketIndexes.body}
                 </p>
                 <div className="-mx-2 overflow-x-auto border-border border-b px-2 sm:hidden">
@@ -181,15 +181,12 @@ function AboutPage() {
                       aria-label="Grade10 market indexes"
                       variant="list"
                     >
-                      {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => (
+                      {ABOUT_PAGE.marketIndexes.indexes.map((index) => (
                         <TabsTrigger
                           aria-controls="market-indexes-panel"
                           key={index.name}
                           value={index.name}
                         >
-                          <span className="text-secondary-foreground tabular-nums">
-                            {String(order + 1).padStart(2, "0")}
-                          </span>
                           {index.name}
                         </TabsTrigger>
                       ))}
@@ -212,7 +209,7 @@ function AboutPage() {
                         aria-controls="market-indexes-panel"
                         aria-selected={selected}
                         className={cn(
-                          "flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left font-medium text-base leading-6 transition-colors duration-150 ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 motion-reduce:transition-none",
+                          "block w-full cursor-pointer rounded-xl px-3 py-2.5 text-left font-medium text-base leading-6 transition-colors duration-150 ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 motion-reduce:transition-none",
                           selected
                             ? "bg-muted text-foreground"
                             : "text-secondary-foreground",
@@ -247,12 +244,7 @@ function AboutPage() {
                         tabIndex={selected ? 0 : -1}
                         type="button"
                       >
-                        <span className="text-secondary-foreground text-sm leading-5 tabular-nums">
-                          {String(order + 1).padStart(2, "0")}
-                        </span>
-                        <span className="flex flex-1 items-center gap-2">
-                          {index.name}
-                        </span>
+                        {index.name}
                       </button>
                     );
                   })}
