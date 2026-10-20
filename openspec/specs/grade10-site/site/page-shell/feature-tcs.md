@@ -1130,6 +1130,7 @@ auction-only or full primary nav.
 
 * Index sits after Shows and before Help.
 * The Grade10 Index hub opens in a new browsing context.
+* Index carries the external-link glyph after its label, as Help does.
 * The original page remains open in the original context.
 * Index is never marked current.
 
@@ -2189,7 +2190,8 @@ Runs once per row of **Test data**.
 * Index joins the primary nav after Shows and before Help, opening the
   Grade10 Index hub in a new tab; the four index pages — Hat Price Index,
   PTCG100, PTCG500, OPCG100 — form the footer's Index column ahead of Help
-  and Legal, each external.
+  and Legal, each external. External primary items carry the external-link
+  glyph after their label — Index and Help alike.
 * Auction-first primary nav omits Store Locator until the shop is open.
 * Help opens the documentation site in a new tab.
 * The durable host address stays open until Product confirms it.

@@ -300,6 +300,11 @@ export const StoreLaunch: Story = {
     for (const heading of ["SHOP", "COMPANY", "INDEX", "HELP", "LEGAL"]) {
       expect(canvas.getByText(heading)).toBeInTheDocument();
     }
+    // Six cells — brand plus five columns — hold one row at the wide rung,
+    // so no column wraps beneath the social block.
+    expect(
+      canvasElement.querySelector('[data-slot="footer"]')?.firstElementChild,
+    ).toHaveClass("@4xl:grid-cols-6");
     expect(
       canvas.getByRole("link", { name: "Press Releases" }),
     ).toBeInTheDocument();
@@ -376,7 +381,7 @@ export const Narrow: Story = {
     if (footer === null) return;
     expect(footer.scrollWidth).toBeLessThanOrEqual(footer.clientWidth);
 
-    // Squeezing four columns onto a phone is what the width alone does not
+    // Squeezing five columns onto a phone is what the width alone does not
     // catch: a long brand line ends up one word per line inside an 80px column.
     const canvas = within(canvasElement);
     // The column is measured, not the line: the paragraph is only as wide as

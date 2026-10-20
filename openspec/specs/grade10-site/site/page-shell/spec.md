@@ -60,7 +60,8 @@ it.
 - Index pages in the chrome
   - Primary-nav Index: the primary navigation lists Index ahead of Help,
     after Shows and the physical destinations; the item opens the Grade10
-    Index hub in a new tab and is never marked current
+    Index hub in a new tab, carries the external-link glyph, and is never
+    marked current
   - Footer Index column: the footer lists the four index pages under an
     Index column ahead of Help and Legal — Hat Price Index, PTCG100,
     PTCG500, OPCG100 — each opening its external page in a new tab
@@ -320,7 +321,8 @@ follow Index when that item is present, else Shows, else Store Locator when
 that item is present, else Auction on auction-only primary navigation.
 
 **Presentation** - Help SHALL use the same primary-nav link presentation as
-other primary items.
+other primary items, carrying the shared external-link glyph after its
+label like every external primary item.
 
 **New tab** - Activating Help SHALL open the documentation site Product names
 in a new browsing context. The current site surface SHALL remain open.
@@ -369,6 +371,10 @@ Help and Legal.
 its external destination in a new browsing context. The current site surface
 SHALL remain open.
 
+**Presentation** - Index SHALL use the same primary-nav link presentation as
+other primary items, carrying the shared external-link glyph after its
+label — the mark every external primary item, Help included, wears.
+
 **Never current** - Index names no surface this site answers, so it SHALL
 NOT be marked current on any surface.
 
@@ -382,6 +388,8 @@ NOT be marked current on any surface.
 - **THEN** Index appears after Shows and before Help
 - **AND** activating it opens the Grade10 Index hub in a new browsing
   context
+- **AND** Index carries the external-link glyph after its label, as Help
+  does
 - **AND** Index is never the current item
 
 <!-- trace:scenario id=g10.site-page-shell.SC-ixf rev=1 -->
