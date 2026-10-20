@@ -1273,3 +1273,58 @@ test("mutations refuse ambiguous targets and require exact file selectors", () =
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("a test citing a retired id resolves through openspec/retired.tsv and names the page id", () => {
+  const { root, storeRoot } = createSuiteFixture();
+  try {
+    const appRoot = resolve(root, "app");
+    mkdirSync(resolve(appRoot, "src"), { recursive: true });
+    writeFileSync(
+      resolve(appRoot, "src/earn.test.ts"),
+      [
+        "// trace:supports=g10.loyalty-programme.SC-abc",
+        'test("an order earns once", () => {});',
+        "",
+        "// trace:acceptance=g10.loyalty-programme.TC-abd@1",
+        'test("the order earns on completion", () => {});',
+        "",
+      ].join("\n"),
+    );
+    const before = runCli([
+      "validate",
+      "--store-root",
+      storeRoot,
+      "--app-root",
+      appRoot,
+    ]);
+    assert.equal(before.status, 1);
+    assert.match(
+      before.stdout,
+      /supports unknown scenario g10.loyalty-programme.SC-abc/,
+    );
+    writeFileSync(
+      resolve(storeRoot, "openspec/retired.tsv"),
+      [
+        "id\tdisplay\tnow",
+        "g10.loyalty-programme.SC-abc\tgrade10-site-loyalty-programme-SC-01\tgrade10-site/loyalty/points#earn-once",
+        "g10.loyalty-programme.TC-abd\t\tgrade10-site/loyalty/points#earn-on-completion",
+        "",
+      ].join("\n"),
+    );
+    const after = runCli([
+      "validate",
+      "--store-root",
+      storeRoot,
+      "--app-root",
+      appRoot,
+    ]);
+    assert.equal(after.status, 0, after.stdout);
+    assert.match(after.stdout, /Retired references: 2/);
+    assert.match(
+      after.stdout,
+      /test supports g10.loyalty-programme.SC-abc -> grade10-site\/loyalty\/points#earn-once/,
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

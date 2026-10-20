@@ -107,6 +107,31 @@ function sourceFiles(storeRoot, appRoot) {
   return files.sort((a, b) => a.file.localeCompare(b.file));
 }
 
+/** The ids Page First retired: `openspec/retired.tsv` maps each scenario
+ * and case id an application may still cite to the `<page>#<id>` that now
+ * holds its rule. A reference to one resolves, and is listed as retired
+ * rather than failing, so a submodule bump keeps the application green while
+ * its citations move. */
+export const RETIRED_FILE = "openspec/retired.tsv";
+
+export function readRetired(storeRoot) {
+  const path = resolve(storeRoot, RETIRED_FILE);
+  const retired = new Map();
+  if (!existsSync(path)) return retired;
+  const [head, ...rows] = readFileSync(path, "utf8").split(/\r?\n/);
+  const columns = head.split("\t");
+  for (const row of rows) {
+    if (!row.trim()) continue;
+    const cells = Object.fromEntries(
+      row.split("\t").map((cell, i) => [columns[i], cell]),
+    );
+    const entry = { now: cells.now ?? "", display: cells.display ?? "" };
+    if (cells.id) retired.set(cells.id, entry);
+    if (cells.display) retired.set(cells.display, entry);
+  }
+  return retired;
+}
+
 function traceComment(line) {
   const html = /^\s*<!--\s*trace:([\s\S]*?)\s*-->\s*$/.exec(line);
   if (html) return { syntax: "html", body: html[1].trim() };
@@ -403,6 +428,14 @@ export function parseTraceGraph({
   const scenarios = [];
   const cases = [];
   const tests = [];
+  const retiredIds = readRetired(roots.storeRoot);
+  const retired = [];
+  const isRetired = (id, file, line, what) => {
+    const entry = retiredIds.get(id);
+    if (!entry) return false;
+    retired.push({ id, now: entry.now, file, line, what });
+    return true;
+  };
   const sources = sourceFiles(roots.storeRoot, roots.appRoot);
 
   for (const source of sources) {
@@ -582,7 +615,10 @@ export function parseTraceGraph({
 
   for (const record of cases) {
     for (const id of record.covers) {
-      if (!byScenario.has(id))
+      if (
+        !byScenario.has(id) &&
+        !isRetired(id, record.file, record.line, `case ${record.id} covers`)
+      )
         issues.push({
           code: "unresolved-reference",
           message: `case ${record.id} covers unknown scenario ${id}`,
@@ -595,7 +631,12 @@ export function parseTraceGraph({
   for (const test of tests) {
     if (test.type === "acceptance" && test.caseId) {
       const matches = byCase.get(test.caseId) ?? [];
-      if (matches.length === 0) {
+      if (
+        matches.length === 0 &&
+        isRetired(test.caseId, test.file, test.line, "test accepts")
+      ) {
+        // resolved through the retired map
+      } else if (matches.length === 0) {
         issues.push({
           code: "unresolved-reference",
           message: `test accepts unknown case ${test.caseId}`,
@@ -614,7 +655,11 @@ export function parseTraceGraph({
         });
       }
     }
-    if (test.type === "supports" && !byScenario.has(test.scenarioId)) {
+    if (
+      test.type === "supports" &&
+      !byScenario.has(test.scenarioId) &&
+      !isRetired(test.scenarioId, test.file, test.line, "test supports")
+    ) {
       issues.push({
         code: "unresolved-reference",
         message: `test supports unknown scenario ${test.scenarioId}`,
@@ -659,6 +704,7 @@ export function parseTraceGraph({
     unlinked,
     links: validLinkCount(cases, tests, byScenario, byCase),
     scenarioLinkPending,
+    retired,
   };
 }
 
@@ -978,6 +1024,14 @@ function summarize(graph) {
     `Unlinked cases: ${unlinked.cases.length}`,
     `Scenario-link pending cases: ${graph.scenarioLinkPending.length}`,
   ];
+  if (graph.retired.length)
+    lines.push(
+      `Retired references: ${graph.retired.length} - cite the page id instead`,
+      ...graph.retired.map(
+        (one) =>
+          `  ${displayPath(one.file, graph.roots)}:${one.line} ${one.what} ${one.id} -> ${one.now}`,
+      ),
+    );
   if (issues.length)
     lines.push(
       "Issues:",
