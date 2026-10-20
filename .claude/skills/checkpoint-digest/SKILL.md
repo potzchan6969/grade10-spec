@@ -29,7 +29,7 @@ The workflow uploads the page, posts the link, then moves the checkpoint, in tha
 - **Where** - `refs/checkpoints/<branch>` on `origin`, pointing at the last commit a digest covered; it is no branch and no tag, so it shows in no branch list and triggers no push workflow
 - **Read** - `range` fetches it and prints `from`, `to`, `commits` and `base`
 - **First run** - with no checkpoint, `range` starts from the branch as it stood at the end of last Friday, Hong Kong time (`CHECKPOINT_FIRST_RUN` takes any other date), and `base` reads `first-run`
-- **Rewritten branch** - when a force-push left the checkpoint off the branch, `range` starts where the two still agree, and `base` reads `merge-base`; say so in the post
+- **Rewritten branch** - when a force-push left the checkpoint off the branch, `range` starts where the two still agree, and `base` reads `merge-base`; say so in `since`, which the page and the post show under the numbers
 - **Two runs at once** - `advance` pushes with a lease on the value it read, so the second run is refused and says so; it posted a range the first run also posted, and nothing is lost
 - **Who moves it** - the workflow, with its own token; a session never needs push rights for it
 - **Look at it** - `git ls-remote origin 'refs/checkpoints/*'`; move it by hand with `advance --to <sha>`
@@ -43,29 +43,36 @@ The workflow uploads the page, posts the link, then moves the checkpoint, in tha
 
 ## What the Reader Gets
 
-### One post and one page
+### One Post and One Page
 
-- **Post** - the page's title as a header, the reason with an Open the page button, the repository, branch, range and date, then one block per area listing each change as its title and its now line, then Follow-ups
+The post repeats the top of the page and its At a glance list, in the same order.
+
+- **Post head** - the title; the days the digest covers, the repository and branch, and the range, which opens GitHub's comparison of the two commits
+- **Post lead** - the reason, the numbers and an Open the digest button
+- **Post changes** - grouped by area as on the page: each change's kind, its title linking to its card, and who notices it; past 12 changes, one link to the rest
+- **Post follow-ups** - each owner first, linked to its row on the page
 - **Page** - every change drawn, at `reports/grade10-spec/digest/<branch>/<commit>/` on the reports host, behind the team's Cloudflare login; the host drops it 30 days after upload
 - **Title** - `<Branch> Branch Digest`, such as `Main Branch Digest`
 - **Reason** - the two or three moves that matter most, in one line: `3 site pages proposed, the Accounts pages rewritten, and the company site catalogs added`
+- **Numbers** - the counts a reader would quote, four at most, each recounted from `facts.json`: commits, pull requests merged, changes proposed, changes archived
 
-### What changed, by area
+### What Changed, by Area
 
 Each change is one card with a `phase` naming its area; the page groups and counts them. Draw what a reader would act on, not every commit.
 
 | What moved | Draw it as |
 | --- | --- |
-| OpenSpec changes proposed, accepted or archived | A `table` of change and where it moved, or a `flow` of its stages |
+| OpenSpec changes proposed, accepted or archived | A `board` with one column per move, or a `flow` of one change's stages |
 | A rule on a product page or in a requirement | `before` and `now` lines, and a `flow` or `states` when it is a path or a status |
-| Token values | A `table` of token, before and now; a `mock` with the new values when a reader would see them |
-| Catalog words | A `table` of key and words, with before and now where words changed |
+| Token values | A `diff` of each token, before and now, where a colour shows its swatch; a `mock` with the new values when a reader would see them |
+| Catalog words | A `diff` of each key's words where they changed; a `table` of key and each language where they are new |
 | A primitive or block added or removed | A `shot` of its story when one can be captured, else a `mock` with `rendered` set |
 | Where the work landed | `bars` of lines or commits per area, as the last card |
 | Tooling, CI and agent skills | One card each for what changes how the team works; the rest goes in For engineers |
 
 - **Kind** - `new`, `changed` or `removed` when the change is one; leave it out for an overview card
-- **Who** - the readers who notice it: `Product`, `Design`, `Engineering`, `Members`
+- **Who** - the readers who notice it: `Product`, `Design`, `Engineering`, `Members`, `Visitors`; the page's filter and the post use the same names
+- **Links** - the sources a reader opens next: the proposal, the pull request, the requirement
 - **Proof** - leave it out; a digest reports what landed and claims nothing about whether it works
 - **Follow-ups** - what the range leaves waiting: a change proposed and not accepted, a 🚧 line with no change, a design-sync report that drifted
 - **For engineers** - the merged pull requests as `commits`, and the facts command in `notes`

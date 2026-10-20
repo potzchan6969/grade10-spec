@@ -5,6 +5,8 @@ import { resolve } from "node:path";
 
 const API = "https://slack.com/api";
 const MAX_TEXT = 2900;
+const MAX_CHANGES = 12;
+const KIND = { new: "New", changed: "Changed", removed: "Removed" };
 
 const args = process.argv.slice(2);
 const option = (name) => {
@@ -19,13 +21,14 @@ if (!file || !url)
   fail(
     "usage: node slack.mjs <data.json> --url <page link> [--channel <id>] [--send]",
   );
+const page = url.split("#")[0];
 const data = JSON.parse(readFileSync(resolve(file), "utf8"));
 const channel = option("channel") ?? process.env.SLACK_CHANNEL;
 const token = process.env.SLACK_BOT_TOKEN;
 
 const message = {
   channel,
-  text: `${data.title}: ${plain(data.reason)}`,
+  text: `${plain(data.title)}: ${plain(data.reason)}`,
   blocks: blocks(),
   unfurl_links: false,
 };
@@ -47,88 +50,162 @@ console.log(
   JSON.stringify({ channel: posted.channel, ts: posted.ts, permalink }),
 );
 
+// The page's top, then its At a glance list: the same order, each title opening its card.
 function blocks() {
   const s = data.stamp ?? {};
-  const range = s.from && s.commit ? `${s.from}..${s.commit}` : s.commit;
+  const where = [s.repo, s.branch].filter(Boolean).join(" · ");
   const out = [
     {
       type: "header",
-      text: { type: "plain_text", text: data.title.slice(0, 150) },
+      text: { type: "plain_text", text: plain(data.title).slice(0, 150) },
     },
-    {
-      type: "section",
-      text: { type: "mrkdwn", text: mrkdwn(data.reason) },
-      accessory: {
-        type: "button",
-        text: { type: "plain_text", text: "Open the page" },
-        url,
-        style: "primary",
-      },
-    },
-    {
-      type: "context",
-      elements: [
-        {
-          type: "mrkdwn",
-          text: [s.repo, s.branch, range && `\`${range}\``, s.date]
-            .filter(Boolean)
-            .join("  ·  "),
-        },
-      ],
-    },
+    context([period(s), where, range(s)].filter(Boolean).join("  ·  ")),
+    section(mrkdwn(data.reason)),
   ];
-  const changes = data.changes ?? [];
-  for (const phase of [...new Set(changes.map((c) => c.phase ?? ""))]) {
-    const lines = changes
-      .filter((c) => (c.phase ?? "") === phase)
-      .map((c) => `• *${mrkdwn(c.title)}* - ${mrkdwn(c.now)}`);
-    out.push({ type: "divider" });
-    out.push({
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: clip(
-          [phase && `*${phase}*`, ...lines].filter(Boolean).join("\n"),
-        ),
-      },
-    });
-  }
-  const followups = data.followups ?? [];
-  if (followups.length) {
-    out.push({ type: "divider" });
-    out.push({
-      type: "section",
-      text: {
-        type: "mrkdwn",
-        text: clip(
-          [
-            "*Follow-ups*",
-            ...followups.map(
-              (f) => `• ${mrkdwn(f.title)} - ${mrkdwn(f.owner)}`,
-            ),
-          ].join("\n"),
-        ),
-      },
-    });
-  }
+  const numbers = data.numbers ?? [];
+  if (numbers.length)
+    out.push(
+      context(
+        numbers
+          .map((n) => `*${figure(n.value)}* ${mrkdwn(n.label)}`)
+          .join("  ·  "),
+      ),
+    );
+  if (data.since) out.push(context(mrkdwn(data.since)));
+  // A button of its own row, so the reason keeps the full width on a phone.
   out.push({
-    type: "context",
+    type: "actions",
     elements: [
       {
-        type: "mrkdwn",
-        text: `<${url}|The page> draws each change; it is behind the team's Cloudflare login for 30 days.`,
+        type: "button",
+        text: { type: "plain_text", text: "Open the digest" },
+        url: page,
+        style: "primary",
       },
     ],
   });
+
+  const changes = data.changes ?? [];
+  const shown = changes.slice(0, MAX_CHANGES);
+  const phases = [...new Set(shown.map((c) => c.phase).filter(Boolean))];
+  const groups = [
+    ...phases.map((p) => [p, shown.filter((c) => c.phase === p)]),
+    ["", shown.filter((c) => !c.phase)],
+  ].filter(([, items]) => items.length);
+  if (groups.length) out.push({ type: "divider" });
+  for (const [phase, items] of groups)
+    out.push(
+      section(
+        [phase && `*${mrkdwn(phase)}*`, ...items.map(line)]
+          .filter(Boolean)
+          .join("\n"),
+      ),
+    );
+  const more = changes.length - shown.length;
+  if (more > 0)
+    out.push(
+      context(
+        `<${page}#changed|${more} more change${more === 1 ? "" : "s"}> on the page`,
+      ),
+    );
+
+  const followups = data.followups ?? [];
+  if (followups.length) {
+    out.push({ type: "divider" });
+    out.push(
+      section(
+        [
+          "*Follow-ups*",
+          ...followups.map(
+            (f) =>
+              `• *${mrkdwn(f.owner)}*: <${page}#fu-${f.id}|${label(f.title)}>`,
+          ),
+        ].join("\n"),
+      ),
+    );
+  }
+  out.push(
+    context(
+      `Each title opens its picture on <${page}|the digest>. The page sits behind the team's Cloudflare login for 30 days.`,
+    ),
+  );
   return out.slice(0, 50);
+}
+
+// One change: its kind, its title linked to its card, and who notices it.
+function line(c) {
+  const kind = KIND[c.kind] ? `${KIND[c.kind]}: ` : "";
+  const who = [c.who ?? []].flat().filter(Boolean);
+  return `• ${kind}*<${page}#${c.id}|${label(c.title)}>*${who.length ? ` · _${mrkdwn(who.join(", "))}_` : ""}`;
+}
+
+// The days the digest covers, as the page writes them: the year once, on the last day.
+function period(s) {
+  const day = (v) => {
+    const m = String(v ?? "").match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return m ? new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])) : null;
+  };
+  const text = (d, year) => {
+    const part = Object.fromEntries(
+      new Intl.DateTimeFormat("en-GB", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        timeZone: "UTC",
+      })
+        .formatToParts(d)
+        .map((p) => [p.type, p.value]),
+    );
+    return [part.weekday, part.day, part.month, year ? part.year : null]
+      .filter(Boolean)
+      .join(" ");
+  };
+  const from = day(s.fromDate);
+  const to = day(s.date);
+  if (!to) return s.date;
+  if (!from || +from === +to) return text(to, true);
+  return `${text(from, from.getUTCFullYear() !== to.getUTCFullYear())} to ${text(to, true)}`;
+}
+
+// The commits the digest covers, opening GitHub's comparison of the two.
+function range(s) {
+  if (!s.from || !s.commit) return s.commit ? `\`${s.commit}\`` : null;
+  const text = `${s.from}..${s.commit}`;
+  return /^[\w.-]+\/[\w.-]+$/.test(s.repo ?? "")
+    ? `<https://github.com/${s.repo}/compare/${s.from}...${s.commit}|${text}>`
+    : `\`${text}\``;
+}
+
+function figure(v) {
+  return typeof v === "number" ? v.toLocaleString("en-GB") : mrkdwn(v);
+}
+
+function section(text) {
+  return { type: "section", text: { type: "mrkdwn", text: clip(text) } };
+}
+
+function context(text) {
+  return { type: "context", elements: [{ type: "mrkdwn", text: clip(text) }] };
 }
 
 // The page's markdown - **bold**, `code`, [text](https://...) - in Slack's own.
 function mrkdwn(s) {
-  return String(s ?? "")
-    .replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c])
+  return entities(s)
     .replace(/\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g, "<$2|$1>")
     .replace(/\*\*([^*]+)\*\*/g, "*$1*");
+}
+
+// A link's words: Slack draws no formatting inside them, and a | or > would end the link.
+function label(s) {
+  return entities(plain(s)).replace(/\|/g, "/");
+}
+
+function entities(s) {
+  return String(s ?? "").replace(
+    /[&<>]/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c],
+  );
 }
 
 function plain(s) {

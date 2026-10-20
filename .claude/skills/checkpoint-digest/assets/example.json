@@ -2,102 +2,257 @@
   "example": true,
   "title": "Main Branch Digest",
   "page": "digest",
-  "reason": "3 site pages proposed, the Accounts pages rewritten, and the company site catalogs added",
+  "reason": "The member card becomes the member pass, 8 changes are proposed, and auctions close to restricted regions",
   "stamp": {
     "repo": "9gag/grade10-spec",
     "branch": "main",
-    "from": "bf24369",
-    "commit": "94346cc",
+    "from": "ea5ac1b",
+    "fromDate": "2026-10-16",
+    "commit": "c06e997",
     "date": "2026-10-19"
   },
+  "numbers": [
+    { "label": "commits", "value": 227 },
+    { "label": "pull requests merged", "value": 21 },
+    { "label": "changes proposed", "value": 8 },
+    { "label": "changes archived", "value": 3 }
+  ],
   "changes": [
     {
-      "id": "site-pages-proposed",
-      "kind": "new",
-      "phase": "Planning",
-      "who": ["Product", "Design"],
-      "title": "Press, Media Coverage and Shows pages are proposed",
-      "now": "Each change carries its decisions, journeys, UI design, cases and tasks",
-      "picture": {
-        "kind": "table",
-        "caption": "OpenSpec changes that moved",
-        "columns": ["Change", "Moved to"],
-        "rows": [
-          ["add-site-press-page", "Proposed, with tasks"],
-          ["add-site-press-article-page", "Proposed, with tasks"],
-          ["add-site-media-coverage-page", "Proposed, with tasks"],
-          ["add-staging-auth-test-door", "Cases reconciled"],
-          ["separate-site-and-admin-sessions", "Decisions edited"]
-        ]
-      }
+      "id": "member-pass",
+      "kind": "changed",
+      "phase": "Blocks",
+      "who": ["Members", "Design", "Engineering"],
+      "title": "The member card becomes the member pass",
+      "before": "`MemberCard`: a plain card with the code, a code to read out, and a used state",
+      "now": "`MemberPass`: a header in the tier's colours over the QR square, a short code and a Refresh button",
+      "picture": [
+        {
+          "kind": "mock",
+          "frame": "phone",
+          "title": "Member pass",
+          "caption": "The pass at the till, in its story's words",
+          "items": [
+            { "badge": "Gold", "tone": "accent" },
+            { "text": "collector@example.com", "muted": true },
+            { "field": "Short code", "value": "XJCD-4WMB" },
+            { "divider": true },
+            { "label": "Refreshes in", "value": "0:45" },
+            { "button": "Refresh" }
+          ]
+        },
+        {
+          "kind": "diff",
+          "caption": "The pass's English words in `membership.json`",
+          "rows": [
+            {
+              "name": "`page.card`",
+              "before": "Your member card",
+              "now": "Your member pass"
+            },
+            {
+              "name": "`card.refresh`",
+              "before": "New code",
+              "now": "Refresh"
+            },
+            { "name": "`card.shortCode`", "now": "Short code" },
+            { "name": "`card.fallbackCode`", "before": "Or read this out" },
+            { "name": "`card.refreshesIn`", "now": "Refreshes in" },
+            { "name": "`card.expiresIn`", "before": "Expires in" }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "text": "Proposal",
+          "href": "https://github.com/9gag/grade10-spec/blob/main/openspec/changes/redesign-member-pass/proposal.md"
+        },
+        {
+          "text": "Pull request #1229",
+          "href": "https://github.com/9gag/grade10-spec/pull/1229"
+        }
+      ]
     },
     {
-      "id": "session-one-week",
-      "kind": "changed",
-      "phase": "Product pages",
-      "who": ["Members"],
-      "title": "A site session lasts one week",
-      "before": "The Accounts pages left the session length open",
-      "now": "A site session lasts one week and refreshes while the member is active",
+      "id": "openspec-moves",
+      "phase": "OpenSpec changes",
+      "who": ["Product", "Engineering"],
+      "title": "Eight changes proposed, three archived",
+      "now": "Five of the eight are company site pages, each with its designs, cases and tasks",
       "picture": {
-        "kind": "flow",
-        "caption": "How a member meets the Accounts pages now",
-        "steps": [
-          { "who": "Member", "text": "Signs in" },
+        "kind": "board",
+        "caption": "Where each OpenSpec change moved",
+        "columns": [
           {
-            "who": "Site",
-            "text": "Holds the session",
-            "arrow": "up to 1 week"
+            "name": "Proposed",
+            "tone": "info",
+            "items": [
+              "`add-site-about-page`",
+              "`add-site-press-page`",
+              "`add-site-press-article-page`",
+              "`add-site-media-coverage-page`",
+              "`add-site-shows-page`",
+              "`redesign-member-pass`",
+              "`redesign-tier-card`",
+              "`preselect-hkd-first-payment-method`"
+            ]
           },
           {
-            "who": "Member",
-            "text": "Returns",
-            "arrow": "refreshes on use",
-            "tone": "ok"
+            "name": "Requirements moved",
+            "tone": "ok",
+            "items": [
+              "`grade10-site/auction/availability`, new",
+              "`grade10-site/store/checkout`",
+              "`grade10-site/store/discounts`",
+              "`shared/ui/site-chrome`",
+              "8 more capabilities"
+            ]
+          },
+          {
+            "name": "Archived",
+            "tone": "none",
+            "items": [
+              "`transfer-relist-listing-slug`",
+              "`draft-auction-legal-in-storybook`",
+              "`listing-media-upload-on-drop`"
+            ]
           }
         ]
       }
     },
     {
-      "id": "about-catalogs",
+      "id": "region-auctions",
+      "kind": "new",
+      "phase": "Requirements",
+      "who": ["Members", "Product"],
+      "title": "Auctions close to regions that restrict them",
+      "now": "A restricted region sees no way into auctions, and a winner there can still pay for what they won",
+      "picture": {
+        "kind": "mock",
+        "frame": "desktop",
+        "url": "grade10.com/auction",
+        "caption": "What a direct auction address answers in a restricted region",
+        "items": [
+          { "h": "Auctions aren't available in your region" },
+          {
+            "text": "You can't bid on or watch lots from where you are. The store is open as usual.",
+            "muted": true
+          },
+          { "button": "Browse the Store", "primary": true }
+        ]
+      },
+      "links": [
+        {
+          "text": "Requirement",
+          "href": "https://github.com/9gag/grade10-spec/blob/main/openspec/specs/grade10-site/auction/availability/spec.md"
+        }
+      ]
+    },
+    {
+      "id": "site-words",
       "kind": "new",
       "phase": "Copy",
-      "who": ["Visitors"],
-      "title": "The company site's About pages have their words",
-      "now": "33 catalog files gained 2,562 lines; news titles now come from press",
+      "who": ["Visitors", "Product"],
+      "title": "The company site's pages have their words",
+      "now": "About, Finance, Press, Retail, Shows and Vault have catalogs in English and both Chinese scripts",
       "picture": {
         "kind": "table",
         "caption": "A sample of the new keys",
-        "columns": ["Key", "Words"],
+        "columns": ["Key", "English", "繁體中文"],
         "rows": [
-          ["about.eyebrow", "About Grade10"],
-          ["about.title", "Asia's premier trading card venture"]
+          ["`about.eyebrow`", "About Grade10", "關於Grade10"],
+          [
+            "`about.title`",
+            "Asia’s premier trading card venture",
+            "亞洲著名收藏卡平台"
+          ],
+          [
+            "`about.milestones.title`",
+            "From Hong Kong to Asia",
+            "從香港走向亞洲"
+          ],
+          [
+            "`aboutFinance.hero.title`",
+            "Unlock Liquidity from Your Premium Assets",
+            "**Still English**"
+          ]
         ]
       }
     },
     {
-      "id": "where-it-moved",
+      "id": "digest-skill",
+      "kind": "new",
+      "phase": "Agent skills",
+      "who": ["Engineering", "Product"],
+      "title": "Main gets a digest in Slack",
+      "now": "A push or a schedule draws what moved since the last digest and posts the page's link here",
+      "picture": {
+        "kind": "flow",
+        "caption": "One digest, from the push to the post",
+        "steps": [
+          { "who": "Push or schedule", "text": "Starts a digest" },
+          {
+            "who": "Agent",
+            "text": "Draws what moved since `refs/checkpoints/main`",
+            "arrow": "reads the commits"
+          },
+          {
+            "who": "CI",
+            "text": "Uploads the page and posts its link",
+            "arrow": "publishes"
+          },
+          {
+            "who": "CI",
+            "text": "Moves the checkpoint to the commit drawn",
+            "arrow": "then",
+            "tone": "ok"
+          }
+        ]
+      },
+      "links": [
+        {
+          "text": "Skill",
+          "href": "https://github.com/9gag/grade10-spec/blob/main/.claude/skills/checkpoint-digest/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "where-it-landed",
       "phase": "Overall",
       "title": "Where the work landed",
-      "now": "66 commits from 4 authors, most in OpenSpec changes and product pages",
+      "now": "Most new lines are planning: OpenSpec changes alone hold more than the next two areas together",
       "picture": {
         "kind": "bars",
-        "unit": " lines",
-        "caption": "Lines added per area",
+        "unit": "lines",
+        "caption": "Lines added per area, the six largest",
         "items": [
-          { "label": "OpenSpec changes", "value": 3493 },
-          { "label": "Copy", "value": 2562 },
-          { "label": "Product pages", "value": 2311 },
-          { "label": "Stories and pages", "value": 1639 }
+          { "label": "OpenSpec changes", "value": 12603 },
+          { "label": "Agent skills", "value": 6855 },
+          { "label": "Tooling and CI", "value": 4191 },
+          { "label": "Blocks", "value": 4105 },
+          { "label": "Stories and pages", "value": 3843 },
+          { "label": "Requirements", "value": 3252 }
         ]
       }
     }
   ],
   "followups": [
     {
-      "id": "press-pages-accept",
-      "title": "Accept the 3 proposed site page changes",
-      "why": "Their tasks are written and wait on acceptance",
+      "id": "member-pass-apps",
+      "title": "Move each app from `MemberCard` to `MemberPass`",
+      "why": "The old names left `@grade10/ui`; an app that still imports them stops building at its next bump",
+      "owner": "Engineering"
+    },
+    {
+      "id": "finance-words",
+      "title": "Translate the Finance page into Chinese",
+      "why": "58 of its 65 words are still English in both Chinese catalogs",
+      "owner": "Product"
+    },
+    {
+      "id": "site-pages-accept",
+      "title": "Accept the 5 proposed company site pages",
+      "why": "Their designs, cases and tasks are written and wait on acceptance",
       "owner": "Product"
     }
   ],
@@ -105,15 +260,23 @@
     "commits": [
       {
         "sha": "94346cc",
-        "subject": "Merge pull request #1248 from 9gag/feat/about-page"
+        "subject": "Merge pull request #1248 from 9gag/feat/about-page",
+        "href": "https://github.com/9gag/grade10-spec/pull/1248"
       },
       {
-        "sha": "e339411",
-        "subject": "Merge pull request #1241 from 9gag/claude/tender-cannon-3fdozf"
+        "sha": "1631117",
+        "subject": "Merge pull request #1240 from 9gag/feat/site-media-coverage",
+        "href": "https://github.com/9gag/grade10-spec/pull/1240"
+      },
+      {
+        "sha": "ab33c98",
+        "subject": "Merge pull request #1229 from 9gag/feat/member-pass-redesign",
+        "href": "https://github.com/9gag/grade10-spec/pull/1229"
       }
     ],
     "notes": [
-      "Drawn from `node .claude/skills/checkpoint-digest/scripts/checkpoint.mjs facts`"
+      "Drawn from `node .claude/skills/checkpoint-digest/scripts/checkpoint.mjs facts --branch main`",
+      "The first digest of main: it starts at the end of Friday 16 Oct, Hong Kong time"
     ]
   }
 }
