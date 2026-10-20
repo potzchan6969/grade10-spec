@@ -62,8 +62,8 @@ function MediaCard({ item }: { item: MediaItem }) {
 /**
  * The `/media-coverage` surface as the app assembles it: `SiteHeader`,
  * the Figma Media Coverage frame — heading block over the four-column
- * card grid — and `Footer`. No nav item is current — the entry point is
- * still undecided.
+ * card grid — and `Footer`. No nav item is current — the page's entry
+ * is the footer's Company column.
  */
 function MediaCoveragePage() {
   const reduceMotion = useReducedMotion();

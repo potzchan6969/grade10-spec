@@ -54,5 +54,5 @@ it sends to `/press-releases` and its press articles.
 | Grade10 Festival 2025 date | ❓ Open | The frame dates the edition card NOV 2026 while the live page shows November 2025; the page carries the frame's text until design confirms. | Design |
 | Hero card label | Decided | "Upcoming Shows" — the live page's label; the frame's LATEST SHOWS described the row, not its rule. | Product |
 | Video and poster provenance | ❓ Open | The YouTube ids and poster images are taken from the live page, not annotated in the frame. | Design |
-| Navigation entry | ❓ Open | Where Shows sits in the chrome is undecided; the header marks no item current for the page today. | Product |
+| Navigation entry | Decided | Shows joins the primary navigation ahead of Help — after Store Locator when that item is present, after Auction on auction-first — and the footer's Company column; the header marks it current on `/shows`. Rejected a footer-only entry: of the company pages, Shows is the one a collector comes looking for. | Product (@tangconst) |
 :::

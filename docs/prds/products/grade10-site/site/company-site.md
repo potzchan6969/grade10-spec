@@ -3,19 +3,21 @@ title: Company Site
 order: 6
 ---
 
-The company site under `/about` tells readers who Grade10 is. Its press
-releases and media coverage are written and published in the admin's
+The company site tells readers who Grade10 is. Its press releases and
+media coverage are written and published in the admin's
 [Press](/p/grade10-admin/press) section; the site shows only what is
-published there.
+published there. The pages are reached from the footer's Company column —
+About, Shows, Press Releases, Media Coverage — and Shows also sits in the
+primary navigation.
 
 ## Press Pages
 
 | Address | Shows | Rendered |
 | --- | --- | --- |
 | `/about` | The About front page, with a news strip of the newest releases | At build; the strip is read in the browser |
-| `/about/press-releases` | Every published release, newest first | On every request |
-| `/about/press-releases/<slug>` | One published release, its About blocks and media contacts | On every request |
-| `/about/media-coverage` | The coverage list, in the order the admin set | On every request |
+| `/press-releases` | Every published release, newest first | On every request |
+| `/press-releases/<slug>` | One published release, its About blocks and media contacts | On every request |
+| `/media-coverage` | The coverage list, in the order the admin set | On every request |
 
 - **A publish is live at once** — the index, a release and the coverage are
   read on every request, never from a cache, so a reader's next visit shows

@@ -41,9 +41,9 @@ title and the link, nothing else.
 - ❓ Design - **Publication colour** - the label draws `#77736b`, bound
   to no variable; the page renders `secondary-foreground` until design
   names the token
-- ❓ Product - **Navigation entry** - where Media Coverage sits in the
-  chrome is undecided; the header marks no item current for the page
-  today
+- **Navigation entry** — Media Coverage sits in the footer's Company
+  column; the header lists no item for the page and marks nothing
+  current
 - **Copy - Title length** - every card holds one height: the publication
   truncates to one line and the title clamps — three lines on small
   viewports, four at `sm` — so a long CMS title ends in an ellipsis

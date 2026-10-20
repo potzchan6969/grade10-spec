@@ -17,7 +17,7 @@ import {
   type LiveListingFacts,
   stateMeta,
 } from "./listing-auction-bid-fixtures";
-import { HELP_NAV_ITEM } from "./workbench-story-nav";
+import { HELP_NAV_ITEM, SHOWS_NAV_ITEM } from "./workbench-story-nav";
 
 export {
   type AuctionTiming,
@@ -173,6 +173,7 @@ export const AUCTION_SITE_HEADER = {
   utilityLinks: [],
   navItems: [
     { label: "Auction", href: "#auction", current: true },
+    { ...SHOWS_NAV_ITEM },
     { ...HELP_NAV_ITEM },
   ],
   onLocaleChange: noop,

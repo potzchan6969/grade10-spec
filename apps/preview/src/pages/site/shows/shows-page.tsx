@@ -479,7 +479,7 @@ function ShowsPage() {
         {...AUCTION_SITE_HEADER}
         navItems={AUCTION_SITE_HEADER.navItems.map((item) => ({
           ...item,
-          current: false,
+          current: item.href === "/shows",
         }))}
       />
       <main className="w-full flex-1">
