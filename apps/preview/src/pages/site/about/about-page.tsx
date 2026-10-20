@@ -167,9 +167,7 @@ function AboutPage() {
                 <p className="text-lg leading-7">
                   {ABOUT_PAGE.marketIndexes.body}
                 </p>
-                {/* The pill indicator drops an 8px/16px shadow; the negative
-                    margins give it room so the scroll clip doesn't crop it. */}
-                <div className="-mx-2 -my-6 overflow-x-auto px-2 py-6 sm:hidden">
+                <div className="-mx-2 overflow-x-auto px-2 sm:hidden">
                   <Tabs
                     onValueChange={(name) => {
                       const next = ABOUT_PAGE.marketIndexes.indexes.find(
@@ -181,7 +179,7 @@ function AboutPage() {
                   >
                     <TabsList
                       aria-label="Grade10 market indexes"
-                      variant="pill"
+                      variant="list"
                     >
                       {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => (
                         <TabsTrigger
