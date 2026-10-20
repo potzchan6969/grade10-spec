@@ -4,7 +4,14 @@ import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { check, citedRefs, gate, parseCases, readPages } from "./pages.mjs";
+import {
+  check,
+  citedRefs,
+  gate,
+  openChanges,
+  parseCases,
+  readPages,
+} from "./pages.mjs";
 
 function store(files) {
   const root = mkdtempSync(join(tmpdir(), "pages-"));
@@ -195,4 +202,34 @@ title: Points
 test("AGENTS.md past its limit fails", () => {
   const root = store({ "AGENTS.md": "line\n".repeat(151) });
   assert.match(check(root).failures[0], /AGENTS.md is 151 lines, over 150/);
+});
+
+test("a retired id or change must name what a page holds", () => {
+  const root = store({
+    "docs/prds/products/site/points.md": PAGE,
+    "openspec/retired.tsv": [
+      "id\tdisplay\tnow\tchange",
+      "g10.points.SC-a\tsite-points-SC-1\tsite/points#earn-once",
+      "g10.points.SC-b\tsite-points-SC-2\tsite/points#gone",
+      "g10.points.SC-c\tsite-points-SC-3\tdropped: superseded",
+    ].join("\n"),
+    "openspec/retired-changes.tsv":
+      "change\tpages\nearn-points\tsite/points site/nowhere\n",
+  });
+  assert.deepEqual(check(root).failures, [
+    "openspec/retired.tsv:3 g10.points.SC-b names site/points#gone, which no page holds",
+    "openspec/retired-changes.tsv:2 earn-points names no page site/nowhere",
+  ]);
+});
+
+test("a still-open change claims the pages its proposal names", () => {
+  const root = store({
+    "openspec/changes/add-guest/proposal.md":
+      "[Checkout](../../../docs/prds/products/site/store/checkout.md) and [Points](/p/site/loyalty/points)",
+    "openspec/changes/archive/old/proposal.md": "/p/site/loyalty/tiers",
+  });
+  const byPage = openChanges(root);
+  assert.deepEqual(byPage.get("site/store/checkout"), ["add-guest"]);
+  assert.deepEqual(byPage.get("site/loyalty/points"), ["add-guest"]);
+  assert.equal(byPage.has("site/loyalty/tiers"), false);
 });

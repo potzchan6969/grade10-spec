@@ -7,7 +7,7 @@ import { execFileSync } from "node:child_process";
  *   pnpm pages:board [prefix] [--build|--open|--design|--work]
  *   pnpm pages:cases <prefix> [--cited <app-dir>] [--tsv]
  *   pnpm pages:check [--base <ref>]
- *   node scripts/pages/pages.mjs gate <app-dir> [--allow <file>]
+ *   node scripts/pages/pages.mjs gate <app-dir> [--allow <file>] [--seed]
  *
  * A page is `docs/prds/products/<id>.md`. Its ids are the rules that end in
  * `{#id}`, its `:::example` and `:::flow` blocks that carry an `id`, and the
@@ -34,6 +34,10 @@ export const CASES = "docs/cases";
 export const OPEN_WORK = "Open work";
 export const ALWAYS = "Always";
 export const AGENTS_LIMIT = 150;
+/** Retired OpenSpec ids and changes, and the pages that now hold them. */
+export const RETIRED = "openspec/retired.tsv";
+export const RETIRED_CHANGES = "openspec/retired-changes.tsv";
+const CHANGES = "openspec/changes";
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 /** A rule's explicit id, as `tools/manual/src/content/rule-ids.ts` hides it. */
 const RULE_ID = /\{#([^}\s]*)\}/g;
@@ -271,6 +275,43 @@ export function readPages(root = ROOT) {
 }
 
 /** The rule ids of every page as a ref ever was at `base`, read from git. */
+/** A tab-separated file as rows keyed by its header; none when absent. */
+function readTsv(path) {
+  if (!existsSync(path)) return [];
+  const [head, ...lines] = readFileSync(path, "utf8").trimEnd().split("\n");
+  const keys = head.split("\t");
+  return lines
+    .filter((line) => line.trim())
+    .map((line, at) => {
+      const cells = line.split("\t");
+      return {
+        line: at + 2,
+        ...Object.fromEntries(keys.map((key, i) => [key, cells[i] ?? ""])),
+      };
+    });
+}
+
+/** Each page a still-open OpenSpec change names in its proposal, with the
+ * changes naming it: its 🚧 lines may be that change's work. */
+export function openChanges(root = ROOT) {
+  const byPage = new Map();
+  const dir = join(root, CHANGES);
+  if (!existsSync(dir)) return byPage;
+  for (const change of readdirSync(dir)) {
+    const proposal = join(dir, change, "proposal.md");
+    if (change === "archive" || !existsSync(proposal)) continue;
+    const text = readFileSync(proposal, "utf8");
+    const named = new Set(
+      [
+        ...text.matchAll(/products\/([a-z0-9-]+(?:\/[a-z0-9-]+)*)\.md/g),
+        ...text.matchAll(/\/p\/([a-z0-9-]+(?:\/[a-z0-9-]+)*)/g),
+      ].map(([, id]) => id.replace(/\/index$/, "")),
+    );
+    for (const id of named) byPage.set(id, [...(byPage.get(id) ?? []), change]);
+  }
+  return byPage;
+}
+
 function rulesAt(root, base) {
   let listed;
   try {
@@ -346,6 +387,29 @@ export function check(root = ROOT, { base } = {}) {
       failures.push(
         `AGENTS.md is ${lines} lines, over ${AGENTS_LIMIT} - it is a map; a new rule becomes a check or replaces one`,
       );
+    }
+  }
+  const holds = new Map(
+    pages.map((page) => [page.id, new Set(page.cases.map((one) => one.id))]),
+  );
+  for (const row of readTsv(join(root, RETIRED))) {
+    if (row.now.startsWith("dropped:")) continue;
+    for (const ref of row.now.split(/\s+/).filter(Boolean)) {
+      const [id, one] = ref.split("#");
+      if (!holds.get(id)?.has(one)) {
+        failures.push(
+          `${RETIRED}:${row.line} ${row.id} names ${ref}, which no page holds`,
+        );
+      }
+    }
+  }
+  for (const row of readTsv(join(root, RETIRED_CHANGES))) {
+    for (const id of row.pages.split(/\s+/).filter(Boolean)) {
+      if (!known.has(id)) {
+        failures.push(
+          `${RETIRED_CHANGES}:${row.line} ${row.change} names no page ${id}`,
+        );
+      }
     }
   }
   const before = base ? rulesAt(root, base) : null;
@@ -458,7 +522,7 @@ const shown = (text) => {
   return ids.length ? `${ids.join(" ")} ${rest}` : rest;
 };
 
-function board(pages, mode) {
+function board(pages, mode, changes = new Map()) {
   const kinds = {
     build: [["🚧", "building"]],
     open: [["❓", "open"]],
@@ -485,7 +549,11 @@ function board(pages, mode) {
     const cases = page.cases.length
       ? ` · ${page.cases.length} cases${page.reviewed ? `, reviewed ${page.reviewed}` : ""}`
       : "";
-    out.push(`\n## ${page.id}${cases}\n${page.path}\n`, ...lines);
+    const open = changes.get(page.id);
+    const owned = open
+      ? `\nOpen OpenSpec change: ${open.join(", ")} - its 🚧 lines may be that change's; run its legacy round, not page-build`
+      : "";
+    out.push(`\n## ${page.id}${cases}\n${page.path}${owned}\n`, ...lines);
   }
   const summary = kinds
     .map(([mark, key]) => `${mark} ${totals[key]}`)
@@ -562,7 +630,7 @@ function main(argv) {
     const mode = ["build", "open", "design", "work"].find((one) =>
       flags.has(`--${one}`),
     );
-    process.stdout.write(board(select(pages), mode));
+    process.stdout.write(board(select(pages), mode, openChanges()));
     return 0;
   }
   if (command === "cases") {
@@ -597,7 +665,19 @@ function main(argv) {
             .map((line) => line.trim())
             .filter((line) => line && !line.startsWith("//"))
         : [];
-    const failures = gate(pages, citedRefs(prefix), allowed);
+    const cited = citedRefs(prefix);
+    if (flags.has("--seed")) {
+      // The first allowlist: every Always id no running test cites today.
+      const seed = pages.flatMap((page) =>
+        page.rules
+          .filter((rule) => rule.section === ALWAYS)
+          .map((rule) => `${page.id}#${rule.id}`)
+          .filter((ref) => !cited.has(ref)),
+      );
+      process.stdout.write(`${seed.join("\n")}\n`);
+      return 0;
+    }
+    const failures = gate(pages, cited, allowed);
     for (const failure of failures) console.error(`FAIL ${failure}`);
     console.error(`pages:gate: ${failures.length} failure(s)`);
     return failures.length ? 1 : 0;
