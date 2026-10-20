@@ -24,21 +24,11 @@
  * the layers it reads and a bundler leaves every other language out.
  */
 
-import grade10EnAbout from "../messages/grade10/en/about.json";
-import grade10EnAboutFinance from "../messages/grade10/en/aboutFinance.json";
-import grade10EnAboutPress from "../messages/grade10/en/aboutPress.json";
-import grade10EnAboutRetail from "../messages/grade10/en/aboutRetail.json";
-import grade10EnAboutShows from "../messages/grade10/en/aboutShows.json";
-import grade10EnAboutVault from "../messages/grade10/en/aboutVault.json";
 import grade10EnAuctionListing from "../messages/grade10/en/auctionListing.json";
 import grade10EnAuctionOrders from "../messages/grade10/en/auctionOrders.json";
-import grade10EnBrandChrome from "../messages/grade10/en/brandChrome.json";
 import grade10EnChrome from "../messages/grade10/en/chrome.json";
 import grade10EnEmail from "../messages/grade10/en/email.json";
 import grade10EnHead from "../messages/grade10/en/head.json";
-import grade10EnHomeHero from "../messages/grade10/en/homeHero.json";
-import grade10EnHomeMarket from "../messages/grade10/en/homeMarket.json";
-import grade10EnHomeShowcase from "../messages/grade10/en/homeShowcase.json";
 import grade10EnIdentity from "../messages/grade10/en/identity.json";
 import grade10EnMarketing from "../messages/grade10/en/marketing.json";
 import grade10EnOrderDetail from "../messages/grade10/en/orderDetail.json";
@@ -49,21 +39,11 @@ import grade10EnSignIn from "../messages/grade10/en/signIn.json";
 import grade10EnStore from "../messages/grade10/en/store.json";
 import grade10EnStoreHome from "../messages/grade10/en/storeHome.json";
 import grade10EnStoreLocator from "../messages/grade10/en/storeLocator.json";
-import grade10ZhHansAbout from "../messages/grade10/zh-Hans/about.json";
-import grade10ZhHansAboutFinance from "../messages/grade10/zh-Hans/aboutFinance.json";
-import grade10ZhHansAboutPress from "../messages/grade10/zh-Hans/aboutPress.json";
-import grade10ZhHansAboutRetail from "../messages/grade10/zh-Hans/aboutRetail.json";
-import grade10ZhHansAboutShows from "../messages/grade10/zh-Hans/aboutShows.json";
-import grade10ZhHansAboutVault from "../messages/grade10/zh-Hans/aboutVault.json";
 import grade10ZhHansAuctionListing from "../messages/grade10/zh-Hans/auctionListing.json";
 import grade10ZhHansAuctionOrders from "../messages/grade10/zh-Hans/auctionOrders.json";
-import grade10ZhHansBrandChrome from "../messages/grade10/zh-Hans/brandChrome.json";
 import grade10ZhHansChrome from "../messages/grade10/zh-Hans/chrome.json";
 import grade10ZhHansEmail from "../messages/grade10/zh-Hans/email.json";
 import grade10ZhHansHead from "../messages/grade10/zh-Hans/head.json";
-import grade10ZhHansHomeHero from "../messages/grade10/zh-Hans/homeHero.json";
-import grade10ZhHansHomeMarket from "../messages/grade10/zh-Hans/homeMarket.json";
-import grade10ZhHansHomeShowcase from "../messages/grade10/zh-Hans/homeShowcase.json";
 import grade10ZhHansIdentity from "../messages/grade10/zh-Hans/identity.json";
 import grade10ZhHansMarketing from "../messages/grade10/zh-Hans/marketing.json";
 import grade10ZhHansOrderDetail from "../messages/grade10/zh-Hans/orderDetail.json";
@@ -74,21 +54,11 @@ import grade10ZhHansSignIn from "../messages/grade10/zh-Hans/signIn.json";
 import grade10ZhHansStore from "../messages/grade10/zh-Hans/store.json";
 import grade10ZhHansStoreHome from "../messages/grade10/zh-Hans/storeHome.json";
 import grade10ZhHansStoreLocator from "../messages/grade10/zh-Hans/storeLocator.json";
-import grade10ZhHantAbout from "../messages/grade10/zh-Hant/about.json";
-import grade10ZhHantAboutFinance from "../messages/grade10/zh-Hant/aboutFinance.json";
-import grade10ZhHantAboutPress from "../messages/grade10/zh-Hant/aboutPress.json";
-import grade10ZhHantAboutRetail from "../messages/grade10/zh-Hant/aboutRetail.json";
-import grade10ZhHantAboutShows from "../messages/grade10/zh-Hant/aboutShows.json";
-import grade10ZhHantAboutVault from "../messages/grade10/zh-Hant/aboutVault.json";
 import grade10ZhHantAuctionListing from "../messages/grade10/zh-Hant/auctionListing.json";
 import grade10ZhHantAuctionOrders from "../messages/grade10/zh-Hant/auctionOrders.json";
-import grade10ZhHantBrandChrome from "../messages/grade10/zh-Hant/brandChrome.json";
 import grade10ZhHantChrome from "../messages/grade10/zh-Hant/chrome.json";
 import grade10ZhHantEmail from "../messages/grade10/zh-Hant/email.json";
 import grade10ZhHantHead from "../messages/grade10/zh-Hant/head.json";
-import grade10ZhHantHomeHero from "../messages/grade10/zh-Hant/homeHero.json";
-import grade10ZhHantHomeMarket from "../messages/grade10/zh-Hant/homeMarket.json";
-import grade10ZhHantHomeShowcase from "../messages/grade10/zh-Hant/homeShowcase.json";
 import grade10ZhHantIdentity from "../messages/grade10/zh-Hant/identity.json";
 import grade10ZhHantMarketing from "../messages/grade10/zh-Hant/marketing.json";
 import grade10ZhHantOrderDetail from "../messages/grade10/zh-Hant/orderDetail.json";
@@ -365,18 +335,8 @@ export const sharedKo = {
 
 /** What each brand says for itself, one language at a time. */
 export const grade10En = {
-  about: grade10EnAbout,
   auctionListing: grade10EnAuctionListing,
   auctionOrders: grade10EnAuctionOrders,
-  brandChrome: grade10EnBrandChrome,
-  homeHero: grade10EnHomeHero,
-  homeShowcase: grade10EnHomeShowcase,
-  homeMarket: grade10EnHomeMarket,
-  aboutShows: grade10EnAboutShows,
-  aboutRetail: grade10EnAboutRetail,
-  aboutFinance: grade10EnAboutFinance,
-  aboutVault: grade10EnAboutVault,
-  aboutPress: grade10EnAboutPress,
   chrome: grade10EnChrome,
   email: grade10EnEmail,
   head: grade10EnHead,
@@ -393,18 +353,8 @@ export const grade10En = {
 };
 
 export const grade10ZhHant = {
-  about: grade10ZhHantAbout,
   auctionListing: grade10ZhHantAuctionListing,
   auctionOrders: grade10ZhHantAuctionOrders,
-  brandChrome: grade10ZhHantBrandChrome,
-  homeHero: grade10ZhHantHomeHero,
-  homeShowcase: grade10ZhHantHomeShowcase,
-  homeMarket: grade10ZhHantHomeMarket,
-  aboutShows: grade10ZhHantAboutShows,
-  aboutRetail: grade10ZhHantAboutRetail,
-  aboutFinance: grade10ZhHantAboutFinance,
-  aboutVault: grade10ZhHantAboutVault,
-  aboutPress: grade10ZhHantAboutPress,
   chrome: grade10ZhHantChrome,
   email: grade10ZhHantEmail,
   head: grade10ZhHantHead,
@@ -421,18 +371,8 @@ export const grade10ZhHant = {
 };
 
 export const grade10ZhHans = {
-  about: grade10ZhHansAbout,
   auctionListing: grade10ZhHansAuctionListing,
   auctionOrders: grade10ZhHansAuctionOrders,
-  brandChrome: grade10ZhHansBrandChrome,
-  homeHero: grade10ZhHansHomeHero,
-  homeShowcase: grade10ZhHansHomeShowcase,
-  homeMarket: grade10ZhHansHomeMarket,
-  aboutShows: grade10ZhHansAboutShows,
-  aboutRetail: grade10ZhHansAboutRetail,
-  aboutFinance: grade10ZhHansAboutFinance,
-  aboutVault: grade10ZhHansAboutVault,
-  aboutPress: grade10ZhHansAboutPress,
   chrome: grade10ZhHansChrome,
   email: grade10ZhHansEmail,
   head: grade10ZhHansHead,
