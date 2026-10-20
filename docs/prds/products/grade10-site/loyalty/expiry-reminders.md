@@ -7,8 +7,8 @@ order: 10
 
 | Rule | Value |
 | --- | --- |
-| Lead times | One reminder, 30 days before the day, when the profile's warning starts |
-| Smallest balance reminded about | Any balance of 1 point or more |
+| Lead times | One reminder, 30 days before the day, when the profile's warning starts {#lead-times} |
+| Smallest balance reminded about | Any balance of 1 point or more {#smallest-balance} |
 | Clock | Asia/Hong_Kong, the same clock the window runs on |
 | Repeats | One reminder per member, per expiry date, per lead time |
 
@@ -19,33 +19,33 @@ reminder.
 
 - **Owed by the balance's own date** - a member is owed a reminder once
   their balance expires within a lead time, the day exactly that far away
-  included, and they still hold points that expire on it - [Points](/p/grade10-site/loyalty/points#expiry)
+  included, and they still hold points that expire on it - [Points](/p/grade10-site/loyalty/points#expiry) {#owed-by-date}
 - **No lead-time setting, no reminder** - a programme without a lead-time
-  setting owes no reminder and still starts
+  setting owes no reminder and still starts {#no-lead-time-setting}
 - **Lead times that cannot work are refused** - a lead-time setting written
   with no lead in it, a lead repeated, a lead under 1 day, or a lead as long
   as the shortest the window can run or longer, 365 days on 12 months, stops
-  the programme from starting, naming what it refuses
+  the programme from starting, naming what it refuses {#lead-times-refused}
 - **Named by its lead** - the reminder carries which lead time raised it,
-  so two lead times on one date are two reminders and never one repeated
+  so two lead times on one date are two reminders and never one repeated {#named-by-lead}
 - **Raised once** - the same member, day and lead time raise one reminder,
-  however often the programme looks
+  however often the programme looks {#raised-once}
 - **Dropped when the day moves** - buying, redeeming, an operator
   restarting the window, or a grant or a correction onto a balance brought to
   nothing moves the day, and a reminder still owed against the day it
-  replaced is dropped - [Points](/p/grade10-site/loyalty/points#expiry)
+  replaced is dropped - [Points](/p/grade10-site/loyalty/points#expiry) {#dropped-when-day-moves}
 - **Dropped when there is nothing left** - the balance lapsing, or a
   claw-back, a correction or a deleted account bringing it to nothing, drops
-  what is still owed
+  what is still owed {#dropped-when-empty}
 - 🚧 **Owed again when points come back** - points a reversal gives back, or
   points paid at checkout that a refund or an operator returns, go back to the
   day still running, so a member brought to nothing is owed the same reminder
   again while that day is within a lead time, never a second one -
-  [Points](/p/grade10-site/loyalty/points#expiry)
+  [Points](/p/grade10-site/loyalty/points#expiry) {#owed-again}
 - **Gone at once** - a reminder stops being owed the moment its day moves,
   its balance empties, the balance lapses or the programme starts without its
   lead time, with nothing waiting on a nightly pass, whether or not anything
-  has read it
+  has read it {#gone-at-once}
 
 :::example{title="A reminder from 30 days before the day" id="reminder-thirty-days"}
 | When | Event | Points | Balance |
@@ -77,13 +77,13 @@ Nothing is owed for the new day until it is 30 days away.
 - **The day** - the day their balance expires
 - **The points** - how many of their points expire on it, kept current
   while the day stands; a grant, a correction, a claw-back or a reversal that
-  leaves the day in place changes the count and raises no second reminder
+  leaves the day in place changes the count and raises no second reminder {#points-kept-current}
 - **The lead time** - which one raised it
 
 ## Delivery
 
 A reminder says that one is owed; it is not a message. Nothing reads it
-yet, so no member is told anything.
+yet, so no member is told anything. {#tells-no-one}
 
 ## Carrying a Reminder
 

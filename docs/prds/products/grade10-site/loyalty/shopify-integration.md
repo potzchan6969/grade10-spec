@@ -5,7 +5,7 @@ reviewed: 2026-10-14
 ---
 
 Shopify is the online checkout and the till: it prices the basket, takes the
-payment and shows a discount, and never holds a balance, a tier or a coupon.
+payment and shows a discount, and never holds a balance, a tier or a coupon. {#never-holds-a-balance}
 
 ## Two Channels, One Pipeline
 
@@ -29,22 +29,22 @@ records the order, and the programme moves the balance once.
 
 | Rule | Value |
 | --- | --- |
-| Link | **An opaque member key** in a unique customer metafield, never the account id |
+| Link | **An opaque member key** in a unique customer metafield, never the account id {#opaque-key} |
 | Count | **One Shopify customer per member** |
 
 - **Seeded at join** — the pairing is written with the enrolment and waits on
-  Shopify for nothing
+  Shopify for nothing {#seeded-at-join}
 - **Verified email only** — the drain writes nothing to the shop until the
   member's email is verified
 - **Adopted only on a verified email** — a Shopify customer that already
   exists joins an existing account only through an email the platform
-  verified; an email a buyer or staff typed attaches nothing
+  verified; an email a buyer or staff typed attaches nothing {#adopt-verified-only}
 - **An account made by a purchase** — pairs with the customer that purchase
-  created
+  created {#purchase-pairs}
 - **A conflict parks** — a customer already carrying another member's key is
-  left for an operator to see and clear by hand
+  left for an operator to see and clear by hand {#conflict-parks}
 - **A retry lands once** — pairing retried after a lost response finds the
-  same customer, never a new one
+  same customer, never a new one {#retry-lands-once}
 - **Nobody is left unpaired** — a sweep pairs members from before pairing
   shipped, and re-running it changes nothing
 - **A stale customer is repaired** — one the shop no longer knows is repaired
@@ -56,7 +56,7 @@ records the order, and the programme moves the balance once.
   one over its orders, the platform files Shopify's own erasure request and
   waits for the acknowledgment. Once erasure starts, no repair or retry
   brings the customer back, and one a racing retry created is found and
-  removed
+  removed {#erasure}
 
 ## Online Checkout
 
@@ -213,7 +213,7 @@ does at each checkout is on [Coupons](/p/grade10-site/loyalty/coupons).
 
 | Webhook | Effect |
 | --- | --- |
-| Order paid | An order event to the programme, with the channel on it |
+| Order paid | An order event to the programme, with the channel on it {#order-event-names-channel} |
 | Order cancelled | The order is recorded cancelled; nothing promised was ever debited |
 | Refund created | The refund's goods share reaches the programme |
 | Order edited | News only |
@@ -222,20 +222,20 @@ does at each checkout is on [Coupons](/p/grade10-site/loyalty/coupons).
 - **Deduplicated** — on Shopify's own webhook id, which a redelivery reuses
 - **Once** — the paid transition writes the order event exactly once
 - **A till sale** — arrives on the same webhook or through the reconciling
-  sweep, and is ingested once either way
+  sweep, and is ingested once either way {#till-sale-once}
 - **A refund before the order** — one naming an order not yet recorded
   fetches and records that order first
 - **The site's own checkout** — an order the store's checkout created is
-  never recorded a second time
+  never recorded a second time {#own-checkout-once}
 - **A refund with no owner yet** — kept once, and replayed in order when the
-  sale gets an owner
+  sale gets an owner {#ownerless-refund}
 - **One claim** — a second claimer is refused, naming who holds the sale; a
-  revoked claim takes back the points it granted
+  revoked claim takes back the points it granted {#one-claim}
 - **Same rule on both channels** — the till earns on the goods after its
   discounts, points spent included, by the rule on
   [Points](/p/grade10-site/loyalty/points#qualification-criteria); a sale
   whose qualifying goods cannot be worked out is refused earning and
-  attribution, never priced from a guess
+  attribution, never priced from a guess {#same-rule-both-channels}
 - **Attribution** — through the customer on the sale, or later by an operator
   where the sale was rung up before the member joined; a sale nobody can own
   is marked a walk-in instead —
@@ -255,16 +255,16 @@ The loyalty terminal is a Shopify POS UI extension.
   with no server, no scopes and no admin access of its own; a manager
   activates a version per location and pins the tile
 - **The sale always goes on** — every refusal leaves staff in a normal sale;
-  an outdated extension takes membership off the till the same way
+  an outdated extension takes membership off the till the same way {#sale-always-goes-on}
 
 ### Member Name
 
 - 🚧 **The member's name** - on the badge and in the modal, the one the site
   shows: the name chosen for the shop, else the account name, else the
   address before the `@`; sent whole, uncut -
-  [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card#on-the-pass)
+  [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card#on-the-pass) {#member-name}
 - 🚧 **Account service down** - a name chosen for the shop still shows; a member
-  without one shows as 會員
+  without one shows as 會員 {#account-service-down}
 
 ### Session
 
@@ -286,17 +286,17 @@ The loyalty terminal is a Shopify POS UI extension.
 
 - **Single use** — the QR and the short code are short-lived and taken once;
   a used code is refused, naming where and when it was first used, and
-  repeated failed entries pause entry for that shop
+  repeated failed entries pause entry for that shop {#single-use}
 - **Recorded** — every lookup, read and spend, with how the member was
   identified and the staff and location labels the till sends; an email
-  lookup keeps the account, never the address
+  lookup keeps the account, never the address {#recorded}
 - **A miss says nothing** — a staff-typed email matching no member answers
-  only that none was found, and repeated lookups are throttled
+  only that none was found, and repeated lookups are throttled {#miss-says-nothing}
 - **A lookup that finds nobody** — the member stays on the sale with the
-  points and coupons staff chose, and the panel says what the lookup answered
+  points and coupons staff chose, and the panel says what the lookup answered {#lookup-finds-nobody}
 - **A lookup that finds another member** — replaces the first; what starts
   after acts for the new member only, and nothing started before moves the
-  till back
+  till back {#lookup-finds-another}
 - **Panel** — the member's name, tier, points to spend, progress in the
   qualifying window, tier renewal and lapse dates, recent activity, and open
   coupons, the store's own and the member's rewards alike
@@ -328,7 +328,7 @@ The loyalty terminal is a Shopify POS UI extension.
 - 🚧 **Older title at the till** — on a sale carrying the store's order id, a
   "Points" discount counts as the member's points and comes off before the
   order id, like "Deduction from Points"; only the sale's one custom
-  fixed-amount discount counts, never an offer or a code titled the same
+  fixed-amount discount counts, never an offer or a code titled the same {#older-title-at-till}
 - 🚧 **A points title nobody marked** — on a sale with no order id, a discount
   under either title is somebody else's; the panel offers no points, no
   coupons and no Apply until staff remove it
@@ -422,7 +422,7 @@ enforced on the next request. An operator flips them from the admin console.
 | Switch | Default | Governs |
 | --- | --- | --- |
 | Terminal enabled | On | The whole till surface. Off: identification refuses and sales carry on as guest sales |
-| Email spend | On | Spending on a session opened by a staff-typed email |
+| Email spend | On | Spending on a session opened by a staff-typed email {#email-spend} |
 | Phone lookup | Off | Identifying by a staff-typed number |
 | Phone spend | Off | Spending on a phone session |
 | Cart identify | On | The customer already on the sale identifies the member |

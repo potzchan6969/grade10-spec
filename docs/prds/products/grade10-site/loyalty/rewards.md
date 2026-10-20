@@ -8,8 +8,8 @@ reviewed: 2026-10-06
 
 | Type | Discount | Scope | Minimum spend | Example |
 | --- | --- | --- | --- | --- |
-| Product coupon | A fixed amount, or a percentage with an optional maximum discount | Named products or variants, a filter over the catalog's worlds and types, or the whole order | Optional | $50 off Pokémon |
-| Gift | A free line added to the order, the variant it names | — | Required, above zero, so a gift always rides on a purchase | A free booster pack over $500 |
+| Product coupon | A fixed amount, or a percentage with an optional maximum discount | Named products or variants, a filter over the catalog's worlds and types, or the whole order | Optional | $50 off Pokémon {#product-coupon} |
+| Gift | A free line added to the order, the variant it names | — | Required, above zero, so a gift always rides on a purchase | A free booster pack over $500 {#gift} |
 
 Both are coupons, Grade10's own instrument, and a reward that takes money
 off the whole order is a product coupon whose scope is the whole order —
@@ -54,12 +54,12 @@ variant alone, so a coupon scoped to named products or a filter is online only
 What a member can buy right now: in stock, inside its window, not archived.
 Stock reads as a yes or no, never a count.
 
-- **Read signed out** - cost and coupon validity, never stock or edits
+- **Read signed out** - cost and coupon validity, never stock or edits {#read-signed-out}
 - **One debit** - a single debit of the balance, oldest points first
 - **All or nothing** - a balance short of the cost is refused whole, never
   part paid
 - **Priced when taken** - the cost is copied onto the redemption, so
-  repricing the catalog never rewrites what an earlier redemption cost
+  repricing the catalog never rewrites what an earlier redemption cost {#priced-when-taken}
 - **Nothing is held** - points are spent at the moment of taking, not reserved
 - **What the coupon needs, before the points go** - the basket it has to
   reach, and the one channel it is good at where there is only one
@@ -67,8 +67,8 @@ Stock reads as a yes or no, never a count.
 ::story{id="loyalty-rewards-blocks-rewardmenu--coupon-limits-are-stated" title="What a coupon needs, on the menu"}
 
 - 🚧 **Online only on the menu** - a reward scoped to named products or a
-  catalog filter reads online only, whatever channels it names
-- 🚧 **Twice costs once** - a redemption sent again, reload or not, records one
+  catalog filter reads online only, whatever channels it names {#menu-online-only}
+- 🚧 **Twice costs once** - a redemption sent again, reload or not, records one {#twice-costs-once}
 - **A collection window** - a reward collected in person states the window it
   must be collected in; a money-off coupon states its validity instead
 
@@ -97,7 +97,7 @@ A money-off or gift reward becomes a coupon the moment it is bought,
 carrying the definition it was bought under.
 
 - **Made instantly** — the coupon is idle in the member's own list the
-  instant the points are spent
+  instant the points are spent {#made-instantly}
 - **Applied online** — on the store's own checkout page, before Shopify's
   checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
@@ -117,15 +117,16 @@ carrying the definition it was bought under.
   two sales
 - **A refund does not give the coupon back** — a refunded sale returns the
   goods, the money and any points spent as a discount on it; a coupon it
-  already used stays used, and the points that bought it stay spent
+  already used stays used, and the points that bought it stay spent {#refund-keeps-coupon}
 
 States, holding and refusals are on
 [Coupons](/p/grade10-site/loyalty/coupons).
 
 A physical reward is an ordinary sale — staff ring the item up, its coupon
-takes 100% off it, and the order goes through at nothing. ❓ Online, that order
-is HKD 0 plus shipping — whether it ships free or is collection only is
-Product's call.
+takes 100% off it, and the order goes through at nothing {#physical-reward}
+
+❓ Online, that order is HKD 0 plus shipping — whether it ships free or is
+collection only is Product's call.
 
 ❓ **A redeemed item stays off the shelf** — stock comes off at the redemption,
 so a coupon that expires unspent never puts it back. Either reward stock is a
@@ -141,9 +142,9 @@ Every reward the programme knows, on sale or not; the
 | Slug and name | The id it is referred to by, and what the member reads |
 | Cost | Points per redemption, copied onto the redemption when it is made |
 | Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken - [Authoring a Reward](/p/grade10-site/loyalty/operator-console#authoring-a-reward) |
-| Stock | Optional; a stocked reward is never oversold |
-| Coupon validity | Whole days the coupon runs, copied onto the coupon when redeemed, so changing it never shortens a coupon already taken |
-| Window | Optional; outside it the reward cannot be redeemed |
+| Stock | Optional; a stocked reward is never oversold {#never-oversold} |
+| Coupon validity | Whole days the coupon runs, copied onto the coupon when redeemed, so changing it never shortens a coupon already taken {#validity-copied} |
+| Window | Optional; outside it the reward cannot be redeemed {#window} |
 | Archived | Retired, still readable in the member's own history |
 
 - **How it is obtained** `TBC` - no field carries it, so every live reward
@@ -159,20 +160,20 @@ Every reward the programme knows, on sale or not; the
 
 A reversal takes back a coupon the member still holds and returns the
 points that bought it — both move together, or the member ends up holding
-one and not the other. It is an operator's move, never a member's.
+one and not the other. It is an operator's move, never a member's. {#operator-only}
 
-- 🚧 **On the record** — in the operator log, with who and why
+- 🚧 **On the record** — in the operator log, with who and why {#on-the-record}
 - **Unused reverses** — the coupon is voided, and the points go back to the
   day the balance still runs to, even onto a balance brought to nothing, so a
-  reversal never lengthens the life of points
+  reversal never lengthens the life of points {#unused-reverses}
 - **Used does not** — a used coupon stays used; cancelling or refunding the
-  order that carried it changes nothing, and the points stay spent
+  order that carried it changes nothing, and the points stay spent {#used-stays-used}
 - **Claimed by a sale does not** — refused, naming that sale, until the
-  sale gives the coupon back
-- **A lapsed balance does not** — there is nothing left to return into
+  sale gives the coupon back {#claimed-refused}
+- **A lapsed balance does not** — there is nothing left to return into {#lapsed-returns-nothing}
 - **Tier is untouched** — a redemption never touched tier progress, so
-  reversing one leaves it exactly where it was
-- 🚧 **Stock** — a unit goes back only where the redemption took one
+  reversing one leaves it exactly where it was {#tier-untouched}
+- 🚧 **Stock** — a unit goes back only where the redemption took one {#stock-back-if-taken}
 
 Where a reversal is refused and the member is still owed something, an
 operator gives rather than takes back:

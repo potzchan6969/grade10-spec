@@ -43,7 +43,7 @@ removed from the product. The code still carries them and is to be removed.
 :::
 
 ❓ **Joining** — the spec makes the member at the first activity recorded,
-and asks a member with no join date to join. Product confirms.
+and asks a member with no join date to join. Product confirms. {#joining}
 
 ## Purchases Before the Account
 
@@ -61,9 +61,9 @@ a Google account under it -
   it, the sale is attributed on the next pass and its points land
 - **By an operator** — a sale with no customer, or the wrong one, is
   attributed by hand with the evidence recorded; one claim lives at a time,
-  and a second is refused, naming the holder
+  and a second is refused, naming the holder {#operator-attribution}
 - **Revoked** — takes back the points the claim granted; the sale can be
-  attributed again
+  attributed again {#attribution-revoked}
 - **Amount not known** — a sale not yet priced is refused attribution,
   never guessed
 - **Walk-in** — a paid till sale with no member and no customer on it is
@@ -88,12 +88,12 @@ The refund came first, and is replayed after the earn, in the order it happened.
 
 | Section | Shows |
 | --- | --- |
-| Membership | 🚧 A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tier & Benefits |
-| Your member pass | 🚧 The tier's skin and the member's email, the QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
+| Membership | 🚧 A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tier & Benefits {#tier-card} |
+| Your member pass | 🚧 The tier's skin and the member's email, the QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet {#member-pass-section} |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
-| Activity | The member's own ledger. Every line says where it came from — the counter, the online store, or the programme itself |
+| Activity | The member's own ledger. Every line says where it came from — the counter, the online store, or the programme itself {#activity-names-channel} |
 
 ::story{id="loyalty-membership-screens-membership--default" title="The membership page"}
 
@@ -105,17 +105,19 @@ The refund came first, and is replayed after the earn, in the order it happened.
   designed. Product confirms
 - ❓ **Expiry line on the page** — the spec keeps one line here: the points
   and the day, warning inside the last 30 days, none at 0 points. Product
-  confirms
+  confirms {#expiry-line}
 - ❓ **Tier period end** — the spec shows the day it ends; the new card does
   not. Product confirms
 - **Two counts** — the points that count toward the tier and the points to
-  spend are two figures, never one total
+  spend are two figures, never one total {#two-figures}
 - **The programme's balance** — a sale the programme has not yet taken is
   not in it
 - **Hong Kong time** — every date on the page reads in the programme's own
-  time zone
+  time zone {#programme-time-zone}
 - **Each section loads on its own** — a catalog that failed to load is no
   reason to hide a balance
+- **A new coupon** — shows with its validity as soon as it is redeemed, with
+  no further step {#coupon-shown-at-once}
 - **A pass in a wallet** — the page names the wallet the card is carried in,
   with that pass's ending beside it —
   [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card)
@@ -131,13 +133,13 @@ names.
 
 | Rule | Value |
 | --- | --- |
-| Code | **One QR and one 8-letter short code**, both for the same record |
+| Code | **One QR and one 8-letter short code**, both for the same record {#one-code} |
 | Life | **10 minutes** |
 | Uses | **Once** — whichever a till takes first; the other is refused and says where and when |
 | Wrong codes | **10 in 5 minutes** pause code entry for that shop |
 
 - 🚧 **Email, not name** — no name is collected at registration, so the pass
-  carries the member's account email under the tier badge
+  carries the member's account email under the tier badge {#pass-shows-email}
 - 🚧 **Its own page on a phone** — the pass is presented alone and the page
   holds a screen wake lock while it is up, so the phone cannot dim or lock
   mid-scan; a web page cannot raise screen brightness, so keeping the screen
@@ -147,7 +149,7 @@ names.
 
 - 🚧 **A code swaps in and out** — a fresh code dips the square out of view,
   fading and easing down, and settles the new pair in; the short code and
-  its label never move, so a scanner never loses its square mid-read
+  its label never move, so a scanner never loses its square mid-read {#code-swap}
 
 ::story{id="loyalty-membership-blocks-memberpass--code-rotates" title="A new code swaps in"}
 
@@ -196,7 +198,7 @@ The same pass can be added to a phone wallet —
 - **Notified** — every identification the member did not show a code for —
   email, phone, the customer on the cart, an Apple pass — sends a notice at
   once
-- **Archived reward** — an entry for a reward since archived still names it
+- **Archived reward** — an entry for a reward since archived still names it {#archived-reward-named}
 
 ## Privacy
 
@@ -204,7 +206,7 @@ The same pass can be added to a phone wallet —
   redemption's fulfilment outcome and attempts, who settled or reversed
   something, stock counts, and the tier and money arithmetic an entry was
   priced from. The operator console shows this as the
-  redemption's own audit trail
+  redemption's own audit trail {#hidden-from-member}
 - **No user id on the surface** — it reads the session
 - **Identity lives elsewhere** — a member's identity lives in the identity
   system and never in the programme, which holds only an opaque user id, so a
@@ -212,7 +214,7 @@ The same pass can be added to a phone wallet —
 - **Deleting the account ends the membership** — balance, tier progress
   and coupons end at once, a waiting collection is cancelled without a
   refund, and the ledger record survives for audit; the Shopify customer is
-  erased — [Shopify Integration](/p/grade10-site/loyalty/shopify-integration)
+  erased — [Shopify Integration](/p/grade10-site/loyalty/shopify-integration) {#account-deletion}
 
 :::callout{kind="note"}
 The tier card's Figma frame lives in Grade10-DS-2026 (node 7141:2000). The

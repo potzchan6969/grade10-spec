@@ -9,22 +9,22 @@ reviewed: 2026-09-15
 | Rule | Value |
 | --- | --- |
 | Currency | **HKD** |
-| Rate | **1 point pays $1** — earning is $10 a point, on [Points](/p/grade10-site/loyalty/points) |
+| Rate | **1 point pays $1** — earning is $10 a point, on [Points](/p/grade10-site/loyalty/points) {#rate} |
 | Pays for | **Qualifying goods only** — the same basis as earning: never gift cards, credit top-ups, or grading fees |
 | Never pays for | **Shipping or tax** |
-| Cap | **Qualifying goods minus the site discounts and the code**, and the balance — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused — [Discounts](/p/grade10-site/store/discounts#order-of-application) |
-| Earns | **Nothing** — the part of the bill paid with points earns no points |
+| Cap | **Qualifying goods minus the site discounts and the code**, and the balance — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused — [Discounts](/p/grade10-site/store/discounts#order-of-application) {#cap} |
+| Earns | **Nothing** — the part of the bill paid with points earns no points {#earns-nothing} |
 | Activity | **Yes** — points paid against a bill move the balance's lapse date, as a redemption does — [Points](/p/grade10-site/loyalty/points#expiry) |
-| Auctions | 🚧 **Never** — points pay nothing toward an auction purchase |
+| Auctions | 🚧 **Never** — points pay nothing toward an auction purchase {#auctions} |
 | Available | **On**, online and at the till — a manager can turn off the till's points spending, or just typed-email spending, within seconds; a sale never waits on it |
-| Discount | 🚧 **One order-level discount titled "Deduction from Points"**, outside the order's one-coupon count, so a coupon and points can be used on the same order; "Points", the title older orders carry, counts as the same discount — [Discounts](/p/grade10-site/store/discounts#one-discount-at-a-time) |
+| Discount | 🚧 **One order-level discount titled "Deduction from Points"**, outside the order's one-coupon count, so a coupon and points can be used on the same order; "Points", the title older orders carry, counts as the same discount — [Discounts](/p/grade10-site/store/discounts#one-discount-at-a-time) {#points-discount} |
 
 ## Online
 
 - **Chosen** — in the cart drawer or on `/checkout`, before Shopify's
   checkout; the member types how many points and sees the ceiling after the
   promo code's cut, and an ask past it is trimmed —
-  [Cart Drawer](/p/grade10-site/store/cart)
+  [Cart Drawer](/p/grade10-site/store/cart) {#chosen}
 
 ::story{id="store-cart-blocks-cartdrawerfooter-points--points-expanded" title="Points chosen in the cart drawer"}
 
@@ -33,12 +33,12 @@ reviewed: 2026-09-15
   deducted and nothing is held
 - **Paid** — in Shopify's checkout
 - **Debited** — when the paid order lands, once, keyed on the order id; an
-  abandoned or cancelled checkout is never debited
+  abandoned or cancelled checkout is never debited {#debited-once}
 - **Scaled only when something went wrong** — where the shop applied less
   than promised, or the balance fell below it meanwhile, the debit is the
   smaller figure and the shortfall is logged and alerted
 - 🚧 **No points title on the paid order** — the debit is what the shop
-  applied less every other discount, never more than promised
+  applied less every other discount, never more than promised {#no-title-debit}
 
 The systems' steps, with the draft order and the webhook, are on
 [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout).
@@ -86,23 +86,23 @@ The debit follows what the shop applied, not what was promised.
   the extension writes the store's order id on the cart, puts the points
   discount on the sale, and shows the points spent, the money still due and
   the balance after; no code is minted for the points, and a repeated tap
-  spends once
+  spends once {#applied}
 - 🚧 **Applied again** — a resumed sale puts its points discount back under
   the title [Rules](/p/grade10-site/loyalty/paying-with-points#rules) names,
-  whatever title it carried
+  whatever title it carried {#applied-again}
 - **Beside the shop's offer** — points go on beside an automatic offer,
   capped at what the offers leave of the goods; a staff order discount on
   the sale refuses the spend until staff take it off
 - 🚧 **A discount staff keyed** — a points title on a sale the extension
   never marked is someone else's discount; the panel offers no points, no
-  coupon and no Apply until staff take it off
+  coupon and no Apply until staff take it off {#staff-keyed-discount}
 - **Paid** — the shopkeeper takes payment
 - **Debited** — when the paid sale lands, the same way as online; clearing
   the discounts before payment undoes the promise, and nothing was debited
 - **Member told once it lands** — when the sale is paid, or trimmed to what
   landed, the member is notified of the points, the amount and the
   location, never a code; a sale abandoned after that notice sends a
-  correction
+  correction {#member-told}
 - **Reversed only by the console** — once a spend is paid, an operator
   undoes it from the loyalty admin; the till itself never reverses one
 

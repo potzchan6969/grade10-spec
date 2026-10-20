@@ -8,7 +8,7 @@ reviewed: 2026-10-07
 ## Permissions
 
 Each action takes its own permission, so an operator can hold one without
-the others.
+the others. {#permission-per-action}
 
 | Permission | Allows |
 | --- | --- |
@@ -26,26 +26,26 @@ takes the permission that grants an invitation. Product confirms.
 - **Sections follow permissions** — the console shows only what the
   operator may do; one who may only read members sees no section that moves
   points, restarts the expiry, grants invitations, edits rewards, removes a
-  tier, cancels a redemption or shows the log
+  tier, cancels a redemption or shows the log {#sections-follow-permissions}
 - **Second factor** — every action needs a verified second factor on the
   session; an operator without one is taken to verify, and the action
-  completes after
+  completes after {#second-factor}
 - **On the record** — every change is written to an operator log that cannot
   be rewritten unseen; verifying it names where it breaks. An action the log
-  cannot record does not run
+  cannot record does not run {#on-the-record}
 
 ## Reading a Member
 
 - **Find and read** — a member's tier, balance, activity, and what they lost
   to expiry; the log and its check sit beside them
 - **Member link** — the address of a member's view opens the same member for
-  whoever it is shared with
+  whoever it is shared with {#shared-member-link}
 - **Names and emails** — read from the identity system under its own
   permission and a second factor, never through a loyalty permission alone,
   and never kept by the programme. The log records who read which members and
-  how many, never the names
+  how many, never the names {#identity-own-permission}
 - **Identity unreachable** — the console says so, and shows no member with a
-  blank name
+  blank name {#identity-down-said}
 
 ## Moving Points
 
@@ -54,16 +54,16 @@ part on one question: do the points count toward the tier?
 
 - **Campaign grant** — a sign-up promotion, a goodwill gift; adds to the
   redeemable balance and to what counts toward the next tier and retention, so
-  it can promote a member
+  it can promote a member {#campaign-grant}
 - **Correction** — putting a mistake right; adds to or takes from the
-  redeemable balance alone, so it never promotes anyone
+  redeemable balance alone, so it never promotes anyone {#correction}
 - **Neither moves a live date** — the points take the date the balance
   already has; where nothing is live they lapse on the later of twelve months
   from their own day and the day still running —
   [Points](/p/grade10-site/loyalty/points#expiry)
 - **The form states the date** — before the operator writes, it names the
   day the points will lapse, and says when they start the member's window
-  rather than join one
+  rather than join one {#form-states-date}
 - **Both carry a reason** — what the operator types goes to the audit trail;
   the ledger carries only its digest
 
@@ -75,12 +75,14 @@ granted until the size is set. The owner's call.
 An operator gives a balance more time without the member buying or redeeming.
 
 - **From today** — the window runs again from the day the operator restarts
-  it, never a day they pick
+  it, never a day they pick {#restarts-from-today}
 - **Never shortens it** — a member whose date is already further out keeps it
+  {#restart-keeps-later-date}
 - **Never a revival** — whatever has already lapsed is written off first and
-  stays lapsed
+  stays lapsed {#restart-revives-nothing}
 - **Moves no points** — the balance is untouched, so nothing reaches the
   member's activity list; the reason goes to the audit trail
+  {#restart-no-points-moved}
 - **Same permission as moving points** — an operator who can grant can
   restart
 
@@ -89,27 +91,30 @@ An operator gives a balance more time without the member buying or redeeming.
 An operator writes a reward's whole definition in the console's reward form,
 with no call to the admin API. The form offers three choices, each saved as
 one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-types).
+{#whole-definition}
 
 - **Money off** - a discount and a scope, saved as a product coupon
 - **Gift with a purchase** - one variant and a minimum spend, saved as a gift
 - 🚧 **Free item** - one variant at 100% off with no maximum discount, saved
   as the product coupon Money off would save; a stored reward of that shape
-  opens, and duplicates, as a Free item
+  opens, and duplicates, as a Free item; a capped or wider 100% discount
+  opens as Money off {#free-item}
 - **A new choice starts empty** - moving to another of the three carries
-  nothing over from the one before
+  nothing over from the one before {#new-choice-empty}
 - 🚧 **Online only by product or filter** - the form saves such a reward for
   online alone, one stored for the till as well included; moving its scope to
   named variants or the whole order shows the channels it was stored with
-  again - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types)
+  again - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) {#online-only-saved}
 - **Retired handovers** - a reward stored as a manual handover or a counter
   collection keeps how it is handed over, unchanged, while the fields beside
   it are edited, until the operator picks one of the three choices; a
-  duplicate of it opens as Money off
+  duplicate of it opens as Money off {#retired-handovers}
 - **Missing parts** - nothing is saved while the choice lacks a part it
   needs, or the window ends before it starts; the form names what is missing
+  {#missing-parts}
 - **Basket check** - beside the form, the operator builds a basket by search
   and reads what the coupon would take off it, or why it would not apply,
-  before saving
+  before saving {#basket-check-shown}
 - **Currency mark** - `HKD` in front of a money field, as console tables
   name the currency
 
@@ -121,6 +126,8 @@ one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-ty
 - **Never in a shared cache** - a response carrying names or emails is marked
   as its caller's alone and is never stored in a shared cache
   {#identity-not-cached}
+- **An answer the console cannot read** - it names the call that failed,
+  and never shows the values as blank {#unreadable-answer-named}
 
 :::detail{title="Code map" for="engineer"}
 - **Design record** -

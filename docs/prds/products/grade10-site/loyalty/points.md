@@ -9,18 +9,17 @@ reviewed: 2026-10-06
 | Rule | Value |
 | --- | --- |
 | Currency | **HKD**. A foreign currency is refused |
-| Clock | **Asia/Hong_Kong** |
+| Clock | **Asia/Hong_Kong** · a record dated more than **5 minutes** ahead is refused {#future-date-refused} |
 | Base rate | **1 point / $10** (qualifying goods after discounts) |
 | Multiplier | **Silver** 1×, **Gold** 1.2×, **Black** 1.7×, at the tier held before the order is priced, so an order that promotes earns at the old rate — [Tiers](/p/grade10-site/loyalty/tiers#earn-multiplier) |
-| Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** |
+| Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** {#rounding} |
 | Timing | 🚧 **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter {#earn-on-completion} |
 
 ## Qualification Criteria
 
-Points are earned from the **net paid amount after any discount or coupon,
-excluding shipping and tax**, so a redemption never earns back part of what it
-spent. A whole-order discount is shared across the lines by value, so it cannot
-land on the part of a basket that earns nothing.
+Points are earned from the **net paid amount after any discount or coupon, excluding shipping and tax**,
+so a redemption never earns back part of what it spent. A whole-order discount is shared across the
+lines by value, so it cannot land on the part of a basket that earns nothing. {#net-paid-basis}
 
 | Item | Earns points |
 | --- | --- |
@@ -46,7 +45,7 @@ An order's earn is written once, the first time the order completes.
 - 🚧 **Guest order** - never earns, joined to an account or not -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout) {#guest-never-earns}
 - **Delivery** - retried until the programme takes it, and taken once, so
-  a purchase during an outage still earns, and never twice
+  a purchase during an outage still earns, and never twice; one it refuses is logged by its reason, never reported as success {#delivered-once}
 
 ❓ The diagrams below still start the earn at Order paid; who redraws them from completion?
 
@@ -186,14 +185,14 @@ the member still holds from them.
 - **Same rate** — money comes back at the rate the credit that earned it
   charged, the last money at the last rate
 - **Once over the whole** — each refund resumes where the last stopped, so
-  two halves take exactly what one refund of the whole takes
+  two halves take exactly what one refund of the whole takes {#refund-once-over-whole}
 - **Never below zero** — a claw-back takes only what the member still holds
-  from that money; the gap is counted, spent points first, expired next
+  from that money; the gap is counted, spent points first, expired next {#refund-never-below-zero}
 - 🚧 **Refund before the earn** — a refund that lands before the order
   completes lowers what it earns on: the basis is the net paid at completion.
   One after completion claws back as below {#refund-before-completion}
 - **Tier** — the contribution the points made leaves with them, and the tier
-  is judged again at once — [Tiers](/p/grade10-site/loyalty/tiers)
+  is judged again at once — [Tiers](/p/grade10-site/loyalty/tiers) {#refund-tier}
 
 :::example{title="Shipping refunded" id="refund-shipping" tier="Gold" shipping="$30"}
 - Gengar single $139
@@ -319,14 +318,14 @@ Every point a member holds lapses on the same day, whatever recorded it.
 | A grant or a correction | Unchanged; those points take the date the balance already has |
 | A grant or a correction with nothing live to join | The later of twelve months from its own day and the day still running, which moves out to it; with neither ahead, it is written already lapsed |
 | 🚧 A refund, a claw-back, or a reward an operator hands over outright | Unchanged {#refund-keeps-date} |
-| Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing |
+| Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing; once it has lapsed nothing goes back, and the points not returned are named {#returned-points-keep-date} |
 | An operator restarts the window | Twelve months from today — [Operator Console](/p/grade10-site/loyalty/operator-console) |
 | A record older than the window | Unchanged; those points are written already lapsed |
-| The day arrives | Gone; the whole balance is written off, and never revived |
+| The day arrives | Gone; the whole balance is written off, and never revived {#expiry-lapse} |
 
 - **Window** — twelve calendar months on the Hong Kong clock: the same day
   and time a year on, 365 or 366 days, never a day count; a 29 February lapses
-  on the 28th
+  on the 28th {#expiry-window}
 - **Forwards only** — a late record shortens nothing; the date sits where the
   latest activity put it
 - **Settled first** — whatever is already dead is written off before the date
@@ -335,7 +334,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
   to losing points; nothing tells them yet —
   [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders)
 - **Dead at once** — points past the date stop counting the instant they are
-  read, with nothing waiting on a nightly pass
+  read, with nothing waiting on a nightly pass; a pass that stops short says how many members it missed, and the next covers them {#write-off-pass}
 
 :::example{title="Buying or redeeming keeps the balance alive" id="expiry-activity-extends"}
 | When | Event | Points | Balance |
@@ -442,6 +441,7 @@ on the last day of that month.
 
 ## Always
 
+- **Balance** - every point recorded, less what was spent, clawed back or lapsed; a debit draws only on points still held and records which it took, so nothing takes a balance below zero {#balance-never-negative}
 - 🚧 **Earned once** - at the first completion, however often it is reported {#earn-once}
 - 🚧 **In flight at cutover** - an order that earned at payment earns nothing again {#cutover-no-second-earn}
 

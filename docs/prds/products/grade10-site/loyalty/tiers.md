@@ -9,8 +9,8 @@ reviewed: 2026-10-06
 | Tier | Earns | Reached by | Kept by |
 | --- | --- | --- | --- |
 | Silver | 1× | Every member starts here | — |
-| Gold | 1.2× | 500 points earned in a rolling 12 months | 500 points earned inside the 12-month period |
-| Black | 1.7× | Invitation only | Until the invitation ends or is revoked |
+| Gold | 1.2× | 500 points earned in a rolling 12 months | 500 points earned inside the 12-month period {#gold-by-earning} |
+| Black | 1.7× | Invitation only | Until the invitation ends or is revoked {#black-by-invitation} |
 
 These are deployed values, changed by a deploy and never by an operator: an
 operator who can rewrite what a purchase earns can mint money. The reward
@@ -21,7 +21,7 @@ catalog is the lever an operator holds.
 A member holds **one balance**: earning adds to it, redeeming takes from it,
 and it expires 12 months after the last activity.
 
-**Tier progress is not a second balance.** The progress is determined by summing the points the member earned in a period.
+**Tier progress is not a second balance.** The progress is determined by summing the points the member earned in a period. {#progress-is-earned-sum}
 
 - **Reaching a tier** — what they earned in the last 12 months
 - **Keeping one** — what they earned in the tier period, the 12 months since
@@ -29,19 +29,20 @@ and it expires 12 months after the last activity.
 
 Only earning moves the progress. Redeeming takes from the balance and leaves
 the progress untouched, so spending can never cost a member their tier.
+{#redeeming-keeps-progress}
 
 ❓ **Campaign grant** — this page counts only earning toward the progress; the
 programme spec and [Operator Console](/p/grade10-site/loyalty/operator-console#moving-points)
 also count a campaign grant, and never a correction. The owner confirms which.
 
-- **Tier lost** — the balance stays as it is
+- **Tier lost** — the balance stays as it is {#tier-lost-keeps-balance}
 - **A late record** — counts toward the period its own day falls in
 
 :::callout{kind="note"}
 A refund takes back the points its order earned, counted against the day of
 that order rather than the day of the refund. Where those points were the only
 thing holding a tier, the member stops holding it, and a period they alone
-extended goes back to its old end.
+extended goes back to its old end. {#refund-can-demote}
 :::
 
 ❓ **A claw-back demotion** — the engine stamps it as a lapse, so a member
@@ -54,24 +55,26 @@ lower rung gets a fresh period, is the owner's call.
 
 Customer reaches a tier upon reaching the points required for that tier.
 The multiplier is only applied starting from the next order.
+{#promoted-at-once} {#multiplier-from-next-order}
 
 ## Keeping a Tier
 
 A tier is held for a **tier period**: **12 months** from the day it was
 reached. What the member earns inside the period decides what happens at the
-end of it.
+end of it. {#period-from-reached}
 
 - **≥ 500 points** — the period extends 12 months from its own end
+  {#period-extends}
 - **< 500 points** — the member falls to the highest tier they still hold,
-  Silver unless a Black invitation is live
+  Silver unless a Black invitation is live {#falls-at-period-end}
 - **Inside the period** — lost only through a refund or an operator; spent
-  or lapsed points never cost it
+  or lapsed points never cost it {#kept-inside-period}
 - **Climb starts again** — once a tier is lost, points earned before count
-  toward no tier
+  toward no tier {#climb-restarts}
 - **Taken back by an operator** — a tier reached or granted in error is
   removed on the record, whatever its period says; it takes the same
   permission as granting an invitation, so an operator who may only move
-  points cannot demote anyone
+  points cannot demote anyone {#removed-by-operator}
 
 Progress in one period is not carried over to the next.
 
@@ -113,9 +116,9 @@ We have a cron sweep to render the record for analytics purposes.
   tier
 - **No end date** — it holds until it is revoked
 - **Refused** — a grant naming a tier the programme does not have, or Silver,
-  records nothing
+  records nothing {#grant-refused}
 - **Live invitations listed** — each with its member, tier, reason and end
-  date, so an operator can find one and revoke it
+  date, so an operator can find one and revoke it {#invitations-listed}
 - **Its end is observed, not scheduled** — the member stops holding Black the
   instant the date passes, and the history records it at the next evaluation
 - **Never the earned floor** — every evaluation runs twice, once ignoring
@@ -134,3 +137,10 @@ We have a cron sweep to render the record for analytics purposes.
   below, earned tiers counted over different windows, a retention threshold
   above its tier's own, a validity period or an inactivity window of zero or
   less, or a time zone that does not exist {#ladder-refused-at-start}
+- **A tier ends on time** - the member stops holding it the instant its
+  period or invitation ends, with no scheduled run; the history records it at
+  the member's next evaluation {#tier-ends-on-time}
+- **Tier history** - one entry for each change of tier, naming what caused it
+  {#tier-history}
+- **Tier names on the record** - `silver`, `gold` and `black`, the names the
+  member reads; no record carries a pre-launch name {#tier-names-on-record}

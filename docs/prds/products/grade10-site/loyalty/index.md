@@ -17,7 +17,7 @@ without a deploy, and keeps what a purchase earns auditable.
 
 The engine is brand-neutral and names no vendor. Shopify is a channel — the
 online checkout and the POS at the counter — and never the source of truth for
-a balance, a tier or a code. ZZZ has no programme.
+a balance, a tier or a code. ZZZ has no programme. {#programme-owns-balances}
 
 | Page | What it holds |
 | --- | --- |
