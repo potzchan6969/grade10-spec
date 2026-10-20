@@ -88,25 +88,31 @@ function PressArticle({ content: article }: PressArticleProps) {
               <CalendarBlank aria-hidden />
               {article.date}
             </Badge>
-            <Badge>
-              <MapPin aria-hidden />
-              {article.location}
-            </Badge>
+            {article.location ? (
+              <Badge>
+                <MapPin aria-hidden />
+                {article.location}
+              </Badge>
+            ) : null}
           </div>
         </div>
         <article className="flex flex-col gap-10 lg:col-start-1 lg:row-start-3 lg:gap-12">
-          <img
-            alt={article.featureImage.alt}
-            className={cn(
-              "aspect-[1200/630] w-full rounded-3xl object-cover",
-              REVEAL,
-              pageIsRevealed && REVEALED,
-            )}
-            src={article.featureImage.src}
-            style={{
-              transitionDelay: pageIsRevealed ? "120ms" : "0ms",
-            }}
-          />
+          {article.featureImage ? (
+            <img
+              alt={article.featureImage.alt}
+              className={cn(
+                "aspect-[1200/630] w-full rounded-3xl object-cover",
+                REVEAL,
+                pageIsRevealed && REVEALED,
+              )}
+              sizes={article.featureImage.sizes}
+              src={article.featureImage.src}
+              srcSet={article.featureImage.srcSet}
+              style={{
+                transitionDelay: pageIsRevealed ? "120ms" : "0ms",
+              }}
+            />
+          ) : null}
           <div
             className={cn(
               "flex flex-col gap-4",
@@ -143,23 +149,25 @@ function PressArticle({ content: article }: PressArticleProps) {
               <p className="text-base leading-6">{card.body}</p>
             </Card>
           ))}
-          <Card className="gap-3 bg-muted p-6" padding={false}>
-            <h2 className="font-semibold text-base leading-6">
-              {article.sidebar.enquiries.title}
-            </h2>
-            <div className="flex flex-col">
-              {article.sidebar.enquiries.contacts.map((contact) => (
-                <Fragment key={contact.name}>
-                  <p className="text-base leading-6">{contact.name}</p>
-                  {contact.link ? (
-                    <Link href={contact.link.href} variant="brand">
-                      {contact.link.label}
-                    </Link>
-                  ) : null}
-                </Fragment>
-              ))}
-            </div>
-          </Card>
+          {article.sidebar.enquiries ? (
+            <Card className="gap-3 bg-muted p-6" padding={false}>
+              <h2 className="font-semibold text-base leading-6">
+                {article.sidebar.enquiries.title}
+              </h2>
+              <div className="flex flex-col">
+                {article.sidebar.enquiries.contacts.map((contact) => (
+                  <Fragment key={contact.name}>
+                    <p className="text-base leading-6">{contact.name}</p>
+                    {contact.link ? (
+                      <Link href={contact.link.href} variant="brand">
+                        {contact.link.label}
+                      </Link>
+                    ) : null}
+                  </Fragment>
+                ))}
+              </div>
+            </Card>
+          ) : null}
         </aside>
       </div>
     </div>

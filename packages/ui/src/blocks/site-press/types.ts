@@ -71,6 +71,8 @@ type ArticleFigure = {
   readonly src: string;
   readonly alt: string;
   readonly caption?: string;
+  readonly srcSet?: string;
+  readonly sizes?: string;
 };
 
 /** A standalone image in the body flow. */
@@ -117,15 +119,17 @@ type PressArticleContent = {
   };
   readonly title: string;
   readonly date: string;
-  readonly location: string;
-  readonly featureImage: {
+  readonly location?: string;
+  readonly featureImage?: {
     readonly src: string;
     readonly alt: string;
+    readonly srcSet?: string;
+    readonly sizes?: string;
   };
   readonly body: readonly ArticleBlock[];
   readonly sidebar: {
     readonly cards: readonly ArticleSidebarCard[];
-    readonly enquiries: {
+    readonly enquiries?: {
       readonly title: string;
       readonly contacts: readonly ArticleContact[];
     };

@@ -23,6 +23,8 @@ function MediaCoverageCard({ item, copy }: MediaCoverageCardProps) {
     <a
       className="block h-full"
       href={item.href}
+      hrefLang={item.lang}
+      lang={item.lang}
       rel="noopener noreferrer"
       target="_blank"
     >

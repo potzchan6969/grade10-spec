@@ -3,6 +3,8 @@ type MediaItem = {
   readonly publication: string;
   readonly title: string;
   readonly href: string;
+  /** The story's language, when it is not the page's. */
+  readonly lang?: string;
 };
 
 type MediaCoverageContent = {

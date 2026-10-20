@@ -13,7 +13,9 @@ function PressArticleFigure({ figure, className }: PressArticleFigureProps) {
         alt={figure.alt}
         className="aspect-video w-full rounded-2xl object-cover"
         loading="lazy"
+        sizes={figure.sizes}
         src={figure.src}
+        srcSet={figure.srcSet}
       />
       {figure.caption ? (
         <figcaption className="text-secondary-foreground text-sm leading-5">
