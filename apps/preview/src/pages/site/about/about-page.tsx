@@ -361,10 +361,10 @@ function AboutPage() {
                 <ul className="flex flex-col px-4 sm:px-6 sm:py-2">
                   {ABOUT_PAGE.milestones.map((milestone) => (
                     <li
-                      className="flex items-start gap-4 border-border border-b py-6 last:border-b-0 sm:gap-6"
+                      className="flex flex-col gap-1 border-border border-b py-6 last:border-b-0 sm:flex-row sm:items-start sm:gap-6"
                       key={milestone.date}
                     >
-                      <div className="w-24 shrink-0">
+                      <div className="sm:w-24 sm:shrink-0">
                         <p className="font-semibold text-base leading-6">
                           {milestone.date}
                         </p>
