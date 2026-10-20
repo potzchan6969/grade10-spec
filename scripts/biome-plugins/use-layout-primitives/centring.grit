@@ -1,0 +1,4 @@
+or { JsStringLiteralExpression(), JsxString(), JsTemplateElement() } as $s where {
+  $s <: r"(?:\"[^\"]*\bitems-center\b[^\"]*\bjustify-center\b[^\"]*\")|(?:\"[^\"]*\bjustify-center\b[^\"]*\bitems-center\b[^\"]*\")",
+  register_diagnostic(span=$s, message="Hand-rolled centring: use Center from @grade10/design-system instead of items-center plus justify-center. See docs/governance/figma-component-to-code.md.", severity="warn")
+}

@@ -56,8 +56,11 @@
     {
       "includes": ["packages/ui/src/blocks/**", "!**/*.stories.tsx"],
       "plugins": [
-        "./scripts/biome-plugins/use-layout-primitives.grit",
-        "./scripts/biome-plugins/use-token-values.grit"
+        "./scripts/biome-plugins/use-layout-primitives/stack.grit",
+        "./scripts/biome-plugins/use-layout-primitives/centring.grit",
+        "./scripts/biome-plugins/use-token-values/length.grit",
+        "./scripts/biome-plugins/use-token-values/colour.grit",
+        "./scripts/biome-plugins/use-token-values/palette.grit"
       ]
     },
     {
