@@ -72,6 +72,6 @@
   {
     "label": "tier-info-card/benefit-text",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7227-1075",
-    "classes": "min-w-0 text-secondary-foreground"
+    "classes": "min-w-0 text-foreground"
   }
 ]

@@ -84,7 +84,7 @@ function TierInfoCard({
             >
               <Check size={16} weight="bold" />
             </span>
-            <Text className="min-w-0 text-secondary-foreground" size="sm">
+            <Text className="min-w-0 text-foreground" size="sm">
               {benefit}
             </Text>
           </HStack>
