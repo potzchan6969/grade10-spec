@@ -167,7 +167,9 @@ function AboutPage() {
               className="mt-4 gap-6 sm:mt-6"
               defaultValue={ABOUT_PAGE.marketIndexes.indexes[0].name}
             >
-              <div className="overflow-x-auto">
+              {/* The pill indicator drops an 8px/16px shadow; the negative
+                  margins give it room so the scroll clip doesn't crop it. */}
+              <div className="-mx-2 -my-8 overflow-x-auto px-2 py-8">
                 <TabsList variant="pill">
                   {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => (
                     <TabsTrigger key={index.name} value={index.name}>
@@ -184,7 +186,7 @@ function AboutPage() {
                 <TabsContent key={index.name} value={index.name}>
                   <a
                     aria-label={`Visit the ${index.name}`}
-                    className="group block overflow-hidden rounded-2xl border border-border bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                    className="group block max-w-[860px] overflow-hidden rounded-2xl border border-border bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
                     href={index.href}
                     rel="noopener noreferrer"
                     target="_blank"
