@@ -27,25 +27,33 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** A Gold member: Silver and Gold are filled, Black stands unconnected. */
+/** A Gold member: Silver is checked off, Gold is in progress, and Black
+ * stands unconnected — both sides of its gap are hidden. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const steps = canvasElement.querySelectorAll('[data-slot="step"]');
+    expect(steps).toHaveLength(3);
+    expect(steps[0]).toHaveAttribute("data-state", "completed");
+    expect(steps[1]).toHaveAttribute("data-state", "progress");
+    expect(steps[1]).toHaveAttribute("aria-current", "step");
+    expect(steps[2]).toHaveAttribute("data-state", "upcoming");
+    // Gold's trailing connector and both of Black's are hidden, so nothing
+    // is drawn into the invitation-only rung.
+    expect(steps[1].querySelectorAll(".opacity-0")).toHaveLength(1);
+    expect(steps[2].querySelectorAll(".opacity-0")).toHaveLength(2);
     expect(canvas.getByText("320")).toBeInTheDocument();
-    expect(
-      canvasElement.querySelectorAll('[data-slot="tier-ladder-connector"]'),
-    ).toHaveLength(1);
-    expect(
-      canvasElement.querySelectorAll('[data-slot="tier-ladder-rung"]'),
-    ).toHaveLength(3);
   },
 };
 
-/** A Silver member: only the entry rung is filled, the rest open. */
+/** A Silver member: the entry rung is the one in progress. */
 export const SilverHeld: Story = {
   args: { currentTier: "Silver" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const steps = canvasElement.querySelectorAll('[data-slot="step"]');
+    expect(steps[0]).toHaveAttribute("data-state", "progress");
+    expect(steps[1]).toHaveAttribute("data-state", "upcoming");
     expect(canvas.getByText("320")).toBeInTheDocument();
   },
 };
@@ -56,6 +64,8 @@ export const BlackHeld: Story = {
   args: { currentTier: "Black", qualifyingPoints: undefined },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const steps = canvasElement.querySelectorAll('[data-slot="step"]');
+    expect(steps[2]).toHaveAttribute("data-state", "progress");
     expect(canvas.getByText("By invitation only")).toBeInTheDocument();
     expect(
       canvas.queryByText("Qualifying points this year"),
