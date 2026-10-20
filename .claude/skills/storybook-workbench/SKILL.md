@@ -49,7 +49,8 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    `/prototype` draft runs
    `/prototype` inside one `Prototypes/<Piece>` story tagged `!test` under
    `apps/preview/src/prototypes/<domain>/<feature>/`
-6. **Check it** — `pnpm storybook:check`, `pnpm --dir apps/preview exec tsc -b`,
+6. **Check it** — `pnpm storybook:sort` when a manual page was added, renamed
+   or reordered, then `pnpm storybook:check`, `pnpm --dir apps/preview exec tsc -b`,
    and `pnpm test:stories:app` (or the MCP's `run-story-tests` on the stories
    you touched); `pnpm run test:stories:ui` when a block story changed
 7. **Hand back** — one link per story, `http://localhost:6006/?path=/story/<id>`,

@@ -10,11 +10,10 @@ import {
   citedIds,
   pascalCase,
   placementErrors,
-  rootOrder,
   settingsErrors,
-  sortRoots,
   titleCase,
 } from "./check.mjs";
+import { renderSidebar } from "./sidebar.mjs";
 
 const story = (title, component = "") => `const meta = {
   title: "${title}",${component ? `\n  component: ${component},` : ""}
@@ -178,29 +177,6 @@ describe("placementErrors", () => {
   });
 });
 
-describe("the workbench order", () => {
-  it("reads the manual's domains in its order", async () => {
-    const root = repository(MANUAL);
-    assert.deepEqual(await rootOrder(root), [
-      "Start Here",
-      "Store",
-      "Post Bidding",
-      "Auth",
-      "Design System",
-    ]);
-    rmSync(root, { recursive: true, force: true });
-  });
-
-  it("finds the roots inside a storySort comparator", () => {
-    assert.deepEqual(
-      sortRoots(
-        `storySort: (a, b) => {\n  const roots = ["Start Here", "Store"];\n  return 0;\n}`,
-      ),
-      ["Start Here", "Store"],
-    );
-  });
-});
-
 describe("cited ids", () => {
   it("finds the ways a story is cited", () => {
     const text = [
@@ -264,8 +240,15 @@ describe("checkStories", () => {
       "docs/prds/products/grade10-site/store/cart.md":
         '::story{id="store-cart-screens-cart--default"}\n::story{id="store-cart-screens-cart--gone"}\n',
       "openspec/changes/add-x/ui-design.md": "`store-cart-cart--later`\n",
-      "apps/preview/.storybook-workbench/preview.tsx":
-        'storySort: (a, b) => {\n  const roots = ["Start Here", "Store", "Post Bidding", "Auth", "Design System"];\n}',
+      "apps/preview/.storybook-workbench/preview.tsx": `storySort: (a, b) => {\n${renderSidebar(
+        {
+          "Start Here": [],
+          Store: ["Cart"],
+          "Post Bidding": [],
+          "Design System": [],
+        },
+        "  ",
+      )}\n}`,
     });
   });
   after(() => rmSync(root, { recursive: true, force: true }));
@@ -281,6 +264,18 @@ describe("checkStories", () => {
       "Account/Sign In - no Screens or Prototypes; draw them, or say why in apps/preview/coverage.yaml",
       'openspec/changes/add-x/ui-design.md:1 - no story "store-cart-cart--later"',
     ]);
+  });
+
+  it("refuses a sidebar that is not the manual's", async () => {
+    const stale = repository({
+      ...MANUAL,
+      "apps/preview/.storybook-workbench/preview.tsx": `storySort: (a, b) => {\n${renderSidebar({ "Start Here": [], Store: ["Cart"] }, "  ")}\n}`,
+    });
+    const { errors } = await checkStories({ root: stale });
+    assert.deepEqual(errors, [
+      "apps/preview/.storybook-workbench/preview.tsx - storySort's sidebar is not the manual's; run pnpm storybook:sort",
+    ]);
+    rmSync(stale, { recursive: true, force: true });
   });
 });
 

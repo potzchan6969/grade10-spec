@@ -14,6 +14,7 @@ at.
 | `pnpm storybook:ui` · `pnpm storybook:design-system` | One package's stories |
 | `pnpm storybook:check` | The grammar below, every cited story id and journey |
 | `pnpm storybook:coverage` | What each feature holds, and the journeys no story walks yet (`--gaps` for only those) |
+| `pnpm storybook:sort` | Writes the manual's domains and features into the workbench's sidebar order |
 | `pnpm storybook:rename <map>` | Retitles stories from an `old title<TAB>new title` map and rewrites every id that cites them |
 | `pnpm test:stories` | Every story's `play` and accessibility check, in Chromium |
 
@@ -53,7 +54,9 @@ Published from `main` at
   `Header`, `Body` and `Footer` inside `CartDrawer`. Retitle with
   `pnpm storybook:rename <map>` so every cited id is rewritten with the move
 - **Order** — Start Here, the domains in `docs/prds/manual.yaml` order, then
-  Design System; inside a feature, Screens, Prototypes, Parts and Blocks
+  Design System; inside a domain, features in the manual's nav order, by each
+  page's `order:` then its title; inside a feature, Screens, Prototypes, Parts
+  and Blocks
 
 A story id is its title and export, sanitized:
 `Appointment/Booking/Screens/Book Visit` →
@@ -183,7 +186,8 @@ story in place with `/animate`, `/transitions-polish` and `/ux-copy`.
 - **Place** — a story outside its kind's folder, or a leaf that is not the
   component's name
 - **Imports** — one feature reaching into another's folder
-- **Order** — a workbench `storySort` root list that is not the manual's
+- **Order** — a workbench sidebar order that is not the manual's; run
+  `pnpm storybook:sort`
 - **Journeys** — a journey id no
   `user-journeys.md` holds; one only an active change holds warns
 - **Coverage** — a key in `coverage.yaml` that is no feature; a collector

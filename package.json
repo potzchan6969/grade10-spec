@@ -53,6 +53,7 @@
     "storybook:check": "node scripts/storybook/check.mjs",
     "storybook:coverage": "node scripts/storybook/coverage.mjs",
     "storybook:rename": "node scripts/storybook/rename.mjs",
+    "storybook:sort": "node scripts/storybook/sidebar.mjs",
     "storybook:design-system": "node scripts/storybook/storybook.mjs --dir packages/design-system",
     "storybook:ui": "node scripts/storybook/storybook.mjs --dir packages/ui",
     "storybook:build:design-system": "pnpm --filter @grade10/design-system run build-storybook",
