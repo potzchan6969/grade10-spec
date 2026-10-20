@@ -88,13 +88,13 @@ Grade10 sets:
 | Method | Reads |
 | --- | --- |
 | Card | `Card fee about {percentage}% + a fixed amount` |
-| FPS, HK Local, International via SWIFT | `Bank fee set on your invoice` |
+| FPS, HK Local, International via SWIFT | no fee line |
 
 `{percentage}` SHALL be the percentage of the card fee rule Payment Settings
 holds for the currency picked, as Finance saved it. Finance MAY set it to any
 value Payment Settings accepts, and the text SHALL read that value, not a fixed
-figure. The bank rail text SHALL name no amount, since an operator sets that
-fee on the invoice.
+figure. A bank rail SHALL read no fee line at the choice — no fee is
+required for those options.
 
 **Offered where Grade10 can take it** - Grade10 SHALL offer each method only
 where it can take the payment:
@@ -231,8 +231,7 @@ its own bank details, and card on its own rule.
   HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
 - **THEN** card reads `Card fee about 3.4% + a fixed amount`
-- **AND** FPS and HK Local each read `Bank fee set on your invoice`, naming no
-  amount
+- **AND** FPS and HK Local read no fee line
 - **AND** card is selected
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-o4y rev=1 -->

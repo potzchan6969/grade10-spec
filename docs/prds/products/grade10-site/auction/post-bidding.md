@@ -200,9 +200,8 @@ hours of the close.
   account's language, as the rest of the site does
 
 - 🚧 **Fee range wording** — card reads `Card fee about {configured percentage}% + a fixed
-  amount`, using the configured rule for the currency picked; bank transfer
-  reads `Bank fee set on your invoice` and names no amount, because the
-  operator sets that fee
+  amount`, using the configured rule for the currency picked; a bank rail
+  reads no fee line, since no fee is required for those options
 - 🚧 **One-time address after a reload** — an unsaved one-time address stays
   on the order after leaving and returning, until the winner confirms or the
   setup deadline passes
@@ -698,7 +697,7 @@ a second payment provider, and changes to the bid-time rules.
 | Receipts are append-only | Decided | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | 🚧 In flight | An unsaved one-time address stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it. Chosen over clearing it on leaving. | Product (@tangconst) |
-| Payment fee wording | 🚧 In flight | Card reads `Card fee about {configured percentage}% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`, with no amount since the operator sets it. | Product (@tangconst) |
+| Payment fee wording | 🚧 In flight | Card reads `Card fee about {configured percentage}% + a fixed amount`; a bank rail reads no fee line — no fee is required for those options. | Product (@tangconst) |
 | USD card rule | 🚧 In flight | Finance configures a USD card fee rule before launch; the same configured percentage and fixed-amount rule applies to USD card invoices. | Finance |
 | Settlement currency | Decided | The winner picks USD or HKD at order setup — 🚧 the first offered currency preselected, the sole currency where one is — fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
 | HKD conversion | Decided | One fixed rate, 7.85 HKD to 1 USD, rounded up, named only in the note under the HKD Order Summary's total; the USD winning bid is not printed on an HKD invoice or receipt. Chosen over a live or locked rate, since the pair is stable and a fixed rate needs no source, lock or refresh. | Product |

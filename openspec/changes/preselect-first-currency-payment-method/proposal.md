@@ -28,6 +28,9 @@ currency switch still clears a method the new currency does not offer.
   winner still confirms explicitly; preselection is not confirmation.
 - **A confirmation with no currency or no method is still refused** —
   preselection changes the opening state, not the validation.
+- **Bank rails read no fee line at the choice** — `Bank fee set on your
+  invoice` is removed; no fee is required for those options. Card keeps
+  its configured fee wording.
 
 ## Non-Goals
 
