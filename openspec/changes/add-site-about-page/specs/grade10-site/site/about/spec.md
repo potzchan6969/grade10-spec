@@ -12,8 +12,9 @@ where each link on it leads.
     beside a paragraph naming its backers
   - What we do and where we're going: two statements, side by side on a
     wide viewport, stacked on a narrow one
-  - Market indexes: the four index pages, highlighted ahead of the
-    parent-company panel
+  - Market indexes: a tabbed showcase of the four index pages — each tab
+    previews the live index page — highlighted ahead of the parent-company
+    panel
   - Parent company: the MemeStrategy mark, a paragraph on the company, and
     its milestones newest first, the upcoming one labelled Coming soon
 - Where the links lead

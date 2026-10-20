@@ -229,7 +229,7 @@ None.
 * Neither mention is a link; both render as plain text.
 
 <!-- trace:case id=g10.site-about.TC-cxl rev=1 covers=g10.site-about.SC-ozy -->
-### grade10-site-site-about-US2-TC4-1: Each index link opens its live index page in a new tab
+### grade10-site-site-about-US2-TC4-1: Each index tab shows its live page and opens it in a new tab
 
 **Classification:**
 
@@ -250,10 +250,13 @@ None.
 **Steps:**
 
 1. Navigate to <grade10 about url>.
-2. Open each of the four links in the Market indexes section.
+2. Select each of the four tabs in the Market indexes section and open its
+   link.
 
 **Expected Results:**
 
+* Each tab swaps in a screenshot of the index's live page with its
+  description underneath.
 * Hat Price Index opens `grade10.com/hat-price-index` in a new tab.
 * PTCG100, PTCG500 and OPCG100 open their `index.grade10.com` pages in a
   new tab.

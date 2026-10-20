@@ -49,11 +49,22 @@ const GRADE10_AI_LINK: AboutLink = {
 type AboutIndex = {
   readonly name: string;
   readonly href: string;
+  /** A line on what the index tracks, shown under its screenshot. */
+  readonly description: string;
+  /** Screenshot of the live index page. */
+  readonly shot: string;
+  readonly shotAlt: string;
   /** Renders the Beta badge on indexes still in beta. */
   readonly beta?: boolean;
-  /** A line on what the index tracks. */
-  readonly description?: string;
 };
+
+const HAT_PRICE_INDEX_SHOT = new URL(
+  "./hat-price-index.fixture.jpg",
+  import.meta.url,
+).href;
+const PTCG100_SHOT = new URL("./ptcg100.fixture.jpg", import.meta.url).href;
+const PTCG500_SHOT = new URL("./ptcg500.fixture.jpg", import.meta.url).href;
+const OPCG100_SHOT = new URL("./opcg100.fixture.jpg", import.meta.url).href;
 
 const ABOUT_PAGE = {
   heading: "About Us",
@@ -95,21 +106,35 @@ const ABOUT_PAGE = {
         name: "Hat Price Index",
         description:
           "Single-asset cultural index tracking the PSA 10 Grey Felt Hat Pikachu.",
+        shot: HAT_PRICE_INDEX_SHOT,
+        shotAlt: "Hat Price Index — live index page",
         href: "https://grade10.com/hat-price-index/",
       },
       {
         name: "PTCG100",
         beta: true,
+        description:
+          "Focused Pokémon benchmark — the 100 most representative PSA 10 cards.",
+        shot: PTCG100_SHOT,
+        shotAlt: "PTCG100 — live index page",
         href: "https://index.grade10.com/ptcg100",
       },
       {
         name: "PTCG500",
         beta: true,
+        description:
+          "Broad Pokémon benchmark — the 500 most representative PSA 10 cards.",
+        shot: PTCG500_SHOT,
+        shotAlt: "PTCG500 — live index page",
         href: "https://index.grade10.com/ptcg500",
       },
       {
         name: "OPCG100",
         beta: true,
+        description:
+          "Focused One Piece benchmark — the 100 most representative PSA 10 cards.",
+        shot: OPCG100_SHOT,
+        shotAlt: "OPCG100 — live index page",
         href: "https://index.grade10.com/opcg100",
       },
     ] satisfies readonly AboutIndex[],

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, waitFor, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { ABOUT_PAGE } from "./about-content";
 import { AboutPage } from "./about-page";
 
@@ -81,13 +81,22 @@ export const Default: Story = {
     expect(indexesHeading).toBeVisible();
     const indexesSection = indexesHeading.closest("section");
     expect(indexesSection).not.toBeNull();
+    const tablist = within(indexesSection as HTMLElement).getByRole("tablist");
+    // Only the active tab's panel is in the accessibility tree, so each tab
+    // is selected before its link is checked.
     for (const index of ABOUT_PAGE.marketIndexes.indexes) {
+      await userEvent.click(
+        within(tablist).getByRole("tab", { name: new RegExp(index.name) }),
+      );
       const link = within(indexesSection as HTMLElement).getByRole("link", {
-        name: new RegExp(index.name),
+        name: `Visit the ${index.name}`,
       });
       expect(link).toHaveAttribute("href", index.href);
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noopener noreferrer");
+      expect(
+        within(indexesSection as HTMLElement).getByText(index.description),
+      ).toBeVisible();
     }
 
     // Neither surface is launched on day 1: both mentions stay plain text.

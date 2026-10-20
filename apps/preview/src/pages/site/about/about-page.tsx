@@ -1,5 +1,11 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Card } from "@grade10/design-system/components/display/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@grade10/design-system/components/display/tabs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
@@ -154,42 +160,57 @@ function AboutPage() {
             >
               {ABOUT_PAGE.marketIndexes.heading}
             </h2>
-            <p className="text-lg leading-7">{ABOUT_PAGE.marketIndexes.body}</p>
-            <Card padding={false}>
-              <ul className="flex flex-col px-4 sm:grid sm:grid-cols-2 sm:px-6 sm:py-2">
-                {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => (
-                  <li
-                    className="border-border border-b last:border-b-0 sm:border-b-0"
-                    key={index.name}
-                  >
-                    <a
-                      className="group flex items-baseline gap-4 py-6 sm:gap-6"
-                      href={index.href}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      <span className="w-8 shrink-0 font-medium text-secondary-foreground text-sm leading-5 tabular-nums">
+            <p className="max-w-prose text-lg leading-7">
+              {ABOUT_PAGE.marketIndexes.body}
+            </p>
+            <Tabs
+              className="mt-4 gap-6 sm:mt-6"
+              defaultValue={ABOUT_PAGE.marketIndexes.indexes[0].name}
+            >
+              <div className="overflow-x-auto">
+                <TabsList variant="pill">
+                  {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => (
+                    <TabsTrigger key={index.name} value={index.name}>
+                      <span className="text-secondary-foreground tabular-nums">
                         {String(order + 1).padStart(2, "0")}
                       </span>
-                      <span className="flex flex-1 flex-col gap-1">
-                        <span className="flex items-center gap-2 font-medium text-base leading-6">
-                          {index.name}
-                          {index.beta ? <Badge size="sm">Beta</Badge> : null}
-                        </span>
-                        {index.description ? (
-                          <span className="text-secondary-foreground text-sm leading-5">
-                            {index.description}
-                          </span>
-                        ) : null}
-                      </span>
-                      <span className="shrink-0 self-center text-secondary-foreground transition-colors group-hover:text-accent-foreground">
+                      {index.name}
+                      {index.beta ? <Badge size="sm">Beta</Badge> : null}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+              {ABOUT_PAGE.marketIndexes.indexes.map((index) => (
+                <TabsContent key={index.name} value={index.name}>
+                  <a
+                    aria-label={`Visit the ${index.name}`}
+                    className="group block overflow-hidden rounded-2xl border border-border bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                    href={index.href}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <span className="relative block">
+                      <img
+                        alt={index.shotAlt}
+                        className="aspect-[1346/1169] w-full object-cover object-top"
+                        decoding="async"
+                        height={1169}
+                        loading="lazy"
+                        src={index.shot}
+                        width={1346}
+                      />
+                      <span className="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-(--radius-full) bg-background/90 px-4 py-2 font-medium text-sm leading-5 opacity-0 shadow-sm backdrop-blur transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
+                        Visit index
                         <ArrowUpRight aria-hidden size={16} />
                       </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </Card>
+                    </span>
+                  </a>
+                  <p className="mt-4 text-secondary-foreground text-sm leading-5">
+                    {index.description}
+                  </p>
+                </TabsContent>
+              ))}
+            </Tabs>
           </section>
           <section
             aria-labelledby="parent-company-heading"
