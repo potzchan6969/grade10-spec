@@ -44,7 +44,7 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
               {TIER_BENEFITS_PAGE_COPY.title}
             </BreadcrumbItem>
           </Breadcrumbs>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-3xl font-semibold text-foreground">
             {TIER_BENEFITS_PAGE_COPY.title}
           </h1>
           <section
