@@ -1,53 +1,48 @@
-// Add a published digest to its branch's day list, and point the branch's one link at it.
-// node days.mjs <days.json> <digest.json> --commit <7 characters> --out <folder>
-// Writes <folder>/days.json, newest first, and <folder>/index.html, which opens the newest digest.
+// Put a run's day pages in their branch's day list, and point the branch's one link at the newest day.
+// node days.mjs <days.json> <digest.json>... --out <folder>
+// Writes <folder>/days.json, one entry per day, newest first, and <folder>/index.html, which opens the newest day.
+// A redrawn day replaces its entry, so the list holds the same days however often the digest runs.
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-// The bucket drops every page 30 days after upload; a day kept longer would link nowhere.
+// The bucket drops every page 30 days after its last upload; a day kept longer could link nowhere.
 const KEEP_DAYS = 29;
 
 const args = process.argv.slice(2);
-const option = (name) => {
-  const i = args.indexOf(`--${name}`);
-  return i === -1 ? undefined : args[i + 1];
-};
-const [listFile, digestFile] = args.filter(
-  (a, i) => !a.startsWith("--") && !/^--(commit|out)$/.test(args[i - 1]),
+const out = args[args.indexOf("--out") + 1];
+const [listFile, ...digestFiles] = args.filter(
+  (a, i) => !a.startsWith("--") && args[i - 1] !== "--out",
 );
-const commit = option("commit");
-const out = option("out");
-if (!listFile || !digestFile || !/^[0-9a-f]{7}$/.test(commit ?? "") || !out)
-  fail(
-    "usage: node days.mjs <days.json> <digest.json> --commit <7 characters> --out <folder>",
-  );
+if (!listFile || !digestFiles.length || !args.includes("--out") || !out)
+  fail("usage: node days.mjs <days.json> <digest.json>... --out <folder>");
 
 const kept = JSON.parse(readFileSync(listFile, "utf8")).days;
 if (!Array.isArray(kept)) fail(`${listFile} holds no days list`);
-const data = JSON.parse(readFileSync(digestFile, "utf8"));
-const now = new Date();
-const oldest = now.getTime() - KEEP_DAYS * 24 * 60 * 60 * 1000;
-
+const drawn = digestFiles.map((file) => {
+  const data = JSON.parse(readFileSync(file, "utf8"));
+  const date = data.stamp?.date;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? ""))
+    fail(`${file}: stamp.date is not a day`);
+  return { date, title: plain(data.title), reason: plain(data.reason) };
+});
+const oldest = new Date(Date.now() - KEEP_DAYS * 24 * 60 * 60 * 1000)
+  .toISOString()
+  .slice(0, 10);
 const days = [
-  {
-    commit,
-    date: data.stamp?.date,
-    fromDate: data.stamp?.fromDate,
-    at: now.toISOString(),
-    title: plain(data.title),
-    reason: plain(data.reason),
-  },
-  ...kept.filter((d) => d.commit !== commit && Date.parse(d.at) >= oldest),
-];
+  ...drawn,
+  ...kept.filter((d) => !drawn.some((n) => n.date === d.date)),
+]
+  .filter((d) => d.date >= oldest)
+  .sort((a, b) => b.date.localeCompare(a.date));
 
 mkdirSync(out, { recursive: true });
 writeFileSync(join(out, "days.json"), `${JSON.stringify({ days }, null, 2)}\n`);
-const latest = `${commit}/index.html`;
+const latest = `${days[0].date}/index.html`;
 writeFileSync(
   join(out, "index.html"),
-  `<!doctype html><html><head><meta charset="utf-8"><title>${entities(days[0].title)}</title><meta http-equiv="refresh" content="0;url=${latest}"><script>location.replace(${JSON.stringify(latest)} + location.hash);</script></head><body><a href="${latest}">Open the newest digest</a></body></html>\n`,
+  `<!doctype html><html><head><meta charset="utf-8"><title>${entities(days[0].title)}</title><meta http-equiv="refresh" content="0;url=${latest}"><script>location.replace(${JSON.stringify(latest)} + location.hash);</script></head><body><a href="${latest}">Open the newest day</a></body></html>\n`,
 );
-console.log(`${days.length} day(s); newest ${commit}`);
+console.log(`${days.length} day(s); newest ${days[0].date}`);
 
 function plain(s) {
   return String(s ?? "")

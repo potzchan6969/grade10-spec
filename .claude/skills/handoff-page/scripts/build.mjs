@@ -633,6 +633,23 @@ changes.forEach((c, i) => {
   ) {
     fail(`${at}.who`, 'who notices, as a list such as ["Bidders"]');
   }
+  if (c.commits != null && !digest)
+    warn(
+      `${at}.commits`,
+      "only a digest lists the commits a change comes from",
+    );
+  else if (
+    digest &&
+    !(
+      Array.isArray(c.commits) &&
+      c.commits.length &&
+      c.commits.every((s) => /^[0-9a-f]{7,40}$/.test(s))
+    )
+  )
+    fail(
+      `${at}.commits`,
+      'the commits it comes from, from facts.json, such as ["1a2b3c4"]; the post lists it only when one is new',
+    );
   if (page !== "decision" && !c.picture)
     warn(
       `${at}.picture`,

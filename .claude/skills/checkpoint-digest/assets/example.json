@@ -8,15 +8,27 @@
     "repo": "9gag/grade10-spec",
     "branch": "main",
     "from": "ea5ac1b",
-    "fromDate": "2026-10-16",
+    "fromDate": "2026-10-19",
     "commit": "c06e997",
     "date": "2026-10-19"
   },
   "numbers": [
-    { "label": "commits", "value": 227 },
-    { "label": "pull requests merged", "value": 21 },
-    { "label": "changes proposed", "value": 8 },
-    { "label": "changes archived", "value": 3 }
+    {
+      "label": "commits",
+      "value": 227
+    },
+    {
+      "label": "pull requests merged",
+      "value": 21
+    },
+    {
+      "label": "changes proposed",
+      "value": 8
+    },
+    {
+      "label": "changes archived",
+      "value": 3
+    }
   ],
   "changes": [
     {
@@ -27,6 +39,7 @@
       "title": "The member card becomes the member pass",
       "before": "`MemberCard`: a plain card with the code, a code to read out, and a used state",
       "now": "`MemberPass`: a header in the tier's colours over the QR square, a short code and a Refresh button",
+      "commits": ["d12c402"],
       "picture": [
         {
           "kind": "mock",
@@ -34,12 +47,28 @@
           "title": "Member pass",
           "caption": "The pass at the till, in its story's words",
           "items": [
-            { "badge": "Gold", "tone": "accent" },
-            { "text": "collector@example.com", "muted": true },
-            { "field": "Short code", "value": "XJCD-4WMB" },
-            { "divider": true },
-            { "label": "Refreshes in", "value": "0:45" },
-            { "button": "Refresh" }
+            {
+              "badge": "Gold",
+              "tone": "accent"
+            },
+            {
+              "text": "collector@example.com",
+              "muted": true
+            },
+            {
+              "field": "Short code",
+              "value": "XJCD-4WMB"
+            },
+            {
+              "divider": true
+            },
+            {
+              "label": "Refreshes in",
+              "value": "0:45"
+            },
+            {
+              "button": "Refresh"
+            }
           ]
         },
         {
@@ -56,10 +85,22 @@
               "before": "New code",
               "now": "Refresh"
             },
-            { "name": "`card.shortCode`", "now": "Short code" },
-            { "name": "`card.fallbackCode`", "before": "Or read this out" },
-            { "name": "`card.refreshesIn`", "now": "Refreshes in" },
-            { "name": "`card.expiresIn`", "before": "Expires in" }
+            {
+              "name": "`card.shortCode`",
+              "now": "Short code"
+            },
+            {
+              "name": "`card.fallbackCode`",
+              "before": "Or read this out"
+            },
+            {
+              "name": "`card.refreshesIn`",
+              "now": "Refreshes in"
+            },
+            {
+              "name": "`card.expiresIn`",
+              "before": "Expires in"
+            }
           ]
         }
       ],
@@ -80,6 +121,7 @@
       "who": ["Product", "Engineering"],
       "title": "Eight changes proposed, three archived",
       "now": "Five of the eight are company site pages, each with its designs, cases and tasks",
+      "commits": ["ae62fb8"],
       "picture": {
         "kind": "board",
         "caption": "Where each OpenSpec change moved",
@@ -128,18 +170,24 @@
       "who": ["Members", "Product"],
       "title": "Auctions close to regions that restrict them",
       "now": "A restricted region sees no way into auctions, and a winner there can still pay for what they won",
+      "commits": ["19c7296", "d290e91"],
       "picture": {
         "kind": "mock",
         "frame": "desktop",
         "url": "grade10.com/auction",
         "caption": "What a direct auction address answers in a restricted region",
         "items": [
-          { "h": "Auctions aren't available in your region" },
+          {
+            "h": "Auctions aren't available in your region"
+          },
           {
             "text": "You can't bid on or watch lots from where you are. The store is open as usual.",
             "muted": true
           },
-          { "button": "Browse the Store", "primary": true }
+          {
+            "button": "Browse the Store",
+            "primary": true
+          }
         ]
       },
       "links": [
@@ -156,6 +204,7 @@
       "who": ["Visitors", "Product"],
       "title": "The company site's pages have their words",
       "now": "About, Finance, Press, Retail, Shows and Vault have catalogs in English and both Chinese scripts",
+      "commits": ["979187e"],
       "picture": {
         "kind": "table",
         "caption": "A sample of the new keys",
@@ -187,11 +236,15 @@
       "who": ["Engineering", "Product"],
       "title": "Main gets a digest in Slack",
       "now": "A push or a schedule draws what moved since the last digest and posts the page's link here",
+      "commits": ["7ba3e4c"],
       "picture": {
         "kind": "flow",
         "caption": "One digest, from the push to the post",
         "steps": [
-          { "who": "Push or schedule", "text": "Starts a digest" },
+          {
+            "who": "Push or schedule",
+            "text": "Starts a digest"
+          },
           {
             "who": "Agent",
             "text": "Draws what moved since `refs/checkpoints/main`",
@@ -222,17 +275,36 @@
       "phase": "Overall",
       "title": "Where the work landed",
       "now": "Most new lines are planning: OpenSpec changes alone hold more than the next two areas together",
+      "commits": ["26a5b0c"],
       "picture": {
         "kind": "bars",
         "unit": "lines",
         "caption": "Lines added per area, the six largest",
         "items": [
-          { "label": "OpenSpec changes", "value": 12603 },
-          { "label": "Agent skills", "value": 6855 },
-          { "label": "Tooling and CI", "value": 4191 },
-          { "label": "Blocks", "value": 4105 },
-          { "label": "Stories and pages", "value": 3843 },
-          { "label": "Requirements", "value": 3252 }
+          {
+            "label": "OpenSpec changes",
+            "value": 12603
+          },
+          {
+            "label": "Agent skills",
+            "value": 6855
+          },
+          {
+            "label": "Tooling and CI",
+            "value": 4191
+          },
+          {
+            "label": "Blocks",
+            "value": 4105
+          },
+          {
+            "label": "Stories and pages",
+            "value": 3843
+          },
+          {
+            "label": "Requirements",
+            "value": 3252
+          }
         ]
       }
     }

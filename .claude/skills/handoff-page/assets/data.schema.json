@@ -311,6 +311,11 @@
           "type": "array",
           "items": { "$ref": "#/$defs/link" },
           "description": "The sources a reader opens next: the proposal, the pull request, the requirement."
+        },
+        "commits": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+          "description": "Digest only: the commits it comes from, from facts.json; the Slack post lists a change only when one of them is new since the last post."
         }
       }
     },

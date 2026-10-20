@@ -109,14 +109,14 @@ The same names in the same order on every handoff, so a reader who has seen one 
 | `page` | `feature`, `decision`, or `digest` for `/checkpoint-digest` |
 | `lead` | `extra` to open on the demo, `changes` to open on What changed when Decide would lead; left out otherwise |
 | `verdict`, `reason` | The verdict and its one reason; a digest has no verdict |
-| `stamp` | `repo`, `branch`, `commit` (7 characters; a merged change stamps its merge commit), `date` (`2026-10-19`), `version`; a digest takes `from` and `fromDate`, the commit and day it starts from, in place of `version`; a fact read in another repository names its commit in its proof row |
+| `stamp` | `repo`, `branch`, `commit` (7 characters; a merged change stamps its merge commit), `date` (`2026-10-19`), `version`; a digest takes `from` and `fromDate`, the commit and day it starts from, in place of `version`, and `/checkpoint-digest` sets both days to the day its page covers; a fact read in another repository names its commit in its proof row |
 | `since` | From `v2`: what moved since the last version |
 | `numbers` | `label` and `value`, a number or short text: up to four counts the reader would quote |
 | `decide.questions` | `n`, `title`, `ask`, `options`, `why`, `blocks`, `reasons`, `picture`, `answered` |
 | `decide.questions[].options` | `key` (`A`, `B`), `label`, `recommended`, `outcome`, `cost`, `picture` |
 | `decide.blockers` | `n`, `title`, `action`, `who`, `why`, `blocks`, `reasons`, `done` |
 | `decide.agentDecisions` | `decision`, `taken`, `why` |
-| `changes` | `id`, `kind` (`new`, `changed`, `removed`; `settled` on a decision page), `who`, `title`, `before` (needed by `changed` and `removed`), `now`, `picture`, `phase`, `links` (`text`, `href`) |
+| `changes` | `id`, `kind` (`new`, `changed`, `removed`; `settled` on a decision page), `who`, `title`, `before` (needed by `changed` and `removed`), `now`, `picture`, `phase`, `links` (`text`, `href`); on a digest, `commits`, the commits it comes from |
 | `try` | `where`, and `steps` with `role`, `when`, `title`, `where`, `do`, `success`, `picture` |
 | `proof` | `claim`, `how`, `revision`, `href`, `status` (`verified`, `partial`, `not-run`, `failed`), `why`, `change` |
 | `ship` | `needs` (a list), `risk`, `undo` |

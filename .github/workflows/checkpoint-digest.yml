@@ -1,12 +1,13 @@
 name: Checkpoint digest
 
-# The checkpoint-digest skill's publish.mjs force-pushes a built digest, its
-# shots and its range to digest/<branch>, under .digest/ on top of main, and
-# that push starts this run, so a session needs no gh and no token. It uploads
-# the page to the e2e reports bucket, posts its link to the digest channel, and
-# only then moves refs/checkpoints/<branch> to the commit the digest covers,
-# with a lease on the value the digest read. A run that fails before the move
-# leaves the checkpoint where it was, so the next digest tells the same range.
+# The checkpoint-digest skill's publish.mjs force-pushes the day pages a run
+# drew, their shots and the run's range to digest/<branch>, under .digest/ on
+# top of main, and that push starts this run, so a session needs no gh and no
+# token. It uploads each day to the e2e reports bucket, posts each day's new
+# changes to the digest channel, and only then moves refs/checkpoints/<branch>
+# to the commit the run covers, with a lease on the value the run read. A run
+# that fails before the move leaves the checkpoint where it was, so the next
+# run redraws the same days and posts the same changes.
 
 on:
   push:
@@ -85,64 +86,74 @@ jobs:
           export BRANCH
           echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
           node -e '
-            const { range } = require("./page/.digest/digest.json");
-            if (range.branch !== process.env.BRANCH) throw new Error(`the page covers ${range.branch}, not ${process.env.BRANCH}`);
-            const env = [`FROM=${range.from}`, `TO=${range.to}`, `SHORT=${range.to.slice(0, 7)}`];
+            const range = require("./page/.digest/range.json");
+            if (range.branch !== process.env.BRANCH) throw new Error(`the pages cover ${range.branch}, not ${process.env.BRANCH}`);
+            const env = [`SAVED=${range.saved}`, `TO=${range.to}`];
             require("fs").appendFileSync(process.env.GITHUB_ENV, env.join("\n") + "\n");
           '
           echo "PREFIX=reports/grade10-spec/digest/${BRANCH//\//-}" >> "$GITHUB_ENV"
+          echo "ENDPOINT=https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" >> "$GITHUB_ENV"
 
       # A page is the team's. Uploading to a host that Access does not guard
       # would publish it to anyone with the link.
       - name: Require Cloudflare Access on the host
         run: |
-          location=$(curl -sS -o /dev/null -w '%{redirect_url}' "$HOST/$PREFIX/$SHORT/")
+          location=$(curl -sS -o /dev/null -w '%{redirect_url}' "$HOST/$PREFIX/index.html")
           case "$location" in
             "$ACCESS_LOGIN"*) ;;
             *) echo "::error::$HOST answered without the team's Cloudflare Access login."; exit 1 ;;
           esac
 
-      - name: Upload
+      # A day's folder is replaced whole, so a redrawn day keeps no shot it
+      # dropped.
+      - name: Upload each day
         run: |
-          aws s3 sync page/.digest "s3://$BUCKET/$PREFIX/$SHORT" \
-            --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" \
-            --exclude "digest.json" --no-follow-symlinks \
-            --cache-control "no-store" --only-show-errors
-          echo "URL=$HOST/$PREFIX/$SHORT/index.html" >> "$GITHUB_ENV"
+          for day in page/.digest/*/; do
+            date=$(basename "$day")
+            aws s3 sync "$day" "s3://$BUCKET/$PREFIX/$date" --endpoint-url "$ENDPOINT" \
+              --exclude "digest.json" --delete --no-follow-symlinks \
+              --cache-control "no-store" --only-show-errors
+          done
 
-      # One link per branch: its index.html opens the newest digest, and every
-      # digest's day bar reads days.json to reach the days before and after it.
-      # A list that cannot be read for any reason but its absence stops the run,
-      # so a failed read never starts the days over.
-      - name: Add the digest to the branch's days
+      # One link per branch: its index.html opens the newest day, and every
+      # day's bar reads days.json to reach the days before and after it. A list
+      # that cannot be read for any reason but its absence stops the run, so a
+      # failed read never starts the days over.
+      - name: Put the days in the branch's list
         run: |
-          endpoint="https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com"
-          if found=$(aws s3api head-object --bucket "$BUCKET" --key "$PREFIX/days.json" --endpoint-url "$endpoint" 2>&1); then
-            aws s3 cp "s3://$BUCKET/$PREFIX/days.json" days.json --endpoint-url "$endpoint" --only-show-errors
+          if found=$(aws s3api head-object --bucket "$BUCKET" --key "$PREFIX/days.json" --endpoint-url "$ENDPOINT" 2>&1); then
+            aws s3 cp "s3://$BUCKET/$PREFIX/days.json" days.json --endpoint-url "$ENDPOINT" --only-show-errors
           elif grep -q -E '\(404\)|Not Found' <<<"$found"; then
             echo '{"days":[]}' > days.json
           else
             echo "$found"
             exit 1
           fi
-          node .claude/skills/checkpoint-digest/scripts/days.mjs days.json page/.digest/digest.json --commit "$SHORT" --out days
-          aws s3 cp days/days.json "s3://$BUCKET/$PREFIX/days.json" --endpoint-url "$endpoint" \
+          node .claude/skills/checkpoint-digest/scripts/days.mjs days.json page/.digest/*/digest.json --out days
+          aws s3 cp days/days.json "s3://$BUCKET/$PREFIX/days.json" --endpoint-url "$ENDPOINT" \
             --content-type application/json --cache-control "no-store" --only-show-errors
-          aws s3 cp days/index.html "s3://$BUCKET/$PREFIX/index.html" --endpoint-url "$endpoint" \
+          aws s3 cp days/index.html "s3://$BUCKET/$PREFIX/index.html" --endpoint-url "$ENDPOINT" \
             --content-type "text/html; charset=utf-8" --cache-control "no-store" --only-show-errors
           echo "LATEST=$HOST/$PREFIX/index.html" >> "$GITHUB_ENV"
 
-      - name: Post the link to Slack
+      # One post per day the run brought a change to; a day with none posts
+      # nothing.
+      - name: Post what the run brought
         run: |
-          node .claude/skills/checkpoint-digest/scripts/slack.mjs page/.digest/digest.json --url "$URL" --latest "$LATEST" --send | tee posted.json
-          printf '%s\n\nEvery day: %s\n' "$URL" "$LATEST" >> "$GITHUB_STEP_SUMMARY"
+          printf 'Every day: %s\n' "$LATEST" >> "$GITHUB_STEP_SUMMARY"
+          for day in page/.digest/*/; do
+            date=$(basename "$day")
+            url="$HOST/$PREFIX/$date/index.html"
+            node .claude/skills/checkpoint-digest/scripts/slack.mjs "$day/digest.json" --url "$url" --latest "$LATEST" --send
+            printf '\n%s: %s\n' "$date" "$url" >> "$GITHUB_STEP_SUMMARY"
+          done
 
       - name: Move the checkpoint
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           node .claude/skills/checkpoint-digest/scripts/checkpoint.mjs advance \
-            --branch "$BRANCH" --to "$TO" --from "$FROM"
+            --branch "$BRANCH" --to "$TO" --from "$SAVED"
 
       - name: Delete the page branch
         run: gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/digest/$BRANCH"

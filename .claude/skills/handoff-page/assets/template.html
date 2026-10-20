@@ -2460,7 +2460,7 @@
       return new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", year: year ? "numeric" : undefined, timeZone: "UTC" }).format(d);
     }
 
-    // A published digest sits in its commit's folder beside days.json, the list its run keeps; anywhere else the bar stays hidden.
+    // A published digest sits in its day's folder beside days.json, the list its runs keep; anywhere else the bar stays hidden.
     async function dayBar(bar) {
       let all;
       try {
@@ -2474,15 +2474,10 @@
         .split("/")
         .filter((p) => p && p !== "index.html")
         .at(-1);
-      const at = all.findIndex((d) => d.commit === here);
+      const at = all.findIndex((d) => d.date === here);
       if (all.length < 2 || at === -1) return;
-      const href = (d) => `../${d.commit}/index.html`;
-      const time = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Hong_Kong" });
-      const label = (d) => {
-        const day = toDay(d.date);
-        const text = day ? dayText(day, false) : d.date;
-        return all.filter((o) => o.date === d.date).length > 1 && d.at ? `${text}, ${time.format(new Date(d.at))}` : text;
-      };
+      const href = (d) => `../${d.date}/index.html`;
+      const label = (d) => (toDay(d.date) ? dayText(toDay(d.date), false) : d.date);
       const step = (d, words) => (d ? h("a", { href: href(d), title: d.reason }, words) : h("span", { class: "off", "aria-disabled": "true" }, words));
       bar.append(
         step(all[at + 1], "\u2039 Earlier"),

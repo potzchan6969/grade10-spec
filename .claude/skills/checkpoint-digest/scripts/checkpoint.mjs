@@ -1,9 +1,11 @@
 // The checkpoint a branch's digest starts from, the facts of what moved since it, and the step that moves it.
-// node checkpoint.mjs range   [--branch <b>] [--to <rev>]          - prints {branch, from, to, base, commits} as JSON
-// node checkpoint.mjs facts   [--branch <b>] [--to <rev>] [--from <rev>] - prints the facts the digest is drawn from as JSON
+// node checkpoint.mjs range   [--branch <b>] [--to <rev>]          - prints {branch, from, to, base, commits, days} as JSON
+// node checkpoint.mjs facts   --day <YYYY-MM-DD> [--branch <b>] [--to <rev>] [--from <rev>] - prints the facts one day's page is drawn from as JSON
+// A day is a Hong Kong calendar day, and its page covers every commit that landed on the branch that day, whenever the digest runs.
 // node checkpoint.mjs advance --to <sha> [--branch <b>] [--from <sha>] - pushes refs/checkpoints/<b> to <sha>, refused if another run moved it first
 import { execFileSync } from "node:child_process";
 
+const HK = 8 * 3600 * 1000;
 const REMOTE = process.env.CHECKPOINT_REMOTE ?? "origin";
 const FIRST_RUN = process.env.CHECKPOINT_FIRST_RUN ?? endOfLastFriday();
 const LIMIT = 40;
@@ -55,7 +57,7 @@ if (!branch || branch === "HEAD")
 const ref = `refs/checkpoints/${branch}`;
 
 if (command === "range") print(range());
-else if (command === "facts") print(facts(range()));
+else if (command === "facts") print(facts(day(range(), option("day"))));
 else if (command === "advance") advance();
 else
   fail(
@@ -82,7 +84,41 @@ function range() {
     base = "first-run";
   }
   const commits = Number(git("rev-list", "--count", `${from}..${to}`));
-  return { branch, ref, saved: saved ?? null, from, to, base, commits };
+  // The days the new commits landed on, by the time each reached the branch.
+  const days = [
+    ...new Set(
+      git("log", "--first-parent", "--format=%cI", `${from}..${to}`)
+        .split("\n")
+        .filter(Boolean)
+        .map(dayOf),
+    ),
+  ].sort();
+  return { branch, ref, saved: saved ?? null, from, to, base, commits, days };
+}
+
+// The whole day, from the branch as it stood at the day's start to the last commit the day landed;
+// fresh names the day's commits this run brings, the ones the last post did not cover.
+function day(r, date) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? ""))
+    fail("facts needs --day <YYYY-MM-DD>: one of the days range prints");
+  const start = Date.parse(`${date}T00:00:00Z`) - HK;
+  const before = (t) =>
+    tryGit(
+      "rev-list",
+      "-1",
+      "--first-parent",
+      `--before=${new Date(t - 1000).toISOString()}`,
+      r.to,
+    );
+  const to = before(start + 24 * 3600 * 1000);
+  if (!to || dayOf(git("show", "-s", "--format=%cI", to)) !== date)
+    fail(`nothing landed on ${r.branch} on ${date}`);
+  const from =
+    before(start) || git("rev-list", "--max-parents=0", to).split("\n").pop();
+  const fresh = git("rev-list", "--no-merges", to, `^${from}`, `^${r.from}`)
+    .split("\n")
+    .filter(Boolean);
+  return { ...r, day: date, from, to, fresh };
 }
 
 function facts(r) {
@@ -106,6 +142,7 @@ function facts(r) {
         subject,
         type: cc?.[1] ?? null,
         scope: cc?.[2] ?? null,
+        fresh: r.fresh.includes(sha),
       };
     });
   const merges = git(
@@ -166,8 +203,8 @@ function facts(r) {
   return {
     ...r,
     repo: repoOf(),
-    date: new Date().toISOString().slice(0, 10),
-    fromDate: tryGit("show", "-s", "--format=%cI", r.from) ?? null,
+    date: r.day,
+    fromDate: r.day,
     commits: log,
     merges,
     authors,
@@ -279,9 +316,12 @@ function flatten(value, prefix = "", out = {}) {
   return out;
 }
 
+function dayOf(iso) {
+  return new Date(Date.parse(iso) + HK).toISOString().slice(0, 10);
+}
+
 // Midnight after the last Friday before today, on the Hong Kong clock the store counts days on.
 function endOfLastFriday(now = new Date()) {
-  const HK = 8 * 3600 * 1000;
   const day = new Date(now.getTime() + HK);
   const back = (day.getUTCDay() + 2) % 7 || 7;
   const midnight = Date.UTC(

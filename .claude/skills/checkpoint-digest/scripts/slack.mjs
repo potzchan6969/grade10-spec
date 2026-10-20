@@ -1,6 +1,8 @@
-// Post a published digest to Slack: one message drawn from its data, with the page's link.
-// node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--channel <id>] [--send] - without --send it prints what it would post and calls nothing.
-// The button opens --latest, the link that always shows the newest digest; each title opens its card on this digest's page.
+// Post what a run brought to one day's digest: the day's changes whose commits are new since the last post, with the page's link.
+// node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--from <rev> --to <rev>] [--channel <id>] [--send]
+// Without --send it prints what it would post and calls nothing. The run's commits come from the data's range, or --from and --to.
+// A day with no new change posts nothing. The button opens --latest, the link that always shows the newest digest.
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -16,18 +18,27 @@ const option = (name) => {
 };
 const file = args.find(
   (a, i) =>
-    !a.startsWith("--") && !/^--(url|latest|channel)$/.test(args[i - 1]),
+    !a.startsWith("--") &&
+    !/^--(url|latest|from|to|channel)$/.test(args[i - 1]),
 );
 const url = option("url");
 if (!file || !url)
   fail(
-    "usage: node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--channel <id>] [--send]",
+    "usage: node slack.mjs <data.json> --url <page link> [--latest <branch link>] [--from <rev> --to <rev>] [--channel <id>] [--send]",
   );
 const page = url.split("#")[0];
 const latest = option("latest") ?? page;
 const data = JSON.parse(readFileSync(resolve(file), "utf8"));
 const channel = option("channel") ?? process.env.SLACK_CHANNEL;
 const token = process.env.SLACK_BOT_TOKEN;
+const fresh = brought();
+const changes = (data.changes ?? []).filter((c) =>
+  (c.commits ?? []).some((sha) => fresh.some((f) => f.startsWith(sha))),
+);
+if (!changes.length) {
+  console.log(`nothing new on ${data.stamp?.date}: no post`);
+  process.exit(0);
+}
 
 const message = {
   channel,
@@ -88,14 +99,19 @@ function blocks() {
     ],
   });
 
-  const changes = data.changes ?? [];
+  const all = data.changes?.length ?? 0;
   const shown = changes.slice(0, MAX_CHANGES);
   const phases = [...new Set(shown.map((c) => c.phase).filter(Boolean))];
   const groups = [
     ...phases.map((p) => [p, shown.filter((c) => c.phase === p)]),
     ["", shown.filter((c) => !c.phase)],
   ].filter(([, items]) => items.length);
-  if (groups.length) out.push({ type: "divider" });
+  out.push(
+    { type: "divider" },
+    context(
+      `*${changes.length} new* since the last post${all > changes.length ? `, of ${all} on the day` : ""}`,
+    ),
+  );
   for (const [phase, items] of groups)
     out.push(
       section(
@@ -112,27 +128,37 @@ function blocks() {
       ),
     );
 
-  const followups = data.followups ?? [];
-  if (followups.length) {
-    out.push({ type: "divider" });
-    out.push(
-      section(
-        [
-          "*Follow-ups*",
-          ...followups.map(
-            (f) =>
-              `• *${mrkdwn(f.owner)}*: <${page}#fu-${f.id}|${label(f.title)}>`,
-          ),
-        ].join("\n"),
-      ),
-    );
-  }
+  // Follow-ups stay on the page: a post every hour would repeat them.
+  const followups = data.followups?.length ?? 0;
   out.push(
     context(
-      `Each title opens its picture on <${page}|the digest>. The page sits behind the team's Cloudflare login for 30 days.`,
+      [
+        followups
+          ? `<${page}#followups|${followups} follow-up${followups === 1 ? "" : "s"}> on the page.`
+          : null,
+        `Each title opens its picture on <${page}|the day's digest>. The page sits behind the team's Cloudflare login for 30 days.`,
+      ]
+        .filter(Boolean)
+        .join(" "),
     ),
   );
   return out.slice(0, 50);
+}
+
+// The commits this run brought: the range the run read, never the day's, so an earlier post is not repeated.
+function brought() {
+  const from = option("from") ?? data.range?.from;
+  const to = option("to") ?? data.range?.to;
+  if (!from || !to)
+    fail(
+      "name the run's commits: --from and --to, or a range in the data as publish.mjs writes it",
+    );
+  return execFileSync("git", ["rev-list", "--no-merges", to, `^${from}`], {
+    encoding: "utf8",
+    maxBuffer: 64 * 1024 * 1024,
+  })
+    .split("\n")
+    .filter(Boolean);
 }
 
 // One change: its kind, its title linked to its card, and who notices it.
