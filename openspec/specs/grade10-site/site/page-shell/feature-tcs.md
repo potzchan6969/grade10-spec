@@ -976,11 +976,11 @@ drawer.
 
 **As a** collector,
 **I want** Help in the primary nav to open the documentation site in a new tab
-(after Store Locator when present, after Auction on auction-only),
+(the last item — after Shows when present, else Store Locator, else Auction),
 **so that** I can read help without losing the page I was on, whether I am on
 auction-only or full primary nav.
 
-<!-- trace:case id=g10.site-page-shell.TC-ho3 rev=1 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
+<!-- trace:case id=g10.site-page-shell.TC-ho3 rev=2 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
 ### grade10-site-site-page-shell-US07-TC1-1: Help on auction-only header opens docs in a new tab
 
 **Classification:**
@@ -1000,23 +1000,23 @@ auction-only or full primary nav.
 
 * customer is on <grade10 auction url> with auction-only primary nav and a wide
   viewport.
-* Help is supplied in the primary nav after Auction; Store Locator is absent.
+* Help is supplied in the primary nav after Shows; Store Locator is absent.
 
 **Steps:**
 
-1. Locate Help in the primary navigation after Auction.
+1. Locate Help in the primary navigation after Shows.
 2. Confirm Store Locator is not in the primary navigation.
 3. Activate Help.
 4. Check the new browsing context and the original page.
 
 **Expected Results:**
 
-* Help is present in the primary navigation after Auction.
+* Help is present in the primary navigation after Shows.
 * Store Locator is absent from the primary navigation.
 * The documentation site opens in a new browsing context.
 * The auction page remains open in the original context.
 
-<!-- trace:case id=g10.site-page-shell.TC-wno rev=1 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
+<!-- trace:case id=g10.site-page-shell.TC-wno rev=2 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
 ### grade10-site-site-page-shell-US07-TC2-1: Help on full primary nav opens docs in a new tab
 
 **Classification:**
@@ -1036,22 +1036,22 @@ auction-only or full primary nav.
 
 * customer is on <grade10 store url> whose primary nav lists Store and Auction,
   on a wide viewport.
-* Help is supplied in the primary nav after Store Locator.
+* Help is supplied in the primary nav after Shows.
 
 **Steps:**
 
-1. Locate Help in the primary navigation after Store Locator.
+1. Locate Help in the primary navigation after Shows.
 2. Activate Help.
 3. Check the new browsing context and the original page.
 
 **Expected Results:**
 
-* Help is present in the primary navigation after Store Locator alongside the
+* Help is present in the primary navigation after Shows alongside the
   full primary nav.
 * The documentation site opens in a new browsing context.
 * The store page remains open in the original context.
 
-<!-- trace:case id=g10.site-page-shell.TC-mgo rev=1 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
+<!-- trace:case id=g10.site-page-shell.TC-mgo rev=2 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
 ### grade10-site-site-page-shell-US07-TC3-1: Help in the compact menu opens docs in a new tab
 
 **Classification:**
@@ -1070,20 +1070,20 @@ auction-only or full primary nav.
 **Pre-conditions:**
 
 * customer is on <grade10 auction url> at a viewport 375 CSS pixels wide.
-* Help is supplied among the primary nav items after Auction; Store Locator is
+* Help is supplied among the primary nav items after Shows; Store Locator is
   absent.
 
 **Steps:**
 
 1. Open the header menu.
-2. Locate Help among the primary items in the drawer after Auction.
+2. Locate Help among the primary items in the drawer after Shows.
 3. Confirm Store Locator is not in the drawer.
 4. Activate Help.
 5. Check the new browsing context and the original page.
 
 **Expected Results:**
 
-* Help is reachable in the drawer after Auction.
+* Help is reachable in the drawer after Shows.
 * Store Locator is absent from the drawer.
 * The documentation site opens in a new browsing context.
 * The auction page remains open in the original context.
@@ -2135,9 +2135,12 @@ Runs once per row of **Test data**.
 
 ## Settled
 
-* Help sits in the primary nav for auction-only and full nav (wide and
-  compact): after Auction on auction-first, after Store Locator when that item
-  is present.
+* Help sits last in the primary nav for auction-only and full nav (wide and
+  compact): after Shows when that item is present, else Store Locator, else
+  Auction.
+* Shows joins the primary nav ahead of Help once the site answers `/shows`;
+  About, Shows, Press Releases and Media Coverage form the footer's Company
+  column.
 * Auction-first primary nav omits Store Locator until the shop is open.
 * Help opens the documentation site in a new tab.
 * The durable host address stays open until Product confirms it.
