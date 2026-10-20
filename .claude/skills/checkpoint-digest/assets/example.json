@@ -1,4 +1,5 @@
 {
+  "$schema": "../../handoff-page/assets/data.schema.json",
   "example": true,
   "title": "Main Branch Digest",
   "page": "digest",

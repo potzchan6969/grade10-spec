@@ -100,6 +100,9 @@ The same names in the same order on every handoff, so a reader who has seen one 
 
 `assets/example.json` is a complete page: copy it, keep its shape, and change every value. The build names every key it does not know, refuses a missing field or an id it cannot use, and says how to fix each.
 
+- **Schema** - `assets/data.schema.json` names every key, its type, its allowed values and what it holds; read it for any key the table below leaves short, and an editor checks the data as you type through the example's `$schema` line
+- **One source** - the build reads its key lists and allowed values from the schema and adds the rules a schema cannot say, such as one recommended option first; a key the template learns goes into the schema first, or the build warns that the page ignores it
+
 | Key | Holds |
 | --- | --- |
 | `title` | The page's name, two to four words: `Extended Bidding Label` |

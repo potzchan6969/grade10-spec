@@ -39,14 +39,23 @@ const isText = (v) => typeof v === "string" && v.trim() !== "";
 const isObject = (v) =>
   v !== null && typeof v === "object" && !Array.isArray(v);
 
-const VERDICTS = {
+// The schema names every key and allowed value; this file adds the rules a schema cannot say.
+const SCHEMA = JSON.parse(
+  readFileSync(join(here, "..", "assets", "data.schema.json"), "utf8"),
+);
+const VERDICT_WORDS = {
   ready: "Ready",
   decide: "Ready once you decide",
   "not-ready": "Not ready",
   blocked: "Blocked",
 };
-const STATUSES = ["verified", "partial", "not-run", "failed"];
-const TONES = ["ok", "warn", "bad", "info", "accent", "none"];
+const VERDICTS = Object.fromEntries(
+  SCHEMA.properties.verdict.enum.map((v) => [v, VERDICT_WORDS[v] ?? v]),
+);
+const STATUSES = SCHEMA.$defs.proof.properties.status.enum;
+const TONES = SCHEMA.$defs.tone.enum;
+const PAGES = SCHEMA.properties.page.enum;
+const FRAMES = SCHEMA.$defs["picture-mock"].properties.frame.enum;
 const RESERVED = [
   "page",
   "top",
@@ -68,86 +77,14 @@ const RESERVED = [
 // Ids the page gives its own parts: questions, blockers, proof rows, follow-ups, areas and controls.
 const RESERVED_PREFIX =
   /^(q\d|b\d|proof-\d|fu-|area-|for-\d|try-role-|answer-|lightbox-|handoff-)/;
-const SHAPES = {
-  data: [
-    "example",
-    "title",
-    "page",
-    "verdict",
-    "reason",
-    "stamp",
-    "numbers",
-    "since",
-    "decide",
-    "changes",
-    "try",
-    "proof",
-    "ship",
-    "followups",
-    "engineers",
-    "extra",
-    "lead",
-  ],
-  stamp: ["repo", "branch", "from", "fromDate", "commit", "date", "version"],
-  decide: ["questions", "blockers", "agentDecisions"],
-  question: [
-    "n",
-    "title",
-    "ask",
-    "picture",
-    "options",
-    "why",
-    "blocks",
-    "reasons",
-    "answered",
-  ],
-  option: ["key", "label", "recommended", "outcome", "cost", "picture"],
-  blocker: ["n", "title", "action", "who", "why", "blocks", "reasons", "done"],
-  agentDecision: ["decision", "taken", "why"],
-  reason: ["text", "href"],
-  change: [
-    "id",
-    "kind",
-    "phase",
-    "who",
-    "title",
-    "before",
-    "now",
-    "picture",
-    "links",
-  ],
-  try: ["where", "steps"],
-  step: ["role", "when", "title", "where", "do", "success", "picture"],
-  proof: ["claim", "how", "revision", "href", "status", "why", "change"],
-  ship: ["needs", "risk", "undo"],
-  followup: ["id", "title", "why", "owner", "due"],
-  engineers: ["commits", "files", "notes", "links"],
-  commit: ["sha", "subject", "href"],
-  link: ["text", "href"],
-};
-const PICTURES = {
-  shot: ["src", "phone"],
-  beforeNow: ["before", "now"],
-  mock: [
-    "draft",
-    "frame",
-    "title",
-    "url",
-    "from",
-    "subject",
-    "app",
-    "time",
-    "body",
-    "items",
-  ],
-  flow: ["steps"],
-  lanes: ["lanes", "events"],
-  states: ["states"],
-  table: ["columns", "rows"],
-  bars: ["unit", "items"],
-  diff: ["rows"],
-  board: ["columns"],
-};
+const SHAPES = { data: Object.keys(SCHEMA.properties) };
+for (const [name, def] of Object.entries(SCHEMA.$defs))
+  if (def.properties) SHAPES[name] = Object.keys(def.properties);
+const PICTURES = Object.fromEntries(
+  Object.keys(SCHEMA.$defs)
+    .filter((name) => name.startsWith("picture-"))
+    .map((name) => [name.slice("picture-".length), SHAPES[name]]),
+);
 const MOCK_PARTS = [
   "h",
   "text",
@@ -159,15 +96,6 @@ const MOCK_PARTS = [
   "tip",
   "badge",
   "divider",
-];
-const MOCK_FLAGS = [
-  "value",
-  "muted",
-  "primary",
-  "on",
-  "tone",
-  "draft",
-  "added",
 ];
 
 const distance = (a, b) => {
@@ -271,7 +199,7 @@ function picture(p, at) {
       `${at}.kind`,
       `"${p.kind}" is not a picture; use one of ${Object.keys(PICTURES).join(", ")}`,
     );
-  shape(p, ["kind", "caption", "rendered", "added", ...keys], at);
+  shape(p, keys, at);
   if (p.kind === "shot") localFile(p.src, `${at}.src`);
   if (p.kind === "beforeNow") {
     localFile(p.before, `${at}.before`);
@@ -282,8 +210,7 @@ function picture(p, at) {
     const steps = items(p.steps, `${at}.steps`);
     if (steps.length < 2) fail(`${at}.steps`, "a flow needs at least 2 steps");
     steps.forEach((s, i) => {
-      if (!shape(s, ["text", "who", "tone", "arrow"], `${at}.steps[${i}]`))
-        return;
+      if (!shape(s, SHAPES.flowStep, `${at}.steps[${i}]`)) return;
       need(s, "text", `${at}.steps[${i}]`);
       tone(s.tone, `${at}.steps[${i}].tone`);
     });
@@ -299,7 +226,7 @@ function picture(p, at) {
     if (!events.length) fail(`${at}.events`, "add the events, in time order");
     events.forEach((e, i) => {
       const where = `${at}.events[${i}]`;
-      if (!shape(e, ["at", "lane", "to", "text", "tone"], where)) return;
+      if (!shape(e, SHAPES.lanesEvent, where)) return;
       need(e, "text", where);
       if (!lanes.includes(e.lane))
         fail(`${where}.lane`, `"${e.lane}" is not one of the lanes`);
@@ -313,8 +240,7 @@ function picture(p, at) {
     if (states.length < 2)
       fail(`${at}.states`, "a status needs at least 2 states");
     states.forEach((s, i) => {
-      if (!shape(s, ["name", "means", "by", "who"], `${at}.states[${i}]`))
-        return;
+      if (!shape(s, SHAPES.state, `${at}.states[${i}]`)) return;
       need(s, "name", `${at}.states[${i}]`);
       need(
         s,
@@ -347,7 +273,7 @@ function picture(p, at) {
       );
     rows.forEach((r, i) => {
       const where = `${at}.rows[${i}]`;
-      if (!shape(r, ["name", "before", "now"], where)) return;
+      if (!shape(r, SHAPES.diffRow, where)) return;
       need(r, "name", where, "the token, key or rule that moved");
       const was = r.before != null && r.before !== "";
       const is = r.now != null && r.now !== "";
@@ -372,7 +298,7 @@ function picture(p, at) {
       );
     columns.forEach((c, i) => {
       const where = `${at}.columns[${i}]`;
-      if (!shape(c, ["name", "items", "tone"], where)) return;
+      if (!shape(c, SHAPES.boardColumn, where)) return;
       need(c, "name", where, "the stage, such as Proposed or Accepted");
       if (!items(c.items, `${where}.items`).every(isText))
         fail(`${where}.items`, "a list of strings, one per thing in the stage");
@@ -384,7 +310,7 @@ function picture(p, at) {
     if (bars.length < 2)
       fail(`${at}.items`, "a chart compares at least 2 values");
     bars.forEach((b, i) => {
-      if (!shape(b, ["label", "value"], `${at}.items[${i}]`)) return;
+      if (!shape(b, SHAPES.bar, `${at}.items[${i}]`)) return;
       need(b, "label", `${at}.items[${i}]`);
       if (typeof b.value !== "number")
         fail(`${at}.items[${i}].value`, "must be a number");
@@ -393,9 +319,8 @@ function picture(p, at) {
 }
 
 function mock(p, at) {
-  const frames = ["phone", "desktop", "email", "push"];
-  if (p.frame != null && !frames.includes(p.frame))
-    fail(`${at}.frame`, `use one of ${frames.join(", ")}`);
+  if (p.frame != null && !FRAMES.includes(p.frame))
+    fail(`${at}.frame`, `use one of ${FRAMES.join(", ")}`);
   if (p.frame === "desktop" && !isText(p.url)) {
     warn(
       `${at}.url`,
@@ -417,7 +342,7 @@ function mock(p, at) {
     );
   parts.forEach((it, i) => {
     const where = `${at}.items[${i}]`;
-    if (!shape(it, [...MOCK_PARTS, ...MOCK_FLAGS], where)) return;
+    if (!shape(it, SHAPES.mockItem, where)) return;
     const main = Object.keys(it).filter((k) => MOCK_PARTS.includes(k));
     if (main.length !== 1)
       fail(where, `needs exactly one of ${MOCK_PARTS.join(", ")}`);
@@ -468,8 +393,7 @@ if (data.lead != null && data.lead !== "changes" && data.lead !== "extra")
   );
 if (data.lead === "extra" && data.extra == null)
   fail("data.lead", '"extra" leads only when data.extra names a fragment');
-if (!["feature", "decision", "digest"].includes(page))
-  fail("data.page", 'use "feature", "decision" or "digest"');
+if (!PAGES.includes(page)) fail("data.page", `use one of ${PAGES.join(", ")}`);
 const digest = page === "digest";
 need(data, "title", "data", "name the page in two to four words");
 if (
@@ -536,7 +460,7 @@ if (shape(data.stamp, SHAPES.stamp, "data.stamp")) {
 const figures = items(data.numbers, "data.numbers");
 figures.forEach((n, i) => {
   const at = `data.numbers[${i}]`;
-  if (!shape(n, ["label", "value"], at)) return;
+  if (!shape(n, SHAPES.number, at)) return;
   need(n, "label", at, 'what is counted, such as "commits"');
   if (!Number.isFinite(n.value) && !isText(n.value))
     fail(`${at}.value`, "the count, such as 227");
@@ -580,7 +504,7 @@ questions.forEach((q, i) => {
   picture(q.picture, `${at}.picture`);
   if (
     q.answered != null &&
-    shape(q.answered, ["option", "text", "href"], `${at}.answered`)
+    shape(q.answered, SHAPES.answered, `${at}.answered`)
   ) {
     if (!items(q.options).some((o) => o?.key === q.answered.option)) {
       fail(`${at}.answered.option`, "the letter of the option that was picked");
@@ -646,7 +570,7 @@ blockers.forEach((b, i) => {
   need(b, "why", at, "why the action is needed");
   need(b, "blocks", at, "the work that cannot go on without it");
   reasons(b.reasons, `${at}.reasons`, b.done == null);
-  if (b.done != null && shape(b.done, ["text", "href"], `${at}.done`)) {
+  if (b.done != null && shape(b.done, SHAPES.done, `${at}.done`)) {
     recorded(b.done, `${at}.done`);
   }
 });
@@ -828,7 +752,7 @@ else if (shape(data.engineers, SHAPES.engineers, "data.engineers")) {
 }
 
 let extra = "";
-if (data.extra != null && shape(data.extra, ["title", "file"], "data.extra")) {
+if (data.extra != null && shape(data.extra, SHAPES.extra, "data.extra")) {
   need(data.extra, "title", "data.extra", "the section's heading");
   localFile(data.extra.file, "data.extra.file");
   if (isText(data.extra.file) && existsSync(join(dir, data.extra.file))) {
