@@ -88,15 +88,21 @@ const WALLET_PASS_COPY: WalletPassLinksCopy = {
 const TIER_BENEFITS_PAGE_COPY = {
   breadcrumbAccount: "Account",
   breadcrumbMembership: "Membership",
-  title: "Tier & Benefits",
+  title: "Tiers & Benefits",
 };
 
-/** One rung of the ladder, as the Tier & Benefits surface reads it. */
+const TIER_LADDER_COPY = {
+  qualifying: "Qualifying points this year",
+};
+
+/** One rung of the ladder, as the Tiers & Benefits surface reads it. */
 type TierBenefitsRow = {
   id: string;
   tier: string;
   caption: string;
   benefits: readonly string[];
+  /** A rung nobody earns: the ladder draws no connector into it. */
+  invitationOnly?: boolean;
 };
 
 const TIER_BENEFITS: readonly TierBenefitsRow[] = [
@@ -117,6 +123,7 @@ const TIER_BENEFITS: readonly TierBenefitsRow[] = [
     tier: "Black",
     caption: "By invitation only",
     benefits: ["1.7 pt for every HK$10 spent"],
+    invitationOnly: true,
   },
 ];
 
@@ -375,5 +382,6 @@ export {
   TIER_BENEFITS,
   TIER_BENEFITS_PAGE_COPY,
   TIER_CARD_COPY,
+  TIER_LADDER_COPY,
   WALLET_PASS_COPY,
 };

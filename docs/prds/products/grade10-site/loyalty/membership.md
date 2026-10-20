@@ -71,7 +71,7 @@ a Google account under it -
 
 | Section | Shows |
 | --- | --- |
-| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tier & Benefits ❓ |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tiers & Benefits ❓ |
 | Your member pass | The tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
@@ -80,7 +80,7 @@ a Google account under it -
 
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
-  to say here. ❓ Where the expiry date reads instead — the Tier & Benefits
+  to say here. ❓ Where the expiry date reads instead — the Tiers & Benefits
   page is being designed 🚧
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone

@@ -4,7 +4,7 @@ import {
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { SiteHeader, TierInfoCard } from "@grade10/ui";
+import { SiteHeader, TierInfoCard, TierLadder } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
@@ -13,18 +13,19 @@ import {
   MEMBERSHIP_VIEW,
   TIER_BENEFITS,
   TIER_BENEFITS_PAGE_COPY,
+  TIER_LADDER_COPY,
 } from "../loyalty-content";
 
 const MEMBERSHIP_STORY_ID = "loyalty-membership-screens-membership--default";
 
 /**
- * Tier & Benefits as its own page — what a small viewport navigates to from
+ * Tiers & Benefits as its own page — what a small viewport navigates to from
  * the tier card. The same list becomes a Membership section on wide
  * viewports; "How points work" joins it once that part is designed. The page
- * reads the member's held tier and marks its card; the blocks only receive
- * them as props.
+ * reads the member's held tier and marks it on the ladder and its card; the
+ * blocks only receive them as props.
  */
-function TierBenefitsPage({ heldTier }: { heldTier: string }) {
+function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...STORE_SITE_HEADER} />
@@ -48,17 +49,26 @@ function TierBenefitsPage({ heldTier }: { heldTier: string }) {
           </h1>
           <section
             aria-label={TIER_BENEFITS_PAGE_COPY.title}
-            className="flex flex-col gap-4 sm:flex-row"
+            className="flex flex-col gap-10"
           >
-            {TIER_BENEFITS.map((row) => (
-              <TierInfoCard
-                benefits={[...row.benefits]}
-                caption={row.caption}
-                currentTier={row.tier === heldTier}
-                key={row.id}
-                tier={row.tier}
-              />
-            ))}
+            <TierLadder
+              copy={TIER_LADDER_COPY}
+              currentTier={heldTier}
+              qualifyingPoints={MEMBERSHIP_VIEW.qualifyingPoints}
+              qualifyingTarget={MEMBERSHIP_VIEW.qualifyingThreshold}
+              rungs={TIER_BENEFITS}
+            />
+            <div className="flex flex-col gap-4 sm:flex-row">
+              {TIER_BENEFITS.map((row) => (
+                <TierInfoCard
+                  benefits={[...row.benefits]}
+                  caption={row.caption}
+                  currentTier={row.tier === heldTier}
+                  key={row.id}
+                  tier={row.tier}
+                />
+              ))}
+            </div>
           </section>
         </div>
       </main>
@@ -68,29 +78,29 @@ function TierBenefitsPage({ heldTier }: { heldTier: string }) {
 }
 
 const meta = {
-  title: "Loyalty/Membership/Screens/Tier & Benefits",
-  component: TierBenefitsPage,
+  title: "Loyalty/Membership/Screens/Tiers & Benefits",
+  component: TiersBenefitsPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: { heldTier: MEMBERSHIP_VIEW.tier },
-} satisfies Meta<typeof TierBenefitsPage>;
+} satisfies Meta<typeof TiersBenefitsPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** All three rungs; the member's Gold card wears the highlight. */
+/** All three rungs; the member's Gold card and rung wear the highlight. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Tier & Benefits" }),
+      canvas.getByRole("heading", { level: 1, name: "Tiers & Benefits" }),
     ).toBeInTheDocument();
     const cards = canvasElement.querySelectorAll(
       '[data-slot="tier-info-card"]',
     );
     expect(cards).toHaveLength(3);
-    for (const tier of ["Silver", "Gold", "Black"]) {
-      expect(canvas.getByText(tier)).toBeInTheDocument();
+    for (const [index, tier] of ["Silver", "Gold", "Black"].entries()) {
+      expect(within(cards[index]).getByText(tier)).toBeInTheDocument();
     }
     expect(cards[1]).toHaveClass("border-primary-border");
     expect(cards[0]).toHaveClass("border-border");
@@ -98,6 +108,7 @@ export const Default: Story = {
     expect(
       canvas.getByText("1.7 pt for every HK$10 spent"),
     ).toBeInTheDocument();
+    expect(canvas.getByText("320")).toBeInTheDocument();
   },
 };
 
@@ -119,7 +130,7 @@ export const Narrow: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Tier & Benefits" }),
+      canvas.getByRole("heading", { level: 1, name: "Tiers & Benefits" }),
     ).toBeInTheDocument();
     expect(
       canvasElement.querySelectorAll('[data-slot="tier-info-card"]'),

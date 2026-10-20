@@ -20,11 +20,11 @@ type TierInfoCardProps = {
 };
 
 /**
- * One rung on the Tier & Benefits ladder: the tier's name, what it asks to
+ * One rung on the Tiers & Benefits ladder: the tier's name, what it asks to
  * reach or keep, and its benefits as a checked list. The card the member
  * holds wears the primary border and its tinted shadow; the rest sit plain.
  * Figma's set carries no description — the card is the tier row of the
- * Tier & Benefits section, current rung highlighted (`7227:1069`).
+ * Tiers & Benefits section, current rung highlighted (`7227:1069`).
  */
 function TierInfoCard({
   tier,
@@ -84,7 +84,7 @@ function TierInfoCard({
             >
               <Check size={16} weight="bold" />
             </span>
-            <Text className="min-w-0 text-foreground" size="sm">
+            <Text className="min-w-0 text-secondary-foreground" size="sm">
               {benefit}
             </Text>
           </HStack>

@@ -59,7 +59,7 @@ export const Silver: Story = {
   },
 };
 
-/** Gold: the retention ask is keeping the tier already held. With a Tier & Benefits address the whole card is the link to it. */
+/** Gold: the retention ask is keeping the tier already held. With a Tiers & Benefits address the whole card is the link to it. */
 export const Gold: Story = {
   args: { href: "#tier-and-benefits" },
   play: async ({ canvasElement }) => {

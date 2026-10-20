@@ -44,9 +44,9 @@ import {
 /** The member card's code, counting down from this many seconds. */
 const CODE_SECONDS = 480;
 
-/* The Tier & Benefits screen the whole tier card opens. */
-const TIER_AND_BENEFITS_HREF = storyHref(
-  "loyalty-membership-screens-tier-benefits--default",
+/* The Tiers & Benefits screen the whole tier card opens. */
+const TIERS_AND_BENEFITS_HREF = storyHref(
+  "loyalty-membership-screens-tiers-benefits--default",
 );
 
 /**
@@ -114,7 +114,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
             balance={balance.toLocaleString("en-HK")}
             copy={TIER_CARD_COPY}
             earnLine={view.earnLine}
-            href={TIER_AND_BENEFITS_HREF}
+            href={TIERS_AND_BENEFITS_HREF}
             qualifyingPoints={view.qualifyingPoints}
             qualifyingThreshold={view.qualifyingThreshold}
             retentionLine={view.retentionLine}
