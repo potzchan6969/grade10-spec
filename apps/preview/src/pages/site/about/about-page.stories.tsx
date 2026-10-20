@@ -94,9 +94,12 @@ export const Default: Story = {
       expect(link).toHaveAttribute("href", index.href);
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noopener noreferrer");
-      expect(
-        within(indexesSection as HTMLElement).getByText(index.description),
-      ).toBeVisible();
+      // The selected preview crossfades in over 250ms; wait for it to settle.
+      await waitFor(() =>
+        expect(
+          within(indexesSection as HTMLElement).getByText(index.description),
+        ).toBeVisible(),
+      );
     }
     // Leave the showcase on its resting state.
     await userEvent.click(
