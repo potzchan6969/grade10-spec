@@ -195,7 +195,7 @@ function MemberPass({
               setShown(token);
             }}
           >
-            <div className="w-full max-w-56" data-slot="member-pass-qr">
+            <div className="mx-auto w-full max-w-56" data-slot="member-pass-qr">
               <QRCodeSVG
                 bgColor="#ffffff"
                 className="block h-auto w-full"
@@ -217,7 +217,7 @@ function MemberPass({
         <HStack align="center" className="w-full" justify="space-between">
           <HStack align="center" gap="xs">
             <span aria-hidden="true" className="inline-flex animate-spin">
-              <CircleNotch color="var(--primary)" size={20} />
+              <CircleNotch color="var(--primary)" size={16} />
             </span>
             <Text
               className="whitespace-nowrap text-secondary-foreground"

@@ -32,7 +32,7 @@
   {
     "label": "member-pass/qr",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2266",
-    "classes": "w-full max-w-56"
+    "classes": "mx-auto w-full max-w-56"
   },
   {
     "label": "member-pass/divider",
