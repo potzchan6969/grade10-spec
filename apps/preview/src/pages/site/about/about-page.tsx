@@ -4,7 +4,7 @@ import { Footer } from "@grade10/design-system/components/layout/footer";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
 import { ArrowUpRight } from "@phosphor-icons/react";
-import { useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Fragment, useLayoutEffect, useState } from "react";
 import { AUCTION_SITE_HEADER } from "../../auction-lot-details-content";
 import { AUCTION_FOOTER } from "../../store-content";
@@ -231,32 +231,54 @@ function AboutPage() {
                 id="market-indexes-panel"
                 role="tabpanel"
               >
-                <a
-                  aria-label={`Visit the ${activeIndex.name}`}
-                  className="group block overflow-hidden rounded-2xl border border-border bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                  href={activeIndex.href}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <span className="relative block">
-                    <img
-                      alt={activeIndex.shotAlt}
-                      className="aspect-[1346/1169] w-full object-cover object-top"
-                      decoding="async"
-                      height={1169}
-                      loading="lazy"
-                      src={activeIndex.shot}
-                      width={1346}
-                    />
-                    <span className="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-(--radius-full) bg-background/90 px-4 py-2 font-medium text-sm leading-5 opacity-0 shadow-sm backdrop-blur transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
-                      Visit index
-                      <ArrowUpRight aria-hidden size={16} />
-                    </span>
-                  </span>
-                </a>
-                <p className="mt-4 text-secondary-foreground text-sm leading-5">
-                  {activeIndex.description}
-                </p>
+                {/* Same-container content swap: a 250ms crossfade with a 2px
+                    pre-blur (the text/icon-swap cadence), skipped under
+                    reduced motion. */}
+                <AnimatePresence initial={false} mode="popLayout">
+                  <motion.div
+                    animate={{
+                      filter: "blur(0px)",
+                      opacity: 1,
+                    }}
+                    exit={{ opacity: 0 }}
+                    initial={{
+                      filter: "blur(2px)",
+                      opacity: 0,
+                    }}
+                    key={activeIndex.name}
+                    transition={{
+                      duration: reduceMotion ? 0 : 0.25,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    <a
+                      aria-label={`Visit the ${activeIndex.name}`}
+                      className="group block overflow-hidden rounded-2xl border border-border bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                      href={activeIndex.href}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span className="relative block">
+                        <img
+                          alt={activeIndex.shotAlt}
+                          className="aspect-[1346/1169] w-full object-cover object-top"
+                          decoding="async"
+                          height={1169}
+                          loading="lazy"
+                          src={activeIndex.shot}
+                          width={1346}
+                        />
+                        <span className="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-(--radius-full) bg-background/90 px-4 py-2 font-medium text-sm leading-5 opacity-0 shadow-sm backdrop-blur transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
+                          Visit index
+                          <ArrowUpRight aria-hidden size={16} />
+                        </span>
+                      </span>
+                    </a>
+                    <p className="mt-4 text-secondary-foreground text-sm leading-5">
+                      {activeIndex.description}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
           </section>
