@@ -36,15 +36,19 @@ Never edit `page.html` by hand: change the data and build again. What the templa
 
 ## What the Reader Gets
 
-### The page opens on the verdict
+### The Top of the Page
 
-No summary screen: one verdict line, then straight into the first section.
+No summary screen: the masthead, one list of the changes, then the sections.
 
+- **Masthead** - the kind of page and the repository over the title, then the verdict panel: the verdict, the reason as the headline, and, when anything is asked, how many questions and blockers wait, with a Go to Decide button
 - **Verdict** - `ready`, `decide`, `not-ready` or `blocked`, shown as `Ready`, `Ready once you decide`, `Not ready` or `Blocked`; a Ready page whose claims are not all verified shows the count beside it (`Ready, 2 of 9 claims verified`)
 - **Reason** - the one reason, as the page's headline: `Ready to merge once 2 decisions are made`
-- **Stamp** - the repository, branch and commit the page was read at, the date and the version (`v2`), in one quiet line; a page tied to no revision cannot be trusted after the next push
+- **Numbers** - up to four counts the reader would quote, drawn large under the headline: `227 commits`, `3 states`
+- **Stamp** - the branch, commit, version (`v2`) and date the page was read at, in one quiet line; a page tied to no revision cannot be trusted after the next push
 - **Since** - from `v2` on, one line names what moved since the last version, so a returning reader skips the rest
-- **Jump row** - one link per section with its count (`Decide 2`, `Proof 3/4`); the page derives every count
+- **At a glance** - with two or more changes, every change in one list grouped by phase: its kind, its title linking to its card, and who notices it; under it, a bar of the proof rows by status
+- **Filter** - with four or more changes and two or more readers in `who`, one chip per reader narrows the page to the changes that reader notices; the reader's browser remembers the pick
+- **Jump row** - one link per section with its count (`Decide 2`, `Proof 3/4`); on a wide screen an outline beside the page holds the same links and What changed's phases, and marks where the reader is; the page derives every count
 
 ### Sections keep one order
 
@@ -65,6 +69,14 @@ The same names in the same order on every handoff, so a reader who has seen one 
 - **The demo leads** - `"lead": "extra"` opens on the `extra` section, for a page whose point is a live demo: a proposal, or options told apart by playing them; the reader sees the problem before the questions about it
 - **Try it** - names where the work can be walked: the workbench with `pnpm storybook` ([`docs/governance/storybook.md`](../../../docs/governance/storybook.md)), the manual with `pnpm manual`, or the staging workbench once `pnpm storybook:deploy:staging` ran; a deploy is the person's call, so it is asked as a blocker, never done unasked
 - **Ship it** - names what each consuming application must do when it bumps the submodule: an export that moved, regenerated theme CSS, a catalog key to answer, a Design Override; what breaks if the change is wrong, and how to undo it
+
+### Each Change Is One Card
+
+- **Head** - its kind (`New`, `Changed`, `Removed`, or `Settled` on a decision page), who notices it, and a link to the card itself
+- **Before and Now** - the `before` and `now` lines as one slip, before above now
+- **Picture** - one or more, as Pictures says
+- **Links** - the sources a reader opens next: the proposal, the pull request, the requirement
+- **Proof** - each proof row whose `change` is the card's `id`, its status as an icon and a word
 
 ## Principles
 
@@ -94,13 +106,14 @@ The same names in the same order on every handoff, so a reader who has seen one 
 | `page` | `feature`, `decision`, or `digest` for `/checkpoint-digest` |
 | `lead` | `extra` to open on the demo, `changes` to open on What changed when Decide would lead; left out otherwise |
 | `verdict`, `reason` | The verdict and its one reason; a digest has no verdict |
-| `stamp` | `repo`, `branch`, `commit` (7 characters; a merged change stamps its merge commit), `date`, `version`, and `from` on a digest in place of `version`; a fact read in another repository names its commit in its proof row |
+| `stamp` | `repo`, `branch`, `commit` (7 characters; a merged change stamps its merge commit), `date` (`2026-10-19`), `version`; a digest takes `from` and `fromDate`, the commit and day it starts from, in place of `version`; a fact read in another repository names its commit in its proof row |
 | `since` | From `v2`: what moved since the last version |
+| `numbers` | `label` and `value`, a number or short text: up to four counts the reader would quote |
 | `decide.questions` | `n`, `title`, `ask`, `options`, `why`, `blocks`, `reasons`, `picture`, `answered` |
 | `decide.questions[].options` | `key` (`A`, `B`), `label`, `recommended`, `outcome`, `cost`, `picture` |
 | `decide.blockers` | `n`, `title`, `action`, `who`, `why`, `blocks`, `reasons`, `done` |
 | `decide.agentDecisions` | `decision`, `taken`, `why` |
-| `changes` | `id`, `kind` (`new`, `changed`, `removed`; `settled` on a decision page), `who`, `title`, `before` (needed by `changed` and `removed`), `now`, `picture`, `phase` |
+| `changes` | `id`, `kind` (`new`, `changed`, `removed`; `settled` on a decision page), `who`, `title`, `before` (needed by `changed` and `removed`), `now`, `picture`, `phase`, `links` (`text`, `href`) |
 | `try` | `where`, and `steps` with `role`, `when`, `title`, `where`, `do`, `success`, `picture` |
 | `proof` | `claim`, `how`, `revision`, `href`, `status` (`verified`, `partial`, `not-run`, `failed`), `why`, `change` |
 | `ship` | `needs` (a list), `risk`, `undo` |
@@ -115,6 +128,7 @@ The same names in the same order on every handoff, so a reader who has seen one 
 - **Status** - `verified`, checked on that revision by a run or by reading; `partial`, part of it checked, or checked on another revision; `not-run`, a test or walk that exists or is planned and nobody ran for this page; `failed`, it ran and failed
 - **Phases** - give each change a `phase` when the work has many; the page groups the changes and counts new, changed and removed per phase
 - **Ids are keys** - question and blocker numbers and follow-up ids outlive a version; never renumber or reuse one
+- **A change's id is its address** - every link to its card ends in it, so the build refuses an id the page uses for its own parts, such as `decide` or `proof`
 - **Answered** - once an answer is recorded, keep the question with `answered: {option, text, href}` naming the record, or a blocker with `done: {text, href}`; the card shows the outcome, and the reply stops asking it
 
 ## Decide
@@ -146,9 +160,13 @@ Every change, option and step leads with a picture; text is captions and short c
 | Two people racing, or anything with a clock | `lanes` | `lanes`, and `events`: `at`, `lane`, `to`, `text`, `tone` |
 | A status | `states` | `states`: `name`, `means`, `by`, `who` |
 | What moved | `table` | `columns`, `rows` |
+| Words or values that changed, key by key | `diff` | `rows`: `name`, `before`, `now`; a row with only `now` is new, one with only `before` is removed |
+| Things moving between stages | `board` | `columns`: `name`, `tone`, `items` |
 | Numbers | `bars` | `unit`, and `items`: `label`, `value` |
 
-- **Any picture** - takes a `caption`, and `added: true` when an option adds all of it; a list of pictures sits side by side where they fit, and a `table` in it takes the full row
+- **Any picture** - takes a `caption`, and `added: true` when an option adds all of it; in a list of pictures, a `mock` or `shot` sits beside the next where they fit, and every other kind takes the full row
+- **Diff** - marks the words a row changed; a colour shows its swatch; a value that changed whole is shown unmarked
+- **Phones** - on a narrow screen a `flow` runs top to bottom, and `lanes` become a list
 - **Rendered** - `rendered: "<sha>"` marks a mock standing in for a screen the build already has, when no stack can capture it; an option's picture is a planned screen and never carries it
 - **Mock items** - one part each: `h`, `text` (`muted`), `label` with `value`, `button` (`primary`), `switch` (`on`), `field` with `value`, `notice`, `tip`, `badge`, `divider`; each may add `draft`, `added` and `tone`; `draft: true` on the mock itself marks its subject, title and body
 - **Tones** - `ok`, `warn`, `bad`, `info`, `accent`, `none`
@@ -191,7 +209,7 @@ A simulation - a countdown, a race, an extension, a retry - is code the template
 ## Check
 
 1. **Facts** - re-read each claim against its source, recount every number from its source, and find each label in the catalog (`grep -rn '"<label>"' packages/i18n/messages/shared/en/`)
-2. **Render** - the `next:` line the build prints, `node <repo>/.claude/skills/handoff-page/scripts/check.mjs <page>`, run from `apps/preview` or any folder where Playwright resolves; it wraps the page in the skeleton and content policy it is served with (`scripts/document.mjs`), renders it 390, 1024 and 1280 wide in light and dark, answers every card, and fails on a script error, a missing file, sideways scroll, a broken image, a theme that does not flip, or a pick missing from the answer line
+2. **Render** - the `next:` line the build prints, `node <repo>/.claude/skills/handoff-page/scripts/check.mjs <page>`, run from `apps/preview` or any folder where Playwright resolves; it wraps the page in the skeleton and content policy it is served with (`scripts/document.mjs`), renders it 390, 1024 and 1280 wide in light and dark, answers every card, narrows the page to each reader in the filter, and fails on a script error, a missing file, sideways scroll, a broken image, a theme that does not flip, a pick missing from the answer line, or a reader the filter leaves with no change
 3. **Look** - open the `-top.png` shots and the section shots (`-<section>.png`, at 390 and 1280 wide); a clean run can still read badly
 4. **Cold read** - when the page asks anything, one fresh subagent with none of this session's context reads the top shot and the Decide section and answers: what is the verdict, what am I asked, what would I pick and why; whatever it gets wrong is rewritten in the data, because the real reader starts from the same place; a session with no subagent says the cold read did not run
 5. **Simulate** - for an `extra` simulation, drive it headless: Watch the demo at top speed and read its log against the code's rules, act in each window, flip Before / Now

@@ -166,6 +166,16 @@
           ],
           "rendered": "0000000"
         }
+      ],
+      "links": [
+        {
+          "text": "Requirement",
+          "href": "https://github.com/9gag/grade10-spec/blob/main/openspec/specs/shared/ui/auction-listing/spec.md"
+        },
+        {
+          "text": "Product page",
+          "href": "https://github.com/9gag/grade10-spec/blob/main/docs/prds/products/grade10-site/auction/bidding.md"
+        }
       ]
     },
     {

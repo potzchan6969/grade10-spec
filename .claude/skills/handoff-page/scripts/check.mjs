@@ -266,6 +266,26 @@ if (record) {
 } else {
   console.log("answers: no question or blocker cards to answer");
 }
+// Each reader in the filter must still see a change: the filter narrows, it never empties.
+const filter = await tab.evaluate(() => {
+  const radios = [...document.querySelectorAll('input[name="audience"]')];
+  const seen = radios.map((r) => {
+    r.click();
+    const cards = [...document.querySelectorAll(".card.change")];
+    return [
+      r.value || "Everyone",
+      cards.filter((c) => !c.closest("[hidden]")).length,
+    ];
+  });
+  radios[0]?.click();
+  return seen;
+});
+for (const [who, shown] of filter)
+  if (!shown) note("FAIL", `the ${who} filter hides every change`);
+if (filter.length)
+  console.log(
+    `filter: ${filter.map(([who, shown]) => `${who} ${shown}`).join(", ")}`,
+  );
 await ctx.close();
 await browser.close();
 

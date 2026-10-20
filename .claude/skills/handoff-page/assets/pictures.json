@@ -206,5 +206,50 @@
         "value": 1.1
       }
     ]
+  },
+  {
+    "kind": "diff",
+    "caption": "The English words in `auctionListing.json`",
+    "rows": [
+      {
+        "name": "`timeLeft`",
+        "before": "Time left",
+        "now": "Time left (extended)"
+      },
+      {
+        "name": "`autoExtendedTooltip`",
+        "now": "After the scheduled close, each bid restarts a 30-minute timer."
+      },
+      { "name": "`closingSoon`", "before": "Closing soon" }
+    ]
+  },
+  {
+    "kind": "diff",
+    "caption": "Token values in `tokens.json`; a colour shows its swatch",
+    "rows": [
+      { "name": "`primary`", "before": "#A47832", "now": "#C4903D" },
+      { "name": "`radius-md`", "before": "8px", "now": "10px" }
+    ]
+  },
+  {
+    "kind": "board",
+    "caption": "Where each OpenSpec change moved",
+    "columns": [
+      {
+        "name": "Proposed",
+        "tone": "info",
+        "items": ["`add-site-about-page`", "`redesign-member-pass`"]
+      },
+      {
+        "name": "Accepted",
+        "tone": "ok",
+        "items": ["`preselect-hkd-first-payment-method`"]
+      },
+      {
+        "name": "Archived",
+        "tone": "none",
+        "items": ["`listing-media-upload-on-drop`"]
+      }
+    ]
   }
 ]

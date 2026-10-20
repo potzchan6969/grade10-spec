@@ -49,17 +49,25 @@ const STATUSES = ["verified", "partial", "not-run", "failed"];
 const TONES = ["ok", "warn", "bad", "info", "accent", "none"];
 const RESERVED = [
   "page",
+  "top",
+  "glance",
   "decide",
   "changed",
   "try",
+  "extra",
   "proof",
   "ship",
   "followups",
   "engineers",
   "answers",
+  "copy-answers",
   "agent-decisions",
+  "filter-note",
   "lightbox",
 ];
+// Ids the page gives its own parts: questions, blockers, proof rows, follow-ups, areas and controls.
+const RESERVED_PREFIX =
+  /^(q\d|b\d|proof-\d|fu-|area-|for-\d|try-role-|answer-|lightbox-|handoff-)/;
 const SHAPES = {
   data: [
     "example",
@@ -68,6 +76,7 @@ const SHAPES = {
     "verdict",
     "reason",
     "stamp",
+    "numbers",
     "since",
     "decide",
     "changes",
@@ -79,7 +88,7 @@ const SHAPES = {
     "extra",
     "lead",
   ],
-  stamp: ["repo", "branch", "from", "commit", "date", "version"],
+  stamp: ["repo", "branch", "from", "fromDate", "commit", "date", "version"],
   decide: ["questions", "blockers", "agentDecisions"],
   question: [
     "n",
@@ -96,7 +105,17 @@ const SHAPES = {
   blocker: ["n", "title", "action", "who", "why", "blocks", "reasons", "done"],
   agentDecision: ["decision", "taken", "why"],
   reason: ["text", "href"],
-  change: ["id", "kind", "phase", "who", "title", "before", "now", "picture"],
+  change: [
+    "id",
+    "kind",
+    "phase",
+    "who",
+    "title",
+    "before",
+    "now",
+    "picture",
+    "links",
+  ],
   try: ["where", "steps"],
   step: ["role", "when", "title", "where", "do", "success", "picture"],
   proof: ["claim", "how", "revision", "href", "status", "why", "change"],
@@ -126,6 +145,8 @@ const PICTURES = {
   states: ["states"],
   table: ["columns", "rows"],
   bars: ["unit", "items"],
+  diff: ["rows"],
+  board: ["columns"],
 };
 const MOCK_PARTS = [
   "h",
@@ -317,6 +338,47 @@ function picture(p, at) {
       }
     });
   }
+  if (p.kind === "diff") {
+    const rows = items(p.rows, `${at}.rows`);
+    if (!rows.length)
+      fail(
+        `${at}.rows`,
+        'add the rows, such as {"name": "`color.primary`", "before": "#c4903d", "now": "#b5832f"}',
+      );
+    rows.forEach((r, i) => {
+      const where = `${at}.rows[${i}]`;
+      if (!shape(r, ["name", "before", "now"], where)) return;
+      need(r, "name", where, "the token, key or rule that moved");
+      const was = r.before != null && r.before !== "";
+      const is = r.now != null && r.now !== "";
+      for (const k of ["before", "now"])
+        if (r[k] != null && typeof r[k] !== "string")
+          fail(`${where}.${k}`, "the value as text");
+      if (!was && !is)
+        fail(
+          where,
+          "give before, now or both; one alone draws it as removed or new",
+        );
+      else if (was && is && r.before === r.now)
+        warn(where, "before and now are the same; drop the row");
+    });
+  }
+  if (p.kind === "board") {
+    const columns = items(p.columns, `${at}.columns`);
+    if (columns.length < 2)
+      fail(
+        `${at}.columns`,
+        "a board has at least 2 columns, one per stage things moved to",
+      );
+    columns.forEach((c, i) => {
+      const where = `${at}.columns[${i}]`;
+      if (!shape(c, ["name", "items", "tone"], where)) return;
+      need(c, "name", where, "the stage, such as Proposed or Accepted");
+      if (!items(c.items, `${where}.items`).every(isText))
+        fail(`${where}.items`, "a list of strings, one per thing in the stage");
+      tone(c.tone, `${where}.tone`);
+    });
+  }
   if (p.kind === "bars") {
     const bars = items(p.items, `${at}.items`);
     if (bars.length < 2)
@@ -438,20 +500,29 @@ if (shape(data.stamp, SHAPES.stamp, "data.stamp")) {
     "data.stamp",
     "a page tied to no commit cannot be trusted after the next push",
   );
-  if (digest)
+  if (digest) {
     need(
       data.stamp,
       "from",
       "data.stamp",
       "the checkpoint commit the digest starts from",
     );
-  else
+    need(
+      data.stamp,
+      "fromDate",
+      "data.stamp",
+      "the day the checkpoint commit landed: fromDate in facts.json",
+    );
+  } else
     need(
       data.stamp,
       "version",
       "data.stamp",
       "v1 on the first publish, then v2 and on",
     );
+  for (const k of ["date", "fromDate"])
+    if (data.stamp[k] != null && !/^\d{4}-\d{2}-\d{2}/.test(data.stamp[k]))
+      fail(`data.stamp.${k}`, "a day as YYYY-MM-DD, such as 2026-10-19");
   const version = data.stamp.version;
   if (isText(version) && !/^v\d+$/.test(version))
     warn("data.stamp.version", "use v1, v2 and on");
@@ -462,6 +533,19 @@ if (shape(data.stamp, SHAPES.stamp, "data.stamp")) {
     );
   }
 }
+const figures = items(data.numbers, "data.numbers");
+figures.forEach((n, i) => {
+  const at = `data.numbers[${i}]`;
+  if (!shape(n, ["label", "value"], at)) return;
+  need(n, "label", at, 'what is counted, such as "commits"');
+  if (!Number.isFinite(n.value) && !isText(n.value))
+    fail(`${at}.value`, "the count, such as 227");
+});
+if (figures.length > 4)
+  warn(
+    "data.numbers",
+    `${figures.length} numbers; keep the 3 or 4 a reader would repeat`,
+  );
 if (data.example)
   warn(
     "data.example",
@@ -599,7 +683,7 @@ changes.forEach((c, i) => {
       `${at}.id`,
       'lowercase words joined by hyphens, such as "extended-label"',
     );
-  else if (RESERVED.includes(c.id) || /^(q|b|proof-|fu-)\d/.test(c.id))
+  else if (RESERVED.includes(c.id) || RESERVED_PREFIX.test(c.id))
     fail(`${at}.id`, `"${c.id}" is taken by the page; pick another`);
   else if (changeIds.has(c.id)) fail(`${at}.id`, `"${c.id}" appears twice`);
   changeIds.add(c.id);
@@ -630,6 +714,11 @@ changes.forEach((c, i) => {
       `${at}.picture`,
       "lead with a picture: a shot, a beforeNow, a mock, a flow or lanes",
     );
+  items(c.links, `${at}.links`).forEach((l, j) => {
+    if (!shape(l, SHAPES.link, `${at}.links[${j}]`)) return;
+    need(l, "text", `${at}.links[${j}]`, "the words of the link");
+    link(l.href, `${at}.links[${j}].href`);
+  });
   long(c.title, 90, `${at}.title`);
   long(c.before, 240, `${at}.before`);
   long(c.now, 240, `${at}.now`);
