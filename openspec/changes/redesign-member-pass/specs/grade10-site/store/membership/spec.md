@@ -6,9 +6,9 @@
 
 The member card SHALL present a dynamic identification code — short-lived,
 usable exactly once, refused on reuse naming where and when it was first
-used — rendered both scannable and as a short typed fallback that is
-infeasible to guess, with repeated failed attempts pausing entry for that
-shop. Staff SHALL also be able to identify a member by their exact email
+used — rendered scannable, a till that cannot scan it falling back to the
+member's email instead. Staff SHALL also be able to identify a member by
+their exact email
 address; a miss SHALL disclose nothing beyond that no member was found.
 Either way the programme SHALL record the account identity and SHALL NOT
 store the email address.
