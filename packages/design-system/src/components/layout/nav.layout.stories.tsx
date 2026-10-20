@@ -81,14 +81,20 @@ export const MenuOpen: Story = {
       "page",
     );
     const storeLocator = menu.getByRole("link", { name: "Store Locator" });
+    const index = menu.getByRole("link", { name: "Index" });
     const help = menu.getByRole("link", { name: "Help" });
     expect(
       storeLocator.compareDocumentPosition(help) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
+    expect(index).toHaveAttribute("href", "https://index.grade10.com/");
+    expect(index).toHaveAttribute("target", "_blank");
+    expect(index).toHaveAttribute("rel", "noopener noreferrer");
+    expect(index.querySelector("svg")).not.toBeNull();
     expect(help).toHaveAttribute("href", "https://grade10.mintlify.io/");
     expect(help).toHaveAttribute("target", "_blank");
     expect(help).toHaveAttribute("rel", "noopener noreferrer");
+    expect(help.querySelector("svg")).not.toBeNull();
     expect(menu.queryByRole("link", { name: "Store Finder" })).toBeNull();
     expect(menu.queryByRole("link", { name: "Grade" })).toBeNull();
     expect(menu.getByRole("button", { name: "English" })).toBeInTheDocument();

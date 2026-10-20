@@ -21,6 +21,7 @@ import {
 import { createElement, type ReactNode } from "react";
 import {
   HELP_NAV_ITEM,
+  INDEX_NAV_ITEM,
   navigateToStory,
   PRIVACY_POLICY_HREF,
   SHOWS_NAV_ITEM,
@@ -484,6 +485,7 @@ const VAULT_SITE_HEADER = {
     { label: "Vault", href: VAULT_PORTFOLIO_HREF, current: true },
     { label: "Store Locator", href: STORE_LOCATOR_HREF },
     { ...SHOWS_NAV_ITEM },
+    { ...INDEX_NAV_ITEM },
     { ...HELP_NAV_ITEM },
   ],
   onLocaleChange: noop,

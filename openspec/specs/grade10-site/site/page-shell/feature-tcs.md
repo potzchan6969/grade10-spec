@@ -668,7 +668,7 @@ implies a currency I cannot switch.
 * Language is reachable in the wide bar and from the compact menu.
 * The locale options are languages, not currencies.
 
-<!-- trace:case id=g10.site-page-shell.TC-ytf rev=1 covers=g10.site-page-shell.SC-ovr,g10.site-page-shell.SC-ql0,g10.site-page-shell.SC-ond,g10.site-page-shell.SC-7p3,g10.site-page-shell.SC-fmx,g10.site-page-shell.SC-cex -->
+<!-- trace:case id=g10.site-page-shell.TC-ytf rev=2 covers=g10.site-page-shell.SC-ovr,g10.site-page-shell.SC-ql0,g10.site-page-shell.SC-ond,g10.site-page-shell.SC-7p3,g10.site-page-shell.SC-fmx,g10.site-page-shell.SC-cex,g10.site-page-shell.SC-ixf -->
 ### grade10-site-site-page-shell-US4-TC2-1: Navigation and footer link only to real surfaces
 
 **Classification:**
@@ -695,8 +695,13 @@ None.
 
 **Expected Results:**
 
-* Every navigation item leads to a surface the site answers.
-* Every footer link leads to a surface the site answers, and a column left with no reachable link is absent entirely.
+* Every navigation item leads to a surface the site answers, except Help
+  which leads to the documentation host and Index which leads to the Grade10
+  Index hub.
+* Every footer link leads to a surface the site answers, except the Index
+  column's four links — Hat Price Index, PTCG100, PTCG500, OPCG100 — which
+  lead to their external index pages in a new browsing context; a column
+  left with no reachable link is absent entirely.
 
 <!-- trace:case id=g10.site-page-shell.TC-azw rev=1 covers=g10.site-page-shell.SC-ovr,g10.site-page-shell.SC-ql0,g10.site-page-shell.SC-ond,g10.site-page-shell.SC-7p3,g10.site-page-shell.SC-fmx,g10.site-page-shell.SC-cex -->
 ### grade10-site-site-page-shell-US4-TC3-1: Promo bar and utility row wait for their pages
@@ -976,11 +981,12 @@ drawer.
 
 **As a** collector,
 **I want** Help in the primary nav to open the documentation site in a new tab
-(the last item — after Shows when present, else Store Locator, else Auction),
+(the last item — after Index when present, else Shows, else Store Locator,
+else Auction), and Index just before it to open the Grade10 Index hub,
 **so that** I can read help without losing the page I was on, whether I am on
 auction-only or full primary nav.
 
-<!-- trace:case id=g10.site-page-shell.TC-ho3 rev=2 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
+<!-- trace:case id=g10.site-page-shell.TC-ho3 rev=3 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
 ### grade10-site-site-page-shell-US07-TC1-1: Help on auction-only header opens docs in a new tab
 
 **Classification:**
@@ -1000,23 +1006,24 @@ auction-only or full primary nav.
 
 * customer is on <grade10 auction url> with auction-only primary nav and a wide
   viewport.
-* Help is supplied in the primary nav after Shows; Store Locator is absent.
+* Help is supplied in the primary nav after Index; Store Locator is absent.
 
 **Steps:**
 
-1. Locate Help in the primary navigation after Shows.
+1. Locate Index in the primary navigation after Shows, and Help after Index.
 2. Confirm Store Locator is not in the primary navigation.
 3. Activate Help.
 4. Check the new browsing context and the original page.
 
 **Expected Results:**
 
-* Help is present in the primary navigation after Shows.
+* Index is present in the primary navigation after Shows.
+* Help is present in the primary navigation after Index.
 * Store Locator is absent from the primary navigation.
 * The documentation site opens in a new browsing context.
 * The auction page remains open in the original context.
 
-<!-- trace:case id=g10.site-page-shell.TC-wno rev=2 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
+<!-- trace:case id=g10.site-page-shell.TC-wno rev=3 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
 ### grade10-site-site-page-shell-US07-TC2-1: Help on full primary nav opens docs in a new tab
 
 **Classification:**
@@ -1036,22 +1043,22 @@ auction-only or full primary nav.
 
 * customer is on <grade10 store url> whose primary nav lists Store and Auction,
   on a wide viewport.
-* Help is supplied in the primary nav after Shows.
+* Help is supplied in the primary nav after Index.
 
 **Steps:**
 
-1. Locate Help in the primary navigation after Shows.
+1. Locate Index in the primary navigation after Shows, and Help after Index.
 2. Activate Help.
 3. Check the new browsing context and the original page.
 
 **Expected Results:**
 
-* Help is present in the primary navigation after Shows alongside the
+* Help is present in the primary navigation after Index alongside the
   full primary nav.
 * The documentation site opens in a new browsing context.
 * The store page remains open in the original context.
 
-<!-- trace:case id=g10.site-page-shell.TC-mgo rev=2 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
+<!-- trace:case id=g10.site-page-shell.TC-mgo rev=3 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
 ### grade10-site-site-page-shell-US07-TC3-1: Help in the compact menu opens docs in a new tab
 
 **Classification:**
@@ -1070,23 +1077,62 @@ auction-only or full primary nav.
 **Pre-conditions:**
 
 * customer is on <grade10 auction url> at a viewport 375 CSS pixels wide.
-* Help is supplied among the primary nav items after Shows; Store Locator is
+* Help is supplied among the primary nav items after Index; Store Locator is
   absent.
 
 **Steps:**
 
 1. Open the header menu.
-2. Locate Help among the primary items in the drawer after Shows.
+2. Locate Index among the primary items in the drawer after Shows, and Help
+   after Index.
 3. Confirm Store Locator is not in the drawer.
 4. Activate Help.
 5. Check the new browsing context and the original page.
 
 **Expected Results:**
 
-* Help is reachable in the drawer after Shows.
+* Index is reachable in the drawer after Shows.
+* Help is reachable in the drawer after Index.
 * Store Locator is absent from the drawer.
 * The documentation site opens in a new browsing context.
 * The auction page remains open in the original context.
+
+<!-- trace:case id=g10.site-page-shell.TC-ix4 rev=1 covers=g10.site-page-shell.SC-ixn -->
+### grade10-site-site-page-shell-US07-TC4-1: Index in the primary nav opens the Grade10 Index hub in a new tab
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-07
+
+**Pre-conditions:**
+
+* customer is on a grade10 surface whose primary nav lists Index after Shows,
+  ahead of Help.
+* The Grade10 Index hub is reachable.
+
+**Steps:**
+
+1. Locate Index in the primary navigation after Shows, before Help.
+2. Activate Index.
+3. Check the new browsing context and the original page.
+4. Confirm Index is not marked as the current item on any surface.
+
+**Expected Results:**
+
+* Index sits after Shows and before Help.
+* The Grade10 Index hub opens in a new browsing context.
+* Index carries the external-link glyph after its label, as Help does.
+* The original page remains open in the original context.
+* Index is never marked current.
 
 ---
 
@@ -2136,11 +2182,16 @@ Runs once per row of **Test data**.
 ## Settled
 
 * Help sits last in the primary nav for auction-only and full nav (wide and
-  compact): after Shows when that item is present, else Store Locator, else
-  Auction.
-* Shows joins the primary nav ahead of Help once the site answers `/shows`;
-  About, Shows, Press Releases and Media Coverage form the footer's Company
-  column.
+  compact): after Index when that item is present, else Shows, else Store
+  Locator, else Auction.
+* Shows joins the primary nav ahead of Index and Help once the site answers
+  `/shows`; About, Shows, Press Releases and Media Coverage form the
+  footer's Company column.
+* Index joins the primary nav after Shows and before Help, opening the
+  Grade10 Index hub in a new tab; the four index pages — Hat Price Index,
+  PTCG100, PTCG500, OPCG100 — form the footer's Index column ahead of Help
+  and Legal, each external. External primary items carry the external-link
+  glyph after their label — Index and Help alike.
 * Auction-first primary nav omits Store Locator until the shop is open.
 * Help opens the documentation site in a new tab.
 * The durable host address stays open until Product confirms it.

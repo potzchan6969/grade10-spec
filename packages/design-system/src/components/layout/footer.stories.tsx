@@ -16,8 +16,9 @@ import { Footer } from "./footer";
  * answers. Auction-only drops the shop column and every store/help page that
  * does not answer yet. Store launch restores shop destinations and Store
  * Locator once that page answers. Both carry the COMPANY column — About,
- * Shows, Press Releases, Media Coverage. Docs (`/docs`) covers auction and
- * store tutorials on both compositions.
+ * Shows, Press Releases, Media Coverage — and the INDEX column of external
+ * Grade10 Index pages. Docs (`/docs`) covers auction and store tutorials on
+ * both compositions.
  *
  * Privacy and Terms live only in the LEGAL column — not again on the bar.
  * Country/currency is omitted until selection exists. Link labels are Title
@@ -54,6 +55,33 @@ const LEGAL_COLUMN = {
   ],
 };
 
+/** The Grade10 Index pages — all external, each opening in a new tab. */
+const INDEX_COLUMN = {
+  heading: "INDEX",
+  links: [
+    {
+      label: "Hat Price Index",
+      href: "https://grade10.com/hat-price-index/",
+      external: true,
+    },
+    {
+      label: "PTCG100",
+      href: "https://index.grade10.com/ptcg100",
+      external: true,
+    },
+    {
+      label: "PTCG500",
+      href: "https://index.grade10.com/ptcg500",
+      external: true,
+    },
+    {
+      label: "OPCG100",
+      href: "https://index.grade10.com/opcg100",
+      external: true,
+    },
+  ],
+};
+
 /** The company pages — their chrome entry is this column, ahead of HELP and LEGAL. */
 const COMPANY_COLUMN = {
   heading: "COMPANY",
@@ -65,9 +93,10 @@ const COMPANY_COLUMN = {
   ],
 };
 
-/** Production today: brand, social, the company pages, docs, and the two legal pages every lane carries. */
+/** Production today: brand, social, the company and index pages, docs, and the two legal pages every lane carries. */
 const AUCTION_ONLY_COLUMNS = [
   COMPANY_COLUMN,
+  INDEX_COLUMN,
   {
     heading: "HELP",
     links: [DOCS_LINK],
@@ -75,7 +104,7 @@ const AUCTION_ONLY_COLUMNS = [
   LEGAL_COLUMN,
 ];
 
-/** Once Store answers: shop destinations and Store Locator join the company pages, docs and legal. */
+/** Once Store answers: shop destinations and Store Locator join the company pages, index pages, docs and legal. */
 const STORE_LAUNCH_COLUMNS = [
   {
     heading: "SHOP",
@@ -91,6 +120,7 @@ const STORE_LAUNCH_COLUMNS = [
     ],
   },
   COMPANY_COLUMN,
+  INDEX_COLUMN,
   {
     heading: "HELP",
     links: [
@@ -130,9 +160,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Auction-only: brand, social, the company pages, Docs (`/docs`), Privacy
- * and Terms. No shop column, no bar legal duplicates, and no locale until
- * selection exists.
+ * Auction-only: brand, social, the company pages, the four Grade10 Index
+ * pages, Docs (`/docs`), Privacy and Terms. No shop column, no bar legal
+ * duplicates, and no locale until selection exists.
  */
 export const AuctionOnly: Story = {
   name: "Auction only",
@@ -157,6 +187,7 @@ export const AuctionOnly: Story = {
 
     const canvas = within(canvasElement);
     expect(canvas.getByText("COMPANY")).toBeInTheDocument();
+    expect(canvas.getByText("INDEX")).toBeInTheDocument();
     expect(canvas.getByText("HELP")).toBeInTheDocument();
     expect(canvas.getByText("LEGAL")).toBeInTheDocument();
     expect(canvas.queryByText("SHOP")).toBeNull();
@@ -174,6 +205,27 @@ export const AuctionOnly: Story = {
     expect(
       canvas.getByRole("link", { name: "Media Coverage" }),
     ).toHaveAttribute("href", "/media-coverage");
+    expect(
+      canvas.getByRole("link", { name: "Hat Price Index" }),
+    ).toHaveAttribute("href", "https://grade10.com/hat-price-index/");
+    expect(
+      canvas.getByRole("link", { name: "Hat Price Index" }),
+    ).toHaveAttribute("target", "_blank");
+    expect(
+      canvas.getByRole("link", { name: "Hat Price Index" }),
+    ).toHaveAttribute("rel", "noopener noreferrer");
+    expect(canvas.getByRole("link", { name: "PTCG100" })).toHaveAttribute(
+      "href",
+      "https://index.grade10.com/ptcg100",
+    );
+    expect(canvas.getByRole("link", { name: "PTCG500" })).toHaveAttribute(
+      "href",
+      "https://index.grade10.com/ptcg500",
+    );
+    expect(canvas.getByRole("link", { name: "OPCG100" })).toHaveAttribute(
+      "href",
+      "https://index.grade10.com/opcg100",
+    );
     expect(canvas.getByRole("link", { name: "Instagram" })).toHaveAttribute(
       "href",
       "https://www.instagram.com/grade10hk/",
@@ -236,8 +288,8 @@ export const AuctionOnly: Story = {
 /**
  * Store launch: shop destinations and Store Locator join the company pages,
  * Docs, Privacy and Terms. COMPANY holds About, Shows, Press Releases and
- * Media Coverage; HELP holds Store Locator and Docs; unanswered help pages
- * stay out.
+ * Media Coverage; INDEX holds the four external Grade10 Index pages; HELP
+ * holds Store Locator and Docs; unanswered help pages stay out.
  * The bar carries copyright only — no duplicated legal links, no locale.
  */
 export const StoreLaunch: Story = {
@@ -245,15 +297,35 @@ export const StoreLaunch: Story = {
   args: { columns: STORE_LAUNCH_COLUMNS },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    for (const heading of ["SHOP", "COMPANY", "HELP", "LEGAL"]) {
+    for (const heading of ["SHOP", "COMPANY", "INDEX", "HELP", "LEGAL"]) {
       expect(canvas.getByText(heading)).toBeInTheDocument();
     }
+    // Every cell claims its own equal track at the wide rung, so no column
+    // wraps beneath the social block and no empty track trails Legal.
+    expect(
+      canvasElement.querySelector('[data-slot="footer"]')?.firstElementChild,
+    ).toHaveClass("@4xl:grid-flow-col", "@4xl:auto-cols-fr");
     expect(
       canvas.getByRole("link", { name: "Press Releases" }),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("link", { name: "All Collections" }),
     ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: "Hat Price Index" }),
+    ).toHaveAttribute("href", "https://grade10.com/hat-price-index/");
+    expect(canvas.getByRole("link", { name: "PTCG100" })).toHaveAttribute(
+      "href",
+      "https://index.grade10.com/ptcg100",
+    );
+    expect(canvas.getByRole("link", { name: "PTCG500" })).toHaveAttribute(
+      "href",
+      "https://index.grade10.com/ptcg500",
+    );
+    expect(canvas.getByRole("link", { name: "OPCG100" })).toHaveAttribute(
+      "href",
+      "https://index.grade10.com/opcg100",
+    );
     expect(
       canvas.getByRole("link", { name: "Store Locator" }),
     ).toBeInTheDocument();
@@ -309,7 +381,7 @@ export const Narrow: Story = {
     if (footer === null) return;
     expect(footer.scrollWidth).toBeLessThanOrEqual(footer.clientWidth);
 
-    // Squeezing four columns onto a phone is what the width alone does not
+    // Squeezing five columns onto a phone is what the width alone does not
     // catch: a long brand line ends up one word per line inside an 80px column.
     const canvas = within(canvasElement);
     // The column is measured, not the line: the paragraph is only as wide as

@@ -23,6 +23,7 @@ import {
 import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
+  ArrowUpRight,
   CaretRight,
   List,
   MagnifyingGlass,
@@ -36,7 +37,8 @@ type NavLink = {
   /** What the link is called — text, so the header can name it to a reader. */
   label: string;
   href: string;
-  /** Opens in a new tab with `rel="noopener noreferrer"`. */
+  /** Opens in a new tab with `rel="noopener noreferrer"`; the item carries
+   * the external-link glyph after its label so the reader expects it. */
   external?: boolean;
 };
 
@@ -299,8 +301,11 @@ function AccountControl({
  * with a leading hamburger that opens a left drawer (primary nav, then
  * utility links as the same link style, then language via a nested drawer),
  * and Account / Sign In plus Cart on the trailing edge. `@4xl` leaves room
- * for five primary items (including Help) without overlapping trailing
+ * for six primary items (including Help) without overlapping trailing
  * controls.
+ *
+ * A primary item with `external` set opens in a new tab and carries the
+ * ArrowUpRight glyph after its label, in the wide bar and the drawer alike.
  *
  * Brand, navigation, locale and control words are required rather than
  * defaulted. A control renders only where a handler backs it or its
@@ -422,6 +427,9 @@ function Nav({
                         target={item.external ? "_blank" : undefined}
                       >
                         {item.label}
+                        {item.external ? (
+                          <ArrowUpRight aria-hidden size={12} />
+                        ) : null}
                       </NavigationLink>
                     ))}
                   </NavigationList>
@@ -497,6 +505,7 @@ function Nav({
                 target={item.external ? "_blank" : undefined}
               >
                 {item.label}
+                {item.external ? <ArrowUpRight aria-hidden size={12} /> : null}
               </NavigationLink>
             ))}
           </NavigationList>

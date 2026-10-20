@@ -18,11 +18,15 @@ const STORE_LOCATOR_HREF =
 /** Workbench Shows page — keep in sync with preview `SHOWS_NAV_ITEM`. */
 const SHOWS_HREF = "?path=/story/site-shows-screens-shows--default";
 
+/** The Grade10 Index hub — external, opens in a new tab like Help. */
+const INDEX_HREF = "https://index.grade10.com/";
+
 export const NAV_ITEMS = [
   { label: "Store", href: "#store", current: true },
   { label: "Auction", href: "#auction" },
   { label: "Store Locator", href: STORE_LOCATOR_HREF },
   { label: "Shows", href: SHOWS_HREF },
+  { label: "Index", href: INDEX_HREF, external: true },
   { label: "Help", href: HELP_HREF, external: true },
 ];
 

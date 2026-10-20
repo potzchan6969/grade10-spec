@@ -45,21 +45,30 @@ it.
   - Controls with surfaces behind them: search and cart stay absent until the
     site answers them
   - Reachable links only: a navigation, utility, footer, or legal link appears
-    only when its destination exists, except primary-nav Help may name the
-    documentation host Product names
+    only when its destination exists; the exceptions are the named external
+    entries — primary-nav Help naming the documentation host, and primary-nav
+    Index and the footer Index column naming the Grade10 Index hosts
   - Current-surface marking: the navigation item owning the current address is
     marked, and none is when no item owns it
 - Company pages in the chrome
   - Primary-nav Shows: the primary navigation lists Shows once the site
-    answers `/shows`, ahead of Help; the item marks current on `/shows` and
-    the addresses beneath
+    answers `/shows`, ahead of Index and Help; the item marks current on
+    `/shows` and the addresses beneath
   - Footer Company column: the footer lists the company pages the site
     answers under a Company column ahead of Help and Legal: About, Shows,
     Press Releases, Media Coverage
+- Index pages in the chrome
+  - Primary-nav Index: the primary navigation lists Index ahead of Help,
+    after Shows and the physical destinations; the item opens the Grade10
+    Index hub in a new tab, carries the external-link glyph, and is never
+    marked current
+  - Footer Index column: the footer lists the four index pages under an
+    Index column ahead of Help and Legal — Hat Price Index, PTCG100,
+    PTCG500, OPCG100 — each opening its external page in a new tab
 - Collector help
-  - Header Help: primary nav lists Help last — after Shows when that item is
-    present, else Store Locator, else Auction on auction-only nav; Help opens
-    the documentation site in a new tab
+  - Header Help: primary nav lists Help last — after Index when that item
+    is present, else Shows, else Store Locator, else Auction on auction-only
+    nav; Help opens the documentation site in a new tab
 - Small-width resilience
   - No horizontal overflow: the shell reflows at 375 CSS pixels with every
     control still reachable
@@ -224,30 +233,34 @@ bar at both widths once the session has resolved.
 ### Requirement: A link is present only when the site answers it
 
 The site SHALL show a navigation, footer, or legal link only when its
-destination is an address the site answers, except primary-nav Help which MAY
-name the documentation host Product names. A destination that does not exist
-yet SHALL be omitted rather than linked to a not-found page.
+destination is an address the site answers. The named external entries are
+the exceptions: primary-nav Help MAY name the documentation host Product
+names, and primary-nav Index and the footer Index column MAY name the
+Grade10 Index hosts. A destination that does not exist yet SHALL be omitted
+rather than linked to a not-found page.
 
 Utility links SHALL follow the same rule for destinations on this site. An
 unanswered site utility destination SHALL stay omitted. The promotional bar
 SHALL wait for a page the site answers.
 
-<!-- trace:scenario id=g10.site-page-shell.SC-7p3 rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-7p3 rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-10 - Navigation lists real surfaces
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
 - **WHEN** the header renders
-- **THEN** every navigation item other than Help leads to a surface the site
-  answers
+- **THEN** every navigation item other than Help and Index leads to a surface
+  the site answers
 - **AND** Help, when present, leads to the documentation host Product names
+- **AND** Index, when present, leads to the Grade10 Index hub
 
-<!-- trace:scenario id=g10.site-page-shell.SC-fmx rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-fmx rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-11 - The footer drops what it cannot reach
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
 - **WHEN** the footer renders
-- **THEN** every link leads to a surface the site answers, and a column left
-  with no reachable link is absent entirely
+- **THEN** every internal link leads to a surface the site answers, the Index
+  column's links lead to their external index pages, and a column left with
+  no reachable link is absent entirely
 
 <!-- trace:scenario id=g10.site-page-shell.SC-cex rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-12 - The promo bar and utility row wait for their pages
@@ -304,11 +317,12 @@ primary navigation is auction-only or includes Store and other answered
 surfaces.
 
 **Its place** - Help SHALL be the last primary-navigation item: it SHALL
-follow Shows when that item is present, else Store Locator when that item is
-present, else Auction on auction-only primary navigation.
+follow Index when that item is present, else Shows, else Store Locator when
+that item is present, else Auction on auction-only primary navigation.
 
 **Presentation** - Help SHALL use the same primary-nav link presentation as
-other primary items.
+other primary items, carrying the shared external-link glyph after its
+label like every external primary item.
 
 **New tab** - Activating Help SHALL open the documentation site Product names
 in a new browsing context. The current site surface SHALL remain open.
@@ -316,7 +330,7 @@ in a new browsing context. The current site surface SHALL remain open.
 **Isolated from the opener** - Help SHALL use the shared chrome's external link
 behaviour so the new tab is isolated from the opener.
 
-<!-- trace:scenario id=g10.site-page-shell.SC-o1e rev=2 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-o1e rev=3 -->
 #### Scenario: grade10-site-site-page-shell-SC-25 - Help on auction-only and full nav
 **Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
 
@@ -324,20 +338,68 @@ behaviour so the new tab is isolated from the opener.
   one that also lists Store and other answered surfaces
 - **WHEN** the header renders
 - **THEN** Help appears as the last item in the primary navigation — after
-  Shows when that item is present, else Store Locator when present, else
-  Auction on auction-only nav
+  Index when that item is present, else Shows, else Store Locator when
+  present, else Auction on auction-only nav
 - **AND** activating it opens the documentation site in a new browsing context
 
-<!-- trace:scenario id=g10.site-page-shell.SC-53q rev=2 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-53q rev=3 -->
 #### Scenario: grade10-site-site-page-shell-SC-26 - Help in the compact menu
 **Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
 
 - **GIVEN** a viewport 375 CSS pixels wide with Help supplied in primary nav
 - **WHEN** the collector opens the header menu
 - **THEN** Help is reachable in the drawer as the last primary item — after
-  Shows when that item is present, else Store Locator when present, else
-  Auction on auction-only nav
+  Index when that item is present, else Shows, else Store Locator when
+  present, else Auction on auction-only nav
 - **AND** activating it opens the documentation site in a new browsing context
+
+### Requirement: Index opens the Grade10 Index hub from the header
+
+Index sits in the primary navigation and opens the Grade10 Index hub in a
+new tab.
+
+**Header Index** - The site SHALL list Index in the primary navigation on a
+wide viewport, and in the compact menu drawer on a narrow viewport. It SHALL
+follow Shows and the physical destinations and SHALL precede Help.
+
+**Hub, not pages** - The primary-nav Index item SHALL name the Grade10 Index
+hub, from which the individual index pages are reached. The four index
+pages SHALL be listed directly only in the footer Index column, ahead of
+Help and Legal.
+
+**New tab** - Activating Index, in the navigation or the footer, SHALL open
+its external destination in a new browsing context. The current site surface
+SHALL remain open.
+
+**Presentation** - Index SHALL use the same primary-nav link presentation as
+other primary items, carrying the shared external-link glyph after its
+label — the mark every external primary item, Help included, wears.
+
+**Never current** - Index names no surface this site answers, so it SHALL
+NOT be marked current on any surface.
+
+<!-- trace:scenario id=g10.site-page-shell.SC-ixn rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-27 - Index in the primary nav
+**Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
+
+- **GIVEN** a header whose primary nav lists Index
+- **WHEN** the header renders on a wide viewport, or the compact menu opens
+  on a narrow viewport
+- **THEN** Index appears after Shows and before Help
+- **AND** activating it opens the Grade10 Index hub in a new browsing
+  context
+- **AND** Index carries the external-link glyph after its label, as Help
+  does
+- **AND** Index is never the current item
+
+<!-- trace:scenario id=g10.site-page-shell.SC-ixf rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-28 - Index in the footer
+**Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
+
+- **WHEN** the footer renders
+- **THEN** an Index column lists Hat Price Index, PTCG100, PTCG500, and
+  OPCG100 ahead of Help and Legal
+- **AND** each link opens its external index page in a new browsing context
 
 ### Requirement: Compact viewports reach navigation through the menu drawer
 

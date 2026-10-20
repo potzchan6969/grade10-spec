@@ -86,9 +86,12 @@ type FooterProps = ComponentProps<"footer"> & {
  * column whose destinations do not exist yet, which would otherwise render as
  * a heading over nothing.
  *
- * The columns stack below the desktop rungs. Four columns on a phone is not a
- * layout: a long brand blurb ends up one word per line in an 80px column, wide
- * enough to pass a scroll-width check and unreadable all the same.
+ * The columns stack below the desktop rungs. Five columns and the brand on a
+ * phone is not a layout: a long brand blurb ends up one word per line in an
+ * 80px column, wide enough to pass a scroll-width check and unreadable all
+ * the same. The rungs step 1 → 2 → 3, then let every cell claim its own
+ * equal track at the widest — nothing wraps beneath the social block and no
+ * declared track sits empty when a composition carries fewer columns.
  *
  * The rungs are container queries, not viewport ones: this shell answers to
  * the width it is given, which is also the only width a story or a test can
@@ -113,7 +116,7 @@ function Footer({
       )}
       {...props}
     >
-      <div className="grid w-full grid-cols-1 gap-6 px-4 py-8 sm:px-8 @xl:grid-cols-2 @3xl:grid-cols-4">
+      <div className="grid w-full grid-cols-1 gap-6 px-4 py-8 sm:px-8 @xl:grid-cols-2 @3xl:grid-cols-3 @4xl:auto-cols-fr @4xl:grid-flow-col @4xl:grid-cols-none">
         <div className="flex flex-col items-start gap-4">
           <a
             className="flex h-9 items-center text-primary-foreground"

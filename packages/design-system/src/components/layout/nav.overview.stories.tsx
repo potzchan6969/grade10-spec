@@ -53,13 +53,33 @@ export const AllControls: Story = {
       canvas.getByRole("link", { name: "Store Locator" }),
     ).not.toHaveAttribute("aria-current");
     const storeLocator = canvas.getByRole("link", { name: "Store Locator" });
+    const shows = canvas.getByRole("link", { name: "Shows" });
+    const index = canvas.getByRole("link", { name: "Index" });
     const help = canvas.getByRole("link", { name: "Help" });
     expect(
       storeLocator.compareDocumentPosition(help) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
+    expect(
+      shows.compareDocumentPosition(index) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      index.compareDocumentPosition(help) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(index).toHaveAttribute("href", "https://index.grade10.com/");
+    expect(index).toHaveAttribute("target", "_blank");
+    expect(index).toHaveAttribute("rel", "noopener noreferrer");
+    expect(index).not.toHaveAttribute("aria-current");
     expect(help).toHaveAttribute("target", "_blank");
     expect(help).toHaveAttribute("rel", "noopener noreferrer");
+    for (const external of [index, help]) {
+      expect(external.querySelector("svg")).not.toBeNull();
+    }
+    for (const item of ["Store", "Auction", "Store Locator", "Shows"]) {
+      expect(
+        canvas.getByRole("link", { name: item }).querySelector("svg"),
+      ).toBeNull();
+    }
     expect(
       canvasElement.querySelector('[data-slot="nav-logo"]'),
     ).toHaveAttribute("href", "/");

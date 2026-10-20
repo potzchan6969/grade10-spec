@@ -14,6 +14,7 @@ import {
 import { createElement, type ReactNode } from "react";
 import {
   HELP_NAV_ITEM,
+  INDEX_NAV_ITEM,
   PRIVACY_POLICY_HREF,
   SHOWS_NAV_ITEM,
   STORE_LOCATOR_HREF,
@@ -73,6 +74,7 @@ const STORE_SITE_HEADER = {
     { label: "Auction", href: "#auction" },
     { label: "Store Locator", href: STORE_LOCATOR_HREF },
     { ...SHOWS_NAV_ITEM },
+    { ...INDEX_NAV_ITEM },
     { ...HELP_NAV_ITEM },
   ],
   onLocaleChange: noop,
@@ -145,6 +147,33 @@ const FOOTER_COMPANY_COLUMN = {
   ],
 };
 
+/** The Grade10 Index pages — all external, opening in a new tab. */
+const FOOTER_INDEX_COLUMN = {
+  heading: "INDEX",
+  links: [
+    {
+      label: "Hat Price Index",
+      href: "https://grade10.com/hat-price-index/",
+      external: true,
+    },
+    {
+      label: "PTCG100",
+      href: "https://index.grade10.com/ptcg100",
+      external: true,
+    },
+    {
+      label: "PTCG500",
+      href: "https://index.grade10.com/ptcg500",
+      external: true,
+    },
+    {
+      label: "OPCG100",
+      href: "https://index.grade10.com/opcg100",
+      external: true,
+    },
+  ],
+};
+
 /**
  * Store-launch footer — Design System/Layout/Footer → Store launch. Shop destinations,
  * the company pages, and Store Locator join Docs and Legal; no bar legal duplicates.
@@ -170,6 +199,7 @@ const STORE_FOOTER = {
       ],
     },
     FOOTER_COMPANY_COLUMN,
+    FOOTER_INDEX_COLUMN,
     {
       heading: "HELP",
       links: [
@@ -194,6 +224,7 @@ const AUCTION_FOOTER = {
   legalLinks: [],
   columns: [
     FOOTER_COMPANY_COLUMN,
+    FOOTER_INDEX_COLUMN,
     {
       heading: "HELP",
       links: [FOOTER_DOCS_LINK],
