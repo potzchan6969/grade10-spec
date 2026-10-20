@@ -168,6 +168,7 @@ Every change, option and step leads with a picture; text is captions and short c
 | Numbers | `bars` | `unit`, and `items`: `label`, `value` |
 
 - **Any picture** - takes a `caption`, and `added: true` when an option adds all of it; in a list of pictures, a `mock` or `shot` sits beside the next where they fit, and every other kind takes the full row
+- **No kind fits** - draw it with the closest kind, and name the missing kind in the reply: what it would show, and for which change; a new kind lands as an entry in `assets/data.schema.json` and a drawing in `assets/template.html`, never as markup in the data
 - **Diff** - marks the words a row changed; a colour shows its swatch; a value that changed whole is shown unmarked
 - **Phones** - on a narrow screen a `flow` runs top to bottom, and `lanes` become a list
 - **Rendered** - `rendered: "<sha>"` marks a mock standing in for a screen the build already has, when no stack can capture it; an option's picture is a planned screen and never carries it
