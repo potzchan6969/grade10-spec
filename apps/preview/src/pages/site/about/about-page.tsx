@@ -193,7 +193,6 @@ function AboutPage() {
                             {String(order + 1).padStart(2, "0")}
                           </span>
                           {index.name}
-                          {index.beta ? <Badge size="sm">Beta</Badge> : null}
                         </TabsTrigger>
                       ))}
                     </TabsList>
@@ -255,7 +254,6 @@ function AboutPage() {
                         </span>
                         <span className="flex flex-1 items-center gap-2">
                           {index.name}
-                          {index.beta ? <Badge size="sm">Beta</Badge> : null}
                         </span>
                       </button>
                     );
@@ -311,8 +309,13 @@ function AboutPage() {
                         </span>
                       </span>
                     </a>
-                    <p className="mt-4 text-secondary-foreground text-sm leading-5">
+                    <p className="mt-4 flex items-center gap-2 text-secondary-foreground text-sm leading-5">
                       {activeIndex.description}
+                      {activeIndex.beta ? (
+                        <Badge size="sm" variant="outline">
+                          Beta
+                        </Badge>
+                      ) : null}
                     </p>
                   </motion.div>
                 </AnimatePresence>
