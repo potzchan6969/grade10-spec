@@ -300,11 +300,11 @@ export const StoreLaunch: Story = {
     for (const heading of ["SHOP", "COMPANY", "INDEX", "HELP", "LEGAL"]) {
       expect(canvas.getByText(heading)).toBeInTheDocument();
     }
-    // Six cells — brand plus five columns — hold one row at the wide rung,
-    // so no column wraps beneath the social block.
+    // Every cell claims its own equal track at the wide rung, so no column
+    // wraps beneath the social block and no empty track trails Legal.
     expect(
       canvasElement.querySelector('[data-slot="footer"]')?.firstElementChild,
-    ).toHaveClass("@4xl:grid-cols-6");
+    ).toHaveClass("@4xl:grid-flow-col", "@4xl:auto-cols-fr");
     expect(
       canvas.getByRole("link", { name: "Press Releases" }),
     ).toBeInTheDocument();
