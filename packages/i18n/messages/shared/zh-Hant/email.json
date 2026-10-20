@@ -150,5 +150,28 @@
     "returnedHeading": "已退回",
     "returnedBody": "{item} 已退回給你，退回收據保存在寄賣 {ref} 中。",
     "footer": "你收到此電郵，是因為你在我們這裡寄賣。如對寄賣有任何問題，請回覆此電郵或向任何門市查詢。"
+  },
+  "ticketing": {
+    "greeting": "{name}，你好：",
+    "greetingWithoutName": "你好：",
+    "reference": "訂單",
+    "event": "活動",
+    "when": "時間",
+    "where": "地點",
+    "tickets": "門票",
+    "ticketLine": "{quantity} × {type}",
+    "total": "總額",
+    "free": "免費",
+    "confirmedSubject": "你的 {event} 門票",
+    "confirmedHeading": "你將出席 {event}",
+    "confirmedBody": "你的訂單 {reference} 已確認。每張門票各有一個 QR 碼：在 Grade10 打開你的訂單，入場時出示即可。",
+    "confirmedAction": "查看你的門票",
+    "cancelledSubject": "你的 {event} 訂單已取消",
+    "cancelledHeading": "你的訂單已取消",
+    "cancelledBody": "你在 {event} 的訂單 {reference} 已取消，其門票不再有效。",
+    "eventCancelledBody": "{event} 已取消。你的訂單 {reference} 及其門票不再有效。",
+    "refundNote": "我們會將 {amount} 退回你付款所用的信用卡。銀行可能需要 5 至 10 個工作天才會顯示退款。",
+    "cancelledAction": "查看你的訂單",
+    "footer": "你收到這封電郵，是因為你在 Grade10 訂購了門票。"
   }
 }

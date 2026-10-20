@@ -150,5 +150,28 @@
     "returnedHeading": "반환 완료",
     "returnedBody": "{item}이(가) 반환되었으며, 반환 인수증은 위탁 {ref}에 보관됩니다.",
     "footer": "위탁을 맡기셨기 때문에 이 이메일을 받으셨습니다. 위탁에 대한 문의는 이 이메일에 회신하거나 매장에 문의해 주세요."
+  },
+  "ticketing": {
+    "greeting": "{name}님, 안녕하세요.",
+    "greetingWithoutName": "안녕하세요.",
+    "reference": "주문",
+    "event": "행사",
+    "when": "일시",
+    "where": "장소",
+    "tickets": "티켓",
+    "ticketLine": "{quantity} × {type}",
+    "total": "합계",
+    "free": "무료",
+    "confirmedSubject": "{event} 티켓",
+    "confirmedHeading": "{event}에 오시는 것을 환영합니다",
+    "confirmedBody": "주문 {reference}이(가) 확정됐습니다. 티켓마다 QR 코드가 있습니다. Grade10에서 주문을 열고 입장할 때 코드를 보여 주세요.",
+    "confirmedAction": "티켓 보기",
+    "cancelledSubject": "{event} 주문이 취소됐습니다",
+    "cancelledHeading": "주문이 취소됐습니다",
+    "cancelledBody": "{event}의 주문 {reference}이(가) 취소되어 티켓으로 더 이상 입장할 수 없습니다.",
+    "eventCancelledBody": "{event}이(가) 취소됐습니다. 주문 {reference}과(와) 그 티켓으로 더 이상 입장할 수 없습니다.",
+    "refundNote": "결제하신 카드로 {amount}을(를) 환불해 드립니다. 은행에 표시되기까지 영업일 기준 5~10일이 걸릴 수 있습니다.",
+    "cancelledAction": "주문 보기",
+    "footer": "Grade10에서 티켓을 주문하셔서 이 이메일을 받으셨습니다."
   }
 }
