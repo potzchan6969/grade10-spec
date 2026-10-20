@@ -69,16 +69,12 @@ surface. Top to bottom:
 - **Product decisions** — the pm block, last, where the page records one
 - **Nothing recaps the change** — no today's gap, no note that a spec is
   still being written, no scenario id. A confirmed plan reads as the product
-  does, in the present tense, marked 🚧 until its change archives; the
-  in-flight cards beneath say what has not shipped, and a page with no
-  `spec` wears the planned pip
-- **The page is the roadmap** — a change starts here, one 🚧 line per
-  outcome the reader can see, and its deltas derive from those lines; a delta
-  promising what no line marks is the delta's error, not the page's. The
-  scenarios that prove an outcome are the delta's, however many: a 🚧 inside
-  a flow step, a sub-step or mid-sentence is a scenario wearing a mark. The
-  proposal links each section it marked, and the manual shows the change
-  under that heading
+  does, in the present tense, marked 🚧 until a release carries it and its
+  ids pass - [Page First](../../governance/page-first.md#marks)
+- **The page is the roadmap** — a feature starts here, one 🚧 line per
+  outcome the reader can see, each with the id its tests cite. A 🚧 inside a
+  flow step, a sub-step or mid-sentence is a case wearing a mark: it belongs
+  to a test or the cases file
 - **The page is the essence** — every line is one the reader would act
   differently without: a value, a set they meet, an outcome they see, a
   decision. A case that only proves a rule is the suite's, a state that only

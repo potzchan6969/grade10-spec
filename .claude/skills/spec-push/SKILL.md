@@ -97,6 +97,11 @@ By what conflicted:
   `src/themes/grade10.css` from `pnpm run tokens:build`, `.codex/skills` and
   `.claude/skills` from `pnpm run agent:sync-parity`, `pnpm-lock.yaml` from
   `pnpm install`.
+- **Deleted on `main`, edited by you** — a change or a durable spec the
+  Page First move retired. Never restore it. `openspec/retired-changes.tsv`
+  names the pages a retired change folded into, `openspec/retired.tsv` the
+  page id each retired scenario and case became; carry what your edit adds
+  to that page as a 🚧 line or a cases row, then `git rm` the path.
 - **`packages/i18n/messages/**`** — both sides' keys, unioned. `pnpm run test`
   refuses a key left unanswered or answered twice.
 

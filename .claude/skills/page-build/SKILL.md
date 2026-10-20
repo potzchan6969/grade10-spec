@@ -11,7 +11,10 @@ or task list to write.
 1. **Find the work** - `pnpm pages:board <prefix> --build` lists the 🚧
    lines, `--work` the open work they wait on. Read the whole page, its
    cases file, the pages it links, its `Code map`, and any `::story` it
-   embeds.
+   embeds. Where the board prints `Open OpenSpec change: <id>` under the
+   page, that change may own its 🚧 lines: ask its author, or run
+   `/workflow-build <id> <group>`, before building them here. An old test
+   citing a scenario id moves to the page id `openspec/retired.tsv` names.
 2. **Read it fresh** - give a fresh sub-agent the touched sections alone and
    ask the `page-cases` skill's questions. It reports back; it edits
    nothing. Each answer the page gives becomes a test; each gap becomes a ❓

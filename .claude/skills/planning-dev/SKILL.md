@@ -9,6 +9,11 @@ description: Take a marked product page to build - a fresh reading of its 🚧 s
 `openspec/changes/` (not `archive/`), follow [LEGACY.md](LEGACY.md) and stop
 reading here.
 
+**A retired change** - when the argument names a change in
+[`openspec/retired-changes.tsv`](../../../openspec/retired-changes.tsv), tell
+the person it folded into the pages its row names, and carry on there: its
+open tasks are those pages' 🚧 lines and Open work items.
+
 Anything else is new work, built from its page -
 [Page First](../../../docs/governance/page-first.md). There is no spec
 delta, tech design, task list or acceptance:

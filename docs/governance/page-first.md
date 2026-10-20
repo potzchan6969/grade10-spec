@@ -140,11 +140,27 @@ Launch is a page with no 🚧 and no ❓ left in its flows and `## Always`.
 | `pnpm pages:check` | Here, on push | Warns: an id that vanished, an unmarked rule whose text changed under the same id |
 | `pnpm check:manual` | Here, on push | A page that does not parse, a broken link or story |
 | `pages.mjs gate <app-dir>` | The application's CI, over the pinned submodule | A test citing an id no page holds; an `## Always` id no running test cites, less a shrinking allowlist |
+| `pnpm pages:check` | Here, on push | An `openspec/retired.tsv` row or `retired-changes.tsv` page that names what no page holds |
 
 ## OpenSpec
 
-`openspec/` is frozen. No new change opens there. A change already open is
-folded into its page and closed. The durable specs stay readable until each
-capability's page carries what the spec holds; that capability's spec,
-journeys and suites are then removed in one push, and the application's
+`openspec/` is frozen. No new change opens there. A change already open
+runs its legacy round, or is folded into its page and closed; the board
+prints `Open OpenSpec change` under each page one names.
+
+- **Retired ids** - `openspec/retired.tsv` maps each retired scenario and
+  case id to the page id that now holds it, or `dropped:` and why.
+  `pnpm run trace validate` lists a test still citing one as retired, not
+  broken, and names the id to cite
+- **Retired changes** - `openspec/retired-changes.tsv` names the pages each
+  folded change now lives on; its open tasks are their 🚧 lines and Open
+  work items. The planning and workflow skills carry on there when given
+  its name
+- **Adopting the gate** - `pages.mjs gate <app-dir> --seed > allow.txt`
+  writes the first allowlist: every `## Always` id no test cites yet. It
+  only shrinks
+
+The durable specs stay readable until each capability's page carries what
+the spec holds; that capability's spec, journeys and suites are then removed
+in one push, its ids land in `openspec/retired.tsv`, and the application's
 citations of scenario ids move to page ids in the same sweep.

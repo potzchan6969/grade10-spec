@@ -1,0 +1,12 @@
+change	pages
+add-account-profile	grade10-site/account/profile grade10-site/loyalty/membership grade10-site/loyalty/wallet-member-card grade10-site/loyalty/shopify-integration shared/ui/store-profile
+add-point-expiry-reminders	grade10-site/loyalty/expiry-reminders grade10-site/loyalty/points
+align-reward-editor-design	grade10-site/loyalty/rewards grade10-site/loyalty/operator-console grade10-site/loyalty/coupons
+confirm-loyalty-surface-looks	grade10-site/loyalty/coupons
+draw-wallet-save-artwork	grade10-site/loyalty/wallet-member-card
+earn-points-on-order-completion	grade10-site/loyalty/points grade10-site/store/order-detail grade10-site/loyalty/membership
+launch-wallet-passes	grade10-site/loyalty/wallet-member-card grade10-admin/audit
+name-points-discount-deduction	grade10-site/loyalty/paying-with-points grade10-site/store/order-detail grade10-site/store/discounts grade10-site/loyalty/shopify-integration
+never-lock-a-coupon	grade10-site/loyalty/coupons grade10-site/loyalty/rewards grade10-site/store/discounts
+redesign-member-pass	grade10-site/loyalty/membership
+redesign-tier-card	grade10-site/loyalty/membership
