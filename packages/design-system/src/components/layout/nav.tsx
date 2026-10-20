@@ -299,7 +299,7 @@ function AccountControl({
  * with a leading hamburger that opens a left drawer (primary nav, then
  * utility links as the same link style, then language via a nested drawer),
  * and Account / Sign In plus Cart on the trailing edge. `@4xl` leaves room
- * for five primary items (including Help) without overlapping trailing
+ * for six primary items (including Help) without overlapping trailing
  * controls.
  *
  * Brand, navigation, locale and control words are required rather than

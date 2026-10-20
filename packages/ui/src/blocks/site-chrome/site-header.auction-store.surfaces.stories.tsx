@@ -23,7 +23,7 @@ type Story = StoryObj<typeof meta>;
 /**
  * Cart stays on Auction (and every other surface) once Store answers, so
  * checkout stays one tap away. Auction is current; Store Locator, Shows,
- * then Help.
+ * Index, then Help.
  */
 export const CartOnAuction: Story = {
   name: "Cart on Auction",
@@ -38,6 +38,7 @@ export const CartOnAuction: Story = {
         label: "Shows",
         href: "?path=/story/site-shows-screens-shows--default",
       },
+      { label: "Index", href: "https://index.grade10.com/", external: true },
       {
         label: "Help",
         href: "https://grade10.mintlify.io/",

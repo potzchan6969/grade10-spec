@@ -84,6 +84,13 @@ const SHOWS_NAV_ITEM = {
   href: "/shows",
 } as const;
 
+/** Primary-nav Index; before Help — opens the Grade10 Index hub in a new tab. */
+const INDEX_NAV_ITEM = {
+  label: "Index",
+  href: "https://index.grade10.com/",
+  external: true,
+} as const;
+
 /** Preview href for Winner Order → lot details. */
 const AUCTION_LOT_DETAILS_HREF = storyHref(
   AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID,
@@ -175,6 +182,7 @@ export {
   AUCTION_LOT_DETAILS_HREF,
   HELP_HREF,
   HELP_NAV_ITEM,
+  INDEX_NAV_ITEM,
   interceptWorkbenchStoryLinks,
   MEDIA_COVERAGE_PAGE_STORY_ID,
   MY_AUCTIONS_PAGE_HREF,

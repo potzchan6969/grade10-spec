@@ -21,10 +21,11 @@ export const LOCALES = [
   { value: "zh-Hans", label: locale["zh-Hans"] },
 ];
 
-/** Auction-first primary nav: no Store, no Store Locator (shop not open yet), no Grade. Shows after Auction, Help last. */
+/** Auction-first primary nav: no Store, no Store Locator (shop not open yet), no Grade. Shows, Index, then Help last. */
 export const AUCTION_NAV_ITEMS = [
   { label: "Auction", href: "#auction", current: true },
   { label: "Shows", href: "?path=/story/site-shows-screens-shows--default" },
+  { label: "Index", href: "https://index.grade10.com/", external: true },
   { label: "Help", href: HELP_HREF, external: true },
 ];
 
