@@ -1,7 +1,10 @@
+import {
+  type ArticleBlock,
+  PressArticleBlock,
+  pressArticleBlockKey,
+} from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import type { ArticleBlock } from "./press-article-content";
-import { Block, blockKey } from "./press-article-page";
 
 const DEMO_BLOCKS: readonly ArticleBlock[] = [
   {
@@ -112,7 +115,7 @@ function ArticleBlocks() {
   return (
     <div className="mx-auto flex w-full max-w-[780px] flex-col gap-4 bg-background p-8 text-foreground">
       {DEMO_BLOCKS.map((block) => (
-        <Block block={block} key={blockKey(block)} />
+        <PressArticleBlock block={block} key={pressArticleBlockKey(block)} />
       ))}
     </div>
   );

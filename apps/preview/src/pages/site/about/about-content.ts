@@ -4,32 +4,12 @@
  * viewport); the body copy has since been tightened after a copywriting
  * review and no longer matches the Figma text verbatim.
  */
+import type { AboutLink, AboutPageContent } from "@grade10/ui";
 
 const MEMESTRATEGY_LOGO = new URL(
   "./memestrategy-logo.fixture.png",
   import.meta.url,
 ).href;
-
-/** A link target inside a running paragraph. */
-type AboutLink = {
-  readonly href: string;
-  /** Opens in a new tab with `rel="noopener noreferrer"`. */
-  readonly external?: boolean;
-};
-
-/** A run of paragraph text; `link` turns the run into an inline anchor. */
-type AboutSegment = {
-  readonly text: string;
-  readonly link?: AboutLink;
-};
-
-/** One row of the parent-company timeline. */
-type AboutMilestone = {
-  readonly date: string;
-  /** Status line under the date — “Coming soon” on the upcoming entry. */
-  readonly status?: string;
-  readonly body: readonly AboutSegment[];
-};
 
 const HOME_LINK: AboutLink = { href: "/" };
 const VAULT_LINK: AboutLink = { href: "/vault" };
@@ -130,8 +110,7 @@ const ABOUT_PAGE = {
       date: "Mar 2025",
       body: [{ text: "Completed a comprehensive brand revamp" }],
     },
-  ] satisfies readonly AboutMilestone[],
-};
+  ],
+} satisfies AboutPageContent;
 
-export type { AboutLink, AboutMilestone, AboutSegment };
 export { ABOUT_PAGE };
