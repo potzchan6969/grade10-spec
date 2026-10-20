@@ -50,7 +50,7 @@ export const Black: Story = {
   args: {
     tier: "Black",
     caption: "By invitation only",
-    benefits: ["1.5 pt for every HK$10 spent"],
+    benefits: ["1.7 pt for every HK$10 spent"],
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
