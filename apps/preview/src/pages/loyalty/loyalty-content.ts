@@ -85,6 +85,41 @@ const WALLET_PASS_COPY: WalletPassLinksCopy = {
   unreachable: "We could not check your passes just now.",
 };
 
+const TIER_BENEFITS_PAGE_COPY = {
+  breadcrumbAccount: "Account",
+  breadcrumbMembership: "Membership",
+  title: "Tier & Benefits",
+};
+
+/** One rung of the ladder, as the Tier & Benefits surface reads it. */
+type TierBenefitsRow = {
+  id: string;
+  tier: string;
+  caption: string;
+  benefits: readonly string[];
+};
+
+const TIER_BENEFITS: readonly TierBenefitsRow[] = [
+  {
+    id: "silver",
+    tier: "Silver",
+    caption: "Free to join",
+    benefits: ["1 pt for every HK$10 spent"],
+  },
+  {
+    id: "gold",
+    tier: "Gold",
+    caption: "500 pts / year",
+    benefits: ["1.2 pt for every HK$10 spent"],
+  },
+  {
+    id: "black",
+    tier: "Black",
+    caption: "By invitation only",
+    benefits: ["1.7 pt for every HK$10 spent"],
+  },
+];
+
 const MEMBERSHIP_PAGE_COPY = {
   breadcrumbAccount: "Account",
   title: "Membership",
@@ -311,7 +346,7 @@ const CART_ITEMS: readonly CartItemSummary[] = [
 const CART_SUBTOTAL = "HK$1,400.00";
 const POINTS_BALANCE_LABEL = "You’ve 1,250 pts.";
 
-export type { MembershipView };
+export type { MembershipView, TierBenefitsRow };
 export {
   ACTIVITY,
   ACTIVITY_LIST_COPY,
@@ -337,6 +372,8 @@ export {
   POINTS_BALANCE_LABEL,
   REWARD_MENU_COPY,
   REWARDS,
+  TIER_BENEFITS,
+  TIER_BENEFITS_PAGE_COPY,
   TIER_CARD_COPY,
   WALLET_PASS_COPY,
 };
