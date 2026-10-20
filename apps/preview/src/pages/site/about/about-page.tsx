@@ -1,5 +1,10 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Card } from "@grade10/design-system/components/display/card";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@grade10/design-system/components/display/tabs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
@@ -162,13 +167,45 @@ function AboutPage() {
                 <p className="text-lg leading-7">
                   {ABOUT_PAGE.marketIndexes.body}
                 </p>
+                {/* The pill indicator drops an 8px/16px shadow; the negative
+                    margins give it room so the scroll clip doesn't crop it. */}
+                <div className="-mx-2 -my-6 overflow-x-auto px-2 py-6 sm:hidden">
+                  <Tabs
+                    onValueChange={(name) => {
+                      const next = ABOUT_PAGE.marketIndexes.indexes.find(
+                        (index) => index.name === name,
+                      );
+                      if (next) setActiveIndex(next);
+                    }}
+                    value={activeIndex.name}
+                  >
+                    <TabsList
+                      aria-label="Grade10 market indexes"
+                      variant="pill"
+                    >
+                      {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => (
+                        <TabsTrigger
+                          aria-controls="market-indexes-panel"
+                          key={index.name}
+                          value={index.name}
+                        >
+                          <span className="text-secondary-foreground tabular-nums">
+                            {String(order + 1).padStart(2, "0")}
+                          </span>
+                          {index.name}
+                          {index.beta ? <Badge size="sm">Beta</Badge> : null}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </Tabs>
+                </div>
                 {/* The design-system Tabs primitive is horizontal-only, so
                     the index picker is a hand-rolled vertical tablist with
                     the same roles and arrow-key model. */}
                 <div
                   aria-label="Grade10 market indexes"
                   aria-orientation="vertical"
-                  className="mt-2 flex flex-col gap-1 sm:mt-4"
+                  className="mt-4 hidden flex-col gap-1 sm:flex"
                   role="tablist"
                 >
                   {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => {
