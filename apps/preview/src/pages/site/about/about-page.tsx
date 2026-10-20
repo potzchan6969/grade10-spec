@@ -212,7 +212,7 @@ function AboutPage() {
                         aria-controls="market-indexes-panel"
                         aria-selected={selected}
                         className={cn(
-                          "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left font-medium text-base leading-6 transition-colors duration-150 ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 motion-reduce:transition-none",
+                          "flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left font-medium text-base leading-6 transition-colors duration-150 ease-out hover:bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 motion-reduce:transition-none",
                           selected
                             ? "bg-muted text-foreground"
                             : "text-secondary-foreground",
