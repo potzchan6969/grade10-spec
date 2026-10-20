@@ -1,6 +1,6 @@
 # grade10-site/site/about Test Cases
 
-**Status:** pending-review · 0/7
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-10-17, tcs-rules r4
 
 ## grade10-site-site-about-US1: Collector learns who is behind Grade10
@@ -40,6 +40,8 @@ None.
 * About Us is the page's top-level heading.
 * An introduction names MemeStrategy and 9GAG.
 * A "What we do" statement and a "Where we're going" statement follow.
+* A Market indexes section names the four index pages ahead of the
+  parent-company panel.
 * A parent-company panel holds the MemeStrategy mark and a paragraph on the
   company.
 
@@ -225,6 +227,36 @@ None.
 **Expected Results:**
 
 * Neither mention is a link; both render as plain text.
+
+<!-- trace:case id=g10.site-about.TC-cxl rev=1 covers=g10.site-about.SC-ozy -->
+### grade10-site-site-about-US2-TC4-1: Each index link opens its live index page in a new tab
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-about-US-02
+
+**Pre-conditions:**
+None.
+
+**Steps:**
+
+1. Navigate to <grade10 about url>.
+2. Open each of the four links in the Market indexes section.
+
+**Expected Results:**
+
+* Hat Price Index opens `grade10.com/hat-price-index` in a new tab.
+* PTCG100, PTCG500 and OPCG100 open their `index.grade10.com` pages in a
+  new tab.
 
 ## Settled
 

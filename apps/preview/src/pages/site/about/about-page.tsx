@@ -1,7 +1,9 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
 import { Card } from "@grade10/design-system/components/display/card";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
+import { ArrowUpRight } from "@phosphor-icons/react";
 import { useReducedMotion } from "motion/react";
 import { Fragment, useLayoutEffect, useState } from "react";
 import { AUCTION_SITE_HEADER } from "../../auction-lot-details-content";
@@ -132,6 +134,63 @@ function AboutPage() {
               ),
             )}
           </div>
+          <section
+            aria-labelledby="market-indexes-heading"
+            className={cn(
+              "flex flex-col gap-2 py-8 sm:gap-4 sm:py-20",
+              REVEAL,
+              pageIsRevealed && REVEALED,
+            )}
+            style={{
+              transitionDelay: pageIsRevealed ? "200ms" : "0ms",
+            }}
+          >
+            <p className="font-medium text-secondary-foreground text-sm leading-5 uppercase">
+              {ABOUT_PAGE.marketIndexes.label}
+            </p>
+            <h2
+              className="font-semibold text-xl leading-7 sm:text-2xl sm:leading-8"
+              id="market-indexes-heading"
+            >
+              {ABOUT_PAGE.marketIndexes.heading}
+            </h2>
+            <p className="text-lg leading-7">{ABOUT_PAGE.marketIndexes.body}</p>
+            <Card padding={false}>
+              <ul className="flex flex-col px-4 sm:grid sm:grid-cols-2 sm:px-6 sm:py-2">
+                {ABOUT_PAGE.marketIndexes.indexes.map((index, order) => (
+                  <li
+                    className="border-border border-b last:border-b-0 sm:border-b-0"
+                    key={index.name}
+                  >
+                    <a
+                      className="group flex items-baseline gap-4 py-6 sm:gap-6"
+                      href={index.href}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span className="w-8 shrink-0 font-medium text-secondary-foreground text-sm leading-5 tabular-nums">
+                        {String(order + 1).padStart(2, "0")}
+                      </span>
+                      <span className="flex flex-1 flex-col gap-1">
+                        <span className="flex items-center gap-2 font-medium text-base leading-6">
+                          {index.name}
+                          {index.beta ? <Badge size="sm">Beta</Badge> : null}
+                        </span>
+                        {index.description ? (
+                          <span className="text-secondary-foreground text-sm leading-5">
+                            {index.description}
+                          </span>
+                        ) : null}
+                      </span>
+                      <span className="shrink-0 self-center text-secondary-foreground transition-colors group-hover:text-accent-foreground">
+                        <ArrowUpRight aria-hidden size={16} />
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          </section>
           <section
             aria-labelledby="parent-company-heading"
             className={cn(

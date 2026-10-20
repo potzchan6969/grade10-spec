@@ -22,6 +22,9 @@ system.
   new tab, and the Grade10 mention in the milestones opens the front door.
   Vaulting services and Grade10 Finance are named as plain text until they
   launch.
+- **A Market indexes section.** The four index pages — Hat Price Index,
+  PTCG100, PTCG500, OPCG100 — are highlighted ahead of the parent-company
+  panel, each opening its live index page in a new tab.
 - **A composed page in the workbench.** `apps/preview` carries the page
   under `Site/About` at a wide and a narrow viewport, so the design system
   renders it before the site does.

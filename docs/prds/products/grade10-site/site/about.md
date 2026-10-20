@@ -16,6 +16,8 @@ without a session, like any public surface —
   a paragraph naming MemeStrategy and 9GAG
 - 🚧 **What we do and where we're going** — two short statements, side by
   side on a wide viewport and stacked on a narrow one
+- 🚧 **Market indexes** — the four index pages highlighted ahead of the
+  parent-company panel, each opening in a new tab
 - 🚧 **Parent company** — a quiet panel with the MemeStrategy mark, a
   paragraph on the company, and its milestones newest first, the upcoming
   one labelled Coming soon

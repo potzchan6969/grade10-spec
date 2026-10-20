@@ -46,6 +46,15 @@ const GRADE10_AI_LINK: AboutLink = {
   external: true,
 };
 
+type AboutIndex = {
+  readonly name: string;
+  readonly href: string;
+  /** Renders the Beta badge on indexes still in beta. */
+  readonly beta?: boolean;
+  /** A line on what the index tracks. */
+  readonly description?: string;
+};
+
 const ABOUT_PAGE = {
   heading: "About Us",
   intro: [
@@ -76,6 +85,34 @@ const ABOUT_PAGE = {
         text: "We are expanding into the Chinese Mainland through strategic partnerships and establishing a presence in Korea and beyond.",
       },
     ],
+  },
+  marketIndexes: {
+    label: "Market Indexes",
+    heading: "Real-Time Pulse of the Card Market",
+    body: "The first indexes to track price movement across the market’s most liquid cards — from the Grey Felt Hat Pikachu to broad Pokémon and One Piece benchmarks.",
+    indexes: [
+      {
+        name: "Hat Price Index",
+        description:
+          "Single-asset cultural index tracking the PSA 10 Grey Felt Hat Pikachu.",
+        href: "https://grade10.com/hat-price-index/",
+      },
+      {
+        name: "PTCG100",
+        beta: true,
+        href: "https://index.grade10.com/ptcg100",
+      },
+      {
+        name: "PTCG500",
+        beta: true,
+        href: "https://index.grade10.com/ptcg500",
+      },
+      {
+        name: "OPCG100",
+        beta: true,
+        href: "https://index.grade10.com/opcg100",
+      },
+    ] satisfies readonly AboutIndex[],
   },
   parentCompany: {
     label: "Parent company",
@@ -126,5 +163,5 @@ const ABOUT_PAGE = {
   ] satisfies readonly AboutMilestone[],
 };
 
-export type { AboutLink, AboutMilestone, AboutSegment };
+export type { AboutIndex, AboutLink, AboutMilestone, AboutSegment };
 export { ABOUT_PAGE };

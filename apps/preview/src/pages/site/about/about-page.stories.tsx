@@ -74,6 +74,22 @@ export const Default: Story = {
     expect(grade10Ai).toHaveAttribute("target", "_blank");
     expect(grade10Ai).toHaveAttribute("rel", "noopener noreferrer");
 
+    const indexesHeading = canvas.getByRole("heading", {
+      level: 2,
+      name: ABOUT_PAGE.marketIndexes.heading,
+    });
+    expect(indexesHeading).toBeVisible();
+    const indexesSection = indexesHeading.closest("section");
+    expect(indexesSection).not.toBeNull();
+    for (const index of ABOUT_PAGE.marketIndexes.indexes) {
+      const link = within(indexesSection as HTMLElement).getByRole("link", {
+        name: new RegExp(index.name),
+      });
+      expect(link).toHaveAttribute("href", index.href);
+      expect(link).toHaveAttribute("target", "_blank");
+      expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    }
+
     // Neither surface is launched on day 1: both mentions stay plain text.
     for (const name of ["vaulting services", "Grade10 Finance"]) {
       expect(

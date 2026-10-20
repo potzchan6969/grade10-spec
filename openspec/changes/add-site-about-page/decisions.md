@@ -30,6 +30,7 @@
 | Q4 | What does the change ship? | The Storybook page assembly and the manual page - decided by the round | Wider OpenSpec or production changes - routing and data belong to the implementing site |
 | Q5 | Does the page keep the Figma body copy verbatim? | Tightened copy applied after a copywriting review - decided by the round | Verbatim Figma text - the review found filler adjectives and unfalsifiable claims; the divergence is flagged for design to sync back |
 | Q6 | Do vaulting services and Grade10 Finance link out? | Plain text until they launch - decided by the round | Links to `/vault` and `/finance` - neither surface exists on day 1, so a link would land nowhere |
+| Q7 | Does the page highlight the market indexes? | A Market indexes section ahead of the parent-company panel, each index opening in a new tab - decided by the round | No indexes block - the nav and footer already link them, and the About page earns the same highlight |
 
 ## Raised
 
