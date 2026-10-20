@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T07:59:54.982Z",
+  "generatedAt": "2026-10-20T07:53:50.593Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -106,6 +106,7 @@
     "Table Row": "ok",
     "Text Area": "warn",
     "Text Input": "skipped",
+    "Tier Card": "warn",
     "Toast": "ok",
     "Toast / Close": "skipped",
     "Tooltip": "ok",
@@ -132,8 +133,8 @@
     "loyalty-membership: member-pass/header": "ok",
     "loyalty-membership: member-pass/logo": "ok",
     "loyalty-membership: scan-plate/qr-flat": "skipped",
-    "loyalty-membership: scan-plate/short-code": "ok",
-    "loyalty-membership: scan-plate/short-code-label": "ok",
+    "loyalty-membership: scan-plate/short-code": "fail",
+    "loyalty-membership: scan-plate/short-code-label": "fail",
     "loyalty-membership: tier-badge/tier": "skipped",
     "overlays: drawer-overlay/root": "skipped",
     "overlays: dropdown-menu-content/items": "ok",
@@ -154,8 +155,7 @@
     "store-order-history: order-history-line-item/image": "ok",
     "store-order-history: order-history/root": "ok",
     "store-product-listing: filter-panel/root": "ok",
-    "store-product-listing: product-card/content": "ok",
-    "tier card": "warn"
+    "store-product-listing: product-card/content": "ok"
   },
   "nodes": {
     "2023-203": "Button",
@@ -937,10 +937,10 @@
     "7115-4595": "Submission Item Card",
     "7117-1554": "Vaulted Asset / Request Retrieval",
     "7141-117": "Membership",
-    "7141-1999": "tier card",
-    "7141-2000": "tier card",
-    "7141-2001": "tier card",
-    "7154-2075": "tier card",
+    "7141-1999": "Tier Card",
+    "7141-2000": "Tier Card",
+    "7141-2001": "Tier Card",
+    "7154-2075": "Tier Card",
     "7156-2264": "loyalty-membership: member-pass/body",
     "7156-2266": "loyalty-membership: scan-plate/qr-flat",
     "7156-2269": "loyalty-membership: scan-plate/short-code-label",
@@ -1142,6 +1142,9 @@
       "Text Area.state: no getEnum('state') in any template — this Figma axis reaches no code prop",
       "Text Area.isDisabled: no getEnum('isDisabled') in any template — this Figma axis reaches no code prop"
     ],
+    "Tier Card": [
+      "Tier Card.tier: no getEnum('tier') in any template — this Figma axis reaches no code prop"
+    ],
     "Vault Asset Card": [
       "Vault Asset Card: no code component (looked for src/components/**/vaultassetcard.tsx or vaultassetcard.tsx)"
     ],
@@ -1151,14 +1154,17 @@
     "Vault Asset Status": [
       "Vault Asset Status: no code component (looked for src/components/**/vaultassetstatus.tsx or vaultassetstatus.tsx)"
     ],
+    "loyalty-membership: scan-plate/short-code": [
+      "node 7156:2272 not found in file GW2WL6JcWok5ypUrUFi9bU"
+    ],
+    "loyalty-membership: scan-plate/short-code-label": [
+      "node 7156:2269 not found in file GW2WL6JcWok5ypUrUFi9bU"
+    ],
     "press list item": [
       "press list item: no code component (looked for src/components/**/presslistitem.tsx or presslistitem.tsx)"
     ],
     "press list item/Event Card": [
       "press list item/Event Card: no code component (looked for src/components/**/presslistitemeventcard.tsx or presslistitemeventcard.tsx)"
-    ],
-    "tier card": [
-      "tier card.tier: no getEnum('tier') in any template — this Figma axis reaches no code prop"
     ]
   }
 }
