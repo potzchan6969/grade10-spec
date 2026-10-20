@@ -7,8 +7,6 @@ import { MEMBER, MEMBER_PASS_COPY, MEMBERSHIP_VIEW } from "../loyalty-content";
 
 /** The member code's life on this surface, in seconds. */
 const CODE_SECONDS = 600;
-/** Letters only — none of I, L, O or U, as the programme mints them. */
-const CODES = ["KRMT-QWPB", "XJCD-4WMB", "DVDT-73CA", "FNHV-8SKC"];
 
 type WakeLockSentinelLike = { release: () => Promise<void> };
 type WakeLockLike = {
@@ -87,10 +85,9 @@ function MemberPassPage() {
       <MemberPass
         copy={MEMBER_PASS_COPY}
         email={MEMBER.email}
-        fallbackCode={CODES[generation % CODES.length]}
         onRefresh={mint}
         refreshing={refreshing}
-        state={{ status: "live", remainingSeconds: seconds }}
+        state={{ remainingSeconds: seconds }}
         tier={MEMBERSHIP_VIEW.tier}
         token={`${MEMBER.token}.${generation}`}
         variant={MEMBERSHIP_VIEW.tierVariant}
@@ -122,15 +119,16 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("mei.lin@example.com")).toBeInTheDocument();
     expect(canvas.getByText("Gold")).toBeInTheDocument();
-    expect(canvas.getByText("KRMT-QWPB")).toBeInTheDocument();
     expect(canvas.getByText(/Refreshes in 10:0\d/)).toBeInTheDocument();
 
+    const modules = () =>
+      canvasElement
+        .querySelector('[data-slot="member-pass-qr"] svg path[fill="#000000"]')
+        ?.getAttribute("d");
+    const before = modules();
+    expect(before).toBeTruthy();
+
     await userEvent.click(canvas.getByRole("button", { name: "Refresh" }));
-    await waitFor(() =>
-      expect(canvas.getByText("XJCD-4WMB")).toBeInTheDocument(),
-    );
-    await waitFor(() =>
-      expect(canvas.queryByText("KRMT-QWPB")).not.toBeInTheDocument(),
-    );
+    await waitFor(() => expect(modules()).not.toBe(before));
   },
 };
