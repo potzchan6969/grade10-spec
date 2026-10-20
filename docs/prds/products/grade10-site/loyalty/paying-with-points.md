@@ -74,8 +74,8 @@ The debit follows what the shop applied, not what was promised.
 
 - **Rung up** — the shopkeeper rings the products up in Shopify POS
 - **Identified** — the shopkeeper opens the Grade10 extension and scans the
-  member card's QR, from the site or a wallet pass, or types the 8-letter
-  short code, the email, or picks the customer already on the cart
+  member card's QR, from the site or a wallet pass, or types the email,
+  or picks the customer already on the cart
 - **Applied** — the shopkeeper chooses points and/or coupons and taps Apply;
   the extension writes the store's order id on the cart, puts the points
   discount on the sale, and shows the points spent, the money still due and

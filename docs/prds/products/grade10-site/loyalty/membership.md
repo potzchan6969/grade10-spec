@@ -72,7 +72,7 @@ a Google account under it -
 | Section | Shows |
 | --- | --- |
 | Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tier & Benefits ❓ |
-| Your member pass | The tier's skin and the member's email, the QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
+| Your member pass | The tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
@@ -96,10 +96,9 @@ names.
 
 | Rule | Value |
 | --- | --- |
-| Code | **One QR and one 8-letter short code**, both for the same record |
+| Code | **One QR** — a till that cannot scan falls back to the member's email |
 | Life | **10 minutes** |
-| Uses | **Once** — whichever a till takes first; the other is refused and says where and when |
-| Wrong codes | **10 in 5 minutes** pause code entry for that shop |
+| Uses | **Once** — a code the till already took is refused, saying where and when |
 
 - **Email, not name** — no name is collected at registration, so the pass
   carries the member's account email under the tier badge
@@ -108,17 +107,16 @@ names.
   mid-scan; a web page cannot raise screen brightness, so keeping the screen
   awake is the part that is feasible
 - **A code swaps in and out** — a fresh code dips the square out of view,
-  fading and easing down, and settles the new pair in; the short code and
-  its label never move, so a scanner never loses its square mid-read
+  fading and easing down, and settles the new one in — a transition,
+  never an abrupt swap, so a scanner never loses its square mid-read
 - **A taken code just rotates** — a code the till accepts is answered by
   the next one arriving; the pass never freezes on a used surface, and
   the refusal a replayed code earns stays on the till
 - **New code on demand** — the earlier code stays alive until it is used or
-  expires, so reopening the page in the queue does not end a code the member
-  has just read out
+  lapses, and the countdown rotates it out before it does, so the pass
+  never draws an expired code
 - **Never stored** — the QR payload is answered once, and only its digest is
   kept
-- **Letters only** — no digits, and none of I, L, O or U
 - **Card code history** — kept only to power the refusal above, naming
   where and when a till already took a code; there is no member or
   operator surface for it
