@@ -1,13 +1,16 @@
 name: Checkpoint digest
 
 # The checkpoint-digest skill's publish.mjs force-pushes a built digest, its
-# shots and its range to digest/<branch>, then dispatches this run. It uploads
+# shots and its range to digest/<branch>, under .digest/ on top of main, and
+# that push starts this run, so a session needs no gh and no token. It uploads
 # the page to the e2e reports bucket, posts its link to the digest channel, and
 # only then moves refs/checkpoints/<branch> to the commit the digest covers,
 # with a lease on the value the digest read. A run that fails before the move
 # leaves the checkpoint where it was, so the next digest tells the same range.
 
 on:
+  push:
+    branches: ["digest/**"]
   workflow_dispatch:
     inputs:
       branch:
@@ -19,7 +22,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: checkpoint-digest-${{ inputs.branch }}
+  group: checkpoint-digest-${{ inputs.branch && format('digest/{0}', inputs.branch) || github.ref_name }}
   cancel-in-progress: false
 
 env:
@@ -31,6 +34,8 @@ env:
 jobs:
   publish:
     name: Publish, post and move the checkpoint
+    # A deleted digest branch is a push too, with nothing to publish.
+    if: github.event.deleted != true
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -43,17 +48,19 @@ jobs:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL_ID }}
       GH_TOKEN: ${{ github.token }}
-      BRANCH: ${{ inputs.branch }}
+      DIGEST_REF: ${{ inputs.branch || github.ref_name }}
     steps:
       # Full history: the move pushes the covered commit, which must be here.
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0
 
       - uses: actions/checkout@v4
         with:
-          ref: digest/${{ inputs.branch }}
+          ref: ${{ github.event_name == 'push' && github.sha || format('digest/{0}', inputs.branch) }}
           path: page
+          sparse-checkout: .digest
           persist-credentials: false
 
       - name: Set up Node.js
@@ -74,8 +81,11 @@ jobs:
 
       - name: Read the range
         run: |
+          BRANCH="${DIGEST_REF#digest/}"
+          export BRANCH
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
           node -e '
-            const { range } = require("./page/digest.json");
+            const { range } = require("./page/.digest/digest.json");
             if (range.branch !== process.env.BRANCH) throw new Error(`the page covers ${range.branch}, not ${process.env.BRANCH}`);
             const env = [`FROM=${range.from}`, `TO=${range.to}`, `SHORT=${range.to.slice(0, 7)}`];
             require("fs").appendFileSync(process.env.GITHUB_ENV, env.join("\n") + "\n");
@@ -94,15 +104,15 @@ jobs:
 
       - name: Upload
         run: |
-          aws s3 sync page "s3://$BUCKET/$PREFIX/$SHORT" \
+          aws s3 sync page/.digest "s3://$BUCKET/$PREFIX/$SHORT" \
             --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" \
-            --exclude ".git/*" --exclude "digest.json" --no-follow-symlinks \
+            --exclude "digest.json" --no-follow-symlinks \
             --cache-control "no-store" --only-show-errors
           echo "URL=$HOST/$PREFIX/$SHORT/index.html" >> "$GITHUB_ENV"
 
       - name: Post the link to Slack
         run: |
-          node .claude/skills/checkpoint-digest/scripts/slack.mjs page/digest.json --url "$URL" --send | tee posted.json
+          node .claude/skills/checkpoint-digest/scripts/slack.mjs page/.digest/digest.json --url "$URL" --send | tee posted.json
           echo "$URL" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Move the checkpoint

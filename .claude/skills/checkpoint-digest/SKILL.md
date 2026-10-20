@@ -19,8 +19,8 @@ The page is a `handoff-page` page of kind `digest`: you write the facts as one d
 4. **Write the data** - copy `<skill>/assets/example.json` to `<scratchpad>/digest/data.json`, replace every value with your own, and delete `"example"`
 5. **Build and check** - `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/digest/data.json`, then the `next:` line it prints, from `apps/preview` or any folder where Playwright resolves; fix every `FAIL`, and look at `check/page-1280-light-changed.png`
 6. **Preview the post** - `node <skill>/scripts/slack.mjs <scratchpad>/digest/data.json --url https://example.com` prints the message CI will send
-7. **Publish** - from the repository root, `node <skill>/scripts/publish.mjs <scratchpad>/digest/page.html --branch <branch> --to <to> --from <saved>`, with `to` and `saved` from step 2 (`saved` is `null` on a first run, and `--from null` passes it); it force-pushes the page, its shots and its range to `digest/<branch>` and dispatches the Checkpoint digest workflow (`.github/workflows/checkpoint-digest.yml`)
-8. **Confirm** - wait for that run (`gh run watch`); its summary holds the page's link, and the post is in the channel
+7. **Publish** - from the repository root, `node <skill>/scripts/publish.mjs <scratchpad>/digest/page.html --branch <branch> --to <to> --from <saved>`, with `to` and `saved` from step 2 (`saved` is `null` on a first run, and `--from null` passes it); it force-pushes the page, its shots and its range to `digest/<branch>`, under `.digest/` on top of `main`, and that push starts the Checkpoint digest workflow (`.github/workflows/checkpoint-digest.yml`); it needs no `gh` and no token
+8. **Confirm** - follow that run in the repository's Actions tab, with `gh run watch` or the GitHub tool; its summary holds the page's link, and the post is in the channel
 
 The workflow uploads the page, posts the link, then moves the checkpoint, in that order. A run that fails before the move leaves the checkpoint where it was, so the next digest tells the same range again. A post is never lost; at worst it is sent twice.
 
@@ -83,7 +83,7 @@ A push or a schedule runs this skill in a session or a CI job. The session needs
 
 - **History** - `range` unshallows a shallow clone; a checkout with `fetch-depth: 0` skips that
 - **A browser** - Playwright and Chromium for the check; `pnpm setup:browsers` installs them
-- **Push rights for `digest/*`** and **`gh`** - to push the page and dispatch the workflow, as a handoff page does
+- **Push rights for `digest/*`** - the push itself starts the workflow
 
 The Checkpoint digest workflow needs, in the repository's settings:
 
