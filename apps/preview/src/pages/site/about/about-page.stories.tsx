@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, waitFor, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { ABOUT_PAGE } from "./about-content";
 import { AboutPage } from "./about-page";
 
@@ -69,18 +69,53 @@ export const Default: Story = {
     expect(nineGag).toHaveAttribute("target", "_blank");
     expect(nineGag).toHaveAttribute("rel", "noopener noreferrer");
 
-    const vault = canvas.getByRole("link", { name: "vaulting services" });
-    expect(vault).toHaveAttribute("href", "/vault");
-    expect(vault).not.toHaveAttribute("target");
-
     const grade10Ai = canvas.getByRole("link", { name: "Grade10 AI" });
     expect(grade10Ai).toHaveAttribute("href", "https://app.grade10.com/");
     expect(grade10Ai).toHaveAttribute("target", "_blank");
     expect(grade10Ai).toHaveAttribute("rel", "noopener noreferrer");
 
-    const finance = canvas.getByRole("link", { name: "Grade10 Finance" });
-    expect(finance).toHaveAttribute("href", "/finance");
-    expect(finance).not.toHaveAttribute("target");
+    const indexesHeading = canvas.getByRole("heading", {
+      level: 2,
+      name: ABOUT_PAGE.marketIndexes.heading,
+    });
+    expect(indexesHeading).toBeVisible();
+    const indexesSection = indexesHeading.closest("section");
+    expect(indexesSection).not.toBeNull();
+    const tablist = within(indexesSection as HTMLElement).getByRole("tablist");
+    // Only the active tab's panel is in the accessibility tree, so each tab
+    // is selected before its link is checked.
+    for (const index of ABOUT_PAGE.marketIndexes.indexes) {
+      await userEvent.click(
+        within(tablist).getByRole("tab", { name: new RegExp(index.name) }),
+      );
+      const link = within(indexesSection as HTMLElement).getByRole("link", {
+        name: `Visit the ${index.name}`,
+      });
+      expect(link).toHaveAttribute("href", index.href);
+      expect(link).toHaveAttribute("target", "_blank");
+      expect(link).toHaveAttribute("rel", "noopener noreferrer");
+      // The selected preview crossfades in over 250ms; wait for it to settle.
+      await waitFor(() =>
+        expect(
+          within(indexesSection as HTMLElement).getByText(index.description),
+        ).toBeVisible(),
+      );
+    }
+    // Leave the showcase on its resting state.
+    await userEvent.click(
+      within(tablist).getByRole("tab", {
+        name: new RegExp(ABOUT_PAGE.marketIndexes.indexes[0].name),
+      }),
+    );
+
+    // Neither surface is launched on day 1: both mentions stay plain text.
+    for (const name of ["vaulting services", "Grade10 Finance"]) {
+      expect(
+        canvas.queryByRole("link", { name }),
+        `${name} should not be a link`,
+      ).toBeNull();
+      expect(canvas.getByText(new RegExp(name))).toBeVisible();
+    }
 
     for (const date of ABOUT_PAGE.milestones.map(
       (milestone) => milestone.date,

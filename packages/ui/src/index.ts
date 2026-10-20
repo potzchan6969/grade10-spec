@@ -493,6 +493,7 @@ export {
   type AboutPageBodyProps,
 } from "./blocks/site-about/about-page-body";
 export type {
+  AboutIndex,
   AboutLink,
   AboutMilestone,
   AboutPageContent,

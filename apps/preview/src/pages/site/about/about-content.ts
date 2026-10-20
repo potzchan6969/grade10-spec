@@ -11,9 +11,16 @@ const MEMESTRATEGY_LOGO = new URL(
   import.meta.url,
 ).href;
 
+const HAT_PRICE_INDEX_SHOT = new URL(
+  "./hat-price-index.fixture.jpg",
+  import.meta.url,
+).href;
+const PTCG100_SHOT = new URL("./ptcg100.fixture.jpg", import.meta.url).href;
+const PTCG500_SHOT = new URL("./ptcg500.fixture.jpg", import.meta.url).href;
+const OPCG100_SHOT = new URL("./opcg100.fixture.jpg", import.meta.url).href;
+
 const HOME_LINK: AboutLink = { href: "/" };
-const VAULT_LINK: AboutLink = { href: "/vault" };
-const FINANCE_LINK: AboutLink = { href: "/finance" };
+
 const MEMESTRATEGY_LINK: AboutLink = {
   href: "https://memestrategy.com.hk/",
   external: true,
@@ -42,11 +49,7 @@ const ABOUT_PAGE = {
     heading: "What we do",
     body: [
       {
-        text: "Since 2023, we’ve hosted Hong Kong’s largest card shows, offered ",
-      },
-      { text: "vaulting services", link: VAULT_LINK },
-      {
-        text: ", and put real-time pricing and research in collectors’ hands through ",
+        text: "Since 2023, we’ve hosted Hong Kong’s largest card shows, offered vaulting services, and put real-time pricing and research in collectors’ hands through ",
       },
       { text: "Grade10 AI", link: GRADE10_AI_LINK },
       {
@@ -59,6 +62,48 @@ const ABOUT_PAGE = {
     body: [
       {
         text: "We are expanding into the Chinese Mainland through strategic partnerships and establishing a presence in Korea and beyond.",
+      },
+    ],
+  },
+  marketIndexes: {
+    label: "Market Indexes",
+    heading: "Real-Time Pulse of the Card Market",
+    body: "The first indexes to track price movement across the market’s most liquid cards — from the Grey Felt Hat Pikachu to broad Pokémon and One Piece benchmarks.",
+    indexes: [
+      {
+        name: "Hat Price Index",
+        description:
+          "Single-asset cultural index tracking the PSA 10 Grey Felt Hat Pikachu.",
+        shot: HAT_PRICE_INDEX_SHOT,
+        shotAlt: "Hat Price Index — live index page",
+        href: "https://grade10.com/hat-price-index/",
+      },
+      {
+        name: "PTCG100",
+        beta: true,
+        description:
+          "Focused Pokémon benchmark — the 100 most representative PSA 10 cards.",
+        shot: PTCG100_SHOT,
+        shotAlt: "PTCG100 — live index page",
+        href: "https://index.grade10.com/ptcg100",
+      },
+      {
+        name: "PTCG500",
+        beta: true,
+        description:
+          "Broad Pokémon benchmark — the 500 most representative PSA 10 cards.",
+        shot: PTCG500_SHOT,
+        shotAlt: "PTCG500 — live index page",
+        href: "https://index.grade10.com/ptcg500",
+      },
+      {
+        name: "OPCG100",
+        beta: true,
+        description:
+          "Focused One Piece benchmark — the 100 most representative PSA 10 cards.",
+        shot: OPCG100_SHOT,
+        shotAlt: "OPCG100 — live index page",
+        href: "https://index.grade10.com/opcg100",
       },
     ],
   },
@@ -82,10 +127,8 @@ const ABOUT_PAGE = {
       date: "Q4 2026",
       status: "Coming soon",
       body: [
-        { text: "Launch of " },
-        { text: "Grade10 Finance", link: FINANCE_LINK },
         {
-          text: ", Asia’s first trading card financing service by a listed company",
+          text: "Launch of Grade10 Finance, Asia’s first trading card financing service by a listed company",
         },
       ],
     },

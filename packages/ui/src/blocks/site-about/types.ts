@@ -25,11 +25,31 @@ type AboutStatement = {
   readonly body: readonly AboutSegment[];
 };
 
+/** One market index in the tabbed showcase. */
+type AboutIndex = {
+  readonly name: string;
+  /** The live index page; always opens in a new tab. */
+  readonly href: string;
+  /** A line on what the index tracks, shown under its screenshot. */
+  readonly description: string;
+  /** Screenshot of the live index page. */
+  readonly shot: string;
+  readonly shotAlt: string;
+  /** Renders the Beta badge on indexes still in beta. */
+  readonly beta?: boolean;
+};
+
 type AboutPageContent = {
   readonly heading: string;
   readonly intro: readonly AboutSegment[];
   readonly whatWeDo: AboutStatement;
   readonly whereWeAreGoing: AboutStatement;
+  readonly marketIndexes: {
+    readonly label: string;
+    readonly heading: string;
+    readonly body: string;
+    readonly indexes: readonly AboutIndex[];
+  };
   readonly parentCompany: {
     readonly label: string;
     readonly logoAlt: string;
@@ -40,6 +60,7 @@ type AboutPageContent = {
 };
 
 export type {
+  AboutIndex,
   AboutLink,
   AboutMilestone,
   AboutPageContent,

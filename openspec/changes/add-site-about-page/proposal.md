@@ -19,9 +19,12 @@ system.
   viewport and stacked on a narrow one, and a quiet parent-company panel
   with the MemeStrategy mark and its milestones newest first.
 - **Links out of the page.** MemeStrategy, 9GAG and Grade10 AI open in a
-  new tab; vaulting services opens the vault page, Grade10 Finance opens
-  `/finance`, and the Grade10 mention in the milestones opens the front
-  door.
+  new tab, and the Grade10 mention in the milestones opens the front door.
+  Vaulting services and Grade10 Finance are named as plain text until they
+  launch.
+- **A Market indexes section.** The four index pages — Hat Price Index,
+  PTCG100, PTCG500, OPCG100 — are highlighted ahead of the parent-company
+  panel, each opening its live index page in a new tab.
 - **A composed page in the workbench.** `apps/preview` carries the page
   under `Site/About` at a wide and a narrow viewport, so the design system
   renders it before the site does.
@@ -47,11 +50,16 @@ None.
 ## Impact
 
 - `apps/preview/src/pages/site/about/` — the page assembly, its content
-  module, its stories, and the MemeStrategy logo fixture.
+  module, its stories, and the MemeStrategy logo and index-screenshot
+  fixtures.
+- `packages/ui/src/blocks/site-about/` — the `AboutPageBody` block that
+  holds the page body. `AboutPageContent` gains a required `marketIndexes`
+  field and a new `AboutIndex` type; consuming applications must supply
+  the four index entries when they next adopt the block.
 - `docs/prds/products/grade10-site/site/about.md` — the capability's PRD
   page, already written.
-- The implementing site repo consumes the page through the shared chrome;
-  no new component export, no routing, no data fetching.
+- The implementing site repo consumes the body through `AboutPageBody`;
+  no routing, no data fetching.
 
 ## Follow-on changes
 
