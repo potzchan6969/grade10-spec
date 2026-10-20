@@ -1,15 +1,15 @@
 ---
 name: workflow-tasks
-description: Route implementation planning to the integrated planning-dev invocation, which writes tasks after scenarios and before acceptance. Invoke as /workflow-tasks <change>.
+description: Take a marked page to build - routes to planning-dev; there is no task list. Routes a change still open under openspec/changes/ to its legacy task planning. Invoke as /workflow-tasks <page>, or /workflow-tasks <change>.
 ---
 
-# Task Planning Route
+# Tasks From the Page
 
-- **Route** - `/workflow-tasks <change>` routes to [planning-dev](../planning-dev/LEGACY.md). Pass the change and any task-planning input to its integrated planning run.
-- **Task Contract** - Read the repository's enriched task instructions below. The template is the example; `scripts/openspec/tasks-template.test.mjs` holds the contract.
+**An open OpenSpec change** - when the argument names a directory under
+`openspec/changes/` (not `archive/`), follow [LEGACY.md](LEGACY.md) and stop
+reading here.
 
-```bash
-openspec instructions tasks --change <change>
-```
-
-- **Completion** - Return that run's accepted and published plan, including `tasks.md`, or its unresolved questions and blockers. Do not start a separate task-planning round.
+Anything else is new work under [Page First](../../../docs/governance/page-first.md):
+there is no `tasks.md`. The page's 🚧 lines are the work list
+(`pnpm pages:board <page> --build`), and what code cannot close is its
+`Open work` detail. Follow [planning-dev](../planning-dev/SKILL.md).

@@ -22,7 +22,7 @@ const ROOT = join(dirname(dirname(fileURLToPath(import.meta.url))), "..");
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
 
 const SCHEMA = "openspec/schemas/grade10-planning";
-const SKILL = ".claude/skills/workflow-tasks/SKILL.md";
+const SKILL = ".claude/skills/workflow-tasks/LEGACY.md";
 /** The rules the instruction is the one home of: the group's test task, its
  * own commit and its tick, the walk, and the flip the walk's commit makes. */
 const RULES = [

@@ -1,3 +1,7 @@
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 /**
  * The line skills, one per artifact of the chain, keyed by the directory each
  * lives in under `.claude/skills/` and naming the artifact it writes.
@@ -16,5 +20,14 @@ export const LINE_SKILLS = Object.freeze({
   "workflow-land": "plan:land",
 });
 
-/** The path of a skill's instructions under the store's root. */
-export const skillPath = (name) => `.claude/skills/${name}/SKILL.md`;
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+
+/** The path of a skill's instructions under the store's root: its
+ * `LEGACY.md` where the skill routes new work to Page First and keeps the
+ * OpenSpec procedure there, its `SKILL.md` otherwise. */
+export const skillPath = (name) => {
+  const legacy = `.claude/skills/${name}/LEGACY.md`;
+  return existsSync(join(ROOT, legacy))
+    ? legacy
+    : `.claude/skills/${name}/SKILL.md`;
+};

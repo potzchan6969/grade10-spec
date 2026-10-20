@@ -77,7 +77,7 @@ A feature is a change to its page, built straight from it. Read [`docs/governanc
 `pnpm pages:board [prefix] [--build|--open|--design|--work]` is everyone's work list.
 
 Ask only what changes scope or an irreversible product choice. Otherwise write a ❓ line on the page and go on.
-`planning-pm`, `planning-design` and `planning-dev` route new work to the steps above and an open OpenSpec change to their `LEGACY.md`; the `workflow-*`, `accept-*`, `spec-to-tcs` and `tcs-*` skills serve only open OpenSpec changes.
+The `planning-*` and `workflow-*` skills route new work to the steps above and an open OpenSpec change to their `LEGACY.md`; the `accept-*`, `spec-to-tcs` and `tcs-*` skills serve only open OpenSpec changes.
 
 ## Design Override
 

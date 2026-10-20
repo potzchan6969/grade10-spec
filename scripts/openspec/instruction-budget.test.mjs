@@ -80,7 +80,7 @@ test("AGENTS.md holds to its word budget", () => {
 });
 
 test("the round skill holds to its word budget", () => {
-  const skill = ".claude/skills/workflow-round/SKILL.md";
+  const skill = ".claude/skills/workflow-round/LEGACY.md";
   const count = words(read(skill));
   assert.ok(
     count <= ROUND_BUDGET,

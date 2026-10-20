@@ -18,7 +18,7 @@ import { dirname, join, normalize, resolve } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
-import { LINE_SKILLS } from "./lib/line-skills.mjs";
+import { LINE_SKILLS, skillPath } from "./lib/line-skills.mjs";
 import { planningSchema, TRIGGERS } from "./lib/perspectives.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -28,10 +28,10 @@ const read = (path) => readFileSync(join(ROOT, path), "utf8");
 // or a bold lead never fails a claim the file still makes.
 const claims = (path) => read(path).replace(/\s+/g, " ");
 
-const ROUND = ".claude/skills/workflow-round/SKILL.md";
-const PLAN = ".claude/skills/workflow-plan/SKILL.md";
-const DESIGN = ".claude/skills/workflow-design/SKILL.md";
-const SPECIFY = ".claude/skills/workflow-specify/SKILL.md";
+const ROUND = ".claude/skills/workflow-round/LEGACY.md";
+const PLAN = ".claude/skills/workflow-plan/LEGACY.md";
+const DESIGN = ".claude/skills/workflow-design/LEGACY.md";
+const SPECIFY = ".claude/skills/workflow-specify/LEGACY.md";
 const LINES = LINE_SKILLS;
 
 const frontMatter = (text) => {
@@ -271,7 +271,7 @@ test("shared-planning-agent-rounds-SC-91 - the round interview lives on the gove
   assert.match(conduct, /asked that one question alone/i);
   assert.match(conduct, /each with the option it\s+took/i);
   assert.match(conduct, /`not now`/);
-  for (const path of [".claude/skills/workflow-plan/SKILL.md"]) {
+  for (const path of [".claude/skills/workflow-plan/LEGACY.md"]) {
     const text = claims(path);
     assert.match(
       text,
@@ -466,7 +466,7 @@ test("shared-planning-agent-rounds-SC-72 - a held row holds the landing until an
     skill,
     /writes each held row's recommendation in the landing commit/i,
   );
-  const land = claims(".claude/skills/workflow-land/SKILL.md");
+  const land = claims(".claude/skills/workflow-land/LEGACY.md");
   assert.match(land, /land with recommendations/i);
 });
 
@@ -810,15 +810,21 @@ test("every path the round skill names resolves", () => {
 });
 
 test("the round skill's own frontmatter name is workflow-round", () => {
-  assert.equal(frontMatter(read(ROUND)).name, "workflow-round");
+  assert.equal(
+    frontMatter(read(".claude/skills/workflow-round/SKILL.md")).name,
+    "workflow-round",
+  );
 });
 
 test("each standalone line skill names its artifact and follows the round", () => {
   for (const [name, artifact] of Object.entries(LINES)) {
     if (["workflow-specify", "workflow-tasks"].includes(name)) continue;
-    const path = `.claude/skills/${name}/SKILL.md`;
+    const path = skillPath(name);
     const skill = claims(path);
-    assert.equal(frontMatter(read(path)).name, name);
+    assert.equal(
+      frontMatter(read(`.claude/skills/${name}/SKILL.md`)).name,
+      name,
+    );
     assert.ok(
       skill.includes(artifact),
       `/${name} names the artifact it writes (${artifact})`,
