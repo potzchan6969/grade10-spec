@@ -15,10 +15,14 @@ export const UTILITY_LINKS = [
 const STORE_LOCATOR_HREF =
   "?path=/story/store-store-locator-screens-store-locator--default";
 
+/** Workbench Shows page — keep in sync with preview `SHOWS_NAV_ITEM`. */
+const SHOWS_HREF = "?path=/story/site-shows-screens-shows--default";
+
 export const NAV_ITEMS = [
   { label: "Store", href: "#store", current: true },
   { label: "Auction", href: "#auction" },
   { label: "Store Locator", href: STORE_LOCATOR_HREF },
+  { label: "Shows", href: SHOWS_HREF },
   { label: "Help", href: HELP_HREF, external: true },
 ];
 

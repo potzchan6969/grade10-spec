@@ -15,8 +15,9 @@ import { Footer } from "./footer";
  * Links follow page-shell and carried-surfaces: only destinations the build
  * answers. Auction-only drops the shop column and every store/help page that
  * does not answer yet. Store launch restores shop destinations and Store
- * Locator once that page answers. Docs (`/docs`) covers auction and store
- * tutorials on both compositions.
+ * Locator once that page answers. Both carry the COMPANY column — About,
+ * Shows, Press Releases, Media Coverage. Docs (`/docs`) covers auction and
+ * store tutorials on both compositions.
  *
  * Privacy and Terms live only in the LEGAL column — not again on the bar.
  * Country/currency is omitted until selection exists. Link labels are Title
@@ -53,8 +54,20 @@ const LEGAL_COLUMN = {
   ],
 };
 
-/** Production today: brand, social, docs, and the two legal pages every lane carries. */
+/** The company pages — their chrome entry is this column, ahead of HELP and LEGAL. */
+const COMPANY_COLUMN = {
+  heading: "COMPANY",
+  links: [
+    { label: "About", href: "/about" },
+    { label: "Shows", href: "/shows" },
+    { label: "Press Releases", href: "/press-releases" },
+    { label: "Media Coverage", href: "/media-coverage" },
+  ],
+};
+
+/** Production today: brand, social, the company pages, docs, and the two legal pages every lane carries. */
 const AUCTION_ONLY_COLUMNS = [
+  COMPANY_COLUMN,
   {
     heading: "HELP",
     links: [DOCS_LINK],
@@ -62,7 +75,7 @@ const AUCTION_ONLY_COLUMNS = [
   LEGAL_COLUMN,
 ];
 
-/** Once Store answers: shop destinations and Store Locator join docs and legal. */
+/** Once Store answers: shop destinations and Store Locator join the company pages, docs and legal. */
 const STORE_LAUNCH_COLUMNS = [
   {
     heading: "SHOP",
@@ -77,6 +90,7 @@ const STORE_LAUNCH_COLUMNS = [
       { label: "Formula 1", href: "#formula-1" },
     ],
   },
+  COMPANY_COLUMN,
   {
     heading: "HELP",
     links: [
@@ -116,8 +130,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Auction-only: brand, social, Docs (`/docs`), Privacy and Terms. No shop
- * column, no bar legal duplicates, and no locale until selection exists.
+ * Auction-only: brand, social, the company pages, Docs (`/docs`), Privacy
+ * and Terms. No shop column, no bar legal duplicates, and no locale until
+ * selection exists.
  */
 export const AuctionOnly: Story = {
   name: "Auction only",
@@ -141,9 +156,24 @@ export const AuctionOnly: Story = {
     expect(footer.querySelector('[data-slot="footer-legal"]')).toBeNull();
 
     const canvas = within(canvasElement);
+    expect(canvas.getByText("COMPANY")).toBeInTheDocument();
     expect(canvas.getByText("HELP")).toBeInTheDocument();
     expect(canvas.getByText("LEGAL")).toBeInTheDocument();
     expect(canvas.queryByText("SHOP")).toBeNull();
+    expect(canvas.getByRole("link", { name: "About" })).toHaveAttribute(
+      "href",
+      "/about",
+    );
+    expect(canvas.getByRole("link", { name: "Shows" })).toHaveAttribute(
+      "href",
+      "/shows",
+    );
+    expect(
+      canvas.getByRole("link", { name: "Press Releases" }),
+    ).toHaveAttribute("href", "/press-releases");
+    expect(
+      canvas.getByRole("link", { name: "Media Coverage" }),
+    ).toHaveAttribute("href", "/media-coverage");
     expect(canvas.getByRole("link", { name: "Instagram" })).toHaveAttribute(
       "href",
       "https://www.instagram.com/grade10hk/",
@@ -204,8 +234,10 @@ export const AuctionOnly: Story = {
 };
 
 /**
- * Store launch: shop destinations and Store Locator join Docs, Privacy and
- * Terms. HELP holds Store Locator and Docs; unanswered help pages stay out.
+ * Store launch: shop destinations and Store Locator join the company pages,
+ * Docs, Privacy and Terms. COMPANY holds About, Shows, Press Releases and
+ * Media Coverage; HELP holds Store Locator and Docs; unanswered help pages
+ * stay out.
  * The bar carries copyright only — no duplicated legal links, no locale.
  */
 export const StoreLaunch: Story = {
@@ -213,9 +245,12 @@ export const StoreLaunch: Story = {
   args: { columns: STORE_LAUNCH_COLUMNS },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    for (const heading of ["SHOP", "HELP", "LEGAL"]) {
+    for (const heading of ["SHOP", "COMPANY", "HELP", "LEGAL"]) {
       expect(canvas.getByText(heading)).toBeInTheDocument();
     }
+    expect(
+      canvas.getByRole("link", { name: "Press Releases" }),
+    ).toBeInTheDocument();
     expect(
       canvas.getByRole("link", { name: "All Collections" }),
     ).toBeInTheDocument();
