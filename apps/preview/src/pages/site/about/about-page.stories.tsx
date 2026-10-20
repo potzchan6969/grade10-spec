@@ -98,6 +98,12 @@ export const Default: Story = {
         within(indexesSection as HTMLElement).getByText(index.description),
       ).toBeVisible();
     }
+    // Leave the showcase on its resting state.
+    await userEvent.click(
+      within(tablist).getByRole("tab", {
+        name: new RegExp(ABOUT_PAGE.marketIndexes.indexes[0].name),
+      }),
+    );
 
     // Neither surface is launched on day 1: both mentions stay plain text.
     for (const name of ["vaulting services", "Grade10 Finance"]) {
