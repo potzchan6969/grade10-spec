@@ -189,7 +189,7 @@ type WinnerOrderSetupDialogProps = {
   cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>;
   /**
    * Settlement currencies offered at Payment Method. One entry fixes the
-   * currency and reads `Pay in {currency}`; a choice preselects HKD. The
+   * currency and reads `Pay in {currency}`; a choice preselects the first. The
    * first offered method is always preselected.
    */
   settlementCurrencies?: readonly WinnerOrderSettlementCurrency[];
@@ -280,12 +280,11 @@ function CountryRegionField({
 
 const FEE_RANGE_CARD = "Card fee applies. Exact amount on the invoice.";
 
-/** HKD is preselected when offered; a single offered currency is fixed. */
+/** The first offered currency is preselected; a single currency is fixed. */
 function defaultSettlementCurrency(
   currencies: readonly WinnerOrderSettlementCurrency[],
 ): WinnerOrderSettlementCurrency | null {
-  if (currencies.includes("HKD")) return "HKD";
-  return currencies.length === 1 ? (currencies[0] ?? null) : null;
+  return currencies[0] ?? null;
 }
 
 /** The first offered method for the currency is preselected. */

@@ -66,8 +66,8 @@ export const FinishSetup: Story = {
     await waitFor(() => {
       expect(modal.getByText("Step 2 of 3")).toBeVisible();
     });
-    // HKD and Card are preselected; the winner can continue directly.
-    expect(modal.getByRole("button", { name: "HKD" })).toHaveAttribute(
+    // USD and Card are preselected; the winner can continue directly.
+    expect(modal.getByRole("button", { name: "USD" })).toHaveAttribute(
       "aria-pressed",
       "true",
     );
@@ -87,7 +87,7 @@ export const FinishSetup: Story = {
     expect(canvas.getByText(/Confirmed delivery/i)).toBeVisible();
     expect(args.onConfirm).toHaveBeenCalledWith(
       expect.objectContaining({
-        settlementCurrency: "HKD",
+        settlementCurrency: "USD",
         paymentMethod: "card",
         sameAsDelivery: true,
       }),

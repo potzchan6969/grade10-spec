@@ -39,8 +39,8 @@
 | winning bid | USD101.00 | (10100 minor units) |
 | buyer's premium | USD20.20 | (2020 minor units) |
 | shipping | USD10.01 | (1001 minor units) |
-| settlement currency | HKD | preselected, confirmed by customer A |
-| payment method | Card | preselected, confirmed by customer A |
+| settlement currency | HKD | chosen by customer A |
+| payment method | Card | chosen by customer A |
 | HKD lines | HKD793.00; HKD159.00; HKD79.00 | (79300, 15900 and 7900 minor units) |
 | HKD subtotal | HKD1,031.00 | (103100 minor units) |
 | HKD card fee | HKD38.73 | (3873 minor units) from the gross-up rule on the HKD subtotal |
@@ -54,14 +54,14 @@
 **Steps:**
 
 1. Read the setup choices and Order Summary before confirming.
-2. Confirm the address and setup with the preselected `<settlement currency>` and `<payment method>`, then read the Order Summary before invoice send.
+2. Confirm the address and setup, choosing `<settlement currency>` and `<payment method>`, then read the Order Summary before invoice send.
 3. As an operator, quote the order with Shipping & Handling of `<shipping>` and send its invoice.
 4. Reopen the winner's order and read its Pending Payment status and Order Summary, totals and fee rows.
 5. Read the invoice amount payable.
 
 **Expected Results:**
 
-* Step 1 opens with HKD and Card preselected, and no HKD amount appears before an invoice exists.
+* Step 1 opens with USD — the first offered currency — and its first available method preselected, and no HKD amount appears before an invoice exists.
 * Step 2 commits the winner's confirmed HKD settlement and Card choices.
 * Before the invoice is sent, the summary has no HKD amount.
 * Step 3 sends an invoice after the quote includes `<shipping>`.
@@ -75,4 +75,4 @@
 
 | Finding | Disposition |
 | --- | --- |
-| `US12-TC3` asserted no preselected currency or method and an explicit selection step; the spec now preselects HKD and the first offered method | Revised to rev=5 — preselection read at step 1, confirmation at step 2. The Walk route bullet that reads "no preselected settlement currency or payment method" (`g10.auction-dmn.US12-TC3` step 1) updates to the same opening |
+| `US12-TC3` asserted no preselected currency or method and an explicit selection step; the spec now preselects the first offered currency and the first offered method | Revised to rev=5 — preselection read at step 1, confirmation at step 2. The Walk route bullet that reads "no preselected settlement currency or payment method" (`g10.auction-dmn.US12-TC3` step 1) updates to the same opening |

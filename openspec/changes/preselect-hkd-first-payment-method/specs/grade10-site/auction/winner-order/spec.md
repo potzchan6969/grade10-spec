@@ -3,7 +3,7 @@
 ## Feature set
 
 - Settlement currency
-  - Winner's choice: while confirming the order the winner picks USD or HKD — HKD preselected where both are offered — fixed once the invoice is sent
+  - Winner's choice: while confirming the order the winner picks USD or HKD — the first offered currency preselected — fixed once the invoice is sent
 - Payment method
   - First offered method preselected: the payment step opens with the settlement currency's first offered method selected — card where a card fee rule applies, else the first bank rail
 
@@ -333,11 +333,13 @@ its own bank details, and card on its own rule.
 #### Scenario: winner-order-SC-305 - The step opens with the currency's first method selected
 **Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
 
-- **GIVEN** an auction order in Awaiting Setup, where Payment Settings holds an
-  HKD card fee rule and Grade10 holds FPS and HK Local bank details
+- **GIVEN** an auction order in Awaiting Setup offered USD and HKD, where
+  Payment Settings holds a USD card fee rule and Grade10 holds HK Local and
+  SWIFT bank details
 - **WHEN** the winner reaches the payment method choice
-- **THEN** card is selected
-- **AND** the winner can still choose FPS or HK Local before confirming
+- **THEN** USD is selected and card is selected
+- **AND** the winner can still choose HK Local or International via SWIFT
+  before confirming
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-mw8 rev=1 -->
 #### Scenario: winner-order-SC-306 - A single settlement currency names itself and offers no picker
@@ -353,7 +355,7 @@ its own bank details, and card on its own rule.
 
 At order setup the winner SHALL choose the order's settlement currency from
 `USD` and `HKD`, in the same step as the delivery address and the payment
-method. Grade10 SHALL preselect `HKD` where both currencies are offered, and
+method. Grade10 SHALL preselect the first offered currency, and
 a single offered currency SHALL be the selection. Grade10 SHALL refuse a
 confirmation that carries no currency. The lot is bid in USD whichever
 currency the winner picks.
@@ -382,7 +384,7 @@ legacy fact and SHALL NOT be treated as a missing currency or filled with a
 default rail.
 
 Scenario `winner-order-SC-278` keeps its title with its id. The title is
-historical: the choice now opens with HKD selected.
+historical: the choice now opens with the first offered currency selected.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-o92 rev=2 -->
 #### Scenario: winner-order-SC-278 - Setup offers USD and HKD with neither picked
@@ -391,7 +393,7 @@ historical: the choice now opens with HKD selected.
 - **GIVEN** an auction order for a lot bid in `USD`, in Awaiting Setup
 - **WHEN** the winner opens the setup form
 - **THEN** the settlement currency choice offers USD and HKD
-- **AND** HKD is selected
+- **AND** the first offered currency — USD — is selected
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-j1l rev=1 -->
 #### Scenario: winner-order-SC-279 - A confirmation with no currency is refused
