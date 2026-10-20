@@ -167,7 +167,7 @@ function AboutPage() {
                 <p className="text-lg leading-7">
                   {ABOUT_PAGE.marketIndexes.body}
                 </p>
-                <div className="-mx-2 overflow-x-auto px-2 sm:hidden">
+                <div className="-mx-2 overflow-x-auto border-border border-b px-2 sm:hidden">
                   <Tabs
                     onValueChange={(name) => {
                       const next = ABOUT_PAGE.marketIndexes.indexes.find(
@@ -301,7 +301,7 @@ function AboutPage() {
                           src={activeIndex.shot}
                           width={1346}
                         />
-                        <span className="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-(--radius-full) bg-background/90 px-4 py-2 font-medium text-sm leading-5 opacity-0 shadow-sm backdrop-blur transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none">
+                        <span className="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-(--radius-full) bg-background/90 px-4 py-2 font-medium text-sm leading-5 shadow-sm backdrop-blur transition-opacity duration-200 group-focus-visible:opacity-100 motion-reduce:transition-none sm:opacity-0 sm:group-hover:opacity-100">
                           Visit index
                           <ArrowUpRight aria-hidden size={16} />
                         </span>
