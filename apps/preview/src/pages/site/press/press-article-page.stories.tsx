@@ -14,13 +14,7 @@ const meta = {
   title: "Site/Press/Screens/Press Release",
   component: PressArticlePage,
   tags: ["autodocs"],
-  parameters: {
-    layout: "fullscreen",
-    journeys: [
-      "grade10-site-site-press-US-04",
-      "grade10-site-site-press-US-05",
-    ],
-  },
+  parameters: { layout: "fullscreen" },
 } satisfies Meta<typeof PressArticlePage>;
 
 export default meta;
