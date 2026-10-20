@@ -16,15 +16,28 @@ The page is a `handoff-page` page of kind `digest`: you write the facts as one d
 1. **Load** - `writing-style`, for every word on the page and in the post
 2. **Range** - `node <skill>/scripts/checkpoint.mjs range --branch <branch> --build <build> > <scratchpad>/digest/range.json`; with `commits` at 0, stop: post nothing and move nothing. `days` lists the days the new commits landed on, in either repository
 3. **Facts** - for each day in `days`, `node <skill>/scripts/checkpoint.mjs facts --branch <branch> --build <build> --day <day> > <scratchpad>/digest/<day>/facts.json`, then read what Gather names; the facts cover the whole day in both repositories, and `fresh` marks the commits this run brings
-4. **Write the data** - for each day, copy `<skill>/assets/example.json` to `<scratchpad>/digest/<day>/data.json`, replace every value with your own, and delete `"example"`
-5. **Capture** - for each screen a change shows, find its story with `node .claude/skills/handoff-page/scripts/shoot.mjs --find <words>` and capture it into the day's folder with `shoot.mjs <scratchpad>/digest/<day> --plan <plan.json> --at <the day's last commit>`, so a past day shows its screens as they stood then; a screen with no story gets no picture
-6. **Build and check** - `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/digest/<day>/data.json`, then the `next:` line it prints, from `apps/preview` or any folder where Playwright resolves; fix every `FAIL`, and look at `check/page-1280-light-changed.png`
-7. **Verify** - dispatch the `page-verifier` agent with the day's `data.json`, `facts.json`, `shots/` and `check/`, and `--build`'s checkout; fix every finding, build, and verify again until it returns `clean`
-8. **Preview the post** - `node <skill>/scripts/slack.mjs <scratchpad>/digest/<day>/data.json --url https://example.com --range <scratchpad>/digest/range.json` prints the message CI will send, or that the day brought nothing new
-9. **Publish** - from the repository root, `node <skill>/scripts/publish.mjs <scratchpad>/digest/<day>/page.html... --range <scratchpad>/digest/range.json`, every day's page in one call; it force-pushes the pages, their shots and the range to `digest/<branch>`, under `.digest/` on top of `main`, and that push starts the Checkpoint digest workflow (`.github/workflows/checkpoint-digest.yml`); it needs no `gh` and no token
-10. **Confirm** - follow that run in the repository's Actions tab, with `gh run watch` or the GitHub tool; its summary holds each day's link, and each post is in the channel
+4. **Chunk** - for each day, `node <skill>/scripts/chunks.mjs <scratchpad>/digest/<day>/facts.json > <scratchpad>/digest/<day>/chunks.json`; with `split` false, draw the day yourself and skip to step 6
+5. **Dispatch** - with `split` true, dispatch one `digest-chunk` agent per chunk, all in one message so they run at once: give each its chunk's `id`, `spec` and `build` commits, the day's folder, its `facts.json` and `--build`'s checkout; each writes `<scratchpad>/digest/<day>/chunks/<id>.json`. While they run, read the day's head yourself: the reason, the numbers and what spans chunks
+6. **Write the data** - for each day, copy `<skill>/assets/example.json` to `<scratchpad>/digest/<day>/data.json`, replace every value with your own, and delete `"example"`. On a split day write the head, the cards that span chunks, the Where the work landed card and For engineers, then `node <skill>/scripts/merge.mjs <scratchpad>/digest/<day>`: it folds every chunk's cards and follow-ups into `data.json` and their shots into `plan.json`, and refuses a missing chunk, a card listing another chunk's commit, or an id two chunks share
+7. **Capture** - for each screen a change shows, find its story with `node .claude/skills/handoff-page/scripts/shoot.mjs --find <words>` and capture it into the day's folder with `shoot.mjs <scratchpad>/digest/<day> --plan <plan.json> --at <the day's last commit>`, so a past day shows its screens as they stood then; a split day captures the merged `plan.json` and any shot of your own in one run; a screen with no story gets no picture
+8. **Build and check** - `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/digest/<day>/data.json`, then the `next:` line it prints, from `apps/preview` or any folder where Playwright resolves; fix every `FAIL`, and look at `check/page-1280-light-changed.png`
+9. **Verify** - dispatch the `page-verifier` agent with the day's `data.json`, `facts.json`, `shots/` and `check/`, and `--build`'s checkout; fix every finding, build, and verify again until it returns `clean`; fix a chunk's card in its `chunks/<id>.json` and merge again, so a later merge does not undo the fix
+10. **Preview the post** - `node <skill>/scripts/slack.mjs <scratchpad>/digest/<day>/data.json --url https://example.com --range <scratchpad>/digest/range.json` prints the message CI will send, or that the day brought nothing new
+11. **Publish** - from the repository root, `node <skill>/scripts/publish.mjs <scratchpad>/digest/<day>/page.html... --range <scratchpad>/digest/range.json`, every day's page in one call; it force-pushes the pages, their shots and the range to `digest/<branch>`, under `.digest/` on top of `main`, and that push starts the Checkpoint digest workflow (`.github/workflows/checkpoint-digest.yml`); it needs no `gh` and no token
+12. **Confirm** - follow that run in the repository's Actions tab, with `gh run watch` or the GitHub tool; its summary holds each day's link, and each post is in the channel
 
 The workflow uploads each day, posts what the run brought, then moves both checkpoints, in that order. A run that fails before the move leaves both where they were, so the next run redraws the same days and posts the same changes. A post is never lost; at worst it is sent twice.
+
+## Chunks
+
+A busy day is too much for one reader: past 30 commits or 4,000 lines, its cards are drawn by agents that each read one focused part of it.
+
+- **Groups** - `chunks.mjs` puts each commit with the OpenSpec change it moves or builds, else its commit scope, else the first area it touches, so a change proposed here and built in the application is one group
+- **Chunks** - a group of half a chunk or more keeps a chunk of its own; smaller groups, ordered by the area they touch most, share chunks of up to 30 commits, or the day's commits over 8 when that is more
+- **At most 8** - a day never dispatches more than 8 agents; with several days to draw, dispatch them day by day
+- **The lead** - you write the head, the cards that span chunks, the build, the capture, the verify and the post; a `digest-chunk` agent writes only its chunk's file and captures nothing, so the workbench starts once a day
+- **Quiet days** - a day under both limits is one chunk, `the-day`, and you draw it yourself
+- **Bots** - report-only bot commits join no chunk; `bots` lists them
 
 ## Days, Not Runs
 
@@ -46,7 +59,7 @@ The workflow uploads each day, posts what the run brought, then moves both check
 
 ## Gather
 
-- **Facts** - `facts.json` holds the commits, the merged pull requests, lines per area, the OpenSpec changes that moved, token and catalog values before and now, and the primitives and blocks added or removed; `build` holds the application's commits, pull requests and lines per area
+- **Facts** - `facts.json` holds the commits, the merged pull requests, lines per area, the OpenSpec changes that moved, token and catalog values before and now, and the primitives and blocks added or removed; `build` holds the application's commits, pull requests and lines per area; each commit names the areas it touches, the changes it moves or builds, and its lines, which `chunks.mjs` groups by
 - **Links** - `build.links` names the changes whose work landed in the application that day: `recorded` where a change's `implementation.json` names the commit, `named` where a commit message names the change. Match the rest, `build.unlinked`, by reading the pull requests' titles and diffs; a commit that builds no change is drawn on its own when a reader would notice it
 - **Read the source** - a commit subject says what someone meant; the diff says what happened. Read `git diff <from>..<to> -- <path>` for every change you draw, with `git -C <build>` for the application, and the PRD page or OpenSpec change it names
 - **Areas** - `facts.json` groups files by area: OpenSpec changes, Requirements, Product pages, References, Tokens, Primitives, Blocks, Copy, Stories and pages, Emails, Agent skills, Governance, Tooling and CI; the application's by Agent skills, Tooling and CI, Spec store pin, Docs, then each app and package by its folder; a path no area claims is grouped by its top folder
