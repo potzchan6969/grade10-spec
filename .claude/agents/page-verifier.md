@@ -26,22 +26,26 @@ again.
 ## What You Check
 
 1. **Numbers** - recount every number in `numbers` and every count in a title
-   or reason from the facts; a number that differs is wrong
-2. **Commits** - every commit a change lists is in the facts, and its diff
+   or reason from the facts; a number that differs is wrong. A digest's
+   `stamp.fromDate` and `stamp.date` both name the day it covers, by design
+2. **Whole lists** - a list, table or title that names what a change holds
+   names all of it, or says it is a sample; one that silently leaves an item
+   out is wrong
+3. **Commits** - every commit a change lists is in the facts, and its diff
    holds what the change says; a change whose commits do not show it is wrong
-3. **Before and now** - read the diff for each `before` and `now`; a value,
+4. **Before and now** - read the diff for each `before` and `now`; a value,
    a word or a rule the diff does not hold is wrong
-4. **Words on screens** - every word a card quotes from a screen is in the
+5. **Words on screens** - every word a card quotes from a screen is in the
    catalog or the component at the commit the shot was captured at
-5. **Shots** - open each shot. It shows what its caption and its card say:
+6. **Shots** - open each shot. It shows what its caption and its card say:
    the state, the words and the screen. A shot of the wrong state, an error,
    an empty page or a loading spinner is wrong. A shot recorded as `dirty`
    is wrong on a digest
-6. **Links** - each link opens what its text names: the pull request, the
+7. **Links** - each link opens what its text names: the pull request, the
    proposal, the requirement at its path
-7. **Kinds and readers** - `new`, `changed` and `removed` match what the diff
+8. **Kinds and readers** - `new`, `changed` and `removed` match what the diff
    did; `who` names the readers who notice it
-8. **House style** - headings are plain labels, items lead with the key term,
+9. **House style** - headings are plain labels, items lead with the key term,
    sentences are short and in the reader's words, no em or en dash
 
 Read a `mock` only on a handoff's question option: it is a planned screen,
