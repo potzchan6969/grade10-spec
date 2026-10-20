@@ -17,10 +17,12 @@ The page is a `handoff-page` page of kind `digest`: you write the facts as one d
 2. **Range** - `node <skill>/scripts/checkpoint.mjs range --branch <branch> --build <build> > <scratchpad>/digest/range.json`; with `commits` at 0, stop: post nothing and move nothing. `days` lists the days the new commits landed on, in either repository
 3. **Facts** - for each day in `days`, `node <skill>/scripts/checkpoint.mjs facts --branch <branch> --build <build> --day <day> > <scratchpad>/digest/<day>/facts.json`, then read what Gather names; the facts cover the whole day in both repositories, and `fresh` marks the commits this run brings
 4. **Write the data** - for each day, copy `<skill>/assets/example.json` to `<scratchpad>/digest/<day>/data.json`, replace every value with your own, and delete `"example"`
-5. **Build and check** - `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/digest/<day>/data.json`, then the `next:` line it prints, from `apps/preview` or any folder where Playwright resolves; fix every `FAIL`, and look at `check/page-1280-light-changed.png`
-6. **Preview the post** - `node <skill>/scripts/slack.mjs <scratchpad>/digest/<day>/data.json --url https://example.com --range <scratchpad>/digest/range.json` prints the message CI will send, or that the day brought nothing new
-7. **Publish** - from the repository root, `node <skill>/scripts/publish.mjs <scratchpad>/digest/<day>/page.html... --range <scratchpad>/digest/range.json`, every day's page in one call; it force-pushes the pages, their shots and the range to `digest/<branch>`, under `.digest/` on top of `main`, and that push starts the Checkpoint digest workflow (`.github/workflows/checkpoint-digest.yml`); it needs no `gh` and no token
-8. **Confirm** - follow that run in the repository's Actions tab, with `gh run watch` or the GitHub tool; its summary holds each day's link, and each post is in the channel
+5. **Capture** - for each screen a change shows, find its story with `node .claude/skills/handoff-page/scripts/shoot.mjs --find <words>` and capture it into the day's folder with `shoot.mjs <scratchpad>/digest/<day> --plan <plan.json> --at <the day's last commit>`, so a past day shows its screens as they stood then; a screen with no story gets no picture
+6. **Build and check** - `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/digest/<day>/data.json`, then the `next:` line it prints, from `apps/preview` or any folder where Playwright resolves; fix every `FAIL`, and look at `check/page-1280-light-changed.png`
+7. **Verify** - dispatch the `page-verifier` agent with the day's `data.json`, `facts.json`, `shots/` and `check/`, and `--build`'s checkout; fix every finding, build, and verify again until it returns `clean`
+8. **Preview the post** - `node <skill>/scripts/slack.mjs <scratchpad>/digest/<day>/data.json --url https://example.com --range <scratchpad>/digest/range.json` prints the message CI will send, or that the day brought nothing new
+9. **Publish** - from the repository root, `node <skill>/scripts/publish.mjs <scratchpad>/digest/<day>/page.html... --range <scratchpad>/digest/range.json`, every day's page in one call; it force-pushes the pages, their shots and the range to `digest/<branch>`, under `.digest/` on top of `main`, and that push starts the Checkpoint digest workflow (`.github/workflows/checkpoint-digest.yml`); it needs no `gh` and no token
+10. **Confirm** - follow that run in the repository's Actions tab, with `gh run watch` or the GitHub tool; its summary holds each day's link, and each post is in the channel
 
 The workflow uploads each day, posts what the run brought, then moves both checkpoints, in that order. A run that fails before the move leaves both where they were, so the next run redraws the same days and posts the same changes. A post is never lost; at worst it is sent twice.
 
@@ -74,12 +76,12 @@ Each change is one card with a `phase` naming its area; the page groups and coun
 | What moved | Draw it as |
 | --- | --- |
 | OpenSpec changes proposed, accepted or archived | A `board` with one column per move, or a `flow` of one change's stages |
-| A change built in the application | One card for the change, with the spec store and application commits both under `commits`, its pull request under `links`, and a `shot` or `mock` of what a reader now meets |
+| A change built in the application | One card for the change, with the spec store and application commits both under `commits`, its pull request under `links`, and a `shot` of what a reader now meets |
 | Application work no change names | One card per thing a reader would notice; a refactor, a fix or CI goes in For engineers |
 | A rule on a product page or in a requirement | `before` and `now` lines, and a `flow` or `states` when it is a path or a status |
-| Token values | A `diff` of each token, before and now, where a colour shows its swatch; a `mock` with the new values when a reader would see them |
+| Token values | A `diff` of each token, before and now, where a colour shows its swatch; a `shot` of a story that shows them when a reader would see them |
 | Catalog words | A `diff` of each key's words where they changed; a `table` of key and each language where they are new |
-| A primitive or block added or removed | A `shot` of its story when one can be captured, else a `mock` with `rendered` set |
+| A primitive or block added or removed | A `shot` of its story |
 | Where the work landed | `bars` of lines or commits per area, as the last card |
 | Tooling, CI and agent skills | One card each for what changes how the team works; the rest goes in For engineers |
 
@@ -87,6 +89,7 @@ Each change is one card with a `phase` naming its area; the page groups and coun
 - **Commits** - every commit the change comes from, in either repository, from `facts.json`; the build refuses a change without them, and the post finds what is new through them
 - **Who** - the readers who notice it: `Product`, `Design`, `Engineering`, `Members`, `Visitors`; the page's filter and the post use the same names
 - **Links** - the sources a reader opens next: the proposal, the pull request, the requirement
+- **Pictures of screens** - only a `shot` captured with `shoot.mjs`, captioned with the story and commit it came from; the build refuses a `mock` on a digest, because a drawn screen never matches what the frontend renders, and a shot captured at any commit but the day's last
 - **Proof** - leave it out; a digest reports what landed and claims nothing about whether it works
 - **Follow-ups** - what the range leaves waiting: a change proposed and not accepted, a 🚧 line with no change, a design-sync report that drifted
 - **For engineers** - the merged pull requests as `commits`, and the facts command in `notes`

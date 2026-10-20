@@ -124,50 +124,12 @@
       "title": "Time left says when a lot is in extended bidding",
       "before": "**Time left** counts down with no sign that the lot has extended",
       "now": "The label reads **Time left (extended)** until the lot closes",
-      "picture": [
-        {
-          "kind": "mock",
-          "frame": "phone",
-          "title": "Lot 12",
-          "caption": "Before",
-          "items": [
-            {
-              "label": "Current bid",
-              "value": "HKD 25,000"
-            },
-            {
-              "label": "Time left",
-              "value": "29:12"
-            },
-            {
-              "button": "Place bid",
-              "primary": true
-            }
-          ],
-          "rendered": "0000000"
-        },
-        {
-          "kind": "mock",
-          "frame": "phone",
-          "title": "Lot 12",
-          "caption": "Now",
-          "items": [
-            {
-              "label": "Current bid",
-              "value": "HKD 25,000"
-            },
-            {
-              "label": "Time left (extended)",
-              "value": "29:12"
-            },
-            {
-              "button": "Place bid",
-              "primary": true
-            }
-          ],
-          "rendered": "0000000"
-        }
-      ],
+      "picture": {
+        "kind": "shot",
+        "src": "shots/lot-extended.jpg",
+        "phone": true,
+        "caption": "Lot 12 in extended bidding, from its story"
+      },
       "links": [
         {
           "text": "Requirement",

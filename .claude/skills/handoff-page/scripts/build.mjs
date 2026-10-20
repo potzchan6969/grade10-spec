@@ -23,6 +23,10 @@ const dataPath = resolve(file);
 const dir = dirname(dataPath);
 const out = resolve(outArg ?? join(dir, "page.html"));
 const replyPath = join(dirname(out), "reply.md");
+const shotsPath = join(dir, "shots", "shots.json");
+const SHOTS = existsSync(shotsPath)
+  ? JSON.parse(readFileSync(shotsPath, "utf8"))
+  : {};
 
 let data;
 try {
@@ -185,6 +189,34 @@ function localFile(src, at) {
     fail(at, `${src} is not next to the data file`);
 }
 
+// A shot is the screen itself: shoot.mjs captured it and recorded where from in shots/shots.json.
+function captured(src, at) {
+  localFile(src, at);
+  if (isText(src) && !SHOTS[src])
+    fail(
+      at,
+      `${src} was not captured by scripts/shoot.mjs; capture the story or page that renders it`,
+    );
+  const shot = isText(src) && SHOTS[src];
+  if (!shot || !digest) return;
+  // A digest's day shows its screens as they stood at the day's last commit, never as they stand now.
+  if (shot.dirty)
+    fail(
+      at,
+      `${src} was captured with changes not committed; capture it at the day's commit`,
+    );
+  const day = String(data.stamp?.commit ?? "");
+  if (
+    shot.story &&
+    day &&
+    !(shot.commit.startsWith(day) || day.startsWith(shot.commit))
+  )
+    fail(
+      at,
+      `${src} shows the stories at ${shot.commit}, not the day's ${day}; capture with scripts/shoot.mjs --at ${day}`,
+    );
+}
+
 function picture(p, at) {
   if (p == null) return;
   if (Array.isArray(p)) {
@@ -200,12 +232,25 @@ function picture(p, at) {
       `"${p.kind}" is not a picture; use one of ${Object.keys(PICTURES).join(", ")}`,
     );
   shape(p, keys, at);
-  if (p.kind === "shot") localFile(p.src, `${at}.src`);
+  if (p.kind === "shot") captured(p.src, `${at}.src`);
   if (p.kind === "beforeNow") {
-    localFile(p.before, `${at}.before`);
-    localFile(p.now, `${at}.now`);
+    captured(p.before, `${at}.before`);
+    captured(p.now, `${at}.now`);
   }
-  if (p.kind === "mock") mock(p, at);
+  if (p.kind === "mock") {
+    // A screen on the page is the screen the frontend renders; only a question's option may draw one nobody has built.
+    if (digest)
+      fail(
+        at,
+        "a digest shows only captured screens: capture the story with scripts/shoot.mjs, or leave the picture out",
+      );
+    else if (!/\.options\[\d+\]\.picture/.test(at))
+      fail(
+        at,
+        "a mock draws an option's planned screen; a screen the build has is a shot, captured with scripts/shoot.mjs",
+      );
+    mock(p, at);
+  }
   if (p.kind === "flow") {
     const steps = items(p.steps, `${at}.steps`);
     if (steps.length < 2) fail(`${at}.steps`, "a flow needs at least 2 steps");
@@ -534,12 +579,6 @@ questions.forEach((q, i) => {
     need(o, "cost", where, 'what the option costs; write "None" when nothing');
     long(o.label, 40, `${where}.label`);
     picture(o.picture, `${where}.picture`);
-    if (JSON.stringify(o.picture ?? null).includes('"rendered"')) {
-      warn(
-        `${where}.picture`,
-        "an option's picture is a planned screen; rendered marks a stand-in for a screen the build already has",
-      );
-    }
   });
   const recommended = options.filter((o) => o?.recommended === true);
   if (recommended.length !== 1)
@@ -794,6 +833,17 @@ const escapeHtml = (s) =>
     /[&<>"]/g,
     (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
   );
+// Each shot names on the page what it was captured from, and at which commit.
+(function stamp(v) {
+  if (Array.isArray(v)) return v.forEach(stamp);
+  if (!isObject(v)) return;
+  const shot =
+    SHOTS[v.kind === "shot" ? v.src : v.kind === "beforeNow" ? v.now : ""];
+  if (shot)
+    v.captured = { from: shot.from, commit: shot.commit, dirty: shot.dirty };
+  for (const x of Object.values(v)) stamp(x);
+})(data);
+
 const template = readFileSync(
   join(here, "..", "assets", "template.html"),
   "utf8",

@@ -30,7 +30,8 @@ One page, linked from its PR and behind the team's Cloudflare login, that hands 
 3. **Write the data** - copy `assets/example.json` to `<scratchpad>/handoff/data.json`, replace every value with your own, and delete `"example"`
 4. **Build** - from the repository root, `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/handoff/data.json`; fix every `FAIL`, weigh every `warn`, and build again until it passes; it writes `page.html` and `reply.md` beside the data
 5. **Check** - run the `next:` line the build prints from a folder where Playwright resolves, and look at the screenshots
-6. **Publish and reply** - as Publish and Hand Over says
+6. **Verify** - dispatch the `page-verifier` agent, as Check says; fix every finding in the data, build, and dispatch it again until it returns `clean`
+7. **Publish and reply** - as Publish and Hand Over says
 
 Never edit `page.html` by hand: change the data and build again. What the template cannot draw goes in `extra`.
 
@@ -158,7 +159,7 @@ Every change, option and step leads with a picture; text is captions and short c
 | --- | --- | --- |
 | A screen of the build under review | `shot` | `src` (`shots/<name>.jpg`), `phone` |
 | A visual change | `beforeNow` | `before`, `now`: two shots of the same state |
-| What a person sees where no build shows it yet - an option, a planned state | `mock` | `frame` (`phone`, `desktop`, `email`, `push`), `title`, `url` (desktop), `from` and `subject` (email), `app`, `time` and `body` (push), `items` |
+| What a question's option would show, where nobody has built it | `mock` | `frame` (`phone`, `desktop`, `email`, `push`), `title`, `url` (desktop), `from` and `subject` (email), `app`, `time` and `body` (push), `items` |
 | A path through screens or systems | `flow` | `steps`: `text`, `who`, `arrow` (the label on the way in), `tone` |
 | Two people racing, or anything with a clock | `lanes` | `lanes`, and `events`: `at`, `lane`, `to`, `text`, `tone` |
 | A status | `states` | `states`: `name`, `means`, `by`, `who` |
@@ -171,22 +172,22 @@ Every change, option and step leads with a picture; text is captions and short c
 - **No kind fits** - draw it with the closest kind, and name the missing kind in the reply: what it would show, and for which change; a new kind lands as an entry in `assets/data.schema.json` and a drawing in `assets/template.html`, never as markup in the data
 - **Diff** - marks the words a row changed; a colour shows its swatch; a value that changed whole is shown unmarked
 - **Phones** - on a narrow screen a `flow` runs top to bottom, and `lanes` become a list
-- **Rendered** - `rendered: "<sha>"` marks a mock standing in for a screen the build already has, when no stack can capture it; an option's picture is a planned screen and never carries it
+- **Screens are captured** - a screen on the page is the screen the frontend renders: a `shot` or `beforeNow` that `scripts/shoot.mjs` captured, which the page captions with the story and the commit it came from; the build refuses one `shots/shots.json` does not record, and a `mock` anywhere but a question's option
 - **Mock items** - one part each: `h`, `text` (`muted`), `label` with `value`, `button` (`primary`), `switch` (`on`), `field` with `value`, `notice`, `tip`, `badge`, `divider`; each may add `draft`, `added` and `tone`; `draft: true` on the mock itself marks its subject, title and body
 - **Tones** - `ok`, `warn`, `bad`, `info`, `accent`, `none`
-- **Mocks** - the product's screen in its own colours, light in both page themes, with the catalog's words
+- **Mocks** - an option's planned screen only, in the product's own colours, light in both page themes, with the catalog's words
 
 ## Real Screenshots
 
 Diagrams explain; screenshots prove. Every change that shows on a screen gets the real screen of the build under review, after its diagram.
 
-- **No stack, no staging** - when neither can run, draw a `mock` with the screen's real parts and words, read from its component, set `rendered` to the commit, and mark its Proof row `partial`; never pass a mock off as a screenshot
-- **Capture from the stories** - run the workbench (`pnpm storybook`) and capture each state from its story with Playwright, from `apps/preview`: an assertion before every shot, images outside the repository; a state with no story is the designer's to draw first (`/storybook-workbench`), never a local mock passed off as a shot
-- **Use the story's own args** - make the state the caption claims through the story's args and controls, and the catalog's words; the reply names each story it captured
+- **Capture with `shoot.mjs`** - `node .claude/skills/handoff-page/scripts/shoot.mjs <scratchpad>/handoff --plan <plan.json>` starts the workbench from this checkout, captures each shot the plan names, and records it in `shots/shots.json`; `--find <words>` lists the story ids, and `--at <commit>` captures the stories as they stood at that commit, from a temporary worktree. A plan is a list: `{"name": "lot-extended", "story": "<story id>", "args": {...}, "phone": true}`, or `{"name": "lot", "url": "http://localhost:5173/..."}` for a page a running app serves
+- **No story, no picture** - a state with no story is the designer's to draw first (`/storybook-workbench`); until then the card has no picture and its Proof row reads `partial`. Never draw it
+- **Use the story's own args** - make the state the caption claims through the story's args, and the catalog's words; the reply names each story it captured
 - **Story order** - capture a process in one serial run, so each screen shows the result of the step before; a cross-role effect is captured after the step that causes it
 - **Demo data only** - no production data, no real person's name, address, card, document or identity photo, and no token, magic link or session id in an address bar; a page travels further than you expect
 - **Look at every image** - the thing that matters below the fold (scroll or filter to it), a PDF blank in headless Chromium (render page 1 with `pdftoppm -jpeg -f 1 -l 1`), a dev badge in a corner (hide it)
-- **Size** - desktop 1280×800, phone 390×844, `type: "jpeg", quality: 78`, saved to `<scratchpad>/handoff/shots/`, where the build and the check look for them
+- **Size** - `shoot.mjs` captures desktop at 1280 wide and phone at 390, as JPEG, into `<scratchpad>/handoff/shots/`, where the build and the check look for them
 - **Capturing finds bugs** - each one goes into Follow-ups and the reply: a past sale still saying it opens soon, a countdown to a date already gone
 
 ## Walkthroughs
@@ -217,6 +218,7 @@ A simulation - a countdown, a race, an extension, a retry - is code the template
 3. **Look** - open the `-top.png` shots and the section shots (`-<section>.png`, at 390 and 1280 wide); a clean run can still read badly
 4. **Cold read** - when the page asks anything, one fresh subagent with none of this session's context reads the top shot and the Decide section and answers: what is the verdict, what am I asked, what would I pick and why; whatever it gets wrong is rewritten in the data, because the real reader starts from the same place; a session with no subagent says the cold read did not run
 5. **Simulate** - for an `extra` simulation, drive it headless: Watch the demo at top speed and read its log against the code's rules, act in each window, flip Before / Now
+6. **Verify** - dispatch the `page-verifier` agent (`.claude/agents/page-verifier.md`, on Haiku) with the paths of `data.json`, the facts, `shots/` and `check/`; it checks every number, commit, before and now, quoted word, shot and link against its source and returns one line per finding. Fix each in the data, build, and dispatch a fresh one until it returns `clean`; a session with no subagent says the verify did not run
 
 A cloud session whose Playwright wants another browser build sets `CHROMIUM_PATH=/opt/pw-browsers/chromium`; a new machine runs `pnpm setup:browsers` once.
 

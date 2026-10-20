@@ -40,70 +40,12 @@
       "before": "`MemberCard`: a plain card with the code, a code to read out, and a used state",
       "now": "`MemberPass`: a header in the tier's colours over the QR square, a short code and a Refresh button",
       "commits": ["d12c402"],
-      "picture": [
-        {
-          "kind": "mock",
-          "frame": "phone",
-          "title": "Member pass",
-          "caption": "The pass at the till, in its story's words",
-          "items": [
-            {
-              "badge": "Gold",
-              "tone": "accent"
-            },
-            {
-              "text": "collector@example.com",
-              "muted": true
-            },
-            {
-              "field": "Short code",
-              "value": "XJCD-4WMB"
-            },
-            {
-              "divider": true
-            },
-            {
-              "label": "Refreshes in",
-              "value": "0:45"
-            },
-            {
-              "button": "Refresh"
-            }
-          ]
-        },
-        {
-          "kind": "diff",
-          "caption": "The pass's English words in `membership.json`",
-          "rows": [
-            {
-              "name": "`page.card`",
-              "before": "Your member card",
-              "now": "Your member pass"
-            },
-            {
-              "name": "`card.refresh`",
-              "before": "New code",
-              "now": "Refresh"
-            },
-            {
-              "name": "`card.shortCode`",
-              "now": "Short code"
-            },
-            {
-              "name": "`card.fallbackCode`",
-              "before": "Or read this out"
-            },
-            {
-              "name": "`card.refreshesIn`",
-              "now": "Refreshes in"
-            },
-            {
-              "name": "`card.expiresIn`",
-              "before": "Expires in"
-            }
-          ]
-        }
-      ],
+      "picture": {
+        "kind": "shot",
+        "src": "shots/member-pass.jpg",
+        "phone": true,
+        "caption": "The pass at the till, from its story"
+      },
       "links": [
         {
           "text": "Proposal",
@@ -172,23 +114,9 @@
       "now": "A restricted region sees no way into auctions, and a winner there can still pay for what they won",
       "commits": ["19c7296", "d290e91"],
       "picture": {
-        "kind": "mock",
-        "frame": "desktop",
-        "url": "grade10.com/auction",
-        "caption": "What a direct auction address answers in a restricted region",
-        "items": [
-          {
-            "h": "Auctions aren't available in your region"
-          },
-          {
-            "text": "You can't bid on or watch lots from where you are. The store is open as usual.",
-            "muted": true
-          },
-          {
-            "button": "Browse the Store",
-            "primary": true
-          }
-        ]
+        "kind": "shot",
+        "src": "shots/region-closed.jpg",
+        "caption": "What a direct auction address answers in a restricted region, from its story"
       },
       "links": [
         {

@@ -433,20 +433,15 @@
       ]
     },
     "caption": { "$ref": "#/$defs/words" },
-    "rendered": {
-      "$ref": "#/$defs/text",
-      "description": "The commit whose screen a mock stands in for."
-    },
     "added": { "type": "boolean", "description": "An option adds all of it." },
     "picture-shot": {
       "type": "object",
       "additionalProperties": false,
       "required": ["kind", "src"],
-      "description": "A screen of the build under review.",
+      "description": "A screen captured by scripts/shoot.mjs from the story or page that renders it; the build refuses one shots/shots.json does not record.",
       "properties": {
         "kind": { "const": "shot" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "src": {
           "$ref": "#/$defs/text",
@@ -463,7 +458,6 @@
       "properties": {
         "kind": { "const": "beforeNow" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "before": { "$ref": "#/$defs/text" },
         "now": { "$ref": "#/$defs/text" }
@@ -477,7 +471,6 @@
       "properties": {
         "kind": { "const": "mock" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "draft": { "type": "boolean" },
         "frame": { "enum": ["phone", "desktop", "email", "push"] },
@@ -527,7 +520,6 @@
       "properties": {
         "kind": { "const": "flow" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "steps": {
           "type": "array",
@@ -558,7 +550,6 @@
       "properties": {
         "kind": { "const": "lanes" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "lanes": {
           "type": "array",
@@ -592,7 +583,6 @@
       "properties": {
         "kind": { "const": "states" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "states": {
           "type": "array",
@@ -620,7 +610,6 @@
       "properties": {
         "kind": { "const": "table" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "columns": { "type": "array", "items": { "type": "string" } },
         "rows": {
@@ -641,7 +630,6 @@
       "properties": {
         "kind": { "const": "bars" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "unit": { "type": "string" },
         "items": {
@@ -668,7 +656,6 @@
       "properties": {
         "kind": { "const": "diff" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "rows": {
           "type": "array",
@@ -700,7 +687,6 @@
       "properties": {
         "kind": { "const": "board" },
         "caption": { "$ref": "#/$defs/caption" },
-        "rendered": { "$ref": "#/$defs/rendered" },
         "added": { "$ref": "#/$defs/added" },
         "columns": {
           "type": "array",

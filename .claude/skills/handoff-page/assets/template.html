@@ -959,7 +959,7 @@
     outline: 2px dashed var(--accent);
     outline-offset: 4px;
   }
-  .rendered {
+  .captured {
     color: var(--muted);
     font-size: 12.5px;
     font-style: italic;
@@ -2796,7 +2796,9 @@
         "figure",
         { class: ["pic", `pic-${p.kind}`, ...look].join(" ") },
         draw(p),
-        p.rendered ? h("p", { class: "rendered" }, `Rendered from code at ${p.rendered}, not captured`) : null,
+        p.captured
+          ? h("p", { class: "captured" }, `Captured from ${p.captured.from} at ${p.captured.commit}${p.captured.dirty ? ", with changes not yet committed" : ""}`)
+          : null,
         p.caption ? h("figcaption", { html: md(p.caption) }) : null,
       );
     }

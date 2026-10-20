@@ -37,6 +37,13 @@ and is read through
 [`scripts/openspec/perspectives.mjs`](../../scripts/openspec/perspectives.mjs).
 This file carries no copy of it.
 
+## The Page Verifier
+
+[`page-verifier.md`](page-verifier.md) is no round's reader: the
+`handoff-page` and `checkpoint-digest` skills dispatch it on a built page,
+before they publish it. It runs on `haiku`, because it checks each claim
+against a source rather than weighing a design, and it writes nothing.
+
 ## Adding a Reader
 
 1. Write the definition here, with `name`, `description`, `model` and
