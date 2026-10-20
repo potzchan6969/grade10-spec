@@ -7,36 +7,15 @@
  *   pnpm storybook:coverage           the three tables, as markdown
  *   pnpm storybook:coverage --gaps    only what is missing
  */
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
-import { KINDS, titleCase } from "./grammar.mjs";
+import { KINDS } from "./grammar.mjs";
 import { citedJourneys, readJourneys } from "./journeys.mjs";
+import { manualFeatures } from "./sidebar.mjs";
 import { rootDirectory, sanitize, storyIndex } from "./story-index.mjs";
 
 export const COVERAGE_FILE = "apps/preview/coverage.yaml";
-const SITE = "docs/prds/products/grade10-site";
-
-/** Every feature the workbench sidebar can hold, as `domain/feature` slugs. */
-export function manualFeatures(root = rootDirectory) {
-  const features = [];
-  const pages = (directory, domain) => {
-    for (const file of readdirSync(join(root, directory)).sort()) {
-      if (!file.endsWith(".md") || file === "index.md" || file === "README.md")
-        continue;
-      const feature = file.slice(0, -3);
-      features.push({
-        key: `${domain}/${feature}`,
-        title: `${titleCase(domain)}/${titleCase(feature)}`,
-        page: `${directory}/${file}`,
-      });
-    }
-  };
-  for (const domain of readdirSync(join(root, SITE)).sort())
-    if (existsSync(join(root, SITE, domain)) && !domain.includes("."))
-      pages(`${SITE}/${domain}`, domain);
-  return features;
-}
 
 /** `{ "no-screen": {key: why}, operator: {key: why} }` from the coverage file. */
 export function declared(root = rootDirectory) {
