@@ -322,7 +322,7 @@ function AboutPage() {
           <section
             aria-labelledby="parent-company-heading"
             className={cn(
-              "rounded-3xl border border-border bg-muted p-6 sm:p-12",
+              "rounded-3xl border border-border bg-muted p-4 sm:p-12",
               REVEAL,
               pageIsRevealed && REVEALED,
             )}
@@ -341,7 +341,7 @@ function AboutPage() {
                   </h2>
                   <img
                     alt={ABOUT_PAGE.parentCompany.logoAlt}
-                    className="h-8 w-auto self-start sm:h-12"
+                    className="h-8 w-auto max-w-full self-start object-contain sm:h-12"
                     src={ABOUT_PAGE.parentCompany.logoSrc}
                   />
                 </div>
