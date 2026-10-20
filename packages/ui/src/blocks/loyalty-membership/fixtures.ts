@@ -97,6 +97,4 @@ const ACTIVITY: ActivityEntry[] = [
 /** Opaque, single-use, minted by the programme — this one only looks the part. */
 const MEMBER_TOKEN = "g10m.eyJrIjoiZml4dHVyZSJ9.5f2a9c";
 
-const FALLBACK_CODE = "H7K2-9QXF";
-
-export { ACTIVITY, BALANCE, COUPONS, FALLBACK_CODE, MEMBER_TOKEN, REWARDS };
+export { ACTIVITY, BALANCE, COUPONS, MEMBER_TOKEN, REWARDS };

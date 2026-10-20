@@ -6,32 +6,26 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { ArrowsCounterClockwise, CircleNotch } from "@phosphor-icons/react";
+import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ScanPlate } from "./scan-plate";
 import { TierBadge } from "./tier-badge";
 
 /** The words the pass says, whoever holds it. */
 type MemberPassCopy = {
   /** Read to anyone who cannot see the scannable code. */
   qrAlt: string;
-  /** Names the short typed fallback code. */
-  shortCode: string;
   /** Names the refresh control. */
   refresh: string;
   /** Precedes the m:ss countdown to the code's refresh. */
   refreshesIn: string;
-  /** Shown when the code's time is up. */
-  expired: string;
 };
 
 /**
- * What has become of the code on the pass. A code the till has taken is not
- * one of them — the pass just keeps rotating, so exactly one holds at a time
- * and an expired code can never also be counting down.
+ * How long the code on the pass has to live — the consumer mints the next
+ * one before it runs out, so the pass is never out of time. A code the till
+ * takes is not a state either; it is answered by the next minted token.
  */
-type MemberPassState =
-  | { status: "live"; remainingSeconds: number }
-  | { status: "expired" };
+type MemberPassState = { remainingSeconds: number };
 
 type MemberPassVariant = "silver" | "gold" | "black";
 
@@ -45,9 +39,7 @@ type MemberPassProps = {
   variant: MemberPassVariant;
   /** Opaque single-use token the scannable code encodes verbatim. The pass never mints it. */
   token: string;
-  /** The same identification, short enough to read out or type. */
-  fallbackCode: string;
-  /** Live or out of time. The consumer decides which — a taken code is answered by minting the next. */
+  /** Seconds the code has left; the consumer mints the next before it runs out. */
   state: MemberPassState;
   /** Asks the consumer for a fresh token; nothing changes until one arrives. */
   onRefresh: () => void;
@@ -87,18 +79,20 @@ function minutesSeconds(seconds: number) {
 }
 
 /**
- * The member pass a till scans or reads. The token arrives minted — this
- * pass encodes it and counts it down, and refreshing only asks the consumer
- * for a new one, so no credential is ever produced on a surface.
+ * The member pass a till scans. The token arrives minted — this pass encodes
+ * it and counts it down, and refreshing only asks the consumer for a new one,
+ * so no credential is ever produced on a surface.
  *
  * A code a till takes is simply answered by the next one — the pass keeps
  * counting down and rotating rather than freezing on what was spent, and the
  * refusal of a replayed code is the till's answer, not the member's card's.
+ * The square stands alone: the code it encodes is not spelled out, and an
+ * email miss is the till's other path to the member.
  *
- * On a phone the pass is presented alone, so the code area keeps the member's
+ * On a phone the pass is presented alone, so the header keeps the member's
  * email under the tier badge — the programme collects no name at registration.
- * A fresh token swaps the code area in and out of view rather than snapping,
- * so staff are never mid-scan when the square moves.
+ * A fresh token swaps the square in and out of view rather than snapping, so
+ * staff are never mid-scan when it moves.
  */
 function MemberPass({
   copy,
@@ -106,7 +100,6 @@ function MemberPass({
   tier,
   variant,
   token,
-  fallbackCode,
   state,
   onRefresh,
   refreshing = false,
@@ -114,19 +107,18 @@ function MemberPass({
   className,
 }: MemberPassProps) {
   const skin = SKIN[variant];
-  const expired = state.status === "expired";
 
-  const [shown, setShown] = useState({ token, code: fallbackCode });
+  const [shown, setShown] = useState(token);
   const [exiting, setExiting] = useState(false);
 
   useLayoutEffect(() => {
-    if (shown.token === token && shown.code === fallbackCode) return;
+    if (shown === token) return;
     if (prefersReducedMotion()) {
-      setShown({ token, code: fallbackCode });
+      setShown(token);
       return;
     }
     setExiting(true);
-  }, [token, fallbackCode, shown]);
+  }, [token, shown]);
 
   // The swap lands the moment the square has faded out — animationend is the
   // crisp path, the timer covers a cancelled or unfired animation.
@@ -134,10 +126,10 @@ function MemberPass({
     if (!exiting) return;
     const settled = window.setTimeout(() => {
       setExiting(false);
-      setShown({ token, code: fallbackCode });
+      setShown(token);
     }, 400);
     return () => window.clearTimeout(settled);
-  }, [exiting, token, fallbackCode]);
+  }, [exiting, token]);
 
   // A refused refresh is an event, not a state — it toasts once per reason
   // rather than sitting inline under the control.
@@ -158,7 +150,6 @@ function MemberPass({
         "w-full max-w-(--container-xs) overflow-clip rounded-(--radius-4xl) drop-shadow-[0px_30px_30px_rgb(0_0_0/0.15)]",
         className,
       )}
-      data-expired={expired || undefined}
       data-slot="member-pass"
     >
       <VStack
@@ -188,9 +179,8 @@ function MemberPass({
           className="w-full"
           data-slot="member-pass-code-area"
         >
-          {/* Only the square moves — it fades and eases down, the pair swaps
-              while it is out of view, then the fresh one settles back in. The
-              caption and code never animate. */}
+          {/* Only the square moves — it fades and eases down, the token swaps
+              while it is out of view, then the fresh one settles back in. */}
           <div
             className={cn(
               exiting
@@ -198,23 +188,25 @@ function MemberPass({
                 : "[&_[data-slot=member-pass-qr]]:animate-in [&_[data-slot=member-pass-qr]]:fade-in [&_[data-slot=member-pass-qr]]:zoom-in-97",
               "[&_[data-slot=member-pass-qr]]:duration-200 motion-reduce:[&_[data-slot=member-pass-qr]]:animate-none",
             )}
-            key={`${shown.token}|${shown.code}`}
+            key={shown}
             onAnimationEnd={() => {
               if (!exiting) return;
               setExiting(false);
-              setShown({ token, code: fallbackCode });
+              setShown(token);
             }}
           >
-            <ScanPlate
-              alt={copy.qrAlt}
-              caption={copy.shortCode}
-              code={shown.code}
-              dimmed={expired}
-              size={224}
-              slot="member-pass"
-              value={shown.token}
-              variant="flat"
-            />
+            <div className="mx-auto w-full max-w-56" data-slot="member-pass-qr">
+              <QRCodeSVG
+                bgColor="#ffffff"
+                className="block h-auto w-full"
+                fgColor="#000000"
+                level="M"
+                marginSize={2}
+                size={224}
+                title={copy.qrAlt}
+                value={shown}
+              />
+            </div>
           </div>
         </div>
         <div
@@ -223,7 +215,18 @@ function MemberPass({
           data-slot="member-pass-divider"
         />
         <HStack align="center" className="w-full" justify="space-between">
-          <PassState copy={copy} state={state} />
+          <HStack align="center" gap="xs">
+            <span aria-hidden="true" className="inline-flex animate-spin">
+              <CircleNotch color="var(--primary)" size={16} />
+            </span>
+            <Text
+              className="whitespace-nowrap text-secondary-foreground"
+              data-slot="member-pass-countdown"
+              size="xs"
+            >
+              {copy.refreshesIn} {minutesSeconds(state.remainingSeconds)}
+            </Text>
+          </HStack>
           <Button
             leading={<ArrowsCounterClockwise aria-hidden="true" />}
             loading={refreshing}
@@ -239,37 +242,6 @@ function MemberPass({
         </HStack>
       </VStack>
     </div>
-  );
-}
-
-/** The footer's one line: what the code is worth right now. */
-function PassState({
-  copy,
-  state,
-}: {
-  copy: MemberPassCopy;
-  state: MemberPassState;
-}) {
-  if (state.status === "expired") {
-    return (
-      <Text data-slot="member-pass-expired" size="xs" tone="error">
-        {copy.expired}
-      </Text>
-    );
-  }
-  return (
-    <HStack align="center" gap="xs">
-      <span aria-hidden="true" className="inline-flex animate-spin">
-        <CircleNotch color="var(--primary)" size={20} />
-      </span>
-      <Text
-        className="whitespace-nowrap text-secondary-foreground"
-        data-slot="member-pass-countdown"
-        size="xs"
-      >
-        {copy.refreshesIn} {minutesSeconds(state.remainingSeconds)}
-      </Text>
-    </HStack>
   );
 }
 

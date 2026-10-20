@@ -1,11 +1,9 @@
 {
   "card": {
-    "expired": "This code has expired",
     "inStore": "in store",
     "qrAlt": "Your member code, as a scannable square",
     "refresh": "Refresh",
     "refreshesIn": "Refreshes in",
-    "shortCode": "Short code",
     "walletAdd": "Add to {wallet}",
     "walletAddFailed": "{wallet} could not be added. Try again.",
     "walletApple": "Apple Wallet",

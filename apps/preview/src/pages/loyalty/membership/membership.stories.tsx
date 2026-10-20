@@ -134,9 +134,8 @@ function MembershipPage({ view }: { view: MembershipView }) {
             <MemberPass
               copy={MEMBER_PASS_COPY}
               email={MEMBER.email}
-              fallbackCode={MEMBER.fallbackCode}
               onRefresh={() => setCodes((value) => value + 1)}
-              state={{ status: "live", remainingSeconds: CODE_SECONDS }}
+              state={{ remainingSeconds: CODE_SECONDS }}
               tier={view.tier}
               token={`${MEMBER.token}.${codes}`}
               variant={view.tierVariant}

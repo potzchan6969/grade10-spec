@@ -34,8 +34,6 @@ const MEMBER = {
   displayName: "Mei Lin",
   /** No name is collected at registration; the pass carries the account email. */
   email: "mei.lin@example.com",
-  /** Eight letters, none of I, L, O or U. */
-  fallbackCode: "KRMT-QWPB",
   /** Opaque, single-use, minted by the programme; this one only looks the part. */
   token: "g10m.eyJrIjoiZml4dHVyZSJ9.5f2a9c",
 };
@@ -50,10 +48,8 @@ const TIER_CARD_COPY: TierCardCopy = {
 
 const MEMBER_PASS_COPY: MemberPassCopy = {
   qrAlt: "Your member QR code",
-  shortCode: "Short code",
   refresh: "Refresh",
   refreshesIn: "Refreshes in",
-  expired: "This code has expired. Refresh for a new one.",
 };
 
 const REWARD_MENU_COPY: RewardMenuCopy = {
