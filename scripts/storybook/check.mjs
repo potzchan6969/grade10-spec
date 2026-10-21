@@ -32,6 +32,8 @@ const PAGES = "apps/preview/src/pages/";
 const PROTOTYPES = "apps/preview/src/prototypes/";
 const BLOCKS = "packages/ui/src/blocks/";
 const PRIMITIVES = "packages/design-system/src/components/";
+/** The verification panel's own fixture: tooling, not a screen the manual draws. */
+const VERIFICATION = "apps/preview/src/ui-verification/";
 /** Manual applications whose domains the workbench draws, in lookup order. */
 const APPS = ["grade10-site", "shared"];
 
@@ -77,6 +79,8 @@ export function placementErrors(root, path, file) {
     leafNames.includes(leaf)
       ? null
       : `"${title}" - name the component ${leafNames.map((name) => `"${name}"`).join(" or ")}, not "${leaf}"`;
+
+  if (path.startsWith(VERIFICATION)) return errors;
 
   if (path.startsWith(PRIMITIVES)) {
     const group = titleCase(path.slice(PRIMITIVES.length).split("/")[0]);

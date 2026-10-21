@@ -63,6 +63,16 @@ describe("placementErrors", () => {
   const place = (path, title, component) =>
     placementErrors(root, path, { title, component });
 
+  it("leaves the verification panel's fixture outside the manual's grammar", () => {
+    assert.deepEqual(
+      place(
+        "apps/preview/src/ui-verification/demo.stories.tsx",
+        "UI Verification/Demo Shell",
+      ),
+      [],
+    );
+  });
+
   it("accepts a screen, a part, a block and a primitive in their folders", () => {
     assert.deepEqual(
       place(
