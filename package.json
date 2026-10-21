@@ -33,7 +33,7 @@
     "test:design-sync": "node --test scripts/design-sync/*.test.mjs",
     "test:traceability": "node --test scripts/test-traceability/*.test.mjs",
     "test:storybook": "node --test scripts/storybook/*.test.mjs",
-    "test:openspec": "node --test scripts/openspec/*.test.mjs",
+    "test:openspec": "node --test --test-concurrency=4 scripts/openspec/*.test.mjs",
     "test:bug-fix": "node --test scripts/bug-fix/*.test.mjs",
     "manual": "pnpm --dir tools/manual dev",
     "manual:build": "pnpm --dir tools/manual build && bash scripts/openspec-viewer/snapshot.sh",

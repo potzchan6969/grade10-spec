@@ -82,10 +82,16 @@ jobs:
             echo "tooling=true" >> "$GITHUB_OUTPUT"
           fi
 
+  # One job per package: ui alone is most of the time, and the three share
+  # nothing but their setup.
   stories:
     needs: changes
     if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [design-system, ui, app]
 
     steps:
       - name: Checkout
@@ -107,7 +113,7 @@ jobs:
         run: pnpm run setup:browsers
 
       - name: Run tests
-        run: pnpm run test:stories
+        run: pnpm run test:stories:${{ matrix.part }}
 
   # The manual's own pages in a browser: a pull request that moves none of
   # what they read has nothing to walk.

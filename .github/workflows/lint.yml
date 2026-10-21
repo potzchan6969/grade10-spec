@@ -48,26 +48,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check lint
+      # One pass that fixes what it can and fails on what it cannot. Errors
+      # alone are printed, so the block plugins' warnings never hide them.
+      - name: Lint and apply fixes
         id: lint
         continue-on-error: true
-        run: pnpm run lint
-
-      - name: Apply lint fixes
-        if: steps.lint.outcome == 'failure'
-        continue-on-error: true
-        run: pnpm run lint:fix
-
-      - name: Verify lint after fixes
-        if: steps.lint.outcome == 'failure'
-        run: pnpm run lint
+        run: pnpm run lint:fix --diagnostic-level=error
 
       - name: Commit lint fixes
         id: commit-lint-fixes
-        if: >-
-          steps.lint.outcome == 'failure' &&
-          github.event_name == 'push' &&
-          github.actor != 'github-actions[bot]'
+        # Committed even while errors remain, so what Biome can fix never piles
+        # up on main behind what it cannot.
+        if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
         env:
           COMMIT_MESSAGE: "chore(ci): apply Biome lint fixes"
         run: |
@@ -113,6 +105,10 @@ jobs:
             }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Fail on what Biome could not fix
+        if: steps.lint.outcome == 'failure'
+        run: exit 1
 
       # Last, so a manual page that has drifted never stops Biome from
       # committing its own fixes first — but never skipped when Biome fails.
