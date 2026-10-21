@@ -875,6 +875,7 @@ console.log(
 console.log(`next: node ${join(here, "check.mjs")} ${out}`);
 
 function reply() {
+  const REPLY_ITEMS = 6;
   const end = (s) => {
     const t = String(s ?? "").trim();
     return /[.!?]$/.test(t) ? t : `${t}.`;
@@ -884,11 +885,34 @@ function reply() {
       .map((r) => (r.href ? `[${r.text}](${r.href})` : r.text))
       .join("; ");
   const asks = openQuestions.length || openBlockers.length;
+  const verified = proof.filter((p) => p.status === "verified").length;
+  const verdict = digest
+    ? data.title
+    : verified < proof.length
+      ? `${VERDICTS[data.verdict]}, ${verified} of ${proof.length} claims verified`
+      : VERDICTS[data.verdict];
   const lines = [
-    `**${digest ? data.title : VERDICTS[data.verdict]}** - ${end(data.reason)}`,
+    `**${verdict}** - ${end(data.reason)}`,
     "",
     url ? `${url}${asks ? "#decide" : ""}` : "{{link}}",
   ];
+  // The reply is a draft the session trims: a long list stops at REPLY_ITEMS and points at the page.
+  const list = (title, all, item) => {
+    if (!all.length) return;
+    lines.push("", `### ${title}`, "", ...all.slice(0, REPLY_ITEMS).map(item));
+    const more = all.length - REPLY_ITEMS;
+    if (more > 0) lines.push(`- ${more} more on the page`);
+  };
+  list("What changed", changes, (c) => `- **${c.title}** - ${end(c.now)}`);
+  const status = { failed: "Failed", "not-run": "Not run", partial: "Partly" };
+  const order = Object.keys(status);
+  list(
+    "Not verified",
+    proof
+      .filter((p) => p.status !== "verified")
+      .sort((a, b) => order.indexOf(a.status) - order.indexOf(b.status)),
+    (p) => `- **${p.claim}** - ${status[p.status]}: ${end(p.why)}`,
+  );
   if (openQuestions.length) {
     lines.push("", "### Questions", "");
     for (const q of openQuestions) {
@@ -922,6 +946,10 @@ function reply() {
     lines.push("", "### Decisions made by Agents", "");
     for (const d of agentDecisions)
       lines.push(`- **${d.decision}** - ${end(d.taken)}`);
+  }
+  if (data.ship?.needs?.length) {
+    lines.push("", "### To ship", "");
+    for (const n of data.ship.needs) lines.push(`- ${end(n)}`);
   }
   if (!digest)
     lines.push(

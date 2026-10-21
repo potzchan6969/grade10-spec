@@ -156,11 +156,12 @@ function brought() {
   return fresh;
 }
 
-// One change: its kind, its title linked to its card, and who notices it.
+// One change: its kind, its title linked to its card, who notices it, and what they meet now.
 function line(c) {
   const kind = KIND[c.kind] ? `${KIND[c.kind]}: ` : "";
   const who = [c.who ?? []].flat().filter(Boolean);
-  return `• ${kind}*<${page}#${c.id}|${label(c.title)}>*${who.length ? ` · _${mrkdwn(who.join(", "))}_` : ""}`;
+  const now = c.now ? ` - ${mrkdwn(c.now)}` : "";
+  return `• ${kind}*<${page}#${c.id}|${label(c.title)}>*${who.length ? ` · _${mrkdwn(who.join(", "))}_` : ""}${now}`;
 }
 
 // The days the digest covers, as the page writes them: the year once, on the last day.
