@@ -1,6 +1,6 @@
 # grade10-site/site/page-shell Test Cases
 
-**Status:** pending-review · 0/53
+**Status:** pending-review · 0/54
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## grade10-site-site-page-shell-US1: Collector opens any surface inside the site shell
@@ -669,7 +669,7 @@ implies a currency I cannot switch.
 * The locale options are languages, not currencies.
 
 <!-- trace:case id=g10.site-page-shell.TC-ytf rev=2 covers=g10.site-page-shell.SC-ovr,g10.site-page-shell.SC-ql0,g10.site-page-shell.SC-ond,g10.site-page-shell.SC-7p3,g10.site-page-shell.SC-fmx,g10.site-page-shell.SC-cex,g10.site-page-shell.SC-ixf -->
-### grade10-site-site-page-shell-US4-TC2-1: Navigation and footer link only to real surfaces
+### grade10-site-site-page-shell-US4-TC2-2: Navigation and footer link only to real surfaces
 
 **Classification:**
 
@@ -987,7 +987,7 @@ else Auction), and Index just before it to open the Grade10 Index hub,
 auction-only or full primary nav.
 
 <!-- trace:case id=g10.site-page-shell.TC-ho3 rev=3 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
-### grade10-site-site-page-shell-US07-TC1-1: Help on auction-only header opens docs in a new tab
+### grade10-site-site-page-shell-US07-TC1-3: Help on auction-only header opens docs in a new tab
 
 **Classification:**
 
@@ -1024,7 +1024,7 @@ auction-only or full primary nav.
 * The auction page remains open in the original context.
 
 <!-- trace:case id=g10.site-page-shell.TC-wno rev=3 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
-### grade10-site-site-page-shell-US07-TC2-1: Help on full primary nav opens docs in a new tab
+### grade10-site-site-page-shell-US07-TC2-3: Help on full primary nav opens docs in a new tab
 
 **Classification:**
 
@@ -1059,7 +1059,7 @@ auction-only or full primary nav.
 * The store page remains open in the original context.
 
 <!-- trace:case id=g10.site-page-shell.TC-mgo rev=3 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
-### grade10-site-site-page-shell-US07-TC3-1: Help in the compact menu opens docs in a new tab
+### grade10-site-site-page-shell-US07-TC3-3: Help in the compact menu opens docs in a new tab
 
 **Classification:**
 
