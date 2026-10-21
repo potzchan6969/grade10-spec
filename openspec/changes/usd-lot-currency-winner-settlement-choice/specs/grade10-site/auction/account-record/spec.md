@@ -73,7 +73,7 @@ urgency SHALL appear with the listing identity.
 
 The row's price SHALL be the auction's current bid on that listing, never the
 collector's own bid. A listing past its effective close whose close is not yet
-recorded SHALL keep its open Status, SHALL stay in the Active tab, and SHALL
+recorded SHALL keep its open Status, SHALL stay an open row, and SHALL
 carry no minimum next valid bid.
 
 Every amount SHALL be an integer count of minor units with an ISO 4217 currency
@@ -115,7 +115,7 @@ code.
 - **GIVEN** an open listing the collector has neither watched nor bid on
 - **WHEN** their first bid on it is refused
 - **AND** they open My Auctions
-- **THEN** no row for that listing appears in any tab
+- **THEN** no row for that listing appears in the list
 
 <!-- trace:scenario id=g10.auction-account-record.SC-dsc rev=2 -->
 #### Scenario: grade10-site-auction-account-record-SC-71 - An outbid collector whose raise is refused stays Outbid
@@ -146,6 +146,6 @@ code.
 - **GIVEN** a listing past its effective close, whose close is not yet
   recorded, on which the collector holds the highest valid bid
 - **WHEN** they open My Auctions
-- **THEN** that row is in the Active tab with Status Leading and no minimum
+- **THEN** that row has Status Leading and no minimum
   next valid bid
 - **AND** it reads neither Won nor Didn't win
