@@ -1,14 +1,25 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Static publish of the workbench Storybook (preview pages + UI + design-
-  // system stories) to the staging Cloudflare account.
+  // Workbench assets and the authenticated R2 archive share this origin.
   // URL: https://storybook.grade10-stg.com
   "name": "grade10-storybook",
+  "main": "./worker/index.mjs",
   "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
   "account_id": "de021143aac704ccbda9c3cd00be261d",
+  "keep_vars": true,
   "assets": {
-    "directory": "./storybook-static"
+    "directory": "./storybook-static",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api", "/api/*"]
   },
+  "r2_buckets": [
+    {
+      "binding": "ARCHIVE",
+      "bucket_name": "grade10-ui-verification-archive",
+      "preview_bucket_name": "grade10-ui-verification-archive-preview"
+    }
+  ],
   "routes": [{ "pattern": "storybook.grade10-stg.com", "custom_domain": true }],
   "workers_dev": false
 }

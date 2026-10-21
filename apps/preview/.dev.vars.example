@@ -1,0 +1,5 @@
+# Copy to .dev.vars for a local combined Worker preview.
+# Obtain these values from the Access application protecting Storybook.
+ACCESS_ISSUER=https://your-team.cloudflareaccess.com
+ACCESS_AUD=your-storybook-access-audience
+PUBLISHER_TOKEN=replace-with-a-local-publisher-token
