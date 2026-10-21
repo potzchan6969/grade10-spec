@@ -79,11 +79,11 @@ export const SeveralBenefits: Story = {
   },
 };
 
-/** The card fills a narrow column and caps at its designed width. */
+/** The card fills a narrow column; its designed cap only applies at `sm` up. */
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const card = canvasElement.querySelector('[data-slot="tier-info-card"]');
-    expect(card).toHaveClass("max-w-(--container-xs)");
+    expect(card).toHaveClass("sm:max-w-(--container-xs)");
   },
 };
