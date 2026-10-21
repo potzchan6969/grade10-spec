@@ -430,3 +430,46 @@ test("reads a moved story file as a move, not a removal and an addition", async 
     },
   ]);
 });
+
+test("lists only stories whose render changed, with the reason", () => {
+  const payload = slackPayload({
+    affectedPages: [
+      "apps/preview/src/pages/store.stories.tsx",
+      "apps/preview/src/pages/profile.stories.tsx",
+    ],
+    index: INDEX,
+    renderChanges: new Map([["pages-store--empty", "layout"]]),
+    storybookUrl: "https://sb.test",
+  });
+  const text = payload.blocks.map((block) => block.text?.text).join("\n");
+
+  assert.match(text, /\*1 of 3\* stories/);
+  assert.match(
+    text,
+    /Store > Empty — <https:\/\/sb\.test\/\?path=\/story\/pages-store--empty\|layout shifted>/,
+  );
+  assert.doesNotMatch(text, /Profile/);
+});
+
+test("says so in one line when no reached story changed", () => {
+  const payload = slackPayload({
+    affectedPages: ["apps/preview/src/pages/store.stories.tsx"],
+    index: INDEX,
+    renderChanges: new Map(),
+    storybookUrl: "https://sb.test",
+  });
+  const text = payload.blocks.map((block) => block.text?.text).join("\n");
+
+  assert.match(text, /No visual change in the 2 stories/);
+  assert.equal(payload.blocks.length, 1);
+});
+
+test("posts nothing when a change reaches no story", () => {
+  const payload = slackPayload({
+    affectedPages: [],
+    index: INDEX,
+    renderChanges: new Map(),
+    storybookUrl: "https://sb.test",
+  });
+  assert.deepEqual(payload, { blocks: [] });
+});

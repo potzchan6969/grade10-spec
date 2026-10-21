@@ -31,17 +31,18 @@ black, taken through a `variant` prop and never derived from the tier
 name the consumer words — and SHALL render that tier name and the
 member's account email, there being no name collected at registration.
 `MemberPass` SHALL render the consumer's identification token as the
-scannable code verbatim and the supplied short code beside it, and SHALL
-NOT mint, persist or substitute either — a fresh pair arrives only
-through props after `onRefresh` reports the ask. While a refresh is in
-flight the refresh control SHALL show busy, and a refused refresh SHALL
-toast the reason the consumer passes, once per refusal. When a fresh token and
-short code arrive, `MemberPass` SHALL dip the square out of view and
-settle the fresh pair in — a transition, never an abrupt swap — and
+scannable code verbatim — the square alone, no typed code beside it —
+and SHALL NOT mint, persist or substitute it — a fresh token arrives
+only through props after `onRefresh` reports the ask. While a refresh is
+in flight the refresh control SHALL show busy, and a refused refresh
+SHALL toast the reason the consumer passes, once per refusal. When a
+fresh token arrives, `MemberPass` SHALL dip the square out of view and
+settle the fresh one in — a transition, never an abrupt swap — and
 SHALL swap instantly under reduced motion. `MemberPass` SHALL
-still render the code's life — a countdown while it lives and its expiry
-when it lapses — and SHALL carry no used state of its own: a code the
-till takes is answered by the next minted pair arriving through props,
+still render the code's life as a countdown while it lives — never an
+expired rendering, the consumer rotating the code out before it lapses —
+and SHALL carry no used state of its own: a code the till takes is
+answered by the next minted token arriving through props,
 so the pass keeps rotating rather than freezing on what was spent.
 `RewardMenu` SHALL price each reward in points, state a
 money-off reward's own validity period, and state what its coupon cannot be
@@ -89,10 +90,10 @@ SHALL require no export of its own.
 #### Scenario: grade10-site-loyalty-programme-SC-mp2 - The pass encodes the consumer's token, never its own
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** `MemberPass` renders a token and a short code
-- **THEN** the scannable code encodes that token verbatim and the short
-  code is the one supplied
-- **AND** the pass mints, persists and substitutes neither
+- **WHEN** `MemberPass` renders a token
+- **THEN** the scannable square encodes that token verbatim, no typed
+  code beside it
+- **AND** the pass mints, persists and substitutes it never
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-mp3 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-mp3 - The pass wears the skin of the tier held
@@ -106,8 +107,8 @@ SHALL require no export of its own.
 #### Scenario: grade10-site-loyalty-programme-SC-mp4 - A fresh code swaps the code area, never snaps
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** a fresh token and short code arrive after `onRefresh` reported the ask
-- **THEN** the square eases out of view and the fresh pair settles in
+- **WHEN** a fresh token arrives after `onRefresh` reported the ask
+- **THEN** the square eases out of view and the fresh one settles in
 - **AND** under reduced motion the swap is instant
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-mp5 rev=1 -->

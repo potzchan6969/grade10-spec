@@ -44,6 +44,14 @@ This file carries no copy of it.
 before they publish it. It runs on `haiku`, because it checks each claim
 against a source rather than weighing a design, and it writes nothing.
 
+## The Digest Chunk
+
+[`digest-chunk.md`](digest-chunk.md) is no round's reader either: the
+`checkpoint-digest` skill dispatches one per chunk when `chunks.mjs` splits a
+busy day. It is the one definition here that writes, and only its chunk's
+file, which the skill's `merge.mjs` folds into the day's page. It runs on
+`sonnet`, because it reads diffs and words the cards they draw.
+
 ## Adding a Reader
 
 1. Write the definition here, with `name`, `description`, `model` and

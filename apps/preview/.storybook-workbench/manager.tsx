@@ -1,3 +1,4 @@
+import "../.storybook/manager";
 import React, { useState } from "react";
 import { AddonPanel } from "storybook/internal/components";
 import {

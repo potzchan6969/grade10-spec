@@ -8,13 +8,7 @@ import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { join, sep } from "node:path";
 import { promisify } from "node:util";
-import { parse } from "yaml";
-import {
-  COVERAGE_FILE,
-  declared,
-  featureCoverage,
-  manualFeatures,
-} from "./coverage.mjs";
+import { COVERAGE_FILE, declared, featureCoverage } from "./coverage.mjs";
 import { DESIGN_SYSTEM, KINDS, START_HERE, titleCase } from "./grammar.mjs";
 import {
   citedJourneys,
@@ -22,6 +16,12 @@ import {
   readJourneys,
   requirementTitles,
 } from "./journeys.mjs";
+import {
+  MISSING,
+  manualFeatures,
+  sortedPreview,
+  WORKBENCH_PREVIEW,
+} from "./sidebar.mjs";
 import { rootDirectory, sanitize, storyIndex } from "./story-index.mjs";
 
 export { DESIGN_SYSTEM, KINDS, START_HERE, titleCase };
@@ -32,7 +32,6 @@ const PAGES = "apps/preview/src/pages/";
 const PROTOTYPES = "apps/preview/src/prototypes/";
 const BLOCKS = "packages/ui/src/blocks/";
 const PRIMITIVES = "packages/design-system/src/components/";
-const WORKBENCH_PREVIEW = "apps/preview/.storybook-workbench/preview.tsx";
 /** Manual applications whose domains the workbench draws, in lookup order. */
 const APPS = ["grade10-site", "shared"];
 
@@ -41,29 +40,6 @@ export const pascalCase = (basename) =>
     .split(/[-.]/)
     .map((word) => word[0].toUpperCase() + word.slice(1))
     .join("");
-
-/** The domains the workbench sidebar draws, in `docs/prds/manual.yaml` order. */
-export async function manualDomains(root = rootDirectory) {
-  const manual = parse(
-    await readFile(join(root, "docs/prds/manual.yaml"), "utf8"),
-  );
-  const domains = [];
-  for (const products of Object.values(manual.groups ?? {})) {
-    for (const product of products) {
-      const [app, domain] = product.split("/");
-      if (app === "grade10-site" || product === "shared/auth") {
-        const title = titleCase(domain);
-        if (!domains.includes(title)) domains.push(title);
-      }
-    }
-  }
-  return domains;
-}
-
-/** The workbench's root order: Start Here, the manual's domains, the design system. */
-export async function rootOrder(root = rootDirectory) {
-  return [START_HERE, ...(await manualDomains(root)), DESIGN_SYSTEM];
-}
 
 /** The manual page a `<Domain>/<Feature>` title names, or null. */
 export function manualPage(root, domain, feature) {
@@ -190,15 +166,6 @@ export async function siblingImports(root) {
     }
   }
   return errors;
-}
-
-/** The root list inside the workbench's `storySort`, or null. */
-export function sortRoots(previewText) {
-  const match = /storySort:[\s\S]*?const roots = (\[[\s\S]*?\]);/.exec(
-    previewText,
-  );
-  if (!match) return null;
-  return [...match[1].matchAll(/"([^"]+)"/g)].map((item) => item[1]);
 }
 
 const CITATIONS = [
@@ -384,11 +351,12 @@ export async function checkStories({ root = rootDirectory, files } = {}) {
 
   const previewPath = join(root, WORKBENCH_PREVIEW);
   if (existsSync(previewPath)) {
-    const roots = sortRoots(await readFile(previewPath, "utf8"));
-    const expected = await rootOrder(root);
-    if (!roots || roots.join("|") !== expected.join("|"))
+    const text = await readFile(previewPath, "utf8");
+    const sorted = sortedPreview(text, root);
+    if (sorted === null) errors.push(MISSING);
+    else if (sorted !== text)
       errors.push(
-        `${WORKBENCH_PREVIEW} - storySort's roots read ${JSON.stringify(expected)}, from docs/prds/manual.yaml`,
+        `${WORKBENCH_PREVIEW} - storySort's sidebar is not the manual's; run pnpm storybook:sort`,
       );
   }
 

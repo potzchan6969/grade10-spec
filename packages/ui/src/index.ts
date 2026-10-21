@@ -420,6 +420,11 @@ export {
   type CouponListProps,
 } from "./blocks/loyalty-membership/coupon-list";
 export {
+  HowPointsWork,
+  type HowPointsWorkItem,
+  type HowPointsWorkProps,
+} from "./blocks/loyalty-membership/how-points-work";
+export {
   MemberPass,
   type MemberPassCopy,
   type MemberPassProps,
@@ -432,16 +437,21 @@ export {
   type RewardMenuProps,
 } from "./blocks/loyalty-membership/reward-menu";
 export {
-  ScanPlate,
-  type ScanPlateProps,
-  type ScanPlateVariant,
-} from "./blocks/loyalty-membership/scan-plate";
-export {
   TierCard,
   type TierCardCopy,
   type TierCardProps,
   type TierCardVariant,
 } from "./blocks/loyalty-membership/tier-card";
+export {
+  TierInfoCard,
+  type TierInfoCardProps,
+} from "./blocks/loyalty-membership/tier-info-card";
+export {
+  TierLadder,
+  type TierLadderCopy,
+  type TierLadderProps,
+  type TierLadderRung,
+} from "./blocks/loyalty-membership/tier-ladder";
 export type {
   ActivityEntry,
   CouponItem,

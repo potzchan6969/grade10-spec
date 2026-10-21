@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T07:59:54.982Z",
+  "generatedAt": "2026-10-21T06:24:18.384Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -68,6 +68,7 @@
     "Product / Cart / Cart Drawer Header": "warn",
     "Product / Cart / Cart Item": "warn",
     "Product / Cart / Cart Item Slot": "warn",
+    "Product / Cart / Promo Ticket": "warn",
     "Product / Image": "warn",
     "Product / Order / Order Details Delivery Status": "ok",
     "Product / Order / Order Details Header": "ok",
@@ -87,6 +88,7 @@
     "Radio Button": "skipped",
     "Radio List": "skipped",
     "Radio List Item": "skipped",
+    "Reward Item": "warn",
     "Search Input": "skipped",
     "Segmented Control": "skipped",
     "Segmented Control Item": "skipped",
@@ -106,6 +108,9 @@
     "Table Row": "ok",
     "Text Area": "warn",
     "Text Input": "skipped",
+    "Tier Card": "warn",
+    "Tier Info Card": "warn",
+    "Tier Ladder": "warn",
     "Toast": "ok",
     "Toast / Close": "skipped",
     "Tooltip": "ok",
@@ -131,10 +136,12 @@
     "loyalty-membership: member-pass/email": "ok",
     "loyalty-membership: member-pass/header": "ok",
     "loyalty-membership: member-pass/logo": "ok",
-    "loyalty-membership: scan-plate/qr-flat": "skipped",
-    "loyalty-membership: scan-plate/short-code": "ok",
-    "loyalty-membership: scan-plate/short-code-label": "ok",
+    "loyalty-membership: member-pass/qr": "skipped",
     "loyalty-membership: tier-badge/tier": "skipped",
+    "loyalty-membership: tier-info-card/benefit-text": "ok",
+    "loyalty-membership: tier-info-card/caption": "ok",
+    "loyalty-membership: tier-info-card/check": "ok",
+    "loyalty-membership: tier-info-card/tier": "ok",
     "overlays: drawer-overlay/root": "skipped",
     "overlays: dropdown-menu-content/items": "ok",
     "overlays: tooltip-content/body": "ok",
@@ -154,8 +161,7 @@
     "store-order-history: order-history-line-item/image": "ok",
     "store-order-history: order-history/root": "ok",
     "store-product-listing: filter-panel/root": "ok",
-    "store-product-listing: product-card/content": "ok",
-    "tier card": "warn"
+    "store-product-listing: product-card/content": "ok"
   },
   "nodes": {
     "2023-203": "Button",
@@ -937,14 +943,12 @@
     "7115-4595": "Submission Item Card",
     "7117-1554": "Vaulted Asset / Request Retrieval",
     "7141-117": "Membership",
-    "7141-1999": "tier card",
-    "7141-2000": "tier card",
-    "7141-2001": "tier card",
-    "7154-2075": "tier card",
+    "7141-1999": "Tier Card",
+    "7141-2000": "Tier Card",
+    "7141-2001": "Tier Card",
+    "7154-2075": "Tier Card",
     "7156-2264": "loyalty-membership: member-pass/body",
-    "7156-2266": "loyalty-membership: scan-plate/qr-flat",
-    "7156-2269": "loyalty-membership: scan-plate/short-code-label",
-    "7156-2272": "loyalty-membership: scan-plate/short-code",
+    "7156-2266": "loyalty-membership: member-pass/qr",
     "7156-2280": "loyalty-membership: member-pass/countdown",
     "7156-2292": "Member Pass",
     "7156-2747": "loyalty-membership: member-pass/divider",
@@ -972,6 +976,27 @@
     "7204-11360": "Media Card",
     "7204-11432": "Media Card",
     "7204-11433": "Media Card",
+    "7227-1069": "Tier Info Card",
+    "7227-1070": "Tier Info Card",
+    "7227-1074": "loyalty-membership: tier-info-card/check",
+    "7227-1075": "loyalty-membership: tier-info-card/benefit-text",
+    "7227-1077": "loyalty-membership: tier-info-card/caption",
+    "7227-544": "loyalty-membership: tier-info-card/tier",
+    "7227-863": "Tier Info Card",
+    "7229-7427": "How Points Work",
+    "7250-1607": "Tiers & Benefits (small vp)",
+    "7254-2284": "Reward Item",
+    "7254-2285": "Reward Item",
+    "7254-2286": "Reward Item",
+    "7254-2460": "Rewards Checkout",
+    "7254-257": "Tier Ladder",
+    "7254-384": "Tier Ladder",
+    "7254-385": "Tier Ladder",
+    "7254-500": "Rewards",
+    "7259-753": "Product / Cart / Promo Ticket",
+    "7259-770": "Product / Cart / Promo Ticket",
+    "7259-787": "Product / Cart / Promo Ticket",
+    "7259-799": "Product / Cart / Promo Ticket",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1101,6 +1126,9 @@
     "Product / Cart / Cart Item Slot": [
       "Product / Cart / Cart Item Slot: no code component (looked for src/components/**/productcartcartitemslot.tsx or cartitemslot.tsx)"
     ],
+    "Product / Cart / Promo Ticket": [
+      "Product / Cart / Promo Ticket.state: no getEnum('state') in any template — this Figma axis reaches no code prop"
+    ],
     "Product / Image": [
       "Product / Image: no code component (looked for src/components/**/productimage.tsx or image.tsx)"
     ],
@@ -1125,6 +1153,9 @@
     "Progress": [
       "Progress: no code component (looked for src/components/**/progress.tsx or progress.tsx)"
     ],
+    "Reward Item": [
+      "Reward Item: no code component (looked for src/components/**/rewarditem.tsx or rewarditem.tsx)"
+    ],
     "Stat": [
       "Stat: no code component (looked for src/components/**/stat.tsx or stat.tsx)"
     ],
@@ -1142,6 +1173,15 @@
       "Text Area.state: no getEnum('state') in any template — this Figma axis reaches no code prop",
       "Text Area.isDisabled: no getEnum('isDisabled') in any template — this Figma axis reaches no code prop"
     ],
+    "Tier Card": [
+      "Tier Card.tier: no getEnum('tier') in any template — this Figma axis reaches no code prop"
+    ],
+    "Tier Info Card": [
+      "Tier Info Card.Current Tier: no getEnum('Current Tier') in any template — this Figma axis reaches no code prop"
+    ],
+    "Tier Ladder": [
+      "Tier Ladder.Black Tier: no getEnum('Black Tier') in any template — this Figma axis reaches no code prop"
+    ],
     "Vault Asset Card": [
       "Vault Asset Card: no code component (looked for src/components/**/vaultassetcard.tsx or vaultassetcard.tsx)"
     ],
@@ -1156,9 +1196,6 @@
     ],
     "press list item/Event Card": [
       "press list item/Event Card: no code component (looked for src/components/**/presslistitemeventcard.tsx or presslistitemeventcard.tsx)"
-    ],
-    "tier card": [
-      "tier card.tier: no getEnum('tier') in any template — this Figma axis reaches no code prop"
     ]
   }
 }

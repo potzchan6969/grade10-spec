@@ -1,5 +1,11 @@
 import { execFile } from "node:child_process";
-import { appendFile, readdir, readFile, stat } from "node:fs/promises";
+import {
+  appendFile,
+  readdir,
+  readFile,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 import { createRequire } from "node:module";
 import {
   dirname,
@@ -11,6 +17,8 @@ import {
 } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs, promisify } from "node:util";
+
+import { diffSnapshots } from "./render-diff.mjs";
 
 const exec = promisify(execFile);
 const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -369,6 +377,83 @@ function mergedLine({ commitSha, commitUrl, mergedPrTitle, mergedPrUrl }) {
   return `PR merged → ${title} (${commit})`;
 }
 
+const REASONS = {
+  added: "🆕 new",
+  error: "fails to render",
+  layout: "layout shifted",
+  text: "text changed",
+};
+const MAX_LISTED = 60;
+
+// Lists only the stories whose render differs from the deployed baseline, so
+// a shared-code edit that moved nothing says so in one line.
+function renderPayload({
+  candidates,
+  commitLine,
+  removedStories,
+  renderChanges,
+  storybookUrl,
+}) {
+  if (!candidates.length && !removedStories.length) return { blocks: [] };
+
+  const changed = candidates.filter((story) => renderChanges.has(story.id));
+  const lines = changed.map((story) => {
+    const [root = "Stories", ...path] = story.title.split("/");
+    const reason = REASONS[renderChanges.get(story.id)];
+    return {
+      line: `${path.join(" > ") || root} > ${story.name} — <${storybookUrl}/?path=/story/${story.id}|${reason}>`,
+      root,
+      sortKey: `${path.join(" > ")} ${story.name}`,
+    };
+  });
+  for (const story of removedStories) {
+    const [root = "Stories", ...path] = story.title.split("/");
+    lines.push({
+      line: `${path.join(" > ") || root} > ${story.name} — ❌ removed`,
+      root,
+      sortKey: `${path.join(" > ")} ${story.name}`,
+    });
+  }
+
+  const summary = lines.length
+    ? `*${changed.length} of ${candidates.length}* stories reached by this change render differently`
+    : `No visual change in the ${candidates.length} stories reached by this change`;
+  const shown = lines.slice(0, MAX_LISTED);
+  const groups = new Map();
+  for (const item of shown) {
+    groups.set(item.root, [...(groups.get(item.root) ?? []), item]);
+  }
+  const nested = `${"\u00a0".repeat(4)}- `;
+  const list = [...groups]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .flatMap(([root, items]) => [
+      `- ${root}`,
+      ...items
+        .sort((left, right) => left.sortKey.localeCompare(right.sortKey))
+        .map(({ line }) => `${nested}${line}`),
+    ]);
+  if (lines.length > shown.length) {
+    list.push(`…and ${lines.length - shown.length} more`);
+  }
+  return {
+    blocks: [
+      {
+        text: { text: `:art: Storybook deployed\n${summary}`, type: "mrkdwn" },
+        type: "section",
+      },
+      ...textBlocks(list),
+      ...(commitLine
+        ? [
+            {
+              elements: [{ text: commitLine, type: "mrkdwn" }],
+              type: "context",
+            },
+          ]
+        : []),
+    ],
+  };
+}
+
 export function slackPayload({
   affectedPages,
   changedPaths = new Map(),
@@ -378,6 +463,7 @@ export function slackPayload({
   mergedPrTitle,
   mergedPrUrl,
   removedStories = [],
+  renderChanges = null,
   storybookUrl,
 }) {
   const pages = new Set(affectedPages.flatMap(storyImportPaths));
@@ -392,6 +478,20 @@ export function slackPayload({
       ...entry,
       status: added.has(entry.importPath) ? "🆕" : "",
     }));
+  if (renderChanges) {
+    return renderPayload({
+      candidates: stories,
+      commitLine: mergedLine({
+        commitSha,
+        commitUrl,
+        mergedPrTitle,
+        mergedPrUrl,
+      }),
+      removedStories,
+      renderChanges,
+      storybookUrl,
+    });
+  }
   const states = [...stories, ...removedStories];
   if (!states.length) return { blocks: [] };
 
@@ -518,6 +618,58 @@ async function deletedStoryStates(base, changed) {
   ).then((states) => states.flat());
 }
 
+function candidateIds(affectedPages, index) {
+  const pages = new Set(affectedPages.flatMap(storyImportPaths));
+  const stories = Object.values(index.entries ?? {}).filter(
+    (entry) => entry.type === "story",
+  );
+  return {
+    candidates: stories
+      .filter((entry) => pages.has(entry.importPath))
+      .map((entry) => entry.id),
+    storyIds: stories.map((entry) => entry.id),
+  };
+}
+
+async function readBaseline(path) {
+  if (!path) return null;
+  try {
+    return JSON.parse(await readFile(path, "utf8"));
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
+// Renders the candidate stories and compares them with the baseline of the
+// last deployed main. Returns null (list every candidate, as before) when no
+// baseline exists yet; writes the refreshed baseline to `snapshotOut`.
+async function renderedChanges({
+  affectedPages,
+  baselinePath,
+  index,
+  snapshotOut,
+}) {
+  if (!snapshotOut) return null;
+  const { snapshotStories } = await import("./render-snapshots.mjs");
+  const baseline = await readBaseline(baselinePath);
+  const { candidates, storyIds } = candidateIds(affectedPages, index);
+  // A baseline plus no reached story means nothing can differ: no browser.
+  if (baseline && !candidates.length) return new Map();
+  // No baseline: render everything so the next run has one to compare with.
+  const current = await snapshotStories({
+    ids: baseline ? candidates : storyIds,
+    staticDirectory: join(rootDirectory, "apps/preview/storybook-static"),
+  });
+
+  const live = new Set(storyIds);
+  const merged = Object.fromEntries(
+    Object.entries({ ...baseline, ...current }).filter(([id]) => live.has(id)),
+  );
+  await writeFile(snapshotOut, JSON.stringify(merged));
+  return baseline ? diffSnapshots(baseline, current) : null;
+}
+
 async function main() {
   const { values } = parseArgs({
     args: process.argv.slice(2).filter((argument) => argument !== "--"),
@@ -532,6 +684,9 @@ async function main() {
       "merged-pr-title": { type: "string" },
       "merged-pr-url": { type: "string" },
       "github-output": { type: "string" },
+      baseline: { type: "string" },
+      "snapshot-out": { type: "string" },
+      plan: { type: "boolean" },
     },
   });
   const changed = await changedFiles(values.base, values.head);
@@ -544,8 +699,25 @@ async function main() {
       "utf8",
     ),
   );
+  if (values.plan) {
+    // Tells the workflow whether the browser and baseline are needed at all.
+    const { candidates } = candidateIds(affectedPages, index);
+    const baseline = await readBaseline(values.baseline);
+    const needed = !baseline || candidates.length > 0;
+    if (values["github-output"]) {
+      await appendFile(values["github-output"], `render-needed=${needed}\n`);
+    }
+    process.stdout.write(`render-needed=${needed}\n`);
+    return;
+  }
   const { stdout: commitSha } = await exec("git", ["rev-parse", values.head], {
     cwd: rootDirectory,
+  });
+  const renderChanges = await renderedChanges({
+    affectedPages,
+    baselinePath: values.baseline,
+    index,
+    snapshotOut: values["snapshot-out"],
   });
   const payload = slackPayload({
     affectedPages,
@@ -556,6 +728,7 @@ async function main() {
     mergedPrTitle: values["merged-pr-title"],
     mergedPrUrl: values["merged-pr-url"],
     removedStories: await deletedStoryStates(values.base, changed),
+    renderChanges,
     storybookUrl: values["storybook-url"].replace(/\/$/, ""),
   });
 

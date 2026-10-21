@@ -197,8 +197,8 @@
 22. Navigate to `<listing_31 url>` and place `<low bid>`.
    - Step 22 shows the refusal on the bid panel. `g10.auction-account-record.US2-TC5`
 23. Navigate to `<my auctions url>`.
-24. Open the Active, Upcoming and Ended tabs in turn.
-   - No tab holds a row for `<listing_31>`. `g10.auction-account-record.US2-TC5`
+24. Read the list.
+   - The list holds no row for `<listing_31>`. `g10.auction-account-record.US2-TC5`
 
 ## Walk 2: Reach My Auctions and read bidding rows and adjacent checks
 
@@ -309,7 +309,7 @@
 2. Confirm the bid.
    - Step 2: the bid form says Minimum bid is `<next minimum>`. `g10.auction-account-record.US2-TC6`
 3. Navigate to `<my auctions url>`.
-4. Find `<listing_29>`'s row in the Active tab.
+4. Find `<listing_29>`'s row.
    - Step 4: Your Standing reads Outbid, with the next valid bid `<next minimum>`. `g10.auction-account-record.US2-TC6`
    - Current bid reads `<current bid>`. `g10.auction-account-record.US2-TC6`
    - No row reads Bid submitted or Bid not accepted. `g10.auction-account-record.US2-TC6`
@@ -326,7 +326,7 @@
    - `<listing_24>` reads Preparing Shipment with the `default` status badge. `g10.auction-account-record.US3-TC20`
    - `<listing_25>` reads Shipped with the `default` status badge. `g10.auction-account-record.US3-TC20`
 11. Navigate to `<my auctions url>`.
-12. Select the Ended tab and find `<listing_23>`'s row.
+12. Find `<listing_23>`'s row.
    - Your Standing reads `<your_standing>`. `g10.auction-account-record.US4-TC1`
    - The row says the card was not charged. `g10.auction-account-record.US4-TC1`
    - No amount is shown as charged. `g10.auction-account-record.US4-TC1`
@@ -461,52 +461,52 @@
 16. Reload `<listing_17 url>`.
    - Step 16: the watch control offers Watch, not locked to watching. `g10.auction-account-record.US6-TC3`
 17. Navigate to `<my auctions url>`.
-   - Step 17: `<listing_17>` is not listed in any tab. `g10.auction-account-record.US6-TC3`
+   - Step 17: `<listing_17>` is not listed. `g10.auction-account-record.US6-TC3`
    - Step 17: the title count is the one noted. `g10.auction-account-record.US6-TC3`
 
 ## Walk 4: Filter rows and read close results — phase 1
 
 **Starting state:**
 
-**Steps 1–3 setup:**
+**Step 1 setup:**
 
 - customer(signed in) watches `<listing_14>`, `<listing_15>` and `<listing_16>`.
 
-**Steps 4–6 setup:**
+**Steps 2–4 setup:**
 
 - customer(signed in) watches `<listing_13>`, a listing whose bidding has not opened.
 
-**Steps 7–8 setup:**
+**Step 5 setup:**
 
-- customer(signed in) watches only open listings.
+- customer(signed in) watches open listings.
 
-**Steps 9–11 setup:**
+**Steps 6–7 setup:**
 
 - customer(signed in) watches `<listing_12>`, a published listing that has closed.
 
-**Steps 12–13 setup:**
+**Steps 8–9 setup:**
 
 - customer(winner) has a Won row for `<listing_11>` whose order `<winner_order_1>` is available.
 
-**Steps 14–15 setup:**
+**Steps 10–11 setup:**
 
 - customer owns `<listing_10>`, whose order `<winner_order_2>` is Partially Paid.
 
-**Steps 16–17 setup:**
+**Steps 12–13 setup:**
 
 - customer A(signed in) bid on `<listing_9>`, which closed with customer B winning.
 
-**Steps 18–19 setup:**
+**Steps 14–15 setup:**
 
 - customer(signed in) has Won rows for `<listing_7>` and `<listing_8>`.
 
-**Steps 20–21 setup:**
+**Steps 16–17 setup:**
 
 - customer(signed in) won `<listing_6>`, whose order has this state: `<order_state>`.
 
 **Shared test data:**
 
-**Steps 1–3 data:**
+**Step 1 data:**
 
 | Field | Value |
 | --- | --- |
@@ -515,27 +515,27 @@
 | listing_16 | A published listing that has closed; bind its identity only |
 | my auctions url | The My Auctions URL |
 
-**Steps 4–6 data:**
+**Steps 2–4 data:**
 
 | Field | Value |
 | --- | --- |
 | listing_13 | A published watched listing whose bidding has not opened and opens inside the test window; bind its identity only |
 | my auctions url | The My Auctions URL |
 
-**Steps 7–8 data:**
+**Step 5 data:**
 
 | Field | Value |
 | --- | --- |
 | my auctions url | The My Auctions URL |
 
-**Steps 9–11 data:**
+**Steps 6–7 data:**
 
 | Field | Value |
 | --- | --- |
 | listing_12 | A published watched listing that has closed; bind its identity only |
 | my auctions url | The My Auctions URL |
 
-**Steps 12–13 data:**
+**Steps 8–9 data:**
 
 | Field | Value |
 | --- | --- |
@@ -543,21 +543,21 @@
 | winner_order_1 | The winner order belonging to `<listing_11>`; bind its identity only |
 | my auctions url | The My Auctions URL |
 
-**Steps 14–15 data:**
+**Steps 10–11 data:**
 
 | Field | Value |
 | --- | --- |
 | listing_10 | A listing won by this customer; bind its identity only |
 | winner_order_2 | The Partially Paid winner order belonging to `<listing_10>`; bind its identity only |
 
-**Steps 16–17 data:**
+**Steps 12–13 data:**
 
 | Field | Value |
 | --- | --- |
 | listing_9 | A closed listing won by customer B; bind its identity only |
 | my auctions url | The My Auctions URL |
 
-**Steps 18–19 data:**
+**Steps 14–15 data:**
 
 | Field | Value |
 | --- | --- |
@@ -565,7 +565,7 @@
 | listing_8 | A won listing whose order reads Awaiting Setup inside the setup window; bind its identity only |
 | my auctions url | The My Auctions URL |
 
-**Steps 20–21 data:**
+**Steps 16–17 data:**
 
 | `<order_state>` | `<your_standing>` | `<excluded_standing>` |
 | --- | --- | --- |
@@ -580,44 +580,42 @@
 ### Route
 
 1. Navigate to `<my auctions url>`.
-   - Step 1 shows the Active tab, listing only `<listing_15>`. `g10.auction-account-record.US7-TC1`
-2. Open the Upcoming tab.
-   - Step 2 lists only `<listing_14>`; step 3 lists only `<listing_16>`. `g10.auction-account-record.US7-TC1`
-3. Open the Ended tab.
+   - No Active, Upcoming or Ended tab is offered. `g10.auction-account-record.US7-TC1`
+   - The breadcrumb is above the container. `g10.auction-account-record.US7-TC1`
    - Title badge shows 3. `g10.auction-account-record.US7-TC1`
-4. Navigate to `<my auctions url>`.
-5. Wait until `<listing_13>` bidding opens.
-6. Reload `<my auctions url>`.
-   - `<listing_13>` is listed in the Active tab. `g10.auction-account-record.US7-TC2`
-   - `<listing_13>` is not listed in the Upcoming tab. `g10.auction-account-record.US7-TC2`
-7. Navigate to `<my auctions url>`.
-8. Open the Upcoming tab.
-   - The Upcoming tab shows its no-listings empty state. `g10.auction-account-record.US7-TC3`
-9. Navigate to `<my auctions url>`.
-10. Open the Ended tab.
-11. Click the Email alerts control on `<listing_12>`.
+   - One list holds `<listing_14>`, `<listing_15>` and `<listing_16>`. `g10.auction-account-record.US7-TC1`
+2. Navigate to `<my auctions url>`.
+3. Wait until `<listing_13>` bidding opens.
+4. Reload `<my auctions url>`.
+   - `<listing_13>` is listed once in the list. `g10.auction-account-record.US7-TC2`
+   - No tab is offered. `g10.auction-account-record.US7-TC2`
+5. Navigate to `<my auctions url>`.
+   - The empty state is not shown. `g10.auction-account-record.US7-TC3`
+   - No error is reported. `g10.auction-account-record.US7-TC3`
+6. Navigate to `<my auctions url>`.
+7. Click the Email alerts control on `<listing_12>`.
    - The Email alerts control is disabled. `g10.auction-account-record.US7-TC4`
    - The alert setting for `<listing_12>` is unchanged. `g10.auction-account-record.US7-TC4`
-12. Navigate to `<my auctions url>`.
-13. Select the order entry point on `<listing_11>`'s Won row.
+8. Navigate to `<my auctions url>`.
+9. Select the order entry point on `<listing_11>`'s Won row.
    - The matching order `<winner_order_1>` opens. `g10.auction-account-record.US7-TC5`
    - My Auctions performs no payment, address, or order-status write. `g10.auction-account-record.US7-TC5`
-14. Open My Auctions and read `<listing_10>`'s Won row.
-15. Select View order.
+10. Open My Auctions and read `<listing_10>`'s Won row.
+11. Select View order.
    - The row status is Partially Paid with its warning treatment. `g10.auction-account-record.US8-TC1`
    - View order opens `<winner_order_2>`, the Partially Paid Winner Order. `g10.auction-account-record.US8-TC1`
-16. Navigate to `<my auctions url>`.
-17. Read `<listing_9>`'s row.
+12. Navigate to `<my auctions url>`.
+13. Read `<listing_9>`'s row.
    - Your Standing reads Didn't win, and the row says the card was not charged. `g10.auction-account-record.US8-TC2`
    - No View order is offered. `g10.auction-account-record.US8-TC2`
-18. Navigate to `<my auctions url>`.
-19. Read `<listing_7>` and `<listing_8>`'s rows.
+14. Navigate to `<my auctions url>`.
+15. Read `<listing_7>` and `<listing_8>`'s rows.
    - `<listing_7>` reads Won, Payment Overdue, and offers View order. `g10.auction-account-record.US8-TC3`
    - `<listing_7>` has no helper line and no way to reach Grade10 on the row. `g10.auction-account-record.US8-TC3`
    - `<listing_8>` reads Won, Awaiting Setup, and offers View order. `g10.auction-account-record.US8-TC3`
    - `<listing_8>` has no confirm-address helper line on the row. `g10.auction-account-record.US8-TC3`
-20. Navigate to `<my auctions url>`.
-21. Read `<listing_6>`'s row.
+16. Navigate to `<my auctions url>`.
+17. Read `<listing_6>`'s row.
    - Your Standing reads `<your_standing>`, never `<excluded_standing>`. `g10.auction-account-record.US9-TC1`
    - The row offers View order. `g10.auction-account-record.US9-TC1`
    - Listing, close and current bid read as on any Won row. `g10.auction-account-record.US9-TC1`
@@ -660,14 +658,14 @@
 ### Route
 
 1. Navigate to `<my auctions url>`.
-2. Find `<listing_5>`'s row and read its tab and Your Standing.
-   - At step 2 the row is in the Active tab, and Your Standing reads Leading with no next valid bid, neither Won nor Didn't win. `g10.auction-account-record.US10-TC2`
+2. Find `<listing_5>`'s row and read Your Standing.
+   - At step 2 Your Standing reads Leading with no next valid bid, neither Won nor Didn't win. `g10.auction-account-record.US10-TC2`
 3. Let recording the close resume.
 4. Reload `<my auctions url>`.
 5. Find `<listing_5>`'s row and read Your Standing.
-   - At step 5 the row is in the Ended tab and Your Standing reads Won. `g10.auction-account-record.US10-TC2`
+   - At step 5 Your Standing reads Won. `g10.auction-account-record.US10-TC2`
 6. As customer B, navigate to `<my auctions url>`.
-7. Find `<listing_4>`'s row in the Active tab.
+7. Find `<listing_4>`'s row.
    - Current bid reads `<current bid>`, not `<customer B bid>`. `g10.auction-account-record.US10-TC3`
    - Your Standing reads Outbid, with the next valid bid. `g10.auction-account-record.US10-TC3`
 
@@ -1063,7 +1061,7 @@ Runs once per row of **Test data**.
 * Your Standing reads `<your_standing>`.
 * Current bid reads the bid noted at step 2, still `<current bid>`, never `<refused raise>`.
 
-<!-- trace:case id=g10.auction-account-record.TC-na3 rev=2 -->
+<!-- trace:case id=g10.auction-account-record.TC-na3 rev=3 -->
 ### g10.auction-account-record.US2-TC5: A refused first bid adds no row
 
 **Classification:**
@@ -1097,15 +1095,15 @@ Runs once per row of **Test data**.
 1. Navigate to `<my auctions url>` and note the title count.
 2. Navigate to `<listing_31 url>` and place `<low bid>`.
 3. Navigate to `<my auctions url>`.
-4. Open the Active, Upcoming and Ended tabs in turn.
+4. Read the list.
 
 **Expected Results:**
 
 * Step 2 shows the refusal on the bid panel.
-* No tab holds a row for `<listing_31>`.
+* The list holds no row for `<listing_31>`.
 * The title count equals the count noted at step 1.
 
-<!-- trace:case id=g10.auction-account-record.TC-8mz rev=2 -->
+<!-- trace:case id=g10.auction-account-record.TC-8mz rev=3 -->
 ### g10.auction-account-record.US2-TC6: An Outbid bidder's refused bid leaves their row Outbid and in place
 
 **Classification:**
@@ -1147,7 +1145,7 @@ Runs once per row of **Test data**.
 1. Type `<refused bid>` into the custom maximum on the bid panel.
 2. Confirm the bid.
 3. Navigate to `<my auctions url>`.
-4. Find `<listing_29>`'s row in the Active tab.
+4. Find `<listing_29>`'s row.
 
 **Expected Results:**
 
@@ -1377,7 +1375,7 @@ Runs once per row of **Test data**.
 **I want** to see that my card was not charged,
 **so that** I know I owe nothing for a listing I did not win.
 
-<!-- trace:case id=g10.auction-account-record.TC-rfz rev=3 -->
+<!-- trace:case id=g10.auction-account-record.TC-rfz rev=4 -->
 ### g10.auction-account-record.US4-TC1: Didn't win says the card was not charged
 
 Runs once per row of **Test data**.
@@ -1416,7 +1414,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to `<my auctions url>`.
-2. Select the Ended tab and find `<listing_23>`'s row.
+2. Find `<listing_23>`'s row.
 
 **Expected Results:**
 
@@ -1653,7 +1651,7 @@ Runs once per row of **Test data**.
 * `<listing_18>` shows once, Your Standing Leading, no Unwatch.
 * `<listing_18>` sits above `<listing_19>`: bid rows before watch-only.
 
-<!-- trace:case id=g10.auction-account-record.TC-43z rev=2 -->
+<!-- trace:case id=g10.auction-account-record.TC-43z rev=3 -->
 ### g10.auction-account-record.US6-TC3: A refused first bid puts nothing on My Auctions
 
 Runs once per row of **Test data**.
@@ -1705,19 +1703,19 @@ Runs once per row of **Test data**.
 
 * Step 2: the bid form says `<refusal_message>`, and no alerts toast shows.
 * Step 3: the watch control offers Watch, not locked to watching.
-* Step 4: `<listing_17>` is not listed in any tab.
+* Step 4: `<listing_17>` is not listed.
 * Step 4: the title count is the one noted.
 
 ---
 
-## g10.auction-account-record.US7: Collector reads My Auctions by bidding window
+## g10.auction-account-record.US7: Collector reads My Auctions as one list
 
 **As a** collector
-**I want** my listings split into Active, Upcoming and Ended tabs
-**so that** I see what needs me now without scrolling past closed and unopened listings.
+**I want** every listing I bid on or watch in one list, with the total in the title
+**so that** I read my whole record in one place without switching tabs.
 
-<!-- trace:case id=g10.auction-account-record.TC-91p rev=2 -->
-### g10.auction-account-record.US7-TC1: Each listing sits in the tab its bidding window names
+<!-- trace:case id=g10.auction-account-record.TC-91p rev=3 -->
+### g10.auction-account-record.US7-TC1: Every listing sits in one list under the breadcrumb
 
 **Classification:**
 
@@ -1750,17 +1748,16 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to `<my auctions url>`.
-2. Open the Upcoming tab.
-3. Open the Ended tab.
 
 **Expected Results:**
 
-* Step 1 shows the Active tab, listing only `<listing_15>`.
+* No Active, Upcoming or Ended tab is offered.
+* The breadcrumb is above the container.
 * Title badge shows 3.
-* Step 2 lists only `<listing_14>`; step 3 lists only `<listing_16>`.
+* One list holds `<listing_14>`, `<listing_15>` and `<listing_16>`.
 
-<!-- trace:case id=g10.auction-account-record.TC-z0b rev=2 -->
-### g10.auction-account-record.US7-TC2: A listing moves to Active when its window opens
+<!-- trace:case id=g10.auction-account-record.TC-z0b rev=3 -->
+### g10.auction-account-record.US7-TC2: A listing stays in the list when its window opens
 
 **Classification:**
 
@@ -1796,11 +1793,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* `<listing_13>` is listed in the Active tab.
-* `<listing_13>` is not listed in the Upcoming tab.
+* `<listing_13>` is listed once in the list.
+* No tab is offered.
 
-<!-- trace:case id=g10.auction-account-record.TC-tbh rev=2 -->
-### g10.auction-account-record.US7-TC3: An empty tab says it has no listings
+<!-- trace:case id=g10.auction-account-record.TC-tbh rev=3 -->
+### g10.auction-account-record.US7-TC3: A record with lots shows no empty state
 
 **Classification:**
 
@@ -1819,7 +1816,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) watches only open listings.
+* customer(signed in) watches open listings.
 
 **Test data:**
 
@@ -1830,14 +1827,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to `<my auctions url>`.
-2. Open the Upcoming tab.
 
 **Expected Results:**
 
-* The Upcoming tab shows its no-listings empty state.
+* The empty state is not shown.
+* No error is reported.
 
-<!-- trace:case id=g10.auction-account-record.TC-tzc rev=2 -->
-### g10.auction-account-record.US7-TC4: Email alerts cannot be changed on an Ended row
+<!-- trace:case id=g10.auction-account-record.TC-tzc rev=3 -->
+### g10.auction-account-record.US7-TC4: Email alerts cannot be changed on a closed row
 
 **Classification:**
 
@@ -1868,8 +1865,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to `<my auctions url>`.
-2. Open the Ended tab.
-3. Click the Email alerts control on `<listing_12>`.
+2. Click the Email alerts control on `<listing_12>`.
 
 **Expected Results:**
 
@@ -2143,7 +2139,7 @@ Runs once per row of **Test data**.
 **I want** each listing I bid on to show the auction's current or final price and, once it closes, whether I won,
 **so that** I know what a listing sold for and whether I lost it without opening the listing.
 
-<!-- trace:case id=g10.auction-account-record.TC-p3p rev=2 -->
+<!-- trace:case id=g10.auction-account-record.TC-p3p rev=3 -->
 ### g10.auction-account-record.US10-TC2: Row shows no result before the close is recorded
 
 **Classification:**
@@ -2176,17 +2172,17 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to `<my auctions url>`.
-2. Find `<listing_5>`'s row and read its tab and Your Standing.
+2. Find `<listing_5>`'s row and read Your Standing.
 3. Let recording the close resume.
 4. Reload `<my auctions url>`.
 5. Find `<listing_5>`'s row and read Your Standing.
 
 **Expected Results:**
 
-* At step 2 the row is in the Active tab, and Your Standing reads Leading with no next valid bid, neither Won nor Didn't win.
-* At step 5 the row is in the Ended tab and Your Standing reads Won.
+* At step 2 Your Standing reads Leading with no next valid bid, neither Won nor Didn't win.
+* At step 5 Your Standing reads Won.
 
-<!-- trace:case id=g10.auction-account-record.TC-y6p rev=3 covers=g10.auction-account-record.SC-fao -->
+<!-- trace:case id=g10.auction-account-record.TC-y6p rev=4 covers=g10.auction-account-record.SC-fao -->
 ### g10.auction-account-record.US10-TC3: Open row shows the auction's current price, not the collector's bid
 
 **Classification:**
@@ -2224,14 +2220,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. As customer B, navigate to `<my auctions url>`.
-2. Find `<listing_4>`'s row in the Active tab.
+2. Find `<listing_4>`'s row.
 
 **Expected Results:**
 
 * Current bid reads `<current bid>`, not `<customer B bid>`.
 * Your Standing reads Outbid, with the next valid bid.
 
-<!-- trace:case id=g10.auction-account-record.TC-j99 rev=2 -->
+<!-- trace:case id=g10.auction-account-record.TC-j99 rev=3 -->
 ### g10.auction-account-record.US10-TC1: Ended row shows the final price and the recorded result
 
 Runs once per row of **Test data**.
@@ -2272,15 +2268,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to `<my auctions url>`.
-2. Select the Ended tab.
-3. Find `<lot_1>`'s row.
+2. Find `<lot_1>`'s row.
 
 **Expected Results:**
 
 * Current bid reads `<final price>`, not `<own last bid>`.
 * Your Standing reads `<standing>`.
 
-<!-- trace:case id=g10.auction-account-record.TC-hgl rev=2 -->
+<!-- trace:case id=g10.auction-account-record.TC-hgl rev=3 -->
 ### g10.auction-account-record.US10-TC4: Lone first bid confirming after the close reads Didn't win on an unsold lot
 
 **Classification:**
@@ -2314,11 +2309,11 @@ Runs once per row of **Test data**.
 1. Wait until `<lot_4>`'s scheduled close has passed and its close is recorded.
 2. Let the payment confirmation resume.
 3. Navigate to `<my auctions url>`.
-4. Select the Ended tab and find `<lot_4>`'s row.
+4. Find `<lot_4>`'s row.
 
 **Expected Results:**
 
-* The row is in the Ended tab, and Your Standing reads Didn't win.
+* Your Standing reads Didn't win.
 * The row says the card hold is releasing or released, never charged.
 * Current bid reads as on any unsold lot's row, not `<first bid>`.
 

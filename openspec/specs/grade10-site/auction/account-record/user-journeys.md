@@ -46,11 +46,11 @@ have to ask Grade10 what happens next.
 As a losing bidder, I want to see that my card was not charged, so that I know
 I owe nothing for a listing I did not win.
 
-### grade10-site-auction-account-record-US-07: Collector reads My Auctions by bidding window
+### grade10-site-auction-account-record-US-07: Collector reads My Auctions as one list
 
 **As a** collector
-**I want** my lots split into Active, Upcoming and Ended tabs
-**so that** I see what needs me now without scrolling past closed and unopened lots.
+**I want** every lot I bid on or watch in one list, bid lots first, with the total in the title
+**so that** I read my whole record in one place without switching tabs.
 
 ### grade10-site-auction-account-record-US-10: Bidder reads each lot's price and result on My Auctions
 

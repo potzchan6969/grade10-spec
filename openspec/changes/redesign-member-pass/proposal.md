@@ -8,8 +8,8 @@ The member card is what a member holds up at a till, and the designer has
 redrawn it in Figma (Grade10-DS-2026, node 7156:2292, header 7158:2858) as
 `Member Pass` — a tier-skinned header carrying the Grade10 mark, the tier
 badge and the member's account email, over a white body that gives the QR
-square and the short code the room a scanner needs, a divider, a refresh
-countdown and a Refresh control. On a phone the pass stands alone on its
+square the room a scanner needs, a divider, a refresh countdown and a
+Refresh control. On a phone the pass stands alone on its
 own page, so staff can read the code without the page around it. The
 shipped `MemberCard` is a plain card with none of that, and its name
 collides with the wallet's member card — the thing being held is a pass.
@@ -27,21 +27,26 @@ collides with the wallet's member card — the thing being held is a pass.
   from the tier name the consumer words, and `email` in place of
   `displayName`, because no name is collected at registration.
   **BREAKING**: `displayName` leaves the props and the copy gains
-  `shortCode` and `refreshesIn` in place of `fallbackCode`, `expiresIn`,
-  `secondsUnit` and `used`.
-- The scannable code and the short code still encode the consumer's token
-  verbatim — the pass never mints one. A fresh token dips the square out
-  of view — fading and easing down — and settles the fresh pair in rather
-  than snapping, so a scanner never loses the square mid-read; under
-  `prefers-reduced-motion` it swaps instantly.
-- The `live` and `expired` states stay — a lapsing code still says so —
-  but the `used` rendering leaves: a code the till takes is answered by
-  the pass quietly rotating to the next minted pair, never by freezing
-  on a "used" surface. The refusal a replayed code earns — naming where
-  and when it first scanned — stays the till's answer; `store/membership`
-  SC-09 loses its "the member's own card shows the same" clause.
-- `ScanPlate` gains a `flat` variant — the square straight on the pass's
-  white body, no plate of its own — and stays an export.
+  `refreshesIn` in place of `fallbackCode`, `expiresIn`, `secondsUnit`,
+  `shortCode` and `used`. The `fallbackCode` prop leaves too — the
+  square is the code in full, and a till that cannot scan falls back to
+  the member's email, the lookup `store/membership` already names.
+- The scannable square encodes the consumer's token verbatim — the pass
+  never mints one, and no typed code sits beside it. A fresh token dips
+  the square out of view — fading and easing down — and settles the fresh
+  one in rather than snapping, so a scanner never loses the square
+  mid-read; under `prefers-reduced-motion` it swaps instantly.
+- The `live` countdown stays, but `expired` and `used` leave as renderings:
+  the consumer rotates the code out before it lapses, and a code the till
+  takes is answered by the pass quietly rotating to the next minted
+  token, never by freezing on a "used" surface. The refusal a replayed
+  code earns — naming where and when it first scanned — stays the till's
+  answer; `store/membership` SC-09 loses its "the member's own card shows
+  the same" clause, and `A member identifies at the till by a dynamic
+  code or their email` loses its typed-fallback clause — the square
+  already carries the record.
+- `ScanPlate` leaves the exports — with the short code gone the pass
+  draws its square directly, and the coupon plate keeps its own surface.
 - The membership page keeps the pass in place of the card, and a new
   `Loyalty/Membership/Screens/Member Pass` screen story draws the pass
   alone, counting the code down and holding a screen wake lock while it
@@ -67,25 +72,27 @@ None.
   the account email, swaps its code area on a fresh token, and joins the
   export list the requirement already names.
 - `grade10-site/store/membership`: `A member identifies at the till by a
-  dynamic code or their email` is restated — `SC-09` drops the clause
-  that mirrors a replay refusal onto the member's own card; the till's
-  refusal naming where and when is unchanged.
+  dynamic code or their email` is restated — the code is rendered
+  scannable only, the member's email the fallback a till that cannot
+  scan already has, and `SC-09` drops the clause that mirrors a replay
+  refusal onto the member's own card; the till's refusal naming where
+  and when is unchanged.
 
 ## Impact
 
 - **`@grade10/ui`** (this store) — `member-card.tsx` becomes
-  `member-pass.tsx` rewritten to the pass; `scan-plate.tsx` gains the
-  `flat` variant; the barrel exports the `MemberPass*` names and
-  `ScanPlateVariant`. An `audit.json` beside them records the class map
-  for the nightly design sync.
+  `member-pass.tsx` rewritten to the pass; `scan-plate.tsx` leaves with
+  its exports, the pass drawing `QRCodeSVG` directly. An `audit.json`
+  beside it records the class map for the nightly design sync.
 - **`apps/preview`** (this store) — `loyalty-content.ts` carries the
   `MemberPassCopy` and the member's email; `membership.stories.tsx` draws
   the pass with `variant`; a new `member-pass.stories.tsx` draws the
   standalone screen with the countdown loop and the wake lock.
 - **`packages/i18n`** (this store) — `membership.card` gains
-  `shortCode` and `refreshesIn`, loses `fallbackCode`, `expiresIn` and
-  `secondsUnit`, and `membership.page.card` names the member pass, in
-  English, Traditional Chinese, Simplified Chinese and Korean.
+  `refreshesIn`, loses `fallbackCode`, `shortCode`, `expired`,
+  `expiresIn` and `secondsUnit`, and `membership.page.card` names the
+  member pass, in English, Traditional Chinese, Simplified Chinese and
+  Korean.
 - **Consumer apps** — any `MemberCard` import renames it, and every call
   site moves to the new props: `email` and `variant` in place of
   `displayName`, and the renamed copy keys. None are known in this store

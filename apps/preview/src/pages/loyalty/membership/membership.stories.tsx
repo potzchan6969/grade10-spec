@@ -20,6 +20,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
+import { storyHref } from "../../workbench-story-nav";
 import {
   ACTIVITY_LIST_COPY,
   APPLE_HELD,
@@ -43,9 +44,10 @@ import {
 /** The member card's code, counting down from this many seconds. */
 const CODE_SECONDS = 480;
 
-/* The Tier & Benefits page is still being designed; until it has a workbench
-   story the card's link points at a placeholder anchor. */
-const TIER_AND_BENEFITS_HREF = "#tier-and-benefits";
+/* The Tiers & Benefits screen the whole tier card opens. */
+const TIERS_AND_BENEFITS_HREF = storyHref(
+  "loyalty-membership-screens-tiers-benefits--default",
+);
 
 /**
  * Membership as a store assembles it: `SiteHeader`, the membership blocks in
@@ -112,7 +114,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
             balance={balance.toLocaleString("en-HK")}
             copy={TIER_CARD_COPY}
             earnLine={view.earnLine}
-            href={TIER_AND_BENEFITS_HREF}
+            href={TIERS_AND_BENEFITS_HREF}
             qualifyingPoints={view.qualifyingPoints}
             qualifyingThreshold={view.qualifyingThreshold}
             retentionLine={view.retentionLine}
@@ -134,9 +136,8 @@ function MembershipPage({ view }: { view: MembershipView }) {
             <MemberPass
               copy={MEMBER_PASS_COPY}
               email={MEMBER.email}
-              fallbackCode={MEMBER.fallbackCode}
               onRefresh={() => setCodes((value) => value + 1)}
-              state={{ status: "live", remainingSeconds: CODE_SECONDS }}
+              state={{ remainingSeconds: CODE_SECONDS }}
               tier={view.tier}
               token={`${MEMBER.token}.${codes}`}
               variant={view.tierVariant}

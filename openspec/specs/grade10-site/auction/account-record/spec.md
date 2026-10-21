@@ -48,9 +48,9 @@ Owner-only — nobody but the collector sees their record.
   - Ownership: resolves the record from the session and nothing else.
   - Landing, empty, and failed reads: makes an unused record and a broken one
     tell the collector different things.
-- **Tabs by bidding window**
-  - Active, Upcoming, Ended: every row sits in the tab its bidding window names.
-  - Landing: My Auctions opens on Active; the title count stays the total.
+- **One list**
+  - No window tabs: every row sits in one list, whatever its bidding window.
+  - Page frame: the breadcrumb sits above the container; the title carries the total count.
 - **Row actions**
   - Ended alerts: Email alerts show disabled on a closed lot.
   - Won entry: a Won row opens its auction order.
@@ -662,79 +662,78 @@ the same lot and winning-bid facts as the Won row.
 - **THEN** the column header is Status
 - **AND** the two rows show their matching overdue labels and View order
 
-### Requirement: My Auctions groups its rows into Active, Upcoming and Ended tabs
+### Requirement: My Auctions shows one list of every lot
 
-My Auctions SHALL place every row in exactly one of three tabs, shown in this
-order, and SHALL open on Active.
+My Auctions SHALL show every row in one list, whatever the row's bidding
+window. It SHALL NOT offer Active, Upcoming or Ended tabs, or any other
+control that splits the list by bidding window. The breadcrumb SHALL sit above
+the container. The title SHALL carry the count of every row. Lots the
+collector has bid on SHALL come first and lots they only watch SHALL follow,
+in the order the table already follows.
 
-| Tab | Holds listings whose |
-| --- | --- |
-| Active | Bidding window is open |
-| Upcoming | Bidding window has not opened |
-| Ended | Bidding is over, however it ended |
+A listing SHALL stay in the list when its bidding window changes. The row
+content and row actions SHALL be those the table already follows.
 
-A listing SHALL move to the tab its window names when the window changes. The
-row order, row content and row actions inside each tab SHALL be those the
-table already follows. The page title badge SHALL count the rows across all
-three tabs.
+A collector with no rows SHALL see the empty state. A collector with rows
+SHALL NOT see it, and SHALL NOT see an error.
 
-A tab with no rows while another tab has rows SHALL say that tab has no lots,
-and SHALL NOT be presented as a failure.
+<!-- trace:scenario id=g10.auction-account-record.SC-11c rev=2 -->
+#### Scenario: grade10-site-auction-account-record-SC-49 - Every listing sits in one list
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions as one list
 
-<!-- trace:scenario id=g10.auction-account-record.SC-11c rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-49 - Each listing sits in the tab its window names
-**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
-
-- **GIVEN** a collector watching one listing whose bidding has not opened, one
+- **GIVEN** a collector with one listing whose bidding has not opened, one
   whose bidding is open, and one that has closed
-- **WHEN** they open each tab of My Auctions
-- **THEN** Upcoming lists only the first, Active only the second, and Ended
-  only the third
-
-<!-- trace:scenario id=g10.auction-account-record.SC-slt rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-50 - A listing moves tab when its window opens
-**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
-
-- **GIVEN** a watched listing in the Upcoming tab
-- **WHEN** its bidding window opens and the collector reopens My Auctions
-- **THEN** the listing is in the Active tab
-- **AND** it is not in the Upcoming tab
-
-<!-- trace:scenario id=g10.auction-account-record.SC-evx rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-51 - An empty tab is not a failure
-**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
-
-- **GIVEN** a collector with Active listings and no Upcoming listings
-- **WHEN** they open the Upcoming tab
-- **THEN** the tab says it has no lots
-- **AND** it does not report an error
-
-<!-- trace:scenario id=g10.auction-account-record.SC-vlf rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-53 - My Auctions opens on Active
-**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
-
-- **GIVEN** a collector with listings in all three tabs
 - **WHEN** they open My Auctions
-- **THEN** the Active tab is shown
+- **THEN** the three listings are rows of one list
+- **AND** no Active, Upcoming or Ended tab is offered
 
-<!-- trace:scenario id=g10.auction-account-record.SC-doc rev=1 -->
-#### Scenario: grade10-site-auction-account-record-SC-54 - The title count covers every tab
-**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
+<!-- trace:scenario id=g10.auction-account-record.SC-slt rev=2 -->
+#### Scenario: grade10-site-auction-account-record-SC-50 - A listing stays in the list when its window opens
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions as one list
 
-- **GIVEN** a collector with one Upcoming, one Active and one Ended listing
+- **GIVEN** a watched listing whose bidding has not opened
+- **WHEN** its bidding window opens and the collector reopens My Auctions
+- **THEN** the listing is still one row of the list
+- **AND** the list holds no second row for it
+
+<!-- trace:scenario id=g10.auction-account-record.SC-evx rev=2 -->
+#### Scenario: grade10-site-auction-account-record-SC-51 - A record with lots shows no empty state
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions as one list
+
+- **GIVEN** a collector with listings in any bidding window
+- **WHEN** they open My Auctions
+- **THEN** the empty state is not shown
+- **AND** no error is reported
+
+<!-- trace:scenario id=g10.auction-account-record.SC-vlf rev=2 -->
+#### Scenario: grade10-site-auction-account-record-SC-53 - My Auctions opens as one list under its breadcrumb
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions as one list
+
+- **GIVEN** a collector who has bid on some listings and only watches others
+- **WHEN** they open My Auctions
+- **THEN** the breadcrumb is above the container
+- **AND** the title is followed by the count of every row
+- **AND** the lots they bid on come before the lots they only watch
+
+<!-- trace:scenario id=g10.auction-account-record.SC-doc rev=2 -->
+#### Scenario: grade10-site-auction-account-record-SC-54 - The title count covers every row
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions as one list
+
+- **GIVEN** a collector with one upcoming, one open and one closed listing
 - **WHEN** they open My Auctions
 - **THEN** the badge beside the page title shows 3
 
 ### Requirement: Ended rows lock Email alerts
 
-A row in the Ended tab SHALL show Email alerts disabled, SHALL NOT let the
-collector change them, and SHALL leave the listing's alert setting unchanged.
+A row for a listing whose bidding is over SHALL show Email alerts disabled,
+SHALL NOT let the collector change them, and SHALL leave the listing's alert
+setting unchanged.
 
-<!-- trace:scenario id=g10.auction-account-record.SC-r26 rev=1 -->
+<!-- trace:scenario id=g10.auction-account-record.SC-r26 rev=2 -->
 #### Scenario: grade10-site-auction-account-record-SC-52 - Ended rows lock Email alerts
-**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions as one list
 
-- **GIVEN** a listing in the Ended tab of My Auctions
+- **GIVEN** a listing whose bidding is over, shown on My Auctions
 - **WHEN** the collector tries to change its Email alerts
 - **THEN** the control is disabled
 - **AND** the listing's alert setting is unchanged
@@ -748,7 +747,7 @@ SHALL NOT record payment, confirm or change an address, or change order status.
 
 <!-- trace:scenario id=g10.auction-account-record.SC-we1 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-55 - A Won row opens its order
-**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions as one list
 
 - **GIVEN** a closed listing whose winner is the collector and whose auction
   order is identified by the row
@@ -781,7 +780,7 @@ urgency SHALL appear with the listing identity.
 
 The row's price SHALL be the auction's current bid on that listing, never the
 collector's own bid. A listing past its effective close whose close is not yet
-recorded SHALL keep its open Status, SHALL stay in the Active tab, and SHALL
+recorded SHALL keep its open Status, SHALL stay an open row, and SHALL
 carry no minimum next valid bid.
 
 Every amount SHALL be an integer count of minor units with an ISO 4217 currency
@@ -823,7 +822,7 @@ code.
 - **GIVEN** an open listing the collector has neither watched nor bid on
 - **WHEN** their first bid on it is refused
 - **AND** they open My Auctions
-- **THEN** no row for that listing appears in any tab
+- **THEN** no row for that listing appears in the list
 
 <!-- trace:scenario id=g10.auction-account-record.SC-dsc rev=2 -->
 #### Scenario: grade10-site-auction-account-record-SC-71 - An outbid collector whose raise is refused stays Outbid
@@ -854,7 +853,7 @@ code.
 - **GIVEN** a listing past its effective close, whose close is not yet
   recorded, on which the collector holds the highest valid bid
 - **WHEN** they open My Auctions
-- **THEN** that row is in the Active tab with Status Leading and no minimum
+- **THEN** that row has Status Leading and no minimum
   next valid bid
 - **AND** it reads neither Won nor Didn't win
 

@@ -377,7 +377,7 @@ enforced on the next request. An operator flips them from the admin console.
 | Cart identify | On | The customer already on the sale identifies the member |
 | Cart spend | Off | Spending on a cart session |
 
-QR, the short code and a wallet pass have no switch of their own; the terminal
+QR and a wallet pass have no switch of their own; the terminal
 switch is what stops them.
 
 ❓ **Phone lookup** — ships off until mobile numbers on the
