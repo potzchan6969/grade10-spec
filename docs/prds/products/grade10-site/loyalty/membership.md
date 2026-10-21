@@ -92,6 +92,28 @@ names.
 
 ::story{id="loyalty-membership-blocks-tiercard--gold" title="Tier, balance and progress"}
 
+## Tiers & Benefits
+
+Every rung of the programme on one surface — what each asks, what each pays,
+where the member stands and how points work. Its own page: the breadcrumbs
+name Home, Membership and Tiers & Benefits; a small viewport navigates to
+it; ❓ whether a wide viewport hosts it as a Membership section instead is
+the Membership page's composition, not drawn yet.
+
+| Section | Shows |
+| --- | --- |
+| Tier ladder | A stepper of the rungs in climb order — earned rungs ticked, the held rung in progress, unearned rungs still to come — with a line of qualifying progress beneath where the member's own tier asks one. No stepper line reaches an invitation-only rung, and a member whose tier is held by invitation sees nothing beneath it ticked and no qualifying line |
+| Tier cards | One card per rung — the tier name, its ask in the member's words, and its benefits behind checks. The held rung's card wears the primary border and its tint |
+| How Points Work | The mechanics as icon rows — earn, pending, spend, expiry — stacked on a narrow viewport and paired on a wide one. The preview states the programme's own values: a point redeems a Hong Kong dollar, points arrive when the order completes, and the whole balance lapses after twelve months with no activity |
+
+- **Reaches** — the `TierCard` on Membership links here whole, and it has
+  its own navigation entry ❓
+- **The expiry date's home** — the mechanics card states the lapse rule;
+  ❓ where a member's own "how many points expire and the day they go"
+  line reads is not drawn yet
+
+::story{id="loyalty-membership-screens-tiers-benefits--default" title="Tiers & Benefits, a gold member"}
+
 ## Member Pass
 
 | Rule | Value |
