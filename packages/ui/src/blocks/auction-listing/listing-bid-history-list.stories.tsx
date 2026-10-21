@@ -64,10 +64,11 @@ function ScrollableHistory() {
       <Button onClick={arrive} variant="secondary">
         A higher bid lands
       </Button>
-      <div
+      <section
         aria-label="Recent bids"
         className="max-h-48 w-full overflow-y-auto rounded-lg border border-border p-4"
         data-slot="history-scroll-slot"
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must take focus so a keyboard can scroll it.
         tabIndex={0}
       >
         <ClockProvider store={STORY_CLOCK.store}>
@@ -82,7 +83,7 @@ function ScrollableHistory() {
             timeZone={FIXTURE_TIME_ZONE}
           />
         </ClockProvider>
-      </div>
+      </section>
     </div>
   );
 }

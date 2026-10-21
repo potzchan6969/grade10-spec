@@ -93,16 +93,61 @@ jobs:
             core.setOutput("title", pullRequest.title);
             core.setOutput("url", pullRequest.html_url);
 
+      # The baseline holds each story's render hashes from the last main run.
+      # restore-keys picks the newest one; a miss falls back to listing every
+      # reached story and seeds the next run.
+      - name: Restore render baseline
+        uses: actions/cache/restore@v4
+        with:
+          path: render-baseline.json
+          key: storybook-render-${{ github.sha }}
+          restore-keys: storybook-render-
+
+      # Cheap graph pass: the browser is installed and used only when a story
+      # is reached or no baseline exists yet.
+      - name: Plan render
+        id: plan
+        run: |
+          node scripts/storybook/changed-page-links.mjs --plan \
+            --base "${{ github.event.before }}" \
+            --head "${{ github.sha }}" \
+            --baseline render-baseline.json \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browser
+        if: steps.plan.outputs.render-needed == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright browser
+        if: steps.plan.outputs.render-needed == 'true'
+        run: pnpm run setup:browsers
+
       - name: Find changed stories
         id: changed-pages
         run: |
           node scripts/storybook/changed-page-links.mjs \
+            --baseline render-baseline.json \
+            --snapshot-out render-current.json \
             --base "${{ github.event.before }}" \
             --head "${{ github.sha }}" \
             --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
             --merged-pr-title "${{ steps.merged-pr.outputs.title }}" \
             --merged-pr-url "${{ steps.merged-pr.outputs.url }}" \
             --github-output "$GITHUB_OUTPUT"
+
+      - name: Save render baseline
+        if: hashFiles('render-current.json') != ''
+        run: mv render-current.json render-baseline.json
+
+      - name: Cache render baseline
+        if: hashFiles('render-baseline.json') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: render-baseline.json
+          key: storybook-render-${{ github.sha }}
 
       - name: Notify Slack about changed pages
         if: steps.changed-pages.outputs.has-pages == 'true'
