@@ -372,11 +372,13 @@ test("the glob matcher reads the patterns the workflows write", () => {
 test("a check a pull request runs cancels on pull requests alone", () => {
   // A push to main cancelled by the next one leaves no verdict on the commit
   // that may have broken main, so every run off a pull request keys its own
-  // group.
+  // group. A workflow no push starts has no such verdict to lose.
   const group =
     "${{ github.event_name == 'pull_request' && github.ref || github.run_id }}";
   const checks = workflows().filter(
-    ([, workflow]) => workflow.on?.pull_request !== undefined,
+    ([, workflow]) =>
+      workflow.on?.pull_request !== undefined &&
+      workflow.on?.push !== undefined,
   );
 
   assert.ok(checks.some(([path]) => path.endsWith("/lint.yml")));
