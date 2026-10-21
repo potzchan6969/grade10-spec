@@ -8,7 +8,8 @@ or {
   JsStringLiteralExpression(),
   JsxString(),
   JsLiteralMemberName(),
-  JsTemplateChunkElement()
+  JsTemplateChunkElement(),
+  TsStringLiteralType()
 } as $s where {
   $s <: r"\"?[^\"]*-\[-?[0-9]+(?:\.[0-9]+)?(?:px|rem|em|%)\][^\"]*\"?",
   register_diagnostic(span=$s, message="Arbitrary length: read the value off the variable the designer bound and use its token utility (or raise unbound drift with the designer) instead of hardcoding a measured length. See docs/governance/figma-component-to-code.md.", severity="warn")

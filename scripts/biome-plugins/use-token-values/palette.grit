@@ -6,7 +6,8 @@ or {
   JsStringLiteralExpression(),
   JsxString(),
   JsLiteralMemberName(),
-  JsTemplateChunkElement()
+  JsTemplateChunkElement(),
+  TsStringLiteralType()
 } as $s where {
   $s <: r"\"?[^\"]*\b(?:bg|text|border|ring|fill|stroke|from|via|to|outline|decoration|divide|accent|caret|shadow)-(?:red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone)-[0-9]{2,3}\b[^\"]*\"?",
   register_diagnostic(span=$s, message="Stock Tailwind palette class: not a token, so it never varies by theme and design sync never diffs it. Use a token utility from tokens.json. See docs/governance/figma-component-to-code.md.", severity="warn")

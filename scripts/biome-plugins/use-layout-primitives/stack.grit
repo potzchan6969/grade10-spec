@@ -6,7 +6,8 @@ or {
   JsStringLiteralExpression(),
   JsxString(),
   JsLiteralMemberName(),
-  JsTemplateChunkElement()
+  JsTemplateChunkElement(),
+  TsStringLiteralType()
 } as $s where {
   $s <: r"\"?(?:[^\"]*\s)?flex-(?:col|row)\b[^\"]*\"?",
   register_diagnostic(span=$s, message="Hand-rolled stack: use VStack/HStack (or Stack) from @grade10/design-system with a gap rung instead of flex direction classes. See docs/governance/figma-component-to-code.md.", severity="warn")
