@@ -330,9 +330,10 @@ the same facts sit in the five-column table.
 | Email alerts | The per-lot switch; off and locked when the account's **Auction email alerts** master is off, or the lot has ended |
 | Unwatch | Only when the collector has not bid |
 
-- **Tabs** — Active, Upcoming and Ended by bidding window, opening on
-  Active; the title count stays the total, and an empty tab says it has no
-  lots
+- **No window tabs** — the list is not split by bidding window: Active,
+  Upcoming and Ended lots share it, and the title count is the total
+- **Page frame** — the breadcrumb sits above the container; the title with
+  its count heads the list
 - **After the close** — Your Standing reads Won or Didn't win once the
   result is recorded, never from the page's own clock
 - **Won** — every Won row offers View order into the lot's order, Cancelled
