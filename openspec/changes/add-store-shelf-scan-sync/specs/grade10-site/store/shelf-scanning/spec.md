@@ -51,12 +51,12 @@ carry the store page is `grade10-site/site/carried-surfaces`'s.
     ships
   - Not recognised yet: scanning a product the scanner cannot recognise shows
     what it shows for anything unknown
-- Hourly photo learning
-  - Hourly on both: the scanner learns new photos every hour on staging and on
-    production
-  - Idle hour costs nothing: an hour with no new photo does no work
+- Photo learning every two hours
+  - Every two hours on both: the scanner learns new photos every two hours
+    on staging and on production
+  - Idle run costs nothing: a run with no new photo does no work
   - Photos change, item relearns: a new or replaced photo is learned at the
-    next hourly run, and a dropped photo leaves the scanner
+    next photo run, and a dropped photo leaves the scanner
 - What a scan shows
   - Store's title and price: what the product page shows, its title and the
     price of its one item with automatic discounts
@@ -495,67 +495,67 @@ anything it does not recognise.
 - **THEN** the scan names the slab's product with grade PSA 10 and cert
   126956765, with no choice to make
 
-### Requirement: The scanner learns new photos every hour
+### Requirement: The scanner learns new photos every two hours
 
-The scanner SHALL learn the photos it has not yet learned every hour, on
+The scanner SHALL learn the photos it has not yet learned every two hours, on
 staging and on production, with the model the deployed scanner runs.
 
 | Rule | Value |
 | --- | --- |
-| Run | Every hour, on staging and production |
-| An hour with no photo to learn | No work beyond checking |
+| Run | Every two hours, on staging and production |
+| A run with no photo to learn | No work beyond checking |
 | A photo that could not be learned | Tried again 24 hours after the failure |
 | The run's model differs from the scanner's | Nothing learned; the run fails |
 
-<!-- trace:scenario id=g10.store-shelf-scanning.SC-s7a rev=2 -->
-#### Scenario: g10.store-shelf-scanning.SC20 - A new photo is learned at the next hourly run on production
-**Serves:** `Hourly photo learning` - the store adds a photo and the shelf recognises it
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-s7a rev=3 -->
+#### Scenario: g10.store-shelf-scanning.SC20 - A new photo is learned at the next photo run on production
+**Serves:** `Photo learning every two hours` - the store adds a photo and the shelf recognises it
 
 - **GIVEN** a product on production gains a photo
 - **WHEN** the next copy reaches production's scanner
-- **THEN** once the next hourly run has finished, the scanner recognises the
+- **THEN** once the next photo run has finished, the scanner recognises the
   product from that photo
 
-<!-- trace:scenario id=g10.store-shelf-scanning.SC-i2s rev=1 -->
-#### Scenario: g10.store-shelf-scanning.SC21 - An hour with nothing new does no work
-**Serves:** `Hourly photo learning` - the hourly run checks and stops
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-i2s rev=2 -->
+#### Scenario: g10.store-shelf-scanning.SC21 - A run with nothing new does no work
+**Serves:** `Photo learning every two hours` - the photo run checks and stops
 
 - **GIVEN** no photo is waiting to be learned
-- **WHEN** the hourly run starts
+- **WHEN** the photo run starts
 - **THEN** it checks once and stops without preparing to learn anything
 
-<!-- trace:scenario id=g10.store-shelf-scanning.SC-c8l rev=1 -->
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-c8l rev=2 -->
 #### Scenario: g10.store-shelf-scanning.SC22 - A replaced photo is learned again and a dropped one leaves
-**Serves:** `Hourly photo learning` - the scanner follows the product's photos
+**Serves:** `Photo learning every two hours` - the scanner follows the product's photos
 
 - **GIVEN** the scanner has learned a product's two photos
 - **WHEN** the shop replaces one photo and removes the other, and the next
   copy reaches the scanner
 - **THEN** the removed photo no longer recognises the product
-- **AND** the new photo is learned at the next hourly run
+- **AND** the new photo is learned at the next photo run
 
-<!-- trace:scenario id=g10.store-shelf-scanning.SC-j8j rev=1 -->
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-j8j rev=2 -->
 #### Scenario: g10.store-shelf-scanning.SC40 - A product with more than 8 photos
-**Serves:** `Hourly photo learning` - the scanner learns what an item can hold
+**Serves:** `Photo learning every two hours` - the scanner learns what an item can hold
 
 - **GIVEN** a product with 10 photos
-- **WHEN** the next copy reaches the scanner and the hourly run has passed
+- **WHEN** the next copy reaches the scanner and the photo run has passed
 - **THEN** the scanner recognises the product from its first 8 photos in the
   shop's order, and not from the last 2
 
-<!-- trace:scenario id=g10.store-shelf-scanning.SC-cz6 rev=1 -->
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-cz6 rev=2 -->
 #### Scenario: g10.store-shelf-scanning.SC23 - A photo that failed is tried again after 24 hours
-**Serves:** `Hourly photo learning` - a photo that could not be fetched once is not lost for good
+**Serves:** `Photo learning every two hours` - a photo that could not be fetched once is not lost for good
 
 - **GIVEN** a product photo could not be learned
 - **WHEN** 24 hours have passed since the failure
-- **THEN** the next hourly run tries it again
+- **THEN** the next photo run tries it again
 
-<!-- trace:scenario id=g10.store-shelf-scanning.SC-a43 rev=1 -->
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-a43 rev=2 -->
 #### Scenario: g10.store-shelf-scanning.SC24 - A run with another model learns nothing
-**Serves:** `Hourly photo learning` - a run never relearns the same photos every hour
+**Serves:** `Photo learning every two hours` - a run never relearns the same photos every time
 
-- **GIVEN** the hourly run's model differs from the one the scanner runs
+- **GIVEN** the photo run's model differs from the one the scanner runs
 - **WHEN** the run starts
 - **THEN** it learns no photo and the run fails, naming both models
 

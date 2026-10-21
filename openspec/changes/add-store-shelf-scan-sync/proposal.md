@@ -33,8 +33,8 @@ change.
 - **Products the scanner cannot yet recognise are held now** — sealed boxes,
   merch and comics carry their details today and are recognised once the box
   detector ships
-- **New photos are recognisable at the next hourly run on staging and production** —
-  an hour with nothing new costs nothing
+- **New photos are recognisable at the next photo run, every two hours, on staging and production** —
+  a run with nothing new costs nothing
 - **Production's scanner works before the store opens there** — the store-page
   link appears only where the store is carried
 - **Shopkeepers open the scanner from one fixed link** — bookmarked or printed
@@ -49,7 +49,7 @@ See [Non-Goals](decisions.md#non-goals).
 ### New Capabilities
 
 - `grade10-site/store/shelf-scanning`: the scanner holding every published
-  store product, a slab as its exact unit, photos learned hourly, and what a
+  store product, a slab as its exact unit, photos learned every two hours, and what a
   shopkeeper sees when they scan a shelf
 
 ### Modified Capabilities
@@ -64,8 +64,8 @@ None.
   production
 - **Scanner** — `apps/backend/grade10/tcg-ar`: an upsert that changes nothing
   writes nothing; a contract the store can import; store items ranked above
-  the shared card catalogue; an open scanner's periodic refresh; the hourly
-  photo run on production in `.github/workflows/tcg-ar-ops.yml`
+  the shared card catalogue; an open scanner's periodic refresh; the photo run
+  on production in `.github/workflows/tcg-ar-ops.yml`
 - **Inventory** — a store entrypoint returning the grader, grade and cert of
   the items store products name; the store holds no binding that returns them
   today

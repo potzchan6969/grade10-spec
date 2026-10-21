@@ -15,10 +15,10 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
 - **Delete is not idempotent** - `DELETE /items/:id` answers `404` for an
   unknown id (`routes.ts:663-683`), and `ScannerError`'s status does not
   survive the binding: a thrown error crosses RPC as its message alone
-- **Model drift** - the hourly photo run checks out `main`; the scanner keeps
+- **Model drift** - the photo run checks out `main`; the scanner keeps
   an embedding only from its own model and drops any other silently
   (`routes.ts:934`), so the photo stays `need: embed` and is processed again
-  every hour, up to the processor's 2,000-job cap
+  at every run, up to the processor's 2,000-job cap
 - **Failed photos stay failed** - a photo the processor could not read is
   `failed` for good; the queue never serves it again (`routes.ts:1039-1074`)
 - **Photos on staging only** - `tcg-ar-ops.yml`'s `photos` job runs hourly at
@@ -68,7 +68,7 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
   every product every tick
 - Slab facts read fresh from inventory each pass, with no copy kept in the
   store
-- Hourly photos on both environments, processed with the scanner's own model
+- Photos every two hours on both environments, processed with the scanner's own model
 
 **Non-Goals:**
 
@@ -240,7 +240,7 @@ what the scanner holds and shows. This section records where each part lands.
 
 ### Operations
 
-- **Hourly on both** - the `photos` job's schedule runs a matrix over
+- **Every two hours on both** - the `photos` job's schedule runs a matrix over
   `staging` and `production`; a dispatch runs the one chosen. An empty probe
   stops before install. Between a model release on `main` and its deploy the
   run fails loudly and learns nothing
@@ -375,7 +375,7 @@ No column changes: `item_images` keeps its columns, and a retry reads
 ## Risks / Trade-offs
 
 - [A product replaces a photo] → the old photo's vectors go at once and the
-  new one is learned at the next hourly run; the item is recognised by its other
+  new one is learned at the next photo run; the item is recognised by its other
   photos, or its cert, meanwhile
 - [The shop does not answer the discount read] → the pass fails before it
   writes, so every shelf change waits, availability included, until the shop

@@ -72,7 +72,7 @@
       "col": 3,
       "type": "backend",
       "label": "Photos learned",
-      "sublabel": "hourly",
+      "sublabel": "every 2 hours",
       "width": 138
     },
     {

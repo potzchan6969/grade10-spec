@@ -5,8 +5,8 @@
 - The scanner holds every published store product as the store's own copy of
   the catalogue moves, and drops one the store no longer publishes.
 - A slab on the shelf names the exact store product it is, not only its card.
-- A product's new photos become recognisable at the next hourly run on
-  staging and production.
+- A product's new photos become recognisable at the next photo run, every two
+  hours, on staging and production.
 
 ## Non-Goals
 
@@ -30,7 +30,7 @@
 | Q1 | Which store products does the scanner hold? | Every published product but gift cards; a sold-out one stays and reads Sold out - decided by the owner | Only collectibles, which leaves merch on the shelf unscannable; only in-stock products, which makes a sold-out shelf item look unknown |
 | Q2 | Are products the scanner cannot yet recognise synced now? | Yes: sealed boxes, merch and comics are held now and recognised once the box detector ships - decided by the owner | Excluding them until then, which needs a second change to add them back |
 | Q3 | Does a slab resolve to its card or to its exact unit? | Its exact unit: the store reads the grader, grade and cert of the inventory item the product names - decided by the owner | Card-level match only, which names the card but not which copy the store lists |
-| Q4 | How fresh is the scanner? | It follows the store's catalogue mirror: within 5 minutes of a change the shop reports, within 10 of one only the store's re-read finds; photos hourly on staging and production; an hour with nothing new costs nothing - decided by the owner, revised by Q35 | A schedule of its own beside the mirror's; production photo runs only by hand, which leaves new photos unrecognised there |
+| Q4 | How fresh is the scanner? | It follows the store's catalogue mirror: within 5 minutes of a change the shop reports, within 10 of one only the store's re-read finds; photos every two hours (Q39) on staging and production; a run with nothing new costs nothing - decided by the owner, revised by Q35 | A schedule of its own beside the mirror's; production photo runs only by hand, which leaves new photos unrecognised there |
 | Q7 | What does a slab with no known unit do? | Recognised by its product photos, without grade or cert; a slab whose grader the scanner does not read is the same; where two products carry one cert neither carries it; Operations is alerted to each, with no screen - decided by the owner | Left off the scanner, which hides a product the store sells; "held by its card", which the store cannot do because it knows no catalogue card |
 | Q7a | How does a house-stock slab name its unit? | The shop product names its inventory item's label code, and the store reads grader, grade and cert from inventory, as for a consigned slab; every house shelf slab is a registered inventory item - decided by the owner, revising the earlier answer | Grader and cert typed on the shop product, the earlier answer, superseded: a second copy of facts inventory holds, no grade, and certs public on the storefront; holding house stock by its photos alone, which leaves Q3 true only for consigned slabs |
 | Q8 | What does the scanner show on a product it cannot recognise? | Its usual "Not recognised yet — hold steady" - decided by the owner | A hint per kind, which the box detector makes obsolete |
@@ -64,6 +64,7 @@
 | Q36 | Does the pick include slabs? | Yes: every close store product of one art, slab or not, unless the scanner read a slab's label - decided by the owner | The closest only, where a raw card could show a slab's price with no warning |
 | Q37 | Which cert forms does the scanner read? | 4 to 24 letters, digits or hyphens, for every grader it reads: PSA, BGS, CGC, SGC and TAG. Any other is recognised by its photos only and alerted (Q30) - decided by the round | A form per grader, which the scanner does not hold |
 | Q38 | What makes a store product graded? | For a consigned product, inventory decides: it is a slab only when inventory holds its item with a grader, whatever its collectible type. A house-stock product is a slab when its collectible type is a graded one (Q32). Any other consigned product is a raw card, recognised by its photos and never alerted. Corrects the draft, which counted every consigned product, and keeps Q3 and Q7a: the unit is the inventory item - decided by the round | Every consigned product, which alerts Operations for each consigned raw card for as long as it is listed |
+| Q39 | How often are new photos learned? | Every two hours on staging and production, a probe on the slim runner first so an idle run costs one request - decided by the owner, 2026-10-22, revising Q4 | Hourly, which doubles the runs for a freshness shopkeepers do not need; or the scanner Worker dispatching the run, which needs a GitHub token the team cannot get |
 
 ## Handed to Tech Design
 
@@ -78,7 +79,7 @@ Choices the round checked against the code, for `tech-design.md` to carry:
   correction in inventory reaches the scanner without a push
 - **Failed photos** — retried after 24 hours rather than left failed
 - **Model mismatch** — the photo processor stops when its model differs from
-  the scanner's, rather than reprocessing every hour
+  the scanner's, rather than reprocessing at every run
 - **Scanner project** — seeded by migration on each environment
 - **Access** — `/scan/*` bypasses Cloudflare Access, so shopkeepers outside
   Access can open the link
