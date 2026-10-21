@@ -7,10 +7,10 @@ import { coverageErrors, journeyErrors } from "./check.mjs";
 import {
   featureCoverage,
   journeyCoverage,
-  manualFeatures,
   scenarioSettings,
 } from "./coverage.mjs";
 import { readJourneys } from "./journeys.mjs";
+import { manualFeatures } from "./sidebar.mjs";
 import { storyIndex } from "./story-index.mjs";
 
 function repository(files) {
