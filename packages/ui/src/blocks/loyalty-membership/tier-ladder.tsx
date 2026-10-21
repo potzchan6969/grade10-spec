@@ -100,7 +100,7 @@ function TierLadder({
               hAlign="space-between"
               vAlign="baseline"
             >
-              <Text className="text-secondary-foreground" size="xs">
+              <Text className="text-secondary-foreground" size="sm">
                 {copy.qualifying}
               </Text>
               <Text data-slot="tier-ladder-qualifying" size="sm">
