@@ -73,7 +73,7 @@ The post repeats the top of the day's page, then lists what the run brought, in 
 
 - **Post head** - the title; the day, the repository and branch, and the day's range, which opens GitHub's comparison of the two commits
 - **Post lead** - the reason, the numbers and an Open the digest button, which opens the branch's one link
-- **Post changes** - how many are new since the last post, of how many on the day, then the new ones grouped by area as on the page: each change's kind, its title linking to its card, and who notices it; past 12 changes, one link to the rest
+- **Post changes** - how many are new since the last post, of how many on the day, then the new ones grouped by area as on the page: each change's kind, its title linking to its card, who notices it, and its `now` line, so the post reads as results without opening the page; past 12 changes, one link to the rest
 - **Post follow-ups** - one link to the page's follow-ups, with their count; listing them in every post would repeat them each hour
 - **Page** - every change of the day drawn, at `reports/grade10-spec/digest/<branch>/<day>/` on the reports host, behind the team's Cloudflare login; the host drops it 30 days after its last upload
 - **One link** - `reports/grade10-spec/digest/<branch>/index.html` always opens the newest day; the run keeps `days.json` beside it (`scripts/days.mjs`), one entry per day for the last 29 days, newest first

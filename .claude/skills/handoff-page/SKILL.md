@@ -225,7 +225,16 @@ A cloud session whose Playwright wants another browser build sets `CHROMIUM_PATH
 ## Publish and Hand Over
 
 1. **Publish** - before the PR merges, from the repository root, `node .claude/skills/handoff-page/scripts/publish.mjs <scratchpad>/handoff/page.html --pr <n>`; it force-pushes the page and `<scratchpad>/handoff/shots/` to `handoff/pr-<n>` and dispatches the Handoff page workflow (`.github/workflows/handoff.yml`), which uploads them and keeps one comment on the PR with the link; closing the PR deletes the branch, and a merged PR's run deletes it after the upload
-2. **Confirm** - wait for that run (`gh run watch`), open its link from the PR comment, and say in one line what you exercised and what you could not
-3. **Reply** - the contents of `reply.md`, with `{{link}}` replaced by the page's link and `#decide` after it when anything is asked, or build again with `--url <link>` to fill it
+2. **Confirm** - wait for that run (`gh run watch`), open its link from the PR comment, and say in one line what you exercised and what you could not, and why
+3. **Reply** - the contents of `reply.md`, with `{{link}}` replaced by the page's link and `#decide` after it when anything is asked, or build again with `--url <link>` to fill it; it reads as The Reply says
 4. **Rounds** - each round re-checks the facts, raises `stamp.version`, writes `since`, builds, checks and publishes again; the link holds
 5. **Clean up** - delete the capture spec and its `test-results/`, stop any server, and keep the data, the page and the screenshots out of the repository
+
+### The Reply
+
+`reply.md` is a draft the person can read without opening the page: the verdict with its exceptions (`Ready, 7 of 9 claims verified`), what changed, what is not verified, then the Clarification Request. Long lists stop at six and point at the page. Trim or reword it to fit the conversation; `writing-style` governs the words.
+
+- **Each line a result** - what a change does now, or what a check found, in the catalog's words: `The label reads **Time left (extended)** until the lot closes`
+- **Say where it was checked** - the workbench, staging or CI, on which commit; a failure says why, and whether it was already known
+- **Held back is not impossible** - an action waiting on the person's permission, such as a deploy, is named as waiting on them
+- **An offer names its cost** - what it would take or leave behind
