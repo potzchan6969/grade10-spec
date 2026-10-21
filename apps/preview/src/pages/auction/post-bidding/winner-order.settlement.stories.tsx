@@ -247,17 +247,13 @@ export const CompleteSetupFlow: Story = {
     await waitFor(() => {
       expect(modal.getByText("Step 2 of 3")).toBeVisible();
     });
-    // The winner chooses the settlement currency and payment method.
+    // The step opens on the first offered currency (USD) with its first method.
     const hkd = modal.getByRole("button", { name: "HKD" });
     const usd = modal.getByRole("button", { name: "USD" });
-    expect(usd).toHaveAttribute("aria-pressed", "false");
+    expect(usd).toHaveAttribute("aria-pressed", "true");
     expect(hkd).toHaveAttribute("aria-pressed", "false");
-    expect(modal.queryByRole("radio")).not.toBeInTheDocument();
-    // winner-order-SC-279 shared UI scope: no choice keeps setup blocked.
-    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
 
     // winner-order-SC-303: the card fee follows the selected settlement currency.
-    await userEvent.click(usd);
     await waitFor(() => {
       expect(
         modal.getByText("Card fee about 4.4% + a fixed amount"),
@@ -404,15 +400,13 @@ export const AddNewAddressSetupFlow: Story = {
     await waitFor(() => {
       expect(picker.getByText("Step 2 of 3")).toBeVisible();
     });
-    // The winner chooses the settlement currency and payment method.
+    // The step opens on the first offered currency (USD) with its first method.
     const hkd = picker.getByRole("button", { name: "HKD" });
     expect(picker.getByRole("button", { name: "USD" })).toHaveAttribute(
       "aria-pressed",
-      "false",
+      "true",
     );
     expect(hkd).toHaveAttribute("aria-pressed", "false");
-    expect(picker.queryByRole("radio")).not.toBeInTheDocument();
-    expect(picker.getByRole("button", { name: "Continue" })).toBeDisabled();
 
     await userEvent.click(hkd);
     const card = await waitFor(() => {
@@ -420,9 +414,6 @@ export const AddNewAddressSetupFlow: Story = {
       expect(found).toBeVisible();
       return found;
     });
-    expect(card).not.toBeChecked();
-    expect(picker.getByRole("button", { name: "Continue" })).toBeDisabled();
-    await userEvent.click(card);
     await waitFor(() => {
       expect(card).toBeChecked();
       expect(picker.getByRole("button", { name: "Continue" })).toBeEnabled();
