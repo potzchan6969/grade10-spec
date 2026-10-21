@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CommitInfo } from "../src/api/types";
-import { type GitIndex, mergeGitIndexes } from "../src/store/git.mts";
+import { type GitIndex, mergeGitIndexes, NO_GIT } from "../src/store/git.mts";
 
 /** Two repositories, one index: `docs/prds/…` answers from the content clone,
  * everything else from the store, and the snapshot is stamped with the
@@ -54,5 +54,21 @@ describe("the merged git index", () => {
     // A ref pairing a store commit with a content path resolves to nothing —
     // the stale check reads that as "moved", never as somebody else's file.
     expect(blobs.has("s:docs/prds/index.md")).toBe(false);
+  });
+
+  it("answers a commit's files from the side that has a history, when the other has none", () => {
+    const withFiles: GitIndex = {
+      ...store,
+      filesAt: (_sha, paths) =>
+        new Map(paths.map((path) => [path, `at ${path}`])),
+    };
+    const files = mergeGitIndexes(withFiles, NO_GIT).filesAt?.("s", [
+      "openspec/specs/a/spec.md",
+      "docs/prds/index.md",
+    ]);
+    expect(files?.get("openspec/specs/a/spec.md")).toBe(
+      "at openspec/specs/a/spec.md",
+    );
+    expect(files?.has("docs/prds/index.md")).toBe(false);
   });
 });

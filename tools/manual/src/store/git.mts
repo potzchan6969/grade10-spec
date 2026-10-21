@@ -25,8 +25,8 @@ export type GitIndex = {
    * holds none, or where there is no history to walk. */
   writerOf?: (path: string, needle: string) => string | undefined;
   /** Files as one commit holds them, keyed by path, in one call; a path the
-   * commit holds no file at is absent. Nothing where git cannot answer. */
-  filesAt?: (sha: string, paths: string[]) => Map<string, string> | undefined;
+   * commit holds no file at is absent. */
+  filesAt?: (sha: string, paths: string[]) => Map<string, string>;
 };
 
 export const NO_GIT: GitIndex = {
@@ -158,15 +158,13 @@ export function mergeGitIndexes(
       .slice(0, HISTORY_LIMIT),
     writerOf: (path, needle) => side(path).writerOf?.(path, needle),
     filesAt: (sha, paths) => {
-      const ofSide = (index: GitIndex) =>
-        index.filesAt?.(
-          sha,
-          paths.filter((path) => side(path) === index),
-        );
-      const fromStore = ofSide(store);
-      const fromContent = ofSide(content);
-      if (!fromStore || !fromContent) return undefined;
-      return new Map([...fromStore, ...fromContent]);
+      // A side with no history holds none of its paths, as `showAt` once said
+      // path by path; the other side still answers for its own.
+      const ofSide = (index: GitIndex) => {
+        const own = paths.filter((path) => side(path) === index);
+        return own.length > 0 ? (index.filesAt?.(sha, own) ?? []) : [];
+      };
+      return new Map([...ofSide(store), ...ofSide(content)]);
     },
     readBlobs: async (refs) => {
       const ofSide = (index: GitIndex) =>
@@ -251,7 +249,7 @@ export async function readGitIndex(
           "--format=%H",
           "-S",
           needle,
-          "HEAD",
+          head,
           "--",
           path,
         ])?.trim() || undefined,
@@ -260,9 +258,7 @@ export async function readGitIndex(
       const refs = paths.map((path) => `${sha}:${path}`);
       const unread = [...new Set(refs.filter((ref) => !blobsAt.has(ref)))];
       if (unread.length > 0) {
-        const out = quietBatch(root, unread);
-        if (!out) return undefined;
-        const blobs = blobsOf(out, unread);
+        const blobs = blobsOf(catFileSync(root, unread), unread);
         for (const ref of unread) blobsAt.set(ref, blobs.get(ref));
       }
       return new Map(
@@ -335,24 +331,19 @@ async function readBlobs(
   return blobsOf(await catFile(root, refs), refs);
 }
 
-/** `readBlobs` for a caller that cannot wait: one synchronous process, and
- * nothing where git refuses. */
-function quietBatch(root: string, refs: string[]): Buffer | undefined {
-  if (refs.length === 0) return Buffer.alloc(0);
-  try {
-    return execFileSync(
-      "git",
-      ["-c", "core.quotePath=false", "cat-file", "--batch"],
-      {
-        cwd: root,
-        input: `${refs.join("\n")}\n`,
-        stdio: ["pipe", "pipe", "ignore"],
-        maxBuffer: 256 * 1024 * 1024,
-      },
-    );
-  } catch {
-    return undefined;
-  }
+/** `catFile` for a caller that cannot wait. A ref git cannot resolve is a
+ * header line, not a failure, so a throw here is git itself refusing. */
+function catFileSync(root: string, refs: string[]): Buffer {
+  return execFileSync(
+    "git",
+    ["-c", "core.quotePath=false", "cat-file", "--batch"],
+    {
+      cwd: root,
+      input: `${refs.join("\n")}\n`,
+      stdio: ["pipe", "pipe", "pipe"],
+      maxBuffer: 256 * 1024 * 1024,
+    },
+  );
 }
 
 function blobsOf(out: Buffer, refs: string[]): Map<string, string> {
@@ -509,11 +500,11 @@ export function mainStateOf(
   return files ? { state: "diverged", ref: main.ref, files } : undefined;
 }
 
-let warned = false;
+const unparsed = new Set<string>();
 
 function warnUnparsed(root: string): void {
-  if (warned) return;
-  warned = true;
+  if (unparsed.has(root)) return;
+  unparsed.add(root);
   console.warn(
     `manual: git log in ${root} named no commit this reader recognizes — pages will show no commit info`,
   );
