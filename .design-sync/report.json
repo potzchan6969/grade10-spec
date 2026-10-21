@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T06:24:18.384Z",
+  "generatedAt": "2026-10-21T12:55:36.864Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -88,7 +88,8 @@
     "Radio Button": "skipped",
     "Radio List": "skipped",
     "Radio List Item": "skipped",
-    "Reward Item": "warn",
+    "Reward / Checkout Point Balance": "warn",
+    "Reward / Item": "warn",
     "Search Input": "skipped",
     "Segmented Control": "skipped",
     "Segmented Control Item": "skipped",
@@ -985,10 +986,10 @@
     "7227-863": "Tier Info Card",
     "7229-7427": "How Points Work",
     "7250-1607": "Tiers & Benefits (small vp)",
-    "7254-2284": "Reward Item",
-    "7254-2285": "Reward Item",
-    "7254-2286": "Reward Item",
-    "7254-2460": "Rewards Checkout",
+    "7254-2284": "Reward / Item",
+    "7254-2285": "Reward / Item",
+    "7254-2286": "Reward / Item",
+    "7254-2460": "Rewards Checkout (Item)",
     "7254-257": "Tier Ladder",
     "7254-384": "Tier Ladder",
     "7254-385": "Tier Ladder",
@@ -997,6 +998,15 @@
     "7259-770": "Product / Cart / Promo Ticket",
     "7259-787": "Product / Cart / Promo Ticket",
     "7259-799": "Product / Cart / Promo Ticket",
+    "7264-4712": "Drawer",
+    "7264-6580": "Rewards Checkout (Coupon)",
+    "7265-461": "Product / Cart / Cart Drawer / Large Viewport",
+    "7265-564": "Product / Cart / Cart Drawer / Small Viewport",
+    "7266-6742": "Rewards Redeemed (Item)",
+    "7266-6873": "Reward / Checkout Point Balance",
+    "7266-6875": "Reward / Checkout Point Balance",
+    "7266-6876": "Reward / Checkout Point Balance",
+    "7266-6909": "Rewards Redeemed (Coupon)",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1153,8 +1163,11 @@
     "Progress": [
       "Progress: no code component (looked for src/components/**/progress.tsx or progress.tsx)"
     ],
-    "Reward Item": [
-      "Reward Item: no code component (looked for src/components/**/rewarditem.tsx or rewarditem.tsx)"
+    "Reward / Checkout Point Balance": [
+      "Reward / Checkout Point Balance: no code component (looked for src/components/**/rewardcheckoutpointbalance.tsx or checkoutpointbalance.tsx)"
+    ],
+    "Reward / Item": [
+      "Reward / Item: no code component (looked for src/components/**/rewarditem.tsx or item.tsx)"
     ],
     "Stat": [
       "Stat: no code component (looked for src/components/**/stat.tsx or stat.tsx)"
