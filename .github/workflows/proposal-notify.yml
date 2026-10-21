@@ -11,9 +11,11 @@ name: OpenSpec changes
 # It runs when the Manual workflow finishes on `main`, and only when it
 # succeeded: that one job deploys the manual and the OpenSpec viewer under
 # /openspec/, so every link a message carries opens on a page that already
-# shows what it says. A deploy that failed, or was cancelled by a newer push,
-# tells nobody; the next deploy that succeeds reads from the last one that did,
-# so nothing it carried is lost.
+# shows what it says. Every successful deploy tells its range, whatever started
+# it — a push, a dispatch after a bot's commit — since the next one reads from
+# it. A deploy that failed, or was cancelled by a newer push, tells nobody; the
+# next deploy that succeeds reads from the last one that did, so nothing it
+# carried is lost.
 #
 # The job commits nothing: `contents: read` and `actions: read` — the second
 # to find the last deployed head — are the whole of it, and the only token it
@@ -49,7 +51,6 @@ jobs:
     # Both deployed, or nothing is told.
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
       github.event.workflow_run.head_branch == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 10

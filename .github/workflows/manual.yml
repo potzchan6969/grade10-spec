@@ -26,13 +26,8 @@ on:
   # of the watched paths.
   push:
     branches: [main]
-  # Lint's Biome fix push, and Design sync's report commit, are made with the
-  # default GITHUB_TOKEN, which starts no workflow; this catches the first up
-  # once Lint finishes, and Design sync dispatches below.
-  workflow_run:
-    workflows: [Lint]
-    types: [completed]
-    branches: [main]
+  # Lint's fix commit and Design sync's report commit are pushed with the
+  # default GITHUB_TOKEN, which starts no workflow; each dispatches this.
   workflow_dispatch:
   repository_dispatch:
     types: [deployment-evidence-updated]

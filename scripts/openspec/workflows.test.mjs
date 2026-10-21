@@ -238,7 +238,9 @@ test("the notifier runs once the manual and the viewer deployed, and only then",
   });
   assert.equal(YAML.parse(read(".github/workflows/manual.yml")).name, "Manual");
   assert.match(notify.jobs.notify.if, /workflow_run\.conclusion == 'success'/);
-  assert.match(notify.jobs.notify.if, /workflow_run\.event == 'push'/);
+  // Any successful deploy, whatever started it: the next one reads its range
+  // from this one, so a deploy that tells nothing loses that range for good.
+  assert.doesNotMatch(notify.jobs.notify.if, /workflow_run\.event/);
   assert.match(notify.jobs.notify.if, /workflow_run\.head_branch == 'main'/);
   // The deployed head, never `github.sha`, which under `workflow_run` is
   // whatever `main` holds when the run starts.
@@ -261,14 +263,18 @@ test("the notifier verifies the run listing before choosing the last deployed he
 test("shared-planning-change-stages-SC-72 - the manual deploys on every push to main", () => {
   // The open page's banner promises the site catches up on its own, so every
   // push to `main` rebuilds it — a path filter made that false — and Lint's
-  // fix push, made with the default token, is caught by Lint finishing.
+  // fix push, made with the default token, dispatches it. Rebuilding on every
+  // Lint run instead deployed every push twice.
   const manual = YAML.parse(read(".github/workflows/manual.yml"));
   assert.deepEqual(manual.on.push, { branches: ["main"] });
-  assert.deepEqual(manual.on.workflow_run, {
-    workflows: ["Lint"],
-    types: ["completed"],
-    branches: ["main"],
-  });
+  assert.equal(manual.on.workflow_run, undefined);
+  assert.ok("workflow_dispatch" in manual.on);
+  const lint = YAML.parse(read(".github/workflows/lint.yml"));
+  const commit = lint.jobs.biome.steps.find(
+    (step) => step.id === "commit-lint-fixes",
+  );
+  assert.match(commit.run, /gh workflow run manual\.yml/);
+  assert.equal(lint.jobs.biome.permissions.actions, "write");
   const build = manual.jobs.deploy.steps.find((step) => step.name === "Build");
   assert.equal(build.env.RELAY_URL, "${{ vars.RELAY_URL }}");
 });
