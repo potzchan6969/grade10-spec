@@ -172,6 +172,11 @@
     "eventCancelledBody": "{event} is cancelled. Your order {reference} and its tickets no longer admit.",
     "refundNote": "We are refunding {amount} to the card you paid with. Your bank can take 5 to 10 business days to show it.",
     "cancelledAction": "View your order",
-    "footer": "You are receiving this email because you ordered tickets on Grade10."
+    "offeredSubject": "Tickets for {event} are waiting for you",
+    "offeredHeading": "It’s your turn for {event}",
+    "offeredBody": "Tickets came back, and we’re holding them for you until {deadline}. Get them before then, or they go to the next person on the waiting list.",
+    "offeredAction": "Get your tickets",
+    "footer": "You are receiving this email because you ordered tickets on Grade10.",
+    "offeredFooter": "You are receiving this email because you joined a waiting list on Grade10."
   }
 }

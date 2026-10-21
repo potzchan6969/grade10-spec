@@ -172,6 +172,11 @@
     "eventCancelledBody": "{event} 已取消。你的訂單 {reference} 及其門票不再有效。",
     "refundNote": "我們會將 {amount} 退回你付款所用的信用卡。銀行可能需要 5 至 10 個工作天才會顯示退款。",
     "cancelledAction": "查看你的訂單",
-    "footer": "你收到這封電郵，是因為你在 Grade10 訂購了門票。"
+    "offeredSubject": "{event} 有門票為你保留",
+    "offeredHeading": "輪到你了：{event}",
+    "offeredBody": "有門票退回了，我們會為你保留至 {deadline}。請在此之前取得門票，否則門票會轉給輪候名單上的下一位。",
+    "offeredAction": "取得你的門票",
+    "footer": "你收到這封電郵，是因為你在 Grade10 訂購了門票。",
+    "offeredFooter": "你收到這封電郵，是因為你在 Grade10 加入了輪候名單。"
   }
 }
