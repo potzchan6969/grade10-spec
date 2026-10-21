@@ -154,7 +154,8 @@ for (const scheme of ["light", "dark"]) {
           if (
             !/hidden|clip/.test(s.overflow) ||
             s.textOverflow === "ellipsis" ||
-            s.webkitLineClamp !== "none"
+            s.webkitLineClamp !== "none" ||
+            el.classList.contains("g-thumb")
           )
             return false;
           if (

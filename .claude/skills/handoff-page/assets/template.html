@@ -533,6 +533,12 @@
     object-fit: cover;
     object-position: top center;
   }
+  .g-thumb > img.cropped {
+    position: absolute;
+    max-width: none;
+    height: auto;
+    object-fit: fill;
+  }
   .g-thumb > img.phone {
     width: 44%;
     justify-self: center;
@@ -3040,8 +3046,8 @@
 
     // A thumbnail of the card's first picture: a screen when it has one, else its chart, table or diagram in miniature.
     const THUMBS = {
-      shot: (p) => h("img", { src: p.src, alt: "", loading: "lazy", class: p.phone ? "phone" : null }),
-      beforeNow: (p) => h("img", { src: p.now, alt: "", loading: "lazy" }),
+      shot: (p) => h("img", { src: p.src, alt: "", loading: "lazy", class: p.phone ? "phone" : null, onload: (e) => crop(e.target) }),
+      beforeNow: (p) => h("img", { src: p.now, alt: "", loading: "lazy", onload: (e) => crop(e.target) }),
       bars: (p) => {
         const items = list(p.items).slice(0, 5);
         const max = Math.max(0, ...items.map((i) => Number(i.value) || 0)) || 1;
@@ -3083,6 +3089,53 @@
       mock: (p) => list(p.items).slice(0, 6).map((it) => h("i", { class: it.button != null && it.primary ? "tone-accent" : "tone-none" })),
     };
 
+    // A story often draws a small block on a wide canvas: zoom the thumbnail to what differs from the canvas colour.
+    function crop(img) {
+      const box = img.parentElement;
+      const w = 160;
+      const ht = Math.max(1, Math.round((w * img.naturalHeight) / img.naturalWidth));
+      const cv = document.createElement("canvas");
+      cv.width = w;
+      cv.height = ht;
+      let px;
+      try {
+        const cx = cv.getContext("2d", { willReadFrequently: true });
+        cx.drawImage(img, 0, 0, w, ht);
+        px = cx.getImageData(0, 0, w, ht).data;
+      } catch {
+        return;
+      }
+      const at = (i) => [px[i], px[i + 1], px[i + 2]];
+      const bg = at(0);
+      let [x0, y0, x1, y1] = [w, ht, -1, -1];
+      for (let y = 0; y < ht; y++) {
+        for (let x = 0; x < w; x++) {
+          const c = at((y * w + x) * 4);
+          if (Math.abs(c[0] - bg[0]) + Math.abs(c[1] - bg[1]) + Math.abs(c[2] - bg[2]) > 24) {
+            if (x < x0) x0 = x;
+            if (x > x1) x1 = x;
+            if (y < y0) y0 = y;
+            if (y > y1) y1 = y;
+          }
+        }
+      }
+      if (x1 < 0) return;
+      const pad = 4;
+      const aspect = box.clientWidth / box.clientHeight;
+      let cw = Math.min(w, x1 - x0 + 1 + 2 * pad);
+      let ch = Math.min(ht, y1 - y0 + 1 + 2 * pad);
+      if (cw / ch > aspect) ch = Math.min(ht, cw / aspect);
+      else cw = Math.min(w, ch * aspect);
+      if (cw > w * 0.8) return;
+      const left = Math.max(0, Math.min(w - cw, (x0 + x1) / 2 - cw / 2));
+      const top = Math.max(0, Math.min(ht - ch, y0 - pad));
+      // In percent of the box, so the crop holds when the box resizes at the phone breakpoint.
+      img.classList.add("cropped");
+      img.style.width = `${(100 * w) / cw}%`;
+      img.style.left = `${(-100 * left) / cw}%`;
+      img.style.top = `${(-100 * top * aspect) / cw}%`;
+    }
+
     function chainThumb(tones) {
       return tones.slice(0, 5).map((t, i) => [i ? h("i") : null, h("span", { class: t ? `tone-${t}` : null })]);
     }
@@ -3098,7 +3151,7 @@
       const screen = p.kind === "shot" || p.kind === "beforeNow";
       return h(
         "span",
-        { class: `g-thumb t-${p.kind}`, "aria-hidden": "true" },
+        { class: "g-thumb", "aria-hidden": "true" },
         screen ? THUMBS[p.kind](p) : h("span", { class: `t-draw t-${p.kind}`, style: p.kind === "table" ? `--c:${tableCols(p)}` : null }, THUMBS[p.kind](p)),
         all.length > 1 ? h("span", { class: "t-more" }, `+${all.length - 1}`) : null,
       );
