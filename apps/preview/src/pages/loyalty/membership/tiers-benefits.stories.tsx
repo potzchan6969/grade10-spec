@@ -4,12 +4,24 @@ import {
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { SiteHeader, TierInfoCard, TierLadder } from "@grade10/ui";
+import {
+  HowPointsWork,
+  SiteHeader,
+  TierInfoCard,
+  TierLadder,
+} from "@grade10/ui";
+import {
+  Basket,
+  ClockCountdown,
+  HandCoins,
+  Truck,
+} from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { storyHref } from "../../workbench-story-nav";
 import {
+  HOW_POINTS_WORK,
   MEMBERSHIP_VIEW,
   TIER_BENEFITS,
   TIER_BENEFITS_PAGE_COPY,
@@ -18,12 +30,19 @@ import {
 
 const MEMBERSHIP_STORY_ID = "loyalty-membership-screens-membership--default";
 
+/** The mark each mechanic row wears, keyed to the content's row ids. */
+const HOW_POINTS_WORK_ICONS = {
+  earn: <Basket size={20} />,
+  pending: <Truck size={20} />,
+  spend: <HandCoins size={20} />,
+  expiry: <ClockCountdown size={20} />,
+} as const;
+
 /**
  * Tiers & Benefits as its own page — what a small viewport navigates to from
  * the tier card. The same list becomes a Membership section on wide
- * viewports; "How points work" joins it once that part is designed. The page
- * reads the member's held tier and marks it on the ladder and its card; the
- * blocks only receive them as props.
+ * viewports. The page reads the member's held tier and marks it on the
+ * ladder and its card; the blocks only receive them as props.
  */
 function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
   return (
@@ -69,6 +88,18 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
                 />
               ))}
             </div>
+            <div className="flex flex-col gap-4">
+              <h2 className="text-xl font-semibold text-foreground">
+                {HOW_POINTS_WORK.heading}
+              </h2>
+              <HowPointsWork
+                items={HOW_POINTS_WORK.rows.map((row) => ({
+                  icon: HOW_POINTS_WORK_ICONS[row.id],
+                  title: row.title,
+                  body: row.body,
+                }))}
+              />
+            </div>
           </section>
         </div>
       </main>
@@ -100,7 +131,9 @@ export const Default: Story = {
     );
     expect(cards).toHaveLength(3);
     for (const [index, tier] of ["Silver", "Gold", "Black"].entries()) {
-      expect(within(cards[index]).getByText(tier)).toBeInTheDocument();
+      expect(
+        within(cards[index] as HTMLElement).getByText(tier),
+      ).toBeInTheDocument();
     }
     expect(cards[1]).toHaveClass("border-primary-border");
     expect(cards[0]).toHaveClass("border-border");
@@ -109,6 +142,17 @@ export const Default: Story = {
       canvas.getByText("1.7 pt for every HK$10 spent"),
     ).toBeInTheDocument();
     expect(canvas.getByText("320")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "How points work" }),
+    ).toBeInTheDocument();
+    expect(
+      canvasElement.querySelectorAll('[data-slot="how-points-work-row"]'),
+    ).toHaveLength(4);
+    expect(
+      canvas.getByText(
+        "1 pt = HK$1 off at checkout, or swap them for rewards and coupons.",
+      ),
+    ).toBeInTheDocument();
   },
 };
 

@@ -420,6 +420,11 @@ export {
   type CouponListProps,
 } from "./blocks/loyalty-membership/coupon-list";
 export {
+  HowPointsWork,
+  type HowPointsWorkItem,
+  type HowPointsWorkProps,
+} from "./blocks/loyalty-membership/how-points-work";
+export {
   MemberPass,
   type MemberPassCopy,
   type MemberPassProps,

@@ -95,6 +95,39 @@ const TIER_LADDER_COPY = {
   qualifying: "Qualifying points this year",
 };
 
+/** One line of the programme's mechanics, as the Tiers & Benefits surface reads it. */
+type HowPointsWorkRow = {
+  id: "earn" | "pending" | "spend" | "expiry";
+  title: string;
+  body: string;
+};
+
+const HOW_POINTS_WORK = {
+  heading: "How points work",
+  rows: [
+    {
+      id: "earn",
+      title: "Earn",
+      body: "1 pt for every HK$10 you spend.",
+    },
+    {
+      id: "pending",
+      title: "Pending",
+      body: "Points arrive after your order completes.",
+    },
+    {
+      id: "spend",
+      title: "Spend",
+      body: "1 pt = HK$1 off at checkout, or swap them for rewards and coupons.",
+    },
+    {
+      id: "expiry",
+      title: "Expiry",
+      body: "Points expire after 12 months with no activity. We’ll remind you 30 days before.",
+    },
+  ] satisfies readonly HowPointsWorkRow[],
+};
+
 /** One rung of the ladder, as the Tiers & Benefits surface reads it. */
 type TierBenefitsRow = {
   id: string;
@@ -353,7 +386,7 @@ const CART_ITEMS: readonly CartItemSummary[] = [
 const CART_SUBTOTAL = "HK$1,400.00";
 const POINTS_BALANCE_LABEL = "You’ve 1,250 pts.";
 
-export type { MembershipView, TierBenefitsRow };
+export type { HowPointsWorkRow, MembershipView, TierBenefitsRow };
 export {
   ACTIVITY,
   ACTIVITY_LIST_COPY,
@@ -368,6 +401,7 @@ export {
   GOOGLE_HELD,
   GOOGLE_OFFERED,
   GOOGLE_SAVE_URL,
+  HOW_POINTS_WORK,
   ISSUED_COUPON,
   LOYALTY_PAY_PART_OF_BASKET_HREF,
   LOYALTY_PAY_PART_OF_BASKET_STORY_ID,
