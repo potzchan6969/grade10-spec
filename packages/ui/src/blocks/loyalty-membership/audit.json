@@ -52,7 +52,7 @@
   {
     "label": "tier-info-card/shell-current",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7227-863",
-    "classes": "gap-3 bg-card border-primary-border drop-shadow-[0px_8px_12px_color-mix(in_srgb,var(--primary)_30%,transparent)]"
+    "classes": "gap-3 bg-card border-primary-border drop-shadow-[0px_4px_12px_color-mix(in_srgb,var(--primary)_15%,transparent)]"
   },
   {
     "label": "tier-info-card/tier",

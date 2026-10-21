@@ -38,8 +38,8 @@ function TierInfoCard({
       className={cn(
         "w-full gap-3 rounded-2xl border bg-card p-4 sm:max-w-(--container-xs)",
         currentTier
-          ? // biome-ignore lint/plugin: the current-tier shadow is Figma's 30% tint of --primary; no alpha token exists, so it is mixed on the token
-            "border-primary-border drop-shadow-[0px_8px_12px_color-mix(in_srgb,var(--primary)_30%,transparent)]"
+          ? // biome-ignore lint/plugin: the current-tier shadow is a 15% tint of --primary; no alpha token exists, so it is mixed on the token
+            "border-primary-border drop-shadow-[0px_4px_12px_color-mix(in_srgb,var(--primary)_15%,transparent)]"
           : "border-border",
         className,
       )}
