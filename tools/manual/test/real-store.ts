@@ -37,7 +37,16 @@ async function readRealStore(): Promise<Store> {
       throw new Error(`the store read wrote nothing in ${READ_DEADLINE_MS}ms`);
     await sleep(100);
   }
-  return JSON.parse(readFileSync(path, "utf8"));
+  // Shared by every file on a worker: a mutation throws, never leaks.
+  return deepFreeze(JSON.parse(readFileSync(path, "utf8")));
+}
+
+function deepFreeze<T>(value: T): T {
+  if (value && typeof value === "object" && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const child of Object.values(value)) deepFreeze(child);
+  }
+  return value;
 }
 
 export const realStore = await readRealStore();

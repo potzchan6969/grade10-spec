@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { CheckoutStanding } from "../src/api/types";
 import { type GitRun, git as runGit } from "../src/store/git.mts";
 import { liveBodies, originMain, relayOf } from "../src/store/main-moved.mts";
@@ -341,19 +341,13 @@ describe("what the browser is told about the relay", () => {
       artifacts,
       originMain(root),
     );
-    const set = process.env.RELAY_URL;
-    process.env.RELAY_URL = "https://relay.test";
+    vi.stubEnv("RELAY_URL", "https://relay.test");
 
-    try {
-      expect(body(await endpoints({ path: "/api/relay" })).body).toEqual({
-        url: "https://relay.test",
-      });
-      expect(body(await endpoints({ path: "/api/head" })).body).toEqual({
-        storeHead: HEAD,
-      });
-    } finally {
-      if (set === undefined) delete process.env.RELAY_URL;
-      else process.env.RELAY_URL = set;
-    }
+    expect(body(await endpoints({ path: "/api/relay" })).body).toEqual({
+      url: "https://relay.test",
+    });
+    expect(body(await endpoints({ path: "/api/head" })).body).toEqual({
+      storeHead: HEAD,
+    });
   });
 });

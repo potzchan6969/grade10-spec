@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import { composeStore } from "../src/store/snapshot.mts";
@@ -136,18 +136,11 @@ describe("the assets the snapshot carries", () => {
 });
 
 describe("the run sheet the snapshot carries", () => {
-  /** Composed with the variable set, and set back after: the manual's Told
-   * now links the same sheet the push workflow's message does. */
-  const withSheet = async (url: string | undefined) => {
-    const set = process.env.TCS_SHEET_URL;
-    if (url === undefined) delete process.env.TCS_SHEET_URL;
-    else process.env.TCS_SHEET_URL = url;
-    try {
-      return await snapshotOfStore(writeStore(BASE));
-    } finally {
-      if (set === undefined) delete process.env.TCS_SHEET_URL;
-      else process.env.TCS_SHEET_URL = set;
-    }
+  /** Composed with the variable set: the manual's Told now links the same
+   * sheet the push workflow's message does. */
+  const withSheet = (url: string | undefined) => {
+    vi.stubEnv("TCS_SHEET_URL", url);
+    return snapshotOfStore(writeStore(BASE));
   };
 
   it("names the run sheet the environment gave it", async () => {

@@ -31,13 +31,14 @@ const VENDOR_CHUNKS = [
  * read the real store run last, once everything else has run beside the read.
  */
 const TEST_DIR = fileURLToPath(new URL("test/", import.meta.url));
+const TESTS = "test/**/*.test.{ts,tsx,mts}";
 const testsMatching = (source: RegExp) =>
-  readdirSync(TEST_DIR)
-    .filter((f) => /\.test\.tsx?$/.test(f))
+  readdirSync(TEST_DIR, { recursive: true, encoding: "utf8" })
+    .filter((f) => /\.test\.(?:tsx?|mts)$/.test(f))
     .filter((f) => source.test(readFileSync(TEST_DIR + f, "utf8")))
     .map((f) => `test/${f}`);
 const ISOLATED = testsMatching(/\bvi\.(?:do)?[mM]ock\(/);
-const REAL_STORE = testsMatching(/from "\.\/real-store"/);
+const REAL_STORE = testsMatching(/from "(?:\.\.?\/)+real-store"/);
 const both = ISOLATED.filter((f) => REAL_STORE.includes(f));
 if (both.length > 0)
   throw new Error(
@@ -53,6 +54,9 @@ export default defineConfig({
     rolldownOptions: { output: { codeSplitting: { groups: VENDOR_CHUNKS } } },
   },
   test: {
+    // Most files share a module graph, so nothing one stubs may outlive it.
+    unstubEnvs: true,
+    unstubGlobals: true,
     deps: {
       optimizer: { ssr: { enabled: true, include: ["@phosphor-icons/react"] } },
     },
@@ -62,7 +66,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: "shared",
-          include: ["test/*.test.{ts,tsx}"],
+          include: [TESTS],
           exclude: [...ISOLATED, ...REAL_STORE],
           isolate: false,
         },
