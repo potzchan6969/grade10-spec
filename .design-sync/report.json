@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T03:07:41.227Z",
+  "generatedAt": "2026-10-21T03:34:09.039Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -108,6 +108,7 @@
     "Text Input": "skipped",
     "Tier Card": "warn",
     "Tier Info Card": "warn",
+    "Tier Ladder": "warn",
     "Toast": "ok",
     "Toast / Close": "skipped",
     "Tooltip": "ok",
@@ -135,6 +136,10 @@
     "loyalty-membership: member-pass/logo": "ok",
     "loyalty-membership: member-pass/qr": "skipped",
     "loyalty-membership: tier-badge/tier": "skipped",
+    "loyalty-membership: tier-info-card/benefit-text": "ok",
+    "loyalty-membership: tier-info-card/caption": "ok",
+    "loyalty-membership: tier-info-card/check": "ok",
+    "loyalty-membership: tier-info-card/tier": "ok",
     "overlays: drawer-overlay/root": "skipped",
     "overlays: dropdown-menu-content/items": "ok",
     "overlays: tooltip-content/body": "ok",
@@ -971,10 +976,16 @@
     "7204-11433": "Media Card",
     "7227-1069": "Tier Info Card",
     "7227-1070": "Tier Info Card",
+    "7227-1074": "loyalty-membership: tier-info-card/check",
+    "7227-1075": "loyalty-membership: tier-info-card/benefit-text",
+    "7227-1077": "loyalty-membership: tier-info-card/caption",
+    "7227-544": "loyalty-membership: tier-info-card/tier",
     "7227-863": "Tier Info Card",
     "7229-7427": "How Points Work",
     "7250-1607": "Tiers & Benefits (small vp)",
-    "7250-1875": "Tier Ladder",
+    "7254-257": "Tier Ladder",
+    "7254-384": "Tier Ladder",
+    "7254-385": "Tier Ladder",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1149,7 +1160,10 @@
       "Tier Card.tier: no getEnum('tier') in any template — this Figma axis reaches no code prop"
     ],
     "Tier Info Card": [
-      "Tier Info Card: no code component (looked for src/components/**/tierinfocard.tsx or tierinfocard.tsx)"
+      "Tier Info Card.Current Tier: no getEnum('Current Tier') in any template — this Figma axis reaches no code prop"
+    ],
+    "Tier Ladder": [
+      "Tier Ladder.Black Tier: no getEnum('Black Tier') in any template — this Figma axis reaches no code prop"
     ],
     "Vault Asset Card": [
       "Vault Asset Card: no code component (looked for src/components/**/vaultassetcard.tsx or vaultassetcard.tsx)"
