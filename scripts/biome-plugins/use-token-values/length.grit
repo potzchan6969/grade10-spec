@@ -4,7 +4,12 @@
 // literal px/rem/em/% inside a bracket (`gap-[13px]`, `w-[420px]`);
 // leaves grid templates, transition property lists, easing functions,
 // and var()/calc() references alone.
-or { JsStringLiteralExpression(), JsxString(), JsTemplateElement() } as $s where {
-  $s <: r"\"[^\"]*-\[-?[0-9]+(?:\.[0-9]+)?(?:px|rem|em|%)\][^\"]*\"",
+or {
+  JsStringLiteralExpression(),
+  JsxString(),
+  JsLiteralMemberName(),
+  JsTemplateChunkElement()
+} as $s where {
+  $s <: r"\"?[^\"]*-\[-?[0-9]+(?:\.[0-9]+)?(?:px|rem|em|%)\][^\"]*\"?",
   register_diagnostic(span=$s, message="Arbitrary length: read the value off the variable the designer bound and use its token utility (or raise unbound drift with the designer) instead of hardcoding a measured length. See docs/governance/figma-component-to-code.md.", severity="warn")
 }
