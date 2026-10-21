@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T03:34:09.039Z",
+  "generatedAt": "2026-10-21T06:24:18.384Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -68,6 +68,7 @@
     "Product / Cart / Cart Drawer Header": "warn",
     "Product / Cart / Cart Item": "warn",
     "Product / Cart / Cart Item Slot": "warn",
+    "Product / Cart / Promo Ticket": "warn",
     "Product / Image": "warn",
     "Product / Order / Order Details Delivery Status": "ok",
     "Product / Order / Order Details Header": "ok",
@@ -87,6 +88,7 @@
     "Radio Button": "skipped",
     "Radio List": "skipped",
     "Radio List Item": "skipped",
+    "Reward Item": "warn",
     "Search Input": "skipped",
     "Segmented Control": "skipped",
     "Segmented Control Item": "skipped",
@@ -983,9 +985,18 @@
     "7227-863": "Tier Info Card",
     "7229-7427": "How Points Work",
     "7250-1607": "Tiers & Benefits (small vp)",
+    "7254-2284": "Reward Item",
+    "7254-2285": "Reward Item",
+    "7254-2286": "Reward Item",
+    "7254-2460": "Rewards Checkout",
     "7254-257": "Tier Ladder",
     "7254-384": "Tier Ladder",
     "7254-385": "Tier Ladder",
+    "7254-500": "Rewards",
+    "7259-753": "Product / Cart / Promo Ticket",
+    "7259-770": "Product / Cart / Promo Ticket",
+    "7259-787": "Product / Cart / Promo Ticket",
+    "7259-799": "Product / Cart / Promo Ticket",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1115,6 +1126,9 @@
     "Product / Cart / Cart Item Slot": [
       "Product / Cart / Cart Item Slot: no code component (looked for src/components/**/productcartcartitemslot.tsx or cartitemslot.tsx)"
     ],
+    "Product / Cart / Promo Ticket": [
+      "Product / Cart / Promo Ticket.state: no getEnum('state') in any template — this Figma axis reaches no code prop"
+    ],
     "Product / Image": [
       "Product / Image: no code component (looked for src/components/**/productimage.tsx or image.tsx)"
     ],
@@ -1138,6 +1152,9 @@
     ],
     "Progress": [
       "Progress: no code component (looked for src/components/**/progress.tsx or progress.tsx)"
+    ],
+    "Reward Item": [
+      "Reward Item: no code component (looked for src/components/**/rewarditem.tsx or rewarditem.tsx)"
     ],
     "Stat": [
       "Stat: no code component (looked for src/components/**/stat.tsx or stat.tsx)"
