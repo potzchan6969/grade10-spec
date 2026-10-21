@@ -16,22 +16,22 @@ const meta = {
   args: {
     items: [
       {
-        icon: <Basket size={20} />,
+        icon: <Basket size={20} weight="regular" />,
         title: "Earn",
         body: "1 pt for every HK$10 you spend, online or in store.",
       },
       {
-        icon: <Truck size={20} />,
+        icon: <Truck size={20} weight="regular" />,
         title: "Pending",
         body: "Points land once the order completes.",
       },
       {
-        icon: <HandCoins size={20} />,
+        icon: <HandCoins size={20} weight="regular" />,
         title: "Spend",
         body: "1 pt = HK$1 off at checkout, or swap them for rewards and coupons.",
       },
       {
-        icon: <ClockCountdown size={20} />,
+        icon: <ClockCountdown size={20} weight="regular" />,
         title: "Expiry",
         body: "Points lapse after 12 months with no activity. We'll remind you 30 days before.",
       },

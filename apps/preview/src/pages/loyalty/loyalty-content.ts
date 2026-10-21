@@ -159,7 +159,7 @@ const TIER_BENEFITS: readonly TierBenefitsRow[] = [
   {
     id: "black",
     tier: "Black",
-    caption: "By invitation only",
+    caption: "Invitation only",
     ladderCaption: "Invitation Only",
     benefits: ["1.7 pt for every HK$10 spent"],
     invitationOnly: true,

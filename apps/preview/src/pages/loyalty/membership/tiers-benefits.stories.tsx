@@ -32,10 +32,10 @@ const MEMBERSHIP_STORY_ID = "loyalty-membership-screens-membership--default";
 
 /** The mark each mechanic row wears, keyed to the content's row ids. */
 const HOW_POINTS_WORK_ICONS = {
-  earn: <Basket size={20} />,
-  pending: <Truck size={20} />,
-  spend: <HandCoins size={20} />,
-  expiry: <ClockCountdown size={20} />,
+  earn: <Basket size={20} weight="regular" />,
+  pending: <Truck size={20} weight="regular" />,
+  spend: <HandCoins size={20} weight="regular" />,
+  expiry: <ClockCountdown size={20} weight="regular" />,
 } as const;
 
 /**
@@ -92,18 +92,24 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
                 />
               ))}
             </div>
-            <div className="flex flex-col gap-3">
-              <h2 className="text-sm font-semibold uppercase text-secondary-foreground">
-                {HOW_POINTS_WORK.heading}
-              </h2>
-              <HowPointsWork
-                items={HOW_POINTS_WORK.rows.map((row) => ({
-                  icon: HOW_POINTS_WORK_ICONS[row.id],
-                  title: row.title,
-                  body: row.body,
-                }))}
-              />
-            </div>
+          </section>
+          <section
+            aria-labelledby="how-points-work-heading"
+            className="flex flex-col gap-3"
+          >
+            <h2
+              className="text-sm font-semibold uppercase text-secondary-foreground"
+              id="how-points-work-heading"
+            >
+              {HOW_POINTS_WORK.heading}
+            </h2>
+            <HowPointsWork
+              items={HOW_POINTS_WORK.rows.map((row) => ({
+                icon: HOW_POINTS_WORK_ICONS[row.id],
+                title: row.title,
+                body: row.body,
+              }))}
+            />
           </section>
         </div>
       </main>
