@@ -22,9 +22,6 @@ env:
   # Must match the `openspec` script in package.json;
   # scripts/openspec/openspec-version.test.mjs holds the three together.
   OPENSPEC_VERSION: 1.8.0
-  SLACK_NOTI_CHANNEL: C045K1QJVQT # web3-github
-  SLACK_NOTI_FOOTER: ${{ github.repository }} | ${{ github.head_ref || github.ref_name }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|view logs>
-  SLACK_NOTI_FOOTER_ICON: https://slack-imgs.com/?c=1&o1=wi32.he32.si&url=https%3A%2F%2Fslack.github.com%2Fstatic%2Fimg%2Ffavicon-neutral.png
 
 jobs:
   biome:
@@ -64,7 +61,6 @@ jobs:
           COMMIT_MESSAGE: "chore(ci): apply Biome lint fixes"
         run: |
           if git diff --quiet; then
-            echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -73,7 +69,6 @@ jobs:
           git fetch --quiet origin "$GITHUB_REF_NAME"
           if [ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]; then
             echo "::notice title=Lint fixes not committed::main moved past ${GITHUB_SHA}; the run on its new head applies its own."
-            echo "committed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "github-actions[bot]"
@@ -81,30 +76,6 @@ jobs:
           git add --all
           git commit -m "$COMMIT_MESSAGE"
           git push
-          echo "committed=true" >> "$GITHUB_OUTPUT"
-          echo "commit-sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
-      - name: Notify Slack about lint-fix commit
-        if: steps.commit-lint-fixes.outputs.committed == 'true'
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          channel-id: ${{ env.SLACK_NOTI_CHANNEL }}
-          payload: |
-            {
-              "attachments": [
-                {
-                  "mrkdwn_in": ["text"],
-                  "color": "#28a745",
-                  "fallback": "CI committed Biome lint fixes.",
-                  "pretext": ":white_check_mark: CI committed Biome lint fixes",
-                  "text": "Branch: *`${{ github.ref_name }}`*\nCommit: *`${{ steps.commit-lint-fixes.outputs.commit-sha }}`*",
-                  "footer": "${{ env.SLACK_NOTI_FOOTER }}",
-                  "footer_icon": "${{ env.SLACK_NOTI_FOOTER_ICON }}"
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
       - name: Fail on what Biome could not fix
         if: steps.lint.outcome == 'failure'
@@ -173,33 +144,3 @@ jobs:
       - name: Validate durable specs
         if: ${{ !cancelled() }}
         run: openspec validate --specs
-
-  # Main takes direct pushes and its ruleset requires no checks, so a red gate
-  # here stops nothing: this says so in the channel the lint-fix post uses.
-  notify-main-red:
-    needs: [biome, openspec]
-    if: failure() && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    permissions: {}
-
-    steps:
-      - name: Notify Slack that Lint failed on main
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          channel-id: ${{ env.SLACK_NOTI_CHANNEL }}
-          payload: |
-            {
-              "attachments": [
-                {
-                  "mrkdwn_in": ["text"],
-                  "color": "#d73a49",
-                  "fallback": "Lint failed on main.",
-                  "pretext": ":x: Lint failed on main",
-                  "text": "Head: *`${{ github.sha }}`*\nbiome: ${{ needs.biome.result }}, openspec: ${{ needs.openspec.result }}",
-                  "footer": "${{ env.SLACK_NOTI_FOOTER }}",
-                  "footer_icon": "${{ env.SLACK_NOTI_FOOTER_ICON }}"
-                }
-              ]
-            }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
