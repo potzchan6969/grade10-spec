@@ -55,7 +55,7 @@ function HowPointsWork({ items, className }: HowPointsWorkProps) {
                 <Text className="font-medium text-foreground" size="sm">
                   {item.title}
                 </Text>
-                <Text className="text-secondary-foreground" size="xs">
+                <Text className="text-secondary-foreground" size="sm">
                   {item.body}
                 </Text>
               </VStack>

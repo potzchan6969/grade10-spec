@@ -22,8 +22,13 @@ type TierLadderRung = {
 };
 
 type TierLadderCopy = {
-  /** Names the qualifying-window progress line — "Qualifying points this year". */
+  /** Names the qualifying-window progress line — "Qualifying pts this year". */
   qualifying: string;
+  /**
+   * The fine print under the progress line — what counts toward the tier and
+   * when the window renews.
+   */
+  footnote?: string;
 };
 
 type TierLadderProps = {
@@ -63,7 +68,7 @@ function TierLadder({
   return (
     <Card className={cn("w-full", className)} data-slot="tier-ladder">
       <CardContent>
-        <VStack gap="md">
+        <VStack gap="sm">
           <Stepper>
             {rungs.map((rung, index) => (
               <Step
@@ -86,20 +91,27 @@ function TierLadder({
           </Stepper>
           {showsQualifying ? (
             <HStack
-              className="w-full border-t border-border pt-4"
+              className="w-full rounded-xl bg-muted p-3"
               hAlign="space-between"
               vAlign="baseline"
             >
-              <Text className="text-secondary-foreground" size="sm">
+              <Text className="text-(--gray-600)" size="sm">
                 {copy.qualifying}
               </Text>
               <Text data-slot="tier-ladder-qualifying" size="sm">
-                <span className="font-semibold">{qualifyingPoints}</span>
-                <span className="text-secondary-foreground">
+                <span className="font-semibold text-foreground">
+                  {qualifyingPoints}
+                </span>
+                <span className="font-semibold text-(--gray-600)">
                   {` / ${qualifyingTarget}`}
                 </span>
               </Text>
             </HStack>
+          ) : null}
+          {copy.footnote ? (
+            <Text className="w-full text-secondary-foreground" size="xs">
+              {copy.footnote}
+            </Text>
           ) : null}
         </VStack>
       </CardContent>

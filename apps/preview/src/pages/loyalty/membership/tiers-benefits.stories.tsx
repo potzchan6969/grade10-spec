@@ -49,7 +49,7 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
-        <div className="flex w-full max-w-4xl flex-col gap-10 px-4 py-10 sm:px-8">
+        <div className="flex w-full max-w-4xl flex-col gap-8 px-4 py-8 sm:px-8">
           <Breadcrumbs>
             <BreadcrumbItem href="#account">
               {TIER_BENEFITS_PAGE_COPY.breadcrumbAccount}
@@ -63,21 +63,25 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
               {TIER_BENEFITS_PAGE_COPY.title}
             </BreadcrumbItem>
           </Breadcrumbs>
-          <h1 className="text-3xl font-semibold text-foreground">
+          <h1 className="text-xl font-semibold text-foreground sm:text-3xl">
             {TIER_BENEFITS_PAGE_COPY.title}
           </h1>
           <section
             aria-label={TIER_BENEFITS_PAGE_COPY.title}
-            className="flex flex-col gap-10"
+            className="flex flex-col gap-4"
           >
             <TierLadder
               copy={TIER_LADDER_COPY}
               currentTier={heldTier}
               qualifyingPoints={MEMBERSHIP_VIEW.qualifyingPoints}
               qualifyingTarget={MEMBERSHIP_VIEW.qualifyingThreshold}
-              rungs={TIER_BENEFITS}
+              rungs={TIER_BENEFITS.map((row) => ({
+                tier: row.tier,
+                caption: row.ladderCaption,
+                invitationOnly: row.invitationOnly,
+              }))}
             />
-            <div className="flex flex-col gap-4 sm:flex-row">
+            <div className="flex flex-col gap-2 sm:flex-row sm:gap-4">
               {TIER_BENEFITS.map((row) => (
                 <TierInfoCard
                   benefits={[...row.benefits]}
@@ -88,8 +92,8 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
                 />
               ))}
             </div>
-            <div className="flex flex-col gap-4">
-              <h2 className="text-xl font-semibold text-foreground">
+            <div className="flex flex-col gap-3">
+              <h2 className="text-sm font-semibold uppercase text-secondary-foreground">
                 {HOW_POINTS_WORK.heading}
               </h2>
               <HowPointsWork
@@ -143,7 +147,7 @@ export const Default: Story = {
     ).toBeInTheDocument();
     expect(canvas.getByText("320")).toBeInTheDocument();
     expect(
-      canvas.getByRole("heading", { level: 2, name: "How points work" }),
+      canvas.getByRole("heading", { level: 2, name: /how points work/i }),
     ).toBeInTheDocument();
     expect(
       canvasElement.querySelectorAll('[data-slot="how-points-work-row"]'),

@@ -92,7 +92,8 @@ const TIER_BENEFITS_PAGE_COPY = {
 };
 
 const TIER_LADDER_COPY = {
-  qualifying: "Qualifying points this year",
+  qualifying: "Qualifying pts this year",
+  footnote: `Only points from purchases count toward your tier. Your tier year renews ${RENEWS}.`,
 };
 
 /** One line of the programme's mechanics, as the Tiers & Benefits surface reads it. */
@@ -133,6 +134,8 @@ type TierBenefitsRow = {
   id: string;
   tier: string;
   caption: string;
+  /** The shorter ask the ladder's rung carries — "Join", "500 pts / yr". */
+  ladderCaption: string;
   benefits: readonly string[];
   /** A rung nobody earns: the ladder draws no connector into it. */
   invitationOnly?: boolean;
@@ -143,18 +146,21 @@ const TIER_BENEFITS: readonly TierBenefitsRow[] = [
     id: "silver",
     tier: "Silver",
     caption: "Free to join",
+    ladderCaption: "Join",
     benefits: ["1 pt for every HK$10 spent"],
   },
   {
     id: "gold",
     tier: "Gold",
     caption: "500 pts / year",
+    ladderCaption: "500 pts / yr",
     benefits: ["1.2 pt for every HK$10 spent"],
   },
   {
     id: "black",
     tier: "Black",
     caption: "By invitation only",
+    ladderCaption: "Invitation Only",
     benefits: ["1.7 pt for every HK$10 spent"],
     invitationOnly: true,
   },

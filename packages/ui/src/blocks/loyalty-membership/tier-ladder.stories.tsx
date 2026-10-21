@@ -8,13 +8,17 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    copy: { qualifying: "Qualifying points this year" },
+    copy: {
+      qualifying: "Qualifying pts this year",
+      footnote:
+        "Only points from purchases count toward your tier. Your tier year renews 1 Mar 2027.",
+    },
     rungs: [
-      { tier: "Silver", caption: "Free to join" },
-      { tier: "Gold", caption: "500 pts / year" },
+      { tier: "Silver", caption: "Join" },
+      { tier: "Gold", caption: "500 pts / yr" },
       {
         tier: "Black",
-        caption: "By invitation only",
+        caption: "Invitation Only",
         invitationOnly: true,
       },
     ],
@@ -66,9 +70,9 @@ export const BlackHeld: Story = {
     const canvas = within(canvasElement);
     const steps = canvasElement.querySelectorAll('[data-slot="step"]');
     expect(steps[2]).toHaveAttribute("data-state", "progress");
-    expect(canvas.getByText("By invitation only")).toBeInTheDocument();
+    expect(canvas.getByText("Invitation Only")).toBeInTheDocument();
     expect(
-      canvas.queryByText("Qualifying points this year"),
+      canvas.queryByText("Qualifying pts this year"),
     ).not.toBeInTheDocument();
   },
 };
