@@ -62,17 +62,23 @@ export const SilverHeld: Story = {
   },
 };
 
-/** A Black member: the held rung is the unconnected one, and there is no
- * threshold to count toward, so no progress line is drawn. */
+/** A Black member: the held rung reads in progress, nothing beneath it reads
+ * as earned — the invitation climbed nobody — and the qualifying line and
+ * footnote stay away even when figures are supplied. */
 export const BlackHeld: Story = {
-  args: { currentTier: "Black", qualifyingPoints: undefined },
+  args: { currentTier: "Black" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const steps = canvasElement.querySelectorAll('[data-slot="step"]');
+    expect(steps[0]).toHaveAttribute("data-state", "upcoming");
+    expect(steps[1]).toHaveAttribute("data-state", "upcoming");
     expect(steps[2]).toHaveAttribute("data-state", "progress");
     expect(canvas.getByText("Invitation Only")).toBeInTheDocument();
     expect(
       canvas.queryByText("Qualifying pts this year"),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByText(/Only points from purchases/),
     ).not.toBeInTheDocument();
   },
 };

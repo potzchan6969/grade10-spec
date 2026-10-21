@@ -49,7 +49,7 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
-        <div className="flex w-full max-w-4xl flex-col gap-8 px-4 py-8 sm:px-8">
+        <div className="flex w-full max-w-4xl flex-col gap-8 px-4 py-8 sm:px-8 sm:py-10">
           <Breadcrumbs>
             <BreadcrumbItem href="#account">
               {TIER_BENEFITS_PAGE_COPY.breadcrumbAccount}
@@ -175,6 +175,26 @@ export const SilverHeld: Story = {
     );
     expect(cards[0]).toHaveClass("border-primary-border");
     expect(cards[1]).toHaveClass("border-border");
+  },
+};
+
+/** A Black member: invitation-held — Silver and Gold read upcoming, the
+ * qualifying pill and footnote stay away, and Black wears the highlight. */
+export const BlackHeld: Story = {
+  args: { heldTier: "Black" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const steps = canvasElement.querySelectorAll('[data-slot="step"]');
+    expect(steps[0]).toHaveAttribute("data-state", "upcoming");
+    expect(steps[1]).toHaveAttribute("data-state", "upcoming");
+    expect(steps[2]).toHaveAttribute("data-state", "progress");
+    expect(
+      canvas.queryByText("Qualifying pts this year"),
+    ).not.toBeInTheDocument();
+    const cards = canvasElement.querySelectorAll(
+      '[data-slot="tier-info-card"]',
+    );
+    expect(cards[2]).toHaveClass("border-primary-border");
   },
 };
 

@@ -52,7 +52,8 @@ type TierLadderProps = {
  * draws every rung the programme has — the rungs already held checked off,
  * the held rung in progress — and the run to keep or reach the next
  * threshold sits below. A rung no one can earn — held by invitation —
- * stands unconnected: nothing is climbed into it.
+ * stands unconnected: nothing is climbed into it, nothing beneath it reads
+ * as earned, and the qualifying line and its footnote stay away.
  */
 function TierLadder({
   copy,
@@ -63,7 +64,11 @@ function TierLadder({
   className,
 }: TierLadderProps) {
   const current = rungs.findIndex((rung) => rung.tier === currentTier);
-  const showsQualifying = qualifyingPoints != null && qualifyingTarget != null;
+  /** An invitation-held rung was never climbed: nothing beneath it reads
+   * as earned, and there is no threshold to count toward. */
+  const invitationHeld = rungs[current]?.invitationOnly === true;
+  const showsQualifying =
+    !invitationHeld && qualifyingPoints != null && qualifyingTarget != null;
 
   return (
     <Card className={cn("w-full", className)} data-slot="tier-ladder">
@@ -80,10 +85,10 @@ function TierLadder({
                   index < rungs.length - 1 && !rungs[index + 1].invitationOnly
                 }
                 state={
-                  index < current
-                    ? "completed"
-                    : index === current
-                      ? "progress"
+                  index === current
+                    ? "progress"
+                    : !invitationHeld && index < current
+                      ? "completed"
                       : "upcoming"
                 }
               />
@@ -95,20 +100,20 @@ function TierLadder({
               hAlign="space-between"
               vAlign="baseline"
             >
-              <Text className="text-(--gray-600)" size="sm">
+              <Text className="text-secondary-foreground" size="xs">
                 {copy.qualifying}
               </Text>
               <Text data-slot="tier-ladder-qualifying" size="sm">
                 <span className="font-semibold text-foreground">
                   {qualifyingPoints}
                 </span>
-                <span className="font-semibold text-(--gray-600)">
+                <span className="font-semibold text-secondary-foreground">
                   {` / ${qualifyingTarget}`}
                 </span>
               </Text>
             </HStack>
           ) : null}
-          {copy.footnote ? (
+          {showsQualifying && copy.footnote ? (
             <Text className="w-full text-secondary-foreground" size="xs">
               {copy.footnote}
             </Text>
