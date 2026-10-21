@@ -689,7 +689,12 @@ changes.forEach((c, i) => {
       `${at}.commits`,
       'the commits it comes from, from facts.json, such as ["1a2b3c4"]; the post lists it only when one is new',
     );
-  if (page !== "decision" && !c.picture)
+  if (digest && !c.picture)
+    fail(
+      `${at}.picture`,
+      "a digest card leads with a picture, which At a glance shows as its thumbnail: a shot of the screen, else a table, bars, a diff, a board or a flow",
+    );
+  else if (page !== "decision" && !c.picture)
     warn(
       `${at}.picture`,
       "lead with a picture: a shot, a beforeNow, a mock, a flow or lanes",

@@ -1,6 +1,6 @@
 // The checkpoint a branch's digest starts from, the facts of what moved since it, and the step that moves it.
 // The digest covers the spec store (this repository) and, with --build <dir>, the application repository built from it.
-// node checkpoint.mjs range   [--branch <b>] [--to <rev>] [--build <dir>] - prints the run's range as JSON: both repositories, the days and the fresh commits
+// node checkpoint.mjs range   [--branch <b>] [--to <rev>] [--build <dir>] [--from <sha>] [--build-from <sha>] - prints the run's range as JSON: both repositories, the days and the fresh commits
 // node checkpoint.mjs facts   --day <YYYY-MM-DD> [--branch <b>] [--to <rev>] [--build <dir>] - prints the facts one day's page is drawn from as JSON
 // A day is a Hong Kong calendar day, and its page covers every commit that landed on the branch that day, whenever the digest runs.
 // node checkpoint.mjs advance --to <sha> [--from <sha>] [--build-repo <owner/name> --build-to <sha> [--build-from <sha>]] [--branch <b>]
@@ -125,8 +125,9 @@ function range() {
 function run(cwd, { repo, ref, to, saved }) {
   let from = saved;
   let base = "checkpoint";
-  if (cwd === undefined && option("from")) {
-    from = git("rev-parse", option("from"));
+  const given = option(cwd === undefined ? "from" : "build-from");
+  if (given) {
+    from = gitIn(cwd, "rev-parse", given);
     base = "given";
   }
   if (from && !exists(cwd, from)) {

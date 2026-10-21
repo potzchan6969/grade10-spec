@@ -46,6 +46,10 @@ One JSON file:
 
 - **Changes** - one card per thing a reader would notice, shaped as in
   `data.schema.json`; draw what a reader would act on, not every commit
+- **Pictures** - every card leads with one, which the page's At a glance
+  shows as its thumbnail: a shot of the screen first, else `bars`, a
+  `table`, a `diff`, a `board` or a `flow`, in that order, as the digest's
+  What Changed, by Area says; the build refuses a card without one
 - **Commits** - only your chunk's commits; a card that needs another chunk's
   commit is the lead's, so name it in your reply and leave it out
 - **Shots** - for a screen a card shows, find its story with
