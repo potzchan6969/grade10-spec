@@ -150,5 +150,33 @@
     "returnedHeading": "Returned",
     "returnedBody": "{item} is back with you, and your return receipt is kept with your consignment {ref}.",
     "footer": "You get this email because you consign with us. Reply to this email, or ask at any shop, about your consignment."
+  },
+  "ticketing": {
+    "greeting": "Hi {name},",
+    "greetingWithoutName": "Hi,",
+    "reference": "Order",
+    "event": "Event",
+    "when": "When",
+    "where": "Where",
+    "tickets": "Tickets",
+    "ticketLine": "{quantity} × {type}",
+    "total": "Total",
+    "free": "Free",
+    "confirmedSubject": "Your tickets for {event}",
+    "confirmedHeading": "You’re going to {event}",
+    "confirmedBody": "Your order {reference} is confirmed. Each ticket has its own QR code: open your order on Grade10 and show the codes at the door.",
+    "confirmedAction": "View your tickets",
+    "cancelledSubject": "Your order for {event} is cancelled",
+    "cancelledHeading": "Your order is cancelled",
+    "cancelledBody": "Your order {reference} for {event} is cancelled, and its tickets no longer admit.",
+    "eventCancelledBody": "{event} is cancelled. Your order {reference} and its tickets no longer admit.",
+    "refundNote": "We are refunding {amount} to the card you paid with. Your bank can take 5 to 10 business days to show it.",
+    "cancelledAction": "View your order",
+    "offeredSubject": "Tickets for {event} are waiting for you",
+    "offeredHeading": "It’s your turn for {event}",
+    "offeredBody": "Tickets came back, and we’re holding them for you until {deadline}. Get them before then, or they go to the next person on the waiting list.",
+    "offeredAction": "Get your tickets",
+    "footer": "You are receiving this email because you ordered tickets on Grade10.",
+    "offeredFooter": "You are receiving this email because you joined a waiting list on Grade10."
   }
 }

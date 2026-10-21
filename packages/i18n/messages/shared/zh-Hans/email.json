@@ -150,5 +150,33 @@
     "returnedHeading": "已退回",
     "returnedBody": "{item} 已退回给你，退回收据保存在寄卖 {ref} 中。",
     "footer": "你收到此电邮，是因为你在我们这里寄卖。如对寄卖有任何问题，请回复此电邮或向任何门店查询。"
+  },
+  "ticketing": {
+    "greeting": "{name}，你好：",
+    "greetingWithoutName": "你好：",
+    "reference": "订单",
+    "event": "活动",
+    "when": "时间",
+    "where": "地点",
+    "tickets": "门票",
+    "ticketLine": "{quantity} × {type}",
+    "total": "总额",
+    "free": "免费",
+    "confirmedSubject": "你的 {event} 门票",
+    "confirmedHeading": "你将出席 {event}",
+    "confirmedBody": "你的订单 {reference} 已确认。每张门票各有一个二维码：在 Grade10 打开你的订单，入场时出示即可。",
+    "confirmedAction": "查看你的门票",
+    "cancelledSubject": "你的 {event} 订单已取消",
+    "cancelledHeading": "你的订单已取消",
+    "cancelledBody": "你在 {event} 的订单 {reference} 已取消，其门票不再有效。",
+    "eventCancelledBody": "{event} 已取消。你的订单 {reference} 及其门票不再有效。",
+    "refundNote": "我们会将 {amount} 退回你付款所用的银行卡。银行可能需要 5 至 10 个工作日才会显示退款。",
+    "cancelledAction": "查看你的订单",
+    "offeredSubject": "{event} 有门票为你保留",
+    "offeredHeading": "轮到你了：{event}",
+    "offeredBody": "有门票退回了，我们会为你保留至 {deadline}。请在此之前获取门票，否则门票会转给候补名单上的下一位。",
+    "offeredAction": "获取你的门票",
+    "footer": "你收到这封邮件，是因为你在 Grade10 订购了门票。",
+    "offeredFooter": "你收到这封邮件，是因为你在 Grade10 加入了候补名单。"
   }
 }
