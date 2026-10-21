@@ -71,7 +71,7 @@ a Google account under it -
 
 | Section | Shows |
 | --- | --- |
-| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tier & Benefits ❓ |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tiers & Benefits ❓ |
 | Your member pass | The tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
@@ -80,7 +80,7 @@ a Google account under it -
 
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
-  to say here. ❓ Where the expiry date reads instead — the Tier & Benefits
+  to say here. ❓ Where the expiry date reads instead — the Tiers & Benefits
   page is being designed 🚧
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
@@ -91,6 +91,28 @@ a Google account under it -
 names.
 
 ::story{id="loyalty-membership-blocks-tiercard--gold" title="Tier, balance and progress"}
+
+## Tiers & Benefits
+
+Every rung of the programme on one surface — what each asks, what each pays,
+where the member stands and how points work. Its own page: the breadcrumbs
+name Home, Membership and Tiers & Benefits; a small viewport navigates to
+it; ❓ whether a wide viewport hosts it as a Membership section instead is
+the Membership page's composition, not drawn yet.
+
+| Section | Shows |
+| --- | --- |
+| Tier ladder | A stepper of the rungs in climb order — earned rungs ticked, the held rung in progress, unearned rungs still to come — with a line of qualifying progress beneath where the member's own tier asks one. No stepper line reaches an invitation-only rung, and a member whose tier is held by invitation sees nothing beneath it ticked and no qualifying line |
+| Tier cards | One card per rung — the tier name, its ask in the member's words, and its benefits behind checks. The held rung's card wears the primary border and its tint |
+| How Points Work | The mechanics as icon rows — earn, pending, spend, expiry — stacked on a narrow viewport and paired on a wide one. The preview states the programme's own values: a point redeems a Hong Kong dollar, points arrive when the order completes, and the whole balance lapses after twelve months with no activity |
+
+- **Reaches** — the `TierCard` on Membership links here whole, and it has
+  its own navigation entry ❓
+- **The expiry date's home** — the mechanics card states the lapse rule;
+  ❓ where a member's own "how many points expire and the day they go"
+  line reads is not drawn yet
+
+::story{id="loyalty-membership-screens-tiers-benefits--default" title="Tiers & Benefits, a gold member"}
 
 ## Member Pass
 

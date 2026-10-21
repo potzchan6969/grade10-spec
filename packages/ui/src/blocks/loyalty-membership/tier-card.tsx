@@ -48,7 +48,7 @@ type TierCardProps = {
   /** What the held tier earns, as the footer's one sentence the consumer words. */
   earnLine?: string;
   /**
-   * The Tier & Benefits page's own address. Where it is given, the whole card
+   * The Tiers & Benefits page's own address. Where it is given, the whole card
    * is a link to it — the Benefits label included — so its address can be
    * copied and a press with a modifier key opens it in a new tab. A plain
    * press is still reported through `onClick` where one is supplied.
@@ -98,7 +98,7 @@ const SKIN: Record<
 /**
  * The member's tier card: the tier's skin and wordmark, the spendable balance
  * and what it pays at checkout, the qualifying-window progress where the tier
- * names a threshold, and the Benefits link — the whole card opens the Tier &
+ * names a threshold, and the Benefits link — the whole card opens the Tiers &
  * Benefits page. The card carries no expiry line: the balance lapses on one
  * date after the inactivity window, and that is said where the member reads
  * their benefits.

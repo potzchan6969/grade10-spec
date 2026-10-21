@@ -85,6 +85,87 @@ const WALLET_PASS_COPY: WalletPassLinksCopy = {
   unreachable: "We could not check your passes just now.",
 };
 
+const TIER_BENEFITS_PAGE_COPY = {
+  breadcrumbAccount: "Account",
+  breadcrumbMembership: "Membership",
+  title: "Tiers & Benefits",
+};
+
+const TIER_LADDER_COPY = {
+  qualifying: "Qualifying pts this year",
+  footnote: `Only points from purchases count toward your tier. Your tier year renews ${RENEWS}.`,
+};
+
+/** One line of the programme's mechanics, as the Tiers & Benefits surface reads it. */
+type HowPointsWorkRow = {
+  id: "earn" | "pending" | "spend" | "expiry";
+  title: string;
+  body: string;
+};
+
+const HOW_POINTS_WORK = {
+  heading: "How points work",
+  rows: [
+    {
+      id: "earn",
+      title: "Earn",
+      body: "1 pt for every HK$10 you spend.",
+    },
+    {
+      id: "pending",
+      title: "Pending",
+      body: "Points arrive after your order completes.",
+    },
+    {
+      id: "spend",
+      title: "Spend",
+      body: "1 pt = HK$1 off at checkout, or swap them for rewards and coupons.",
+    },
+    {
+      id: "expiry",
+      title: "Expiry",
+      body: "Points expire after 12 months with no activity. We’ll remind you 30 days before.",
+    },
+  ] satisfies readonly HowPointsWorkRow[],
+};
+
+/** One rung of the ladder, as the Tiers & Benefits surface reads it. */
+type TierBenefitsRow = {
+  id: string;
+  tier: string;
+  caption: string;
+  /** The shorter ask the ladder's rung carries — "Join", "500 pts / yr". */
+  ladderCaption: string;
+  benefits: readonly string[];
+  /** A rung nobody earns: the ladder draws no connector into it. */
+  invitationOnly?: boolean;
+};
+
+const TIER_BENEFITS: readonly TierBenefitsRow[] = [
+  {
+    id: "silver",
+    tier: "Silver",
+    caption: "Free to join",
+    ladderCaption: "Join",
+    benefits: ["1 pt for every HK$10 spent"],
+  },
+  {
+    id: "gold",
+    tier: "Gold",
+    caption: "500 pts / year",
+    ladderCaption: "500 pts / yr",
+    benefits: ["1.2 pt for every HK$10 spent"],
+  },
+  {
+    id: "black",
+    tier: "Black",
+    caption: "Invitation only",
+    ladderCaption: "Invitation Only",
+    benefits: ["1.7 pt for every HK$10 spent"],
+    invitationOnly: true,
+  },
+];
+
 const MEMBERSHIP_PAGE_COPY = {
   breadcrumbAccount: "Account",
   title: "Membership",
@@ -311,7 +392,7 @@ const CART_ITEMS: readonly CartItemSummary[] = [
 const CART_SUBTOTAL = "HK$1,400.00";
 const POINTS_BALANCE_LABEL = "You’ve 1,250 pts.";
 
-export type { MembershipView };
+export type { HowPointsWorkRow, MembershipView, TierBenefitsRow };
 export {
   ACTIVITY,
   ACTIVITY_LIST_COPY,
@@ -326,6 +407,7 @@ export {
   GOOGLE_HELD,
   GOOGLE_OFFERED,
   GOOGLE_SAVE_URL,
+  HOW_POINTS_WORK,
   ISSUED_COUPON,
   LOYALTY_PAY_PART_OF_BASKET_HREF,
   LOYALTY_PAY_PART_OF_BASKET_STORY_ID,
@@ -337,6 +419,9 @@ export {
   POINTS_BALANCE_LABEL,
   REWARD_MENU_COPY,
   REWARDS,
+  TIER_BENEFITS,
+  TIER_BENEFITS_PAGE_COPY,
   TIER_CARD_COPY,
+  TIER_LADDER_COPY,
   WALLET_PASS_COPY,
 };

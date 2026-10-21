@@ -43,5 +43,35 @@
     "label": "member-pass/countdown",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2280",
     "classes": "whitespace-nowrap text-secondary-foreground"
+  },
+  {
+    "label": "tier-info-card/shell",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7227-1070",
+    "classes": "w-full sm:max-w-(--container-xs) gap-3 rounded-2xl border bg-card p-4 border-border"
+  },
+  {
+    "label": "tier-info-card/shell-current",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7227-863",
+    "classes": "gap-3 bg-card border-primary-border drop-shadow-[0px_4px_12px_color-mix(in_srgb,var(--primary)_15%,transparent)]"
+  },
+  {
+    "label": "tier-info-card/tier",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7227-544",
+    "classes": "font-semibold text-foreground"
+  },
+  {
+    "label": "tier-info-card/caption",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7227-1077",
+    "classes": "text-secondary-foreground"
+  },
+  {
+    "label": "tier-info-card/check",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7227-1074",
+    "classes": "shrink-0 text-primary"
+  },
+  {
+    "label": "tier-info-card/benefit-text",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7227-1075",
+    "classes": "min-w-0 text-foreground"
   }
 ]
