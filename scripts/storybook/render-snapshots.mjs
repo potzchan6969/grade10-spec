@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { createRequire } from "node:module";
-import { dirname, extname, join, normalize, resolve } from "node:path";
+import { dirname, extname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { renderSignature } from "./render-diff.mjs";
@@ -24,9 +24,12 @@ const FREEZE =
 
 function serve(directory) {
   const server = createServer(async (request, response) => {
-    const path = normalize(new URL(request.url, "http://x").pathname);
+    const path = decodeURIComponent(new URL(request.url, "http://x").pathname);
+    const file = resolve(join(directory, path));
     try {
-      const body = await readFile(join(directory, path));
+      if (!file.startsWith(resolve(directory) + sep))
+        throw new Error("outside");
+      const body = await readFile(file);
       response.writeHead(200, {
         "content-type": MIME[extname(path)] ?? "application/octet-stream",
       });

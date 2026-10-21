@@ -12,13 +12,15 @@ export function renderSignature(elements) {
   };
 }
 
-// Reasons are `layout`, `text` or `added`; a story absent from the result is
+// Reasons are `layout`, `text`, `added` or `error` (fails to render); a story absent from the result is
 // unchanged. Stories missing from the baseline are `added`.
 export function diffSnapshots(baseline, current) {
   const changes = new Map();
   for (const [id, now] of Object.entries(current)) {
     const before = baseline[id];
-    if (!before) changes.set(id, "added");
+    if (now.layout === "error" && before?.layout !== "error") {
+      changes.set(id, "error");
+    } else if (!before) changes.set(id, "added");
     else if (before.layout !== now.layout) changes.set(id, "layout");
     else if (before.text !== now.text) changes.set(id, "text");
   }

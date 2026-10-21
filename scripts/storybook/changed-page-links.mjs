@@ -379,6 +379,7 @@ function mergedLine({ commitSha, commitUrl, mergedPrTitle, mergedPrUrl }) {
 
 const REASONS = {
   added: "🆕 new",
+  error: "fails to render",
   layout: "layout shifted",
   text: "text changed",
 };

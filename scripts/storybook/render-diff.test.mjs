@@ -42,3 +42,17 @@ test("diff names the reason per story and skips unchanged ones", () => {
     d: "added",
   });
 });
+
+test("a story that starts failing is named, one that keeps failing is not", () => {
+  const ok = { layout: "l", text: "t" };
+  const bad = { layout: "error", text: "error" };
+  const changes = diffSnapshots(
+    { a: ok, b: bad, c: bad },
+    { a: bad, b: bad, c: ok, d: bad },
+  );
+  assert.deepEqual(Object.fromEntries(changes), {
+    a: "error",
+    c: "layout",
+    d: "error",
+  });
+});
