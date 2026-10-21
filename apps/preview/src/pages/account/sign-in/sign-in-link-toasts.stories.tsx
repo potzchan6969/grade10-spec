@@ -4,8 +4,8 @@ import { SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
 import { expect, waitFor, within } from "storybook/test";
-import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { AUTH_COPY as signIn } from "../../auth/auth-content";
+import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { HOME } from "./sign-in-content";
 
 type LinkToast = "expired" | "invalid" | "different";

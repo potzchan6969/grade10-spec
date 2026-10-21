@@ -8,10 +8,7 @@
     "legend": {
       "mode": "hidden"
     },
-    "viewBox": [
-      980,
-      640
-    ]
+    "viewBox": [980, 640]
   },
   "lanes": [
     {
@@ -91,10 +88,7 @@
       "label": "save a change",
       "fromSide": "bottom",
       "toSide": "top",
-      "labelAt": [
-        710,
-        222
-      ]
+      "labelAt": [710, 222]
     },
     {
       "id": "publish-changes",

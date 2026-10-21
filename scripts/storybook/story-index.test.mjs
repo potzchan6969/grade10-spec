@@ -43,29 +43,25 @@ describe("story ids", () => {
     );
   });
 
-  it(
-    "agrees with Storybook's own helpers",
-    {
-      skip: !csfEntry && "storybook is not installed",
-    },
-    async () => {
-      const csf = await import(pathToFileURL(csfEntry).href);
-      for (const name of [
-        "Default",
-        "ClosedWon_PaymentDue",
-        "Step2Payment",
-        "XLarge",
-      ]) {
-        assert.equal(storyNameFromExport(name), csf.storyNameFromExport(name));
-      }
-      for (const title of [
-        "Site/Page Shell/Blocks/SiteHeader/Auction & Store",
-        "Design System/Forms/Button",
-      ]) {
-        assert.equal(toId(title, "Docs"), csf.toId(title, "Docs"));
-      }
-    },
-  );
+  it("agrees with Storybook's own helpers", {
+    skip: !csfEntry && "storybook is not installed",
+  }, async () => {
+    const csf = await import(pathToFileURL(csfEntry).href);
+    for (const name of [
+      "Default",
+      "ClosedWon_PaymentDue",
+      "Step2Payment",
+      "XLarge",
+    ]) {
+      assert.equal(storyNameFromExport(name), csf.storyNameFromExport(name));
+    }
+    for (const title of [
+      "Site/Page Shell/Blocks/SiteHeader/Auction & Store",
+      "Design System/Forms/Button",
+    ]) {
+      assert.equal(toId(title, "Docs"), csf.toId(title, "Docs"));
+    }
+  });
 });
 
 describe("parseStoryFile", () => {
@@ -173,24 +169,20 @@ export default meta;
 describe("storyIndex", () => {
   const built = join(preview, "storybook-static/index.json");
 
-  it(
-    "holds the same entries as a built workbench index",
-    {
-      // A build left from an earlier checkout would be stale, so this runs
-      // only when asked, right after `pnpm storybook:build:workbench`.
-      skip:
-        (!process.env.STORY_INDEX_PARITY && "set STORY_INDEX_PARITY=1") ||
-        (!existsSync(built) && "no workbench build"),
-    },
-    () => {
-      const want = JSON.parse(readFileSync(built, "utf8")).entries;
-      const { entries } = storyIndex();
-      assert.deepEqual(Object.keys(entries).sort(), Object.keys(want).sort());
-      for (const [id, entry] of Object.entries(want)) {
-        assert.equal(entries[id].title, entry.title, id);
-        assert.equal(entries[id].importPath, entry.importPath, id);
-        assert.equal(entries[id].type, entry.type, id);
-      }
-    },
-  );
+  it("holds the same entries as a built workbench index", {
+    // A build left from an earlier checkout would be stale, so this runs
+    // only when asked, right after `pnpm storybook:build:workbench`.
+    skip:
+      (!process.env.STORY_INDEX_PARITY && "set STORY_INDEX_PARITY=1") ||
+      (!existsSync(built) && "no workbench build"),
+  }, () => {
+    const want = JSON.parse(readFileSync(built, "utf8")).entries;
+    const { entries } = storyIndex();
+    assert.deepEqual(Object.keys(entries).sort(), Object.keys(want).sort());
+    for (const [id, entry] of Object.entries(want)) {
+      assert.equal(entries[id].title, entry.title, id);
+      assert.equal(entries[id].importPath, entry.importPath, id);
+      assert.equal(entries[id].type, entry.type, id);
+    }
+  });
 });

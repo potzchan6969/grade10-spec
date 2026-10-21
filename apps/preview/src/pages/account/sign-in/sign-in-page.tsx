@@ -8,8 +8,8 @@ import {
   SiteHeader,
 } from "@grade10/ui";
 import { useEffect, useRef, useState } from "react";
-import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { AUTH_COPY } from "../../auth/auth-content";
+import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import {
   EMAIL_FORM_COPY,
   LINK_SENT_COPY,
