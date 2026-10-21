@@ -8,6 +8,10 @@
       "types": "./src/model.d.mts",
       "import": "./src/model.mjs"
     },
+    "./pixel-diff": {
+      "types": "./src/pixel-diff.d.mts",
+      "import": "./src/pixel-diff.mjs"
+    },
     "./archive": "./src/archive.mjs",
     "./archive-api": "./src/archive-api.mjs",
     "./calibration": "./src/calibration.mjs",

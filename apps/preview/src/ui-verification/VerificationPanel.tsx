@@ -7,29 +7,23 @@ import type {
   VerificationManifest,
 } from "@grade10/ui-verification/model";
 import { captureLocale } from "@grade10/ui-verification/model";
-import type { FormEvent } from "react";
 import * as React from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useStorybookApi, useStorybookState } from "storybook/manager-api";
 import { useTheme } from "storybook/theming";
-import type {
-  ArchiveRecord,
-  ArchiveStorage,
-  VerificationIdentity,
-} from "./archive-client";
+import type { VerificationIdentity } from "./archive-client";
 import {
-  createReview,
-  getArchiveInfo,
   getImageObject,
   getRun,
   identityKey,
   isRecord,
-  listCalibrations,
-  listRecords,
   listRuns,
   sameIdentity,
   verificationIdentity,
 } from "./archive-client";
+
+import type { PixelComparison } from "./pixel-compare";
+import { anchorOf, comparePixels, describeAnchor } from "./pixel-compare";
 
 import "./verification-panel.css";
 
@@ -38,12 +32,15 @@ void React;
 
 const ARCHIVE_BASE =
   typeof window === "undefined" ? "" : window.location.origin;
-const PROFILE_TABS: readonly { id: ProfileId; label: string; size: string }[] =
-  [
-    { id: "desktop", label: "Desktop 1440x900", size: "1440 × 900" },
-    { id: "tablet", label: "Tablet 768x1024", size: "768 × 1024" },
-    { id: "mobile", label: "Mobile 390x844", size: "390 × 844" },
-  ];
+const PROFILE_TABS: readonly {
+  id: ProfileId;
+  shortLabel: string;
+  size: string;
+}[] = [
+  { id: "desktop", shortLabel: "Desktop", size: "1440 × 900" },
+  { id: "tablet", shortLabel: "Tablet", size: "768 × 1024" },
+  { id: "mobile", shortLabel: "Mobile", size: "390 × 844" },
+];
 const GRADE10_LOCALES = localesOf("grade10");
 const LOCALE_LABELS: Readonly<Record<string, string>> = {
   en: "English",
@@ -81,10 +78,6 @@ function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : "The archive request failed.";
 }
 
-function isProfileId(value: unknown): value is ProfileId {
-  return value === "desktop" || value === "tablet" || value === "mobile";
-}
-
 function localeKey(value: string): string {
   return value.toLowerCase();
 }
@@ -92,13 +85,6 @@ function localeKey(value: string): string {
 function localeLabel(value: string): string {
   const language = LOCALE_LABELS[localeKey(value)];
   return language ? `${language} (${value})` : value;
-}
-
-function localeOfRecord(value: unknown): string {
-  if (!isRecord(value) || typeof value.locale !== "string") {
-    return captureLocale(undefined);
-  }
-  return captureLocale({ locale: value.locale });
 }
 
 function localeOptions(
@@ -197,7 +183,7 @@ function versionOptions(runs: VerificationManifest[]): VersionOption[] {
 }
 
 function versionLabel(version: VersionOption): string {
-  return `${version.appRef} ${version.appCommit.slice(0, 12)} / ${version.referenceRef} ${version.referenceCommit.slice(0, 12)} · ${version.runs.length} run${version.runs.length === 1 ? "" : "s"}`;
+  return `${version.appRef} ${version.appCommit.slice(0, 12)} / ${version.referenceRef} ${version.referenceCommit.slice(0, 12)}`;
 }
 
 function runHasIdentity(
@@ -244,308 +230,6 @@ async function listAllRuns(
   );
 }
 
-function matchingRecords(
-  records: ArchiveRecord[],
-  runId: string,
-  identity: VerificationIdentity,
-  profileId: ProfileId,
-  locale: string,
-): ArchiveRecord[] {
-  return records.filter((record) => {
-    const recordIdentity = entryIdentity(record);
-    return (
-      record.runId === runId &&
-      record.profileId === profileId &&
-      localeKey(localeOfRecord(record)) === localeKey(locale) &&
-      recordIdentity !== null &&
-      sameIdentity(recordIdentity, identity)
-    );
-  });
-}
-
-function timestampOf(value: ArchiveRecord): string {
-  if (typeof value.createdAt === "string") return value.createdAt;
-  if (typeof value.reviewedAt === "string") return value.reviewedAt;
-  return "Time not recorded";
-}
-
-function latestRecord(values: ArchiveRecord[]): ArchiveRecord | null {
-  return (
-    [...values].sort((left, right) =>
-      timestampOf(right).localeCompare(timestampOf(left)),
-    )[0] ?? null
-  );
-}
-
-function isSyntheticShadowAssessment(value: ArchiveRecord | null): boolean {
-  return Boolean(
-    value?.decision === "shadow" &&
-    (value.synthetic === true ||
-      value.source === "synthetic" ||
-      value.rubricVersion === "demo-only" ||
-      (isRecord(value.scorer) &&
-        value.scorer.id === "synthetic-demo" &&
-        value.scorer.model === "fixture-only")),
-  );
-}
-
-function automaticStatus(
-  value: ArchiveRecord | null,
-  scoringProfile: ProfileId | undefined,
-  selectedProfile: ProfileId,
-): string {
-  if (!value) {
-    if (scoringProfile && selectedProfile !== scoringProfile) {
-      return `The selected target is scored at the ${scoringProfile} profile. No assessment is expected for ${selectedProfile}.`;
-    }
-    return `No external model assessment is recorded for the ${selectedProfile} scoring profile in this run.`;
-  }
-  if (isSyntheticShadowAssessment(value)) {
-    return "Synthetic shadow assessment (not produced by an external model)";
-  }
-  if (typeof value.decision === "string") {
-    return `Model decision: ${value.decision}`;
-  }
-  if (typeof value.status === "string") {
-    return `Assessment status: ${value.status}`;
-  }
-  return "Assessment recorded; no automatic acceptance is stated";
-}
-
-function scoreDetails(value: ArchiveRecord | null): string[] {
-  if (!value) return [];
-  const details: string[] = [];
-  if (typeof value.assessmentId === "string") {
-    details.push(`Assessment ID: ${value.assessmentId}`);
-  }
-  if (isRecord(value.scorer)) {
-    details.push(
-      `Scorer: ${String(value.scorer.id ?? "unknown")} ${String(value.scorer.version ?? "")} (${String(value.scorer.model ?? "model not recorded")})`,
-    );
-  }
-  if (typeof value.rubricVersion === "string") {
-    details.push(`Rubric: ${value.rubricVersion}`);
-  }
-  if (typeof value.contractHash === "string") {
-    details.push(`Contract SHA-256: ${value.contractHash}`);
-  }
-  if (
-    typeof value.similarity === "number" &&
-    Number.isFinite(value.similarity)
-  ) {
-    const threshold =
-      typeof value.similarityThreshold === "number"
-        ? ` / threshold ${value.similarityThreshold}`
-        : "";
-    details.push(
-      `Image similarity: ${value.similarity}${threshold} (${value.similarityPass === true ? "pass" : "below threshold"})`,
-    );
-  }
-  if (value.confidence === null) {
-    details.push("Model confidence: not supplied by the scorer");
-  }
-  if (isRecord(value.dimensions)) {
-    for (const [name, rawDimension] of Object.entries(value.dimensions)) {
-      if (!isRecord(rawDimension)) continue;
-      const score =
-        typeof rawDimension.score === "number"
-          ? `: ${rawDimension.score}/100`
-          : "";
-      const findings = Array.isArray(rawDimension.findings)
-        ? rawDimension.findings.filter(
-            (finding): finding is string => typeof finding === "string",
-          )
-        : [];
-      details.push(
-        `${name}${score}${findings.length ? ` - ${findings.join("; ")}` : ""}`,
-      );
-    }
-  }
-  if (value.criticalVeto === true) {
-    const mismatches = Array.isArray(value.criticalMismatches)
-      ? value.criticalMismatches.filter(isRecord).map((mismatch) => {
-          const category =
-            typeof mismatch.category === "string"
-              ? mismatch.category
-              : "critical mismatch";
-          const evidence =
-            typeof mismatch.evidence === "string" ? mismatch.evidence : "";
-          return evidence ? `${category}: ${evidence}` : category;
-        })
-      : [];
-    details.push(
-      `Critical mismatch veto: ${mismatches.join("; ") || "recorded"}`,
-    );
-  }
-  if (value.unknownCategory === true) {
-    const categories = Array.isArray(value.unknownCategories)
-      ? value.unknownCategories.filter(
-          (category): category is string => typeof category === "string",
-        )
-      : [];
-    details.push(`Unknown category: ${categories.join(", ") || "yes"}`);
-  }
-  details.push(
-    `Capture provenance: ${value.provenanceVerified === true ? "verified" : "unverified"}`,
-  );
-  if (typeof value.failureCount === "number")
-    details.push(`Scoring failures: ${value.failureCount}`);
-  details.push(
-    `Autoaccept candidate: ${value.autoAcceptCandidate === true ? "yes" : "no"}`,
-  );
-  if (Array.isArray(value.reasons)) {
-    details.push(
-      ...value.reasons.filter(
-        (reason): reason is string => typeof reason === "string",
-      ),
-    );
-  }
-  return [...new Set(details)];
-}
-
-function matchingCalibration(
-  assessment: ArchiveRecord | null,
-  calibrations: ArchiveRecord[],
-  locale: string,
-): ArchiveRecord | null {
-  if (
-    !assessment ||
-    typeof assessment.assessmentId !== "string" ||
-    !isRecord(assessment.scorer)
-  ) {
-    return null;
-  }
-  const scorer = assessment.scorer;
-  const matches = calibrations.filter((calibration) => {
-    if (
-      calibration.assessmentId !== assessment.assessmentId ||
-      !isRecord(calibration.calibrationKey)
-    ) {
-      return false;
-    }
-    const key = calibration.calibrationKey;
-    return (
-      localeKey(localeOfRecord(key)) === localeKey(locale) &&
-      key.scorerId === scorer.id &&
-      key.scorerVersion === scorer.version &&
-      key.scorerModel === scorer.model &&
-      key.profileId === assessment.profileId &&
-      typeof key.contractHash === "string" &&
-      typeof assessment.contractHash === "string" &&
-      key.contractHash.toLowerCase() ===
-        assessment.contractHash.toLowerCase() &&
-      key.rubricVersion === assessment.rubricVersion &&
-      typeof key.labelPolicyVersion === "string" &&
-      key.labelPolicyVersion.trim() !== ""
-    );
-  });
-  return latestRecord(matches);
-}
-
-function calibrationAutoaccepts(
-  assessment: ArchiveRecord | null,
-  calibration: ArchiveRecord | null,
-): boolean {
-  if (!assessment || !calibration || calibration.decision !== "autoaccept")
-    return false;
-  if (!isRecord(calibration.policy)) return false;
-  const policy = calibration.policy;
-  return (
-    assessment.autoAcceptCandidate === true &&
-    assessment.criticalVeto === false &&
-    assessment.unknownCategory === false &&
-    assessment.provenanceVerified === true &&
-    assessment.failureCount === 0 &&
-    typeof assessment.similarity === "number" &&
-    typeof policy.similarityThreshold === "number" &&
-    assessment.similarity >= policy.similarityThreshold &&
-    typeof calibration.sampleSize === "number" &&
-    typeof policy.minSampleSize === "number" &&
-    calibration.sampleSize >= policy.minSampleSize &&
-    typeof calibration.confidenceLowerBound === "number" &&
-    typeof policy.confidenceThreshold === "number" &&
-    calibration.confidenceLowerBound >= policy.confidenceThreshold &&
-    calibration.method === "wilson-lower-95" &&
-    (!Array.isArray(calibration.reasons) || calibration.reasons.length === 0)
-  );
-}
-
-function calibrationDetails(value: ArchiveRecord | null): string[] {
-  if (!value) return [];
-  const details: string[] = [];
-  if (typeof value.calibrationId === "string")
-    details.push(`Calibration ID: ${value.calibrationId}`);
-  if (typeof value.decision === "string")
-    details.push(`Calibration decision: ${value.decision}`);
-  if (typeof value.confidenceLowerBound === "number") {
-    details.push(
-      `Calibrated confidence lower bound: ${(value.confidenceLowerBound * 100).toFixed(2)}%`,
-    );
-  }
-  if (
-    typeof value.sampleSize === "number" &&
-    typeof value.approvedCount === "number"
-  ) {
-    details.push(
-      `Held-out approvals: ${value.approvedCount}/${value.sampleSize}`,
-    );
-  }
-  if (isRecord(value.policy)) {
-    const threshold = value.policy.confidenceThreshold;
-    const minSampleSize = value.policy.minSampleSize;
-    if (typeof threshold === "number")
-      details.push(`Confidence threshold: ${(threshold * 100).toFixed(2)}%`);
-    if (typeof minSampleSize === "number")
-      details.push(`Minimum held-out sample: ${minSampleSize}`);
-    if (typeof value.policy.similarityThreshold === "number") {
-      details.push(`Similarity threshold: ${value.policy.similarityThreshold}`);
-    }
-  }
-  if (typeof value.method === "string") details.push(`Method: ${value.method}`);
-  if (
-    isRecord(value.calibrationKey) &&
-    typeof value.calibrationKey.labelPolicyVersion === "string"
-  ) {
-    details.push(`Label policy: ${value.calibrationKey.labelPolicyVersion}`);
-  }
-  if (typeof value.createdAt === "string")
-    details.push(`Calibration recorded: ${value.createdAt}`);
-  if (isRecord(value.excludedCounts)) {
-    const exclusions = Object.entries(value.excludedCounts)
-      .filter(([, count]) => typeof count === "number" && count > 0)
-      .map(([reason, count]) => `${reason}: ${count}`);
-    if (exclusions.length > 0) {
-      details.push(`Excluded observations: ${exclusions.join(", ")}`);
-    }
-  }
-  if (Array.isArray(value.reasons)) {
-    details.push(
-      ...value.reasons.filter(
-        (reason): reason is string => typeof reason === "string",
-      ),
-    );
-  }
-  return [...new Set(details)];
-}
-
-function recordDecision(value: ArchiveRecord): string {
-  if (value.decision === "approved") return "Human approved";
-  if (value.decision === "changes-requested") return "Changes requested";
-  return typeof value.decision === "string"
-    ? value.decision
-    : "Review recorded";
-}
-
-function reviewerLabel(value: ArchiveRecord): string {
-  if (typeof value.reviewer === "string") return value.reviewer;
-  if (isRecord(value.reviewer)) {
-    if (typeof value.reviewer.subject === "string")
-      return value.reviewer.subject;
-    if (typeof value.reviewer.email === "string") return value.reviewer.email;
-  }
-  return "Reviewer not recorded";
-}
-
 function formatIdentity(identity: VerificationIdentity): string {
   return `${identity.caseId} · ${identity.targetId} · ${identity.capturePointId}`;
 }
@@ -583,6 +267,57 @@ function captureFor(
         capture.profileId === profileId &&
         localeKey(captureLocale(capture)) === localeKey(locale),
     ) ?? null
+  );
+}
+
+type Tone = "ok" | "warn" | "idle";
+
+type ComparisonState = PixelComparison | "running";
+
+function shortHash(value: string): string {
+  return value.length > 20 ? `${value.slice(0, 8)}…${value.slice(-6)}` : value;
+}
+
+function shortCommit(value: string): string {
+  return value.slice(0, 12);
+}
+
+function percent(ratio: number): string {
+  if (ratio === 0) return "Exact match";
+  if (ratio < 0.0001) return "<0.01% differ";
+  return `${(ratio * 100).toFixed(ratio < 0.1 ? 2 : 1)}% differ`;
+}
+
+function profileStatus(
+  capture: CaptureOutcome | null,
+  comparison: ComparisonState | undefined,
+): { text: string; tone: Tone } {
+  if (!capture) return { text: "Not captured", tone: "idle" };
+  if (capture.status === "failed")
+    return { text: "Capture failed", tone: "warn" };
+  if (capture.status === "not-selected") {
+    return { text: "Not selected", tone: "idle" };
+  }
+  if (!capture.reference) return { text: "No reference", tone: "idle" };
+  if (comparison === "running") return { text: "Comparing…", tone: "idle" };
+  if (!comparison) return { text: "Not compared", tone: "idle" };
+  if (comparison.kind === "size-mismatch") {
+    return { text: "Size differs", tone: "warn" };
+  }
+  if (comparison.kind === "error") {
+    return { text: "Comparison failed", tone: "warn" };
+  }
+  return {
+    text: percent(comparison.ratio),
+    tone: comparison.ratio < 0.005 ? "ok" : "warn",
+  };
+}
+
+function Chip({ tone = "idle", children }: { tone?: Tone; children: string }) {
+  return (
+    <span className={`verification-chip verification-chip--${tone}`}>
+      {children}
+    </span>
   );
 }
 
@@ -636,22 +371,101 @@ function ImageEvidence({
           <p role="status">Loading original PNG…</p>
         )}
       </div>
-      {imageUrl ? (
-        <a
-          href={imageUrl}
-          download={`${title.toLocaleLowerCase()}.png`}
-          title={artifact.sha256}
-        >
-          Download original {title} PNG · SHA-256 {artifact.sha256}
-        </a>
-      ) : (
-        <span>SHA-256 {artifact.sha256}</span>
-      )}
+      <div className="verification-hash-row">
+        <code title={`SHA-256 ${artifact.sha256}`}>
+          sha256 {shortHash(artifact.sha256)}
+        </code>
+        {imageUrl ? (
+          <a
+            href={imageUrl}
+            download={`${title.toLocaleLowerCase()}.png`}
+            aria-label={`Download original ${title} PNG · SHA-256 ${artifact.sha256}`}
+          >
+            Download PNG
+          </a>
+        ) : null}
+      </div>
       {title === "Reference" && !cropRegion ? (
         <p className="verification-notice">
           No reference region was recorded; showing the full reference image.
         </p>
       ) : null}
+    </section>
+  );
+}
+
+function DiffEvidence({
+  comparison,
+  aspect,
+  canCompare,
+}: {
+  comparison: ComparisonState | undefined;
+  aspect: string;
+  canCompare: boolean;
+}) {
+  let body: React.ReactNode;
+  let note = "";
+  if (comparison === "running") {
+    body = <p role="status">Comparing pixels…</p>;
+  } else if (!comparison) {
+    body = (
+      <p className="verification-muted">
+        {canCompare ? "Not compared yet" : "Needs both images"}
+      </p>
+    );
+  } else if (comparison.kind === "error") {
+    body = (
+      <p role="alert" className="verification-error">
+        {comparison.message}
+      </p>
+    );
+  } else if (comparison.kind === "size-mismatch") {
+    body = (
+      <p className="verification-notice">
+        The anchors differ in size: reference {comparison.reference.width} ×{" "}
+        {comparison.reference.height}, site {comparison.site.width} ×{" "}
+        {comparison.site.height}. Fix the layout before comparing pixels.
+      </p>
+    );
+  } else {
+    note = `${comparison.regions.length} region${comparison.regions.length === 1 ? "" : "s"}`;
+    body = (
+      <>
+        <img src={comparison.diffUrl} alt="Pixel difference overlay" />
+        {comparison.regions.map((region) => (
+          <span
+            key={`${region.x}:${region.y}`}
+            className="verification-diff-box"
+            style={{
+              left: `${(region.x / comparison.size.width) * 100}%`,
+              top: `${(region.y / comparison.size.height) * 100}%`,
+              width: `${(region.width / comparison.size.width) * 100}%`,
+              height: `${(region.height / comparison.size.height) * 100}%`,
+            }}
+          />
+        ))}
+      </>
+    );
+  }
+  const framed =
+    comparison !== undefined &&
+    comparison !== "running" &&
+    comparison.kind === "compared";
+  return (
+    <section
+      className="verification-image-card"
+      aria-label="Pixel diff evidence"
+    >
+      <div className="verification-image-heading">
+        <h4>Pixel diff</h4>
+        <span>{note}</span>
+      </div>
+      <div
+        className={`verification-image-frame${framed ? "" : " verification-image-frame--empty"}`}
+        style={{ aspectRatio: aspect }}
+      >
+        {body}
+      </div>
     </section>
   );
 }
@@ -664,18 +478,34 @@ function themeVariables(theme: ReturnType<typeof useTheme>) {
     "--vp-fg": theme.color.defaultText,
     "--vp-muted": theme.color.mediumdark,
     "--vp-bg": theme.background.content,
-    "--vp-surface": theme.background.hoverable,
+    "--vp-surface": theme.background.app,
     "--vp-border": theme.appBorderColor,
     "--vp-accent": theme.color.secondary,
+    "--vp-on-accent": dark ? "#08141e" : "#ffffff",
     "--vp-font": theme.typography.fonts.base,
     "--vp-mono": theme.typography.fonts.mono,
+    "--vp-ok-bg": dark ? "#17331f" : "#e5f5ea",
+    "--vp-ok-border": dark ? "#2f6b42" : "#a9d8b8",
+    "--vp-ok-fg": dark ? "#8fe0a8" : "#14602e",
     "--vp-warn-bg": dark ? "#3a2f10" : "#fff9e8",
     "--vp-warn-border": dark ? "#7a6320" : "#d8c691",
     "--vp-warn-fg": dark ? "#f2dfa2" : "#523f12",
     "--vp-error-bg": dark ? "#3d1717" : "#fff0f0",
     "--vp-error-border": dark ? "#9b3b3b" : "#d65a5a",
     "--vp-error-fg": dark ? "#ffc9c9" : "#7d1818",
+    "--vp-diff": dark ? "#ff6b6b" : "#d92d2d",
   } as React.CSSProperties;
+}
+
+// Storybook hands back fresh parameter objects on every render. Equal
+// identities must stay one object, or a late render reloads the run and wipes
+// the comparisons the reviewer just made.
+function useStableIdentity(value: VerificationIdentity | null) {
+  const stable = useRef(value);
+  const next = value ? identityKey(value) : "";
+  const current = stable.current ? identityKey(stable.current) : "";
+  if (next !== current) stable.current = value;
+  return stable.current;
 }
 
 export function VerificationPanel({ active }: { active: boolean }) {
@@ -693,11 +523,6 @@ export function VerificationPanel({ active }: { active: boolean }) {
   );
 
   const archiveBase = ARCHIVE_BASE;
-  const [archiveStorage, setArchiveStorage] = useState<ArchiveStorage | null>(
-    null,
-  );
-  const [archiveInfoError, setArchiveInfoError] = useState("");
-  const [loadingArchiveInfo, setLoadingArchiveInfo] = useState(false);
   const [storyListOpen, setStoryListOpen] = useState(false);
   const [identitySearch, setIdentitySearch] = useState("");
   const [selectedIdentityKey, setSelectedIdentityKey] = useState("");
@@ -706,30 +531,23 @@ export function VerificationPanel({ active }: { active: boolean }) {
   const [selectedCurrentIdentityKey, setSelectedCurrentIdentityKey] =
     useState("");
   const [runs, setRuns] = useState<VerificationManifest[]>([]);
-  const [selectedRunId, setSelectedRunId] = useState("");
   const [manifest, setManifest] = useState<VerificationManifest | null>(null);
-  const [profileId, setProfileId] = useState<ProfileId>("desktop");
   const [localeId, setLocaleId] = useState<string>("en");
-  const [imageUrls, setImageUrls] = useState<ImageUrls>({});
-  const [reviews, setReviews] = useState<ArchiveRecord[]>([]);
-  const [assessments, setAssessments] = useState<ArchiveRecord[]>([]);
-  const [calibrations, setCalibrations] = useState<ArchiveRecord[]>([]);
+  const [imageUrls, setImageUrls] = useState<
+    Partial<Record<ProfileId, ImageUrls>>
+  >({});
+  const [comparisons, setComparisons] = useState<
+    Partial<Record<ProfileId, ComparisonState>>
+  >({});
   const [historyError, setHistoryError] = useState("");
   const [manifestError, setManifestError] = useState("");
   const [imageError, setImageError] = useState("");
-  const [reviewError, setReviewError] = useState("");
-  const [assessmentError, setAssessmentError] = useState("");
-  const [calibrationError, setCalibrationError] = useState("");
-  const [loadingCalibrations, setLoadingCalibrations] = useState(false);
   const [loadingRuns, setLoadingRuns] = useState(false);
   const [loadingRun, setLoadingRun] = useState(false);
   const [loadingImages, setLoadingImages] = useState(false);
-  const [savingReview, setSavingReview] = useState(false);
   const [refreshVersion, setRefreshVersion] = useState(0);
-  const [reviewDecision, setReviewDecision] = useState<
-    "approved" | "changes-requested"
-  >("approved");
-  const [reviewComment, setReviewComment] = useState("");
+  const diffUrls = useRef<string[]>([]);
+  const comparisonGeneration = useRef(0);
   const identityChoices = useMemo(() => identityOptions(runs), [runs]);
   const currentIdentityChoices = useMemo(() => {
     if (caseIdHint) {
@@ -850,25 +668,27 @@ export function VerificationPanel({ active }: { active: boolean }) {
         (choice) => identityKey(choice.identity) === effectiveIdentityKey,
       ) ?? null)
     : null;
-  const selectedIdentity = storyListOpen
+  const pendingIdentity = storyListOpen
     ? (selectedStoryChoice?.identity ?? null)
     : currentIdentity;
+  const selectedIdentity = useStableIdentity(pendingIdentity);
   const listFilterCaseId = storyListOpen ? "" : caseIdHint;
   const listStoryScope = storyListOpen ? "" : (currentStoryId ?? "");
-  const matchingRuns = useMemo(
+  // A version has one static layout, so its newest run is the one that counts.
+  // Older runs stay in the archive but the panel does not offer them.
+  const effectiveRunId = useMemo(
     () =>
-      selectedIdentity && selectedVersion
-        ? selectedVersion.runs.filter((run) =>
+      (selectedIdentity && selectedVersion
+        ? selectedVersion.runs.find((run) =>
             runHasIdentity(run, selectedIdentity),
           )
-        : [],
+        : undefined
+      )?.runId ?? "",
     [selectedIdentity, selectedVersion],
   );
-  const effectiveRunId = matchingRuns.some((run) => run.runId === selectedRunId)
-    ? selectedRunId
-    : (matchingRuns[0]?.runId ?? "");
   const selectedManifestSummary =
-    matchingRuns.find((run) => run.runId === effectiveRunId) ?? manifest;
+    selectedVersion?.runs.find((run) => run.runId === effectiveRunId) ??
+    manifest;
   const localeChoices = useMemo(
     () => localeOptions(selectedManifestSummary),
     [selectedManifestSummary],
@@ -883,72 +703,29 @@ export function VerificationPanel({ active }: { active: boolean }) {
   }, [localeChoices, selectedLocaleHasOption]);
   const selectedLocaleHasEvidence = Boolean(
     selectedManifestSummary &&
-    selectedIdentity &&
-    selectedManifestSummary.captures.some(
-      (capture) =>
-        capture.caseId === selectedIdentity.caseId &&
-        capture.targetId === selectedIdentity.targetId &&
-        capture.capturePointId === selectedIdentity.capturePointId &&
-        localeKey(captureLocale(capture)) === localeKey(localeId),
-    ),
+      selectedIdentity &&
+      selectedManifestSummary.captures.some(
+        (capture) =>
+          capture.caseId === selectedIdentity.caseId &&
+          capture.targetId === selectedIdentity.targetId &&
+          capture.capturePointId === selectedIdentity.capturePointId &&
+          localeKey(captureLocale(capture)) === localeKey(localeId),
+      ),
   );
-  const selectedCapture = useMemo(
-    () => captureFor(manifest, selectedIdentity, profileId, localeId),
-    [localeId, manifest, profileId, selectedIdentity],
+  const captures = useMemo(
+    () =>
+      Object.fromEntries(
+        PROFILE_TABS.map((item) => [
+          item.id,
+          captureFor(manifest, selectedIdentity, item.id, localeId),
+        ]),
+      ) as Record<ProfileId, CaptureOutcome | null>,
+    [localeId, manifest, selectedIdentity],
   );
-  const selectedAssessment = latestRecord(
-    selectedIdentity && manifest
-      ? matchingRecords(
-          assessments,
-          manifest.runId,
-          selectedIdentity,
-          profileId,
-          localeId,
-        )
-      : [],
-  );
-  const selectedReview = latestRecord(
-    selectedIdentity && manifest
-      ? matchingRecords(
-          reviews,
-          manifest.runId,
-          selectedIdentity,
-          profileId,
-          localeId,
-        )
-      : [],
-  );
-  const selectedCalibration = matchingCalibration(
-    selectedAssessment,
-    calibrations,
-    localeId,
-  );
-  const isCalibratedAutoaccept = calibrationAutoaccepts(
-    selectedAssessment,
-    selectedCalibration,
-  );
-  const selectedCalibrationDetails = calibrationDetails(selectedCalibration);
-  const profile =
-    PROFILE_TABS.find((item) => item.id === profileId) ?? PROFILE_TABS[0];
+  const provenanceCapture =
+    PROFILE_TABS.map((item) => captures[item.id]).find(Boolean) ?? null;
 
-  useEffect(() => {
-    if (!active || !archiveBase) return;
-    const controller = new AbortController();
-    setLoadingArchiveInfo(true);
-    setArchiveInfoError("");
-    void getArchiveInfo(archiveBase, controller.signal)
-      .then((storage) => {
-        if (!controller.signal.aborted) setArchiveStorage(storage);
-      })
-      .catch((error: unknown) => {
-        if (!controller.signal.aborted) setArchiveInfoError(messageOf(error));
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoadingArchiveInfo(false);
-      });
-    return () => controller.abort();
-  }, [active]);
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies: refreshVersion reloads the run list on demand
   useEffect(() => {
     if (!active || !archiveBase || (!storyListOpen && !listStoryScope)) {
       setRuns([]);
@@ -959,7 +736,6 @@ export function VerificationPanel({ active }: { active: boolean }) {
     setLoadingRuns(true);
     setHistoryError("");
     setRuns([]);
-    if (refreshVersion > 0) setSelectedRunId("");
     void listAllRuns(archiveBase, listFilterCaseId, controller.signal)
       .then((nextRuns) => {
         if (controller.signal.aborted) return;
@@ -974,13 +750,10 @@ export function VerificationPanel({ active }: { active: boolean }) {
     return () => controller.abort();
   }, [active, listFilterCaseId, listStoryScope, refreshVersion, storyListOpen]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: refreshVersion reloads the manifest on demand
   useEffect(() => {
     if (!active || !archiveBase || !effectiveRunId || !selectedIdentity) {
       setManifest(null);
-      setReviews([]);
-      setAssessments([]);
-      setCalibrations([]);
-      setCalibrationError("");
       setLoadingRun(false);
       return;
     }
@@ -988,168 +761,127 @@ export function VerificationPanel({ active }: { active: boolean }) {
     setLoadingRun(true);
     setManifest(null);
     setManifestError("");
-    setReviewError("");
-    setAssessmentError("");
-    if (refreshVersion > 0) {
-      setReviews([]);
-      setAssessments([]);
-    }
-    const load = async () => {
-      const [runResult, reviewResult, assessmentResult] =
-        await Promise.allSettled([
-          getRun(archiveBase, effectiveRunId, controller.signal),
-          listRecords(
-            archiveBase,
-            "reviews",
-            effectiveRunId,
-            selectedIdentity.caseId,
-            localeId,
-            controller.signal,
-          ),
-          listRecords(
-            archiveBase,
-            "assessments",
-            effectiveRunId,
-            selectedIdentity.caseId,
-            localeId,
-            controller.signal,
-          ),
-        ]);
-      if (controller.signal.aborted) return;
-      if (runResult.status === "fulfilled") setManifest(runResult.value);
-      else setManifestError(messageOf(runResult.reason));
-      if (reviewResult.status === "fulfilled") setReviews(reviewResult.value);
-      else setReviewError(messageOf(reviewResult.reason));
-      if (assessmentResult.status === "fulfilled")
-        setAssessments(assessmentResult.value);
-      else setAssessmentError(messageOf(assessmentResult.reason));
-      setLoadingRun(false);
-    };
-    void load().catch((error: unknown) => {
-      if (!controller.signal.aborted) {
-        setManifestError(messageOf(error));
-        setLoadingRun(false);
-      }
-    });
-    return () => controller.abort();
-  }, [active, effectiveRunId, localeId, refreshVersion, selectedIdentity]);
-
-  useEffect(() => {
-    if (!active || !archiveBase || !selectedAssessment) {
-      setCalibrations([]);
-      setCalibrationError("");
-      setLoadingCalibrations(false);
-      return;
-    }
-    const controller = new AbortController();
-    setCalibrations([]);
-    setCalibrationError("");
-    setLoadingCalibrations(true);
-    void listCalibrations(
-      archiveBase,
-      selectedAssessment,
-      localeId,
-      controller.signal,
-    )
-      .then((records) => {
-        if (!controller.signal.aborted) setCalibrations(records);
+    void getRun(archiveBase, effectiveRunId, controller.signal)
+      .then((value) => {
+        if (!controller.signal.aborted) setManifest(value);
       })
       .catch((error: unknown) => {
-        if (!controller.signal.aborted) setCalibrationError(messageOf(error));
+        if (!controller.signal.aborted) setManifestError(messageOf(error));
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoadingCalibrations(false);
+        if (!controller.signal.aborted) setLoadingRun(false);
       });
     return () => controller.abort();
-  }, [active, localeId, selectedAssessment]);
+  }, [active, effectiveRunId, refreshVersion, selectedIdentity]);
 
   useEffect(() => {
-    const capture = selectedCapture;
-    if (!active || !archiveBase || !capture || capture.status !== "captured") {
+    if (!active || !archiveBase) {
       setImageUrls({});
       setLoadingImages(false);
       return;
     }
     const controller = new AbortController();
     const createdUrls: string[] = [];
+    const targets = PROFILE_TABS.flatMap((item) => {
+      const capture = captures[item.id];
+      return capture?.status === "captured" ? [{ id: item.id, capture }] : [];
+    });
     setImageUrls({});
     setImageError("");
-    setLoadingImages(true);
-    const load = async () => {
-      const site = await verifiedPngUrl(
+    setLoadingImages(targets.length > 0);
+    let pending = targets.length;
+    const track = async (artifact: ImageArtifact) => {
+      const url = await verifiedPngUrl(
         archiveBase,
-        capture.site,
+        artifact,
         controller.signal,
       );
-      createdUrls.push(site);
-      let reference: string | undefined;
-      if (capture.reference) {
-        reference = await verifiedPngUrl(
-          archiveBase,
-          capture.reference,
-          controller.signal,
-        );
-        createdUrls.push(reference);
-      }
-      if (controller.signal.aborted) {
-        for (const url of createdUrls) URL.revokeObjectURL(url);
-        return;
-      }
-      setImageUrls({ site, ...(reference ? { reference } : {}) });
+      createdUrls.push(url);
+      return url;
     };
-    void load()
-      .catch((error: unknown) => {
-        if (!controller.signal.aborted) setImageError(messageOf(error));
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoadingImages(false);
-      });
+    for (const { id, capture } of targets) {
+      void (async () => {
+        const site = await track(capture.site);
+        const reference = capture.reference
+          ? await track(capture.reference)
+          : undefined;
+        if (controller.signal.aborted) return;
+        setImageUrls((previous) => ({
+          ...previous,
+          [id]: { site, ...(reference ? { reference } : {}) },
+        }));
+      })()
+        .catch((error: unknown) => {
+          if (!controller.signal.aborted) setImageError(messageOf(error));
+        })
+        .finally(() => {
+          pending -= 1;
+          if (!controller.signal.aborted && pending === 0) {
+            setLoadingImages(false);
+          }
+        });
+    }
     return () => {
       controller.abort();
       for (const url of createdUrls) URL.revokeObjectURL(url);
     };
-  }, [active, selectedCapture]);
+  }, [active, captures]);
 
-  async function submitReview(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (
-      !archiveBase ||
-      !archiveStorage ||
-      !effectiveRunId ||
-      !selectedIdentity ||
-      !isProfileId(profileId)
-    )
-      return;
-    setSavingReview(true);
-    setReviewError("");
-    try {
-      await createReview(archiveBase, {
-        runId: effectiveRunId,
-        caseId: selectedIdentity.caseId,
-        targetId: selectedIdentity.targetId,
-        capturePointId: selectedIdentity.capturePointId,
-        profileId,
-        locale: localeId,
-        decision: reviewDecision,
-        comment: reviewComment.trim(),
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a new capture selection drops the earlier comparisons
+  useEffect(() => {
+    comparisonGeneration.current += 1;
+    setComparisons({});
+    return () => {
+      comparisonGeneration.current += 1;
+      for (const url of diffUrls.current) URL.revokeObjectURL(url);
+      diffUrls.current = [];
+    };
+  }, [captures]);
+
+  function comparable(id: ProfileId): boolean {
+    const capture = captures[id];
+    const urls = imageUrls[id];
+    return Boolean(
+      capture?.status === "captured" &&
+        capture.reference &&
+        urls?.site &&
+        urls.reference,
+    );
+  }
+
+  async function runComparison(ids: ProfileId[]) {
+    const generation = comparisonGeneration.current;
+    for (const id of ids) {
+      const capture = captures[id];
+      const urls = imageUrls[id];
+      if (
+        capture?.status !== "captured" ||
+        !capture.reference ||
+        !urls?.site ||
+        !urls.reference
+      ) {
+        continue;
+      }
+      setComparisons((previous) => ({ ...previous, [id]: "running" }));
+      const result = await comparePixels({
+        referenceUrl: urls.reference,
+        siteUrl: urls.site,
+        referenceRegion: capture.referenceRegion,
+        siteRegion: capture.siteRegion,
       });
-      setReviewComment("");
-      setReviews(
-        await listRecords(
-          archiveBase,
-          "reviews",
-          effectiveRunId,
-          selectedIdentity.caseId,
-          localeId,
-          new AbortController().signal,
-        ),
-      );
-    } catch (error) {
-      setReviewError(messageOf(error));
-    } finally {
-      setSavingReview(false);
+      if (generation !== comparisonGeneration.current) {
+        if (result.kind === "compared") URL.revokeObjectURL(result.diffUrl);
+        return;
+      }
+      if (result.kind === "compared") diffUrls.current.push(result.diffUrl);
+      setComparisons((previous) => ({ ...previous, [id]: result }));
     }
   }
+
+  const comparableIds = PROFILE_TABS.map((item) => item.id).filter(comparable);
+  const comparing = PROFILE_TABS.some(
+    (item) => comparisons[item.id] === "running",
+  );
 
   const selectedDeclaration = manifest?.catalogue.find(
     (entry) =>
@@ -1158,8 +890,6 @@ export function VerificationPanel({ active }: { active: boolean }) {
       entry.targetId === selectedIdentity.targetId &&
       entry.capturePointId === selectedIdentity.capturePointId,
   );
-  const relevantReviews = selectedReview ? [selectedReview] : [];
-  const selectedAssessmentDetails = scoreDetails(selectedAssessment);
   function storyNavigation(choice: IdentityOption) {
     if (choice.storyId && managerApi.resolveStory(choice.storyId)) {
       return { target: choice.storyId, notice: "" };
@@ -1223,43 +953,144 @@ export function VerificationPanel({ active }: { active: boolean }) {
 
   function selectArchivedStory(choice: IdentityOption) {
     setSelectedIdentityKey(identityKey(choice.identity));
-    setSelectedRunId("");
     const navigation = storyNavigation(choice);
     if (navigation.target) managerApi.selectStory(navigation.target);
   }
 
-  const reviewBlockedReason = !selectedCapture
-    ? "Review applies once this run has an outcome for the selected profile."
-    : selectedCapture.status !== "captured"
-      ? "Review applies to captured pairs only."
-      : !selectedCapture.reference
-        ? "No reference at this viewport; review applies to scored pairs."
-        : !archiveStorage
-          ? "Review needs an archive destination. Start Storybook with pnpm storybook:workbench, or set UI_VERIFICATION_ARCHIVE."
-          : "";
+  function openStoryList() {
+    setSelectedVersionKey(effectiveVersionKey);
+    setSelectedIdentityKey(
+      currentIdentity &&
+        versionIdentityChoices.some((choice) =>
+          sameIdentity(choice.identity, currentIdentity),
+        )
+        ? identityKey(currentIdentity)
+        : "",
+    );
+    setIdentitySearch("");
+    setStoryListOpen(true);
+  }
 
   return (
     <div className="verification-panel" style={themeVariables(theme)}>
       <header className="verification-panel-header">
-        <div>
-          <h2>Verification history</h2>
-          <p>Archived evidence stays tied to its run.</p>
+        <h2>Verification</h2>
+        <div className="verification-inline-actions">
+          {storyListOpen ? (
+            <button type="button" onClick={() => setStoryListOpen(false)}>
+              Return to current story
+            </button>
+          ) : (
+            <button type="button" onClick={openStoryList}>
+              All recordings
+            </button>
+          )}
+          <button
+            type="button"
+            className="verification-icon-button"
+            aria-label="Refresh"
+            onClick={() => setRefreshVersion((value) => value + 1)}
+            disabled={!archiveBase}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 12a9 9 0 1 1-3-6.7" />
+              <path d="M21 3v6h-6" />
+            </svg>
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => setRefreshVersion((value) => value + 1)}
-          disabled={!archiveBase}
-        >
-          Refresh
-        </button>
       </header>
 
       <section
-        className="verification-section"
+        className="verification-context"
         aria-labelledby="verification-story-heading"
       >
-        <h3 id="verification-story-heading">Current Storybook story</h3>
-        <p>{currentStoryId || "No story is selected"}</p>
+        <div className="verification-context-grid">
+          <div className="verification-story-block">
+            <h3 id="verification-story-heading" className="verification-label">
+              Expected layout (Story)
+            </h3>
+            <p className="verification-readonly">
+              {currentStoryId || "No story is selected"}
+            </p>
+          </div>
+          {!storyListOpen && currentTargetChoices.length > 1 ? (
+            <label className="verification-field">
+              Verification target
+              <select
+                value={effectiveCurrentIdentityKey}
+                onChange={(event) =>
+                  setSelectedCurrentIdentityKey(event.currentTarget.value)
+                }
+              >
+                <option value="">Choose a target</option>
+                {currentTargetChoices.map((choice) => (
+                  <option
+                    key={identityKey(choice.identity)}
+                    value={identityKey(choice.identity)}
+                  >
+                    {choice.label} · {choice.identity.targetId} ·{" "}
+                    {choice.identity.capturePointId}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {!storyListOpen && currentCaseIds.length > 1 ? (
+            <label className="verification-field">
+              Current verification case
+              <select
+                value={effectiveCurrentCaseId}
+                onChange={(event) => {
+                  setSelectedCurrentCaseId(event.currentTarget.value);
+                  setSelectedCurrentIdentityKey("");
+                }}
+              >
+                <option value="">Choose a case</option>
+                {currentCaseIds.map((caseId) => (
+                  <option key={caseId} value={caseId}>
+                    {caseId}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {availableVersions.length > 0 ? (
+            <label className="verification-field">
+              Compared version
+              <select
+                value={effectiveVersionKey}
+                onChange={(event) => {
+                  setSelectedVersionKey(event.currentTarget.value);
+                  setSelectedIdentityKey("");
+                }}
+              >
+                {availableVersions.map((version) => (
+                  <option key={version.key} value={version.key}>
+                    {versionLabel(version)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {selectedManifestSummary ? (
+            <div className="verification-story-block">
+              <p className="verification-label">Captured</p>
+              <p className="verification-readonly">
+                {selectedManifestSummary.createdAt}
+              </p>
+            </div>
+          ) : null}
+        </div>
         {caseIdHint ? (
           <p className="verification-metadata">
             {storyListOpen ? "Current live case: " : "Mapped case: "}
@@ -1276,87 +1107,14 @@ export function VerificationPanel({ active }: { active: boolean }) {
             No archived verification entries match this story.
           </p>
         ) : null}
-        {!storyListOpen && currentCaseIds.length > 1 ? (
-          <label className="verification-field">
-            Current verification case
-            <select
-              value={effectiveCurrentCaseId}
-              onChange={(event) => {
-                setSelectedCurrentCaseId(event.currentTarget.value);
-                setSelectedCurrentIdentityKey("");
-              }}
-            >
-              <option value="">Choose a case</option>
-              {currentCaseIds.map((caseId) => (
-                <option key={caseId} value={caseId}>
-                  {caseId}
-                </option>
-              ))}
-            </select>
-          </label>
-        ) : null}
-        {!storyListOpen && currentTargetChoices.length > 0 ? (
-          <label className="verification-field">
-            Verification target
-            <select
-              value={effectiveCurrentIdentityKey}
-              onChange={(event) =>
-                setSelectedCurrentIdentityKey(event.currentTarget.value)
-              }
-              disabled={currentTargetChoices.length === 1}
-            >
-              {currentTargetChoices.length > 1 ? (
-                <option value="">Choose a target</option>
-              ) : null}
-              {currentTargetChoices.map((choice) => (
-                <option
-                  key={identityKey(choice.identity)}
-                  value={identityKey(choice.identity)}
-                >
-                  {choice.label} · {choice.identity.targetId} ·{" "}
-                  {choice.identity.capturePointId}
-                </option>
-              ))}
-            </select>
-          </label>
-        ) : null}
         {currentIdentity ? (
           <p className="verification-metadata">
             {storyListOpen ? "Current live identity: " : "Mapped identity: "}
             {formatIdentity(currentIdentity)}
           </p>
         ) : null}
-        {availableVersions.length > 0 ? (
-          <label className="verification-field">
-            Selected version
-            <select
-              value={effectiveVersionKey}
-              onChange={(event) => {
-                setSelectedVersionKey(event.currentTarget.value);
-                setSelectedIdentityKey("");
-                setSelectedRunId("");
-              }}
-            >
-              {availableVersions.map((version) => (
-                <option key={version.key} value={version.key}>
-                  {versionLabel(version)}
-                </option>
-              ))}
-            </select>
-          </label>
-        ) : null}
         {storyListOpen ? (
           <>
-            <div className="verification-inline-actions">
-              <button
-                type="button"
-                onClick={() => {
-                  setStoryListOpen(false);
-                }}
-              >
-                Return to current story
-              </button>
-            </div>
             <label className="verification-field">
               Search archived stories
               <input
@@ -1406,26 +1164,6 @@ export function VerificationPanel({ active }: { active: boolean }) {
             ) : null}
           </>
         ) : null}
-        {!storyListOpen ? (
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedVersionKey(effectiveVersionKey);
-              setSelectedIdentityKey(
-                currentIdentity &&
-                  versionIdentityChoices.some((choice) =>
-                    sameIdentity(choice.identity, currentIdentity),
-                  )
-                  ? identityKey(currentIdentity)
-                  : "",
-              );
-              setIdentitySearch("");
-              setStoryListOpen(true);
-            }}
-          >
-            All recordings
-          </button>
-        ) : null}
       </section>
 
       {!storyListOpen && !currentStoryId ? (
@@ -1463,37 +1201,19 @@ export function VerificationPanel({ active }: { active: boolean }) {
           </span>
         </p>
       ) : null}
-      {loadingRuns ? <p role="status">Loading archived runs…</p> : null}
+      {loadingRuns ? (
+        <p role="status" className="verification-muted">
+          Loading archived runs…
+        </p>
+      ) : null}
       {archiveBase &&
       selectedIdentity &&
       !loadingRuns &&
-      matchingRuns.length === 0 &&
+      !effectiveRunId &&
       !historyError ? (
         <p className="verification-empty">
           No archived runs match this verification identity.
         </p>
-      ) : null}
-
-      {matchingRuns.length > 0 && selectedIdentity ? (
-        <section
-          className="verification-section"
-          aria-labelledby="verification-run-heading"
-        >
-          <h3 id="verification-run-heading">Archived run</h3>
-          <label className="verification-field">
-            Archived run
-            <select
-              value={effectiveRunId}
-              onChange={(event) => setSelectedRunId(event.currentTarget.value)}
-            >
-              {matchingRuns.map((run) => (
-                <option key={run.runId} value={run.runId}>
-                  {run.runId} · {run.createdAt}
-                </option>
-              ))}
-            </select>
-          </label>
-        </section>
       ) : null}
 
       {manifestError ? (
@@ -1506,300 +1226,195 @@ export function VerificationPanel({ active }: { active: boolean }) {
           </span>
         </p>
       ) : null}
-      {loadingRun ? <p role="status">Loading archived evidence…</p> : null}
+      {loadingRun ? (
+        <p role="status" className="verification-muted">
+          Loading archived evidence…
+        </p>
+      ) : null}
 
       {manifest && selectedIdentity ? (
         <>
+          <div className="verification-controls">
+            <div
+              className="verification-locale-tabs"
+              role="tablist"
+              aria-label="Capture locale"
+            >
+              {localeChoices.map((locale) => (
+                <button
+                  key={locale}
+                  type="button"
+                  role="tab"
+                  aria-selected={localeKey(localeId) === localeKey(locale)}
+                  aria-controls="verification-evidence"
+                  onClick={() => setLocaleId(locale)}
+                >
+                  {localeLabel(locale)}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="verification-primary"
+              disabled={
+                loadingImages || comparableIds.length === 0 || comparing
+              }
+              onClick={() => void runComparison(comparableIds)}
+            >
+              {comparing ? "Comparing…" : "Compare pixels"}
+            </button>
+          </div>
+
           {selectedDeclaration?.status === "retired" ? (
             <p className="verification-notice">Retired at capture</p>
           ) : null}
-          {selectedCapture?.provenance.verified === false ? (
+          {provenanceCapture?.provenance.verified === false ? (
             <p className="verification-notice">
               Capture provenance is unverified
             </p>
           ) : null}
-          {selectedCapture?.provenance.reusedFrom ? (
+          {provenanceCapture?.provenance.reusedFrom ? (
             <p className="verification-metadata">
-              Reused from {selectedCapture.provenance.reusedFrom.runId},
-              captured {selectedCapture.provenance.reusedFrom.capturedAt}, app{" "}
-              {selectedCapture.provenance.reusedFrom.appCommit}, reference{" "}
-              {selectedCapture.provenance.reusedFrom.referenceCommit}
+              Reused from {provenanceCapture.provenance.reusedFrom.runId},
+              captured {provenanceCapture.provenance.reusedFrom.capturedAt}, app{" "}
+              {provenanceCapture.provenance.reusedFrom.appCommit}, reference{" "}
+              {provenanceCapture.provenance.reusedFrom.referenceCommit}
             </p>
           ) : null}
 
-          <section
-            className="verification-section"
-            aria-label="Viewport evidence"
-          >
-            <div className="verification-locale-control">
-              <p className="verification-metadata">Capture locale</p>
-              <div
-                className="verification-locale-tabs"
-                role="tablist"
-                aria-label="Capture locale"
-              >
-                {localeChoices.map((locale) => (
-                  <button
-                    key={locale}
-                    type="button"
-                    role="tab"
-                    aria-selected={localeKey(localeId) === localeKey(locale)}
-                    aria-controls="verification-profile-panel"
-                    onClick={() => setLocaleId(locale)}
-                  >
-                    {localeLabel(locale)}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div
-              className="verification-tabs"
-              role="tablist"
-              aria-label="Viewport profile"
-            >
-              {PROFILE_TABS.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={profileId === item.id}
-                  aria-controls="verification-profile-panel"
-                  onClick={() => setProfileId(item.id)}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-            <div
-              id="verification-profile-panel"
-              role="tabpanel"
-              aria-label={`${profile.label} evidence`}
-            >
-              <p className="verification-metadata">
-                Selected locale: {localeLabel(localeId)} · Recorded viewport:{" "}
-                {profile.size}
-              </p>
-              {!selectedCapture ? (
-                selectedLocaleHasEvidence ? (
-                  <p role="alert">
-                    This run has no outcome for the selected identity and
-                    profile.
-                  </p>
-                ) : (
-                  <p className="verification-notice">
-                    No archived evidence for {localeLabel(localeId)} in this
-                    run. The panel does not substitute another locale.
-                  </p>
-                )
-              ) : selectedCapture.status === "failed" ? (
-                <p role="alert">
-                  Capture failed: {selectedCapture.failure.message}
-                </p>
-              ) : selectedCapture.status === "not-selected" ? (
-                <p className="verification-notice">
-                  This profile was not selected
-                </p>
-              ) : (
-                <>
-                  {selectedCapture.reference ? (
-                    <div className="verification-image-grid">
-                      <ImageEvidence
-                        title="Reference"
-                        artifact={selectedCapture.reference}
-                        imageUrl={imageUrls.reference}
-                        cropRegion={selectedCapture.referenceRegion}
-                      />
-                      <ImageEvidence
-                        title="Site"
-                        artifact={selectedCapture.site}
-                        imageUrl={imageUrls.site}
-                      />
-                    </div>
-                  ) : (
-                    <>
-                      <p className="verification-notice">
-                        No matching reference at this viewport
-                      </p>
-                      <p className="verification-notice">
-                        Not scored at this profile
-                      </p>
-                      <div className="verification-image-grid">
-                        <ImageEvidence
-                          title="Site"
-                          artifact={selectedCapture.site}
-                          imageUrl={imageUrls.site}
-                        />
-                      </div>
-                    </>
-                  )}
-                  {loadingImages ? (
-                    <p role="status">Loading original screenshots…</p>
-                  ) : null}
-                  {imageError ? (
-                    <p role="alert" className="verification-error">
-                      Images: {imageError}
-                    </p>
-                  ) : null}
-                </>
-              )}
-            </div>
-          </section>
-
-          <section
-            className="verification-section"
-            aria-label="Assessment and review status"
-          >
-            <h3>Status</h3>
-            <h4>Assessment</h4>
-            <p>
-              {automaticStatus(
-                selectedAssessment,
-                selectedDeclaration?.scoreProfile,
-                profileId,
-              )}
-            </p>
-            {isSyntheticShadowAssessment(selectedAssessment) ? (
+          <div id="verification-evidence" role="tabpanel">
+            {!selectedLocaleHasEvidence ? (
               <p className="verification-notice">
-                This synthetic shadow assessment does not evaluate visual
-                quality. No external model produced this result.
+                No archived evidence for {localeLabel(localeId)} in this run.
+                The panel does not substitute another locale.
               </p>
-            ) : null}
-            {selectedAssessmentDetails.length > 0 ? (
-              <ul className="verification-details">
-                {selectedAssessmentDetails.map((detail) => (
-                  <li key={detail}>{detail}</li>
-                ))}
-              </ul>
-            ) : null}
-            {assessmentError ? (
-              <p role="alert" className="verification-error">
-                Assessment history: {assessmentError}
-              </p>
-            ) : null}
-            <h4>Calibration</h4>
-            <p>
-              {loadingCalibrations
-                ? "Loading calibration history…"
-                : isCalibratedAutoaccept
-                  ? "Calibrated autoaccept: manual human review is not required for this assessment"
-                  : selectedCalibration
-                    ? `Calibration decision: ${String(selectedCalibration.decision ?? "unknown")} - human review is required`
-                    : "No matching calibration - human review is required"}
-            </p>
-            {selectedCalibrationDetails.length > 0 ? (
-              <ul className="verification-details">
-                {selectedCalibrationDetails.map((detail) => (
-                  <li key={detail}>{detail}</li>
-                ))}
-              </ul>
-            ) : null}
-            {calibrationError ? (
-              <p role="alert" className="verification-error">
-                Calibration history: {calibrationError}
-              </p>
-            ) : null}
-            <h4>Human review</h4>
-            <p>
-              {selectedReview
-                ? recordDecision(selectedReview)
-                : isCalibratedAutoaccept
-                  ? "Human review not required by the matching calibrated policy"
-                  : "Human review pending"}
-            </p>
-            {selectedReview ? (
-              <p className="verification-metadata">
-                {reviewerLabel(selectedReview)} · {timestampOf(selectedReview)}
-              </p>
-            ) : null}
-            {relevantReviews.map((review) => (
-              <blockquote
-                key={
-                  typeof review.reviewId === "string"
-                    ? review.reviewId
-                    : `${timestampOf(review)}:${String(review.decision ?? "review")}`
-                }
-              >
-                {typeof review.comment === "string" && review.comment !== ""
-                  ? review.comment
-                  : "No comment recorded."}
-              </blockquote>
-            ))}
-            {reviewError ? (
-              <p role="alert" className="verification-error">
-                Review history: {reviewError}
-              </p>
-            ) : null}
-            <form
-              className="verification-review-form"
-              onSubmit={(event) => void submitReview(event)}
-            >
-              <label className="verification-field">
-                Review decision
-                <select
-                  value={reviewDecision}
-                  onChange={(event) =>
-                    setReviewDecision(
-                      event.currentTarget.value as
-                        "approved" | "changes-requested",
-                    )
-                  }
-                >
-                  <option value="approved">Approve this archived pair</option>
-                  <option value="changes-requested">Request changes</option>
-                </select>
-              </label>
-              <label className="verification-field">
-                Review comment
-                <textarea
-                  value={reviewComment}
-                  onChange={(event) =>
-                    setReviewComment(event.currentTarget.value)
-                  }
-                  rows={3}
-                  maxLength={4000}
-                />
-              </label>
-              {loadingArchiveInfo ? (
-                <p role="status" className="verification-metadata">
-                  Checking archive destination…
-                </p>
-              ) : archiveStorage ? (
-                <p className="verification-metadata">
-                  Review saves to{" "}
-                  {archiveStorage.kind === "filesystem"
-                    ? "local archive"
-                    : "R2 archive"}
-                  : {archiveStorage.location}
-                </p>
-              ) : archiveInfoError ? (
-                <p role="alert" className="verification-error">
-                  Archive destination: {archiveInfoError}
-                </p>
-              ) : (
-                <p role="status" className="verification-metadata">
-                  Archive destination is unavailable.
-                </p>
-              )}
-              {reviewBlockedReason ? (
-                <p className="verification-hint">{reviewBlockedReason}</p>
-              ) : null}
-              <button
-                type="submit"
-                disabled={
-                  !archiveBase ||
-                  !archiveStorage ||
-                  !manifest ||
-                  !selectedIdentity ||
-                  !selectedCapture ||
-                  selectedCapture.status !== "captured" ||
-                  !selectedCapture.reference ||
-                  savingReview
-                }
-              >
-                {savingReview ? "Saving review…" : "Submit review"}
-              </button>
-            </form>
-          </section>
+            ) : (
+              <>
+                <section className="verification-section" aria-label="Status">
+                  <div className="verification-section-heading">
+                    <h3>Status</h3>
+                    <p className="verification-metadata">
+                      Selected locale: {localeLabel(localeId)}
+                    </p>
+                  </div>
+                  <div className="verification-status-grid">
+                    {PROFILE_TABS.map((item) => {
+                      const status = profileStatus(
+                        captures[item.id],
+                        comparisons[item.id],
+                      );
+                      return (
+                        <div key={item.id} className="verification-status-card">
+                          <h4>{item.shortLabel}</h4>
+                          <span className="verification-metadata">
+                            {item.size}
+                          </span>
+                          <Chip tone={status.tone}>{status.text}</Chip>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {loadingImages ? (
+                  <p role="status" className="verification-muted">
+                    Loading original screenshots…
+                  </p>
+                ) : null}
+                {imageError ? (
+                  <p role="alert" className="verification-error">
+                    Images: {imageError}
+                  </p>
+                ) : null}
+
+                {PROFILE_TABS.map((item) => {
+                  const capture = captures[item.id];
+                  const urls = imageUrls[item.id];
+                  return (
+                    <section
+                      key={item.id}
+                      className="verification-profile"
+                      data-profile={item.id}
+                      aria-label={`${item.shortLabel} evidence`}
+                    >
+                      <div className="verification-profile-heading">
+                        <h3>{item.shortLabel}</h3>
+                        <span className="verification-metadata">
+                          {item.size}
+                        </span>
+                        {capture?.status === "captured" ? (
+                          <span
+                            className="verification-chip"
+                            title="Both images are cropped to the component box and aligned at its top-left corner before comparing."
+                          >
+                            Anchor{" "}
+                            {describeAnchor(capture.siteRegion, capture.site)}
+                          </span>
+                        ) : null}
+                        {capture?.status === "captured" && capture.reference ? (
+                          <button
+                            type="button"
+                            disabled={
+                              !comparable(item.id) ||
+                              comparisons[item.id] === "running"
+                            }
+                            onClick={() => void runComparison([item.id])}
+                          >
+                            {comparisons[item.id] &&
+                            comparisons[item.id] !== "running"
+                              ? "Recompare"
+                              : "Compare pixels"}
+                          </button>
+                        ) : null}
+                      </div>
+                      {!capture ? (
+                        <p role="alert">
+                          This run has no outcome for the selected identity and
+                          profile.
+                        </p>
+                      ) : capture.status === "failed" ? (
+                        <p role="alert">
+                          Capture failed: {capture.failure.message}
+                        </p>
+                      ) : capture.status === "not-selected" ? (
+                        <p className="verification-notice">
+                          This profile was not selected
+                        </p>
+                      ) : (
+                        <div className="verification-image-grid">
+                          {capture.reference ? (
+                            <ImageEvidence
+                              title="Reference"
+                              artifact={capture.reference}
+                              imageUrl={urls?.reference}
+                              cropRegion={capture.referenceRegion}
+                            />
+                          ) : (
+                            <p className="verification-notice">
+                              No matching reference at this viewport. Not scored
+                              at this profile.
+                            </p>
+                          )}
+                          <ImageEvidence
+                            title="Site"
+                            artifact={capture.site}
+                            imageUrl={urls?.site}
+                          />
+                          {capture.reference ? (
+                            <DiffEvidence
+                              comparison={comparisons[item.id]}
+                              canCompare={comparable(item.id)}
+                              aspect={`${anchorOf(capture.siteRegion, capture.site).width} / ${anchorOf(capture.siteRegion, capture.site).height}`}
+                            />
+                          ) : null}
+                        </div>
+                      )}
+                    </section>
+                  );
+                })}
+              </>
+            )}
+          </div>
 
           <section className="verification-section" aria-label="Run provenance">
             <details className="verification-details-toggle" open>
@@ -1808,20 +1423,26 @@ export function VerificationPanel({ active }: { active: boolean }) {
                   {manifest.runId}
                 </h3>
               </summary>
-              <p>Run created: {manifest.createdAt}</p>
+              <p className="verification-metadata">
+                Run created: {manifest.createdAt}
+              </p>
               <dl className="verification-provenance">
                 <div>
                   <dt>App checkpoint</dt>
                   <dd>
                     {manifest.checkpoint.app.ref} ·{" "}
-                    {manifest.checkpoint.app.commit}
+                    <span title={manifest.checkpoint.app.commit}>
+                      {shortCommit(manifest.checkpoint.app.commit)}
+                    </span>
                   </dd>
                 </div>
                 <div>
                   <dt>Story reference</dt>
                   <dd>
                     {manifest.checkpoint.reference.ref} ·{" "}
-                    {manifest.checkpoint.reference.commit}
+                    <span title={manifest.checkpoint.reference.commit}>
+                      {shortCommit(manifest.checkpoint.reference.commit)}
+                    </span>
                   </dd>
                 </div>
                 <div>
@@ -1837,14 +1458,14 @@ export function VerificationPanel({ active }: { active: boolean }) {
                 <div>
                   <dt>Source capture time</dt>
                   <dd>
-                    {selectedCapture?.provenance.capturedAt ?? "Not recorded"}
+                    {provenanceCapture?.provenance.capturedAt ?? "Not recorded"}
                   </dd>
                 </div>
                 <div>
                   <dt>Capture source commits</dt>
                   <dd>
-                    {selectedCapture
-                      ? `${selectedCapture.provenance.appCommit} · ${selectedCapture.provenance.referenceCommit}`
+                    {provenanceCapture
+                      ? `${shortCommit(provenanceCapture.provenance.appCommit)} · ${shortCommit(provenanceCapture.provenance.referenceCommit)}`
                       : "Not recorded"}
                   </dd>
                 </div>

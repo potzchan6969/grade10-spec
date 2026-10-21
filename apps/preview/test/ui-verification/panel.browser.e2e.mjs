@@ -10,7 +10,6 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { createArchive } from "@grade10/ui-verification/archive";
 import { createArchiveHandler } from "@grade10/ui-verification/archive-api";
-import { assessReport } from "@grade10/ui-verification/scoring";
 
 const directory = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const repositoryRoot = resolve(directory, "../../../..");
@@ -99,21 +98,19 @@ async function waitForCondition(check, description) {
   assert.fail(`Timed out waiting for ${description}.`);
 }
 
-async function waitForImageDimensions(page, alt, viewport) {
-  const image = page.getByRole("img", { name: alt });
+async function waitForImageDimensions(scope, alt, viewport) {
+  const image = scope.getByRole("img", { name: alt });
   await image.waitFor({ state: "visible" });
-  await page.waitForFunction(
-    ({ expectedAlt, width, height }) => {
-      const element = Array.from(document.images).find(
-        (candidate) => candidate.alt === expectedAlt,
-      );
-      return (
-        element?.complete === true &&
-        element.naturalWidth === width &&
-        element.naturalHeight === height
-      );
-    },
-    { expectedAlt: alt, ...viewport },
+  await waitForCondition(
+    () =>
+      image.evaluate(
+        (element, size) =>
+          element.complete === true &&
+          element.naturalWidth === size.width &&
+          element.naturalHeight === size.height,
+        viewport,
+      ),
+    `${alt} to load at ${viewport.width} x ${viewport.height}`,
   );
   return image;
 }
@@ -159,9 +156,11 @@ async function screenshot(browser, viewport, text, background, locale = "en") {
 }
 
 async function assertSelectedRunVisible(page, runId) {
-  const runSelect = page.getByRole("combobox", { name: "Archived run" });
-  await runSelect.waitFor({ state: "visible" });
-  assert.equal(await runSelect.inputValue(), runId);
+  assert.equal(
+    await page.getByRole("combobox", { name: "Archived run" }).count(),
+    0,
+    "a version shows one run, so there is no run selector",
+  );
   const runHeading = page.getByRole("heading", { name: runId, exact: true });
   try {
     await runHeading.waitFor({ timeout: 5000 });
@@ -170,22 +169,24 @@ async function assertSelectedRunVisible(page, runId) {
       tmpdir(),
       `ui-verification-${runId}-failure.png`,
     );
-    const diagnostic = {
-      selectedRun: await runSelect.inputValue().catch(() => "unavailable"),
-      panelText: await page
-        .locator(".verification-panel")
-        .innerText()
-        .then((text) => text.slice(-2500))
-        .catch(() => "unavailable"),
-      screenshotPath,
-    };
+    console.error(
+      "Selected archived run diagnostics:\n" +
+        JSON.stringify(
+          {
+            panelText: await page
+              .locator(".verification-panel")
+              .innerText()
+              .then((text) => text.slice(-2500))
+              .catch(() => "unavailable"),
+            screenshotPath,
+          },
+          null,
+          2,
+        ),
+    );
     await page
       .screenshot({ path: screenshotPath, fullPage: true })
       .catch(() => {});
-    console.error(
-      "Selected archived run diagnostics:\n" +
-        JSON.stringify(diagnostic, null, 2),
-    );
     throw error;
   }
 }
@@ -454,126 +455,6 @@ async function publishReferenceStoryRun(archive, browser) {
   );
 }
 
-async function publishAssessment(
-  archive,
-  manifest,
-  declaration,
-  locale = "en",
-) {
-  const capture = manifest.captures.find(
-    (entry) =>
-      entry.caseId === declaration.caseId &&
-      entry.targetId === declaration.targetId &&
-      entry.capturePointId === declaration.capturePointId &&
-      entry.profileId === declaration.scoreProfile &&
-      (entry.locale ?? "en").toLowerCase() === locale.toLowerCase(),
-  );
-  assert(capture && capture.status === "captured" && capture.reference);
-  const scorer = {
-    id: "fixture-scorer",
-    version: "fixture-v1",
-    model: "fixture-model",
-  };
-  const rubricVersion = "fixture-rubric-v1";
-  const contractHash = "c".repeat(64);
-  const expected = {
-    caseId: capture.caseId,
-    targetId: capture.targetId,
-    capturePointId: capture.capturePointId,
-    profileId: capture.profileId,
-    locale,
-    scorerId: scorer.id,
-    scorerVersion: scorer.version,
-    scorerModel: scorer.model,
-    rubricVersion,
-    contractHash,
-    siteSha256: capture.site.sha256,
-    referenceSha256: capture.reference.sha256,
-    captureStatus: capture.status,
-    provenanceVerified: capture.provenance.verified,
-    failureCount: 0,
-  };
-  const assessment = assessReport({
-    expected,
-    report: {
-      schemaVersion: 1,
-      ...expected,
-      locale,
-      scorer,
-      imageHashes: {
-        site: capture.site.sha256,
-        reference: capture.reference.sha256,
-      },
-      similarity: locale === "zh-Hant" ? 98 : 99,
-      dimensions: Object.fromEntries(
-        ["layout", "typography", "color", "imagery", "content"].map((name) => [
-          name,
-          { score: 99, findings: [] },
-        ]),
-      ),
-      criticalMismatches: [],
-    },
-  });
-  return archive.createAssessment({ runId: manifest.runId, ...assessment });
-}
-
-async function publishReview(archive, manifest, declaration, locale, comment) {
-  return archive.createReview(
-    {
-      runId: manifest.runId,
-      caseId: declaration.caseId,
-      targetId: declaration.targetId,
-      capturePointId: declaration.capturePointId,
-      profileId: declaration.scoreProfile,
-      locale,
-      decision: "approved",
-      comment,
-    },
-    { subject: `${locale}-fixture-reviewer` },
-  );
-}
-
-async function publishCalibration(archive, runId, assessment, review, locale) {
-  const calibrationKey = {
-    scorerId: assessment.scorer.id,
-    scorerVersion: assessment.scorer.version,
-    scorerModel: assessment.scorer.model,
-    profileId: assessment.profileId,
-    contractHash: assessment.contractHash,
-    rubricVersion: assessment.rubricVersion,
-    labelPolicyVersion: "locale-review-v1",
-    locale,
-  };
-  const observation = {
-    sourceAssessmentId: assessment.assessmentId,
-    sourceRunId: runId,
-    reviewId: review.reviewId,
-    reviewerId: `${locale}-fixture-reviewer`,
-    locale,
-    siteSha256: assessment.imageHashes.site,
-    referenceSha256: assessment.imageHashes.reference,
-    split: "held-out",
-    independent: true,
-    humanApproved: true,
-    similarity: assessment.similarity,
-    criticalVeto: assessment.criticalVeto,
-    unknownCategory: assessment.unknownCategory,
-    provenanceVerified: assessment.provenanceVerified,
-    captureStatus: "captured",
-  };
-  return archive.createCalibration({
-    runId,
-    assessmentId: assessment.assessmentId,
-    locale,
-    calibration: {
-      schemaVersion: 1,
-      key: calibrationKey,
-      observations: [observation],
-    },
-    policy: { labelPolicyVersion: "locale-review-v1" },
-  });
-}
-
 function mimeType(pathname) {
   switch (extname(pathname).toLowerCase()) {
     case ".html":
@@ -697,7 +578,33 @@ async function startWorkbenchServer(root, archive) {
   };
 }
 
-test("the central workbench uses its local archive and reviews versioned story history", {
+const PROFILE_LABELS = {
+  desktop: "Desktop",
+  tablet: "Tablet",
+  mobile: "Mobile",
+};
+
+async function startPanel(browser, server, storyId = STORY_ID) {
+  const page = await browser.newPage();
+  await page.goto(`${server.origin}/?path=/story/${storyId}`, {
+    waitUntil: "domcontentloaded",
+  });
+  await page.getByRole("tab", { name: "Verification" }).click();
+  return page;
+}
+
+async function selectFirstTarget(page) {
+  const targetSelect = page.getByRole("combobox", {
+    name: "Verification target",
+  });
+  await targetSelect.waitFor({ state: "visible" });
+  await targetSelect.selectOption(
+    `${DECLARATIONS[0].caseId}::${DECLARATIONS[0].targetId}::${DECLARATIONS[0].capturePointId}`,
+  );
+  return targetSelect;
+}
+
+test("the central workbench shows the newest run of a version at all three sizes", {
   timeout: 180_000,
 }, async (t) => {
   const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-preview-"));
@@ -711,7 +618,7 @@ test("the central workbench uses its local archive and reviews versioned story h
 
   const archive = await createArchive(archiveRoot);
   browser = await chromium.launch({ headless: true });
-  const oldRun = await publishRun(archive, browser, {
+  await publishRun(archive, browser, {
     runId: "preview-history-0001",
     createdAt: "2026-10-08T10:01:00.000Z",
     storyId: "pages-not-found--renamed",
@@ -725,7 +632,6 @@ test("the central workbench uses its local archive and reviews versioned story h
     appRef: "app-release-new",
     referenceRef: "reference-release-new",
   });
-  await publishAssessment(archive, oldRun, DECLARATIONS[0]);
   server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
 
   const page = await browser.newPage();
@@ -761,12 +667,13 @@ test("the central workbench uses its local archive and reviews versioned story h
     0,
   );
   assert.ok(
-    server.apiRequests.some((entry) => entry === "GET /api/archive-info"),
-    "the panel should discover its archive destination on the workbench origin",
-  );
-  assert.ok(
     server.apiRequests.some((entry) => entry.startsWith("GET /api/runs?")),
     "the panel should request archive runs on cold load",
+  );
+  assert.equal(
+    server.apiRequests.some((entry) => entry.startsWith("POST /api/reviews")),
+    false,
+    "the panel does not record reviews",
   );
   assert.equal(
     requestOrigins.has("http://localhost:4466"),
@@ -784,7 +691,7 @@ test("the central workbench uses its local archive and reviews versioned story h
   assert.equal(await targetSelect.locator('option:not([value=""])').count(), 2);
 
   const versionSelect = page.getByRole("combobox", {
-    name: "Selected version",
+    name: "Compared version",
   });
   await versionSelect.waitFor();
   assert.equal(
@@ -793,33 +700,25 @@ test("the central workbench uses its local archive and reviews versioned story h
     "different tag labels for the same commit pair should remain one version",
   );
 
-  const runSelect = page.getByRole("combobox", { name: "Archived run" });
-  await runSelect.waitFor({ state: "visible" });
-  assert.deepEqual(
-    await runSelect
-      .locator("option")
-      .evaluateAll((options) => options.map((option) => option.value)),
-    ["preview-history-0002", "preview-history-0001"],
-    "repeat runs for the selected commit pair should be newest first",
+  await assertSelectedRunVisible(page, "preview-history-0002");
+  assert.equal(
+    await page
+      .getByRole("heading", { name: "preview-history-0001", exact: true })
+      .count(),
+    0,
+    "a version shows its newest run only",
   );
-  await runSelect.selectOption("preview-history-0001");
-  await page.getByText("Model decision: shadow", { exact: true }).waitFor();
   await page
-    .getByText(`Review saves to local archive: ${archiveRoot}`, { exact: true })
+    .locator(".verification-readonly", {
+      hasText: "2026-10-09T10:01:00.000Z",
+    })
     .waitFor();
-  await page.getByRole("tab", { name: "Desktop 1440x900" }).click();
-  const desktopViewport = PROFILE_SIZES.desktop;
+
+  const desktop = page.getByRole("region", { name: "Desktop evidence" });
   const siteImage = await waitForImageDimensions(
-    page,
+    desktop,
     "Site full viewport",
-    desktopViewport,
-  );
-  assert.deepEqual(
-    await siteImage.evaluate((image) => [
-      image.naturalWidth,
-      image.naturalHeight,
-    ]),
-    [1440, 900],
+    PROFILE_SIZES.desktop,
   );
   assert.equal(
     await siteImage
@@ -831,9 +730,9 @@ test("the central workbench uses its local archive and reviews versioned story h
     "a recorded site region must not crop the full viewport image",
   );
   const referenceImage = await waitForImageDimensions(
-    page,
+    desktop,
     "Reference capture region",
-    desktopViewport,
+    PROFILE_SIZES.desktop,
   );
   assert.equal(
     await referenceImage
@@ -845,88 +744,115 @@ test("the central workbench uses its local archive and reviews versioned story h
     "the reference image should display the recorded crop region",
   );
   assert.equal(
-    await page
+    await desktop
       .getByRole("link", { name: /Download original Reference PNG/ })
       .getAttribute("download"),
     "reference.png",
     "the full original reference PNG should remain downloadable",
   );
-  await page.getByRole("tab", { name: "Tablet 768x1024" }).click();
-  await page
-    .getByText(
-      "The selected target is scored at the desktop profile. No assessment is expected for tablet.",
-      { exact: true },
-    )
-    .waitFor();
-  await waitForImageDimensions(
-    page,
-    "Site full viewport",
-    PROFILE_SIZES.tablet,
-  );
-  assert.deepEqual(
-    await page
-      .getByRole("img", { name: "Site full viewport" })
-      .evaluate((image) => [image.naturalWidth, image.naturalHeight]),
-    [768, 1024],
-  );
-  await page.getByRole("tab", { name: "Mobile 390x844" }).click();
-  await page
-    .getByText(
-      "The selected target is scored at the desktop profile. No assessment is expected for mobile.",
-      { exact: true },
-    )
-    .waitFor();
-  await waitForImageDimensions(
-    page,
-    "Site full viewport",
-    PROFILE_SIZES.mobile,
-  );
-  assert.deepEqual(
-    await page
-      .getByRole("img", { name: "Site full viewport" })
-      .evaluate((image) => [image.naturalWidth, image.naturalHeight]),
-    [390, 844],
-  );
-
-  await page.getByRole("tab", { name: "Desktop 1440x900" }).click();
-  await waitForImageDimensions(
-    page,
-    "Site full viewport",
-    PROFILE_SIZES.desktop,
-  );
-  await page.getByLabel("Review decision").selectOption("approved");
-  await page
-    .getByLabel("Review comment")
-    .fill("The archived page target is approved.");
-  await page.getByRole("button", { name: "Submit review" }).click();
-  await page
-    .getByText("The archived page target is approved.", { exact: true })
-    .waitFor();
-  assert.ok(
-    server.apiRequests.some((entry) => entry.startsWith("POST /api/reviews")),
-    "review submission should reach the archive API",
-  );
-
-  await page.reload({ waitUntil: "domcontentloaded" });
-  await page.getByRole("tab", { name: "Verification" }).click();
-  await page
-    .getByRole("combobox", { name: "Verification target" })
-    .waitFor({ state: "visible" });
-  await page
-    .getByRole("combobox", { name: "Verification target" })
-    .selectOption(
-      `${DECLARATIONS[0].caseId}::${DECLARATIONS[0].targetId}::${DECLARATIONS[0].capturePointId}`,
+  for (const profileId of ["tablet", "mobile"]) {
+    const region = page.getByRole("region", {
+      name: `${PROFILE_LABELS[profileId]} evidence`,
+    });
+    await waitForImageDimensions(
+      region,
+      "Site full viewport",
+      PROFILE_SIZES[profileId],
     );
+    await waitForImageDimensions(
+      region,
+      "Reference capture region",
+      PROFILE_SIZES[profileId],
+    );
+  }
+  assert.equal(
+    await page.getByRole("tab", { name: /^(Desktop|Tablet|Mobile)/ }).count(),
+    0,
+    "the three sizes are shown together, not behind tabs",
+  );
+
+  assert.equal(
+    await page.getByText("Not compared", { exact: true }).count(),
+    3,
+  );
   await page
-    .getByRole("combobox", { name: "Archived run" })
-    .selectOption("preview-history-0001");
-  await page
-    .getByText("The archived page target is approved.", { exact: true })
-    .waitFor();
+    .locator(".verification-controls")
+    .getByRole("button", { name: "Compare pixels" })
+    .click();
+  await waitForCondition(
+    async () =>
+      (await page.getByText("Size differs", { exact: true }).count()) === 3,
+    "a size mismatch for each recorded anchor",
+  );
+  assert.equal(
+    await page.getByText(/The anchors differ in size/).count(),
+    3,
+    "unequal anchors explain themselves instead of resizing",
+  );
   await page.close();
 });
 
-test("locale and viewport selection show the exact localized evidence and histories", {
+test("pixel comparison crops to the anchor and draws the diff in the browser", {
+  timeout: 180_000,
+}, async (t) => {
+  const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-pixels-"));
+  let server;
+  let browser;
+  t.after(async () => {
+    await browser?.close();
+    await server?.close();
+    await rm(archiveRoot, { recursive: true, force: true });
+  });
+
+  const archive = await createArchive(archiveRoot);
+  browser = await chromium.launch({ headless: true });
+  await publishRun(archive, browser, {
+    runId: "pixel-compare-0001",
+    createdAt: "2026-10-12T10:01:00.000Z",
+    storyId: STORY_ID,
+    includeReferenceRegion: false,
+  });
+  server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
+
+  const page = await startPanel(browser, server);
+  await selectFirstTarget(page);
+  await page.getByRole("region", { name: "Run provenance" }).waitFor();
+
+  const compareAll = page
+    .locator(".verification-controls")
+    .getByRole("button", { name: "Compare pixels" });
+  await waitForCondition(
+    async () => await compareAll.isEnabled(),
+    "all screenshots to load before comparing",
+  );
+  await compareAll.click();
+  for (const [profileId, viewport] of Object.entries(PROFILE_SIZES)) {
+    const region = page.getByRole("region", {
+      name: `${PROFILE_LABELS[profileId]} evidence`,
+    });
+    await waitForImageDimensions(region, "Pixel difference overlay", viewport);
+    assert.match(
+      await region.locator(".verification-chip").first().innerText(),
+      /^Anchor 0,0 · \d+×\d+$/,
+      "a capture without a region is anchored to the whole viewport",
+    );
+    await region.getByRole("button", { name: "Recompare" }).waitFor();
+  }
+  const outcomes = await page
+    .locator(".verification-status-card .verification-chip")
+    .allInnerTexts();
+  assert.equal(outcomes.length, 3);
+  for (const outcome of outcomes) {
+    assert.match(outcome, /differ$/, "each size reports its own result");
+  }
+  assert.ok(
+    (await page.locator(".verification-diff-box").count()) >= 3,
+    "differing areas are boxed on the overlay",
+  );
+  await page.close();
+});
+
+test("locale selection shows the exact localized evidence for all three sizes", {
   timeout: 180_000,
 }, async (t) => {
   const archiveRoot = await mkdtemp(join(tmpdir(), "ui-verification-locales-"));
@@ -966,75 +892,11 @@ test("locale and viewport selection show the exact localized evidence and histor
       }
     }
   }
-
   const declaration = DECLARATIONS[0];
-  const englishAssessment = await publishAssessment(
-    archive,
-    manifest,
-    declaration,
-    "en",
-  );
-  const traditionalAssessment = await publishAssessment(
-    archive,
-    manifest,
-    declaration,
-    "zh-Hant",
-  );
-  const englishReview = await publishReview(
-    archive,
-    manifest,
-    declaration,
-    "en",
-    "English-only review history.",
-  );
-  const traditionalReview = await publishReview(
-    archive,
-    manifest,
-    declaration,
-    "zh-Hant",
-    "繁體中文審查紀錄。",
-  );
-  await publishCalibration(
-    archive,
-    manifest.runId,
-    englishAssessment,
-    englishReview,
-    "en",
-  );
-  await publishCalibration(
-    archive,
-    manifest.runId,
-    traditionalAssessment,
-    traditionalReview,
-    "zh-Hant",
-  );
-  assert.equal(
-    (await archive.listReviews({ runId: manifest.runId, locale: "en" }))
-      .reviews[0]?.comment,
-    "English-only review history.",
-  );
-  assert.equal(
-    (await archive.listReviews({ runId: manifest.runId, locale: "zh-Hant" }))
-      .reviews[0]?.comment,
-    "繁體中文審查紀錄。",
-  );
   server = await startWorkbenchServer(STORYBOOK_STATIC, archive);
 
-  const page = await browser.newPage();
-  await page.goto(`${server.origin}/?path=/story/${STORY_ID}`, {
-    waitUntil: "domcontentloaded",
-  });
-  await page.getByRole("tab", { name: "Verification" }).click();
-  const targetSelect = page.getByRole("combobox", {
-    name: "Verification target",
-  });
-  await targetSelect.waitFor({ state: "visible" });
-  await targetSelect.selectOption(
-    `${declaration.caseId}::${declaration.targetId}::${declaration.capturePointId}`,
-  );
-  await page
-    .getByRole("combobox", { name: "Archived run" })
-    .selectOption(manifest.runId);
+  const page = await startPanel(browser, server);
+  await selectFirstTarget(page);
   await page.getByRole("region", { name: "Run provenance" }).waitFor();
 
   const localeTabs = page.getByRole("tablist", { name: "Capture locale" });
@@ -1051,57 +913,6 @@ test("locale and viewport selection show the exact localized evidence and histor
       .getAttribute("aria-selected"),
     "true",
   );
-  await waitForCondition(
-    () =>
-      server.apiRequests.some((entry) => {
-        if (!entry.startsWith("GET /api/reviews?")) return false;
-        const url = new URL(entry.slice("GET ".length), "http://localhost");
-        return (
-          url.searchParams.get("runId") === manifest.runId &&
-          url.searchParams.get("locale") === "en"
-        );
-      }),
-    "the English review-history query",
-  );
-  try {
-    await page
-      .getByText("English-only review history.", { exact: true })
-      .waitFor({ timeout: 15_000 });
-  } catch (error) {
-    const [englishReviews, traditionalReviews] = await Promise.all([
-      archive.listReviews({ runId: manifest.runId, locale: "en" }),
-      archive.listReviews({ runId: manifest.runId, locale: "zh-Hant" }),
-    ]);
-    console.error(
-      "Localized review history diagnostics:\n" +
-        JSON.stringify(
-          {
-            panelText: await page
-              .locator(".verification-panel")
-              .innerText()
-              .then((text) => text.slice(-3000))
-              .catch(() => "unavailable"),
-            reviewRequests: server.apiRequests.filter((entry) =>
-              entry.startsWith("GET /api/reviews?"),
-            ),
-            englishReviewComments: englishReviews.reviews.map(
-              (review) => review.comment,
-            ),
-            traditionalReviewComments: traditionalReviews.reviews.map(
-              (review) => review.comment,
-            ),
-          },
-          null,
-          2,
-        ),
-    );
-    throw error;
-  }
-  assert.equal(
-    await page.getByText("繁體中文審查紀錄。", { exact: true }).count(),
-    0,
-  );
-  await page.getByText(/Image similarity: 99/).waitFor();
 
   const objectKeys = () =>
     server.apiRequests
@@ -1120,27 +931,14 @@ test("locale and viewport selection show the exact localized evidence and histor
       async () => (await localeTab.getAttribute("aria-selected")) === "true",
       `${localeName} locale selection`,
     );
-    assert.equal(await localeTab.getAttribute("aria-selected"), "true");
     await waitForCondition(
       async () =>
         (await page.getByText(`Selected locale: ${localeName}`).count()) === 1,
       `${localeName} locale metadata`,
     );
     for (const [profileId, viewport] of Object.entries(PROFILE_SIZES)) {
-      await page
-        .getByRole("tab", {
-          name: {
-            desktop: "Desktop 1440x900",
-            tablet: "Tablet 768x1024",
-            mobile: "Mobile 390x844",
-          }[profileId],
-        })
-        .click();
-      const siteImage = page.getByRole("img", {
-        name: "Site full viewport",
-      });
-      const referenceImage = page.getByRole("img", {
-        name: "Reference capture region",
+      const region = page.getByRole("region", {
+        name: `${PROFILE_LABELS[profileId]} evidence`,
       });
       const expectedCapture = manifest.captures.find(
         (capture) =>
@@ -1151,31 +949,21 @@ test("locale and viewport selection show the exact localized evidence and histor
           capture.profileId === profileId,
       );
       assert(expectedCapture?.reference);
-      await page
+      await region
         .getByRole("link", {
           name: `Download original Site PNG · SHA-256 ${expectedCapture.site.sha256}`,
         })
         .waitFor();
-      await page
+      await region
         .getByRole("link", {
           name: `Download original Reference PNG · SHA-256 ${expectedCapture.reference.sha256}`,
         })
         .waitFor();
-      await waitForImageDimensions(page, "Site full viewport", viewport);
-      await waitForImageDimensions(page, "Reference capture region", viewport);
-      assert.deepEqual(
-        await siteImage.evaluate((image) => [
-          image.naturalWidth,
-          image.naturalHeight,
-        ]),
-        [viewport.width, viewport.height],
-      );
-      assert.deepEqual(
-        await referenceImage.evaluate((image) => [
-          image.naturalWidth,
-          image.naturalHeight,
-        ]),
-        [viewport.width, viewport.height],
+      await waitForImageDimensions(region, "Site full viewport", viewport);
+      await waitForImageDimensions(
+        region,
+        "Reference capture region",
+        viewport,
       );
       const expectedPrefix = `ui-verification/${manifest.runId}/${declaration.caseId}/${declaration.targetId}/${declaration.capturePointId}/${locale}/${profileId}/`;
       await waitForCondition(() => {
@@ -1185,64 +973,8 @@ test("locale and viewport selection show the exact localized evidence and histor
           fetchedKeys.includes(`${expectedPrefix}reference.png`)
         );
       }, `${locale}/${profileId} localized image requests`);
-      const fetchedKeys = objectKeys();
-      assert(fetchedKeys.includes(`${expectedPrefix}site.png`));
-      assert(fetchedKeys.includes(`${expectedPrefix}reference.png`));
     }
   }
-
-  const traditionalTab = page.getByRole("tab", {
-    name: "Traditional Chinese (zh-Hant)",
-  });
-  await traditionalTab.click();
-  await page.getByRole("tab", { name: "Desktop 1440x900" }).click();
-  await page.getByText("Image similarity: 98").waitFor();
-  assert.equal(
-    await page.getByText("Image similarity: 98").count(),
-    1,
-    "the assessment must come from the selected locale",
-  );
-  await page.getByText("繁體中文審查紀錄。", { exact: true }).waitFor();
-  assert.equal(
-    await page
-      .getByText("English-only review history.", { exact: true })
-      .count(),
-    0,
-    "English review history must not appear for a Chinese capture",
-  );
-  await page.getByLabel("Review comment").fill("繁體中文審查已更新。 ");
-  await page.getByRole("button", { name: "Submit review" }).click();
-  await page.getByText("繁體中文審查已更新。", { exact: true }).waitFor();
-  assert(
-    server.reviewRequests.some(
-      (review) =>
-        review.runId === manifest.runId &&
-        review.locale === "zh-Hant" &&
-        review.comment === "繁體中文審查已更新。",
-    ),
-    "the review request must retain the selected locale",
-  );
-  assert(
-    server.apiRequests.some(
-      (entry) =>
-        entry.startsWith("GET /api/reviews?") &&
-        entry.includes("locale=zh-Hant"),
-    ),
-  );
-  assert(
-    server.apiRequests.some(
-      (entry) =>
-        entry.startsWith("GET /api/assessments?") &&
-        entry.includes("locale=zh-Hant"),
-    ),
-  );
-  assert(
-    server.apiRequests.some(
-      (entry) =>
-        entry.startsWith("GET /api/calibrations?") &&
-        entry.includes("locale=zh-Hant"),
-    ),
-  );
   assert(
     server.apiRequests.some(
       (entry) =>
@@ -1250,15 +982,15 @@ test("locale and viewport selection show the exact localized evidence and histor
     ),
     "run discovery must include manifests with non-English-only matrices",
   );
-
-  await page.getByRole("tab", { name: "English (en)" }).click();
-  await page
-    .getByText("English-only review history.", { exact: true })
-    .waitFor();
-  assert.equal(
-    await page.getByText("繁體中文審查紀錄。", { exact: true }).count(),
-    0,
-  );
+  for (const route of ["reviews", "assessments", "calibrations"]) {
+    assert.equal(
+      server.apiRequests.some((entry) =>
+        entry.startsWith(`GET /api/${route}?`),
+      ),
+      false,
+      `the panel does not read ${route}`,
+    );
+  }
   await page.close();
 });
 
@@ -1314,9 +1046,6 @@ test("new locale subsets stay exact while legacy English runs show missing evide
     .selectOption(
       `${DECLARATIONS[0].caseId}::${DECLARATIONS[0].targetId}::${DECLARATIONS[0].capturePointId}`,
     );
-  await page
-    .getByRole("combobox", { name: "Archived run" })
-    .selectOption(requestedEnglish.runId);
   await page.getByRole("region", { name: "Run provenance" }).waitFor();
   await page
     .getByRole("tab", { name: "English (en)" })
@@ -1335,14 +1064,11 @@ test("new locale subsets stay exact while legacy English runs show missing evide
       .getAttribute("aria-selected"),
     "true",
   );
-  await page.getByRole("img", { name: "Site full viewport" }).waitFor();
+  await page.getByRole("img", { name: "Site full viewport" }).first().waitFor();
 
   await page
-    .getByRole("combobox", { name: "Selected version" })
+    .getByRole("combobox", { name: "Compared version" })
     .selectOption(JSON.stringify(["e".repeat(40), "f".repeat(40)]));
-  await page
-    .getByRole("combobox", { name: "Archived run" })
-    .selectOption(legacy.runId);
   const traditionalTab = page.getByRole("tab", {
     name: "Traditional Chinese (zh-Hant)",
   });
@@ -1368,7 +1094,7 @@ test("new locale subsets stay exact while legacy English runs show missing evide
     "the panel must not reuse the English image for a missing locale",
   );
   await page.getByRole("tab", { name: "English (en)" }).click();
-  await page.getByRole("img", { name: "Site full viewport" }).waitFor();
+  await page.getByRole("img", { name: "Site full viewport" }).first().waitFor();
   assert(
     server.apiRequests.some(
       (entry) =>
@@ -1416,14 +1142,8 @@ test("run discovery includes a manifest whose only locale is Traditional Chinese
     .selectOption(
       `${DECLARATIONS[0].caseId}::${DECLARATIONS[0].targetId}::${DECLARATIONS[0].capturePointId}`,
     );
-  const runSelect = page.getByRole("combobox", { name: "Archived run" });
-  await runSelect.waitFor({ state: "visible" });
   await page.getByRole("region", { name: "Run provenance" }).waitFor();
-  assert.equal(await runSelect.inputValue(), manifest.runId);
-  assert.equal(
-    await runSelect.locator(`option[value="${manifest.runId}"]`).count(),
-    1,
-  );
+  await assertSelectedRunVisible(page, manifest.runId);
   assert.equal(
     await page
       .getByRole("tablist", { name: "Capture locale" })
@@ -1445,7 +1165,7 @@ test("run discovery includes a manifest whose only locale is Traditional Chinese
       .count(),
     1,
   );
-  await page.getByRole("img", { name: "Site full viewport" }).waitFor();
+  await page.getByRole("img", { name: "Site full viewport" }).first().waitFor();
   assert(
     server.apiRequests.some(
       (entry) =>
@@ -1503,11 +1223,13 @@ test("a story switch does not carry the prior case mapping while preparation is 
   const componentSearch = page.getByPlaceholder("Find components");
   await componentSearch.fill("Breadcrumbs Default");
   await page
-    .locator('.search-result-item[data-id="design-system-display-breadcrumbs--default"]')
+    .locator(
+      '.search-result-item[data-id="design-system-display-breadcrumbs--default"]',
+    )
     .click();
   await breadcrumbsRequested;
   const currentStoryHeading = page.getByRole("heading", {
-    name: "Current Storybook story",
+    name: "Expected layout (Story)",
   });
   const currentStoryId = currentStoryHeading.locator(
     "xpath=following-sibling::p[1]",
@@ -1515,7 +1237,7 @@ test("a story switch does not carry the prior case mapping while preparation is 
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
       (candidate) =>
-        candidate.textContent?.trim() === "Current Storybook story",
+        candidate.textContent?.trim() === "Expected layout (Story)",
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
@@ -1546,11 +1268,11 @@ test("a story switch does not carry the prior case mapping while preparation is 
       { exact: true },
     )
     .waitFor();
-  assert.match(
-    await page
-      .getByRole("combobox", { name: "Verification target" })
-      .inputValue(),
-    /^vc_breadcrumbs_history::/,
+  await page.getByText(/^Mapped identity: vc_breadcrumbs_history/).waitFor();
+  assert.equal(
+    await page.getByRole("combobox", { name: "Verification target" }).count(),
+    0,
+    "one mapped target is filled in, not offered as a choice",
   );
   await page.close();
 });
@@ -1583,23 +1305,23 @@ test("a shared story without a verification parameter finds its reference case a
     { waitUntil: "domcontentloaded" },
   );
   await page.getByRole("tab", { name: "Verification" }).click();
-  const targetSelect = page.getByRole("combobox", {
-    name: "Verification target",
-  });
-  await targetSelect.waitFor({ state: "visible", timeout: 60_000 });
-
-  assert.equal(await targetSelect.locator("option").count(), 1);
-  assert.match(await targetSelect.inputValue(), /^vc_breadcrumbs_history::/);
+  await page
+    .getByText(/^Mapped identity: vc_breadcrumbs_history/)
+    .waitFor({ timeout: 60_000 });
+  assert.equal(
+    await page.getByRole("combobox", { name: "Verification target" }).count(),
+    0,
+    "one mapped target is filled in, not offered as a choice",
+  );
   assert.ok(
     server.apiRequests.filter((entry) => entry.startsWith("GET /api/runs?"))
       .length > 1,
     "story discovery should follow every run-history cursor",
   );
   await page
-    .getByRole("combobox", { name: "Archived run" })
-    .selectOption("reference-story-history-0001");
-  await page
-    .getByText("design-system-display-breadcrumbs--previous-name", { exact: true })
+    .getByText("design-system-display-breadcrumbs--previous-name", {
+      exact: true,
+    })
     .waitFor();
   await page
     .getByText(
@@ -1637,7 +1359,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
   await page.getByRole("button", { name: "All recordings" }).click();
 
   const versionSelect = page.getByRole("combobox", {
-    name: "Selected version",
+    name: "Compared version",
   });
   await versionSelect.selectOption(
     JSON.stringify(["f".repeat(40), "1".repeat(40)]),
@@ -1661,7 +1383,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
       (candidate) =>
-        candidate.textContent?.trim() === "Current Storybook story",
+        candidate.textContent?.trim() === "Expected layout (Story)",
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
@@ -1673,12 +1395,14 @@ test("an explicit historical story stays selected while Storybook navigation cha
   const componentSearch = page.getByPlaceholder("Find components");
   await componentSearch.fill("Not Found Default page");
   await page
-    .locator('.search-result-item[data-id="site-navigation-screens-not-found--default"]')
+    .locator(
+      '.search-result-item[data-id="site-navigation-screens-not-found--default"]',
+    )
     .click();
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
       (candidate) =>
-        candidate.textContent?.trim() === "Current Storybook story",
+        candidate.textContent?.trim() === "Expected layout (Story)",
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
@@ -1728,7 +1452,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
     .getByText(`Current live case: ${CASE_ID}`, { exact: true })
     .waitFor();
   await page
-    .getByRole("combobox", { name: "Selected version" })
+    .getByRole("combobox", { name: "Compared version" })
     .selectOption(JSON.stringify(["a".repeat(40), "b".repeat(40)]));
 
   assert.equal(
@@ -1739,12 +1463,14 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
   const componentSearch = page.getByPlaceholder("Find components");
   await componentSearch.fill("Breadcrumbs Default");
   await page
-    .locator('.search-result-item[data-id="design-system-display-breadcrumbs--default"]')
+    .locator(
+      '.search-result-item[data-id="design-system-display-breadcrumbs--default"]',
+    )
     .click();
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
       (candidate) =>
-        candidate.textContent?.trim() === "Current Storybook story",
+        candidate.textContent?.trim() === "Expected layout (Story)",
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
@@ -1769,7 +1495,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
     );
     const diagnostic = {
       currentStory: await page
-        .getByRole("heading", { name: "Current Storybook story" })
+        .getByRole("heading", { name: "Expected layout (Story)" })
         .locator("xpath=following-sibling::p[1]")
         .innerText()
         .catch(() => "unavailable"),
@@ -1800,7 +1526,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
       (candidate) =>
-        candidate.textContent?.trim() === "Current Storybook story",
+        candidate.textContent?.trim() === "Expected layout (Story)",
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
@@ -1814,12 +1540,14 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
 
   await componentSearch.fill("Breadcrumbs Default");
   await page
-    .locator('.search-result-item[data-id="design-system-display-breadcrumbs--default"]')
+    .locator(
+      '.search-result-item[data-id="design-system-display-breadcrumbs--default"]',
+    )
     .click();
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
       (candidate) =>
-        candidate.textContent?.trim() === "Current Storybook story",
+        candidate.textContent?.trim() === "Expected layout (Story)",
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
