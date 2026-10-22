@@ -195,6 +195,7 @@
     "missedSetupDeadlineNoDate": "已錯過設定期限",
     "setupTotalFootnote": "運費、保險及其他費用會在發票上列明。",
     "convertedFrom": "由 {amount} 換算，匯率 1 USD = {rate} HKD",
+    "subtotal": "小計",
     "tbd": "待定",
     "free": "免費",
     "toBeCalculated": "待計算",

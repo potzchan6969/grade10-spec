@@ -89,12 +89,12 @@ export const ProcessingOverpaid: Story = {
       ),
     ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
-      "Order TotalHK$128,814.00",
+      "Order TotalHK$132,786.08",
     ]);
     expect(summaryRows).toContain(
       "SubtotalHK$128,269.00Converted from US$16,340.00 at 1 USD = 7.85 HKD",
     );
-    expect(summaryRows).toContain("Payment Processing FeeHK$545.00");
+    expect(summaryRows).toContain("Payment Processing FeeHK$4,517.08");
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Refund Details" }),
@@ -167,7 +167,7 @@ export const ProcessingBankTransfer: Story = {
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
       "Order TotalHK$128,269.00",
     ]);
-    expect(summaryRows).not.toContain("Payment Processing FeeHK$545.00");
+    expect(summaryRows).not.toContain("Payment Processing FeeHK$4,517.08");
     expect(summaryRows).not.toContain("Payment Processing FeeUS$120.00");
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(

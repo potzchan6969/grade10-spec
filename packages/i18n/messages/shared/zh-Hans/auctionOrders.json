@@ -195,6 +195,7 @@
     "missedSetupDeadlineNoDate": "已错过设置期限",
     "setupTotalFootnote": "运费、保险及其他费用会在发票上列明。",
     "convertedFrom": "由 {amount} 换算，汇率 1 USD = {rate} HKD",
+    "subtotal": "小计",
     "tbd": "待定",
     "free": "免费",
     "toBeCalculated": "待计算",

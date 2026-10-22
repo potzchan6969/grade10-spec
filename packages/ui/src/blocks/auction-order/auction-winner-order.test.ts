@@ -204,7 +204,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     );
   });
 
-  it("winner-order-SC-290 and winner-order-SC-304 and shared-ui-auction-order-SC-27 and shared-ui-auction-order-SC-30 - renders USD then HKD totals and keeps the card fee on its own row", () => {
+  it("shared-ui-auction-order-SC-27 and shared-ui-auction-order-SC-30 - renders USD then HKD totals and keeps the card fee on its own row", () => {
     const { container } = mount({
       summary: {
         ...BASE_PROPS.summary,
@@ -249,17 +249,13 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(lotCard?.textContent).toContain("Winning bid: US$101.00");
   });
 
-  it("winner-order-SC-290 - renders USD lines, an HKD subtotal with its rate footnote, then the fee and two-decimal total below", () => {
+  it("g10.shared-auction-order.SC1 - renders the Subtotal and fee rows between two separators, then the total", () => {
     const { container } = mount({
       summary: {
         ...BASE_PROPS.summary,
-        subtotal: {
-          label: "Subtotal",
-          value: "HK$1,030.00",
-          footnote: "Converted from US$131.21 at 1 USD = 7.85 HKD",
-        },
-        feeLines: [{ label: "Payment Processing Fee", value: "HK$38.73" }],
-        total: { label: "Order Total", value: "HK$1,068.73" },
+        subtotal: { label: "Subtotal", value: "HK$1,030.00" },
+        feeLines: [{ label: "Payment Processing Fee", value: "HK$38.69" }],
+        total: { label: "Order Total", value: "HK$1,068.69" },
       },
     });
 
@@ -267,21 +263,18 @@ describe("AuctionWinnerOrder settlement presentation", () => {
       "Winning BidUS$101.00",
       "Buyer's PremiumUS$20.20",
       "Shipping & HandlingUS$10.01",
-      "SubtotalHK$1,030.00Converted from US$131.21 at 1 USD = 7.85 HKD",
-      "Payment Processing FeeHK$38.73",
-      "Order TotalHK$1,068.73",
+      "SubtotalHK$1,030.00",
+      "Payment Processing FeeHK$38.69",
+      "Order TotalHK$1,068.69",
     ]);
 
     const sidebar = within(container).getByRole("complementary");
     const separators = sidebar.querySelectorAll("hr");
     expect(separators).toHaveLength(2);
     const shippingRow = summaryRow(container, "Shipping & HandlingUS$10.01");
-    const subtotalRow = summaryRow(
-      container,
-      "SubtotalHK$1,030.00Converted from US$131.21 at 1 USD = 7.85 HKD",
-    );
-    const feeRow = summaryRow(container, "Payment Processing FeeHK$38.73");
-    const totalRow = summaryRow(container, "Order TotalHK$1,068.73");
+    const subtotalRow = summaryRow(container, "SubtotalHK$1,030.00");
+    const feeRow = summaryRow(container, "Payment Processing FeeHK$38.69");
+    const totalRow = summaryRow(container, "Order TotalHK$1,068.69");
     expect(shippingRow && subtotalRow && feeRow && totalRow).toBeTruthy();
     if (shippingRow && subtotalRow && feeRow && totalRow) {
       const follows = (a: Node, b: Node) =>
@@ -296,7 +289,104 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     }
   });
 
-  it("winner-order-SC-291 and shared-ui-auction-order-SC-28 - keeps a USD order to one total line", () => {
+  it("g10.shared-auction-order.SC2 - shows the Subtotal's footnote under the Subtotal only", () => {
+    const note = "Converted from US$131.21 at 1 USD = 7.85 HKD";
+    const { container } = mount({
+      summary: {
+        ...BASE_PROPS.summary,
+        subtotal: { label: "Subtotal", value: "HK$1,030.00", footnote: note },
+        feeLines: [{ label: "Payment Processing Fee", value: "HK$38.69" }],
+        total: { label: "Order Total", value: "HK$1,068.69" },
+      },
+    });
+
+    const footnotes = container.querySelectorAll(
+      '[data-slot="winner-order-summary-footnote"]',
+    );
+    expect([...footnotes].map((node) => node.textContent)).toEqual([note]);
+    expect(
+      summaryRow(container, `SubtotalHK$1,030.00${note}`),
+    ).not.toBeUndefined();
+    expect(
+      summaryRow(container, "Payment Processing FeeHK$38.69"),
+    ).not.toBeUndefined();
+    expect(summaryRow(container, "Order TotalHK$1,068.69")).not.toBeUndefined();
+  });
+
+  it("g10.shared-auction-order.SC4 - draws each prop on its own", () => {
+    const subtotalOnly = mount({
+      summary: {
+        ...BASE_PROPS.summary,
+        subtotal: { label: "Subtotal", value: "HK$1,030.00" },
+      },
+    });
+    expect(summaryRowText(subtotalOnly.container)).toEqual([
+      "Winning BidUS$101.00",
+      "Buyer's PremiumUS$20.20",
+      "Shipping & HandlingUS$10.01",
+      "SubtotalHK$1,030.00",
+      "Order TotalUS$131.21",
+    ]);
+    expect(
+      subtotalOnly.container.querySelectorAll(
+        '[data-slot="winner-order-summary-footnote"]',
+      ),
+    ).toHaveLength(0);
+
+    const feesOnly = mount({
+      summary: {
+        ...BASE_PROPS.summary,
+        feeLines: [{ label: "Payment Processing Fee", value: "HK$38.69" }],
+      },
+    });
+    expect(summaryRowText(feesOnly.container)).toEqual([
+      "Winning BidUS$101.00",
+      "Buyer's PremiumUS$20.20",
+      "Shipping & HandlingUS$10.01",
+      "Payment Processing FeeHK$38.69",
+      "Order TotalUS$131.21",
+    ]);
+
+    const emptyFees = mount({
+      summary: { ...BASE_PROPS.summary, feeLines: [] },
+    });
+    expect(summaryRowText(emptyFees.container)).toEqual([
+      "Winning BidUS$101.00",
+      "Buyer's PremiumUS$20.20",
+      "Shipping & HandlingUS$10.01",
+      "Order TotalUS$131.21",
+    ]);
+    expect(
+      within(emptyFees.container)
+        .getByRole("complementary")
+        .querySelectorAll("hr"),
+    ).toHaveLength(1);
+  });
+
+  it("g10.shared-auction-order.SC5 - draws the Subtotal and fee rows and the converted total and fee when both sets arrive", () => {
+    const { container } = mount({
+      summary: {
+        ...BASE_PROPS.summary,
+        subtotal: { label: "Subtotal", value: "HK$1,030.00" },
+        feeLines: [{ label: "Payment Processing Fee", value: "HK$38.69" }],
+        convertedTotal: { label: "Order Total", value: "HK$1,068.69" },
+        convertedFee: { label: "Card Fee", value: "HK$38.69" },
+      },
+    });
+
+    expect(summaryRowText(container)).toEqual([
+      "Winning BidUS$101.00",
+      "Buyer's PremiumUS$20.20",
+      "Shipping & HandlingUS$10.01",
+      "SubtotalHK$1,030.00",
+      "Payment Processing FeeHK$38.69",
+      "Order TotalUS$131.21",
+      "Order TotalHK$1,068.69",
+      "Card FeeHK$38.69",
+    ]);
+  });
+
+  it("shared-ui-auction-order-SC-28 and g10.shared-auction-order.SC3 - keeps a USD order to one total line, one separator and no Subtotal row", () => {
     const { container } = mount();
 
     const canvas = within(container);
@@ -307,6 +397,10 @@ describe("AuctionWinnerOrder settlement presentation", () => {
       "Order TotalUS$131.21",
     ]);
     expect(canvas.queryByText("HK$1,031.00")).toBeNull();
+    expect(canvas.queryByText("Subtotal")).toBeNull();
+    expect(
+      within(container).getByRole("complementary").querySelectorAll("hr"),
+    ).toHaveLength(1);
   });
 
   it("winner-order-SC-181 and shared-ui-auction-order-SC-29 - opens one supplied FPS rail and reports the control press", () => {

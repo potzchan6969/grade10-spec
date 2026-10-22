@@ -118,7 +118,7 @@ export const Refunded: Story = {
       feeLines: INVOICE_FEE_LINES,
       total: INVOICE_TOTAL,
       invoicePdf: { onOpen: fn() },
-      refund: { title: "Refund HK$122,534", onView: fn() },
+      refund: { title: "Refund HK$126,285.05", onView: fn() },
     },
     paymentMethod: { kind: "card", brand: "mastercard", masked: "•••• 5454" },
     receipts: [{ label: "Receipt", href: "#receipt.pdf" }],

@@ -2,6 +2,7 @@ import type { InvoicePdfData } from "@grade10/ui";
 import { InvoicePdf } from "@grade10/ui";
 import {
   BANK_TRANSFER_INVOICE,
+  HKD_FREE_SHIPPING_INVOICE,
   LONG_TABLE_INVOICE,
   REPLACEMENT_INVOICE,
   SAMPLE_INVOICE,
@@ -29,6 +30,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: { data: SAMPLE_INVOICE },
+};
+
+/** Free Shipping & Handling beside the US$ lines; the Subtotal still shows. */
+export const FreeShipping: Story = {
+  args: { data: HKD_FREE_SHIPPING_INVOICE },
 };
 
 export const BankTransfer: Story = {

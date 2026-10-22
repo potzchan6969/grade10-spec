@@ -195,6 +195,7 @@
     "missedSetupDeadlineNoDate": "Missed setup deadline",
     "setupTotalFootnote": "Shipping, insurance and fees are added at invoice.",
     "convertedFrom": "Converted from {amount} at 1 USD = {rate} HKD",
+    "subtotal": "Subtotal",
     "tbd": "TBD",
     "free": "Free",
     "toBeCalculated": "To be calculated",

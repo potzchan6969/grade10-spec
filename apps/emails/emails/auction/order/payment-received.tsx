@@ -1,6 +1,8 @@
 import { AuctionLetter } from "@/emails/auction/_components/auction-letter";
 import { previewLot } from "@/emails/auction/_components/preview-lot";
 
+export type PaymentReceivedLine = { label: string; value: string };
+
 export type PaymentReceivedProps = {
   brandName?: string;
   lotTitle?: string;
@@ -12,6 +14,13 @@ export type PaymentReceivedProps = {
   primaryImageUrl?: string | null;
   /** Amount paid (invoice / order total). */
   amountPaid?: string;
+  /**
+   * The invoice's lines as facts, above the receipt ID: the USD lines, then
+   * Subtotal, Payment Processing Fee and Order Total in the settlement
+   * currency. A free charge reads `Free`; an absent Insurance or Tax is left
+   * out. The other order letters list none.
+   */
+  lines?: readonly PaymentReceivedLine[];
   /** When payment was confirmed (winner's zone). */
   receivedAt?: string;
   /**
@@ -44,6 +53,7 @@ export default function PaymentReceivedEmail({
   orderUrl = previewLot.orderUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   amountPaid = previewLot.orderTotal,
+  lines = previewLot.orderLines,
   receivedAt = previewLot.paidAt,
   paymentMethod = previewLot.paymentMethod,
   receiptId = previewLot.receiptId,
@@ -62,7 +72,10 @@ export default function PaymentReceivedEmail({
           subtext: `Received ${receivedAt}`,
         },
       ]}
-      facts={[`Receipt ID: ${receiptId}`]}
+      facts={[
+        ...lines.map((line) => `${line.label}: ${line.value}`),
+        `Receipt ID: ${receiptId}`,
+      ]}
       heading="Payment received"
       highlight={{ label: "Amount paid", value: amountPaid }}
       listingUrl={orderUrl}
@@ -80,6 +93,7 @@ PaymentReceivedEmail.PreviewProps = {
   orderUrl: previewLot.orderUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   amountPaid: previewLot.orderTotal,
+  lines: previewLot.orderLines,
   receivedAt: previewLot.paidAt,
   paymentMethod: previewLot.paymentMethod,
   receiptId: previewLot.receiptId,

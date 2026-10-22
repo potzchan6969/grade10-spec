@@ -1,7 +1,12 @@
 import { getMessages } from "@grade10/i18n";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
-import { SAMPLE_RECEIPT, TABLE_LABELS, WITH_TAX_RECEIPT } from "./fixtures";
+import {
+  HKD_PART_PAYMENT_RECEIPT,
+  SAMPLE_RECEIPT,
+  TABLE_LABELS,
+  WITH_TAX_RECEIPT,
+} from "./fixtures";
 import { LINE_HEIGHT, MARGIN, RIGHT_EDGE, SUMMARY_LEFT } from "./pdf-document";
 import {
   drawnHorizontalLines,
@@ -80,74 +85,115 @@ const SUMMARY_LINE_ITEMS = [
 ];
 
 const HKD_RECEIPT_AMOUNTS = [
-  "HK$793.00",
-  "HK$159.00",
-  "HK$952.00",
-  "HK$79.00",
-  "HK$1,031.00",
+  "US$101.00",
+  "US$20.20",
+  "US$121.20",
+  "US$10.01",
+  "HK$1,030.00",
   "HK$0.00",
 ] as const;
 
+function amountBeside(
+  rows: Awaited<ReturnType<typeof drawnText>>,
+  label: string,
+  amount: string,
+) {
+  const labelRow = drawnRow(rows, label);
+  return rows.some(
+    (row) => row.text === amount && Math.abs(row.y - labelRow.y) < 0.01,
+  );
+}
+
 describe("receipt PDF renderer", () => {
-  it("keeps the tax receipt fixture arithmetic and payment breakdown coherent", async () => {
+  it("keeps the tax receipt fixture in USD lines with a converted HKD summary and breakdown", async () => {
     const strings = await drawnStrings(await ReceiptPdf(WITH_TAX_RECEIPT));
     const amounts = new Map(
       WITH_TAX_RECEIPT.lineItems.map((item) => [item.label, item.amount]),
     );
 
     expect(WITH_TAX_RECEIPT.itemTotal).toEqual({
-      winningBid: "HK$2,500.00",
-      buyersPremium: "HK$500.00",
-      total: "HK$3,000.00",
+      winningBid: "US$2,500.00",
+      buyersPremium: "US$500.00",
+      total: "US$3,000.00",
     });
-    expect(amounts.get("Shipping & Handling")).toBe("HK$80.00");
-    expect(amounts.get("Insurance")).toBe("HK$40.00");
+    expect(amounts.get("Shipping & Handling")).toBe("US$80.00");
+    expect(amounts.get("Insurance")).toBe("US$40.00");
     expect(WITH_TAX_RECEIPT.taxLine).toEqual({
       label: "Tax",
-      amount: "HK$156.00",
+      amount: "US$156.00",
     });
-    expect(amounts.get("Subtotal")).toBe("HK$3,276.00");
-    expect(amounts.get("Payment Processing Fee")).toBe("HK$118.00");
-    expect(amounts.get("Order Total")).toBe("HK$3,394.00");
+    expect(amounts.get("Subtotal")).toBe("HK$25,716.60");
+    expect(amounts.get("Payment Processing Fee")).toBe("HK$907.58");
+    expect(amounts.get("Order Total")).toBe("HK$26,624.18");
     expect(WITH_TAX_RECEIPT.paymentBreakdown).toEqual({
-      originalInvoiceTotal: "HK$3,394.00",
+      originalInvoiceTotal: "HK$26,624.18",
       previousPayments: "HK$0.00",
-      currentPaymentReceived: "HK$3,394.00",
+      currentPaymentReceived: "HK$26,624.18",
       remainingBalanceDue: "HK$0.00",
     });
-    expect(3_000 + 80 + 40 + 156).toBe(3_276);
-    expect(3_276 + 118).toBe(3_394);
     for (const amount of [
-      "HK$2,500.00",
-      "HK$500.00",
-      "HK$3,000.00",
-      "HK$80.00",
-      "HK$40.00",
-      "HK$156.00",
-      "HK$3,276.00",
-      "HK$118.00",
-      "HK$3,394.00",
+      "US$2,500.00",
+      "US$500.00",
+      "US$3,000.00",
+      "US$80.00",
+      "US$40.00",
+      "US$156.00",
+      "HK$25,716.60",
+      "HK$907.58",
+      "HK$26,624.18",
       "HK$0.00",
     ]) {
       expect(strings).toContain(amount);
     }
   });
 
-  // winner-order-SC-289
-  it("renders the HKD receipt fixture with every amount in HKD and no USD winning bid or rate", async () => {
-    const strings = await drawnStrings(await ReceiptPdf(SAMPLE_RECEIPT));
-    const text = strings.join(" ");
+  // g10.auction-winner-order.SC4
+  it("lists the USD lines, then the HKD Subtotal, fee and Order Total, and the payment breakdown in HKD", async () => {
+    const bytes = await ReceiptPdf(SAMPLE_RECEIPT);
+    const strings = await drawnStrings(bytes);
+    const rows = await drawnText(bytes);
 
     for (const amount of HKD_RECEIPT_AMOUNTS) expect(strings).toContain(amount);
+    for (const [label, amount] of [
+      ["Shipping & Handling", "US$10.01"],
+      ["Subtotal", "HK$1,030.00"],
+      ["Payment Processing Fee", "Free"],
+      ["Order Total", "HK$1,030.00"],
+      ["Original Invoice Total", "HK$1,030.00"],
+      ["Previous Payments", "HK$0.00"],
+      ["Current Payment Received", "HK$1,030.00"],
+      ["Remaining Balance Due", "HK$0.00"],
+    ] as const) {
+      expect(amountBeside(rows, label, amount)).toBe(true);
+    }
     const amounts = strings.filter((value) =>
-      /^(?:HK\$|\d)[\d,]*\.\d{2}$/.test(value),
+      /^(?:US\$|HK\$|\d)[\d,]*\.\d{2}$/.test(value),
     );
     expect(new Set(amounts)).toEqual(new Set(HKD_RECEIPT_AMOUNTS));
-    expect(strings.filter((value) => /^\d[\d,]*\.\d{2}$/.test(value))).toEqual(
-      [],
-    );
-    expect(text).not.toMatch(/\bUSD\b|US\$/);
+    const text = strings.join(" ");
     expect(text).not.toContain("7.85");
+    expect(text).not.toMatch(/Converted|\bUSD\b|\bHKD\b/);
+  });
+
+  // g10.auction-winner-order.SC12
+  it("lists the same lines above the breakdown of a part payment", async () => {
+    const rows = await drawnText(await ReceiptPdf(HKD_PART_PAYMENT_RECEIPT));
+
+    for (const [label, amount] of [
+      ["Shipping & Handling", "US$10.01"],
+      ["Subtotal", "HK$1,030.00"],
+      ["Payment Processing Fee", "Free"],
+      ["Order Total", "HK$1,030.00"],
+      ["Original Invoice Total", "HK$1,030.00"],
+      ["Previous Payments", "HK$0.00"],
+      ["Current Payment Received", "HK$300.00"],
+      ["Remaining Balance Due", "HK$730.00"],
+    ] as const) {
+      expect(amountBeside(rows, label, amount)).toBe(true);
+    }
+    const orderTotal = drawnRow(rows, "Order Total");
+    const original = drawnRow(rows, "Original Invoice Total");
+    expect(orderTotal.y).toBeGreaterThan(original.y);
   });
 
   it("keeps the four immutable payment lines in order", () => {

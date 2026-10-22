@@ -65,7 +65,7 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("19 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getAllByText("Order Total")).toHaveLength(1);
-    expect(canvas.getByText("HK$128,814.00")).toBeVisible();
+    expect(canvas.getByText("HK$132,786.08")).toBeVisible();
     expect(canvas.getByText("US$12,800.00")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
@@ -74,7 +74,7 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("Subtotal")).toBeVisible();
     expect(canvas.getByText("HK$128,269.00")).toBeVisible();
     expect(canvas.getAllByText("Payment Processing Fee")).toHaveLength(1);
-    expect(canvas.getByText("HK$545.00")).toBeVisible();
+    expect(canvas.getByText("HK$4,517.08")).toBeVisible();
     expect(
       canvas.getByText("Converted from US$16,340.00 at 1 USD = 7.85 HKD"),
     ).toBeVisible();
