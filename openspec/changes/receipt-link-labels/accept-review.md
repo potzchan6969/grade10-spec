@@ -1,5 +1,5 @@
 reviewed: 0a5e152f2a9a5d1efa7cdf1d94fa7d265df422f4 (repair e3902a5ed; independent scoped rerun)
-source-identity: 4623aeb6a476e7945c09b41cbc73ef558fad3b6b2c8c557aed80dcdc7ec6df96
+source-identity: 8a752c93d9b155f436d219bc3816424c055e78d6b584b19bc66e6224e5981600
 baseline-identity: d4d138558878f00b9d758a041c0f2eb426d2c9a54e6f2eb1ca07ea9f712f3fd7
 verdict: Ready to accept
 
@@ -10,7 +10,7 @@ verdict: Ready to accept
 | 3 | fix | `tasks.md` 2.1 · `.openspec.yaml` | Consumption has no verify row (the cases `US2-TC57`, `US2-TC58`), and no task retires `receiptNumbered` and `receiptNumberedPdf` (`Receipt · P{n}`) in `@grade10/i18n` `auctionOrders.json`. The file has no `hands`, and no `ui-design.md` or `ui_waived` although a label a winner reads changes. | Dev | `tasks.md`; `.openspec.yaml` | fixed e3902a5ed |
 | 4 | note | `docs/prds/products/grade10-site/auction/post-bidding.md:463` | The "oldest first" line is unmarked and already true on `main` (`SC-156`); the delta restates it in the requirement. This agrees, not a conflict. | - | - | open |
 
-| 5 | note | `decisions.md` Q4 | The date-zone choice (viewer's local zone) was taken by the agent from the recommended option; @tangconst to confirm | Product | - | open |
+| 5 | note | `decisions.md` Q4 | The date-zone choice (viewer's local zone) was confirmed by @tangconst on 2026-10-23; no requirement text changed | Product | - | fixed |
 
 ## Coverage
 
