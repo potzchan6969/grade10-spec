@@ -269,6 +269,9 @@ order.
   identifier, beside the deadline, the reissue count and the suspension state
 - 🚧 **One timeline** - the invoice log, the fulfilment log and comments,
   oldest first; a comment is 1 to 2,000 characters, never edited or deleted
+- 🚧 **A sent HKD invoice** - the order page lists the USD lines, then the HKD
+  Subtotal, Payment Processing Fee and Total, as the quote preview does; the
+  reissue history shows a changed line in USD and the fee and total in HKD
 - 🚧 **Hong Kong time** - every date and time on the worklist, the order page,
   the timeline and the send and reissue dialog's deadline reads in Hong Kong
   time (GMT+8), whatever zone the operator's browser is in

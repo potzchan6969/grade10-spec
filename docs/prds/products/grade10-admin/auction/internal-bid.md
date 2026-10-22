@@ -54,6 +54,8 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
   winner setup or invoice at close. The operator sends the invoice, lets it
   expire after 7 days and cancels the order by hand; no order letter is sent to
   any recipient
+- 🚧 **House order total** - the quote of an internal bidder's order reads like
+  any HKD quote: the USD lines, then one HKD Subtotal and total
 - **Audit** - each set, change and removal is recorded without the amount
   or the time
 

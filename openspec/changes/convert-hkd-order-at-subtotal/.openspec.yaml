@@ -2,5 +2,4 @@ schema: grade10-planning
 created: 2026-10-22
 depends_on:
   - usd-lot-currency-winner-settlement-choice
-  - order-summary-hkd-conversion-note
 ui_waived: "@seankcw waived ui-design on 2026-10-22; the Order Summary is drawn in the merged stories (grade10-spec#1288) and the invoice and receipt PDF blocks take strings, so USD lines above HKD summary rows add no variant."

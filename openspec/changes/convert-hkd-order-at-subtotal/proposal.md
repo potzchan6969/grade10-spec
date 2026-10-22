@@ -43,9 +43,11 @@ differently.
   and letter carry HKD only" says every amount reads HKD and no USD winning bid
   prints; that no longer holds for the invoice, the receipt and a letter that
   lists lines.
-- **The operator's quote preview reads the same breakdown** - the figure an
-  operator previews is the one the winner will be asked to pay.
-- **Sent invoices stay as sent** - none is re-priced.
+- **The operator reads the same breakdown** - the quote preview, the reissue
+  dialog, the order page's invoice lines and the reissue history show the USD
+  lines, then the HKD Subtotal, fee and total; the figure an operator previews
+  is the one the winner will be asked to pay.
+- **Sent invoices stay as sent** - none is re-priced; an invoice sent with whole-HK$ lines keeps them and reads in the new layout from its stored amounts.
 - **Unchanged** - a USD order, the rows before an invoice is sent, the lot
   card's USD winning bid, and the won-lot letter's US$ bid.
 
@@ -67,19 +69,25 @@ None.
   replaced.
 - `grade10-site/auction/notifications-order` - a letter that lists lines lists
   them as the invoice does; every letter's total reads HKD.
-- `grade10-admin/auction/post-sale` - the quote preview shows the USD lines,
+- `grade10-admin/auction/post-sale` - the quote preview, the reissue dialog,
+  the order page's invoice lines and the reissue history show the USD lines,
   then the HKD Subtotal, fee and total.
+- `grade10-admin/auction/internal-bid` - the house order's invoice total is one
+  conversion of its USD lines, so the total of one scenario moves from 103100
+  to 103000.
 - `shared/ui/auction-order` - `AuctionWinnerOrder` takes `summary.subtotal` and
   `summary.feeLines`, merged in the design store with #1288.
 
 ## Impact
 
-- **Supersedes in part** - the display half of `order-summary-hkd-conversion-note`
-  (every line in HKD, one note under the Order Total) and Q8, Q9 and Q17 of
-  `usd-lot-currency-winner-settlement-choice` (HKD lines under each USD amount,
-  convert and round each line, the fee as a line above the total). Both stay
-  in place and are listed in `depends_on`; this change's walk replaces the one
-  that `order-summary-hkd-conversion-note` still owes.
+- **Retracts and supersedes** - `order-summary-hkd-conversion-note` (every line
+  in HKD, one note under the Order Total) is retracted, as
+  `collapse-order-summary-usd-recap` was before it; its one surviving rule, that
+  the note is the only place that names the rate, is carried in this change.
+  Q8, Q9 and Q17 of `usd-lot-currency-winner-settlement-choice` (HKD lines under
+  each USD amount, convert and round each line, the fee as a line above the
+  total) are replaced; that change stays in place and is listed in `depends_on`.
+  This change's walk takes the place of the one the retracted change still owed.
 - **Component exports** - `AuctionWinnerOrder` gains `summary.subtotal` and
   `summary.feeLines`; `convertedTotal` and `convertedFee` stay. `AuctionInvoicePdf`
   and `AuctionReceiptPdf` keep their contract, since they render the strings
@@ -92,13 +100,6 @@ None.
   [Auction Management](../../../docs/prds/products/grade10-admin/auction/management.md#payment)
   and [Auction](../../../docs/prds/products/grade10-site/auction/index.md)
   carry the 🚧 lines. The Money Amounts invoice item example reads `US$101.00`.
-
-## Open Questions
-
-- **Invoices sent before this layout** - whether any HKD invoice exists outside
-  test data. Product confirms; `decisions.md` Q12 and the PRD row `Invoices
-  sent before this layout` hold it. Until then a sent invoice keeps its stored
-  amounts.
 
 ## References
 
