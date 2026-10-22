@@ -1,14 +1,23 @@
+import {
+  Attachment,
+  AttachmentAction,
+  AttachmentActions,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentMedia,
+  type AttachmentState,
+  AttachmentTitle,
+} from "@grade10/design-system/components/display/attachment";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { IconButton } from "@grade10/design-system/components/forms/icon-button";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
+  ArrowsClockwise,
   File as FileGlyph,
   FilePdf,
-  Trash,
   UploadSimple,
+  X,
 } from "@phosphor-icons/react";
 import {
   type ChangeEvent,
@@ -57,6 +66,8 @@ function useEnteringFileIds(
   return entering;
 }
 
+export type FileDropzoneItemStatus = "processing" | "ready" | "error";
+
 export type FileDropzoneItem = {
   id: string;
   file: File;
@@ -64,6 +75,16 @@ export type FileDropzoneItem = {
   name: string;
   /** True when the original was HEIC/HEIF and was converted for storage. */
   convertedFromHeic?: boolean;
+  /**
+   * Row lifecycle — `processing` while async work runs (HEIC → JPEG),
+   * `ready` once usable, `error` when the file could not be accepted.
+   * Defaults to `ready`.
+   */
+  status?: FileDropzoneItemStatus;
+  /** Status line under the name — converting copy or the failure reason. */
+  statusMessage?: string;
+  /** Set by ingest when the failure is retryable (e.g. HEIC conversion). */
+  retry?: () => void;
 };
 
 export type FileDropzoneTargetCopy = {
@@ -75,6 +96,8 @@ export type FileDropzoneTargetCopy = {
 
 export type FileDropzoneFileCopy = {
   removeFile: string;
+  /** Accessible name for the retry action on a failed file. */
+  retryFile?: string;
   /** Shown under the name when the file was converted from HEIC. */
   convertedFromHeic?: string;
 };
@@ -141,10 +164,13 @@ function isPdfFile(file: File): boolean {
 }
 
 type IngestContext = {
-  files: readonly FileDropzoneItem[];
+  /** Latest committed items — live across the async conversion awaits. */
+  getFiles: () => readonly FileDropzoneItem[];
+  appendItem: (item: FileDropzoneItem) => void;
+  updateItem: (id: string, update: Partial<FileDropzoneItem>) => void;
   limits: FileDropzoneLimits;
   accept: string;
-  onChange: (files: FileDropzoneItem[]) => void;
+  copy: FileDropzoneTargetCopy;
   onReject?: (reason: FileDropzoneRejectReason, detail?: string) => void;
 };
 
@@ -152,19 +178,22 @@ async function ingestFiles(
   rawList: FileList | File[],
   context: IngestContext,
 ): Promise<void> {
-  const { files, limits, accept, onChange, onReject } = context;
-  const remainingSlots = Math.max(0, limits.maxFiles - files.length);
-  const currentTotal = files.reduce((sum, item) => sum + item.file.size, 0);
+  const { getFiles, appendItem, updateItem, limits, accept, copy, onReject } =
+    context;
   const incoming = Array.from(rawList);
   if (incoming.length === 0) return;
 
-  if (incoming.length > remainingSlots) {
+  if (incoming.length > Math.max(0, limits.maxFiles - getFiles().length)) {
     onReject?.("too_many", `Up to ${limits.maxFiles} files.`);
     return;
   }
 
-  const next: FileDropzoneItem[] = [...files];
-  let runningTotal = currentTotal;
+  const perFileMessage = `Each file must be ${Math.floor(limits.maxBytesPerFile / FILE_DROPZONE_MIB)} MB or less.`;
+  const totalMessage = `All files together must be ${Math.floor(limits.maxBytesTotal / FILE_DROPZONE_MIB)} MB or less.`;
+  const totalExcluding = (id: string) =>
+    getFiles()
+      .filter((item) => item.id !== id)
+      .reduce((sum, item) => sum + item.file.size, 0);
 
   for (const raw of incoming) {
     if (!isAllowedType(raw, accept)) {
@@ -172,90 +201,113 @@ async function ingestFiles(
       return;
     }
     if (raw.size > limits.maxBytesPerFile) {
-      onReject?.(
-        "too_large_file",
-        `Each file must be ${Math.floor(limits.maxBytesPerFile / FILE_DROPZONE_MIB)} MB or less.`,
-      );
+      onReject?.("too_large_file", perFileMessage);
       return;
     }
 
-    let file = raw;
-    let convertedFromHeic = false;
-    if (isHeicFile(raw)) {
-      try {
-        file = await convertHeicToJpeg(raw);
-        convertedFromHeic = true;
-      } catch {
-        onReject?.("convert_failed", raw.name);
+    const item: FileDropzoneItem = {
+      id: `${raw.name}-${raw.size}-${raw.lastModified}-${Math.random().toString(36).slice(2, 8)}`,
+      file: raw,
+      name: raw.name,
+    };
+
+    if (!isHeicFile(raw)) {
+      if (totalExcluding(item.id) + raw.size > limits.maxBytesTotal) {
+        onReject?.("too_large_total", totalMessage);
         return;
       }
+      appendItem(item);
+      continue;
     }
 
-    if (file.size > limits.maxBytesPerFile) {
-      onReject?.(
-        "too_large_file",
-        `Each file must be ${Math.floor(limits.maxBytesPerFile / FILE_DROPZONE_MIB)} MB or less.`,
-      );
-      return;
-    }
-    if (runningTotal + file.size > limits.maxBytesTotal) {
-      onReject?.(
-        "too_large_total",
-        `All files together must be ${Math.floor(limits.maxBytesTotal / FILE_DROPZONE_MIB)} MB or less.`,
-      );
-      return;
-    }
-
-    runningTotal += file.size;
-    next.push({
-      id: `${file.name}-${file.size}-${file.lastModified}-${Math.random().toString(36).slice(2, 8)}`,
-      file,
-      name: file.name,
-      convertedFromHeic,
+    // HEIC: the row lands as `processing` while heic2any runs, then settles
+    // to `ready` — or stays as an `error` row when it cannot be used.
+    appendItem({
+      ...item,
+      status: "processing",
+      statusMessage: copy.converting,
     });
+    const runConversion = async () => {
+      try {
+        const converted = await convertHeicToJpeg(raw);
+        if (converted.size > limits.maxBytesPerFile) {
+          updateItem(item.id, {
+            status: "error",
+            statusMessage: perFileMessage,
+            retry: undefined,
+          });
+          return;
+        }
+        if (totalExcluding(item.id) + converted.size > limits.maxBytesTotal) {
+          updateItem(item.id, {
+            status: "error",
+            statusMessage: totalMessage,
+            retry: undefined,
+          });
+          return;
+        }
+        updateItem(item.id, {
+          file: converted,
+          name: converted.name,
+          status: "ready",
+          statusMessage: undefined,
+          convertedFromHeic: true,
+          retry: undefined,
+        });
+      } catch {
+        updateItem(item.id, {
+          status: "error",
+          statusMessage: "Couldn’t convert this file.",
+          retry: () => {
+            updateItem(item.id, {
+              status: "processing",
+              statusMessage: copy.converting,
+              retry: undefined,
+            });
+            void runConversion();
+          },
+        });
+      }
+    };
+    await runConversion();
   }
-
-  onChange(next);
 }
 
 /** Square preview: image thumbnail, or icon tile for PDF / other. */
-function FileDropzoneThumb({ file }: { file: File }) {
+function FileDropzoneThumb({
+  file,
+  processing = false,
+}: {
+  file: File;
+  processing?: boolean;
+}) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const showImage = !processing && isImageFile(file);
 
   useEffect(() => {
-    if (!isImageFile(file)) {
+    if (!showImage) {
       setPreviewUrl(null);
       return;
     }
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
     return () => URL.revokeObjectURL(url);
-  }, [file]);
-
-  if (previewUrl) {
-    return (
-      <span
-        aria-hidden
-        className="relative size-10 shrink-0 overflow-hidden rounded-lg border border-border bg-muted"
-        data-slot="file-dropzone-thumb"
-      >
-        <img alt="" className="size-full object-cover" src={previewUrl} />
-      </span>
-    );
-  }
+  }, [file, showImage]);
 
   return (
-    <span
+    <AttachmentMedia
       aria-hidden
-      className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-secondary-foreground"
       data-slot="file-dropzone-thumb"
+      variant={previewUrl ? "image" : "icon"}
     >
-      {isPdfFile(file) ? (
-        <FilePdf size={20} weight="regular" />
+      {previewUrl ? (
+        <img alt="" src={previewUrl} />
+      ) : isPdfFile(file) ? (
+        <FilePdf size={16} weight="regular" />
       ) : (
-        <FileGlyph size={20} weight="regular" />
+        <FileGlyph size={16} weight="regular" />
       )}
-    </span>
+    </AttachmentMedia>
   );
 }
 
@@ -299,6 +351,26 @@ function FileDropzoneTarget({
     if (convertingProp === undefined) setInternalConverting(next);
   }
 
+  // Live list for the async ingest loop — appends and status updates land
+  // on the latest committed files even across awaits, and optimistic writes
+  // keep back-to-back synchronous appends from dropping each other.
+  const liveFilesRef = useRef<readonly FileDropzoneItem[]>(files);
+  liveFilesRef.current = files;
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
+  function appendItem(item: FileDropzoneItem) {
+    liveFilesRef.current = [...liveFilesRef.current, item];
+    onChangeRef.current([...liveFilesRef.current]);
+  }
+
+  function updateItem(id: string, update: Partial<FileDropzoneItem>) {
+    liveFilesRef.current = liveFilesRef.current.map((item) =>
+      item.id === id ? { ...item, ...update } : item,
+    );
+    onChangeRef.current([...liveFilesRef.current]);
+  }
+
   const remainingSlots = Math.max(0, limits.maxFiles - files.length);
   const inactive = disabled || converting || remainingSlots === 0;
 
@@ -307,7 +379,15 @@ function FileDropzoneTarget({
 
     setConverting(true);
     try {
-      await ingestFiles(rawList, { files, limits, accept, onChange, onReject });
+      await ingestFiles(rawList, {
+        getFiles: () => liveFilesRef.current,
+        appendItem,
+        updateItem,
+        limits,
+        accept,
+        copy,
+        onReject,
+      });
     } finally {
       setConverting(false);
       if (inputRef.current) inputRef.current.value = "";
@@ -392,6 +472,12 @@ type FileDropzoneFileProps = {
   className?: string;
 };
 
+const ATTACHMENT_STATE: Record<FileDropzoneItemStatus, AttachmentState> = {
+  processing: "processing",
+  ready: "done",
+  error: "error",
+};
+
 /** One uploaded file row — thumbnail, name, size, remove. */
 function FileDropzoneFile({
   item,
@@ -400,39 +486,52 @@ function FileDropzoneFile({
   disabled = false,
   className,
 }: FileDropzoneFileProps) {
+  const status = item.status ?? "ready";
   return (
-    <HStack
-      className={cn(
-        "w-full rounded-xl border border-border bg-card px-3 py-2",
-        className,
-      )}
+    <Attachment
+      className={cn("w-full", className)}
       data-slot="file-dropzone-file"
-      gap="sm"
-      vAlign="center"
+      state={ATTACHMENT_STATE[status]}
     >
-      <FileDropzoneThumb file={item.file} />
-      <VStack className="min-w-0 flex-1" gap="none" hAlign="stretch">
-        <span className="truncate text-sm leading-5 font-medium text-foreground">
-          {item.name}
-        </span>
-        <Text size="sm" tone="secondary">
-          {(item.file.size / FILE_DROPZONE_MIB).toFixed(1)} MB
-          {item.convertedFromHeic
-            ? `. ${copy.convertedFromHeic ?? "Converted from HEIC"}`
-            : ""}
-        </Text>
-      </VStack>
-      <IconButton
-        aria-label={`${copy.removeFile}: ${item.name}`}
-        disabled={disabled}
-        onClick={() => onRemove(item.id)}
-        size="xs"
-        type="button"
-        variant="ghost"
-      >
-        <Trash aria-hidden />
-      </IconButton>
-    </HStack>
+      <FileDropzoneThumb
+        file={item.file}
+        processing={status === "processing"}
+      />
+      <AttachmentContent>
+        <AttachmentTitle>{item.name}</AttachmentTitle>
+        <AttachmentDescription>
+          {status === "processing"
+            ? (item.statusMessage ?? "Processing…")
+            : status === "error"
+              ? (item.statusMessage ?? "Couldn’t add this file.")
+              : `${(item.file.size / FILE_DROPZONE_MIB).toFixed(1)} MB${
+                  item.convertedFromHeic
+                    ? `. ${copy.convertedFromHeic ?? "Converted from HEIC"}`
+                    : ""
+                }`}
+        </AttachmentDescription>
+      </AttachmentContent>
+      <AttachmentActions>
+        {status === "error" && item.retry ? (
+          <AttachmentAction
+            aria-label={`${copy.retryFile ?? "Retry"}: ${item.name}`}
+            disabled={disabled}
+            onClick={() => item.retry?.()}
+            type="button"
+          >
+            <ArrowsClockwise aria-hidden weight="regular" />
+          </AttachmentAction>
+        ) : null}
+        <AttachmentAction
+          aria-label={`${copy.removeFile}: ${item.name}`}
+          disabled={disabled}
+          onClick={() => onRemove(item.id)}
+          type="button"
+        >
+          <X aria-hidden weight="regular" />
+        </AttachmentAction>
+      </AttachmentActions>
+    </Attachment>
   );
 }
 

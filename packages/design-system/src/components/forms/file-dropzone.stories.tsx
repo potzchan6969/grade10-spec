@@ -138,6 +138,41 @@ export const FileList: Story = {
   },
 };
 
+/** Row lifecycle — processing pulse, error tint, ready. */
+export const FileStates: Story = {
+  name: "File states",
+  render: () => (
+    <FileDropzoneFileList
+      copy={COPY}
+      files={[
+        {
+          ...sampleItem("photo-from-iphone.heic", "image/heic"),
+          status: "processing",
+          statusMessage: "Converting HEIC…",
+        },
+        {
+          ...sampleItem("too-big.pdf", "application/pdf"),
+          status: "error",
+          statusMessage: "Each file must be 5 MB or less.",
+        },
+        sampleItem("receipt.jpg", "image/jpeg"),
+      ]}
+      onRemove={fn()}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const rows = canvasElement.querySelectorAll(
+      '[data-slot="file-dropzone-file"]',
+    );
+    expect(rows[0]?.getAttribute("data-state")).toBe("processing");
+    expect(rows[1]?.getAttribute("data-state")).toBe("error");
+    expect(rows[2]?.getAttribute("data-state")).toBe("done");
+    expect(canvas.getByText("Converting HEIC…")).toBeVisible();
+    expect(canvas.getByText("Each file must be 5 MB or less.")).toBeVisible();
+  },
+};
+
 /** Target + list composed by the consumer. */
 export const Composed: Story = {
   name: "Composed",
