@@ -10,6 +10,131 @@
 
 ## MODIFIED Requirements
 
+### Requirement: Invoice log history
+
+Every change to an auction order's money SHALL be written as an append-only
+invoice log entry, never as a field overwrite. The order's detail SHALL show
+these log entries in chronological order. It SHALL also show operators each
+invoice's invoice ID, bank reference and internal audit number, and each
+receipt's receipt ID and internal audit number, per
+`grade10-site/auction/winner-order`.
+
+| Field | Notes |
+| --- | --- |
+| Log type | Address reopened, address recorded, order edited before send, sent, expired, reissued, proof uploaded, proof confirmed, proof returned, paid, payment recorded, cancelled, refunded, payment attempt failed, flagged payment, flag cleared |
+| Timestamp | Stored in UTC, displayed in Hong Kong time for every operator, per "Order dates and times read in Hong Kong time" |
+| Invoice ID | The invoice the entry concerns |
+| Internal audit number | Sent, reissued, paid and payment recorded entries: the number of the invoice or receipt the entry issued |
+| Invoice status after the log entry | |
+| Order total at the log entry | Captures amount changes across reissues |
+| Amount delta | Where the amount changed from the prior log entry |
+| Payment deadline at the log entry | The deadline trail across reissues and returned proof |
+| Time left | Proof uploaded and proof returned entries |
+| Deadline choice | Reissues only: kept or restarted |
+| Changed parts | Order edited before send: delivery address, payment method or both. Reissues: each of delivery address, payment method, payment processing fee, Shipping & Handling, Insurance, Tax and deadline that changed. Each with its value before and after, and Tax with no amount where the invoice carried none. A Shipping & Handling, Insurance or Tax part reads in USD, the amount the operator typed; the payment processing fee and the order total read in the invoice's currency |
+| Reissue sequence number | Where the log entry is a reissue |
+| Actor | The buyer, the system, or a named operator |
+| Payment method | Paid, payment recorded and flagged payment entries: a card with its brand and last four digits, or bank transfer, cash, or other with its description |
+| Flag | Flagged payment and flag cleared entries: the flag's kind and the payment it sits on |
+| Proof files | Proof uploaded entries: the winner's files. Proof confirmed and payment recorded entries: every file on the payment record |
+| External reference | Payment recorded entries only; flag cleared entries: the optional return reference |
+| Reason | Mandatory on an operator-initiated log entry that needs one, per "History is append-only and retained". A proof returned entry carries both the external and the internal reason |
+| Payment-provider reference | Where one applies |
+
+Grade10 SHALL record failed payment attempts in the invoice log. A buyer who
+tried three times with a declining card is a different case from one who never
+engaged, and the difference SHALL be visible to whoever decides on
+reinstatement.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ua0 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-34 - Failed payment attempts appear in the invoice log
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** a winner whose card was declined three times before the deadline
+  elapsed
+- **WHEN** an operator reads the invoice log
+- **THEN** it shows three failed payment attempts with their timestamps
+- **AND** the buyer is distinguishable from one whose history holds only the
+  issued log entry
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-j3o rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-35 - An amendment's amount change is on the record
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an auction order an operator reissued, changing the order total
+  from 312000 to 316000 minor units in HKD
+- **WHEN** an operator reads the invoice log
+- **THEN** it shows the reissued entry at 316000 minor units in HKD
+- **AND** the delta from the prior entry and the deadline choice
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-hgz rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-61 - A paid entry names how it was paid
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** one order the winner paid by a Visa card ending 4242 and one an
+  operator settled by cash
+- **WHEN** an operator reads each invoice log
+- **THEN** the first paid entry names a Visa card ending 4242
+- **AND** the second names cash, with its proof files
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-k8l rev=2 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-123 - A reissue names what it changed
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an HKD order an operator reissued, switching the method from card to
+  bank transfer, which moved the payment processing fee from 11225 to 0 minor
+  units in HKD, and changing Shipping & Handling from 8000 to 12000 minor units
+  in USD
+- **WHEN** an operator reads the invoice log
+- **THEN** the reissued entry names payment method, payment processing fee and
+  Shipping & Handling as changed, each with its value before and after, the
+  Shipping & Handling values in USD and the fee values in HKD
+- **AND** names no other part as changed
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-tyi rev=2 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-204 - A reissue that changes tax names it with its value before and after
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an HKD order in Pending Payment whose invoice has no Tax
+- **AND** an operator reissued it with Tax of 6000 minor units in USD and a reason, changing nothing else
+- **WHEN** an operator reads the invoice log
+- **THEN** the reissued entry names Tax as the changed part, with no amount before and 6000 minor units in USD after
+- **AND** names no other part as changed
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-jce rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-124 - A proof check is on the record
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an order whose winner uploaded proof, an operator returned it with an external and an internal reason, and the winner uploaded again, which an operator confirmed
+- **WHEN** an operator reads the invoice log
+- **THEN** it shows proof uploaded, proof returned with both reasons and the time left, proof uploaded, and proof confirmed, in that order
+- **AND** each names its actor and timestamp
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-dgt rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-132 - Operators read the internal audit numbers
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an order whose first invoice holds internal audit number `#00010482`, whose reissued invoice holds `#00010490`, and whose receipt holds `#00010495`
+- **WHEN** an operator opens the order and reads its invoice log
+- **THEN** the order shows all three numbers against their invoice or receipt
+- **AND** the sent entry shows `#00010482`, the reissued entry `#00010490` and the paid entry `#00010495`
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-rn1 rev=1 -->
+#### Scenario: g10adm.auction-post-sale.SC6 - A reissue of an HKD invoice logs a changed line in USD and the totals in HKD
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an HKD order whose bank transfer invoice has USD lines of 10100, 2020
+  and 1001 minor units, a bank transfer fee of 0 and an order total of 103000
+  minor units in HKD
+- **AND** an operator reissued it with Shipping & Handling of 2001 minor units in
+  USD and a reason, changing nothing else
+- **WHEN** an operator reads the invoice log
+- **THEN** the reissued entry names Shipping & Handling as the changed part, with
+  1001 minor units in USD before and 2001 minor units in USD after
+- **AND** the entry's order total reads 110850 minor units in HKD and its amount
+  delta 7850 minor units in HKD
+- **AND** it names no other part as changed
+
 ### Requirement: The quote is typed in USD and read in the settlement currency
 
 An operator SHALL type every amount of the quote in USD, the bid currency,
@@ -736,3 +861,46 @@ card rule.
 - **THEN** the dialog lists the USD lines of 10100, 2020 and 2001 minor units
 - **AND** below them it reads a Subtotal of 110850 and an order total of 110850
   minor units in HKD, with the previous order total of 103000 beside the new one
+
+## ADDED Requirements
+
+### Requirement: The order page lists a sent HKD invoice's USD lines, then its HKD Subtotal, fee and Total
+
+The order page SHALL show an HKD order's current invoice as the quote preview
+shows it: the USD lines, which are the Winning Bid, the Buyer's Premium,
+Shipping & Handling, and Insurance and Tax when the invoice carries them, then
+the Subtotal, the Payment Processing Fee and the Total in HKD. It SHALL show no
+HKD amount beside a line, and no conversion rate or note. Every amount reads in
+the operator shape of `shared/money-amounts`. The Subtotal, the fee and the
+Total are the invoice's, per `grade10-site/auction/winner-order`, "An HKD order
+converts each USD line at a fixed rate and rounds it up".
+
+The page SHALL list a USD invoice's lines, fee and Total in USD, as before.
+
+The reissue history reads per "Invoice log history": a changed line in USD, and
+the fee and the total in HKD.
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-dz1 rev=1 -->
+#### Scenario: g10adm.auction-post-sale.SC7 - The order page lists a sent HKD invoice as USD lines, then the HKD Subtotal, fee and Total
+**Serves:** post-sale-US-02 - Operator works one order from its own page
+
+- **GIVEN** an order in Pending Payment whose HKD bank transfer invoice was sent
+  with USD lines of 10100, 2020 and 992 minor units and a bank transfer fee of
+  257 minor units in USD
+- **WHEN** an operator opens the order
+- **THEN** the invoice lists `USD 101.00`, `USD 20.20` and `USD 9.92`
+- **AND** below them it reads Subtotal `HKD 1,029.30`, Payment Processing Fee
+  `HKD 20.18` and Total `HKD 1,049.48`
+- **AND** no HKD amount shows beside a line
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-59j rev=1 -->
+#### Scenario: g10adm.auction-post-sale.SC8 - The order page lists a sent USD invoice in USD
+**Serves:** post-sale-US-02 - Operator works one order from its own page
+
+- **GIVEN** an order in Pending Payment whose USD bank transfer invoice was sent
+  with lines of 10100, 2020 and 1001 minor units and a bank transfer fee of 500
+  minor units in USD
+- **WHEN** an operator opens the order
+- **THEN** the invoice lists `USD 101.00`, `USD 20.20` and `USD 10.01`, Payment
+  Processing Fee `USD 5.00` and Total `USD 136.21`
+- **AND** no HKD amount shows

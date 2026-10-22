@@ -386,6 +386,19 @@ receipt or letter.
 - **AND** the replaced invoice still reads a Subtotal of 103000 minor units in
   HKD
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-ida rev=1 -->
+#### Scenario: g10.auction-winner-order.SC13 - Only the Order Summary's note names the rate
+**Serves:** winner-order-US-26 - the winner finds the rate once, where the HKD total comes from
+
+- **GIVEN** a sent HKD invoice for an order whose winner picked HKD and bank
+  transfer, with USD lines of 10100, 2020 and 1001 minor units, whose payment an
+  operator confirmed
+- **WHEN** the winner reads the Order Summary, the invoice page, the invoice PDF,
+  the receipt PDF, the payment reminder and the payment-received letter
+- **THEN** the Order Summary's note under the Subtotal reads
+  `Converted from US$131.21 at 1 USD = 7.85 HKD`
+- **AND** none of the other five names the rate or prints `7.85`
+
 ### Requirement: The Order Summary reads the settlement currency, with USD beneath each HKD line
 
 This requirement keeps its heading for the requirements that cite it, and
