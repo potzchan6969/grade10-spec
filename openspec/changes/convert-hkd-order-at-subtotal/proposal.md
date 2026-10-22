@@ -89,10 +89,9 @@ None.
   operator's quote preview from the new breakdown. `apps/preview` and
   `apps/emails` HKD fixtures follow.
 - **PRD pages** - [Post-Bidding](../../../docs/prds/products/grade10-site/auction/post-bidding.md#settling-in-hkd),
-  [Auction Management](../../../docs/prds/products/grade10-admin/auction/management.md#payment),
-  [Auction](../../../docs/prds/products/grade10-site/auction/index.md) and
-  [Money Amounts](../../../docs/prds/platform/shared/money-amounts.md#display-shapes)
-  carry the 🚧 lines.
+  [Auction Management](../../../docs/prds/products/grade10-admin/auction/management.md#payment)
+  and [Auction](../../../docs/prds/products/grade10-site/auction/index.md)
+  carry the 🚧 lines. The Money Amounts invoice item example reads `US$101.00`.
 
 ## Open Questions
 
@@ -105,7 +104,5 @@ None.
 
 - [Post-Bidding · Settling in HKD](../../../docs/prds/products/grade10-site/auction/post-bidding.md#settling-in-hkd)
 - [Post-Bidding · The Invoice](../../../docs/prds/products/grade10-site/auction/post-bidding.md#the-invoice)
-- [Post-Bidding · Receipts](../../../docs/prds/products/grade10-site/auction/post-bidding.md#receipts)
 - [Post-Bidding · Letters](../../../docs/prds/products/grade10-site/auction/post-bidding.md#letters)
 - [Auction Management · Payment](../../../docs/prds/products/grade10-admin/auction/management.md#payment)
-- [Money Amounts · Display Shapes](../../../docs/prds/platform/shared/money-amounts.md#display-shapes)

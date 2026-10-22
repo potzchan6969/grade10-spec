@@ -22,8 +22,8 @@ operator's order procedure is on [Internal Bid](/p/grade10-admin/auction/interna
 - **No card was charged** — nothing was held on any card while bidding; a
   losing bidder's My Auctions row says their card was not charged
 - **A collector winner** - gets the auction-won letter asking for setup by
-  `Confirm by …`, naming no amount; their My Auctions row reads Won with View
-  order
+  `Confirm by …`, naming the US$ winning bid and no amount owed; their My
+  Auctions row reads Won with View order
 - **Everyone else hears once** — a bidder who lost, and a watch-only
   collector, each get one letter about the close and nothing after it —
   [Bidding ·
@@ -331,9 +331,9 @@ by card, reads:
   as TBD, whether or not the winner will owe any. Whenever the line shows it
   carries a brief info tooltip — `Set by Grade10 for where your order ships.
   Some orders have none.`
-- 🚧 **Amount marks** — Order Summary lines use `$` with two decimals
-  (`$12,800.00`), except bare `$0` when the amount is zero; Order Total
-  keeps its trailing zeros too (`HK$16,460.00`)
+- 🚧 **Amount marks** - a USD Order Summary line reads `US$` with two decimals
+  (`US$12,800.00`) and a zero amount reads Free; Order Total keeps its
+  trailing zeros too (`HK$16,460.00`)
 - 🚧 **Payment Processing Fee** — Grade10's own on a card invoice, computed
   from the Stripe card rule; the operator's own on a bank transfer invoice,
   zero or more, empty read as Free
@@ -497,7 +497,7 @@ then shipped, delivered, and order cancelled.
 
 | Letter | Sent | What it carries |
 | --- | --- | --- |
-| Auction won | At the close | The setup steps and `Confirm by …`; no amount yet |
+| Auction won | At the close | The setup steps and `Confirm by …`; the US$ winning bid, and no amount owed yet |
 | 🚧 Setup reminder | Close **+ 24 hours**, while setup is incomplete | The steps and `Confirm by …` |
 | 🚧 Setup overdue | Close **+ 48 hours**, the setup deadline | Self-service setup is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review, never automatically |
 | Payment reminder | Invoice send, then send **+ 3** and **+ 6 days** while the invoice is pending | The total and `Pay by …`; View invoice and pay |
