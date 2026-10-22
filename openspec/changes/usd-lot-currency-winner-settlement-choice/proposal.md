@@ -31,6 +31,10 @@ the money they hold.
   nowhere. An HKD invoice and receipt print no USD winning bid.
 - **The Order Summary reads the settlement currency** — under HKD each line
   reads HKD with its USD amount beneath it, and Order Total is one HKD total.
+- **USD order amounts read `US$`** - every USD amount a winner reads on Winner
+  Order, the invoice and its PDF, the receipt and the order letters shows
+  `US$` in every language, as a bid does. Today English shows `$` and Chinese
+  and Korean show `US$` for the same amount.
 - **Methods follow the currency** — HKD offers Card, FPS and HK Local; USD
   offers Card, HK Local and International via SWIFT. Each rail is a choice at
   setup.
@@ -54,13 +58,15 @@ None.
   HKD and JPY schedules and ceilings retire.
 - `grade10-site/auction/winner-order` — order setup gains the settlement
   currency; payment methods by rail follow it; HKD conversion, the Order
-  Summary's HKD lines and the invoice's disclosure follow it.
+  Summary's HKD lines and the invoice's disclosure follow it. A USD order
+  amount reads `US$` for every reader.
 - `grade10-admin/auction/listing` — the currency field is USD only and
   defaults to USD; HKD and JPY are refused.
 - `grade10-admin/auction/post-sale` — the operator quote types USD, converts it
   to the settlement currency and names the rail picked.
 - `grade10-site/auction/notifications-order` — letters after the winner picks
-  carry the settlement currency and no USD winning bid.
+  carry the settlement currency and no USD winning bid; a USD amount reads
+  `US$`.
 - `grade10-site/auction/auction` — the verified-bidder bar is US$15,000.
 - `shared/ui/auction-order` — the new setup and summary props the winner-order
   block takes.

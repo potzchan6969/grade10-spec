@@ -44,6 +44,12 @@
 **I want** my Order Summary in HKD, with each line's USD amount beneath it and one HKD total I will pay,
 **so that** I see what I won and what it costs me in HKD.
 
+### winner-order-US-28: Winner who settles in USD reads every amount as US$
+
+**As a** winner who picked USD,
+**I want** every amount on my order, invoice, receipt and order letters to read `US$`, whatever language I read in,
+**so that** I never mistake a US dollar amount for Hong Kong dollars.
+
 ## MODIFIED User journeys
 
 ### winner-order-US-08: Winner pays an invoice with a policy premium

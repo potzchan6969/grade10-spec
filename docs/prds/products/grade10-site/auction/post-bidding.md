@@ -273,6 +273,9 @@ winner who picks USD pays it unchanged.
 | Fixed once sent | The sent invoice never re-prices, and its currency never changes |
 
 - **Order Summary under USD** — every line and the Order Total read USD
+- 🚧 **USD reads `US$`** - a USD order amount reads `US$` in every language,
+  on Winner Order, the invoice and its PDF, the receipt and the order letters.
+  A PDF opened before this keeps what it printed
 - **Order Summary under HKD** — every line and the Order Total read HKD,
   which is what the invoice asks for; a note under the total names the
   conversion once — `Converted from US$131.21 at 1 USD = 7.85 HKD`
@@ -705,6 +708,7 @@ a second payment provider, and changes to the bid-time rules.
 | Payment methods by currency | Decided | HKD offers Card, FPS and HK Local; USD offers Card, HK Local and International via SWIFT. The winner chooses one method or rail. The invoice and bank-details dialog show only the selected rail, with no tabs or copy controls. | Product |
 | Rail-only reissue | Decided | Changing FPS to HK Local, or USD HK Local to International via SWIFT, counts as a change by itself and allows invoice reissue. | Product |
 | Order summary under HKD | Decided | Every line and the Order Total read HKD, as the invoice asks, and one note under the total names the converted lines' USD figure and the fixed rate. Chosen over USD beneath each line and over an HKD \| USD switch, because the USD answers where the HKD total came from, not what each line is in USD. | Product |
+| USD symbol on order amounts | 🚧 In flight | A USD order amount reads `US$` for every reader, as a bid does. Chosen over the reader's language picking the symbol, which printed `$` in English and `US$` in Chinese and Korean for one amount. | Product (@seankcw) |
 | Transfer contact channel | Decided | An operator reaches a winner about a transfer or a proof on WhatsApp, at the address form's phone number. Chosen over email alone and over both. | Operations |
 | Copy Message confirmation | Decided | Copy Message shows no confirmation beyond the control's own state, and no toast, so the dialog stays the only thing on screen. Chosen over keeping the toast and over no feedback. | Product (@tangconst) |
 | Internal order setup | 🚧 In flight | An internal order has no winner setup, operator setup step or letters. It uses HKD settlement and FPS automatically. | Product |
