@@ -102,21 +102,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner settled in `<settlement_currency>`, account language `<letter_language>`) has just paid `<order_n>` in full by card.
+* customer(winner settled in `<settlement_currency>`, account language `<letter_language>`) has just paid `<order_n>` in full by `<method>`.
 * The winner can open the Payment received letter in `<winner_mailbox>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| order_n | The order of the row, paid by card with the card rule of its currency; bind its identity only |
+| order_n | The order of the row, paid with the method and rule of the row; bind its identity only |
 | winner_mailbox | The inbox of the winner's registered email address |
 
-| Row | `<settlement_currency>` | `<letter_language>` | `<usd_lines>` | `<subtotal>` | `<fee>` | `<order_total>` |
-| --- | --- | --- | --- | --- | --- | --- |
-| USD order | USD, card rule 4.4% plus USD0.30 | English | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | none | USD6.36 | USD137.57 |
-| HKD order | HKD, card rule 3.4% plus HKD2.35 | English | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | HKD38.69 | HKD1,068.69 |
-| HKD order in Chinese | HKD, card rule 3.4% plus HKD2.35 | Traditional Chinese | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | HKD38.69 | HKD1,068.69 |
+| Row | `<settlement_currency>` | `<letter_language>` | `<method>` | `<usd_lines>` | `<subtotal>` | `<fee>` | `<order_total>` |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| USD order | USD | English | Bank transfer, confirmed by an operator, bank transfer fee USD5.00 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | USD131.21 | USD5.00 | USD136.21 |
+| HKD order | HKD | English | Card, HKD rule 3.4% plus HKD2.35 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | HKD38.69 | HKD1,068.69 |
+| HKD order in Chinese | HKD | Traditional Chinese | Card, HKD rule 3.4% plus HKD2.35 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | HKD38.69 | HKD1,068.69 |
 
 **Steps:**
 
@@ -127,7 +127,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The letter lists `<usd_lines>` in USD, in `<letter_language>`.
-* For an HKD order it then shows Subtotal `<subtotal>`, Payment Processing Fee `<fee>` and Order Total `<order_total>` in HKD with two decimals; for a USD order it shows the fee `<fee>` and Order Total `<order_total>` in USD and no HKD amount.
+* It then shows Subtotal `<subtotal>`, Payment Processing Fee `<fee>` and Order Total `<order_total>`, in HKD with two decimals for an HKD order and in USD for a USD order, which shows no HKD amount.
 * The letter names `<order_total>` as the amount paid.
 * The letter names no rate and shows no conversion note.
 * Amounts use English grouping and punctuation whatever the language.
@@ -184,28 +184,30 @@ Runs once per row of **Test data**.
 
 **Run:** QA1, blind pass for `convert-hkd-order-at-subtotal`, 2026-10-22. The first blind pass read a bundle whose existing suites were empty and whose PRD pages lacked the product manager's edits, both packaging defects of the coordinator. It was resumed against a corrected bundle, with the real suites and the current PRD, and revised. It read no `## Requirements`, no scenario, no `tech-design.md`, no `tasks.md`, no archive and no code. It is the run's own statement, not proof.
 
-**Run:** QA2, 2026-10-22, in a fresh context. It read the planning-dev skill, the specs-to-test-cases, tcs-conventions, planning-review-efficiency and writing documents; the change's proposal, `decisions.md` (Q1 to Q19 and the 12 Raised rows), the four `user-journeys.md`, the four `spec.md` deltas, `tech-design.md` and `tasks.md`; the PRD sections they cite; the durable notifications-order spec and suite. It compared the blind case with the scenarios, recomputed every minor-unit figure, and wrote no case from a scenario. A case is linked to a scenario when its results assert every outcome the scenario's THEN and ANDs state, from a starting state of the same class and with values from the same partition; a clause a case leaves out keeps the link off and the scenario under Uncovered. It is a statement, not proof.
+**Run:** QA1, second blind pass, 2026-10-22. It extended its cases for the operator's order page and the house order and left this capability's case as it was. Its files started from the blind state, without the dispositions below. It is the run's own statement, not proof.
+
+**Run:** QA2, second reconciliation pass, 2026-10-22, in a fresh context. It read the repaired deltas of the five capabilities, `tasks.md`, `tech-design.md`, `proposal.md`, the journeys and `decisions.md` through Q31, the PRD sections they cite, and both QA1 passes. It recomputed every minor-unit figure and wrote no case from a scenario. A case is linked to a scenario when its results assert every outcome the scenario's THEN and ANDs state, from a starting state of the same class and with values from the same partition. It is a statement, not proof.
 
 **Blind case**
 
 | Case | Disposition |
 | --- | --- |
-| `US1-TC61` (`TC-cm0`) | Regrouped into `US1-TC57` (`TC-vxo`): the Payment received letter and its receipt PDF are one surface, one starting state and one route. Its English and Traditional Chinese rows, the English grouping result and the attachment result are now rows and results of `TC57`. The case is dropped; it was never published |
+| `US1-TC61` (`TC-cm0`) | Regrouped into `US1-TC57` (`TC-vxo`): the Payment received letter and its receipt PDF are one surface, one starting state and one route. Its English and Traditional Chinese rows, the English grouping result and the attachment result are now rows and results of `TC57`. Dropped; it was never published |
 
-**Existing durable cases the change moves**
+**Existing durable cases**
 
 | Durable case | Verdict | Action |
 | --- | --- | --- |
 | `US1-TC1` (`TC-8bw`) | Not moved: the won-lot letter keeps the US$ winning bid (decisions Q25) | Left `draft` |
 | `US1-TC2` (`TC-5o0@3`) | Contradicted in its HKD row: 103,100 | Rewritten at `@4`; the HKD row reads 103,000 and keeps its links |
 | `US1-TC56` (`TC-ew9@1`) | Contradicted in its HKD row: 103,100 | Rewritten at `@2` |
-| `US1-TC57` (`TC-vxo@2`) | Contradicted: "neither prints the USD winning bid" fails for a letter that lists the USD lines | Rewritten at `@3` with `TC61` folded in; links SC-66 and SC2 |
+| `US1-TC57` (`TC-vxo@2`) | Contradicted: "neither prints the USD winning bid" fails for a letter that lists the USD lines | Rewritten at `@3` with `TC61` folded in; its USD row now follows SC2 (a bank transfer, a Subtotal, a fee of US$5.00, a total of US$136.21); links SC-66 and SC2 |
 | `US1-TC58` (`TC-l6s`) | Not moved: the reissue letter in USD and the earlier HKD letter | Left `draft` |
 | `US1-TC59` (`TC-xsq@2`) | Contradicted: outstanding amount 103,100 | Rewritten at `@3` |
 
-`TC-5o0` is also the marker id of `US1-TC3` in the durable suite, a collision that predates this change; the fold's marker check reads two durable cases under one id and needs `US1-TC3` re-keyed first.
+`TC-5o0` is also the marker id of `US1-TC3` in the durable suite, a collision that predates this change. A change copy may not re-key a marker, since a marker id never changes, so the owner of the durable suite re-keys `US1-TC3`; `accept:preflight` folds without it.
 
-Walk text that repeats these results stays stale until `/tcs-review` refreshes the walks: Walk 1 steps 3 to 4 (durable lines 79 to 81) and Walk 3 steps 3, 4, 7 and 8 (durable lines 272 to 287, and their data blocks, which hold HKD1,031 and 103100).
+Walk text that repeats these results stays stale until `/tcs-review` refreshes the walks: Walk 1 steps 3 to 4 (durable lines 79 to 81) and Walk 3 steps 3, 4, 7 and 8 (durable lines 272 to 287 and their data blocks).
 
 **Scenario coverage**
 
@@ -218,24 +220,28 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | `order-mail-SC-67` | `US1-TC59` |
 | `order-mail-SC-68` | `US1-TC58`, unchanged |
 
+**Out of suite:** g10.auction-notifications-order.SC1
+
+SC1 is a free charge in the Payment received letter: Shipping & Handling Free, no Insurance or Tax line and a Free fee. The letter preview test of task 4.2 in this store (`apps/emails/emails/auction/order/payment-received.test.mjs`) and the letter test of task 7.1 in the application repository (`emailPort.test.ts`) verify it.
+
 **Uncovered**
-
-- `g10.auction-notifications-order.SC1`: a free charge in the Payment received letter (Shipping & Handling Free, no Insurance or Tax line, a Free fee). No case reads a letter of an order with free lines
-
-**Over-claimed**
 
 - None
 
+**Over-claimed**
+
+- `US1-TC57` step 3 and its last result open the receipt PDF attached to the letter. The attachment is a gap that predates this change; task 7.3 leaves it to a bug fix, and the spec states only that an attached receipt reads the same currency. The step cannot pass until the fix lands
+
 **Contradictions between the readings**
 
-- None between the blind case and a scenario. One between artifacts: `US1-TC57` step 3 opens the receipt PDF attached to the letter, as `spec.md` states ("The receipt PDF attached to it reads the same lines") and the PRD's Letters table says; `tech-design.md` and task 7.3 leave the attachment to the change that owns it. The step cannot pass until that change lands
+- None
 
 **Anchor coverage**
 
 | Anchor | Cases | Scenarios |
 | --- | --- | --- |
-| Root group Post-close letters | `US1-TC2`, `TC56`, `TC57`, `TC59`, and the unchanged `TC1`, `TC58` | SC-63 to SC-68 and SC2 covered; SC1 uncovered |
+| Root group Post-close letters | `US1-TC2`, `TC56`, `TC57`, `TC59`, and the unchanged `TC1`, `TC58` | SC-63 to SC-68 and SC2 covered; SC1 out of suite |
 
 **Raised**
 
-Q24 and Q25 close the two notifications-order rows; the answers sit in `## Settled`. The PRD's Close paragraph and Letters table still say the Auction won letter names no amount, and owe the product manager an edit.
+Q24 and Q25 close the two notifications-order rows; the answers sit in `## Settled`.

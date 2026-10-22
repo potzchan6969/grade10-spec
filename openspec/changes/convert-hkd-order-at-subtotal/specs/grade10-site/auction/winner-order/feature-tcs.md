@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/24
+**Status:** pending-review · 0/25
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## g10.auction-winner-order.US1: Winner settles a won listing
@@ -260,8 +260,6 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
 
-**Blocked:** Product manager - how the operator's order detail reads a replaced HKD invoice is the open row on the operator order detail in `decisions.md` `## Raised`; steps 2 and 3 wait for it.
-
 **Pre-conditions:**
 
 * admin(operator with payment-processing) holds `<winner_order_185_1>`, whose pending invoice was sent in HKD for bank transfer on HK Local.
@@ -278,7 +276,7 @@ Runs once per row of **Test data**.
 
 1. Reissue the invoice in USD, keeping HK Local, with a reason.
 2. Read the new invoice's Winning Bid.
-3. Read the replaced invoice in the order's invoice history.
+3. Read the replaced invoice on the order page, marked Replaced.
 
 **Expected Results:**
 
@@ -349,7 +347,7 @@ Runs once per row of **Test data**.
 * Order Total reads `<order total>`, the Subtotal plus the fee, with no further rounding.
 * No figure reads as `<not this>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-nf6 rev=4 covers=g10.auction-winner-order.SC-81v -->
+<!-- trace:case id=g10.auction-winner-order.TC-nf6 rev=4 covers=g10.auction-winner-order.SC-81v,g10.auction-winner-order.SC-g3i -->
 ### g10.auction-winner-order.US26-TC2: HKD receipt PDF lists the USD lines, the HKD Subtotal, fee and total, and the payment
 
 Runs once per row of **Test data**.
@@ -370,26 +368,27 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(winner settled in HKD) is on `<winner order url>` for `<hkd_order_n>`.
-* `<hkd_order_n>` was paid in full in one payment and reads Preparing Shipment.
+* `<hkd_order_n>` has the payment of the row recorded against its invoice.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| hkd_order_n | An HKD order paid in full, with the method, lines, rule and totals of the row; bind its identity only |
+| hkd_order_n | An HKD order with the method, lines, rule and payment of the row; bind its identity only |
 
 | Field | Value |
 | --- | --- |
 | winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
-| Row | `<method>` | `<usd lines>` | `<subtotal>` | `<fee>` | `<order total>` |
-| --- | --- | --- | --- | --- | --- |
-| Bank transfer | Bank transfer on FPS, bank transfer fee USD0 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | Free | HKD1,030.00 |
-| Card with Tax | Card, HKD rule 3.4% plus HKD2.35 | Winning Bid USD150.00, Buyer's Premium USD30.00, Shipping & Handling USD49.00, Insurance USD20.00, Tax USD2.00 | HKD1,970.35 | HKD71.79 | HKD2,042.14 |
+| Row | `<method>` | `<usd lines>` | `<subtotal>` | `<fee>` | `<order total>` | `<current payment>` | `<previous payments>` | `<remaining balance>` |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Bank transfer, paid in full | Bank transfer on FPS, bank transfer fee USD0 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | Free | HKD1,030.00 | HKD1,030.00 | HKD0.00 | HKD0.00 |
+| Card with Tax, paid in full | Card, HKD rule 3.4% plus HKD2.35 | Winning Bid USD150.00, Buyer's Premium USD30.00, Shipping & Handling USD49.00, Insurance USD20.00, Tax USD2.00 | HKD1,970.35 | HKD71.79 | HKD2,042.14 | HKD2,042.14 | HKD0.00 | HKD0.00 |
+| Bank transfer, first part payment | Bank transfer on FPS, bank transfer fee USD0 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | Free | HKD1,030.00 | HKD300.00 | HKD0.00 | HKD730.00 |
 
 **Steps:**
 
-1. Click the receipt link under the payment-method card.
+1. Click the receipt link under the payment-method card and open the receipt for the payment of the row.
 2. Read the receipt PDF's lines, Subtotal, Payment Processing Fee and Order Total.
 3. Read its Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due.
 
@@ -398,7 +397,7 @@ Runs once per row of **Test data**.
 * The receipt PDF opens.
 * The lines read in USD as `<usd lines>`, with two decimals and Tax between Insurance and the Subtotal where the row has it.
 * Subtotal, Payment Processing Fee and Order Total read `<subtotal>`, `<fee>` and `<order total>` in HKD with two decimals, and the fee reads Free where it is zero.
-* Original Invoice Total reads `<order total>`, Previous Payments HKD0.00, Current Payment Received `<order total>` and Remaining Balance Due HKD0.00.
+* Below the lines, Original Invoice Total reads `<order total>`, Previous Payments `<previous payments>`, Current Payment Received `<current payment>` and Remaining Balance Due `<remaining balance>`.
 * No rate and no conversion note is printed.
 * Every figure equals the invoice and the Order Summary.
 
@@ -522,7 +521,7 @@ Runs once per row of **Test data**.
 
 * The result is `<hkd subtotal>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-k5y rev=2 -->
+<!-- trace:case id=g10.auction-winner-order.TC-k5y rev=2 covers=g10.auction-winner-order.SC-ida -->
 ### g10.auction-winner-order.US26-TC7: Only the Order Summary's note names the conversion rate
 
 **Classification:**
@@ -540,26 +539,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<winner_order_200_1>` is settled in HKD and paid in full, and Grade10 sent letters about it.
+* `<winner_order_200_1>` is settled in HKD, its payment is confirmed, and Grade10 sent letters about it.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| winner_order_200_1 | An order settled in HKD whose invoice of HK$2,042.14 was paid in full; bind its identity only |
+| winner_order_200_1 | An order settled in HKD by bank transfer on FPS with USD lines of USD101.00, USD20.20 and USD10.01, a bank transfer fee of USD0 and an invoice of HK$1,030.00, whose payment an operator confirmed; bind its identity only |
+| usd_sum | USD131.21 (fixed: the sum of the three USD lines) |
 
 **Steps:**
 
 1. Read the settlement currency choice before picking HKD on a new order.
 2. Read Order Summary on `<winner_order_200_1>`.
-3. Read its invoice.
-4. Read its receipt.
-5. Read each letter sent for it.
+3. Read its invoice page.
+4. Read its invoice PDF.
+5. Read its receipt PDF.
+6. Read the payment reminder and the payment received letter sent for it, and each other letter.
 
 **Expected Results:**
 
-* The Order Summary names the rate once, in the note under the Subtotal.
-* The settlement currency choice, the invoice, the receipt and each letter name no rate, exchange rate or 7.85.
+* The Order Summary names the rate once, in the note under the Subtotal, which names `<usd_sum>` and the rate 1 USD = 7.85 HKD.
+* The settlement currency choice, the invoice page, the invoice PDF, the receipt PDF and each letter name no rate, exchange rate or 7.85.
 
 <!-- trace:case id=g10.auction-winner-order.TC-one rev=2 covers=g10.auction-winner-order.SC-8gv -->
 ### g10.auction-winner-order.US26-TC8: A bank transfer fee typed in USD converts alone and sits below the Subtotal
@@ -717,7 +718,7 @@ Runs once per row of **Test data**.
 * Payment Processing Fee reads Free and is not left out.
 * Order Total reads `<subtotal_2>` as HK$942.00.
 
-<!-- trace:case id=g10.auction-winner-order.TC-q8e rev=1 -->
+<!-- trace:case id=g10.auction-winner-order.TC-q8e rev=1 covers=g10.auction-winner-order.SC-o3a -->
 ### g10.auction-winner-order.US26-TC13: Reissued invoice is priced once under the rule and the replaced one keeps its amounts
 
 **Classification:**
@@ -732,8 +733,6 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-26
-
-**Blocked:** Product manager - how the operator's order detail reads a replaced HKD invoice is the open row on the operator order detail in `decisions.md` `## Raised`; steps 3 and 4 wait for it.
 
 **Pre-conditions:**
 
@@ -764,7 +763,7 @@ Runs once per row of **Test data**.
 
 1. Read the Order Summary and the note under the Subtotal.
 2. Click the Invoice link beside the Order summary heading and read the invoice.
-3. As admin(holds payment-processing), open the order's invoice history and open the replaced `<invoice_1>`.
+3. As admin(holds payment-processing), open the order page and open the replaced `<invoice_1>`, marked Replaced.
 4. Read the replaced invoice's lines, Subtotal, fee and total.
 
 **Expected Results:**
@@ -830,7 +829,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The lines read as `<usd lines>`, in that order, each in USD with two decimals and no HKD amount beside it.
+* The lines read as `<usd lines>`, in that order, each with the US$ mark and two decimals, as `US$101.00`, and no HKD amount beside it.
 * One Subtotal row follows them and reads `<subtotal>`.
 * The note under the Subtotal names `<usd sum>` and the rate 1 USD = 7.85 HKD, and the fee adds nothing to its USD figure.
 * Payment Processing Fee sits below the Subtotal and reads `<fee>` in HKD, with no USD amount beside it.
@@ -905,7 +904,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: no HKD total shows, and no Subtotal row and no conversion note shows.
+* Step 1: no HKD total and no HKD fee shows, and no Subtotal row and no conversion note shows.
 * Step 2: the winning bid reads USD250.00, in USD.
 
 <!-- trace:case id=g10.auction-winner-order.TC-xdg rev=1 -->
@@ -1155,6 +1154,53 @@ Runs once per row of **Test data**.
 * The note under the Subtotal wraps inside the summary.
 * The page does not scroll sideways.
 
+<!-- trace:case id=g10.auction-winner-order.TC-ewl rev=1 -->
+### g10.auction-winner-order.US27-TC11: An HKD invoice sent before this layout keeps its stored amounts and reads in the new layout
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-27
+
+**Pre-conditions:**
+
+* customer(winner settled in HKD) is on `<winner order url>` for `<old_hkd_order>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| old_hkd_order | A test order whose HKD invoice was sent before this layout, paid by bank transfer on FPS with the fee empty; it stored the USD lines USD101.00 winning bid, USD20.20 Buyer's Premium and USD10.01 Shipping & Handling as typed, and each line's whole-HK$ amount, HK$793, HK$159 and HK$79 |
+| stored_total | HKD1031 (fixed: 793 plus 159 plus 79, each line rounded up when it was sent) |
+| repriced_total | HKD1030 (fixed: USD131.21 times 7.85 converted once, the figure a new invoice would read) |
+| usd_sum | USD131.21 (fixed: the sum of the three stored USD lines) |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
+**Steps:**
+
+1. Scroll to the Order Summary.
+2. Read its rows from the top down.
+3. Read the note under the Subtotal.
+
+**Expected Results:**
+
+* The rows list the three lines in USD with two decimals, none with an HKD figure beside it.
+* A Subtotal row follows them and reads `<stored_total>` with two decimals, not `<repriced_total>`.
+* The note under the Subtotal names `<usd_sum>` and the rate, as it does on any invoice.
+* Payment Processing Fee reads Free and Order Total reads `<stored_total>`.
+* The invoice is not re-priced.
+
 ---
 
 ## Settled
@@ -1171,7 +1217,9 @@ Runs once per row of **Test data**.
 
 **Run:** QA1, blind pass for `convert-hkd-order-at-subtotal`, 2026-10-22. The first blind pass read a bundle whose existing suites were empty and whose PRD pages lacked the product manager's edits, both packaging defects of the coordinator. It was resumed against a corrected bundle, with the real suites and the current PRD, and revised. It read no `## Requirements`, no scenario, no `tech-design.md`, no `tasks.md`, no archive and no code. It is the run's own statement, not proof.
 
-**Run:** QA2, 2026-10-22, in a fresh context. It read the planning-dev skill, the specs-to-test-cases, tcs-conventions, planning-review-efficiency and writing documents; the change's proposal, `decisions.md` (Q1 to Q19 and the 12 Raised rows), the four `user-journeys.md`, the four `spec.md` deltas, `tech-design.md` and `tasks.md`; the PRD sections they cite; the durable winner-order spec and suite and the sibling durable suites; and the suites of the open changes that overlap this one. It compared each blind case with the scenarios, recomputed every minor-unit figure, and wrote no case from a scenario. A case is linked to a scenario when its results assert every outcome the scenario's THEN and ANDs state, from a starting state of the same class and with values from the same partition; a clause a case leaves out keeps the link off and the scenario under Uncovered. It is a statement, not proof.
+**Run:** QA1, second blind pass, 2026-10-22. It extended its cases for the operator's order page and the house order, from the frozen anchors, the journeys, `decisions.md` with its Raised table and the PRD, with the same denials as the first pass. It added the case for an invoice sent before this layout. Its files started from the blind state, without the dispositions below. It is the run's own statement, not proof.
+
+**Run:** QA2, second reconciliation pass, 2026-10-22, in a fresh context. It read the repaired deltas of the five capabilities, `tasks.md`, `tech-design.md`, `proposal.md`, the journeys and `decisions.md` through Q31, the PRD sections they cite, and both QA1 passes. It merged QA1's new case into this suite, re-checked every durable case that states an amount or a line, recomputed every minor-unit figure, and wrote no case from a scenario. A case is linked to a scenario when its results assert every outcome the scenario's THEN and ANDs state, from a starting state of the same class and with values from the same partition; a clause a case leaves out keeps the link off and the scenario under Uncovered or Out of suite. It is a statement, not proof.
 
 **Blind cases**
 
@@ -1179,42 +1227,43 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `US26-TC10` (`TC-c07`) | Kept. The Page row asserts the invoice-page scenario `g10.auction-winner-order.SC5` with its own fixture; the PDF row is the same claim on the PDF. Linked: SC5 |
 | `US26-TC11` (`TC-b46`) | Kept. Page and PDF rows assert the free-charge scenario `g10.auction-winner-order.SC6`. Linked: SC6 |
-| `US26-TC12` (`TC-9ke`) | Regrouped into `US26-TC2` (`TC-nf6`): the receipt PDF of an HKD order paid in full is one surface, one starting state and one route. Its card-with-Tax fixture is row 2 of `TC-nf6`, which adds the payment breakdown. The case is dropped; it was never published |
-| `US26-TC13` (`TC-q8e`) | Kept and blocked. It carries a behaviour no scenario states beyond the second clause of `winner-order-SC-287`: a reissue prices under the rule and the replaced invoice keeps its amounts (decisions Q16). Steps 3 and 4 read the operator's invoice history, which the open row on the operator order detail leaves undecided. No link |
-| `US27-TC4` (`TC-xgk`) and `US27-TC5` (`TC-i4z`) | Regrouped into `US27-TC1` (`TC-vwm`) as its third row. The layout and note of TC4 and the fee base of TC5 share one starting state and one route, and `TC-vwm` has to be rewritten for the same rule. Both are dropped; neither was published |
+| `US26-TC12` (`TC-9ke`) | Regrouped into `US26-TC2` (`TC-nf6`): the receipt PDF of an HKD order is one surface, one starting state and one route. Its card-with-Tax fixture is row 2 of `TC-nf6`. Dropped; it was never published |
+| `US26-TC13` (`TC-q8e`) | Kept and unblocked: decisions Q29 settles the order page the operator reads the replaced invoice on. Linked: `g10.auction-winner-order.SC11`, which a card fixture with a lowered Shipping & Handling line asserts in the same class |
+| `US27-TC4` (`TC-xgk`) and `US27-TC5` (`TC-i4z`) | Regrouped into `US27-TC1` (`TC-vwm`) as its third row. Dropped; neither was published |
 | `US27-TC6` (`TC-xdg`) | Kept. The rounding partitions on the Order Summary; the requirement holds them as a table and no scenario states them. No link |
-| `US27-TC7` (`TC-m5d`) | Kept. The exact and rounds-up partitions of a converted bank fee and the amount due in the bank details dialog. It overlaps row 4 of `TC-vwm` on the fee below the Subtotal and the note; the partitions and the dialog are its own. No link |
+| `US27-TC7` (`TC-m5d`) | Kept. The exact and rounds-up partitions of a converted bank fee and the amount due in the bank details dialog. No link |
 | `US27-TC8` (`TC-oc2`) | Kept. Asserts every clause of `g10.auction-winner-order.SC10`. Linked: SC10 |
 | `US27-TC9` (`TC-qf9`) and `US27-TC10` (`TC-kkw`) | Kept as compatibility cases, Chinese and a narrow viewport. No scenario states either. No link |
+| `US27-TC11` (`TC-ewl`) | New in the second pass. Kept. An HKD invoice sent before this layout keeps its stored lines and Subtotal and reads in the new layout (decisions Q12). QA2 added one result: the note names the USD sum as on any invoice, which decisions Q31 settles; the case left the note out while the question was open. It carries behaviour no scenario states; `spec.md` owes a scenario |
 
-**Existing durable cases the change moves**
+**Existing durable cases**
 
 Every durable case below is `draft`; each rewrite keeps its marker id and bumps `rev`, so the fold replaces the durable case of the same `TC<m>`.
 
 | Durable case | Verdict | Action |
 | --- | --- | --- |
-| `US26-TC1` (`TC-ac5@3`) | Contradicted: it asserts each line converted to a whole HK$ and summed | Rewritten at `@4` over five rows that hold the exact, fraction, five-line and bank-fee partitions; links SC-283, SC-284, SC-285, SC1 and SC2, and drops the link to the removed `winner-order-SC-288` |
-| `US26-TC2` (`TC-nf6@3`) | Contradicted: the receipt now lists USD lines | Rewritten at `@4` with QA1's `TC12` folded in; links SC4 and drops the link to the removed `winner-order-SC-289` |
-| `US26-TC3` (`TC-9dm@1`) | Contradicted: "every amount in every letter reads HKD" and "no USD winning bid" fail for the receipt letter | Rewritten at `@2` |
+| `US26-TC1` (`TC-ac5@3`) | Contradicted: each line converted to a whole HK$ and summed | Rewritten at `@4` over five rows; links SC-283, SC-284, SC-285, SC1 and SC2 |
+| `US26-TC2` (`TC-nf6@3`) | Contradicted: the receipt now lists USD lines | Rewritten at `@4` over three rows, with QA1's `TC12` folded in and a first part payment added; links SC4 and SC12 |
+| `US26-TC3` (`TC-9dm@1`) | Contradicted: "every amount in every letter reads HKD" fails for the receipt letter | Rewritten at `@2` |
 | `US26-TC4` (`TC-q56`) | Not moved: a refund reads in HKD (Non-Goals) | Left `draft` |
 | `US26-TC5` (`TC-3ly@2`) | Figures move to 3,869 and 106,869 | Rewritten at `@3`; keeps its link to SC-286 |
-| `US26-TC6` (`TC-uz6@2`) | Contradicted: rows round to a whole HK$ | Rewritten at `@3` as the cent conversion of a USD sum |
-| `US26-TC7` (`TC-k5y@1`) | Contradicted: "no surface names a rate" fails for the Order Summary note | Rewritten at `@2`. `order-summary-hkd-conversion-note` holds the same claim as its own `US26-TC9`; one of the two is retired when that change lands |
+| `US26-TC6` (`TC-uz6@2`) | Contradicted: rows round to a whole HK$ | Rewritten at `@3` |
+| `US26-TC7` (`TC-k5y@1`) | Contradicted: "no surface names a rate" fails for the Order Summary note | Rewritten at `@2` on the fixture of SC13, which names the invoice page and the invoice PDF apart; links SC13. `order-summary-hkd-conversion-note` is retracted, so its duplicate `US26-TC9` and the `TC-7qs` marker clash are gone |
 | `US26-TC8` (`TC-one@1`) | Figures move to 39,250 and 142,250 | Rewritten at `@2`; keeps its link to SC-302 |
-| `US27-TC1` (`TC-vwm@4`) | Contradicted: HKD lines with USD beneath | Rewritten at `@6`, above the `@5` that `order-summary-hkd-conversion-note` holds in its draft; four rows; links SC-290, SC-304, SC9 and SC8 |
-| `US27-TC2` (`TC-7qs@1`) | SC-291 gains "no Subtotal row and no conversion note" | Rewritten at `@2`. `order-summary-hkd-conversion-note` reuses this marker id for its `US26-TC9`; its owner repairs that |
-| `US27-TC3` (`TC-17a@1`) | Decision Q23 adds no Subtotal row and no note before send | Rewritten at `@2`; keeps its link to SC-292 |
+| `US27-TC1` (`TC-vwm@4`) | Contradicted: HKD lines with USD beneath | Rewritten at `@6` over four rows; the lines now read with the US$ mark (decisions Q20); links SC-290, SC-304, SC9 and SC8 |
+| `US27-TC2` (`TC-7qs@1`) | SC-291 gains "no Subtotal row and no conversion note" | Rewritten at `@2` |
+| `US27-TC3` (`TC-17a@1`) | SC-292 adds no Subtotal row, no HKD fee and no note before send | Rewritten at `@2`; keeps its link |
 | `US24-TC2` (`TC-79a@2`) | Contradicted: the HKD row lists each line in HKD | Rewritten at `@3` |
-| `US24-TC7` (`TC-r4x@1`) | Contradicted: the replaced HKD invoice no longer reads its Winning Bid in HKD | Rewritten at `@2` and blocked on the operator order detail row |
+| `US24-TC7` (`TC-r4x@1`) | Contradicted: the replaced HKD invoice no longer reads its Winning Bid in HKD | Rewritten at `@2` on the fixture of SC-301; unblocked; keeps its link |
 | `US8-TC5` (`TC-xji@1`) | Contradicted: each line converted and rounded before summing | Rewritten at `@2` |
-| `US1-TC31` (`TC-m21@1`) | Contradicted: Tax of HKD70 on an HKD order, where Tax is a USD line (SC-214 now reads a USD order) | Rewritten at `@2` as a USD order; the marker's link list is unchanged |
-| `US1-TC33` (`TC-dvc@1`) | Contradicted: lines of HKD3,280 plus Tax of HKD70 | Rewritten at `@2` with the USD sum of SC-216; the marker's link list is unchanged |
-| `US2-TC1` (`TC-h7f@2`) | Contradicted: "the lines sum to the final amount" fails for an HKD receipt | Rewritten at `@3`; the marker's link list is unchanged |
-| `US1-TC4` (`TC-yuw@1`) | Not moved. It asserts that the old and new totals show and that the new is the old plus the difference; both are HKD fixtures and none of that changes. HKD3,280 cannot be formed from USD cent lines, which is a fixture note and not an assertion | Left `draft` |
+| `US1-TC31` (`TC-m21@1`) | Contradicted: Tax of HKD70 on an HKD order | Rewritten at `@2` as a USD order (SC-214); the link list is unchanged |
+| `US1-TC33` (`TC-dvc@1`) | Contradicted: lines of HKD3,280 plus Tax of HKD70 | Rewritten at `@2` with the USD sum of SC-216; the link list is unchanged |
+| `US2-TC1` (`TC-h7f@2`) | Contradicted: "the lines sum to the final amount" | Rewritten at `@3`; the link list is unchanged |
+| `US1-TC4` (`TC-yuw@1`) | Not moved: both totals are HKD fixtures and none of its assertions changes | Left `draft` |
 
-The legacy `covers` lists on `US1-TC31`, `US1-TC33`, `US2-TC1` and `US1-TC4` name 15 to 70 scenarios each, far more than the cases assert; they are over-claimed and are left for `/tcs-review`, since no scenario of this change moves them.
+The legacy `covers` lists on `US1-TC31`, `US1-TC33`, `US2-TC1` and `US1-TC4` name 15 to 70 scenarios each, far more than the cases assert; they are over-claimed and are left for `/tcs-review`.
 
-Walk text that repeats these results stays stale until `/tcs-review` refreshes the walks: Walk 4 steps 11 to 19 (HKD70 and HKD3,350, durable lines 877 to 890), Walk 6 step 2 (durable lines 1245 to 1247) and Walk 26 (durable lines 4072 to 4208, and its setup and data blocks, which hold 103100, 79300, 3873 and 106973). A change suite carries no walk and the fold keeps the durable ones, so the cases are the authority until then.
+Walk text that repeats these results stays stale until `/tcs-review` refreshes the walks: Walk 4 steps 11 to 19 (durable lines 877 to 890), Walk 6 step 2 (durable lines 1245 to 1247) and Walk 26 (durable lines 4072 to 4208 and its setup and data blocks). A change suite carries no walk and the fold keeps the durable ones, so the cases are the authority until then.
 
 **Scenario coverage**
 
@@ -1225,42 +1274,47 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | SC-302 | `US26-TC8` |
 | SC-214 | `US1-TC31` |
 | SC-216 | `US1-TC33` |
+| SC11 | `US26-TC13` |
+| SC4, SC12 | `US26-TC2`, one row each |
+| SC13 | `US26-TC7` |
+| SC5 | `US26-TC10` |
+| SC6 | `US26-TC11` |
+| SC-301 | `US24-TC7` |
 | SC-290, SC-304, SC9, SC8 | `US27-TC1`, one row each |
 | SC-291 | `US27-TC2` |
 | SC-292 | `US27-TC3` |
 | SC10 | `US27-TC8` |
-| SC4 | `US26-TC2` |
-| SC5 | `US26-TC10` |
-| SC6 | `US26-TC11` |
-| SC-04 | Out of suite, in the durable header: relabelled from HKD to USD with the figures unchanged |
-| SC-287 | Out of suite, in the durable header: the fixed rate is a code constant no tester can change; the pricing tests (task 6.1) and the PGlite specs verify it |
-| SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-215 | Unchanged; they stay with the durable cases and the durable Out of suite header |
+| SC-04, SC-287 | Out of suite, in the durable header |
+| SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-215, SC-278, SC-279, SC-280, SC-281, SC-282, SC-300 | Unchanged; they stay with the durable cases |
+
+**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7
+
+SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee beside a non-zero shipping line, and SC7 a USD order's documents staying in USD. The block tests of task 3.1 in this store (`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/fixtures.test.ts`, `invoice-pdf.test.ts` and `receipt-pdf.test.ts`) and the PDF tests of task 7.1 in the application repository (`invoicePdf.test.ts`, `receiptPdf.test.ts`) verify both. `US26-TC10` and `TC11` read the same documents by hand.
 
 **Uncovered**
 
-- `g10.auction-winner-order.SC3`: the invoice PDF with a Shipping & Handling line of US$10.01, a lot row that reads Winning Bid, Buyer's Premium and Total (`US$121.20`) and a Free fee. `US26-TC10` and `US26-TC11` assert the lines, Subtotal, fee and total on the PDF but never the lot-row Total, and never a Free fee beside a non-zero shipping line
-- `g10.auction-winner-order.SC7`: a USD order's invoice page and PDF stay in USD; no case reads a USD order's documents
+- None
 
 **Over-claimed**
 
 - The legacy `covers` lists named above
-- `US26-TC13` and `US27-TC6` carry outcomes no scenario states (the reissue pricing and replaced invoice; the rounding partitions). They are real, so `spec.md` owes a scenario for the first and may keep the second as the requirement's table
+- `US26-TC13` is linked to SC11 with a fixture of the same class, not SC11's own figures; `US27-TC6` and `US27-TC11` carry outcomes no scenario states, the first as the requirement's table and the second as decisions Q12 and Q31
 
 **Contradictions between the readings**
 
-- None in this capability. The one the run found sits in `shared/ui/auction-order` (separators), and the open row on the operator order detail and the internal-bid total hold the two decisions the readings cannot settle
+- None. The disagreement the first pass held, over the separators of the shared block, is settled in the repaired capability
 
 **Anchor coverage**
 
 | Anchor | Cases | Scenarios |
 | --- | --- | --- |
-| `winner-order-US-26` (documents) | `US26-TC1`, `TC2`, `TC3`, `TC5` to `TC8`, `TC10`, `TC11`, `TC13`; `TC4` is unchanged | All but SC3 and SC7; SC-287 out of suite |
-| `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC10` | All seven |
-| Root group Settlement currency | `US26-TC1`, `TC2`, `TC5`, `TC6`, `TC8`, `TC10`, `TC11` | Convert once, cent rounding, bank fee, same lines on every document; Rate named once rests on `US26-TC7` and the documents' no-rate results |
-| Root group Order summary | `US27-TC1`, `TC2`, `TC3`, `TC8` | All four lines of the group |
+| `winner-order-US-26` (documents) | `US26-TC1`, `TC2`, `TC3`, `TC5` to `TC8`, `TC10`, `TC11`, `TC13`; `TC4` is unchanged | All; SC3, SC7 and SC-287 out of suite |
+| `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC11` | All seven |
+| `winner-order-US-24` (context) | `US24-TC2`, `TC7` | SC-281 and SC-301 covered; the rest stay with the durable cases |
+| Root group Settlement currency | `US26-TC1`, `TC2`, `TC5`, `TC6`, `TC7`, `TC8`, `TC10`, `TC11`, `TC13` | Convert once, cent rounding, bank fee, rate named once, same lines on every document |
+| Root group Order summary | `US27-TC1`, `TC2`, `TC3`, `TC8`, `TC11` | All four lines of the group |
 | Root group Invoice | `US1-TC33`, `US26-TC5` | Fee base |
-| Context journeys | `US1`, `US2`, `US8`, `US24` | `user-journeys.md` lists none of them as Context, so `tcs:validate` reports them undefined until the journeys file does |
 
 **Raised**
 
-Q20 to Q23 close the four winner-order rows; the answers sit in `## Settled`.
+Q20 to Q23 close four winner-order rows and Q31 the row on the note of a pre-layout invoice; the answers sit in `## Settled`. Q31 sets aside the row's recommendation, no note, because it needs a conversion in the breakdown or a stored marker to special-case test data.

@@ -71,7 +71,7 @@
 **I want** a lot an internal bidder wins to open its internal order, which I invoice, let expire and cancel by hand,
 **so that** the card goes back to stock through the same order flow as any unpaid lot.
 
-<!-- trace:case id=g10adm.auction-dmn.TC-sjg rev=6 covers=grade10-admin-auction-internal-bid-SC-71,grade10-admin-auction-internal-bid-SC-73,grade10-admin-auction-internal-bid-SC-75,g10.auction-winner-order.SC-los,grade10-admin-auction-post-sale-SC-253 -->
+<!-- trace:case id=g10adm.auction-dmn.TC-sjg rev=6 covers=g10adm.auction-internal-bid.SC-nl0,g10adm.auction-internal-bid.SC-6fc,g10adm.auction-internal-bid.SC-jzh,g10.auction-winner-order.SC-los,g10adm.auction-post-sale.SC-0op -->
 ### grade10-admin-auction-e2e-US4-TC2-6: An internal bidder's win is invoiced, expires and is cancelled, and the stock comes back
 
 **Classification:**
@@ -136,7 +136,7 @@
 * At Step 4, exactly one internal order exists. Its invoice status is `not_issued`, no invoice has been issued, and its method is `bank_transfer` on `fps`.
 * The order does not enter Awaiting Setup and neither the winner nor operator chooses settlement currency or rail.
 * Step 5: the operator's quote takes USD inputs of 1001 minor units for Shipping & Handling and 0 for the transfer fee, previews the USD lines, then the HKD Subtotal, fee and total with no conversion rate, names HKD settlement and bank transfer on FPS, and the invoice status becomes `pending`.
-* The invoice lists the USD winning bid of 10100, the USD premium of 2020 and USD shipping of 1001 minor units, and its HKD Subtotal is `<invoice subtotal>`: their sum `<usd sum>` converted once. The transfer fee is zero, so the invoice total is 103000 minor units in HKD. The order reads Pending Payment and its deadline is 7 calendar days after the send.
+* After Step 5 the order page lists the USD winning bid of 10100, the USD premium of 2020 and USD shipping of 1001 minor units, then the HKD Subtotal `<invoice subtotal>`: their sum `<usd sum>` converted once. The transfer fee is zero, so the Total is 103000 minor units in HKD. The order reads Pending Payment and its deadline is 7 calendar days after the send.
 * Step 6: the order reads Payment Overdue, the invoice Expired.
 * Step 7: the confirmation says no letter is sent, and the order then reads Cancelled.
 * Step 8 reads `<available before>` plus `<held quantity>`.
@@ -146,10 +146,12 @@
 
 **Run:** QA1, levels pass for `convert-hkd-order-at-subtotal`, 2026-10-22. It rewrote the two admin domain cases this change moves from the journeys and the domain's PRD pages, before the feature readings, and read no `## Requirements`, no scenario, no `tech-design.md`, no `tasks.md`, no archive and no code. The first blind pass ran on a bundle with empty suites and PRD pages without the product manager's edits, and was resumed on a corrected one. It is the run's own statement, not proof.
 
-**Run:** QA2, 2026-10-22, in a fresh context. It read both cases against the post-sale delta and recomputed the figures: 10100 plus 2020 plus 1001 is 13121 minor USD units, which converts once to 103000 at 7.85. It is a statement, not proof.
+**Run:** QA1, second blind pass, 2026-10-22. It sharpened `US4-TC2-6` to read the lines and the Total on the order page after the send, with the same denials. It is the run's own statement, not proof.
 
-- **`grade10-admin-auction-e2e-US3-TC1-4`** (`TC-dly@4`) - step 3 now reads the quote preview and the case names no amount; it carries no scenario link, as before
-- **`grade10-admin-auction-e2e-US4-TC2-6`** (`TC-sjg@6`) - the figures move from 103100 to 103000 with the USD sum and the Subtotal stated. Its links to `grade10-admin-auction-post-sale-SC-253` stand. Its links to `grade10-admin-auction-internal-bid-SC-71`, `SC-73` and `SC-75` stand too, but `SC-73` still states 103100 and the capability is not on the proposal's list; the open row on that scenario in `decisions.md` holds the disagreement
+**Run:** QA2, second reconciliation pass, 2026-10-22, in a fresh context. It read both cases against the post-sale and internal-bid deltas and recomputed the figures: 10100 plus 2020 plus 1001 is 13121 minor USD units, which converts once to 103000 at 7.85. It is a statement, not proof.
+
+- **`grade10-admin-auction-e2e-US3-TC1-4`** (`TC-dly@4`) - step 3 reads the quote preview and the case names no amount; it carries no scenario link, as before
+- **`grade10-admin-auction-e2e-US4-TC2-6`** (`TC-sjg@6`) - the figures move from 103100 to 103000 with the USD sum and the Subtotal stated, and the check after the send now reads the order page (decisions Q29). Its links stay: `grade10-admin-auction-post-sale-SC-253`, `grade10-admin-auction-internal-bid-SC-71`, `SC-73` and `SC-75`, and `winner-order-SC-277`. QA2 rewrote them from their display forms to the machine ids, which the trace check could not read; the meaning is unchanged. SC-73 now states 103000 (decisions Q30), so the case and the scenario agree
 - **Stale text** - the `US4-TC2` paragraph of the durable suite's `## Reconciliation` (durable line 492) repeats the 103100 result and its per-line conversions; it is refreshed when `/tcs-review` next prepares the suite
 - **Raised** - none
-- **Contradictions** - `US4-TC2-6` against the durable `internal-bid` `SC-73`, held with the row that names it
+- **Contradictions** - none

@@ -82,7 +82,9 @@
 
 **Run:** QA1, levels pass for `convert-hkd-order-at-subtotal`, 2026-10-22. It rewrote the one domain case this change moves from the journeys and the domain's PRD pages, before the feature readings, and read no `## Requirements`, no scenario, no `tech-design.md`, no `tasks.md`, no archive and no code. The first blind pass ran on a bundle with empty suites and PRD pages without the product manager's edits, and was resumed on a corrected one. It is the run's own statement, not proof.
 
-**Run:** QA2, 2026-10-22, in a fresh context. It read the case against the winner-order, notifications-order and post-sale deltas and recomputed its figures: 13121 minor USD units at 7.85 is 102,999.85 and rounds up to 103000; the card fee on 103000 at 3.4 per cent and 235 is 3869; the Order Total is 106869. It is a statement, not proof.
+**Run:** QA1, second blind pass, 2026-10-22. It extended its cases for the operator's order page and the house order and left this case as it was. It is the run's own statement, not proof.
+
+**Run:** QA2, second reconciliation pass, 2026-10-22, in a fresh context. It read the case against the repaired winner-order, notifications-order and post-sale deltas and recomputed its figures: 13121 minor USD units at 7.85 is 102,999.85 and rounds up to 103000; the card fee on 103000 at 3.4 per cent and 235 is 3869; the Order Total is 106869. It is a statement, not proof.
 
 - **Case** - `g10.auction-dmn.US12-TC3` (`TC-k4p@5`) was rewritten by QA1 over a new title, with `winner-order-US-27` added to its trace. QA2 keeps it and its links to `winner-order-SC-292` and `winner-order-SC-304`, whose results it asserts at steps 1 and 4
 - **Not linked** - `order-mail-SC-66`: step 7 asserts that the letter and the receipt PDF list the same lines and name no rate, but not that the letter names the amount paid
