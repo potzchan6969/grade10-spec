@@ -5,7 +5,7 @@ import { AuctionWinnerOrderSkeleton } from "./auction-winner-order-skeleton";
 const LABEL = "Loading winner order…";
 
 const meta = {
-  title: "Auction/Post Bidding/Blocks/AuctionWinnerOrder/Skeleton",
+  title: "Auction/Post Bidding/Blocks/AuctionWinnerOrderSkeleton",
   component: AuctionWinnerOrderSkeleton,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
