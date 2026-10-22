@@ -1254,7 +1254,7 @@ Every durable case below is `draft`; each rewrite keeps its marker id and bumps 
 | `US27-TC2` (`TC-7qs@1`) | SC-291 gains "no Subtotal row and no conversion note" | Rewritten at `@2` |
 | `US27-TC3` (`TC-17a@1`) | SC-292 adds no Subtotal row, no HKD fee and no note before send | Rewritten at `@2`; keeps its link |
 | `US24-TC2` (`TC-79a@2`) | Contradicted: the HKD row lists each line in HKD | Rewritten at `@3` |
-| `US24-TC7` (`TC-r4x@1`) | Contradicted: the replaced HKD invoice no longer reads its Winning Bid in HKD | Rewritten at `@2` on the fixture of SC-301; unblocked; keeps its link |
+| `US24-TC7` (`TC-r4x@1`) | Contradicted: the replaced HKD invoice no longer reads its Winning Bid in HKD | Rewritten at `@2` on the fixture of SC11; unblocked; keeps its link |
 | `US8-TC5` (`TC-xji@1`) | Contradicted: each line converted and rounded before summing | Rewritten at `@2` |
 | `US1-TC31` (`TC-m21@1`) | Contradicted: Tax of HKD70 on an HKD order | Rewritten at `@2` as a USD order (SC-214); the link list is unchanged |
 | `US1-TC33` (`TC-dvc@1`) | Contradicted: lines of HKD3,280 plus Tax of HKD70 | Rewritten at `@2` with the USD sum of SC-216; the link list is unchanged |
@@ -1279,7 +1279,7 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | SC13 | `US26-TC7` |
 | SC5 | `US26-TC10` |
 | SC6 | `US26-TC11` |
-| SC-301 | `US24-TC7` |
+| SC-301 | none - restated by a follow-up amendment after `preselect-first-currency-payment-method` |
 | SC-290, SC-304, SC9, SC8 | `US27-TC1`, one row each |
 | SC-291 | `US27-TC2` |
 | SC-292 | `US27-TC3` |
@@ -1310,7 +1310,7 @@ SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee 
 | --- | --- | --- |
 | `winner-order-US-26` (documents) | `US26-TC1`, `TC2`, `TC3`, `TC5` to `TC8`, `TC10`, `TC11`, `TC13`; `TC4` is unchanged | All; SC3, SC7 and SC-287 out of suite |
 | `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC11` | All seven |
-| `winner-order-US-24` (context) | `US24-TC2`, `TC7` | SC-281 and SC-301 covered; the rest stay with the durable cases |
+| `winner-order-US-24` (context) | `US24-TC2`, `TC7` | SC-281 covered; SC-301 waits for its follow-up amendment; the rest stay with the durable cases |
 | Root group Settlement currency | `US26-TC1`, `TC2`, `TC5`, `TC6`, `TC7`, `TC8`, `TC10`, `TC11`, `TC13` | Convert once, cent rounding, bank fee, rate named once, same lines on every document |
 | Root group Order summary | `US27-TC1`, `TC2`, `TC3`, `TC8`, `TC11` | All four lines of the group |
 | Root group Invoice | `US1-TC33`, `US26-TC5` | Fee base |

@@ -158,6 +158,7 @@ Nothing else on the wire moves: `AuctionInvoice` already carries `subtotalAmount
 - **[Risk] The receipt letter grows lines it never had, in two codebases** → The store preview and the `grade10` letter take the same lines; each has a test that lists them.
 - **[Risk] A cent total at Stripe** → The charge already takes `final_amount` in minor units and HKD has cents; the walk runs a sandbox card charge on a cent total.
 - **[Risk] The durable "Receipt in the letter" asks for an attached receipt PDF that the app does not attach** → The gap predates this change and is out of its scope; the route is a bug fix under `docs/governance/bug-fixes.md`. No scenario of this change asserts the attachment, and the new scenarios state only the lines in the letter body.
+- **[Risk] Durable `winner-order-SC-301` still states the replaced invoice's Winning Bid as 78500 in HKD** → This change does not restate it, because `preselect-first-currency-payment-method` and `usd-lot-currency-winner-settlement-choice` own that requirement; a follow-up amendment restates it after `preselect-first-currency-payment-method` lands. `g10.auction-winner-order.SC11` covers a replaced invoice that keeps its amounts meanwhile.
 - **[Trade-off] Informational per-line values** → Kept for the reasons under "What an HKD invoice stores".
 
 ## Migration Plan
@@ -171,7 +172,7 @@ Rollback redeploys the previous release. An invoice sent in between keeps its st
 
 **Acceptance order.** `usd-lot-currency-winner-settlement-choice`, `add-winner-order-tax-line`, `complete-auction-post-sale` and `add-auction-internal-bid` are accepted and already in the durable specs, so the deltas here are written against their text and no order is owed. Two changes remain:
 
-- `preselect-first-currency-payment-method` is in review and MODIFIES "The winner chooses a settlement currency at order setup", which this change MODIFIES too, for one scenario. It goes first; this change then copies its text into that block and keeps the one edited scenario.
+- `preselect-first-currency-payment-method` is in review and MODIFIES "The winner chooses a settlement currency at order setup". This change does not touch that requirement, so no order is owed against it.
 - The unmerged `plan/usd-amounts-rebased` amends the accepted `usd-lot-currency-winner-settlement-choice`. It goes after this change: it adds a paragraph to "Order letters read the currency the winner pays in" and a scenario that states `HK$1,031.00`, which this change moves to `HK$1,030.00`.
 
 ## Open Questions
