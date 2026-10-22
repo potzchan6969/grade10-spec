@@ -53,6 +53,12 @@ export type PdfLineItem = {
   key?: "subtotal" | "paymentProcessingFee" | "orderTotal";
   label: string;
   amount: string;
+  /**
+   * Drawn exactly as given, muted, under the Subtotal row and wrapped inside
+   * the summary. Read on the item keyed `subtotal` only; absent or blank draws
+   * nothing.
+   */
+  note?: string;
 };
 
 /** One item of the table. Every amount arrives formatted; the block adds none of them up. */
@@ -429,6 +435,20 @@ export function requireFits(
 
 const ORDER_TOTAL_SIZE = 13;
 
+/** The Subtotal's note, wrapped inside the summary, returning the y the next row sits at. */
+function drawSummaryNote(
+  page: PDFPage,
+  fonts: Fonts,
+  note: string,
+  y: number,
+): number {
+  for (const line of wrap(note, fonts.regular, SMALL_SIZE, SUMMARY_WIDTH)) {
+    drawText(page, fonts.regular, line, SUMMARY_LEFT, y, SMALL_SIZE, MUTED);
+    y -= LINE_HEIGHT;
+  }
+  return y;
+}
+
 /**
  * The three lines every order value ends in - never a charge of their own,
  * always the arithmetic over the charges above them. Pulled out of the flat
@@ -447,6 +467,9 @@ function drawSummary(
     if (item.key !== "orderTotal") {
       drawMoneyRow(page, fonts, item.label, item.amount, SUMMARY_LEFT, y);
       y -= LINE_HEIGHT;
+      if (item.key === "subtotal" && item.note?.trim()) {
+        y = drawSummaryNote(page, fonts, item.note, y);
+      }
       continue;
     }
     y = drawRuleSpan(page, SUMMARY_LEFT, RIGHT_EDGE, y, {
