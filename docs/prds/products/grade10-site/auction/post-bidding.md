@@ -28,7 +28,7 @@ operator's order procedure is on [Internal Bid](/p/grade10-admin/auction/interna
   collector, each get one letter about the close and nothing after it —
   [Bidding ·
   Notifications](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications)
-- 🚧 **A suspended bidder keeps the result** — suspension stops new bids and
+- **A suspended bidder keeps the result** — suspension stops new bids and
   raises, but it does not retract standing bids or change winner order, invoice,
   payment deadline or payable status
 
@@ -44,7 +44,7 @@ winner of three lots has three orders, each with its own deadlines.
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from the close; nothing the winner does moves it |
 | Buyer's premium | **20%** of the USD winning bid, rounded half up, or the one USD minimum charge when higher |
 | Premium minimum | One USD amount, **0** at first; it applies to the premium before settlement conversion |
-| Payment proof | 🚧 **1 to 3** PDF, PNG, JPG, HEIC or HEIF files of up to **5 MB** each, **15 MB** total, uploaded once |
+| Payment proof | **1 to 3** PDF, PNG, JPG, HEIC or HEIF files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
 - **Layout** — the Winner Order design's page body, the one its stories
@@ -92,8 +92,8 @@ meaning.
 | **Setup Overdue** | Not issued | The setup deadline passes with setup incomplete; self-service Confirm is closed |
 | **Preparing Invoice** | Not issued | The winner confirms setup, or an operator records an address after the deadline |
 | **Pending Payment** | Pending | An operator sends or reissues the invoice |
-| 🚧 **Payment Overdue** | Expired | The payment deadline passes with the invoice unpaid; self-service Pay is closed |
-| 🚧 **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
+| **Payment Overdue** | Expired | The payment deadline passes with the invoice unpaid; self-service Pay is closed |
+| **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
 | **Partially Paid** | Partially Paid | An operator records a payment short of the balance; the deadline stops for good and Pay is not offered again, and the order stays here until a payment closes the balance |
 | **Preparing Shipment** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
 | **Shipped** | Paid | The warehouse dispatches, with a tracking number |
@@ -106,7 +106,7 @@ meaning.
   order and delivery before dispatch are refused
 - **Collected at a shop** — an operator records the collection as the
   dispatch and the delivery, so the order reads Delivered
-- 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
+- **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
 - **Shipment** — while the lot is dispatched (`fulfilled`), Order Progress
   shows the tracking number as a link to the carrier's tracking page (opens
@@ -136,7 +136,7 @@ meaning.
 
 ### Refunds
 
-- 🚧 **Suspended winner** — the order remains payable and the page gives
+- **Suspended winner** — the order remains payable and the page gives
   contact guidance without showing the operator's reason
 - **A refunded order** — reads Refunded as both the order status and the
   invoice status, however much was paid and wherever the card is; no Pay, no
@@ -171,7 +171,7 @@ hours of the close.
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
 | Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | 🚧 The first offered currency preselected |
 | Payment method or bank rail | **HKD**: Card, FPS or HK Local; **USD**: Card, HK Local or International via SWIFT - [Payment Methods by Currency](#payment-methods-by-currency) | 🚧 The first offered method preselected |
-| 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
+| Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 
 - **Form** — Personal or Company; first and last name, phone (country and
   digits), country or region, town or city, address line 1 and postal code are
@@ -323,7 +323,7 @@ by card, reads:
 | Payment Processing Fee | Calculated from the configured rule for the settlement currency | Grade10's own for a card invoice, computed from the Stripe card rule in Payment Settings, grossed up so Grade10 keeps the Subtotal whole |
 | Order Total | Subtotal plus configured fee | What the winner pays |
 
-- 🚧 **Insurance on Order Summary** — before send, Insurance sits with the other
+- **Insurance on Order Summary** — before send, Insurance sits with the other
   fee rows as TBD; after send it carries a brief info tooltip (`0.9% of the
   order value during transit.`) when the operator added it, and stays absent
   when none
@@ -337,9 +337,9 @@ by card, reads:
 - **Payment Processing Fee** — Grade10's own on a card invoice, computed
   from the Stripe card rule; the operator's own on a bank transfer invoice,
   zero or more, empty read as Free
-- 🚧 **Payment method** — Card or Bank Transfer, printed on the invoice so
+- **Payment method** — Card or Bank Transfer, printed on the invoice so
   the document names it rather than leaving it to the fee amount alone
-- 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
+- **Payment reference code** — `LK423`: the listing's own code, carried
   forward unchanged as the order's one public reference once a winner
   exists; shown on the winner's invoice and operator support surfaces, and
   safe to copy into FPS, local bank transfer or SWIFT notes. The public
@@ -351,11 +351,11 @@ by card, reads:
   snapshot, printed below Order Total when paid by Bank Transfer; the payment
   reference follows it, with a reminder to quote it in the bank app's memo or
   remarks field
-- 🚧 **Invoice ID** — `IN-LK42301`: the payment reference plus an issuance
+- **Invoice ID** — `IN-LK42301`: the payment reference plus an issuance
   sequence with at least 2 digits; it continues as `100` after `99`. A reissue
   increments the sequence, keeps the payment reference and lets the old ID
   find the order
-- 🚧 **Bill To and Ship To** — both from the order's snapshot, each with
+- **Bill To and Ship To** — both from the order's snapshot, each with
   name, company name, phone and address; they read the same unless the
   winner unticked Same as delivery address
 - **PDFs** — the invoice once sent (text link beside the Order summary
@@ -420,19 +420,19 @@ failure, and locks the form while work is in progress.
   was saved. Try again.**; while submitting or converting HEIC the form locks
   and leave is blocked; the approved toast messages are localized in English,
   Simplified Chinese and Traditional Chinese
-- 🚧 **Payment Verifying alert** — an inline Alert says Grade10 is verifying
+- **Payment Verifying alert** — an inline Alert says Grade10 is verifying
   the transfer and will email when payment is confirmed, under Order progress
   on small viewports and under the lot from `lg` up
-- 🚧 **Manual confirmation** — an operator confirms the proof, or returns it
+- **Manual confirmation** — an operator confirms the proof, or returns it
   with a reason the winner reads, the latest only; the deadline runs again
   with the time that was left, and the winner uploads again — [Auction
   Management · Payment](/p/grade10-admin/auction/management#payment)
-- 🚧 **Proof stays private** — the winner never sees a payment proof file or
+- **Proof stays private** — the winner never sees a payment proof file or
   its name; the order shows only that proof was sent
 
 #### Bank Instruction Configuration
 
-- 🚧 **Bank details by lane** — Finance-owned configuration supplies approved
+- **Bank details by lane** — Finance-owned configuration supplies approved
   live instructions and the FPS QR outside source control. Grade10 snapshots
   them on each issued bank-transfer invoice; preview uses Grade10 Finance
   Limited and HSBC Hong Kong samples
@@ -449,13 +449,13 @@ failure, and locks the form while work is in progress.
   four, or the method and reference an operator recorded
 - **Tax on the receipt** — the receipt lists Tax when the operator added it,
   between Insurance and the Subtotal
-- 🚧 **Bill To and Ship To** — the same two addresses as the invoice it
+- **Bill To and Ship To** — the same two addresses as the invoice it
   pays; a later edit or reissue never changes a receipt already issued
-- 🚧 **A confirmed transfer** — its receipt reads Bank Transfer
-- 🚧 **Receipt ID** — new receipts use `RC-LK42301P1`: the listing code,
+- **A confirmed transfer** — its receipt reads Bank Transfer
+- **Receipt ID** — new receipts use `RC-LK42301P1`: the listing code,
   invoice sequence and the finalized payment's unpadded sequence within that
   invoice. Historical receipt IDs stay unchanged
-- 🚧 **When it is issued** — a finalized full or partial payment receives one;
+- **When it is issued** — a finalized full or partial payment receives one;
   a refund, reversal or void receives none
 - **One receipt per payment** — every receipt for an invoice lists on the
   same Receipt PDF row, oldest first
@@ -498,14 +498,14 @@ then shipped, delivered, and order cancelled.
 | Letter | Sent | What it carries |
 | --- | --- | --- |
 | Auction won | At the close | The setup steps and `Confirm by …`; the US$ winning bid, and no amount owed yet |
-| 🚧 Setup reminder | Close **+ 24 hours**, while setup is incomplete | The steps and `Confirm by …` |
-| 🚧 Setup overdue | Close **+ 48 hours**, the setup deadline | Self-service setup is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review, never automatically |
+| Setup reminder | Close **+ 24 hours**, while setup is incomplete | The steps and `Confirm by …` |
+| Setup overdue | Close **+ 48 hours**, the setup deadline | Self-service setup is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review, never automatically |
 | Payment reminder | Invoice send, then send **+ 3** and **+ 6 days** while the invoice is pending | The total and `Pay by …`; View invoice and pay |
-| 🚧 Final notice | **24 hours** before the payment deadline, while Pay is still offered | The last payable reminder |
-| 🚧 Payment overdue | The payment deadline, unpaid | What remains owed; Pay is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review |
-| 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner, and `Pay by …` on the deadline that runs again |
+| Final notice | **24 hours** before the payment deadline, while Pay is still offered | The last payable reminder |
+| Payment overdue | The payment deadline, unpaid | What remains owed; Pay is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review |
+| Proof not accepted | An operator returns the proof | The operator's reason for the winner, and `Pay by …` on the deadline that runs again |
 | Payment received | Card confirmed, proof confirmed, or a manual settlement | The itemised lines as the invoice reads them, amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
-| 🚧 Partial payment received | An operator records a partial payment | The current invoice ID, Receipt ID and receipt PDF, with Contact Us; no remaining balance |
+| Partial payment received | An operator records a partial payment | The current invoice ID, Receipt ID and receipt PDF, with Contact Us; no remaining balance |
 | Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking, or View order with the tracking number as plain text when no tracker link was recorded |
 | Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
 | Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
@@ -513,13 +513,13 @@ then shipped, delivered, and order cancelled.
 - **Letter times** - deadlines in email use Hong Kong time labelled `GMT+8`
 - **Reminders stop at payment** — every outstanding reminder is cancelled the
   moment payment is received
-- 🚧 **A reissue restarts the series** — the replaced invoice's reminders
+- **A reissue restarts the series** — the replaced invoice's reminders
   park and the `payment-reminder` goes again for the new invoice, with its
   total and `Pay by …`; there is no reissued letter of its own
-- 🚧 **Reminders on hold** — none go out while proof is checked, and
+- **Reminders on hold** — none go out while proof is checked, and
   uploading it sends no letter at all; if the proof is returned the sequence
   resumes on the moved clock, skipping and repeating nothing
-- 🚧 **Partial payments** — reminders stop at the first recorded payment; each
+- **Partial payments** — reminders stop at the first recorded payment; each
   partial payment sends `payment_received_partial` with its invoice and receipt
   IDs, its receipt PDF and the same ready Contact Us mailto rules
 
@@ -655,7 +655,7 @@ a second payment provider, and changes to the bid-time rules.
 | HKD order summary layout | 🚧 In flight | Under HKD the invoice lines keep their original USD amounts, Shipping & Handling, Insurance and Tax included, and a Subtotal converts their sum to HKD once. The Payment Processing Fee and Order Total sit below it in HKD - the fee is computed in the settlement currency and has no USD counterpart. Every amount shows two decimals, a fraction of a cent rounding up, and the Order Total is the Subtotal plus the fee. Chosen over converting each line to HKD, which hid what the lot cost in USD and let rounding each line move the Subtotal off the rate, and over USD beneath each HKD line or an HKD \| USD switch. | Product |
 | Invoice and receipt under HKD | 🚧 In flight | The invoice page, the invoice and receipt PDFs and the receipt letter print the same USD lines, then the HKD Subtotal, Payment Processing Fee and Order Total, and name no rate. **BREAKING** vs HKD-only documents that print no USD winning bid. Chosen over HKD-only documents beside a USD Order Summary, which shows the winner two layouts for one order and whose rounded HKD lines no longer add up to the Subtotal. | Product |
 | Invoices sent before this layout | Decided | A sent HKD invoice never re-prices, so one sent with whole-HK$ lines keeps them and reads in the new layout from its stored amounts. Every HKD invoice sent so far is test data. Chosen over keeping the old HKD-only layout for them, which keeps two layouts for ever on test data. | Product |
-| Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
+| Bank transfer by the winner | Decided | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
 | Bank details | Decided | Grade10 holds bank details for each supported rail. A rail is offered when Finance has configured its details, and the invoice snapshots only the selected rail. | Product and Finance |
 | Fee disclosure | Decided | The winner chooses a method on a fee range Grade10 sets; the amount first shows on the sent invoice, and an operator reissues if the winner then wants another method or rail. | Product (@jeffffej0909) |
 | Winner's choice locks on confirming | Decided | Once the winner confirms the address, settlement currency and method or rail, only an operator changes them: an edit with a reason before send, a reissue after. | Product (@jeffffej0909) |
@@ -675,12 +675,12 @@ a second payment provider, and changes to the bid-time rules.
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Proof submit feedback | Decided | Successful proof upload shows toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying. A failed upload keeps the dialog open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.** While submitting or converting HEIC the form locks and leave is blocked. Confirm stays inline microcopy. The success and failure messages are localized in English, Simplified Chinese and Traditional Chinese. Chosen over page-only toast and over a second confirm screen. | Product and design (@tangconst) |
 | Tracking link on Winner Order | Decided | While fulfilment is `fulfilled` (Shipped and Delivered), Order Progress shows the tracking number as the external carrier link with an arrow when the operator recorded a tracker link, and as plain text when none was. No separate Track shipment button and no carrier name in that chrome. Chosen over carrier name plus a Track shipment CTA. | Product and design (@tangconst) |
-| Identifiers | 🚧 In flight | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation on the first saved draft, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. New receipt IDs use the listing code, invoice sequence and an unpadded per-invoice payment sequence. Historical receipt IDs remain unchanged. | Product and Finance |
+| Identifiers | Decided | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation on the first saved draft, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. New receipt IDs use the listing code, invoice sequence and an unpadded per-invoice payment sequence. Historical receipt IDs remain unchanged. | Product and Finance |
 | Listing-code read permission | Decided | Existing listing-admin read access controls the code; knowing it cannot grant admin access or private data. | Product |
 | Listing-code placement | Decided | The code appears in both the Listings table and listing detail screen. | Product and Design |
 | Cached listing preview | Decided | Previously cached preview content may persist; no purge or regeneration is guaranteed. The current page and fresh metadata omit the code and private data. | Product |
-| Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
-| Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. Durable `notifications-order` holds that schedule; `add-winner-bank-transfer` adds proof holds and the receipt PDF. | Product (@tangconst) |
+| Setup mail | Decided | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
+| Payment mail | Decided | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. Durable `notifications-order` holds that schedule; `add-winner-bank-transfer` adds proof holds and the receipt PDF. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking, and with View order, the tracking number as plain text, when no tracker link was recorded. | Product (@tangconst); the no-tracker-link case the planning owner (@htonyl) |
 | Contact Us destination | Decided | Copy-first sheet on Winner Order: To, Subject, Message, Copy Message first, Open Mail App second. Copy Message shows no confirmation beyond the control's own state. Letters prefill the same mailto and name the address. Chosen over opening a mail client, a contact form, or a toast with the address only. A partial-payment template lists receipts and never the remaining balance. Subject uses the current invoice id after a reissue; Message is an editable Textarea with Copy Message footer-only. | Product (@tangconst) |
 | Reissue letter | Decided | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
@@ -690,7 +690,7 @@ a second payment provider, and changes to the bid-time rules.
 | A separate orders page | Decided | None — My Auctions lists the won lots and each Won row opens its own Winner Order; `grade10-site/auction/auction-orders` is retired. Reverses the earlier decision to follow won lots on My Auction Orders: the list duplicated My Auctions' Won rows and nothing on the site reached it. | Product (@tangconst) |
 | Opening My Auction Orders | Decided | Moot — the page is removed, so the deferred My Auctions link is never built. | Product (@tangconst) |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
-| Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
+| Billing address on setup | Decided | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
 | Country or region on delivery setup | Decided | On Winner Order delivery Add Address, country or region lists every country and region A–Z in a searchable field; typing filters matching names. **BREAKING** vs letter typeahead on Select (`full-winner-order-country-region-list` non-goal reversed). Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set and over letter-jump Select. | Product (@tangconst) |
 | Phone on Add Address | Decided | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Placeholder shows an example with calling code (`+852 12345678`). Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
 | Personal or company address | Decided | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. Card body shows street, city or region, and country only — no postal code and no phone. Order summary Delivery and Billing show the full snapshot (company when company, recipient name, phone, full address including postal). First and last name stay required on both. | Product (@tangconst) |
@@ -709,7 +709,7 @@ a second payment provider, and changes to the bid-time rules.
 | Overpaying a partial balance | Decided | A payment above the original invoice total is accepted after an operator confirmation dialog before the invoice is marked Paid. The full payment remains recorded; the excess can be returned through the refund flow. | Product and finance |
 | Partial payment locks Reissue and Cancel | Decided | Once a payment counting toward the balance is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | Decided | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
-| Receipt ID format | 🚧 In flight | New receipts issued for finalized full or partial payments use `RC-{listing code}{invoice sequence}P{receipt sequence}`, such as `RC-LK42301P1`. The receipt sequence starts at 1 for each invoice and is unpadded. Historical `REC-...` receipts remain unchanged; refunds, reversals and voids issue no receipt. Formal tax-receipt content stays open. | Product (@jeffffej0909) |
+| Receipt ID format | Decided | New receipts issued for finalized full or partial payments use `RC-{listing code}{invoice sequence}P{receipt sequence}`, such as `RC-LK42301P1`. The receipt sequence starts at 1 for each invoice and is unpadded. Historical `REC-...` receipts remain unchanged; refunds, reversals and voids issue no receipt. Formal tax-receipt content stays open. | Product (@jeffffej0909) |
 | Receipt breakdown | Decided | Each receipt freezes and shows, in order, Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due. The remaining balance is zero when payment closes the invoice, including a tolerance close or confirmed overpayment. Refunds and reversals do not change an issued receipt or a later receipt's Previous Payments. | Product and finance |
 | A balance belongs on a receipt, not on a page | Decided | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
 | Receipts are append-only | Decided | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
