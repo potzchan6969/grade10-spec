@@ -126,9 +126,18 @@ function receiptLinksFor(content: WinnerOrderContent): WinnerOrderReceipt[] {
     content.status === "delivered" ||
     content.status === "refunded"
   ) {
-    return [{ label: "Receipt" }];
+    return [{}];
   }
   return [];
+}
+
+/** Link label — `Receipt #RC-LK7P2Q01P1 (22 Sep 2026)`, or `Receipt` alone
+ * when the record carries no ID. */
+function receiptLabel(receipt: WinnerOrderReceipt): string {
+  if (!receipt.id) return "Receipt";
+  return receipt.issuedOn
+    ? `Receipt #${receipt.id} (${receipt.issuedOn})`
+    : `Receipt #${receipt.id}`;
 }
 
 const PRODUCT_IMAGE = new URL("../../product.fixture.png", import.meta.url)
@@ -664,14 +673,17 @@ function WinnerOrderPageState({
           note={noteFor(content)}
           paymentMethod={paymentMethodFor(content)}
           progress={progressFor(content)}
-          receipts={receiptLinksFor(content).map((receipt) => ({
-            label: receipt.label,
-            ariaLabel: `${receipt.label} PDF`,
-            onOpen: () =>
-              openPlaceholderReceiptPdf(
-                receipt.fileName ?? "grade10-winner-receipt.pdf",
-              ),
-          }))}
+          receipts={receiptLinksFor(content).map((receipt) => {
+            const label = receiptLabel(receipt);
+            return {
+              label,
+              ariaLabel: `${label} PDF`,
+              onOpen: () =>
+                openPlaceholderReceiptPdf(
+                  receipt.fileName ?? "grade10-winner-receipt.pdf",
+                ),
+            };
+          })}
           summary={{
             lines: summaryLines,
             total: total ?? null,

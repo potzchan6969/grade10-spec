@@ -53,7 +53,11 @@ export const Processing: Story = {
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+    expect(
+      canvas.getByRole("link", {
+        name: "Receipt #RC-LK7P2Q01P1 (20 Sep 2026) PDF",
+      }),
+    ).toBeVisible();
   },
 };
 
@@ -160,7 +164,11 @@ export const ProcessingBankTransfer: Story = {
     expect(summaryRows).not.toContain("Payment Processing FeeHK$545.00");
     expect(summaryRows).not.toContain("Payment Processing FeeUS$120.00");
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(sidebar.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+    expect(
+      sidebar.getByRole("link", {
+        name: "Receipt #RC-LK7P2Q01P1 (20 Sep 2026) PDF",
+      }),
+    ).toBeVisible();
   },
 };
 
@@ -189,7 +197,11 @@ export const Shipped: Story = {
     expect(canvas.queryByRole("button", { name: "Track shipment" })).toBeNull();
     expect(canvas.queryByText("SF Express", { exact: true })).toBeNull();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+    expect(
+      canvas.getByRole("link", {
+        name: "Receipt #RC-LK7P2Q01P1 (20 Sep 2026) PDF",
+      }),
+    ).toBeVisible();
   },
 };
 
@@ -243,6 +255,10 @@ export const Delivered: Story = {
     expect(canvas.queryByRole("button", { name: "Track shipment" })).toBeNull();
     expect(canvas.queryByText("SF Express", { exact: true })).toBeNull();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+    expect(
+      canvas.getByRole("link", {
+        name: "Receipt #RC-LK7P2Q01P1 (20 Sep 2026) PDF",
+      }),
+    ).toBeVisible();
   },
 };
