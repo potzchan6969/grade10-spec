@@ -27,16 +27,16 @@ const hkd = (cents: number) => `HK$${amount(cents)}`;
 const centsOf = (amount: string) =>
   Math.round(Number(amount.replace(/[^\d.]/g, "")) * 100);
 
-/** `count` items titled `Lot 01`, `Lot 02`, ..., item n bidding n × HKD 100.00 with a 20% premium. */
+/** `count` items titled `Lot 01`, `Lot 02`, ..., item n bidding n × HK$100.00 with a 20% premium. */
 export function sampleItems(count: number): PdfItemRow[] {
   const digits = Math.max(2, String(count).length);
   return Array.from({ length: count }, (_, index) => {
     const n = index + 1;
     return {
       title: `Lot ${String(n).padStart(digits, "0")}`,
-      winningBid: amount(n * 10_000),
-      buyersPremium: amount(n * 2_000),
-      total: amount(n * 12_000),
+      winningBid: hkd(n * 10_000),
+      buyersPremium: hkd(n * 2_000),
+      total: hkd(n * 12_000),
     };
   });
 }
@@ -44,7 +44,7 @@ export function sampleItems(count: number): PdfItemRow[] {
 /** The Item Total a caller would supply for `items`: each column summed. */
 export function itemTotalOf(items: readonly PdfItemRow[]): PdfItemTotal {
   const sum = (key: keyof PdfItemTotal) =>
-    amount(items.reduce((cents, item) => cents + centsOf(item[key]), 0));
+    hkd(items.reduce((cents, item) => cents + centsOf(item[key]), 0));
   return {
     winningBid: sum("winningBid"),
     buyersPremium: sum("buyersPremium"),
