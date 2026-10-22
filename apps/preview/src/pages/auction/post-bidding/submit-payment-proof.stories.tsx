@@ -185,7 +185,9 @@ export const SubmitEmpty: Story = {
     const dialog = await findVisibleDialog(page, "Submit Payment Proof");
     const modal = within(dialog);
 
-    const body = dialog.querySelector<HTMLElement>('[data-slot="dialog-body"]');
+    const body = dialog.querySelector(
+      '[data-slot="dialog-body"]',
+    ) as HTMLElement | null;
     expect(body).toBeTruthy();
     body!.scrollTop = body!.scrollHeight;
 

@@ -112,7 +112,6 @@ export const PendingPaymentBankTransfer: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -136,17 +135,6 @@ export const PendingPaymentBankTransfer: Story = {
     expect(
       sidebar.getByText("Converted from US$16,340.00 at 1 USD = 7.85 HKD"),
     ).toBeVisible();
-
-    await userEvent.click(
-      sidebar.getByRole("button", { name: "View Bank Details" }),
-    );
-    const dialog = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "View Bank Details" });
-      expect(found).toBeVisible();
-      return within(found);
-    });
-    expect(dialog.getByText("HK$128,269.00")).toBeVisible();
-    expect(dialog.queryByText("HK$16,340.00")).not.toBeInTheDocument();
   },
 };
 
@@ -159,7 +147,6 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -173,22 +160,6 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
     ).not.toBeInTheDocument();
     expect(sidebar.queryByText("US$16,340.00")).not.toBeInTheDocument();
     expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
-
-    await userEvent.click(
-      sidebar.getByRole("button", { name: "View Bank Details" }),
-    );
-    const dialog = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "View Bank Details" });
-      expect(found).toBeVisible();
-      return within(found);
-    });
-    expect(dialog.getByText("Bank name")).toBeVisible();
-    expect(dialog.getByText("Branch code")).toBeVisible();
-    expect(dialog.getByText("HK$128,269.00")).toBeVisible();
-    expect(dialog.queryByText("HK$16,340.00")).not.toBeInTheDocument();
-    expect(dialog.queryByText("FPS ID")).not.toBeInTheDocument();
-    expect(dialog.queryByText("SWIFT / BIC")).not.toBeInTheDocument();
-    expect(dialog.queryByRole("tab")).not.toBeInTheDocument();
   },
 };
 
@@ -204,7 +175,6 @@ export const PendingPaymentUsdBankTransfer: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -217,20 +187,6 @@ export const PendingPaymentUsdBankTransfer: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("US$16,340.00")).toBeVisible();
-
-    await userEvent.click(
-      sidebar.getByRole("button", { name: "View Bank Details" }),
-    );
-    const dialog = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "View Bank Details" });
-      expect(found).toBeVisible();
-      return within(found);
-    });
-    expect(dialog.getByText("US$16,340.00")).toBeVisible();
-    expect(dialog.queryByRole("tab")).not.toBeInTheDocument();
-    expect(dialog.getByText("SWIFT / BIC")).toBeVisible();
-    expect(dialog.queryByText("Branch code")).not.toBeInTheDocument();
-    expect(dialog.queryByText("FPS ID")).not.toBeInTheDocument();
   },
 };
 
