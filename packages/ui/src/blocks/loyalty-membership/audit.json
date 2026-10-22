@@ -73,5 +73,35 @@
     "label": "tier-info-card/benefit-text",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7227-1075",
     "classes": "min-w-0 text-foreground"
+  },
+  {
+    "label": "reward-menu/price",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7270-1382",
+    "classes": "shrink-0 items-end justify-center text-right font-semibold"
+  },
+  {
+    "label": "reward-art/coupon-tile",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7264-6653",
+    "classes": "relative grid overflow-hidden rounded-2xl bg-[linear-gradient(135deg,var(--orange-200)_0%,var(--orange-400)_55%,var(--orange-600)_100%)]"
+  },
+  {
+    "label": "reward-checkout/balance",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7266-6883",
+    "classes": "w-full items-center justify-between rounded-2xl px-4 py-3 bg-muted"
+  },
+  {
+    "label": "reward-menu/card-row",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7270:1377",
+    "classes": "flex w-full items-center gap-4"
+  },
+  {
+    "label": "reward-menu/coupon-card-row",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7264:6652",
+    "classes": "flex w-full items-center gap-4"
+  },
+  {
+    "label": "reward-art/hero",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7254:2697",
+    "classes": "aspect-2/1 w-full rounded-3xl bg-muted"
   }
 ]
