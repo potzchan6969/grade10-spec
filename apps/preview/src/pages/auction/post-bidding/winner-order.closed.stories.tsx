@@ -131,10 +131,10 @@ export const Refunded: Story = {
       ),
     ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
-      "Order TotalHK$128,814.00",
+      "Order TotalHK$132,786.08",
     ]);
-    expect(summaryRows).toContain("Payment Processing FeeHK$545.00");
-    expect(canvas.getByText("Refund HK$128,814")).toBeVisible();
+    expect(summaryRows).toContain("Payment Processing FeeHK$4,517.08");
+    expect(canvas.getByText("Refund HK$132,786.08")).toBeVisible();
     await userEvent.click(
       canvas.getByRole("button", { name: "Refund Details" }),
     );
