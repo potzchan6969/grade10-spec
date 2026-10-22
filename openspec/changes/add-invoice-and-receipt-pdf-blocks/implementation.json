@@ -39,6 +39,151 @@
       }
     ]
   },
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "seankcw",
+    "reviewedAt": "2026-10-22T06:49:47.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "#1035 adds the item-table and pagination cases TC51 to TC80 and #1061 words the summary without a border; later commits only reword headings and parameterize test data. The implementation draws every behaviour they name",
+        "evidence": [
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/invoice-pdf.test.ts (draws one item as one row under the column header, closed by its Item Total)",
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/receipt-pdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:packages/grade10-auction/backend/test/services/auctions/invoicePdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:packages/grade10-auction/backend/test/services/auctions/receiptPdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (SC-57, SC-67)",
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (the lab's 30-item invoice and receipt)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "#1035 adds the Item table and pagination groups and drops the boxed summary from the Feature set, which the implementation draws",
+        "evidence": [
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/invoice-pdf.test.ts (draws one item as one row under the column header, closed by its Item Total)",
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/receipt-pdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:packages/grade10-auction/backend/test/services/auctions/invoicePdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:packages/grade10-auction/backend/test/services/auctions/receiptPdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (SC-57, SC-67)",
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (the lab's 30-item invoice and receipt)",
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/invoice-pdf.test.ts (draws the summary without a border)",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (no box around the summary)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Purpose"
+        ],
+        "classification": "semantic",
+        "reason": "The 2026-10-08 amendment (Q31-Q38) has both documents list the order's items as table rows and continue a long table on further pages, replacing the lot title heading and the Description/Amount header",
+        "evidence": [
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/invoice-pdf.test.ts (draws one item as one row under the column header, closed by its Item Total)",
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/receipt-pdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:packages/grade10-auction/backend/test/services/auctions/invoicePdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:packages/grade10-auction/backend/test/services/auctions/receiptPdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (SC-57, SC-67)",
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (the lab's 30-item invoice and receipt)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Requirement: Each renderer produces one A4 document"
+        ],
+        "classification": "semantic",
+        "reason": "Renamed to produce A4 pages, one page when the content fits: a table too long for one page continues on a further page",
+        "evidence": [
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (the lab's 30-item invoice and receipt)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Requirement: InvoicePdf and ReceiptPdf render an optional supplied tax line"
+        ],
+        "classification": "editorial",
+        "reason": "#1061 drops the word boxed from the summary it sits beside; where Tax draws is unchanged"
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Requirement: InvoicePdf and ReceiptPdf render only what they are given"
+        ],
+        "classification": "semantic",
+        "reason": "The no-computation and no-lookup rules now cover the item rows and the Item Total row: every item amount arrives as text and the block adds none of them",
+        "evidence": [
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/invoice-pdf.test.ts (draws one item as one row under the column header, closed by its Item Total)",
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/receipt-pdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:packages/grade10-auction/backend/test/services/auctions/invoicePdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:packages/grade10-auction/backend/test/services/auctions/receiptPdf.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (SC-57, SC-67)",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:packages/grade10-auction/backend/test/services/auctions/invoicePdf.test.ts (the mapping adds the Total in minor units before it becomes text)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Requirement: InvoicePdf and ReceiptPdf render the issuer block at the foot of the sheet, right-aligned"
+        ],
+        "classification": "semantic",
+        "reason": "The issuer block sits at the foot of the last page of a multi-page document, once",
+        "evidence": [
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-pages.test.ts",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (the lab's 30-item invoice and receipt)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Requirement: InvoicePdf and ReceiptPdf render their charges in the order given, ending in a boxed summary"
+        ],
+        "classification": "semantic",
+        "reason": "Renamed to end in a summary: #1061 draws no border around Subtotal, Payment Processing Fee and Order Total, set apart by a rule on Order Total",
+        "evidence": [
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/invoice-pdf.test.ts (draws the summary without a border)",
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (no box around the summary)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Requirement: InvoicePdf renders bank details only on a bank-transfer invoice"
+        ],
+        "classification": "editorial",
+        "reason": "Wording moves from the lot and charges table to the item table with its charges, and a scenario revision is bumped; which invoices show bank details is unchanged"
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Requirement: InvoicePdf renders its meta rows and party blocks"
+        ],
+        "classification": "editorial",
+        "reason": "One page becomes the first page in a scenario once a document may run to several; the rows and blocks are unchanged"
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Requirement: The lot and charges carry a Description/Amount header"
+        ],
+        "classification": "semantic",
+        "reason": "Removed: the item table with its Item, Winning Bid, Buyer's Premium and Total header replaces the lot title and the two-column header, so no Description or Amount header is drawn",
+        "evidence": [
+          "9gag/grade10@a46459cf80633952304c881c06348497eb458a69:apps/frontend/grade10/e2e/tests/auction/winner-order/item-table-pdf.spec.ts (no Description or Amount header in either document)",
+          "9gag/grade10-spec@ad28e3a02425aba0b9fd20c3481bbf5b451883f9:packages/ui/src/blocks/auction-invoice-and-receipt-pdf/invoice-pdf.test.ts"
+        ]
+      }
+    ]
+  },
   "repositories": [
     {
       "repository": "9gag/grade10",
