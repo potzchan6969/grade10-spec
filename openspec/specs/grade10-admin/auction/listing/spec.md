@@ -33,6 +33,7 @@ optional alt live in `grade10-site/auction/listing-media`. An operator also writ
 - Prices and window
   - Writable before publish: starting price, close, extension duration, and cap can change until the listing is live
   - Starting price of 0: a draft and create accept 0 in USD; a negative, non-whole or empty price is refused, and empty is never stored as 0
+  - Whole-dollar starting price: a draft save, a create and an update of a starting price with cents are refused on the form and the API, naming the rule; a starting price already stored with cents is not rewritten
 - Publish
   - Now or scheduled: a created listing publishes immediately or at a set time
 - Call off
@@ -440,9 +441,14 @@ to set:
 
 - **Currency** — `USD`, the only value accepted. Omitted at create SHALL store
   `USD`. Any other value SHALL be refused on the form and on the API.
-- **Starting price** — integer minor units, 0 or greater, when set. 0 is a
-  set starting price and satisfies create; it is not an empty one. Empty is
-  allowed only while `draft`.
+- **Starting price** — a whole-dollar amount in integer minor units, 0 or
+  greater, when set: a multiple of one major unit of `USD`, taken from the USD
+  exponent of the money module. A starting price with cents SHALL be refused on
+  the form and on the API, on a draft save, a create and an update, naming the
+  whole-dollar rule, and the listing SHALL stay unchanged. 0 is a set starting
+  price and satisfies create; it is not an empty one. Empty is allowed only
+  while `draft`. A starting price already stored with cents is not rewritten
+  by this rule.
 - **Minimum increment** — integer minor units greater than zero when set.
   Empty is allowed only while `draft`.
 - The form SHALL show each entered minor-unit price as a separately formatted
@@ -630,6 +636,24 @@ be refused.
 - **WHEN** an operator changes its title and saves without touching starts at
 - **THEN** Grade10 stores the new title
 - **AND** starts at is unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-qd4 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-221 - A draft save refuses a starting price with cents
+**Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
+
+- **GIVEN** a draft listing in `USD` with a starting price of S minor units, a whole-dollar amount
+- **WHEN** an authorized operator saves it with a starting price of S plus one minor unit, on the form and then straight to the API
+- **THEN** Grade10 refuses each write and names the whole-dollar rule
+- **AND** the listing remains a draft with a starting price of S minor units
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-h3z rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-222 - A create or an update refuses a starting price with cents
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a complete draft in `USD`, and a created listing with a starting price of S minor units, a whole-dollar amount
+- **WHEN** an authorized operator creates the draft with a starting price of S plus one minor unit, and then sets the created listing's starting price to S plus one minor unit
+- **THEN** Grade10 refuses each write and names the whole-dollar rule
+- **AND** the draft is not created, and the created listing keeps a starting price of S minor units
 
 ### Requirement: Publish happens now or at a scheduled time
 

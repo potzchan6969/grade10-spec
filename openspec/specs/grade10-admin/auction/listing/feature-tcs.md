@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** pending-review · 0/162
+**Status:** pending-review · 0/164
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 **Out of suite:** grade10-admin-auction-listing-SC-176 - the listing service's save test, task 2.1 in `tasks.md`, because the editor always names the translations it holds and no route in the console sends an omitted object; grade10-admin-auction-listing-SC-177 - the same test, which saves a named object that holds fewer languages than the stored one; grade10-admin-auction-listing-SC-200, grade10-admin-auction-listing-SC-201 and grade10-admin-auction-listing-SC-202 - the Labs seed tests of task 2.8, because the Labs are a local developer panel the suite does not walk; grade10-admin-auction-listing-SC-203, grade10-admin-auction-listing-SC-204, grade10-admin-auction-listing-SC-205 and grade10-admin-auction-listing-SC-206 - the customer view tests of task 4.6, added after the blind pass; they stay without a case until QA2 or human review writes one; grade10-admin-auction-listing-SC-207 and grade10-admin-auction-listing-SC-208 - the Copy block tests of task 4.1, added after the blind pass
@@ -274,6 +274,52 @@ Runs once per row of **Test data**.
 * Step 5 reads 0 minor units USD, not empty.
 * Step 8 saves; the listing remains a draft.
 * Step 10 reads empty, not 0.
+
+<!-- trace:case id=g10adm.auction-listing.TC-p7c rev=1 covers=grade10-admin-auction-listing-SC-221 -->
+### g10adm.auction-listing.US1-TC7: A draft save refuses a starting price with cents
+
+The editor's money field takes cents, so the route is the editor itself, then a direct API write.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-01
+
+**Pre-conditions:**
+
+* An operator holding the grant to set prices and the window is signed in and is on the editor of `<listing_1>`.
+* `<listing_1>` is a draft in USD with a starting price of `<starting price>`.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | A draft listing in USD; bind its identity only | · |
+| starting price | USD120 | (range: any whole-dollar amount) |
+| starting price with cents | USD120.50 | (fixed boundary), a starting price that is not whole dollars |
+
+**Steps:**
+
+1. Enter `<starting price with cents>` in the starting price field and save the draft.
+2. Read the starting price field and the message beside it.
+3. Send the same starting price straight to the API for `<listing_1>`.
+4. Reload the editor and read the starting price.
+5. Enter `<starting price>` and save the draft.
+
+**Expected Results:**
+
+* Step 2 shows the save is refused and the message names the whole-dollar rule.
+* Step 3 is refused and names the whole-dollar rule.
+* Step 4 reads `<starting price>`, the value before step 1, and the listing is still a draft.
+* Step 5 saves the draft, so the refusal was for the cents.
 
 ---
 
@@ -619,7 +665,7 @@ Runs once per row of **Test data**.
 
 ## grade10-admin-auction-listing-US3: Operator creates a listing that is ready to sell
 
-**As an** auction operator,
+**As a** auction operator,
 **I want** the listing checked against everything an auction needs at the moment I create it,
 **so that** nothing incomplete can reach a bidder.
 
@@ -1702,6 +1748,49 @@ Runs once per row of **Test data**.
 * Step 4 refuses Create and names the English title.
 * Step 5 shows `<listing_7>` still a draft.
 * Step 7 creates the listing.
+
+<!-- trace:case id=g10adm.auction-listing.TC-v2n rev=1 covers=grade10-admin-auction-listing-SC-222 -->
+### g10adm.auction-listing.US3-TC31: A create or an update refuses a starting price with cents
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-03
+
+**Pre-conditions:**
+
+* An operator holding the grant to set prices and the window holds an API session.
+* `<listing_2>` is a complete draft in USD, and `<listing_3>` is a created listing in USD with a starting price of `<starting price>`.
+
+**Test data:**
+
+| Write | Starting price sent | Fixture notes |
+| --- | --- | --- |
+| create `<listing_2>` | USD120.01 | (fixed boundary), one minor unit above a whole dollar |
+| update `<listing_3>` | `<starting price>` plus one minor unit | (fixed boundary) |
+
+`<starting price>` is USD120, a whole-dollar amount.
+
+**Steps:**
+
+1. Send the row's write with the row's starting price.
+2. Read the API response and the listing named in the row.
+
+**Expected Results:**
+
+* Step 1 is refused and the message names the whole-dollar rule.
+* Step 2 reads `<listing_2>` as a draft, not created, for the create row.
+* Step 2 reads `<listing_3>` with starting price `<starting price>`, the value before the write, for the update row.
 
 <!-- trace:case id=g10adm.auction-listing.TC-m53 rev=2 -->
 ### grade10-admin-auction-listing-US3-TC26-2: Currency change reformats the same minor-unit price
@@ -6692,6 +6781,7 @@ Runs once per row of **Test data**.
 - Transfer activity names the other listing by listing code and English title when present, else the listing id, and always the slug that moved (Q10)
 - Clearing the prefilled Relist slug before Save stores the ordinary title-and-code generated slug and still frees the source's former slug (Q11)
 - After Relist Save, the Unsold source shows Relisted beside Unsold on its detail header and Listings Status column (Q12)
+- A starting price an operator saves, creates or updates is a whole-dollar amount; one with cents is refused on the form and the API, naming the rule, and the listing is unchanged (Q16, the product manager's answer, carried here by Q17). A price already stored with cents is left as it is (Q18).
 
 ## Reconciliation
 
@@ -6869,3 +6959,10 @@ record-retention case with no operator-facing control here).
 
 - Journeys `grade10-admin-auction-listing-US-04`, `grade10-admin-auction-listing-US-09` and `grade10-admin-auction-listing-US-73` each hold draft cases
 - Feature-set leaves Relist public address, Slug as public key and Generated slug / field exit are walked through those journeys; no case traces a feature-set group alone
+
+**Run:** QA2 reconciliation 2026-10-23 for change `configure-auction-bid-increments`, joining two draft cases with the delta scenarios `SC-221` and `SC-222` on `grade10-admin-auction-listing-US-01` and `grade10-admin-auction-listing-US-03`. The cases were written in the same pass as the delta, not blind: neither QA1 nor Dev ran again for this capability, because the rule was settled by the product manager's answers. This line is a statement, not proof.
+
+- **Retained** - every durable case of this capability stays as it is; this delta adds two and revises none. The durable cases that refuse a non-whole starting price (`US1-TC3` and `US3-TC22`) read a count of minor units and are unaffected.
+- **Covered** - `SC-221` by `US1-TC7` and `SC-222` by `US3-TC31`.
+- **Overlap** - `usd-lot-currency-winner-settlement-choice` also carries this requirement; this change `depends_on` it and states against its text.
+- **Anchors** - `grade10-admin-auction-listing-US-01` and `grade10-admin-auction-listing-US-03` hold the two cases.

@@ -115,6 +115,25 @@ id. The title is historical: a first bid may stand on the starting price.
 - **WHEN** a collector reads an open listing
 - **THEN** its facts include the minimum next amount as integer minor units in USD
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-p50 rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-21 - Every lot reads the same schedule
+**Serves:** grade10-site-auction-bid-increments-US-03 - Collector bids in USD on every lot
+
+- **GIVEN** two open USD listings with different starting prices and categories, each with a current bid of P minor units
+- **WHEN** Grade10 calculates the minimum bid of each listing
+- **THEN** both minimum bids are P plus the increment the configured schedule selects for P
+- **AND** neither listing holds an increment or a schedule of its own
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-bs0 rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-22 - The schedule starts at 0 and its last tier is unbounded
+**Serves:** grade10-site-auction-bid-increments-US-03 - Collector bids in USD on every lot
+
+- **GIVEN** the configured schedule
+- **WHEN** Grade10 selects the tier for the amount 0, and for an amount above the Price from of every tier
+- **THEN** the tier for 0 is the first tier, so no amount lies below it
+- **AND** the tier for the larger amount is the last tier, whatever that amount
+- **AND** every amount from 0 upward falls in exactly one tier
+
 ### Requirement: The minimum uses the amount being beaten
 
 Before any accepted bid, the minimum next amount SHALL be the listing's
@@ -142,6 +161,89 @@ refuse an amount below it. It SHALL not create intermediate bids.
 - **GIVEN** an open `USD` listing with a starting price of 0 and no accepted bid
 - **WHEN** a collector reads its minimum bid
 - **THEN** Grade10 reports 100 minor units
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-a64 rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-17 - A changed schedule moves the next minimum on an open lot
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** an open USD listing whose current bid is P minor units, and the configured tier for P has an increment of X minor units
+- **WHEN** the configured increment for that tier becomes Y minor units, with Y not equal to X, and Grade10 next calculates the minimum bid
+- **THEN** the minimum bid is P plus Y minor units
+- **AND** the listing needs no change of its own to read it
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-bj0 rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-18 - A standing bid keeps its amount through a change
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** an open USD listing where a collector leads at P minor units with a maximum of M minor units
+- **WHEN** the configured values change so that the increment for P differs
+- **THEN** the current bid stays P minor units and the leader keeps their maximum of M minor units
+- **AND** the bid count and the recorded bids are unchanged
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-w3o rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-19 - A bid sized for the old minimum is refused after a change
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** an open USD listing whose current bid is P minor units, a collector whose page still shows the minimum P plus X minor units, and a change that makes the configured increment for P larger than X
+- **WHEN** the collector bids P plus X minor units
+- **THEN** Grade10 refuses the bid and names P plus the new increment as the minimum
+- **AND** the current bid and the leader are unchanged
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-ywg rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-20 - A proxy resolution reads the schedule in force
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** an open USD listing where collector A leads with a maximum of MA minor units, and a collector B whose maximum MB minor units is at least the minimum next amount and below MA
+- **WHEN** B commits that maximum
+- **THEN** the current bid is the lesser of MA and MB plus the increment the configured schedule selects for MB
+- **AND** a later change to the configured values leaves that current bid as it stands
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-cx4 rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-23 - A bid with cents is refused
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** an open USD listing whose minimum bid is M minor units, a whole-dollar amount, led by another collector
+- **WHEN** a collector bids M plus one minor unit
+- **THEN** Grade10 refuses the bid and names the whole-dollar rule
+- **AND** the current bid, the leader and every maximum are unchanged, and no bid is recorded
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-kc7 rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-24 - An operator's starting price with cents is refused
+**Serves:** Minimum bid - the operator's save is refused before a collector meets the price
+
+- **GIVEN** a USD listing whose starting price is a whole-dollar amount S minor units
+- **WHEN** an operator sets its starting price to S plus one minor unit
+- **THEN** Grade10 refuses the write and names the whole-dollar rule
+- **AND** the listing's starting price stays S minor units
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-y9s rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-25 - A consignment ask with cents makes no listing
+**Serves:** Minimum bid - the listing sync refuses the ask against its own caller
+
+- **GIVEN** a consignment ask for the auction whose price is a whole-dollar amount S minor units plus one minor unit
+- **WHEN** Grade10 makes the listing from the ask
+- **THEN** Grade10 refuses to make it and names the whole-dollar rule
+- **AND** no listing exists for the ask, and the ask is unchanged
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-n5d rev=2 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-26 - A stored starting price with cents opens at the next whole dollar
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** an open USD listing stored with a starting price of S plus one minor unit, S being a whole-dollar amount, and no accepted bid
+- **WHEN** a collector reads the listing page and its minimum bid
+- **THEN** the page shows the starting price as stored, S plus one minor unit
+- **AND** the minimum bid is S plus one major unit, the next whole dollar at or above the starting price
+- **AND** a first bid of that minimum is accepted
+- **AND** the stored starting price stays S plus one minor unit, and no migration or rounding touches it
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-r3d rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-27 - The house maximum and an extended-bidding bid step on the same schedule
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** an open USD listing in extended bidding, led by a collector with a maximum of MA minor units, and a house maximum of MH minor units that is at least the minimum next amount and below MA
+- **WHEN** the house commits MH
+- **THEN** the current bid is the lesser of MA and MH plus the increment the configured schedule selects for MH
+- **AND** the minimum next amount is the current bid plus the increment the configured schedule selects for it, as on a listing outside extended bidding
 
 ### Requirement: Unsupported currencies are refused before auctioning
 

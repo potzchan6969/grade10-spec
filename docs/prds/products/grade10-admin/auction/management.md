@@ -50,6 +50,9 @@ the card is in the winner's hands. The collector's half is
 - **A consigned lot** - consignment makes it as a draft from the item, its
   photographs and facts; it takes no stock hold, and its starting price is
   the consignment's floor, which an operator here cannot change
+- 🚧 **A floor with cents** - a consignment floor is whole dollars like any
+  starting price; the consignment screen refuses a floor with cents when staff
+  enter it, so a consigned lot is never made from one
 - **Cert ID** - creating a listing takes an explicit choice of one Cert ID
   of the selected product, or `No Cert ID` for regular stock without a Cert
   record; each Cert ID can have its own live listing, and only one
@@ -172,7 +175,7 @@ the card is in the winner's hands. The collector's half is
   that lot, across both brands; interest, not a count of expected bidders; the
   Listings table does not show the count
 - 🚧 **Refused** — a currency other than USD, or a starting price that is not
-  a whole amount of 0 or more; a slug of the wrong shape, or one another listing
+  a whole-dollar amount of 0 or more, on a draft save, a create or an update; a slug of the wrong shape, or one another listing
   holds; two categories from one taxonomy, or a published or canceled
   campaign; a close not after the start, a Publish at after the start, a
   start, close or Publish at typed not after now, or a close not after now at
