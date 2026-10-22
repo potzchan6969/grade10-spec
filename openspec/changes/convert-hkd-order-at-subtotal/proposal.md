@@ -3,7 +3,7 @@
 Product context: [Post-Bidding · Settling in HKD](../../../docs/prds/products/grade10-site/auction/post-bidding.md#settling-in-hkd), set by the merged design change [grade10-spec#1288](https://github.com/9gag/grade10-spec/pull/1288).
 
 > An HKD winner reads the lot's lines in USD, one HKD Subtotal converted once
-> at the fixed rate, the card fee in HKD and a whole-HK$ Order Total - on the
+> at the fixed rate, the card fee in HKD and an Order Total that adds them - on the
 > Order Summary, the invoice, the receipt and the receipt letter alike. This
 > replaces the per-line conversion and the all-HKD summary, and it prices the
 > order the same way.
@@ -28,11 +28,11 @@ differently.
 - **The Order Summary reads USD lines, then HKD** - under HKD the winning bid,
   premium, Shipping & Handling, Insurance and Tax keep their USD amounts. A
   Subtotal converts their sum to HKD and carries the conversion note. The
-  Payment Processing Fee and the whole-HK$ Order Total sit below it in HKD.
+  Payment Processing Fee and the Order Total sit below it in HKD.
 - **The HKD Subtotal converts once** - the USD lines add up, convert at 7.85
   and round up to the next cent. The card fee is computed in HKD on that
-  Subtotal, and the Order Total is Subtotal plus fee rounded up to the whole
-  HK$. This replaces converting and rounding each line.
+  Subtotal, and the Order Total is Subtotal plus fee, to the cent. This
+  replaces converting and rounding each line.
 - **A bank transfer fee converts below the Subtotal** - the operator still
   types it in USD; it converts at the same rate to the next cent, sits with the
   fee, and adds nothing to the note's USD figure.
@@ -62,8 +62,7 @@ None.
 ### Modified Capabilities
 
 - `grade10-site/auction/winner-order` - an HKD order converts the sum of its
-  USD lines once and rounds up to the cent; the Order Total rounds up to the
-  whole HK$; the Order Summary, invoice and receipt show the USD lines with the
+  USD lines once and rounds up to the cent; the Order Total is Subtotal plus fee; the Order Summary, invoice and receipt show the USD lines with the
   HKD Subtotal, fee and total; the HKD-only rule for invoice and receipt is
   replaced.
 - `grade10-site/auction/notifications-order` - a letter that lists lines lists
@@ -93,8 +92,7 @@ None.
   [Auction Management](../../../docs/prds/products/grade10-admin/auction/management.md#payment),
   [Auction](../../../docs/prds/products/grade10-site/auction/index.md) and
   [Money Amounts](../../../docs/prds/platform/shared/money-amounts.md#display-shapes)
-  carry the 🚧 lines. Money Amounts gains one exception: an HKD Order Total
-  reads without cents.
+  carry the 🚧 lines.
 
 ## Open Questions
 

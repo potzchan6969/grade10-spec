@@ -13,7 +13,7 @@
 ### winner-order-US-27: Winner who settles in HKD reads the Order Summary with USD lines and an HKD total
 
 **As a** winner who picked HKD,
-**I want** my Order Summary to list what I won in USD, then one HKD Subtotal converted from their sum, the fee, and the whole-HK$ total I will pay,
+**I want** my Order Summary to list what I won in USD, then one HKD Subtotal converted from their sum, the fee, and the Order Total I will pay,
 **so that** I see what the lot cost and check what I pay against the one rate the note names.
 
 ## REMOVED User journeys
