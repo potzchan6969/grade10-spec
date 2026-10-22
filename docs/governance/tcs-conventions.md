@@ -98,6 +98,7 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 
 ### Test data
 
+- 2026-10-22, docs/prds/products/grade10-site/store/tests/domain-tcs.md: Test data names no environment. An address is `<g10url>/<path>`, never "the staging site's …", and no pre-condition or starting state says which environment, unless the environment is the partition under test.
 - 2026-10-14, grade10-site/auction/winner-order/feature-tcs.md: Bind every replaceable test-data field by its inline-code `<placeholder>` in the pre-conditions, steps or expected results that use it; row-based tables name each bound column with that placeholder, never "the row's value". Write complete sentences that remain readable after binding concrete values, keeping fixture descriptions and selection notes outside the substituted value. Switch data rows without rewriting the route; keep each row in its stated partition, retain fixed boundaries and configured values, and state how derived results follow its inputs.
 - **Readable units, the requirement's unit** — `100 mebibytes`, `30 minutes`; never a rounded megabyte that moves the bound
 - **Rows with one checking** — keep one row when values share the same purpose, route and expected checking. Use separate rows when the expected provider answer or checking differs; use separate cases when the purpose differs
