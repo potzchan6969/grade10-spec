@@ -107,8 +107,8 @@ Runs once per row of **Test data**.
 
 | Partition | `<carrier address>` | `<expected track>` |
 | --- | --- | --- |
-| Safe | A carrier's `https` tracking address. | Track Order opens it. |
-| Not safe | A `javascript:` address. | No Track Order. |
+| ❓ Safe | A carrier's `https` tracking address. | Track Order opens it. |
+| ❓ Not safe | A `javascript:` address. | No Track Order. |
 | None | No tracking supplied. | No Track Order. |
 
 **Steps:**

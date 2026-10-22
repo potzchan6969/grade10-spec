@@ -110,7 +110,7 @@ Runs once per row of **Test data**.
 | Partition | `<description>` | `<expected first view>` |
 | --- | --- | --- |
 | Long | More than three lines at the page's width. | Three lines and a button to read it in full. |
-| Short | One line. | The whole description, no button. |
+| ❓ Short | One line. | The whole description, no button. |
 
 **Steps:**
 

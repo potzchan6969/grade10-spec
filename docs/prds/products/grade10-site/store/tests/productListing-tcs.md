@@ -622,7 +622,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 opens a bottom drawer of orders.
-* Step 2 closes the drawer and applies the order.
+* Step 2 applies the order.
+* ❓ Step 2 closes the drawer.
 * Step 3 lists the highest-priced card for sale first.
 
 <!-- trace:case id=g10.store-product-listing.TC-6x5 rev=1 -->
@@ -1421,8 +1422,8 @@ Runs once per row of **Test data**.
 
 | Partition | `<draft product>` |
 | --- | --- |
-| Created as Draft | A new product saved with status Draft, published to the store's channel. |
-| Moved to Draft | An active product on the listing, set to Draft and saved. |
+| ❓ Created as Draft | A new product saved with status Draft, published to the store's channel. |
+| ❓ Moved to Draft | An active product on the listing, set to Draft and saved. |
 
 **Steps:**
 

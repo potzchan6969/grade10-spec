@@ -1592,6 +1592,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2 refuses the payment and places no order.
-* Step 3 still holds `<product A>`.
-* Step 4 places the order.
-* Step 5 holds exactly one order for `<product A>`.
+* ❓ Step 3 still holds `<product A>`.
+* ❓ Step 4 places the order.
+* ❓ Step 5 holds exactly one order for `<product A>`.

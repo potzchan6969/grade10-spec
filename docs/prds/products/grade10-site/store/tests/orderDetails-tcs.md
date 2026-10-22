@@ -438,8 +438,8 @@ Runs once per row of **Test data**.
 
 | Partition | `<carrier address>` | `<expected track>` |
 | --- | --- | --- |
-| Safe | A carrier's `https` tracking address. | Track Order opens it. |
-| Not safe | A `javascript:` address. | No Track Order. |
+| ❓ Safe | A carrier's `https` tracking address. | Track Order opens it. |
+| ❓ Not safe | A `javascript:` address. | No Track Order. |
 
 **Steps:**
 
@@ -554,8 +554,8 @@ Runs once per row of **Test data**.
 
 | Partition | `<order>` | `<expected steps>` |
 | --- | --- | --- |
-| Placed | Paid, not yet fulfilled. | Order Placed reached, with its date; Shipping and Completed not reached. |
-| Sent | Fulfilled, not completed. | Order Placed and Shipping (in progress) reached, each with its date; Completed not reached. |
+| ❓ Placed | Paid, not yet fulfilled. | Order Placed reached, with its date; Shipping and Completed not reached. |
+| ❓ Sent | Fulfilled, not completed. | Order Placed and Shipping (in progress) reached, each with its date; Completed not reached. |
 | Done | Completed. | All three steps reached. |
 
 **Steps:**
@@ -595,7 +595,7 @@ Runs once per row of **Test data**.
 | Partition | `<refund>` | `<expected summary>` | `<expected badge>` |
 | --- | --- | --- | --- |
 | One line | `<product B>`, HKD105. | Total HKD885; a Refund row of −HKD105. | Refunded |
-| Everything | Both lines, HKD885. | Total HKD885; a Refund row of −HKD885. | Refunded |
+| ❓ Everything | Both lines, HKD885. | Total HKD885; a Refund row of −HKD885. | Refunded |
 
 **Steps:**
 
