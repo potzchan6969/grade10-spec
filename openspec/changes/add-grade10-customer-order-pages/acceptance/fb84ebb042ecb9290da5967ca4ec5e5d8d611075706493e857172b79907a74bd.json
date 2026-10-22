@@ -1,0 +1,229 @@
+{
+  "version": 2,
+  "change": "add-grade10-customer-order-pages",
+  "baseline": "69ca2b0ad8cdbbd2ace72f3d22971e25b9f53a652ff46eaba68a8a5ce0e6a3c9",
+  "fingerprint": "fb84ebb042ecb9290da5967ca4ec5e5d8d611075706493e857172b79907a74bd",
+  "reviewedBy": "@kinisworking",
+  "acceptedAt": "2026-10-22T14:06:29.907Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/order-detail.md#order",
+      "sha256": "a19618342c5b9e8ac8410b748e11d7b20e49990c82245cdcb75e033cba69b54c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/order-detail.md#order-summary",
+      "sha256": "a2bfb57f5c48f18a6bbc18e53266960d07d1c03cfd4d0ca7d6fb5f29935e1cd2",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/order-detail.md#product-pictures",
+      "sha256": "e8193832d7cd0fe9e04386598a9e9a7cebb48ab3630b0ada22e2e4585a6e2db9",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/order-history.md#orders",
+      "sha256": "5b109072ee6244a5a50d00a41a9a31cf3b13b43c6d8b136bc52452cc70646718",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/order-history.md#product-pictures",
+      "sha256": "8162a20a25db2b1a6c642599a74c709a519b5eb3c7f942a20d301a59044d25e0",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-order-detail.md#optional-sections",
+      "sha256": "828a39a3db435d2d82813e8e840f44efc380d2a11a840e45738360363f7c2806",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/decisions.md",
+      "sha256": "ad7e9d24501366ec746f8c8de0aa28dea0ea8201e194d31c95b75c30275fdf4d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/proposal.md",
+      "sha256": "780e1f3690c8c6ebca5acab8b66b5b749fae49cbd15f0b38db93c36f2bab0168",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "3188805241282190d8f842bb0b3821e1604383c2d5d98ca75e2814fda9210100",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/grade10-site/store/order-detail/feature-tcs.md",
+      "sha256": "fc993597f9accfb1ffe16cdeb56c5ba5b3f47c7248a452095a41af35810ba446",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/grade10-site/store/order-detail/spec.md",
+      "sha256": "44c775827eb8b22fa4b0fcafcdb404a8c6bb5e71a203c48ad6af7400236300cd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/grade10-site/store/order-detail/user-journeys.md",
+      "sha256": "afcb93241305bd0d85f90b5551008e814091bed62152661691df65efed97b4e0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/grade10-site/store/order-history/feature-tcs.md",
+      "sha256": "e211784b2508e2375574e70fd807ebfb6230806506f84c269174353e9d69ce96",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/grade10-site/store/order-history/spec.md",
+      "sha256": "d3db881504e26cb282ae12a9fd35cd579db09d16d298c46fdf85d18f3c779cec",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/grade10-site/store/order-history/user-journeys.md",
+      "sha256": "367f54ad9d373649b2fe4e55a5d4c2bf819fd6bd2826893fdff3cc400820a4ba",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/shared/ui/store-order-detail/feature-tcs.md",
+      "sha256": "57e5c8223111af65498cf129c4c963662c538129fd6b13e0661a2e734524b291",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/shared/ui/store-order-detail/spec.md",
+      "sha256": "c8dd69e8ffc96934211e91599a1a6c5622aa99b2addff2497c62dac093b695ef",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/specs/shared/ui/store-order-detail/user-journeys.md",
+      "sha256": "7fc6305afa850f718361cd32df49868d5e865b7b5db1ac5b0eb3081ae5796bac",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/tech-design.md",
+      "sha256": "ee054d8d66e90f13ee52ad1e344d612ce601aa98eeb74b74bbdc4e01151e481b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/ui-design.md",
+      "sha256": "0cedbec7392788878d6b2b37ae9840fb2a9c31b028ee733ae3724cc0e96ff5e5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "d1a77acea75249d9ad196efb9047c40aadabd0478ec14c3040ed306cf359aade",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/feature-tcs.md",
+      "sha256": "fc993597f9accfb1ffe16cdeb56c5ba5b3f47c7248a452095a41af35810ba446",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/spec.md",
+      "sha256": "cde28809c5fb82e55602c25b2439a61e0172b41d39e69c01ec5093f8a540f12a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/user-journeys.md",
+      "sha256": "faa3374fa9983b832fa2a2e310d1e1c8037e12c8ba606b62e49105309e5260e3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-history/feature-tcs.md",
+      "sha256": "e211784b2508e2375574e70fd807ebfb6230806506f84c269174353e9d69ce96",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-history/spec.md",
+      "sha256": "316287c6d77601f8191b59dbf2270c4fb1182980388bfecac092400be1d332c7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-history/user-journeys.md",
+      "sha256": "0f430e31ecc2a1194f6435e128118872946fd7641bc131032dbb0f9214b8a3fb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-detail/feature-tcs.md",
+      "sha256": "57e5c8223111af65498cf129c4c963662c538129fd6b13e0661a2e734524b291",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-detail/spec.md",
+      "sha256": "4fdf9565648e3aa4b248cace2e67a048b50d58a7c83587cae168117afadb6885",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-detail/user-journeys.md",
+      "sha256": "7fc6305afa850f718361cd32df49868d5e865b7b5db1ac5b0eb3081ae5796bac",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-grade10-customer-order-pages/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Current product pictures supplement accessible order details",
+        "Requirement: Fulfilment and tracking use supplied order facts",
+        "Requirement: One private address shows one owned order",
+        "Requirement: The detail distinguishes loading, failure, and not found",
+        "Requirement: The detail preserves the order facts the Store supplies"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-detail/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-history/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-history/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A collector reaches their orders at one private address",
+        "Requirement: Current product pictures identify recorded purchases",
+        "Requirement: Order actions use settled Grade10 and carrier addresses",
+        "Requirement: The page distinguishes loading, failure, and no orders",
+        "Requirement: Your Orders presents newest active and past orders"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/order-history/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-detail/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-detail/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Delivery progress and tracking are supplied behavior",
+        "Requirement: Optional sidebar facts stay independent",
+        "Requirement: OrderDetails composes supplied order facts",
+        "Requirement: The order detail surface exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-detail/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
