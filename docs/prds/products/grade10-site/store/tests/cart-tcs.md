@@ -1,6 +1,6 @@
 # grade10-site/store/cart Test Cases
 
-**Status:** pending-review · 0/36
+**Status:** pending-review · 0/38
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Background
@@ -823,6 +823,46 @@ Runs once per row of **Test data**.
 * The order discount row has no Remove; the code and Points rows do.
 * Step 2's Estimated Total is `<expected total>`.
 
+<!-- trace:case id=g10.store-cart.TC-7wv rev=1 -->
+#### g10.store-cart.US1-TC14: An empty cart says so and offers no checkout
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US1
+
+**Pre-conditions:**
+
+* customer(`<actor state>`) has an empty cart.
+
+**Test data:**
+
+| Partition | `<actor state>` |
+| --- | --- |
+| Guest | signed out |
+| Member | signed-in member |
+
+**Steps:**
+
+1. Click Cart in the site header.
+2. Read the drawer.
+
+**Expected Results:**
+
+* Step 2 says the cart is empty.
+* Step 2 shows no lines, no footer and no Proceed to Checkout.
+* The Cart control in the header shows no count.
+
 ---
 
 ### g10.store-cart.US2: Use a promo code
@@ -1511,3 +1551,47 @@ Runs once per row of **Test data**.
 * Step 1 does not leave for the shop's checkout.
 * Step 2 stays open and shows `<expected drawer>`.
 * Each line shows the shop's current answer.
+
+<!-- trace:case id=g10.store-cart.TC-mhq rev=1 -->
+#### g10.store-cart.US4-TC10: A declined payment places no order and keeps the cart for another try
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US4
+
+**Pre-conditions:**
+
+* customer(`<actor state>`) pressed Proceed to Checkout on `<product A>` and is on Shopify's page.
+
+**Test data:**
+
+| Partition | `<actor state>` |
+| --- | --- |
+| Guest | signed out |
+| Member | signed-in member |
+
+**Steps:**
+
+1. Pay with the payment provider's published test card that is declined.
+2. Read Shopify's page.
+3. Return to `<store listing url>` and open Cart.
+4. Click Proceed to Checkout and pay with `<test card>`.
+5. Read the orders for this purchase.
+
+**Expected Results:**
+
+* Step 2 refuses the payment and places no order.
+* Step 3 still holds `<product A>`.
+* Step 4 places the order.
+* Step 5 holds exactly one order for `<product A>`.
