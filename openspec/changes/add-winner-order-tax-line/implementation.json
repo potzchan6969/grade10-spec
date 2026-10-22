@@ -58,5 +58,110 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-22T16:46:27.000Z",
+    "changes": [
+      {
+        "path": "openspec/changes/add-winner-order-tax-line/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Storybook story ids renamed from `My Auctions/Winner Order` to `Auction/Post Bidding/Winner Order`. The Tax layout and the stories it names are unchanged."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite restated by other accepted changes and the TCS parameterization sweep: case ids and markers reissued, test data bound by file, repeated cases parameterized, retired bank-reference cases removed. The cases still cover the Tax quote, reissue and removal journeys."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature set bullets restate the worklist, order page, money-that-lands, fulfilment and setup behavior other accepted changes added. None changes how Tax is quoted or reissued."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: An operator quotes and sends the invoice"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by the settlement currency, USD quote entry, card rule and bank rail changes. The Tax line still prices in the subtotal before the card fee and a zero Tax is still refused. Acknowledged by the owner.",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/backend/test/services/orders/quote.test.ts (post-sale-SC-155, post-sale-SC-210, winner-order-SC-216, winner-order-SC-285, winner-order-SC-286, winner-order-SC-302)",
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/quote.spec.ts (post-sale-SC-68, post-sale-SC-245, winner-order-SC-299)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/contracts/test/invoicePricing.test.ts (winner-order-SC-216)",
+          "9gag/grade10@6cf3f22b3d:apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts (post-sale-SC-155, post-sale-SC-156, post-sale-SC-158, post-sale-SC-210)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: An operator reissues a sent invoice"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline: a reissue may change the settlement currency or bank rail, and every line is priced in it. Reissuing without Tax still removes only that line. Acknowledged by the owner.",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/backend/test/services/orders/quote.test.ts (post-sale-SC-210, post-sale-SC-254)",
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/quote.spec.ts (post-sale-SC-245, winner-order-SC-301)",
+          "9gag/grade10@6cf3f22b3d:apps/frontend/grade10/e2e/tests/auction/post-sale-journey.spec.ts (post-sale-SC-158, post-sale-SC-210)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Journey titles and wording restated for the worklist and order page, plus journeys US-18 and US-20 added by other accepted changes. The Tax journeys are untouched."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite restated by other accepted changes and the TCS parameterization sweep: cases added for settlement currency, bank rails and the HKD summary, case ids and markers reissued, repeated cases parameterized. The Tax and Tax tooltip cases remain."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature set bullets restate the settlement currency, order summary, rail and internal bidder behavior other accepted changes added. The Tax bullets are unchanged."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: Invoice fields"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline by usd-lot-currency-winner-settlement-choice and the HKD Order Summary change: every amount, Tax included, is in the settlement currency, USD or HKD, converted at a fixed rate and rounded up. The Tax line still sits between Insurance and the processing fee, and is hidden when absent. Acknowledged by the owner.",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/backend/test/services/orders/quote.test.ts (winner-order-SC-285, winner-order-SC-286, winner-order-SC-302, winner-order-SC-216)",
+          "9gag/grade10@6cf3f22b3d:apps/frontend/grade10/src/pages/auctions/AuctionWinnerOrderPage.test.tsx (winner-order-SC-214, winner-order-SC-215, winner-order-SC-217)",
+          "9gag/grade10@6cf3f22b3d:apps/frontend/grade10/e2e/tests/auction/winner-order/winner-order.spec.ts (winner-order-SC-214, winner-order-SC-215, winner-order-SC-217)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: Records the winner keeps"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement refined after the baseline: the shipping tracker is a link only when the operator recorded a tracker link, and plain text otherwise. The receipt keeps its Tax line unchanged. Acknowledged by the owner.",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/backend/test/services/auctions/receiptPdf.test.ts (winner-order-SC-214, winner-order-SC-215)",
+          "9gag/grade10@6cf3f22b3d:apps/frontend/grade10/src/pages/auctions/AuctionWinnerOrderPage.test.tsx (links the tracking number to the operator-recorded tracker URL)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/frontend/src/features/orders/winner-order/winnerOrderView.test.ts (tracker link and plain-text tracking number)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Journeys US-24 to US-27 added for settlement currency, and one wording change from current currency minimum to one USD minimum. The Tax journeys are untouched."
+      }
+    ]
+  }
 }

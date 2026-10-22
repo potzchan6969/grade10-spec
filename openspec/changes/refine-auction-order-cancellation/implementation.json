@@ -56,5 +56,81 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-22T16:46:27.000Z",
+    "changes": [
+      {
+        "path": "openspec/changes/refine-auction-order-cancellation/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Moves the Winner Order Storybook path to its Auction/Post Bidding location and records the admin copy as English literals under the admin localization convention; the cancelled surfaces and states it maps do not change"
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "Later accepted changes (orders worklist segments, Closed segment, USD and HKD settlement, bank rails) refold and regenerate the whole suite; the cancellation, late-payment and Paid after cancel cases (US13, US14, US2-TC9-1, US7-TC4-1) remain and assert the same terminal, reason-required and non-reviving behaviour",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/cancelRefund.spec.ts (grade10-admin-auction-post-sale-SC-233, SC-236)",
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/operatorPayments.spec.ts (grade10-admin-auction-post-sale-SC-235)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/dialogs/OrderDialogs.test.tsx (cancels only with a category and a note; SC-233)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrderDetail.test.tsx (grade10-admin-auction-post-sale-SC-234, SC-235)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrdersWorklist.test.tsx (offers the segment's statuses, and a cancel reason only for Cancelled)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Feature set restates other accepted changes (worklist segments, Closed segment, order page, USD settlement); the two cancellation requirements this change claims are unchanged in meaning and the Feature set still lists cancel and Paid after cancel",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/cancelRefund.spec.ts (grade10-admin-auction-post-sale-SC-233, SC-236)",
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/operatorPayments.spec.ts (grade10-admin-auction-post-sale-SC-235)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/dialogs/OrderDialogs.test.tsx (cancels only with a category and a note; SC-233)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrderDetail.test.tsx (grade10-admin-auction-post-sale-SC-234, SC-235)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrdersWorklist.test.tsx (offers the segment's statuses, and a cancel reason only for Cancelled)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "US-01 and US-02 are reworded to the Orders worklist and order page, and US-18 and US-20 are added by other accepted changes; no journey about cancellation or a late payment after it changes"
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "Later accepted changes (USD bid and settlement choices, bank rails, internal bid) regenerate the whole suite; the cancelled-order cases (US13-TC1, US5-TC2, US16-TC14) and the reason-free ready email cases remain and assert the same behaviour",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:apps/frontend/grade10/src/pages/auctions/winnerOrderContactMail.test.ts (winner-order-SC-275)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/backend/test/email/emailPort.test.ts (winner-order-SC-275)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/backend/test/email/contactMailto.test.ts (order-mail-SC-59, order-mail-SC-60)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Feature set restates other accepted changes (USD and HKD settlement, bank rails, internal bid); the cancelled-order notice and reason-free ready email requirements this change claims are unchanged in meaning",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:apps/frontend/grade10/src/pages/auctions/winnerOrderContactMail.test.ts (winner-order-SC-275)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/backend/test/email/emailPort.test.ts (winner-order-SC-275)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/backend/test/email/contactMailto.test.ts (order-mail-SC-59, order-mail-SC-60)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Adds US-24 to US-27 for USD and HKD settlement and rewords the minimum to one USD minimum, from other accepted changes; no cancellation journey changes"
+      }
+    ]
+  }
 }

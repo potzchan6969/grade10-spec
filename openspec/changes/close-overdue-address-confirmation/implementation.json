@@ -70,5 +70,113 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-22T16:46:27.000Z",
+    "changes": [
+      {
+        "path": "openspec/changes/close-overdue-address-confirmation/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Wording only: the After invoice send state now says setup was confirmed before the send and the confirmed address is locked. The states, controls and anchor auction-status-US-06 are unchanged."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys close-overdue-address-confirmation delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement or feature set refined after the baseline by other accepted changes (card payment after the deadline, partial payment, internal bidder, settlement currency, queue segments). close-overdue-address-confirmation's own address-deadline and reopen setup behavior is unchanged in meaning and still delivered. Acknowledged by the owner.",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/setup.spec.ts (reopenSetup, recordSetup)",
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/commands.spec.ts (reopenSetup)",
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/orderStatus.spec.ts (winner-order-SC-145, winner-order-SC-146, winner-order-SC-148, winner-order-SC-149, winner-order-SC-150)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys close-overdue-address-confirmation delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys close-overdue-address-confirmation delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement or feature set refined after the baseline by other accepted changes (card payment after the deadline, partial payment, internal bidder, settlement currency, queue segments). close-overdue-address-confirmation's own address-deadline and reopen setup behavior is unchanged in meaning and still delivered. Acknowledged by the owner.",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/orderStatus.spec.ts (winner-order-SC-145, winner-order-SC-146, winner-order-SC-148, winner-order-SC-149, winner-order-SC-150)",
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/cardPayments.spec.ts (grade10-admin-auction-post-sale-SC-86, -SC-87, -SC-88, -SC-93)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+        "anchors": [
+          "Requirement: The address deadline gates the winner's address write"
+        ],
+        "classification": "semantic",
+        "reason": "Folded into the durable spec by this change (accepted 85fe49c15) and reworded after the baseline: the winner's address write is refused after the deadline until an operator reopens or records setup, and an invoice is sent only on a confirmed address. The behavior this change delivers is unchanged. Acknowledged by the owner.",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/orderStatus.spec.ts (winner-order-SC-145, winner-order-SC-146, winner-order-SC-148, winner-order-SC-149, winner-order-SC-150)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys close-overdue-address-confirmation delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys close-overdue-address-confirmation delivers."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Requirement or feature set refined after the baseline by other accepted changes (card payment after the deadline, partial payment, internal bidder, settlement currency, queue segments). close-overdue-address-confirmation's own address-deadline and reopen setup behavior is unchanged in meaning and still delivered. Acknowledged by the owner.",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/orderStatus.spec.ts (winner-order-SC-145, winner-order-SC-146, winner-order-SC-148, winner-order-SC-149, winner-order-SC-150)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/frontend/src/features/orders/winner-order/winnerOrderView.test.ts (winner-order-SC-150)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: A missed address deadline closes the address form"
+        ],
+        "classification": "semantic",
+        "reason": "Folded into the durable spec by this change (accepted 85fe49c15) and extended after the baseline: the setup now also carries the settlement currency, and an internal bidder's order never waits on an address deadline. The missed deadline still closes the form, keeps Setup Overdue and lets an operator reopen or record setup. Acknowledged by the owner.",
+        "evidence": [
+          "9gag/grade10@6cf3f22b3d:apps/backend/grade10/auction/test/db/orders/orderStatus.spec.ts (winner-order-SC-145, winner-order-SC-146, winner-order-SC-148, winner-order-SC-149, winner-order-SC-150)",
+          "9gag/grade10@6cf3f22b3d:packages/grade10-auction/frontend/src/features/orders/winner-order/winnerOrderView.test.ts (winner-order-SC-150)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite or journey file restated by other accepted changes and the TCS parameterization sweep: test data bound by file, routes standardized, case ids reissued. The cases still cover the journeys close-overdue-address-confirmation delivers."
+      }
+    ]
+  }
 }
