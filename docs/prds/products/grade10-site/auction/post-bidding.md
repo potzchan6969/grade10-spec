@@ -89,7 +89,7 @@ meaning.
 | Status | Invoice reads | Reached when |
 | --- | --- | --- |
 | **Awaiting Setup** | Not issued | The lot closes with a winner and setup is incomplete — delivery address, payment method or billing address |
-| 🚧 **Setup Overdue** | Not issued | The setup deadline passes with setup incomplete; self-service Confirm is closed |
+| **Setup Overdue** | Not issued | The setup deadline passes with setup incomplete; self-service Confirm is closed |
 | **Preparing Invoice** | Not issued | The winner confirms setup, or an operator records an address after the deadline |
 | **Pending Payment** | Pending | An operator sends or reissues the invoice |
 | 🚧 **Payment Overdue** | Expired | The payment deadline passes with the invoice unpaid; self-service Pay is closed |
@@ -116,11 +116,11 @@ meaning.
   the carrier provides one — an operator records both —
   [Auction Management ·
   Fulfilment](/p/grade10-admin/auction/management#fulfilment)
-- 🚧 **The shipping tracker the winner keeps** — the tracking number and
+- **The shipping tracker the winner keeps** — the tracking number and
   its carrier link; no carrier name anywhere on Winner Order; when the
   operator records no tracker link, the tracking number reads as plain text
   with no carrier name and no Track shipment control
-- 🚧 **A cancelled order** — reads `Cancelled on {date}`, keeps the lot and
+- **A cancelled order** — reads `Cancelled on {date}`, keeps the lot and
   the winning bid, and offers Contact Us alone; it gives no reason, and a
   suspension stays until an operator reinstates
 
@@ -129,7 +129,7 @@ meaning.
 - **Cancellation display** — Winner Order keeps the lot, the winning bid and
   `Cancelled on {date}`, with Contact Us alone. It never shows the operator's
   reason, category or payment controls
-- 🚧 **Contact Us on a cancelled order** — opens the ready email with the
+- **Contact Us on a cancelled order** — opens the ready email with the
   reason `order cancelled`, subject `Auction lot {lot title}: order cancelled`,
   and names the invoice when one exists; the operator's category and note
   stay internal
@@ -191,18 +191,18 @@ hours of the close.
   order show the confirmed snapshot: company name when the address is
   company, recipient name, phone, and the full address including postal code
   (not the lean picker card body)
-- 🚧 **Billing country or region list** — billing Add Address uses the same
+- **Billing country or region list** — billing Add Address uses the same
   full A–Z list and searchable field as delivery
 - **Every destination listed** — the picker lists every country and region,
   including ones Grade10 does not ship to; limiting it to shippable
   destinations is later work, not this page's
-- 🚧 **Catalogue display locale** — Country/Region names follow the
+- **Catalogue display locale** — Country/Region names follow the
   account's language, as the rest of the site does
 
 - 🚧 **Fee range wording** — card reads `Card fee about {configured percentage}% + a fixed
   amount`, using the configured rule for the currency picked; a bank rail
   reads no fee line, since no fee is required for those options
-- 🚧 **One-time address after a reload** — an unsaved one-time address stays
+- **One-time address after a reload** — an unsaved one-time address stays
   on the order after leaving and returning, until the winner confirms or the
   setup deadline passes
 - **Card where Finance set a rule** — card is offered only in a currency
@@ -246,16 +246,16 @@ moment the winner changes it.
 
 - **Deadline** — `Confirm by …` sits under Confirm; a miss closes the whole
   form and only Grade10 reopens it, under Edge Cases
-- 🚧 **Locked on confirming** — the winner changes none of the three
+- **Locked on confirming** — the winner changes none of the three
   afterwards; an operator edits them on request before send and reissues
   after, and the order shows what changed. The settlement currency is edited
   the same way
-- 🚧 **Clock** — the 48 hours count from the lot's actual close, extended
+- **Clock** — the 48 hours count from the lot's actual close, extended
   bidding included, and a write is judged by when Grade10 receives it, however
   long the winner spent on it
-- 🚧 **One figure** — the 48 hours is one Grade10-owned figure for every lot; a
+- **One figure** — the 48 hours is one Grade10-owned figure for every lot; a
   new figure applies only to lots that close after it is set
-- 🚧 **Retired at send** — sending the invoice ends the address deadline; the
+- **Retired at send** — sending the invoice ends the address deadline; the
   order shows no deadline and no missed-deadline alert afterwards
 
 ## Settling in HKD
@@ -334,7 +334,7 @@ by card, reads:
 - 🚧 **Amount marks** - a USD Order Summary line reads `US$` with two decimals
   (`US$12,800.00`) and a zero amount reads Free; Order Total keeps its
   trailing zeros too (`HK$16,460.00`)
-- 🚧 **Payment Processing Fee** — Grade10's own on a card invoice, computed
+- **Payment Processing Fee** — Grade10's own on a card invoice, computed
   from the Stripe card rule; the operator's own on a bank transfer invoice,
   zero or more, empty read as Free
 - 🚧 **Payment method** — Card or Bank Transfer, printed on the invoice so
@@ -383,7 +383,7 @@ failure, and locks the form while work is in progress.
 - **Unfinished payment** — a payment that times out or is abandoned says
   so and leaves Pay with Card ready; a completed one reads Confirming payment until
   Grade10 records it
-- 🚧 **Started in time** — one tried at or after the deadline cannot start, so
+- **Started in time** — one tried at or after the deadline cannot start, so
   the card is not charged; one started in time still counts, and if its session
   then fails, times out or is abandoned the invoice expires then and Pay stays
   closed
@@ -506,7 +506,7 @@ then shipped, delivered, and order cancelled.
 | 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner, and `Pay by …` on the deadline that runs again |
 | Payment received | Card confirmed, proof confirmed, or a manual settlement | The itemised lines as the invoice reads them, amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
 | 🚧 Partial payment received | An operator records a partial payment | The current invoice ID, Receipt ID and receipt PDF, with Contact Us; no remaining balance |
-| 🚧 Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking, or View order with the tracking number as plain text when no tracker link was recorded |
+| Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking, or View order with the tracking number as plain text when no tracker link was recorded |
 | Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
 | Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
 
@@ -647,7 +647,7 @@ a second payment provider, and changes to the bid-time rules.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Tax line | Decided | Tax is an amount the operator enters, shaped like Insurance. Chosen over a rate Grade10 computes, which needs a jurisdiction rule and a rate per regime nobody has written, and over a tax provider, which adds a vendor to price a number the operator already knows. Zero is refused, so "no tax" and "tax of nothing" stay distinct. Order Summary tip: `Set by Grade10 for where your order ships. Some orders have none.` What a receipt must carry beyond the amount is still the open Formal tax receipt row below. | Product (@jeffffej0909) |
+| Tax line | Decided | Tax is an amount the operator enters, shaped like Insurance. Chosen over a rate Grade10 computes, which needs a jurisdiction rule and a rate per regime nobody has written, and over a tax provider, which adds a vendor to price a number the operator already knows. Zero is refused, so "no tax" and "tax of nothing" stay distinct. Order Summary tip: `Set by Grade10 for where your order ships. Some orders have none.` Tax sits inside the Subtotal, so a card invoice's fee is grossed up on it; chosen over leaving it outside the fee base, which has Grade10 absorb the card cost on tax it collects. What a receipt must carry beyond the amount is still the open Formal tax receipt row below. | Product (@jeffffej0909) |
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, Final amount reads Order Total, for the winner and the operator; zero shipping reads Free; Insurance is optional and above zero. | Product |
 | Insurance tooltip | Decided | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
 | Buyer's premium | Decided | 20% of the USD winning bid alone, rounded half up, or the one USD minimum when higher; Grade10 computes it and discloses the rate on the bid panel only. The minimum is 0 at first and applies before settlement conversion. | Product and finance |
@@ -661,9 +661,9 @@ a second payment provider, and changes to the bid-time rules.
 | Winner's choice locks on confirming | Decided | Once the winner confirms the address, settlement currency and method or rail, only an operator changes them: an edit with a reason before send, a reissue after. | Product (@jeffffej0909) |
 | Address deadline | Decided | 48 hours from lot close. A miss hides Confirm, shows Contact Us, and the order reads Setup Overdue; no invoice is issued, nothing cancels or suspends automatically. The account address book is unaffected. | Product (@tangconst) |
 | Reopening the address form | Decided | An operator, with payment processing and a reason, reopens it once the deadline passes before an address was confirmed, for a fresh 48 hours; never on a cancelled order; no letter, the operator tells the winner. Or the operator records an address given by phone without reopening. | Product (@jeffffej0909) |
-| Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
+| Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after, and one whose session then fails, times out or is abandoned expires the invoice then, with Pay closed. A payment received at or after the deadline is refused and not charged. Chosen over judging by when the winner opened the page, and over leaving an abandoned session pending. | Product (@tangconst, @jeffffej0909) |
 | Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is a recorded refund only. A missed setup deadline reads Setup Overdue; a missed payment deadline reads Payment Overdue — neither is Cancelled on its own. | Product |
-| A cancelled order | 🚧 In flight | `Cancelled on {date}` with the lot and the winning bid, and Contact Us as the only action; no reason is shown, as the cancellation letter gives none, and a suspension stays. Chosen over showing the winner the operator's reason category. | Product and Operations (@jeffffej0909) |
+| A cancelled order | Decided | `Cancelled on {date}` with the lot and the winning bid, and Contact Us as the only action; no reason is shown, as the cancellation letter gives none, and a suspension stays. Chosen over showing the winner the operator's reason category. | Product and Operations (@jeffffej0909) |
 | A refunded order | Decided | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens a dialog that stacks Amount, Transfer to, Reference (bank only), Reason, and Note when the operator recorded one. Proof, Stripe reference and audit number stay with the operator. | Product (@jeffffej0909, @tangconst) |
 | An overpaid difference | Decided | The order keeps its status. Winning Bid, Shipping & Handling and Order Total stay the amount that should have been paid. An inline alert below Order Total shows only the difference, with the same detail dialog. My Auctions does not change. Chosen over ending every refund, including an overpayment, as Refunded. | Product (@tangconst) |
 | Refund transaction clues | Decided | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A paid order's payment method uses that same layout. A bank refund shows its provider reference in the details; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product (@tangconst) |
@@ -681,12 +681,12 @@ a second payment provider, and changes to the bid-time rules.
 | Cached listing preview | Decided | Previously cached preview content may persist; no purge or regeneration is guaranteed. The current page and fresh metadata omit the code and private data. | Product |
 | Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
 | Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. Durable `notifications-order` holds that schedule; `add-winner-bank-transfer` adds proof holds and the receipt PDF. | Product (@tangconst) |
-| Letter CTA | 🚧 In flight | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking, and with View order, the tracking number as plain text, when no tracker link was recorded. | Product (@tangconst); the no-tracker-link case the planning owner (@htonyl) |
+| Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking, and with View order, the tracking number as plain text, when no tracker link was recorded. | Product (@tangconst); the no-tracker-link case the planning owner (@htonyl) |
 | Contact Us destination | Decided | Copy-first sheet on Winner Order: To, Subject, Message, Copy Message first, Open Mail App second. Copy Message shows no confirmation beyond the control's own state. Letters prefill the same mailto and name the address. Chosen over opening a mail client, a contact form, or a toast with the address only. A partial-payment template lists receipts and never the remaining balance. Subject uses the current invoice id after a reissue; Message is an editable Textarea with Copy Message footer-only. | Product (@tangconst) |
 | Reissue letter | Decided | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
 | Delivered content | Decided | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
 | Cancelled content | Decided | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
-| Cancelling a paid order | 🚧 In flight | An order with money counting toward its balance cannot be cancelled; it is refunded instead. Only unpaid orders are cancelled, so the cancelled letter names no payment. Chosen over cancelling a paid order, which would leave money with no order to return it against. Owned by `refine-auction-order-cancellation` Q13. | Product (@jeffffej0909) |
+| Cancelling a paid order | Decided | An order with money counting toward its balance cannot be cancelled; it is refunded instead. Only unpaid orders are cancelled, so the cancelled letter names no payment. Chosen over cancelling a paid order, which would leave money with no order to return it against. | Product (@jeffffej0909) |
 | A separate orders page | Decided | None — My Auctions lists the won lots and each Won row opens its own Winner Order; `grade10-site/auction/auction-orders` is retired. Reverses the earlier decision to follow won lots on My Auction Orders: the list duplicated My Auctions' Won rows and nothing on the site reached it. | Product (@tangconst) |
 | Opening My Auction Orders | Decided | Moot — the page is removed, so the deferred My Auctions link is never built. | Product (@tangconst) |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
@@ -695,14 +695,14 @@ a second payment provider, and changes to the bid-time rules.
 | Phone on Add Address | Decided | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Placeholder shows an example with calling code (`+852 12345678`). Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
 | Personal or company address | Decided | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. Card body shows street, city or region, and country only — no postal code and no phone. Order summary Delivery and Billing show the full snapshot (company when company, recipient name, phone, full address including postal). First and last name stay required on both. | Product (@tangconst) |
 | Add Address optional locality | Decided | Address line 2 and state or province are optional; address line 1 and postal code stay required. Apt./Suite/Building is not collected on this form. | Product (@tangconst) |
-| Billing country or region list | 🚧 In flight | Billing Add Address uses the same full A–Z list and searchable field as delivery: one control, and a winner billed abroad finds their country the same way. | Product (@tangconst) |
+| Billing country or region list | Decided | Billing Add Address uses the same full A–Z list and searchable field as delivery: one control, and a winner billed abroad finds their country the same way. | Product (@tangconst) |
 | Shippable destinations only | Decided | The picker keeps every destination for now; limiting it to where Grade10 ships is later work. Chosen over limiting it now, which needs Operations' destination list first. | Product (@tangconst) |
-| Catalogue display locale | 🚧 In flight | Country/Region names follow the account's language, as the rest of the site does. Chosen over the browser's locale and over fixed English. | Product (@tangconst) |
+| Catalogue display locale | Decided | Country/Region names follow the account's language, as the rest of the site does. Chosen over the browser's locale and over fixed English. | Product (@tangconst) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
 | Partial payment | Decided | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
 | Awaiting Setup | Decided | Incomplete setup reads Awaiting Setup while its address window is open or reopened. After the 48-hour address deadline with no confirmed address it reads Setup Overdue; a confirmed address reads Preparing Invoice. | Product (@jeffffej0909) |
 | Setup Overdue and Payment Overdue | Decided | **BREAKING** vs keeping Awaiting Setup / Pending Payment after the deadline: an incomplete setup reads Setup Overdue after 48 hours from the lot's actual close; Payment Overdue starts only after Grade10 sends the invoice and its 7-day payment deadline passes. Preparing Invoice has no setup-overdue queue mark. | Product and design (@tangconst) |
-| Address window | 🚧 In flight | The stored 48-hour deadline is based on the actual lot close and does not move with configuration changes. Confirm and address changes close at expiry. An operator can reopen with a reason for another 48 hours, or record a phone-supplied address with an audit entry. Invoice send ends the address window. | Product and finance |
+| Address window | Decided | The stored 48-hour deadline is based on the actual lot close and does not move with configuration changes. The 48 hours is one Grade10-owned figure for every lot; a new figure applies only to lots that close after it is set. Confirm and address changes close at expiry. An operator can reopen with a reason for another 48 hours, or record a phone-supplied address with an audit entry. Invoice send ends the address window. | Product and finance |
 | My Auctions Status column | Decided | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |
 | Partially Paid | Decided | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |
 | Closing a partial balance | Decided | Measured against the original invoice total, cumulative across every payment, not the balance left at that moment: updating the invoice to Paid is refused below 90% of the total, and the payment that brings the total to 90% or more, and every later one, offers the operator a close, Paid with no separate write-off entry, or kept Partially Paid at the real balance. The prompt returns on each later payment while still under 100%, so a `keep open` answer never quietly waives later checks. An exact match closes on its own. | Product and finance |
@@ -714,7 +714,7 @@ a second payment provider, and changes to the bid-time rules.
 | A balance belongs on a receipt, not on a page | Decided | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
 | Receipts are append-only | Decided | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
-| One-time address persistence | 🚧 In flight | An unsaved one-time address stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it. Chosen over clearing it on leaving. | Product (@tangconst) |
+| One-time address persistence | Decided | An unsaved one-time address stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it. Chosen over clearing it on leaving. | Product (@tangconst) |
 | Payment fee wording | 🚧 In flight | Card reads `Card fee about {configured percentage}% + a fixed amount`; a bank rail reads no fee line — no fee is required for those options. | Product (@tangconst) |
 | USD card rule | 🚧 In flight | Finance configures a USD card fee rule before launch; the same configured percentage and fixed-amount rule applies to USD card invoices. | Finance |
 | Settlement currency | Decided | The winner picks USD or HKD at order setup — 🚧 the first offered currency preselected, the sole currency where one is — fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
