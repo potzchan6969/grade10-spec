@@ -102,9 +102,6 @@ None.
   test data. Product confirms; `decisions.md` Q12 and the PRD row `Invoices
   sent before this layout` hold it. Until then a sent invoice keeps its stored
   amounts.
-- **The printed documents' look** - whether a designer draws the invoice and
-  receipt with USD lines under HKD summary rows, or waives it because the blocks
-  take strings and gain no variant. Design answers; `decisions.md` Q11 holds it.
 
 ## References
 
