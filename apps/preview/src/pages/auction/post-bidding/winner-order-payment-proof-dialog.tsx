@@ -78,7 +78,6 @@ const SUBMIT_SIMULATE_MS = 400;
 type ProofDraft = {
   senderName: string;
   transferDate: string;
-  transactionReference: string;
   notes: string;
   files: FileDropzoneItem[];
 };
@@ -86,7 +85,6 @@ type ProofDraft = {
 const EMPTY_PROOF: ProofDraft = {
   senderName: "",
   transferDate: "",
-  transactionReference: "",
   notes: "",
   files: [],
 };
@@ -138,14 +136,12 @@ function WinnerOrderPaymentProofDialog({
   const hasDraft =
     Boolean(draft.senderName.trim()) ||
     Boolean(draft.transferDate.trim()) ||
-    Boolean(draft.transactionReference.trim()) ||
     Boolean(draft.notes.trim()) ||
     draft.files.length > 0;
 
   const ready =
     Boolean(draft.senderName.trim()) &&
     Boolean(draft.transferDate.trim()) &&
-    Boolean(draft.transactionReference.trim()) &&
     draft.files.length >= WINNER_ORDER_PROOF_MIN_FILES;
 
   const formLocked = submitting || converting;
@@ -271,24 +267,6 @@ function WinnerOrderPaymentProofDialog({
               }
               type="date"
               value={draft.transferDate}
-            />
-            <TextInput
-              disabled={formLocked}
-              label="Transaction Reference / ID"
-              message={
-                attempted && !draft.transactionReference.trim()
-                  ? "Enter the transaction reference."
-                  : undefined
-              }
-              onChange={(event) =>
-                patch("transactionReference", event.currentTarget.value)
-              }
-              status={
-                attempted && !draft.transactionReference.trim()
-                  ? "error"
-                  : "default"
-              }
-              value={draft.transactionReference}
             />
             <VStack className="w-full" gap="sm" hAlign="stretch">
               <VStack

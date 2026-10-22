@@ -100,10 +100,6 @@ async function fillProofForm(modal: ReturnType<typeof within>) {
   )?.set?.call(transferDate, "2026-09-20");
   transferDate.dispatchEvent(new Event("input", { bubbles: true }));
   transferDate.dispatchEvent(new Event("change", { bubbles: true }));
-  await userEvent.type(
-    modal.getByLabelText("Transaction Reference / ID"),
-    "TXN-998877",
-  );
   const file = new File(["preview-proof"], "transfer-receipt.pdf", {
     type: "application/pdf",
   });
@@ -136,7 +132,9 @@ export const Form: Story = {
     expect(modal.queryByRole("tab", { name: "FPS" })).not.toBeInTheDocument();
     expect(modal.getByLabelText("Sender Name")).toBeVisible();
     expect(modal.getByLabelText("Transfer Date")).toBeVisible();
-    expect(modal.getByLabelText("Transaction Reference / ID")).toBeVisible();
+    expect(
+      modal.queryByLabelText("Transaction Reference / ID"),
+    ).not.toBeInTheDocument();
     expect(modal.queryByText("Proof of Payment File")).not.toBeInTheDocument();
     expect(modal.getByText(WINNER_ORDER_PROOF_FILE_HINT)).toBeVisible();
     expect(modal.getByRole("button", { name: "Choose Files" })).toBeVisible();

@@ -276,10 +276,6 @@ export const SubmitBankPaymentProof: Story = {
     )?.set?.call(transferDate, "2026-09-20");
     transferDate.dispatchEvent(new Event("input", { bubbles: true }));
     transferDate.dispatchEvent(new Event("change", { bubbles: true }));
-    await userEvent.type(
-      modal.getByLabelText("Transaction Reference / ID"),
-      "TXN-998877",
-    );
     const file = new File(["preview-proof"], "transfer-receipt.pdf", {
       type: "application/pdf",
     });
