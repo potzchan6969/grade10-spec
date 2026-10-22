@@ -5,7 +5,9 @@ import {
   BANK_TRANSFER_METHOD,
   BASE_ARGS,
   bankTransferPay,
+  INVOICE_FEE_LINES,
   INVOICE_LINES,
+  INVOICE_SUBTOTAL,
   INVOICE_TOTAL,
   settled,
 } from "./auction-winner-order.story-fixtures";
@@ -51,6 +53,8 @@ export const BankTransferDue: Story = {
   args: {
     summary: {
       lines: INVOICE_LINES,
+      subtotal: INVOICE_SUBTOTAL,
+      feeLines: INVOICE_FEE_LINES,
       total: INVOICE_TOTAL,
       pay: bankTransferPay("Pay by 2 Oct 2026, 15:00 HKT"),
     },
@@ -69,6 +73,8 @@ export const CardRedirecting: Story = {
   args: {
     summary: {
       lines: INVOICE_LINES,
+      subtotal: INVOICE_SUBTOTAL,
+      feeLines: INVOICE_FEE_LINES,
       total: INVOICE_TOTAL,
       pay: { label: "Redirecting…", onPress: fn(), loading: true },
     },
@@ -96,6 +102,8 @@ export const PaymentVerifying: Story = {
     },
     summary: {
       lines: INVOICE_LINES,
+      subtotal: INVOICE_SUBTOTAL,
+      feeLines: INVOICE_FEE_LINES,
       total: INVOICE_TOTAL,
     },
     paymentMethod: BANK_TRANSFER_METHOD,
@@ -112,6 +120,8 @@ export const ProofReturned: Story = {
   args: {
     summary: {
       lines: INVOICE_LINES,
+      subtotal: INVOICE_SUBTOTAL,
+      feeLines: INVOICE_FEE_LINES,
       total: INVOICE_TOTAL,
       pay: bankTransferPay("Pay by 9 Oct 2026, 15:00 HKT"),
     },
@@ -138,6 +148,8 @@ export const PartiallyPaid: Story = {
     badge: { label: "Partially Paid", variant: "warning" },
     summary: {
       lines: INVOICE_LINES,
+      subtotal: INVOICE_SUBTOTAL,
+      feeLines: INVOICE_FEE_LINES,
       total: INVOICE_TOTAL,
       alert: {
         title: "Payment received in part",

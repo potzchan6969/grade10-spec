@@ -249,6 +249,53 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(lotCard?.textContent).toContain("Winning bid: US$101.00");
   });
 
+  it("winner-order-SC-290 - renders USD lines, an HKD subtotal with its rate footnote, then the fee and whole-HK$ total below", () => {
+    const { container } = mount({
+      summary: {
+        ...BASE_PROPS.summary,
+        subtotal: {
+          label: "Subtotal",
+          value: "HK$1,030.00",
+          footnote: "Converted from US$131.21 at 1 USD = 7.85 HKD",
+        },
+        feeLines: [{ label: "Payment Processing Fee", value: "HK$38.73" }],
+        total: { label: "Order Total", value: "HK$1,069" },
+      },
+    });
+
+    expect(summaryRowText(container)).toEqual([
+      "Winning BidUS$101.00",
+      "Buyer's PremiumUS$20.20",
+      "Shipping & HandlingUS$10.01",
+      "SubtotalHK$1,030.00Converted from US$131.21 at 1 USD = 7.85 HKD",
+      "Payment Processing FeeHK$38.73",
+      "Order TotalHK$1,069",
+    ]);
+
+    const sidebar = within(container).getByRole("complementary");
+    const separators = sidebar.querySelectorAll("hr");
+    expect(separators).toHaveLength(2);
+    const shippingRow = summaryRow(container, "Shipping & HandlingUS$10.01");
+    const subtotalRow = summaryRow(
+      container,
+      "SubtotalHK$1,030.00Converted from US$131.21 at 1 USD = 7.85 HKD",
+    );
+    const feeRow = summaryRow(container, "Payment Processing FeeHK$38.73");
+    const totalRow = summaryRow(container, "Order TotalHK$1,069");
+    expect(shippingRow && subtotalRow && feeRow && totalRow).toBeTruthy();
+    if (shippingRow && subtotalRow && feeRow && totalRow) {
+      const follows = (a: Node, b: Node) =>
+        Boolean(
+          a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING,
+        );
+      expect(follows(shippingRow, separators[0])).toBe(true);
+      expect(follows(separators[0], subtotalRow)).toBe(true);
+      expect(follows(subtotalRow, feeRow)).toBe(true);
+      expect(follows(feeRow, separators[1])).toBe(true);
+      expect(follows(separators[1], totalRow)).toBe(true);
+    }
+  });
+
   it("winner-order-SC-291 and shared-ui-auction-order-SC-28 - keeps a USD order to one total line", () => {
     const { container } = mount();
 

@@ -190,43 +190,45 @@ export const LINE_TOOLTIPS = {
 } as const;
 
 /**
- * HKD-issued card invoice — every line reads its converted HKD amount and the
- * Order Total's footnote names the USD figure converted and the fixed rate.
- * The card fee is computed in HKD and has no USD counterpart
- * (winner-order-SC-290, winner-order-SC-304).
+ * HKD-issued card invoice — the invoice lines keep their original USD
+ * amounts, the Subtotal converts their sum to HKD and names the fixed rate,
+ * and the card fee is computed in HKD below it with no USD counterpart. Only
+ * the Order Total rounds to a whole HK$ (winner-order-SC-290,
+ * winner-order-SC-304).
  */
 const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "HK$100,480.00" },
+  { label: "Winning Bid", value: "US$12,800.00" },
   {
     label: "Buyer’s Premium",
-    value: "HK$20,096.00",
+    value: "US$2,560.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "HK$1,413.00",
+    value: "US$180.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "HK$3,768.00",
+    value: "US$480.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "HK$2,512.00",
+    value: "US$320.00",
     tooltip: LINE_TOOLTIPS.tax,
+  },
+  {
+    label: "Subtotal",
+    value: "HK$128,269.00",
+    footnote: "Converted from US$16,340.00 at 1 USD = 7.85 HKD",
   },
   {
     label: "Payment Processing Fee",
     value: "HK$545.00",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  {
-    label: "Order Total",
-    value: "HK$128,814.00",
-    footnote: "Converted from US$16,340.00 at 1 USD = 7.85 HKD",
-  },
+  { label: "Order Total", value: "HK$128,814" },
 ];
 
 /** Sent invoice with Insurance for the tooltip coverage state. */
@@ -283,42 +285,43 @@ export const WINNER_ORDER_REFUND_OVERPAID = {
 } as const;
 
 /**
- * HKD-issued bank transfer invoice — operator fee may be zero; zero reads
- * Free (`winner-order-SC-111`). Order total is the card fixture less the card
- * fee, and its footnote names the USD figure converted and the fixed rate.
+ * HKD-issued bank transfer invoice — same USD lines and HK$ Subtotal as the
+ * card fixture; the operator fee may be zero and zero reads Free
+ * (`winner-order-SC-111`). Order total is the card fixture less the card fee.
  */
 export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "HK$100,480.00" },
+  { label: "Winning Bid", value: "US$12,800.00" },
   {
     label: "Buyer’s Premium",
-    value: "HK$20,096.00",
+    value: "US$2,560.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "HK$1,413.00",
+    value: "US$180.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "HK$3,768.00",
+    value: "US$480.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "HK$2,512.00",
+    value: "US$320.00",
     tooltip: LINE_TOOLTIPS.tax,
+  },
+  {
+    label: "Subtotal",
+    value: "HK$128,269.00",
+    footnote: "Converted from US$16,340.00 at 1 USD = 7.85 HKD",
   },
   {
     label: "Payment Processing Fee",
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  {
-    label: "Order Total",
-    value: "HK$128,269.00",
-    footnote: "Converted from US$16,340.00 at 1 USD = 7.85 HKD",
-  },
+  { label: "Order Total", value: "HK$128,269" },
 ];
 
 /**

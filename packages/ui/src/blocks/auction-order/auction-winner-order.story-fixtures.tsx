@@ -38,21 +38,40 @@ export const LINE_TOOLTIPS = {
 };
 
 /**
- * HKD-settled invoice lines. The card fee is computed in HKD and carries no
- * USD counterpart, so it reads HKD (winner-order-SC-290, winner-order-SC-304).
+ * HKD-settled invoice lines keep their original USD amounts: US$12,800.00 +
+ * US$2,560.00 + US$180.00 = US$15,540.00, which the Subtotal converts at 7.85
+ * to HK$121,989.00. The card fee is computed in HKD and carries no USD
+ * counterpart, so it sits below the Subtotal (winner-order-SC-290,
+ * winner-order-SC-304).
  */
 export const INVOICE_LINES = [
-  { label: "Winning Bid", value: "HK$12,800.00" },
+  { label: "Winning Bid", value: "US$12,800.00" },
   {
     label: "Buyer’s Premium",
-    value: "HK$2,560.00",
+    value: "US$2,560.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "HK$180.00",
+    value: "US$180.00",
     tooltip: LINE_TOOLTIPS.shipping,
   },
+];
+
+/**
+ * The HKD subtotal `INVOICE_LINES` converts to. The footnote names the USD
+ * subtotal of the lines above and the fixed rate — the only place the summary
+ * names either (winner-order-SC-290).
+ */
+export const INVOICE_SUBTOTAL: NonNullable<
+  AuctionWinnerOrderProps["summary"]["subtotal"]
+> = {
+  label: "Subtotal",
+  value: "HK$121,989.00",
+  footnote: "Converted from US$15,540.00 at 1 USD = 7.85 HKD",
+};
+
+export const INVOICE_FEE_LINES = [
   {
     label: "Payment Processing Fee",
     value: "HK$545.00",
@@ -60,15 +79,10 @@ export const INVOICE_LINES = [
   },
 ];
 
-/**
- * HKD order total for `INVOICE_LINES`. The footnote names the USD figure the
- * lines converted from and the fixed rate — the only place the summary names
- * either (winner-order-SC-290).
- */
+/** HK$121,989.00 + HK$545.00, rounded up to the whole HK$. */
 export const INVOICE_TOTAL: AuctionWinnerOrderProps["summary"]["total"] = {
   label: "Order Total",
-  value: "HK$16,085.00",
-  footnote: "Converted from US$15,540.00 at 1 USD = 7.85 HKD",
+  value: "HK$122,534",
 };
 
 export const DELIVERY = {
@@ -111,6 +125,8 @@ export const BASE_ARGS: AuctionWinnerOrderProps = {
   },
   summary: {
     lines: INVOICE_LINES,
+    subtotal: INVOICE_SUBTOTAL,
+    feeLines: INVOICE_FEE_LINES,
     total: INVOICE_TOTAL,
     invoicePdf: { onOpen: fn() },
     pay: {

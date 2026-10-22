@@ -605,6 +605,33 @@ function OrderSummary({
           />
         ))}
       </VStack>
+      {summary.subtotal || summary.feeLines?.length ? (
+        <>
+          <hr className="w-full border-border" />
+          <VStack className="w-full" gap="sm" hAlign="stretch">
+            {summary.subtotal ? (
+              <SummaryRow
+                footnote={summary.subtotal.footnote}
+                label={summary.subtotal.label}
+                muted={summary.subtotal.muted}
+                subtext={summary.subtotal.subtext}
+                value={summary.subtotal.value}
+              />
+            ) : null}
+            {summary.feeLines?.map((line) => (
+              <SummaryRow
+                footnote={line.footnote}
+                key={line.label}
+                label={line.label}
+                muted={line.muted}
+                subtext={line.subtext}
+                tooltip={line.tooltip}
+                value={line.value}
+              />
+            ))}
+          </VStack>
+        </>
+      ) : null}
       {summary.total || summary.convertedTotal ? (
         <>
           <hr className="w-full border-border" />

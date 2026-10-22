@@ -3,7 +3,9 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import { AuctionWinnerOrder } from "./auction-winner-order";
 import {
   BASE_ARGS,
+  INVOICE_FEE_LINES,
   INVOICE_LINES,
+  INVOICE_SUBTOTAL,
   INVOICE_TOTAL,
   STEPS,
   settled,
@@ -34,6 +36,8 @@ export const Shipped: Story = {
     },
     summary: {
       lines: INVOICE_LINES,
+      subtotal: INVOICE_SUBTOTAL,
+      feeLines: INVOICE_FEE_LINES,
       total: INVOICE_TOTAL,
       invoicePdf: { onOpen: fn() },
     },
@@ -64,6 +68,8 @@ export const Delivered: Story = {
     },
     summary: {
       lines: INVOICE_LINES,
+      subtotal: INVOICE_SUBTOTAL,
+      feeLines: INVOICE_FEE_LINES,
       total: INVOICE_TOTAL,
     },
     paymentMethod: { kind: "card", brand: "visa", masked: "•••• 4242" },
@@ -83,7 +89,7 @@ export const Cancelled: Story = {
     badge: { label: "Cancelled", variant: "outline" },
     progress: null,
     summary: {
-      lines: [{ label: "Winning Bid", value: "HK$12,800.00" }],
+      lines: [{ label: "Winning Bid", value: "US$12,800.00" }],
       total: { label: "Order Total", value: "—" },
       alert: {
         title: "Order cancelled.",
@@ -108,9 +114,11 @@ export const Refunded: Story = {
     progress: null,
     summary: {
       lines: INVOICE_LINES,
+      subtotal: INVOICE_SUBTOTAL,
+      feeLines: INVOICE_FEE_LINES,
       total: INVOICE_TOTAL,
       invoicePdf: { onOpen: fn() },
-      refund: { title: "Refund HK$16,085", onView: fn() },
+      refund: { title: "Refund HK$122,534", onView: fn() },
     },
     paymentMethod: { kind: "card", brand: "mastercard", masked: "•••• 5454" },
     receipts: [{ label: "Receipt", href: "#receipt.pdf" }],

@@ -37,17 +37,17 @@ export const AwaitingSetup: Story = {
     },
     summary: {
       lines: [
-        { label: "Winning Bid", value: "HK$12,800.00" },
+        { label: "Winning Bid", value: "US$12,800.00" },
         {
           label: "Buyer’s Premium",
-          value: "HK$2,560.00",
+          value: "US$2,560.00",
           tooltip: LINE_TOOLTIPS.buyersPremium,
         },
         { label: "Shipping & Handling", value: "TBD", muted: true },
       ],
       total: {
         label: "Order Total",
-        value: "HK$15,360.00",
+        value: "US$15,360.00",
         footnote: "Shipping, insurance and fees are added at invoice.",
       },
     },
@@ -85,16 +85,16 @@ export const SetupOverdue: Story = {
     },
     summary: {
       lines: [
-        { label: "Winning Bid", value: "HK$12,800.00" },
+        { label: "Winning Bid", value: "US$12,800.00" },
         {
           label: "Buyer’s Premium",
-          value: "HK$2,560.00",
+          value: "US$2,560.00",
           tooltip: LINE_TOOLTIPS.buyersPremium,
         },
       ],
       total: {
         label: "Order Total",
-        value: "HK$15,360.00",
+        value: "US$15,360.00",
         footnote: "Shipping, insurance and fees are added at invoice.",
       },
     },
