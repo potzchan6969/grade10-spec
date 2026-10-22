@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T07:12:12.129Z",
+  "generatedAt": "2026-10-22T07:26:34.766Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -9,6 +9,8 @@
     "Asset Details": "warn",
     "Asset Summary": "warn",
     "Attachment": "warn",
+    "AttachmentAction": "warn",
+    "AttachmentMedia": "warn",
     "Auction": "warn",
     "Auctions / Category Button": "warn",
     "Avatar": "skipped",
@@ -1009,28 +1011,16 @@
     "7266-6876": "Reward / Checkout Point Balance",
     "7266-6909": "Rewards Redeemed (Coupon)",
     "7276-2028": "Attachment",
-    "7281-143": "Attachment",
-    "7281-154": "Attachment",
-    "7281-165": "Attachment",
-    "7281-176": "Attachment",
-    "7281-187": "Attachment",
-    "7281-198": "Attachment",
-    "7281-209": "Attachment",
-    "7281-220": "Attachment",
-    "7281-231": "Attachment",
-    "7281-242": "Attachment",
-    "7281-253": "Attachment",
-    "7281-264": "Attachment",
-    "7281-275": "Attachment",
-    "7281-286": "Attachment",
-    "7281-297": "Attachment",
-    "7281-308": "Attachment",
-    "7281-319": "Attachment",
-    "7281-330": "Attachment",
-    "7281-341": "Attachment",
-    "7281-352": "Attachment",
-    "7281-363": "Attachment",
-    "7281-364": "Review — states and group",
+    "7276-2338": "Container (design-system-display-attachment--states)",
+    "7276-2707": "AttachmentAction",
+    "7276-2708": "AttachmentAction",
+    "7276-2709": "AttachmentAction",
+    "7276-2722": "Attachment",
+    "7276-2726": "AttachmentMedia",
+    "7276-2727": "AttachmentMedia",
+    "7276-2728": "AttachmentMedia",
+    "7276-2735": "Attachment",
+    "7276-2761": "Attachment",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1080,6 +1070,12 @@
     ],
     "Attachment": [
       "Attachment: no code component (looked for src/components/**/attachment.tsx or attachment.tsx)"
+    ],
+    "AttachmentAction": [
+      "AttachmentAction: no code component (looked for src/components/**/attachmentaction.tsx or attachmentaction.tsx)"
+    ],
+    "AttachmentMedia": [
+      "AttachmentMedia: no code component (looked for src/components/**/attachmentmedia.tsx or attachmentmedia.tsx)"
     ],
     "Auction": [
       "Auction: no code component (looked for src/components/**/auction.tsx or auction.tsx)"
