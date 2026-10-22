@@ -130,26 +130,46 @@ increment is 100:
 ### Bid Increments
 
 The increment is selected by the USD amount being beaten. A tier includes its
-lower bound. Grade10 sets one schedule, and no listing overrides it.
+lower bound, and the last tier has no upper bound. Grade10 sets one schedule,
+and no listing overrides it. The schedule is configuration, not a
+requirement: Grade10 can change its values without changing this rule, and the
+table below shows the values in force. They follow the increments Goldin
+publishes under [How does bidding work?](https://goldin.co/faq), with $1 below
+$10, where Goldin names none.
 
 | From | Increment |
 | ---: | ---: |
 | $0 | +$1 |
-| $100 | +$5 |
-| $500 | +$10 |
-| $1,000 | +$25 |
-| $5,000 | +$50 |
-| $10,000 | +$100 |
+| $10 | +$2 |
+| $50 | +$5 |
+| $100 | +$10 |
+| $200 | +$25 |
+| $500 | +$50 |
+| $1,000 | +$100 |
+| $2,500 | +$250 |
+| $5,000 | +$500 |
+| $10,000 | +$1,000 |
+| $20,000 | +$2,000 |
+| $30,000 | +$3,000 |
+| $50,000 | +$5,000 |
+| $100,000 | +$10,000 |
+| $200,000 | +$20,000 |
+| $300,000 | +$25,000 |
+| $600,000 | +$50,000 |
+| $1,000,000 | +$50,000 |
+| $1,500,000 | +$100,000 |
 
 | Lot | Amount being beaten | Next minimum | Outcome |
 | --- | ---: | ---: | --- |
-| Lot opening at $200 | $200 | $200 | The first bid may stand on the starting price; $201 from the second |
+| Lot opening at $200 | $200 | $200 | The first bid may stand on the starting price; $225 from the second |
 | Lot opening at $0 | $0 | $1 | The first bid must reach the lowest increment; a lone bidder stands at $1, never $0 |
-| Lot on a tier boundary | $100 | $105 | The $100 tier applies, not the $0 tier |
-| A bidder offers more | $100 | $105 | $120 is accepted as $120; nothing rounds it to a multiple |
+| Lot on a tier boundary | $100 | $110 | The $100 tier applies, not the $50 tier |
+| A bidder offers more | $100 | $110 | $120 is accepted as $120; nothing rounds it to a multiple |
 | Lot at the ceiling | $10,000,000 | — | Every further bid is refused |
 
-- **One schedule** — the USD tiers above apply to every lot
+- 🚧 **One configured schedule** — the USD tiers above apply to every lot, and
+  a change to their values reaches the next bid on every lot, open ones
+  included; a bid already standing keeps its amount
 - **What a collector sees** — the next minimum for the lot, never the
   schedule
 - **A first maximum** — must reach the opening price, and the public price it
