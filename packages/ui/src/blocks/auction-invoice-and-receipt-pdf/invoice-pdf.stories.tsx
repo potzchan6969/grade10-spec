@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { expect, waitFor } from "storybook/test";
 import {
   BANK_TRANSFER_INVOICE,
+  HKD_FREE_SHIPPING_INVOICE,
   LONG_TABLE_INVOICE,
   REPLACEMENT_INVOICE,
   SAMPLE_INVOICE,
@@ -30,6 +31,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: { data: SAMPLE_INVOICE },
+};
+
+/** The HKD invoice with free Shipping & Handling: Free beside the US$ lines, Subtotal HK$951.42. */
+export const FreeShipping: Story = {
+  args: { data: HKD_FREE_SHIPPING_INVOICE },
 };
 
 export const BankTransfer: Story = {

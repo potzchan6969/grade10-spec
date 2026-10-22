@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { expect, waitFor } from "storybook/test";
 import {
   BANK_TRANSFER_RECEIPT,
+  HKD_PART_PAYMENT_RECEIPT,
   LONG_TABLE_RECEIPT,
   SAMPLE_RECEIPT,
   SEVERAL_ITEMS_RECEIPT,
@@ -29,6 +30,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: { data: SAMPLE_RECEIPT },
+};
+
+/** A first payment of HK$300.00: the same lines above a breakdown that leaves HK$730.00 due. */
+export const PartPayment: Story = {
+  args: { data: HKD_PART_PAYMENT_RECEIPT },
 };
 
 export const BankTransfer: Story = {
