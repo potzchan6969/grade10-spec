@@ -279,3 +279,5 @@ Runs once per row of **Test data**.
 | `TC-bmd` (`US9-TC23`) asserted `Bank fee set on your invoice` and neither method selected; SC-91 rev 3 removes the bank fee line and selects card | Revised to rev=2, asserting no bank fee line and card selected |
 | `TC-eu8` (`US9-TC22`) asserted none selected at step 1; SC-305 selects the first method | Revised to rev=4, asserting card selected and a rail chosen in its place |
 | `TC-miy` (`US1-TC51`) had the winner choose no method; a preselected radio choice cannot be cleared by the winner | Revised to rev=2, reaching no method through a currency switch that clears it, as SC-94 now states |
+
+Walk text that repeats these results stays stale until `/tcs-review` refreshes the walks: durable lines 2111 and 2118 to 2120 (`US9-TC22`, `US9-TC23`), 4053 to 4054 (`US24-TC1`) and 4119 to 4120 (`US25-TC6`). A change suite carries no walk and the fold keeps the durable ones, so the cases are the authority until then.
