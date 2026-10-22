@@ -8,7 +8,6 @@ import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
   AuctionWinnerOrder,
-  type AuctionWinnerOrderBankDetails,
   type AuctionWinnerOrderProps,
   type AuctionWinnerOrderStep,
   type OrderDetailsPaymentBrand,
@@ -34,10 +33,8 @@ import {
   type WinnerOrderReceipt,
   type WinnerOrderStatus,
 } from "./winner-order-content";
-import {
-  WINNER_ORDER_BANK_DETAILS,
-  WinnerOrderPaymentProofDialog,
-} from "./winner-order-payment-proof-dialog";
+import { WinnerOrderHowToPayDialog } from "./winner-order-how-to-pay-dialog";
+import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
 import { toastProofSubmitted } from "./winner-order-proof-feedback";
 import { WinnerOrderRefundDialog } from "./winner-order-refund-dialog";
 import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
@@ -397,102 +394,11 @@ function summaryLinesFor(
   ];
 }
 
-function bankDetailsFor(
-  content: WinnerOrderContent,
-): AuctionWinnerOrderBankDetails | undefined {
-  const rail = content.paymentRail;
-  if (!rail) return undefined;
-
+function bankDetailsAmountDue(content: WinnerOrderContent): string | undefined {
   const invoiceTotal = content.invoiceLines?.find(
     (line) => line.label === "Order Total",
   )?.value;
-  const amountDue = content.convertedTotal ?? content.usdTotal ?? invoiceTotal;
-
-  const rows = [
-    ...(amountDue
-      ? [
-          {
-            label: "Amount due",
-            value: amountDue,
-          },
-        ]
-      : []),
-    ...(content.invoiceId
-      ? [{ label: "Invoice", value: content.invoiceId }]
-      : []),
-  ];
-
-  if (rail === "fps") {
-    return {
-      rail,
-      title: "View Bank Details",
-      rows: [
-        ...rows,
-        { label: "FPS ID", value: WINNER_ORDER_BANK_DETAILS.fpsId },
-        {
-          label: "Account name",
-          value: WINNER_ORDER_BANK_DETAILS.beneficiaryName,
-        },
-        {
-          label: "Payment reference",
-          value: WINNER_ORDER_BANK_DETAILS.transferReference,
-        },
-      ],
-      note: "Open your banking app and scan this QR",
-    };
-  }
-
-  if (rail === "hk_local") {
-    return {
-      rail,
-      title: "View Bank Details",
-      rows: [
-        ...rows,
-        { label: "Bank name", value: WINNER_ORDER_BANK_DETAILS.bankName },
-        { label: "Bank code", value: WINNER_ORDER_BANK_DETAILS.bankCode },
-        {
-          label: "Branch code",
-          value: WINNER_ORDER_BANK_DETAILS.branchCode,
-        },
-        {
-          label: "Account number",
-          value: WINNER_ORDER_BANK_DETAILS.accountNumber,
-        },
-        {
-          label: "Payment reference",
-          value: WINNER_ORDER_BANK_DETAILS.transferReference,
-        },
-      ],
-    };
-  }
-
-  return {
-    rail,
-    title: "View Bank Details",
-    rows: [
-      ...rows,
-      {
-        label: "Beneficiary name",
-        value: WINNER_ORDER_BANK_DETAILS.beneficiaryName,
-      },
-      {
-        label: "Beneficiary address",
-        value: WINNER_ORDER_BANK_DETAILS.beneficiaryAddress,
-      },
-      { label: "Bank name", value: WINNER_ORDER_BANK_DETAILS.bankName },
-      { label: "Bank address", value: WINNER_ORDER_BANK_DETAILS.bankAddress },
-      { label: "SWIFT / BIC", value: WINNER_ORDER_BANK_DETAILS.swiftCode },
-      {
-        label: "Account number / IBAN",
-        value: WINNER_ORDER_BANK_DETAILS.accountNumber,
-      },
-      {
-        label: "Payment reference",
-        value: WINNER_ORDER_BANK_DETAILS.transferReference,
-      },
-    ],
-    note: "In your bank app, choose OUR for transfer fees so we receive the full order total.",
-  };
+  return content.convertedTotal ?? content.usdTotal ?? invoiceTotal;
 }
 
 function resolveContent(
@@ -566,6 +472,7 @@ function WinnerOrderPageState({
   );
   const [setupDialogOpen, setSetupDialogOpen] = useState(false);
   const [proofDialogOpen, setProofDialogOpen] = useState(false);
+  const [howToPayOpen, setHowToPayOpen] = useState(false);
   const [refundDialogOpen, setRefundDialogOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [cardCheckoutPending, setCardCheckoutPending] = useState(false);
@@ -754,7 +661,6 @@ function WinnerOrderPageState({
               ? `${content.lotTitle} — open lot details`
               : "Winning lot",
           }}
-          bankDetails={bankDetailsFor(content)}
           note={noteFor(content)}
           paymentMethod={paymentMethodFor(content)}
           progress={progressFor(content)}
@@ -804,7 +710,7 @@ function WinnerOrderPageState({
                       payCta === "Submit Payment Proof" && content.paymentRail
                         ? {
                             label: "View Bank Details",
-                            onPress: () => undefined,
+                            onPress: () => setHowToPayOpen(true),
                           }
                         : undefined,
                     deadline: content.deadline,
@@ -828,6 +734,15 @@ function WinnerOrderPageState({
         onSubmit={handleProofSubmit}
         open={proofDialogOpen}
       />
+      {content.paymentRail ? (
+        <WinnerOrderHowToPayDialog
+          amountDue={bankDetailsAmountDue(content)}
+          invoiceId={content.invoiceId ?? undefined}
+          onOpenChange={setHowToPayOpen}
+          open={howToPayOpen}
+          paymentRail={content.paymentRail}
+        />
+      ) : null}
       {content.refund ? (
         <WinnerOrderRefundDialog
           onOpenChange={setRefundDialogOpen}
