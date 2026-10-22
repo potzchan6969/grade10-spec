@@ -24,8 +24,8 @@ const TOOLTIPS = {
 /**
  * One lot, three USD lines: US$101.00 + US$20.20 + US$10.01 = US$131.21. Under
  * HKD the lines keep their USD amounts and the Subtotal converts their sum at
- * 7.85: HK$1,030.00. Settlement-currency fees sit below the Subtotal; only the
- * Order Total rounds up to a whole HK$ (winner-order-SC-290).
+ * 7.85: HK$1,030.00. Settlement-currency fees sit below the Subtotal; the
+ * Order Total rounds up to two decimals (winner-order-SC-290).
  */
 const USD_LINES: readonly AuctionWinnerOrderLine[] = [
   { label: "Winning Bid", value: "US$101.00" },
@@ -81,7 +81,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The Order Summary in the winner's settlement currency. Under USD every line and the Order Total read USD. Under HKD the lines keep their original USD amounts, a Subtotal converts their sum to HKD and names the USD figure and the fixed rate once — 'Converted from US$131.21 at 1 USD = 7.85 HKD' — and the settlement-currency fees and the whole-HK$ Order Total sit below it. The block formats nothing: the application supplies every amount.",
+          "The Order Summary in the winner's settlement currency. Under USD every line and the Order Total read USD. Under HKD the lines keep their original USD amounts, a Subtotal converts their sum to HKD and names the USD figure and the fixed rate once — 'Converted from US$131.21 at 1 USD = 7.85 HKD' — and the settlement-currency fees and the two-decimal Order Total sit below it. The block formats nothing: the application supplies every amount.",
       },
     },
   },
@@ -222,7 +222,7 @@ export const UsdBankWithFee: Story = {
  * HKD settlement, bank transfer with no fee: the invoice lines keep their USD
  * amounts, the Subtotal converts their sum to HKD and names the USD figure
  * and the fixed rate, the fee reads Free below it, and the Order Total is the
- * whole HK$ sum (winner-order-SC-290, winner-order-SC-111).
+ * two-decimal sum (winner-order-SC-290, winner-order-SC-111).
  */
 export const HkdBankNoFee: Story = {
   args: {
@@ -236,7 +236,7 @@ export const HkdBankNoFee: Story = {
           tooltip: TOOLTIPS.bankFee,
         },
       ],
-      total: { label: "Order Total", value: "HK$1,030" },
+      total: { label: "Order Total", value: "HK$1,030.00" },
       invoicePdf: { onOpen: fn() },
       pay: {
         label: "Submit Payment Proof",
@@ -260,7 +260,9 @@ export const HkdBankNoFee: Story = {
     expect(rowFor(canvasElement, "Subtotal").row.textContent).toContain(
       "HK$1,030.00",
     );
-    expect(sidebar.getByText("HK$1,030")).toBeInTheDocument();
+    expect(rowFor(canvasElement, "Order Total").row.textContent).toContain(
+      "HK$1,030.00",
+    );
     expect(sidebar.getByText(HKD_CONVERSION_NOTE)).toBeInTheDocument();
     expect(
       rowFor(canvasElement, "Payment Processing Fee").row.textContent,
@@ -289,7 +291,7 @@ export const HkdBankWithFee: Story = {
           tooltip: TOOLTIPS.bankFee,
         },
       ],
-      total: { label: "Order Total", value: "HK$1,423" },
+      total: { label: "Order Total", value: "HK$1,423.00" },
       invoicePdf: { onOpen: fn() },
       pay: {
         label: "Submit Payment Proof",
@@ -307,7 +309,7 @@ export const HkdBankWithFee: Story = {
     expect(
       rowFor(canvasElement, "Payment Processing Fee").row.textContent,
     ).toContain("HK$393.00");
-    expect(sidebar.getByText("HK$1,423")).toBeInTheDocument();
+    expect(sidebar.getByText("HK$1,423.00")).toBeInTheDocument();
     expect(sidebar.getByText(HKD_CONVERSION_NOTE)).toBeInTheDocument();
     expect(rowFor(canvasElement, "Winning Bid").row.textContent).toContain(
       "US$101.00",
@@ -318,7 +320,7 @@ export const HkdBankWithFee: Story = {
 /**
  * HKD settlement by card: the fee is computed in HKD from the HKD card rule on
  * the HKD subtotal, so it reads HK$38.73 under the Subtotal with no USD
- * counterpart, and the Order Total rounds up to HK$1,069; the Subtotal's note
+ * counterpart, and the Order Total rounds up to HK$1,068.73; the Subtotal's note
  * names only the converted USD lines (winner-order-SC-304).
  */
 export const HkdCardWithFee: Story = {
@@ -333,7 +335,7 @@ export const HkdCardWithFee: Story = {
           tooltip: TOOLTIPS.cardFee,
         },
       ],
-      total: { label: "Order Total", value: "HK$1,069" },
+      total: { label: "Order Total", value: "HK$1,068.73" },
       invoicePdf: { onOpen: fn() },
       pay: {
         label: "Pay with Card",
@@ -353,7 +355,7 @@ export const HkdCardWithFee: Story = {
     const fee = rowFor(canvasElement, "Payment Processing Fee");
     expect(fee.row.textContent).toContain("HK$38.73");
     expect(fee.subtext).toBeNull();
-    expect(sidebar.getByText("HK$1,069")).toBeInTheDocument();
+    expect(sidebar.getByText("HK$1,068.73")).toBeInTheDocument();
     expect(sidebar.getByText(HKD_CONVERSION_NOTE)).toBeInTheDocument();
   },
 };

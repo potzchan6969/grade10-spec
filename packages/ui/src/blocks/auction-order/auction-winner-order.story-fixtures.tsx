@@ -79,10 +79,10 @@ export const INVOICE_FEE_LINES = [
   },
 ];
 
-/** HK$121,989.00 + HK$545.00, rounded up to the whole HK$. */
+/** HK$121,989.00 + HK$545.00, rounded up to two decimals. */
 export const INVOICE_TOTAL: AuctionWinnerOrderProps["summary"]["total"] = {
   label: "Order Total",
-  value: "HK$122,534",
+  value: "HK$122,534.00",
 };
 
 export const DELIVERY = {

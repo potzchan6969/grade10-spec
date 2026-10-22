@@ -192,8 +192,8 @@ export const LINE_TOOLTIPS = {
 /**
  * HKD-issued card invoice — the invoice lines keep their original USD
  * amounts, the Subtotal converts their sum to HKD and names the fixed rate,
- * and the card fee is computed in HKD below it with no USD counterpart. Only
- * the Order Total rounds to a whole HK$ (winner-order-SC-290,
+ * and the card fee is computed in HKD below it with no USD counterpart. The
+ * Order Total rounds up to two decimals (winner-order-SC-290,
  * winner-order-SC-304).
  */
 const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
@@ -228,7 +228,7 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     value: "HK$545.00",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$128,814" },
+  { label: "Order Total", value: "HK$128,814.00" },
 ];
 
 /** Sent invoice with Insurance for the tooltip coverage state. */
@@ -321,7 +321,7 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$128,269" },
+  { label: "Order Total", value: "HK$128,269.00" },
 ];
 
 /**

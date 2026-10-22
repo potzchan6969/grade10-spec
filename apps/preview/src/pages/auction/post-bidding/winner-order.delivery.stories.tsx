@@ -89,7 +89,7 @@ export const ProcessingOverpaid: Story = {
       ),
     ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
-      "Order TotalHK$128,814",
+      "Order TotalHK$128,814.00",
     ]);
     expect(summaryRows).toContain(
       "SubtotalHK$128,269.00Converted from US$16,340.00 at 1 USD = 7.85 HKD",
@@ -165,7 +165,7 @@ export const ProcessingBankTransfer: Story = {
       "SubtotalHK$128,269.00Converted from US$16,340.00 at 1 USD = 7.85 HKD",
     );
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
-      "Order TotalHK$128,269",
+      "Order TotalHK$128,269.00",
     ]);
     expect(summaryRows).not.toContain("Payment Processing FeeHK$545.00");
     expect(summaryRows).not.toContain("Payment Processing FeeUS$120.00");
