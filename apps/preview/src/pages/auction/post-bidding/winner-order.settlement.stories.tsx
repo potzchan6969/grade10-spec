@@ -93,7 +93,7 @@ export const AwaitingSetup: Story = {
       canvas.queryByRole("link", { name: "Invoice PDF" }),
     ).not.toBeInTheDocument();
     expect(
-      canvas.queryByRole("link", { name: "Receipt PDF" }),
+      canvas.queryByRole("link", { name: /^Receipt/ }),
     ).not.toBeInTheDocument();
   },
 };

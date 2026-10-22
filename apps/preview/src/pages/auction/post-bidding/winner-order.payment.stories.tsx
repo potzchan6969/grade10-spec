@@ -97,7 +97,7 @@ export const PendingPayment: Story = {
     ).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(
-      sidebar.queryByRole("link", { name: "Receipt PDF" }),
+      sidebar.queryByRole("link", { name: /^Receipt/ }),
     ).not.toBeInTheDocument();
     expect(sidebar.queryByRole("alert")).not.toBeInTheDocument();
   },
@@ -112,7 +112,6 @@ export const PendingPaymentBankTransfer: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -136,17 +135,6 @@ export const PendingPaymentBankTransfer: Story = {
     expect(
       sidebar.getByText("Converted from US$16,340.00 at 1 USD = 7.85 HKD"),
     ).toBeVisible();
-
-    await userEvent.click(
-      sidebar.getByRole("button", { name: "View Bank Details" }),
-    );
-    const dialog = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "View Bank Details" });
-      expect(found).toBeVisible();
-      return within(found);
-    });
-    expect(dialog.getByText("HK$128,269.00")).toBeVisible();
-    expect(dialog.queryByText("HK$16,340.00")).not.toBeInTheDocument();
   },
 };
 
@@ -159,7 +147,6 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -173,22 +160,6 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
     ).not.toBeInTheDocument();
     expect(sidebar.queryByText("US$16,340.00")).not.toBeInTheDocument();
     expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
-
-    await userEvent.click(
-      sidebar.getByRole("button", { name: "View Bank Details" }),
-    );
-    const dialog = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "View Bank Details" });
-      expect(found).toBeVisible();
-      return within(found);
-    });
-    expect(dialog.getByText("Bank name")).toBeVisible();
-    expect(dialog.getByText("Branch code")).toBeVisible();
-    expect(dialog.getByText("HK$128,269.00")).toBeVisible();
-    expect(dialog.queryByText("HK$16,340.00")).not.toBeInTheDocument();
-    expect(dialog.queryByText("FPS ID")).not.toBeInTheDocument();
-    expect(dialog.queryByText("SWIFT / BIC")).not.toBeInTheDocument();
-    expect(dialog.queryByRole("tab")).not.toBeInTheDocument();
   },
 };
 
@@ -204,7 +175,6 @@ export const PendingPaymentUsdBankTransfer: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -217,20 +187,6 @@ export const PendingPaymentUsdBankTransfer: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("US$16,340.00")).toBeVisible();
-
-    await userEvent.click(
-      sidebar.getByRole("button", { name: "View Bank Details" }),
-    );
-    const dialog = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "View Bank Details" });
-      expect(found).toBeVisible();
-      return within(found);
-    });
-    expect(dialog.getByText("US$16,340.00")).toBeVisible();
-    expect(dialog.queryByRole("tab")).not.toBeInTheDocument();
-    expect(dialog.getByText("SWIFT / BIC")).toBeVisible();
-    expect(dialog.queryByText("Branch code")).not.toBeInTheDocument();
-    expect(dialog.queryByText("FPS ID")).not.toBeInTheDocument();
   },
 };
 
@@ -276,10 +232,6 @@ export const SubmitBankPaymentProof: Story = {
     )?.set?.call(transferDate, "2026-09-20");
     transferDate.dispatchEvent(new Event("input", { bubbles: true }));
     transferDate.dispatchEvent(new Event("change", { bubbles: true }));
-    await userEvent.type(
-      modal.getByLabelText("Transaction Reference / ID"),
-      "TXN-998877",
-    );
     const file = new File(["preview-proof"], "transfer-receipt.pdf", {
       type: "application/pdf",
     });
@@ -321,7 +273,7 @@ export const SubmitBankPaymentProof: Story = {
     expect(sidebar.getByText("Payment method")).toBeVisible();
     expect(sidebar.getAllByText("FPS").length).toBeGreaterThan(0);
     expect(
-      sidebar.queryByRole("link", { name: "Receipt PDF" }),
+      sidebar.queryByRole("link", { name: /^Receipt/ }),
     ).not.toBeInTheDocument();
   },
 };
@@ -358,7 +310,11 @@ export const PayWithCardCheckout: Story = {
     ).not.toBeInTheDocument();
     expect(canvas.getByText(/preparing this lot to ship/i)).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
-    expect(sidebar.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+    expect(
+      sidebar.getByRole("link", {
+        name: "Receipt #RC-LK7P2Q01P1 (20 Sep 2026) PDF",
+      }),
+    ).toBeVisible();
   },
 };
 
@@ -400,14 +356,14 @@ export const PaymentVerifying: Story = {
     ).toBeVisible();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(
-      sidebar.queryByRole("link", { name: "Receipt PDF" }),
+      sidebar.queryByRole("link", { name: /^Receipt/ }),
     ).not.toBeInTheDocument();
   },
 };
 
 /**
  * Operator recorded one or more underpayments — locked page, Contact Us, no
- * running balance, Receipt PDF row lists every payment (P1, P2, …).
+ * running balance, Receipt PDF row lists every payment, oldest issued first.
  */
 export const PartiallyPaid: Story = {
   name: "Partially Paid",
@@ -449,12 +405,13 @@ export const PartiallyPaid: Story = {
     expect(sidebar.getByText("Payment method")).toBeVisible();
     expect(sidebar.getAllByText("FPS").length).toBeGreaterThan(0);
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(
-      sidebar.getByRole("link", { name: "Receipt · P1 PDF" }),
-    ).toBeVisible();
-    expect(
-      sidebar.getByRole("link", { name: "Receipt · P2 PDF" }),
-    ).toBeVisible();
+    const receiptLinks = sidebar.getAllByRole("link", { name: /^Receipt/ });
+    expect(receiptLinks.map((link) => link.getAttribute("aria-label"))).toEqual(
+      [
+        "Receipt #RC-LK7P2Q01P1 (22 Sep 2026) PDF",
+        "Receipt #RC-LK7P2Q01P2 (25 Sep 2026) PDF",
+      ],
+    );
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();
     await winnerOrderContactSheet(

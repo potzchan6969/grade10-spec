@@ -738,7 +738,7 @@ function Receipts({
       {receipts.map((receipt) => (
         <PdfLink
           ariaLabel={receipt.ariaLabel ?? receipt.label}
-          key={receipt.label}
+          key={receipt.ariaLabel ?? receipt.label}
           label={receipt.label}
           pdf={receipt}
         />

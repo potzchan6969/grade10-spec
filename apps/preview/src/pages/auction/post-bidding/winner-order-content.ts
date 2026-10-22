@@ -36,8 +36,11 @@ export const WINNER_ORDER_STATUS_LABELS: Record<WinnerOrderStatus, string> = {
 
 /** One download on the Receipt PDF row (oldest first when several). */
 export type WinnerOrderReceipt = {
-  /** Link label — e.g. `Receipt` or `Receipt · P1`. */
-  label: string;
+  /** Receipt ID on the link label — `RC-LK7P2Q01P1`; omit for an unnamed
+   * record. */
+  id?: string;
+  /** Issue date — in the label after the ID, `9 Oct 2026`. */
+  issuedOn?: string;
   /** Placeholder download file name. */
   fileName?: string;
 };
@@ -123,8 +126,8 @@ export type WinnerOrderContent = {
   paymentMethod?: string;
   paymentMasked?: string;
   /**
-   * Receipt PDF row — one entry per payment (`-P1`, `-P2`, …), oldest first.
-   * Omit when no payment has been recorded yet.
+   * Receipt PDF row — one entry per payment (`RC-…P1`, `RC-…P2`, …),
+   * oldest issued first. Omit when no payment has been recorded yet.
    */
   receipts?: WinnerOrderReceipt[];
   /** Sent invoice id — omitted before send (setup overdue has none). */
@@ -540,12 +543,14 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         overdue: false,
         receipts: [
           {
-            label: "Receipt · P1",
-            fileName: "REC-202609-LK7P2Q-01-P1.pdf",
+            id: "RC-LK7P2Q01P1",
+            issuedOn: "22 Sep 2026",
+            fileName: "RC-LK7P2Q01P1.pdf",
           },
           {
-            label: "Receipt · P2",
-            fileName: "REC-202609-LK7P2Q-01-P2.pdf",
+            id: "RC-LK7P2Q01P2",
+            issuedOn: "25 Sep 2026",
+            fileName: "RC-LK7P2Q01P2.pdf",
           },
         ],
       };
@@ -568,7 +573,13 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         },
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
-        receipts: [{ label: "Receipt" }],
+        receipts: [
+          {
+            id: "RC-LK7P2Q01P1",
+            issuedOn: "20 Sep 2026",
+            fileName: "RC-LK7P2Q01P1.pdf",
+          },
+        ],
       };
     case "shipped":
       return {
@@ -591,7 +602,13 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         trackingHref: TRACKING.trackingHref,
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
-        receipts: [{ label: "Receipt" }],
+        receipts: [
+          {
+            id: "RC-LK7P2Q01P1",
+            issuedOn: "20 Sep 2026",
+            fileName: "RC-LK7P2Q01P1.pdf",
+          },
+        ],
       };
     case "delivered":
       return {
@@ -614,7 +631,13 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         trackingHref: TRACKING.trackingHref,
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
-        receipts: [{ label: "Receipt" }],
+        receipts: [
+          {
+            id: "RC-LK7P2Q01P1",
+            issuedOn: "20 Sep 2026",
+            fileName: "RC-LK7P2Q01P1.pdf",
+          },
+        ],
       };
     case "cancelled":
       return {
@@ -646,7 +669,13 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         primaryCta: null,
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
-        receipts: [{ label: "Receipt" }],
+        receipts: [
+          {
+            id: "RC-LK7P2Q01P1",
+            issuedOn: "20 Sep 2026",
+            fileName: "RC-LK7P2Q01P1.pdf",
+          },
+        ],
         refund: { ...WINNER_ORDER_REFUND_CLOSING },
       };
   }

@@ -119,7 +119,11 @@ export const Refunded: Story = {
     expect(canvas.getByText("Refunded")).toBeVisible();
     expect(canvas.queryByText("Order Progress")).not.toBeInTheDocument();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+    expect(
+      canvas.getByRole("link", {
+        name: "Receipt #RC-LK7P2Q01P1 (20 Sep 2026) PDF",
+      }),
+    ).toBeVisible();
     const sidebarElement = canvas.getByRole("complementary");
     const summaryRows = [
       ...sidebarElement.querySelectorAll<HTMLElement>(

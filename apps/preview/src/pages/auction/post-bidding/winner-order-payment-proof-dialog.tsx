@@ -21,6 +21,7 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { toast } from "@grade10/design-system/components/overlays/toast";
+import { cn } from "@grade10/design-system/lib/utils";
 import { Warning } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
 import { toastProofNotSubmitted } from "./winner-order-proof-feedback";
@@ -78,7 +79,6 @@ const SUBMIT_SIMULATE_MS = 400;
 type ProofDraft = {
   senderName: string;
   transferDate: string;
-  transactionReference: string;
   notes: string;
   files: FileDropzoneItem[];
 };
@@ -86,7 +86,6 @@ type ProofDraft = {
 const EMPTY_PROOF: ProofDraft = {
   senderName: "",
   transferDate: "",
-  transactionReference: "",
   notes: "",
   files: [],
 };
@@ -122,6 +121,9 @@ function WinnerOrderPaymentProofDialog({
   const submitTimerRef = useRef<number | null>(null);
   /** Bumps on abandon so a late timer cannot complete submit. */
   const submitGenerationRef = useRef(0);
+  const senderNameRef = useRef<HTMLInputElement>(null);
+  const transferDateRef = useRef<HTMLInputElement>(null);
+  const dropzoneRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     return () => {
@@ -138,17 +140,17 @@ function WinnerOrderPaymentProofDialog({
   const hasDraft =
     Boolean(draft.senderName.trim()) ||
     Boolean(draft.transferDate.trim()) ||
-    Boolean(draft.transactionReference.trim()) ||
     Boolean(draft.notes.trim()) ||
     draft.files.length > 0;
 
   const ready =
     Boolean(draft.senderName.trim()) &&
     Boolean(draft.transferDate.trim()) &&
-    Boolean(draft.transactionReference.trim()) &&
     draft.files.length >= WINNER_ORDER_PROOF_MIN_FILES;
 
   const formLocked = submitting || converting;
+
+  const dropzoneFull = draft.files.length >= WINNER_ORDER_PROOF_MAX_FILES;
 
   function clearSubmitTimer() {
     if (submitTimerRef.current != null) {
@@ -209,9 +211,54 @@ function WinnerOrderPaymentProofDialog({
     }
   }
 
+  function scrollToCenter(target: HTMLElement) {
+    const scroller = target.closest<HTMLElement>('[data-slot="dialog-body"]');
+    if (!scroller) return;
+    // Storybook's iframe stubs scrollIntoView — scroll the body ourselves.
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const targetRect = target.getBoundingClientRect();
+    const scrollerRect = scroller.getBoundingClientRect();
+    const delta =
+      targetRect.top +
+      targetRect.height / 2 -
+      (scrollerRect.top + scrollerRect.height / 2);
+    scroller.scrollTo({
+      top: scroller.scrollTop + delta,
+      behavior: reduced ? "instant" : "smooth",
+    });
+  }
+
+  function revealFirstInvalid() {
+    const field = !draft.senderName.trim()
+      ? senderNameRef.current
+      : !draft.transferDate.trim()
+        ? transferDateRef.current
+        : null;
+    if (field) {
+      field.focus({ preventScroll: true });
+      scrollToCenter(field);
+      return;
+    }
+    const zone = dropzoneRef.current;
+    if (draft.files.length < WINNER_ORDER_PROOF_MIN_FILES && zone) {
+      scrollToCenter(zone);
+      zone
+        .querySelector<HTMLButtonElement>("button:not(:disabled)")
+        ?.focus({ preventScroll: true });
+    }
+  }
+
   function handleSubmit() {
     setAttempted(true);
-    if (!ready || formLocked) return;
+    if (formLocked) return;
+    if (!ready) {
+      // Reveal after the error chrome commits — the messages push the
+      // target down, so scrolling first would aim at a stale position.
+      requestAnimationFrame(revealFirstInvalid);
+      return;
+    }
     const generation = submitGenerationRef.current;
     setSubmitting(true);
     clearSubmitTimer();
@@ -238,86 +285,104 @@ function WinnerOrderPaymentProofDialog({
         </DialogHeader>
         <DialogBody>
           <VStack className="w-full" gap="md" hAlign="stretch" id={formId}>
-            <TextInput
-              autoComplete="name"
-              disabled={formLocked}
-              label="Sender Name"
-              message={
-                attempted && !draft.senderName.trim()
-                  ? "Enter the sender name."
-                  : undefined
-              }
-              onChange={(event) =>
-                patch("senderName", event.currentTarget.value)
-              }
-              status={
-                attempted && !draft.senderName.trim() ? "error" : "default"
-              }
-              value={draft.senderName}
-            />
-            <TextInput
-              disabled={formLocked}
-              label="Transfer Date"
-              message={
-                attempted && !draft.transferDate.trim()
-                  ? "Enter the transfer date."
-                  : undefined
-              }
-              onChange={(event) =>
-                patch("transferDate", event.currentTarget.value)
-              }
-              status={
-                attempted && !draft.transferDate.trim() ? "error" : "default"
-              }
-              type="date"
-              value={draft.transferDate}
-            />
-            <TextInput
-              disabled={formLocked}
-              label="Transaction Reference / ID"
-              message={
-                attempted && !draft.transactionReference.trim()
-                  ? "Enter the transaction reference."
-                  : undefined
-              }
-              onChange={(event) =>
-                patch("transactionReference", event.currentTarget.value)
-              }
-              status={
-                attempted && !draft.transactionReference.trim()
-                  ? "error"
-                  : "default"
-              }
-              value={draft.transactionReference}
-            />
+            <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+              <TextInput
+                autoComplete="name"
+                disabled={formLocked}
+                label="Sender Name"
+                ref={senderNameRef}
+                message={
+                  attempted && !draft.senderName.trim()
+                    ? "Enter the sender name."
+                    : undefined
+                }
+                onChange={(event) =>
+                  patch("senderName", event.currentTarget.value)
+                }
+                status={
+                  attempted && !draft.senderName.trim() ? "error" : "default"
+                }
+                value={draft.senderName}
+              />
+              <TextInput
+                disabled={formLocked}
+                label="Transfer Date"
+                ref={transferDateRef}
+                message={
+                  attempted && !draft.transferDate.trim()
+                    ? "Enter the transfer date."
+                    : undefined
+                }
+                onChange={(event) =>
+                  patch("transferDate", event.currentTarget.value)
+                }
+                status={
+                  attempted && !draft.transferDate.trim() ? "error" : "default"
+                }
+                type="date"
+                value={draft.transferDate}
+              />
+            </div>
             <VStack className="w-full" gap="sm" hAlign="stretch">
+              <span className="text-sm font-medium text-secondary-foreground">
+                Payment Proof
+              </span>
               <VStack
                 className="w-full"
                 data-slot="file-dropzone"
                 gap="sm"
                 hAlign="stretch"
+                ref={dropzoneRef}
               >
-                <FileDropzoneTarget
-                  accept={WINNER_ORDER_PROOF_FILE_ACCEPT}
-                  converting={converting}
-                  copy={{
-                    idleTitle: "Drop files here or choose files",
-                    idleDescription: WINNER_ORDER_PROOF_FILE_HINT,
-                    chooseFiles: "Choose Files",
-                    converting: "Converting HEIC…",
+                <div
+                  aria-hidden={dropzoneFull || undefined}
+                  className={cn(
+                    "grid transition-[grid-template-rows] duration-200 motion-reduce:transition-none",
+                    dropzoneFull ? "grid-rows-[0fr]" : "grid-rows-[1fr]",
+                  )}
+                  data-slot="file-dropzone-collapse"
+                  style={{
+                    transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
-                  disabled={formLocked}
-                  files={draft.files}
-                  limits={{
-                    minFiles: WINNER_ORDER_PROOF_MIN_FILES,
-                    maxFiles: WINNER_ORDER_PROOF_MAX_FILES,
-                    maxBytesPerFile: WINNER_ORDER_PROOF_MAX_BYTES_PER_FILE,
-                    maxBytesTotal: WINNER_ORDER_PROOF_MAX_BYTES_TOTAL,
-                  }}
-                  onChange={(files) => patch("files", files)}
-                  onConvertingChange={setConverting}
-                  onReject={handleFileReject}
-                />
+                >
+                  <div className="overflow-hidden">
+                    <div
+                      className={cn(
+                        "transition-[opacity,transform] duration-200 motion-reduce:transition-none",
+                        dropzoneFull
+                          ? "pointer-events-none -translate-y-1 opacity-0 motion-reduce:translate-y-0"
+                          : "translate-y-0 opacity-100",
+                      )}
+                      style={{
+                        transitionTimingFunction:
+                          "cubic-bezier(0.22, 1, 0.36, 1)",
+                      }}
+                    >
+                      <FileDropzoneTarget
+                        accept={WINNER_ORDER_PROOF_FILE_ACCEPT}
+                        converting={converting}
+                        copy={{
+                          idleTitle: "Drop files here or choose files",
+                          idleDescription: WINNER_ORDER_PROOF_FILE_HINT,
+                          chooseFiles: "Choose Files",
+                          converting: "Converting HEIC…",
+                        }}
+                        disabled={formLocked}
+                        files={draft.files}
+                        limits={{
+                          minFiles: WINNER_ORDER_PROOF_MIN_FILES,
+                          maxFiles: WINNER_ORDER_PROOF_MAX_FILES,
+                          maxBytesPerFile:
+                            WINNER_ORDER_PROOF_MAX_BYTES_PER_FILE,
+                          maxBytesTotal: WINNER_ORDER_PROOF_MAX_BYTES_TOTAL,
+                        }}
+                        onChange={(files) => patch("files", files)}
+                        onConvertingChange={setConverting}
+                        onReject={handleFileReject}
+                      />
+                    </div>
+                  </div>
+                </div>
                 <FileDropzoneFileList
                   copy={{ removeFile: "Remove file" }}
                   disabled={formLocked}

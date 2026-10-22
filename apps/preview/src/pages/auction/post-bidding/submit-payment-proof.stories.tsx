@@ -100,10 +100,6 @@ async function fillProofForm(modal: ReturnType<typeof within>) {
   )?.set?.call(transferDate, "2026-09-20");
   transferDate.dispatchEvent(new Event("input", { bubbles: true }));
   transferDate.dispatchEvent(new Event("change", { bubbles: true }));
-  await userEvent.type(
-    modal.getByLabelText("Transaction Reference / ID"),
-    "TXN-998877",
-  );
   const file = new File(["preview-proof"], "transfer-receipt.pdf", {
     type: "application/pdf",
   });
@@ -136,8 +132,11 @@ export const Form: Story = {
     expect(modal.queryByRole("tab", { name: "FPS" })).not.toBeInTheDocument();
     expect(modal.getByLabelText("Sender Name")).toBeVisible();
     expect(modal.getByLabelText("Transfer Date")).toBeVisible();
-    expect(modal.getByLabelText("Transaction Reference / ID")).toBeVisible();
+    expect(
+      modal.queryByLabelText("Transaction Reference / ID"),
+    ).not.toBeInTheDocument();
     expect(modal.queryByText("Proof of Payment File")).not.toBeInTheDocument();
+    expect(modal.getByText("Payment Proof")).toBeVisible();
     expect(modal.getByText(WINNER_ORDER_PROOF_FILE_HINT)).toBeVisible();
     expect(modal.getByRole("button", { name: "Choose Files" })).toBeVisible();
     expect(modal.getByLabelText("Additional Notes (optional)")).toBeVisible();
@@ -175,6 +174,47 @@ export const SubmitProof: Story = {
       expect(page.getByText(PROOF_SUBMITTED_TOAST.description)).toBeVisible();
     });
     expect(args.onSubmit).toHaveBeenCalled();
+  },
+};
+
+/** Empty submit — the first invalid field takes focus and its error shows. */
+export const SubmitEmpty: Story = {
+  name: "Submit empty",
+  args: { onSubmit: fn() },
+  play: async ({ canvasElement, args }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const modal = within(dialog);
+
+    const body = dialog.querySelector(
+      '[data-slot="dialog-body"]',
+    ) as HTMLElement | null;
+    expect(body).toBeTruthy();
+    body!.scrollTop = body!.scrollHeight;
+
+    await userEvent.click(
+      modal.getByRole("button", { name: "Submit Payment Proof" }),
+    );
+
+    const senderName = modal.getByLabelText("Sender Name");
+    await waitFor(() => {
+      expect(senderName).toHaveFocus();
+    });
+    await waitFor(() => {
+      expect(body!.scrollTop).toBe(0);
+    });
+    await waitFor(() => {
+      const rect = senderName.getBoundingClientRect();
+      const bodyRect = body!.getBoundingClientRect();
+      expect(rect.top).toBeGreaterThanOrEqual(bodyRect.top - 1);
+      expect(rect.bottom).toBeLessThanOrEqual(bodyRect.bottom + 1);
+    });
+    expect(modal.getByText("Enter the sender name.")).toBeVisible();
+    expect(modal.getByText("Attach at least one proof file.")).toBeVisible();
+    expect(
+      page.getByRole("dialog", { name: "Submit Payment Proof" }),
+    ).toBeVisible();
+    expect(args.onSubmit).not.toHaveBeenCalled();
   },
 };
 
@@ -272,6 +312,35 @@ export const SubmittingBusy: Story = {
     ).toBeVisible();
     await waitFor(() => {
       expect(page.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+  },
+};
+
+/** Three files — the dropzone target collapses into the list. */
+export const DropzoneFull: Story = {
+  name: "Dropzone full",
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const modal = within(dialog);
+    const fileInput = modal
+      .getByRole("button", { name: "Choose Files" })
+      .closest('[data-slot="file-dropzone"]')
+      ?.querySelector('input[type="file"]');
+    expect(fileInput).toBeTruthy();
+    const files = ["p1.pdf", "p2.pdf", "p3.pdf"].map(
+      (name) => new File([name], name, { type: "application/pdf" }),
+    );
+    await userEvent.upload(fileInput as HTMLInputElement, files);
+    await waitFor(() => {
+      expect(modal.getByText("p3.pdf")).toBeVisible();
+    });
+    const collapse = dialog.querySelector(
+      '[data-slot="file-dropzone-collapse"]',
+    ) as HTMLElement | null;
+    expect(collapse).toBeTruthy();
+    await waitFor(() => {
+      expect(collapse?.getBoundingClientRect().height).toBe(0);
     });
   },
 };
