@@ -42,7 +42,9 @@ export default function AuctionWonEmail({
       }}
       listingUrl={orderUrl}
       lotTitle={lotTitle}
-      points={[...previewLot.setupFields]}
+      points={previewLot.setupFields.map((field) =>
+        field === "Payment method" ? "Payment currency and method" : field,
+      )}
       preheader={`Complete Order Setup by ${setupDeadline}.`}
       primaryImageUrl={primaryImageUrl}
       whyYouGotThis="You won this auction on Grade10."
