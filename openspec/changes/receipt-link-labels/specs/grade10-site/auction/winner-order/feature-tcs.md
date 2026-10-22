@@ -21,9 +21,9 @@ is still owed, a tracker, and proof of what was handed over,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** ui
-* **Automation status:** automated
-* **Testability:** automated
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
 * **Trace:** winner-order-US-02
 
 **Pre-conditions:**
@@ -55,9 +55,9 @@ is still owed, a tracker, and proof of what was handed over,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** ui
-* **Automation status:** automated
-* **Testability:** automated
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
 * **Trace:** winner-order-US-02
 
 **Pre-conditions:**
