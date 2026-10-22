@@ -81,7 +81,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-landing.US3, g10.store-product-page.US2, g10.store-cart-checkout.US4, g10.store-order-detail.US3, g10.store-order-history.US2
+* **Trace:** g10.store-landing.US3, g10.store-product-page.US2, g10.store-cart.US4, g10.store-order-detail.US3, g10.store-order-history.US2
 
 **Pre-conditions:**
 
@@ -140,7 +140,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US2, g10.store-product-listing.US1, g10.store-product-page.US1, g10.store-cart-checkout.US1
+* **Trace:** g10.store-landing.US2, g10.store-product-listing.US1, g10.store-product-page.US1, g10.store-cart.US1
 
 **Pre-conditions:**
 
@@ -190,7 +190,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US2, g10.store-product-listing.US1, g10.store-product-page.US1, g10.store-product-listing.US8
+* **Trace:** g10.store-landing.US2, g10.store-product-listing.US1, g10.store-product-page.US1, g10.store-cart.US1
 
 **Pre-conditions:**
 
@@ -232,7 +232,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-product-listing.US7, g10.store-cart-checkout.US2, g10.store-cart-checkout.US3, g10.store-cart-checkout.US4, g10.store-order-history.US1, g10.store-order-detail.US1
+* **Trace:** g10.store-product-listing.US7, g10.store-cart.US2, g10.store-cart.US3, g10.store-cart.US4, g10.store-order-history.US1, g10.store-order-detail.US1
 
 **Pre-conditions:**
 
@@ -284,7 +284,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US7, g10.store-product-page.US2, g10.store-cart-checkout.US4
+* **Trace:** g10.store-product-listing.US7, g10.store-product-page.US2, g10.store-cart.US4
 
 **Pre-conditions:**
 
