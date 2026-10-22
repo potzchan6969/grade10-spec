@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/25
+**Status:** pending-review · 0/26
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## g10.auction-winner-order.US1: Winner settles a won listing
@@ -8,6 +8,47 @@
 **As a** winner,
 **I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
 **so that** the listing I won becomes mine inside a deadline I can see, priced for where it is actually going.
+
+<!-- trace:case id=g10.auction-winner-order.TC-apy rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
+### g10.auction-winner-order.US1-TC26: A sent invoice with Insurance shows the amount and its tip
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on `<winner order url>` for `<winner_order_23_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_23_1 | An HKD order whose sent invoice includes Insurance of USD40.00, typed in USD; bind its identity only |
+| insurance_amount | US$40.00 (fixed: 4000 minor units, a USD line that is not converted) |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
+**Steps:**
+
+1. Find Insurance on Order Summary.
+2. Hover the Insurance info tooltip.
+
+**Expected Results:**
+
+* Step 1: Insurance reads `<insurance_amount>`, not TBD, and no HKD amount beside it.
+* Step 2: the tooltip reads `0.9% of the order value during transit.`
 
 <!-- trace:case id=g10.auction-winner-order.TC-m21 rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
 ### g10.auction-winner-order.US1-TC31: Sent tax is itemised throughout the order record
@@ -36,12 +77,14 @@
 | Field | Value |
 | --- | --- |
 | winner_order_41_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+| winner_order_41_2 | An HKD order, invoice sent, whose invoice includes Tax of USD60.00 (fixed: 6000 minor units, typed in USD); bind its order identity only |
 
 **Steps:**
 
 1. Open Winner Order and read Order Summary.
 2. Open the invoice PDF.
 3. Open the receipt PDF.
+4. Open Winner Order for `<winner_order_41_2>` and read Order Summary.
 
 **Expected Results:**
 
@@ -49,6 +92,7 @@
 * Order Summary offers the Tax info tip with the stated copy.
 * The invoice PDF and the receipt PDF each show Tax of USD70 (range: >0 minor units) between Insurance and Subtotal.
 * Each PDF's Subtotal includes Tax of USD70 (range: >0 minor units).
+* Step 4: Order Summary shows Tax as `US$60.00` between Insurance and Payment Processing Fee, with the Tax info tip and its stated copy.
 
 <!-- trace:case id=g10.auction-winner-order.TC-dvc rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
 ### g10.auction-winner-order.US1-TC33: Card fee is grossed up on tax
@@ -1154,7 +1198,7 @@ Runs once per row of **Test data**.
 * The note under the Subtotal wraps inside the summary.
 * The page does not scroll sideways.
 
-<!-- trace:case id=g10.auction-winner-order.TC-ewl rev=1 -->
+<!-- trace:case id=g10.auction-winner-order.TC-ewl rev=1 covers=g10.auction-winner-order.SC-ygl -->
 ### g10.auction-winner-order.US27-TC11: An HKD invoice sent before this layout keeps its stored amounts and reads in the new layout
 
 **Classification:**
@@ -1234,7 +1278,7 @@ Runs once per row of **Test data**.
 | `US27-TC7` (`TC-m5d`) | Kept. The exact and rounds-up partitions of a converted bank fee and the amount due in the bank details dialog. No link |
 | `US27-TC8` (`TC-oc2`) | Kept. Asserts every clause of `g10.auction-winner-order.SC10`. Linked: SC10 |
 | `US27-TC9` (`TC-qf9`) and `US27-TC10` (`TC-kkw`) | Kept as compatibility cases, Chinese and a narrow viewport. No scenario states either. No link |
-| `US27-TC11` (`TC-ewl`) | New in the second pass. Kept. An HKD invoice sent before this layout keeps its stored lines and Subtotal and reads in the new layout (decisions Q12). QA2 added one result: the note names the USD sum as on any invoice, which decisions Q31 settles; the case left the note out while the question was open. It carries behaviour no scenario states; `spec.md` owes a scenario |
+| `US27-TC11` (`TC-ewl`) | New in the second pass. Kept. An HKD invoice sent before this layout keeps its stored lines and Subtotal and reads in the new layout (decisions Q12). QA2 added one result: the note names the USD sum as on any invoice, which decisions Q31 settles; the case left the note out while the question was open. Asserts every clause of `g10.auction-winner-order.SC14`. Linked: SC14 |
 
 **Existing durable cases**
 
@@ -1256,7 +1300,8 @@ Every durable case below is `draft`; each rewrite keeps its marker id and bumps 
 | `US24-TC2` (`TC-79a@2`) | Contradicted: the HKD row lists each line in HKD | Rewritten at `@3` |
 | `US24-TC7` (`TC-r4x@1`) | Contradicted: the replaced HKD invoice no longer reads its Winning Bid in HKD | Rewritten at `@2` on the fixture of SC11; unblocked; keeps its link |
 | `US8-TC5` (`TC-xji@1`) | Contradicted: each line converted and rounded before summing | Rewritten at `@2` |
-| `US1-TC31` (`TC-m21@1`) | Contradicted: Tax of HKD70 on an HKD order | Rewritten at `@2` as a USD order (SC-214); the link list is unchanged |
+| `US1-TC31` (`TC-m21@1`) | Contradicted: Tax of HKD70 on an HKD order | Rewritten at `@2` as a USD order (SC-214), with a step for an HKD order whose Tax reads `US$60.00` (SC-217 rev 2); the link list is unchanged |
+| `US1-TC26` (`TC-apy@1`) | The Insurance amount is a bare fixture; SC-169 rev 2 reads it in USD under HKD | Rewritten at `@2` on an HKD order reading `US$40.00`; the link list is unchanged |
 | `US1-TC33` (`TC-dvc@1`) | Contradicted: lines of HKD3,280 plus Tax of HKD70 | Rewritten at `@2` with the USD sum of SC-216; the link list is unchanged |
 | `US2-TC1` (`TC-h7f@2`) | Contradicted: "the lines sum to the final amount" | Rewritten at `@3`; the link list is unchanged |
 | `US1-TC4` (`TC-yuw@1`) | Not moved: both totals are HKD fixtures and none of its assertions changes | Left `draft` |
@@ -1284,21 +1329,23 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | SC-291 | `US27-TC2` |
 | SC-292 | `US27-TC3` |
 | SC10 | `US27-TC8` |
+| SC14 | `US27-TC11` |
+| `winner-order-SC-169`, `winner-order-SC-217` (the Insurance and Tax tooltips under HKD) | `US1-TC26`, `US1-TC31` |
 | SC-04, SC-287 | Out of suite, in the durable header |
 | SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-215, SC-278, SC-279, SC-280, SC-281, SC-282, SC-300 | Unchanged; they stay with the durable cases |
 
-**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7
+**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15
 
-SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee beside a non-zero shipping line, and SC7 a USD order's documents staying in USD. The block tests of task 3.1 in this store (`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/fixtures.test.ts`, `invoice-pdf.test.ts` and `receipt-pdf.test.ts`) and the PDF tests of task 7.1 in the application repository (`invoicePdf.test.ts`, `receiptPdf.test.ts`) verify both. `US26-TC10` and `TC11` read the same documents by hand.
+SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee beside a non-zero shipping line, and SC7 a USD order's documents staying in USD. The block tests of task 3.1 in this store (`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/fixtures.test.ts`, `invoice-pdf.test.ts` and `receipt-pdf.test.ts`) and the PDF tests of task 7.1 in the application repository (`invoicePdf.test.ts`, `receiptPdf.test.ts`) verify both. `US26-TC10` and `TC11` read the same documents by hand. SC15 is an invoice sent before USD facts were stored, which no tester can create now; the breakdown tests of task 6.1 (`invoicePricing.test.ts`, which drops the note when a line has no USD fact) verify it, and `US27-TC11` reads the sibling pre-layout case by hand.
 
 **Uncovered**
 
-- None
+- None. SC15 (a line with no USD fact reads in HKD, note dropped) is Out of suite below
 
 **Over-claimed**
 
 - The legacy `covers` lists named above
-- `US26-TC13` is linked to SC11 with a fixture of the same class, not SC11's own figures; `US27-TC6` and `US27-TC11` carry outcomes no scenario states, the first as the requirement's table and the second as decisions Q12 and Q31
+- `US26-TC13` is linked to SC11 with a fixture of the same class, not SC11's own figures; `US27-TC6` carries outcomes no scenario states, the requirement's table
 
 **Contradictions between the readings**
 
@@ -1309,7 +1356,7 @@ SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee 
 | Anchor | Cases | Scenarios |
 | --- | --- | --- |
 | `winner-order-US-26` (documents) | `US26-TC1`, `TC2`, `TC3`, `TC5` to `TC8`, `TC10`, `TC11`, `TC13`; `TC4` is unchanged | All; SC3, SC7 and SC-287 out of suite |
-| `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC11` | All seven |
+| `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC11` | SC-290, SC-304, SC-291, SC-292, SC8, SC9, SC10 and SC14 covered; SC15 out of suite |
 | `winner-order-US-24` (context) | `US24-TC2`, `TC7` | SC-281 covered; SC-301 waits for its follow-up amendment; the rest stay with the durable cases |
 | Root group Settlement currency | `US26-TC1`, `TC2`, `TC5`, `TC6`, `TC7`, `TC8`, `TC10`, `TC11`, `TC13` | Convert once, cent rounding, bank fee, rate named once, same lines on every document |
 | Root group Order summary | `US27-TC1`, `TC2`, `TC3`, `TC8`, `TC11` | All four lines of the group |

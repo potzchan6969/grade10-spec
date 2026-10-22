@@ -1023,7 +1023,7 @@ Runs once per row of **Test data**.
 | `US21-TC3-1` (`TC-tui`) | Kept. The bank transfer fee typed in USD converts below the preview Subtotal. No link: it lists no USD lines, so SC1 rests on this case and `TC1-1` together and is left to its unit test |
 | `US21-TC4-1` (`TC-a57`) | Kept. The sent invoice carries the total the operator previewed. Linked: `g10adm.auction-post-sale.SC3` |
 | `US2-TC13-1` (`TC-ao7`) | Kept. The order page of a sent HKD invoice lists the USD lines, then the HKD Subtotal, fee and Total, with nothing in HKD beside a line, for a card invoice and a bank transfer invoice with a Free fee. No link: SC7 quotes the operator shape, which a fixture reading does not assert, and its bank fee is converted where these rows are not |
-| `US2-TC14-1` (`TC-t1k`) | Kept. A test order sent before this layout lists its stored USD lines and its stored Subtotal, not a re-priced one (decisions Q12). It carries behaviour no scenario states; `spec.md` owes a scenario |
+| `US2-TC14-1` (`TC-t1k`) | Kept. A test order sent before this layout lists its stored USD lines and its stored Subtotal, not a re-priced one (decisions Q12). Pre-layout order page; scenario SC10 covers only the log entry, so no link |
 | `US7-TC50-1` (`TC-0d1`) | Regrouped: the reissue entry is read on the timeline, which post-sale-US-08 owns and every scenario about it serves. Its Shipping & Handling row is row 3 of `US8-TC10-2` and its Tax row is row 1 of `US8-TC13-2`. The case is dropped; it was never published |
 
 **Existing durable cases**
@@ -1068,20 +1068,21 @@ The legacy `covers` lists on `TC13-2`, `TC15-2`, `TC16-2`, `TC18-2`, `TC32-2` an
 | SC-204 | `US8-TC13-2` |
 | SC-245 | `US5-TC22-3` |
 | SC-158, SC-210 | `US7-TC38-2`, `US7-TC46-2` |
-| SC-123, SC6 | `US8-TC10-2`, asserted but not linkable until the durable case has a marker |
+| SC-123, SC6, SC9 | `US8-TC10-2` (SC9 by row 3, on its own figures' class), asserted but not linkable until the durable case has a marker |
+| SC10 | None: it reads a log entry written before line parts carried a currency, which no tester can write now |
 
-**Out of suite:** g10adm.auction-post-sale.SC1, g10adm.auction-post-sale.SC4, g10adm.auction-post-sale.SC7, g10adm.auction-post-sale.SC8
+**Out of suite:** g10adm.auction-post-sale.SC1, g10adm.auction-post-sale.SC4, g10adm.auction-post-sale.SC7, g10adm.auction-post-sale.SC8, g10adm.auction-post-sale.SC10
 
-Each is a display claim of the quote dialog or the order page that the cases above assert in substance, with the operator shape and the exact fixture left to the dialog and order page tests of task 9.1 (`SendInvoiceDialog.test.tsx`, `quoteDraft.test.ts`, `OrderDetail.test.tsx`) in the application repository. `US21-TC1-1`, `TC3-1` and `US2-TC13-1` read the same surfaces by hand.
+Each is a display claim of the quote dialog or the order page that the cases above assert in substance, with the operator shape and the exact fixture left to the dialog and order page tests of task 9.1 (`SendInvoiceDialog.test.tsx`, `quoteDraft.test.ts`, `OrderDetail.test.tsx`) in the application repository. `US21-TC1-1`, `TC3-1` and `US2-TC13-1` read the same surfaces by hand. SC10, an entry written before the rule, is verified by the history tests of task 9.1 in the application repository (`changeLine` in `orderCopy.ts` reads a part's currency before the entry's, per task 9.4).
 
 **Uncovered**
 
-- `grade10-admin-auction-post-sale-SC-123` and `g10adm.auction-post-sale.SC6` are asserted by `US8-TC10-2` and carry no link only because the durable `US8-TC10-1` has no trace marker. One `trace init case` on the durable record lets this case take its marker and the two links
+- `grade10-admin-auction-post-sale-SC-123` and `g10adm.auction-post-sale.SC6` and `g10adm.auction-post-sale.SC9` are asserted by `US8-TC10-2` and carry no link only because the durable `US8-TC10-1` has no trace marker. One `trace init case` on the durable record lets this case take its marker and the two links
 
 **Over-claimed**
 
 - The legacy `covers` lists above
-- `US8-TC10-2` row 3 names the Payment Processing Fee as changed when only Shipping & Handling moved on a card invoice; no scenario states it, so `spec.md` owes one line
+- None beyond the legacy lists
 
 **Contradictions between the readings**
 
@@ -1095,10 +1096,10 @@ Each is a display claim of the quote dialog or the order page that the cases abo
 | `post-sale-US-02` | `US2-TC7-2`, `TC13-1`, `TC14-1` | SC7, SC8 out of suite |
 | `post-sale-US-05` | `US5-TC9-4`, `TC13-2`, `TC15-2`, `TC16-2`, `TC18-2`, `TC20-3`, `TC24-3`, `TC25-3`, `TC26-3` | All covered |
 | `post-sale-US-07` | `US5-TC22-3`, `US7-TC32-2`, `TC38-2`, `TC46-2` | All covered |
-| `post-sale-US-08` | `US8-TC10-2`, `TC13-2` | SC-204 covered; SC-123 and SC6 asserted, link pending |
+| `post-sale-US-08` | `US8-TC10-2`, `TC13-2` | SC-204 covered; SC-123, SC6 and SC9 asserted, link pending; SC10 out of suite |
 | Root group Quote and send | the US21 and US5 cases | Both bullets covered |
 | Root group Order page | `US2-TC13-1`, `TC14-1`, `US8-TC10-2`, `TC13-2` | Both bullets reached |
-| Context journeys | `US8`, `US18` | `user-journeys.md` lists neither as Context, so `tcs:validate` reports them undefined until it does |
+| Context journeys | `US8`, `US18` | Both are Context in `user-journeys.md` |
 
 **Raised**
 
