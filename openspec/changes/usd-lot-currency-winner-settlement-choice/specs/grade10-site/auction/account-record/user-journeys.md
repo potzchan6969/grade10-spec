@@ -49,7 +49,7 @@ I owe nothing for a listing I did not win.
 ### grade10-site-auction-account-record-US-07: Collector reads My Auctions as one list
 
 **As a** collector
-**I want** every lot I bid on or watch in one list, with the total in the title
+**I want** every lot I bid on or watch in one list, bid lots first, with the total in the title
 **so that** I read my whole record in one place without switching tabs.
 
 ### grade10-site-auction-account-record-US-10: Bidder reads each lot's price and result on My Auctions
