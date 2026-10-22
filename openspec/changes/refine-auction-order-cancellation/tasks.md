@@ -5,19 +5,19 @@ ahead of acceptance; they are re-verified against the accepted contract.
 
 - [x] 1.1 Update post-sale and Winner Order PRD pages with categories, consequence preview, late-payment flag handling and the reason-free winner notice (`grade10-admin-auction-post-sale-SC-230`, `winner-order-SC-143`).
 
-## 2. Contracts and data (owner: @htonyl)
+## 2. Contracts and data (grade10) (owner: @htonyl)
 
 - [x] 2.1 Add cancellation category/note, consequence snapshot, lot link and Paid-after-cancel facts.
 - [x] 2.2 Add the terminal transition and late-payment audit events to the auction-order schema.
 
-## 3. Backend (owner: @htonyl)
+## 3. Backend (grade10) (owner: @htonyl)
 
 - [x] 3.1 Require category and note, show consequences, return the lot to stock and keep cancellation terminal (`grade10-admin-auction-post-sale-SC-230`, `SC-231`).
 - [x] 3.2 Record late payments, expose the queue flag and allow an `auction:payment` operator to clear only the flag, with a reason and an optional return reference (`SC-232`).
 - [x] 3.3 Allow cancellation after money that counts toward nothing, and refuse it after money that counts toward the balance (`SC-233`, `SC-236`).
 - [x] 3.4 Record a required reason and optional return reference when clearing the late-payment flag (`SC-235`).
 
-## 4. Frontend (owner: @htonyl)
+## 4. Frontend (grade10) (owner: @htonyl)
 
 - [x] 4.1 Add category filtering and consequence preview to the operator flow.
 - [x] 4.2 Render the cancelled Winner Order notice with date, lot, winning bid and Contact Us only (`winner-order-SC-143`).

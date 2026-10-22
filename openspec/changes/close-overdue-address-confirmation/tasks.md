@@ -7,7 +7,7 @@
   (`auction-status-SC-30`, `winner-order-SC-146`).
   - Verification: `pnpm check:manual` in the registered `grade10-spec` store.
 
-## 2. Data and contracts (owner: @htonyl)
+## 2. Data and contracts (grade10) (owner: @htonyl)
 
 - [x] 2.1 Add the persisted `address_deadline_at`, reopen count and reasoned
   address-reopen/address-recorded audit facts to
@@ -18,7 +18,7 @@
   - Verification: contract checks cover the persisted timestamp and derived
     condition.
 
-## 3. Backend (owner: @htonyl)
+## 3. Backend (grade10) (owner: @htonyl)
 
 - [x] 3.1 In `services/orderStatus.ts`, `rpc/AuctionService.ts` and
   `services/auctions/auctionOrders.ts`, derive `address_window_open` from the stored
@@ -46,7 +46,7 @@
     and `SC-93`.
   - Verification: invoice-send race and settlement checks.
 
-## 4. Frontend (owner: @htonyl)
+## 4. Frontend (grade10) (owner: @htonyl)
 
 - [x] 4.1 Hide Confirm after the derived deadline condition, then restore it
   after an operator reopen. A confirmed address locks on confirm.
