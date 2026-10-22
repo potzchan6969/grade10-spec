@@ -4,9 +4,21 @@ import { SAMPLE_INVOICE, SAMPLE_RECEIPT } from "./fixtures";
 import type { InvoicePdfData } from "./invoice-pdf";
 import { InvoicePdf } from "./invoice-pdf";
 import type { PdfItemRow } from "./pdf-document";
-import { BODY_SIZE, loadFonts, wrap } from "./pdf-document";
+import {
+  BODY_SIZE,
+  LINE_HEIGHT,
+  loadFonts,
+  RIGHT_EDGE,
+  SUMMARY_LEFT,
+  wrap,
+} from "./pdf-document";
 import type { DrawnText } from "./pdf-test-helpers";
-import { drawnRow, drawnText, textRight } from "./pdf-test-helpers";
+import {
+  drawnRow,
+  drawnStrings,
+  drawnText,
+  textRight,
+} from "./pdf-test-helpers";
 import { ReceiptPdf } from "./receipt-pdf";
 
 /** Embeds each face as the very bytes it was given, so a test can tell them apart. */
@@ -305,4 +317,122 @@ describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
       await expect(render(table)).rejects.toThrow(error);
     },
   );
+});
+
+const NOTE = "Converted from US$131.21 at 1 USD = 7.85 HKD";
+const MUTED_COLOUR = [0.4, 0.4, 0.4];
+
+/** The HKD charges of the sample documents, their Subtotal carrying `note` when given. */
+function chargesWithNote(note?: string) {
+  return SAMPLE_INVOICE.lineItems.map((item) =>
+    item.key === "subtotal" && note !== undefined ? { ...item, note } : item,
+  );
+}
+
+describe.each(DOCUMENTS)("%s's Subtotal note", (_name, render) => {
+  // g10.shared-invoice-and-receipt-pdf.SC1, g10.shared-invoice-and-receipt-pdf.SC2
+  it("draws the note directly under Subtotal and above Payment Processing Fee, muted and plain", async () => {
+    const rows = await drawnText(
+      await render({ lineItems: chargesWithNote(NOTE) }),
+    );
+    const subtotal = drawnRow(rows, "Subtotal");
+    const note = drawnRow(rows, NOTE);
+    const fee = drawnRow(rows, "Payment Processing Fee");
+    const orderTotal = drawnRow(rows, "Order Total");
+    const email = drawnRow(rows, "support@grade10.com");
+
+    expect(note.y).toBeLessThan(subtotal.y);
+    expect(fee.y).toBeLessThan(note.y);
+    expect(orderTotal.y).toBeLessThan(fee.y);
+    expect(subtotal.y - note.y).toBeLessThanOrEqual(LINE_HEIGHT);
+    expect(note.x).toBeCloseTo(subtotal.x);
+    expect(note.color).toEqual(email.color);
+    expect(note.color).toEqual(MUTED_COLOUR);
+    expect(note.size).toBeLessThanOrEqual(subtotal.size);
+    expect(note.font).not.toMatch(/Bold/);
+    const between = rows.filter(
+      (row) => row.y < subtotal.y - 0.01 && row.y > fee.y + 0.01,
+    );
+    expect(between.map((row) => row.text)).toEqual([NOTE]);
+  });
+
+  // g10.shared-invoice-and-receipt-pdf.SC1
+  it("adds no charge row: Shipping & Handling is the only charge under the Item Total row", async () => {
+    const rows = await drawnText(
+      await render({ lineItems: chargesWithNote(NOTE) }),
+    );
+    const itemTotal = drawnRow(rows, "Item Total");
+    const subtotal = drawnRow(rows, "Subtotal");
+    const between = rows
+      .filter((row) => row.y < itemTotal.y - 0.01 && row.y > subtotal.y + 0.01)
+      .map((row) => row.text);
+    expect(between).toEqual(["Shipping & Handling", "US$10.01"]);
+  });
+
+  // g10.shared-invoice-and-receipt-pdf.SC3
+  it.each([
+    ["omitted", undefined],
+    ["an empty string", ""],
+    ["whitespace only", "   "],
+  ])(
+    "draws the bytes of a document with no note when the note is %s",
+    async (_case, note) => {
+      const plain = await render({ lineItems: chargesWithNote() });
+      const subtotal = SAMPLE_INVOICE.lineItems.find(
+        (item) => item.key === "subtotal",
+      );
+      const bytes = await render({
+        lineItems: SAMPLE_INVOICE.lineItems.map((item) =>
+          item === subtotal ? { ...item, note } : item,
+        ),
+      });
+      expect(Buffer.from(bytes).equals(Buffer.from(plain))).toBe(true);
+    },
+  );
+
+  // g10.shared-invoice-and-receipt-pdf.SC3
+  it("keeps Payment Processing Fee one line under Subtotal when no note is given", async () => {
+    const rows = await drawnText(
+      await render({ lineItems: chargesWithNote() }),
+    );
+    expect(
+      drawnRow(rows, "Subtotal").y - drawnRow(rows, "Payment Processing Fee").y,
+    ).toBeCloseTo(LINE_HEIGHT);
+  });
+
+  // g10.shared-invoice-and-receipt-pdf.SC4
+  it("wraps a note wider than the summary onto further lines inside it, above the fee", async () => {
+    const wide = "Converted from US$1,234,567,890.12 at 1 USD = 7.85 HKD";
+    const rows = await drawnText(
+      await render({ lineItems: chargesWithNote(wide) }),
+    );
+    const rightOf = await textRight();
+    const fee = drawnRow(rows, "Payment Processing Fee");
+    const subtotal = drawnRow(rows, "Subtotal");
+    const lines = rows
+      .filter((row) => row.y < subtotal.y - 0.01 && row.y > fee.y + 0.01)
+      .sort((a, b) => b.y - a.y);
+    expect(lines.length).toBeGreaterThan(1);
+    expect(lines.map((line) => line.text).join(" ")).toBe(wide);
+    for (const line of lines) {
+      expect(line.x).toBeGreaterThanOrEqual(SUMMARY_LEFT - 0.01);
+      expect(rightOf(line)).toBeLessThanOrEqual(RIGHT_EDGE + 0.01);
+    }
+  });
+
+  // g10.shared-invoice-and-receipt-pdf.SC5
+  it("draws the note as given and builds nothing from the amounts on the sheet", async () => {
+    const given = "Converted from US$999.00 at 1 USD = 7.00 HKD";
+    const strings = await drawnStrings(
+      await render({ lineItems: chargesWithNote(given) }),
+    );
+    expect(strings).toContain(given);
+    expect(strings.filter((text) => text.includes("Converted"))).toEqual([
+      given,
+    ]);
+    for (const text of strings) {
+      expect(text).not.toContain("131.21");
+      expect(text).not.toContain("7.85");
+    }
+  });
 });
