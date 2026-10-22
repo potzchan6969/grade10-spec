@@ -16,7 +16,7 @@ configuration; this capability holds the rule that reads them.
 - Minimum bid
   - One lookup rule: manual and proxy bidding select the tier from the amount being beaten, read from the configured schedule
   - Opening price: before any bid, the minimum is the starting price, or the lowest configured increment on a 0 start
-  - Whole-dollar starting price: a starting price is a whole-dollar amount, so the opening minimum is one a collector can bid
+  - Whole-dollar starting price: a starting price that an operator or a consignment ask sets is a whole-dollar amount, and one with cents is refused; a price already stored is not rewritten
   - Whole-dollar bids: a bid or a maximum is a whole-dollar amount at or above the minimum, and one that is not is refused
 
 ## MODIFIED Requirements
@@ -50,11 +50,11 @@ standing. The HKD and JPY schedules no longer exist.
 Scenario `grade10-site-auction-bid-increments-SC-01` keeps its title with its
 id. The title is historical: a first bid may stand on the starting price.
 
-<!-- trace:scenario id=g10.auction-bid-increments.SC-vqb rev=2 -->
+<!-- trace:scenario id=g10.auction-bid-increments.SC-vqb rev=3 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-01 - A first bid clears the starting-price tier
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
-- **GIVEN** an open USD listing with a starting price of 20000 minor units and no accepted bid
+- **GIVEN** an open USD listing with a whole-dollar starting price of 20000 minor units and no accepted bid
 - **WHEN** a collector reads its minimum bid
 - **THEN** Grade10 reports 20000 minor units, the starting price
 
@@ -113,8 +113,7 @@ id. The title is historical: a first bid may stand on the starting price.
 
 Before any accepted bid, the minimum next amount SHALL be the listing's
 opening price: the starting price, or the tier increment for 0 when the
-starting price is 0. The starting price SHALL be a whole-dollar amount, so the
-opening price is always one a whole-dollar bid can match. After an accepted manual bid, it SHALL add the current
+starting price is 0. After an accepted manual bid, it SHALL add the current
 public-price tier increment to that price. With two or more proxy maxima, it
 SHALL add the second-highest maximum's tier increment to that maximum and cap
 the result at the leader's maximum. The result is the minimum next amount.
@@ -127,9 +126,13 @@ minimum. Grade10 SHALL refuse an amount that is not whole dollars, naming the
 rule, and leave the price, the leader and every maximum unchanged. It SHALL not
 create intermediate bids.
 
-Grade10 SHALL refuse a starting price that is not a whole-dollar amount,
-naming the rule, and leave the listing unchanged. The multiple of one major
-unit comes from the USD exponent of the money module.
+A starting price that an operator sets, or that a consignment ask sets when
+it makes a listing, SHALL be a whole-dollar amount. Grade10 SHALL refuse one
+that is not, naming the rule, and leave the listing unchanged, or make none.
+The multiple of one major unit comes from the USD exponent of the money
+module. The rule applies to a price being set and SHALL NOT rewrite a starting
+price already stored. This requirement does not state the opening price of a
+listing stored with a starting price that has cents.
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-xjw rev=3 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-07 - A manual floor uses the current public price
@@ -193,13 +196,30 @@ unit comes from the USD exponent of the money module.
 - **AND** the current bid, the leader and every maximum are unchanged, and no bid is recorded
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-kc7 rev=1 -->
-#### Scenario: grade10-site-auction-bid-increments-SC-24 - A starting price with cents is refused
+#### Scenario: grade10-site-auction-bid-increments-SC-24 - An operator's starting price with cents is refused
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** a USD listing whose starting price is a whole-dollar amount S minor units
 - **WHEN** an operator sets its starting price to S plus one minor unit
 - **THEN** Grade10 refuses the write and names the whole-dollar rule
 - **AND** the listing's starting price stays S minor units
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-y9s rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-25 - A consignment ask with cents makes no listing
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** a consignment ask for the auction whose price is a whole-dollar amount S minor units plus one minor unit
+- **WHEN** Grade10 makes the listing from the ask
+- **THEN** Grade10 refuses to make it and names the whole-dollar rule
+- **AND** no listing exists for the ask, and the ask is unchanged
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-n5d rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-26 - A stored starting price with cents is not rewritten
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** a listing already stored with a starting price of a whole-dollar amount plus one minor unit
+- **WHEN** Grade10 reads the listing, or deploys this rule
+- **THEN** the starting price stays as stored, and no migration or rounding touches it
 
 ### Requirement: Every lot is bid in USD and no other currency stays
 

@@ -172,7 +172,8 @@ $10, where Goldin names none.
   included; a bid already standing keeps its amount
 - 🚧 **Whole dollars only** — a bid, a maximum, a starting price, every tier
   bound and every increment are whole dollars; a bid with cents is refused and
-  nothing moves, and a starting price with cents is not saved
+  nothing moves, and a starting price an operator or a consignment sets with
+  cents is not saved. A price already stored with cents is left as it is
 - **What a collector sees** — the next minimum for the lot, never the
   schedule
 - **A first maximum** — must reach the opening price, and the public price it
@@ -180,6 +181,10 @@ $10, where Goldin names none.
 - **Opening price** — the first bid must reach the starting price, or the
   lowest increment when the lot starts at 0, and a lone bidder stands there;
   one increment above the current bid applies from the second bid
+- ❓ **Opening price of a stored price with cents** - a listing already stored
+  with a starting price that has cents opens at a minimum no whole-dollar bid
+  can match. The product manager confirms: the opening minimum reads the next
+  whole dollar at or above it, and the page still shows the starting price
 
 ### Refusals
 

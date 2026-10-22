@@ -40,6 +40,8 @@ None.
 
 - `grade10-site/auction/bid-increments`: the schedule table leaves the
   requirement, which states the rule over a configured schedule
+- `grade10-admin/auction/listing`: a starting price is a whole-dollar amount,
+  so an operator's draft save, create or update of one with cents is refused
 
 ## Impact
 
@@ -55,6 +57,10 @@ None.
   the old tiers. They get no delta: their amounts read as examples under other
   configuration values, and only the application's tests and fixtures are
   rewritten.
+- **Starting price** - a starting price an operator or a consignment ask sets
+  is whole dollars (Q16, Q17, Q19). A price already stored with cents is left as
+  it is (Q18); the opening minimum on such a row is held for the product
+  manager (see Raised in [decisions](decisions.md#raised)).
 - **Depends on** - `usd-lot-currency-winner-settlement-choice`, which also
   modifies this capability and archives first, as its `depends_on` records.
   This change owns the rule-and-configuration text; that one owns the USD-only
@@ -63,3 +69,4 @@ None.
 ## References
 
 - [Bidding · Auction Logic](../../../docs/prds/products/grade10-site/auction/bidding.md#auction-logic)
+- [Listing Management · Listings](../../../docs/prds/products/grade10-admin/auction/management.md#listings)
