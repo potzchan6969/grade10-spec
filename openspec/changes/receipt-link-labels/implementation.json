@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "0824145a5ab09d62daf3c7bf67c4ef15fc50df8b96b23c09b64bb1878f3ace31"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "3de65dd56c3471cfb1316f5a9ca7d74e172e867c",
+    "capturedAt": "2026-10-22T23:42:12.938Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The winner can view the payment receipt as a PDF"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
