@@ -10,7 +10,10 @@ import {
   ActivityList,
   CouponList,
   MemberPass,
+  RewardCheckout,
   RewardMenu,
+  type RewardMenuItem,
+  type RewardRedemption,
   SiteHeader,
   TierCard,
   WalletPassLinks,
@@ -36,6 +39,7 @@ import {
   MEMBERSHIP_STATE_VIEWS,
   MEMBERSHIP_VIEW,
   type MembershipView,
+  REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   TIER_CARD_COPY,
   WALLET_PASS_COPY,
@@ -61,25 +65,51 @@ function MembershipPage({ view }: { view: MembershipView }) {
   const [issued, setIssued] = useState(0);
   const [codes, setCodes] = useState(0);
   const [held, setHeld] = useState<readonly string[]>(view.heldWallets);
+  const [selected, setSelected] = useState<RewardMenuItem | null>(null);
+  const [redemption, setRedemption] = useState<RewardRedemption | null>(null);
 
-  const redeem = (rewardId: string, quantity: number) => {
+  const closeCheckout = () => {
+    setSelected(null);
+    setRedemption(null);
+  };
+
+  const select = (rewardId: string) => {
     if (view.rewards.status !== "ready") return;
     const reward = view.rewards.data.find((item) => item.id === rewardId);
-    if (!reward) return;
-    const cost = reward.pointCost * quantity;
-    if (cost > balance) return;
+    if (reward) setSelected(reward);
+  };
+
+  const redeem = () => {
+    if (!selected || selected.pointCost > balance) return;
+    const left = balance - selected.pointCost;
+    const cost = selected.pointCost;
     const coupon = {
       ...ISSUED_COUPON,
       id: `coupon-issued-${issued + 1}`,
-      amount: reward.name,
-      description: reward.limits ?? reward.collectionWindow,
+      amount: selected.name,
+      description: selected.description,
     };
-    setBalance((value) => value - cost);
+    setBalance(left);
     setIssued((value) => value + 1);
     setCoupons((prev) => ({
       status: "ready",
       data: [...(prev.status === "ready" ? prev.data : []), coupon],
     }));
+    setRedemption(
+      selected.kind === "coupon"
+        ? {
+            balanceAfter: left,
+            summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+            deadline: "Use by 28 Oct 2026",
+            code: `G10-${cost}-${issued + 1}Q2M`,
+          }
+        : {
+            balanceAfter: left,
+            summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+            deadline: "Collect by 5 Nov 2026",
+            note: "Collect at any Grade10 store",
+          },
+    );
   };
 
   const addWallet = (id: string) =>
@@ -164,7 +194,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
             <RewardMenu
               balance={balance}
               copy={REWARD_MENU_COPY}
-              onRedeem={redeem}
+              onSelect={select}
               state={view.rewards}
             />
           </section>
@@ -222,6 +252,21 @@ function MembershipPage({ view }: { view: MembershipView }) {
       </main>
       <Footer {...STORE_FOOTER} />
       <Toast position="bottom-right" />
+      {selected ? (
+        <RewardCheckout
+          balance={balance}
+          copy={REWARD_CHECKOUT_COPY}
+          onDone={closeCheckout}
+          onOpenChange={(next) => {
+            if (!next) closeCheckout();
+          }}
+          onRedeem={redeem}
+          open
+          redemption={redemption ?? undefined}
+          reward={selected}
+          viewCouponsHref="#membership-coupons-heading"
+        />
+      ) : null}
     </div>
   );
 }
@@ -264,7 +309,17 @@ export const Default: Story = {
       canvas.getByRole("button", { name: "Go to checkout" }),
     ).toHaveAttribute("href", LOYALTY_PAY_PART_OF_BASKET_HREF);
 
-    await userEvent.click(canvas.getAllByRole("button", { name: "Redeem" })[0]);
+    const overlay = within(document.body);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /HK\$50 off coupon/ }),
+    );
+    await userEvent.click(
+      await overlay.findByRole("button", { name: "Redeem for 500 pts" }),
+    );
+    expect(
+      await overlay.findByText("Added to your coupons"),
+    ).toBeInTheDocument();
+    await userEvent.click(overlay.getByRole("button", { name: "Done" }));
     expect(canvas.getByText("750")).toBeInTheDocument();
   },
 };
@@ -280,8 +335,10 @@ export const NoPoints: Story = {
         "No activity yet. Purchases appear here once they are recorded.",
       ),
     ).toBeInTheDocument();
-    for (const control of canvas.getAllByRole("button", { name: "Redeem" })) {
-      expect(control).toBeDisabled();
+    for (const card of canvasElement.querySelectorAll(
+      '[data-slot="reward-menu-item"]',
+    )) {
+      expect(card).toHaveAttribute("data-affordable", "false");
     }
   },
 };

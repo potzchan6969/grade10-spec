@@ -7,6 +7,7 @@ import type {
   CouponItem,
   CouponListCopy,
   MemberPassCopy,
+  RewardCheckoutCopy,
   RewardMenuCopy,
   RewardMenuItem,
   TierCardCopy,
@@ -54,12 +55,21 @@ const MEMBER_PASS_COPY: MemberPassCopy = {
 
 const REWARD_MENU_COPY: RewardMenuCopy = {
   label: "Rewards",
-  redeem: "Redeem",
   points: "pts",
-  atQuantityBound: "Maximum per redemption",
-  insufficient: "Not enough points",
-  decreaseQuantity: "Decrease quantity",
-  increaseQuantity: "Increase quantity",
+  pointCount: (points) => points.toLocaleString("en-HK"),
+};
+
+const REWARD_CHECKOUT_COPY: RewardCheckoutCopy = {
+  useAt: "Use at",
+  validFor: "Valid for",
+  pointBalance: "Point Balance",
+  points: "pts",
+  pointCount: (points) => points.toLocaleString("en-HK"),
+  redeemFor: (cost) => `Redeem for ${cost.toLocaleString("en-HK")} pts`,
+  redeemedCouponTitle: "Added to your coupons",
+  redeemedItemTitle: "Ready to Collect",
+  done: "Done",
+  viewCoupons: "View Coupons",
 };
 
 const COUPON_LIST_COPY: CouponListCopy = {
@@ -179,26 +189,39 @@ const MEMBERSHIP_PAGE_COPY = {
   activityHeading: "Activity",
 };
 
+/** Stand-in product art for the item rewards. */
+const REWARD_IMAGE = new URL("../product.fixture.png", import.meta.url).href;
+
 const REWARDS: RewardMenuItem[] = [
   {
-    id: "voucher-50",
-    name: "HK$50 off",
-    pointCost: 500,
-    validity: "Code valid 90 days from redemption",
-    limits: "Spend HK$300 or more · In store only",
+    id: "potatoz",
+    kind: "item",
+    name: "Halloween Potatoz",
+    description: "Pick one from Zombie, Demon and Halloween Hat Potatoz.",
+    pointCost: 100,
+    image: { src: REWARD_IMAGE, alt: "Three plush Potatoz keychains" },
+    deadline: "Until 31 Dec 2026",
+    useAt: "Grade10 store",
+    validFor: "14 days from redemption",
   },
   {
-    id: "sleeves",
-    name: "Grade10 card sleeves",
-    pointCost: 120,
-    maxQuantity: 3,
-    collectionWindow: "Collect in store within 14 days",
+    id: "voucher-50",
+    kind: "coupon",
+    name: "HK$50 off coupon",
+    description: "Spend at online or offline store",
+    pointCost: 500,
+    useAt: "Online or physical store",
+    validFor: "90 days from redemption",
   },
   {
     id: "slab-stand",
+    kind: "item",
     name: "Acrylic slab stand",
+    description: "Display one graded slab upright.",
     pointCost: 4000,
-    collectionWindow: "Collect in store within 30 days",
+    image: { src: REWARD_IMAGE, alt: "A clear acrylic slab stand" },
+    useAt: "Grade10 store",
+    validFor: "30 days from redemption",
   },
 ];
 
@@ -417,6 +440,7 @@ export {
   MEMBERSHIP_STATE_VIEWS,
   MEMBERSHIP_VIEW,
   POINTS_BALANCE_LABEL,
+  REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   REWARDS,
   TIER_BENEFITS,
