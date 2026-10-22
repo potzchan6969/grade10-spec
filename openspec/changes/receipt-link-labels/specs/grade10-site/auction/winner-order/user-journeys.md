@@ -2,8 +2,6 @@
 
 ## Context user journeys
 
-**Walked by:** the winner of a lot, through payment to delivery
-
 ### winner-order-US-02: Winner follows a settled lot to delivery
 
 **As a** winner who has paid,

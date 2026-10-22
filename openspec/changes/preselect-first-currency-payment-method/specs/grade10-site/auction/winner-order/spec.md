@@ -267,11 +267,13 @@ its own bank details, and card on its own rule.
 - **THEN** the order records bank transfer, on the HK Local rail
 - **AND** the order derives as Preparing Invoice
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-wn1 rev=2 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-wn1 rev=3 -->
 #### Scenario: winner-order-SC-94 - A confirmation with no method is refused
 **Serves:** Payment method - card or bank transfer recorded with the address
 
-- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD and
+  International via SWIFT, then switched the currency to HKD, which cleared
+  the method
 - **WHEN** the winner confirms a delivery address without choosing a method
 - **THEN** Grade10 refuses the confirmation
 - **AND** the order is still Awaiting Setup

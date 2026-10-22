@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/2
 **Drafts styled:** 2026-10-22, tcs-rules r5
 
-## g10.auction-winner-order.US02: Winner follows a settled lot to delivery
+## g10.auction-winner-order.US2: Winner follows a settled lot to delivery
 
 **As a** winner who has paid,
 **I want** a receipt PDF that says how I paid, what was paid before it and what

@@ -5,7 +5,7 @@
 - Receipts
   - Link label: a receipt link names the receipt ID and issue date —
     `Receipt #RC-LK7P2Q01P1 (22 Sep 2026)` — or `Receipt` alone when the
-    record carries no ID
+    record carries no ID; the date is day-only, in the viewer's local zone
 
 ## MODIFIED Requirements
 
@@ -19,7 +19,7 @@ a PDF icon, SHALL render as a text link (not a button), and SHALL sit under
 the payment-method card — not on the same row as the invoice PDF. The link
 SHALL name the receipt's ID and issue date — `Receipt #RC-LK7P2Q01P1 (22
 Sep 2026)`, accessible name `Receipt #RC-LK7P2Q01P1 (22 Sep 2026) PDF` —
-the ID kept exactly as the receipt PDF and Grade10's letters print it. A
+the ID kept exactly as the receipt PDF and Grade10's letters print it. The issue date SHALL read as a day-only date in the viewer's local zone, per `shared/dates-and-times`. A
 receipt record carrying no ID SHALL read `Receipt`, accessible name
 `Receipt PDF`. Where an order records more than one payment, its receipt
 links SHALL run oldest issued first. The control SHALL be hidden before

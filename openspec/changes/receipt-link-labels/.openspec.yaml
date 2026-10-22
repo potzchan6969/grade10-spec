@@ -1,2 +1,5 @@
 schema: grade10-planning
 created: 2026-10-22
+hands:
+  dev: "@tangconst"
+ui_waived: "@tangconst waived ui-design on 2026-10-23; the Payment stories draw the receipt link label as the design reference."

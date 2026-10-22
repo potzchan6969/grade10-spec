@@ -462,8 +462,9 @@ failure, and locks the form while work is in progress.
 - **One receipt per payment** — every receipt for an invoice lists on the
   same Receipt PDF row, oldest first
 - 🚧 **The link names the receipt** — `Receipt #RC-LK7P2Q01P1 (22 Sep
-  2026)`, keeping the `RC-` prefix the PDF and letters print; a record
-  carrying no ID reads `Receipt`
+  2026)`, keeping the `RC-` prefix the PDF and letters print; the date is
+  day-only, in the viewer's local zone; a record carrying no ID reads
+  `Receipt`
 - **What every receipt shows** — Original Invoice Total, Previous Payments,
   Current Payment Received and Remaining Balance Due, whether the invoice took
   one payment or several. A single full payment reads 0 previous and 0
