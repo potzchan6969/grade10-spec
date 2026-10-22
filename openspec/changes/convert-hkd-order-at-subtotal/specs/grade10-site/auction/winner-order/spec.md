@@ -6,8 +6,9 @@
   - Convert once: an HKD order's Subtotal is the sum of its USD lines at 7.85, rounded up to the next cent; no line is converted or rounded on its own
   - Cent rounding: every amount keeps two decimals; a fraction of a cent rounds up where an amount is converted or grossed up; the Order Total is the Subtotal plus the fee
   - Bank transfer fee under HKD: typed in USD, converted at 7.85 and rounded up to the next cent, below the Subtotal and outside the converted sum
-  - Rate named once: the Order Summary's conversion note is the one place that names the rate; no invoice, receipt or letter does
+  - Rate named in the note only: the conversion note names the rate on the Order Summary and under the Subtotal of the invoice and receipt PDFs; the invoice page and the letters do not
   - Same lines on every document: an HKD invoice and receipt list the USD lines, then the HKD Subtotal, fee and total
+  - Note on the PDFs: the invoice and receipt PDFs of an HKD order carry the Order Summary's note under the Subtotal; a USD order carries none
 - Order summary
   - USD lines under HKD: each line reads its USD amount, Shipping & Handling, Insurance and Tax included
   - Subtotal and note: one HKD Subtotal below the lines names the USD sum and the rate
@@ -271,7 +272,7 @@ Subtotal or the Order Total to a whole HK$.
 A bank transfer fee converts alone: the operator types it in USD and Grade10
 SHALL convert it at the same rate, rounded up to the next cent. It sits below
 the Subtotal, SHALL NOT be part of the sum Grade10 converts, and SHALL NOT add to
-the USD figure the Order Summary's conversion note names.
+the USD figure the conversion note names.
 
 For a card order, Grade10 SHALL take the card rule for HKD from Payment
 Settings and compute the payment processing fee in HKD on the Subtotal, per
@@ -280,9 +281,9 @@ Subtotal plus the fee, to the cent, and SHALL NOT be rounded again.
 
 Grade10 SHALL fix the Subtotal, the fee and the Order Total on the invoice when
 it is sent. A sent invoice SHALL NOT re-price, and only a reissue SHALL price it
-again, under this rule. The Order Summary's conversion note is the one place
-that names the rate; Grade10 SHALL show the rate on no other page, invoice,
-receipt or letter.
+again, under this rule. The conversion note under the Subtotal names the rate on
+the Order Summary and on the invoice and receipt PDFs. Grade10 SHALL show the
+rate on no other page and in no letter, the invoice page included.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-gc6 rev=2 -->
 #### Scenario: winner-order-SC-283 - A USD amount converts at 7.85 to an HKD amount
@@ -399,18 +400,20 @@ receipt or letter.
   `Converted from US$131.21 at 1 USD = 7.85 HKD` under it
 - **AND** Order Total reads `HK$1,031.00`, and nothing is re-priced
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-ida rev=1 -->
-#### Scenario: g10.auction-winner-order.SC13 - Only the Order Summary's note names the rate
-**Serves:** winner-order-US-26 - the winner finds the rate once, where the HKD total comes from
+<!-- trace:scenario id=g10.auction-winner-order.SC-ida rev=2 -->
+#### Scenario: g10.auction-winner-order.SC13 - The note names the rate on the Order Summary and the two PDFs, and nowhere else
+**Serves:** winner-order-US-26 - the winner finds the rate where the HKD total comes from
 
 - **GIVEN** a sent HKD invoice for an order whose winner picked HKD and bank
   transfer, with USD lines of 10100, 2020 and 1001 minor units, whose payment an
   operator confirmed
 - **WHEN** the winner reads the Order Summary, the invoice page, the invoice PDF,
   the receipt PDF, the payment reminder and the payment-received letter
-- **THEN** the Order Summary's note under the Subtotal reads
-  `Converted from US$131.21 at 1 USD = 7.85 HKD`
-- **AND** none of the other five names the rate or prints `7.85`
+- **THEN** the note under the Subtotal reads
+  `Converted from US$131.21 at 1 USD = 7.85 HKD` on the Order Summary, on the
+  invoice PDF and on the receipt PDF
+- **AND** the invoice page, the payment reminder and the payment-received letter
+  name no rate and print no `7.85`
 
 ### Requirement: The Order Summary reads the settlement currency, with USD beneath each HKD line
 
@@ -437,8 +440,10 @@ no note.
 
 The Subtotal row SHALL carry the note `Converted from US$X at 1 USD = 7.85 HKD`,
 where X is the USD sum of the lines above it. The Payment Processing Fee, card or
-bank transfer, SHALL add nothing to X. The note is the one place the summary
-names the rate.
+bank transfer, SHALL add nothing to X. The summary names the rate nowhere but in
+this note; the invoice and receipt PDFs carry the same note under their own
+Subtotal, per "An HKD invoice and receipt list the USD lines, then the HKD
+Subtotal, fee and Order Total".
 
 The Payment Processing Fee SHALL read in HKD with no USD amount beneath it, and
 SHALL read Free when it is zero. Shipping & Handling of zero SHALL read Free.
@@ -637,8 +642,13 @@ them. The Subtotal, the fee and the Order Total are the invoice's, per "An HKD
 order converts each USD line at a fixed rate and rounds it up". Every amount
 keeps its two decimals, zeros included.
 
-These documents SHALL name no conversion rate and carry no conversion note.
-Shipping & Handling of zero and a Payment Processing Fee of zero SHALL read
+The invoice PDF and every receipt PDF of an HKD order SHALL carry the
+conversion note `Converted from US$X at 1 USD = 7.85 HKD` directly under the
+Subtotal row, drawn muted, where X is the USD sum of the lines above the
+Subtotal, as the Order Summary's note reads it. The Payment Processing Fee,
+card or bank transfer, SHALL add nothing to X, and the note is absent when a
+line has no USD fact on record. The invoice page SHALL name no conversion rate
+and carry no conversion note. Shipping & Handling of zero and a Payment Processing Fee of zero SHALL read
 Free, and Insurance and Tax SHALL be left out when the invoice carries none, per
 "Invoice fields".
 
@@ -646,9 +656,10 @@ A receipt's Original Invoice Total, Previous Payments, Current Payment Received
 and Remaining Balance Due SHALL read in HKD, each payment counted against the
 Order Total, and SHALL sit below the lines the receipt lists.
 
-An order in USD SHALL read every amount in USD on the same documents.
+An order in USD SHALL read every amount in USD on the same documents, and its
+Subtotal row SHALL carry no note.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-8ig rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-8ig rev=2 -->
 #### Scenario: g10.auction-winner-order.SC3 - An HKD invoice PDF lists the USD lines, then the HKD total
 **Serves:** winner-order-US-26 - the winner keeps an invoice that shows what the lot cost in USD and what they pay in HKD
 
@@ -659,9 +670,8 @@ An order in USD SHALL read every amount in USD on the same documents.
   `US$20.20` and Total `US$121.20`, and Shipping & Handling reads `US$10.01`
 - **AND** below them Subtotal reads `HK$1,030.00`, Payment Processing Fee reads
   Free and Order Total reads `HK$1,030.00`
-- **AND** no conversion rate and no conversion note is printed
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-81v rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-81v rev=2 -->
 #### Scenario: g10.auction-winner-order.SC4 - An HKD receipt PDF lists the same lines and the payment in HKD
 **Serves:** winner-order-US-26 - the winner keeps a receipt that matches the invoice they paid
 
@@ -673,7 +683,6 @@ An order in USD SHALL read every amount in USD on the same documents.
 - **AND** Original Invoice Total reads `HK$1,030.00`, Previous Payments
   `HK$0.00`, Current Payment Received `HK$1,030.00` and Remaining Balance Due
   `HK$0.00`
-- **AND** no conversion rate and no conversion note is printed
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-rsv rev=1 -->
 #### Scenario: g10.auction-winner-order.SC5 - The invoice page lists Insurance and Tax in USD and a card fee in HKD
@@ -726,6 +735,69 @@ An order in USD SHALL read every amount in USD on the same documents.
 - **AND** below them Original Invoice Total reads `HK$1,030.00`, Previous
   Payments `HK$0.00`, Current Payment Received `HK$300.00` and Remaining Balance
   Due `HK$730.00`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-63n rev=1 -->
+#### Scenario: g10.auction-winner-order.SC16 - An HKD invoice PDF carries the conversion note under the Subtotal
+**Serves:** winner-order-US-26 - the winner checks the invoice PDF's Subtotal against the rate
+
+- **GIVEN** the order of `g10.auction-winner-order.SC3`, with USD lines of 10100,
+  2020 and 1001 minor units
+- **WHEN** the winner opens the sent invoice PDF
+- **THEN** directly under Subtotal `HK$1,030.00`, and above Payment Processing
+  Fee, the note reads `Converted from US$131.21 at 1 USD = 7.85 HKD`, drawn muted
+- **AND** the figure is the USD sum of the three lines, 13121 minor units, as on
+  the Order Summary's note
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-dfs rev=1 -->
+#### Scenario: g10.auction-winner-order.SC17 - Every HKD receipt PDF carries the same note under the Subtotal
+**Serves:** winner-order-US-26 - the winner checks each receipt PDF's Subtotal against the rate
+
+- **GIVEN** the order of `g10.auction-winner-order.SC3`, with a receipt for a full
+  payment of 103000 minor units in HKD and a receipt for a part payment of 30000
+  minor units in HKD
+- **WHEN** the winner opens each receipt PDF
+- **THEN** each reads, directly under Subtotal `HK$1,030.00`, the note
+  `Converted from US$131.21 at 1 USD = 7.85 HKD`, drawn muted
+- **AND** each draws its payment breakdown below the lines and carries no note
+  there
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1xa rev=1 -->
+#### Scenario: g10.auction-winner-order.SC19 - An HKD PDF carries no note when a line has no USD fact
+**Serves:** winner-order-US-27 - the winner of an invoice sent before USD facts were stored reads it
+
+- **GIVEN** the order of `g10.auction-winner-order.SC15`, a Pending Payment order
+  whose HKD invoice was sent with no USD fact on record, and a receipt for a full
+  payment of it
+- **WHEN** the winner opens the invoice PDF and the receipt PDF
+- **THEN** each reads the lines in HKD and the Subtotal at 103100 minor units in
+  HKD, with no note under it and no gap between Subtotal and Payment Processing
+  Fee
+- **AND** an HKD order paid by card, whose lines all carry a USD fact and whose
+  card fee has none, still carries the note on both PDFs, as the Order Summary
+  does
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-xeg rev=1 -->
+#### Scenario: g10.auction-winner-order.SC20 - An invoice sent under the per-line rule carries the note on its PDF
+**Serves:** winner-order-US-27 - the winner of an invoice sent before this layout reads it
+
+- **GIVEN** the order of `g10.auction-winner-order.SC14`, with USD lines of 10100,
+  2020 and 1001 minor units, a stored Subtotal of 103100 minor units in HKD and a
+  stored Order Total of 103100
+- **WHEN** the winner opens the invoice PDF
+- **THEN** directly under Subtotal `HK$1,031.00`, and above Payment Processing
+  Fee, the note reads `Converted from US$131.21 at 1 USD = 7.85 HKD`, drawn muted,
+  as on the Order Summary
+- **AND** nothing is re-priced
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-ela rev=1 -->
+#### Scenario: g10.auction-winner-order.SC18 - A USD order's invoice and receipt PDFs carry no note
+**Serves:** winner-order-US-26 - the winner of a USD order reads documents without a conversion
+
+- **GIVEN** the USD order of `g10.auction-winner-order.SC7`, paid in full
+- **WHEN** the winner opens the invoice PDF and the receipt PDF
+- **THEN** neither draws a note under the Subtotal, and no row or gap sits between
+  Subtotal and Payment Processing Fee
+- **AND** neither prints a rate or `7.85`
 
 ## REMOVED Requirements
 

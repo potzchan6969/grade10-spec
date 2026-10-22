@@ -38,7 +38,8 @@ differently.
   fee, and adds nothing to the note's USD figure.
 - **The documents follow the same layout** - the invoice page, the invoice and
   receipt PDFs and the receipt letter list the USD lines, then the HKD
-  Subtotal, Payment Processing Fee and Order Total, and name no rate.
+  Subtotal, Payment Processing Fee and Order Total; the PDFs carry the conversion
+  note under the Subtotal, and the invoice page and the letters name no rate.
   **BREAKING** - `grade10-site/auction/winner-order` "An HKD invoice, receipt
   and letter carry HKD only" says every amount reads HKD and no USD winning bid
   prints; that no longer holds for the invoice, the receipt and a letter that
@@ -75,6 +76,9 @@ None.
 - `grade10-admin/auction/internal-bid` - the house order's invoice total is one
   conversion of its USD lines, so the total of one scenario moves from 103100
   to 103000.
+- `shared/ui/invoice-and-receipt-pdf` - the Subtotal summary row may carry a note,
+  drawn muted under it, which the invoice and receipt PDFs use for the conversion
+  note.
 - `shared/ui/auction-order` - `AuctionWinnerOrder` takes `summary.subtotal` and
   `summary.feeLines`, merged in the design store with #1288.
 
@@ -82,16 +86,18 @@ None.
 
 - **Retracts and supersedes** - `order-summary-hkd-conversion-note` (every line
   in HKD, one note under the Order Total) is retracted, as
-  `collapse-order-summary-usd-recap` was before it; its one surviving rule, that
-  the note is the only place that names the rate, is carried in this change.
+  `collapse-order-summary-usd-recap` was before it; its one surviving rule, the
+  note under the Subtotal that names the rate, is carried in this change; the
+  note now shows on the Order Summary and on the invoice and receipt PDFs, and
+  nowhere else.
   Q8, Q9 and Q17 of `usd-lot-currency-winner-settlement-choice` (HKD lines under
   each USD amount, convert and round each line, the fee as a line above the
   total) are replaced; that change stays in place and is listed in `depends_on`.
   This change's walk takes the place of the one the retracted change still owed.
 - **Component exports** - `AuctionWinnerOrder` gains `summary.subtotal` and
   `summary.feeLines`; `convertedTotal` and `convertedFee` stay. `AuctionInvoicePdf`
-  and `AuctionReceiptPdf` keep their contract, since they render the strings
-  given; their HKD fixtures and stories change.
+  and `AuctionReceiptPdf` gain an optional note on the Subtotal row; their HKD
+  fixtures and stories change.
 - **Consumer apps** - `grade10` prices the invoice, builds the Winner Order
   summary, the invoice page, the order documents, the letters and the
   operator's quote preview from the new breakdown. `apps/preview` and

@@ -391,7 +391,7 @@ Runs once per row of **Test data**.
 * Order Total reads `<order total>`, the Subtotal plus the fee, with no further rounding.
 * No figure reads as `<not this>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-nf6 rev=4 covers=g10.auction-winner-order.SC-81v,g10.auction-winner-order.SC-g3i -->
+<!-- trace:case id=g10.auction-winner-order.TC-nf6 rev=5 covers=g10.auction-winner-order.SC-81v,g10.auction-winner-order.SC-g3i,g10.auction-winner-order.SC-dfs -->
 ### g10.auction-winner-order.US26-TC2: HKD receipt PDF lists the USD lines, the HKD Subtotal, fee and total, and the payment
 
 Runs once per row of **Test data**.
@@ -424,16 +424,17 @@ Runs once per row of **Test data**.
 | --- | --- |
 | winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
-| Row | `<method>` | `<usd lines>` | `<subtotal>` | `<fee>` | `<order total>` | `<current payment>` | `<previous payments>` | `<remaining balance>` |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Bank transfer, paid in full | Bank transfer on FPS, bank transfer fee USD0 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | Free | HKD1,030.00 | HKD1,030.00 | HKD0.00 | HKD0.00 |
-| Card with Tax, paid in full | Card, HKD rule 3.4% plus HKD2.35 | Winning Bid USD150.00, Buyer's Premium USD30.00, Shipping & Handling USD49.00, Insurance USD20.00, Tax USD2.00 | HKD1,970.35 | HKD71.79 | HKD2,042.14 | HKD2,042.14 | HKD0.00 | HKD0.00 |
-| Bank transfer, first part payment | Bank transfer on FPS, bank transfer fee USD0 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | Free | HKD1,030.00 | HKD300.00 | HKD0.00 | HKD730.00 |
+| Row | `<method>` | `<usd lines>` | `<note>` | `<subtotal>` | `<fee>` | `<order total>` | `<current payment>` | `<previous payments>` | `<remaining balance>` |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Bank transfer, paid in full | Bank transfer on FPS, bank transfer fee USD0 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | `Converted from US$131.21 at 1 USD = 7.85 HKD` | HKD1,030.00 | Free | HKD1,030.00 | HKD1,030.00 | HKD0.00 | HKD0.00 |
+| Card with Tax, paid in full | Card, HKD rule 3.4% plus HKD2.35 | Winning Bid USD150.00, Buyer's Premium USD30.00, Shipping & Handling USD49.00, Insurance USD20.00, Tax USD2.00 | `Converted from US$251.00 at 1 USD = 7.85 HKD` | HKD1,970.35 | HKD71.79 | HKD2,042.14 | HKD2,042.14 | HKD0.00 | HKD0.00 |
+| Bank transfer, first part payment | Bank transfer on FPS, bank transfer fee USD0 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | `Converted from US$131.21 at 1 USD = 7.85 HKD` | HKD1,030.00 | Free | HKD1,030.00 | HKD300.00 | HKD0.00 | HKD730.00 |
+| Bank transfer with a fee, paid in full | Bank transfer on FPS, bank transfer fee USD2.57 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | `Converted from US$131.21 at 1 USD = 7.85 HKD` | HKD1,030.00 | HKD20.18 | HKD1,050.18 | HKD1,050.18 | HKD0.00 | HKD0.00 |
 
 **Steps:**
 
 1. Click the receipt link under the payment-method card and open the receipt for the payment of the row.
-2. Read the receipt PDF's lines, Subtotal, Payment Processing Fee and Order Total.
+2. Read the receipt PDF's lines, Subtotal, the row under it, Payment Processing Fee and Order Total.
 3. Read its Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due.
 
 **Expected Results:**
@@ -442,7 +443,8 @@ Runs once per row of **Test data**.
 * The lines read in USD as `<usd lines>`, with two decimals and Tax between Insurance and the Subtotal where the row has it.
 * Subtotal, Payment Processing Fee and Order Total read `<subtotal>`, `<fee>` and `<order total>` in HKD with two decimals, and the fee reads Free where it is zero.
 * Below the lines, Original Invoice Total reads `<order total>`, Previous Payments `<previous payments>`, Current Payment Received `<current payment>` and Remaining Balance Due `<remaining balance>`.
-* No rate and no conversion note is printed.
+* Directly under Subtotal, above Payment Processing Fee, the note reads `<note>`, drawn muted, its USD figure the sum of the lines above and never counting a bank transfer fee.
+* The payment breakdown below the lines carries no note.
 * Every figure equals the invoice and the Order Summary.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9dm rev=2 -->
@@ -565,8 +567,8 @@ Runs once per row of **Test data**.
 
 * The result is `<hkd subtotal>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-k5y rev=2 covers=g10.auction-winner-order.SC-ida -->
-### g10.auction-winner-order.US26-TC7: Only the Order Summary's note names the conversion rate
+<!-- trace:case id=g10.auction-winner-order.TC-k5y rev=3 covers=g10.auction-winner-order.SC-ida,g10.auction-winner-order.SC-63n -->
+### g10.auction-winner-order.US26-TC7: The note names the conversion rate on the Order Summary and the two PDFs, and nowhere else
 
 **Classification:**
 
@@ -597,14 +599,15 @@ Runs once per row of **Test data**.
 1. Read the settlement currency choice before picking HKD on a new order.
 2. Read Order Summary on `<winner_order_200_1>`.
 3. Read its invoice page.
-4. Read its invoice PDF.
-5. Read its receipt PDF.
+4. Read its invoice PDF from Subtotal down.
+5. Read its receipt PDF from Subtotal down.
 6. Read the payment reminder and the payment received letter sent for it, and each other letter.
 
 **Expected Results:**
 
-* The Order Summary names the rate once, in the note under the Subtotal, which names `<usd_sum>` and the rate 1 USD = 7.85 HKD.
-* The settlement currency choice, the invoice page, the invoice PDF, the receipt PDF and each letter name no rate, exchange rate or 7.85.
+* The Order Summary names the rate in the note under the Subtotal, which names `<usd_sum>` and the rate 1 USD = 7.85 HKD.
+* The invoice PDF and the receipt PDF each carry that note directly under Subtotal HK$1,030.00 and above Payment Processing Fee, drawn muted, with the same `<usd_sum>`.
+* The settlement currency choice, the invoice page, the payment reminder and each letter name no rate, exchange rate or 7.85.
 
 <!-- trace:case id=g10.auction-winner-order.TC-one rev=2 covers=g10.auction-winner-order.SC-8gv -->
 ### g10.auction-winner-order.US26-TC8: A bank transfer fee typed in USD converts alone and sits below the Subtotal
@@ -652,7 +655,7 @@ Runs once per row of **Test data**.
 * The total reads `<total HKD>`, the Subtotal plus the fee.
 * The lines read in USD, and the Subtotal, fee and total in HKD.
 
-<!-- trace:case id=g10.auction-winner-order.TC-c07 rev=1 covers=g10.auction-winner-order.SC-rsv -->
+<!-- trace:case id=g10.auction-winner-order.TC-c07 rev=2 covers=g10.auction-winner-order.SC-rsv -->
 ### g10.auction-winner-order.US26-TC10: Invoice page and PDF list USD lines then HKD Subtotal, fee and total
 
 Runs once per row of **Test data**.
@@ -688,10 +691,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
-| Row | `<invoice_document>` |
-| --- | --- |
-| Page | The invoice page the Invoice link opens |
-| PDF | The invoice PDF the Invoice link opens or downloads |
+| Row | `<invoice_document>` | `<rate_reading>` |
+| --- | --- | --- |
+| Page | The invoice page the Invoice link opens | No rate and no conversion note is named anywhere on the page |
+| PDF | The invoice PDF the Invoice link opens or downloads | Directly under Subtotal, above Payment Processing Fee, the note `Converted from US$251.00 at 1 USD = 7.85 HKD` reads in the muted style, and no other text names a rate |
 
 **Steps:**
 
@@ -705,7 +708,7 @@ Runs once per row of **Test data**.
 * Item lines read Winning Bid, Buyer's Premium, Shipping & Handling, Insurance and Tax, each in USD with two decimals.
 * Subtotal reads `<subtotal_1>` with two decimals, `<usd_sum_1>` times 7.85.
 * Payment Processing Fee reads `<fee_1>` and Order Total reads `<total_1>`, both in HKD with two decimals.
-* No rate and no conversion note is named anywhere in `<invoice_document>`.
+* Rate and note on `<invoice_document>`: `<rate_reading>`.
 * Every figure equals the Order Summary on Winner Order.
 
 <!-- trace:case id=g10.auction-winner-order.TC-b46 rev=1 covers=g10.auction-winner-order.SC-7q5 -->
@@ -1256,6 +1259,7 @@ Runs once per row of **Test data**.
 - The invoice page and the invoice PDF are two surfaces, and each lists the USD lines, then the HKD Subtotal, fee and Order Total (decisions Q21).
 - Every receipt, a part-payment receipt included, lists the lines above its running breakdown (decisions Q22).
 - Before the invoice is sent an HKD order's Order Summary shows no Subtotal row, no HKD amount and no note (decisions Q17, Q23).
+- The invoice PDF and every receipt PDF of an HKD order carry the Order Summary's note directly under the Subtotal, drawn muted, its USD figure the sum of the lines above and never counting a bank transfer fee; the invoice page and every letter name no rate; a USD order's PDFs carry no note (decisions Q8, Q33).
 
 ## Reconciliation
 
@@ -1265,11 +1269,13 @@ Runs once per row of **Test data**.
 
 **Run:** QA2, second reconciliation pass, 2026-10-22, in a fresh context. It read the repaired deltas of the five capabilities, `tasks.md`, `tech-design.md`, `proposal.md`, the journeys and `decisions.md` through Q31, the PRD sections they cite, and both QA1 passes. It merged QA1's new case into this suite, re-checked every durable case that states an amount or a line, recomputed every minor-unit figure, and wrote no case from a scenario. A case is linked to a scenario when its results assert every outcome the scenario's THEN and ANDs state, from a starting state of the same class and with values from the same partition; a clause a case leaves out keeps the link off and the scenario under Uncovered or Out of suite. It is a statement, not proof.
 
+**Run:** QA2, amendment pass, 2026-10-23, in a fresh context. For the owner's amendment (decisions Q8 revised, Q33: the invoice and receipt PDFs of an HKD order carry the conversion note under the Subtotal) it read the revised winner-order delta, the new `shared/ui/invoice-and-receipt-pdf` delta, `tech-design.md`, `tasks.md` 3.4 to 3.7 and 7.5 to 7.7, `decisions.md` through Q37 and QA1's PDF-block pass, and re-read every case of this suite that mentions a rate, a conversion note or a PDF. It wrote no case from a scenario; a case is linked as in the pass above. It is a statement, not proof.
+
 **Blind cases**
 
 | Case | Disposition |
 | --- | --- |
-| `US26-TC10` (`TC-c07`) | Kept. The Page row asserts the invoice-page scenario `g10.auction-winner-order.SC5` with its own fixture; the PDF row is the same claim on the PDF. Linked: SC5 |
+| `US26-TC10` (`TC-c07`) | Kept. The Page row asserts the invoice-page scenario `g10.auction-winner-order.SC5` with its own fixture; the PDF row is the same claim on the PDF. Linked: SC5. Amendment 2026-10-23: its result "no rate and no conversion note is named anywhere in `<invoice_document>`" held for the Page row and contradicted the PDF row; re-issued at `@2` with a `<rate_reading>` column, no note on the page and the note `Converted from US$251.00 at 1 USD = 7.85 HKD` under the PDF's Subtotal. Not linked to SC16, whose lines it does not use |
 | `US26-TC11` (`TC-b46`) | Kept. Page and PDF rows assert the free-charge scenario `g10.auction-winner-order.SC6`. Linked: SC6 |
 | `US26-TC12` (`TC-9ke`) | Regrouped into `US26-TC2` (`TC-nf6`): the receipt PDF of an HKD order is one surface, one starting state and one route. Its card-with-Tax fixture is row 2 of `TC-nf6`. Dropped; it was never published |
 | `US26-TC13` (`TC-q8e`) | Kept and unblocked: decisions Q29 settles the order page the operator reads the replaced invoice on. Linked: `g10.auction-winner-order.SC11`, which a card fixture with a lowered Shipping & Handling line asserts in the same class |
@@ -1287,12 +1293,12 @@ Every durable case below is `draft`; each rewrite keeps its marker id and bumps 
 | Durable case | Verdict | Action |
 | --- | --- | --- |
 | `US26-TC1` (`TC-ac5@3`) | Contradicted: each line converted to a whole HK$ and summed | Rewritten at `@4` over five rows; links SC-283, SC-284, SC-285, SC1 and SC2 |
-| `US26-TC2` (`TC-nf6@3`) | Contradicted: the receipt now lists USD lines | Rewritten at `@4` over three rows, with QA1's `TC12` folded in and a first part payment added; links SC4 and SC12 |
+| `US26-TC2` (`TC-nf6@3`) | Contradicted: the receipt now lists USD lines | Rewritten at `@4` over three rows, with QA1's `TC12` folded in and a first part payment added; links SC4 and SC12. Amendment 2026-10-23: its result "no rate and no conversion note is printed" contradicts the PDF note; rewritten again at `@5` with a `<note>` column, a fourth row for a bank transfer fee of USD2.57 (the fee adds nothing to the note's figure), and results for the note under Subtotal and none on the breakdown; links SC17 as well |
 | `US26-TC3` (`TC-9dm@1`) | Contradicted: "every amount in every letter reads HKD" fails for the receipt letter | Rewritten at `@2` |
 | `US26-TC4` (`TC-q56`) | Not moved: a refund reads in HKD (Non-Goals) | Left `draft` |
 | `US26-TC5` (`TC-3ly@2`) | Figures move to 3,869 and 106,869 | Rewritten at `@3`; keeps its link to SC-286 |
 | `US26-TC6` (`TC-uz6@2`) | Contradicted: rows round to a whole HK$ | Rewritten at `@3` |
-| `US26-TC7` (`TC-k5y@1`) | Contradicted: "no surface names a rate" fails for the Order Summary note | Rewritten at `@2` on the fixture of SC13, which names the invoice page and the invoice PDF apart; links SC13. `order-summary-hkd-conversion-note` is retracted, so its duplicate `US26-TC9` and the `TC-7qs` marker clash are gone |
+| `US26-TC7` (`TC-k5y@1`) | Contradicted: "no surface names a rate" fails for the Order Summary note | Rewritten at `@2` on the fixture of SC13, which names the invoice page and the invoice PDF apart; links SC13. `order-summary-hkd-conversion-note` is retracted, so its duplicate `US26-TC9` and the `TC-7qs` marker clash are gone. Amendment 2026-10-23: its last result put the invoice PDF and the receipt PDF among the surfaces naming no rate; rewritten at `@3` so both carry the note under Subtotal and the page, reminder and letters name none; links SC16 as well, since its invoice PDF read asserts the note on the lines of SC3 |
 | `US26-TC8` (`TC-one@1`) | Figures move to 39,250 and 142,250 | Rewritten at `@2`; keeps its link to SC-302 |
 | `US27-TC1` (`TC-vwm@4`) | Contradicted: HKD lines with USD beneath | Rewritten at `@6` over four rows; the lines now read with the US$ mark (decisions Q20); links SC-290, SC-304, SC9 and SC8 |
 | `US27-TC2` (`TC-7qs@1`) | SC-291 gains "no Subtotal row and no conversion note" | Rewritten at `@2` |
@@ -1320,8 +1326,8 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | SC-214 | `US1-TC31` |
 | SC-216 | `US1-TC33` |
 | SC11 | `US26-TC13` |
-| SC4, SC12 | `US26-TC2`, one row each |
-| SC13 | `US26-TC7` |
+| SC4, SC12, SC17 | `US26-TC2`, one row each; SC17 is the first and third rows (a full and a part payment of the lines of SC3) |
+| SC13, SC16 | `US26-TC7` |
 | SC5 | `US26-TC10` |
 | SC6 | `US26-TC11` |
 | SC-301 | none - restated by a follow-up amendment after `preselect-first-currency-payment-method` |
@@ -1334,17 +1340,20 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | SC-04, SC-287 | Out of suite, in the durable header |
 | SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-215, SC-278, SC-279, SC-280, SC-281, SC-282, SC-300 | Unchanged; they stay with the durable cases |
 
-**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15
+**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15, g10.auction-winner-order.SC18, g10.auction-winner-order.SC19, g10.auction-winner-order.SC20
 
-SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee beside a non-zero shipping line, and SC7 a USD order's documents staying in USD. The block tests of task 3.1 in this store (`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/fixtures.test.ts`, `invoice-pdf.test.ts` and `receipt-pdf.test.ts`) and the PDF tests of task 7.1 in the application repository (`invoicePdf.test.ts`, `receiptPdf.test.ts`) verify both. `US26-TC10` and `TC11` read the same documents by hand. SC15 is an invoice sent before USD facts were stored, which no tester can create now; the breakdown tests of task 6.1 (`invoicePricing.test.ts`, which drops the note when a line has no USD fact) verify it, and `US27-TC11` reads the sibling pre-layout case by hand.
+SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee beside a non-zero shipping line, SC7 a USD order's documents staying in USD, and SC18 that a USD order's invoice and receipt PDFs carry no note and no gap under Subtotal. The block tests of tasks 3.1 and 3.4 to 3.6 in this store (`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/fixtures.test.ts`, `invoice-pdf.test.ts` and `receipt-pdf.test.ts`) and the PDF tests of tasks 7.1 and 7.5 in the application repository (`invoicePdf.test.ts`, `receiptPdf.test.ts`, which hold a USD invoice and receipt without a note) verify the three. No hand case opens a USD order's PDFs; the walk of task 11.1 reads an HKD order's. `US26-TC10` and `TC11` read the same documents by hand. SC15 is an invoice sent before USD facts were stored, which no tester can create now; the breakdown tests of task 6.1 (`invoicePricing.test.ts`, which drops the note when a line has no USD fact) verify it, and `US27-TC11` reads the sibling pre-layout case by hand.
+
+SC19 is the same invoice and its receipt, with no USD fact on a line, drawn without a note and without a gap, and a card order whose fee alone lacks a fact keeping it. No tester can create the first order now, so a link would assert half the scenario; `US26-TC10` (PDF row) and `US26-TC2` (card row) read a card order's invoice and receipt PDFs with the note by hand, which is the second clause only, and carry no link. The note tests of task 7.5 (`invoicePdf.test.ts`, `receiptPdf.test.ts`) verify both clauses, with the breakdown tests of task 6.1. SC20 is a pre-layout HKD invoice, stored Subtotal 103100, whose PDF carries the note beside `HK$1,031.00`; `US27-TC11` reads that order's Order Summary and opens no PDF, and no other hand case opens a pre-layout invoice's PDF. The note test of task 7.5 for a pre-layout invoice verifies it, and task 7.6 wires the note.
 
 **Uncovered**
 
-- None. SC15 (a line with no USD fact reads in HKD, note dropped) is Out of suite below
+- None. SC15, SC19 and SC20 are Out of suite below, each with its verifier
 
 **Over-claimed**
 
 - The legacy `covers` lists named above
+- `US26-TC2` links SC17 with a first row whose lines and payment are SC17's own and a third row for its part payment, and adds a card row and a fee row that SC17 does not state; `US26-TC7` links SC16 through its invoice PDF read, on the same lines
 - `US26-TC13` is linked to SC11 with a fixture of the same class, not SC11's own figures; `US27-TC6` carries outcomes no scenario states, the requirement's table
 
 **Contradictions between the readings**
@@ -1355,12 +1364,16 @@ SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee 
 
 | Anchor | Cases | Scenarios |
 | --- | --- | --- |
-| `winner-order-US-26` (documents) | `US26-TC1`, `TC2`, `TC3`, `TC5` to `TC8`, `TC10`, `TC11`, `TC13`; `TC4` is unchanged | All; SC3, SC7 and SC-287 out of suite |
-| `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC11` | SC-290, SC-304, SC-291, SC-292, SC8, SC9, SC10 and SC14 covered; SC15 out of suite |
+| `winner-order-US-26` (documents) | `US26-TC1`, `TC2`, `TC3`, `TC5` to `TC8`, `TC10`, `TC11`, `TC13`; `TC4` is unchanged | All; SC3, SC7, SC18, SC19, SC20 and SC-287 out of suite |
+| `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC11` | SC-290, SC-304, SC-291, SC-292, SC8, SC9, SC10 and SC14 covered; SC15, SC19 and SC20 out of suite |
 | `winner-order-US-24` (context) | `US24-TC2`, `TC7` | SC-281 covered; SC-301 waits for its follow-up amendment; the rest stay with the durable cases |
-| Root group Settlement currency | `US26-TC1`, `TC2`, `TC5`, `TC6`, `TC7`, `TC8`, `TC10`, `TC11`, `TC13` | Convert once, cent rounding, bank fee, rate named once, same lines on every document |
+| Root group Settlement currency | `US26-TC1`, `TC2`, `TC5`, `TC6`, `TC7`, `TC8`, `TC10`, `TC11`, `TC13` | Convert once, cent rounding, bank fee, rate named in the note only (SC13), same lines on every document, note on the PDFs (SC16, SC17 covered; SC18, SC19, SC20 out of suite) |
 | Root group Order summary | `US27-TC1`, `TC2`, `TC3`, `TC8`, `TC11` | All four lines of the group |
 | Root group Invoice | `US1-TC33`, `US26-TC5` | Fee base |
+
+**Existing cases the amendment leaves alone**
+
+- `US26-TC1` reads the invoice page and asserts nothing about a rate or a PDF (QA1's "step 5" is not in this suite; the case has three steps), so the note on the PDF does not touch it. `US26-TC3` asserts that no letter prints a rate and that the payment received letter lists the lines; the letters still name none, and the receipt PDF attached to the letter is not read by it. `US26-TC11` reads the Page and PDF rows of a Free-lines order and asserts no rate; its PDF row now carries the note, which none of its results denies. `US27-TC1` to `TC3` and `TC6` to `TC11` read the Order Summary, whose note is unchanged. `US2-TC1` and `US1-TC31` read PDF lines and Tax and say nothing of a note. All stay `draft` at their rev
 
 **Raised**
 
