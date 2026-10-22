@@ -5,6 +5,8 @@
 - Quote and send
   - Quote in USD: the operator types every amount, the bank transfer fee included, in USD
   - HKD preview: the quote preview reads the USD lines typed, then the HKD Subtotal, fee and total, with no rate
+- Order page
+  - Sent HKD invoice: the order page lists the USD lines, then the HKD Subtotal, Payment Processing Fee and Total, and the reissue history shows a changed line in USD and the fee and total in HKD
 
 ## MODIFIED Requirements
 
