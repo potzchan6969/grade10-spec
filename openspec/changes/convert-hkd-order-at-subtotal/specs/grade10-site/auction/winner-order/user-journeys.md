@@ -25,6 +25,13 @@ is still owed, a tracker, and proof of what was handed over,
 **I want** to settle in USD or HKD when I set the order up,
 **so that** I pay in the currency my money is already in.
 
+### winner-order-US-08: Winner pays an invoice with a policy premium
+
+**As a** winner of an auction lot,
+**I want** my invoice to calculate the stated buyer premium correctly using the
+one USD minimum,
+**so that** the amount I pay is explainable and collectible.
+
 ## ADDED User journeys
 
 ## MODIFIED User journeys

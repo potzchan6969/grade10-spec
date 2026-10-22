@@ -386,6 +386,19 @@ receipt or letter.
 - **AND** the replaced invoice still reads a Subtotal of 103000 minor units in
   HKD
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-ygl rev=1 -->
+#### Scenario: g10.auction-winner-order.SC14 - An HKD invoice sent under the per-line rule reads in the new layout from its stored amounts
+**Serves:** winner-order-US-27 - the winner of an invoice sent before this layout reads it
+
+- **GIVEN** a Pending Payment order whose HKD invoice was sent under the per-line
+  rule, with USD lines of 10100, 2020 and 1001 minor units, a stored Subtotal of
+  103100 minor units in HKD and a stored Order Total of 103100
+- **WHEN** the winner opens Winner Order
+- **THEN** the Order Summary lists the USD lines, then the Subtotal at the stored
+  103100 minor units in HKD, with the note
+  `Converted from US$131.21 at 1 USD = 7.85 HKD` under it
+- **AND** Order Total reads `HK$1,031.00`, and nothing is re-priced
+
 <!-- trace:scenario id=g10.auction-winner-order.SC-ida rev=1 -->
 #### Scenario: g10.auction-winner-order.SC13 - Only the Order Summary's note names the rate
 **Serves:** winner-order-US-26 - the winner finds the rate once, where the HKD total comes from

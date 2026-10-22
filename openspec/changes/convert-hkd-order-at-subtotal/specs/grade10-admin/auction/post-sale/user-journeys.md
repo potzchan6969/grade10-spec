@@ -18,6 +18,19 @@
 **I want** to see how long an unpaid order has waited, and settle, reissue, or cancel it from the order itself,
 **so that** a lot whose winner has not paid stops being an open-ended obligation.
 
+### post-sale-US-08: Operator reconstructs an order's history
+
+**As an** operator deciding whether to reinstate a buyer,
+**I want** every invoice and fulfilment log entry on the order, including the
+payments that failed,
+**so that** I can tell a buyer who tried and could not from one who never engaged.
+
+### post-sale-US-18: Operator reopens the address form
+
+**As an** operator,
+**I want** to give a winner who missed the 48-hour address deadline a fresh 48 hours, with my reason on the record,
+**so that** a winner who got in touch can finish the order without me cancelling the lot.
+
 ## ADDED User journeys
 
 ### post-sale-US-21: Operator previews the HKD total a quote will charge

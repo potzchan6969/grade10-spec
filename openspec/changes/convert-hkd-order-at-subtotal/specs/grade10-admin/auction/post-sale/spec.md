@@ -31,7 +31,7 @@ receipt's receipt ID and internal audit number, per
 | Payment deadline at the log entry | The deadline trail across reissues and returned proof |
 | Time left | Proof uploaded and proof returned entries |
 | Deadline choice | Reissues only: kept or restarted |
-| Changed parts | Order edited before send: delivery address, payment method or both. Reissues: each of delivery address, payment method, payment processing fee, Shipping & Handling, Insurance, Tax and deadline that changed. Each with its value before and after, and Tax with no amount where the invoice carried none. A Shipping & Handling, Insurance or Tax part reads in USD, the amount the operator typed; the payment processing fee and the order total read in the invoice's currency |
+| Changed parts | Order edited before send: delivery address, payment method or both. Reissues: each of delivery address, payment method, payment processing fee, Shipping & Handling, Insurance, Tax and deadline that changed. Each with its value before and after, and Tax with no amount where the invoice carried none. A Shipping & Handling, Insurance or Tax part reads in USD, the amount the operator typed; the payment processing fee and the order total read in the invoice's currency. A change that moves a card invoice's Subtotal moves its fee, so the fee is named as a changed part too |
 | Reissue sequence number | Where the log entry is a reissue |
 | Actor | The buyer, the system, or a named operator |
 | Payment method | Paid, payment recorded and flagged payment entries: a card with its brand and last four digits, or bank transfer, cash, or other with its description |
@@ -133,6 +133,22 @@ reinstatement.
   1001 minor units in USD before and 2001 minor units in USD after
 - **AND** the entry's order total reads 110850 minor units in HKD and its amount
   delta 7850 minor units in HKD
+- **AND** it names no other part as changed
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-u9x rev=1 -->
+#### Scenario: g10adm.auction-post-sale.SC9 - A line change on a card invoice names the fee too
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an HKD order whose card invoice has USD lines of 25000, 5000, 8000 and
+  2000 minor units, a Subtotal of 314000 and a payment processing fee of 11296
+  minor units in HKD, from an HKD card rule of 3.4 per cent and 235 minor units
+- **AND** an operator reissued it with Shipping & Handling of 8500 minor units in
+  USD and a reason, changing nothing else
+- **WHEN** an operator reads the invoice log
+- **THEN** the reissued entry names Shipping & Handling, 8000 before and 8500 after
+  in USD, and the payment processing fee, 11296 before and 11434 after in HKD, as
+  changed
+- **AND** its order total reads 329359 minor units in HKD
 - **AND** it names no other part as changed
 
 ### Requirement: The quote is typed in USD and read in the settlement currency
