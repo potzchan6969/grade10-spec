@@ -15,8 +15,9 @@ change: today every one does, and after this change none does.
   and coarser at high ones: $2 from $10, $25 from $200, $100 from $1,000,
   $1,000 from $10,000, and $100,000 from $1,500,000. Below $10 stays $1.
 - The schedule is configuration. The requirement states the rule alone:
-  lower-inclusive tiers, the tier chosen from the amount being beaten, the last
-  tier unbounded. It carries no increment value.
+  lower-inclusive tiers, a lowest tier from $0, the tier chosen from the amount
+  being beaten, the last tier unbounded. It carries no increment value, so the
+  lowest tier is retuned like any other.
 - A change to the configured values reaches the next bid on every lot, open
   lots included. A bid already standing keeps its amount.
 - The manual shows the values in force, so a reader sees the latest
@@ -49,6 +50,15 @@ None.
   reads it.
 - **Tests** - the scenarios and e2e cases that quote a tier amount are
   rewritten against the configured values.
+- **Neighbouring specs** - `auto-bidding`, `bidding-history`, `auction`,
+  `account-record` and `grade10-admin/auction/internal-bid` quote amounts from
+  the old tiers. They get no delta: their amounts read as examples under other
+  configuration values, and only the application's tests and fixtures are
+  rewritten.
+- **Depends on** - `usd-lot-currency-winner-settlement-choice`, which also
+  modifies this capability and archives first, as its `depends_on` records.
+  This change owns the rule-and-configuration text; that one owns the USD-only
+  requirement.
 
 ## References
 

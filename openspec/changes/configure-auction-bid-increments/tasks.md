@@ -1,6 +1,6 @@
 ## 1. Manual table and PRD (grade10-spec)
 
-Lands first: the submodule bump is the boundary for the grade10 groups.
+Lands first: the submodule bump is the boundary for the grade10 groups. It lands after `usd-lot-currency-winner-settlement-choice` archives (`depends_on`, Q15), so this delta states against that change's folded text.
 
 - [ ] 1.1 Check the table under `### Bid Increments` in `docs/prds/products/grade10-site/auction/bidding.md` is the shape the grade10 drift test parses: one table headed From and Increment, every published row kept, ascending, and that the page and the delta state no tier amount as a rule (`grade10-site-auction-bid-increments-SC-02`, `grade10-site-auction-bid-increments-SC-07`)
 - [ ] 1.2 Update the Bidding PRD page for the capability: the 🚧 line on the configured schedule stays until the walk is verified, and the page names the configuration file's path
@@ -8,10 +8,11 @@ Lands first: the submodule bump is the boundary for the grade10 groups.
 
 ## 2. Configuration and lookups (grade10)
 
-- [ ] 2.1 Tests first, in their own commit: contracts tests for the boundary at every configured tier and one below it, the first-tier-from-0 rule, the validator's refusals, the change cases through two schedules, and the manual-table equality test (`g10.auction-bid-increments.SC-mn9`, `g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-w8f`, `g10.auction-bid-increments.SC-a64`, `g10.auction-bid-increments.SC-bj0`, `g10.auction-bid-increments.SC-ywg`)
-- [ ] 2.2 Add `bidIncrementSchedule.ts` in the contracts package with Goldin's rows in USD minor units and a load-time validator; rewrite `bidIncrements.ts` to read it and add the pure `incrementIn` and `nextAmountIn` lookups, keeping every existing export (`g10.auction-bid-increments.SC-mn9`, `g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-a64`)
-- [ ] 2.3 Add `test/bidIncrementsManual.test.ts`: read the Bidding page from `external/grade10-spec`, parse the first From and Increment table, and assert it equals the configuration row for row
-- [ ] 2.4 Verify: the contracts package `typecheck` and `test`, then a grep that finds no tier amount outside the contracts package and that test
+- [ ] 2.1 Tests first, in their own commit: contracts tests for the boundary at every configured tier and one minor unit below it, the lookup for 0 and for an amount above every lower bound, the shared schedule on every lot, the change cases through two schedules, and the manual-table equality test (`g10.auction-bid-increments.SC-mn9`, `g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-w8f`, `g10.auction-bid-increments.SC-a64`, `g10.auction-bid-increments.SC-bj0`, `g10.auction-bid-increments.SC-ywg`, `g10.auction-bid-increments.SC-p50`, `g10.auction-bid-increments.SC-bs0`)
+- [ ] 2.2 Validity test first, in the same commit as 2.1: `test/bidIncrementScheduleValid.test.ts` asserts on the configured constant that it has a tier from 0, rows ascending with no shared lower bound, positive whole increments, a non-empty list and an unbounded last tier, and names no increment value; it runs in the contracts CI (Q12, Q13)
+- [ ] 2.3 Add `bidIncrementSchedule.ts` in the contracts package with Goldin's rows in USD minor units and no validator code; rewrite `bidIncrements.ts` to read it and add the pure `incrementIn` and `nextAmountIn` lookups, keeping every existing export (`g10.auction-bid-increments.SC-mn9`, `g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-a64`)
+- [ ] 2.4 Add `test/bidIncrementsManual.test.ts`: read the Bidding page from `external/grade10-spec`, parse the first From and Increment table, and assert it equals the configuration row for row
+- [ ] 2.5 Verify: the contracts package `typecheck` and `test`, including the validity test, then a grep that finds no tier amount outside the contracts package and that test
 
 ## 3. Backend (grade10)
 
@@ -33,7 +34,7 @@ Needs group 2 landed; verified against contracts and fixtures, not a running bac
 
 Needs groups 2 and 3 landed.
 
-- [ ] 5.1 Tests first, in their own commit: rewrite `tests/auction/bid-increments.spec.ts` to derive the floor, above and below amounts and the 10000 boundary row from the configuration, with one boundary case per configured tier through `plusIncrement` (`g10.auction-bid-increments.SC-mn9`, `g10.auction-bid-increments.SC-u6t`, `g10.auction-bid-increments.SC-b2w`, `g10.auction-bid-increments.SC-xjw`)
+- [ ] 5.1 Tests first, in their own commit: rewrite `tests/auction/bid-increments.spec.ts` to derive the lowest-tier, above and below amounts and the 10000 boundary row from the configuration, with one boundary case per configured tier through `plusIncrement` (`g10.auction-bid-increments.SC-mn9`, `g10.auction-bid-increments.SC-u6t`, `g10.auction-bid-increments.SC-b2w`, `g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-p50`)
 - [ ] 5.2 Audit `opening-price`, `auction-bids`, `auction`, `account-record`, `bidding-history`, `internal-bid` and `phone` specs for literal tier-derived amounts, and move each to `plusIncrement` or the configuration (`g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-w8f`)
 - [ ] 5.3 Verify: the local e2e lane for the auction specs
 

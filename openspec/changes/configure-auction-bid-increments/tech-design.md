@@ -20,12 +20,20 @@ The collector site's minimum shown on the bid form is the backend's `minimumNext
 
 The working tree of branch `claude/bid-increments-alignment-99505e` already holds an inline version of the new values in `bidIncrements.ts` and its tests. It omits the $1,000,000 row, which repeats the $600,000 increment. Under this design the row stays, so the table and the configuration match row for row.
 
+## Dependency
+
+This change `depends_on` the accepted open change `usd-lot-currency-winner-settlement-choice` (Q15), which also modifies `grade10-site/auction/bid-increments`. It archives first, so this delta's MODIFIED blocks state against its folded text.
+- **Ours** - the rule-and-configuration text of "Grade10 owns the supported-currency schedules" and "The minimum uses the amount being beaten", with no literal tier table.
+- **Theirs** - the ADDED "Every lot is bid in USD" requirement and the USD-only settlement content. This delta restates that requirement with its text copied, and rewrites only `SC-13`, whose quoted amount follows the old tiers.
+- **Ids** - scenarios `SC-01` to `SC-05`, `SC-07` and `SC-12`, and cases `TC-2ed`, `TC-0lh` and `TC-sze`, appear in both changes. Where the text differs, this change carries the higher `rev`.
+- **Sheet** - the cluster sheet is `reconciliation.md` in their change directory.
+
 ## Goals / Non-Goals
 
 **Goals:**
 - One configuration file holds the values; backend, collector site, admin preview, demo and e2e read it.
 - A retune is one pull request that edits the configuration and the manual table, with a test that fails when they differ.
-- A bad file fails at start, not on the first bid.
+- A bad file fails a test in CI, so it never merges and never ships (Q12).
 
 **Non-Goals:**
 - A runtime store, screen or API for the values, per [decisions Q1](decisions.md#decisions).
@@ -34,14 +42,17 @@ The working tree of branch `claude/bid-increments-alignment-99505e` already hold
 
 ## Decisions
 
-**Where the values live.** The spec governs the lookup rule; the implementation choice is a typed module `packages/grade10-auction/contracts/src/bidIncrementSchedule.ts` that exports one constant: the currency, and an ordered list of `{ fromMinor, incrementMinor }` rows in integer USD minor units. `bidIncrements.ts` imports it and keeps its exported functions and signatures.
-- Alternative - a JSON file: rejected because the e2e helper and the demo import contract sources as `.ts` directly, and a typed module gives the type check and the validator one place without import attributes in each loader.
+**Where the values live.** The spec governs the lookup rule; the implementation choice is a typed module `packages/grade10-auction/contracts/src/bidIncrementSchedule.ts` that exports one constant: the currency, and an ordered list of `{ fromMinor, incrementMinor }` rows in integer USD minor units. `bidIncrements.ts` imports it and keeps its exported functions and signatures. The lowest tier is the first row and holds no fixed value: `openingPrice` on a 0 start is `incrementIn(schedule, 0)`, the lowest configured increment (Q13).
+- Alternative - a JSON file: rejected because the e2e helper and the demo import contract sources as `.ts` directly, and a typed module gives the type check and the validity test one place without import attributes in each loader.
 - Alternative - the file in the spec store, read as the i18n catalogs are: rejected because a retune would then need a store change, a submodule bump and a deploy, and the manual could not tell the deploy which values are in force. Decision Q1 names pull request and deploy.
 - Alternative - a database row or an environment variable: rejected by Q1.
 
 **One source for every reader.** `@grade10/auction-contracts` stays the only import path. The backend, the collector site, the admin preview and the demo already import it, so none of them changes its import. The e2e helper keeps its relative import of `bidIncrements.ts`. No file outside the contracts package may hold a tier amount; the verification task greps for this.
 
-**Fail fast.** The module validates the constant when it loads and throws on: a first row not from 0, or not 100; rows not strictly ascending by `fromMinor`; a non-integer or non-positive increment; an empty list. Equal increments on adjacent rows are allowed, so the table can keep every published Goldin row. A contracts test feeds each broken shape to the validator.
+**Validity is a test.** Per Q12, the product manager's own answer, nothing validates the constant when it loads. A contracts test, `test/bidIncrementScheduleValid.test.ts`, runs in CI and asserts on the configured constant: the first row is from 0; rows ascend strictly by `fromMinor`, so no two rows share a lower bound and none overlap; every increment is a positive whole number of minor units; the list is not empty; and the last tier is unbounded, which the lookup shows by selecting the last row for an amount above every `fromMinor`. Equal increments on adjacent rows are allowed, so the table can keep every published Goldin row. The test names no increment value, so the lowest tier is retuned like any other (Q13).
+- A failing test blocks the pull request, so the bad file does not merge and the last deployed schedule stays in force.
+- A merge that skips CI is not guarded at run time. This is the cost of Q12's answer; the spec states the rule and the test enforces it.
+- Rejected, by Q12: a validator that throws when the module loads, with a test per broken shape.
 
 **Pure lookups take the schedule.** `bidIncrement(currency, amount)` and `nextBidAmount` bind the configured schedule. Beside them the module exports `incrementIn(schedule, amount)` and `nextAmountIn(schedule, amount)` as pure functions, and `bidFloor` takes an optional schedule argument that defaults to the configured one. The contracts vitest project runs with `isolate: false` and no module mocks, so the change tests cannot mock the file. They pass a second schedule instead.
 
@@ -61,9 +72,9 @@ The working tree of branch `claude/bid-increments-alignment-99505e` already hold
 
 **The admin preview.** `NextBids` in `ListingEditor.tsx` calls `openingPrice` and `nextBidAmount`; it follows the file with no change.
 
-**Neighbouring capabilities.** No other capability's behaviour changes: each states that its increment is the one `bid-increments` selects. Their scenarios and worked examples that quote old-tier amounts are listed below. Whether they get deltas in this change is a Raised row in [decisions](decisions.md#raised); until it closes, they are a test-data rewrite.
+**Neighbouring capabilities.** No other capability's behaviour changes: each states that its increment is the one `bid-increments` selects. Their scenarios and worked examples that quote old-tier amounts are listed below. Per Q14, the product manager's own answer, they get no delta in this change: the application repository's tests and fixtures are rewritten, and each durable spec's worked amount is read as an example under a different set of configuration values, so it does not contradict the configured schedule. These specs are example-only.
 
-| Capability | Where | Amount that follows the old tiers |
+| Capability (example-only, no delta) | Where | Amount that follows the old tiers, read as an example |
 | --- | --- | --- |
 | `auto-bidding` | Two-maximum table; `SC-30a`; house worked example; `SC-38`; the "Starting price 20000, increment 2500" example | 1100 after a maximum of 1000, 25500 and 40500, 53000, 52500 and 82500 |
 | `bidding-history` | Boundary-case requirement, `SC-35`, `SC-36` | 1100 as one increment above a maximum of 1000 |
@@ -71,19 +82,19 @@ The working tree of branch `claude/bid-increments-alignment-99505e` already hold
 | `account-record` | `SC-71` | A minimum of 30500 at a current bid of 30000 |
 | `grade10-admin/auction/internal-bid` | `SC-09`, `SC-44`, `SC-13` | A minimum of 53000 at 52000; 52000 at 51000 |
 
-The domain suite `openspec/specs/grade10-site/auction/domain-tcs.md` quotes tier amounts too (increments of USD 25 and USD 50, and USD 10 steps). QA owns that suite; the walk rewrites its fixtures.
+The domain suite `openspec/specs/grade10-site/auction/domain-tcs.md` quotes tier amounts too (increments of USD 25 and USD 50, and USD 10 steps). The same reading applies: they are examples. QA owns that suite; the walk rewrites its fixtures.
 
 ## Test data
 
-- **Unit** - Contracts tests assert each configured boundary through the configuration (`incrementIn` at each `fromMinor` and at `fromMinor - 1`), the validator, the manual table equality, and the change cases through two schedules. Backend, frontend and demo tests that quote tier amounts compute them from the configuration, or, where the amount is the point, from the manual table's values.
+- **Unit** - Contracts tests assert each configured boundary through the configuration (`incrementIn` at each `fromMinor` and at `fromMinor - 1`), the validity test, the manual table equality, and the change cases through two schedules. Backend, frontend and demo tests that quote tier amounts compute them from the configuration, or, where the amount is the point, from the manual table's values.
 - **Fixtures** - `packages/grade10-auction/frontend/src/core/api/listingFixtures.ts` and `packages/grade10-auction/admin-frontend/src/core/api/FixtureAuctionAdminProcedureClient.ts` hold literal `minimumNextAmount` values. Each is recomputed from its listing's current bid.
 - **Backend DB lane** - `apps/backend/grade10/auction/test/db/bidding/{openingPrice,placeBid,autoBidding,resolveStandingMaxima}.spec.ts`, `listings/{live,schedule}.spec.ts` and `internalBids/commit.spec.ts` assert amounts. The change cases seed an open lot with a standing leader, take `bidFloor` under two schedules, and assert the stored rows are identical before and after.
-- **E2E** - `apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts` holds `USD_FLOOR`, `USD_ABOVE_FLOOR`, `USD_BELOW_FLOOR`, the 10000 boundary row and the ceiling minimum as literals. The rewrite derives each from the configuration: one boundary case per configured tier through `plusIncrement`, and "above" and "below" as the minimum plus 100 and minus 1. E2E cannot swap values at run time, so it proves the wiring from the file to the page; the change cases belong to the unit and DB lanes. Other specs that call `plusIncrement` (`auction-bids`, `auction`, `account-record`, `internal-bid`, `phone`) compute through the helper and need an audit for literals, not a rewrite.
+- **E2E** - `apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts` holds `USD_FLOOR`, `USD_ABOVE_FLOOR`, `USD_BELOW_FLOOR`, the 10000 boundary row and the ceiling minimum as literals. The rewrite derives each from the configuration: one boundary case per configured tier through `plusIncrement`, and "above" and "below" as the minimum plus one major unit and minus one minor unit. E2E cannot swap values at run time, so it proves the wiring from the file to the page; the change cases belong to the unit and DB lanes. Other specs that call `plusIncrement` (`auction-bids`, `auction`, `account-record`, `internal-bid`, `phone`) compute through the helper and need an audit for literals, not a rewrite.
 
 ## Risks / Trade-offs
 
 - [The manual table and the file drift] → The manual-equality test fails the grade10 build on any difference, and it keeps every published row so no normalisation hides one.
-- [A bad edit reaches a deployed bundle] → The load-time validator throws, so the Worker and the collector bundle fail their tests and their start, never a bid.
+- [A bad edit reaches a deployed bundle] → The validity test fails the contracts CI, so the pull request cannot merge and the last deployed schedule stays in force. A merge that bypasses CI is not guarded at run time; Q12 accepts this.
 - [Backend and collector site run different values for a short window] → The minimum shown and enforced is the backend's. A stale chip is refused with the existing refusal; nothing is mis-accepted.
 - [Bidders who planned on the old steps see a new minimum on deploy] → This is the BREAKING note in the proposal and is intended; a deploy during a live close moves the minimum under bidders. Retunes belong outside the closing hours of lots. This is operations, not code.
 - [A re-stand under new values can lower a price] → It follows the existing "never rise" rule. No stored price is rewritten by the deploy itself.
@@ -92,6 +103,6 @@ The domain suite `openspec/specs/grade10-site/auction/domain-tcs.md` quotes tier
 ## Migration Plan
 
 1. Store: land the manual table and the delta; the submodule bump is the boundary.
-2. grade10: bump the submodule, add the configuration file and validator, rewrite the lookups over it, rewrite tests and fixtures, merge.
+2. grade10: bump the submodule, add the configuration file and its validity test, rewrite the lookups over it, rewrite tests and fixtures, merge.
 3. Deploy backend and collector site together. No database migration, no backfill.
 4. Rollback is a revert of the grade10 pull request and a redeploy. It moves the minimum back the same way, and standing bids stay untouched in both directions.

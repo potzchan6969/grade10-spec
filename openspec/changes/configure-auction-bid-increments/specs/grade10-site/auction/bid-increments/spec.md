@@ -10,7 +10,7 @@ configuration; this capability holds the rule that reads them.
 
 - Currency schedules
   - Configured schedule: the USD tiers are configuration, one for every auction, and no requirement states a tier amount
-  - Schedule shape: lower-inclusive tiers, the last tier unbounded, a $1 floor tier from $0
+  - Schedule shape: lower-inclusive tiers, the last tier unbounded, a lowest tier from $0
   - A change takes effect on the next bid: open lots included, standing bids untouched
 - Minimum bid
   - One lookup rule: manual and proxy bidding select the tier from the amount being beaten, read from the configured schedule
@@ -22,15 +22,17 @@ configuration; this capability holds the rule that reads them.
 
 Grade10 SHALL price Auction listings only in `USD`. One schedule governs every
 auction. The schedule is configuration, not a requirement: an ordered set of
-lower-inclusive price tiers, each pairing a Price from with an Increment. Every
-amount is an integer count of minor units paired with `USD`. No requirement
-states a tier amount, and the values in force are the configuration's, shown
-under Bid Increments on the Bidding page of the manual.
+lower-inclusive price tiers, each pairing a Price from with an Increment. The
+last tier has no upper bound. Every amount is an integer count of minor units
+paired with `USD`. No requirement states a tier amount, and the values in force
+are the configuration's, shown under Bid Increments on the Bidding page of the
+manual.
 
-The schedule SHALL hold a first tier from 0 whose increment is 100 minor units,
-so no amount lies below the first tier. Tiers SHALL ascend by Price from, every
-increment SHALL be a positive whole number of minor units, and the last tier
-SHALL have no upper bound.
+The schedule SHALL hold a first tier from 0, so no amount lies below the first
+tier. Like every other tier, the first tier's increment is a configured value.
+Tiers SHALL ascend by Price from with no two tiers sharing one, every increment
+SHALL be a positive whole number of minor units, and the schedule SHALL NOT be
+empty.
 
 Grade10 SHALL select the tier with the greatest Price from that does not exceed
 the amount being raised from. It SHALL NOT retain a per-listing increment or
@@ -63,7 +65,7 @@ id. The title is historical: a first bid may stand on the starting price.
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open USD listing whose minimum bid is M minor units
-- **WHEN** a collector bids M plus 100 minor units
+- **WHEN** a collector bids a whole amount greater than M minor units
 - **THEN** Grade10 accepts the bid
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-b2w rev=2 -->
@@ -81,6 +83,25 @@ id. The title is historical: a first bid may stand on the starting price.
 - **WHEN** a collector reads an open listing
 - **THEN** its facts include the minimum next amount as integer minor units in USD
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-p50 rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-21 - Every lot reads the same schedule
+**Serves:** grade10-site-auction-bid-increments-US-03 - Collector bids in USD on every lot
+
+- **GIVEN** two open USD listings with different starting prices and categories, each with a current bid of P minor units
+- **WHEN** Grade10 calculates the minimum bid of each listing
+- **THEN** both minimum bids are P plus the increment the configured schedule selects for P
+- **AND** neither listing holds an increment or a schedule of its own
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-bs0 rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-22 - The schedule starts at 0 and its last tier is unbounded
+**Serves:** grade10-site-auction-bid-increments-US-03 - Collector bids in USD on every lot
+
+- **GIVEN** the configured schedule
+- **WHEN** Grade10 selects the tier for the amount 0, and for an amount above the Price from of every tier
+- **THEN** the tier for 0 is the first tier, so no amount lies below it
+- **AND** the tier for the larger amount is the last tier, whatever that amount
+- **AND** every amount from 0 upward falls in exactly one tier
+
 ### Requirement: The minimum uses the amount being beaten
 
 Before any accepted bid, the minimum next amount SHALL be the listing's
@@ -97,19 +118,19 @@ refuse an amount below it. It SHALL not create intermediate bids.
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-xjw rev=3 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-07 - A manual floor uses the current public price
-**Serves:** Minimum bid - a manual floor uses the current public price
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open USD listing whose current public price is P minor units, and whose configured tier for P has an increment of X minor units
 - **WHEN** Grade10 calculates the next minimum
 - **THEN** the minimum is P plus X minor units
 
-<!-- trace:scenario id=g10.auction-bid-increments.SC-w8f rev=2 -->
+<!-- trace:scenario id=g10.auction-bid-increments.SC-w8f rev=3 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-12 - A 0 start opens at the lowest increment
-**Serves:** grade10-site-auction-bid-increments-US-01 - Collector enters the opening bid on a lot that starts at nothing
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open `USD` listing with a starting price of 0 and no accepted bid
 - **WHEN** a collector reads its minimum bid
-- **THEN** Grade10 reports 100 minor units
+- **THEN** Grade10 reports the increment of the lowest configured tier, the tier that holds 0
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-a64 rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-17 - A changed schedule moves the next minimum on an open lot
