@@ -431,6 +431,10 @@ Total in HKD. The Subtotal is the invoice's Subtotal. No USD total shows.
 Every USD line SHALL read with the symbol `US$` and two decimals, as
 `US$150.00`.
 
+A line with no USD fact on record, as on an invoice sent before USD facts were
+stored, SHALL read in the settlement currency, and the Subtotal row then carries
+no note.
+
 The Subtotal row SHALL carry the note `Converted from US$X at 1 USD = 7.85 HKD`,
 where X is the USD sum of the lines above it. The Payment Processing Fee, card or
 bank transfer, SHALL add nothing to X. The note is the one place the summary
@@ -540,6 +544,86 @@ and no note. The lot card SHALL keep the winning bid in USD.
 - **AND** the Subtotal reads 95142 minor units in HKD, with the note
   `Converted from US$121.20 at 1 USD = 7.85 HKD` under it, and the Payment
   Processing Fee reads Free
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-d50 rev=1 -->
+#### Scenario: g10.auction-winner-order.SC15 - A line with no USD fact reads in HKD and the note is dropped
+**Serves:** winner-order-US-27 - the winner of an invoice sent before USD facts were stored reads it
+
+- **GIVEN** a Pending Payment order whose HKD invoice was sent with no USD fact
+  on record, lines of 79300, 15900 and 7900 minor units in HKD and a stored
+  Subtotal and Order Total of 103100 minor units in HKD
+- **WHEN** the winner opens Winner Order
+- **THEN** the lines read 79300, 15900 and 7900 minor units in HKD
+- **AND** the Subtotal reads 103100 minor units in HKD with no note under it
+- **AND** nothing is re-priced
+
+### Requirement: Insurance info tooltip
+
+On Winner Order's order summary, Insurance explains itself when the line is
+shown.
+
+**Tooltip** - When the Insurance line is shown, Grade10 SHALL offer a brief
+info tooltip beside it.
+
+**Copy** - The tooltip SHALL read `0.9% of the order value during transit.`
+
+**Currency** - Under HKD the Insurance line reads in USD, per "The Order Summary
+reads the settlement currency, with USD beneath each HKD line".
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-yzf rev=2 -->
+#### Scenario: winner-order-SC-169 - A shown Insurance line carries its info tooltip
+**Serves:** winner-order-US-01 - the winner reads Order Summary while settling
+the lot
+
+- **GIVEN** an operator sent an HKD invoice with Insurance of 4000 minor units in
+  USD
+- **WHEN** the winner opens Winner Order
+- **THEN** the Insurance line shows `US$40.00`
+- **AND** the line offers a brief info tooltip
+- **AND** the tooltip reads `0.9% of the order value during transit.`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-2zt rev=1 -->
+#### Scenario: winner-order-SC-170 - An absent Insurance line offers no tooltip
+**Serves:** winner-order-US-01 - the winner reads Order Summary while settling
+the lot
+
+- **GIVEN** an operator sent an invoice without adding Insurance
+- **WHEN** the winner opens Winner Order
+- **THEN** no Insurance line is shown
+- **AND** no Insurance tooltip is offered
+
+### Requirement: Tax info tooltip
+
+On Winner Order's Order Summary, Tax explains itself whenever the line is shown.
+
+**Tooltip** - Grade10 SHALL offer a brief info tooltip beside Tax whenever the
+Tax line is shown.
+
+**Copy** - The tooltip SHALL read `Set by Grade10 for where your order ships.
+Some orders have none.`
+
+**Currency** - Under HKD the Tax line reads in USD, per "The Order Summary reads
+the settlement currency, with USD beneath each HKD line".
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-d0w rev=2 -->
+#### Scenario: winner-order-SC-217 - A shown Tax line carries its info tooltip
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an HKD invoice with Tax of 6000 minor units in USD
+- **WHEN** the winner reads Order Summary
+- **THEN** the Tax line shows `US$60.00`
+- **AND** the Tax line sits between Insurance and Payment Processing Fee
+- **AND** it offers an info tooltip reading `Set by Grade10 for where your order
+  ships. Some orders have none.`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-mph rev=1 -->
+#### Scenario: winner-order-SC-212 - An absent Tax line offers no tooltip
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an invoice without adding Tax
+- **WHEN** the winner reads Order Summary
+- **THEN** no Tax line is shown
+- **AND** no Tax tooltip is offered
 
 ## ADDED Requirements
 

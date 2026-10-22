@@ -31,7 +31,7 @@ receipt's receipt ID and internal audit number, per
 | Payment deadline at the log entry | The deadline trail across reissues and returned proof |
 | Time left | Proof uploaded and proof returned entries |
 | Deadline choice | Reissues only: kept or restarted |
-| Changed parts | Order edited before send: delivery address, payment method or both. Reissues: each of delivery address, payment method, payment processing fee, Shipping & Handling, Insurance, Tax and deadline that changed. Each with its value before and after, and Tax with no amount where the invoice carried none. A Shipping & Handling, Insurance or Tax part reads in USD, the amount the operator typed; the payment processing fee and the order total read in the invoice's currency. A change that moves a card invoice's Subtotal moves its fee, so the fee is named as a changed part too |
+| Changed parts | Order edited before send: delivery address, payment method or both. Reissues: each of delivery address, payment method, payment processing fee, Shipping & Handling, Insurance, Tax and deadline that changed. Each with its value before and after, and Tax with no amount where the invoice carried none. A Shipping & Handling, Insurance or Tax part reads in USD, the amount the operator typed; the payment processing fee and the order total read in the invoice's currency. A change that moves a card invoice's Subtotal moves its fee, so the fee is named as a changed part too. An entry written before a line part carried a currency reads in the invoice's currency, as written |
 | Reissue sequence number | Where the log entry is a reissue |
 | Actor | The buyer, the system, or a named operator |
 | Payment method | Paid, payment recorded and flagged payment entries: a card with its brand and last four digits, or bank transfer, cash, or other with its description |
@@ -150,6 +150,17 @@ reinstatement.
   changed
 - **AND** its order total reads 329359 minor units in HKD
 - **AND** it names no other part as changed
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-el3 rev=1 -->
+#### Scenario: g10adm.auction-post-sale.SC10 - An entry written before the rule reads as written
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an HKD order whose reissued entry, written before line parts carried a
+  currency, records Shipping & Handling from 7900 to 11800 minor units with no
+  currency
+- **WHEN** an operator reads the invoice log
+- **THEN** the entry shows Shipping & Handling from 7900 to 11800 minor units in
+  HKD, as it was written
 
 ### Requirement: The quote is typed in USD and read in the settlement currency
 

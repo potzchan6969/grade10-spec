@@ -62,7 +62,7 @@ What `grade10` does today, read at `bf94489156`:
 
 - **A pure function in the contracts package** - `invoiceBreakdown` in `packages/grade10-auction/contracts/src/invoicePricing.ts` takes the settlement currency, the stored settlement lines, the stored Subtotal, fee and total, and returns the lines in display order with the amount each reads in, the fee, the total, and the USD sum for the note.
 - **It converts nothing** - it picks USD facts and adds integers. The rate stays in the pricing module, so the lint is untouched.
-- **A line with no USD fact** reads in the settlement currency, and the note is absent unless every non-fee line has a USD fact. That covers a USD invoice that predates `usd_minor`, and is what a pre-change HKD invoice with no USD fact reads (see Sent invoices below).
+- **A line with no USD fact** reads in the settlement currency, and the note is absent unless every non-fee line has a USD fact. The Order Summary requirement states it (`g10.auction-winner-order.SC15`); the card fee is not one of the five lines, so it never drops the note. That covers a USD invoice that predates `usd_minor`, and is what a pre-change HKD invoice with no USD fact reads (see Sent invoices below).
 - **The note** - the USD sum covers the five lines and never the fee, so a bank transfer fee no longer reaches it. The text is the existing `winner.convertedFrom` key.
 
 | Reader | Where | Change |
@@ -153,7 +153,7 @@ Nothing else on the wire moves: `AuctionInvoice` already carries `subtotalAmount
 - **[Risk] The note's rate drifts from the pricing constant** → A test pins `USD_TO_HKD_RATE_LABEL` to `USD_TO_HKD_RATE`.
 - **[Risk] A bank fee reaches the note or the converted sum again** → A pricing test holds a fee of 257 against lines of 10100, 2020 and 992: the Order Total is 104948, not the 104947 that converting the fee with the lines gives.
 - **[Risk] A pre-change HKD invoice reads a note beside a whole-HK$ Subtotal** → Accepted by `decisions.md` Q12: every one is test data and keeps its stored amounts.
-- **[Risk] A history entry written before this change holds HKD line values, one written after holds USD** → The new entry's line parts carry a `currency`; an old entry has none and reads in its invoice's currency, as it was written.
+- **[Risk] A history entry written before this change holds HKD line values, one written after holds USD** → The new entry's line parts carry a `currency`; an old entry has none and reads in its invoice's currency, as it was written. "Invoice log history" states it (`g10adm.auction-post-sale.SC10`).
 - **[Risk] The store fixtures drift from the rule** → `hkdFixtures.test.ts` derives each fixture's Subtotal from its USD lines; it reads the store pin, so the store groups land first.
 - **[Risk] The receipt letter grows lines it never had, in two codebases** → The store preview and the `grade10` letter take the same lines; each has a test that lists them.
 - **[Risk] A cent total at Stripe** → The charge already takes `final_amount` in minor units and HKD has cents; the walk runs a sandbox card charge on a cent total.

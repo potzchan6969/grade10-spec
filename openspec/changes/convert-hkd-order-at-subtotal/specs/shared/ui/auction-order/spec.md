@@ -31,8 +31,8 @@ optional `qrSrc` and an optional `note`. The dialog SHALL render exactly those
 rows, SHALL render no tabs and SHALL name no other rail. A press on View Bank
 Details SHALL open it and SHALL also report through the control's callback.
 
-When `summary.subtotal` or `summary.feeLines` is supplied the block SHALL draw one
-separator above them and another above the total. It SHALL render the Subtotal
+When `summary.subtotal` is supplied or `summary.feeLines` holds at least one row,
+the block SHALL draw one separator above them and another above the total. It SHALL render the Subtotal
 and each fee row as supplied, SHALL add the fees to no total and no Subtotal, and
 SHALL derive no amount and no note: the application supplies the footnote text.
 A summary with neither prop SHALL render as it did before them.
@@ -149,7 +149,8 @@ total line. It SHALL show no such row when none is supplied.
 - **WHEN** each renders
 - **THEN** the first draws the Subtotal row with no note and no fee row
 - **AND** the second draws the fee rows and no Subtotal row
-- **AND** the third draws no row and no separator for them
+- **AND** the third draws no row and no separator for them, so its summary shows
+  the lines, one separator and the total
 
 <!-- trace:scenario id=g10.shared-auction-order.SC-5gy rev=1 -->
 #### Scenario: g10.shared-auction-order.SC5 - Both sets draw when both are supplied
