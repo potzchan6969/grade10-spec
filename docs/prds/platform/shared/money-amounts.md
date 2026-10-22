@@ -70,8 +70,8 @@ Money takes two shapes, and each surface uses the one its audience calls for.
   region, as `$` beside `HK$` on one HKD order. The product owner decides.
 - **Narrow symbol** — ❓ TBC: whether a line that drops the region is a third
   shape. This page allows two shapes and no third. The product owner decides.
-- **Invoice item lines** — ❓ TBC: whether item lines keep bare numbers under a
-  header that names the currency. The product owner decides.
+- **Invoice item lines** - the item table on an auction invoice or receipt
+  shows the symbol on every amount, `HK$793.00`, as the lines under it do.
 
 :::detail{title="Code helpers" for="engineer"}
 | Helper | Module | Use for |
@@ -96,7 +96,9 @@ so the two cannot drift apart unnoticed.
 **Decisions.** One table of codes and digits for every surface, rather than one
 table per surface. Two shapes, chosen by audience. An amount the currency cannot
 hold is refused, never rounded. Floating point loses cents, so an amount is
-never a decimal inside the platform.
+never a decimal inside the platform. Invoice and receipt item lines carry the
+symbol, rather than bare numbers under a header that names the currency, so a
+document reads one shape throughout.
 
 **Not in scope.** Which currency a brand quotes in, which sits on its owning
 page. Currency conversion, which the platform does not do.

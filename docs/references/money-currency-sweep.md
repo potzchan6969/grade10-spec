@@ -85,7 +85,7 @@ Verdicts are as of this snapshot, and the fixed items name the commit.
 | 6 | PriceCharting rounds with `* 100` (`priceChartingClient.ts:17-21`) | Refuted | The source is USD-only, and integers are read as cents |
 | 7 | Winner-order HKD fallback shows `HK$0.00` (`winnerOrderView.ts:213`, `winnerOrderRead.ts:99`) | Refuted | The fallback is dead for a live order: the server supplies the winning bid's currency |
 | 8 | Till `money()` prints the operator code shape on a member-facing screen (`integrations/shopify-pos/grade10/src/acts/money.ts`) | Decision | Open: [Display Shapes](/platform/shared/money-amounts) |
-| 9 | Auction invoice item lines print bare numbers (`orderDocument.ts:137-141`) | Decision | Open: [Display Shapes](/platform/shared/money-amounts) |
+| 9 | Auction invoice item lines print bare numbers (`orderDocument.ts:137-141`) | Decision | Decided: item lines carry the symbol, per [Display Shapes](/platform/shared/money-amounts) |
 | 10 | A bare `$` in grading paste reads as HKD (`paste.ts:37-50`) | Decision | Deliberate and tested. Open whether to warn or refuse |
 | 11 | Shared formatter shows whole HKD without fraction digits (`packages/ui/src/lib/format-money.ts`) | Decision | Open: [Display Shapes](/platform/shared/money-amounts). Changing it changes the agreed auction look |
 
@@ -128,7 +128,6 @@ from the exponent by design and is recorded here so it is not "fixed".
 
 - Whether bid amounts show the digits or whole units (the auction listing and bid ladder).
 - Whether a summary line beside an HKD total may drop `HK$` to `$` (order detail and post-bidding pages).
-- Whether invoice item lines keep bare numbers.
 - Whether the narrow symbol is a third shape.
 - Whether IDR joins the platform table.
 - Whether a bare `$` in grading paste should warn or be refused.
