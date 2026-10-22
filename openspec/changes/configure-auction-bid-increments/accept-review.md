@@ -1,7 +1,7 @@
-reviewed: b33671c65d1b27bd36897514f0af8463f092813b
+reviewed: 3d6d58369eb6b50df4ebf0294977261fa0cb24e9
 source-identity: 584f6657b8f4918397578428b898d0d2b4ef2d8ce52368e6c9e403b8c5d0f5ac
 baseline-identity: ac01c00e2d9eec5dff57fc7a6fc7318ebcd1e65d0e69e30b16488cd081f71761
-verdict: Not ready - 1 blocker
+verdict: Ready to accept
 
 | # | Severity | Where | Finding | Owner | Fix in | Status |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -18,9 +18,9 @@ verdict: Not ready - 1 blocker
 | 11 | note | feature-tcs.md:209, 261 | US1-TC11 and US1-TC12 carry no covers link. The disposition is recorded, and tcs:validate warns | QA | none, or add a scenario for the manual bid answered by a maximum | fixed b33671c65 |
 | 12 | note | spec.md:98, 106 | SC-07 and SC-12 change their Serves anchor from the durable text, and the delta does not say so | Dev | the delta | fixed b33671c65 |
 | 13 | note | spec.md, feature-tcs.md:834 | Q11 (house maximum and extended-bidding bid read one schedule) has no scenario or case. It is stated only under Settled | Dev | one line in the requirement | fixed b33671c65 |
-| 14 | blocker | specs/grade10-admin/auction/listing/feature-tcs.md:4 and specs/grade10-site/auction/bid-increments/feature-tcs.md:4 (`**Drafts styled:** ..., tcs-rules r6`) against openspec/specs/grade10-admin/auction/listing/feature-tcs.md:4 and openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md:5 (r5); docs/governance/specs-to-test-cases.md:244 | The fold writes the delta stamp over the durable r5 stamp. Under r6 a `draft` with a former Severity, Type or Suites value is an error (validate-test-cases.mjs:644-647), so `accept:preflight` reports 12 errors on the folded copy (listing, bid-increments US3-TC1) and exits 1. The stamp says the drafts were regenerated under r6; the durable drafts were not, and the rules say the stamp moves only on a regenerate | QA | set both delta stamps to `tcs-rules r5`, dated no later than the durable ones (`2026-10-14` listing, `2026-10-13` bid-increments), so the folded file states the oldest style it holds | open |
-| 15 | fix | durable bid-increments feature-tcs.md:749-775 (`US2-TC4`, TC-dlk rev 3) and Walk 2 steps 9-13 (:196, :217-221) against spec.md Q9 (whole dollars) | The case and walk send USD10,000,000.01 and expect `AMOUNT_TOO_HIGH`. A bid with cents is refused for the whole-dollar rule; the asserted refusal depends on check order, which no requirement states. Same category as finding 5 | QA | revise `US2-TC4` in the delta at rev 4 with USD10,000,001 (one USD over, as `US2-TC3` has); extend task 1.2a to the Walk 2 rows | fixed (PM option B, see Repair) |
-| 16 | note | durable feature-tcs.md Walk 1 steps 1-2 (`US1-TC1`) against delta `US1-TC1` and `US1-TC9` | The walk reads the zero start (USD0 to USD1) through `US1-TC1`, which now covers a priced start; the zero start moves to `US1-TC9`. `tcs:validate` does not refuse it | QA | add the re-point to task 1.2a | open |
+| 14 | blocker | specs/grade10-admin/auction/listing/feature-tcs.md:4 and specs/grade10-site/auction/bid-increments/feature-tcs.md:4 (`**Drafts styled:** ..., tcs-rules r6`) against openspec/specs/grade10-admin/auction/listing/feature-tcs.md:4 and openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md:5 (r5); docs/governance/specs-to-test-cases.md:244 | The fold writes the delta stamp over the durable r5 stamp. Under r6 a `draft` with a former Severity, Type or Suites value is an error (validate-test-cases.mjs:644-647), so `accept:preflight` reports 12 errors on the folded copy (listing, bid-increments US3-TC1) and exits 1. The stamp says the drafts were regenerated under r6; the durable drafts were not, and the rules say the stamp moves only on a regenerate | QA | set both delta stamps to `tcs-rules r5`, dated no later than the durable ones (`2026-10-14` listing, `2026-10-13` bid-increments), so the folded file states the oldest style it holds | fixed 3d6d58369 |
+| 15 | fix | durable bid-increments feature-tcs.md:749-775 (`US2-TC4`, TC-dlk rev 3) and Walk 2 steps 9-13 (:196, :217-221) against spec.md Q9 (whole dollars) | The case and walk send USD10,000,000.01 and expect `AMOUNT_TOO_HIGH`. A bid with cents is refused for the whole-dollar rule; the asserted refusal depends on check order, which no requirement states. Same category as finding 5 | QA | revise `US2-TC4` in the delta at rev 4 with USD10,000,001 (one USD over, as `US2-TC3` has); extend task 1.2a to the Walk 2 rows | fixed 3d6d58369 (PM option B, see Repair) |
+| 16 | note | durable feature-tcs.md Walk 1 steps 1-2 (`US1-TC1`) against delta `US1-TC1` and `US1-TC9` | The walk reads the zero start (USD0 to USD1) through `US1-TC1`, which now covers a priced start; the zero start moves to `US1-TC9`. `tcs:validate` does not refuse it | QA | add the re-point to task 1.2a | fixed 3d6d58369 |
 
 ## Rerun at b33671c65
 
@@ -29,6 +29,12 @@ Findings 1 to 13 verified in the source, not from the claim: the delta Purpose k
 Gates at b33671c65: `validate:changes` pass, `plan:review-preflight` ready, `openspec validate --strict` valid, `tcs:validate` no errors (2121 warnings, none new beyond the two draft-link warnings of finding 11), `check:manual` 0 failures. `accept:preflight` exits 1 for finding 14 only; its `fold:purpose` line is a warning. The "Traced at more than one level" line is a standing warning of other suites.
 
 Decision on the open items of the Repair: the stamp is a blocker (finding 14), solved by stamping r5; a sweep of the durable suites is not needed for acceptance and would collide with the three other open deltas on the listing suite. `US2-TC4` and Walk 2 are finding 15 (fix); Walk 1 and `US1-TC1` are finding 16 (note). Neither blocks acceptance.
+
+## Rerun at 3d6d58369
+
+Bounded to the repair diff since b33671c65 (findings 14 to 16): the two delta stamps, task 1.2a and the Reconciliation bullet. Verified in the source: both delta stamps read r5 at 2026-10-14 (listing) and 2026-10-13 (bid-increments), equal to the durable stamps (14); task 1.2a and the Reconciliation bullet both state the PM's option B (durable `US2-TC4`/`TC-dlk` at feature-tcs.md:748-775 and Walk 2 steps 9-13 at :196 exist and quote USD10,000,000.01; no new rev, no US-02 anchor), and no other text in the change contradicts it (15); task 1.2a re-points Walk 1 steps 1-2 (durable :106-107) to `US1-TC9` (16). Nothing else changed in the change dir apart from this ledger. The origin/main commits on the capability paths (cc83a2051, dc56f17af, 95ee2d767) are all ancestors of b33671c65: no drift from the rebase.
+
+Gates at 3d6d58369: `accept:preflight` exit 0 "ready to fold and accept"; `tcs:validate` no errors; `check:manual` 0 failures (no line for this change); `plan:review-preflight` ready; `validate:changes` pass; `openspec validate --strict` valid.
 
 ## Repair
 
