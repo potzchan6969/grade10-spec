@@ -658,4 +658,4 @@ Runs once per row of **Test data**.
 ## Reconciliation
 
 - **Covered at domain** — a created campaign publishes as a public cover and its unpublished lots stay off the catalogue, walked by `grade10-admin-auction-e2e-US1-TC1-1`
-- **Covered at domain** — cancelling a published campaign cancels the listings under it, walked by `grade10-admin-auction-e2e-US2-TC1-1`
+- **Covered at domain** — cancelling a published campaign cancels the listings under it, walked by `grade10-admin-auction-e2e-US2-TC1-4`

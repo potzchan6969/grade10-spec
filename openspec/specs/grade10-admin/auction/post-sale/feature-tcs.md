@@ -6011,7 +6011,7 @@ of any requirement, and a scenario draft written without sight of this suite.
 | --- | --- |
 | Queue labels preserve the operator action context | **Folded in** |
 
-- **Covered at domain** — recording a payment on an order, then dispatch and delivery, reaches Preparing Shipment, Shipped and then Delivered, walked by `grade10-admin-auction-e2e-US3-TC1-2`
+- **Covered at domain** — recording a payment on an order, then dispatch and delivery, reaches Preparing Shipment, Shipped and then Delivered, walked by `grade10-admin-auction-e2e-US3-TC1-3`
 - **Restored** - the cases archived with `2026-09-18-add-winner-bank-transfer` and `2026-09-18-add-winner-billing-address` that their folds left behind are back as draft, unchanged, for `/tcs-review`: `post-sale-US1-TC2-1`, `-TC3-1` and `-TC5-1`, `post-sale-US7-TC5-1` to `-TC31-1`, `post-sale-US8-TC6-1` to `-TC8-1`, `post-sale-US10-TC1-1` to `-TC9-1`, `post-sale-US5-TC1-1`, and `post-sale-US11-TC1-1` and `-TC2-1`.
 
 **Run:** 2026-09-29. One agent wrote the cases and the scenarios, so the two readings are not independent. The cases were drafted from the Purpose, the Feature set, the journeys, the proposal, the decisions and the linked pages, then joined to the scenarios on their anchors.
