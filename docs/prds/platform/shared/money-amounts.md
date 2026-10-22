@@ -71,7 +71,8 @@ Money takes two shapes, and each surface uses the one its audience calls for.
 - **Narrow symbol** — ❓ TBC: whether a line that drops the region is a third
   shape. This page allows two shapes and no third. The product owner decides.
 - **Invoice item lines** - the item table on an auction invoice or receipt
-  shows the symbol on every amount, `HK$793.00`, as the lines under it do.
+  shows the symbol on every amount, `US$101.00` on a USD line and `HK$793.00`
+  on an HKD one, as the lines under it do.
 
 :::detail{title="Code helpers" for="engineer"}
 | Helper | Module | Use for |

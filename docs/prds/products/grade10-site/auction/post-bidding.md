@@ -22,8 +22,8 @@ operator's order procedure is on [Internal Bid](/p/grade10-admin/auction/interna
 - **No card was charged** — nothing was held on any card while bidding; a
   losing bidder's My Auctions row says their card was not charged
 - **A collector winner** - gets the auction-won letter asking for setup by
-  `Confirm by …`, naming no amount; their My Auctions row reads Won with View
-  order
+  `Confirm by …`, naming the US$ winning bid and no amount owed; their My
+  Auctions row reads Won with View order
 - **Everyone else hears once** — a bidder who lost, and a watch-only
   collector, each get one letter about the close and nothing after it —
   [Bidding ·
@@ -266,10 +266,10 @@ winner who picks USD pays it unchanged.
 | Rule | Value |
 | --- | --- |
 | Rate | **7.85** HKD to 1 USD, one rate for every order, set by Grade10 and not looked up live |
-| 🚧 Rounding | Only the Order Total rounds, up to two decimals with trailing zeros always shown (`HK$128,269.00`, `US$16,340.00`), whatever the currency; every other amount shows up to two decimals, unrounded |
+| 🚧 Rounding | Every amount shows two decimals with trailing zeros, whatever the currency (`HK$1,990.55`, `US$16,340.00`); a fraction of a cent rounds up to the next cent in the converted Subtotal, a converted bank fee and the card fee, and the Order Total is the Subtotal plus the fee |
 | 🚧 Shown once | Only the Order Summary's conversion note names the rate; no other page, invoice, receipt or letter does |
-| 🚧 Invoice and receipt | The Order Summary keeps USD line items with the HKD Subtotal, Payment Processing Fee and Order Total; ❓ whether the printed invoice and receipt follow the same layout is unconfirmed |
-| Fees and letters | The order total, fees, payments, refunds and order letters carry HKD |
+| 🚧 Invoice and receipt | The Order Summary, the invoice page, the invoice and receipt PDFs and the receipt letter keep the USD line items, then the HKD Subtotal, Payment Processing Fee and Order Total |
+| Fees and letters | The Subtotal, fees, Order Total, payments and refunds carry HKD, and so do the totals in order letters |
 | Fixed once sent | The sent invoice never re-prices, and its currency never changes |
 
 - **Order Summary under USD** — every line and the Order Total read USD
@@ -277,24 +277,27 @@ winner who picks USD pays it unchanged.
   on Winner Order, the invoice and its PDF, the receipt and the order letters.
   A PDF opened before this keeps what it printed
 - 🚧 **Order Summary under HKD** — the invoice lines keep their original USD
-  amounts; a **Subtotal** converts their sum to HKD and names the USD
-  subtotal and the fixed rate once — `Converted from US$131.21 at 1 USD =
-  7.85 HKD`; the Payment
+  amounts, Shipping & Handling, Insurance and Tax included; a **Subtotal**
+  converts their sum to HKD and names the USD subtotal and the fixed rate
+  once - `Converted from US$131.21 at 1 USD = 7.85 HKD`; the Payment
   Processing Fee and the Order Total sit below it in HKD, which is
-  what the winner pays. ❓ Whether Shipping & Handling quotes in USD or the
-  settlement currency is unconfirmed — it may sit with the USD lines or below
-  the Subtotal
+  what the winner pays
 - 🚧 **What the HKD total adds up from** — the USD lines sum to one figure,
-  converted once at the fixed rate for the Subtotal; the card fee is computed
-  in HKD from the HKD card rule and the Order Total is the Subtotal plus the
-  fee, rounded up to two decimals
+  converted once at the fixed rate and rounded up to the next cent for the
+  Subtotal; the card fee is computed in HKD from the HKD card rule and the
+  Order Total is the Subtotal plus the fee
+- 🚧 **Invoice and receipt under HKD** - the invoice page, the invoice and
+  receipt PDFs and the receipt letter list the USD lines, then the HKD
+  Subtotal, Payment Processing Fee and Order Total, and name no rate
 - **Lots already priced in HKD or JPY** — every one is test data and its
   currency is overwritten to USD, amounts unchanged and nothing converted
-- 🚧 **Bank transfer fee** — the operator types it in USD, and it converts to
-  HKD with the Subtotal's rate and sits below it
-- **Letters** — the won-lot letter, sent at close before any currency is
-  picked, keeps the US$ bid; every letter after the winner picks reads the
-  settlement currency only, with no USD winning bid
+- 🚧 **Bank transfer fee** - the operator types it in USD; it converts to HKD
+  at the Subtotal's rate, rounded up to the next cent, sits below the
+  Subtotal and adds nothing to the note's USD figure
+- 🚧 **Letters** - the won-lot letter, sent at close before any currency is
+  picked, keeps the US$ bid; a letter after the winner picks names its totals
+  in the settlement currency and, where it lists lines, lists them as the
+  invoice does
 - **Card fee under HKD** — the card fee uses the configured HKD rule and
   reads HKD only, with no USD figure; it adds nothing to the note's converted
   USD figure, and the HKD Order Total includes it
@@ -306,7 +309,7 @@ winner who picks USD pays it unchanged.
 ## The Invoice
 
 One operator-sent invoice per lot, never combined with another; no amount is
-shown before send, and the sent invoice never re-prices. One lot in HKD, paid
+shown before send, and the sent invoice never re-prices. One lot in USD, paid
 by card, reads:
 
 | Line | Example | What it is |
@@ -316,8 +319,8 @@ by card, reads:
 | Shipping & Handling | 800 | Quoted for the confirmed address; zero reads Free, and a difference found after payment is neither charged nor refunded |
 | Insurance | 500 | Optional and above zero; absent when none |
 | Tax | — | Optional and above zero, entered by the operator; absent when none, as on this example order |
-| Subtotal | 121,300 | The lines above converted to the settlement currency; the page summary, invoice and receipt keep it |
-| Payment Processing Fee | Calculated from configured HKD rule | Grade10's own for a card invoice, computed from the Stripe card rule in Payment Settings, grossed up so Grade10 keeps the Subtotal whole |
+| Subtotal | 121,300 | The lines above; under HKD their sum converted once to HKD. The page summary, invoice and receipt keep it |
+| Payment Processing Fee | Calculated from the configured rule for the settlement currency | Grade10's own for a card invoice, computed from the Stripe card rule in Payment Settings, grossed up so Grade10 keeps the Subtotal whole |
 | Order Total | Subtotal plus configured fee | What the winner pays |
 
 - 🚧 **Insurance on Order Summary** — before send, Insurance sits with the other
@@ -328,10 +331,9 @@ by card, reads:
   as TBD, whether or not the winner will owe any. Whenever the line shows it
   carries a brief info tooltip — `Set by Grade10 for where your order ships.
   Some orders have none.`
-- 🚧 **Amount marks** — Order Summary lines use `$` with two decimals
-  (`$12,800.00`), except bare `$0` when the amount is zero; Order Total
-  rounds up to two decimals with trailing zeros always shown
-  (`HK$16,460.00`)
+- 🚧 **Amount marks** - a USD Order Summary line reads `US$` with two decimals
+  (`US$12,800.00`) and a zero amount reads Free; Order Total keeps its
+  trailing zeros too (`HK$16,460.00`)
 - 🚧 **Payment Processing Fee** — Grade10's own on a card invoice, computed
   from the Stripe card rule; the operator's own on a bank transfer invoice,
   zero or more, empty read as Free
@@ -495,14 +497,14 @@ then shipped, delivered, and order cancelled.
 
 | Letter | Sent | What it carries |
 | --- | --- | --- |
-| Auction won | At the close | The setup steps and `Confirm by …`; no amount yet |
+| Auction won | At the close | The setup steps and `Confirm by …`; the US$ winning bid, and no amount owed yet |
 | 🚧 Setup reminder | Close **+ 24 hours**, while setup is incomplete | The steps and `Confirm by …` |
 | 🚧 Setup overdue | Close **+ 48 hours**, the setup deadline | Self-service setup is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review, never automatically |
 | Payment reminder | Invoice send, then send **+ 3** and **+ 6 days** while the invoice is pending | The total and `Pay by …`; View invoice and pay |
 | 🚧 Final notice | **24 hours** before the payment deadline, while Pay is still offered | The last payable reminder |
 | 🚧 Payment overdue | The payment deadline, unpaid | What remains owed; Pay is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review |
 | 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner, and `Pay by …` on the deadline that runs again |
-| Payment received | Card confirmed, proof confirmed, or a manual settlement | Amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
+| Payment received | Card confirmed, proof confirmed, or a manual settlement | The itemised lines as the invoice reads them, amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
 | 🚧 Partial payment received | An operator records a partial payment | The current invoice ID, Receipt ID and receipt PDF, with Contact Us; no remaining balance |
 | 🚧 Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking, or View order with the tracking number as plain text when no tracker link was recorded |
 | Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
@@ -650,7 +652,9 @@ a second payment provider, and changes to the bid-time rules.
 | Insurance tooltip | Decided | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
 | Buyer's premium | Decided | 20% of the USD winning bid alone, rounded half up, or the one USD minimum when higher; Grade10 computes it and discloses the rate on the bid panel only. The minimum is 0 at first and applies before settlement conversion. | Product and finance |
 | Payment processing fee | Decided | A card invoice's fee is Grade10's own: the configured Stripe card rule for the settlement currency, grossed up from the Subtotal; a USD card rule is required at launch. A bank transfer invoice's fee is the operator's own, no cap, empty read as Free. The sent invoice never re-prices. | Product |
-| HKD order summary layout | Decided | Under HKD the invoice lines keep their original USD amounts, a Subtotal converts their sum to HKD, and the Payment Processing Fee and Order Total sit below it in HKD — the fee is computed in the settlement currency and has no USD counterpart. Only the Order Total rounds, up to two decimals with trailing zeros, whatever the currency; other amounts show up to two decimals unrounded. Chosen over converting each line to HKD, which hid what the lot cost in USD. ❓ Whether Shipping & Handling is quoted in USD or the settlement currency is open, so its placement above or below the Subtotal may move. | Product |
+| HKD order summary layout | 🚧 In flight | Under HKD the invoice lines keep their original USD amounts, Shipping & Handling, Insurance and Tax included, and a Subtotal converts their sum to HKD once. The Payment Processing Fee and Order Total sit below it in HKD - the fee is computed in the settlement currency and has no USD counterpart. Every amount shows two decimals, a fraction of a cent rounding up, and the Order Total is the Subtotal plus the fee. Chosen over converting each line to HKD, which hid what the lot cost in USD and let rounding each line move the Subtotal off the rate, and over USD beneath each HKD line or an HKD \| USD switch. | Product |
+| Invoice and receipt under HKD | 🚧 In flight | The invoice page, the invoice and receipt PDFs and the receipt letter print the same USD lines, then the HKD Subtotal, Payment Processing Fee and Order Total, and name no rate. **BREAKING** vs HKD-only documents that print no USD winning bid. Chosen over HKD-only documents beside a USD Order Summary, which shows the winner two layouts for one order and whose rounded HKD lines no longer add up to the Subtotal. | Product |
+| Invoices sent before this layout | Decided | A sent HKD invoice never re-prices, so one sent with whole-HK$ lines keeps them and reads in the new layout from its stored amounts. Every HKD invoice sent so far is test data. Chosen over keeping the old HKD-only layout for them, which keeps two layouts for ever on test data. | Product |
 | Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
 | Bank details | Decided | Grade10 holds bank details for each supported rail. A rail is offered when Finance has configured its details, and the invoice snapshots only the selected rail. | Product and Finance |
 | Fee disclosure | Decided | The winner chooses a method on a fee range Grade10 sets; the amount first shows on the sent invoice, and an operator reissues if the winner then wants another method or rail. | Product (@jeffffej0909) |
@@ -714,11 +718,10 @@ a second payment provider, and changes to the bid-time rules.
 | Payment fee wording | 🚧 In flight | Card reads `Card fee about {configured percentage}% + a fixed amount`; a bank rail reads no fee line — no fee is required for those options. | Product (@tangconst) |
 | USD card rule | 🚧 In flight | Finance configures a USD card fee rule before launch; the same configured percentage and fixed-amount rule applies to USD card invoices. | Finance |
 | Settlement currency | Decided | The winner picks USD or HKD at order setup — 🚧 the first offered currency preselected, the sole currency where one is — fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
-| HKD conversion | Decided | One fixed rate, 7.85 HKD to 1 USD, rounded up, named only in the note under the HKD Order Summary's total; the USD winning bid is not printed on an HKD invoice or receipt. Chosen over a live or locked rate, since the pair is stable and a fixed rate needs no source, lock or refresh. | Product |
-| Rounding | Decided | Whole HK$, any fraction up (`100.01` and `100.1` read `101`), each line converted and rounded, then summed. Chosen over the first decimal and over converting the total once, which would leave invoice lines that do not add up. | Product |
+| HKD conversion | Decided | One fixed rate, 7.85 HKD to 1 USD, named only in the note under the HKD Order Summary's Subtotal; no invoice, receipt or letter names it. Chosen over a live or locked rate, since the pair is stable and a fixed rate needs no source, lock or refresh. | Product |
+| Rounding | 🚧 In flight | Every amount shows two decimals with trailing zeros, whatever the currency, and a fraction of a cent rounds up. The USD lines add up first and convert once, so the Subtotal, a converted bank fee and the card fee are whole cents and the Order Total is their sum. Chosen over rounding each line to the whole HK$, which moves the Subtotal off the rate, and over rounding the Order Total to the whole HK$, which charges the winner more than the lines add up to. | Product |
 | Payment methods by currency | Decided | HKD offers Card, FPS and HK Local; USD offers Card, HK Local and International via SWIFT. The winner chooses one method or rail. The invoice and bank-details dialog show only the selected rail, with no tabs or copy controls. | Product |
 | Rail-only reissue | Decided | Changing FPS to HK Local, or USD HK Local to International via SWIFT, counts as a change by itself and allows invoice reissue. | Product |
-| Order summary under HKD | Decided | Every line and the Order Total read HKD, as the invoice asks, and one note under the total names the converted lines' USD figure and the fixed rate. Chosen over USD beneath each line and over an HKD \| USD switch, because the USD answers where the HKD total came from, not what each line is in USD. | Product |
 | USD symbol on order amounts | 🚧 In flight | A USD order amount reads `US$` for every reader, as a bid does. Chosen over the reader's language picking the symbol, which printed `$` in English and `US$` in Chinese and Korean for one amount. | Product (@seankcw) |
 | Transfer contact channel | Decided | An operator reaches a winner about a transfer or a proof on WhatsApp, at the address form's phone number. Chosen over email alone and over both. | Operations |
 | Copy Message confirmation | Decided | Copy Message shows no confirmation beyond the control's own state, and no toast, so the dialog stays the only thing on screen. Chosen over keeping the toast and over no feedback. | Product (@tangconst) |
