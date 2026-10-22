@@ -40,9 +40,9 @@ export const LINE_TOOLTIPS = {
 /**
  * HKD-settled invoice lines keep their original USD amounts: US$12,800.00 +
  * US$2,560.00 + US$180.00 = US$15,540.00, which the Subtotal converts at 7.85
- * to HK$121,989.00. The card fee is computed in HKD and carries no USD
- * counterpart, so it sits below the Subtotal (winner-order-SC-290,
- * winner-order-SC-304).
+ * to HK$121,989.00. The card fee is computed in HKD on that Subtotal and
+ * carries no USD counterpart, so it sits below the Subtotal
+ * (g10.shared-auction-order.SC1).
  */
 export const INVOICE_LINES = [
   { label: "Winning Bid", value: "US$12,800.00" },
@@ -61,7 +61,7 @@ export const INVOICE_LINES = [
 /**
  * The HKD subtotal `INVOICE_LINES` converts to. The footnote names the USD
  * subtotal of the lines above and the fixed rate — the only place the summary
- * names either (winner-order-SC-290).
+ * names either (g10.shared-auction-order.SC2).
  */
 export const INVOICE_SUBTOTAL: NonNullable<
   AuctionWinnerOrderProps["summary"]["subtotal"]
@@ -74,15 +74,15 @@ export const INVOICE_SUBTOTAL: NonNullable<
 export const INVOICE_FEE_LINES = [
   {
     label: "Payment Processing Fee",
-    value: "HK$545.00",
+    value: "HK$4,296.05",
     tooltip: LINE_TOOLTIPS.cardFee,
   },
 ];
 
-/** HK$121,989.00 + HK$545.00, rounded up to two decimals. */
+/** HK$121,989.00 + HK$4,296.05, to the cent. */
 export const INVOICE_TOTAL: AuctionWinnerOrderProps["summary"]["total"] = {
   label: "Order Total",
-  value: "HK$122,534.00",
+  value: "HK$126,285.05",
 };
 
 export const DELIVERY = {
