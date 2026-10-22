@@ -7,8 +7,7 @@ export type OutbidProps = {
   listingUrl?: string;
   muteUrl?: string;
   primaryImageUrl?: string | null;
-  currentBid?: string;
-  /** Standing bid when they lost the lead. Omit to hide the secondary line. */
+  /** Their maximum bid, shown outbid. Omit to hide the highlight. */
   yourBid?: string;
   effectiveClosesAt?: string;
 };
@@ -19,7 +18,6 @@ export default function OutbidEmail({
   listingUrl = previewLot.listingUrl,
   muteUrl = previewLot.muteUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
-  currentBid = previewLot.currentBid,
   yourBid = previewLot.yourBid,
   effectiveClosesAt = previewLot.effectiveClosesAt,
 }: OutbidProps) {
@@ -31,14 +29,17 @@ export default function OutbidEmail({
       canUnsubscribe
       ctaLabel="Bid again"
       heading="You have been outbid"
-      highlight={{ label: "Leading bid", value: currentBid }}
+      highlight={
+        yourBid
+          ? { label: "Your max. bid (outbid)", value: yourBid }
+          : undefined
+      }
       listingUrl={listingUrl}
       lotSubtext={`Closes ${effectiveClosesAt}`}
       lotTitle={lotTitle}
       muteUrl={muteUrl}
-      preheader={`Leading bid is now ${currentBid}. Closes ${effectiveClosesAt}.`}
+      preheader={`Closes ${effectiveClosesAt}.`}
       primaryImageUrl={primaryImageUrl}
-      secondary={yourBid ? { label: "Your bid", value: yourBid } : undefined}
       whyYouGotThis="Email alerts are on for this auction."
     />
   );
@@ -50,7 +51,6 @@ OutbidEmail.PreviewProps = {
   listingUrl: previewLot.listingUrl,
   muteUrl: previewLot.muteUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
-  currentBid: previewLot.currentBid,
   yourBid: previewLot.yourBid,
   effectiveClosesAt: previewLot.effectiveClosesAt,
 } satisfies OutbidProps;

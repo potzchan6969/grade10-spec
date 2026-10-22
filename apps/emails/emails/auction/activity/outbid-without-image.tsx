@@ -12,19 +12,15 @@ export default function OutbidWithoutImageEmail() {
       ctaLabel="Bid again"
       heading="You have been outbid"
       highlight={{
-        label: "Leading bid",
-        value: previewLot.currentBid,
+        label: "Your max. bid (outbid)",
+        value: previewLot.yourBid,
       }}
       listingUrl={previewLot.listingUrl}
       lotSubtext={`Closes ${previewLot.effectiveClosesAt}`}
       lotTitle={previewLot.lotTitle}
       muteUrl={previewLot.muteUrl}
-      preheader={`Leading bid is now ${previewLot.currentBid}. Closes ${previewLot.effectiveClosesAt}.`}
+      preheader={`Closes ${previewLot.effectiveClosesAt}.`}
       primaryImageUrl={null}
-      secondary={{
-        label: "Your bid",
-        value: previewLot.yourBid,
-      }}
       whyYouGotThis="Email alerts are on for this auction."
     />
   );
