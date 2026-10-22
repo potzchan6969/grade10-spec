@@ -136,6 +136,7 @@ export const Form: Story = {
       modal.queryByLabelText("Transaction Reference / ID"),
     ).not.toBeInTheDocument();
     expect(modal.queryByText("Proof of Payment File")).not.toBeInTheDocument();
+    expect(modal.getByText("Payment Proof")).toBeVisible();
     expect(modal.getByText(WINNER_ORDER_PROOF_FILE_HINT)).toBeVisible();
     expect(modal.getByRole("button", { name: "Choose Files" })).toBeVisible();
     expect(modal.getByLabelText("Additional Notes (optional)")).toBeVisible();
@@ -311,6 +312,35 @@ export const SubmittingBusy: Story = {
     ).toBeVisible();
     await waitFor(() => {
       expect(page.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+  },
+};
+
+/** Three files — the dropzone target collapses into the list. */
+export const DropzoneFull: Story = {
+  name: "Dropzone full",
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const modal = within(dialog);
+    const fileInput = modal
+      .getByRole("button", { name: "Choose Files" })
+      .closest('[data-slot="file-dropzone"]')
+      ?.querySelector('input[type="file"]');
+    expect(fileInput).toBeTruthy();
+    const files = ["p1.pdf", "p2.pdf", "p3.pdf"].map(
+      (name) => new File([name], name, { type: "application/pdf" }),
+    );
+    await userEvent.upload(fileInput as HTMLInputElement, files);
+    await waitFor(() => {
+      expect(modal.getByText("p3.pdf")).toBeVisible();
+    });
+    const collapse = dialog.querySelector(
+      '[data-slot="file-dropzone-collapse"]',
+    ) as HTMLElement | null;
+    expect(collapse).toBeTruthy();
+    await waitFor(() => {
+      expect(collapse?.getBoundingClientRect().height).toBe(0);
     });
   },
 };

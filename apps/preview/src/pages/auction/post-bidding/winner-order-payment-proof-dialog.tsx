@@ -21,6 +21,7 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { toast } from "@grade10/design-system/components/overlays/toast";
+import { cn } from "@grade10/design-system/lib/utils";
 import { Warning } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
 import { toastProofNotSubmitted } from "./winner-order-proof-feedback";
@@ -148,6 +149,8 @@ function WinnerOrderPaymentProofDialog({
     draft.files.length >= WINNER_ORDER_PROOF_MIN_FILES;
 
   const formLocked = submitting || converting;
+
+  const dropzoneFull = draft.files.length >= WINNER_ORDER_PROOF_MAX_FILES;
 
   function clearSubmitTimer() {
     if (submitTimerRef.current != null) {
@@ -282,43 +285,48 @@ function WinnerOrderPaymentProofDialog({
         </DialogHeader>
         <DialogBody>
           <VStack className="w-full" gap="md" hAlign="stretch" id={formId}>
-            <TextInput
-              autoComplete="name"
-              disabled={formLocked}
-              label="Sender Name"
-              ref={senderNameRef}
-              message={
-                attempted && !draft.senderName.trim()
-                  ? "Enter the sender name."
-                  : undefined
-              }
-              onChange={(event) =>
-                patch("senderName", event.currentTarget.value)
-              }
-              status={
-                attempted && !draft.senderName.trim() ? "error" : "default"
-              }
-              value={draft.senderName}
-            />
-            <TextInput
-              disabled={formLocked}
-              label="Transfer Date"
-              ref={transferDateRef}
-              message={
-                attempted && !draft.transferDate.trim()
-                  ? "Enter the transfer date."
-                  : undefined
-              }
-              onChange={(event) =>
-                patch("transferDate", event.currentTarget.value)
-              }
-              status={
-                attempted && !draft.transferDate.trim() ? "error" : "default"
-              }
-              type="date"
-              value={draft.transferDate}
-            />
+            <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+              <TextInput
+                autoComplete="name"
+                disabled={formLocked}
+                label="Sender Name"
+                ref={senderNameRef}
+                message={
+                  attempted && !draft.senderName.trim()
+                    ? "Enter the sender name."
+                    : undefined
+                }
+                onChange={(event) =>
+                  patch("senderName", event.currentTarget.value)
+                }
+                status={
+                  attempted && !draft.senderName.trim() ? "error" : "default"
+                }
+                value={draft.senderName}
+              />
+              <TextInput
+                disabled={formLocked}
+                label="Transfer Date"
+                ref={transferDateRef}
+                message={
+                  attempted && !draft.transferDate.trim()
+                    ? "Enter the transfer date."
+                    : undefined
+                }
+                onChange={(event) =>
+                  patch("transferDate", event.currentTarget.value)
+                }
+                status={
+                  attempted && !draft.transferDate.trim() ? "error" : "default"
+                }
+                type="date"
+                value={draft.transferDate}
+              />
+            </div>
             <VStack className="w-full" gap="sm" hAlign="stretch">
+              <span className="text-sm font-medium text-secondary-foreground">
+                Payment Proof
+              </span>
               <VStack
                 className="w-full"
                 data-slot="file-dropzone"
@@ -326,27 +334,55 @@ function WinnerOrderPaymentProofDialog({
                 hAlign="stretch"
                 ref={dropzoneRef}
               >
-                <FileDropzoneTarget
-                  accept={WINNER_ORDER_PROOF_FILE_ACCEPT}
-                  converting={converting}
-                  copy={{
-                    idleTitle: "Drop files here or choose files",
-                    idleDescription: WINNER_ORDER_PROOF_FILE_HINT,
-                    chooseFiles: "Choose Files",
-                    converting: "Converting HEIC…",
+                <div
+                  aria-hidden={dropzoneFull || undefined}
+                  className={cn(
+                    "grid transition-[grid-template-rows] duration-200 motion-reduce:transition-none",
+                    dropzoneFull ? "grid-rows-[0fr]" : "grid-rows-[1fr]",
+                  )}
+                  data-slot="file-dropzone-collapse"
+                  style={{
+                    transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
-                  disabled={formLocked}
-                  files={draft.files}
-                  limits={{
-                    minFiles: WINNER_ORDER_PROOF_MIN_FILES,
-                    maxFiles: WINNER_ORDER_PROOF_MAX_FILES,
-                    maxBytesPerFile: WINNER_ORDER_PROOF_MAX_BYTES_PER_FILE,
-                    maxBytesTotal: WINNER_ORDER_PROOF_MAX_BYTES_TOTAL,
-                  }}
-                  onChange={(files) => patch("files", files)}
-                  onConvertingChange={setConverting}
-                  onReject={handleFileReject}
-                />
+                >
+                  <div className="overflow-hidden">
+                    <div
+                      className={cn(
+                        "transition-[opacity,transform] duration-200 motion-reduce:transition-none",
+                        dropzoneFull
+                          ? "pointer-events-none -translate-y-1 opacity-0 motion-reduce:translate-y-0"
+                          : "translate-y-0 opacity-100",
+                      )}
+                      style={{
+                        transitionTimingFunction:
+                          "cubic-bezier(0.22, 1, 0.36, 1)",
+                      }}
+                    >
+                      <FileDropzoneTarget
+                        accept={WINNER_ORDER_PROOF_FILE_ACCEPT}
+                        converting={converting}
+                        copy={{
+                          idleTitle: "Drop files here or choose files",
+                          idleDescription: WINNER_ORDER_PROOF_FILE_HINT,
+                          chooseFiles: "Choose Files",
+                          converting: "Converting HEIC…",
+                        }}
+                        disabled={formLocked}
+                        files={draft.files}
+                        limits={{
+                          minFiles: WINNER_ORDER_PROOF_MIN_FILES,
+                          maxFiles: WINNER_ORDER_PROOF_MAX_FILES,
+                          maxBytesPerFile:
+                            WINNER_ORDER_PROOF_MAX_BYTES_PER_FILE,
+                          maxBytesTotal: WINNER_ORDER_PROOF_MAX_BYTES_TOTAL,
+                        }}
+                        onChange={(files) => patch("files", files)}
+                        onConvertingChange={setConverting}
+                        onReject={handleFileReject}
+                      />
+                    </div>
+                  </div>
+                </div>
                 <FileDropzoneFileList
                   copy={{ removeFile: "Remove file" }}
                   disabled={formLocked}
