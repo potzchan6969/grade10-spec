@@ -869,6 +869,28 @@ its own bank details, and card on its own rule.
 - **AND** an operator holding payment processing can reopen or record its
   setup
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-zk3 rev=1 -->
+#### Scenario: winner-order-SC-305 - The step opens with the currency's first method selected
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup offered USD and HKD, where
+  Payment Settings holds a USD card fee rule and Grade10 holds HK Local and
+  SWIFT bank details
+- **WHEN** the winner reaches the payment method choice
+- **THEN** USD is selected and card is selected
+- **AND** the winner can still choose HK Local or International via SWIFT
+  before confirming
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-mw8 rev=1 -->
+#### Scenario: winner-order-SC-306 - A single settlement currency names itself and offers no picker
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup that settles in HKD only, where
+  Payment Settings holds an HKD card fee rule
+- **WHEN** the winner reaches the payment method choice
+- **THEN** the choice reads `Pay in HKD` and offers no currency picker
+- **AND** card is selected
+
 ### Requirement: A bank transfer invoice shows how to pay
 
 A pending bank transfer invoice tells the winner where to send the money and
