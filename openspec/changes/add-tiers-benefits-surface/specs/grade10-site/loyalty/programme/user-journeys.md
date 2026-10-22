@@ -6,7 +6,9 @@
 **I want** my tier, balance, and activity on one surface, in the programme's dates,
 **so that** I can join, redeem, and never see the operator's reasons behind an entry.
 
-### grade10-site-loyalty-programme-US-05: Member compares tiers and learns how points work
+## ADDED User journeys
+
+### grade10-site-loyalty-programme-US-12: Member compares tiers and learns how points work
 
 **As a** member,
 **I want** every tier's ask and benefits and the programme's mechanics on one surface,
