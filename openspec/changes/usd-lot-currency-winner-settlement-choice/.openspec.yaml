@@ -10,16 +10,23 @@ depends_on:
 hands:
   design: "@tangconst"
   dev: "@htonyl"
-ui_waived: "@htonyl waived ui-design on 2026-10-14 and authorized correcting the existing stories to the settled currency and method choices."
+  pm: "@htonyl"
+ui_waived: "@htonyl waived ui-design on 2026-10-14 and authorized correcting the
+  existing stories to the settled currency and method choices."
 purpose_rewritten:
-  grade10-site/auction/winner-order: "the order now carries a settlement currency the winner picks and a bank rail, so what a winner is sent and chooses changed"
-  grade10-site/auction/bid-increments: "every auction bids in USD alone, so one USD schedule replaces a schedule per currency"
-  grade10-admin/auction/payment-settings: "Payment Settings now hold a card fee rule per settlement currency and one USD premium minimum, not a mapping per lot currency"
+  grade10-site/auction/winner-order: "the order now carries a settlement currency
+    the winner picks and a bank rail, so what a winner is sent and chooses
+    changed"
+  grade10-site/auction/bid-increments: "every auction bids in USD alone, so one
+    USD schedule replaces a schedule per currency"
+  grade10-admin/auction/payment-settings: "Payment Settings now hold a card fee
+    rule per settlement currency and one USD premium minimum, not a mapping per
+    lot currency"
 reviewed:
-  user-journeys: cf926a1b
-  specs: b7c79f08
-  test-cases: b7c79f08
-  tech-design: 60839e2e
-  tasks: 8efbf1a5
-  proposal: a48c66c6
-  decisions: a7db9402
+  user-journeys: 1bcfcc8d
+  specs: ee9ca35b
+  test-cases: c4407d65
+  tech-design: c4407d65
+  tasks: 8bbb1556
+  proposal: 9f777336
+  decisions: d9bfc83f

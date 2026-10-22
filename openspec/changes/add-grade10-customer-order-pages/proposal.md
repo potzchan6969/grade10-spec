@@ -2,14 +2,21 @@
 
 ## Why
 
-A signed-in collector can complete the Store checkout, but the Grade10 site has
-no customer route that renders the order list or one order. Owner-scoped order
-reads and the shared order blocks already exist; the missing work is the
-customer-facing composition and frontend integration.
+Collectors need a trustworthy account of their Store purchases, with enough
+product information to recognise each item. Your Orders and Order Details now
+exist, but their image frames remain empty because the typed order items and
+page projections carry no picture.
 
 Success is measured by the share of paid Store orders whose owner opens Your
 Orders or an order detail without contacting support for basic fulfilment,
 refund, or tracking information. The first delivery establishes the baseline.
+
+**Product pictures** - the cart already receives current product pictures.
+The 2026-10-22 scope extension supplies the same product identification on
+existing orders.
+Measure the share of order lines with an available catalogue picture whose
+matching thumbnail loads on each page; controlled browser checks establish
+the first baseline without adding production instrumentation.
 
 ## What Changes
 
@@ -20,6 +27,12 @@ refund, or tracking information. The first delivery establishes the baseline.
   from the existing shared Order Details block and the current Store order read.
 - Integrate both pages through `@grade10/store-frontend`; the Grade10
   application does not call the Store transport or Shopify directly.
+- Show each item's first current product picture on Your Orders and Order
+  Details, including existing purchases, private order links and the console's
+  customer preview. Missing picture facts preserve the existing placeholder;
+  a failed picture lookup does not fail the order read.
+- Preserve compatible order responses without picture fields, meaningful
+  image alt text, recorded purchase facts and existing access checks.
 - Derive every displayed badge from `grade10-site/commerce/order-status`, and keep
   quoted, paid, refunded, fulfilment, and delivery facts distinct.
 - Prefer the Store-supplied shop order number in customer-facing order labels,
@@ -41,24 +54,7 @@ refund, or tracking information. The first delivery establishes the baseline.
 
 ## Non-Goals
 
-- Implementing or changing Store backend procedures, database tables,
-  Shopify reads, webhooks, reconciliation, deployment, or environment setup.
-- Building an admin order surface or changing any admin order workflow.
-- Changing checkout, cart, discount, shipping-rate, tax, payment, refund, or
-  return behavior.
-- Defining the order-status mapping; `add-store-order-status` owns that
-  customer-facing rule.
-- Redesigning the shared order blocks, the design system, Figma components, or
-  tokens. Shared UI changes remain backwards-compatible extensions to optional
-  detail data.
-- Adding a secondary status-note slot to either shared order block.
-- Guest order lookup, customer-initiated cancellation, refund, return, or
-  address editing.
-- Displaying a product image or loyalty amount before the typed Store order
-  contract supplies that fact, or inventing a pickup address from the supplied
-  shipping address.
-- Changing the cart drawer's applied Points label to include the points count;
-  Order Details owns that count-in-label treatment for this change.
+See [Non-Goals](decisions.md#non-goals).
 
 ## Capabilities
 
@@ -66,10 +62,10 @@ refund, or tracking information. The first delivery establishes the baseline.
 
 - `grade10-site/store/order-history`: the signed-in customer order list,
   Active/Past composition, empty and failure states, and navigation to tracking
-  or one order.
+  or one order, with current product pictures when supplied.
 - `grade10-site/store/order-detail`: owner-only rendering of one order's
   identity, items, supplied settlement breakdown, shipping address, payment,
-  refunds, fulfilment, and tracking facts.
+  refunds, fulfilment, tracking facts and supplied current product pictures.
 - `shared/ui/store-order-detail`: the reusable Order Details block and its
   optional data sections, including partial addresses and payment methods with
   or without a recognized brand logo.
@@ -84,7 +80,11 @@ None.
   order navigation, page composition, catalog use, and focused browser tests.
 - `packages/grade10-store/frontend`: customer-order presentation models and
   adapters over the typed `listOrders` and `getOrder` procedures, with fixture
-  and hook coverage.
+  and hook coverage; picture fields reach both customer page projections.
+- `packages/grade10-store/backend` and `packages/grade10-store/contracts`:
+  compatible optional picture facts on order items, supplied through existing
+  catalogue reads after access checks. Reuse one shared enrichment path for
+  member reads, order lists, private links and the existing admin preview.
 - `packages/ui`: a backwards-compatible optional-section, partial-address, and
   payment-fallback contract for the existing Order Details block, with stories
   and component tests.
@@ -96,12 +96,45 @@ None.
 - `docs/prds/products/shared/ui/store-order-detail.md`: the shared optional
   sections and supplied tracking action used by the customer detail surface.
 
-This change contains no backend or admin implementation task. Frontend tests
-exercise the typed Store contract through fixtures; live integration evidence
-belongs to the Grade10 application delivery, not to this planning store.
+The thumbnail extension adds backend read enrichment and keeps the existing
+admin preview aligned with the customer pages. It adds no admin workflow.
+The existing batch variant read already carries the first product picture;
+delivery planning must cover deduplicated, bounded batches, lookup failures,
+response decoding and images that actually load in the application browser.
+
+## Related Changes
+
+- **Order links** - `add-store-guest-checkout` owns private-link access and
+  joining guest orders. This extension supplies pictures only after those
+  checks; it adds no access or points entitlement.
+- **Order status** - `add-store-order-status` owns the badge mapping.
+- **Cart pictures** - `add-store-cart-thumbnails` owns cart enrichment and
+  rendering. Its first-current-product-picture rule is reused for orders;
+  its persistence and review behavior stay in that change.
+- **Points credit** - `name-points-discount-deduction` retains the points
+  label scope. Thumbnails alter no summary amount or label.
+
+## Planning Handoff
+
+No domain impact: the thumbnail extension preserves the existing history-to-detail
+route. Feature suites own its picture observations; the Store domain suite
+introduces no new cross-capability path for this additive display data.
+
+No platform impact: order access, account joining and checkout remain with
+their existing owners; thumbnail supply adds no path between products.
+
+The thumbnail extension includes independent draft cases, backend read design,
+requirement scenarios and unchecked delivery tasks. QA2 reconciles the cases
+against whole scenario outcomes. Existing case and scenario identities and
+completed task history remain. Acceptance review and publication follow the
+planning gates; draft cases claim no execution or human approval.
 
 ## References
 
+- [Your Orders · Product Pictures](../../../docs/prds/products/grade10-site/store/order-history.md#product-pictures)
+  - current product pictures on earlier and new purchases.
+- [Order Details · Product Pictures](../../../docs/prds/products/grade10-site/store/order-detail.md#product-pictures)
+  - pictures on owned details and private order links.
 - [Your Orders · Orders](../../../docs/prds/products/grade10-site/store/order-history.md#orders)
   — the private address, Active and Past groups, order actions and empty account.
 - [Order Details · Order](../../../docs/prds/products/grade10-site/store/order-detail.md#order)

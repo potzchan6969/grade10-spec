@@ -70,7 +70,20 @@ export const previewLot = {
   /** Hammer / winning bid at close. */
   winningBid: "US$101.00",
   /** Order Total / Invoice total on a sent invoice (includes fees). */
-  orderTotal: "HK$1,031.00",
+  orderTotal: "HK$1,068.69",
+  /**
+   * The sent card invoice's lines, as the receipt letter lists them: the USD
+   * lines, then the HKD Subtotal (US$131.21 at 1 USD = 7.85 HKD), the card fee
+   * on it and the Order Total.
+   */
+  orderLines: [
+    { label: "Winning Bid", value: "US$101.00" },
+    { label: "Buyer's Premium", value: "US$20.20" },
+    { label: "Shipping & Handling", value: "US$10.01" },
+    { label: "Subtotal", value: "HK$1,030.00" },
+    { label: "Payment Processing Fee", value: "HK$38.69" },
+    { label: "Order Total", value: "HK$1,068.69" },
+  ] as const,
   /** When payment was confirmed (winner's zone). */
   paidAt: "20 Sep 2026, 14:22 GMT+8",
   /** Card: brand + masked number. Bank transfer letters use `Bank Transfer` only. */

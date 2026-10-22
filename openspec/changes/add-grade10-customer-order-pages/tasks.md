@@ -49,3 +49,53 @@ Uses the landed group 4 catalogs and completes the frontend copy boundary on the
 
 - [x] 6.1 Replace the literal Discount, Shipping and Tax summary labels in `OrderDetailsPage` with the existing `orderDetail.money` catalog keys, preserving zero and absent rows from `grade10-site-store-order-detail-SC-14`; cover `en`, `zh-Hant`, and `zh-Hans` with typed fixtures
 - [x] 6.2 Verify focused order projection, page and locale tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:submodules`
+
+## 7. Product picture records (grade10-spec)
+
+This documentation group adds no component behavior. It uses existing checks;
+new application tests belong to groups 8-10.
+
+- [ ] 7.1 Run focused strict change and product-record link checks before reconciling the picture handoff; confirm the existing shared line props already accept optional pictures and no component change is owed.
+- [ ] 7.2 Reconcile `docs/prds/products/grade10-site/store/order-history.md` and `docs/prds/products/grade10-site/store/order-detail.md` with the selected current-picture policy, earlier purchases, readable fallback and retained private-link restrictions. Keep the in-flight marks until archive.
+- [ ] 7.3 Verify the two product-record links and focused strict change validation; record any unrelated manual baseline failures separately.
+
+## 8. Optional order picture contracts (grade10) (owner: @kinisworking)
+
+This group establishes the wire and domain item shapes. Groups 9 and 10 depend
+on it, and can then be claimed independently against fixtures.
+
+- [ ] 8.1 Add failing production-schema and client-decoder tests for image-free legacy and enriched member, list, private-link and admin responses; assert optional strings survive decoding and malformed picture fields fail, supporting `g10.store-order-history.SC6` and `g10.store-order-detail.SC6`. Land these tests in their own commit before code and tick this task last.
+- [ ] 8.2 Add optional `imageSrc` and `imageAlt` strings to `orderItemSchema` and the frontend `OrderItem`, preserving the direct decoded repository return, so `g10.store-order-history.SC6` and `g10.store-order-detail.SC6` pass. Keep current input schemas and persistence image-free; prove enriched responses remain readable by the saved previous production schema.
+- [ ] 8.3 Verify focused contract/client compatibility tests and affected contract/frontend/admin typechecks. Check member, list, private-link and admin-card output schemas retain the same fields.
+
+## 9. Current order picture reads (grade10) (owner: @kinisworking)
+
+Uses the landed group 8 contract. No frontend implementation or running browser
+is needed to prove this service boundary.
+
+- [ ] 9.1 Add failing service and router tests for `g10.store-order-history.SC1`, `g10.store-order-history.SC2`, `g10.store-order-history.SC3`, `g10.store-order-history.SC5`, `g10.store-order-detail.SC1`, `g10.store-order-detail.SC2`, `g10.store-order-detail.SC3`, `g10.store-order-detail.SC5`, `g10.store-order-detail.SC7` and `g10.store-order-detail.SC8`. Assert matching first pictures, rereads, unchanged purchase facts, empty and malformed identities, valid POS variant identity without product identity, reordered/null catalogue nodes, repeated variants across orders, more than 250 distinct variants, bounded wait, partial batch failure and structured diagnostics. Land tests in their own commit before code and tick this task last.
+- [ ] 9.2 Add one image-only order enrichment beside `readOrder.ts`: deduplicate valid variant IDs across the complete order result, skip empty lookups, use batches of at most 250 with the existing chunk/deadline utilities, join returned IDs, and copy only the first current product picture. Preserve completed results on failures, log safe diagnostics and perform no network lookup inside a database transaction, making `g10.store-order-history.SC1`, `g10.store-order-history.SC2`, `g10.store-order-history.SC3`, `g10.store-order-history.SC5`, `g10.store-order-detail.SC1`, `g10.store-order-detail.SC2`, `g10.store-order-detail.SC3` and `g10.store-order-detail.SC5` pass.
+- [ ] 9.3 Invoke enrichment once after the existing buyer/list projections and after the private-link non-member projection. Keep the current member/link checks, legacy guest compatibility, admin grants, Audit behavior and admin-card omissions. Prove rejected reads do no image lookup and private links acquire no member-only points facts, making `g10.store-order-detail.SC7` and `g10.store-order-detail.SC8` pass; verify admin detail/card previews receive the same image fields through their existing reader.
+- [ ] 9.4 Verify focused order service/router tests, the saved decoder compatibility tests, affected backend/contract typechecks and backend lint. Compare image-enriched and image-free purchase facts without adding database migrations, cache, metrics or dependencies.
+
+## 10. Customer order picture projections (grade10) (owner: @kinisworking)
+
+Uses the landed group 8 types. This group uses typed procedure fixtures and
+controlled image assets; group 9's running backend is not a dependency.
+
+- [ ] 10.1 Add failing projection and rendered-page tests for `g10.store-order-history.SC1`, `g10.store-order-history.SC3`, `g10.store-order-history.SC4`, `g10.store-order-history.SC6`, `g10.store-order-history.SC7`, `g10.store-order-detail.SC1`, `g10.store-order-detail.SC3`, `g10.store-order-detail.SC4`, `g10.store-order-detail.SC6`, `g10.store-order-detail.SC7` and `g10.store-order-detail.SC9`, including absent, empty and whitespace-only alt text, meaningful alt text and repeated variants with different recorded titles. Land tests in their own commit before code and tick this task last.
+- [ ] 10.2 Forward optional image props through `toOrderHistorySummary` and `toOrderDetailsProjection`; use each recorded item title for blank alt text and preserve meaningful supplied alt text and URLs. Keep placeholder behavior and existing facts unchanged so `g10.store-order-history.SC1`, `g10.store-order-history.SC3`, `g10.store-order-history.SC4`, `g10.store-order-history.SC6`, `g10.store-order-detail.SC1`, `g10.store-order-detail.SC3`, `g10.store-order-detail.SC4` and `g10.store-order-detail.SC6` pass.
+- [ ] 10.3 Exercise the existing member pages, private-link page and admin customer preview through the shared customer components. Preserve link account-data restrictions and usable facts/actions on image-resource failure, making `g10.store-order-history.SC7`, `g10.store-order-detail.SC7` and `g10.store-order-detail.SC9` pass without shared block redesign or new copy.
+- [ ] 10.4 Verify focused production-decoder, projection, member/private-link page and admin-preview tests; run affected frontend/admin typechecks and lint, then affected application builds. Preserve unrelated nested work if the accepted-contract handoff advances the shared submodule pin, and run `pnpm run check:submodules` when it does.
+
+## 11. The walk - order pictures (grade10) (owner: @kinisworking)
+
+Uses draft `feature-tcs.md` as its planning input and groups 8-10 landed.
+Existing groups 1-6 remain the delivered baseline. Walk every journey of every
+capability in this change through its actor's interface, retaining the
+existing order-facts and optional-section regression coverage.
+
+- [ ] 11.1 Keep the member history/sign-in/empty-account, owned-detail/sign-in and shared-detail journeys as end-to-end tests; add controlled loaded-picture walks for `g10.store-order-history.US5`, `g10.store-order-detail.US7` and `g10.store-order-detail.US8`. Include earlier purchases, two matching products, a changed first image on reread, absent pictures, blank alt text, picture lookup failure, legacy responses, rejected access and a failed image resource. Assert loaded dimensions for successful image assets and unchanged purchase facts and actions.
+- [ ] 11.2 Verify the existing admin customer detail/card preview against the same controlled item fixture and projection, preserving grants and Audit behavior; retain this as preview parity evidence rather than a new admin journey. Check the existing item frames at narrow and wide widths.
+- [ ] 11.3 In the walks' own commit, mark only the draft cases the walks decide automated with `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>`. Name remaining manual cases in the suite and the walk's `rounds.md` row; human execution follows deployment.
+- [ ] 11.4 Verify the derived browser suite and focused contract/backend/frontend regressions, then the repository's change-sensitive validation gate. Record loaded-image evidence separately from any unperformed live-provider or deployment acceptance.

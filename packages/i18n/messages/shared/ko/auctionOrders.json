@@ -196,6 +196,7 @@
     "missedSetupDeadlineNoDate": "설정 기한 경과",
     "setupTotalFootnote": "배송비, 보험 및 기타 수수료는 청구서에 추가됩니다.",
     "convertedFrom": "{amount}에서 환산, 환율 1 USD = {rate} HKD",
+    "subtotal": "소계",
     "tbd": "미정",
     "free": "무료",
     "toBeCalculated": "계산 예정",

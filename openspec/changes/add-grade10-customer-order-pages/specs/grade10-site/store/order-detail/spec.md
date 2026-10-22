@@ -16,6 +16,10 @@ Store order without revealing another customer's order or inventing absent facts
 - Page states
   - Loading and retry: Keep the address while the read settles or retries.
 
+- Product pictures
+  - Current product identity: Show supplied current product pictures on owned orders and valid private links.
+  - Optional pictures: Keep purchase facts readable when picture data is absent or unavailable.
+
 ## ADDED Requirements
 
 ### Requirement: One private address shows one owned order
@@ -255,3 +259,113 @@ or transport-error state.
 - **GIVEN** the order read failed
 - **WHEN** the collector activates Retry
 - **THEN** the page reads the same order again without changing its address
+
+### Requirement: Current product pictures supplement accessible order details
+
+Owned Order Details and valid private order links SHALL show each available
+first current product picture beside its matching recorded item, including
+purchases made before picture support. A later catalogue edit SHALL be
+reflected when the order is read again. Pictures SHALL NOT replace recorded
+titles, quantities, currency, prices, totals, status or tracking facts.
+
+| Picture State | Required Outcome |
+| --- | --- |
+| Current first product picture available | Show it in the existing item frame |
+| Catalogue alt text absent, empty or whitespace-only | Use the recorded item title as the image's accessible name |
+| Meaningful catalogue alt text supplied | Preserve that accessible name |
+| Product or picture unavailable | Keep the existing placeholder and purchase facts |
+| Picture lookup fails | Record a diagnostic and keep the order detail and its actions usable |
+| Image resource fails to load | Keep other order facts and actions usable |
+
+Order item responses SHALL allow absent `imageSrc` and `imageAlt` fields.
+When supplied, each field SHALL be a string. A compatible response without
+picture fields SHALL remain readable with the existing placeholder.
+
+Supplying pictures SHALL preserve the existing owner and private-link access
+rules. A private link SHALL retain its existing account-data restrictions:
+no Points row, Points to Earn, Points Earned, wallet or account details.
+Unknown orders, unowned member reads and invalid private links SHALL disclose
+no order picture or other order fact.
+
+<!-- trace:scenario id=g10.store-order-detail.SC-lss rev=1 -->
+#### Scenario: g10.store-order-detail.SC1 - Earlier owned orders show matching current pictures
+**Serves:** g10.store-order-detail.US7 - the collector recognises the items on an earlier owned order
+
+- **GIVEN** an earlier owned order with different recorded items and available current product pictures
+- **WHEN** the collector opens its details
+- **THEN** each item shows its own product's first current picture
+- **AND** recorded titles, quantities, currency, prices, totals, status and tracking remain unchanged
+
+<!-- trace:scenario id=g10.store-order-detail.SC-sdh rev=1 -->
+#### Scenario: g10.store-order-detail.SC2 - Rereading an order reflects the current first picture
+**Serves:** g10.store-order-detail.US7 - the collector recognises the items on an earlier owned order
+
+- **GIVEN** a product's first picture changed after the collector last opened an earlier order
+- **WHEN** the collector reads that order again
+- **THEN** the item shows the new first current picture
+- **AND** its recorded purchase facts remain unchanged
+
+<!-- trace:scenario id=g10.store-order-detail.SC-dn2 rev=1 -->
+#### Scenario: g10.store-order-detail.SC3 - Missing catalogue pictures preserve detail facts
+**Serves:** `g10.store-order-detail.US7`, `g10.store-order-detail.US8` - owners and private-link holders recognise the recorded items
+
+- **GIVEN** an accessible order with items whose products are removed, unpublished or supply no picture
+- **WHEN** its details load successfully
+- **THEN** affected items keep the existing placeholder beside their recorded facts
+- **AND** supplied money, fulfilment and tracking remain readable
+
+<!-- trace:scenario id=g10.store-order-detail.SC-ut1 rev=1 -->
+#### Scenario: g10.store-order-detail.SC4 - Detail alt text falls back to the recorded title
+**Serves:** `g10.store-order-detail.US7`, `g10.store-order-detail.US8` - owners and private-link holders recognise the recorded items
+
+- **GIVEN** pictured items with absent, empty, whitespace-only or meaningful catalogue alt text
+- **WHEN** the order details render
+- **THEN** each blank alt uses that item's recorded title as the image's accessible name
+- **AND** meaningful supplied alt text remains the accessible name
+
+<!-- trace:scenario id=g10.store-order-detail.SC-3gw rev=1 -->
+#### Scenario: g10.store-order-detail.SC5 - Picture lookup failure does not fail the order detail
+**Serves:** `g10.store-order-detail.US7`, `g10.store-order-detail.US8` - owners and private-link holders recognise the recorded items
+
+- **GIVEN** an accessible order's facts are readable but picture lookup fails
+- **WHEN** its details load
+- **THEN** affected items keep the existing placeholder beside unchanged purchase facts
+- **AND** the detail and any valid tracking action remain usable
+- **AND** the picture lookup failure has a diagnostic record
+
+<!-- trace:scenario id=g10.store-order-detail.SC-yx8 rev=1 -->
+#### Scenario: g10.store-order-detail.SC6 - Legacy responses preserve pictureless details
+**Serves:** `g10.store-order-detail.US7`, `g10.store-order-detail.US8` - owners and private-link holders recognise the recorded items
+
+- **GIVEN** a compatible order response without picture fields on its items
+- **WHEN** the current application reads that response
+- **THEN** Order Details renders the recorded items with the existing placeholder
+- **AND** absent picture fields do not turn the successful read into an error
+
+<!-- trace:scenario id=g10.store-order-detail.SC-4at rev=1 -->
+#### Scenario: g10.store-order-detail.SC7 - Private links receive pictures without account facts
+**Serves:** g10.store-order-detail.US8 - the link holder recognises a purchase without account access
+
+- **GIVEN** a valid private link for an earlier guest or member order with an available current product picture
+- **WHEN** a link holder who is not the signed-in owner opens it
+- **THEN** the matching recorded item shows the same first current product picture as the owned detail
+- **AND** no Points row, Points to Earn, Points Earned, wallet or account details appear
+- **AND** the link does not grant account access or change order ownership
+
+<!-- trace:scenario id=g10.store-order-detail.SC-na2 rev=1 -->
+#### Scenario: g10.store-order-detail.SC8 - Pictures do not disclose inaccessible orders
+**Serves:** `grade10-site-store-order-detail-US-01`, `g10.store-order-detail.US8` - the viewer meets the existing refusal without seeing purchase facts
+
+- **GIVEN** an unknown order, an unowned member-order address or an invalid private link
+- **WHEN** the viewer opens that address
+- **THEN** the existing not-found treatment appears without an order picture
+- **AND** no recorded order fact or existence claim is disclosed
+
+<!-- trace:scenario id=g10.store-order-detail.SC-x4j rev=1 -->
+#### Scenario: g10.store-order-detail.SC9 - Image resource failure preserves detail actions
+**Serves:** `g10.store-order-detail.US7`, `g10.store-order-detail.US8` - owners and private-link holders recognise the recorded items
+
+- **GIVEN** a supplied picture whose image resource fails to load
+- **WHEN** an owner or valid private-link holder reads the order
+- **THEN** the recorded purchase facts remain readable
+- **AND** any valid tracking action remains usable

@@ -10,7 +10,7 @@ id and another collector's id deliberately look the same.
 
 The first delivery shows only facts the typed Store order already carries:
 items, quoted and paid totals, refunds, fulfilment, estimates, and tracking.
-Payment method, address, discounts, shipping, tax, product images, and loyalty
+Payment method, address, discounts, shipping, tax, and loyalty
 stay absent until the Store supplies them. Omitting those groups is more useful
 than filling the designed page with claims the frontend cannot prove.
 
@@ -38,6 +38,12 @@ such as `javascript:`, offers no Track Order. Engineering confirms
 
 **Read states** — loading, localized failure with Retry, and not-found stay
 distinct at the same address
+
+## Product Pictures
+
+🚧 **Recognise an item** - each item shows its current product picture on the
+owned order and its private link, including earlier purchases. An unavailable
+picture keeps the existing placeholder without preventing the order from opening.
 
 ## Order Link
 
@@ -136,6 +142,7 @@ except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| Order pictures | Decided | Use the first current product picture, as the cart does, rather than a purchase-time image. A later product-image edit can appear on an earlier order; a removed or unpublished product may have no picture. Order access and recorded purchase facts stay unchanged. Selected from the recommended fix on 2026-10-22. | Product |
 | Order link for every order | Decided | Every order email's View order button carries the private link, member orders included. A forwarded email lets a holder see a member's order — accepted; the page shows no account facts. Decided 2026-10-13. | Product |
 | Post-checkout prompt | Decided | The account prompt lives on the Grade10 order page after checkout, not on a Shopify Thank-you extension. Decided 2026-10-13. | Product |
 | Another email | Decided | Only a sign-in that proves the order's email adds it — a magic link to that email or a Google account under it; a Google account under another email signs the buyer in and adds nothing, and the toast offers a magic link to the order's email. Decided 2026-10-13. | Product |

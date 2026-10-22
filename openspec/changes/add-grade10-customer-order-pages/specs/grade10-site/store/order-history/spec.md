@@ -11,6 +11,9 @@ understand which still need attention, and open tracking or one order safely.
 - Order review
   - Active and past groups: Present newest orders Shopify holds, active above those nothing is left to happen on.
   - Order actions: Open one order or a safe carrier tracking page.
+- Product pictures
+  - Current product identity: Show the first current product picture on earlier and new purchases.
+  - Optional pictures: Keep purchase facts readable when picture data is absent or unavailable.
 - Page states
   - Loading and retry: Explain reads that have not completed or failed.
   - Empty account: Return a collector with no orders to the Store.
@@ -168,3 +171,89 @@ designed empty state and a Shop Now action to `/store`.
 - **WHEN** Your Orders renders
 - **THEN** the designed empty state appears
 - **AND** Shop Now opens `/store`
+
+### Requirement: Current product pictures identify recorded purchases
+
+Your Orders SHALL show each available first current product picture beside its
+matching recorded item, including purchases made before picture support. A
+later catalogue edit SHALL be reflected when the order is read again. Pictures
+SHALL NOT replace recorded titles, quantities, currency, prices, totals,
+status, tracking or order actions.
+
+| Picture State | Required Outcome |
+| --- | --- |
+| Current first product picture available | Show it in the existing item frame |
+| Catalogue alt text absent, empty or whitespace-only | Use the recorded item title as the image's accessible name |
+| Meaningful catalogue alt text supplied | Preserve that accessible name |
+| Product or picture unavailable | Keep the existing placeholder and purchase facts |
+| Picture lookup fails | Record a diagnostic and keep the order list and its actions usable |
+| Image resource fails to load | Keep other order facts and actions usable |
+
+Order item responses SHALL allow absent `imageSrc` and `imageAlt` fields.
+When supplied, each field SHALL be a string. A compatible response without
+picture fields SHALL remain readable with the existing placeholder. Picture
+availability SHALL NOT change which collector can read an order.
+
+<!-- trace:scenario id=g10.store-order-history.SC-qrm rev=1 -->
+#### Scenario: g10.store-order-history.SC1 - Earlier purchases show their matching current pictures
+**Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
+
+- **GIVEN** earlier orders with different recorded items and available current product pictures
+- **WHEN** the collector opens Your Orders
+- **THEN** each item shows its own product's first current picture
+- **AND** its recorded title, quantity, currency, price, line total, order total, status and tracking remain unchanged
+
+<!-- trace:scenario id=g10.store-order-history.SC-2qr rev=1 -->
+#### Scenario: g10.store-order-history.SC2 - A later catalogue picture replaces an earlier display
+**Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
+
+- **GIVEN** an earlier purchase whose product's first picture has changed since a previous order read
+- **WHEN** the collector reads Your Orders again
+- **THEN** that item shows the new first current picture
+- **AND** its recorded purchase facts remain unchanged
+
+<!-- trace:scenario id=g10.store-order-history.SC-1ry rev=1 -->
+#### Scenario: g10.store-order-history.SC3 - Unavailable pictures preserve the order list
+**Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
+
+- **GIVEN** recorded items whose products are removed, unpublished or supply no picture
+- **WHEN** Your Orders loads successfully
+- **THEN** each affected item keeps the existing placeholder
+- **AND** the recorded items, order facts and available actions remain visible
+
+<!-- trace:scenario id=g10.store-order-history.SC-r6e rev=1 -->
+#### Scenario: g10.store-order-history.SC4 - Blank alt text uses each recorded title
+**Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
+
+- **GIVEN** pictured items with absent, empty, whitespace-only or meaningful catalogue alt text
+- **WHEN** their summaries render
+- **THEN** each blank alt uses that item's recorded title as the image's accessible name
+- **AND** meaningful supplied alt text remains the accessible name
+
+<!-- trace:scenario id=g10.store-order-history.SC-cb4 rev=1 -->
+#### Scenario: g10.store-order-history.SC5 - Picture lookup failure preserves successful order reads
+**Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
+
+- **GIVEN** the collector's order facts are readable but the picture lookup fails
+- **WHEN** Your Orders loads
+- **THEN** the affected items keep the existing placeholder
+- **AND** the successful list, purchase facts, View Details and any valid tracking action remain usable
+- **AND** the picture lookup failure has a diagnostic record
+
+<!-- trace:scenario id=g10.store-order-history.SC-ds5 rev=1 -->
+#### Scenario: g10.store-order-history.SC6 - Legacy responses preserve pictureless summaries
+**Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
+
+- **GIVEN** a compatible order response without picture fields on its items
+- **WHEN** the current application reads that response
+- **THEN** Your Orders renders the recorded items with the existing placeholder
+- **AND** absent picture fields do not turn the successful read into an error
+
+<!-- trace:scenario id=g10.store-order-history.SC-a5w rev=1 -->
+#### Scenario: g10.store-order-history.SC7 - Image resource failure leaves order actions usable
+**Serves:** g10.store-order-history.US5 - the collector recognises earlier purchases before opening one
+
+- **GIVEN** a supplied picture whose image resource fails to load
+- **WHEN** the collector reads its order summary
+- **THEN** the recorded purchase facts remain readable
+- **AND** View Details and any valid tracking action remain usable

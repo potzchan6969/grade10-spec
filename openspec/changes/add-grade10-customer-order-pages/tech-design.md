@@ -1,241 +1,234 @@
 ## Context
 
-See [proposal.md](proposal.md) for the product reason. The feature branch now
-has session-gated customer order routes composed over
-`@grade10/store-frontend/checkout`'s `useOrders` and `useOrder` hooks. Those
-hooks use the typed `checkout.listOrders` and `checkout.getOrder` reads.
+See [proposal.md](proposal.md) for the product reason and
+[decisions.md](decisions.md) for the selected picture policy. Groups 1-6 in
+[tasks.md](tasks.md) record the delivered customer pages and rich order facts.
+The thumbnail extension adds optional display facts to that path.
 
-The typed buyer order now carries id, shop order number, lifecycle status,
-origin, currency, quoted subtotal, eligible goods, discount, shipping charge,
-tax, paid total, refunded amount, fulfilment status, fulfilments, shipping
-address, payment instrument, timestamps, and line items. It does not currently
-carry a settled points credit or deducted points count, an order-level promo
-code, line-level coupon or issue facts, product media, pickup address or
-fulfilment kind, or a loyalty amount. The frontend `Order` model still exposes
-the earlier subset, so TypeScript permits the decoded `StoreOrder` to pass
-through the repository while the new fields disappear at the domain and
-presentation boundaries.
+The Grade10 routes compose `CustomerOrderHistory` and `CustomerOrderDetails`
+through `@grade10/store-frontend/checkout`. `CheckoutApiService` decodes the
+existing order schemas; its repository returns the decoded order directly.
+The frontend `Order` model already carries shop identity, settlement, points
+credit, address, payment and fulfilment facts. Its items and the wire's
+`orderItemSchema` carry no images, and both pure page projections omit them.
 
-`@grade10/ui` already exports both page blocks. `OrderHistory` accepts supplied
-active and past lists. The shared component implementation omits absent
-summary groups and money rows, but its current address type still requires a
-recipient name and its payment type still requires a recognized brand. The
-widened address and payment contract described by this change is therefore not
-complete until its implementation and stories land together.
+`readOrderForBuyer` repairs one accessible order and calls
+`toStoreOrdersForBuyer`. The list calls that batched projection without
+repairing every order. `readOrderByLink` repairs an accessible order but calls
+`toStoreOrder` directly, preserving the private link's distinct account-data
+boundary. Admin order detail and card reads use `readForBuyer`; their preview
+renders the same customer components. Existing repair, points, access and
+Audit behavior stay in their current owners.
 
-The published composed Order Details stories exercise richer fixture props than
-the current Store read. `ItemCoupon` and `OrderDiscount` demonstrate line and
-order promo labels, refunded line presentation, and product media. `Pickup`
-demonstrates an explicit pickup fulfilment and address. `InStore`,
-`NoOptionalGroups`, and `PaidTotalWithoutSubtotal` demonstrate optional-group
-shapes. These are shared UI fixtures, not values the Grade10 page may copy into
-an order. The application maps them only when the typed Store contract supplies
-the corresponding fact. Until then, it preserves the existing honest omission
-rules. `WithPointsCredit` is an application requirement when the read supplies
-both the money credit and deducted count, but the current read has no source for
-either value.
+`ShopifyCatalog.getVariants` already returns each variant's product and first
+product image. Its port accepts at most 250 IDs. An order list allows up to
+100 orders, whose distinct line variants can exceed that ceiling. The shared
+order blocks already accept `imageSrc` and `imageAlt`, render the existing
+placeholder without a source, and leave image-resource errors to the browser.
+Their address, payment and points contracts from the earlier groups are
+already implemented.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Keep route and state composition in the Grade10 app and order reads in the
-  existing store frontend feature.
-- Project only typed order facts into shared UI props.
-- Preserve owner privacy by treating a null order as not found.
-- Keep each page testable with frontend fixtures and an injected procedure
-  client.
+- Add current product pictures at the existing order-read boundary, including
+  earlier orders, without storing a second purchase fact.
+- Use one image enrichment for member, list, private-link and admin-preview
+  reads, after their existing access checks.
+- Keep order facts usable when this optional catalogue read fails.
+- Keep frontend rendering testable through typed procedure fixtures.
 
 **Non-Goals:**
 
-- Adding or changing a Store procedure, provider read, database record, webhook,
-  or reconciliation path.
-- Reorganizing the existing checkout feature solely to rename order reads.
-- Adding a second order-status mapping inside either page.
+- Changing order persistence, checkout validation, provider reconciliation,
+  access policy, points entitlement or the shared blocks' design.
+- Adding a cache, image snapshots, a dependency, metrics or a new admin flow.
+- Mapping story-only line coupons, issues, promo codes, pickup facts or earned
+  loyalty values without a corresponding typed order fact.
 
 ## Decisions
 
-### Add two explicit session surfaces
+### Keep The Existing Page Boundaries
 
-Add `orderHistory` at `/profile/orders` and `orderDetail` at
-`/profile/orders/:orderId` to `apps/frontend/grade10/src/surfaces.ts`, then add
-one route module per surface. Both modules compose the existing
-`SessionDecided` boundary. The parameterized detail route is registered before
-the broader profile routes, following the existing product-detail route.
+The [history](specs/grade10-site/store/order-history/spec.md) and
+[detail](specs/grade10-site/store/order-detail/spec.md) requirements govern the
+customer pages. Keep their session surfaces at `/profile/orders` and
+`/profile/orders/:orderId`, `SessionDecided`, query-state branches, callbacks
+and safe tracking helper. The routes own navigation and browser effects;
+shared blocks receive props. A null owned-order answer remains not found.
 
-The route modules own browser effects: app navigation and opening a carrier URL.
-The page components receive callbacks, so they remain renderable in focused
-tests without `window`.
+Continue to derive the badge through `grade10-site/commerce/order-status`.
+Use integer minor units before formatting. Display a non-empty shop order
+number with Store-id fallback, while routes and actions keep the immutable
+Store id. Existing settlement projections preserve null versus zero, separate
+Points from Discount, and omit unsupported address or payment facts.
+Recognized payment brands keep their logos; other supplied labels remain text.
+Catalogue enrichment changes none of those mappings.
 
-**Alternative rejected:** nest Your Orders inside the current profile page.
-That leaves no stable order-list address and couples two independently loading
-surfaces.
+**Alternative rejected:** a second page adapter or a direct Shopify call from
+the browser. Both duplicate the current feature boundary.
 
-### Keep one typed order read path
+### Enrich Orders After Access And Repair
 
-Align the existing frontend `Order` model with the buyer fields these pages
-consume: `orderName`, `discountAppliedMinor`, `shippingMinor`, `taxMinor`,
-`shippingAddress`, and `paymentInstrument`. Reuse the exported
-`StoreShippingAddress` and `StorePaymentInstrument` value types. Keep the
-repository's direct decoded return, `useOrders`, and `useOrder`; do not restore
-an identity mapper or add duplicate repositories or procedures.
+The picture requirements govern which image readers receive. Keep
+`toStoreOrder` as the synchronous projection of recorded facts. Add a small
+order-image service beside `readOrder.ts`, receiving the existing catalogue
+port and already projected orders. It returns new orders with only optional
+item-image fields added. It performs no database read or write.
 
-Add pure customer-order projections beside the order presentation layer:
+- **Buyer and list reads** - `toStoreOrdersForBuyer` keeps its existing batched
+  points projection, then enriches the complete result once. Do not invoke
+  `readOrderForBuyer` per list row or add per-order catalogue reads.
+- **Private links** - `readOrderByLink` enriches `[toStoreOrder(found)]` after
+  existing link validation and repair. Do not replace it with the member
+  projection: that would acquire member-only points facts. Keep the current
+  link envelope and page-level account-data omissions. The retained legacy
+  guest procedure receives images through its existing read path without
+  changing its access policy.
+- **Admin preview** - existing `admin.orders.get` and `admin.orders.card` use
+  the enriched buyer projection. Keep the `store:read` grant, Audit behavior
+  and card's removal of address and payment. Its customer preview receives
+  the same picture props through the existing customer components; it adds
+  no staff journey or read endpoint.
+- **Transaction boundary** - finish the current database reads and repair
+  transaction before calling the catalogue. No transaction or row lock spans
+  image lookup. The helper adds no claim, due row, event or mutation.
 
-| Projection | Input | Output |
+**Alternative rejected:** cart review as an order-image helper. Its price,
+currency, availability and quantity decisions would revalidate a historical
+purchase. Read only the image-bearing variant data instead.
+
+### Batch By Variant Identity
+
+Collect valid `VARIANT_GID` values from all projected items, deduplicate them,
+and skip the catalogue call when that set is empty. Lookup uses `variantId`:
+a point-of-sale line can have a valid variant with an empty `productId`.
+Reuse `chunk` from `@grade10/utils/batch` for batches of at most 250. Process
+batches sequentially rather than starting one request per order or line.
+
+Index returned non-null variants by their returned ID, independent of response
+position. Copy only `variant.product.images[0]` to matching items. A missing,
+unpublished or removed variant, absent first image, or blank image URL adds no
+picture fields. Do not choose another variant image, reprice the line, require
+current stock, replace its recorded title or fabricate items for an empty order.
+A changed catalogue image is read again on the next order request; no cache or
+persisted image is introduced.
+
+The existing Shopify transport uses `fetchWithDeadline` and
+`VENDOR_DEADLINE_MS`. Retain that aborting transport deadline. Bound the whole
+optional enrichment wait to the same budget: before each batch, compute the
+remaining time and use `beforeDeadline` around the signal-free catalogue port.
+Do not launch more batches after budget expiry. Keep each completed batch's
+results; uncompleted variants remain pictureless. The remaining transport call
+may finish after the wait expires, but cannot mutate returned orders or launch
+another batch.
+
+For a refusal, thrown fault or timeout, log a bounded structured warning with
+operation, failure kind and batch counts, then preserve the successful order
+read. Do not log a private-link secret, receipt email, address, payment data or
+raw provider body. Missing catalogue nodes are normal absence, not faults.
+Continue other batches while budget remains. No retry loop or metric is added.
+
+**Alternative rejected:** one unbounded `nodes` call or unlimited parallel
+lookups. The former fails above the port ceiling; the latter magnifies an
+optional display read into provider load.
+
+### Forward Optional Props Through One Customer Projection
+
+Extend `OrderItem` with the wire's optional string fields. Keep the direct
+repository return and production decoding; no identity mapper is needed.
+`toOrderHistorySummary` and `toOrderDetailsProjection` forward a non-blank
+`imageSrc` unchanged and use the supplied non-blank alt text. Absent, empty or
+whitespace-only alt text falls back to that item's recorded title. Check
+blankness with trimming, without rewriting a valid URL or meaningful alt text.
+Do not derive the history alt from its formatted `title × quantity` label.
+
+Apply the fallback in the frontend even if backend enrichment omits blank alt
+text. This covers compatible response fixtures and keeps repeated variants
+with different recorded titles truthful. Without a source, omit picture props
+and retain the existing frame. An image-resource failure changes neither order
+query state nor purchase facts; no `onError` design is added.
+
+**Alternative rejected:** changing the shared image renderers to repair missing
+application props. The application owns these item facts; the blocks already
+render them.
+
+## Service Interfaces
+
+| Processor | Fixed Input | Success | Faults And Side Effects |
+| --- | --- | --- | --- |
+| Order image enrichment | `{ catalog: ShopifyCatalog, orders: readonly StoreOrder[] }` | `StoreOrder[]`, preserving order and item sequence, with optional images on matching items | Refused, thrown or late catalogue results log and leave affected items pictureless; no database work |
+| Buyer order projection | Existing commerce dependencies and complete `OrderWithItems[]` | Existing buyer facts followed by one page-wide image enrichment | Existing points/read faults retain their behavior; only image lookup is optional |
+| Private-link projection | Existing accessible order, viewer and event-drain callback | Existing `OrderByLink` envelope, with enriched `order` from the non-member projection | Existing null/refusal and repair behavior; no member points lookup |
+
+Identity flows through the existing session or link check, order repair and
+repository read, then the image enrichment, output schema, production client
+decoder, frontend domain item and customer projection. Admin permission and
+Audit checks precede the same buyer read. No image request comes from a block.
+
+For example, an earlier order line names variant
+`gid://shopify/ProductVariant/41`, title `Recorded Card`, quantity 2 and unit
+price 10000 minor units `HKD`. A current catalogue answer with first image
+`https://cdn.example.test/card.jpg?v=7` adds that URL. A blank alt becomes
+`Recorded Card` at presentation. A current title or price in that catalogue
+answer replaces neither recorded value; the line total stays 20000 minor units
+`HKD`. Reordered or null variant nodes cannot transfer another item's picture.
+
+## API Contracts
+
+| Order Item Field | Shape | Absence |
 | --- | --- | --- |
-| History summary | `Order`, customer badge, localized formatters | `OrderHistoryOrderSummary` |
-| Detail props | `Order`, customer badge, localized formatters | `OrderDetailsProps` data |
-| Customer order label | shop order number and Store id | non-empty shop order number or Store id |
-| Shipping address | typed shipping address | optional `OrderDetailsAddress` |
-| Payment method | typed payment instrument | optional `OrderDetailsPayment` |
-| Tracking target | tracking URL string or null | safe absolute `https` URL or null |
+| `imageSrc` | Optional string | Catalogue cannot supply a first product picture |
+| `imageAlt` | Optional string | Catalogue supplies no non-blank alt text; frontend uses recorded title |
 
-The status badge comes from `grade10-site/commerce/order-status`; these pages
-consume that frontend rule and do not copy it. Formatting stays at the
-application boundary where locale is known. Arithmetic uses minor units before
-formatting. Both pages display a trimmed, non-empty `orderName` when supplied
-and otherwise the Store id, but maps, callbacks, and routes remain keyed by the
-Store id. Change the catalog templates from `Order #{id}` to `Order {id}` so a
-provider value such as `#G10-10482` does not acquire a second prefix.
+Add the fields with `Schema.optionalKey(Schema.String)` on `orderItemSchema`.
+They flow through existing `orderSchema`, `orderListSchema`, `orderByLinkSchema`
+and the admin card schema. There are no new input fields or endpoints.
 
-**Alternative rejected:** map the DTO directly in each page. That would hide
-wire fields behind the narrower domain type and duplicate money, status, and
-tracking decisions.
-
-### Treat absent data as absent UI
-
-Keep the existing optional summary, payment, money-row, and sidebar behavior.
-The compound continues to omit an absent group and the full sidebar when no
-sidebar facts remain. Existing consumers that pass complete objects keep the
-same rendering and type compatibility.
-
-The Grade10 detail projection supplies only facts present on `Order`:
-
-- **Lines:** title, quantity, captured unit price, and derived line total. It
-  does not copy story-only image, line coupon, line status, status message, or
-  strike-through values. A later typed contract change may map each optional
-  fact without changing the page boundary.
-- **Money:** quoted subtotal, discount, points credit, shipping, tax, and paid
-  total when each is non-null, plus refund when positive. Format discount,
-  points, and refund as deductions; normalize a zero deduction before
-  formatting so it does not become negative zero. Pass points on
-  `OrderDetailsSummary.points` separately from `discount` so the sidebar can
-  keep the cart-drawer Points line. A points row requires a typed money credit
-  and deducted count; the projection does not derive either from discount,
-  eligible goods, or refund. When a typed order-level promo code exists, the
-  discount label includes it. A typed item-level coupon remains on its line and
-  is not repeated in the summary.
-- **Address:** join the supplied first and last names only when present, then
-  render non-empty street, locality, country, and phone lines in postal order.
-  Keep the address on the owner-only detail and never project it into history.
-- **Payment:** omit a null or all-null instrument. When `wallet` is supplied,
-  derive a known wallet brand from it and do not fall back to a card logo;
-  retain the wallet identity beside any mask. Without a wallet, normalize
-  known Visa, Mastercard, and American Express values to their shared logo.
-  For every other value, use the first non-empty company or provider method as
-  a text label beside the supplied mask.
-- **Fulfilment:** status, display status, estimated delivery, and tracking. A
-  pickup step or address requires an explicit typed pickup fact. The projection
-  does not turn a web shipping address into pickup or infer pickup from a point-
-  of-sale origin.
-
-Null discount, shipping, tax, address, and payment values remain absent. A
-supplied numeric zero remains a visible statement. No generic card brand, zero
-subtotal, empty line, pickup address, delivery event, product image, loyalty
-value, promo code, line coupon, or line issue stands in for a missing fact.
-
-Extend `OrderDetailsAddress.name` to be optional. Extend
-`OrderDetailsPayment` so `brand`, `label`, and `maskedNumber` are independently
-optional, and omit an all-empty payment section. The shared sidebar renders a
-logo only for a supplied recognized brand and renders a supplied label without
-requiring a logo. Existing consumers that provide `name` and `brand` remain
-source-compatible.
-
-**Alternative rejected:** map every unknown provider to a generic or nearest
-card logo. That would turn incomplete provider data into a claim the Store did
-not make and can mislabel a wallet's device-account digits as a card number.
-
-### Validate tracking before exposing an action
-
-Parse a supplied tracking target once in a pure frontend helper. Accept only an
-absolute `https` URL with no username or password. The route callback opens it
-with a new browsing context and `noopener,noreferrer`. Invalid, relative,
-credential-bearing, or absent URLs return null; carrier names and tracking
-numbers remain display data only.
-
-**Alternative rejected:** build carrier URLs from tracking numbers. Carrier URL
-formats and regional hosts are not a Grade10 contract.
-
-### Keep query states outside the shared blocks
-
-Pages render `Skeleton` while the first query is pending, a localized error and
-Retry action when it fails, and the shared page block only after success. A
-successful null detail renders the site's not-found treatment. History passes
-empty arrays to `OrderHistory` only after a successful empty read.
-
-**Alternative rejected:** teach shared UI blocks about query libraries. Shared
-blocks are prop-driven and used by more than this application.
-
-### Localize only application-supplied copy
-
-Add Discount, Shipping, and Tax money-row copy, and update the order-label
-template, in the Grade10 `en`, `zh-Hant`, and `zh-Hans` catalogs. Keep dates,
-money, provider names, and masks on the existing formatters or supplied data;
-no Korean entries are added because Korean is a ZZZ locale.
+Use the actual production decoders to prove legacy image-free responses remain
+valid and enriched responses retain both fields on member, list, private-link
+and admin paths. Exercise the previous schema against enriched responses to
+prove older clients can discard unknown fields. `null` or non-string picture
+fields are invalid under the new schema. Keep the saved prior schema in the
+compatibility test rather than weakening the production schema.
 
 ## Risks / Trade-offs
 
-- **[Risk] The order-status change is revised while these pages are built.** →
-  Consume one exported badge and keep raw lifecycle values out of page
-  components, limiting any adjustment to the projection boundary.
-- **[Risk] A later order contract adds richer detail fields.** → Optional UI
-  groups remain additive; a later frontend change can map new typed facts
-  without changing these routes or fabricating data now.
-- **[Risk] Older orders and ingestion arms carry null or partial settlement
-  facts.** → Test null separately from numeric zero and let each address or
-  payment part render independently.
-- **[Risk] Provider payment names do not match the shared brand union.** → Keep
-  normalization explicit and case-insensitive, then fall back to supplied text
-  without a guessed logo.
-- **[Risk] Shared stories carry facts the Store read does not carry.** - Keep
-  story fixtures in `@grade10/ui`, map only typed order facts in Grade10, and
-  make a later contract change the prerequisite for line promos, line issues,
-  product media, pickup facts, loyalty amounts, or order promo labels.
-- **[Risk] The points credit has a source only where the shop named the points
-  discount.** - The Store read takes it from the allocation the shop named
-  under a points title (grade10
-  `packages/grade10-store/backend/src/services/orders/readOrder.ts`
-  `pointsCreditOf`), never from the fallback that subtracts every other
-  discount, so an order whose shop named no points discount shows no Points
-  row, as Order Details' No Points row line states.
-- **[Risk] Shipping address and payment data escape the owner surface.** → Keep
-  both projections detail-only, exclude them from logs and analytics, and rely
-  on the existing owner-scoped read and not-found treatment.
-- **[Risk] A malformed carrier URL creates an unsafe navigation.** → Centralize
-  URL parsing, reject credentials and non-HTTPS schemes, and test the browser
-  flags at the route boundary.
-- **[Risk] A null owner read is mistaken for a transport failure.** → Keep null,
-  error, and pending branches explicit in the detail page tests.
-- **[Risk] The buyer read shape drifts again before implementation.** → Compile
-  frontend fixtures against `StoreOrder` and keep the domain model structurally
-  aligned with the decoded contract.
+- **[Risk] Optional image lookup delays a large order page.** - Deduplicate
+  across its orders, cap batches at 250 and bound the enrichment wait.
+- **[Risk] A catalogue failure hides the receipt.** - Catch only the optional
+  enrichment boundary, log its failure and return existing purchase facts.
+- **[Risk] Shared stories imply unavailable purchase data.** - Add only the
+  approved image fields. Keep unsupported promo, pickup and loyalty values
+  absent; keep named points allocations under the existing rule.
+- **[Risk] Private links acquire account facts.** - Preserve their non-member
+  projection, and compare the enriched envelope and rendered omissions in
+  router and page tests. Keep all access and account-joining rules with
+  `add-store-guest-checkout`.
+- **[Risk] Contract decoding silently strips image fields.** - Assert raw
+  output, output-schema decoding and the frontend decoder separately.
+- **[Risk] A rendered image tag points at unusable bytes.** - Browser walks use
+  controlled served assets and assert loaded dimensions, alongside unchanged
+  facts and actions on resource failure.
+- **[Risk] Current pictures differ from the purchase date.** - This is the
+  selected product policy. No historical-image claim is made.
 
 ## Migration Plan
 
-1. Land the widened Order Details address and payment contract plus Grade10
-   catalog additions in `grade10-spec`, with component stories and catalog
-   tests.
-2. Advance the Grade10 app's `external/grade10-spec` pointer to that landed
-   commit.
-3. Confirm the typed Store read supplies every field required by the page
-   scenarios. If it does not, keep the corresponding story-only data absent and
-   hold the affected acceptance behind the contract change that supplies it.
-4. Align the frontend order model, fixtures, and projections, then pass the new
-   optional props through the existing history and detail pages.
-5. Land the separate `add-store-order-status` dependency before claiming the
-   customer pages complete; this change continues to consume that capability
-   rather than defining a temporary status rule.
-6. Roll back the rich-field presentation by reverting the app projections and
-   gitlink together; the existing owner-scoped reads remain unchanged. No data
-   migration or backend rollout is involved.
+1. Reconcile the two product records with the settled picture decision and
+   preserve their in-flight marks. No shared block contract change is needed
+   for this extension; the earlier groups remain completed history.
+2. Land optional wire and domain item types with old/new decoder proof.
+3. Backend enrichment and frontend projections can then proceed independently
+   against the contract and controlled fixtures. Reuse the current catalogue
+   image selection; do not reopen the cart-thumbnail change's persistence rules.
+4. Verify member list, owned detail, valid and rejected private links, and
+   existing admin preview. Preserve the current shared submodule pin unless
+   the accepted contract handoff requires its normal update.
+5. Keep `add-store-order-status` as the status owner and the guest-checkout
+   change as the link/account owner. No production operation is part of this
+   planning work.
+6. Optional fields allow backend and frontend rollout in either order after
+   decoder checks. Reverting either application side returns affected views to
+   their existing placeholders. There is no database migration or cache reset.

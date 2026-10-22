@@ -193,8 +193,7 @@ export const LINE_TOOLTIPS = {
  * HKD-issued card invoice — the invoice lines keep their original USD
  * amounts, the Subtotal converts their sum to HKD and names the fixed rate,
  * and the card fee is computed in HKD below it with no USD counterpart. The
- * Order Total rounds up to two decimals (winner-order-SC-290,
- * winner-order-SC-304).
+ * Order Total is their sum to the cent (g10.auction-winner-order.SC5).
  */
 const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
   { label: "Winning Bid", value: "US$12,800.00" },
@@ -225,10 +224,10 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
   },
   {
     label: "Payment Processing Fee",
-    value: "HK$545.00",
+    value: "HK$4,517.08",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$128,814.00" },
+  { label: "Order Total", value: "HK$132,786.08" },
 ];
 
 /** Sent invoice with Insurance for the tooltip coverage state. */
@@ -263,7 +262,7 @@ export const INSURED_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
 ];
 
 export const WINNER_ORDER_REFUND_CLOSING = {
-  amount: "HK$128,814",
+  amount: "HK$132,786.08",
   reason: "Not as described",
   note: "Card condition did not match the listing photos. Full amount returned.",
   transfer: {
@@ -287,7 +286,7 @@ export const WINNER_ORDER_REFUND_OVERPAID = {
 /**
  * HKD-issued bank transfer invoice — same USD lines and HK$ Subtotal as the
  * card fixture; the operator fee may be zero and zero reads Free
- * (`winner-order-SC-111`). Order total is the card fixture less the card fee.
+ * (`winner-order-SC-111`, `g10.auction-winner-order.SC3`). Order total is the card fixture less the card fee.
  */
 export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
   { label: "Winning Bid", value: "US$12,800.00" },
@@ -460,8 +459,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         settlementCurrency: "HKD",
         invoiceLines: INVOICE_LINES,
         usdTotal: "US$16,340.00",
-        convertedTotal: "HK$128,269.00",
-        convertedFee: "HK$545.00",
+        convertedTotal: "HK$132,786.08",
+        convertedFee: "HK$4,517.08",
         invoiceId: INVOICE_ID,
         deadline: PAYMENT_DEADLINE,
         primaryCta: "Pay with Card",
@@ -482,8 +481,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         settlementCurrency: "HKD",
         invoiceLines: INVOICE_LINES,
         usdTotal: "US$16,340.00",
-        convertedTotal: "HK$128,269.00",
-        convertedFee: "HK$545.00",
+        convertedTotal: "HK$132,786.08",
+        convertedFee: "HK$4,517.08",
         invoiceId: INVOICE_ID,
         deadline: PAYMENT_DEADLINE_PASSED,
         primaryCta: null,
@@ -567,8 +566,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         settlementCurrency: "HKD",
         setupPaymentMethod: "Card",
         usdTotal: "US$16,340.00",
-        convertedTotal: "HK$128,269.00",
-        convertedFee: "HK$545.00",
+        convertedTotal: "HK$132,786.08",
+        convertedFee: "HK$4,517.08",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
@@ -594,8 +593,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         settlementCurrency: "HKD",
         setupPaymentMethod: "Card",
         usdTotal: "US$16,340.00",
-        convertedTotal: "HK$128,269.00",
-        convertedFee: "HK$545.00",
+        convertedTotal: "HK$132,786.08",
+        convertedFee: "HK$4,517.08",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
@@ -623,8 +622,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         settlementCurrency: "HKD",
         setupPaymentMethod: "Card",
         usdTotal: "US$16,340.00",
-        convertedTotal: "HK$128,269.00",
-        convertedFee: "HK$545.00",
+        convertedTotal: "HK$132,786.08",
+        convertedFee: "HK$4,517.08",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
@@ -666,8 +665,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         settlementCurrency: "HKD",
         setupPaymentMethod: "Card",
         usdTotal: "US$16,340.00",
-        convertedTotal: "HK$128,269.00",
-        convertedFee: "HK$545.00",
+        convertedTotal: "HK$132,786.08",
+        convertedFee: "HK$4,517.08",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         paymentMethod: "Visa",

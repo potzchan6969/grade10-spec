@@ -5,7 +5,7 @@
       held rung wearing the primary border and its tinted shadow where
       `currentTier` is passed; export `TierInfoCard` and `TierInfoCardProps`
       from `packages/ui/src/index.ts`
-      `grade10-site-loyalty-programme-SC-258`, `grade10-site-loyalty-programme-SC-125`
+      `grade10-site-loyalty-programme-SC-265`, `grade10-site-loyalty-programme-SC-125`
 - [x] 1.2 Add `tier-info-card.stories.tsx` under
       `Loyalty/Membership/Blocks/TierInfoCard` — `Silver`, `Gold`, `Black`,
       the held and unheld emphasis
@@ -19,7 +19,7 @@
       upcoming and no qualifying pill or footnote renders; the qualifying
       pill and footnote render only where both figures arrive. Export
       `TierLadder`, `TierLadderCopy`, `TierLadderProps` and `TierLadderRung`
-      `grade10-site-loyalty-programme-SC-259`, `grade10-site-loyalty-programme-SC-260`
+      `grade10-site-loyalty-programme-SC-266`, `grade10-site-loyalty-programme-SC-267`
 - [x] 2.2 Add `tier-ladder.stories.tsx` — `Gold`, `Silver` (Silver-held
       ladder), `Black` (invitation-held, qualifying suppressed) and a
       story asserting the pill waits for both figures
@@ -29,7 +29,7 @@
 - [x] 3.1 Add `how-points-work.tsx` — icon rows stacked on a narrow
       viewport and paired across a wide one, icons and words through props;
       export `HowPointsWork`, `HowPointsWorkItem` and `HowPointsWorkProps`
-      `grade10-site-loyalty-programme-SC-261`
+      `grade10-site-loyalty-programme-SC-268`
 - [x] 3.2 Add `how-points-work.stories.tsx` asserting the preview's own
       copy states the programme's values — a point redeems a Hong Kong
       dollar, points arrive when an order completes, the balance lapses
@@ -54,8 +54,8 @@
 
 ## 5. The walk - a member reads their standing and the mechanics (grade10-spec)
 
-- [ ] 5.1 Walk `grade10-site-loyalty-programme-US-05` on the workbench:
+- [ ] 5.1 Walk `grade10-site-loyalty-programme-US-12` on the workbench:
       `Loyalty/Membership/TiersBenefits` draws the gold member's ladder and
       rung cards on a phone and on a wide viewport, and the Black-held story
       shows every other rung upcoming with no qualifying line
-      (`grade10-site-loyalty-programme-SC-258`, `grade10-site-loyalty-programme-SC-259`)
+      (`grade10-site-loyalty-programme-SC-265`, `grade10-site-loyalty-programme-SC-266`)
