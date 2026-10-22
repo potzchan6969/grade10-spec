@@ -176,6 +176,45 @@ export const SubmitProof: Story = {
   },
 };
 
+/** Empty submit — the first invalid field takes focus and its error shows. */
+export const SubmitEmpty: Story = {
+  name: "Submit empty",
+  args: { onSubmit: fn() },
+  play: async ({ canvasElement, args }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const modal = within(dialog);
+
+    const body = dialog.querySelector<HTMLElement>('[data-slot="dialog-body"]');
+    expect(body).toBeTruthy();
+    body!.scrollTop = body!.scrollHeight;
+
+    await userEvent.click(
+      modal.getByRole("button", { name: "Submit Payment Proof" }),
+    );
+
+    const senderName = modal.getByLabelText("Sender Name");
+    await waitFor(() => {
+      expect(senderName).toHaveFocus();
+    });
+    await waitFor(() => {
+      expect(body!.scrollTop).toBe(0);
+    });
+    await waitFor(() => {
+      const rect = senderName.getBoundingClientRect();
+      const bodyRect = body!.getBoundingClientRect();
+      expect(rect.top).toBeGreaterThanOrEqual(bodyRect.top - 1);
+      expect(rect.bottom).toBeLessThanOrEqual(bodyRect.bottom + 1);
+    });
+    expect(modal.getByText("Enter the sender name.")).toBeVisible();
+    expect(modal.getByText("Attach at least one proof file.")).toBeVisible();
+    expect(
+      page.getByRole("dialog", { name: "Submit Payment Proof" }),
+    ).toBeVisible();
+    expect(args.onSubmit).not.toHaveBeenCalled();
+  },
+};
+
 /** Forced failure — dialog stays open, draft kept, failure toast. */
 export const SubmitFailure: Story = {
   name: "Submit failure",

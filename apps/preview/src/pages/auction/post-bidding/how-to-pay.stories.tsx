@@ -3,7 +3,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, fn, waitFor, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 import {
   OUR_NOTE,
@@ -25,7 +25,7 @@ function HowToPayDemo({
   settlementCurrency = "HKD",
   paymentRail = "fps",
 }: HowToPayDemoProps) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex min-h-svh w-full flex-col bg-background p-8">
@@ -98,11 +98,17 @@ async function findVisibleDialog(
   });
 }
 
+async function openBankDetails(canvasElement: HTMLElement) {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByRole("button", { name: "Open dialog" }));
+}
+
 /** HKD invoice — FPS default, QR, reference at bottom; no Copy controls. */
 export const HkdFpsRail: Story = {
   name: "HKD — FPS rail",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
+    await openBankDetails(canvasElement);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
     expect(
@@ -141,6 +147,7 @@ export const HkdHongKongRail: Story = {
   args: { settlementCurrency: "HKD", paymentRail: "hk_local" },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
+    await openBankDetails(canvasElement);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
     expect(modal.queryByRole("tab")).not.toBeInTheDocument();
@@ -170,6 +177,7 @@ export const UsdRails: Story = {
   args: { settlementCurrency: "USD", paymentRail: "hk_local" },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
+    await openBankDetails(canvasElement);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
     expect(modal.queryByRole("tab")).not.toBeInTheDocument();
@@ -186,6 +194,7 @@ export const UsdInternationalRail: Story = {
   args: { settlementCurrency: "USD", paymentRail: "swift" },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
+    await openBankDetails(canvasElement);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
     expect(modal.queryByRole("tab")).not.toBeInTheDocument();

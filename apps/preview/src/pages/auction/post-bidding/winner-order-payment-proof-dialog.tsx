@@ -120,6 +120,9 @@ function WinnerOrderPaymentProofDialog({
   const submitTimerRef = useRef<number | null>(null);
   /** Bumps on abandon so a late timer cannot complete submit. */
   const submitGenerationRef = useRef(0);
+  const senderNameRef = useRef<HTMLInputElement>(null);
+  const transferDateRef = useRef<HTMLInputElement>(null);
+  const dropzoneRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     return () => {
@@ -205,9 +208,54 @@ function WinnerOrderPaymentProofDialog({
     }
   }
 
+  function scrollToCenter(target: HTMLElement) {
+    const scroller = target.closest<HTMLElement>('[data-slot="dialog-body"]');
+    if (!scroller) return;
+    // Storybook's iframe stubs scrollIntoView — scroll the body ourselves.
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const targetRect = target.getBoundingClientRect();
+    const scrollerRect = scroller.getBoundingClientRect();
+    const delta =
+      targetRect.top +
+      targetRect.height / 2 -
+      (scrollerRect.top + scrollerRect.height / 2);
+    scroller.scrollTo({
+      top: scroller.scrollTop + delta,
+      behavior: reduced ? "instant" : "smooth",
+    });
+  }
+
+  function revealFirstInvalid() {
+    const field = !draft.senderName.trim()
+      ? senderNameRef.current
+      : !draft.transferDate.trim()
+        ? transferDateRef.current
+        : null;
+    if (field) {
+      field.focus({ preventScroll: true });
+      scrollToCenter(field);
+      return;
+    }
+    const zone = dropzoneRef.current;
+    if (draft.files.length < WINNER_ORDER_PROOF_MIN_FILES && zone) {
+      scrollToCenter(zone);
+      zone
+        .querySelector<HTMLButtonElement>("button:not(:disabled)")
+        ?.focus({ preventScroll: true });
+    }
+  }
+
   function handleSubmit() {
     setAttempted(true);
-    if (!ready || formLocked) return;
+    if (formLocked) return;
+    if (!ready) {
+      // Reveal after the error chrome commits — the messages push the
+      // target down, so scrolling first would aim at a stale position.
+      requestAnimationFrame(revealFirstInvalid);
+      return;
+    }
     const generation = submitGenerationRef.current;
     setSubmitting(true);
     clearSubmitTimer();
@@ -238,6 +286,7 @@ function WinnerOrderPaymentProofDialog({
               autoComplete="name"
               disabled={formLocked}
               label="Sender Name"
+              ref={senderNameRef}
               message={
                 attempted && !draft.senderName.trim()
                   ? "Enter the sender name."
@@ -254,6 +303,7 @@ function WinnerOrderPaymentProofDialog({
             <TextInput
               disabled={formLocked}
               label="Transfer Date"
+              ref={transferDateRef}
               message={
                 attempted && !draft.transferDate.trim()
                   ? "Enter the transfer date."
@@ -274,6 +324,7 @@ function WinnerOrderPaymentProofDialog({
                 data-slot="file-dropzone"
                 gap="sm"
                 hAlign="stretch"
+                ref={dropzoneRef}
               >
                 <FileDropzoneTarget
                   accept={WINNER_ORDER_PROOF_FILE_ACCEPT}
