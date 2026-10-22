@@ -1,0 +1,131 @@
+{
+  "version": 2,
+  "change": "configure-auction-bid-increments",
+  "baseline": "ac01c00e2d9eec5dff57fc7a6fc7318ebcd1e65d0e69e30b16488cd081f71761",
+  "fingerprint": "320f595b0727e2cc657fa3e3004a524150076ab8f1008de385b1ef4ebb3407e4",
+  "reviewedBy": "htonyl",
+  "acceptedAt": "2026-10-22T17:25:53.349Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#listings",
+      "sha256": "7434a215e389ac67d3bd1367d7a3637e06eaa51c472804646cbbeb085f1f23d1",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/bidding.md#auction-logic",
+      "sha256": "2959976161351278b536e663873a9e1b10ef26ed064288cd78f6f49de0a8e8d8",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/configure-auction-bid-increments/decisions.md",
+      "sha256": "af023588da590834be564f603cd4d07ce128c38f59e8f9042b746a5df271bdba",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/configure-auction-bid-increments/proposal.md",
+      "sha256": "c3b9b9ea956430d3ed6d820121a586840e8dab436197a891dfdcd75f2fb1da75",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/configure-auction-bid-increments/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "e24e8211d0f57158bc20f506768e1fd6437a49f87c0d3f60f931f68d0b2a6738",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/configure-auction-bid-increments/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "6d0511a17f1adf00f0e5e64ffb6b9e0bba2fc8925ac88649885b203c977b7d86",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/configure-auction-bid-increments/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "6cb4a8e55612bd9d6bb23e9d237e4ecfa09479b080c9964c89051c3f3acd8742",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/configure-auction-bid-increments/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+      "sha256": "4c7f1cc001dd69710af6b875f9cc8a2242a379d3e4408dfedbc03cbd6a2478bc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/configure-auction-bid-increments/specs/grade10-site/auction/bid-increments/spec.md",
+      "sha256": "b99085b9087b10842cf7982d94a36c907892cbf6a9417daf9c45ec191babae87",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/configure-auction-bid-increments/specs/grade10-site/auction/bid-increments/user-journeys.md",
+      "sha256": "6b8f6978b63180bf9d8e3b86cc1ffa98e760dcbdc2514ad765f51e3bd24f0cd6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/configure-auction-bid-increments/tech-design.md",
+      "sha256": "0135a04ce6dc0c35fa8a37e4568f7a84bf15ff5e626661a4746b165576c6db6a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "4b59a388eb85b53e314f7f55729c9942ef06fd47c1e573924ffa8d2b3d5045af",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "53367cb9f421aadab4ddf5c3b162bba247c1af853aa7de02c3227e137aeb6994",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "b7144d415b13e7a07d97244a06fafd53202ff9ef2d4b923b168240654b2b91a4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+      "sha256": "aed64d33e81fdd31543171b8e95b69a3df89b423126e5bcce9a0b1b3cefb9160",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+      "sha256": "53bb0b832a8d1f2fa73eb85699f7420fac5b320de4ddabec8deb87533e04c802",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/user-journeys.md",
+      "sha256": "1918f985a1318bfb9347442e5f86c0012e78db78f5f5285f0f8b3c3d752a547c",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Prices and window are writable before publish"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Every lot is bid in USD and no other currency stays",
+        "Requirement: Grade10 owns the supported-currency schedules",
+        "Requirement: The minimum uses the amount being beaten"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
