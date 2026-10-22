@@ -8,6 +8,7 @@ import {
   REPLACEMENT_INVOICE,
   SAMPLE_INVOICE,
   SEVERAL_ITEMS_INVOICE,
+  WIDE_NOTE_INVOICE,
   WITH_TAX_INVOICE,
 } from "./fixtures";
 import type { InvoicePdfData } from "./invoice-pdf";
@@ -29,6 +30,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The HKD invoice: the Subtotal note, muted, sits under the HK$ Subtotal. */
 export const Default: Story = {
   args: { data: SAMPLE_INVOICE },
 };
@@ -36,6 +38,11 @@ export const Default: Story = {
 /** The HKD invoice with free Shipping & Handling: Free beside the US$ lines, Subtotal HK$951.42. */
 export const FreeShipping: Story = {
   args: { data: HKD_FREE_SHIPPING_INVOICE },
+};
+
+/** A Subtotal note wider than the summary wraps under the Subtotal. */
+export const WideSubtotalNote: Story = {
+  args: { data: WIDE_NOTE_INVOICE },
 };
 
 export const BankTransfer: Story = {

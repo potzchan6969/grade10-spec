@@ -170,7 +170,10 @@ describe("receipt PDF renderer", () => {
       /^(?:US\$|HK\$|\d)[\d,]*\.\d{2}$/.test(value),
     );
     expect(new Set(amounts)).toEqual(new Set(HKD_RECEIPT_AMOUNTS));
-    const text = strings.join(" ");
+    expect(strings).toContain("Converted from US$131.21 at 1 USD = 7.85 HKD");
+    const text = strings
+      .filter((value) => !value.startsWith("Converted from"))
+      .join(" ");
     expect(text).not.toContain("7.85");
     expect(text).not.toMatch(/Converted|\bUSD\b|\bHKD\b/);
   });
@@ -425,5 +428,31 @@ describe("receipt PDF renderer", () => {
     expect(drawnRow(omittedRows, "Payment Processing Fee").y).toBeCloseTo(
       drawnRow(nullRows, "Payment Processing Fee").y,
     );
+  });
+});
+
+const NOTE = "Converted from US$131.21 at 1 USD = 7.85 HKD";
+
+const WITH_NOTE = SAMPLE_RECEIPT.lineItems.map((item) =>
+  item.key === "subtotal" ? { ...item, note: NOTE } : item,
+);
+
+describe("a receipt's Subtotal note", () => {
+  // g10.shared-invoice-and-receipt-pdf.SC2
+  it("draws the note in the summary and leaves the payment breakdown without one", async () => {
+    const rows = await drawnText(
+      await ReceiptPdf({ ...SAMPLE_RECEIPT, lineItems: WITH_NOTE }),
+    );
+    expect(rows.filter((row) => row.text === NOTE)).toHaveLength(1);
+    const note = drawnRow(rows, NOTE);
+    expect(note.y).toBeLessThan(drawnRow(rows, "Subtotal").y);
+    expect(note.y).toBeGreaterThan(drawnRow(rows, "Payment Processing Fee").y);
+    const breakdown = drawnRow(rows, "Original Invoice Total");
+    expect(breakdown.y).toBeLessThan(drawnRow(rows, "Order Total").y);
+    expect(
+      rows.filter(
+        (row) => row.y <= breakdown.y + 0.01 && row.text.includes("Converted"),
+      ),
+    ).toEqual([]);
   });
 });

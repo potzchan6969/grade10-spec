@@ -518,3 +518,51 @@ describe("every divider", () => {
     );
   });
 });
+
+const CONVERSION_NOTE = "Converted from US$131.21 at 1 USD = 7.85 HKD";
+
+const WITH_NOTE = SAMPLE_INVOICE.lineItems.map((item) =>
+  item.key === "subtotal" ? { ...item, note: CONVERSION_NOTE } : item,
+);
+
+describe.each(DOCUMENTS)("%s's Subtotal note across pages", (name, render) => {
+  // g10.shared-invoice-and-receipt-pdf.SC6
+  it("keeps a one-item document with a note on one A4 page, the issuer block at its foot", async () => {
+    const bytes = await render(1, { lineItems: WITH_NOTE });
+    const pdf = await PDFDocument.load(bytes);
+    expect(pdf.getPageCount()).toBe(1);
+    expect(pdf.getPage(0).getSize()).toEqual({ width: 595.28, height: 841.89 });
+    const rows = (await drawnPages(bytes))[0] ?? [];
+    for (const text of [
+      CONVERSION_NOTE,
+      "Payment Processing Fee",
+      "support@grade10.com",
+    ]) {
+      expect(rows.map((row) => row.text)).toContain(text);
+    }
+    expect(drawnRow(rows, "support@grade10.com").y).toBeCloseTo(MARGIN);
+  });
+
+  // g10.shared-invoice-and-receipt-pdf.SC7
+  it("draws the note on the page of its Subtotal row, directly under it, over 1 to 40 items", async () => {
+    let movedAlone = false;
+    for (const count of COUNTS(40)) {
+      const bytes = await render(count, { lineItems: WITH_NOTE });
+      await expectBodyAboveBottom(bytes);
+      const pages = await drawnPages(bytes);
+      const page = pageOf(pages, "Subtotal");
+      expect(pageOf(pages, CONVERSION_NOTE), `${count} items: note`).toBe(page);
+      const rows = pages[page] ?? [];
+      const subtotal = drawnRow(rows, "Subtotal");
+      const note = drawnRow(rows, CONVERSION_NOTE);
+      expect(subtotal.y - note.y, `${count} items`).toBeLessThanOrEqual(
+        LINE_HEIGHT,
+      );
+      expect(note.y).toBeLessThan(subtotal.y);
+      expect(note.y).toBeGreaterThanOrEqual(BODY_BOTTOM);
+      const lastLot = sampleItems(count).at(-1)?.title ?? "";
+      if (page === 1 && pageOf(pages, lastLot) === 0) movedAlone = true;
+    }
+    expect(movedAlone, `${name}: a summary moved to page 2 alone`).toBe(true);
+  });
+});

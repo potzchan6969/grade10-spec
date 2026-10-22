@@ -23,6 +23,8 @@ export type DrawnText = {
   y: number;
   font: string;
   size: number;
+  /** The fill colour's red, green and blue, each 0 to 1. */
+  color: [number, number, number];
 };
 
 export type DrawnRectangle = {
@@ -68,11 +70,16 @@ function textOf(content: string): DrawnText[] {
   const rows: DrawnText[] = [];
   let font = "";
   let size = 0;
+  let color: [number, number, number] = [0, 0, 0];
   let x = 0;
   let y = 0;
   const operations =
-    /\/([^\s]+)\s+(-?\d+(?:\.\d+)?)\s+Tf|1\s+0\s+0\s+1\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+Tm|<([0-9A-Fa-f]*)>\s+Tj/g;
+    /\/([^\s]+)\s+(-?\d+(?:\.\d+)?)\s+Tf|1\s+0\s+0\s+1\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+Tm|<([0-9A-Fa-f]*)>\s+Tj|(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+(\d+(?:\.\d+)?)\s+rg/g;
   for (const match of content.matchAll(operations)) {
+    if (match[6]) {
+      color = [Number(match[6]), Number(match[7]), Number(match[8])];
+      continue;
+    }
     if (match[1]) {
       font = match[1];
       size = Number(match[2]);
@@ -89,6 +96,7 @@ function textOf(content: string): DrawnText[] {
       y,
       font,
       size,
+      color,
     });
   }
   return rows;

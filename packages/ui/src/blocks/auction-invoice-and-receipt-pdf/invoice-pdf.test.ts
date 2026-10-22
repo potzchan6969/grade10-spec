@@ -219,7 +219,10 @@ describe("invoice PDF renderer", () => {
     ] as const) {
       expect(await amountBeside(rows, label, amount)).toBe(true);
     }
-    const text = strings.join(" ");
+    expect(strings).toContain("Converted from US$131.21 at 1 USD = 7.85 HKD");
+    const text = strings
+      .filter((value) => !value.startsWith("Converted from"))
+      .join(" ");
     expect(text).not.toContain("7.85");
     expect(text).not.toMatch(/Converted|\bUSD\b|\bHKD\b|1,031/);
   });
@@ -876,5 +879,29 @@ describe("invoice PDF renderer", () => {
     expect(drawnRow(nullRows, "Payment Processing Fee").y).toBeCloseTo(
       drawnRow(omittedRows, "Payment Processing Fee").y,
     );
+  });
+});
+
+const NOTE = "Converted from US$131.21 at 1 USD = 7.85 HKD";
+
+const WITH_NOTE = SAMPLE_INVOICE.lineItems.map((item) =>
+  item.key === "subtotal" ? { ...item, note: NOTE } : item,
+);
+
+describe("an invoice's Subtotal note", () => {
+  // g10.shared-invoice-and-receipt-pdf.SC1
+  it("draws the note once, between Subtotal and Payment Processing Fee, and above the bank details", async () => {
+    const rows = await drawnText(
+      await InvoicePdf({
+        ...SAMPLE_INVOICE,
+        lineItems: WITH_NOTE,
+        bankRails: ALL_BANK_RAILS,
+      }),
+    );
+    expect(rows.filter((row) => row.text === NOTE)).toHaveLength(1);
+    const note = drawnRow(rows, NOTE);
+    expect(note.y).toBeLessThan(drawnRow(rows, "Subtotal").y);
+    expect(note.y).toBeGreaterThan(drawnRow(rows, "Payment Processing Fee").y);
+    expect(note.y).toBeGreaterThan(drawnRow(rows, "Bank details").y);
   });
 });
