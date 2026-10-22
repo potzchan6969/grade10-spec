@@ -1,6 +1,6 @@
 # grade10-site/store/order-history Test Cases
 
-**Status:** pending-review · 0/9
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Walk 1: Read Your Orders
@@ -278,6 +278,50 @@ Runs once per row of **Test data**.
 
 * Step 2 says there are no orders yet.
 * Step 3 opens the Store.
+
+<!-- trace:case id=g10.store-order-history.TC-sw9 rev=1 -->
+#### g10.store-order-history.US1-TC7: Each order shows the badge for its status
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-order-history.US1
+
+**Pre-conditions:**
+
+* customer(signed-in member) has `<order>` in the state its row describes.
+
+**Test data:**
+
+| Partition | `<order>` | `<expected badge>` |
+| --- | --- | --- |
+| Paid, not sent | Paid, not yet fulfilled, for delivery. | Processing |
+| Sent | Fulfilled for delivery, not completed. | Shipped |
+| Ready to collect | A pick-up order the shop marked ready. | Ready for Pickup |
+| Done | Completed. | Completed |
+| Called off | Canceled. | Canceled |
+| Money back in full | Refunded in full. | Refunded |
+
+**Steps:**
+
+1. Navigate to `<your orders url>`.
+2. Read `<order>`'s status badge.
+3. Click View Details and read the badge there.
+
+**Expected Results:**
+
+* Step 2 reads `<expected badge>`.
+* Step 3 reads the same badge.
 
 ---
 
