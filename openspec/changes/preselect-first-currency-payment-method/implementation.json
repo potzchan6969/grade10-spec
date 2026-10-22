@@ -1,0 +1,50 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "f7f3682d2a43b13e4b9e02f8f7b49ec70e8a71e9928474e8c7e6ac7e80e036d4"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ce43ce9c20c021b369b6c2c1e9aa45774aae0da9",
+    "capturedAt": "2026-10-22T23:42:05.467Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An operator makes a test winner in one step"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The delivery address is confirmed before payment",
+          "Requirement: The winner chooses a payment method with the address",
+          "Requirement: The winner chooses a settlement currency at order setup"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

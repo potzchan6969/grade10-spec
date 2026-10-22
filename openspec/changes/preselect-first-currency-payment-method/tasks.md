@@ -10,7 +10,7 @@
 - [x] 1.3 Update the Complete Order Setup payment stories for the preselected open and the `Pay in {currency}` single-currency read
 - [x] 1.4 Verify: `pnpm --dir apps/preview exec tsc --noEmit`, the post-bidding story suite
 
-## 2. Consumption (grade10)
+## 2. Consumption (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Apply the same defaults where Winner Order opens setup: the first offered currency selected, `Pay in {currency}` with no picker where one is, and the first offered method selected — the winner still confirms (`winner-order-SC-278`, `winner-order-SC-305`, `winner-order-SC-306`)
 - [ ] 2.2 Bank rails read no fee line at the choice: drop `fee.bankTransfer` (`Bank fee set on your invoice`) from `@grade10/i18n` `auctionOrders.json` and from the setup dialog (`winner-order-SC-91`)
