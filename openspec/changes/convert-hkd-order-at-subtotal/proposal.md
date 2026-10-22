@@ -86,8 +86,10 @@ None.
 
 - **Retracts and supersedes** - `order-summary-hkd-conversion-note` (every line
   in HKD, one note under the Order Total) is retracted, as
-  `collapse-order-summary-usd-recap` was before it; its one surviving rule, that
-  the note under the Subtotal is the only place that names the rate, now on the Order Summary and on the invoice and receipt PDFs, is carried in this change.
+  `collapse-order-summary-usd-recap` was before it; its one surviving rule, the
+  note under the Subtotal that names the rate, is carried in this change; the
+  note now shows on the Order Summary and on the invoice and receipt PDFs, and
+  nowhere else.
   Q8, Q9 and Q17 of `usd-lot-currency-winner-settlement-choice` (HKD lines under
   each USD amount, convert and round each line, the fee as a line above the
   total) are replaced; that change stays in place and is listed in `depends_on`.
