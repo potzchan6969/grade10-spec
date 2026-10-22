@@ -3,7 +3,7 @@
 ## Feature set
 
 - **Order detail**
-  - Subtotal and fee rows: `AuctionWinnerOrder` renders `summary.subtotal` under the lines and `summary.feeLines` under it, each between its own separators, then the total
+  - Subtotal and fee rows: `AuctionWinnerOrder` renders `summary.subtotal` under the lines and `summary.feeLines` under it as one group between two separators, then the total
   - Subtotal note: the Subtotal row carries the conversion note the application supplies
   - Summary unchanged without them: a summary with neither prop renders as before
 
@@ -36,6 +36,14 @@ separator above them and another above the total. It SHALL render the Subtotal
 and each fee row as supplied, SHALL add the fees to no total and no Subtotal, and
 SHALL derive no amount and no note: the application supplies the footnote text.
 A summary with neither prop SHALL render as it did before them.
+
+Each prop draws on its own, as supplied. A `summary.subtotal` with no
+`summary.feeLines` draws the Subtotal alone, fee lines with no Subtotal draw the
+fees alone, an empty `summary.feeLines` draws no row and no separator, and a
+Subtotal with no `footnote` draws no note. When the application supplies both
+these props and the older `summary.convertedTotal` or `summary.convertedFee`,
+both sets draw. The block picks no policy between them; the application supplies
+one set.
 
 The block SHALL show the first Order Total line as supplied and, when
 `summary.convertedTotal` is supplied, the second line below it. It SHALL show
@@ -129,3 +137,28 @@ total line. It SHALL show no such row when none is supplied.
 - **WHEN** it renders
 - **THEN** the summary shows the lines, one separator and the total
 - **AND** no Subtotal row and no fee row shows
+
+<!-- trace:scenario id=g10.shared-auction-order.SC-rs4 rev=1 -->
+#### Scenario: g10.shared-auction-order.SC4 - Each prop draws on its own
+**Serves:** `Order detail` - the summary renders the Subtotal and fee rows the application supplies
+
+- **GIVEN** three `AuctionWinnerOrder` summaries: one supplied a `summary.subtotal`
+  with no footnote and no `summary.feeLines`, one supplied `summary.feeLines` with
+  no `summary.subtotal`, and one supplied an empty `summary.feeLines` and no
+  `summary.subtotal`
+- **WHEN** each renders
+- **THEN** the first draws the Subtotal row with no note and no fee row
+- **AND** the second draws the fee rows and no Subtotal row
+- **AND** the third draws no row and no separator for them
+
+<!-- trace:scenario id=g10.shared-auction-order.SC-5gy rev=1 -->
+#### Scenario: g10.shared-auction-order.SC5 - Both sets draw when both are supplied
+**Serves:** `Order detail` - the summary renders the Subtotal and fee rows the application supplies
+
+- **GIVEN** an `AuctionWinnerOrder` supplied `summary.subtotal`, `summary.feeLines`
+  and the older `summary.convertedTotal` and `summary.convertedFee`
+- **WHEN** it renders
+- **THEN** the Subtotal and fee rows draw, and the converted Order Total and
+  converted fee draw too
+- **AND** the block adds no amount to any of them and drops none
+

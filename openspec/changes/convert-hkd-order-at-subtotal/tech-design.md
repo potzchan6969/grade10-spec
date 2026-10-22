@@ -67,24 +67,26 @@ What `grade10` does today, read at `bf94489156`:
 
 | Reader | Where | Change |
 | --- | --- | --- |
-| Winner Order | `packages/grade10-auction/frontend/.../winnerOrderView.ts` `summaryLines`, the HKD branch | USD lines, then `subtotal` with the note as its `footnote`, then `feeLines`, then `total`. `SourceInvoice` gains `subtotalAmountMinor` |
-| Console customer view | `admin-frontend/.../customerView/orderCustomerView.tsx` `winnerSourceOf` | Passes `subtotalAmountMinor` from the quote, so the preview of the winner page draws the same rows |
-| Invoice page | `apps/frontend/grade10/src/pages/auctions/AuctionInvoicePage.tsx` | Drops `settlementAmountsFor`; lists the breakdown |
-| Invoice and receipt PDF | `services/auctions/orderDocument.ts` `orderValue`, `invoicePdf.ts`, `receiptPdf.ts` | Read the lines with `readAuctionInvoiceSettlementLines` and map the breakdown to the block's strings |
-| Receipt letter | `email/emailPort.ts`, `sweeps/orderNotifications.ts` | The send carries the breakdown; the letter lists it as `Label: amount` facts |
-| Operator quote preview | `admin-frontend/.../dialogs/InvoiceQuoteFields.tsx` | Rows from `usd_minor`, then Subtotal, fee and total from the preview |
-| Operator order detail and history | `InvoiceAndPayments.tsx`, `invoiceRevisionChanges` | Per the Raised row, recommended: USD lines, HKD rows; history parts in USD |
+| Winner Order | `packages/grade10-auction/frontend/.../winnerOrderView.ts` `summaryLines`, the HKD branch | USD lines with `US$` and two decimals, then `subtotal` with the note as its `footnote`, then `feeLines`, then `total`. Before send the branch draws no Subtotal row. `SourceInvoice` gains `subtotalAmountMinor` |
+| Invoice page | `apps/frontend/grade10/src/pages/auctions/AuctionInvoicePage.tsx` | A surface of its own, apart from the PDF (Q21). Drops `settlementAmountsFor`; lists the breakdown |
+| Invoice and receipt PDF | `services/auctions/orderDocument.ts` `orderValue`, `invoicePdf.ts`, `receiptPdf.ts` | Read the lines with `readAuctionInvoiceSettlementLines` and map the breakdown to the block's strings. Every receipt, a part payment's too, goes through `orderValue`, so each lists the lines above its payment breakdown (Q22) |
+| Receipt letter | `email/emailPort.ts`, `sweeps/orderNotifications.ts` | The send carries the breakdown for `payment_received`; the letter lists it as `Label: amount` facts. `payment_received_partial` keeps its receipt IDs and lists no lines (Q24) |
+| Operator quote preview and reissue dialog | `admin-frontend/.../dialogs/InvoiceQuoteFields.tsx`, used by `SendInvoiceDialog.tsx` and `ReissueInvoiceDialog.tsx` | Rows from `usd_minor`, then Subtotal, fee and total from the preview, each written by `formatMinor` in the operator shape (`USD 150.00`, `HKD 1,970.35`, Q26). The reissue dialog already renders the same component and shows the previous total beside the new one in its description (Q27), so it needs the new figures only |
+| Operator order detail and history (held on the Raised row) | `InvoiceAndPayments.tsx`, `invoiceRevisionChanges` | Per the Raised row, recommended: USD lines, HKD rows; history parts in USD |
+
+`winnerOrderView` has a second caller, the operator console's customer preview (`orderCustomerView.tsx` `winnerSourceOf`). No requirement states that preview, so it is not a reader of its own: it passes `subtotalAmountMinor` from the quote so the shared projection type-checks.
 
 ### Sent invoices stay as sent
 
 - **Spec governs** - "Fixed once sent" and `decisions.md` Q16.
-- **No re-price, no backfill** - a read takes stored values only. A reissue prices through the same call under the new rule and writes a new revision; the replaced invoice is untouched.
+- **No re-price, no backfill** - a read takes stored values only. A reissue prices through the same call under the new rule and writes a new revision; the replaced invoice is untouched, as the reissue scenarios in `winner-order` and `post-sale` state with a Winning Bid in USD and a Subtotal in HKD.
 - **A pre-change HKD invoice** reads through the same breakdown from its stored amounts, whole-HK$ Subtotal included, which is the PRD's reading of the held `decisions.md` Q12. If it carries `usd_minor` the page lists USD lines and the note names their sum beside a Subtotal that was not converted from it. The Migration Plan counts such invoices first.
 - **Stored PDFs** - `archivedOrRendered` serves a PDF drawn before the deploy as drawn. One not yet opened draws in the new layout from the stored amounts.
 
 ### The documents and the receipt letter
 
 - **The PDF contract holds** - `shared/ui/invoice-and-receipt-pdf` takes strings. The item row carries `US$` winning bid, premium and total; `lineItems` carries Shipping & Handling and Insurance in USD; `taxLine` carries Tax in USD; the keyed Subtotal, Payment Processing Fee and Order Total rows carry HK$. The payment breakdown stays HKD. No block, copy or export changes; its HKD fixtures, stories and tests do.
+- **The block draws each prop on its own** (Q28) - `auction-winner-order.tsx` draws `summary.subtotal` and `summary.feeLines` as one group between two separators, draws neither when both are empty, and draws the older `convertedTotal` and `convertedFee` beside them if they arrive. It picks no policy, so `grade10` supplies one set; the HKD view supplies the new props only.
 - **Labels** - the PDFs, the invoice page, the letters and the operator console keep English literals, as they do today. The letter labels join the English map in `email/messages.ts`.
 - **The letter lists lines as facts** - `AuctionLetter` takes `facts: string[]`, so the lines go in as `Winning Bid: US$101.00` strings with no component change. The store's `apps/emails` preview takes the same lines as props.
 
@@ -104,7 +106,7 @@ What `grade10` does today, read at `bf94489156`:
 | Order Summary rows and note | SPA unit, `pnpm run test` | `winnerOrderView.test.ts` with literal expectations |
 | Invoice page | SPA unit | `AuctionInvoicePage.test.tsx` |
 | PDFs and the letter | Backend node | `test/services/auctions/invoicePdf.test.ts`, `receiptPdf.test.ts`, `test/email/emailPort.test.ts` |
-| Quote preview and order detail | SPA unit | `SendInvoiceDialog.test.tsx`, `quoteDraft.test.ts`, `fixtureOperatorOrders.test.ts`, `OrderDetail.test.tsx` |
+| Quote preview and order detail | SPA unit | `SendInvoiceDialog.test.tsx`, `OrderDialogs.test.tsx` (the reissue dialog), `quoteDraft.test.ts`, `fixtureOperatorOrders.test.ts`, `OrderDetail.test.tsx` |
 | Block rows | Store, `packages/ui` vitest | `auction-winner-order.test.ts` |
 | The browser walk | Playwright | `e2e/tests/auction/winner-order/*.spec.ts`, `e2e/tests/admin/auction/post-sale/*.spec.ts` |
 
@@ -141,6 +143,7 @@ No API contract changes: `AuctionInvoice` already carries `subtotalAmountMinor`,
 - **[Risk] The store fixtures drift from the rule** → `hkdFixtures.test.ts` derives each fixture's Subtotal from its USD lines; it reads the store pin, so the store groups land first.
 - **[Risk] The receipt letter grows lines it never had, in two codebases** → The store preview and the `grade10` letter take the same lines; each has a test that lists them.
 - **[Risk] A cent total at Stripe** → The charge already takes `final_amount` in minor units and HKD has cents; the walk runs a sandbox card charge on a cent total.
+- **[Risk] The durable "Receipt in the letter" asks for an attached receipt PDF that the app does not attach** → The gap predates this change and is out of its scope; the route is a bug fix under `docs/governance/bug-fixes.md`. No scenario of this change asserts the attachment, and the new scenarios state only the lines in the letter body.
 - **[Trade-off] Informational per-line values** → Kept for the reasons under "What an HKD invoice stores".
 
 ## Migration Plan
@@ -156,4 +159,5 @@ Rollback redeploys the previous release. An invoice sent in between keeps its st
 ## Open Questions
 
 - **Invoices sent before this layout** - held as `decisions.md` Q12. The design reads stored amounts, as the PRD does. If Product answers that such an invoice keeps the old layout, one task adds a switch to the breakdown.
+- **The receipt letter's attachment** - the app attaches no receipt PDF today, against the durable "Receipt in the letter". Out of scope here; a bug fix owns it.
 - **Operator history and detail, and the internal-bid number** - the two rows in `decisions.md` `## Raised` hold acceptance only. The design and the tasks follow their recommended options.

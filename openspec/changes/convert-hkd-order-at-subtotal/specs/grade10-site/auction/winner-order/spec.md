@@ -373,6 +373,19 @@ receipt or letter.
 - **AND** its Order Total is 104948 minor units in HKD, not 104947, which is what
   converting the fee with the lines would give
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-o3a rev=1 -->
+#### Scenario: g10.auction-winner-order.SC11 - A reissue prices under the rule and the replaced invoice keeps its amounts
+**Serves:** winner-order-US-26 - the winner's replaced invoice keeps the amounts it was sent with
+
+- **GIVEN** an HKD invoice sent with USD lines of 10100, 2020 and 1001 minor units
+  and a Subtotal of 103000 minor units in HKD
+- **WHEN** an operator reissues it with Shipping & Handling of 2001 minor units
+  in USD
+- **THEN** the new invoice's Subtotal is 110850 minor units in HKD, the 14121
+  minor units in USD at 7.85 rounded up to the next cent
+- **AND** the replaced invoice still reads a Subtotal of 103000 minor units in
+  HKD
+
 ### Requirement: The Order Summary reads the settlement currency, with USD beneath each HKD line
 
 This requirement keeps its heading for the requirements that cite it, and
@@ -389,6 +402,9 @@ carries them. Below them, each group between its own separators, it SHALL show
 one Subtotal row in HKD, then the Payment Processing Fee in HKD, then the Order
 Total in HKD. The Subtotal is the invoice's Subtotal. No USD total shows.
 
+Every USD line SHALL read with the symbol `US$` and two decimals, as
+`US$150.00`.
+
 The Subtotal row SHALL carry the note `Converted from US$X at 1 USD = 7.85 HKD`,
 where X is the USD sum of the lines above it. The Payment Processing Fee, card or
 bank transfer, SHALL add nothing to X. The note is the one place the summary
@@ -400,17 +416,17 @@ Insurance and Tax SHALL be left out when the invoice carries none. The Subtotal
 and its note SHALL show whatever the lines are. Every amount keeps its two
 decimals, and the Order Total reads with its trailing zeros, as in `HK$1,030.00`.
 
-Before an invoice is sent the summary SHALL show no HKD amount and no note. The
-lot card SHALL keep the winning bid in USD.
+Before an invoice is sent the summary SHALL show no Subtotal row, no HKD amount
+and no note. The lot card SHALL keep the winning bid in USD.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-kdr rev=4 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-kdr rev=5 -->
 #### Scenario: winner-order-SC-290 - An HKD order's summary reads HKD lines with USD beneath
 **Serves:** winner-order-US-27 - the winner checks the HKD total against the USD lines
 
 - **GIVEN** a Pending Payment order whose winner picked HKD and bank transfer,
   with USD lines of 10100, 2020 and 1001 minor units and a bank transfer fee of 0
 - **WHEN** the winner opens Winner Order
-- **THEN** the Order Summary lines read 10100, 2020 and 1001 minor units in USD
+- **THEN** the Order Summary lines read `US$101.00`, `US$20.20` and `US$10.01`
 - **AND** below a separator the Subtotal reads 103000 minor units in HKD, with
   the note `Converted from US$131.21 at 1 USD = 7.85 HKD` under it
 - **AND** the Payment Processing Fee reads Free
@@ -418,7 +434,7 @@ lot card SHALL keep the winning bid in USD.
   shows
 - **AND** the lot card shows the winning bid of 10100 minor units in USD
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-fq4 rev=3 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-fq4 rev=4 -->
 #### Scenario: winner-order-SC-304 - A card order under HKD shows the HKD fee in the total
 **Serves:** winner-order-US-27 - the winner checks the card fee and the HKD total
 
@@ -427,7 +443,7 @@ lot card SHALL keep the winning bid in USD.
 - **AND** an HKD card rule in Payment Settings of 3.4 per cent and 235 minor
   units
 - **WHEN** the winner opens Winner Order
-- **THEN** the Order Summary lines read 10100, 2020 and 1001 minor units in USD
+- **THEN** the Order Summary lines read `US$101.00`, `US$20.20` and `US$10.01`
 - **AND** the Subtotal reads 103000 minor units in HKD
 - **AND** the Payment Processing Fee reads 3869 minor units in HKD, with no USD
   amount beneath it
@@ -443,13 +459,14 @@ lot card SHALL keep the winning bid in USD.
 - **THEN** Order Total is one line in USD
 - **AND** no HKD amount, no Subtotal row and no conversion note shows
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-ug0 rev=2 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-ug0 rev=3 -->
 #### Scenario: winner-order-SC-292 - The HKD total waits for the invoice
 **Serves:** winner-order-US-27 - Winner who settles in HKD reads the Order Summary in HKD
 
 - **GIVEN** an order whose winner picked HKD and whose invoice is not yet sent
 - **WHEN** the winner opens Winner Order
-- **THEN** the summary shows no HKD total and no HKD fee
+- **THEN** the summary shows no Subtotal row, no HKD total, no HKD fee and no
+  note
 - **AND** the lot card shows the winning bid in USD
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-hcb rev=1 -->
@@ -477,9 +494,9 @@ lot card SHALL keep the winning bid in USD.
 - **AND** an HKD card rule in Payment Settings of 3.4 per cent and 235 minor
   units
 - **WHEN** the winner opens Winner Order
-- **THEN** the Order Summary lines read, in order, Winning Bid 15000, Buyer's
-  Premium 3000, Shipping & Handling 4900, Insurance 2000 and Tax 200 minor units
-  in USD
+- **THEN** the Order Summary lines read, in order, Winning Bid `US$150.00`,
+  Buyer's Premium `US$30.00`, Shipping & Handling `US$49.00`, Insurance
+  `US$20.00` and Tax `US$2.00`
 - **AND** the Subtotal reads 197035 minor units in HKD and the Payment
   Processing Fee 7179 minor units in HKD
 - **AND** Order Total reads `HK$2,042.14`
@@ -498,12 +515,116 @@ lot card SHALL keep the winning bid in USD.
   `Converted from US$121.20 at 1 USD = 7.85 HKD` under it, and the Payment
   Processing Fee reads Free
 
+### Requirement: The winner chooses a settlement currency at order setup
+
+At order setup the winner SHALL choose the order's settlement currency from
+`USD` and `HKD`, in the same step as the delivery address and the payment
+method. Grade10 SHALL preselect neither and SHALL refuse a confirmation that
+carries no currency. The lot is bid in USD whichever currency the winner picks.
+
+This choice applies to a collector winner. For an internal bidder's win,
+`grade10-admin/auction/internal-bid` sets HKD settlement, bank transfer and
+FPS at lot close; the internal order does not wait for winner setup.
+
+Until the winner confirms, they SHALL be able to change the currency freely.
+Once they confirm, the currency locks for the winner with the address and the
+method, per "The delivery address locks when the invoice is sent". An operator
+MAY change it before the invoice is sent, and on a reissue after, per
+`grade10-admin/auction/post-sale`. A sent invoice SHALL keep its own currency
+and amounts; a reissue replaces it with a new invoice in the currency the
+operator chose, and the replaced invoice keeps its own.
+
+The invoice, the order total, every fee, every payment and refund, the receipt
+and every order letter that states an amount owed or paid SHALL carry the
+settlement currency. A winning bid on the lot card SHALL stay in USD. Payment
+method availability SHALL follow the settlement currency, per "The winner
+chooses a payment method with the address".
+
+`settlement_currency: null` is allowed only before confirmation. A missing
+`bank_rail` on an ordinary historical confirmed bank order is a separate
+legacy fact and SHALL NOT be treated as a missing currency or filled with a
+default rail.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-o92 rev=1 -->
+#### Scenario: winner-order-SC-278 - Setup offers USD and HKD with neither picked
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order for a lot bid in `USD`, in Awaiting Setup
+- **WHEN** the winner opens the setup form
+- **THEN** the settlement currency choice offers USD and HKD
+- **AND** neither is selected
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-j1l rev=1 -->
+#### Scenario: winner-order-SC-279 - A confirmation with no currency is refused
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order in Awaiting Setup, whose winner has chosen a
+  delivery address and a billing address but no currency
+- **WHEN** the winner confirms setup
+- **THEN** Grade10 refuses the confirmation
+- **AND** the order holds no delivery address, no currency and no method, and
+  is still Awaiting Setup
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-lq9 rev=1 -->
+#### Scenario: winner-order-SC-280 - The winner confirms with the currency they picked
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order in Awaiting Setup where the winner has picked
+  HKD and a method HKD offers
+- **WHEN** the winner confirms the delivery address
+- **THEN** the order records HKD as its settlement currency
+- **AND** the order derives as Preparing Invoice
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-8c6 rev=1 -->
+#### Scenario: winner-order-SC-281 - A USD order is priced in USD without conversion
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order whose winner picked USD, with a hammer price of
+  250000 minor units in USD
+- **WHEN** an operator sends its invoice
+- **THEN** the invoice's Winning Bid is 250000 minor units in USD
+- **AND** the buyer's premium is 50000 minor units in USD
+- **AND** no line is converted
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-k63 rev=1 -->
+#### Scenario: winner-order-SC-282 - A sent invoice keeps its currency
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order whose invoice was sent in HKD
+- **WHEN** a write that is not an operator's reissue sets the order's
+  settlement currency to USD
+- **THEN** Grade10 refuses the write
+- **AND** the order and its invoice still carry HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-rau rev=1 -->
+#### Scenario: winner-order-SC-300 - An operator changes the currency before the invoice is sent
+**Serves:** `winner-order-US-24`, `grade10-admin/auction/post-sale#post-sale-US-05` - the winner's pick is corrected before the quote
+
+- **GIVEN** an auction order in Preparing Invoice whose winner confirmed HKD and
+  HK Local
+- **WHEN** an operator holding payment-processing changes the settlement
+  currency to USD with a reason
+- **THEN** the order records USD, and the winner reads Winner Order in USD
+- **AND** the winner's own write to the currency is still refused
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-d84 rev=2 -->
+#### Scenario: winner-order-SC-301 - A reissue carries the currency the operator chose
+**Serves:** `winner-order-US-24`, `winner-order-US-26` - the winner's currency is corrected after the invoice is sent
+
+- **GIVEN** an auction order whose invoice was sent in HKD with USD lines of
+  10000 and 2000 minor units, a Winning Bid of 10000, and a Subtotal of 94200
+  minor units in HKD
+- **WHEN** an operator reissues it in USD
+- **THEN** the new invoice carries a Winning Bid of 10000 minor units in USD
+- **AND** the replaced invoice still reads a Winning Bid of 10000 minor units in
+  USD and a Subtotal of 94200 minor units in HKD
+
 ## ADDED Requirements
 
 ### Requirement: An HKD invoice and receipt list the USD lines, then the HKD Subtotal, fee and Order Total
 
-The invoice page, the invoice PDF and the receipt PDF of an HKD order SHALL list
-the order's lines in USD, then the Subtotal, the Payment Processing Fee and the
+The invoice page, the invoice PDF and every receipt PDF of an HKD order, a
+part-payment receipt included, SHALL list the order's lines in USD, then the Subtotal, the Payment Processing Fee and the
 Order Total in HKD, in that order. The lines are the Winning Bid, the Buyer's
 Premium, Shipping & Handling, and Insurance and Tax when the invoice carries
 them. The Subtotal, the fee and the Order Total are the invoice's, per "An HKD
@@ -517,7 +638,7 @@ Free, and Insurance and Tax SHALL be left out when the invoice carries none, per
 
 A receipt's Original Invoice Total, Previous Payments, Current Payment Received
 and Remaining Balance Due SHALL read in HKD, each payment counted against the
-Order Total.
+Order Total, and SHALL sit below the lines the receipt lists.
 
 An order in USD SHALL read every amount in USD on the same documents.
 
@@ -586,6 +707,19 @@ An order in USD SHALL read every amount in USD on the same documents.
 - **THEN** every line, the Subtotal at 13121 minor units, the Payment Processing
   Fee and the Order Total at 13121 minor units read in USD
 - **AND** no HKD amount shows
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-g3i rev=1 -->
+#### Scenario: g10.auction-winner-order.SC12 - A part-payment receipt lists the lines above its breakdown
+**Serves:** winner-order-US-26 - the winner keeps a receipt for each part payment that matches the invoice
+
+- **GIVEN** the order of `g10.auction-winner-order.SC3`, on which an operator
+  recorded a first payment of 30000 minor units in HKD
+- **WHEN** the winner opens that payment's receipt PDF
+- **THEN** it lists the same USD lines, Subtotal `HK$1,030.00`, Payment
+  Processing Fee Free and Order Total `HK$1,030.00`
+- **AND** below them Original Invoice Total reads `HK$1,030.00`, Previous
+  Payments `HK$0.00`, Current Payment Received `HK$300.00` and Remaining Balance
+  Due `HK$730.00`
 
 ## REMOVED Requirements
 

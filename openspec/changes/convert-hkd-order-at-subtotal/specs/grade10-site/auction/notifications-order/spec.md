@@ -29,9 +29,11 @@ Handling, and Insurance and Tax when the invoice carries them, each in USD, then
 the Subtotal, the Payment Processing Fee and the Order Total in HKD, per
 `grade10-site/auction/winner-order`, "An HKD invoice and receipt list the USD
 lines, then the HKD Subtotal, fee and Order Total". It SHALL name no conversion
-rate and carry no conversion note. The receipt PDF attached to it reads the same
-lines. For a USD order it SHALL list every line, the fee and the Order Total in
-USD.
+rate and carry no conversion note. For a USD order it SHALL list every line, the
+fee and the Order Total in USD. The partial-payment-received letter SHALL list no
+lines.
+
+The receipt PDF attached to a payment-received letter reads the same currency.
 
 A letter for an invoice an operator reissues in another currency SHALL carry
 the new invoice's currency; a letter already sent keeps the currency it was
@@ -127,9 +129,11 @@ historical: the letter lists USD lines above its HKD total.
 #### Scenario: g10.auction-notifications-order.SC2 - A USD payment-received letter lists its lines in USD
 **Serves:** `Post-close letters`, `grade10-site/auction/winner-order#winner-order-US-26` - the winner of a USD order keeps a receipt letter in USD
 
-- **GIVEN** a USD order whose invoice has lines of 10100, 2020 and 1001 minor
-  units and an Order Total of 13121 minor units in USD, and whose card payment
-  is confirmed
+- **GIVEN** a USD order paid by bank transfer, whose invoice has lines of 10100,
+  2020 and 1001 minor units, a Subtotal of 13121, a bank transfer fee of 500 and
+  an Order Total of 13621 minor units in USD
+- **AND** the transfer is confirmed
 - **WHEN** Grade10 sends the payment-received letter
-- **THEN** the letter lists the three lines and the Order Total in USD
+- **THEN** the letter lists the three lines, then Subtotal `US$131.21`, Payment
+  Processing Fee `US$5.00` and Order Total `US$136.21`
 - **AND** it shows no HKD amount
