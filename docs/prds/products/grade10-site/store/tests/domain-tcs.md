@@ -59,7 +59,7 @@
 3. Read the listing's name, sort control and cards.
 4. Click the name of `<collection product>`.
 5. Press Back.
-6. Dismiss the collection's name above the grid.
+6. Click the control that dismisses `<chosen collection>`'s name above the grid.
 
 **Expected Results:**
 
@@ -68,7 +68,7 @@
 * Step 3 lists `<collection product>` and not `<outside product>`.
 * Step 4 opens `/store/products/<collection product handle>`, with its name and price.
 * Step 5 returns to the collection listing, at the top.
-* Step 6 lists `<outside product>` in the whole catalogue.
+* Step 6 lists `<outside product>` in the whole catalogue, and the address names no collection.
 
 ---
 
