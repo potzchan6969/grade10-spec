@@ -219,7 +219,10 @@ describe("invoice PDF renderer", () => {
     ] as const) {
       expect(await amountBeside(rows, label, amount)).toBe(true);
     }
-    const text = strings.join(" ");
+    expect(strings).toContain("Converted from US$131.21 at 1 USD = 7.85 HKD");
+    const text = strings
+      .filter((value) => !value.startsWith("Converted from"))
+      .join(" ");
     expect(text).not.toContain("7.85");
     expect(text).not.toMatch(/Converted|\bUSD\b|\bHKD\b|1,031/);
   });

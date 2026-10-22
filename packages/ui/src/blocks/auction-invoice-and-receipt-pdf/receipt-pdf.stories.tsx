@@ -7,6 +7,7 @@ import {
   LONG_TABLE_RECEIPT,
   SAMPLE_RECEIPT,
   SEVERAL_ITEMS_RECEIPT,
+  WIDE_NOTE_RECEIPT,
   WITH_TAX_RECEIPT,
 } from "./fixtures";
 import { PdfPreview } from "./pdf-preview";
@@ -28,8 +29,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The HKD receipt: the Subtotal note, muted, sits under the HK$ Subtotal. */
 export const Default: Story = {
   args: { data: SAMPLE_RECEIPT },
+};
+
+/** A Subtotal note wider than the summary wraps under the Subtotal. */
+export const WideSubtotalNote: Story = {
+  args: { data: WIDE_NOTE_RECEIPT },
 };
 
 /** A first payment of HK$300.00: the same lines above a breakdown that leaves HK$730.00 due. */

@@ -52,7 +52,12 @@ function hkdChargesOf(
         label,
         amount: cents === 0 ? "Free" : usd(cents),
       })),
-      { key: "subtotal" as const, label: "Subtotal", amount: hkd(subtotal) },
+      {
+        key: "subtotal" as const,
+        label: "Subtotal",
+        amount: hkd(subtotal),
+        note: `Converted from ${usd(usdCents)} at 1 USD = 7.85 HKD`,
+      },
       {
         key: "paymentProcessingFee" as const,
         label: "Payment Processing Fee",
@@ -287,6 +292,19 @@ export const WITH_TAX_INVOICE: InvoicePdfData = {
   taxLine: { label: "Tax", amount: usd(15_600) },
 };
 
+/** The invoice with a Subtotal note too wide for the summary, which wraps under the Subtotal. */
+export const WIDE_NOTE_INVOICE: InvoicePdfData = {
+  ...HKD_INVOICE,
+  lineItems: HKD_INVOICE.lineItems.map((line) =>
+    line.key === "subtotal"
+      ? {
+          ...line,
+          note: "Converted from US$1,234,567,890.12 at 1 USD = 7.85 HKD",
+        }
+      : line,
+  ),
+};
+
 export const HKD_RECEIPT: ReceiptPdfData = {
   items: HKD_INVOICE.items,
   itemTotal: HKD_INVOICE.itemTotal,
@@ -321,6 +339,11 @@ export const HKD_PART_PAYMENT_RECEIPT: ReceiptPdfData = {
     currentPaymentReceived: hkd(30_000),
     remainingBalanceDue: hkd(HKD_BANK_CHARGES.total - 30_000),
   },
+};
+
+export const WIDE_NOTE_RECEIPT: ReceiptPdfData = {
+  ...SAMPLE_RECEIPT,
+  lineItems: WIDE_NOTE_INVOICE.lineItems,
 };
 
 export const BANK_TRANSFER_RECEIPT: ReceiptPdfData = {

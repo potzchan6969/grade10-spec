@@ -322,10 +322,10 @@ describe.each(DOCUMENTS)("%s's item table", (_name, render) => {
 const NOTE = "Converted from US$131.21 at 1 USD = 7.85 HKD";
 const MUTED_COLOUR = [0.4, 0.4, 0.4];
 
-/** The HKD charges of the sample documents, their Subtotal carrying `note` when given. */
+/** The HKD charges of the sample documents, their Subtotal carrying `note`, or none when it is undefined. */
 function chargesWithNote(note?: string) {
   return SAMPLE_INVOICE.lineItems.map((item) =>
-    item.key === "subtotal" && note !== undefined ? { ...item, note } : item,
+    item.key === "subtotal" ? { ...item, note } : item,
   );
 }
 
@@ -378,14 +378,7 @@ describe.each(DOCUMENTS)("%s's Subtotal note", (_name, render) => {
     "draws the bytes of a document with no note when the note is %s",
     async (_case, note) => {
       const plain = await render({ lineItems: chargesWithNote() });
-      const subtotal = SAMPLE_INVOICE.lineItems.find(
-        (item) => item.key === "subtotal",
-      );
-      const bytes = await render({
-        lineItems: SAMPLE_INVOICE.lineItems.map((item) =>
-          item === subtotal ? { ...item, note } : item,
-        ),
-      });
+      const bytes = await render({ lineItems: chargesWithNote(note) });
       expect(Buffer.from(bytes).equals(Buffer.from(plain))).toBe(true);
     },
   );

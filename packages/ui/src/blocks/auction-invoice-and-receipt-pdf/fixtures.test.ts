@@ -11,6 +11,8 @@ import {
   SEVERAL_ITEMS_RECEIPT,
   sampleItems,
   USD_INVOICE,
+  WIDE_NOTE_INVOICE,
+  WIDE_NOTE_RECEIPT,
   WITH_TAX_INVOICE,
   WITH_TAX_RECEIPT,
 } from "./fixtures";
@@ -123,7 +125,45 @@ describe("the HKD fixtures", () => {
     );
   });
 
-  it("g10.auction-winner-order.SC7 - the USD invoice stays in USD", () => {
+  it.each(settled)(
+    "g10.auction-winner-order.SC16 - %s notes the USD figure and the rate under its Subtotal",
+    (_name, data) => {
+      const usd = data.lineItems
+        .filter((line) => /^(Shipping|Insurance)/.test(line.label))
+        .map((line) => minorOf(line.amount))
+        .concat(minorOf(data.itemTotal.total))
+        .concat(data.taxLine ? [minorOf(data.taxLine.amount)] : [])
+        .reduce((sum, minor) => sum + minor, 0);
+      const notes = data.lineItems.flatMap((line) =>
+        line.note === undefined ? [] : [[line.label, line.note]],
+      );
+      expect(notes).toEqual([
+        [
+          "Subtotal",
+          `Converted from US$${(usd / 100).toLocaleString("en-US", { minimumFractionDigits: 2 })} at 1 USD = 7.85 HKD`,
+        ],
+      ]);
+    },
+  );
+
+  it("g10.auction-winner-order.SC16 - the first invoice, receipt and part-payment receipt read the US$131.21 note", () => {
+    for (const data of [HKD_INVOICE, HKD_RECEIPT, HKD_PART_PAYMENT_RECEIPT]) {
+      expect(data.lineItems.find((line) => line.key === "subtotal")?.note).toBe(
+        "Converted from US$131.21 at 1 USD = 7.85 HKD",
+      );
+    }
+  });
+
+  it("g10.auction-winner-order.SC16 - the wide-note fixtures hold a note that wraps", () => {
+    for (const data of [WIDE_NOTE_INVOICE, WIDE_NOTE_RECEIPT]) {
+      expect(data.lineItems.find((line) => line.key === "subtotal")?.note).toBe(
+        "Converted from US$1,234,567,890.12 at 1 USD = 7.85 HKD",
+      );
+    }
+  });
+
+  it("g10.auction-winner-order.SC7 - the USD invoice stays in USD and carries no note", () => {
+    expect(USD_INVOICE.lineItems.filter((line) => "note" in line)).toEqual([]);
     expect(USD_INVOICE.lineItems.map((line) => line.amount)).toEqual([
       "US$10.01",
       "US$131.21",
