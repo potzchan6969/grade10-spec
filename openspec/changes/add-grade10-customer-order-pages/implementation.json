@@ -1,0 +1,81 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "fb84ebb042ecb9290da5967ca4ec5e5d8d611075706493e857172b79907a74bd"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "858dd8a4809ca213818bcaaa2a9f81909c141768",
+    "capturedAt": "2026-10-22T15:27:33.289Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-grade10-customer-order-pages/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-detail/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-detail/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Current product pictures supplement accessible order details",
+          "Requirement: Fulfilment and tracking use supplied order facts",
+          "Requirement: One private address shows one owned order",
+          "Requirement: The detail distinguishes loading, failure, and not found",
+          "Requirement: The detail preserves the order facts the Store supplies"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-detail/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-history/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-history/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A collector reaches their orders at one private address",
+          "Requirement: Current product pictures identify recorded purchases",
+          "Requirement: Order actions use settled Grade10 and carrier addresses",
+          "Requirement: The page distinguishes loading, failure, and no orders",
+          "Requirement: Your Orders presents newest active and past orders"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/order-history/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-order-detail/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-order-detail/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Delivery progress and tracking are supplied behavior",
+          "Requirement: Optional sidebar facts stay independent",
+          "Requirement: OrderDetails composes supplied order facts",
+          "Requirement: The order detail surface exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-order-detail/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

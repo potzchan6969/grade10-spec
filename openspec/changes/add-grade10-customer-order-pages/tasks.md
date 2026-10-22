@@ -59,7 +59,7 @@ new application tests belong to groups 8-10.
 - [ ] 7.2 Reconcile `docs/prds/products/grade10-site/store/order-history.md` and `docs/prds/products/grade10-site/store/order-detail.md` with the selected current-picture policy, earlier purchases, readable fallback and retained private-link restrictions. Keep the in-flight marks until archive.
 - [ ] 7.3 Verify the two product-record links and focused strict change validation; record any unrelated manual baseline failures separately.
 
-## 8. Optional order picture contracts (grade10)
+## 8. Optional order picture contracts (grade10) (owner: @kinisworking)
 
 This group establishes the wire and domain item shapes. Groups 9 and 10 depend
 on it, and can then be claimed independently against fixtures.
