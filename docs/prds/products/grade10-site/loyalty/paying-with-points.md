@@ -11,9 +11,11 @@ reviewed: 2026-09-15
 | --- | --- |
 | Currency | **HKD** |
 | Rate | **1 point pays $1** — earning is $10 a point, on [Points](/p/grade10-site/loyalty/points) |
-| Pays for | **Qualifying goods only** — the same basis as earning: never gift cards, credit top-ups, or grading fees |
+| Pools | **Earned points first, then topped-up ones**, from the one balance — [Top-ups](/p/grade10-site/loyalty/top-ups#topped-up-points) |
+| Pays for | **Qualifying goods only** — the same basis as earning: never gift cards, top-ups, or grading fees |
 | Never pays for | **Shipping or tax** |
 | Cap | **Qualifying goods minus the site discounts and the code**, and the balance — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused — [Discounts](/p/grade10-site/store/discounts#order-of-application) |
+| Daily cap | **Set by an operator** — points paid in a Hong Kong day, both pools together; a bigger ask is trimmed to what the day still allows — [Top-ups](/p/grade10-site/loyalty/top-ups#limits) |
 | Earns | **Nothing** — the part of the bill paid with points earns no points |
 | Available | **On**, online and at the till — a manager can turn off the till's points spending, or just typed-email spending, within seconds; a sale never waits on it |
 | Discount | 🚧 **One order-level discount titled "Deduction from Points"**, outside the order's one-coupon count, so a coupon and points can be used on the same order; "Points", the title older orders carry, counts as the same discount — [Discounts](/p/grade10-site/store/discounts#one-discount-at-a-time) |
@@ -109,6 +111,8 @@ The session, the switches and the cart are on
   loyalty admin, and a spend can be returned only once
 - **No extra life** — returned points lapse with the rest of the balance,
   so a return never lengthens the life of points
+- **Back to their pool** — returned points go back to the pool they were
+  paid from, earned or topped-up — [Top-ups](/p/grade10-site/loyalty/top-ups#returns)
 - **Points earned** — clawed back separately, line by line —
   [Points](/p/grade10-site/loyalty/points)
 

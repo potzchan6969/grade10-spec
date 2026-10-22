@@ -28,7 +28,7 @@ land on the part of a basket that earns nothing.
 | Products | **Yes** |
 | Shipping and tax | **No**, never in the basis |
 | Gift cards | **No**, excluded as a product rather than as a tender |
-| Credit top-ups | **No**, excluded as a product rather than as a tender |
+| Top-ups | **No** — a points pack earns nothing, and neither do its points when they pay — [Top-ups](/p/grade10-site/loyalty/top-ups) |
 | Grading fees | **No**, excluded as a product |
 | Auction wins | **No** today, a later-phase candidate |
 

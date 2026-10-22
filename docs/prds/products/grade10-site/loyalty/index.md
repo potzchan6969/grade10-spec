@@ -25,6 +25,7 @@ a balance, a tier or a code. ZZZ has no programme.
 | [Tiers](/p/grade10-site/loyalty/tiers) | Silver, Gold and Black — how a tier is reached, kept, lost and given |
 | [Rewards](/p/grade10-site/loyalty/rewards) | What a reward is, the catalog, the shop, what a member holds, and how one is given |
 | [Paying with Points](/p/grade10-site/loyalty/paying-with-points) | Points straight off a bill, online and at the till |
+| [Top-ups](/p/grade10-site/loyalty/top-ups) | Points packs bought by card on Stripe, their limits, and the pool their points spend from |
 | [Coupons](/p/grade10-site/loyalty/coupons) | How a coupon reaches an order at each checkout, and what happens when one goes wrong |
 | [Membership](/p/grade10-site/loyalty/membership) | Membership with the account, the membership page, the member pass and the member's own histories |
 | [Shopify Integration](/p/grade10-site/loyalty/shopify-integration) | Customer pairing, the draft-order checkout, the POS extension, discounts and shipping |
@@ -45,8 +46,9 @@ and giving the top tier to a named person with a reason.
 
 - **Paid membership** — every tier is free, and the top one is given
 - **Earning outside the store and the counter** — beyond operator-granted
-  campaign points; auction wins and credit top-ups are later-phase candidates
-  and earn nothing today
+  campaign points; auction wins are a later-phase candidate and earn nothing
+  today, and a points pack earns nothing —
+  [Top-ups](/p/grade10-site/loyalty/top-ups)
 - **Redeeming against an auction** — points and coupons buy nothing there, in
   any phase
 - **SMS verification**, and NFC tap in any wallet
