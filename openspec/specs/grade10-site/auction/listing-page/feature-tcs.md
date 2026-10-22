@@ -1284,6 +1284,7 @@ HTML,
 **so that** I can read its name, its description and where its bidding stands
 without waiting for a script to run.
 
+<!-- trace:case id=g10.auction-listing-page.TC-zeh rev=2 -->
 ### g10.auction-listing-page.US1-TC1: Listing answers whole before scripts run
 
 **Classification:**
