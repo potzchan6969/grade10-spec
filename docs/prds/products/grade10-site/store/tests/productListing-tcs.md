@@ -1,6 +1,6 @@
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review · 0/38
+**Status:** pending-review · 0/30
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Walk 1: Browse, Narrow and Search on a Wide Screen
@@ -85,14 +85,11 @@
 ### Route
 
 1. Click Add to cart on the card for `<cart product>`.
-   - Record the added line with no sign-in asked `g10.store-product-listing.US7-TC1`
-2. Increase the card's quantity twice, then decrease it once.
-   - Record the card's quantity after each change `g10.store-product-listing.US7-TC2`
-3. Click Cart in the site header.
-   - Record the drawer over the listing and its pending read `g10.store-product-listing.US8-TC1`
-   - Record the drawer line matching the card's quantity `g10.store-product-listing.US7-TC2`
-4. Close the drawer.
-   - Record the listing kept as it was `g10.store-product-listing.US8-TC1`
+   - Record the card's quantity controls, with no sign-in asked `g10.store-product-listing.US7-TC1`
+2. Click the card's increase control twice, then its decrease control once.
+   - Record the card's quantity after each click `g10.store-product-listing.US7-TC2`
+3. Click the card's remove control.
+   - Record the card back to Add to cart `g10.store-product-listing.US7-TC2`
 
 ## g10.store-product-listing.US1: Browse the catalogue
 
@@ -675,7 +672,7 @@ Runs once per row of **Test data**.
 **so that** I can keep browsing while I shop.
 
 <!-- trace:case id=g10.store-product-listing.TC-glr rev=1 -->
-### g10.store-product-listing.US7-TC1: Guest Add to cart keeps the line in this browser
+### g10.store-product-listing.US7-TC1: A guest's Add to cart turns the card's control into a quantity
 
 **Classification:**
 
@@ -698,18 +695,18 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click Add to cart on the card for `<cart product>`.
-2. Read the card.
+2. Read the card's cart controls.
 3. Reload the page.
-4. Click Cart in the site header.
+4. Read the card's cart controls again.
 
 **Expected Results:**
 
 * Step 1 asks for no sign-in.
-* Step 2 shows `<cart product>` in the cart, quantity 1.
-* Step 4 lists `<cart product>` after the reload, quantity 1.
+* Step 2 shows quantity 1, with increase, decrease and remove controls.
+* Step 4 still shows quantity 1.
 
 <!-- trace:case id=g10.store-product-listing.TC-wne rev=1 -->
-### g10.store-product-listing.US7-TC2: Card and drawer quantity edits write one cart
+### g10.store-product-listing.US7-TC2: The card's increase, decrease and remove controls change its quantity
 
 Runs once per row of **Test data**.
 
@@ -729,73 +726,27 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(signed out) is on `<store listing url>`.
-* The cart holds `<cart product>`, quantity 2, and the shop has at least 3 for sale.
+* The cart holds `<cart product>` at quantity 2; the shop has at least 3 for sale.
 
 **Test data:**
 
-| Partition | `<edit>` | `<expected quantity>` |
+| Partition | `<card control>` | `<expected card>` |
 | --- | --- | --- |
-| Increase on the card | Increase the card's quantity once. | 3 |
-| Decrease on the card | Decrease the card's quantity once. | 1 |
-| Remove on the card | Remove `<cart product>` from the cart on its card. | Not in the cart. |
-| Change in the drawer | Open Cart and increase the line's quantity once, then close it. | 3 |
+| Increase | The card's increase control. | Quantity 3. |
+| Decrease | The card's decrease control. | Quantity 1. |
+| Remove | The card's remove control. | Add to cart, no quantity. |
 
 **Steps:**
 
-1. Do `<edit>`.
-2. Read the card for `<cart product>`.
-3. Click Cart in the site header.
-4. Read the line for `<cart product>`.
+1. Click `<card control>` on the card for `<cart product>`.
+2. Read the card's cart controls.
+3. Reload the page.
+4. Read the card's cart controls again.
 
 **Expected Results:**
 
-* Step 2 shows `<expected quantity>`.
-* Step 4 shows `<expected quantity>`.
-
----
-
-## g10.store-product-listing.US8: Review the cart from the listing
-
-**As a** customer,
-**I want** to open my cart over the listing and see what the shop can sell now,
-**so that** I fix my cart before I pay.
-
-<!-- trace:case id=g10.store-product-listing.TC-8w0 rev=1 -->
-### g10.store-product-listing.US8-TC1: Cart opens over the listing and waits for the shop's read
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** acceptance, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US8
-
-**Pre-conditions:**
-
-* customer(signed out) is on `<store listing url>`, narrowed by `<world A>` and scrolled past its first page.
-* The cart holds `<cart product>`.
-
-**Steps:**
-
-1. Click Cart in the site header.
-2. Read the drawer while its read is pending.
-3. Try to change the line's quantity while pending.
-4. Wait for the read to finish.
-5. Close the drawer.
-
-**Expected Results:**
-
-* Step 1 opens the drawer over the listing.
-* Step 2 shows the lines, totals and Checkout waiting.
-* Step 3 changes nothing.
-* Step 4 shows the line at the shop's current price.
-* Step 5 returns to the same narrowing and place.
+* Step 2 shows `<expected card>`.
+* Step 4 shows `<expected card>`.
 
 ---
 
@@ -1281,312 +1232,6 @@ Runs once per row of **Test data**.
 
 * Step 2 matches `<expected collection>`.
 * Step 2's address names the collection only where it is kept.
-
----
-
-### g10.store-product-listing.US7: Add to cart from the listing
-
-**As a** customer,
-**I want** to put cards in my cart straight from the listing,
-**so that** I can keep browsing while I shop.
-
-<!-- trace:case id=g10.store-product-listing.TC-rdb rev=1 -->
-#### g10.store-product-listing.US7-TC3: A quantity past the shop's stock is taken, then filled short in the cart
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US7
-
-**Pre-conditions:**
-
-* customer(signed out) is on `<store listing url>`, with an empty cart.
-* `<short product>` is available with `<stock>` for sale.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `stock` | 2 (fixed: one fewer than the ask). |
-| `ask` | 3 (fixed: `<stock>` + 1). |
-
-**Steps:**
-
-1. Click Add to cart on the card for `<short product>`.
-2. Increase the card's quantity to `<ask>`.
-3. Read the card.
-4. Click Cart in the site header.
-5. Wait for the drawer's read to finish.
-6. Read the line for `<short product>`.
-
-**Expected Results:**
-
-* Step 3 shows `<ask>`, with no cap or stock message.
-* Step 6 shows `<stock>`.
-* Step 6 says the store changed the line.
-
-<!-- trace:case id=g10.store-product-listing.TC-h4v rev=1 -->
-#### g10.store-product-listing.US7-TC4: Signing in moves the browser's lines into the member's cart
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US7
-
-**Pre-conditions:**
-
-* customer(signed out) is on `<store listing url>`, with `<guest product>`, quantity 1, in this browser's cart.
-* `<member>` has `<member cart>` at the store.
-
-**Test data:**
-
-| Partition | `<member cart>` | `<expected lines>` |
-| --- | --- | --- |
-| Empty member cart | No lines. | `<guest product>`. |
-| Member cart with another line | `<member product>`, a different product. | `<guest product>` and `<member product>`. |
-| Same product in both carts | `<guest product>`, quantity 2. | `<guest product>` once, quantity 3 = 1 + 2. |
-
-**Steps:**
-
-1. Sign in as `<member>` from the site header.
-2. Return to `<store listing url>`.
-3. Click Cart in the site header.
-4. Read the lines.
-
-**Expected Results:**
-
-* Step 4 lists `<expected lines>`.
-* The card for `<guest product>` shows it in the cart.
-
----
-
-### g10.store-product-listing.US8: Review the cart from the listing
-
-**As a** customer,
-**I want** to open my cart over the listing and see what the shop can sell now,
-**so that** I fix my cart before I pay.
-
-<!-- trace:case id=g10.store-product-listing.TC-4ry rev=1 -->
-#### g10.store-product-listing.US8-TC2: A line the shop repriced or fills short says so on open
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US8
-
-**Pre-conditions:**
-
-* customer(signed out) is on `<store listing url>`, with `<moved product>` in the cart, quantity 2, at HKD880.
-* admin has changed `<moved product>` in the staging shop's admin as its row describes, and 1 minute has passed.
-
-**Test data:**
-
-| Partition | `<shop change>` | `<expected line>` |
-| --- | --- | --- |
-| Fewer than asked | 1 left for sale. | Quantity 1, saying the store changed it. |
-| More than asked | 5 for sale. | Quantity 2; it never grows. |
-| Price rise | Repriced to HKD950. | HKD950, saying the price changed. |
-| Price fall | Repriced to HKD800. | HKD800, saying the price changed. |
-
-**Steps:**
-
-1. Click Cart in the site header.
-2. Wait for the drawer's read to finish.
-3. Read the line for `<moved product>`.
-
-**Expected Results:**
-
-* Step 3 shows `<expected line>`.
-* The total follows the line's quantity times its price.
-
-<!-- trace:case id=g10.store-product-listing.TC-4ba rev=1 -->
-#### g10.store-product-listing.US8-TC3: A sold-out line holds checkout until it is removed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US8
-
-**Pre-conditions:**
-
-* customer(signed out) is on `<store listing url>`, with `<sold-out product>` and `<cart product>` in the cart.
-* `<sold-out product>` has since sold out, by the recipe "Sell a card out"; the shop still lists its variant.
-
-**Steps:**
-
-1. Click Cart in the site header.
-2. Wait for the drawer's read to finish.
-3. Read the lines and the checkout control.
-4. Remove `<sold-out product>`.
-5. Read the checkout control.
-
-**Expected Results:**
-
-* Step 3 shows `<sold-out product>` marked Sold out.
-* Step 3's Proceed to Checkout is unavailable.
-* Step 5's Proceed to Checkout is available.
-
-<!-- trace:case id=g10.store-product-listing.TC-2fl rev=1 -->
-#### g10.store-product-listing.US8-TC4: Lines whose product left the shop leave with one notice
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US8
-
-**Pre-conditions:**
-
-* customer(signed out) is on `<store listing url>`, with `<gone lines>` and `<cart product>` in the cart.
-* admin has taken `<gone lines>` away as their row describes, and 1 minute has passed.
-
-**Test data:**
-
-| Partition | `<gone lines>` |
-| --- | --- |
-| One line off the channel | `<product A>`, unpublished from the store's sales channel. |
-| Two lines, two causes | `<product A>` unpublished, and `<product B>`'s variant deleted. |
-
-**Steps:**
-
-1. Click Cart in the site header.
-2. Wait for the drawer's read to finish.
-3. Read the lines and the notice.
-
-**Expected Results:**
-
-* Step 3 lists no line from `<gone lines>`.
-* Step 3 shows one notice naming every line in `<gone lines>`.
-* `<cart product>` stays in the cart.
-
-<!-- trace:case id=g10.store-product-listing.TC-j18 rev=1 -->
-#### g10.store-product-listing.US8-TC5: A read that cannot finish shows unchecked lines and Retry
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-product-listing.US8
-
-**Pre-conditions:**
-
-* customer(signed out) is on `<store listing url>`, with `<cart product>` in the cart.
-* The cart read fails as `<failure>` describes; the read after Retry answers.
-
-**Test data:**
-
-| Partition | `<failure>` | `<expected drawer>` |
-| --- | --- | --- |
-| Check cannot finish | The lines load, but the shop's check fails. | Every line unchecked; no price, availability or total. |
-| Cart never loaded | The cart itself cannot be read. | No line named; never says the cart is empty. |
-
-**Steps:**
-
-1. Click Cart in the site header.
-2. Read the drawer.
-3. Click Retry.
-4. Read the drawer after the read answers.
-
-**Expected Results:**
-
-* Step 2 shows `<expected drawer>`.
-* Step 2 offers Retry; checkout is unavailable.
-* Step 4 shows `<cart product>` checked, with checkout available.
-
-<!-- trace:case id=g10.store-product-listing.TC-jdu rev=1 -->
-#### g10.store-product-listing.US8-TC6: Checkout's own read names moved lines and refuses a short fill
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US8
-
-**Pre-conditions:**
-
-* customer(signed out) has opened Cart from `<store listing url>`; its read shows `<product A>` and `<product B>` current, quantity 2 each.
-* After that read, admin changes the shop as `<shop change>` describes, and 1 minute passes.
-
-**Test data:**
-
-| Partition | `<shop change>` | `<expected drawer>` |
-| --- | --- | --- |
-| Two lines repriced | `<product A>` and `<product B>` each repriced. | One notice naming both lines and their new prices. |
-| One line filled short | 1 left of `<product A>`. | Checkout refused, naming `<product A>` and 1 the shop would fill. |
-
-**Steps:**
-
-1. Click Proceed to Checkout.
-2. Read the drawer.
-
-**Expected Results:**
-
-* Step 1 does not leave for the shop's checkout.
-* Step 2 stays open and shows `<expected drawer>`.
-* Each line shows the shop's current answer.
 
 ---
 

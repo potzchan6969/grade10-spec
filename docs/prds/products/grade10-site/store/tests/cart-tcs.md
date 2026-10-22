@@ -1,6 +1,6 @@
-# grade10-site/store/cart-checkout Test Cases
+# grade10-site/store/cart Test Cases
 
-**Status:** pending-review · 0/27
+**Status:** pending-review · 0/32
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Background
@@ -40,26 +40,26 @@
 ### Route
 
 1. Click Cart in the site header and wait for the read.
-   - Record the drawer over the page with current lines `g10.store-cart-checkout.US1-TC1`
+   - Record the drawer over the page with current lines `g10.store-cart.US1-TC1`
 2. Open the code list.
-   - Record the member's codes beside the public ones, in order `g10.store-cart-checkout.US2-TC2`
+   - Record the member's codes beside the public ones, in order `g10.store-cart.US2-TC2`
 3. Pick `<member code>`.
-   - Record the code's row and the total at once `g10.store-cart-checkout.US2-TC1`
+   - Record the code's row and the total at once `g10.store-cart.US2-TC1`
 4. Click Use max on points.
-   - Record the points row at the ceiling `g10.store-cart-checkout.US3-TC1`
+   - Record the points row at the ceiling `g10.store-cart.US3-TC1`
 5. Reload the page and open Cart again.
-   - Record the code and the points still chosen `g10.store-cart-checkout.US3-TC4`
+   - Record the code and the points still chosen `g10.store-cart.US3-TC4`
 6. Click Proceed to Checkout.
-   - Record Shopify's page with the same code and points `g10.store-cart-checkout.US4-TC1`
+   - Record Shopify's page with the same code and points `g10.store-cart.US4-TC1`
 
-## g10.store-cart-checkout.US1: Review the cart
+## g10.store-cart.US1: Review the cart
 
 **As a** customer,
 **I want** to open my cart over the page I am on and see current facts,
 **so that** I can trust the total before I pay.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-q5a rev=1 -->
-### g10.store-cart-checkout.US1-TC1: Cart opens over the page and waits for the shop's read
+### g10.store-cart.US1-TC1: Cart opens over the page and waits for the shop's read
 
 Runs once per row of **Test data**.
 
@@ -74,7 +74,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US1
+* **Trace:** g10.store-cart.US1
 
 **Pre-conditions:**
 
@@ -103,14 +103,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-cart-checkout.US2: Use a promo code
+## g10.store-cart.US2: Use a promo code
 
 **As a** customer,
 **I want** to type or pick one promo code against my cart,
 **so that** I see what it takes off before I pay.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-bzv rev=1 -->
-### g10.store-cart-checkout.US2-TC1: A known code cuts the total; a refused one stays with its reason
+### g10.store-cart.US2-TC1: A known code cuts the total; a refused one stays with its reason
 
 Runs once per row of **Test data**.
 
@@ -125,7 +125,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US2
+* **Trace:** g10.store-cart.US2
 
 **Pre-conditions:**
 
@@ -152,7 +152,7 @@ Runs once per row of **Test data**.
 * Step 4 shows `<expected>`.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-t4a rev=1 -->
-### g10.store-cart-checkout.US2-TC2: The code list shows what fits first, soonest to expire first
+### g10.store-cart.US2-TC2: The code list shows what fits first, soonest to expire first
 
 Runs once per row of **Test data**.
 
@@ -167,7 +167,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US2
+* **Trace:** g10.store-cart.US2
 
 **Pre-conditions:**
 
@@ -196,14 +196,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-cart-checkout.US3: Pay with points
+## g10.store-cart.US3: Pay with points
 
 **As a** customer,
 **I want** to put my points against what the code leaves,
 **so that** I pay less money at checkout.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-4o0 rev=1 -->
-### g10.store-cart-checkout.US3-TC1: Points apply after the code, trimmed to the ceiling
+### g10.store-cart.US3-TC1: Points apply after the code, trimmed to the ceiling
 
 Runs once per row of **Test data**.
 
@@ -218,7 +218,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US3
+* **Trace:** g10.store-cart.US3
 
 **Pre-conditions:**
 
@@ -250,7 +250,7 @@ Runs once per row of **Test data**.
 * Step 6 shows no Points row, the code still applied.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-34g rev=1 -->
-### g10.store-cart-checkout.US3-TC4: The chosen code and points survive a reload and another device
+### g10.store-cart.US3-TC4: The chosen code and points survive a reload and another device
 
 **Classification:**
 
@@ -263,7 +263,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US3
+* **Trace:** g10.store-cart.US3
 
 **Pre-conditions:**
 
@@ -284,14 +284,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-cart-checkout.US4: Check out
+## g10.store-cart.US4: Check out
 
 **As a** customer,
 **I want** to send my reviewed cart to Shopify's checkout and pay,
 **so that** I place my order.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-md9 rev=1 -->
-### g10.store-cart-checkout.US4-TC1: Proceed to Checkout sends the lines, code and points to Shopify
+### g10.store-cart.US4-TC1: Proceed to Checkout sends the lines, code and points to Shopify
 
 **Classification:**
 
@@ -304,7 +304,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US4
+* **Trace:** g10.store-cart.US4
 
 **Pre-conditions:**
 
@@ -328,14 +328,14 @@ Runs once per row of **Test data**.
 
 ## Ungrouped
 
-### g10.store-cart-checkout.US1: Review the cart
+### g10.store-cart.US1: Review the cart
 
 **As a** customer,
 **I want** to open my cart over the page I am on and see current facts,
 **so that** I can trust the total before I pay.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-wf5 rev=1 -->
-#### g10.store-cart-checkout.US1-TC2: The drawer stays dismissible while it waits
+#### g10.store-cart.US1-TC2: The drawer stays dismissible while it waits
 
 Runs once per row of **Test data**.
 
@@ -350,7 +350,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart-checkout.US1
+* **Trace:** g10.store-cart.US1
 
 **Pre-conditions:**
 
@@ -377,7 +377,7 @@ Runs once per row of **Test data**.
 * Step 3 closes the drawer.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-1mg rev=1 -->
-#### g10.store-cart-checkout.US1-TC3: Quantity and removal in the drawer change the cart and total
+#### g10.store-cart.US1-TC3: Quantity and removal in the drawer change the cart and total
 
 Runs once per row of **Test data**.
 
@@ -392,7 +392,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US1
+* **Trace:** g10.store-cart.US1
 
 **Pre-conditions:**
 
@@ -421,7 +421,7 @@ Runs once per row of **Test data**.
 * Step 5 shows the same lines as step 3.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-gcg rev=1 -->
-#### g10.store-cart-checkout.US1-TC4: Each line shows the product's current first picture
+#### g10.store-cart.US1-TC4: Each line shows the product's current first picture
 
 **Classification:**
 
@@ -434,7 +434,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US1
+* **Trace:** g10.store-cart.US1
 
 **Pre-conditions:**
 
@@ -451,7 +451,7 @@ Runs once per row of **Test data**.
 * Step 2 shows `<product A>`'s new first image.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-c56 rev=1 -->
-#### g10.store-cart-checkout.US1-TC5: The total is the shop's price, or the store's own past 2.5 s
+#### g10.store-cart.US1-TC5: The total is the shop's price, or the store's own past 2.5 s
 
 Runs once per row of **Test data**.
 
@@ -466,7 +466,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart-checkout.US1
+* **Trace:** g10.store-cart.US1
 
 **Pre-conditions:**
 
@@ -492,7 +492,7 @@ Runs once per row of **Test data**.
 * Step 3 shows `<expected footer>`.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-g2h rev=1 -->
-#### g10.store-cart-checkout.US1-TC6: A member's drawer closes when the session ends elsewhere
+#### g10.store-cart.US1-TC6: A member's drawer closes when the session ends elsewhere
 
 Runs once per row of **Test data**.
 
@@ -507,7 +507,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US1
+* **Trace:** g10.store-cart.US1
 
 **Pre-conditions:**
 
@@ -534,7 +534,7 @@ Runs once per row of **Test data**.
 * Step 4 does not reopen a closed drawer.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-wkm rev=1 -->
-#### g10.store-cart-checkout.US1-TC7: A guest cart is kept in this browser, a member's at the store
+#### g10.store-cart.US1-TC7: A guest cart is kept in this browser, a member's at the store
 
 Runs once per row of **Test data**.
 
@@ -549,7 +549,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US1
+* **Trace:** g10.store-cart.US1
 
 **Pre-conditions:**
 
@@ -572,16 +572,10 @@ Runs once per row of **Test data**.
 * Step 1 shows `<product A>`.
 * Step 2 shows `<expected browser 2 cart>`.
 
----
+<!-- trace:case id=g10.store-product-listing.TC-4ry rev=1 -->
+#### g10.store-cart.US1-TC8: A line the shop repriced or fills short says so on open
 
-### g10.store-cart-checkout.US2: Use a promo code
-
-**As a** customer,
-**I want** to type or pick one promo code against my cart,
-**so that** I see what it takes off before I pay.
-
-<!-- trace:case id=g10.store-cart-checkout.TC-nst rev=1 -->
-#### g10.store-cart-checkout.US2-TC3: A second code replaces the first
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -594,7 +588,176 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US2
+* **Trace:** g10.store-cart.US1
+
+**Pre-conditions:**
+
+* customer(signed out) is on `<store listing url>`, with `<moved product>` in the cart, quantity 2, at HKD880.
+* admin has changed `<moved product>` in the staging shop's admin as its row describes, and 1 minute has passed.
+
+**Test data:**
+
+| Partition | `<shop change>` | `<expected line>` |
+| --- | --- | --- |
+| Fewer than asked | 1 left for sale. | Quantity 1, saying the store changed it. |
+| More than asked | 5 for sale. | Quantity 2; it never grows. |
+| Price rise | Repriced to HKD950. | HKD950, saying the price changed. |
+| Price fall | Repriced to HKD800. | HKD800, saying the price changed. |
+
+**Steps:**
+
+1. Click Cart in the site header.
+2. Wait for the drawer's read to finish.
+3. Read the line for `<moved product>`.
+
+**Expected Results:**
+
+* Step 3 shows `<expected line>`.
+* The total follows the line's quantity times its price.
+
+<!-- trace:case id=g10.store-product-listing.TC-4ba rev=1 -->
+#### g10.store-cart.US1-TC9: A sold-out line holds checkout until it is removed
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US1
+
+**Pre-conditions:**
+
+* customer(signed out) is on `<store listing url>`, with `<sold-out product>` and `<product A>` in the cart.
+* `<sold-out product>` has since sold out, by the recipe "Sell a card out"; the shop still lists its variant.
+
+**Steps:**
+
+1. Click Cart in the site header.
+2. Wait for the drawer's read to finish.
+3. Read the lines and the checkout control.
+4. Remove `<sold-out product>`.
+5. Read the checkout control.
+
+**Expected Results:**
+
+* Step 3 shows `<sold-out product>` marked Sold out.
+* Step 3's Proceed to Checkout is unavailable.
+* Step 5's Proceed to Checkout is available.
+
+<!-- trace:case id=g10.store-product-listing.TC-2fl rev=1 -->
+#### g10.store-cart.US1-TC10: Lines whose product left the shop leave with one notice
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US1
+
+**Pre-conditions:**
+
+* customer(signed out) is on `<store listing url>`, with `<gone lines>` and `<product A>` in the cart.
+* admin has taken `<gone lines>` away as their row describes, and 1 minute has passed.
+
+**Test data:**
+
+| Partition | `<gone lines>` |
+| --- | --- |
+| One line off the channel | `<product A>`, unpublished from the store's sales channel. |
+| Two lines, two causes | `<product A>` unpublished, and `<product B>`'s variant deleted. |
+
+**Steps:**
+
+1. Click Cart in the site header.
+2. Wait for the drawer's read to finish.
+3. Read the lines and the notice.
+
+**Expected Results:**
+
+* Step 3 lists no line from `<gone lines>`.
+* Step 3 shows one notice naming every line in `<gone lines>`.
+* `<product A>` stays in the cart.
+
+<!-- trace:case id=g10.store-product-listing.TC-j18 rev=1 -->
+#### g10.store-cart.US1-TC11: A read that cannot finish shows unchecked lines and Retry
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart.US1
+
+**Pre-conditions:**
+
+* customer(signed out) is on `<store listing url>`, with `<product A>` in the cart.
+* The cart read fails as `<failure>` describes; the read after Retry answers.
+
+**Test data:**
+
+| Partition | `<failure>` | `<expected drawer>` |
+| --- | --- | --- |
+| Check cannot finish | The lines load, but the shop's check fails. | Every line unchecked; no price, availability or total. |
+| Cart never loaded | The cart itself cannot be read. | No line named; never says the cart is empty. |
+
+**Steps:**
+
+1. Click Cart in the site header.
+2. Read the drawer.
+3. Click Retry.
+4. Read the drawer after the read answers.
+
+**Expected Results:**
+
+* Step 2 shows `<expected drawer>`.
+* Step 2 offers Retry; checkout is unavailable.
+* Step 4 shows `<product A>` checked, with checkout available.
+
+---
+
+### g10.store-cart.US2: Use a promo code
+
+**As a** customer,
+**I want** to type or pick one promo code against my cart,
+**so that** I see what it takes off before I pay.
+
+<!-- trace:case id=g10.store-cart-checkout.TC-nst rev=1 -->
+#### g10.store-cart.US2-TC3: A second code replaces the first
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US2
 
 **Pre-conditions:**
 
@@ -612,7 +775,7 @@ Runs once per row of **Test data**.
 * Estimated Total is HKD1,280 = 1,300 − 20.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-xm3 rev=1 -->
-#### g10.store-cart-checkout.US2-TC4: A code that cannot stack gives way to a larger site discount
+#### g10.store-cart.US2-TC4: A code that cannot stack gives way to a larger site discount
 
 Runs once per row of **Test data**.
 
@@ -627,7 +790,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US2
+* **Trace:** g10.store-cart.US2
 
 **Pre-conditions:**
 
@@ -656,7 +819,7 @@ Runs once per row of **Test data**.
 * For the site-discount row, step 4 still lists `<order code>`.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-7r3 rev=1 -->
-#### g10.store-cart-checkout.US2-TC5: A code the shop refuses for this basket is listed with its reason
+#### g10.store-cart.US2-TC5: A code the shop refuses for this basket is listed with its reason
 
 **Classification:**
 
@@ -669,7 +832,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US2
+* **Trace:** g10.store-cart.US2
 
 **Pre-conditions:**
 
@@ -689,7 +852,7 @@ Runs once per row of **Test data**.
 * Step 4 is unchanged by `<product code>`.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-zqw rev=1 -->
-#### g10.store-cart-checkout.US2-TC6: Removing a code, or an edit it no longer fits, puts it back
+#### g10.store-cart.US2-TC6: Removing a code, or an edit it no longer fits, puts it back
 
 Runs once per row of **Test data**.
 
@@ -704,7 +867,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US2
+* **Trace:** g10.store-cart.US2
 
 **Pre-conditions:**
 
@@ -729,7 +892,7 @@ Runs once per row of **Test data**.
 * Step 3 lists `<spend code>` again.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-ty5 rev=1 -->
-#### g10.store-cart-checkout.US2-TC7: The codes still work when the rewards wallet does not answer
+#### g10.store-cart.US2-TC7: The codes still work when the rewards wallet does not answer
 
 **Classification:**
 
@@ -742,7 +905,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart-checkout.US2
+* **Trace:** g10.store-cart.US2
 
 **Pre-conditions:**
 
@@ -762,7 +925,7 @@ Runs once per row of **Test data**.
 * Step 3 applies `<public code>`.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-jeb rev=1 -->
-#### g10.store-cart-checkout.US2-TC8: A gift code adds a free line; removing the line puts the code back
+#### g10.store-cart.US2-TC8: A gift code adds a free line; removing the line puts the code back
 
 **Classification:**
 
@@ -775,7 +938,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US2
+* **Trace:** g10.store-cart.US2
 
 **Pre-conditions:**
 
@@ -797,14 +960,14 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-cart-checkout.US3: Pay with points
+### g10.store-cart.US3: Pay with points
 
 **As a** customer,
 **I want** to put my points against what the code leaves,
 **so that** I pay less money at checkout.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-7st rev=1 -->
-#### g10.store-cart-checkout.US3-TC2: Points are not offered to a guest or a non-member
+#### g10.store-cart.US3-TC2: Points are not offered to a guest or a non-member
 
 Runs once per row of **Test data**.
 
@@ -819,7 +982,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US3
+* **Trace:** g10.store-cart.US3
 
 **Pre-conditions:**
 
@@ -844,7 +1007,7 @@ Runs once per row of **Test data**.
 * Step 2 still offers the promo code field.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-cew rev=1 -->
-#### g10.store-cart-checkout.US3-TC3: A code that takes all the goods leaves points nothing to pay
+#### g10.store-cart.US3-TC3: A code that takes all the goods leaves points nothing to pay
 
 **Classification:**
 
@@ -857,7 +1020,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US3
+* **Trace:** g10.store-cart.US3
 
 **Pre-conditions:**
 
@@ -875,14 +1038,14 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-cart-checkout.US4: Check out
+### g10.store-cart.US4: Check out
 
 **As a** customer,
 **I want** to send my reviewed cart to Shopify's checkout and pay,
 **so that** I place my order.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-lib rev=1 -->
-#### g10.store-cart-checkout.US4-TC2: A guest checks out from the guest button; signing in merges the cart
+#### g10.store-cart.US4-TC2: A guest checks out from the guest button; signing in merges the cart
 
 Runs once per row of **Test data**.
 
@@ -897,11 +1060,11 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US4
+* **Trace:** g10.store-cart.US4
 
 **Pre-conditions:**
 
-* customer(signed out) has `<product A>` and `<public code>` on this browser's cart.
+* customer(signed out) has `<product A>` at quantity 1 and `<public code>` on this browser's cart.
 * `<member>` holds `<member cart>` at the store.
 
 **Test data:**
@@ -911,6 +1074,7 @@ Runs once per row of **Test data**.
 | Check out as guest | Click Check out as guest. | Not used. | Shopify's page asks for an email; no sign-in. |
 | Sign in, member cart without a code | Click the Sign in link under the button. | `<product B>`, no code. | Drawer reopens: `<product A>`, `<product B>`, `<public code>`, points offered. |
 | Sign in, member cart with a code | Click the Sign in link under the button. | `<product B>` with `<member code>`. | Drawer reopens: both lines, `<member code>` kept. |
+| Sign in, same product in both carts | Click the Sign in link under the button. | `<product A>` at quantity 2. | Drawer reopens: one `<product A>` line at quantity 3 = 1 + 2. |
 
 **Steps:**
 
@@ -925,7 +1089,7 @@ Runs once per row of **Test data**.
 * Step 4 shows `<expected>`.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-mih rev=1 -->
-#### g10.store-cart-checkout.US4-TC3: A Pay in flight holds the drawer; closing does not cancel it
+#### g10.store-cart.US4-TC3: A Pay in flight holds the drawer; closing does not cancel it
 
 **Classification:**
 
@@ -938,7 +1102,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart-checkout.US4
+* **Trace:** g10.store-cart.US4
 
 **Pre-conditions:**
 
@@ -959,7 +1123,7 @@ Runs once per row of **Test data**.
 * Step 4 opens Shopify's page for the cart sent at step 1.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-mvl rev=1 -->
-#### g10.store-cart-checkout.US4-TC4: An unchanged purchase reopens its invoice; a changed one starts anew
+#### g10.store-cart.US4-TC4: An unchanged purchase reopens its invoice; a changed one starts anew
 
 Runs once per row of **Test data**.
 
@@ -974,7 +1138,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US4
+* **Trace:** g10.store-cart.US4
 
 **Pre-conditions:**
 
@@ -1001,7 +1165,7 @@ Runs once per row of **Test data**.
 * For the edit row, step 4 cannot be paid.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-vun rev=1 -->
-#### g10.store-cart-checkout.US4-TC5: Paying clears the cart it bought, not a cart changed after
+#### g10.store-cart.US4-TC5: Paying clears the cart it bought, not a cart changed after
 
 Runs once per row of **Test data**.
 
@@ -1016,7 +1180,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US4
+* **Trace:** g10.store-cart.US4
 
 **Pre-conditions:**
 
@@ -1042,7 +1206,7 @@ Runs once per row of **Test data**.
 * Step 3 shows `<expected cart>`.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-rbr rev=1 -->
-#### g10.store-cart-checkout.US4-TC6: Shopify refuses an item that sold out after the drawer's read
+#### g10.store-cart.US4-TC6: Shopify refuses an item that sold out after the drawer's read
 
 **Classification:**
 
@@ -1055,7 +1219,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart-checkout.US4
+* **Trace:** g10.store-cart.US4
 
 **Pre-conditions:**
 
@@ -1074,7 +1238,7 @@ Runs once per row of **Test data**.
 * No order is placed.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-k2d rev=1 -->
-#### g10.store-cart-checkout.US4-TC7: Shopify's thank-you page leads to Your Orders with the purchase
+#### g10.store-cart.US4-TC7: Shopify's thank-you page leads to Your Orders with the purchase
 
 **Classification:**
 
@@ -1087,7 +1251,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-cart-checkout.US4
+* **Trace:** g10.store-cart.US4
 
 **Pre-conditions:**
 
@@ -1106,7 +1270,7 @@ Runs once per row of **Test data**.
 * Step 4 lists the order for `<product A>` within seconds.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-b0s rev=1 -->
-#### g10.store-cart-checkout.US4-TC8: An uncertain payment hand-off opens no second invoice
+#### g10.store-cart.US4-TC8: An uncertain payment hand-off opens no second invoice
 
 **Classification:**
 
@@ -1119,7 +1283,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart-checkout.US4
+* **Trace:** g10.store-cart.US4
 
 **Pre-conditions:**
 
@@ -1134,3 +1298,44 @@ Runs once per row of **Test data**.
 
 * Step 1 keeps the purchase visible.
 * Step 2 opens the same invoice, or waits; never a second payable one.
+
+<!-- trace:case id=g10.store-product-listing.TC-jdu rev=1 -->
+#### g10.store-cart.US4-TC9: Checkout's own read names moved lines and refuses a short fill
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US4
+
+**Pre-conditions:**
+
+* customer(signed out) has opened Cart from `<store listing url>`; its read shows `<product A>` and `<product B>` current, quantity 2 each.
+* After that read, admin changes the shop as `<shop change>` describes, and 1 minute passes.
+
+**Test data:**
+
+| Partition | `<shop change>` | `<expected drawer>` |
+| --- | --- | --- |
+| Two lines repriced | `<product A>` and `<product B>` each repriced. | One notice naming both lines and their new prices. |
+| One line filled short | 1 left of `<product A>`. | Checkout refused, naming `<product A>` and 1 the shop would fill. |
+
+**Steps:**
+
+1. Click Proceed to Checkout.
+2. Read the drawer.
+
+**Expected Results:**
+
+* Step 1 does not leave for the shop's checkout.
+* Step 2 stays open and shows `<expected drawer>`.
+* Each line shows the shop's current answer.
