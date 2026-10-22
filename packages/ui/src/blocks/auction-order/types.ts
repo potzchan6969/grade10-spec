@@ -102,6 +102,10 @@ type AuctionWinnerOrderProps = {
   alerts?: readonly AuctionWinnerOrderAlert[];
   summary: {
     lines: readonly AuctionWinnerOrderLine[];
+    /** Under the lines, above the total: a settlement-currency subtotal the lines convert into. */
+    subtotal?: Omit<AuctionWinnerOrderLine, "tooltip">;
+    /** Settlement-currency fee rows under the subtotal — e.g. the payment processing fee computed in the settlement currency. */
+    feeLines?: readonly AuctionWinnerOrderLine[];
     total: Omit<AuctionWinnerOrderLine, "tooltip"> | null;
     convertedTotal?: Omit<AuctionWinnerOrderLine, "tooltip">;
     convertedFee?: Omit<AuctionWinnerOrderLine, "tooltip">;

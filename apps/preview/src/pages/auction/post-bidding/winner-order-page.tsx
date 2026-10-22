@@ -552,9 +552,18 @@ function WinnerOrderPageState({
     content.settlementCurrency === "HKD" &&
     !content.paymentRail &&
     (content.setupPaymentMethod === "Card" || content.paymentMethod === "Visa");
+  const subtotalIndex = lines.findIndex((line) => line.label === "Subtotal");
+  const subtotal = subtotalIndex >= 0 ? lines[subtotalIndex] : undefined;
+  const feeLines =
+    subtotalIndex >= 0
+      ? lines
+          .slice(subtotalIndex + 1)
+          .filter((line) => line.label !== "Order Total")
+      : [];
   const summaryLines = lines.filter(
-    (line) =>
+    (line, index) =>
       line.label !== "Order Total" &&
+      (subtotalIndex < 0 || index < subtotalIndex) &&
       !(
         cardSettlement &&
         !hasIssuedInvoice(content) &&
@@ -686,6 +695,8 @@ function WinnerOrderPageState({
           })}
           summary={{
             lines: summaryLines,
+            subtotal,
+            feeLines: feeLines.length ? feeLines : undefined,
             total: total ?? null,
             invoicePdf: hasIssuedInvoice(content)
               ? { onOpen: openPlaceholderInvoicePdf }
