@@ -861,7 +861,7 @@ Runs once per row of **Test data**.
 
 * Step 2 says the cart is empty.
 * Step 2 shows no lines, no footer and no Proceed to Checkout.
-* The Cart control in the header shows no count.
+* The drawer's header shows no item count.
 
 ---
 

@@ -594,7 +594,7 @@ Runs once per row of **Test data**.
 
 | Partition | `<refund>` | `<expected summary>` | `<expected badge>` |
 | --- | --- | --- | --- |
-| One line | `<product B>`, HKD105. | Total HKD885; a Refund row of −HKD105. | The order's status before the refund. |
+| One line | `<product B>`, HKD105. | Total HKD885; a Refund row of −HKD105. | Refunded |
 | Everything | Both lines, HKD885. | Total HKD885; a Refund row of −HKD885. | Refunded |
 
 **Steps:**

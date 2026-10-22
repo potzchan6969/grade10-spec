@@ -305,12 +305,15 @@ Runs once per row of **Test data**.
 
 | Partition | `<order>` | `<expected badge>` |
 | --- | --- | --- |
-| Paid, not sent | Paid, not yet fulfilled, for delivery. | Processing |
-| Sent | Fulfilled for delivery, not completed. | Shipped |
-| Ready to collect | A pick-up order the shop marked ready. | Ready for Pickup |
-| Done | Completed. | Completed |
+| Paid, not sent | Paid, not yet fulfilled. | Processing |
+| Held | On hold, refunded in part. | Processing |
+| Sent in part | Some items fulfilled, paid in full. | Shipped |
+| Sent, not paid in full | Every item fulfilled, not paid in full. | Shipped |
+| Done | Every item fulfilled and paid in full. | Completed |
 | Called off | Canceled. | Canceled |
+| Money back in part | Refunded in part, not on hold or scheduled. | Refunded |
 | Money back in full | Refunded in full. | Refunded |
+| Pick-up order | A pick-up order, paid, not yet fulfilled. | Processing; no pick-up badge |
 
 **Steps:**
 
