@@ -68,7 +68,7 @@ on it, and can then be claimed independently against fixtures.
 - [ ] 8.2 Add optional `imageSrc` and `imageAlt` strings to `orderItemSchema` and the frontend `OrderItem`, preserving the direct decoded repository return, so `g10.store-order-history.SC6` and `g10.store-order-detail.SC6` pass. Keep current input schemas and persistence image-free; prove enriched responses remain readable by the saved previous production schema.
 - [ ] 8.3 Verify focused contract/client compatibility tests and affected contract/frontend/admin typechecks. Check member, list, private-link and admin-card output schemas retain the same fields.
 
-## 9. Current order picture reads (grade10)
+## 9. Current order picture reads (grade10) (owner: @kinisworking)
 
 Uses the landed group 8 contract. No frontend implementation or running browser
 is needed to prove this service boundary.
