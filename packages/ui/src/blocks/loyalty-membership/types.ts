@@ -1,28 +1,52 @@
 import type { ReactNode } from "react";
 
+/** What a redemption settles as: a physical item, or a money-off coupon. */
+type RewardKind = "item" | "coupon";
+
+/** Art the consumer supplies for an item reward. A coupon draws its own tile. */
+type RewardImage = {
+  src: string;
+  alt: string;
+};
+
 /**
- * One reward on the redemption menu. Points are numbers because the programme
- * counts them; every date and window is a string the consumer already
- * formatted, because formatting needs a locale and a time zone this package is
- * forbidden to know.
+ * One reward on the shop. Points are numbers because the programme counts
+ * them; every date, window and place is a string the consumer already
+ * formatted, because formatting needs a locale and a time zone this package
+ * is forbidden to know. A redemption is always one unit.
  */
 type RewardMenuItem = {
   id: string;
+  kind: RewardKind;
   name: string;
-  /** Points for one redemption — or for one unit when the reward takes a quantity. */
+  description?: string;
+  /** Points for one redemption. */
   pointCost: number;
-  /** Present when the reward is priced per unit: the per-redemption bound. */
-  maxQuantity?: number;
-  /** A physical reward's collection window, stated as supplied. */
-  collectionWindow?: string;
-  /** A money-off reward's code validity period, stated as supplied. */
-  validity?: string;
-  /**
-   * What its coupon cannot be spent without — a basket big enough, a counter
-   * or a checkout it is good at. Stated as supplied, and absent where the
-   * coupon limits nothing.
-   */
-  limits?: string;
+  /** Item art; a coupon draws the gift tile and takes none. */
+  image?: RewardImage;
+  /** The redemption window's end, already formatted. */
+  deadline?: string;
+  /** Where the coupon is spendable, or where the item is collected, as supplied. */
+  useAt?: string;
+  /** How long the coupon is good for, or the collection window, as supplied. */
+  validFor?: string;
+};
+
+/** The same reward read on the checkout surface. */
+type RewardCheckoutReward = RewardMenuItem;
+
+/** What a settled redemption left the member holding, on the ticket. */
+type RewardRedemption = {
+  /** The balance left after the debit. */
+  balanceAfter: number;
+  /** The line under the check — the cost and the remaining balance, as supplied. */
+  summary: string;
+  /** The ticket's deadline line — use-by or collect-by, as supplied. */
+  deadline: string;
+  /** The member-readable code the redemption minted — a discount coupon's only. */
+  code?: string;
+  /** The ticket's footer line where no code stands — the collect-in-store line. */
+  note?: string;
 };
 
 type CouponStatus = "open" | "spent" | "void" | "expired";
@@ -59,4 +83,13 @@ type ActivityEntry = {
   context?: ReactNode;
 };
 
-export type { ActivityEntry, CouponItem, CouponStatus, RewardMenuItem };
+export type {
+  ActivityEntry,
+  CouponItem,
+  CouponStatus,
+  RewardCheckoutReward,
+  RewardImage,
+  RewardKind,
+  RewardMenuItem,
+  RewardRedemption,
+};
