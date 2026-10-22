@@ -57,6 +57,7 @@ None.
   the old tiers. They get no delta: their amounts read as examples under other
   configuration values, and only the application's tests and fixtures are
   rewritten.
+- **Domain suites** - No domain impact: no `**Trace:**` line of `grade10-site/auction/domain-tcs.md` names a bid-increments journey, and the one admin journey a domain case traces (`grade10-admin-auction-listing-US-03`, a campaign cancellation) does not touch a starting price with cents. The domain suite's tier amounts are examples (Q14). No platform impact: no platform path moves.
 - **Starting price** - a starting price an operator or a consignment ask sets
   is whole dollars (Q16, Q17, Q19). A price already stored with cents is left as
   it is (Q18); the opening minimum on such a row is the next whole dollar at or

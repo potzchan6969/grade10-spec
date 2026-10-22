@@ -3,8 +3,9 @@
 ## Purpose
 
 Makes the next auction bid proportionate to the price being beaten, using one
-Grade10-owned USD schedule for every auction. The schedule's values are
-configuration; this capability holds the rule that reads them.
+Grade10-owned USD schedule for every auction, which bids in USD alone. The
+schedule's values are configuration; this capability holds the rule that reads
+them.
 
 ## Feature set
 
@@ -14,7 +15,7 @@ configuration; this capability holds the rule that reads them.
   - Whole-dollar values: every tier bound and every increment is a whole-dollar amount
   - A change takes effect on the next bid: open lots included, standing bids untouched
 - Minimum bid
-  - One lookup rule: manual and proxy bidding select the tier from the amount being beaten, read from the configured schedule
+  - One lookup rule: manual and proxy bidding, the house's maximum and a bid in extended bidding select the tier from the amount being beaten, read from the configured schedule
   - Opening price: before any bid, the minimum is the starting price, or the lowest configured increment on a 0 start, or the next whole dollar at or above a stored starting price that has cents
   - Whole-dollar starting price: a starting price that an operator or a consignment ask sets is a whole-dollar amount, and one with cents is refused; a price already stored is not rewritten
   - Whole-dollar bids: a bid or a maximum is a whole-dollar amount at or above the minimum, and one that is not is refused
@@ -121,7 +122,9 @@ public-price tier increment to that price. With two or more proxy maxima, it
 SHALL add the second-highest maximum's tier increment to that maximum and cap
 the result at the leader's maximum. The result is the minimum next amount.
 Every tier increment SHALL be read from the configured schedule in force when
-the minimum is calculated, and the minimum SHALL NOT be stored.
+the minimum is calculated, and the minimum SHALL NOT be stored. A house maximum
+and a bid placed in extended bidding SHALL read the same schedule, at the
+amount being beaten, as any other bid.
 
 A bid or a maximum SHALL be a whole-dollar amount at or above the minimum next
 amount. Grade10 SHALL accept any such amount and refuse an amount below the
@@ -201,7 +204,7 @@ stored rows only.
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-kc7 rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-24 - An operator's starting price with cents is refused
-**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+**Serves:** Minimum bid - the operator's save is refused before a collector meets the price
 
 - **GIVEN** a USD listing whose starting price is a whole-dollar amount S minor units
 - **WHEN** an operator sets its starting price to S plus one minor unit
@@ -210,7 +213,7 @@ stored rows only.
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-y9s rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-25 - A consignment ask with cents makes no listing
-**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+**Serves:** Minimum bid - the listing sync refuses the ask against its own caller
 
 - **GIVEN** a consignment ask for the auction whose price is a whole-dollar amount S minor units plus one minor unit
 - **WHEN** Grade10 makes the listing from the ask
@@ -227,6 +230,15 @@ stored rows only.
 - **AND** the minimum bid is S plus one major unit, the next whole dollar at or above the starting price
 - **AND** a first bid of that minimum is accepted
 - **AND** the stored starting price stays S plus one minor unit, and no migration or rounding touches it
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-r3d rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-27 - The house maximum and an extended-bidding bid step on the same schedule
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** an open USD listing in extended bidding, led by a collector with a maximum of MA minor units, and a house maximum of MH minor units that is at least the minimum next amount and below MA
+- **WHEN** the house commits MH
+- **THEN** the current bid is the lesser of MA and MH plus the increment the configured schedule selects for MH
+- **AND** the minimum next amount is the current bid plus the increment the configured schedule selects for it, as on a listing outside extended bidding
 
 ### Requirement: Every lot is bid in USD and no other currency stays
 
