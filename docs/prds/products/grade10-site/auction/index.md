@@ -86,7 +86,7 @@ lot is its own capability.
 | Auction unit | Decided | A **listing** is one auction item and the sole term in every spec and the operator queue; collectors read **auction**. | Product |
 | Buy Now | Decided | Excluded, including browse-only Buy Now listings. | Product |
 | One auction, two brands | Decided | A card is auctioned once, and Grade10 and ZZZ collectors bid on the same lot. Identities, sessions and money never cross; a display says Bidder 4, never a name. A public bid avatar may show one letter from the bidder's email local part; never the full email. | Product |
-| Auction money | Decided | Every lot is bid in USD. The winner chooses USD or HKD settlement at order setup; HKD uses the fixed 7.85 rate, named only in the note under the HKD Order Summary's Subtotal. | Product |
+| Auction money | Decided | Every lot is bid in USD. The winner chooses USD or HKD settlement at order setup; HKD uses the fixed 7.85 rate, named only in the note under the Subtotal, on the HKD Order Summary and on the invoice and receipt PDFs. | Product |
 | Operator grants | Decided | Payment processing and shipment processing are different grants and different roles (`finance` vs `staff`); `admin` holds both. Publishing a lot is neither. | Product |
 | Chapters, not capability pages | Decided | The manual cuts the auction into four chapters a reader meets in order; each capability is a section of one chapter, names its spec there, and is what a proposal links. | Product |
 | Design frames | ❓ Open | No design frame exists for any auction surface; the shipped Storybook stories are the reference until Design names the screens drawn first. | Design |
