@@ -33,8 +33,9 @@ so redefining the reward never rewrites a coupon a member already holds —
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused
 
-**The picture** - the coupon list shown here draws no code and no copy
-action, since a reward coupon carries none
+**The picture** - the coupon list shown here draws a code only where the
+coupon is passed one; 🚧 a money-off redemption mints one member-readable
+code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 
 ::story{id="loyalty-coupons-blocks-couponlist--wallet" title="The coupons a member holds"}
 
