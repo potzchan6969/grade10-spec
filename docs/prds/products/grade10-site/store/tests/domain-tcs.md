@@ -11,7 +11,8 @@
 | --- | --- |
 | `grade10 store url` | `<g10url>/store` |
 | `store listing url` | `<g10url>/store/collections` |
-| `product A` | A booster box for sale at HKD880, no site discount, at least 3 for sale. |
+| `product A` | A booster box for sale at `<product A price>`, no site discount, at least 3 for sale. |
+| `product A price` | HKD880 (range: any price above `<code amount>` + `<points used>`). |
 | `product B` | An elite trainer box for sale at HKD420, no site discount, at least 3 for sale. |
 
 ## Ungrouped
@@ -262,14 +263,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(member) holds 600 points and `<member code>`, with an empty cart.
-* `<product A>` is for sale at HKD880 with no site discount.
+* customer(member) holds `<points balance>` and `<member code>`, with an empty cart.
+* `<product A>` is for sale at `<product A price>` with no site discount.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `member code` | A store code for HKD50 off any order, combining with order discounts. |
+| `member code` | A store code for `<code amount>` off any order, combining with order discounts. |
+| `code amount` | HKD50 (range: any amount below `<product A price>`). |
+| `points balance` | 600 points (range: at least `<points used>`). |
+| `points used` | 100 points (range: 1 to `<product A price>` − `<code amount>`, at $1 a point). |
 | `test card` | The payment provider's published test card that succeeds. |
 
 **Steps:**
@@ -278,7 +282,7 @@ Runs once per row of **Test data**.
 2. Click Add to cart on the card for `<product A>`.
 3. Click Cart in the site header and wait for the read.
 4. Type `<member code>` in the promo code field and apply it.
-5. Type 100 in the points field and click Apply.
+5. Type `<points used>` in the points field and click Apply.
 6. Read the Estimated Total.
 7. Click Proceed to Checkout.
 8. Read Shopify's page.
@@ -288,10 +292,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 6 shows HKD730 = 880 − 50 − 100.
-* Step 8 holds `<member code>` and the 100-point deduction.
+* Step 6 shows `<product A price>` − `<code amount>` − `<points used>`.
+* Step 8 holds `<member code>` and the `<points used>` deduction.
 * Step 10 lists the order under Active Orders.
-* Step 11's summary shows `Points (100 pts)` after Discount.
+* Step 11's summary shows `Points (<points used> pts)` after Discount.
 * Step 11 shows Points to Earn.
 
 ---
@@ -321,18 +325,20 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(guest) has an empty cart in this browser.
-* `<member>` holds `<product A>` at quantity 2 in the store-kept cart, and 600 points.
+* `<member>` holds `<product A>` at `<member quantity>` in the store-kept cart, and a points balance above 0.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | `member` | A member account in the loyalty programme, with a known sign-in. |
+| `member quantity` | 2 (range: 1 or more, below `<product A>`'s stock). |
+| `guest quantity` | 1 (range: 1 or more; with `<member quantity>`, within `<product A>`'s stock). |
 
 **Steps:**
 
 1. Navigate to `<store listing url>`.
-2. Click Add to cart on the card for `<product A>`.
+2. Click Add to cart on the card for `<product A>`, then increase it to `<guest quantity>`.
 3. Navigate to `/store/products/<product B handle>`.
 4. Click Add to cart.
 5. Click the Sign in link under Check out as guest in the drawer.
@@ -341,7 +347,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 7 shows `<product A>` at quantity 3 = 2 + 1.
+* Step 7 shows `<product A>` at `<member quantity>` + `<guest quantity>`.
 * Step 7 shows `<product B>` at quantity 1.
 * Step 7 offers points, with the member's codes.
 * Step 7 offers Proceed to Checkout.
