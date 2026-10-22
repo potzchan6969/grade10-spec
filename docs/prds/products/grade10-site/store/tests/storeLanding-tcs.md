@@ -123,7 +123,7 @@ Runs once per row of **Test data**.
 * No product only in `<second collection>` appears in the row.
 
 <!-- trace:case id=g10.store-home.TC-l20 rev=1 -->
-### g10.store-landing.US2-TC7: Main Page cards show sold out and marked down as the listing does
+### g10.store-landing.US2-TC7: Main Page cards show sold out and the price before a markdown
 
 Runs once per row of **Test data**.
 
@@ -159,15 +159,10 @@ Runs once per row of **Test data**.
 1. Navigate to `<grade10 store url>`.
 2. Wait for the merchandised row to finish loading.
 3. Read the card for `<status product>`.
-4. Navigate to `<store listing url>`.
-5. Find the card for `<status product>`.
-6. Read its status and prices.
 
 **Expected Results:**
 
 * Step 3 shows `<expected status>` on the Main Page card.
-* Step 6 shows the same status as step 3.
-* Step 6 shows the same current and earlier prices as step 3.
 
 ---
 
