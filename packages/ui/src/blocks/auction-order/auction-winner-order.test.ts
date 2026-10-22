@@ -249,7 +249,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(lotCard?.textContent).toContain("Winning bid: US$101.00");
   });
 
-  it("winner-order-SC-290 - renders USD lines, an HKD subtotal with its rate footnote, then the fee and whole-HK$ total below", () => {
+  it("winner-order-SC-290 - renders USD lines, an HKD subtotal with its rate footnote, then the fee and two-decimal total below", () => {
     const { container } = mount({
       summary: {
         ...BASE_PROPS.summary,
@@ -259,7 +259,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
           footnote: "Converted from US$131.21 at 1 USD = 7.85 HKD",
         },
         feeLines: [{ label: "Payment Processing Fee", value: "HK$38.73" }],
-        total: { label: "Order Total", value: "HK$1,069" },
+        total: { label: "Order Total", value: "HK$1,068.73" },
       },
     });
 
@@ -269,7 +269,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
       "Shipping & HandlingUS$10.01",
       "SubtotalHK$1,030.00Converted from US$131.21 at 1 USD = 7.85 HKD",
       "Payment Processing FeeHK$38.73",
-      "Order TotalHK$1,069",
+      "Order TotalHK$1,068.73",
     ]);
 
     const sidebar = within(container).getByRole("complementary");
@@ -281,7 +281,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
       "SubtotalHK$1,030.00Converted from US$131.21 at 1 USD = 7.85 HKD",
     );
     const feeRow = summaryRow(container, "Payment Processing FeeHK$38.73");
-    const totalRow = summaryRow(container, "Order TotalHK$1,069");
+    const totalRow = summaryRow(container, "Order TotalHK$1,068.73");
     expect(shippingRow && subtotalRow && feeRow && totalRow).toBeTruthy();
     if (shippingRow && subtotalRow && feeRow && totalRow) {
       const follows = (a: Node, b: Node) =>

@@ -65,7 +65,7 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("19 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getAllByText("Order Total")).toHaveLength(1);
-    expect(canvas.getByText("HK$128,814")).toBeVisible();
+    expect(canvas.getByText("HK$128,814.00")).toBeVisible();
     expect(canvas.getByText("US$12,800.00")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
@@ -134,7 +134,8 @@ export const PendingPaymentBankTransfer: Story = {
     expect(sidebar.getByText("US$320.00")).toBeVisible();
     expect(sidebar.getByText("US$12,800.00")).toBeVisible();
     expect(sidebar.getByText("Subtotal")).toBeVisible();
-    expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
+    // Subtotal and Order Total both read HK$128,269.00 — the fee is Free.
+    expect(sidebar.getAllByText("HK$128,269.00")).toHaveLength(2);
     expect(
       sidebar.getByText("Converted from US$16,340.00 at 1 USD = 7.85 HKD"),
     ).toBeVisible();
@@ -162,7 +163,8 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(sidebar.queryByText("US$16,340.00")).not.toBeInTheDocument();
-    expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
+    // Subtotal and Order Total both read HK$128,269.00 — the fee is Free.
+    expect(sidebar.getAllByText("HK$128,269.00")).toHaveLength(2);
   },
 };
 
