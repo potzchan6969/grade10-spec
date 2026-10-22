@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-10-22
+depends_on:
+  - usd-lot-currency-winner-settlement-choice
+  - order-summary-hkd-conversion-note
+awaiting:
+  specs: 2026-10-22, requirement deltas from /planning-dev
