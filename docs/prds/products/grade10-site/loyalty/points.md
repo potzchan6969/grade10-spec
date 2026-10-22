@@ -28,7 +28,8 @@ land on the part of a basket that earns nothing.
 | Products | **Yes** |
 | Shipping and tax | **No**, never in the basis |
 | Gift cards | **No**, excluded as a product rather than as a tender |
-| Top-ups | **No** — a points pack earns nothing, and neither do its points when they pay — [Top-ups](/p/grade10-site/loyalty/top-ups) |
+| Credit top-ups | **No**, excluded as a product rather than as a tender |
+| Points packs | **No** — a pack earns nothing, and neither do its points when they pay — [Top-ups](/p/grade10-site/loyalty/top-ups) |
 | Grading fees | **No**, excluded as a product |
 | Auction wins | **No** today, a later-phase candidate |
 
@@ -68,10 +69,10 @@ The shop sends the paid order: its lines, their discounts, and the goods total i
 }
 ```
 
-`subtotal_price` is the goods total after discounts, before shipping and tax — the webhook flags a gift card outright, but a grading fee or a top-up looks like real goods until the read answers
+`subtotal_price` is the goods total after discounts, before shipping and tax — the webhook flags a gift card outright, but a grading fee or a credit top-up looks like real goods until the read answers
 
 ## *Store* — **Asks Shopify**
-The webhook already flags a gift card, but a grading fee, a top-up, and real goods all look the same to it — only a read of each line's product type and tags can tell them apart
+The webhook already flags a gift card, but a grading fee, a credit top-up, and real goods all look the same to it — only a read of each line's product type and tags can tell them apart
 
 ```json
 {
@@ -91,7 +92,7 @@ Reached by an order event, not by the sale waiting: **$10** a base point, rounde
 
 :::flow{title="From a paid order to points" case="A line the shop cannot classify" diagram="assets/diagrams/loyalty-pricing-unclassified.svg"}
 ## *Shop* — **Order paid**
-A line names a product, but nothing here says its type or tags yet — only the read can tell real goods from a fee or a top-up
+A line names a product, but nothing here says its type or tags yet — only the read can tell real goods from a fee or a credit top-up
 
 ```json
 {
@@ -317,6 +318,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
 | What happens | The date |
 | --- | --- |
 | A purchase or a redemption, even one too small to earn a point | Twelve months from that day |
+| A points pack credited | ❓ Twelve months from that day, as a purchase moves it; Legal and Finance confirm bought points may lapse — [Top-ups](/p/grade10-site/loyalty/top-ups#topped-up-points) |
 | A grant or a correction | Unchanged; those points take the date the balance already has |
 | A grant or a correction with nothing live to join | The later of twelve months from its own day and the day still running, which moves out to it; with neither ahead, it is written already lapsed |
 | Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing |

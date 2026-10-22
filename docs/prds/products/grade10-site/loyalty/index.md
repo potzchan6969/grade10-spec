@@ -46,8 +46,8 @@ and giving the top tier to a named person with a reason.
 
 - **Paid membership** — every tier is free, and the top one is given
 - **Earning outside the store and the counter** — beyond operator-granted
-  campaign points; auction wins are a later-phase candidate and earn nothing
-  today, and a points pack earns nothing —
+  campaign points; auction wins and credit top-ups are later-phase candidates
+  and earn nothing today, and a points pack earns nothing —
   [Top-ups](/p/grade10-site/loyalty/top-ups)
 - **Redeeming against an auction** — points and coupons buy nothing there, in
   any phase

@@ -164,6 +164,8 @@ The same pass can be added to a phone wallet —
 | Points taken off | An operator's correction, downward |
 | Points revoked | A refund's claw-back |
 | Points returned | A reversed redemption, or a cancelled or refunded sale that points paid for |
+| Points bought | A points pack, paid by card — [Top-ups](/p/grade10-site/loyalty/top-ups) |
+| Bought points taken back | A chargeback, or a refund made in Stripe's dashboard, on a pack |
 
 - **Notified** — every identification the member did not show a code for —
   email, phone, the customer on the cart, an Apple pass — sends a notice at
@@ -181,7 +183,8 @@ The same pass can be added to a phone wallet —
   leak of the loyalty database exposes balances and identifiers, not people
 - **Deleting the account ends the membership** — balance, tier progress
   and coupons end at once, a waiting collection is cancelled without a
-  refund, and the ledger record survives for audit
+  refund, an open or held top-up closes with nothing charged, and the ledger
+  record survives for audit
 
 :::callout{kind="note"}
 The tier card has a design frame. The

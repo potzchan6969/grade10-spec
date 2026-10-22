@@ -18,7 +18,7 @@ part on one question: do the points count toward the tier?
   redeemable balance alone, so it never promotes anyone
 - **A deduction names its pool** — earned or topped-up, never more than that
   pool holds; a credit by hand always lands in the earned pool —
-  [Top-ups](/p/grade10-site/loyalty/top-ups#topped-up-points)
+  [Top-ups](/p/grade10-site/loyalty/top-ups#operator-console)
 - **Neither moves a live date** — the points take the date the balance
   already has; where nothing is live they lapse on the later of twelve months
   from their own day and the day still running —
@@ -48,8 +48,8 @@ An operator gives a balance more time without the member buying or redeeming.
 ## Top-ups
 
 An operator runs points packs from the console: the packs, the limits, the
-review queue, pausing a member's top-ups, and the flags —
-[Top-ups](/p/grade10-site/loyalty/top-ups#operator-console).
+review queue, pausing a member's top-ups, the flags, and recovering a
+chargeback's shortfall — [Top-ups](/p/grade10-site/loyalty/top-ups#operator-console).
 
 ## Authoring a Reward
 

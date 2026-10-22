@@ -12,10 +12,10 @@ reviewed: 2026-09-15
 | Currency | **HKD** |
 | Rate | **1 point pays $1** — earning is $10 a point, on [Points](/p/grade10-site/loyalty/points) |
 | Pools | **Earned points first, then topped-up ones**, from the one balance — [Top-ups](/p/grade10-site/loyalty/top-ups#topped-up-points) |
-| Pays for | **Qualifying goods only** — the same basis as earning: never gift cards, top-ups, or grading fees |
+| Pays for | **Qualifying goods only** — the same basis as earning: never gift cards, credit top-ups, points packs, or grading fees |
 | Never pays for | **Shipping or tax** |
 | Cap | **Qualifying goods minus the site discounts and the code**, and the balance — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused — [Discounts](/p/grade10-site/store/discounts#order-of-application) |
-| Daily cap | **Set by an operator** — points paid in a Hong Kong day, both pools together; a bigger ask is trimmed to what the day still allows — [Top-ups](/p/grade10-site/loyalty/top-ups#limits) |
+| Daily cap | **Set by an operator** — points spent in a Hong Kong day, at checkout and on rewards, both pools together; a bigger ask is trimmed to what the day still allows — [Top-ups](/p/grade10-site/loyalty/top-ups#limits) |
 | Earns | **Nothing** — the part of the bill paid with points earns no points |
 | Available | **On**, online and at the till — a manager can turn off the till's points spending, or just typed-email spending, within seconds; a sale never waits on it |
 | Discount | 🚧 **One order-level discount titled "Deduction from Points"**, outside the order's one-coupon count, so a coupon and points can be used on the same order; "Points", the title older orders carry, counts as the same discount — [Discounts](/p/grade10-site/store/discounts#one-discount-at-a-time) |

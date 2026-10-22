@@ -1,6 +1,6 @@
 ---
 title: Top-ups
-order: 4
+order: 11
 ---
 
 ## Packs
@@ -10,10 +10,15 @@ A member buys points in packs an operator sets.
 | Rule | Value |
 | --- | --- |
 | Currency | **HKD** |
-| Pack | **Points and a discount**, both set by an operator; the discount stays under a ceiling only a deploy changes |
+| Pack | **Points and a discount**, both set by an operator |
 | Price | **The points less the discount** — 10,000 points at 5% off costs **$9,500** |
+| Discount ceiling | **20%**, set by deploy |
+| Largest pack | **100,000 points**, set by deploy |
 | Paid by | **Card, on Stripe's checkout** — Apple Pay and Google Pay pay by card; no coupon, gift card, promotion code or points pays for a pack |
 | Price fixed | **When checkout opens** — a later edit to the pack or its discount changes no pack already bought |
+
+- **Past a lowered ceiling** — a pack leaves sale until an operator reprices
+  it
 
 ## Buying a Pack
 
@@ -23,11 +28,15 @@ A member buys points in packs an operator sets.
   points still wait for their order to complete
 - **Held** — a pack above the review threshold waits for an operator before
   its points arrive — [Limits](#limits)
-- **Not paid** — a checkout left unpaid, replaced or failed credits nothing
-- **One open checkout** — starting another expires the earlier one; a
-  payment that still lands on it credits too, and is flagged
-- **Receipt** — Stripe's own email, to the account email the member is
-  signed in with; the member's top-up history links it
+- **Checkout** — open for 35 minutes; one left unpaid credits nothing
+- **Came back without paying** — the checkout ends at once, and its share of
+  the day is free again
+- **Receipt** — Stripe's own email, to the address the member is signed in
+  with; the member's top-up history links it
+- **Account deleted** — an open checkout or a held pack closes with nothing
+  charged; a payment that lands after is flagged for an operator to refund
+- ❓ **Told before paying** — what checkout says about no refund, no cash-out
+  and no transfer before the member pays. Legal words it
 - ❓ **A Grade10 email** — on credit, hold, approval and rejection; it waits
   on a way to reach members, chosen with the
   [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders) channel.
@@ -36,9 +45,10 @@ A member buys points in packs an operator sets.
 | Refusal | Meaning |
 | --- | --- |
 | Top-ups off | An operator has not switched them on, or card payment is not set up |
-| Paused | This member's top-ups are paused, by a chargeback, a fraud warning or an operator |
+| Paused | This member's top-ups are paused; why is the operators' to read |
 | Off sale | The pack is no longer on sale |
 | Over today's cap | The pack would pass today's top-up cap; the member reads what is left today |
+| Not opened | Stripe would not open a checkout; nothing was charged |
 
 :::example{title="A pack bought"}
 | Step | Event | Points | Balance | Progress |
@@ -58,12 +68,12 @@ rate, never the price paid.
 
 | Limit | Counts | Past it |
 | --- | --- | --- |
-| Daily top-up cap | Points a member buys in a Hong Kong day, by the day the checkout opened: open, held and credited top-ups; an expired, failed or rejected one frees its share | The pack is refused, saying what is left today |
-| Review threshold | One top-up's points, strictly above it | Held: the card is authorised at checkout and charged only when an operator approves; a rejected top-up is never charged, and an authorisation lapses after 7 days, expiring the top-up |
-| Daily spend cap | Points a member pays at checkout in a Hong Kong day, both pools together; a reward bought with points does not count | A bigger ask is trimmed to what the day still allows; a debit that lands over it is taken whole, never cut short, and flagged |
+| Daily top-up cap | Points a member buys in a Hong Kong day, by the day the checkout opened: every top-up open, held or credited. A checkout holds its share until it is paid or ends | The pack is refused, saying what is left today |
+| Review threshold | One top-up's points, strictly above it | Held: the card is authorised at checkout and charged only when an operator approves; a rejected top-up is never charged, and an authorisation lapses after about 7 days |
+| Daily spend cap | Points a member spends in a Hong Kong day, both pools together: at checkout and on rewards | A bigger ask is trimmed or refused; a bill the shop already discounted is taken whole |
 
-- **Flagged** — a limit reached is flagged for operators, a cap once per
-  member per day
+- **Flagged** — each cap reached is flagged for operators, once per member
+  per day, and a bill that passes the spend cap once more
 - ❓ **"Flag multiple limit"** — the owner's words, read as several limits,
   each set by an operator and each flagged when reached; a spend cap per pool
   would be one more setting. Product confirms the reading
@@ -75,15 +85,15 @@ Topped-up points sit in a pool of their own inside the one balance.
 - **Spent like earned points** — 1 point pays $1 at checkout, and topped-up
   points buy rewards too —
   [Paying with Points](/p/grade10-site/loyalty/paying-with-points)
-- **Earned points first** — a bill or a reward takes earned points first,
-  then topped-up ones, oldest first inside each
+- ❓ **Earned points first** — a bill or a reward takes earned points first,
+  then topped-up ones, oldest first inside each. Product confirms the order
 - **No tier progress** — never toward reaching or keeping a tier —
   [Tiers](/p/grade10-site/loyalty/tiers#tier-progress)
 - **No points earned** — a pack earns nothing, and a bill earns only on the
   part paid in money
 - **Shown apart** — the balance and the history show earned and topped-up
   points apart
-- **Lapse with the balance** — on its one inactivity date; a top-up counts as
+- **Lapse with the balance** — on its one inactivity date; a pack counts as
   activity and moves the date out, as a purchase does —
   [Points](/p/grade10-site/loyalty/points#expiry)
 - ❓ **Paid value lapsing** — whether topped-up points may lapse at all, and
@@ -106,16 +116,19 @@ again. The $500 paid in points earns nothing.
 
 A top-up is never refunded, cashed out or moved to another member.
 
-- **Chargeback** — takes back the points the top-up still holds, those
-  returned to it included
-- **Short** — what was already spent is counted short and flagged, and an
-  operator deducts it by hand — [Operator Console](#operator-console)
-- **Paused** — a chargeback or Stripe's early fraud warning pauses the
+- **Chargeback** — takes back the disputed share of the pack's points, from
+  those the pack still holds; a chargeback of half the price takes half
+- **Short** — points already spent are counted short and flagged; an
+  operator recovers them from the member's other points, bought first, never
+  past what the member holds — [Operator Console](#operator-console)
+- **Brought back by a return** — points a return gives back to a
+  charged-back pack are taken back at once
+- **Paused** — the first chargeback or Stripe fraud warning pauses the
   member's top-ups until an operator resumes them
-- **Dispute won** — the points it took go back to the top-up pool; a dispute
-  lost moves nothing more
-- **Refund in Stripe's dashboard** — takes back the refunded share of the
-  points, as a chargeback does
+- **Dispute won** — every point it took goes back, those an operator
+  recovered included; a dispute lost moves nothing more
+- **Refund in Stripe's dashboard** — the refunded share of the points comes
+  back with the money
 - **No transfer** — only a paid top-up fills the top-up pool; an operator
   credit always lands in the earned pool
 
@@ -127,19 +140,32 @@ A top-up is never refunded, cashed out or moved to another member.
 | Debits | 800 points paid at checkout · 300 earned, then 500 topped-up | −800 | 500 |
 | Earns | a later order, $2,000 at 1× | +200 | 700 |
 | Charged back | the pack's $950 · the 500 topped-up points still held | −500 | 200 |
-| Deducts | an operator, toward the 500 short · earned pool | −200 | 0 |
+| Recovers | an operator, toward the 500 short · earned pool | −200 | 0 |
 
-The chargeback takes back only what the top-up still holds, and pauses the
-member's top-ups. The 500 already spent are counted short and flagged; a
-deduction never takes more than the pool holds, so 300 stay short.
+The chargeback takes back only what the pack still holds, and pauses the
+member's top-ups. The 500 already spent are counted short and flagged;
+recovering never takes more than the member holds, so 300 stay short.
 :::
 
-:::example{title="A dispute won"}
+:::example{title="A return after a chargeback"}
+| Step | Event | Points | Balance |
+| --- | --- | --- | --- |
+| Credited | a 1,000-point pack, $950 by card · top-up pool | +1000 | 1000 |
+| Debits | 400 points paid at checkout | −400 | 600 |
+| Charged back | the pack's $950 · the 600 still held | −600 | 0 |
+| Returned | the order the 400 paid for · back to the top-up pool | +400 | 400 |
+| Taken back | the 400 the chargeback was short | −400 | 0 |
+
+The return closes the shortfall with the pack's own points, and nothing is
+left to recover.
+:::
+
+:::example{title="Half the price disputed"}
 | Step | Event | Points | Balance |
 | --- | --- | --- | --- |
 | Holds | 1,000 topped-up points, none spent | | 1000 |
-| Charged back | the pack's $950 disputed | −1000 | 0 |
-| Won | the dispute closes in Grade10's favour · top-up pool | +1000 | 1000 |
+| Charged back | $475 of the pack's $950 | −500 | 500 |
+| Won | the dispute closes in Grade10's favour · top-up pool | +500 | 1000 |
 
 A dispute lost moves nothing more.
 :::
@@ -149,17 +175,22 @@ A dispute lost moves nothing more.
 Returned points go back to the pool they were paid from —
 [Paying with Points](/p/grade10-site/loyalty/paying-with-points#refunds).
 
-- **In the ratio paid** — a refund comes back in the bill's own split: on a
-  bill paid 60% in points and 40% by card, 60% of each refund is points,
-  split across the pools as the payment took them, and 40% goes to the card
-- ❓ **When the ratio starts** — it replaces whole goods or nothing in the
-  store's refunds, after the store's per-line settlement. Product
+- **Whole goods, or nothing** — a return of every good gives every point
+  back; a part return gives none back
+- ❓ **In the ratio paid** — the owner's rule: on a bill paid 60% in points
+  and 40% by card, 60% of each refund comes back as points, to the pools the
+  payment took them from, and 40% goes to the card. It replaces whole goods
+  or nothing after the store's per-line settlement. Product confirms when
 
 ## Operator Console
 
 Top-ups start switched off; an operator turns them on and runs them from the
 console.
 
+- **Switching on** — refused while the daily top-up cap or the review
+  threshold is unset
+- ❓ **Launch** — top-ups stay off until the open rows under Product
+  decisions close. Product, Legal and Finance
 - **Packs** — their points, discount and order, and whether each is on sale
 - **Limits** — the daily top-up cap, the review threshold and the daily spend
   cap
@@ -168,18 +199,20 @@ console.
 - **Pause and resume** — an operator can pause a member's top-ups by hand,
   and only an operator resumes them
 - **Flags** — limits reached, chargebacks, fraud warnings, refunds made in
-  Stripe's dashboard, shortfalls and late payments; an operator clears each
-- **Deducting by pool** — a deduction names the pool it takes from, never
-  more than that pool holds; a credit by hand lands in the earned pool —
-  [Operator Console](/p/grade10-site/loyalty/operator-console#moving-points)
+  Stripe's dashboard, shortfalls, payments on a closed top-up or a deleted
+  account, and a charge for a different amount; an operator clears each
+- **Recover** — a top-up's shortfall comes out of the member's other points,
+  bought first, then earned, never more than they hold
 - **What is owed** — the liability figure shows topped-up points still held
   apart from earned ones
-- **Permissions** — packs, limits and review need `loyalty:finance`; pausing,
-  resuming, flags and deductions need `loyalty:adjust`
+- **Permissions** — packs, limits and review need `loyalty:finance`;
+  pausing, resuming, flags, recovering and deductions need `loyalty:adjust`
 
 :::detail{title="Code map" for="engineer"}
-- **Build plan** — [point top-ups plan](https://github.com/9gag/grade10/blob/main/docs/temp/point-top-ups-plan.md)
-- **Design record** — [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
+- **Design record** — [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md#bought-points-sit-in-a-pool-of-their-own)
+- **Ceilings** — `GRADE10_LOYALTY_PROGRAM.topUps` in `packages/app-env`
+- **Stripe** — [deployment](https://github.com/9gag/grade10/blob/main/docs/deployment.md#stripe-for-points-packs)
+- **Runbook** — [running point top-ups](https://github.com/9gag/grade10/blob/main/docs/operations.md#running-point-top-ups)
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -191,44 +224,33 @@ chargeback rate on top-ups.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Packs and price | Decided | An operator sets each pack's points and discount; the price is the points less the discount, final when checkout opens. | Product |
-| Paid by | Decided | Stripe alone; no coupon, gift card or points pays for a pack. | Product |
-| Credit | Decided | When payment clears; earned points still arrive when their order completes. | Product |
-| Held for review | Decided | A top-up above an operator-set amount waits for an operator before its points arrive. | Product |
-| Daily limits | Decided | An operator-set cap on points bought a day, and a daily cap on points paid at checkout. | Product |
-| Spending | Decided | 1 point pays $1, earned or topped-up; topped-up points never add tier progress. | Product |
-| Earning | Decided | Points paid at checkout earn nothing; on a split bill only the money earns. | Product |
-| No refunds | Decided | No refund, cash-out or transfer. A chargeback takes the top-up's points back, and an operator deducts the rest by hand. | Product |
-| Returns | Decided | In the ratio paid, each point back to the pool it came from. | Product |
-| Two pools | Decided | One balance, earned and topped-up points kept apart on the same ledger. | Engineering |
-| Spend order | Decided | Earned first, then topped-up, oldest first inside each, so a chargeback finds more of a recent top-up unspent. | Engineering |
-| Expiry | Decided | Topped-up points lapse with the balance on its one date, and a top-up counts as activity. | Engineering |
-| Units and day | Decided | Limits count points, $1 each at the spend rate; the top-up cap counts on the Hong Kong day the checkout opened. | Engineering |
-| Top-up cap | Decided | Counts top-ups opened, held or credited that day; an expired, failed or rejected one frees its share. | Engineering |
-| Review threshold | Decided | Strictly above it. The card is authorised at checkout and charged only on approval, so a rejected top-up is never charged; an authorisation lapses after 7 days. | Engineering |
-| Spend cap | Decided | One daily cap over both pools. A spend is trimmed to what the day allows, and a debit that lands over it is taken whole and flagged. Rewards do not count. | Engineering |
-| One open checkout | Decided | Starting another expires the earlier one. | Engineering |
-| Pause | Decided | A chargeback or an early fraud warning pauses a member's top-ups until an operator resumes them. | Engineering |
-| Disputes | Decided | Opened takes back what the top-up still holds and flags the rest; won gives it back; lost moves nothing more. A refund in Stripe's dashboard takes back its share the same way. | Engineering |
-| Credits by hand | Decided | Always to the earned pool, because only a paid top-up fills the top-up pool. | Engineering |
-| Receipts | Decided | Stripe's own email, to the account email the member signs in with; the programme keeps the receipt link, never the address. | Engineering |
-| Payment methods | Decided | Card only, Apple Pay and Google Pay included; no promotion codes. | Engineering |
-| Switched off at first | Decided | Top-ups start off until an operator turns them on. | Engineering |
-| Permissions | Decided | Packs, limits and review under `loyalty:finance`; pause, resume, flags and deductions under `loyalty:adjust`; reads under `loyalty:read`. | Engineering |
-| Grade10 email | ❓ Open | An email on credit, hold, approval and rejection needs a way to reach members, chosen with the Expiry Reminders channel. | Product |
+| Two pools | Decided | One balance, earned and topped-up points kept apart on the same ledger, so a chargeback and the liability can tell them apart. | Engineering |
+| Spend order | ❓ Open | Shipped: earned first, so a chargeback finds more of a pack unspent. The cost: after an account takeover the member's own earned points go first. | Product |
+| Daily top-up cap | ❓ Open | Shipped: every checkout counts until it is paid or ends, so checkouts opened side by side cannot pass the cap. The cost: an abandoned checkout holds its share up to 35 minutes, unless the member comes back from it. | Product |
+| Spend cap | ❓ Open | Shipped: one cap over both pools, counting points on rewards with points paid at checkout. | Product |
+| Review | ❓ Open | Shipped: per pack, strictly above the threshold, as the owner's words say. Packs bought one under the line reach the daily cap unreviewed. | Product |
+| Ceilings | ❓ Open | Shipped: 20% off and 100,000 points a pack, set by deploy. | Product |
+| Payment methods | ❓ Open | Shipped: card only, Apple Pay and Google Pay included; FPS, Alipay HK and WeChat Pay would need a path with no review. | Product |
+| Pause | ❓ Open | Shipped: the first chargeback or fraud warning pauses top-ups until an operator resumes them. | Product |
+| Refund in Stripe's dashboard | ❓ Open | Shipped: takes back the refunded share of the points, as a chargeback does. | Product |
+| Launch | ❓ Open | Shipped off; stays off until the rows below close. | Product, Legal and Finance |
+| Returns in the ratio paid | ❓ Open | When the ratio rule replaces whole goods or nothing; the store's per-line settlement comes first. | Product |
+| Told before paying | ❓ Open | The words checkout shows on no refund, no cash-out and no transfer, the proof a disputed charge is fought with. | Legal |
 | Paid value lapsing | ❓ Open | Whether topped-up points may lapse on inactivity, and what deleting an account does to them. | Legal and Finance |
 | Stored value licence | ❓ Open | The single-issuer exemption under the Payment Systems and Stored Value Facilities Ordinance (Cap. 584), confirmed before launch. | Legal |
-| Returns in the ratio paid | ❓ Open | When the ratio rule replaces whole goods or nothing in the store's refunds; the store's per-line settlement comes first. | Product |
-| "Flag multiple limit" | ❓ Open | Read as several limits, each set by an operator and each flagged when reached; a spend cap per pool would be one more setting. | Product |
+| Grade10 email | ❓ Open | An email on credit, hold, approval and rejection needs a way to reach members, chosen with the Expiry Reminders channel. | Product |
+| "Flag multiple limit" | ❓ Open | Read as several limits, each set by an operator and each flagged when reached. | Product |
+| Gift cards | ❓ Open | Whether topped-up points may pay on a sale holding a gift card. | Product |
+| Many accounts, one card | ❓ Open | Whether a card's top-ups are capped across the accounts it pays for. | Product |
 
 | Risk | Control |
 | --- | --- |
-| A stolen card buys points and spends them, then the cardholder charges back | Review above the threshold; earned points spent first; the chargeback takes back what is left and pauses top-ups; the rest is deducted by hand |
-| Many top-ups a day to move money through the shop | The daily top-up cap per member, counted when checkout opens; one open checkout at a time |
-| Top up, buy goods, return them for a card refund (套現) | Returns come back in the ratio paid, points to their pool; a top-up itself is never refunded |
-| Top up, pay for a gift card with points, sell the card | Points pay qualifying goods only, but the shop spreads a points discount over a gift card on the same sale — [Discounts](/p/grade10-site/store/discounts) |
+| A stolen card buys points and spends them, then the cardholder charges back | Review above the threshold; earned points spent first; the chargeback takes back its share and pauses top-ups; an operator recovers the rest |
+| Many top-ups a day to move money through the shop | The daily top-up cap per member, counting every checkout not yet closed |
+| Top up, buy goods, return them for a card refund (套現) | A whole return gives points back as points and money to the card; a part return gives no points back yet; a top-up itself is never refunded |
+| Top up, pay for a gift card with points, sell the card | Points pay qualifying goods only, but the shop spreads a points discount over a gift card on the same sale — [Discounts](/p/grade10-site/store/discounts); open above |
 | Value moved to another member | No transfer exists; an operator credit lands in the earned pool |
 | A balance cashed out | No path pays points out |
-| Discounts bought at scale | A deploy-set ceiling on a pack's discount, and the daily spend cap |
-| Many accounts, one card | Each account's cap counts alone; nothing links accounts by card |
+| Discounts bought at scale | The deploy-set ceilings, and the daily spend cap |
+| Many accounts, one card | Each account's cap counts alone; open above |
 :::
