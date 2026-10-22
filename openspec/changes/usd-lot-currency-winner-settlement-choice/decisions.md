@@ -4,6 +4,7 @@
 - A winner picks USD or HKD once, at order setup, and pays in it.
 - A winner who picks HKD reads every invoice, receipt, fee and letter in HKD, with no USD winning bid and no rate beside it.
 - The payment methods a winner can pick follow the settlement currency picked.
+- A winner reads every USD amount on their order as `US$`, in any language.
 - An operator prices a listing in USD with no other currency to choose.
 
 ## Non-Goals
@@ -16,6 +17,8 @@
 - Changing the card fee rule's shape, the bank transfer fee model or the buyer's premium rate.
 - Changes to the `shared/money-amounts` contract.
 - HKD as a bid currency or JPY as an auction currency. USD is the single, universal bid currency; HKD remains a settlement currency.
+- Redrawing an invoice or receipt PDF already stored. One opened before `US$` ships keeps what it printed.
+- The operator shape. Admin and console screens keep `USD 121.20`.
 
 ## Decisions
 
@@ -55,6 +58,7 @@
 | Q32 | Can a listing currency edit clear an internal bid? | No. USD is fixed and a non-USD write is refused without changing the listing or its internal bid. Window and USD starting-price edits still clear a bid left outside its limits. This follows @htonyl's USD-only decision and replaces the stale currency-change part of the journey | Keeping a journey whose required currency edit is refused |
 | Q33 | How does an ordinary historical bank order with no recorded rail behave? | It remains a confirmed bank-transfer order with an explicitly unknown rail. Its confirmed setup, sent invoice amounts and currencies, and existing instruction artifact remain unchanged. A new confirmation, future edit, first send for a confirmed order with no invoice, or reissue requires a currently offered rail. No rail is guessed, and internal or house orders receive no exception - approved by human A on 2026-10-14 | Treating the unknown rail as FPS, HK Local or SWIFT; allowing a new rail-less write; adding an internal exception |
 | Q34 | Where do the internal order's HKD-on-FPS check and its write at close land? | With `add-auction-internal-bid`, which adds house bids, writes the internal order at close and migrates its tables. Decided by agent, 2026-10-16: this change shipped the settlement columns, their supported-pair checks and the `order_origin` column; the internal-order check and tasks 5.7, 5.8, 6.1, 6.10, 7.7, 7.8, 7.14, 9.1, 9.2 and 11.8's internal parts wait on that change, so the two do not fork the migration sequence | A second migration here adding a check no code yet exercises |
+| Q35 | Which symbol does a USD order amount read? | `US$` for every reader, as a bid reads under Q1: on Winner Order (the Order Summary, the bank details' Amount due and the USD figure in the HKD conversion note), the invoice page and PDF, the receipt PDF and the order letters. A PDF already stored keeps what it printed - decided by @seankcw, 2026-10-22 | The reader's language picking the symbol, which printed `$` in English and `US$` in Chinese and Korean for one amount, against `shared/money-amounts`' one symbol for every reader; or `US$` on the invoice, both PDFs and the Order Summary only, which left the letters on `$` |
 
 ## Raised
 
