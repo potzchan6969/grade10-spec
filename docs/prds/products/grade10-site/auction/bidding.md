@@ -181,10 +181,9 @@ $10, where Goldin names none.
 - **Opening price** — the first bid must reach the starting price, or the
   lowest increment when the lot starts at 0, and a lone bidder stands there;
   one increment above the current bid applies from the second bid
-- ❓ **Opening price of a stored price with cents** - a listing already stored
-  with a starting price that has cents opens at a minimum no whole-dollar bid
-  can match. The product manager confirms: the opening minimum reads the next
-  whole dollar at or above it, and the page still shows the starting price
+- 🚧 **Opening price of a stored price with cents** - a listing already stored
+  with a starting price that has cents opens at the next whole dollar at or
+  above it; the page still shows the starting price
 
 ### Refusals
 

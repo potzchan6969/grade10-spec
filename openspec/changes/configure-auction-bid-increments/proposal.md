@@ -59,8 +59,9 @@ None.
   rewritten.
 - **Starting price** - a starting price an operator or a consignment ask sets
   is whole dollars (Q16, Q17, Q19). A price already stored with cents is left as
-  it is (Q18); the opening minimum on such a row is held for the product
-  manager (see Raised in [decisions](decisions.md#raised)).
+  it is (Q18); the opening minimum on such a row is the next whole dollar at or
+  above it, and the page still shows the stored price (Q20). The consignment
+  screen refuses a floor with cents on entry (Q21); `add-consignment` owns it.
 - **Depends on** - `usd-lot-currency-winner-settlement-choice`, which also
   modifies this capability and archives first, as its `depends_on` records.
   This change owns the rule-and-configuration text; that one owns the USD-only

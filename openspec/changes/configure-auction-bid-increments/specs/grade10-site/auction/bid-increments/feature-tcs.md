@@ -1,8 +1,8 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** pending-review · 0/16
+**Status:** pending-review · 0/17
 **Drafts styled:** 2026-10-22, tcs-rules r6
-**Out of suite:** grade10-site-auction-bid-increments-SC-03, grade10-site-auction-bid-increments-SC-04, grade10-site-auction-bid-increments-SC-14, grade10-site-auction-bid-increments-SC-26
+**Out of suite:** grade10-site-auction-bid-increments-SC-03, grade10-site-auction-bid-increments-SC-04, grade10-site-auction-bid-increments-SC-14
 
 ## g10.auction-bid-increments.US1: Collector places a bid across a price tier
 
@@ -592,6 +592,53 @@ The route is the consignment sync, reached through the API, because no screen of
 
 ---
 
+<!-- trace:case id=g10.auction-bid-increments.TC-0es rev=1 covers=g10.auction-bid-increments.SC-n5d -->
+### g10.auction-bid-increments.US1-TC19: A stored starting price with cents opens at the next whole dollar
+
+The row is seeded in the database, because no screen saves a starting price with cents.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Pre-conditions:**
+
+* A user is signed in with `<card>` saved and is on `<listing_14>`.
+* `<listing_14>` is live, holds no bids, and was stored with a starting price of `<stored price>`.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| card | Visa ending 4242 | · |
+| listing_14 | A live listing with no bids, in USD, seeded with a starting price that has cents; bind its identity only | · |
+| stored price | USD120.50 | (fixed boundary), between two whole dollars |
+| opening minimum | USD121 | (fixed derived value), the next whole dollar at or above `<stored price>` |
+
+**Steps:**
+
+1. Read the starting price and Min on the bid panel.
+2. Enter `<opening minimum>` in the bid field.
+3. Click **Place Bid**.
+4. Reload `<listing_14>` and read the starting price, Highest bid and the bid count.
+
+**Expected Results:**
+
+* Step 1 reads the starting price `<stored price>` and Min `<opening minimum>`.
+* Step 3 accepts the bid.
+* Step 4 reads Highest bid `<opening minimum>`, bid count 1, and the starting price still `<stored price>`.
+
+---
+
 ## g10.auction-bid-increments.US3: Collector bids in USD on every lot
 
 **As a** collector,
@@ -787,7 +834,7 @@ Runs once per row of **Test data**.
 - An open page's Min refreshes on its next read or bid attempt, not live; a bid or a maximum below the minimum the server now holds is refused, names that minimum, and records nothing (Q7).
 - A standing maximum reads the schedule in force each time it answers a bid; it keeps its amount and the earlier resolutions stand (Q8).
 - A bid, a maximum, every tier bound and every increment are whole-dollar amounts; a bid with cents is refused, naming the rule, and nothing moves. One whole dollar below a bound is in the lower tier, and one whole dollar below the minimum is below it (Q9, the product manager's answer).
-- A starting price an operator sets, or a consignment ask sets, is a whole-dollar amount; one with cents is refused, naming the rule, and the listing is unchanged or not made (Q16 and Q19, the product manager's answers). A starting price already stored with cents is left as it is (Q18). The opening minimum of such a stored row is held for the product manager (Raised, `decisions.md`); no case drives it.
+- A starting price an operator sets, or a consignment ask sets, is a whole-dollar amount; one with cents is refused, naming the rule, and the listing is unchanged or not made (Q16 and Q19, the product manager's answers). A starting price already stored with cents is left as it is (Q18) and opens at the next whole dollar at or above it, while the page still shows the stored price (Q20); `US1-TC19` drives it. A consignment screen refuses a floor with cents on entry (Q21); `add-consignment` owns that screen, so no case here drives it.
 - Every bid surface reads USD only; a USD fact becomes HKD only at settlement (Q10).
 - A house maximum and an extended-bidding bid read the same schedule as any bid (Q11).
 - A configured schedule is held valid by a test that runs in CI: a tier from 0, ascending tiers with no shared lower bound, whole-dollar tier bounds, positive whole-dollar increments (Q9), a non-empty list and an unbounded last tier. No runtime check refuses a bad file, and no scenario or case drives one (Q12, the product manager's answer).
@@ -796,7 +843,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-22, rerun after the product manager answered Q12 to Q14 and Q15 was raised, for change `configure-auction-bid-increments`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-bid-increments-US-01` and `grade10-site-auction-bid-increments-US-03`. The rerun repaired ids, layers and coverage; it did not regenerate cases from scenarios. QA1's own bundle is its statement and cannot be checked here. The wording patch that took the fixed 100 minor units from the requirement, the scenarios and the feature-set line is a clarification of an anchor, not a new one, so QA1 and Dev did not run again (Q13). The product manager then reversed Q9 to whole dollars only: the patch reworded the boundary text, added `SC-23` and `US1-TC16`, and did not rerun QA1 or Dev. The product manager then answered Q16, a whole-dollar starting price: the patch added `SC-24` and `US1-TC17`, and did not rerun QA1 or Dev. The product manager then answered Q17 to Q19 (an admin delta, stored rows left as they are, a consigned create refused like any other): the patch scoped the rule to a price being set, added `SC-25`, `SC-26` and `US1-TC18`, withdrew the claim that the opening minimum is always biddable, and did not rerun QA1 or Dev. This line is a statement, not proof.
+**Run:** QA2 reconciliation 2026-10-22, rerun after the product manager answered Q12 to Q14 and Q15 was raised, for change `configure-auction-bid-increments`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-bid-increments-US-01` and `grade10-site-auction-bid-increments-US-03`. The rerun repaired ids, layers and coverage; it did not regenerate cases from scenarios. QA1's own bundle is its statement and cannot be checked here. The wording patch that took the fixed 100 minor units from the requirement, the scenarios and the feature-set line is a clarification of an anchor, not a new one, so QA1 and Dev did not run again (Q13). The product manager then reversed Q9 to whole dollars only: the patch reworded the boundary text, added `SC-23` and `US1-TC16`, and did not rerun QA1 or Dev. The product manager then answered Q16, a whole-dollar starting price: the patch added `SC-24` and `US1-TC17`, and did not rerun QA1 or Dev. The product manager then answered Q17 to Q19 (an admin delta, stored rows left as they are, a consigned create refused like any other): the patch scoped the rule to a price being set, added `SC-25`, `SC-26` and `US1-TC18`, withdrew the claim that the opening minimum is always biddable, and did not rerun QA1 or Dev. The product manager then answered Q20 and Q21 (a stored price with cents opens at the next whole dollar; the consignment screen refuses a floor with cents): the patch rewrote `SC-26` at rev 2 to assert the opening minimum, added `US1-TC19`, and did not rerun QA1 or Dev. This line is a statement, not proof.
 
 | Blind case | Disposition | Scenario claims verified |
 | --- | --- | --- |
@@ -812,6 +859,7 @@ Runs once per row of **Test data**.
 | `US1-TC16` | **New, api layer, added for Q9:** a bid with cents is refused naming the whole-dollar rule, and nothing moves; api because the bid panel's field cannot type cents | `grade10-site-auction-bid-increments-SC-23` |
 | `US1-TC17` | **New, e2e layer, added for Q16:** a starting price with cents is refused in the listing editor, naming the whole-dollar rule, and the saved price stays | `grade10-site-auction-bid-increments-SC-24` |
 | `US1-TC18` | **New, api layer, added for Q19:** a consignment ask with cents makes no listing and names the whole-dollar rule; a whole-dollar ask makes a draft | `grade10-site-auction-bid-increments-SC-25` |
+| `US1-TC19` | **New, e2e layer, added for Q20:** a stored starting price with cents opens at the next whole dollar, the page still shows the stored price, and a first bid at that minimum is accepted | `grade10-site-auction-bid-increments-SC-26` |
 | `US3-TC3` | **Revises the durable case of the same id** (`TC-sze`, rev 2): the minimum reads the current bid plus the configured increment, not a quoted amount; `usd-lot-currency-winner-settlement-choice` carries it at rev 1 with a quoted `USD8,050.00` | `grade10-site-auction-bid-increments-SC-13` |
 | `US3-TC5` | **Retained, renumbered** (QA1's `US3-TC1`, which collided with the durable `TC-y0l`): two listings at one price share one increment | `grade10-site-auction-bid-increments-SC-21` |
 | `US3-TC6` | **Retained, renumbered** (QA1's `US3-TC2`, which collided with the durable `TC-fdc`): Min and the bid read in USD | `grade10-site-auction-bid-increments-SC-05` |
@@ -819,14 +867,13 @@ Runs once per row of **Test data**.
 
 - **Covers links** - `TC-2ed` to `SC-vqb`, `TC-0lh` to `SC-mn9`, `TC-sze` to `SC-tke`, and each new case to the scenario named in the table, by the scenario's trace id. A scenario is linked only when the case's route asserts every THEN and AND line of it
 - **Uncovered scenarios** - none without a case or a named verifier:
-  - `grade10-site-auction-bid-increments-SC-26` (a stored starting price with cents is not rewritten) is **Out of suite**: it is a deploy fact, no route a tester walks; task 3.5's count shows the rows and no task writes one
   - The operator-side refusal of `SC-24` is also stated by `grade10-admin-auction-listing-SC-221` and `SC-222` in that capability's delta suite (Q17); `US1-TC17` stays here for the rule's own capability
   - `grade10-site-auction-bid-increments-SC-03` and `grade10-site-auction-bid-increments-SC-04` are **Out of suite**: the durable `g10.auction-bid-increments.US1-TC3` (a bid above the minimum is accepted) and `g10.auction-bid-increments.US1-TC4` (a bid below it is refused and names it) assert them, and this change does not alter what those cases verify, with one exception held under Durable cases below; the amounts they quote are examples of a given minimum
   - `grade10-site-auction-bid-increments-SC-14` is **Out of suite**: the case that asserts it is `usd-lot-currency-winner-settlement-choice`'s `g10.auction-bid-increments.US3-TC4`, which that change folds first (Q15); this change restates the scenario unchanged
 - **Over-claimed cases** - none: no case carries a `covers` link its route does not assert
 - **Contradictions** - none open, apart from the held durable cases above. QA1's `US1-TC2` read the opening minimum on a 0 start as the lowest configured increment while Dev's `SC-12` fixed it at 100 minor units; Q13 settled it for QA1's reading, and the requirement, `SC-12` and the feature-set line no longer state 100
 - **Routes that differ, not contradictions** - `US1-TC10` stops at the bid form, below the minimum by one whole dollar, while `SC-04` reaches the server; the PRD's Refusals table gives each route its own line. `US1-TC14` reaches the server through a page that still shows the old minimum
-- **Id collisions, resolved** - QA2's first report found that nine of QA1's case ids and heading numbers were the durable suite's for other cases, and that `usd-lot-currency-winner-settlement-choice` carries `TC-2ed`, `TC-kyx`, `TC-n6d`, `TC-9do`, `TC-y0l`, `TC-fdc`, `TC-sze` and `TC-pn8` under the durable text. Cases that revise a durable case keep its id and number and bump `rev`: `TC-2ed`, `TC-0lh` and `TC-sze` to 2, each above the sibling's rev 1. Every other case takes a fresh number from `pnpm run spec:issue` (`US1-TC9` to `US1-TC18`, `US3-TC5` to `US3-TC7`) and a fresh trace id. The durable `TC-qui`, `TC-5ez`, `TC-kyx`, `TC-n6d`, `TC-9do`, `TC-4ox`, `TC-y0l`, `TC-fdc` and `TC-pn8` stay as the durable suite and the sibling hold them
+- **Id collisions, resolved** - QA2's first report found that nine of QA1's case ids and heading numbers were the durable suite's for other cases, and that `usd-lot-currency-winner-settlement-choice` carries `TC-2ed`, `TC-kyx`, `TC-n6d`, `TC-9do`, `TC-y0l`, `TC-fdc`, `TC-sze` and `TC-pn8` under the durable text. Cases that revise a durable case keep its id and number and bump `rev`: `TC-2ed`, `TC-0lh` and `TC-sze` to 2, each above the sibling's rev 1. Every other case takes a fresh number from `pnpm run spec:issue` (`US1-TC9` to `US1-TC19`, `US3-TC5` to `US3-TC7`) and a fresh trace id. The durable `TC-qui`, `TC-5ez`, `TC-kyx`, `TC-n6d`, `TC-9do`, `TC-4ox`, `TC-y0l`, `TC-fdc` and `TC-pn8` stay as the durable suite and the sibling hold them
 - **Durable cases left to keep their amounts** - `g10.auction-bid-increments.US1-TC3` and the domain suite quote amounts from the old six tiers (USD105, USD126, USD5, USD10). They state a given minimum or an increment as an example, as Q14 reads the neighbouring specs. A reviewer may restyle them against the configured values after deploy
 - **Durable cases that carry cents, held** - after Q9, `US1-TC4` (USD104.99, the verifier of `SC-04`), `US1-TC6` (a USD2.50 higher bid) and `US1-TC7` (USD0.99 and USD104.99 bids) quote amounts the product no longer accepts, and the main suite's walk rows quote USD99.99 and USD100.99. Each needs a whole-dollar restyle and a `rev` bump, and `US1-TC4` is `actual` and automated, so it returns to draft. They are not rewritten here: `TC-n6d` and `TC-9do` are also carried, at other revisions, by `usd-lot-currency-winner-settlement-choice` (Q15), so the product manager or the cluster sheet owns the order of those bumps
 - **Layer** - `US1-TC13` to `US1-TC15` are `api` and `US3-TC7` is `unit`, Testability `automation`: a second schedule is a test seam no tester can reach by hand, and the application's DB lane and contracts tests are where `tech-design.md` puts them
