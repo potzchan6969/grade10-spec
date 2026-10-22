@@ -1,6 +1,6 @@
 # grade10-site/store/order-detail Test Cases
 
-**Status:** pending-review · 0/18
+**Status:** pending-review · 0/21
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Walk 1: A Guest Back From Checkout
@@ -527,6 +527,125 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2 shows `<expected points>`.
+
+<!-- trace:case id=g10.store-order-detail.TC-rup rev=1 -->
+#### g10.store-order-detail.US1-TC8: Delivery steps move from Order Placed through Shipping to Completed
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-order-detail.US1
+
+**Pre-conditions:**
+
+* customer(signed-in member) owns `<order>`, a delivery order, in the state its row describes.
+
+**Test data:**
+
+| Partition | `<order>` | `<expected steps>` |
+| --- | --- | --- |
+| Placed | Paid, not yet fulfilled. | Order Placed reached, with its date; Shipping and Completed not reached. |
+| Sent | Fulfilled, not completed. | Order Placed and Shipping (in progress) reached, each with its date; Completed not reached. |
+| Done | Completed. | All three steps reached. |
+
+**Steps:**
+
+1. Navigate to `/profile/orders/<order id>`.
+2. Read the Delivery Status steps.
+
+**Expected Results:**
+
+* Step 2 shows `<expected steps>`.
+
+<!-- trace:case id=g10.store-order-detail.TC-fbs rev=1 -->
+#### g10.store-order-detail.US1-TC9: A refund shows its amount beside what was paid
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-order-detail.US1
+
+**Pre-conditions:**
+
+* customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885.
+* admin refunded `<refund>` in the staging shop's admin.
+
+**Test data:**
+
+| Partition | `<refund>` | `<expected summary>` | `<expected badge>` |
+| --- | --- | --- | --- |
+| One line | `<product B>`, HKD105. | Total HKD885; a Refund row of −HKD105. | The order's status before the refund. |
+| Everything | Both lines, HKD885. | Total HKD885; a Refund row of −HKD885. | Refunded |
+
+**Steps:**
+
+1. Navigate to `/profile/orders/<order id>`.
+2. Read the order summary and the status badge.
+
+**Expected Results:**
+
+* Step 2 shows `<expected summary>`.
+* Step 2's badge reads `<expected badge>`.
+
+<!-- trace:case id=g10.store-order-detail.TC-wxh rev=1 -->
+#### g10.store-order-detail.US1-TC10: Refunded goods take back the points they earned
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-order-detail.US1
+
+**Pre-conditions:**
+
+* customer(signed-in member) owns `<order>`: goods `<product A>` and `<product B>` plus delivery, completed, with points earned on both goods.
+* The member's points balance is known.
+
+**Test data:**
+
+| Partition | `<refund>` | `<expected balance>` |
+| --- | --- | --- |
+| One line of goods | `<product B>`. | Lower by the points `<product B>` earned. |
+| Delivery only | The delivery fee alone. | Unchanged. |
+
+**Steps:**
+
+1. Refund `<refund>` in the staging shop's admin.
+2. Wait 60 seconds.
+3. Read the member's points balance.
+
+**Expected Results:**
+
+* Step 3 is `<expected balance>`.
 
 ---
 
