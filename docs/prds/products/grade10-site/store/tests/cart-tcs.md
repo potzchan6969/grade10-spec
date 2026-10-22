@@ -1,6 +1,6 @@
 # grade10-site/store/cart Test Cases
 
-**Status:** pending-review · 0/32
+**Status:** pending-review · 0/36
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Background
@@ -13,6 +13,7 @@
 | `product A` | A booster box for sale at HKD880, no site discount, at least 3 for sale. |
 | `product B` | An elite trainer box for sale at HKD420, no site discount, at least 3 for sale. |
 | `product C` | Booster packs for sale at HKD60, no site discount. |
+| `product D` | Sleeves for sale at HKD210, no site discount. |
 | `member code` | A store code minted to the member: HKD50 off any order, combining with order discounts. |
 | `public code` | A public Shopify code, tagged `public`: HKD20 off the order. |
 | `spend code` | A code: HKD200 off, spend HKD1,000 or more. |
@@ -735,6 +736,93 @@ Runs once per row of **Test data**.
 * Step 2 offers Retry; checkout is unavailable.
 * Step 4 shows `<product A>` checked, with checkout available.
 
+<!-- trace:case id=g10.store-cart.TC-x4l rev=1 -->
+#### g10.store-cart.US1-TC12: A cart line strikes the price a site discount took off
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US1
+
+**Pre-conditions:**
+
+* The cart holds `<cart lines>`.
+* The shop holds only `<shop discount>`, saved at least 1 minute ago.
+
+**Test data:**
+
+| Partition | `<shop discount>` | `<cart lines>` | `<expected line>` | `<expected footer>` |
+| --- | --- | --- | --- | --- |
+| Product cut, no minimum | 10% off `<product A>`. | `<product A>` × 1. | HKD792, HKD880 struck. | Subtotal HKD792 = 880 × 0.9; no discount row. |
+| Buy X get Y | Buy 2 packs, get 1 free. | `<product C>` × 3. | HKD40 a pack, HKD60 struck. | Subtotal HKD120 = 60 × 3 − 60; no discount row. |
+| Sale price | `<product A>` compare-at HKD1,000. | `<product A>` × 1. | HKD880, HKD1,000 struck. | Subtotal HKD880; no discount row. |
+| Order cut, no minimum | 10% off each item in the order. | `<product A>` × 1. | HKD880, nothing struck. | `Discount (<order discount title>)` −HKD88 = 880 × 0.1. |
+
+**Steps:**
+
+1. Open Cart and wait for the read.
+2. Read the line.
+3. Read the footer.
+
+**Expected Results:**
+
+* Step 2 shows `<expected line>`.
+* Step 3 shows `<expected footer>`.
+
+<!-- trace:case id=g10.store-cart.TC-bkm rev=1 -->
+#### g10.store-cart.US1-TC13: Footer rows keep their order; an order discount shows once its minimum is met
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US1
+
+**Pre-conditions:**
+
+* customer(signed-in member) holds 600 points and `<member code>`.
+* The shop has the order discount Spend HKD1,000, save HKD100.
+* The cart holds `<cart lines>`; `<member code>` and 100 points are applied.
+* The minimum is read on the goods after the code.
+
+**Test data:**
+
+| Partition | `<cart lines>` | `<expected discount row>` | `<expected total>` |
+| --- | --- | --- | --- |
+| Below the minimum | `<product A>` and `<product C>`: HKD940; HKD890 after the code. | None. | HKD790 = 940 − 50 − 100 |
+| At the limit | `<product B>` × 2 and `<product D>`: HKD1,050; HKD1,000 after the code (fixed: the minimum). | `Discount (Spend HKD1,000, save HKD100)` −HKD100. | HKD800 = 1,050 − 100 − 50 − 100 |
+| Above the minimum | `<product A>` × 2: HKD1,760. | `Discount (Spend HKD1,000, save HKD100)` −HKD100. | HKD1,510 = 1,760 − 100 − 50 − 100 |
+
+**Steps:**
+
+1. Open Cart and wait for the read.
+2. Read the footer rows from top to bottom.
+
+**Expected Results:**
+
+* Step 2 lists Subtotal, `<expected discount row>`, the code, Points, Shipping, then Estimated Total.
+* The order discount row has no Remove; the code and Points rows do.
+* Step 2's Estimated Total is `<expected total>`.
+
 ---
 
 ### g10.store-cart.US2: Use a promo code
@@ -957,6 +1045,90 @@ Runs once per row of **Test data**.
 * Step 2 shows `<gift product>` as a line at no charge.
 * Step 2's total is unchanged by the gift line.
 * Step 4 shows no code row, and `<gift code>` listed again.
+
+<!-- trace:case id=g10.store-cart.TC-ikv rev=1 -->
+#### g10.store-cart.US2-TC9: A code stacks with an order discount while the goods still clear its minimum
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US2
+
+**Pre-conditions:**
+
+* customer(signed-in member) holds `<reward>`, a reward off Pokémon goods that combines with order discounts.
+* The shop has the order discount Spend HKD1,000, save HKD100.
+* The cart holds `<cart lines>`, all Pokémon goods.
+
+**Test data:**
+
+| Partition | `<cart lines>` | `<reward>` | `<expected rows>` | `<expected total>` |
+| --- | --- | --- | --- | --- |
+| Both apply | `<product A>` and `<product B>`: HKD1,300. | HKD50 off. | Order discount −HKD100; `Discount (<reward>)` −HKD50. | HKD1,150 = 1,300 − 100 − 50 |
+| Under the minimum after the code, code larger | `<product B>` × 2 and `<product D>`: HKD1,050. | HKD120 off. | `Discount (<reward>)` −HKD120; no order discount row. | HKD930 = 1,050 − 120 |
+| Under the minimum after the code, order discount larger | `<product B>` × 2 and `<product D>`: HKD1,050. | HKD60 off. | Order discount −HKD100; the code's field says the site discount applies instead. | HKD950 = 1,050 − 100 |
+
+**Steps:**
+
+1. Open Cart and wait for the read.
+2. Apply `<reward>`.
+3. Read the footer and the code's field.
+
+**Expected Results:**
+
+* Step 3 shows `<expected rows>`.
+* Step 3's Estimated Total is `<expected total>`.
+
+<!-- trace:case id=g10.store-cart.TC-9px rev=1 -->
+#### g10.store-cart.US2-TC10: A percentage code takes what Shopify's checkout takes, rounded the shop's way
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart.US2
+
+**Pre-conditions:**
+
+* customer(signed-in member) holds `<percent code>`.
+* The cart holds `<odd product>` × 1, and no site discount applies.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `percent code` | A store code for 10% off the order. |
+| `odd product` | A product priced HKD99.95, so 10% is HKD9.995 before rounding. |
+
+**Steps:**
+
+1. Open Cart and wait for the read.
+2. Apply `<percent code>`.
+3. Read the code's row and the Estimated Total.
+4. Click Proceed to Checkout.
+5. Read the discount and subtotal on Shopify's page.
+
+**Expected Results:**
+
+* Step 3's code row equals step 5's discount.
+* Step 3's Estimated Total equals HKD99.95 less step 5's discount.
 
 ---
 
