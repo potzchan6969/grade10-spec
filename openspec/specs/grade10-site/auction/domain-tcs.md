@@ -2,7 +2,7 @@
 
 **Status:** reopened · 2/28
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
-**Drafts styled:** 2026-10-14, tcs-rules r5
+**Drafts styled:** 2026-10-19, tcs-rules r5
 
 ## Walk 1: Execute every domain case independently — phase 1
 
@@ -2001,7 +2001,7 @@ it.
 * Step 3's card reads Ended and names when it ended, with no watch control.
 * Neither page reloaded.
 
-<!-- trace:case id=g10.auction-domain.TC-k4p rev=4 covers=g10.auction-winner-order.SC-ug0,g10.auction-winner-order.SC-fq4 -->
+<!-- trace:case id=g10.auction-domain.TC-k4p rev=5 covers=g10.auction-winner-order.SC-ug0,g10.auction-winner-order.SC-fq4 -->
 ### g10.auction-dmn.US12-TC3: A winner chooses HKD and sees the card fee after both order totals
 
 **Classification:**
@@ -2021,7 +2021,6 @@ it.
 
 * Customer A won `<listing_63>` at `<winning bid>`, with buyer's premium `<buyer's premium>` and is on its order setup page.
 * HKD Card is offered, and Payment Settings holds an HKD card rule of `<card fee percent>` per cent and `<fixed card fee>`.
-* No settlement currency or payment method is preselected.
 * No invoice has been sent for `<listing_63>`.
 
 **Test data:**
@@ -2032,8 +2031,8 @@ it.
 | winning bid | USD101.00 | (10100 minor units) |
 | buyer's premium | USD20.20 | (2020 minor units) |
 | shipping | USD10.01 | (1001 minor units) |
-| settlement currency | HKD | selected by customer A |
-| payment method | Card | selected by customer A |
+| settlement currency | HKD | chosen by customer A |
+| payment method | Card | chosen by customer A |
 | HKD lines | HKD793.00; HKD159.00; HKD79.00 | (79300, 15900 and 7900 minor units) |
 | HKD subtotal | HKD1,031.00 | (103100 minor units) |
 | HKD card fee | HKD38.73 | (3873 minor units) from the gross-up rule on the HKD subtotal |
@@ -2046,16 +2045,16 @@ it.
 
 **Steps:**
 
-1. Read the setup choices and Order Summary before making a selection.
-2. Select `<settlement currency>`, then `<payment method>`; confirm the address and setup, then read the Order Summary before invoice send.
+1. Read the setup choices and Order Summary before confirming.
+2. Confirm the address and setup, choosing `<settlement currency>` and `<payment method>`, then read the Order Summary before invoice send.
 3. As an operator, quote the order with Shipping & Handling of `<shipping>` and send its invoice.
 4. Reopen the winner's order and read its Pending Payment status and Order Summary, totals and fee rows.
 5. Read the invoice amount payable.
 
 **Expected Results:**
 
-* Step 1 has no preselected settlement currency or payment method, and no HKD amount appears before an invoice exists.
-* Step 2 commits the winner's explicit HKD settlement and Card choices.
+* Step 1 opens with USD — the first offered currency — and its first available method preselected, and no HKD amount appears before an invoice exists.
+* Step 2 commits the winner's confirmed HKD settlement and Card choices.
 * Before the invoice is sent, the summary has no HKD amount.
 * Step 3 sends an invoice after the quote includes `<shipping>`.
 * Step 4 reads Pending Payment and lists the winning bid, buyer's premium and shipping as `<HKD lines>`, each with its USD amount beneath it.
@@ -2496,3 +2495,7 @@ it.
 `TC-wrl` remains draft with `automation, manual` testability and manual automation status. Its corrected current-bid range is 30,000 to 30,500 USD minor units. The domain cases do not claim full coverage of other site feature scenarios based on representative cases.
 
 **Planned verification** - Tasks 7.7-7.9 cover schedule outcomes and auction-history reads. Task 7.10 covers the live bid, Outbid state and 132,500 USD-minor next minimum in SC-43. Planned tasks are not execution evidence. No product test or approval is claimed.
+
+| Finding | Disposition |
+| --- | --- |
+| `US12-TC3` asserted no preselected currency or method and an explicit selection step; the spec now preselects the first offered currency and the first offered method | Revised to rev=5 — preselection read at step 1, confirmation at step 2. The Walk route bullet that reads "no preselected settlement currency or payment method" (`g10.auction-dmn.US12-TC3` step 1) updates to the same opening |

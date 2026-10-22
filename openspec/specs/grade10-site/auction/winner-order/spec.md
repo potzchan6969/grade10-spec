@@ -58,7 +58,7 @@ tracker and delivery proof the order keeps afterwards.
   - Invoice shows Bill To and Ship To from the order snapshot
   - Receipt keeps the addresses of the invoice it pays
 - Settlement currency
-  - Winner's choice: while confirming the order the winner picks USD or HKD, nothing preselected, fixed once the invoice is sent
+  - Winner's choice: while confirming the order the winner picks USD or HKD — the first offered currency preselected — fixed once the invoice is sent
   - Order in that currency: the invoice, order total, fees, payments, refunds and order letters carry the settlement currency
   - Fixed conversion: HKD is the USD amount at 7.85, each line rounded up to a whole HK$, then summed
   - Rate never shown: no page, invoice, receipt or letter names the rate
@@ -79,6 +79,7 @@ tracker and delivery proof the order keeps afterwards.
   - Rail chosen at setup: each bank rail is its own choice, not one bank transfer choice
   - Currency change: switching currency before confirming clears a method the new currency does not offer
   - USD card needs a rule: card is offered in USD only once Finance saves a USD card fee rule
+  - First offered method preselected: the payment step opens with the settlement currency's first offered method selected — card where a card fee rule applies, else the first bank rail
 - Invoice
   - Fee priced by method: Payment Processing Fee is the card gross-up or the operator's bank transfer fee, never dropped
   - Identifier formats: an invoice ID and a bank reference built from the listing code, the month and the invoice count; a reissue takes new ones, and an old one still finds the order
@@ -139,6 +140,10 @@ tracker and delivery proof the order keeps afterwards.
   - No start once closed: no card payment starts on an expired or checked invoice, and one that completes anyway is recorded
 - A lot an internal bidder won
   - Internal bidder order: a close with an internal bidder leading opens its order with the internal bidder's billing address and sends no letter
+- Receipts
+  - Link label: a receipt link names the receipt ID and issue date —
+    `Receipt #RC-LK7P2Q01P1 (22 Sep 2026)` — or `Receipt` alone when the
+    record carries no ID; the date is day-only, in the viewer's local zone
 
 ## Requirements
 
@@ -639,7 +644,8 @@ Grade10 SHALL require the winner to confirm a delivery address and a payment
 method on the auction order before an operator can send its invoice. When an
 account default exists, Grade10 SHALL pre-fill the address from it, but the
 default SHALL not become the order's destination until the winner confirms or
-selects an address. Grade10 SHALL pre-select no payment method.
+selects an address. Grade10 SHALL preselect the first payment method the
+settlement currency offers.
 
 | Condition | Behaviour |
 | --- | --- |
@@ -1323,10 +1329,15 @@ sent for.
 After payment is confirmed on an auction order — by the winner's card, by an
 operator confirming the winner's bank transfer proof, or by operator manual
 settlement — Winner Order SHALL offer the winner a control to view and
-download the itemised payment receipt as a PDF. The control SHALL use a PDF
-icon with the label **Receipt** (accessible name Receipt PDF), SHALL render as
-a text link (not a button), and SHALL sit under the payment-method card —
-not on the same row as the invoice PDF. The control SHALL be hidden before
+download the itemised payment receipt as a PDF. Each receipt link SHALL use
+a PDF icon, SHALL render as a text link (not a button), and SHALL sit under
+the payment-method card — not on the same row as the invoice PDF. The link
+SHALL name the receipt's ID and issue date — `Receipt #RC-LK7P2Q01P1 (22
+Sep 2026)`, accessible name `Receipt #RC-LK7P2Q01P1 (22 Sep 2026) PDF` —
+the ID kept exactly as the receipt PDF and Grade10's letters print it. The issue date SHALL read as a day-only date in the viewer's local zone, per `shared/dates-and-times`. A
+receipt record carrying no ID SHALL read `Receipt`, accessible name
+`Receipt PDF`. Where an order records more than one payment, its receipt
+links SHALL run oldest issued first. The control SHALL be hidden before
 payment, while the invoice is `payment_verifying`, and when Cancelled.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-aaq rev=1 -->
@@ -1345,6 +1356,23 @@ payment, while the invoice is `payment_verifying`, and when Cancelled.
 - **GIVEN** an auction order whose invoice status is `pending` or `payment_verifying`
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers no receipt PDF control
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-n5y rev=1 -->
+#### Scenario: winner-order-SC-307 - The receipt link names its ID and issue date
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** a paid auction order whose receipt is `RC-LK7P2Q01P1`, issued on
+  22 Sep 2026
+- **WHEN** the winner opens Winner Order
+- **THEN** the receipt link reads `Receipt #RC-LK7P2Q01P1 (22 Sep 2026)`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-d8z rev=1 -->
+#### Scenario: winner-order-SC-308 - A receipt with no ID reads Receipt
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** a paid auction order whose receipt record carries no receipt ID
+- **WHEN** the winner opens Winner Order
+- **THEN** the receipt link reads `Receipt`
 
 ### Requirement: An invoice calculates the buyer's premium
 
@@ -1462,9 +1490,14 @@ an auction order, Winner Order SHALL also ask how they will pay:
 3. Read the fee range Grade10 sets for each method.
 4. Confirm the address, the currency and the method together.
 
-**No preselection** - Grade10 SHALL preselect no currency and no method, and
-SHALL record the chosen method on the order. Until the winner picks a
-currency, Winner Order SHALL offer no method.
+**Preselection** - Winner Order SHALL preselect the first method the
+settlement currency offers — card where a card fee rule applies to the
+currency, else the first bank rail it offers — and SHALL record the chosen
+method on the order. A method the currency cannot take SHALL NOT be
+preselected. Where one settlement currency is offered, Winner Order SHALL
+name it at the choice — `Pay in {currency}` — and SHALL offer no currency
+picker. A preselected method is not a confirmed one: the winner still
+confirms the address, the currency and the method together.
 
 **Methods by currency** - The methods follow the settlement currency picked:
 
@@ -1484,13 +1517,13 @@ Grade10 sets:
 | Method | Reads |
 | --- | --- |
 | Card | `Card fee about {percentage}% + a fixed amount` |
-| FPS, HK Local, International via SWIFT | `Bank fee set on your invoice` |
+| FPS, HK Local, International via SWIFT | no fee line |
 
 `{percentage}` SHALL be the percentage of the card fee rule Payment Settings
 holds for the currency picked, as Finance saved it. Finance MAY set it to any
 value Payment Settings accepts, and the text SHALL read that value, not a fixed
-figure. The bank rail text SHALL name no amount, since an operator sets that
-fee on the invoice.
+figure. A bank rail SHALL read no fee line at the choice — no fee is
+required for those options.
 
 **Offered where Grade10 can take it** - Grade10 SHALL offer each method only
 where it can take the payment:
@@ -1618,7 +1651,7 @@ its own bank details, and card on its own rule.
   rail
 - **AND** the order derives as Preparing Invoice
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-8dl rev=2 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-8dl rev=3 -->
 #### Scenario: winner-order-SC-91 - The choice shows a fee range and no bank transfer amount
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -1627,9 +1660,8 @@ its own bank details, and card on its own rule.
   HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
 - **THEN** card reads `Card fee about 3.4% + a fixed amount`
-- **AND** FPS and HK Local each read `Bank fee set on your invoice`, naming no
-  amount
-- **AND** no method is selected
+- **AND** FPS and HK Local read no fee line
+- **AND** card is selected
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-o4y rev=1 -->
 #### Scenario: winner-order-SC-303 - The card fee range reads the percentage of the currency picked
@@ -1664,11 +1696,13 @@ its own bank details, and card on its own rule.
 - **THEN** the order records bank transfer, on the HK Local rail
 - **AND** the order derives as Preparing Invoice
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-wn1 rev=2 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-wn1 rev=3 -->
 #### Scenario: winner-order-SC-94 - A confirmation with no method is refused
 **Serves:** Payment method - card or bank transfer recorded with the address
 
-- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD and
+  International via SWIFT, then switched the currency to HKD, which cleared
+  the method
 - **WHEN** the winner confirms a delivery address without choosing a method
 - **THEN** Grade10 refuses the confirmation
 - **AND** the order is still Awaiting Setup
@@ -1724,6 +1758,28 @@ its own bank details, and card on its own rule.
 - **THEN** the order reads Setup Overdue
 - **AND** an operator holding payment processing can reopen or record its
   setup
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-zk3 rev=1 -->
+#### Scenario: winner-order-SC-305 - The step opens with the currency's first method selected
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup offered USD and HKD, where
+  Payment Settings holds a USD card fee rule and Grade10 holds HK Local and
+  SWIFT bank details
+- **WHEN** the winner reaches the payment method choice
+- **THEN** USD is selected and card is selected
+- **AND** the winner can still choose HK Local or International via SWIFT
+  before confirming
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-mw8 rev=1 -->
+#### Scenario: winner-order-SC-306 - A single settlement currency names itself and offers no picker
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup that settles in HKD only, where
+  Payment Settings holds an HKD card fee rule
+- **WHEN** the winner reaches the payment method choice
+- **THEN** the choice reads `Pay in HKD` and offers no currency picker
+- **AND** card is selected
 
 ### Requirement: A bank transfer invoice shows how to pay
 
@@ -3456,8 +3512,10 @@ the account address book or any other order.
 
 At order setup the winner SHALL choose the order's settlement currency from
 `USD` and `HKD`, in the same step as the delivery address and the payment
-method. Grade10 SHALL preselect neither and SHALL refuse a confirmation that
-carries no currency. The lot is bid in USD whichever currency the winner picks.
+method. Grade10 SHALL preselect the first offered currency, and
+a single offered currency SHALL be the selection. Grade10 SHALL refuse a
+confirmation that carries no currency. The lot is bid in USD whichever
+currency the winner picks.
 
 This choice applies to a collector winner. For an internal bidder's win,
 `grade10-admin/auction/internal-bid` sets HKD settlement, bank transfer and
@@ -3482,14 +3540,17 @@ chooses a payment method with the address".
 legacy fact and SHALL NOT be treated as a missing currency or filled with a
 default rail.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-o92 rev=1 -->
+Scenario `winner-order-SC-278` keeps its title with its id. The title is
+historical: the choice now opens with the first offered currency selected.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-o92 rev=2 -->
 #### Scenario: winner-order-SC-278 - Setup offers USD and HKD with neither picked
 **Serves:** winner-order-US-24 - Winner chooses the currency they pay in
 
 - **GIVEN** an auction order for a lot bid in `USD`, in Awaiting Setup
 - **WHEN** the winner opens the setup form
 - **THEN** the settlement currency choice offers USD and HKD
-- **AND** neither is selected
+- **AND** the first offered currency — USD — is selected
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-j1l rev=1 -->
 #### Scenario: winner-order-SC-279 - A confirmation with no currency is refused

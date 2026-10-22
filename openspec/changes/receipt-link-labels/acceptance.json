@@ -1,0 +1,77 @@
+{
+  "version": 2,
+  "change": "receipt-link-labels",
+  "baseline": "9c55ccb91a630297a57bd3d424e115ecfecc37ba0ce1e7bb948d87e47f474a31",
+  "fingerprint": "0824145a5ab09d62daf3c7bf67c4ef15fc50df8b96b23c09b64bb1878f3ace31",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-22T18:17:11.601Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#receipt-documents",
+      "sha256": "4bbe2176a4643432a3ff5544850e4365ec50c5d1d2f4ad7afa5b0b48ea996b73",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/receipt-link-labels/decisions.md",
+      "sha256": "f997232de4ed52a38ce5932b2cb6e1558a9afdec1acf5568668a0d71356eea65",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/receipt-link-labels/proposal.md",
+      "sha256": "7003b7bb3e103552d42486d178c09857868c960296341459fdf3a0c914a279b8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/receipt-link-labels/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "e210dd378e7ca58c07307a83ff2ad36d025d0a51d477123bd80f43aa126cb2e6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/receipt-link-labels/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "39cdd06e0dd5ede6ae10aedcb77621483312ab1b87a3c031badc19afc81f4584",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/receipt-link-labels/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "4e7c3870dd503c6b5ace57b09c0206d52f12accd800d558f7445f88b4abdb70b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/receipt-link-labels/tech-design.md",
+      "sha256": "66240443c8362cd044ccfacd6606d8f7321fc18304e14d5b12e048e83e7314b5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "566d09dc82f1d3b2e3afc872ff438bebdfbc4c86f90a42c391bd36947c3b6d59",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "398256a66529b098a7cc7a7eb6d54c609d6c0632660aefe8ddc9834e564ae21f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "54888830cbf328c6fd9c7fb5a6e16352b1cb92cf6f9b3b09e008b031e1215d22",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The winner can view the payment receipt as a PDF"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

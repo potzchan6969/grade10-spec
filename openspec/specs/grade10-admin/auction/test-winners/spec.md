@@ -16,7 +16,7 @@ link, so QA walks a winner's order by hand as a real winner would.
   - One per address: the same address makes one test winner, and an address holding a verified account is refused
   - Never biddable: the lot is closed from the moment it is made
   - USD bid: the sandbox lot and winning bid use USD only
-  - Normal winner setup: the winner chooses USD or HKD and an offered payment method, with nothing preselected
+  - Normal winner setup: the winner chooses USD or HKD and an offered payment method, with the first offered currency and its first offered method preselected
   - Atomic refusal: a non-USD bid currency refuses the action without creating an account, lot or order
 - Test winner sign-in
   - Ordinary link: the sign-in email every collector gets, sent after making and again on request, opening the order
@@ -38,7 +38,7 @@ console's Test tab:
 | Where | The action |
 | --- | --- |
 | Local, staging, staging-2, UAT | Offered |
-| Production, or any other lane, a preview included | Absent: Grade10 answers it as if it did not exist |
+| Production, or any other lane, a preview included | Absent: Grade10 answers as if the action did not exist |
 
 The console built for production SHALL carry neither the Test tab nor its
 code.
@@ -75,10 +75,10 @@ nothing twice.
 takes no bid. It lists as any closed sandbox lot does.
 
 The successful test winner SHALL use ordinary winner setup. The order SHALL
-offer USD or HKD and the payment choices offered for that currency, with
-neither currency nor method preselected.
+offer USD or HKD and the payment choices offered for that currency, with the first offered currency
+and the currency's first offered method preselected.
 
-<!-- trace:scenario id=g10adm.auction-test-winners.SC-pxq rev=2 -->
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-pxq rev=3 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-11 - One action makes a winner waiting on setup
 **Serves:** Making a test winner - from nothing to an order that waits on the winner
 
@@ -91,7 +91,7 @@ neither currency nor method preselected.
 - **AND** it holds an auction order in Awaiting Setup for a closed sandbox lot
   titled `Test lot <code>`, won at 100000 minor units in USD
 - **AND** order setup offers USD or HKD and the offered payment choices, with
-  neither currency nor payment method selected
+  the first offered currency and its first payment method preselected
 - **AND** the auction-won letter reaches that address
 
 <!-- trace:scenario id=g10adm.auction-test-winners.SC-wfn rev=1 -->

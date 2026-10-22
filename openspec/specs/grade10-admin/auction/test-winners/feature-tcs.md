@@ -1,7 +1,7 @@
 # grade10-admin/auction/test-winners Test Cases
 
 **Status:** pending-review · 0/12
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Drafts styled:** 2026-10-19, tcs-rules r5
 
 **Out of suite:** grade10-admin-auction-test-winners-SC-13 — held by the admin console's bundle check, which fails a production build that carries the Test tab's code
 
@@ -11,7 +11,7 @@
 **I want** a winner of a closed lot I can sign in as, made in one step,
 **so that** I walk the order by hand without bidding and waiting for a close.
 
-<!-- trace:case id=g10adm.auction-test-winners.TC-7qq rev=3 covers=grade10-admin-auction-test-winners-SC-11,grade10-admin-auction-test-winners-SC-25 -->
+<!-- trace:case id=g10adm.auction-test-winners.TC-7qq rev=4 covers=grade10-admin-auction-test-winners-SC-11,grade10-admin-auction-test-winners-SC-25 -->
 ### g10adm.auction-test-winners.US1-TC7: One action makes a winner waiting on setup
 
 **Classification:**
@@ -48,7 +48,7 @@
 * Before step 5, the account at that address has not signed in.
 * The inbox holds the auction-won letter for that lot, sent to that address.
 * Step 5 signs in as the test account and leaves the order in Awaiting Setup.
-* Step 6 offers USD or HKD and their offered payment choices, with no currency or method selected.
+* Step 6 offers USD or HKD and their offered payment choices, with the first offered currency and its first offered payment method preselected.
 
 <!-- trace:case id=g10adm.auction-test-winners.TC-abd rev=1 -->
 ### g10adm.auction-test-winners.US1-TC8: Production, or a missing grant, makes nothing
@@ -473,3 +473,7 @@ Runs once per row of **Test data**.
 - **Covered:** `SC-11` and `SC-25` are fully asserted by revised `US1-TC7` (same marker, revision 3). Its route continues from test-winner creation through the emailed link into order setup, and checks the USD-only bid form plus default-free settlement and method choices.
 - **Out of suite:** `SC-13` remains held by the production-console bundle check.
 - **Anchors:** The single root journey retains active cases. No unresolved product question remains.
+
+| Finding | Disposition |
+| --- | --- |
+| `TC-7qq` step 6 asserted no currency or method selected; SC-11 now preselects the first offered currency and the first offered method | Revised to rev=4 |

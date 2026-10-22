@@ -1,7 +1,7 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/200
-**Drafts styled:** 2026-10-14, tcs-rules r5
+**Status:** pending-review · 0/204
+**Drafts styled:** 2026-10-22, tcs-rules r5
 **Out of suite:** winner-order-SC-04, winner-order-SC-05, winner-order-SC-38, winner-order-SC-39, winner-order-SC-62, winner-order-SC-63, winner-order-SC-69, winner-order-SC-96, winner-order-SC-110, winner-order-SC-111, winner-order-SC-180, winner-order-SC-184, winner-order-SC-214, winner-order-SC-215, winner-order-SC-216, winner-order-SC-249, winner-order-SC-257, winner-order-SC-287, winner-order-SC-26, winner-order-SC-27, winner-order-SC-28
 
 ## Walk 1: Winner settles a won listing — phase 1
@@ -6067,7 +6067,7 @@ Runs once per row of **Test data**. The method can change until the winner confi
 * The order records `<recorded method>`, not card.
 * The order reads Preparing Invoice.
 
-<!-- trace:case id=g10.auction-winner-order.TC-miy rev=1 covers=g10.auction-winner-order.SC-wn1 -->
+<!-- trace:case id=g10.auction-winner-order.TC-miy rev=2 covers=g10.auction-winner-order.SC-wn1 -->
 ### g10.auction-winner-order.US1-TC51: A confirmation with no method is refused
 
 **Classification:**
@@ -6085,8 +6085,8 @@ Runs once per row of **Test data**. The method can change until the winner confi
 
 **Pre-conditions:**
 
-* Grade10 holds HKD bank details, and Payment Settings holds an HKD card fee rule.
-* customer(winner) holds an auction order in HKD in Awaiting Setup.
+* Grade10 holds HKD and SWIFT bank details, and Payment Settings holds an HKD card fee rule.
+* customer(winner) holds an auction order won in USD in Awaiting Setup.
 
 * The winner order under test is `<winner_order_46_1>`.
 
@@ -6098,7 +6098,7 @@ Runs once per row of **Test data**. The method can change until the winner confi
 
 **Steps:**
 
-1. Choose the home address, choose no payment method, and confirm.
+1. Choose the home address, pick USD and International via SWIFT, then switch the currency to HKD so the method clears, and confirm without choosing a method.
 2. Reload the order.
 
 **Expected Results:**
@@ -6496,10 +6496,11 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.auction-winner-order.US2: Winner follows a settled listing to delivery
+## g10.auction-winner-order.US2: Winner follows a settled lot to delivery
 
 **As a** winner who has paid,
-**I want** a receipt PDF that says how I paid, what was paid before it and what is still owed, a tracker, and proof of what was handed over,
+**I want** a receipt PDF that says how I paid, what was paid before it and what
+is still owed, a tracker, and proof of what was handed over,
 **so that** I can account for a high-value purchase without asking Grade10 for records.
 
 <!-- trace:case id=g10.auction-winner-order.TC-h7f rev=2 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
@@ -6971,45 +6972,6 @@ Runs once per row of **Test data**.
 * The receipt ID is still `<receipt id>`.
 * No second receipt ID or audit number exists for `<winner_order_61_1>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-uox rev=1 covers=g10.auction-winner-order.SC-h7d -->
-### g10.auction-winner-order.US2-TC13: Shipped Order Progress opens the carrier tracker (folded into g10.auction-winner-order.US2-TC12)
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-02
-
-**Pre-conditions:**
-
-* customer(winner) is on `<winner order url>` for `<shipped order>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<shipped order>` | A paid order with fulfilment fulfilled, a tracking number, an operator tracker link and delivery not confirmed |
-| `<tracking number>` | The tracking number recorded for `<shipped order>` |
-| `<carrier tracking URL>` | The carrier's tracking page for `<shipped order>` |
-
-**Steps:**
-
-1. Read Order Progress.
-2. Open `<tracking number>`.
-
-**Expected Results:**
-
-* Order Progress shows `<tracking number>` as an external link with an arrow icon.
-* Order Progress shows no Track shipment button or carrier name.
-* Step 2 opens `<carrier tracking URL>` in a new tab.
-
 <!-- trace:case id=g10.auction-winner-order.TC-l0r rev=2 covers=g10.auction-winner-order.SC-k4r -->
 ### g10.auction-winner-order.US2-TC12: A shipped or delivered order keeps the carrier tracker
 
@@ -7061,6 +7023,7 @@ Runs once per row of **Test data**.
 * Order Progress shows `<tracking number>` as an external link with an arrow icon.
 * Order Progress shows no Track shipment button or carrier name.
 * Step 2 opens `<carrier tracking url>` in a new tab.
+
 <!-- trace:case id=g10.auction-winner-order.TC-nmg rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
 ### g10.auction-winner-order.US2-TC55: Preparing Shipment pings Shipping with Preparing to ship
 
@@ -7226,6 +7189,113 @@ Runs once per row of **Test data**.
 * Shipping is the current progress step with the day-only ship date.
 * The tracking number reads as plain text, not a link.
 * Order Progress shows no carrier name and no Track shipment control.
+
+<!-- trace:case id=g10.auction-winner-order.TC-b6h rev=1 covers=g10.auction-winner-order.SC-n5y -->
+### g10.auction-winner-order.US2-TC57: The receipt link names its ID and issue date
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* `<winner_order_300_1>` is paid, with a receipt whose ID and issue date are recorded.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_300_1 | A paid order whose receipt is `RC-LK7P2Q01P1`, issued on 22 Sep 2026; bind its identity only |
+
+**Steps:**
+
+1. Open Winner Order on `<winner_order_300_1>` and read the receipt link.
+
+**Expected Results:**
+
+* The link reads `Receipt #RC-LK7P2Q01P1 (22 Sep 2026)`.
+
+<!-- trace:case id=g10.auction-winner-order.TC-p2x rev=1 covers=g10.auction-winner-order.SC-d8z -->
+### g10.auction-winner-order.US2-TC58: A receipt with no ID reads Receipt
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* `<winner_order_301_1>` is paid, with a receipt record that carries no receipt ID.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_301_1 | A paid order whose receipt has no recorded ID; bind its identity only |
+
+**Steps:**
+
+1. Open Winner Order on `<winner_order_301_1>` and read the receipt link.
+
+**Expected Results:**
+
+* The link reads `Receipt` — no `#`, no date, no dangling separators.
+
+<!-- trace:case id=g10.auction-winner-order.TC-uox rev=1 covers=g10.auction-winner-order.SC-h7d -->
+### g10.auction-winner-order.US2-TC13: Shipped Order Progress opens the carrier tracker (folded into g10.auction-winner-order.US2-TC12)
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on `<winner order url>` for `<shipped order>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<shipped order>` | A paid order with fulfilment fulfilled, a tracking number, an operator tracker link and delivery not confirmed |
+| `<tracking number>` | The tracking number recorded for `<shipped order>` |
+| `<carrier tracking URL>` | The carrier's tracking page for `<shipped order>` |
+
+**Steps:**
+
+1. Read Order Progress.
+2. Open `<tracking number>`.
+
+**Expected Results:**
+
+* Order Progress shows `<tracking number>` as an external link with an arrow icon.
+* Order Progress shows no Track shipment button or carrier name.
+* Step 2 opens `<carrier tracking URL>` in a new tab.
 
 ---
 
@@ -8838,10 +8908,8 @@ Runs once per row of **Test data**.
 * Submit Payment Proof stays open.
 * The form remains locked until `<busy work>` finishes.
 
-<!-- trace:case id=g10.auction-winner-order.TC-eu8 rev=3 covers=g10.auction-winner-order.SC-v59 -->
-### g10.auction-winner-order.US9-TC22:
-
-Runs once per row of **Test data**. The picked rail is recorded with the address where Grade10 holds bank details
+<!-- trace:case id=g10.auction-winner-order.TC-eu8 rev=4 covers=g10.auction-winner-order.SC-v59 -->
+### g10.auction-winner-order.US9-TC22: The picked rail is recorded with the address where Grade10 holds bank details
 
 Runs once per row of **Test data**.
 
@@ -8880,16 +8948,16 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Choose `<settlement currency>` and read the method choices.
-2. Confirm the delivery address with `<rail>`.
+2. Choose `<rail>` in place of the preselected card, and confirm the delivery address.
 3. Reload the order.
 
 **Expected Results:**
 
-* Step 1: Card and the `<rail>` option are offered, none selected.
+* Step 1: Card and the `<rail>` option are offered, and card is selected.
 * Step 3: the order records bank transfer on `<rail>` and reads Preparing Invoice.
 
-<!-- trace:case id=g10.auction-winner-order.TC-bmd rev=1 covers=g10.auction-winner-order.SC-8dl -->
-### g10.auction-winner-order.US9-TC23: The choice shows each method's fee wording, neither selected
+<!-- trace:case id=g10.auction-winner-order.TC-bmd rev=2 covers=g10.auction-winner-order.SC-8dl -->
+### g10.auction-winner-order.US9-TC23: The choice shows each method's fee wording, card selected
 
 **Classification:**
 
@@ -8925,8 +8993,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Card reads `Card fee about 3.4% + a fixed amount`.
-* Bank transfer reads `Bank fee set on your invoice`, naming no amount.
-* Neither method is selected.
+* Each bank rail reads no fee line.
+* Card is selected.
 
 <!-- trace:case id=g10.auction-winner-order.TC-6nc rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
 ### g10.auction-winner-order.US9-TC21: Order summary offers Submit Payment Proof and View Bank Details
@@ -12259,12 +12327,12 @@ Runs once per row of **Test data**.
 
 ## g10.auction-winner-order.US24: Winner chooses the currency they pay in
 
-**As a** winner of a listing bid in USD,
+**As a** winner of a lot bid in USD,
 **I want** to settle in USD or HKD when I set the order up,
 **so that** I pay in the currency my money is already in.
 
-<!-- trace:case id=g10.auction-winner-order.TC-ayp rev=1 covers=g10.auction-winner-order.SC-o92 -->
-### g10.auction-winner-order.US24-TC1: Order setup offers USD and HKD without a choice
+<!-- trace:case id=g10.auction-winner-order.TC-ayp rev=2 covers=g10.auction-winner-order.SC-o92 -->
+### g10.auction-winner-order.US24-TC1: Order setup offers USD and HKD with the first offered preselected
 
 **Classification:**
 
@@ -12282,6 +12350,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * A winner is on setup for a won listing whose auction bids were in USD.
+* Payment Settings holds a card fee rule in HKD and Grade10 holds FPS and HK Local bank details.
 
 **Steps:**
 
@@ -12289,8 +12358,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* USD and HKD are offered; neither is selected.
-* No payment method is selected before a currency is chosen.
+* USD and HKD are offered; the first offered — USD — is selected.
+* Card, FPS and HK Local are offered, and Card is selected.
+* The setup is not yet confirmed; the order stays Awaiting Setup until the winner confirms.
 
 <!-- trace:case id=g10.auction-winner-order.TC-79a rev=2 covers=g10.auction-winner-order.SC-8c6 -->
 ### g10.auction-winner-order.US24-TC2: Chosen settlement currency prices the invoice
@@ -12748,8 +12818,8 @@ Runs once per row of **Test data**.
 * Step 2 is refused.
 * Step 3 reads the order in Awaiting Setup, holding no delivery address, no currency and no method.
 
-<!-- trace:case id=g10.auction-winner-order.TC-jfi rev=1 covers=g10.auction-winner-order.SC-8dl -->
-### g10.auction-winner-order.US25-TC6: Each HKD method reads its fee wording and none is selected
+<!-- trace:case id=g10.auction-winner-order.TC-jfi rev=2 covers=g10.auction-winner-order.SC-8dl -->
+### g10.auction-winner-order.US25-TC6: Each HKD method reads its fee wording and card is selected
 
 **Classification:**
 
@@ -12777,14 +12847,13 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Choose the home address and HKD.
-2. Read each method in the payment method choice.
+1. Choose the home address, pick HKD and read its payment choices.
 
 **Expected Results:**
 
-* Card reads `Card fee about 3.4% + a fixed amount`.
-* FPS and HK Local each read `Bank fee set on your invoice`, naming no amount.
-* No method is selected.
+* HKD is the selected settlement currency.
+* Card reads `Card fee about 3.4% + a fixed amount` and is selected.
+* FPS and HK Local read no fee line.
 
 <!-- trace:case id=g10.auction-winner-order.TC-pes rev=1 covers=g10.auction-winner-order.SC-1aa,g10.auction-winner-order.SC-er5 -->
 ### g10.auction-winner-order.US25-TC7: A bank rail is offered only where Grade10 holds its bank details
@@ -12873,6 +12942,50 @@ Runs once per row of **Test data**.
 
 * Step 1: card reads `Card fee about 4.4% + a fixed amount`.
 * Step 2: card reads `Card fee about 3.4% + a fixed amount`.
+
+<!-- trace:case id=g10.auction-winner-order.TC-wq7 rev=1 covers=g10.auction-winner-order.SC-zk3,g10.auction-winner-order.SC-mw8 -->
+### g10.auction-winner-order.US25-TC9: The first offered method is preselected, and one currency names itself
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-25
+
+**Pre-conditions:**
+
+* customer(winner) holds `<winner_order>` in Awaiting Setup with a saved home address, on the row's currency offer.
+
+**Test data:**
+
+| Row | Currencies offered | Card fee rule | Opens reading | Selected method |
+| --- | --- | --- | --- | --- |
+| Both | USD and HKD | HKD rule | Pay in picker, USD selected | Card |
+| HKD only | HKD | HKD rule | `Pay in HKD`, no picker | Card |
+| HKD only, no card rule | HKD | none | `Pay in HKD`, no picker | FPS, card not selectable |
+
+| Field | Value |
+| --- | --- |
+| winner_order | An order won in USD, in Awaiting Setup on the row's currency offer; bind its identity only |
+
+**Steps:**
+
+1. Read the settlement currency choice and each payment method.
+2. Where both currencies are offered, choose a different method and confirm setup.
+
+**Expected Results:**
+
+* Step 1 reads the row's **Opens reading** and **Selected method**; a method the currency cannot take is not preselected.
+* Step 2's confirmation records the method the winner chose, and the order derives as Preparing Invoice.
 
 ---
 
@@ -13347,7 +13460,6 @@ Runs once per row of **Test data**.
 ## Settled
 
 - 2026-10-22 - The bank-reference copy control is removed. `g10.auction-winner-order.US9-TC20` is deprecated; its historical copy assertion is not a requirement.
-
 - `winner-order-US3-TC1` is held by `winner-order-US8-TC1`: the same premium claim, under the policy-premium journey.
 - `winner-order-US3-TC2` is held by `winner-order-US8-TC2`: the same premium claim, under the policy-premium journey.
 - `winner-order-US3-TC3` is held by `winner-order-US8-TC3`: the same premium claim, under the policy-premium journey.
@@ -13565,3 +13677,25 @@ No new scenario or case ID is created in this refinement. The existing
 known-rail cases remain proofs for known rails only; the parent/store review
 must choose an existing case to refine or issue a store-assigned case ID before
 claiming coverage.
+
+| Finding | Disposition |
+| --- | --- |
+| `TC-ayp` asserted both currencies offered with neither selected; SC-278 now preselects the first offered currency | Revised to rev=2, asserting USD selected and the card method preselected |
+| `TC-jfi` asserted HKD fee wording with no method selected; SC-91 now selects card | Revised to rev=2, asserting card selected |
+| First-method preselection and the `Pay in {currency}` single-currency read had no case | Added `TC-wq7`, covering SC-305 and SC-306 |
+| `TC-bmd` (`US9-TC23`) asserted `Bank fee set on your invoice` and neither method selected; SC-91 rev 3 removes the bank fee line and selects card | Revised to rev=2, asserting no bank fee line and card selected |
+| `TC-eu8` (`US9-TC22`) asserted none selected at step 1; SC-305 selects the first method | Revised to rev=4, asserting card selected and a rail chosen in its place |
+| `TC-miy` (`US1-TC51`) had the winner choose no method; a preselected radio choice cannot be cleared by the winner | Revised to rev=2, reaching no method through a currency switch that clears it, as SC-94 now states |
+
+Walk text that repeats these results stays stale until `/tcs-review` refreshes the walks: durable lines 2111 and 2118 to 2120 (`US9-TC22`, `US9-TC23`), 4053 to 4054 (`US24-TC1`) and 4119 to 4120 (`US25-TC6`). A change suite carries no walk and the fold keeps the durable ones, so the cases are the authority until then.
+
+- **Cases** - `TC-b6h` covers `SC-n5y`: the link reads `Receipt #<id>
+  (<issued>)`. `TC-p2x` covers `SC-d8z`: no ID, plain `Receipt` — the date
+  drops with it, there being no receipt the row could point at by name.
+- **Raised, settled** - whether an ID-less record still shows its issue
+  date; landed as Q1 — the label falls back to `Receipt` alone.
+- **Contradicted** - none: the carried scenarios `SC-67` and `SC-68` keep
+  their durable cases, and the two new cases agree with the scenarios they
+  cover.
+- **Walked** - `SC-n5y` by `TC-b6h`, `SC-d8z` by `TC-p2x`.
+- **Uncovered** - none of this delta's scenarios.

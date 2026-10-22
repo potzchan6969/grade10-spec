@@ -1,0 +1,138 @@
+{
+  "version": 2,
+  "change": "preselect-first-currency-payment-method",
+  "baseline": "5a10360969e85fc1027704aeadce1a99f7557f1e980bbe7a80a46046f34a57dd",
+  "fingerprint": "f7f3682d2a43b13e4b9e02f8f7b49ec70e8a71e9928474e8c7e6ac7e80e036d4",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-22T18:16:02.569Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#order-setup",
+      "sha256": "714bd0c9b058bedd284664d0251120c60a806e94b17bbf279c5d67115d572963",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#payment-methods-by-currency",
+      "sha256": "5e7293ada7e372b97391711d6dd94085911b83303c1653fae794253c30648873",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/preselect-first-currency-payment-method/decisions.md",
+      "sha256": "9083a2ad4bf26d30a358a4241834d3bb96e00810bc3a79feab49aa93e704edb6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/preselect-first-currency-payment-method/proposal.md",
+      "sha256": "06fea9ee16a7f31a1121aa735014df796d9537bd5ae371f4e08f2b6e5315763f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/preselect-first-currency-payment-method/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+      "sha256": "15e580934a1f0250820f074ae17567504c2f3ea37691d042c04a7a9aaec376c8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/preselect-first-currency-payment-method/specs/grade10-admin/auction/test-winners/spec.md",
+      "sha256": "10f701daaa25d09e1c7a51a240c47c7f0f1513598ca4ab7625b441322b1caaab",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/preselect-first-currency-payment-method/specs/grade10-admin/auction/test-winners/user-journeys.md",
+      "sha256": "af4e48e0203355ca80afbee86f2c99a903fa747fe182557d98587c9fd6306b8a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/preselect-first-currency-payment-method/specs/grade10-site/auction/domain-tcs.md",
+      "sha256": "60bad1d369477a4de517a89ae897a043f0370dee28d7b5fa826a364fca072f9d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/preselect-first-currency-payment-method/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "f8b3762ca45a2a237eec99a031ac54fa612605a511e120436d969e633fbb9051",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/preselect-first-currency-payment-method/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "c2d9cacfec8a28880776066cb59f131f5396d898e8302b1e8fd06019a066433e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/preselect-first-currency-payment-method/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "93d2f0dc26214355bf096a036253ab5e3a074c1961327adef4a687aae9252b3d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+      "sha256": "32cf90b46d355e5491803011e2537976f8c1ebb917052e36537646d03401492c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+      "sha256": "46eed476c6cc3ace85f218640f8ef700d5017dffe3db4f53c545301089adbfb8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/user-journeys.md",
+      "sha256": "8b82c54b6aa0b7e5a691ca021a4ef629f1bd0e306b1b60f8c59291a85eba9100",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+      "sha256": "e017c0e6e7cb468a2fa4e793cfef7875d2b98f0f34b60d1ce0bc1209c6993acc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "5721e99aeda05d4f14959004327a5f0a3a7f29ab67ccb272c1ae2ef4a7b7d306",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "ed84ce79095ad4854b8951e63e7b4ff37f69c03fe18316bb6ea58e8f3635ca54",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "54888830cbf328c6fd9c7fb5a6e16352b1cb92cf6f9b3b09e008b031e1215d22",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: An operator makes a test winner in one step"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The delivery address is confirmed before payment",
+        "Requirement: The winner chooses a payment method with the address",
+        "Requirement: The winner chooses a settlement currency at order setup"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
