@@ -78,7 +78,7 @@ is needed to prove this service boundary.
 - [ ] 9.3 Invoke enrichment once after the existing buyer/list projections and after the private-link non-member projection. Keep the current member/link checks, legacy guest compatibility, admin grants, Audit behavior and admin-card omissions. Prove rejected reads do no image lookup and private links acquire no member-only points facts, making `g10.store-order-detail.SC7` and `g10.store-order-detail.SC8` pass; verify admin detail/card previews receive the same image fields through their existing reader.
 - [ ] 9.4 Verify focused order service/router tests, the saved decoder compatibility tests, affected backend/contract typechecks and backend lint. Compare image-enriched and image-free purchase facts without adding database migrations, cache, metrics or dependencies.
 
-## 10. Customer order picture projections (grade10)
+## 10. Customer order picture projections (grade10) (owner: @kinisworking)
 
 Uses the landed group 8 types. This group uses typed procedure fixtures and
 controlled image assets; group 9's running backend is not a dependency.
