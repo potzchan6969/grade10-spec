@@ -102,15 +102,15 @@ svg[data-diagram="store-shelf-scan"] .c-lane{fill: var(--lane-fill); stroke: var
           <text data-node-label="" data-detail-anchor="" x="357" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Slab named</text>
           <text data-detail="context" x="357" y="379" class="t-muted" font-size="8" text-anchor="middle">grader, grade, cert</text>
         </g>
-        <g data-step="the-scanner-learns-the-photos" id="store-shelf-scan-node-the-scanner-learns-the-photos" data-node-id="the-scanner-learns-the-photos" data-node-label="Photos learned" aria-label="Focus Photos learned, hourly, Scanner" data-node-kind="backend" data-node-sublabel="hourly" data-node-context="Scanner">
-          <title>Photos learned · hourly · Scanner</title>
+        <g data-step="the-scanner-learns-the-photos" id="store-shelf-scan-node-the-scanner-learns-the-photos" data-node-id="the-scanner-learns-the-photos" data-node-label="Photos learned" aria-label="Focus Photos learned, every 2 hours, Scanner" data-node-kind="backend" data-node-sublabel="every 2 hours" data-node-context="Scanner">
+          <title>Photos learned · every 2 hours · Scanner</title>
           <rect x="408" y="465" width="138" height="52" rx="6" class="c-mask"/>
           <rect x="408" y="465" width="138" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(414 471) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="477" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Photos learned</text>
-          <text data-detail="context" x="477" y="503" class="t-muted" font-size="8" text-anchor="middle">hourly</text>
+          <text data-detail="context" x="477" y="503" class="t-muted" font-size="8" text-anchor="middle">every 2 hours</text>
         </g>
         <g data-step="a-shopkeeper-points-the-camera" id="store-shelf-scan-node-a-shopkeeper-points-the-camera" data-node-id="a-shopkeeper-points-the-camera" data-node-label="Camera on the shelf" aria-label="Focus Camera on the shelf, one fixed link, Shopkeeper" data-node-kind="frontend" data-node-sublabel="one fixed link" data-node-context="Shopkeeper">
           <title>Camera on the shelf · one fixed link · Shopkeeper</title>

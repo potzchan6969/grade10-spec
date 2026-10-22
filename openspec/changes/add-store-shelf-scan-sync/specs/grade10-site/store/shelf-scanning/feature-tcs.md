@@ -9,7 +9,7 @@
 
 - admin(shopkeeper) has `<g10 scan link>` for staging open on a phone, signed in to nothing.
 - Every shelf product below is published to the staging store and unchanged for the last 10 minutes.
-- Every photo of those products is older than the last hourly photo run.
+- Every photo of those products is older than the last photo run.
 
 **Shared test data:**
 
@@ -199,7 +199,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<product>` exists in the staging shop in the state its row names, unchanged for the last 10 minutes.
-* `<product>` has at least one photo, older than the last hourly photo run.
+* `<product>` has at least one photo, older than the last photo run.
 
 **Test data:**
 
@@ -425,7 +425,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<object>` is on the shelf; a published `<object>` has photos older than the last hourly run.
+* `<object>` is on the shelf; a published `<object>` has photos older than the last photo run.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
 
 **Test data:**
@@ -448,7 +448,7 @@ Runs once per row of **Test data**.
 * Step 2 is the same as for the baseline object.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-u71 rev=2 covers=g10.store-shelf-scanning.SC-s7a -->
-### g10.store-shelf-scanning.US1-TC11: A new product's photos are recognisable at the next hourly run
+### g10.store-shelf-scanning.US1-TC11: A new product's photos are recognisable at the next photo run
 
 Runs once per row of **Test data**.
 
@@ -480,7 +480,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the `<environment>` shop's admin, publish `<card_new>` to the store with a photo; note the time.
-2. After the first hourly photo run that starts 360s (6mins) or more past the publish, reload `<g10 scan link>`.
+2. After the first photo run that starts 360s (6mins) or more past the publish (runs are 7200s (2h) apart), reload `<g10 scan link>`.
 3. Point the camera at `<card_new>`.
 
 **Expected Results:**
@@ -488,7 +488,7 @@ Runs once per row of **Test data**.
 * Step 3 names `<card_new>` with its title, price and availability.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-xta rev=1 covers=g10.store-shelf-scanning.SC-c8l -->
-### g10.store-shelf-scanning.US1-TC12: A replaced or dropped photo is learned at the next hourly run
+### g10.store-shelf-scanning.US1-TC12: A replaced or dropped photo is learned at the next photo run
 
 Runs once per row of **Test data**.
 
@@ -522,7 +522,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, make `<photo change>` on `<card_1>`; note the time.
-2. After the first hourly photo run that starts 360s (6mins) or more past the save, reload `<g10 scan link>`.
+2. After the first photo run that starts 360s (6mins) or more past the save (runs are 7200s (2h) apart), reload `<g10 scan link>`.
 3. Point the camera at a print of `<new photo>`.
 4. Point the camera at a print of `<old photo>`.
 
@@ -532,7 +532,7 @@ Runs once per row of **Test data**.
 * Step 4 `<old photo outcome>`.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-3sh rev=2 covers=g10.store-shelf-scanning.SC-i2s -->
-### g10.store-shelf-scanning.US1-TC13: An hour with no new photo does no work
+### g10.store-shelf-scanning.US1-TC13: A run with no new photo does no work
 
 **Classification:**
 
@@ -549,7 +549,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* No photo of any store product changed since the last hourly photo run, on `<environment>`.
+* No photo of any store product changed since the last photo run, on `<environment>`.
 
 **Test data:**
 
@@ -560,7 +560,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Wait for the next hourly photo run on `<environment>`.
+1. Wait for the next photo run on `<environment>` (runs are 7200s (2h) apart).
 2. Read that run's record.
 
 **Expected Results:**
@@ -586,17 +586,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A photo of `<card_1>`, a published staging card, failed to learn at an hourly run.
+* A photo of `<card_1>`, a published staging card, failed to learn at a photo run.
 * The cause of the failure is gone.
 
 **Steps:**
 
-1. Read the scanner's record of that photo at the hourly runs over the next 86400s (24h).
-2. Read it again at the first hourly run past 86400s (24h) after the failure.
+1. Read the scanner's record of that photo at the photo runs over the next 86400s (24h).
+2. Read it again at the first photo run past 86400s (24h) after the failure.
 
 **Expected Results:**
 
-* Step 1 shows the photo left failed, not retried every hour.
+* Step 1 shows the photo left failed, not retried at every run.
 * Step 2 shows the photo learned.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-47l rev=3 covers=g10.store-shelf-scanning.SC-9ha,g10.store-shelf-scanning.SC-0a3,g10.store-shelf-scanning.SC-hdf -->
@@ -923,7 +923,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, move `<distinct photo>` to `<position>` in `<card_1>`'s photo order and save; note the time.
-2. After the first hourly photo run that starts 360s (6mins) or more past the save, reload `<g10 scan link>`.
+2. After the first photo run that starts 360s (6mins) or more past the save (runs are 7200s (2h) apart), reload `<g10 scan link>`.
 3. Point the camera at a print of `<distinct photo>`.
 4. Point the camera at a print of `<card_1>`'s first photo.
 
@@ -1052,7 +1052,7 @@ Runs once per row of **Test data**.
 * Step 3 holds no photo of a store product queued since step 1.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-gu0 rev=2 covers=g10.store-shelf-scanning.SC-a43 -->
-### g10.store-shelf-scanning.US1-TC26: The hourly photo run stops when its model differs from the scanner's
+### g10.store-shelf-scanning.US1-TC26: The photo run stops when its model differs from the scanner's
 
 **Classification:**
 
@@ -1069,12 +1069,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The hourly photo run's model on staging differs from the scanner's.
+* The photo run's model on staging differs from the scanner's.
 * A new photo of `<card_1>`, a raw card published to the staging store, waits to be learned.
 
 **Steps:**
 
-1. Wait for the next hourly photo run on staging.
+1. Wait for the next photo run on staging (runs are 7200s (2h) apart).
 2. Read that run's record.
 
 **Expected Results:**
@@ -2163,10 +2163,10 @@ still fully asserts it. No other case depends on a consigned product's type.
 **Run:** QA2 rerun on 2026-10-13, scoped, at source `e1625c180`. The accept
 review added `g10.store-shelf-scanning.SC51` and Q38: a consigned product is
 graded only when inventory holds its item with a grader. It moved
-`g10.store-shelf-scanning.SC20` to rev 2, at the next hourly run, and three
+`g10.store-shelf-scanning.SC20` to rev 2, at the next photo run, and three
 feature-set lines: Graded product, Store product first and the open
 scanner's 2 minutes. Blind QA added US1-TC27, moved US1-TC11 to rev 2 to wait
-for the first hourly run 6 minutes past the save, and stated the grader in
+for the first photo run 6 minutes past the save, and stated the grader in
 the setups of US3-TC1, US3-TC5 and US4-TC3. Every case still agrees with
 Q38.
 
@@ -2207,7 +2207,7 @@ gained their `trace:scenario` markers in this run so cases can link them.
 | US1-TC8 | Partial: does not assert that no store page shows; US2-TC1 covers it | `g10.store-shelf-scanning.SC10` partly |
 | US1-TC9 | Covers | `g10.store-shelf-scanning.SC17` |
 | US1-TC10 | Covers | `g10.store-shelf-scanning.SC19` |
-| US1-TC11 | Covers at rev 2, after the first hourly run 6 minutes past the save | `g10.store-shelf-scanning.SC20` |
+| US1-TC11 | Covers at rev 2, after the first photo run 6 minutes past the save | `g10.store-shelf-scanning.SC20` |
 | US1-TC12 | Covers | `g10.store-shelf-scanning.SC22` |
 | US1-TC13 | Covers | `g10.store-shelf-scanning.SC21` |
 | US1-TC14 | Covers | `g10.store-shelf-scanning.SC23` |

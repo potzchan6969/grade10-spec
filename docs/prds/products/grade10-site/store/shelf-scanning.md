@@ -15,7 +15,7 @@ site's `/scan`; the store keeps what it knows in step with the catalogue.
 | What the scanner holds | every product the store publishes, sold out included, gift cards excepted |
 | A change the shop reports | on the scanner within 6 minutes of the shop's save; on an open scanner within 8 |
 | A change only the store's re-read finds | on the scanner within 11 minutes of the shop's save; on an open scanner within 13 |
-| A new photo recognisable | at the next hourly run, on staging and production |
+| A new photo recognisable | at the next photo run, every two hours, on staging and production |
 | An open scanner's catalogue | read again every 2 minutes while in view, and when the shopkeeper returns to it |
 | Photos learned per product | the first 8, in the shop's order |
 | What a scan shows | title in the store's default language, the price the shopper pays, Available or Sold out, a link to the store page |
@@ -59,7 +59,7 @@ leaves what matches untouched.
 For a slab, the store reads the grader, grade and cert of the inventory item
 the product names.
 ## The scanner learns the photos
-Every hour the scanner learns the photos it has not seen.
+Every two hours the scanner learns the photos it has not seen.
 ## A shopkeeper points the camera
 The shopkeeper opens the scanner's link on a phone and points it at the shelf.
 ## The product shows
@@ -125,14 +125,14 @@ slab names the slab's product, without grade or cert
 
 ## Photos
 
-🚧 **Hourly on both** — the scanner learns new photos every hour on staging
-and on production
+🚧 **Every two hours on both** — the scanner learns new photos every two
+hours on staging and on production
 
-🚧 **Nothing new, nothing done** — an hour with no new photo costs nothing, and
+🚧 **Nothing new, nothing done** — a run with no new photo costs nothing, and
 a product whose details and photos have not moved is not written again
 
 🚧 **Photos change, the item learns again** — a product's new or replaced
-photo is learned at the next hourly run; a photo the product drops leaves the
+photo is learned at the next photo run; a photo the product drops leaves the
 scanner with it
 
 🚧 **Failures wait, never repeat** — a photo that could not be learned is
@@ -204,7 +204,7 @@ scanner can only give it if it holds the store's catalogue.
 | What makes a slab | Decided | Consigned: its inventory item holds a grader, whatever its type. House stock: a graded collectible type — decided by the round, 2026-10-13 | Product |
 | A slab with no known unit | Decided | Recognised by its photos, without grade or cert; Operations alerted — decided by the owner, 2026-10-13 | Product |
 | Availability | Decided | Available or Sold out, no count — decided by the owner, 2026-10-13 | Product |
-| Freshness | Decided | Follows the store's mirror; photos hourly on staging and production; an open scanner refreshes every few minutes — decided by the owner, 2026-10-13 | Product |
+| Freshness | Decided | Follows the store's mirror; photos every two hours on staging and production; an open scanner refreshes every few minutes — decided by the owner, 2026-10-22 | Product |
 | The link | Decided | One fixed scan-only link, bookmarked or printed; retired by rotating its key — decided by the owner, 2026-10-13 | Product |
 | ZZZ | Decided | Grade10's store only — decided by the owner, 2026-10-13 | Product |
 | Certs | Decided | A slab's cert and house label code are public, printed on the slab — decided by the owner, 2026-10-13 | Product |
