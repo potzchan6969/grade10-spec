@@ -23,6 +23,20 @@ The cart drawer's applied Points line remains visual parity for success-styled
 money credit only; it does not carry the points count in its label for this
 change.
 
+### Your Orders - Product Pictures
+
+Keep the existing [Order history frame](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1534&m=dev)
+and [line item component](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4901-3026).
+The [filled story](https://storybook.grade10-stg.com/?path=/story/store-order-history-screens-order-history--filled)
+is the composed reference, including the existing thumbnail frame.
+
+### Order Details - Product Pictures
+
+Keep the existing [order item component](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-6440)
+and [composed detail story](https://storybook.grade10-stg.com/?path=/story/store-order-detail-blocks-orderdetails--item-coupon).
+This item reference adds no authority over the sidebar layout described above.
+Private links and the existing admin customer preview keep the same item frame.
+
 ## Components
 
 ### Your Orders
@@ -54,6 +68,20 @@ change.
 change in `grade10-spec`: summary and payment become optional, each money row
 becomes optional (including `points`), and an absent group disappears. No new
 component, variant, primitive, or token is required.
+
+### Thumbnail Extension
+
+- `OrderHistory`, `OrderHistoryLineItem`, and `OrderHistoryLineSummary` already
+  accept supplied `imageSrc` and `imageAlt` through the existing line props.
+- `OrderDetails`, `OrderDetailsOrderTable`, `OrderDetailsOrderItem`, and
+  `OrderDetailsLineItem` already carry the same optional image props.
+- [History renderer](../../../packages/ui/src/blocks/store-order-history/order-history-line-item.tsx)
+  and [detail renderer](../../../packages/ui/src/blocks/store-order-detail/order-details-order-item.tsx)
+  own the current image frame and absent-image placeholder.
+- The application supplies the recorded product title when catalogue alt text
+  is blank. No new component, variant, token, message key or error treatment
+  is required for thumbnails. Controlled loaded-image browser evidence is
+  application work; existing story assets are design references only.
 
 ## States
 
@@ -94,3 +122,27 @@ component, variant, primitive, or token is required.
   `grade10-site-store-order-detail-SC-11` and
   `grade10-site-store-order-detail-SC-12`.
 - **Sign-in overlay** — `grade10-site-store-order-detail-SC-03`.
+
+### Your Orders - Product Pictures
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Available picture | First current product picture in the existing frame, including an earlier purchase | `g10.store-order-history.US5` |
+| Blank alt text | Same picture with the recorded item title as its accessible name | `g10.store-order-history.US5` |
+| No supplied picture | Existing placeholder beside unchanged purchase facts | `g10.store-order-history.US5` |
+| Catalogue lookup fails | Existing placeholder; order items and actions remain usable | `g10.store-order-history.US5` |
+| Legacy response | Existing placeholder when optional picture fields are absent | `g10.store-order-history.US5` |
+| Image resource fails | Existing browser image presentation; other order facts remain usable | `g10.store-order-history.US5` |
+
+### Order Details - Product Pictures
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Available picture | First current product picture beside the recorded item | `g10.store-order-detail.US7` |
+| Blank alt text | Same picture with the recorded item title as its accessible name | `g10.store-order-detail.US7` |
+| No supplied picture | Existing placeholder beside unchanged purchase facts | `g10.store-order-detail.US7` |
+| Catalogue lookup fails | Existing placeholder; the order remains readable | `g10.store-order-detail.US7` |
+| Legacy response | Existing placeholder when optional picture fields are absent | `g10.store-order-detail.US7` |
+| Valid private link | Same supplied picture with the private link's existing account-data restrictions | `g10.store-order-detail.US8` |
+| Image resource fails | Existing browser image presentation; other order facts remain usable | `g10.store-order-detail.US7` |
+| Admin customer preview | Same supplied picture as the existing customer projection | `g10.store-order-detail.US7` |

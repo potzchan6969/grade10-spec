@@ -17,3 +17,11 @@
 **As a** signed-in collector with no Store orders,
 **I want** an empty state that returns me to the Store,
 **so that** I can begin a purchase instead of reaching a dead end.
+
+## ADDED User journeys
+
+### g10.store-order-history.US5: Collector recognises products in earlier purchases
+
+**As a** signed-in collector reviewing my Store purchases,
+**I want** available current product pictures beside my order items,
+**so that** I can recognise a purchase before opening its details.
