@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/201
+**Status:** pending-review · 0/200
 **Drafts styled:** 2026-10-14, tcs-rules r5
 **Out of suite:** winner-order-SC-04, winner-order-SC-05, winner-order-SC-38, winner-order-SC-39, winner-order-SC-62, winner-order-SC-63, winner-order-SC-69, winner-order-SC-96, winner-order-SC-110, winner-order-SC-111, winner-order-SC-180, winner-order-SC-184, winner-order-SC-214, winner-order-SC-215, winner-order-SC-216, winner-order-SC-249, winner-order-SC-257, winner-order-SC-287, winner-order-SC-26, winner-order-SC-27, winner-order-SC-28
 
@@ -1950,23 +1950,18 @@
 
 - `<winner_order_101_1>` reached Payment Verifying before its payment deadline.
 
-**Steps 16–18 setup:**
-
-- customer(winner of `<winner_order_102_1>` and `<winner_order_102_2>`) is signed in.
-- The browser may use the clipboard.
-
-**Steps 19–20 setup:**
+**Steps 16–17 setup:**
 
 - customer(winner) is signed in on `<winner order url>` for `<winner_order_103_1>`.
 - Submit Payment Proof is open.
 
-**Steps 21–23 setup:**
+**Steps 18–20 setup:**
 
 - Grade10 holds the sample bank details for each rail outside production, and Payment Settings holds a card fee rule in `<settlement currency>`.
 - customer(winner) holds an order won in USD in Awaiting Setup with a saved home address.
 - The winner order under test is `<winner_order_104_1>`.
 
-**Steps 24–25 setup:**
+**Steps 21–22 setup:**
 
 - Grade10 holds HKD bank details, and Payment Settings holds an HKD card fee rule.
 - customer(winner) holds an auction order in HKD in Awaiting Setup.
@@ -2041,19 +2036,7 @@
 | --- | --- |
 | winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
-**Steps 16–18 data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_102_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
-| reference | LK7P2Q01, `<winner_order_102_1>`'s bank reference |
-| winner_order_102_2 | An order with a sent card invoice, unpaid; bind its identity only |
-
-| Field | Value |
-| --- | --- |
-| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
-
-**Steps 19–20 data:**
+**Steps 16–17 data:**
 
 | `<busy work>` | `<leave route>` |
 | --- | --- |
@@ -2069,7 +2052,7 @@
 | --- | --- |
 | winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
-**Steps 21–23 data:**
+**Steps 18–20 data:**
 
 | `<settlement currency>` | `<rail>` |
 | --- | --- |
@@ -2081,7 +2064,7 @@
 | --- | --- |
 | winner_order_104_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
-**Steps 24–25 data:**
+**Steps 21–22 data:**
 
 | Field | Value |
 | --- | --- |
@@ -2120,22 +2103,17 @@
 14. Move the clock past the original payment deadline.
 15. Open `<winner order url>` for `<winner_order_101_1>` as its winner.
    - The order still reads Payment Verifying, not Payment Overdue. `g10.auction-winner-order.US9-TC19`
-16. Open `<winner order url>` for `<winner_order_102_1>`.
-17. Click the copy control beside the bank reference, then paste.
-   - Step 17 pastes exactly `<reference>`, no space. `g10.auction-winner-order.US9-TC20`
-18. Open `<winner order url>` for `<winner_order_102_2>`.
-   - Step 18 shows no bank reference and no copy control. `g10.auction-winner-order.US9-TC20`
-19. Start `<busy work>`.
-20. Use `<leave route>`.
+16. Start `<busy work>`.
+17. Use `<leave route>`.
    - Submit Payment Proof stays open. `g10.auction-winner-order.US9-TC30`
    - The form remains locked until `<busy work>` finishes. `g10.auction-winner-order.US9-TC30`
-21. Choose `<settlement currency>` and read the method choices.
-   - Step 21: Card and the `<rail>` option are offered, none selected. `g10.auction-winner-order.US9-TC22`
-22. Confirm the delivery address with `<rail>`.
-23. Reload the order.
-   - Step 23: the order records bank transfer on `<rail>` and reads Preparing Invoice. `g10.auction-winner-order.US9-TC22`
-24. Choose the home address and reach the payment method choice.
-25. Read each method.
+18. Choose `<settlement currency>` and read the method choices.
+   - Step 18: Card and the `<rail>` option are offered, none selected. `g10.auction-winner-order.US9-TC22`
+19. Confirm the delivery address with `<rail>`.
+20. Reload the order.
+   - Step 20: the order records bank transfer on `<rail>` and reads Preparing Invoice. `g10.auction-winner-order.US9-TC22`
+21. Choose the home address and reach the payment method choice.
+22. Read each method.
    - Card reads `Card fee about 3.4% + a fixed amount`. `g10.auction-winner-order.US9-TC23`
    - Bank transfer reads `Bank fee set on your invoice`, naming no amount. `g10.auction-winner-order.US9-TC23`
    - Neither method is selected. `g10.auction-winner-order.US9-TC23`
@@ -8811,50 +8789,6 @@ Runs once per row of **Test data**.
 
 * The order still reads Payment Verifying, not Payment Overdue.
 
-<!-- trace:case id=g10.auction-winner-order.TC-ypl rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.US9-TC20: The reference copy control copies it exactly, on bank transfer only
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* customer(winner of `<winner_order_102_1>` and `<winner_order_102_2>`) is signed in.
-* The browser may use the clipboard.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_102_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
-| reference | LK7P2Q01, `<winner_order_102_1>`'s bank reference |
-| winner_order_102_2 | An order with a sent card invoice, unpaid; bind its identity only |
-
-| Field | Value |
-| --- | --- |
-| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
-
-**Steps:**
-
-1. Open `<winner order url>` for `<winner_order_102_1>`.
-2. Click the copy control beside the bank reference, then paste.
-3. Open `<winner order url>` for `<winner_order_102_2>`.
-
-**Expected Results:**
-
-* Step 2 pastes exactly `<reference>`, no space.
-* Step 3 shows no bank reference and no copy control.
-
 <!-- trace:case id=g10.auction-winner-order.TC-xl5 rev=2 covers=g10.auction-winner-order.SC-bb1 -->
 ### g10.auction-winner-order.US9-TC30: Busy proof form blocks every leave route
 
@@ -9202,6 +9136,52 @@ Runs once per row of **Test data**.
 
 * The payment is refused; no charge is made.
 * The order still reads Pending Payment.
+
+<!-- trace:case id=g10.auction-winner-order.TC-ypl rev=2 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
+### g10.auction-winner-order.US9-TC20: The reference copy control copies it exactly, on bank transfer only
+
+**Retirement:** 2026-10-22 - The bank-reference copy control was removed from the specification. View Bank Details shows the reference without a copy control. No replacement is required for the removed behaviour.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner of `<winner_order_102_1>` and `<winner_order_102_2>`) is signed in.
+* The browser may use the clipboard.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_102_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
+| reference | LK7P2Q01, `<winner_order_102_1>`'s bank reference |
+| winner_order_102_2 | An order with a sent card invoice, unpaid; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
+**Steps:**
+
+1. Open `<winner order url>` for `<winner_order_102_1>`.
+2. Click the copy control beside the bank reference, then paste.
+3. Open `<winner order url>` for `<winner_order_102_2>`.
+
+**Expected Results:**
+
+* Step 2 pastes exactly `<reference>`, no space.
+* Step 3 shows no bank reference and no copy control.
 
 ---
 
@@ -13366,6 +13346,8 @@ Runs once per row of **Test data**.
 
 ## Settled
 
+- 2026-10-22 - The bank-reference copy control is removed. `g10.auction-winner-order.US9-TC20` is deprecated; its historical copy assertion is not a requirement.
+
 - `winner-order-US3-TC1` is held by `winner-order-US8-TC1`: the same premium claim, under the policy-premium journey.
 - `winner-order-US3-TC2` is held by `winner-order-US8-TC2`: the same premium claim, under the policy-premium journey.
 - `winner-order-US3-TC3` is held by `winner-order-US8-TC3`: the same premium claim, under the policy-premium journey.
@@ -13441,6 +13423,8 @@ Runs once per row of **Test data**.
 - SC-302 uses the rounded fee of 39,300 minor HKD and total 142,400 minor HKD.
 
 ## Reconciliation
+
+- **Retired, 2026-10-22** - `g10.auction-winner-order.US9-TC20` (`TC-ypl@2`) verifies removed bank-reference copy behaviour. The reviewer confirmed retirement when a test purpose no longer exists. Its Walk 13 route and fixture are removed; no replacement is required.
 
 **Run:** QA2 round 6, 2026-10-12, over the round-4 run below. Dev's round-6 reading raised `winner-order-SC-277` to revision 2, a close with the house leading now opening the internal bidder's order, and dropped the MODIFIED block of one invoice and one order per lot. QA1's round-6 blind pass, denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`, revised the case here. QA2 read both, the delta specs, `decisions.md` through Q58, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. It is a statement, not proof.
 
