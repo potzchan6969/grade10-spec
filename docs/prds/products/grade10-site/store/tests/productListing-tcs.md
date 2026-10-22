@@ -937,7 +937,7 @@ Runs once per row of **Test data**.
 **so that** I see how much is there before I pick.
 
 <!-- trace:case id=g10.store-product-listing.TC-m8o rev=1 -->
-#### g10.store-product-listing.US2-TC2: Worlds show five and an invitation; types show whole
+#### g10.store-product-listing.US2-TC2: Worlds show five and See all worlds; types show whole
 
 **Classification:**
 
@@ -961,12 +961,12 @@ Runs once per row of **Test data**.
 
 1. Read the Worlds group in the sidebar.
 2. Read the Types group.
-3. Click the Worlds group's invitation to the rest.
+3. Click the See all worlds text button.
 4. Read the Worlds group again.
 
 **Expected Results:**
 
-* Step 1 shows 5 worlds and an invitation to the rest.
+* Step 1 shows 5 worlds and the See all worlds text button.
 * Step 2 shows every type with cards.
 * Step 4 shows every world with cards, each with its count.
 
@@ -1353,7 +1353,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out) is on `<store listing url>`, with `<guest product>` in this browser's cart.
+* customer(signed out) is on `<store listing url>`, with `<guest product>`, quantity 1, in this browser's cart.
 * `<member>` has `<member cart>` at the store.
 
 **Test data:**
@@ -1362,6 +1362,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | Empty member cart | No lines. | `<guest product>`. |
 | Member cart with another line | `<member product>`, a different product. | `<guest product>` and `<member product>`. |
+| Same product in both carts | `<guest product>`, quantity 2. | `<guest product>` once, quantity 3 = 1 + 2. |
 
 **Steps:**
 
