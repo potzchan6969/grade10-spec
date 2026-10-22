@@ -1,6 +1,6 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** pending-review · 0/13
+**Status:** pending-review · 0/14
 **Drafts styled:** 2026-10-22, tcs-rules r6
 **Out of suite:** grade10-site-auction-bid-increments-SC-03, grade10-site-auction-bid-increments-SC-04, grade10-site-auction-bid-increments-SC-14
 
@@ -89,7 +89,7 @@ Runs once per row of **Test data**, and once for every configured tier after the
 | Row | `<current bid>` | Tier that sets `<increment>` | `<minimum next bid>` |
 | --- | --- | --- | --- |
 | 1 | The lower bound of the configured tier under test (fixed boundary) | That tier, which owns its lower bound | `<current bid>` plus `<increment>` |
-| 2 | One minor unit below the lower bound of the tier under test (fixed boundary) | The tier just below it | `<current bid>` plus `<increment>` |
+| 2 | One whole dollar below the lower bound of the tier under test (fixed boundary) | The tier just below it | `<current bid>` plus `<increment>` |
 
 **Steps:**
 
@@ -184,9 +184,9 @@ Runs once per row of **Test data**.
 
 | Row | Tier of `<current bid>` | `<current bid>` | `<increment>` | `<minimum next bid>` | `<bid below minimum>` |
 | --- | --- | --- | --- | --- | --- |
-| 1 | The lowest tier, from 0 | A price inside that tier, above 0 (range: within the tier) | The configured increment of that tier | `<current bid>` plus `<increment>` | One minor unit below `<minimum next bid>` |
-| 2 | A configured tier above the lowest and below the last tier | A price inside that tier, away from both bounds (range: within the tier) | The configured increment of that tier | `<current bid>` plus `<increment>` | One minor unit below `<minimum next bid>` |
-| 3 | The unbounded last tier | A price inside the last tier, above its lower bound (range: above the lower bound) | The configured increment of the last tier | `<current bid>` plus `<increment>` | One minor unit below `<minimum next bid>` |
+| 1 | The lowest tier, from 0 | A price inside that tier, above 0 (range: within the tier) | The configured increment of that tier | `<current bid>` plus `<increment>` | One whole dollar below `<minimum next bid>` |
+| 2 | A configured tier above the lowest and below the last tier | A price inside that tier, away from both bounds (range: within the tier) | The configured increment of that tier | `<current bid>` plus `<increment>` | One whole dollar below `<minimum next bid>` |
+| 3 | The unbounded last tier | A price inside the last tier, above its lower bound (range: above the lower bound) | The configured increment of the last tier | `<current bid>` plus `<increment>` | One whole dollar below `<minimum next bid>` |
 
 **Steps:**
 
@@ -336,7 +336,7 @@ Runs once per row of **Test data**.
 | schedule A | The configured schedule | (fixed configured value) |
 | old increment | The increment `<schedule A>` gives the tier holding `<standing bid>` | (fixed configured value) |
 | schedule B | `<schedule A>` with the increment of the tier holding `<standing bid>` changed to `<new increment>` | (fixed, a second schedule, never the deployed file) |
-| new increment | A positive whole number of minor units different from `<old increment>` | (range: any such amount) |
+| new increment | A positive whole-dollar amount different from `<old increment>` | (range: any such amount) |
 
 **Steps:**
 
@@ -385,7 +385,7 @@ Runs once per row of **Test data**.
 | schedule A | The configured schedule | (fixed configured value) |
 | old minimum | `<standing bid>` plus the increment `<schedule A>` gives that tier | (fixed derived value) |
 | schedule B | `<schedule A>` with the increment of that tier raised to `<new increment>` | (fixed, a second schedule, never the deployed file) |
-| new increment | A whole number of minor units larger than the increment in `<schedule A>` | (range: any such amount) |
+| new increment | A whole-dollar amount larger than the increment in `<schedule A>` | (range: any such amount) |
 | new minimum | `<standing bid>` plus `<new increment>` | (fixed derived value) |
 
 **Steps:**
@@ -434,7 +434,7 @@ Runs once per row of **Test data**.
 | schedule A | The configured schedule | (fixed configured value) |
 | increment | The increment `<schedule A>` gives the tier holding `<user B maximum>` | (fixed configured value) |
 | resolved price | `<user B maximum>` plus `<increment>`, capped at `<user A maximum>` | (fixed derived value) |
-| schedule B | `<schedule A>` with the increment of the tier holding `<user B maximum>` changed to another positive whole number | (fixed, a second schedule, never the deployed file) |
+| schedule B | `<schedule A>` with the increment of the tier holding `<user B maximum>` changed to another positive whole-dollar amount | (fixed, a second schedule, never the deployed file) |
 
 **Steps:**
 
@@ -447,6 +447,55 @@ Runs once per row of **Test data**.
 
 * Step 2 reads current bid `<resolved price>`, equal to `<user B maximum>` plus `<increment>`, with user A leading.
 * Step 4 reads the same current bid `<resolved price>`, the same leader and the same recorded bids as step 2.
+
+---
+
+<!-- trace:case id=g10.auction-bid-increments.TC-ht2 rev=1 covers=g10.auction-bid-increments.SC-cx4 -->
+### g10.auction-bid-increments.US1-TC16: A bid with cents is refused
+
+The bid panel's amount field keeps whole dollars and cannot type cents, so the route is a direct call to the bid API.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-bid-increments-US-01
+
+**Pre-conditions:**
+
+* `<listing_14>` is open, in USD, and led by user A at `<standing bid>`, with a maximum of `<standing maximum>`.
+* User B is signed in with `<card>` saved and holds no bid on `<listing_14>`.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| card | Visa ending 4242 | · |
+| listing_14 | An open USD listing led by user A; bind its identity only | · |
+| standing bid | A whole-dollar price inside a configured tier | (range: within that tier) |
+| standing maximum | A whole-dollar amount above `<standing bid>` | (range: any such amount) |
+| minimum next bid | `<standing bid>` plus the configured increment of its tier | (fixed derived value), a whole-dollar amount |
+| bid with cents | `<minimum next bid>` plus one minor unit | (fixed boundary), the smallest amount above the minimum that is not whole dollars |
+
+**Steps:**
+
+1. As user B, submit a bid of `<bid with cents>` on `<listing_14>` through the bid API.
+2. Read the API response.
+3. Read `<listing_14>`'s current bid, leader, maximum, bid count and recorded bids.
+4. As user B, submit a bid of `<minimum next bid>` on `<listing_14>`.
+
+**Expected Results:**
+
+* Step 2 shows the bid is refused and names the whole-dollar rule.
+* Step 3 reads current bid `<standing bid>`, user A leading with maximum `<standing maximum>`, the bid count as before step 1, and no recorded bid at `<bid with cents>`.
+* Step 4 accepts the bid, so the refusal was for the cents and not for user B's standing.
 
 ---
 
@@ -629,7 +678,7 @@ Runs once per row of **Test data**.
 2. Select the tier for `<zero amount>`.
 3. Select the tier for `<large amount>`.
 4. Compare each tier's lower bound with the one before it.
-5. Select the tier for each tier's lower bound, and for the amount one minor unit below it.
+5. Select the tier for each tier's lower bound, and for the amount one whole dollar below it.
 
 **Expected Results:**
 
@@ -637,28 +686,29 @@ Runs once per row of **Test data**.
 * Step 2 selects the first tier, whose lower bound is 0, so no amount lies below it.
 * Step 3 selects the last tier, which has no upper bound.
 * Step 4 reads lower bounds in strictly rising order.
-* Step 5 selects the tier that owns the lower bound, and the tier before it for the amount one minor unit below, so every amount from 0 upward falls in exactly one tier.
+* Step 5 selects the tier that owns the lower bound, and the tier before it for the amount one whole dollar below, so every amount from 0 upward falls in exactly one tier.
 
 ## Settled
 
 - A first bid is accepted at the opening price: the starting price, or the lowest configured increment on a 0 start. From the first accepted bid, the current bid plus the increment of its tier applies.
 - An open page's Min refreshes on its next read or bid attempt, not live; a bid or a maximum below the minimum the server now holds is refused, names that minimum, and records nothing (Q7).
 - A standing maximum reads the schedule in force each time it answers a bid; it keeps its amount and the earlier resolutions stand (Q8).
-- A bid amount is a whole count of USD minor units, so cents are allowed; a tier includes its lower bound at the exact minor unit (Q9).
+- A bid, a maximum, every tier bound and every increment are whole-dollar amounts; a bid with cents is refused, naming the rule, and nothing moves. One whole dollar below a bound is in the lower tier, and one whole dollar below the minimum is below it (Q9, the product manager's answer).
+- A listing's starting price with cents is held for the product manager and no case or scenario states a rule for it (decisions, Raised).
 - Every bid surface reads USD only; a USD fact becomes HKD only at settlement (Q10).
 - A house maximum and an extended-bidding bid read the same schedule as any bid (Q11).
-- A configured schedule is held valid by a test that runs in CI: a tier from 0, ascending tiers with no shared lower bound, positive whole increments, a non-empty list and an unbounded last tier. No runtime check refuses a bad file, and no scenario or case drives one (Q12, the product manager's answer).
+- A configured schedule is held valid by a test that runs in CI: a tier from 0, ascending tiers with no shared lower bound, whole-dollar tier bounds, positive whole-dollar increments (Q9), a non-empty list and an unbounded last tier. No runtime check refuses a bad file, and no scenario or case drives one (Q12, the product manager's answer).
 - The lowest tier is configured like any other: the opening minimum on a 0 start is the lowest configured increment, and no case or scenario fixes it at one value (Q13, the product manager's answer).
 - The neighbouring capabilities' worked amounts are examples under another set of configuration values; their suites are not rewritten here (Q14, the product manager's answer).
 
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-22, rerun after the product manager answered Q12 to Q14 and Q15 was raised, for change `configure-auction-bid-increments`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-bid-increments-US-01` and `grade10-site-auction-bid-increments-US-03`. The rerun repaired ids, layers and coverage; it did not regenerate cases from scenarios. QA1's own bundle is its statement and cannot be checked here. The wording patch that took the fixed 100 minor units from the requirement, the scenarios and the feature-set line is a clarification of an anchor, not a new one, so QA1 and Dev did not run again (Q13). This line is a statement, not proof.
+**Run:** QA2 reconciliation 2026-10-22, rerun after the product manager answered Q12 to Q14 and Q15 was raised, for change `configure-auction-bid-increments`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-bid-increments-US-01` and `grade10-site-auction-bid-increments-US-03`. The rerun repaired ids, layers and coverage; it did not regenerate cases from scenarios. QA1's own bundle is its statement and cannot be checked here. The wording patch that took the fixed 100 minor units from the requirement, the scenarios and the feature-set line is a clarification of an anchor, not a new one, so QA1 and Dev did not run again (Q13). The product manager then reversed Q9 to whole dollars only: the patch reworded the boundary text, added `SC-23` and `US1-TC16`, and did not rerun QA1 or Dev. This line is a statement, not proof.
 
 | Blind case | Disposition | Scenario claims verified |
 | --- | --- | --- |
 | `US1-TC1` | **Retained, revises the durable case of the same id** (`TC-2ed`, rev 2): the priced start only; the zero-start row moved to `US1-TC9` | `grade10-site-auction-bid-increments-SC-01` |
-| `US1-TC2` | **Retained, revises the durable case of the same id** (`TC-0lh`, rev 2, back to draft): a price on a bound takes the higher tier, for every tier after the first and one minor unit below each bound | `grade10-site-auction-bid-increments-SC-02` |
+| `US1-TC2` | **Retained, revises the durable case of the same id** (`TC-0lh`, rev 2, back to draft): a price on a bound takes the higher tier, for every tier after the first and one whole dollar below each bound (Q9) | `grade10-site-auction-bid-increments-SC-02` |
 | `US1-TC9` | **Retained, renumbered** (QA1's zero-start case; its id and number collided with the durable `TC-0lh`): a 0 start opens at the lowest configured increment | `grade10-site-auction-bid-increments-SC-12` |
 | `US1-TC10` | **Retained, renumbered** (QA1's next-minimum case, which collided with the durable `TC-qui`): the lowest, a middle and the last tier | `grade10-site-auction-bid-increments-SC-07` |
 | `US1-TC11` | **Retained, renumbered** (collided with the durable `TC-kyx`): a maximum is beaten at the beaten maximum plus its own tier's increment | none: `grade10-site-auction-bid-increments-SC-20` also states that a later change leaves the current bid, which no step here changes; `US1-TC15` asserts it |
@@ -666,6 +716,7 @@ Runs once per row of **Test data**.
 | `US1-TC13` | **Reshaped from QA1's `US1-TC7`, renumbered, moved to the `api` layer** (the id collided with the durable `TC-9do`): `tech-design.md` says e2e cannot swap the schedule at run time, so a second schedule is passed to the minimum calculation | `grade10-site-auction-bid-increments-SC-17`, `grade10-site-auction-bid-increments-SC-18` |
 | `US1-TC14` | **New, api layer:** a bid at the old minimum is refused after a change, naming the new minimum | `grade10-site-auction-bid-increments-SC-19` |
 | `US1-TC15` | **New, api layer:** a resolved price reads the schedule in force and a later change leaves it | `grade10-site-auction-bid-increments-SC-20` |
+| `US1-TC16` | **New, api layer, added for Q9:** a bid with cents is refused naming the whole-dollar rule, and nothing moves; api because the bid panel's field cannot type cents | `grade10-site-auction-bid-increments-SC-23` |
 | `US3-TC3` | **Revises the durable case of the same id** (`TC-sze`, rev 2): the minimum reads the current bid plus the configured increment, not a quoted amount; `usd-lot-currency-winner-settlement-choice` carries it at rev 1 with a quoted `USD8,050.00` | `grade10-site-auction-bid-increments-SC-13` |
 | `US3-TC5` | **Retained, renumbered** (QA1's `US3-TC1`, which collided with the durable `TC-y0l`): two listings at one price share one increment | `grade10-site-auction-bid-increments-SC-21` |
 | `US3-TC6` | **Retained, renumbered** (QA1's `US3-TC2`, which collided with the durable `TC-fdc`): Min and the bid read in USD | `grade10-site-auction-bid-increments-SC-05` |
@@ -673,13 +724,14 @@ Runs once per row of **Test data**.
 
 - **Covers links** - `TC-2ed` to `SC-vqb`, `TC-0lh` to `SC-mn9`, `TC-sze` to `SC-tke`, and each new case to the scenario named in the table, by the scenario's trace id. A scenario is linked only when the case's route asserts every THEN and AND line of it
 - **Uncovered scenarios** - none without a case or a named verifier:
-  - `grade10-site-auction-bid-increments-SC-03` and `grade10-site-auction-bid-increments-SC-04` are **Out of suite**: the durable `g10.auction-bid-increments.US1-TC3` (a bid above the minimum is accepted) and `g10.auction-bid-increments.US1-TC4` (a bid below it is refused and names it) assert them, and this change does not alter what those cases verify; the amounts they quote are examples of a given minimum
+  - `grade10-site-auction-bid-increments-SC-03` and `grade10-site-auction-bid-increments-SC-04` are **Out of suite**: the durable `g10.auction-bid-increments.US1-TC3` (a bid above the minimum is accepted) and `g10.auction-bid-increments.US1-TC4` (a bid below it is refused and names it) assert them, and this change does not alter what those cases verify, with one exception held under Durable cases below; the amounts they quote are examples of a given minimum
   - `grade10-site-auction-bid-increments-SC-14` is **Out of suite**: the case that asserts it is `usd-lot-currency-winner-settlement-choice`'s `g10.auction-bid-increments.US3-TC4`, which that change folds first (Q15); this change restates the scenario unchanged
 - **Over-claimed cases** - none: no case carries a `covers` link its route does not assert
-- **Contradictions** - none open. QA1's `US1-TC2` read the opening minimum on a 0 start as the lowest configured increment while Dev's `SC-12` fixed it at 100 minor units; Q13 settled it for QA1's reading, and the requirement, `SC-12` and the feature-set line no longer state 100
-- **Routes that differ, not contradictions** - `US1-TC10` stops at the bid form while `SC-04` reaches the server; the PRD's Refusals table gives each route its own line. `US1-TC14` reaches the server through a page that still shows the old minimum
-- **Id collisions, resolved** - QA2's first report found that nine of QA1's case ids and heading numbers were the durable suite's for other cases, and that `usd-lot-currency-winner-settlement-choice` carries `TC-2ed`, `TC-kyx`, `TC-n6d`, `TC-9do`, `TC-y0l`, `TC-fdc`, `TC-sze` and `TC-pn8` under the durable text. Cases that revise a durable case keep its id and number and bump `rev`: `TC-2ed`, `TC-0lh` and `TC-sze` to 2, each above the sibling's rev 1. Every other case takes a fresh number from `pnpm run spec:issue` (`US1-TC9` to `US1-TC15`, `US3-TC5` to `US3-TC7`) and a fresh trace id. The durable `TC-qui`, `TC-5ez`, `TC-kyx`, `TC-n6d`, `TC-9do`, `TC-4ox`, `TC-y0l`, `TC-fdc` and `TC-pn8` stay as the durable suite and the sibling hold them
-- **Durable cases left to keep their amounts** - `g10.auction-bid-increments.US1-TC3`, `US1-TC4`, `US1-TC6` and `US1-TC7` and the domain suite quote amounts from the old six tiers (USD105, USD126, USD5, USD10). They state a given minimum or an increment as an example, as Q14 reads the neighbouring specs. A reviewer may restyle them against the configured values after deploy
+- **Contradictions** - none open, apart from the held durable cases above. QA1's `US1-TC2` read the opening minimum on a 0 start as the lowest configured increment while Dev's `SC-12` fixed it at 100 minor units; Q13 settled it for QA1's reading, and the requirement, `SC-12` and the feature-set line no longer state 100
+- **Routes that differ, not contradictions** - `US1-TC10` stops at the bid form, below the minimum by one whole dollar, while `SC-04` reaches the server; the PRD's Refusals table gives each route its own line. `US1-TC14` reaches the server through a page that still shows the old minimum
+- **Id collisions, resolved** - QA2's first report found that nine of QA1's case ids and heading numbers were the durable suite's for other cases, and that `usd-lot-currency-winner-settlement-choice` carries `TC-2ed`, `TC-kyx`, `TC-n6d`, `TC-9do`, `TC-y0l`, `TC-fdc`, `TC-sze` and `TC-pn8` under the durable text. Cases that revise a durable case keep its id and number and bump `rev`: `TC-2ed`, `TC-0lh` and `TC-sze` to 2, each above the sibling's rev 1. Every other case takes a fresh number from `pnpm run spec:issue` (`US1-TC9` to `US1-TC16`, `US3-TC5` to `US3-TC7`) and a fresh trace id. The durable `TC-qui`, `TC-5ez`, `TC-kyx`, `TC-n6d`, `TC-9do`, `TC-4ox`, `TC-y0l`, `TC-fdc` and `TC-pn8` stay as the durable suite and the sibling hold them
+- **Durable cases left to keep their amounts** - `g10.auction-bid-increments.US1-TC3` and the domain suite quote amounts from the old six tiers (USD105, USD126, USD5, USD10). They state a given minimum or an increment as an example, as Q14 reads the neighbouring specs. A reviewer may restyle them against the configured values after deploy
+- **Durable cases that carry cents, held** - after Q9, `US1-TC4` (USD104.99, the verifier of `SC-04`), `US1-TC6` (a USD2.50 higher bid) and `US1-TC7` (USD0.99 and USD104.99 bids) quote amounts the product no longer accepts, and the main suite's walk rows quote USD99.99 and USD100.99. Each needs a whole-dollar restyle and a `rev` bump, and `US1-TC4` is `actual` and automated, so it returns to draft. They are not rewritten here: `TC-n6d` and `TC-9do` are also carried, at other revisions, by `usd-lot-currency-winner-settlement-choice` (Q15), so the product manager or the cluster sheet owns the order of those bumps
 - **Layer** - `US1-TC13` to `US1-TC15` are `api` and `US3-TC7` is `unit`, Testability `automation`: a second schedule is a test seam no tester can reach by hand, and the application's DB lane and contracts tests are where `tech-design.md` puts them
 - **Case duplication, checked** - `US1-TC15` repeats `US1-TC11`'s route at the `api` layer and adds the later change; it is kept because `US1-TC11` cannot change the schedule. `US3-TC5` and the durable `TC-y0l` both assert one schedule: `TC-y0l` across two price ranges, `US3-TC5` at one price
 - **Config validity** - held by a contracts test, not by a scenario or a case (Q12); `US3-TC7` asserts only the shape the requirement states as a rule

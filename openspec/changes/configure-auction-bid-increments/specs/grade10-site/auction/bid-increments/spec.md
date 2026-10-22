@@ -11,10 +11,12 @@ configuration; this capability holds the rule that reads them.
 - Currency schedules
   - Configured schedule: the USD tiers are configuration, one for every auction, and no requirement states a tier amount
   - Schedule shape: lower-inclusive tiers, the last tier unbounded, a lowest tier from $0
+  - Whole-dollar values: every tier bound and every increment is a whole-dollar amount
   - A change takes effect on the next bid: open lots included, standing bids untouched
 - Minimum bid
   - One lookup rule: manual and proxy bidding select the tier from the amount being beaten, read from the configured schedule
   - Opening price: before any bid, the minimum is the starting price, or the lowest configured increment on a 0 start
+  - Whole-dollar bids: a bid or a maximum is a whole-dollar amount at or above the minimum, and one that is not is refused
 
 ## MODIFIED Requirements
 
@@ -28,11 +30,15 @@ paired with `USD`. No requirement states a tier amount, and the values in force
 are the configuration's, shown under Bid Increments on the Bidding page of the
 manual.
 
+Every Price from and every Increment SHALL be a whole-dollar amount: an integer
+count of minor units that is a multiple of one major unit of `USD`. The count
+per major unit comes from the USD exponent of the money module, not from a
+figure in a requirement. An Increment SHALL also be positive.
+
 The schedule SHALL hold a first tier from 0, so no amount lies below the first
 tier. Like every other tier, the first tier's increment is a configured value.
-Tiers SHALL ascend by Price from with no two tiers sharing one, every increment
-SHALL be a positive whole number of minor units, and the schedule SHALL NOT be
-empty.
+Tiers SHALL ascend by Price from with no two tiers sharing one, and the
+schedule SHALL NOT be empty.
 
 Grade10 SHALL select the tier with the greatest Price from that does not exceed
 the amount being raised from. It SHALL NOT retain a per-listing increment or
@@ -51,29 +57,29 @@ id. The title is historical: a first bid may stand on the starting price.
 - **WHEN** a collector reads its minimum bid
 - **THEN** Grade10 reports 20000 minor units, the starting price
 
-<!-- trace:scenario id=g10.auction-bid-increments.SC-mn9 rev=2 -->
+<!-- trace:scenario id=g10.auction-bid-increments.SC-mn9 rev=3 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-02 - A boundary selects the higher tier
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** the configured schedule, and for each tier after the first, an open USD listing whose current bid equals that tier's Price from
 - **WHEN** Grade10 calculates its minimum bid
 - **THEN** the minimum bid is the current bid plus that tier's increment, not the previous tier's
-- **AND** a listing whose current bid is one minor unit below that Price from takes the previous tier's increment
+- **AND** a listing whose current bid is one whole dollar below that Price from takes the previous tier's increment
 
-<!-- trace:scenario id=g10.auction-bid-increments.SC-u6t rev=2 -->
+<!-- trace:scenario id=g10.auction-bid-increments.SC-u6t rev=3 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-03 - A bid may exceed the minimum
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open USD listing whose minimum bid is M minor units
-- **WHEN** a collector bids a whole amount greater than M minor units
+- **WHEN** a collector bids a whole-dollar amount greater than M minor units
 - **THEN** Grade10 accepts the bid
 
-<!-- trace:scenario id=g10.auction-bid-increments.SC-b2w rev=2 -->
+<!-- trace:scenario id=g10.auction-bid-increments.SC-b2w rev=3 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-04 - A bid below the minimum is refused
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open USD listing whose minimum bid is M minor units
-- **WHEN** a collector bids M minus 1 minor unit
+- **WHEN** a collector bids M minus one whole dollar
 - **THEN** Grade10 refuses the bid and names M minor units as the minimum
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-ijk rev=2 -->
@@ -113,8 +119,11 @@ the result at the leader's maximum. The result is the minimum next amount.
 Every tier increment SHALL be read from the configured schedule in force when
 the minimum is calculated, and the minimum SHALL NOT be stored.
 
-Grade10 SHALL accept any whole amount at or above the minimum next amount and
-refuse an amount below it. It SHALL not create intermediate bids.
+A bid or a maximum SHALL be a whole-dollar amount at or above the minimum next
+amount. Grade10 SHALL accept any such amount and refuse an amount below the
+minimum. Grade10 SHALL refuse an amount that is not whole dollars, naming the
+rule, and leave the price, the leader and every maximum unchanged. It SHALL not
+create intermediate bids.
 
 <!-- trace:scenario id=g10.auction-bid-increments.SC-xjw rev=3 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-07 - A manual floor uses the current public price
@@ -167,6 +176,15 @@ refuse an amount below it. It SHALL not create intermediate bids.
 - **WHEN** B commits that maximum
 - **THEN** the current bid is the lesser of MA and MB plus the increment the configured schedule selects for MB
 - **AND** a later change to the configured values leaves that current bid as it stands
+
+<!-- trace:scenario id=g10.auction-bid-increments.SC-cx4 rev=1 -->
+#### Scenario: grade10-site-auction-bid-increments-SC-23 - A bid with cents is refused
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
+
+- **GIVEN** an open USD listing whose minimum bid is M minor units, a whole-dollar amount, led by another collector
+- **WHEN** a collector bids M plus one minor unit
+- **THEN** Grade10 refuses the bid and names the whole-dollar rule
+- **AND** the current bid, the leader and every maximum are unchanged, and no bid is recorded
 
 ### Requirement: Every lot is bid in USD and no other currency stays
 
