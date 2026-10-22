@@ -1,7 +1,7 @@
 # grade10-admin/auction/listing Test Cases
 
 **Status:** pending-review · 0/2
-**Drafts styled:** 2026-10-23, tcs-rules r6
+**Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## grade10-admin-auction-listing-US1: Operator saves an unfinished listing and comes back to it
 

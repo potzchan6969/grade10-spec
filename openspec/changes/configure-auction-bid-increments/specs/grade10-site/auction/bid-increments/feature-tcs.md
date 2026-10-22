@@ -1,7 +1,7 @@
 # grade10-site/auction/bid-increments Test Cases
 
 **Status:** pending-review · 0/21
-**Drafts styled:** 2026-10-22, tcs-rules r6
+**Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** grade10-site-auction-bid-increments-SC-03, grade10-site-auction-bid-increments-SC-14
 
 ## g10.auction-bid-increments.US1: Collector places a bid across a price tier
