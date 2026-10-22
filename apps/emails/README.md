@@ -65,7 +65,7 @@ emails/
     _components/           AuctionLetter, LotBlock, LotWatchedEmail,
                            campaign tags, preview fixture
     progress/              opens / closes-in-24h / extended (before & during)
-    activity/              new-bid / outbid (while bidding is open)
+    activity/              outbid (while bidding is open)
     close/                 lot ended for watchers & non-winners
                            (watcher previews: lot-watched-sold /
                            lot-watched-ended = no-bids Ended-only)
