@@ -52,6 +52,7 @@ A busy day is too much for one reader: past 30 commits or 4,000 lines, its cards
 - **The application's** - `refs/checkpoints-of/<owner>/<name>/<branch>`, also in this repository: a commit with no files whose subject is the application commit the last digest covered, so one token moves both
 - **Read** - `range` fetches both and prints, per repository under `spec` and `build`, `from`, `to`, `saved`, `commits` and `base`; `days` and `fresh` cover both
 - **First run** - with no checkpoint, `range` starts that repository from the branch as it stood at the end of last Friday, Hong Kong time (`CHECKPOINT_FIRST_RUN` takes any other date), and `base` reads `first-run`
+- **Redraw past days** - `range --from <spec sha> --build-from <application sha>` starts both repositories at the given commits rather than at their checkpoints, so the days since then are drawn and posted again; the workflow still moves each checkpoint with a lease on the value it holds now
 - **Rewritten branch** - when a force-push left the checkpoint off the branch, `range` starts where the two still agree, and `base` reads `merge-base`; say so in `since`, which the page and the post show under the numbers
 - **Two runs at once** - `advance` moves both checkpoints in one atomic push, with a lease on each value it read, so the second run is refused and says so; it posted changes the first run also posted, and nothing is lost
 - **Who moves it** - the workflow, with its own token; a session never needs push rights for it
@@ -86,23 +87,34 @@ The post repeats the top of the day's page, then lists what the run brought, in 
 
 Each change is one card with a `phase` naming its area; the page groups and counts them. Draw what a reader would act on, not every commit.
 
+Every card leads with a picture, and At a glance shows that picture as the card's thumbnail, so the day reads at a glance before a word of it. The build refuses a card without one. Pick by what the reader would recognise first:
+
+1. **A screen** - a `shot` captured with `shoot.mjs`, or a `beforeNow` pair where the same state looks different; the thumbnail is the screen itself
+2. **A chart** - `bars` for anything counted: lines, commits, keys, cases, tests
+3. **A table** - `table` for things listed side by side: keys and their words, ids and their rules, files and what moved
+4. **A diff** - `diff` for values or words before and now; a colour shows its swatch in the thumbnail too
+5. **A diagram** - `board`, `flow` or `states` for moves between stages and paths
+
+- **Several pictures** - a card may carry a list: the screen first, then the chart or table that explains it; the thumbnail shows the screen and counts the rest
+- **Engineering cards** - tooling, CI and skills still get a picture: a `flow` of the new steps, a `table` of commands and what each does, or `bars` of what moved
+
 | What moved | Draw it as |
 | --- | --- |
 | OpenSpec changes proposed, accepted or archived | A `board` with one column per move, or a `flow` of one change's stages |
 | A change built in the application | One card for the change, with the spec store and application commits both under `commits`, its pull request under `links`, and a `shot` of what a reader now meets |
 | Application work no change names | One card per thing a reader would notice; a refactor, a fix or CI goes in For engineers |
-| A rule on a product page or in a requirement | `before` and `now` lines, and a `flow` or `states` when it is a path or a status |
+| A rule on a product page or in a requirement | `before` and `now` lines, and a `diff` of the rule's words, or a `flow` or `states` when it is a path or a status; a `shot` of the story that shows the rule when one exists |
 | Token values | A `diff` of each token, before and now, where a colour shows its swatch; a `shot` of a story that shows them when a reader would see them |
 | Catalog words | A `diff` of each key's words where they changed; a `table` of key and each language where they are new |
 | A primitive or block added or removed | A `shot` of its story |
 | Where the work landed | `bars` of lines or commits per area, as the last card |
-| Tooling, CI and agent skills | One card each for what changes how the team works; the rest goes in For engineers |
+| Tooling, CI and agent skills | One card each for what changes how the team works, with a `flow` or `table` of how it now runs; the rest goes in For engineers |
 
 - **Kind** - `new`, `changed` or `removed` when the change is one; leave it out for an overview card
 - **Commits** - every commit the change comes from, in either repository, from `facts.json`; the build refuses a change without them, and the post finds what is new through them
 - **Who** - the readers who notice it: `Product`, `Design`, `Engineering`, `Members`, `Visitors`; the page's filter and the post use the same names
 - **Links** - the sources a reader opens next: the proposal, the pull request, the requirement
-- **Pictures of screens** - only a `shot` captured with `shoot.mjs`, captioned with the story and commit it came from; the build refuses a `mock` on a digest, because a drawn screen never matches what the frontend renders, and a shot captured at any commit but the day's last
+- **Pictures of screens** - capture a `shot` for every card whose change a story shows, in either repository, before reaching for a diagram; only a `shot` captured with `shoot.mjs`, captioned with the story and commit it came from; the build refuses a `mock` on a digest, because a drawn screen never matches what the frontend renders, and a shot captured at any commit but the day's last
 - **Proof** - leave it out; a digest reports what landed and claims nothing about whether it works
 - **Follow-ups** - what the range leaves waiting: a change proposed and not accepted, a 🚧 line with no change, a design-sync report that drifted
 - **For engineers** - the merged pull requests as `commits`, and the facts command in `notes`

@@ -47,7 +47,8 @@ No summary screen: the masthead, one list of the changes, then the sections.
 - **Numbers** - up to four counts the reader would quote, drawn large under the headline: `227 commits`, `3 states`
 - **Stamp** - the branch, commit, version (`v2`) and date the page was read at, in one quiet line; a page tied to no revision cannot be trusted after the next push
 - **Since** - from `v2` on, one line names what moved since the last version, so a returning reader skips the rest
-- **At a glance** - with two or more changes, every change in one list grouped by phase: its kind, its title linking to its card, and who notices it; under it, a bar of the proof rows by status
+- **At a glance** - with two or more changes, every change in one list grouped by phase: a thumbnail of its card's first picture, its kind, its title linking to its card, and who notices it; under it, a bar of the proof rows by status
+- **Thumbnail** - a card's first `shot` or `beforeNow` when it has one, cropped from the top; else its first chart, table, diff, board, flow, states, lanes or mock drawn in miniature from the same data, with `+n` for each further picture; once any change has a picture, a card with none shows an empty frame, so give each one
 - **Filter** - with four or more changes and two or more readers in `who`, one chip per reader narrows the page to the changes that reader notices; the reader's browser remembers the pick
 - **Jump row** - one link per section with its count (`Decide 2`, `Proof 3/4`); on a wide screen an outline beside the page holds the same links and What changed's phases, and marks where the reader is; the page derives every count
 

@@ -509,6 +509,171 @@
   .glance.plain .g-list a {
     grid-template-columns: minmax(0, 1fr) auto;
   }
+  /* With pictures, each line leads with a thumbnail of its card's first picture */
+  .glance.pictured .g-list a {
+    grid-template-columns: 104px 84px minmax(0, 1fr) auto;
+    align-items: center;
+  }
+  .glance.pictured.plain .g-list a {
+    grid-template-columns: 104px minmax(0, 1fr) auto;
+  }
+  .g-thumb {
+    position: relative;
+    display: grid;
+    width: 104px;
+    height: 66px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--stage);
+  }
+  .g-thumb > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .g-thumb > img.cropped {
+    position: absolute;
+    max-width: none;
+    height: auto;
+    object-fit: fill;
+  }
+  .g-thumb > img.phone {
+    width: 44%;
+    justify-self: center;
+    border-inline: 1px solid var(--line);
+  }
+  .g-list a:hover .g-thumb {
+    border-color: var(--line-strong);
+  }
+  .t-more {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--scrim);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .t-draw {
+    display: flex;
+    align-self: center;
+    gap: 4px;
+    padding: 8px 9px;
+  }
+  .t-bars,
+  .t-diff,
+  .t-lanes,
+  .t-mock {
+    flex-direction: column;
+  }
+  .t-bars > span {
+    width: calc(6% + 94% * var(--p));
+    height: 6px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .t-draw.t-table {
+    display: grid;
+    grid-template-columns: repeat(var(--c), minmax(0, 1fr));
+    gap: 3px;
+  }
+  .t-table > span {
+    height: 6px;
+    border-radius: 2px;
+    background: var(--line-strong);
+  }
+  .t-table > .th {
+    background: var(--muted);
+  }
+  .t-diff > span {
+    display: flex;
+    gap: 3px;
+  }
+  .t-diff i {
+    flex: 1;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--del);
+  }
+  .t-diff i.ins {
+    background: var(--ins);
+  }
+  .t-diff i.sw {
+    flex: 0 0 18px;
+    height: 12px;
+    background: var(--c);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+  }
+  .t-board {
+    align-items: stretch;
+  }
+  .t-board > span {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 3px;
+    min-height: 46px;
+    padding: 3px;
+    border-radius: 3px;
+    background: var(--tone-soft, var(--none-soft));
+  }
+  .t-board i,
+  .t-mock i {
+    height: 5px;
+    border-radius: 2px;
+    background: var(--tone, var(--muted));
+  }
+  .t-flow,
+  .t-states {
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+  .t-flow > span,
+  .t-states > span {
+    flex: 0 0 13px;
+    height: 13px;
+    border: 2px solid var(--tone, var(--accent));
+    border-radius: 50%;
+    background: var(--tone-soft, var(--accent-soft));
+  }
+  .t-flow > i,
+  .t-states > i {
+    flex: 1;
+    max-width: 14px;
+    height: 2px;
+    background: var(--line-strong);
+  }
+  .t-lanes > span {
+    position: relative;
+    height: 12px;
+    border-bottom: 2px solid var(--line-strong);
+  }
+  .t-lanes i {
+    position: absolute;
+    bottom: -5px;
+    left: var(--x);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--tone, var(--accent));
+  }
+  .t-draw.t-mock {
+    align-self: stretch;
+    width: 46%;
+    justify-self: center;
+    padding: 6px 5px;
+    border-inline: 1px solid var(--line);
+    background: #fff;
+  }
+  .t-none {
+    background: repeating-linear-gradient(135deg, var(--sunk) 0 6px, var(--stage) 6px 12px);
+  }
   @media (max-width: 560px) {
     .g-list a {
       grid-template-columns: 76px minmax(0, 1fr);
@@ -520,6 +685,19 @@
     .g-for {
       grid-column: -2;
       text-align: left;
+    }
+    .glance.pictured .g-list a,
+    .glance.pictured.plain .g-list a {
+      grid-template-columns: 84px minmax(0, 1fr);
+      align-items: start;
+    }
+    .glance.pictured .g-list a > :not(.g-thumb) {
+      grid-column: 2;
+    }
+    .glance.pictured .g-thumb {
+      grid-row: 1 / span 3;
+      width: 84px;
+      height: 56px;
     }
     .glance-head,
     .g-phase,
@@ -2866,12 +3044,126 @@
       );
     }
 
+    // A thumbnail of the card's first picture: a screen when it has one, else its chart, table or diagram in miniature.
+    const THUMBS = {
+      shot: (p) => h("img", { src: p.src, alt: "", loading: "lazy", class: p.phone ? "phone" : null, onload: (e) => crop(e.target) }),
+      beforeNow: (p) => h("img", { src: p.now, alt: "", loading: "lazy", onload: (e) => crop(e.target) }),
+      bars: (p) => {
+        const items = list(p.items).slice(0, 5);
+        const max = Math.max(0, ...items.map((i) => Number(i.value) || 0)) || 1;
+        return items.map((i) => h("span", { style: `--p:${(Number(i.value) || 0) / max}` }));
+      },
+      table: (p) => {
+        const cells = (cls) => Array.from({ length: tableCols(p) }, () => h("span", { class: cls }));
+        return [p.columns ? cells("th") : null, ...list(p.rows).slice(0, 4).map(() => cells(null))];
+      },
+      diff: (p) =>
+        list(p.rows)
+          .slice(0, 4)
+          .map((r) => {
+            const was = r.before != null && r.before !== "";
+            const is = r.now != null && r.now !== "";
+            const mark = (v, cls) => (swatch(v) ? h("i", { class: "sw", style: `--c:${String(v).trim()}` }) : h("i", { class: cls }));
+            return h("span", {}, was ? mark(r.before, null) : null, is ? mark(r.now, "ins") : null);
+          }),
+      board: (p) =>
+        list(p.columns)
+          .slice(0, 4)
+          .map((c) => h("span", { class: c.tone ? `tone-${c.tone}` : null }, list(c.items).slice(0, 5).map(() => h("i")))),
+      flow: (p) => chainThumb(list(p.steps).map((s) => s.tone)),
+      states: (p) => chainThumb(list(p.states).map(() => null)),
+      lanes: (p) => {
+        const events = list(p.events);
+        return list(p.lanes)
+          .slice(0, 3)
+          .map((l) =>
+            h(
+              "span",
+              {},
+              events.map((ev, i) =>
+                ev.lane === l || ev.to === l ? h("i", { class: ev.tone ? `tone-${ev.tone}` : null, style: `--x:${(90 * i) / Math.max(1, events.length - 1)}%` }) : null,
+              ),
+            ),
+          );
+      },
+      mock: (p) => list(p.items).slice(0, 6).map((it) => h("i", { class: it.button != null && it.primary ? "tone-accent" : "tone-none" })),
+    };
+
+    // A story often draws a small block on a wide canvas: zoom the thumbnail to what differs from the canvas colour.
+    function crop(img) {
+      const box = img.parentElement;
+      const w = 160;
+      const ht = Math.max(1, Math.round((w * img.naturalHeight) / img.naturalWidth));
+      const cv = document.createElement("canvas");
+      cv.width = w;
+      cv.height = ht;
+      let px;
+      try {
+        const cx = cv.getContext("2d", { willReadFrequently: true });
+        cx.drawImage(img, 0, 0, w, ht);
+        px = cx.getImageData(0, 0, w, ht).data;
+      } catch {
+        return;
+      }
+      const at = (i) => [px[i], px[i + 1], px[i + 2]];
+      const bg = at(0);
+      let [x0, y0, x1, y1] = [w, ht, -1, -1];
+      for (let y = 0; y < ht; y++) {
+        for (let x = 0; x < w; x++) {
+          const c = at((y * w + x) * 4);
+          if (Math.abs(c[0] - bg[0]) + Math.abs(c[1] - bg[1]) + Math.abs(c[2] - bg[2]) > 24) {
+            if (x < x0) x0 = x;
+            if (x > x1) x1 = x;
+            if (y < y0) y0 = y;
+            if (y > y1) y1 = y;
+          }
+        }
+      }
+      if (x1 < 0) return;
+      const pad = 4;
+      const aspect = box.clientWidth / box.clientHeight;
+      let cw = Math.min(w, x1 - x0 + 1 + 2 * pad);
+      let ch = Math.min(ht, y1 - y0 + 1 + 2 * pad);
+      if (cw / ch > aspect) ch = Math.min(ht, cw / aspect);
+      else cw = Math.min(w, ch * aspect);
+      if (cw > w * 0.8) return;
+      const left = Math.max(0, Math.min(w - cw, (x0 + x1) / 2 - cw / 2));
+      const top = Math.max(0, Math.min(ht - ch, y0 - pad));
+      // In percent of the box, so the crop holds when the box resizes at the phone breakpoint.
+      img.classList.add("cropped");
+      img.style.width = `${(100 * w) / cw}%`;
+      img.style.left = `${(-100 * left) / cw}%`;
+      img.style.top = `${(-100 * top * aspect) / cw}%`;
+    }
+
+    function chainThumb(tones) {
+      return tones.slice(0, 5).map((t, i) => [i ? h("i") : null, h("span", { class: t ? `tone-${t}` : null })]);
+    }
+
+    function tableCols(p) {
+      return Math.min(4, Math.max(list(p.columns).length, ...list(p.rows).slice(0, 4).map((r) => list(r).length), 1));
+    }
+
+    function thumb(c) {
+      const all = list(c.picture).filter((p) => THUMBS[p?.kind]);
+      const p = all.find((one) => one.kind === "shot" || one.kind === "beforeNow") ?? all[0];
+      if (!p) return h("span", { class: "g-thumb t-none", "aria-hidden": "true" });
+      const screen = p.kind === "shot" || p.kind === "beforeNow";
+      return h(
+        "span",
+        { class: "g-thumb", "aria-hidden": "true" },
+        screen ? THUMBS[p.kind](p) : h("span", { class: `t-draw t-${p.kind}`, style: p.kind === "table" ? `--c:${tableCols(p)}` : null }, THUMBS[p.kind](p)),
+        all.length > 1 ? h("span", { class: "t-more" }, `+${all.length - 1}`) : null,
+      );
+    }
+
     function glance() {
       if (CH.length < 2) return null;
       const kinded = CH.some((c) => KIND[c.kind]);
+      const pictured = CH.some((c) => list(c.picture).some((p) => THUMBS[p?.kind]));
       const el = h(
         "section",
-        { class: `glance${kinded ? "" : " plain"}`, id: "glance", "aria-labelledby": "glance-h" },
+        { class: `glance${kinded ? "" : " plain"}${pictured ? " pictured" : ""}`, id: "glance", "aria-labelledby": "glance-h" },
         h("div", { class: "glance-head" }, h("h2", { id: "glance-h" }, "At a glance"), FILTER ? audience() : null),
       );
       for (const [phase, items] of groups()) {
@@ -2891,6 +3183,7 @@
                   h(
                     "a",
                     { href: `#${c.id}` },
+                    pictured ? thumb(c) : null,
                     kinded ? h("span", {}, word ? h("span", { class: `chip tone-${tone}` }, word) : null) : null,
                     h("span", { class: "g-title", html: mdText(c.title) }),
                     list(c.who).length ? h("span", { class: "g-for" }, list(c.who).join(", ")) : null,
