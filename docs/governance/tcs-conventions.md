@@ -14,6 +14,7 @@ How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.m
 - **A convention that must hold everywhere is a contract** — it moves to `specs-to-test-cases.md` with a rules revision, and leaves this file
 - **A confirmed line applies at once** — when the review that confirmed it ends, apply it to the reviewed suite's remaining drafts and its manual `actual` cases. A same-domain propagation may update other cases in a separately listed style-only follow-up, preserving purpose, expected results, trace, status, test-data meaning and automation links; a semantic change waits for that suite's review. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
 - **`automated` and `deprecated` cases are never restyled to it** — an `automated` case changes only with its behaviour, a `deprecated` one never
+- 2026-10-22, docs/prds/products/grade10-site/store/tests/domain-tcs.md: A signed-out customer is customer(guest) and a signed-in one is customer(member). Refused: kept as practice only, not a written rule.
 
 ## Before Adding a Convention
 
