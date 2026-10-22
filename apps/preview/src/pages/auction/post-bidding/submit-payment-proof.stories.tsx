@@ -190,7 +190,8 @@ export const SubmitEmpty: Story = {
       '[data-slot="dialog-body"]',
     ) as HTMLElement | null;
     expect(body).toBeTruthy();
-    body!.scrollTop = body!.scrollHeight;
+    if (!body) throw new Error("Dialog body not found");
+    body.scrollTop = body.scrollHeight;
 
     await userEvent.click(
       modal.getByRole("button", { name: "Submit Payment Proof" }),
@@ -201,11 +202,11 @@ export const SubmitEmpty: Story = {
       expect(senderName).toHaveFocus();
     });
     await waitFor(() => {
-      expect(body!.scrollTop).toBe(0);
+      expect(body.scrollTop).toBe(0);
     });
     await waitFor(() => {
       const rect = senderName.getBoundingClientRect();
-      const bodyRect = body!.getBoundingClientRect();
+      const bodyRect = body.getBoundingClientRect();
       expect(rect.top).toBeGreaterThanOrEqual(bodyRect.top - 1);
       expect(rect.bottom).toBeLessThanOrEqual(bodyRect.bottom + 1);
     });
@@ -363,7 +364,15 @@ export const ConvertingHeic: Story = {
     expect(fileInput).toBeTruthy();
 
     await userEvent.upload(fileInput as HTMLInputElement, heic);
-    expect(modal.getByText("Converting HEIC…")).toBeVisible();
+    // Both the target title and the new processing row carry the status.
+    expect(
+      modal.getAllByText("Converting HEIC…").length,
+    ).toBeGreaterThanOrEqual(1);
+    expect(
+      dialog.querySelector(
+        '[data-slot="file-dropzone-file"][data-state="processing"]',
+      ),
+    ).toBeTruthy();
     expect(modal.getByRole("button", { name: "Cancel" })).toBeDisabled();
     await userEvent.keyboard("{Escape}");
     const overlay = canvasElement.ownerDocument.querySelector(

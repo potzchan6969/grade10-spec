@@ -143,10 +143,15 @@ function WinnerOrderPaymentProofDialog({
     Boolean(draft.notes.trim()) ||
     draft.files.length > 0;
 
+  /** Rows that failed ingest don't count as proof — they stay removable. */
+  const usableFiles = draft.files.filter(
+    (item) => (item.status ?? "ready") !== "error",
+  );
+
   const ready =
     Boolean(draft.senderName.trim()) &&
     Boolean(draft.transferDate.trim()) &&
-    draft.files.length >= WINNER_ORDER_PROOF_MIN_FILES;
+    usableFiles.length >= WINNER_ORDER_PROOF_MIN_FILES;
 
   const formLocked = submitting || converting;
 
@@ -202,12 +207,6 @@ function WinnerOrderPaymentProofDialog({
           description: "Use PDF, PNG, JPG, or HEIC.",
         });
         break;
-      case "convert_failed":
-        toast.error("Couldn’t convert HEIC", {
-          description:
-            "Try exporting as JPG from your phone, then upload again.",
-        });
-        break;
     }
   }
 
@@ -242,7 +241,7 @@ function WinnerOrderPaymentProofDialog({
       return;
     }
     const zone = dropzoneRef.current;
-    if (draft.files.length < WINNER_ORDER_PROOF_MIN_FILES && zone) {
+    if (usableFiles.length < WINNER_ORDER_PROOF_MIN_FILES && zone) {
       scrollToCenter(zone);
       zone
         .querySelector<HTMLButtonElement>("button:not(:disabled)")
@@ -395,11 +394,16 @@ function WinnerOrderPaymentProofDialog({
                   }
                 />
                 {attempted &&
-                draft.files.length < WINNER_ORDER_PROOF_MIN_FILES ? (
+                usableFiles.length < WINNER_ORDER_PROOF_MIN_FILES ? (
                   <Text size="sm" tone="error">
                     Attach at least one proof file.
                   </Text>
                 ) : null}
+                <span aria-live="polite" className="sr-only">
+                  {usableFiles.length === 0
+                    ? "No files selected"
+                    : `${usableFiles.length} ${usableFiles.length === 1 ? "file" : "files"} selected`}
+                </span>
               </VStack>
             </VStack>
             <TextInput
