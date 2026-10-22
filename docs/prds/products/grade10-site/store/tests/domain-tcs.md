@@ -3,6 +3,17 @@
 **Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
+## Background
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `grade10 store url` | The staging site's `/store`. |
+| `store listing url` | The staging site's `/store/collections`. |
+| `product A` | A booster box for sale at HKD880, no site discount, at least 3 for sale. |
+| `product B` | An elite trainer box for sale at HKD420, no site discount, at least 3 for sale. |
+
 ## Ungrouped
 
 ### g10.store-dmn.US1: Browse from a collection tile
@@ -103,18 +114,20 @@
 2. Click the card for `<row product>`.
 3. Click Add to cart.
 4. Click Check out as guest in the drawer.
-5. Pay under `<order email>` with `<test card>`.
-6. Click Continue on Shopify's thank-you page.
-7. Click Sign in on the toast and sign in by a magic link to `<order email>`.
-8. Navigate to `/profile/orders`.
+5. Enter `<order email>` on Shopify's page.
+6. Pay with `<test card>`.
+7. Click Continue on Shopify's thank-you page.
+8. Click Sign in on the toast.
+9. Sign in by the magic link sent to `<order email>`.
+10. Navigate to `/profile/orders`.
 
 **Expected Results:**
 
 * Step 2 opens `/store/products/<row product handle>`.
 * Step 3 asks for no sign-in and opens the drawer with `<row product>`.
-* Step 6 shows the order, with a receipt line naming `<order email>`.
-* Step 7 says the order was added to the account.
-* Step 8 lists the order, with no points earned on it.
+* Step 7 shows the order, with a receipt line naming `<order email>`.
+* Step 9 says the order was added to the account.
+* Step 10 lists the order, with no points earned on it.
 
 ---
 
@@ -157,16 +170,19 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to `<grade10 store url>` and read the card for `<priced product>`.
-2. Navigate to `<store listing url>` and read its card.
-3. Open its product page and read the price.
-4. Open Cart and read its line.
+1. Navigate to `<grade10 store url>`.
+2. Read the card for `<priced product>` in the merchandised row.
+3. Navigate to `<store listing url>`.
+4. Read the card for `<priced product>`.
+5. Click the card's name.
+6. Read the price on the product page.
+7. Click Cart in the site header and wait for the read.
+8. Read the line for `<priced product>`.
 
 **Expected Results:**
 
-* Steps 1 to 4 each show `<expected price>`.
-* Steps 1 to 3 each strike `<expected strike>`.
-* Step 4 shows `<expected price>` as the line's price.
+* Steps 2, 4, 6 and 8 each show `<expected price>`.
+* Steps 2, 4 and 6 each strike `<expected strike>`.
 
 ---
 
@@ -197,18 +213,28 @@ Runs once per row of **Test data**.
 * customer(signed out) has `<gone product>` in the cart.
 * `<gone product>` is in the Main Page's merchandised row, then sold out by the recipe "Sell a card out".
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `gone product` | A card with a known handle and price, put in the merchandised row by the recipe "Put a card in the Main Page's merchandised row". |
+
 **Steps:**
 
-1. Navigate to `<grade10 store url>` and read the card for `<gone product>`.
-2. Navigate to `<store listing url>` and read its card.
-3. Navigate to `/store/products/<gone product handle>`.
-4. Open Cart and wait for the read.
+1. Navigate to `<grade10 store url>`.
+2. Read the card for `<gone product>` in the merchandised row.
+3. Navigate to `<store listing url>`.
+4. Read the card for `<gone product>`.
+5. Navigate to `/store/products/<gone product handle>`.
+6. Read the page and its purchase controls.
+7. Click Cart in the site header and wait for the read.
+8. Read the line for `<gone product>` and the checkout control.
 
 **Expected Results:**
 
-* Steps 1 and 2 say `<gone product>` is sold out.
-* Step 3 says it is sold out, shows its price, and cannot add it.
-* Step 4 marks its line Sold out, with Proceed to Checkout unavailable.
+* Steps 2 and 4 say `<gone product>` is sold out.
+* Step 6 says it is sold out, shows its price, and cannot add it.
+* Step 8 marks its line Sold out, with Proceed to Checkout unavailable.
 
 ---
 
@@ -248,19 +274,25 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to `<store listing url>` and click Add to cart on `<product A>`.
-2. Open Cart, apply `<member code>` and apply 100 points.
-3. Click Proceed to Checkout and pay with `<test card>`.
-4. Click the Grade10 Your Orders link on Shopify's thank-you page.
-5. Open the new order.
+1. Navigate to `<store listing url>`.
+2. Click Add to cart on the card for `<product A>`.
+3. Click Cart in the site header and wait for the read.
+4. Type `<member code>` in the promo code field and apply it.
+5. Type 100 in the points field and click Apply.
+6. Read the Estimated Total.
+7. Click Proceed to Checkout.
+8. Read Shopify's page.
+9. Pay with `<test card>`.
+10. Click the Grade10 Your Orders link on Shopify's thank-you page.
+11. Click View Details on the new order.
 
 **Expected Results:**
 
-* Step 2's Estimated Total is HKD730 = 880 − 50 − 100.
-* Step 3's Shopify page holds `<member code>` and the 100-point deduction.
-* Step 4 lists the order under Active Orders.
-* Step 5's summary shows `Points (100 pts)` after Discount.
-* Step 5 shows Points to Earn.
+* Step 6 shows HKD730 = 880 − 50 − 100.
+* Step 8 holds `<member code>` and the 100-point deduction.
+* Step 10 lists the order under Active Orders.
+* Step 11's summary shows `Points (100 pts)` after Discount.
+* Step 11 shows Points to Earn.
 
 ---
 
@@ -291,20 +323,28 @@ Runs once per row of **Test data**.
 * customer(signed out) has an empty cart in this browser.
 * `<member>` holds `<product A>` at quantity 2 in the store-kept cart, and 600 points.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `member` | A member account in the loyalty programme, with a known sign-in. |
+
 **Steps:**
 
-1. Navigate to `<store listing url>` and click Add to cart on `<product A>`.
-2. Open `/store/products/<product B handle>` and add `<product B>`.
-3. Open Cart and click the Sign in link under Check out as guest.
-4. Sign in as `<member>`.
-5. Read the reopened drawer.
+1. Navigate to `<store listing url>`.
+2. Click Add to cart on the card for `<product A>`.
+3. Navigate to `/store/products/<product B handle>`.
+4. Click Add to cart.
+5. Click the Sign in link under Check out as guest in the drawer.
+6. Sign in as `<member>`.
+7. Read the reopened drawer.
 
 **Expected Results:**
 
-* Step 5 shows `<product A>` at quantity 3 = 2 + 1.
-* Step 5 shows `<product B>` at quantity 1.
-* Step 5 offers points, with the member's codes.
-* Step 5 offers Proceed to Checkout.
+* Step 7 shows `<product A>` at quantity 3 = 2 + 1.
+* Step 7 shows `<product B>` at quantity 1.
+* Step 7 offers points, with the member's codes.
+* Step 7 offers Proceed to Checkout.
 
 ---
 
@@ -336,14 +376,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open the View order link.
-2. Click Sign in on the toast and sign in as the member.
-3. Read the address bar and the page.
-4. Navigate to `/profile/orders`.
+1. Open the View order button in Shopify's order email for `<member order>`.
+2. Read the page.
+3. Click Sign in on the toast.
+4. Sign in as the member.
+5. Read the address bar and the page.
+6. Navigate to `/profile/orders`.
 
 **Expected Results:**
 
-* Step 1 shows the order with no points or account details.
-* Step 3's address is `/profile/orders/<member order id>`.
-* Step 3 shows the order's points section.
-* Step 4 lists `<member order>`.
+* Step 2 shows the order with no points or account details.
+* Step 5's address is `/profile/orders/<member order id>`.
+* Step 5 shows the order's points section.
+* Step 6 lists `<member order>`.
