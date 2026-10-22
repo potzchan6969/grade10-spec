@@ -3,8 +3,10 @@ import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
 import {
   ALL_BANK_RAILS,
+  HKD_FREE_SHIPPING_INVOICE,
   SAMPLE_INVOICE,
   TABLE_LABELS,
+  USD_INVOICE,
   WITH_TAX_INVOICE,
 } from "./fixtures";
 import type { InvoicePdfBankRails } from "./invoice-pdf";
@@ -129,12 +131,19 @@ const INSURANCE = { label: "Insurance", amount: "HKD 40.00" };
 const SUMMARY_LINE_ITEMS = [SHIPPING, ...SUMMARY];
 
 const HKD_INVOICE_AMOUNTS = [
-  "HK$793.00",
-  "HK$159.00",
-  "HK$952.00",
-  "HK$79.00",
-  "HK$1,031.00",
+  "US$101.00",
+  "US$20.20",
+  "US$121.20",
+  "US$10.01",
+  "HK$1,030.00",
 ] as const;
+
+async function amountBeside(rows: DrawnText[], label: string, amount: string) {
+  const labelRow = drawnRow(rows, label);
+  return rows.some(
+    (row) => row.text === amount && Math.abs(row.y - labelRow.y) < 0.01,
+  );
+}
 
 const HKD_FPS_RAIL = {
   label: "FPS",
@@ -155,90 +164,112 @@ function titleLines(rows: DrawnText[], top: number, bottom: number) {
 }
 
 describe("invoice PDF renderer", () => {
-  it("keeps the tax invoice fixture arithmetic coherent", async () => {
+  it("keeps the tax invoice fixture in USD lines with a converted HKD summary", async () => {
     const strings = await drawnStrings(await InvoicePdf(WITH_TAX_INVOICE));
     const amounts = new Map(
       WITH_TAX_INVOICE.lineItems.map((item) => [item.label, item.amount]),
     );
 
     expect(WITH_TAX_INVOICE.itemTotal).toEqual({
-      winningBid: "HK$2,500.00",
-      buyersPremium: "HK$500.00",
-      total: "HK$3,000.00",
+      winningBid: "US$2,500.00",
+      buyersPremium: "US$500.00",
+      total: "US$3,000.00",
     });
-    expect(amounts.get("Shipping & Handling")).toBe("HK$80.00");
-    expect(amounts.get("Insurance")).toBe("HK$40.00");
+    expect(amounts.get("Shipping & Handling")).toBe("US$80.00");
+    expect(amounts.get("Insurance")).toBe("US$40.00");
     expect(WITH_TAX_INVOICE.taxLine).toEqual({
       label: "Tax",
-      amount: "HK$156.00",
+      amount: "US$156.00",
     });
-    expect(amounts.get("Subtotal")).toBe("HK$3,276.00");
-    expect(amounts.get("Payment Processing Fee")).toBe("HK$118.00");
-    expect(amounts.get("Order Total")).toBe("HK$3,394.00");
+    expect(amounts.get("Subtotal")).toBe("HK$25,716.60");
+    expect(amounts.get("Payment Processing Fee")).toBe("HK$907.58");
+    expect(amounts.get("Order Total")).toBe("HK$26,624.18");
     expect(3_000 + 80 + 40 + 156).toBe(3_276);
-    expect(3_276 + 118).toBe(3_394);
+    expect(Math.ceil(327_600 * 7.85)).toBe(2_571_660);
+    expect(2_571_660 + 90_758).toBe(2_662_418);
     for (const amount of [
-      "HK$2,500.00",
-      "HK$500.00",
-      "HK$3,000.00",
-      "HK$80.00",
-      "HK$40.00",
-      "HK$156.00",
-      "HK$3,276.00",
-      "HK$118.00",
-      "HK$3,394.00",
+      "US$2,500.00",
+      "US$500.00",
+      "US$3,000.00",
+      "US$80.00",
+      "US$40.00",
+      "US$156.00",
+      "HK$25,716.60",
+      "HK$907.58",
+      "HK$26,624.18",
     ]) {
       expect(strings).toContain(amount);
     }
   });
 
-  // winner-order-SC-285 - The HKD total adds up the rounded lines
-  it("sums the rounded HKD invoice lines to the supplied order total", async () => {
+  // g10.auction-winner-order.SC3
+  it("draws the USD lot row and Shipping & Handling, then the HKD Subtotal, fee and Order Total", async () => {
     const bytes = await InvoicePdf(SAMPLE_INVOICE);
     const strings = await drawnStrings(bytes);
     const rows = await drawnText(bytes);
 
-    expect(793 + 159 + 79).toBe(1_031);
-    for (const amount of [
-      "HK$793.00",
-      "HK$159.00",
-      "HK$952.00",
-      "HK$79.00",
-      "HK$1,031.00",
-    ]) {
-      expect(strings).toContain(amount);
-    }
+    expect(10_100 + 2_020).toBe(12_120);
+    expect(Math.ceil(13_121 * 7.85)).toBe(103_000);
+    for (const amount of HKD_INVOICE_AMOUNTS) expect(strings).toContain(amount);
     for (const [label, amount] of [
-      ["Shipping & Handling", "HK$79.00"],
-      ["Subtotal", "HK$1,031.00"],
-      ["Order Total", "HK$1,031.00"],
+      ["Shipping & Handling", "US$10.01"],
+      ["Subtotal", "HK$1,030.00"],
+      ["Payment Processing Fee", "Free"],
+      ["Order Total", "HK$1,030.00"],
     ] as const) {
-      const labelRow = drawnRow(rows, label);
-      expect(
-        rows.some(
-          (row) => row.text === amount && Math.abs(row.y - labelRow.y) < 0.01,
-        ),
-      ).toBe(true);
+      expect(await amountBeside(rows, label, amount)).toBe(true);
     }
-    expect(strings.join(" ")).not.toMatch(/\bUSD\b|US\$/);
-    expect(strings.join(" ")).not.toContain("7.85");
+    const text = strings.join(" ");
+    expect(text).not.toContain("7.85");
+    expect(text).not.toMatch(/Converted|\bUSD\b|\bHKD\b|1,031/);
   });
 
-  // winner-order-SC-288
-  it("renders the HKD invoice fixture with every amount in HKD and no USD winning bid or rate", async () => {
+  // g10.auction-winner-order.SC3
+  it("draws every amount as US$ or HK$ with a symbol and nothing bare", async () => {
     const strings = await drawnStrings(await InvoicePdf(SAMPLE_INVOICE));
-    const text = strings.join(" ");
 
-    for (const amount of HKD_INVOICE_AMOUNTS) expect(strings).toContain(amount);
     const amounts = strings.filter((value) =>
-      /^(?:HK\$|\d)[\d,]*\.\d{2}$/.test(value),
+      /^(?:US\$|HK\$|\d)[\d,]*\.\d{2}$/.test(value),
     );
     expect(new Set(amounts)).toEqual(new Set(HKD_INVOICE_AMOUNTS));
     expect(strings.filter((value) => /^\d[\d,]*\.\d{2}$/.test(value))).toEqual(
       [],
     );
-    expect(text).not.toMatch(/\bUSD\b|US\$/);
-    expect(text).not.toContain("7.85");
+  });
+
+  // g10.auction-winner-order.SC6
+  it("reads Free for a free charge, with no Insurance or Tax line, and the Subtotal still shows", async () => {
+    const bytes = await InvoicePdf(HKD_FREE_SHIPPING_INVOICE);
+    const strings = await drawnStrings(bytes);
+    const rows = await drawnText(bytes);
+
+    expect(Math.ceil(12_120 * 7.85)).toBe(95_142);
+    for (const [label, amount] of [
+      ["Shipping & Handling", "Free"],
+      ["Subtotal", "HK$951.42"],
+      ["Payment Processing Fee", "Free"],
+      ["Order Total", "HK$951.42"],
+    ] as const) {
+      expect(await amountBeside(rows, label, amount)).toBe(true);
+    }
+    expect(strings).not.toContain("Insurance");
+    expect(strings).not.toContain("Tax");
+  });
+
+  // g10.auction-winner-order.SC7
+  it("keeps a USD invoice in USD with no HKD amount", async () => {
+    const bytes = await InvoicePdf(USD_INVOICE);
+    const strings = await drawnStrings(bytes);
+    const rows = await drawnText(bytes);
+
+    for (const [label, amount] of [
+      ["Shipping & Handling", "US$10.01"],
+      ["Subtotal", "US$131.21"],
+      ["Order Total", "US$131.21"],
+    ] as const) {
+      expect(await amountBeside(rows, label, amount)).toBe(true);
+    }
+    expect(strings.join(" ")).not.toContain("HK$");
   });
 
   // winner-order-SC-288, winner-order-SC-299
