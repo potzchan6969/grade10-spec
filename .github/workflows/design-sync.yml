@@ -32,7 +32,8 @@ permissions:
   actions: write
 
 # Pull requests cancel their own superseded runs; a push, the schedule and a
-# dispatch each run to the end, so none silences another on a busy day.
+# dispatch each run to the end once past setup (cancel-superseded.yml), so none
+# silences another on a busy day.
 concurrency:
   group: ci-design-sync-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: true
