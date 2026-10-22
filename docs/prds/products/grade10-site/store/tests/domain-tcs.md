@@ -40,7 +40,7 @@
 
 **Pre-conditions:**
 
-* customer is signed out.
+* customer(guest) has no Grade10 session.
 * The shop publishes `<chosen collection>`, holding `<collection product>` and not `<outside product>`.
 * Both products are available; `<outside product>` is newer.
 
@@ -96,7 +96,7 @@
 
 **Pre-conditions:**
 
-* customer(signed out) has an empty cart in this browser.
+* customer(guest) has an empty cart in this browser.
 * `<row product>` is in the Main Page's merchandised row, by the recipe "Put a card in the Main Page's merchandised row".
 * No account holds `<order email>`.
 
@@ -210,7 +210,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out) has `<gone product>` in the cart.
+* customer(guest) has `<gone product>` in the cart.
 * `<gone product>` is in the Main Page's merchandised row, then sold out by the recipe "Sell a card out".
 
 **Test data:**
@@ -262,7 +262,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed-in member) holds 600 points and `<member code>`, with an empty cart.
+* customer(member) holds 600 points and `<member code>`, with an empty cart.
 * `<product A>` is for sale at HKD880 with no site discount.
 
 **Test data:**
@@ -320,7 +320,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out) has an empty cart in this browser.
+* customer(guest) has an empty cart in this browser.
 * `<member>` holds `<product A>` at quantity 2 in the store-kept cart, and 600 points.
 
 **Test data:**
@@ -372,7 +372,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out) holds the View order link for `<member order>`, paid by their member account.
+* customer(member) is signed out and holds the View order link for `<member order>`, which they paid for.
 
 **Steps:**
 
