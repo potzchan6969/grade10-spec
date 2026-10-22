@@ -1,6 +1,6 @@
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review · 0/30
+**Status:** pending-review · 0/32
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Walk 1: Browse, Narrow and Search on a Wide Screen
@@ -1235,6 +1235,49 @@ Runs once per row of **Test data**.
 
 ---
 
+### g10.store-product-listing.US7: Add to cart from the listing
+
+**As a** customer,
+**I want** to put cards in my cart straight from the listing,
+**so that** I can keep browsing while I shop.
+
+<!-- trace:case id=g10.store-product-listing.TC-qil rev=1 -->
+#### g10.store-product-listing.US7-TC3: A member's card controls write the cart kept at the store
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-product-listing.US7
+
+**Pre-conditions:**
+
+* customer(signed-in member) is on `<store listing url>`, with an empty cart.
+* `<cart product>` is available on the first page, with at least 3 for sale.
+
+**Steps:**
+
+1. Click Add to cart on the card for `<cart product>`.
+2. Click the card's increase control twice, then its decrease control once.
+3. Sign in as the same member in another browser and open `<store listing url>`.
+4. Read the card for `<cart product>` there.
+5. Click the card's remove control in the first browser.
+6. Reload the second browser and read the card.
+
+**Expected Results:**
+
+* Step 4 shows `<cart product>` at quantity 2.
+* Step 6 shows Add to cart, no quantity.
+
+---
+
 ### g10.store-product-listing.US9: See the shop's current catalogue
 
 **As a** customer,
@@ -1350,3 +1393,47 @@ Runs once per row of **Test data**.
 * Step 1 shows the cards, the count and the sidebar.
 * Step 2 narrows with its counts.
 * Step 3 waits on the shop.
+
+<!-- trace:case id=g10.store-product-listing.TC-82a rev=1 -->
+#### g10.store-product-listing.US9-TC4: A product in Draft stays off the listing, its counts and search
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-product-listing.US9
+
+**Pre-conditions:**
+
+* admin is in the staging shop's admin.
+* `<draft product>` carries `<world A>` and a title word `<draft word>` no other product has.
+
+**Test data:**
+
+| Partition | `<draft product>` |
+| --- | --- |
+| Created as Draft | A new product saved with status Draft, published to the store's channel. |
+| Moved to Draft | An active product on the listing, set to Draft and saved. |
+
+**Steps:**
+
+1. Wait 60 seconds past the save.
+2. Navigate to `<store listing url>` and read the count and `<world A>`'s count.
+3. Tick `<world A>` and read the cards.
+4. Type `<draft word>` in the search field and press Enter.
+5. Read the suggestions and cards.
+
+**Expected Results:**
+
+* Step 2's counts do not include `<draft product>`.
+* Step 3 does not list `<draft product>`.
+* Step 5 neither suggests nor lists `<draft product>`.
