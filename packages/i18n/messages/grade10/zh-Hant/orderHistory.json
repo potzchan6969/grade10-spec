@@ -25,5 +25,8 @@
     "pickup": "可取貨",
     "canceled": "已取消",
     "refunded": "已退款"
+  },
+  "statusNote": {
+    "partiallyRefunded": "部分退款"
   }
 }

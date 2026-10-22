@@ -10,6 +10,8 @@ type OrderHistoryCardProps = {
   orderId: ReactNode;
   status: OrderHistoryFulfillmentStatus;
   statusLabel: ReactNode;
+  /** A second fact beside the status, e.g. `Partially refunded`. */
+  statusNote?: ReactNode;
   date: ReactNode;
   total: ReactNode;
   trackOrder?: boolean;
@@ -34,6 +36,7 @@ function OrderHistoryCard({
   orderId,
   status,
   statusLabel,
+  statusNote,
   date,
   total,
   trackOrder,
@@ -58,6 +61,7 @@ function OrderHistoryCard({
         orderId={orderId}
         status={status}
         statusLabel={statusLabel}
+        statusNote={statusNote}
         total={total}
         trackOrder={trackOrder}
         onTrackOrder={onTrackOrder}

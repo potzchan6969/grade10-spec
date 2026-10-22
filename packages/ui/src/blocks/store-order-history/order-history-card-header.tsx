@@ -17,6 +17,8 @@ type OrderHistoryCardHeaderProps = {
   orderId: ReactNode;
   status: OrderHistoryFulfillmentStatus;
   statusLabel: ReactNode;
+  /** A second fact beside the status, e.g. `Partially refunded`. */
+  statusNote?: ReactNode;
   date: ReactNode;
   total: ReactNode;
   /** Figma BOOLEAN `trackOrder` — show Track Order (shipped orders). */
@@ -40,6 +42,7 @@ function OrderHistoryCardHeader({
   orderId,
   status,
   statusLabel,
+  statusNote,
   date,
   total,
   trackOrder = false,
@@ -61,7 +64,9 @@ function OrderHistoryCardHeader({
           <p className="shrink-0 text-base leading-6 font-medium whitespace-nowrap text-foreground">
             {orderId}
           </p>
-          <OrderHistoryStatus status={status}>{statusLabel}</OrderHistoryStatus>
+          <OrderHistoryStatus note={statusNote} status={status}>
+            {statusLabel}
+          </OrderHistoryStatus>
         </HStack>
         <HStack
           className="text-sm leading-5 whitespace-nowrap text-secondary-foreground"

@@ -25,5 +25,8 @@
     "pickup": "Ready for Pickup",
     "canceled": "Canceled",
     "refunded": "Refunded"
+  },
+  "statusNote": {
+    "partiallyRefunded": "Partially refunded"
   }
 }

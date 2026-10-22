@@ -19,6 +19,9 @@ type OrderHistoryStatusProps = {
   status: OrderHistoryFulfillmentStatus;
   /** Consumer-supplied label for this status. */
   children: ReactNode;
+  /** A second fact about the order beside its status, e.g. `Partially
+   * refunded`, already worded. Omit it and only the status shows. */
+  note?: ReactNode;
   className?: string;
 };
 
@@ -29,21 +32,32 @@ type OrderHistoryStatusProps = {
  * `completed` · `shipped` · `processing` · `pickup` · `canceled` · `refunded`.
  * Each rung composes design-system `Badge` `sm`: `outline` for completed /
  * canceled / refunded, `info` for shipped and pickup, `warning` for processing.
+ * A `note` follows the status as an `outline` badge of its own.
  */
 function OrderHistoryStatus({
   status,
   children,
+  note,
   className,
 }: OrderHistoryStatusProps) {
   return (
     <span
-      className={cn("inline-flex items-start", className)}
+      className={cn("inline-flex flex-wrap items-start gap-1", className)}
       data-slot="order-history-status"
       data-status={status}
     >
       <Badge size="sm" variant={STATUS_BADGE_VARIANT[status]}>
         {children}
       </Badge>
+      {note != null ? (
+        <Badge
+          data-slot="order-history-status-note"
+          size="sm"
+          variant="outline"
+        >
+          {note}
+        </Badge>
+      ) : null}
     </span>
   );
 }

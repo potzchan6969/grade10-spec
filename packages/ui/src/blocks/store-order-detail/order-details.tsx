@@ -29,6 +29,8 @@ type OrderDetailsProps = {
   breadcrumbs?: ReactNode;
   orderId: ReactNode;
   status: OrderDetailsFulfillmentStatus;
+  /** A second fact beside the status, e.g. `Partially refunded`. */
+  statusNote?: ReactNode;
   placedOn: ReactNode;
   placedOnDateTime?: string;
   /** A second sentence on the header's placement line — e.g. "Receipt sent
@@ -96,6 +98,7 @@ function OrderDetails({
   breadcrumbs,
   orderId,
   status,
+  statusNote,
   placedOn,
   placedOnDateTime,
   placedOnNote,
@@ -160,6 +163,7 @@ function OrderDetails({
           placedOnNote={placedOnNote}
           status={status}
           statusLabel={copy.status[status]}
+          statusNote={statusNote}
         />
       </RevealGroup>
       <div

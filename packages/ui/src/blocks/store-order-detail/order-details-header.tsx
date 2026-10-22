@@ -10,6 +10,8 @@ type OrderDetailsHeaderProps = {
   orderId: ReactNode;
   status: OrderDetailsFulfillmentStatus;
   statusLabel: ReactNode;
+  /** A second fact beside the status, e.g. `Partially refunded`. */
+  statusNote?: ReactNode;
   /** Pre-formatted placement date; wrapped in `<time>`. */
   placedOn: ReactNode;
   /** ISO date for the `<time datetime>` attribute. */
@@ -36,6 +38,7 @@ function OrderDetailsHeader({
   orderId,
   status,
   statusLabel,
+  statusNote,
   placedOn,
   placedOnDateTime,
   placedOnNote,
@@ -53,7 +56,11 @@ function OrderDetailsHeader({
         <h1 className="min-w-0 text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
           {orderId}
         </h1>
-        <OrderHistoryStatus className="shrink-0 items-center" status={status}>
+        <OrderHistoryStatus
+          className="shrink-0 items-center"
+          note={statusNote}
+          status={status}
+        >
           {statusLabel}
         </OrderHistoryStatus>
       </HStack>

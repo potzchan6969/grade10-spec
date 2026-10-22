@@ -90,6 +90,7 @@ function OrderSection({
                 orderId={order.orderId}
                 status={order.status}
                 statusLabel={copy.status[order.status]}
+                statusNote={order.statusNote}
                 total={order.total}
                 trackOrder={order.trackOrder}
                 onTrackOrder={

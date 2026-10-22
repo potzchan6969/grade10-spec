@@ -102,3 +102,12 @@ export const CompletedWithoutTrack: Story = {
     </OrderHistoryCard>
   ),
 };
+
+/** Some of a completed order came back: the note sits beside its status. */
+export const PartiallyRefunded: Story = {
+  args: {
+    ...CompletedWithoutTrack.args,
+    statusNote: "Partially refunded",
+  },
+  render: CompletedWithoutTrack.render,
+};

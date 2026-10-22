@@ -92,6 +92,7 @@ const ORDER_HISTORY_KEYS = [
   "status.pickup",
   "status.canceled",
   "status.refunded",
+  "statusNote.partiallyRefunded",
 ].sort();
 
 const ORDER_DETAIL_KEYS = [
@@ -120,6 +121,8 @@ const ORDER_DETAIL_KEYS = [
   "money.tax",
   "money.paidTotal",
   "money.refund",
+  "lineRefunded",
+  "statusNote.partiallyRefunded",
   "fulfilment.title",
   "fulfilment.orderPlaced",
   "fulfilment.shipped",
