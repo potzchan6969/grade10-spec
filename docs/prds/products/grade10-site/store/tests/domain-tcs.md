@@ -1,6 +1,6 @@
 # grade10-site/store Test Cases
 
-**Status:** pending-review · 1/7
+**Status:** pending-review · 2/7
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Background
@@ -85,7 +85,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, smoke, regression
