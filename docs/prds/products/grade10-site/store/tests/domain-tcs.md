@@ -9,8 +9,8 @@
 
 | Field | Value |
 | --- | --- |
-| `grade10 store url` | The staging site's `/store`. |
-| `store listing url` | The staging site's `/store/collections`. |
+| `grade10 store url` | `<g10url>/store` |
+| `store listing url` | `<g10url>/store/collections` |
 | `product A` | A booster box for sale at HKD880, no site discount, at least 3 for sale. |
 | `product B` | An elite trainer box for sale at HKD420, no site discount, at least 3 for sale. |
 
@@ -96,7 +96,7 @@
 
 **Pre-conditions:**
 
-* customer(signed out) has an empty cart in this browser, on staging.
+* customer(signed out) has an empty cart in this browser.
 * `<row product>` is in the Main Page's merchandised row, by the recipe "Put a card in the Main Page's merchandised row".
 * No account holds `<order email>`.
 
@@ -262,7 +262,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed-in member) holds 600 points and `<member code>`, with an empty cart, on staging.
+* customer(signed-in member) holds 600 points and `<member code>`, with an empty cart.
 * `<product A>` is for sale at HKD880 with no site discount.
 
 **Test data:**
