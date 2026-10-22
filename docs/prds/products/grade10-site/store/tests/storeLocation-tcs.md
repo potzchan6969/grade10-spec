@@ -7,14 +7,14 @@
 
 **Starting state:**
 
-- customer is on `<store listing url>` on staging, in a wide desktop browser window, in the default language.
+- customer is on `<store listing url>`, in a wide desktop browser window, in the default language.
 
 **Shared test data:**
 
 | Field | Value |
 | --- | --- |
-| `store listing url` | The staging site's `/store/collections`. |
-| `store locator url` | The staging site's `/store-locator`. |
+| `store listing url` | `<g10url>/store/collections` |
+| `store locator url` | `<g10url>/store-locator` |
 
 ### Route
 
@@ -145,7 +145,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on `<store listing url>` on staging.
+* customer is on `<store listing url>`.
 
 **Test data:**
 
@@ -184,7 +184,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on staging, in `<lang>`.
+* customer is on a lane that carries the store, in `<lang>`.
 
 **Test data:**
 
@@ -363,7 +363,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The store is carried on staging.
+* The lane under test carries the store.
 
 **Steps:**
 

@@ -7,14 +7,14 @@
 
 **Starting state:**
 
-- customer(signed-in member) is on `<your orders url>` on staging.
+- customer(signed-in member) is on `<your orders url>`.
 - The member has `<shipped order>`, `<processing order>`, `<completed order>` and `<canceled order>`, placed on known dates.
 
 **Shared test data:**
 
 | Field | Value |
 | --- | --- |
-| `your orders url` | The staging site's `/profile/orders`. |
+| `your orders url` | `<g10url>/profile/orders` |
 | `shipped order` | A paid web order, shipped, with a safe carrier address. |
 | `processing order` | A paid web order, not yet shipped, newer than `<shipped order>`. |
 | `completed order` | A completed web order. |
@@ -438,7 +438,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Complete `<guest order>` in the staging shop's admin.
+1. Complete `<guest order>` in the shop's admin.
 2. Read the member's points balance.
 3. Open `<guest order>` from `<your orders url>`.
 

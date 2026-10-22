@@ -7,7 +7,7 @@
 
 **Starting state:**
 
-- customer(signed out) has `<guest product>` in this browser's cart on staging, and no account under `<order email>`.
+- customer(signed out) has `<guest product>` in this browser's cart, and no account under `<order email>`.
 - The customer can read mail sent to `<order email>`.
 
 **Shared test data:**
@@ -588,7 +588,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(signed-in member) owns `<order>`: `<product A>` HKD780 and `<product B>` HKD105, paid HKD885.
-* admin refunded `<refund>` in the staging shop's admin.
+* admin refunded `<refund>` in the shop's admin.
 
 **Test data:**
 
@@ -639,7 +639,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Refund `<refund>` in the staging shop's admin.
+1. Refund `<refund>` in the shop's admin.
 2. Wait 60 seconds.
 3. Read the member's points balance.
 
@@ -790,7 +790,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(`<actor state>`) has `<product A>` in the cart on staging.
+* customer(`<actor state>`) has `<product A>` in the cart.
 * The customer can read mail sent to `<order email>`.
 
 **Test data:**

@@ -7,14 +7,14 @@
 
 **Starting state:**
 
-- customer(signed out) is on `<store listing url>` on staging, in a wide desktop browser window.
+- customer(signed out) is on `<store listing url>`, in a wide desktop browser window.
 - The catalogue holds `<catalogue>`, larger than one page of cards.
 
 **Shared test data:**
 
 | Field | Value |
 | --- | --- |
-| `store listing url` | The staging site's `/store/collections`. |
+| `store listing url` | `<g10url>/store/collections` |
 | `catalogue` | At least 3 pages of cards across at least 6 worlds and 2 types, with known creation dates and prices. |
 | `world A` | A world with cards in the catalogue and a known count. |
 | `type A` | A type with cards inside `<world A>` and a known count. |
@@ -46,14 +46,14 @@
 
 **Starting state:**
 
-- customer(signed out) is on `<store listing url>` on staging, in a browser emulating a phone, below the wide breakpoint.
+- customer(signed out) is on `<store listing url>`, in a browser emulating a phone, below the wide breakpoint.
 - The catalogue holds at least 6 worlds and 2 types with cards.
 
 **Shared test data:**
 
 | Field | Value |
 | --- | --- |
-| `store listing url` | The staging site's `/store/collections`. |
+| `store listing url` | `<g10url>/store/collections` |
 | `world A` | A world with cards and a known name. |
 | `world B` | A second world with cards and a known name. |
 
@@ -72,14 +72,14 @@
 
 **Starting state:**
 
-- customer(signed out) is on `<store listing url>` on staging, with an empty cart in this browser.
+- customer(signed out) is on `<store listing url>`, with an empty cart in this browser.
 - `<cart product>` is available, with at least 3 for sale, and shows on the first page.
 
 **Shared test data:**
 
 | Field | Value |
 | --- | --- |
-| `store listing url` | The staging site's `/store/collections`. |
+| `store listing url` | `<g10url>/store/collections` |
 | `cart product` | An available card on the first page, at least 3 for sale. |
 
 ### Route
@@ -1305,8 +1305,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on `<listing view>` on staging.
-* admin is in the staging shop's admin, on `<change product>`.
+* customer is on `<listing view>`.
+* admin is in the shop's admin, on `<change product>`.
 
 **Test data:**
 
@@ -1415,7 +1415,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin is in the staging shop's admin.
+* admin is in the shop's admin.
 * `<draft product>` carries `<world A>` and a title word `<draft word>` no other product has.
 
 **Test data:**

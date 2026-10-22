@@ -9,7 +9,7 @@
 
 | Field | Value |
 | --- | --- |
-| `store listing url` | The staging site's `/store/collections`. |
+| `store listing url` | `<g10url>/store/collections` |
 | `product A` | A booster box for sale at HKD880, no site discount, at least 3 for sale. |
 | `product B` | An elite trainer box for sale at HKD420, no site discount, at least 3 for sale. |
 | `product C` | Booster packs for sale at HKD60, no site discount. |
@@ -23,7 +23,7 @@
 
 **Starting state:**
 
-- customer(signed-in member) is on `<store listing url>` on staging, a member of the loyalty programme with `<points balance>`.
+- customer(signed-in member) is on `<store listing url>`, a member of the loyalty programme with `<points balance>`.
 - The cart holds `<product A>` and `<product B>`; no code or points are chosen.
 - The member's wallet holds `<member code>`; the shop has `<public code>` open to everyone.
 
@@ -31,7 +31,7 @@
 
 | Field | Value |
 | --- | --- |
-| `store listing url` | The staging site's `/store/collections`. |
+| `store listing url` | `<g10url>/store/collections` |
 | `product A` | A booster box for sale at HKD880, no site discount. |
 | `product B` | An elite trainer box for sale at HKD420, no site discount. |
 | `points balance` | 600 points. |
@@ -440,7 +440,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<product A>` is in the cart.
-* admin has since changed `<product A>`'s first image in the staging shop's admin, and 1 minute has passed.
+* admin has since changed `<product A>`'s first image in the shop's admin, and 1 minute has passed.
 
 **Steps:**
 
@@ -594,7 +594,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(signed out) is on `<store listing url>`, with `<moved product>` in the cart, quantity 2, at HKD880.
-* admin has changed `<moved product>` in the staging shop's admin as its row describes, and 1 minute has passed.
+* admin has changed `<moved product>` in the shop's admin as its row describes, and 1 minute has passed.
 
 **Test data:**
 
@@ -1467,7 +1467,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed-in member) is on Shopify's page for `<product A>`, on staging.
+* customer(signed-in member) is on Shopify's page for `<product A>`.
 
 **Steps:**
 

@@ -7,7 +7,7 @@
 
 **Starting state:**
 
-- customer is on `<grade10 store url>` on staging, with JavaScript enabled.
+- customer is on `<grade10 store url>`, with JavaScript enabled.
 - The catalogue has answered `[<first collection>, <second collection>]`; both have distinct products.
 - `<displayed product>`, `<sold-out product>` and `<marked-down product>` are in the first collection and appear in the merchandised row, by the recipe "Put a card in the Main Page's merchandised row".
 
@@ -286,7 +286,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on staging, where the store is carried.
+* customer is on a lane that carries the store.
 
 **Test data:**
 
@@ -332,7 +332,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer can read `<grade10 store url>`.
-* admin has access to the staging shop's admin.
+* admin has access to the shop's admin.
 * The catalogue publishes `<existing collection>`; `<new collection>` is not yet published.
 * The site deployment stays fixed throughout this run.
 
@@ -341,13 +341,13 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `existing collection` | A published collection with a known name and handle. |
-| `new collection` | A new collection with a distinct name and handle, ready to publish in the staging shop. |
+| `new collection` | A new collection with a distinct name and handle, ready to publish in the shop. |
 
 **Steps:**
 
 1. Navigate to `<grade10 store url>`.
 2. Read the collection grid.
-3. Publish `<new collection>` in the staging shop's admin.
+3. Publish `<new collection>` in the shop's admin.
 4. Wait 60 seconds past the publish.
 5. Reload `<grade10 store url>`.
 6. Read the collection grid again.
@@ -524,8 +524,8 @@ Runs once per row of **Test data**.
 
 | Partition | `<lane>` | `<lane store url>` | `<expected status>` | `<expected answer>` |
 | --- | --- | --- | --- | --- |
-| Carried, not public | Staging | The staging site's `/store`. | 200 | The Main Page, its hero first. |
-| Public | Production | `grade10.com/store`. | 404 | The site's not-found page. |
+| Carried, not public | Staging | `<g10url>/store` | 200 | The Main Page, its hero first. |
+| Public | Production | `<g10url>/store` | 404 | The site's not-found page. |
 
 **Steps:**
 

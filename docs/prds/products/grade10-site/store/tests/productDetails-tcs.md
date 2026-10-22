@@ -7,7 +7,7 @@
 
 **Starting state:**
 
-- customer(signed out) is on `<product page url>` on staging, with an empty cart in this browser.
+- customer(signed out) is on `<product page url>`, with an empty cart in this browser.
 - `<page product>` is available, with a description longer than three lines and at least 3 for sale.
 - `<page product>` has 2 picks and shares its world with other cards for sale.
 
@@ -15,7 +15,7 @@
 
 | Field | Value |
 | --- | --- |
-| `product page url` | The staging site's `/store/products/<page product handle>`. |
+| `product page url` | `<g10url>/store/products/<page product handle>` |
 | `page product` | An available card with images, badges, a long description, 2 picks, by the recipe "Choose picks on a staging-shop card". |
 
 ### Route
@@ -720,7 +720,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<page product>` has picks `<pick A>` and `<pick B>`, in that order.
-* admin is in the staging shop's admin.
+* admin is in the shop's admin.
 
 **Test data:**
 
