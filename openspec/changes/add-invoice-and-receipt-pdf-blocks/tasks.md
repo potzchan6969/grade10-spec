@@ -125,3 +125,11 @@ Uses draft `feature-tcs.md` as its input; human QA reviews cases after deploymen
 - [x] 12.1 Walk `winner-order-US-01` and `winner-order-US-02` through the item table: open a sent invoice's PDF and a paid order's receipt PDF from Winner Order and confirm one item row, the Item Total row, the charges, the summary with no border around it, the receipt's payment breakdown, and no lot heading; then open the PDF lab's several-item and 30-item samples and confirm the second page repeats the column header, no row splits, the Item Total row stays with the summary, and the issuer block appears on the last page only (`winner-order-SC-57`, `winner-order-SC-67`)
 - [x] 12.2 Flip the `shared/ui/invoice-and-receipt-pdf` `feature-tcs.md` cases the walk decides to automated with `pnpm run tcs:automated <case> --decided-by <walk path>` for each case, a walk in grade10 named `grade10:<path>`, in the walk's own commit; name any that stay manual in the suite and in the walk's `rounds.md` row
 - [x] 12.3 Verify: `pnpm run test --filter grade10` (and the e2e lane that covers Winner Order when this walk lands there)
+
+## 13. The item table carries the symbol (grade10) (owner: @seankcw)
+
+Amendment (`decisions.md` Q41 reversed). Needs nothing from the store beyond this record: the block draws the strings it is given. Documents already archived in object storage keep their stored layout, and the archive is not purged (Q37).
+
+- [ ] 13.1 Write the tests first, in their own commit, in `receiptPdf.test.ts` and `invoicePdf.test.ts`: `itemTable()` and the Item Total read each amount with the settlement currency's symbol, the same string `lineItems()` gives a charge of that amount, for an HKD and a USD invoice; the Total still equals Winning Bid plus Buyer's Premium, added as integers of minor units and then formatted
+- [ ] 13.2 In `packages/grade10-auction/backend/src/services/auctions/orderDocument.ts`, format `itemTable()`'s three amounts with `formatMoney` instead of `formatAmount`, making 13.1 pass
+- [ ] 13.3 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10`
