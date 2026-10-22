@@ -167,7 +167,7 @@ Runs once per row of **Test data**.
 * The page draws neither `US$131.21` nor `7.85`.
 * No figure on the page is recalculated from the note.
 
-<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-bfo rev=1 -->
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-bfo rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-ec5 -->
 ### g10.shared-invoice-and-receipt-pdf.US1-TC84: The invoice note is drawn muted against the Subtotal row
 
 **Classification:**
@@ -254,7 +254,7 @@ Runs once per row of **Test data**.
 * The note, the summary and the bank details are on that page.
 * The issuer block is on that page, at its foot.
 
-<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-tk2 rev=1 -->
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-tk2 rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-zs0 -->
 ### g10.shared-invoice-and-receipt-pdf.US1-TC87: The invoice note never leaves the Subtotal row at a page end
 
 **Classification:**
@@ -451,7 +451,7 @@ Runs once per row of **Test data**.
 * The note, the summary, the Payment section and the four breakdown lines are on that page.
 * The issuer block is on that page, at its foot.
 
-<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-5qy rev=1 -->
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-5qy rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-zs0 -->
 ### g10.shared-invoice-and-receipt-pdf.US1-TC93: The receipt note and payment breakdown stay whole at a page end
 
 **Classification:**
@@ -496,8 +496,10 @@ Runs once per row of **Test data**.
 
 * At every count, the Item Total row, the charge rows, the Subtotal, the note, the fee and Order Total sit on one page.
 * The note is never the first line of a page or the last line before a page break.
+* The note sits directly under Subtotal, with the fee after it.
 * At every count, the four breakdown lines sit on one page, none left on the page before.
 * Where the note takes a count over one page, the Item Total row and the whole summary start the next page under the column header.
+* No item row is moved over to sit with the summary.
 
 ## Settled
 
@@ -519,15 +521,15 @@ Runs once per row of **Test data**.
 | `US1-TC81` (`TC-i81`) | Kept over two rows, the second taken from QA1's `TC85`. QA2 added two results the requirement fixes after the Raised rows closed: the issuer email's colour and the left edge of the summary's labels, and that Shipping & Handling stays the only row above Subtotal; it dropped "or a USD sum" from the last result, which the note itself contradicts. Linked: `g10.shared-invoice-and-receipt-pdf.SC1` |
 | `US1-TC82` (`TC-gzu`) | Kept, with `TC89` (`TC-u6o`) regrouped into it as its receipt rows: one starting state class, one route, one checking, a different renderer. QA2 added the missing fixture table (QA1 named `<item_usd>`, `<summary_usd>` and the rest without binding them), the empty and spaces-only rows that Q34 now settles, and the result that positions match the Omitted row. Dropped QA1's `null` row: no anchor or requirement states a null note, and the prop is optional text. Linked: `g10.shared-invoice-and-receipt-pdf.SC3` |
 | `US1-TC83` (`TC-c32`) | Reshaped. QA1's rows mixed three claims; the wrap row moved to `TC91`, the short-figure row duplicated `TC81`, and the "figure differs" row kept the real rate 7.85, which cannot show a block that builds the rate. It now runs the note `US$999.00 at 7.00` on both renderers, with `TC91` (`TC-k6p`)'s receipt row folded in, and asserts that `US$131.21` and `7.85` appear nowhere. Dropped QA1's "one piece of text" result, which contradicts a wrapped note. Linked: `g10.shared-invoice-and-receipt-pdf.SC5` |
-| `US1-TC84` (`TC-bfo`) | Kept, no link. It asserts the relative reading of muted (lighter than the Subtotal label, no larger, not bold); the requirement fixes the issuer email's colour, now asserted in `TC81`, and says nothing of size or weight, so those two results go beyond it (see Over-claimed) |
+| `US1-TC84` (`TC-bfo`) | Kept. It asserts the relative reading of muted (lighter than the Subtotal label, no larger, not bold). SC1 rev 2 now states no larger than the summary labels and not bold, so the size and weight results are the requirement's, no longer beyond it; the issuer email's colour stays asserted in `TC81`. Linked jointly with `TC81`: `g10.shared-invoice-and-receipt-pdf.SC1` |
 | `US1-TC85` (`TC-52z`) | Regrouped into `TC81` as its Free fee row: the block draws the string `Free` as it draws any other, so only the data differed. Dropped; never published. Its Subtotal reproduces: 12120 at 7.85 is HK$951.42 |
 | `US1-TC86` (`TC-pml`) | Kept. Trace moved to Document shape, where the durable one-page cases `TC42` and `TC59` sit. QA2 corrected the fixture: Subtotal HK$1,069.25 for lines of US$136.21 and a Free fee, so the bank-transfer invoice with bank details reads a consistent Order Total. Linked jointly with `TC92`: `g10.shared-invoice-and-receipt-pdf.SC6` |
-| `US1-TC87` (`TC-tk2`) | Kept; trace moved to Document shape, as the durable `TC64`. No scenario states a note held with its Subtotal at a page end, though the requirement does; see Uncovered |
+| `US1-TC87` (`TC-tk2`) | Kept; trace moved to Document shape, as the durable `TC64`. Linked: `g10.shared-invoice-and-receipt-pdf.SC7`, jointly with `TC93` for the receipt |
 | `US1-TC88` (`TC-2g8`) | Kept, with `TC90` (`TC-53h`) regrouped into it as its Part payment row: a part payment changes the breakdown strings and nothing else the block draws. QA2 added the result that the breakdown lines carry no note and the issuer email's colour. Linked: `g10.shared-invoice-and-receipt-pdf.SC2` |
 | `US1-TC89` (`TC-u6o`), `US1-TC90` (`TC-53h`), `US1-TC85` (`TC-52z`) | Dropped as regrouped above; none was published |
 | `US1-TC91` (`TC-k6p`) | Reshaped into the wrap case over both renderers on the note `US$1,234,567,890.12`, which is wider than the summary; QA1's `US$1,234,567.89` may fit one line and so could not assert a wrap. The Q35 answer, wrap, replaces QA1's "one piece of text". Linked: `g10.shared-invoice-and-receipt-pdf.SC4` |
 | `US1-TC92` (`TC-6a9`) | Kept; trace to Document shape; fee figure aligned with the other fixtures. Linked jointly with `TC86`: `g10.shared-invoice-and-receipt-pdf.SC6` |
-| `US1-TC93` (`TC-5qy`) | Kept; trace to Document shape, as the durable `TC65`. See Uncovered |
+| `US1-TC93` (`TC-5qy`) | Kept; trace to Document shape, as the durable `TC65`. QA2 added two results (the note directly under Subtotal, and no item row moved over to sit with the summary), which `TC87` already held. Linked: `g10.shared-invoice-and-receipt-pdf.SC7`, jointly with `TC87` for the invoice |
 
 **Existing durable cases**
 
@@ -541,22 +543,24 @@ QA1 flagged `TC1`, `TC5`, `TC8`, `TC42`, `TC53`, `TC64` and `TC65` as assuming a
 
 | Scenario | Covered by |
 | --- | --- |
-| `g10.shared-invoice-and-receipt-pdf.SC1` | `US1-TC81`, one row each for a Card fee and a Free fee |
+| `g10.shared-invoice-and-receipt-pdf.SC1` | `US1-TC81` for the order, the exact text, the colour and the single charge row, one row each for a Card fee and a Free fee, jointly with `US1-TC84` for size and weight |
 | `g10.shared-invoice-and-receipt-pdf.SC2` | `US1-TC88`, one row each for a full and a part payment |
 | `g10.shared-invoice-and-receipt-pdf.SC3` | `US1-TC82`, five rows over both renderers |
 | `g10.shared-invoice-and-receipt-pdf.SC4` | `US1-TC91` |
 | `g10.shared-invoice-and-receipt-pdf.SC5` | `US1-TC83`, one row per renderer |
 | `g10.shared-invoice-and-receipt-pdf.SC6` | `US1-TC86` for the invoice and `US1-TC92` for the receipt, jointly: the scenario states one outcome for two documents with two starting states, and each case asserts it in full for its document |
+| `g10.shared-invoice-and-receipt-pdf.SC7` | `US1-TC87` for the invoice and `US1-TC93` for the receipt, jointly: one outcome for two documents, each case asserting it in full for its document over the counts from the plain fit to the first two-page count with a note, not the scenario's 1 to 40 items; below that window the document is one page by construction |
 | `shared-ui-invoice-and-receipt-pdf-SC-3`, `SC-4`, `SC-16`, `SC-17`, `SC-27`, `SC-61`, `SC-77`, `SC-67`, `SC-68` | Restated in the delta with their text unchanged; the durable cases that hold them keep them |
 
 **Uncovered**
 
-- The requirement clause that the note stays with the Subtotal row on one page, and that a summary with its note taller than a page's room is a "cannot fit" refusal, has no scenario. `TC87` and `TC93` assert the first; they carry no `covers`. Reported as a defect for the spec
+- None. The requirement's clause that a summary with its note taller than a page's room is a "cannot fit" refusal has no scenario and no case; it is reported for the spec, not closed here
 
 **Over-claimed**
 
-- `US1-TC84` asserts a size no larger than the Subtotal label and not bold; the requirement fixes colour and alignment only. Kept as the usability reading of muted (decisions Q36) and not linked
 - `US1-TC86` and `US1-TC92` each assert half of `SC6` and are linked to it jointly, as the table says
+- `US1-TC87` and `US1-TC93` each assert `SC7` for one document and are linked jointly
+- `US1-TC81` and `US1-TC84` assert `SC1` jointly: order, text, colour and rows in the first, size and weight in the second
 
 **Contradictions between the readings**
 
@@ -569,7 +573,7 @@ QA1 flagged `TC1`, `TC5`, `TC8`, `TC42`, `TC53`, `TC64` and `TC65` as assuming a
 | Root group InvoicePdf export | `US1-TC81`, `TC82`, `TC84`, `TC91` | SC1, SC3, SC4 covered |
 | Root group ReceiptPdf export | `US1-TC88`; the receipt rows of `TC82` and `TC91` trace InvoicePdf export, where SC3 and SC4 are served | SC2 covered |
 | Root group Presentation-only contract | `US1-TC83` | SC5 covered |
-| Root group Document shape | `US1-TC86`, `TC87`, `TC92`, `TC93` | SC6 covered; the held-with-Subtotal clause has no scenario |
+| Root group Document shape | `US1-TC86`, `TC87`, `TC92`, `TC93` | SC6, SC7 covered |
 
 **Raised**
 

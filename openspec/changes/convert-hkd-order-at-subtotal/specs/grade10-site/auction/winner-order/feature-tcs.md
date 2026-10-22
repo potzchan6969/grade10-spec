@@ -1340,13 +1340,15 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | SC-04, SC-287 | Out of suite, in the durable header |
 | SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-215, SC-278, SC-279, SC-280, SC-281, SC-282, SC-300 | Unchanged; they stay with the durable cases |
 
-**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15, g10.auction-winner-order.SC18
+**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15, g10.auction-winner-order.SC18, g10.auction-winner-order.SC19, g10.auction-winner-order.SC20
 
 SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee beside a non-zero shipping line, SC7 a USD order's documents staying in USD, and SC18 that a USD order's invoice and receipt PDFs carry no note and no gap under Subtotal. The block tests of tasks 3.1 and 3.4 to 3.6 in this store (`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/fixtures.test.ts`, `invoice-pdf.test.ts` and `receipt-pdf.test.ts`) and the PDF tests of tasks 7.1 and 7.5 in the application repository (`invoicePdf.test.ts`, `receiptPdf.test.ts`, which hold a USD invoice and receipt without a note) verify the three. No hand case opens a USD order's PDFs; the walk of task 11.1 reads an HKD order's. `US26-TC10` and `TC11` read the same documents by hand. SC15 is an invoice sent before USD facts were stored, which no tester can create now; the breakdown tests of task 6.1 (`invoicePricing.test.ts`, which drops the note when a line has no USD fact) verify it, and `US27-TC11` reads the sibling pre-layout case by hand.
 
+SC19 is the same invoice and its receipt, with no USD fact on a line, drawn without a note and without a gap, and a card order whose fee alone lacks a fact keeping it. No tester can create the first order now, so a link would assert half the scenario; `US26-TC10` (PDF row) and `US26-TC2` (card row) read a card order's invoice and receipt PDFs with the note by hand, which is the second clause only, and carry no link. The note tests of task 7.5 (`invoicePdf.test.ts`, `receiptPdf.test.ts`) verify both clauses, with the breakdown tests of task 6.1. SC20 is a pre-layout HKD invoice, stored Subtotal 103100, whose PDF carries the note beside `HK$1,031.00`; `US27-TC11` reads that order's Order Summary and opens no PDF, and no other hand case opens a pre-layout invoice's PDF. The note test of task 7.5 for a pre-layout invoice verifies it, and task 7.6 wires the note.
+
 **Uncovered**
 
-- None. SC15 (a line with no USD fact reads in HKD, note dropped) is Out of suite below
+- None. SC15, SC19 and SC20 are Out of suite below, each with its verifier
 
 **Over-claimed**
 
@@ -1362,10 +1364,10 @@ SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee 
 
 | Anchor | Cases | Scenarios |
 | --- | --- | --- |
-| `winner-order-US-26` (documents) | `US26-TC1`, `TC2`, `TC3`, `TC5` to `TC8`, `TC10`, `TC11`, `TC13`; `TC4` is unchanged | All; SC3, SC7, SC18 and SC-287 out of suite |
-| `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC11` | SC-290, SC-304, SC-291, SC-292, SC8, SC9, SC10 and SC14 covered; SC15 out of suite |
+| `winner-order-US-26` (documents) | `US26-TC1`, `TC2`, `TC3`, `TC5` to `TC8`, `TC10`, `TC11`, `TC13`; `TC4` is unchanged | All; SC3, SC7, SC18, SC19, SC20 and SC-287 out of suite |
+| `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC11` | SC-290, SC-304, SC-291, SC-292, SC8, SC9, SC10 and SC14 covered; SC15, SC19 and SC20 out of suite |
 | `winner-order-US-24` (context) | `US24-TC2`, `TC7` | SC-281 covered; SC-301 waits for its follow-up amendment; the rest stay with the durable cases |
-| Root group Settlement currency | `US26-TC1`, `TC2`, `TC5`, `TC6`, `TC7`, `TC8`, `TC10`, `TC11`, `TC13` | Convert once, cent rounding, bank fee, rate named in the note only (SC13), same lines on every document, note on the PDFs (SC16, SC17 covered; SC18 out of suite) |
+| Root group Settlement currency | `US26-TC1`, `TC2`, `TC5`, `TC6`, `TC7`, `TC8`, `TC10`, `TC11`, `TC13` | Convert once, cent rounding, bank fee, rate named in the note only (SC13), same lines on every document, note on the PDFs (SC16, SC17 covered; SC18, SC19, SC20 out of suite) |
 | Root group Order summary | `US27-TC1`, `TC2`, `TC3`, `TC8`, `TC11` | All four lines of the group |
 | Root group Invoice | `US1-TC33`, `US26-TC5` | Fee base |
 

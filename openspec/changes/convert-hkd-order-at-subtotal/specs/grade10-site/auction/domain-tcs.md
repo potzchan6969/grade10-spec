@@ -92,6 +92,7 @@
 - **Case** - `g10.auction-dmn.US12-TC3` (`TC-k4p@5`) was rewritten by QA1 over a new title, with `winner-order-US-27` added to its trace. QA2 keeps it and its links to `winner-order-SC-292` and `winner-order-SC-304`, whose results it asserts at steps 1 and 4
 - **Not linked** - `order-mail-SC-66`: step 7 asserts that the letter and the receipt PDF list the same lines and name no rate, but not that the letter names the amount paid
 - **Covered at domain** - none claimed; the feature suite holds `winner-order-SC-304` and `winner-order-SC-292` in `US27-TC1` and `US27-TC3`
+- **Scenarios added later** - `g10.auction-winner-order.SC19` and `SC20` are not reached by `TC-k4p`: its step 7 reads the card order's receipt PDF with the note but opens no invoice PDF, no order with a line lacking a USD fact and no pre-layout invoice. They stay Out of suite in the winner-order feature suite, verified by the note tests of task 7.5
 - **Stale text** - Walk 4 of the durable suite (durable lines 760 to 772) and its `**Current cases**` paragraph (durable line 2494) repeat the `@4` results, HKD793.00, HKD38.73 and HKD1,069.73. The walk is refreshed when `/tcs-review` next prepares the suite; this run's figures are the authority until then
 - **Raised** - none
 - **Contradictions** - none
