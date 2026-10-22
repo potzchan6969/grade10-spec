@@ -170,10 +170,9 @@ $10, where Goldin names none.
 - 🚧 **One configured schedule** — the USD tiers above apply to every lot, and
   a change to their values reaches the next bid on every lot, open ones
   included; a bid already standing keeps its amount
-- 🚧 **Whole dollars only** — a bid, a maximum, every tier bound and every
-  increment are whole dollars; a bid with cents is refused and nothing moves
-- ❓ **A starting price with cents** — the product manager confirms whether a
-  lot may start on cents, since no whole-dollar bid can match one
+- 🚧 **Whole dollars only** — a bid, a maximum, a starting price, every tier
+  bound and every increment are whole dollars; a bid with cents is refused and
+  nothing moves, and a starting price with cents is not saved
 - **What a collector sees** — the next minimum for the lot, never the
   schedule
 - **A first maximum** — must reach the opening price, and the public price it
