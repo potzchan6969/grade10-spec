@@ -1,0 +1,14 @@
+// A class string that sets a flex direction is a stack drawn by hand.
+// The `(?:[^"]*\s)?` guard requires the utility to be unprefixed, so a
+// responsive `xl:flex-row` — which Stack cannot express — does not match
+// on its own.
+or {
+  JsStringLiteralExpression(),
+  JsxString(),
+  JsLiteralMemberName(),
+  JsTemplateChunkElement(),
+  TsStringLiteralType()
+} as $s where {
+  $s <: r"\"?(?:[^\"]*\s)?flex-(?:col|row)\b[^\"]*\"?",
+  register_diagnostic(span=$s, message="Hand-rolled stack: use VStack/HStack (or Stack) from @grade10/design-system with a gap rung instead of flex direction classes. See docs/governance/figma-component-to-code.md.", severity="warn")
+}

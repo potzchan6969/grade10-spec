@@ -24,8 +24,9 @@ export type GitIndex = {
    * the one that wrote a record line holding it. Nothing where the history
    * holds none, or where there is no history to walk. */
   writerOf?: (path: string, needle: string) => string | undefined;
-  /** A file as one commit holds it, or nothing where it holds none. */
-  showAt?: (sha: string, path: string) => string | undefined;
+  /** Files as one commit holds them, keyed by path, in one call; a path the
+   * commit holds no file at is absent. */
+  filesAt?: (sha: string, paths: string[]) => Map<string, string>;
 };
 
 export const NO_GIT: GitIndex = {
@@ -156,7 +157,15 @@ export function mergeGitIndexes(
       .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
       .slice(0, HISTORY_LIMIT),
     writerOf: (path, needle) => side(path).writerOf?.(path, needle),
-    showAt: (sha, path) => side(path).showAt?.(sha, path),
+    filesAt: (sha, paths) => {
+      // A side with no history holds none of its paths, as `showAt` once said
+      // path by path; the other side still answers for its own.
+      const ofSide = (index: GitIndex) => {
+        const own = paths.filter((path) => side(path) === index);
+        return own.length > 0 ? (index.filesAt?.(sha, own) ?? []) : [];
+      };
+      return new Map([...ofSide(store), ...ofSide(content)]);
+    },
     readBlobs: async (refs) => {
       const ofSide = (index: GitIndex) =>
         refs.filter((ref) => side(ref.slice(ref.indexOf(":") + 1)) === index);
@@ -224,24 +233,54 @@ export async function readGitIndex(
   // costs dates, not pages, so say it out loud and carry on.
   if (headers === 0 && log.trim() !== "") warnUnparsed(root);
 
+  // A file at a commit never changes, and many changes read the same ones.
+  const blobsAt = new Map<string, string | undefined>();
   return {
     head,
     commitOf: (storePath) => commits.get(storePath),
     newestUnder: (storeDir) => dirs.get(storeDir),
     history,
     readBlobs: (refs) => readBlobs(root, refs),
-    writerOf: (path, needle) =>
-      quietGit(root, [
-        "log",
-        "-1",
-        "--format=%H",
-        "-S",
-        needle,
-        "HEAD",
-        "--",
-        path,
-      ])?.trim() || undefined,
-    showAt: (sha, path) => quietGit(root, ["show", `${sha}:${path}`]),
+    writerOf: remembered(
+      (path, needle) =>
+        quietGit(root, [
+          "log",
+          "-1",
+          "--format=%H",
+          "-S",
+          needle,
+          head,
+          "--",
+          path,
+        ])?.trim() || undefined,
+    ),
+    filesAt: (sha, paths) => {
+      const refs = paths.map((path) => `${sha}:${path}`);
+      const unread = [...new Set(refs.filter((ref) => !blobsAt.has(ref)))];
+      if (unread.length > 0) {
+        const blobs = blobsOf(catFileSync(root, unread), unread);
+        for (const ref of unread) blobsAt.set(ref, blobs.get(ref));
+      }
+      return new Map(
+        paths.flatMap((path, at) => {
+          const text = blobsAt.get(refs[at]);
+          return text === undefined ? [] : [[path, text]];
+        }),
+      );
+    },
+  };
+}
+
+/** Many changes ask who wrote the same line; each answer is fixed for the
+ * index's life, so git is asked once. */
+function remembered(
+  read: (a: string, b: string) => string | undefined,
+): (a: string, b: string) => string | undefined {
+  const answers = new Map<string, string | undefined>();
+  return (a, b) => {
+    const key = `${a}\0${b}`;
+    if (!answers.has(key)) answers.set(key, read(a, b));
+    return answers.get(key);
   };
 }
 
@@ -288,10 +327,27 @@ async function readBlobs(
   root: string,
   refs: string[],
 ): Promise<Map<string, string>> {
-  const found = new Map<string, string>();
-  if (refs.length === 0) return found;
+  if (refs.length === 0) return new Map();
+  return blobsOf(await catFile(root, refs), refs);
+}
 
-  const out = await catFile(root, refs);
+/** `catFile` for a caller that cannot wait. A ref git cannot resolve is a
+ * header line, not a failure, so a throw here is git itself refusing. */
+function catFileSync(root: string, refs: string[]): Buffer {
+  return execFileSync(
+    "git",
+    ["-c", "core.quotePath=false", "cat-file", "--batch"],
+    {
+      cwd: root,
+      input: `${refs.join("\n")}\n`,
+      stdio: ["pipe", "pipe", "pipe"],
+      maxBuffer: 256 * 1024 * 1024,
+    },
+  );
+}
+
+function blobsOf(out: Buffer, refs: string[]): Map<string, string> {
+  const found = new Map<string, string>();
   let offset = 0;
   for (const ref of refs) {
     const end = out.indexOf(0x0a, offset);
@@ -444,11 +500,11 @@ export function mainStateOf(
   return files ? { state: "diverged", ref: main.ref, files } : undefined;
 }
 
-let warned = false;
+const unparsed = new Set<string>();
 
 function warnUnparsed(root: string): void {
-  if (warned) return;
-  warned = true;
+  if (unparsed.has(root)) return;
+  unparsed.add(root);
   console.warn(
     `manual: git log in ${root} named no commit this reader recognizes — pages will show no commit info`,
   );

@@ -216,11 +216,16 @@ function movedSince(
 ): Moved[] | undefined {
   const sha = git.writerOf?.(`${change.dir}/.openspec.yaml`, reviewed);
   if (!sha) return undefined;
+  const files = git.filesAt?.(
+    sha,
+    before.flatMap(({ parts }) => parts.map((part) => part.path)),
+  );
+  if (!files) return undefined;
   const was: string[][] = [];
   for (const { parts } of before) {
     const texts: string[] = [];
     for (const part of parts) {
-      const text = textAt(git, sha, part);
+      const text = textAt(files, part);
       if (text === undefined) return undefined;
       texts.push(text);
     }
@@ -240,8 +245,8 @@ function movedSince(
 }
 
 /** One part as one commit held it: a file whole, or a page's section. */
-function textAt(git: GitIndex, sha: string, part: Part): string | undefined {
-  const source = git.showAt?.(sha, part.path);
+function textAt(files: Map<string, string>, part: Part): string | undefined {
+  const source = files.get(part.path);
   if (source === undefined || part.slug === undefined) return source;
   try {
     return sectionTextOf({ ast: parsePage(source) }, part.slug);

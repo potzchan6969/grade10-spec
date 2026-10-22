@@ -1,0 +1,14 @@
+// A literal colour — hex or a colour function — bypasses tokens.json
+// entirely, so no theme and no design-sync diff ever sees it. Also fires
+// on a hex fallback inside var(), which quietly ships one theme's value
+// to every other theme.
+or {
+  JsStringLiteralExpression(),
+  JsxString(),
+  JsLiteralMemberName(),
+  JsTemplateChunkElement(),
+  TsStringLiteralType()
+} as $s where {
+  $s <: r"\"?[^\"]*-\[[^\]]*(?:#[0-9a-fA-F]{3,8}\b|(?:rgba?|hsla?|oklch|oklab|color-mix)\()[^\]]*\][^\"]*\"?",
+  register_diagnostic(span=$s, message="Literal colour in a class: colours travel Figma variables -> tokens.json -> theme CSS. Use the token utility, or add the token, rather than a hex or colour function. See docs/governance/figma-component-to-code.md.", severity="warn")
+}
