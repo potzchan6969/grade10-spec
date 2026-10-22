@@ -110,6 +110,7 @@ None.
 - [Post-Bidding · Receipt Documents](../../../docs/prds/products/grade10-site/auction/post-bidding.md#receipt-documents)
 - [Auction Invoice and Receipt Contents](../../../docs/references/auction-invoice-and-receipt-contents.md)
 - [Invoice and Receipt PDF Blocks · On the Page](../../../docs/prds/products/shared/ui/invoice-and-receipt-pdf.md#on-the-page)
+- [Money Amounts · Display Shapes](../../../docs/prds/platform/shared/money-amounts.md#display-shapes)
 
 ## Scope boundaries
 
