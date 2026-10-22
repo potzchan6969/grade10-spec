@@ -4,7 +4,6 @@ export type AuctionEmailCampaign =
   | "bidding_has_opened"
   | "bidding_closes_in_24h"
   | "extended_bidding"
-  | "new_bid"
   | "outbid"
   | "lot_closed_didnt_win"
   | "lot_watched_sold"

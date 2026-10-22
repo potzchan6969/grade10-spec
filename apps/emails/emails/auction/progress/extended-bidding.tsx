@@ -24,7 +24,7 @@ export default function ExtendedBiddingEmail({
 }: ExtendedBiddingProps) {
   return (
     <AuctionLetter
-      body="A late bid moved this auction’s close. Bidding continues until no further bid lands in the extension window."
+      body="Each new bid resets the timer. The auction ends only when a full extension window passes with no new bids."
       brandName={brandName}
       campaign="extended_bidding"
       canUnsubscribe={canUnsubscribe}
