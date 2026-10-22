@@ -27,6 +27,8 @@
 * **Testability:** automation
 * **Trace:** Order detail
 
+**Blocked:** Author of the `shared/ui/auction-order` spec - the Feature set says the Subtotal and fee rows sit "each between its own separators", the requirement and the merged block draw them as one group between two separators; this case follows the Feature set wording until the author says which holds.
+
 **Pre-conditions:**
 
 * `AuctionWinnerOrder` is rendered for an HKD order with USD line items, `summary.subtotal` carrying a note, one `summary.feeLines` row and an Order Total.
@@ -71,6 +73,8 @@
 * **Testability:** automation
 * **Trace:** Order detail
 
+**Blocked:** Author of the `shared/ui/auction-order` spec - the result that each fee row sits between its own separators follows the Feature set wording, which the requirement and the merged block do not draw; see the Subtotal case above.
+
 **Pre-conditions:**
 
 * `AuctionWinnerOrder` is rendered with `summary.subtotal`, an Order Total and a `summary.feeLines` list of two rows.
@@ -92,3 +96,58 @@
 * `<fee row 1>` shows first and `<fee row 2>` second, as supplied.
 * Each fee row sits between its own separators.
 * `<fee row 2>` prints Free as given.
+
+---
+
+## Settled
+
+- `AuctionWinnerOrder` draws each of `summary.subtotal` and `summary.feeLines` as supplied: an empty fee list draws no row, the Subtotal's note is optional, and with the older converted total and fee beside them every supplied row draws; the application supplies one set (decisions Q28).
+
+## Reconciliation
+
+**Run:** QA1, blind pass for `convert-hkd-order-at-subtotal`, 2026-10-22. The first blind pass read a bundle whose existing suites were empty and whose PRD pages lacked the product manager's edits, both packaging defects of the coordinator. It was resumed against a corrected bundle, with the real suites and the current PRD, and revised. It read no `## Requirements`, no scenario, no `tech-design.md`, no `tasks.md`, no archive and no code. It is the run's own statement, not proof.
+
+**Run:** QA2, 2026-10-22, in a fresh context. It read the planning-dev skill, the specs-to-test-cases, tcs-conventions, planning-review-efficiency and writing documents; the change's proposal, `decisions.md` (Q1 to Q19 and the 12 Raised rows), the four `user-journeys.md`, the four `spec.md` deltas, `tech-design.md` and `tasks.md`; the durable shared auction-order spec and suite; and the merged block, `packages/ui/src/blocks/auction-order/auction-winner-order.tsx`. It compared each blind case with the scenarios and wrote no case from a scenario. A case is linked to a scenario when its results assert every outcome the scenario's THEN and ANDs state, from a starting state of the same class and with values from the same partition; a clause a case leaves out keeps the link off and the scenario under Uncovered. It is a statement, not proof.
+
+**Blind cases**
+
+| Case | Disposition |
+| --- | --- |
+| `US1-TC34` (`TC-ibm`) | Kept and blocked. It asserts the order of the rows, the note and the total, but its result that the Subtotal row and the fee row "each sit between their own separators" follows the Feature set bullet, and the requirement, `g10.shared-auction-order.SC1` and the merged block draw them as one group between two separators. No link until the author says which holds |
+| `US1-TC35` (`TC-lnf`) | Kept and blocked on the same result. The order of several fee rows, as supplied, and the Free string printed as given are not in question. No link: no scenario states them |
+
+**Existing durable cases**
+
+- `US1-TC27` (`TC-bu1@3`) renders what the application supplies, and the strings it supplies (HKD total 103100, fee 3873) are illustrative values the application no longer sends. Its results do not move. Left `draft`
+- `US1-TC32` (`TC-mvr@1`) is the block with no converted total. Left `draft`
+
+**Scenario coverage**
+
+| Scenario | Covered by |
+| --- | --- |
+| `shared-ui-auction-order-SC-27`, `SC-28`, `SC-30`, `SC-s7t`, `SC-29` | Unchanged; the durable cases that held them hold them |
+| `g10.shared-auction-order.SC1` | Not linked: `US1-TC34` asserts the rows and the total, and its separator result contradicts the scenario |
+| `g10.shared-auction-order.SC2` | Not linked: `US1-TC34` asserts the note under the Subtotal and never that no footnote shows under the fee row or the total |
+
+**Uncovered**
+
+- `g10.shared-auction-order.SC3`: a summary supplied neither `summary.subtotal` nor `summary.feeLines` renders its lines, one separator and the total, with no Subtotal or fee row. No case supplies the block without them
+- `SC1` and `SC2` until `US1-TC34` is settled
+
+**Over-claimed**
+
+- None
+
+**Contradictions between the readings (held)**
+
+- Separators. QA1 read "each between its own separators" from the Feature set bullet; Dev's requirement says "one separator above them and another above the total" and `SC1` counts two separators in the summary. The merged block agrees with Dev: one `hr` above the Subtotal and fee group and one above the total. Held for the author of the capability; recommended: the requirement wording, with the Feature set bullet reworded and the two results rewritten to "share one group between two separators"
+
+**Anchor coverage**
+
+| Anchor | Cases | Scenarios |
+| --- | --- | --- |
+| Root group Order detail | `US1-TC34`, `TC35`, and the durable `TC27`, `TC28`, `TC32` | SC1 and SC2 pending the held separator question; SC3 uncovered |
+
+**Raised**
+
+Q28 closes the two shared rows: each prop draws on its own as supplied, and with both sets supplied both draw. The merged block already behaves so.

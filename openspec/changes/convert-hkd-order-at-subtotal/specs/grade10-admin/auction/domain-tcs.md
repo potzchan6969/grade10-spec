@@ -141,3 +141,15 @@
 * Step 7: the confirmation says no letter is sent, and the order then reads Cancelled.
 * Step 8 reads `<available before>` plus `<held quantity>`.
 * Step 9 holds no won, address, invoice, payment or other order-letter row for this order addressed to any recipient, from the close through invoice send, expiry and cancellation.
+
+## Reconciliation
+
+**Run:** QA1, levels pass for `convert-hkd-order-at-subtotal`, 2026-10-22. It rewrote the two admin domain cases this change moves from the journeys and the domain's PRD pages, before the feature readings, and read no `## Requirements`, no scenario, no `tech-design.md`, no `tasks.md`, no archive and no code. The first blind pass ran on a bundle with empty suites and PRD pages without the product manager's edits, and was resumed on a corrected one. It is the run's own statement, not proof.
+
+**Run:** QA2, 2026-10-22, in a fresh context. It read both cases against the post-sale delta and recomputed the figures: 10100 plus 2020 plus 1001 is 13121 minor USD units, which converts once to 103000 at 7.85. It is a statement, not proof.
+
+- **`grade10-admin-auction-e2e-US3-TC1-4`** (`TC-dly@4`) - step 3 now reads the quote preview and the case names no amount; it carries no scenario link, as before
+- **`grade10-admin-auction-e2e-US4-TC2-6`** (`TC-sjg@6`) - the figures move from 103100 to 103000 with the USD sum and the Subtotal stated. Its links to `grade10-admin-auction-post-sale-SC-253` stand. Its links to `grade10-admin-auction-internal-bid-SC-71`, `SC-73` and `SC-75` stand too, but `SC-73` still states 103100 and the capability is not on the proposal's list; the open row on that scenario in `decisions.md` holds the disagreement
+- **Stale text** - the `US4-TC2` paragraph of the durable suite's `## Reconciliation` (durable line 492) repeats the 103100 result and its per-line conversions; it is refreshed when `/tcs-review` next prepares the suite
+- **Raised** - none
+- **Contradictions** - `US4-TC2-6` against the durable `internal-bid` `SC-73`, held with the row that names it

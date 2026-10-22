@@ -1,7 +1,291 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/11
+**Status:** pending-review · 0/24
 **Drafts styled:** 2026-10-14, tcs-rules r5
+
+## g10.auction-winner-order.US1: Winner settles a won listing
+
+**As a** winner,
+**I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
+**so that** the listing I won becomes mine inside a deadline I can see, priced for where it is actually going.
+
+<!-- trace:case id=g10.auction-winner-order.TC-m21 rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
+### g10.auction-winner-order.US1-TC31: Sent tax is itemised throughout the order record
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) holds a paid auction order in USD whose invoice includes Tax of USD70 (range: >0 minor units).
+
+* The winner order under test is `<winner_order_41_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_41_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+**Steps:**
+
+1. Open Winner Order and read Order Summary.
+2. Open the invoice PDF.
+3. Open the receipt PDF.
+
+**Expected Results:**
+
+* Order Summary shows Tax of USD70 (range: >0 minor units) between Insurance and Payment Processing Fee.
+* Order Summary offers the Tax info tip with the stated copy.
+* The invoice PDF and the receipt PDF each show Tax of USD70 (range: >0 minor units) between Insurance and Subtotal.
+* Each PDF's Subtotal includes Tax of USD70 (range: >0 minor units).
+
+<!-- trace:case id=g10.auction-winner-order.TC-dvc rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
+### g10.auction-winner-order.US1-TC33: Card fee is grossed up on tax
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* admin(operator with payment-processing) is on a card order in Preparing Invoice, settled in HKD.
+* The order's USD lines before Tax total USD320 (fixed derived value).
+
+* The winner order under test is `<winner_order_43_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_43_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+**Steps:**
+
+1. Add Tax of USD80 (fixed derived value).
+2. Send the invoice.
+3. Read its Subtotal and payment processing fee inputs.
+
+**Expected Results:**
+
+* The Subtotal is HKD3,140.00 (fixed derived value), the USD400 sum of the lines and Tax converted once at 7.85.
+* Grade10 computes the payment processing fee from that Subtotal.
+
+---
+
+## g10.auction-winner-order.US2: Winner follows a settled listing to delivery
+
+**As a** winner who has paid,
+**I want** a receipt PDF that says how I paid, what was paid before it and what is still owed, a tracker, and proof of what was handed over,
+**so that** I can account for a high-value purchase without asking Grade10 for records.
+
+<!-- trace:case id=g10.auction-winner-order.TC-h7f rev=3 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
+### g10.auction-winner-order.US2-TC1: The receipt itemises what was paid and sums to the total
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner) is on `<winner order url>` for `<winner_order_51_1>`.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_51_1 | An HKD order paid in full at `<final amount>`; bind its identity only | · |
+| final amount | HKD3,330 | (range: 80000-399999 minor units) |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
+**Steps:**
+
+1. Download the receipt PDF.
+2. Read its lines.
+
+**Expected Results:**
+
+* Winning bid, buyer's premium, shipping, insurance when added and Tax when added show in USD, then the Subtotal, the Payment Processing Fee and the final amount in HKD.
+* The Subtotal and the fee add up to `<final amount>`.
+* It names how it was paid.
+
+---
+
+## g10.auction-winner-order.US8: Winner pays an invoice with a policy premium
+
+**As a** winner of an auction listing,
+**I want** my invoice to calculate the stated buyer premium correctly using the current currency minimum,
+**so that** the amount I pay is explainable and collectible.
+
+<!-- trace:case id=g10.auction-winner-order.TC-xji rev=2 -->
+### g10.auction-winner-order.US8-TC5: HKD order converts the premium and minimum together
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-03
+
+**Pre-conditions:**
+
+* The invoice is for an HKD settlement and the USD premium rule has a non-zero minimum.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winning bid | USD1 | (fixed fixture): 20% of it is below the minimum |
+| minimum premium | USD1 | (fixed configured minimum) |
+| exchange rate | 7.85 HKD per USD | · |
+| USD sum | USD2.00 | (fixed derived value): `<winning bid>` plus the premium |
+| Subtotal | HKD15.70 | (fixed derived value): `<USD sum>` times `<exchange rate>`, converted once |
+
+**Steps:**
+
+1. Read the invoice premium, its lines and its Subtotal.
+
+**Expected Results:**
+
+* The premium is the greater of 20% of `<winning bid>` or `<minimum premium>`, in USD.
+* The lines stay in USD and the Subtotal reads `<Subtotal>`, `<USD sum>` converted once at `<exchange rate>` and rounded up to the next cent, not each line converted on its own.
+
+---
+
+## g10.auction-winner-order.US24: Winner chooses the currency they pay in
+
+**As a** winner of a listing bid in USD,
+**I want** to settle in USD or HKD when I set the order up,
+**so that** I pay in the currency my money is already in.
+
+<!-- trace:case id=g10.auction-winner-order.TC-79a rev=3 covers=g10.auction-winner-order.SC-8c6 -->
+### g10.auction-winner-order.US24-TC2: Chosen settlement currency prices the invoice
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-24
+
+**Pre-conditions:**
+
+* A winner is on order setup with an address and billing address ready.
+
+* The USD winning bid is `<usd winning bid minor units>` minor units, with premium `<usd premium minor units>` minor units.
+
+* The winner order under test is `<winner_order_180_1>`.
+
+**Test data:**
+
+| `<settlement currency>` | `<usd winning bid minor units>` | `<usd premium minor units>` | `<invoice amounts>` |
+| --- | ---: | ---: | --- |
+| USD | 250000 | 50000 | Winning Bid 250000 USD; Buyer's Premium 50000 USD; total 300000 USD |
+| HKD | 250000 | 50000 | Winning Bid 250000 USD; Buyer's Premium 50000 USD; Subtotal 2355000 HKD |
+
+| Field | Value |
+| --- | --- |
+| winner_order_180_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+**Steps:**
+
+1. Choose `<settlement currency>`.
+2. Choose a payment method offered for it.
+3. Confirm the order setup.
+4. Read the invoice currency and order total.
+
+**Expected Results:**
+
+* The invoice shows the amounts `<invoice amounts>`, with no conversion for USD.
+* When `<settlement currency>` is HKD, the lines stay in USD and the Subtotal converts their sum once at 7.85, rounded up to the next cent; no HKD amount is printed for a line.
+
+<!-- trace:case id=g10.auction-winner-order.TC-r4x rev=2 covers=g10.auction-winner-order.SC-d84 -->
+### g10.auction-winner-order.US24-TC7: A reissue in the other currency prices the new invoice from the USD amounts and leaves the replaced one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-24
+
+**Blocked:** Product manager - how the operator's order detail reads a replaced HKD invoice is the open row on the operator order detail in `decisions.md` `## Raised`; steps 2 and 3 wait for it.
+
+**Pre-conditions:**
+
+* admin(operator with payment-processing) holds `<winner_order_185_1>`, whose pending invoice was sent in HKD for bank transfer on HK Local.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_185_1 | An order won at `<winning bid>`, with a pending HKD invoice and a buyer's premium of 20% of it; bind its identity only | · |
+| winning bid | USD100.00 | (fixed derived value), 10000 minor units |
+| Subtotal HKD | HKD942.00 | (fixed derived value): `<winning bid>` plus its USD20.00 premium times 7.85, 94200 minor units |
+
+**Steps:**
+
+1. Reissue the invoice in USD, keeping HK Local, with a reason.
+2. Read the new invoice's Winning Bid.
+3. Read the replaced invoice in the order's invoice history.
+
+**Expected Results:**
+
+* The new invoice's Winning Bid reads `<winning bid>` in USD, with no conversion.
+* The replaced invoice still reads its Winning Bid as `<winning bid>` in USD and its Subtotal as `<Subtotal HKD>`.
+
+---
 
 ## g10.auction-winner-order.US26: Winner who settles in HKD reads the invoice and receipt with USD lines and an HKD total
 
@@ -9,20 +293,322 @@
 **I want** my invoice, receipt and receipt letter to list the same USD lines and end in the same HKD Subtotal, fee and Order Total as my Order Summary,
 **so that** every document I keep shows what the lot cost in USD and what I paid in HKD.
 
----
+<!-- trace:case id=g10.auction-winner-order.TC-ac5 rev=4 covers=g10.auction-winner-order.SC-gc6,g10.auction-winner-order.SC-buj,g10.auction-winner-order.SC-ekn,g10.auction-winner-order.SC-bk7,g10.auction-winner-order.SC-tmc -->
+### g10.auction-winner-order.US26-TC1: An HKD invoice converts the USD sum once and rounds it up to the cent
 
-## g10.auction-winner-order.US27: Winner who settles in HKD reads the Order Summary with USD lines and an HKD total
+Runs once per row of **Test data**.
 
-**As a** winner who picked HKD,
-**I want** my Order Summary to list what I won in USD, then one HKD Subtotal converted from their sum, the fee, and the Order Total I will pay,
-**so that** I see what the lot cost and check what I pay against the one rate the note names.
+**Classification:**
 
-## Ungrouped
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-26
 
-### g10.auction-winner-order.US26: Winner who settles in HKD reads the invoice and receipt with USD lines and an HKD total
+**Pre-conditions:**
 
-<!-- trace:case id=g10.auction-winner-order.TC-c07 rev=1 -->
-#### g10.auction-winner-order.US26-TC10: Invoice page and PDF list USD lines then HKD Subtotal, fee and total
+* The USD premium minimum is USD0.
+* customer(winner settled in HKD) is on `<winner order url>` for `<hkd_order_n>`, whose invoice is sent.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| hkd_order_n | An HKD order paid by bank transfer, invoice sent and Pending Payment, with the lines and bank transfer fee of the row; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
+| Row | `<usd lines>` | `<bank transfer fee>` | `<subtotal>` | `<fee>` | `<order total>` | `<not this>` |
+| --- | --- | --- | --- | --- | --- | --- |
+| Exact | Winning Bid USD100.00, Buyer's Premium USD20.00, Shipping & Handling zero | USD0 | HKD942.00 | Free | HKD942.00 | none; a control row whose lines need no rounding |
+| Fraction rounds up | USD101.00, USD20.20, USD10.01 | USD0 | HKD1,030.00 | Free | HKD1,030.00 | a Subtotal of HKD1,029.99, which drops the fraction, or HKD1,031.00, the three lines each rounded up to a whole HK$ |
+| Five lines | USD150.00, USD30.00, USD49.00, USD20.00, USD2.00 | USD0 | HKD1,970.35 | Free | HKD1,970.35 | a Subtotal of HKD1,972.00, the five lines each rounded up to a whole HK$ |
+| Fee converts alone | USD101.00, USD20.20, USD9.92 | USD2.57 | HKD1,029.30 | HKD20.18 | HKD1,049.48 | an Order Total of HKD1,049.47, which converts the fee with the lines |
+| Fee beside five lines | USD150.00, USD30.00, USD49.00, USD20.00, USD2.00 | USD2.57 | HKD1,970.35 | HKD20.18 | HKD1,990.53 | an Order Total of HKD1,991.00, rounded up to a whole HK$ |
+
+**Steps:**
+
+1. Click the Invoice link beside the Order summary heading.
+2. Open the invoice page.
+3. Read its lines, Subtotal, Payment Processing Fee and Order Total.
+
+**Expected Results:**
+
+* The invoice page opens.
+* The lines read in USD as `<usd lines>`, and the Winning Bid keeps its USD amount.
+* Subtotal reads `<subtotal>`, the USD sum times 7.85, converted once and rounded up to the next cent.
+* Payment Processing Fee reads `<fee>`, the `<bank transfer fee>` times 7.85 rounded up to the next cent below the Subtotal, and Free when the fee is zero.
+* Order Total reads `<order total>`, the Subtotal plus the fee, with no further rounding.
+* No figure reads as `<not this>`.
+
+<!-- trace:case id=g10.auction-winner-order.TC-nf6 rev=4 covers=g10.auction-winner-order.SC-81v -->
+### g10.auction-winner-order.US26-TC2: HKD receipt PDF lists the USD lines, the HKD Subtotal, fee and total, and the payment
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-26
+
+**Pre-conditions:**
+
+* customer(winner settled in HKD) is on `<winner order url>` for `<hkd_order_n>`.
+* `<hkd_order_n>` was paid in full in one payment and reads Preparing Shipment.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| hkd_order_n | An HKD order paid in full, with the method, lines, rule and totals of the row; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
+| Row | `<method>` | `<usd lines>` | `<subtotal>` | `<fee>` | `<order total>` |
+| --- | --- | --- | --- | --- | --- |
+| Bank transfer | Bank transfer on FPS, bank transfer fee USD0 | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | HKD1,030.00 | Free | HKD1,030.00 |
+| Card with Tax | Card, HKD rule 3.4% plus HKD2.35 | Winning Bid USD150.00, Buyer's Premium USD30.00, Shipping & Handling USD49.00, Insurance USD20.00, Tax USD2.00 | HKD1,970.35 | HKD71.79 | HKD2,042.14 |
+
+**Steps:**
+
+1. Click the receipt link under the payment-method card.
+2. Read the receipt PDF's lines, Subtotal, Payment Processing Fee and Order Total.
+3. Read its Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due.
+
+**Expected Results:**
+
+* The receipt PDF opens.
+* The lines read in USD as `<usd lines>`, with two decimals and Tax between Insurance and the Subtotal where the row has it.
+* Subtotal, Payment Processing Fee and Order Total read `<subtotal>`, `<fee>` and `<order total>` in HKD with two decimals, and the fee reads Free where it is zero.
+* Original Invoice Total reads `<order total>`, Previous Payments HKD0.00, Current Payment Received `<order total>` and Remaining Balance Due HKD0.00.
+* No rate and no conversion note is printed.
+* Every figure equals the invoice and the Order Summary.
+
+<!-- trace:case id=g10.auction-winner-order.TC-9dm rev=2 -->
+### g10.auction-winner-order.US26-TC3: Order letters of an HKD order name HKD totals and the receipt letter lists the USD lines
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-26
+
+**Pre-conditions:**
+
+* Grade10 sent letters about `<winner_order_196_1>`, which is settled in HKD by card and has a sent invoice, paid in full.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_196_1 | An order settled in HKD by card with USD lines of USD150.00, USD30.00, USD49.00, USD20.00 and USD2.00 and an Order Total of HKD2,042.14, paid in full; bind its identity only |
+
+**Steps:**
+
+1. Read each letter Grade10 sent for `<winner_order_196_1>`.
+
+**Expected Results:**
+
+* A letter that names only a total names the Order Total in HKD.
+* No letter sent after the winner picked HKD prints a conversion rate, and none that names only a total prints a USD winning bid.
+* The payment received letter lists the USD lines, then the HKD Subtotal, Payment Processing Fee and Order Total.
+* The won-listing letter, sent at the close before any currency was picked, names the winning bid in US$.
+
+<!-- trace:case id=g10.auction-winner-order.TC-3ly rev=3 covers=g10.auction-winner-order.SC-qtr -->
+### g10.auction-winner-order.US26-TC5: The card fee of an HKD order comes from the HKD rule
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-26
+
+**Pre-conditions:**
+
+* Payment Settings holds a USD card fee rule of 4.4% and USD0.30, and an HKD card fee rule of 3.4% and HK$2.35.
+* `<winner_order_198_1>` is settled in HKD by card, with its invoice sent.
+* customer(winner) is on `<winner order url>` for `<winner_order_198_1>`.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_198_1 | A listing won at USD101.00, with a USD20.20 premium and USD10.01 Shipping & Handling, settled in HKD by card; bind its identity only | · |
+| HKD Subtotal | HK$1,030.00 | (fixed derived value): the USD131.21 sum times 7.85, converted once and rounded up to the next cent |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
+**Steps:**
+
+1. Open the invoice.
+2. Read the card fee and the total.
+
+**Expected Results:**
+
+* The card fee is 3,869 minor units in HKD, the HKD rule's gross-up fee on subtotal `<HKD Subtotal>`.
+* The total is 106,869 minor units in HKD, the Subtotal plus the fee.
+* The USD rule is not applied.
+
+<!-- trace:case id=g10.auction-winner-order.TC-uz6 rev=3 -->
+### g10.auction-winner-order.US26-TC6: A USD sum converts to HKD once, rounded up to the next cent
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-26
+
+**Pre-conditions:**
+
+* None.
+
+**Test data:**
+
+| `<usd sum>` | `<hkd subtotal>` | Why this row | Fixture notes |
+| --- | --- | --- | --- |
+| USD120.00 | HK$942.00 | Exact: 942.00, nothing to round | `<usd sum>`: (fixed boundary) |
+| USD131.21 | HK$1,030.00 | 1029.9985 rounds up to the next cent | `<usd sum>`: (fixed boundary) |
+| USD0.04 | HK$0.32 | 0.314 rounds up, not to nearest | `<usd sum>`: (fixed boundary) |
+| USD0.01 | HK$0.08 | 0.0785 rounds up to the next cent | `<usd sum>`: (fixed boundary) |
+
+**Steps:**
+
+1. Convert `<usd sum>` to HKD once.
+
+**Expected Results:**
+
+* The result is `<hkd subtotal>`.
+
+<!-- trace:case id=g10.auction-winner-order.TC-k5y rev=2 -->
+### g10.auction-winner-order.US26-TC7: Only the Order Summary's note names the conversion rate
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-26
+
+**Pre-conditions:**
+
+* `<winner_order_200_1>` is settled in HKD and paid in full, and Grade10 sent letters about it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_200_1 | An order settled in HKD whose invoice of HK$2,042.14 was paid in full; bind its identity only |
+
+**Steps:**
+
+1. Read the settlement currency choice before picking HKD on a new order.
+2. Read Order Summary on `<winner_order_200_1>`.
+3. Read its invoice.
+4. Read its receipt.
+5. Read each letter sent for it.
+
+**Expected Results:**
+
+* The Order Summary names the rate once, in the note under the Subtotal.
+* The settlement currency choice, the invoice, the receipt and each letter name no rate, exchange rate or 7.85.
+
+<!-- trace:case id=g10.auction-winner-order.TC-one rev=2 covers=g10.auction-winner-order.SC-8gv -->
+### g10.auction-winner-order.US26-TC8: A bank transfer fee typed in USD converts alone and sits below the Subtotal
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-26
+
+**Pre-conditions:**
+
+* customer(winner) is on `<winner order url>` for `<winner_order_201_1>`.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_201_1 | An order settled in HKD by bank transfer on HK Local whose USD lines sum to USD131.21, with bank transfer fee `<bank transfer fee>` typed in USD; bind its identity only | · |
+| subtotal | HKD1,030.00 | (fixed derived value), 103000 minor units |
+| bank transfer fee | USD50.00 | (fixed boundary or equality), 5000 minor units, which converts to HKD392.50 |
+| fee HKD | HKD392.50 | (fixed derived value), 39250 minor units |
+| total HKD | HKD1,422.50 | (fixed derived value), 142250 minor units |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
+**Steps:**
+
+1. Open the invoice.
+2. Read the Subtotal, the Payment Processing Fee and the total.
+
+**Expected Results:**
+
+* The Subtotal reads `<subtotal>`, without the fee in the sum.
+* The Payment Processing Fee reads `<fee HKD>`, the typed amount converted and rounded up to the next cent, below the Subtotal.
+* The total reads `<total HKD>`, the Subtotal plus the fee.
+* The lines read in USD, and the Subtotal, fee and total in HKD.
+
+<!-- trace:case id=g10.auction-winner-order.TC-c07 rev=1 covers=g10.auction-winner-order.SC-rsv -->
+### g10.auction-winner-order.US26-TC10: Invoice page and PDF list USD lines then HKD Subtotal, fee and total
 
 Runs once per row of **Test data**.
 
@@ -77,8 +663,8 @@ Runs once per row of **Test data**.
 * No rate and no conversion note is named anywhere in `<invoice_document>`.
 * Every figure equals the Order Summary on Winner Order.
 
-<!-- trace:case id=g10.auction-winner-order.TC-b46 rev=1 -->
-#### g10.auction-winner-order.US26-TC11: Invoice with Free lines and no Insurance or Tax keeps two decimals
+<!-- trace:case id=g10.auction-winner-order.TC-b46 rev=1 covers=g10.auction-winner-order.SC-7q5 -->
+### g10.auction-winner-order.US26-TC11: Invoice with Free lines and no Insurance or Tax keeps two decimals
 
 Runs once per row of **Test data**.
 
@@ -131,56 +717,8 @@ Runs once per row of **Test data**.
 * Payment Processing Fee reads Free and is not left out.
 * Order Total reads `<subtotal_2>` as HK$942.00.
 
-<!-- trace:case id=g10.auction-winner-order.TC-9ke rev=1 -->
-#### g10.auction-winner-order.US26-TC12: Receipt PDF repeats the USD lines and the HKD Subtotal, fee and total
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-26
-
-**Pre-conditions:**
-
-* customer(winner settled in HKD) is on `<winner order url>` for `<hkd_order_1>`.
-* `<hkd_order_1>` was paid in full by card and reads Preparing Shipment.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| hkd_order_1 | An HKD order paid by card; lines USD150 winning bid, USD30 Buyer's Premium, USD49 Shipping & Handling, USD20 Insurance, USD2 Tax; HKD card rule 3.4% plus HKD2.35 |
-| usd_sum_1 | USD251 (fixed: the sum of the five USD lines) |
-| subtotal_1 | HKD1970.35 (fixed: `<usd_sum_1>` times 7.85, converted once) |
-| fee_1 | HKD71.79 (fixed: the card gross-up of `<subtotal_1>` under the rule, rounded up to the next cent) |
-| total_1 | HKD2042.14 (fixed: `<subtotal_1>` plus `<fee_1>`) |
-
-| Field | Value |
-| --- | --- |
-| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
-
-**Steps:**
-
-1. Click the receipt link under the payment-method card.
-2. Read the receipt PDF's item lines, Subtotal, Payment Processing Fee and Order Total.
-
-**Expected Results:**
-
-* The receipt PDF opens.
-* Item lines read in USD with two decimals, Tax between Insurance and the Subtotal.
-* Subtotal reads `<subtotal_1>`, fee `<fee_1>` and Order Total `<total_1>`, all in HKD with two decimals.
-* No rate and no conversion note is named.
-* Every figure equals the invoice and the Order Summary.
-
 <!-- trace:case id=g10.auction-winner-order.TC-q8e rev=1 -->
-#### g10.auction-winner-order.US26-TC13: Reissued invoice is priced once under the rule and the replaced one keeps its amounts
+### g10.auction-winner-order.US26-TC13: Reissued invoice is priced once under the rule and the replaced one keeps its amounts
 
 **Classification:**
 
@@ -194,6 +732,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-26
+
+**Blocked:** Product manager - how the operator's order detail reads a replaced HKD invoice is the open row on the operator order detail in `decisions.md` `## Raised`; steps 3 and 4 wait for it.
 
 **Pre-conditions:**
 
@@ -234,10 +774,18 @@ Runs once per row of **Test data**.
 * The new invoice says it replaces `<invoice_1>` and prints the same figures as the Order Summary.
 * The replaced `<invoice_1>` still prints Subtotal `<subtotal_1>`, fee `<fee_1>` and Order Total `<total_1>`.
 
-### g10.auction-winner-order.US27: Winner who settles in HKD reads the Order Summary with USD lines and an HKD total
+---
 
-<!-- trace:case id=g10.auction-winner-order.TC-xgk rev=1 -->
-#### g10.auction-winner-order.US27-TC4: Order Summary lists USD lines, one HKD Subtotal and its note
+## g10.auction-winner-order.US27: Winner who settles in HKD reads the Order Summary with USD lines and an HKD total
+
+**As a** winner who picked HKD,
+**I want** my Order Summary to list what I won in USD, then one HKD Subtotal converted from their sum, the fee, and the Order Total I will pay,
+**so that** I see what the lot cost and check what I pay against the one rate the note names.
+
+<!-- trace:case id=g10.auction-winner-order.TC-vwm rev=6 covers=g10.auction-winner-order.SC-kdr,g10.auction-winner-order.SC-fq4,g10.auction-winner-order.SC-lfi,g10.auction-winner-order.SC-hcb -->
+### g10.auction-winner-order.US27-TC1: HKD Order Summary lists the USD lines, one Subtotal with its note, the fee and the Order Total
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -246,7 +794,7 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** regression
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -254,20 +802,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner settled in HKD) is on `<winner order url>` for `<hkd_order_1>`.
+* customer(winner settled in HKD) is on `<winner order url>` for `<winner_order_202_1>`, a Pending Payment order whose invoice is sent.
+* Payment Settings holds the HKD card rule 3.4% plus HKD2.35.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| hkd_order_1 | An HKD order paid by card, invoice sent and Pending Payment; lines USD150 winning bid, USD30 Buyer's Premium, USD49 Shipping & Handling, USD20 Insurance, USD2 Tax; HKD card rule 3.4% plus HKD2.35 |
-| usd_sum_1 | USD251 (fixed: the sum of the five USD lines) |
-| subtotal_1 | HKD1970.35 (fixed: `<usd_sum_1>` times 7.85, converted once) |
-| per_line_sum_1 | HKD1972 (fixed: each line converted and rounded up to a whole HK$, then summed, the rule this replaces) |
+| winner_order_202_1 | The HKD order of the row, with its payment method, lines and bank transfer fee; bind its order identity only |
 
 | Field | Value |
 | --- | --- |
 | winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
+| Row | `<payment method>` | `<usd lines>` | `<bank transfer fee>` | `<usd sum>` | `<subtotal>` | `<fee>` | `<order total>` | `<not this>` |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Bank transfer | Bank transfer on FPS | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | USD0 | USD131.21 | HKD1,030.00 | Free | HKD1,030.00 | a Subtotal of HKD1,031.00, the lines each rounded up to a whole HK$ |
+| Card | Card | Winning Bid USD101.00, Buyer's Premium USD20.20, Shipping & Handling USD10.01 | none | USD131.21 | HKD1,030.00 | HKD38.69 | HKD1,068.69 | a fee of HKD38.73, grossed up from HKD1,031.00 |
+| Card with Insurance and Tax | Card | Winning Bid USD150.00, Buyer's Premium USD30.00, Shipping & Handling USD49.00, Insurance USD20.00, Tax USD2.00 | none | USD251.00 | HKD1,970.35 | HKD71.79 | HKD2,042.14 | a Subtotal of HKD1,972.00 and a fee of HKD71.85 |
+| Bank transfer with a fee | Bank transfer on FPS | Winning Bid USD150.00, Buyer's Premium USD30.00, Shipping & Handling USD49.00, Insurance USD20.00, Tax USD2.00 | USD2.57 | USD251.00 | HKD1,970.35 | HKD20.18 | HKD1,990.53 | a note naming USD253.57, which counts the fee |
 
 **Steps:**
 
@@ -277,19 +830,21 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Rows read Winning Bid, Buyer's Premium, Shipping & Handling, Insurance and Tax, in that order.
-* Each of those rows shows its USD amount with two decimals and no HKD amount beside it.
-* One Subtotal row follows them and reads `<subtotal_1>`, not `<per_line_sum_1>`.
-* The note under the Subtotal names `<usd_sum_1>` and the rate 1 USD = 7.85 HKD.
-* The Payment Processing Fee and the Order Total sit below the Subtotal.
-* No other row names the rate.
+* The lines read as `<usd lines>`, in that order, each in USD with two decimals and no HKD amount beside it.
+* One Subtotal row follows them and reads `<subtotal>`.
+* The note under the Subtotal names `<usd sum>` and the rate 1 USD = 7.85 HKD, and the fee adds nothing to its USD figure.
+* Payment Processing Fee sits below the Subtotal and reads `<fee>` in HKD, with no USD amount beside it.
+* Order Total reads `<order total>`, the Subtotal plus the fee, with no further rounding, and no USD total shows.
+* The lot card above still shows the winning bid in USD.
+* No row other than the note names the rate.
+* No figure reads as `<not this>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-i4z rev=1 -->
-#### g10.auction-winner-order.US27-TC5: Card fee is computed on the HKD Subtotal and the Order Total is their sum
+<!-- trace:case id=g10.auction-winner-order.TC-7qs rev=2 covers=g10.auction-winner-order.SC-59h -->
+### g10.auction-winner-order.US27-TC2: USD summary shows one USD total
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -302,18 +857,42 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner settled in HKD) is on `<winner order url>` for `<hkd_order_1>`.
+* The winner selected USD and the invoice has no converted HKD total.
+
+**Steps:**
+
+1. Read the Order Summary totals.
+
+**Expected Results:**
+
+* The summary shows one USD total.
+* It shows no HKD amount, no Subtotal row and no conversion note.
+
+<!-- trace:case id=g10.auction-winner-order.TC-17a rev=2 covers=g10.auction-winner-order.SC-ug0 -->
+### g10.auction-winner-order.US27-TC3: The HKD total waits for the invoice
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-27
+
+**Pre-conditions:**
+
+* customer(winner) is on `<winner order url>` for `<winner_order_204_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| hkd_order_1 | An HKD order paid by card, invoice sent and Pending Payment; lines USD150 winning bid, USD30 Buyer's Premium, USD49 Shipping & Handling, USD20 Insurance, USD2 Tax; HKD card rule 3.4% plus HKD2.35 |
-| usd_sum_1 | USD251 (fixed: the sum of the five USD lines) |
-| subtotal_1 | HKD1970.35 (fixed: `<usd_sum_1>` times 7.85, converted once) |
-| fee_1 | HKD71.79 (fixed: the card gross-up of `<subtotal_1>` under the rule, rounded up to the next cent) |
-| fee_on_per_line_1 | HKD71.85 (fixed: the same gross-up of HKD1972, the base this replaces) |
-| total_1 | HKD2042.14 (fixed: `<subtotal_1>` plus `<fee_1>`) |
+| winner_order_204_1 | A listing won at USD250 (fixed fixture), settled in HKD, setup confirmed, invoice not sent; bind its identity only |
 
 | Field | Value |
 | --- | --- |
@@ -321,19 +900,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the Payment Processing Fee row.
-2. Read the Order Total row.
-3. Read the note under the Subtotal again.
+1. Read Order Summary.
+2. Read the listing card.
 
 **Expected Results:**
 
-* Payment Processing Fee reads `<fee_1>` in HKD, not `<fee_on_per_line_1>`.
-* The fee row shows no USD figure.
-* Order Total reads `<total_1>`, `<subtotal_1>` plus `<fee_1>`, with two decimals and no further rounding.
-* The note still names `<usd_sum_1>`; the fee adds nothing to it.
+* Step 1: no HKD total shows, and no Subtotal row and no conversion note shows.
+* Step 2: the winning bid reads USD250.00, in USD.
 
 <!-- trace:case id=g10.auction-winner-order.TC-xdg rev=1 -->
-#### g10.auction-winner-order.US27-TC6: Subtotal converts the USD sum once and rounds up to the next cent
+### g10.auction-winner-order.US27-TC6: Subtotal converts the USD sum once and rounds up to the next cent
 
 Runs once per row of **Test data**.
 
@@ -386,7 +962,7 @@ Runs once per row of **Test data**.
 * Order Total reads `<subtotal>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-m5d rev=1 -->
-#### g10.auction-winner-order.US27-TC7: Bank transfer fee converts below the Subtotal and stays out of the note
+### g10.auction-winner-order.US27-TC7: Bank transfer fee converts below the Subtotal and stays out of the note
 
 Runs once per row of **Test data**.
 
@@ -438,8 +1014,8 @@ Runs once per row of **Test data**.
 * Order Total reads `<total>`, `<subtotal_1>` plus `<bank_fee_hkd>`.
 * The amount due at step 4 reads `<total>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-oc2 rev=1 -->
-#### g10.auction-winner-order.US27-TC8: Free shipping, absent Insurance and Tax, and a Free fee still show the Subtotal
+<!-- trace:case id=g10.auction-winner-order.TC-oc2 rev=1 covers=g10.auction-winner-order.SC-8t1 -->
+### g10.auction-winner-order.US27-TC8: Free shipping, absent Insurance and Tax, and a Free fee still show the Subtotal
 
 **Classification:**
 
@@ -485,7 +1061,7 @@ Runs once per row of **Test data**.
 * Order Total reads `<subtotal_2>` as HK$942.00.
 
 <!-- trace:case id=g10.auction-winner-order.TC-qf9 rev=1 -->
-#### g10.auction-winner-order.US27-TC9: Order Summary keeps USD marks and HKD figures in Chinese
+### g10.auction-winner-order.US27-TC9: Order Summary keeps USD marks and HKD figures in Chinese
 
 Runs once per row of **Test data**.
 
@@ -536,7 +1112,7 @@ Runs once per row of **Test data**.
 * The note names USD251 and the rate 1 USD = 7.85 HKD.
 
 <!-- trace:case id=g10.auction-winner-order.TC-kkw rev=1 -->
-#### g10.auction-winner-order.US27-TC10: Mixed-currency Order Summary and note fit a narrow viewport
+### g10.auction-winner-order.US27-TC10: Mixed-currency Order Summary and note fit a narrow viewport
 
 **Classification:**
 
@@ -578,3 +1154,113 @@ Runs once per row of **Test data**.
 * Every amount and label is fully visible, none clipped or overlapping.
 * The note under the Subtotal wraps inside the summary.
 * The page does not scroll sideways.
+
+---
+
+## Settled
+
+- The bank transfer fee typed in USD converts alone at 7.85, rounded up to the next cent, below the Subtotal and outside the converted sum; it replaces the line that converts each fee line to a whole HK$ (decisions Q3, Q6).
+- An invoice whose USD lines sum to 13121 minor units, with a bank transfer fee of 5000 minor USD units, reads a fee of 39,250 and an Order Total of 142,250 minor HKD units; it replaces the 39,300 and 142,400 line.
+- Only the won-listing letter names the winning bid in US$ before the winner picks; after the pick every letter names its total in HKD, and the payment received letter lists the USD lines, then the HKD Subtotal, fee and Order Total; it replaces the line that later letters use only the settlement currency (decisions Q9, Q25).
+- Every USD line of the Order Summary reads `US$` with two decimals, and a zero Shipping & Handling reads Free (decisions Q14, Q20).
+- The invoice page and the invoice PDF are two surfaces, and each lists the USD lines, then the HKD Subtotal, fee and Order Total (decisions Q21).
+- Every receipt, a part-payment receipt included, lists the lines above its running breakdown (decisions Q22).
+- Before the invoice is sent an HKD order's Order Summary shows no Subtotal row, no HKD amount and no note (decisions Q17, Q23).
+
+## Reconciliation
+
+**Run:** QA1, blind pass for `convert-hkd-order-at-subtotal`, 2026-10-22. The first blind pass read a bundle whose existing suites were empty and whose PRD pages lacked the product manager's edits, both packaging defects of the coordinator. It was resumed against a corrected bundle, with the real suites and the current PRD, and revised. It read no `## Requirements`, no scenario, no `tech-design.md`, no `tasks.md`, no archive and no code. It is the run's own statement, not proof.
+
+**Run:** QA2, 2026-10-22, in a fresh context. It read the planning-dev skill, the specs-to-test-cases, tcs-conventions, planning-review-efficiency and writing documents; the change's proposal, `decisions.md` (Q1 to Q19 and the 12 Raised rows), the four `user-journeys.md`, the four `spec.md` deltas, `tech-design.md` and `tasks.md`; the PRD sections they cite; the durable winner-order spec and suite and the sibling durable suites; and the suites of the open changes that overlap this one. It compared each blind case with the scenarios, recomputed every minor-unit figure, and wrote no case from a scenario. A case is linked to a scenario when its results assert every outcome the scenario's THEN and ANDs state, from a starting state of the same class and with values from the same partition; a clause a case leaves out keeps the link off and the scenario under Uncovered. It is a statement, not proof.
+
+**Blind cases**
+
+| Case | Disposition |
+| --- | --- |
+| `US26-TC10` (`TC-c07`) | Kept. The Page row asserts the invoice-page scenario `g10.auction-winner-order.SC5` with its own fixture; the PDF row is the same claim on the PDF. Linked: SC5 |
+| `US26-TC11` (`TC-b46`) | Kept. Page and PDF rows assert the free-charge scenario `g10.auction-winner-order.SC6`. Linked: SC6 |
+| `US26-TC12` (`TC-9ke`) | Regrouped into `US26-TC2` (`TC-nf6`): the receipt PDF of an HKD order paid in full is one surface, one starting state and one route. Its card-with-Tax fixture is row 2 of `TC-nf6`, which adds the payment breakdown. The case is dropped; it was never published |
+| `US26-TC13` (`TC-q8e`) | Kept and blocked. It carries a behaviour no scenario states beyond the second clause of `winner-order-SC-287`: a reissue prices under the rule and the replaced invoice keeps its amounts (decisions Q16). Steps 3 and 4 read the operator's invoice history, which the open row on the operator order detail leaves undecided. No link |
+| `US27-TC4` (`TC-xgk`) and `US27-TC5` (`TC-i4z`) | Regrouped into `US27-TC1` (`TC-vwm`) as its third row. The layout and note of TC4 and the fee base of TC5 share one starting state and one route, and `TC-vwm` has to be rewritten for the same rule. Both are dropped; neither was published |
+| `US27-TC6` (`TC-xdg`) | Kept. The rounding partitions on the Order Summary; the requirement holds them as a table and no scenario states them. No link |
+| `US27-TC7` (`TC-m5d`) | Kept. The exact and rounds-up partitions of a converted bank fee and the amount due in the bank details dialog. It overlaps row 4 of `TC-vwm` on the fee below the Subtotal and the note; the partitions and the dialog are its own. No link |
+| `US27-TC8` (`TC-oc2`) | Kept. Asserts every clause of `g10.auction-winner-order.SC10`. Linked: SC10 |
+| `US27-TC9` (`TC-qf9`) and `US27-TC10` (`TC-kkw`) | Kept as compatibility cases, Chinese and a narrow viewport. No scenario states either. No link |
+
+**Existing durable cases the change moves**
+
+Every durable case below is `draft`; each rewrite keeps its marker id and bumps `rev`, so the fold replaces the durable case of the same `TC<m>`.
+
+| Durable case | Verdict | Action |
+| --- | --- | --- |
+| `US26-TC1` (`TC-ac5@3`) | Contradicted: it asserts each line converted to a whole HK$ and summed | Rewritten at `@4` over five rows that hold the exact, fraction, five-line and bank-fee partitions; links SC-283, SC-284, SC-285, SC1 and SC2, and drops the link to the removed `winner-order-SC-288` |
+| `US26-TC2` (`TC-nf6@3`) | Contradicted: the receipt now lists USD lines | Rewritten at `@4` with QA1's `TC12` folded in; links SC4 and drops the link to the removed `winner-order-SC-289` |
+| `US26-TC3` (`TC-9dm@1`) | Contradicted: "every amount in every letter reads HKD" and "no USD winning bid" fail for the receipt letter | Rewritten at `@2` |
+| `US26-TC4` (`TC-q56`) | Not moved: a refund reads in HKD (Non-Goals) | Left `draft` |
+| `US26-TC5` (`TC-3ly@2`) | Figures move to 3,869 and 106,869 | Rewritten at `@3`; keeps its link to SC-286 |
+| `US26-TC6` (`TC-uz6@2`) | Contradicted: rows round to a whole HK$ | Rewritten at `@3` as the cent conversion of a USD sum |
+| `US26-TC7` (`TC-k5y@1`) | Contradicted: "no surface names a rate" fails for the Order Summary note | Rewritten at `@2`. `order-summary-hkd-conversion-note` holds the same claim as its own `US26-TC9`; one of the two is retired when that change lands |
+| `US26-TC8` (`TC-one@1`) | Figures move to 39,250 and 142,250 | Rewritten at `@2`; keeps its link to SC-302 |
+| `US27-TC1` (`TC-vwm@4`) | Contradicted: HKD lines with USD beneath | Rewritten at `@6`, above the `@5` that `order-summary-hkd-conversion-note` holds in its draft; four rows; links SC-290, SC-304, SC9 and SC8 |
+| `US27-TC2` (`TC-7qs@1`) | SC-291 gains "no Subtotal row and no conversion note" | Rewritten at `@2`. `order-summary-hkd-conversion-note` reuses this marker id for its `US26-TC9`; its owner repairs that |
+| `US27-TC3` (`TC-17a@1`) | Decision Q23 adds no Subtotal row and no note before send | Rewritten at `@2`; keeps its link to SC-292 |
+| `US24-TC2` (`TC-79a@2`) | Contradicted: the HKD row lists each line in HKD | Rewritten at `@3` |
+| `US24-TC7` (`TC-r4x@1`) | Contradicted: the replaced HKD invoice no longer reads its Winning Bid in HKD | Rewritten at `@2` and blocked on the operator order detail row |
+| `US8-TC5` (`TC-xji@1`) | Contradicted: each line converted and rounded before summing | Rewritten at `@2` |
+| `US1-TC31` (`TC-m21@1`) | Contradicted: Tax of HKD70 on an HKD order, where Tax is a USD line (SC-214 now reads a USD order) | Rewritten at `@2` as a USD order; the marker's link list is unchanged |
+| `US1-TC33` (`TC-dvc@1`) | Contradicted: lines of HKD3,280 plus Tax of HKD70 | Rewritten at `@2` with the USD sum of SC-216; the marker's link list is unchanged |
+| `US2-TC1` (`TC-h7f@2`) | Contradicted: "the lines sum to the final amount" fails for an HKD receipt | Rewritten at `@3`; the marker's link list is unchanged |
+| `US1-TC4` (`TC-yuw@1`) | Not moved. It asserts that the old and new totals show and that the new is the old plus the difference; both are HKD fixtures and none of that changes. HKD3,280 cannot be formed from USD cent lines, which is a fixture note and not an assertion | Left `draft` |
+
+The legacy `covers` lists on `US1-TC31`, `US1-TC33`, `US2-TC1` and `US1-TC4` name 15 to 70 scenarios each, far more than the cases assert; they are over-claimed and are left for `/tcs-review`, since no scenario of this change moves them.
+
+Walk text that repeats these results stays stale until `/tcs-review` refreshes the walks: Walk 4 steps 11 to 19 (HKD70 and HKD3,350, durable lines 877 to 890), Walk 6 step 2 (durable lines 1245 to 1247) and Walk 26 (durable lines 4072 to 4208, and its setup and data blocks, which hold 103100, 79300, 3873 and 106973). A change suite carries no walk and the fold keeps the durable ones, so the cases are the authority until then.
+
+**Scenario coverage**
+
+| Scenario | Covered by |
+| --- | --- |
+| SC-283, SC-284, SC-285, SC1, SC2 | `US26-TC1`, one row each |
+| SC-286 | `US26-TC5` |
+| SC-302 | `US26-TC8` |
+| SC-214 | `US1-TC31` |
+| SC-216 | `US1-TC33` |
+| SC-290, SC-304, SC9, SC8 | `US27-TC1`, one row each |
+| SC-291 | `US27-TC2` |
+| SC-292 | `US27-TC3` |
+| SC10 | `US27-TC8` |
+| SC4 | `US26-TC2` |
+| SC5 | `US26-TC10` |
+| SC6 | `US26-TC11` |
+| SC-04 | Out of suite, in the durable header: relabelled from HKD to USD with the figures unchanged |
+| SC-287 | Out of suite, in the durable header: the fixed rate is a code constant no tester can change; the pricing tests (task 6.1) and the PGlite specs verify it |
+| SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-215 | Unchanged; they stay with the durable cases and the durable Out of suite header |
+
+**Uncovered**
+
+- `g10.auction-winner-order.SC3`: the invoice PDF with a Shipping & Handling line of US$10.01, a lot row that reads Winning Bid, Buyer's Premium and Total (`US$121.20`) and a Free fee. `US26-TC10` and `US26-TC11` assert the lines, Subtotal, fee and total on the PDF but never the lot-row Total, and never a Free fee beside a non-zero shipping line
+- `g10.auction-winner-order.SC7`: a USD order's invoice page and PDF stay in USD; no case reads a USD order's documents
+
+**Over-claimed**
+
+- The legacy `covers` lists named above
+- `US26-TC13` and `US27-TC6` carry outcomes no scenario states (the reissue pricing and replaced invoice; the rounding partitions). They are real, so `spec.md` owes a scenario for the first and may keep the second as the requirement's table
+
+**Contradictions between the readings**
+
+- None in this capability. The one the run found sits in `shared/ui/auction-order` (separators), and the open row on the operator order detail and the internal-bid total hold the two decisions the readings cannot settle
+
+**Anchor coverage**
+
+| Anchor | Cases | Scenarios |
+| --- | --- | --- |
+| `winner-order-US-26` (documents) | `US26-TC1`, `TC2`, `TC3`, `TC5` to `TC8`, `TC10`, `TC11`, `TC13`; `TC4` is unchanged | All but SC3 and SC7; SC-287 out of suite |
+| `winner-order-US-27` (Order Summary) | `US27-TC1` to `TC3`, `TC6` to `TC10` | All seven |
+| Root group Settlement currency | `US26-TC1`, `TC2`, `TC5`, `TC6`, `TC8`, `TC10`, `TC11` | Convert once, cent rounding, bank fee, same lines on every document; Rate named once rests on `US26-TC7` and the documents' no-rate results |
+| Root group Order summary | `US27-TC1`, `TC2`, `TC3`, `TC8` | All four lines of the group |
+| Root group Invoice | `US1-TC33`, `US26-TC5` | Fee base |
+| Context journeys | `US1`, `US2`, `US8`, `US24` | `user-journeys.md` lists none of them as Context, so `tcs:validate` reports them undefined until the journeys file does |
+
+**Raised**
+
+Q20 to Q23 close the four winner-order rows; the answers sit in `## Settled`.

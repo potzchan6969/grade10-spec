@@ -77,3 +77,18 @@
 * Step 6 charges `<amount payable>` and the order reads Preparing Shipment.
 * Step 7: the letter and the receipt PDF list the same USD lines, Subtotal, fee and Order Total and name no rate.
 * The Order Summary's note is the only place that names the rate.
+
+## Reconciliation
+
+**Run:** QA1, levels pass for `convert-hkd-order-at-subtotal`, 2026-10-22. It rewrote the one domain case this change moves from the journeys and the domain's PRD pages, before the feature readings, and read no `## Requirements`, no scenario, no `tech-design.md`, no `tasks.md`, no archive and no code. The first blind pass ran on a bundle with empty suites and PRD pages without the product manager's edits, and was resumed on a corrected one. It is the run's own statement, not proof.
+
+**Run:** QA2, 2026-10-22, in a fresh context. It read the case against the winner-order, notifications-order and post-sale deltas and recomputed its figures: 13121 minor USD units at 7.85 is 102,999.85 and rounds up to 103000; the card fee on 103000 at 3.4 per cent and 235 is 3869; the Order Total is 106869. It is a statement, not proof.
+
+- **Case** - `g10.auction-dmn.US12-TC3` (`TC-k4p@5`) was rewritten by QA1 over a new title, with `winner-order-US-27` added to its trace. QA2 keeps it and its links to `winner-order-SC-292` and `winner-order-SC-304`, whose results it asserts at steps 1 and 4
+- **Not linked** - `order-mail-SC-66`: step 7 asserts that the letter and the receipt PDF list the same lines and name no rate, but not that the letter names the amount paid
+- **Covered at domain** - none claimed; the feature suite holds `winner-order-SC-304` and `winner-order-SC-292` in `US27-TC1` and `US27-TC3`
+- **Stale text** - Walk 4 of the durable suite (durable lines 760 to 772) and its `**Current cases**` paragraph (durable line 2494) repeat the `@4` results, HKD793.00, HKD38.73 and HKD1,069.73. The walk is refreshed when `/tcs-review` next prepares the suite; this run's figures are the authority until then
+- **Raised** - none
+- **Contradictions** - none
+
+**Current cases** - `TC-k4p@5` covers winner-order SC-292 and SC-304. Its sent order shows the winning bid, buyer's premium and shipping in USD (US$101.00, US$20.20, US$10.01), one HKD Subtotal of HK$1,030.00 whose note names US$131.21, an HKD gross-up fee of HK$38.69 and one Order Total of HK$1,068.69. It checks that no HKD amount appears before confirmation and invoice creation, that the invoice page, the letter and the receipt PDF list the same lines, and that the Order Summary's note is the only place that names the rate.
