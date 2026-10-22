@@ -20,6 +20,8 @@ item a collector can add.
   again stays on one line
 - **Description** — a long description shows collapsed to three lines with a
   button to read it in full, without leaving the page
+- ❓ **A short description** — one that fits in three lines shows whole, with
+  no button. Design confirms
 - 🚧 **Availability without stock pressure** — the page says whether its one
   sellable item can be bought, with no remaining count or scarcity cue. A
   requested quantity is not capped by the browse read; Cart explains a short

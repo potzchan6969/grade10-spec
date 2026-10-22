@@ -29,6 +29,9 @@ order; one that fails or expires before then never appears -
 **Order actions** - a collector opens one order or follows a Store-supplied
 carrier address when it is safe to open
 
+❓ **A safe carrier address** - an `https` address opens; any other scheme,
+such as `javascript:`, offers no Track Order. Engineering confirms
+
 **Read states** - loading stays distinct from empty, and a failed read offers
 localized Retry without replacing the address
 
