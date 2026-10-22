@@ -26,10 +26,12 @@ same summary, set off by a rule and rendered more heavily weighted than every
 other line. **Subtotal note** - The Subtotal row MAY carry a note the caller
 supplies. When it does, InvoicePdf and ReceiptPdf SHALL draw the note directly
 under the Subtotal row and above the Payment Processing Fee row, left-aligned
-with the summary's labels, in the muted colour of the issuer email, and SHALL
-wrap it inside the summary's width when it is wider. The note is part of the
-summary: it SHALL stay with the Subtotal row on one page, and it adds no row to
-the charges. When no note is supplied, or the note is blank, neither document
+with the summary's labels, in the muted colour of the issuer email, no larger
+than the summary labels and not bold, and SHALL wrap it inside the summary's
+width when it is wider. The note is part of the summary: it SHALL stay with the
+Subtotal row on one page, so that when the document continues over further
+pages the note is never separated from the Subtotal row above it, and it adds
+no row to the charges. When no note is supplied, or the note is blank, neither document
 SHALL draw one or leave a gap where it would sit.
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-63o rev=3 -->
@@ -59,7 +61,7 @@ SHALL draw one or leave a gap where it would sit.
 - **AND** the Shipping & Handling line and the summary keep their given order
   below the Item Total row
 
-<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-ec5 rev=1 -->
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-ec5 rev=2 -->
 #### Scenario: g10.shared-invoice-and-receipt-pdf.SC1 - An invoice draws the Subtotal's note directly under it
 
 **Serves:** InvoicePdf export - the Subtotal row may carry a note, drawn muted directly under it
@@ -72,7 +74,8 @@ SHALL draw one or leave a gap where it would sit.
 - **THEN** the summary reads, from the top, Subtotal, the note, Payment
   Processing Fee and Order Total
 - **AND** the note shows exactly as supplied, in the muted colour of the issuer
-  email, with no other row between it and Subtotal
+  email, no larger than the summary labels and not bold, with no other row
+  between it and Subtotal
 - **AND** the note adds no row above the summary: Shipping & Handling is still
   the only charge under the Item Total row
 
@@ -114,6 +117,21 @@ SHALL draw one or leave a gap where it would sit.
 - **THEN** the note wraps onto a second line, every line of it inside the
   summary's width and above the Payment Processing Fee row
 - **AND** the whole note reads once, in order, with no part cut at the margin
+
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-zs0 rev=1 -->
+#### Scenario: g10.shared-invoice-and-receipt-pdf.SC7 - The note stays with its Subtotal row at a page end
+
+**Serves:** InvoicePdf export - the Subtotal row may carry a note, drawn muted directly under it
+
+- **GIVEN** invoices and receipts with 1 to 40 items, each title on one line, the
+  charges of `shared-ui-invoice-and-receipt-pdf-SC-3` and a Subtotal note of
+  `Converted from US$131.21 at 1 USD = 7.85 HKD`
+- **WHEN** InvoicePdf and ReceiptPdf render each of them
+- **THEN** in every document, the Subtotal row and its note are drawn on one page,
+  the note directly under the row
+- **AND** in at least one invoice and at least one receipt that page is the
+  second page while the last item row is on the first
+- **AND** no page ends with the Subtotal row and begins with its note
 
 ### Requirement: InvoicePdf and ReceiptPdf render only what they are given
 

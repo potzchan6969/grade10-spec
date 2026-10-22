@@ -440,8 +440,10 @@ no note.
 
 The Subtotal row SHALL carry the note `Converted from US$X at 1 USD = 7.85 HKD`,
 where X is the USD sum of the lines above it. The Payment Processing Fee, card or
-bank transfer, SHALL add nothing to X. The note is the one place the summary
-names the rate.
+bank transfer, SHALL add nothing to X. The summary names the rate nowhere but in
+this note; the invoice and receipt PDFs carry the same note under their own
+Subtotal, per "An HKD invoice and receipt list the USD lines, then the HKD
+Subtotal, fee and Order Total".
 
 The Payment Processing Fee SHALL read in HKD with no USD amount beneath it, and
 SHALL read Free when it is zero. Shipping & Handling of zero SHALL read Free.
@@ -758,6 +760,34 @@ Subtotal row SHALL carry no note.
   `Converted from US$131.21 at 1 USD = 7.85 HKD`, drawn muted
 - **AND** each draws its payment breakdown below the lines and carries no note
   there
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1xa rev=1 -->
+#### Scenario: g10.auction-winner-order.SC19 - An HKD PDF carries no note when a line has no USD fact
+**Serves:** winner-order-US-27 - the winner of an invoice sent before USD facts were stored reads it
+
+- **GIVEN** the order of `g10.auction-winner-order.SC15`, a Pending Payment order
+  whose HKD invoice was sent with no USD fact on record, and a receipt for a full
+  payment of it
+- **WHEN** the winner opens the invoice PDF and the receipt PDF
+- **THEN** each reads the lines in HKD and the Subtotal at 103100 minor units in
+  HKD, with no note under it and no gap between Subtotal and Payment Processing
+  Fee
+- **AND** an HKD order paid by card, whose lines all carry a USD fact and whose
+  card fee has none, still carries the note on both PDFs, as the Order Summary
+  does
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-xeg rev=1 -->
+#### Scenario: g10.auction-winner-order.SC20 - An invoice sent under the per-line rule carries the note on its PDF
+**Serves:** winner-order-US-27 - the winner of an invoice sent before this layout reads it
+
+- **GIVEN** the order of `g10.auction-winner-order.SC14`, with USD lines of 10100,
+  2020 and 1001 minor units, a stored Subtotal of 103100 minor units in HKD and a
+  stored Order Total of 103100
+- **WHEN** the winner opens the invoice PDF
+- **THEN** directly under Subtotal `HK$1,031.00`, and above Payment Processing
+  Fee, the note reads `Converted from US$131.21 at 1 USD = 7.85 HKD`, drawn muted,
+  as on the Order Summary
+- **AND** nothing is re-priced
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-ela rev=1 -->
 #### Scenario: g10.auction-winner-order.SC18 - A USD order's invoice and receipt PDFs carry no note
