@@ -39,5 +39,14 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "a46459cf80633952304c881c06348497eb458a69",
+      "components": [
+        "auction-service",
+        "web"
+      ]
+    }
+  ]
 }
