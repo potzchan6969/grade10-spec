@@ -12,7 +12,7 @@
 **so that** I can open a product from that collection.
 
 <!-- trace:case id=g10.store-dmn.TC-2fr rev=1 -->
-#### g10.store-dmn.US1-TC1: Collection entry keeps its products through the product opening
+#### g10.store-dmn.US1-TC1: Browse a homepage collection, open a product, then clear the selection
 
 **Classification:**
 
@@ -67,7 +67,7 @@
 **so that** I can buy the product I chose.
 
 <!-- trace:case id=g10.store-dmn.TC-v5l rev=1 -->
-#### g10.store-dmn.US2-TC1: A guest buys the merchandised product from its own page
+#### g10.store-dmn.US2-TC1: Guests can add homepage products to cart from product details
 
 **Classification:**
 
@@ -112,7 +112,7 @@
 * The cart total updates and the product quantity resets.
 
 <!-- trace:case id=g10.store-dmn.TC-mj0 rev=1 -->
-#### g10.store-dmn.US2-TC2: Sold-out cards open from home and remain unavailable to buy
+#### g10.store-dmn.US2-TC2: Homepage opens sold-out product details, where Add to cart is unavailable
 
 **Classification:**
 
@@ -164,7 +164,7 @@
 **so that** I can trust the price I followed.
 
 <!-- trace:case id=g10.store-dmn.TC-nuz rev=1 -->
-#### g10.store-dmn.US3-TC1: A sale price agrees across home listing and product details
+#### g10.store-dmn.US3-TC1: Sale and original prices match on homepage, listing and product details
 
 **Classification:**
 

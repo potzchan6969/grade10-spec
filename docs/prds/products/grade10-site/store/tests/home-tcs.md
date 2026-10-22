@@ -37,7 +37,7 @@
 **so that** I can choose what to browse.
 
 <!-- trace:case id=g10.store-home.TC-w79 rev=1 -->
-### g10.store-home.US2-TC1: Collection tiles follow the complete catalogue collection order
+### g10.store-home.US2-TC1: Homepage shows every collection once, in catalogue order
 
 Runs once per row of **Test data**.
 
@@ -77,7 +77,7 @@ Runs once per row of **Test data**.
 * The tile order equals `<collection order>`.
 
 <!-- trace:case id=g10.store-home.TC-q4t rev=1 -->
-### g10.store-home.US2-TC3: The merchandised row uses the first catalogue collection
+### g10.store-home.US2-TC3: Homepage product row shows products from the first collection
 
 Runs once per row of **Test data**.
 
@@ -127,7 +127,7 @@ Runs once per row of **Test data**.
 **so that** I can read its own page before buying.
 
 <!-- trace:case id=g10.store-home.TC-egn rev=1 -->
-### g10.store-home.US3-TC1: Every merchandised card opens its product without selling
+### g10.store-home.US3-TC1: Homepage product cards open details and have no Add to cart
 
 Runs once per row of **Test data**.
 
@@ -178,7 +178,7 @@ Runs once per row of **Test data**.
 **so that** I can understand the shop as soon as its response arrives.
 
 <!-- trace:case id=g10.store-home.TC-5i5 rev=1 -->
-#### g10.store-home.US1-TC1: The hero arrives in HTML regardless of catalogue availability
+#### g10.store-home.US1-TC1: Homepage hero appears before JavaScript, even if the catalogue fails
 
 Runs once per row of **Test data**.
 
@@ -230,7 +230,7 @@ Runs once per row of **Test data**.
 **so that** I can choose what to browse.
 
 <!-- trace:case id=g10.store-home.TC-usm rev=1 -->
-#### g10.store-home.US2-TC2: A newly published collection appears without deploying the site
+#### g10.store-home.US2-TC2: New shop collections appear on homepage without a site deployment
 
 **Classification:**
 
@@ -276,7 +276,7 @@ Runs once per row of **Test data**.
 * The new collection appears on the same site deployment.
 
 <!-- trace:case id=g10.store-home.TC-aw0 rev=1 -->
-#### g10.store-home.US2-TC4: Each catalogue section explains its pending read
+#### g10.store-home.US2-TC4: Homepage sections show loading until collections or products are ready
 
 Runs once per row of **Test data**.
 
@@ -319,7 +319,7 @@ Runs once per row of **Test data**.
 * The completed section no longer indicates loading.
 
 <!-- trace:case id=g10.store-home.TC-9ds rev=1 -->
-#### g10.store-home.US2-TC5: A failed section retries without reloading the page
+#### g10.store-home.US2-TC5: Retry loads failed homepage sections without refreshing the page
 
 Runs once per row of **Test data**.
 
@@ -367,7 +367,7 @@ Runs once per row of **Test data**.
 * Retry issues no new document navigation request.
 
 <!-- trace:case id=g10.store-home.TC-05u rev=1 -->
-#### g10.store-home.US2-TC6: An empty section leaves no titled empty row
+#### g10.store-home.US2-TC6: Empty homepage sections and their headings are hidden
 
 Runs once per row of **Test data**.
 
@@ -408,7 +408,7 @@ Runs once per row of **Test data**.
 * The successful empty read is not shown as loading or failed.
 
 <!-- trace:case id=g10.store-home.TC-l20 rev=1 -->
-#### g10.store-home.US2-TC7: Card status follows availability and valid sale-price boundaries
+#### g10.store-home.US2-TC7: Homepage product cards show availability and strike through higher original prices
 
 Runs once per row of **Test data**.
 
@@ -456,7 +456,7 @@ Runs once per row of **Test data**.
 * Its higher-price treatment matches `<expected strike>`.
 
 <!-- trace:case id=g10.store-home.TC-2jx rev=1 -->
-#### g10.store-home.US2-TC8: Only discounts with a card price change its price
+#### g10.store-home.US2-TC8: Homepage prices reflect discounts that do not depend on a basket
 
 Runs once per row of **Test data**.
 
