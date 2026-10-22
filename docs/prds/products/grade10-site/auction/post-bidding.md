@@ -504,7 +504,7 @@ then shipped, delivered, and order cancelled.
 | 🚧 Final notice | **24 hours** before the payment deadline, while Pay is still offered | The last payable reminder |
 | 🚧 Payment overdue | The payment deadline, unpaid | What remains owed; Pay is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review |
 | 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner, and `Pay by …` on the deadline that runs again |
-| Payment received | Card confirmed, proof confirmed, or a manual settlement | Amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
+| Payment received | Card confirmed, proof confirmed, or a manual settlement | The itemised lines as the invoice reads them, amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
 | 🚧 Partial payment received | An operator records a partial payment | The current invoice ID, Receipt ID and receipt PDF, with Contact Us; no remaining balance |
 | 🚧 Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking, or View order with the tracking number as plain text when no tracker link was recorded |
 | Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
