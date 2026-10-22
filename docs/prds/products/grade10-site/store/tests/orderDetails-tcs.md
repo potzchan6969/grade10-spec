@@ -1,6 +1,6 @@
 # grade10-site/store/order-detail Test Cases
 
-**Status:** pending-review · 0/17
+**Status:** pending-review · 0/18
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Walk 1: A Guest Back From Checkout
@@ -650,6 +650,51 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The response tells search engines not to index the address.
+
+<!-- trace:case id=g10.store-order-detail.TC-ogu rev=1 -->
+#### g10.store-order-detail.US2-TC6: Shopify's order email carries the View order link
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** g10.store-order-detail.US2
+
+**Pre-conditions:**
+
+* customer(`<actor state>`) has `<product A>` in the cart on staging.
+* The customer can read mail sent to `<order email>`.
+
+**Test data:**
+
+| Partition | `<actor state>` | `<order email>` |
+| --- | --- | --- |
+| Guest | signed out | A test mailbox no Grade10 account holds. |
+| Member | signed-in member | The member's own email. |
+
+**Steps:**
+
+1. Check out and pay with the payment provider's published test card that succeeds.
+2. Open the order confirmation email at `<order email>`.
+3. Read its View order button's address.
+4. Click View order in a private window.
+5. Read the mailbox after 5 minutes.
+
+**Expected Results:**
+
+* Step 2 is Shopify's order confirmation.
+* Step 3 is `/orders/<order id>`, its secret after `#`.
+* Step 4 opens the order's page signed out.
+* Step 5 holds no other order email from Grade10.
 
 ---
 
