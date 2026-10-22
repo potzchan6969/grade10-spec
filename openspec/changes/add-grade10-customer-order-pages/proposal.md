@@ -116,11 +116,18 @@ response decoding and images that actually load in the application browser.
 
 ## Planning Handoff
 
-The thumbnail extension is the PM draft. The existing requirement scenarios,
-blind cases, technical design and completed task history describe the earlier
-scope. The waits in `.openspec.yaml` require `/planning-dev` to reconcile those
-artifacts with these decisions and new journeys before acceptance or any
-thumbnail implementation claim. Existing scenario and case identities remain.
+No domain impact: the thumbnail extension preserves the existing history-to-detail
+route. Feature suites own its picture observations; the Store domain suite
+introduces no new cross-capability path for this additive display data.
+
+No platform impact: order access, account joining and checkout remain with
+their existing owners; thumbnail supply adds no path between products.
+
+The thumbnail extension includes independent draft cases, backend read design,
+requirement scenarios and unchecked delivery tasks. QA2 reconciles the cases
+against whole scenario outcomes. Existing case and scenario identities and
+completed task history remain. Acceptance review and publication follow the
+planning gates; draft cases claim no execution or human approval.
 
 ## References
 

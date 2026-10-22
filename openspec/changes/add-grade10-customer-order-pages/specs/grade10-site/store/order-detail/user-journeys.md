@@ -22,6 +22,6 @@
 
 ### g10.store-order-detail.US8: Link holder recognises products on a private order
 
-**As a** holder of a valid private order link,
+**As a** customer holding a valid private order link,
 **I want** the same available current product pictures on that order,
 **so that** I can recognise the purchase without signing in.

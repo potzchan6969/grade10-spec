@@ -35,8 +35,12 @@ their owners in the related changes named by the proposal.
 | Q5 | What if alt text is blank or a response predates picture fields? | Use the recorded item title for absent, empty or whitespace-only alt text; responses without pictures keep the placeholder (recommended). | Empty accessible names, invented copy or a required field that rejects older responses. |
 | Q6 | Does this add image rendering or image-error states? | Reuse existing order blocks, frames and browser image presentation. An image resource failure leaves the rest of the order usable. | Redesigning shared image fallback behavior within a data-supply change. |
 | Q7 | Which active change owns this extension? | Extend the original order-pages change. Its member-page composition remains here; guest-link access and account joining remain in add-store-guest-checkout. | A competing change declaring the same unpublished order-page capabilities. |
+| Q8 | Does malformed optional picture metadata weaken order-response validation? | Malformed upstream catalogue metadata is an optional lookup failure under Q2. Supplied order picture fields remain optional strings; null or non-string values still fail typed response validation - decided by the round. Sources: the site picture requirements, [API Contracts](tech-design.md#api-contracts) and task 8.1. | Silently accepting an invalid typed order payload; the recommendation to discard bad metadata applies before the order response is produced. |
+| Q9 | Does one failed catalogue batch discard successful pictures? | Keep completed successful batches and leave unresolved items pictureless - decided by the round. Sources: Q1/Q2, [Batch By Variant Identity](tech-design.md#batch-by-variant-identity) and tasks 9.1/9.2. | Dropping available pictures because a different optional lookup failed. |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| grade10-site/store/order-history; grade10-site/store/order-detail | QA1: If optional image facts are malformed in an otherwise valid order response, should only the picture be discarded or should the response fail validation? recommended: discard unusable picture facts. Q5 settles absent fields and blank alt text, but not malformed supplied facts. | Q8 |
+| grade10-site/store/order-history; grade10-site/store/order-detail | QA1: When one catalogue batch fails and another supplies pictures, must successful pictures remain? recommended: retain successful pictures and use placeholders only for unresolved items. | Q9 |

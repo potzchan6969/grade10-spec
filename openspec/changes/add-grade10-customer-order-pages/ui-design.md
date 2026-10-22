@@ -125,24 +125,24 @@ component, variant, primitive, or token is required.
 
 ### Your Orders - Product Pictures
 
-| State | Shows | Anchor |
+| State | Shows | Verification |
 | --- | --- | --- |
-| Available picture | First current product picture in the existing frame, including an earlier purchase | `g10.store-order-history.US5` |
-| Blank alt text | Same picture with the recorded item title as its accessible name | `g10.store-order-history.US5` |
-| No supplied picture | Existing placeholder beside unchanged purchase facts | `g10.store-order-history.US5` |
-| Catalogue lookup fails | Existing placeholder; order items and actions remain usable | `g10.store-order-history.US5` |
-| Legacy response | Existing placeholder when optional picture fields are absent | `g10.store-order-history.US5` |
-| Image resource fails | Existing browser image presentation; other order facts remain usable | `g10.store-order-history.US5` |
+| Available picture | First current product picture in the existing frame, including an earlier purchase | `g10.store-order-history.SC1`, `g10.store-order-history.SC2` |
+| Blank alt text | Same picture with the recorded item title as its accessible name | `g10.store-order-history.SC4` |
+| No supplied picture | Existing placeholder beside unchanged purchase facts | `g10.store-order-history.SC3` |
+| Catalogue lookup fails | Existing placeholder; order items and actions remain usable | `g10.store-order-history.SC5` |
+| Legacy response | Existing placeholder when optional picture fields are absent | `g10.store-order-history.SC6` |
+| Image resource fails | Existing browser image presentation; other order facts remain usable | `g10.store-order-history.SC7` |
 
 ### Order Details - Product Pictures
 
-| State | Shows | Anchor |
+| State | Shows | Verification |
 | --- | --- | --- |
-| Available picture | First current product picture beside the recorded item | `g10.store-order-detail.US7` |
-| Blank alt text | Same picture with the recorded item title as its accessible name | `g10.store-order-detail.US7` |
-| No supplied picture | Existing placeholder beside unchanged purchase facts | `g10.store-order-detail.US7` |
-| Catalogue lookup fails | Existing placeholder; the order remains readable | `g10.store-order-detail.US7` |
-| Legacy response | Existing placeholder when optional picture fields are absent | `g10.store-order-detail.US7` |
-| Valid private link | Same supplied picture with the private link's existing account-data restrictions | `g10.store-order-detail.US8` |
-| Image resource fails | Existing browser image presentation; other order facts remain usable | `g10.store-order-detail.US7` |
-| Admin customer preview | Same supplied picture as the existing customer projection | `g10.store-order-detail.US7` |
+| Available picture | First current product picture beside the recorded item | `g10.store-order-detail.SC1`, `g10.store-order-detail.SC2` |
+| Blank alt text | Same picture with the recorded item title as its accessible name | `g10.store-order-detail.SC4` |
+| No supplied picture | Existing placeholder beside unchanged purchase facts | `g10.store-order-detail.SC3` |
+| Catalogue lookup fails | Existing placeholder; the order remains readable | `g10.store-order-detail.SC5` |
+| Legacy response | Existing placeholder when optional picture fields are absent | `g10.store-order-detail.SC6` |
+| Valid private link | Same supplied picture with the private link's existing account-data restrictions | `g10.store-order-detail.SC7`; refused access: `g10.store-order-detail.SC8` |
+| Image resource fails | Existing browser image presentation; other order facts remain usable | `g10.store-order-detail.SC9` |
+| Admin customer preview | Same supplied picture as the existing customer projection | **Out of suite:** `apps/admin/grade10/src/pages/store/StoreOrderPage.test.tsx` verifies existing detail/card preview parity using the same customer projection; backend router tests retain grants, Audit and card omissions. Tasks 9.3, 10.3 and [11.2](tasks.md#11-the-walk---order-pictures-grade10) name the planned checks |

@@ -2,11 +2,6 @@ schema: grade10-planning
 created: 2026-09-05
 promoted_by: "@kinisworking"
 page_waived: "predates the page rule"
-awaiting:
-  specs: "2026-10-22, planning-dev must extend the existing scenarios and reconcile blind cases for the confirmed thumbnail scope before acceptance."
-  tech-design: "2026-10-22, planning-dev must replace the earlier frontend-only image deferral with the shared backend thumbnail read design."
-  test-cases: "2026-10-22, planning-dev must cover current images, older responses, missing images, lookup failures and private links."
-  tasks: "2026-10-22, planning-dev must add thumbnail work and its final browser walk to the existing delivery plan."
 reviewed:
   proposal: 50c3e91f
   ui-design: ba9eb537
