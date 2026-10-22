@@ -1,6 +1,6 @@
 # grade10-site/store Test Cases
 
-**Status:** pending-review · 2/7
+**Status:** pending-review · 3/7
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Background
@@ -146,7 +146,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
