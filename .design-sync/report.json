@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T07:26:34.766Z",
+  "generatedAt": "2026-10-22T07:47:17.892Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -1011,7 +1011,6 @@
     "7266-6876": "Reward / Checkout Point Balance",
     "7266-6909": "Rewards Redeemed (Coupon)",
     "7276-2028": "Attachment",
-    "7276-2338": "Container (design-system-display-attachment--states)",
     "7276-2707": "AttachmentAction",
     "7276-2708": "AttachmentAction",
     "7276-2709": "AttachmentAction",
@@ -1069,7 +1068,9 @@
       "Asset Summary: no code component (looked for src/components/**/assetsummary.tsx or assetsummary.tsx)"
     ],
     "Attachment": [
-      "Attachment: no code component (looked for src/components/**/attachment.tsx or attachment.tsx)"
+      "Attachment.state: no getEnum('state') in any template — this Figma axis reaches no code prop",
+      "Attachment.size: no getEnum('size') in any template — this Figma axis reaches no code prop",
+      "Attachment.orientation: no getEnum('orientation') in any template — this Figma axis reaches no code prop"
     ],
     "AttachmentAction": [
       "AttachmentAction: no code component (looked for src/components/**/attachmentaction.tsx or attachmentaction.tsx)"
