@@ -340,7 +340,9 @@ on winner, In transit, Closed and All, opening on Needs action.
   uses HKD settlement and FPS set automatically, with no winner setup or
   operator setup step. The operator still quotes and sends its invoice, and types
   every amount in USD, the bank transfer fee included; for an HKD order Grade10
-  converts each line at the fixed rate and shows the operator no rate —
+  converts the sum of the lines once at the fixed rate for the Subtotal, and
+  the quote preview reads the USD lines, then the HKD Subtotal, fee and Total,
+  with no rate shown to the operator -
   [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
 - **Historical bank rail** - An ordinary order already confirmed for bank
   transfer may have no recorded rail. The operator reads that rail as unknown;
