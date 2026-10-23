@@ -85,7 +85,10 @@ the reward — its hero, the deadline where named, the name and description —
 name where the coupon is spendable and how long it is good for, as supplied,
 show the balance before and after the cost, and refuse a short balance
 whole with the readout in the warning tone. A refusal the reward is gone
-for SHALL close the surface — the refusal is raised outside it. Given a
+for SHALL close the surface — the refusal is raised outside it. A refusal
+the member can retry SHALL leave the surface open and the press live, and
+a balance dropped mid-checkout SHALL re-read the deficit row; either
+refusal is raised outside the surface. Given a
 redemption it SHALL
 draw the redeemed phase in the same surface: the member-readable code a
 discount coupon's ticket carries, the collection a good's ticket names, and
@@ -212,3 +215,23 @@ SHALL require no export of its own.
 - **WHEN** the confirm phase renders
 - **THEN** the surface asks to close
 - **AND** the refusal is raised outside the surface
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-t8d rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-270 - A retryable refusal keeps the surface
+**Serves:** grade10-site-loyalty-programme-US-12 - Member browses the shop, confirms the cost and sees the redemption
+
+- **GIVEN** the redemption died on the wire — retryable, the consumer never
+  passes the gone refusal
+- **WHEN** the confirm phase renders
+- **THEN** the surface stays open and the press stays live
+- **AND** the refusal is raised outside the surface
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-t8e rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-271 - A balance dropped mid-checkout re-reads the deficit
+**Serves:** grade10-site-loyalty-programme-US-12 - Member browses the shop, confirms the cost and sees the redemption
+
+- **GIVEN** the balance fell short elsewhere since the surface opened — the
+  consumer re-passes the lower balance
+- **WHEN** the confirm phase renders
+- **THEN** the deficit row re-reads the shortfall and refuses whole
+- **AND** the shortfall is raised outside the surface

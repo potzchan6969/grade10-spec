@@ -75,7 +75,11 @@ Stock reads as a yes or no, never a count.
   coupon is spendable and how long it is good for, and shows the balance
   before and after - a short balance names the deficit in the warning
   tone and refuses whole. On the dialog the actions sit right behind a
-  Cancel; on the sheet the redeem spans the width
+  Cancel; on the sheet the redeem spans the width. A refusal splits two
+  ways: the reward being gone closes the surface, while a retryable
+  refusal keeps it open and the press live — either is raised outside as
+  a toast, and a balance dropped mid-checkout re-reads the deficit row
+  the same way
 - 🚧 **The redeemed state stays in the surface** - the ticket the
   redemption issued: a discount coupon's carries the code minted for that
   redemption alone, a good's names the collection and no code. A ticket
@@ -95,6 +99,9 @@ Stock reads as a yes or no, never a count.
 - 🚧 **Apply belongs to the cart** - nothing on the shop, the redeemed
   ticket or the coupons page offers to apply a coupon; the cart's
   apply-rewards flow is the only place it happens
+- ❓ **A settle that half-fails** - the points debit but the coupon never
+  mints: whether the redemption settles atomically or a refund path
+  catches it is Backend's call
 
 :::example{title="Buying from the shop"}
 | Step | Event | Points | Balance |

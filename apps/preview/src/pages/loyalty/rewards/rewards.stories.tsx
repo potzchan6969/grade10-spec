@@ -8,14 +8,19 @@ import {
   SiteHeader,
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import {
+  BALANCE_DROPPED_REWARDS,
+  DROPPED_BALANCE,
+  FLAKY_REWARDS,
   MEMBERSHIP_VIEW,
+  RETRY_COPY,
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   REWARDS,
+  SHORT_BALANCE_COPY,
   SOLD_OUT_COPY,
   SOLD_OUT_REWARDS,
 } from "../loyalty-content";
@@ -38,6 +43,8 @@ function RewardsPage() {
   const [redemption, setRedemption] = useState<RewardRedemption | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  /* Attempts already refused on the wire — a flaky reward redeems on retry. */
+  const flaked = useRef<ReadonlySet<string>>(new Set());
 
   /* The surface stays mounted once opened — only `open` flips — so the
    * drawer and dialog can play their exit transitions. */
@@ -56,6 +63,28 @@ function RewardsPage() {
         setFailure(SOLD_OUT_COPY.title);
         toast.error(SOLD_OUT_COPY.title, {
           description: SOLD_OUT_COPY.description,
+        });
+        return;
+      }
+      if (BALANCE_DROPPED_REWARDS.has(reward.id)) {
+        /* The balance fell short elsewhere since the sheet opened; the page
+         * refetches and the deficit row re-reads it. */
+        setPending(false);
+        setBalance(DROPPED_BALANCE);
+        toast.error(SHORT_BALANCE_COPY.title, {
+          description: SHORT_BALANCE_COPY.description(
+            reward.pointCost - DROPPED_BALANCE,
+          ),
+        });
+        return;
+      }
+      if (FLAKY_REWARDS.has(reward.id) && !flaked.current.has(reward.id)) {
+        /* A retryable refusal: the surface stays open and the press stays
+         * live; the page raises it as a toast. */
+        flaked.current = new Set([...flaked.current, reward.id]);
+        setPending(false);
+        toast.error(RETRY_COPY.title, {
+          description: RETRY_COPY.description,
         });
         return;
       }
@@ -189,5 +218,70 @@ export const SoldOut: Story = {
         document.body.querySelector('[data-sheet="reward-checkout"]'),
       ).not.toBeInTheDocument(),
     );
+  },
+};
+
+/** A refusal the member can retry: the toast lands and the sheet stays
+ * open with the press live — nothing proceeds until the member taps
+ * Redeem again themselves. */
+export const RetryableFailure: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /Mystery foil pack/ }),
+    );
+    const overlay = within(document.body);
+    await userEvent.click(
+      await overlay.findByRole("button", { name: "Redeem for 800 pts" }),
+    );
+    expect(
+      await overlay.findByText("Couldn't redeem just now"),
+    ).toBeInTheDocument();
+    expect(
+      document.body.querySelector('[data-slot="reward-checkout"]'),
+    ).toBeInTheDocument();
+    expect(
+      overlay.getByRole("button", { name: "Redeem for 800 pts" }),
+    ).toBeEnabled();
+  },
+};
+
+/** The same flaky reward, retried: the member taps Redeem again after the
+ * refusal and the redeemed phase lands. */
+export const RetryableFailureRecovered: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /Mystery foil pack/ }),
+    );
+    const overlay = within(document.body);
+    await userEvent.click(
+      await overlay.findByRole("button", { name: "Redeem for 800 pts" }),
+    );
+    await overlay.findByText("Couldn't redeem just now");
+    await userEvent.click(
+      await overlay.findByRole("button", { name: "Redeem for 800 pts" }),
+    );
+    expect(await overlay.findByText("Ready to Collect")).toBeInTheDocument();
+  },
+};
+
+/** The balance fell short elsewhere since the sheet opened: the page
+ * refetches, the deficit row re-reads it, and the toast says so. */
+export const BalanceDropped: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /Express grading voucher/ }),
+    );
+    const overlay = within(document.body);
+    await userEvent.click(
+      await overlay.findByRole("button", { name: "Redeem for 1,100 pts" }),
+    );
+    expect(await overlay.findByText("Not enough points")).toBeInTheDocument();
+    expect(await overlay.findByText("Need 500 more pts")).toBeInTheDocument();
+    expect(
+      overlay.getByRole("button", { name: "Redeem for 1,100 pts" }),
+    ).toBeDisabled();
   },
 };

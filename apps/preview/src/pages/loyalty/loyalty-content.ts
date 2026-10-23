@@ -235,15 +235,57 @@ const REWARDS: RewardMenuItem[] = [
     useAt: "Grade10 store",
     validFor: "30 days from redemption",
   },
+  {
+    id: "foil-pack",
+    kind: "item",
+    name: "Mystery foil pack",
+    description: "One sealed pack from the foil promo wave.",
+    pointCost: 800,
+    image: { src: REWARD_IMAGE, alt: "A sealed foil promo pack" },
+    useAt: "Grade10 store",
+    validFor: "30 days from redemption",
+  },
+  {
+    id: "express-grading",
+    kind: "item",
+    name: "Express grading voucher",
+    description: "Jump one submission to the front of the grading queue.",
+    pointCost: 1100,
+    image: { src: REWARD_IMAGE, alt: "An express grading voucher" },
+    useAt: "Grade10 store",
+    validFor: "30 days from redemption",
+  },
 ];
 
 /** Stand-in availability: these rewards have run out; redeeming one is
  * refused and the surface closes. */
 const SOLD_OUT_REWARDS: ReadonlySet<string> = new Set(["uv-sleeves"]);
 
+/** Stand-in flakiness: the first redeem attempt on these dies on the wire;
+ * retryable — the surface stays open. */
+const FLAKY_REWARDS: ReadonlySet<string> = new Set(["foil-pack"]);
+
+/** Stand-in drift: the balance fell short elsewhere since the sheet opened;
+ * the page refetches and the deficit row shows. */
+const BALANCE_DROPPED_REWARDS: ReadonlySet<string> = new Set([
+  "express-grading",
+]);
+const DROPPED_BALANCE = 600;
+
 const SOLD_OUT_COPY = {
   title: "This reward just ran out",
   description: "No points were taken. Pick another reward.",
+};
+
+const RETRY_COPY = {
+  title: "Couldn't redeem just now",
+  description: "No points were taken. Check your connection and try again.",
+};
+
+const SHORT_BALANCE_COPY = {
+  title: "Not enough points",
+  description: (missing: number) =>
+    `You need ${missing.toLocaleString("en-HK")} more pts to redeem this reward. No points were taken.`,
 };
 
 const COUPONS: CouponItem[] = [
@@ -443,11 +485,14 @@ export {
   APPLE_HELD,
   APPLE_OFFERED,
   APPLE_PASS_URL,
+  BALANCE_DROPPED_REWARDS,
   CART_ITEMS,
   CART_SUBTOTAL,
   COUPON_ACTION_COPY,
   COUPON_LIST_COPY,
   COUPONS,
+  DROPPED_BALANCE,
+  FLAKY_REWARDS,
   GOOGLE_HELD,
   GOOGLE_OFFERED,
   GOOGLE_SAVE_URL,
@@ -461,9 +506,11 @@ export {
   MEMBERSHIP_STATE_VIEWS,
   MEMBERSHIP_VIEW,
   POINTS_BALANCE_LABEL,
+  RETRY_COPY,
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   REWARDS,
+  SHORT_BALANCE_COPY,
   SOLD_OUT_COPY,
   SOLD_OUT_REWARDS,
   TIER_BENEFITS,
