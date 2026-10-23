@@ -29,7 +29,7 @@ Needs group 2 landed.
 - [ ] 3.6 Informational only, no decision and no gate on deploy: count existing listings whose `starting_price` is not a multiple of the USD major unit and note the count in the landing summary. The rule is not applied to a stored row, and no migration, rounding or backfill is added (Q18, `g10.auction-bid-increments.SC-n5d`)
 - [ ] 3.7 Verify: the backend unit and DB-lane suites for the auction package, and its typecheck
 
-## 4. Collector site, admin preview and demo (grade10)
+## 4. Collector site, admin preview and demo (grade10) (owner: @htonyl)
 
 Needs groups 2 and 3 landed; verified against contracts and fixtures, not a running backend.
 
