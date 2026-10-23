@@ -339,6 +339,5 @@ word.
 
 - [`docs/governance/system-design.md`](../../../docs/governance/system-design.md) - the eight principles
 - [`.claude/agents/README.md`](../../agents/README.md) - the readers
-- [`docs/governance/writing.md`](../../../docs/governance/writing.md) - the house style
 - `planning-pm`, `planning-design`, `planning-dev` - the rules each artifact
   must meet, which the line commands load

@@ -11,7 +11,7 @@ description: Write the proposal, decisions and journeys for an OpenSpec change, 
 
 - **Interview** - Use [`grilling`](../grilling/SKILL.md) to resolve choices that materially affect scope or product behavior. Honor existing answers and authorization; apply routine choices without introducing an approval step. Format unresolved choices using [Questions and Blockers](../../../AGENTS.md#questions-and-blockers). Research facts; do not ask the author to size work or name exports or code touched. Follow the loaded decisions instructions for the interview checklist and for recording settled or deferred answers.
 
-- **Product details** - Update the capability PRD before the artifact that depends on a product detail learned during planning: a line the reader would act differently without. Use one `🚧` line per confirmed outcome this change delivers, however many scenarios prove it, and `❓` for an unresolved detail; run the `Cut` pass of `docs/governance/writing.md` before handing off. Update `decisions.md` first when a later scope decision changes a goal, non-goal or rejected option.
+- **Product details** - Update the capability PRD before the artifact that depends on a product detail learned during planning: a line the reader would act differently without. Use one `🚧` line per confirmed outcome this change delivers, however many scenarios prove it, and `❓` for an unresolved detail. Update `decisions.md` first when a later scope decision changes a goal, non-goal or rejected option.
 
 - **Waivers** - Use `decisions_waived` and `page_waived` only under [The change's record](../../../docs/governance/prd-and-openspec.md#the-changes-record). A decision waiver covers genuinely nothing to settle or a legacy change whose proposal already records its scope.
 

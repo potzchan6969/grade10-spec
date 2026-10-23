@@ -30,7 +30,6 @@ capture.
   and What Changed, by Area: which move is drawn as which picture
 - **The data** - `.claude/skills/handoff-page/SKILL.md`, Data and Pictures,
   and `.claude/skills/handoff-page/assets/data.schema.json` for a change card
-- **The words** - `docs/governance/writing.md`; every word is the house style
 
 ## What You Write
 

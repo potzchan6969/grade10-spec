@@ -36,8 +36,7 @@ context: |
   docs/prds/ is the manual: one page per capability, and that page is the
   PRD. It moves first - whoever learns a product detail writes it there,
   marked 🚧 or ❓, before the artifact that depends on it - and never restates
-  a requirement. docs/governance/prd-and-openspec.md draws the boundary;
-  docs/governance/writing.md is the style of every artifact here.
+  a requirement. docs/governance/prd-and-openspec.md draws the boundary.
   Every path these instructions name is this store's. Run from grade10, the
   CLI prints `Using OpenSpec root: grade10-spec (<path>)`, and a skill or
   document named here is under that path, never the application repository's.
@@ -63,7 +62,7 @@ rules:
     - "Money is minor units plus an ISO 4217 code. Convert yourself: the author says HKD 10, the spec says 1000 HKD minor units."
     - "No class, function, hook, table or library names; public component exports are the one exception, kept in one requirement. Propose the export set yourself from `packages/ui` and say in the proposal which do not exist yet."
     - "Requirements live here and nowhere else; a testable statement never stays on a PRD (AGENTS.md § Sources of truth)."
-    - "Prose short, tables carry detail (docs/governance/writing.md). Before coining a shape, read the capabilities beside this one and reuse their wording, table columns and state names. Before handing over, read each requirement as the engineer in the other repository will - every term defined, every value stated, every scenario decidable - and fix what fails."
+    - "Before coining a shape, read the capabilities beside this one and reuse their wording, table columns and state names. Before handing over, read each requirement as the engineer in the other repository will - every term defined, every value stated, every scenario decidable - and fix what fails."
 
   user-journeys:
     - "The schema instruction holds the rules; `pnpm check:manual` enforces the role, the `**Walked by:** nobody` routing declaration, the verbatim context copies and every anchor."

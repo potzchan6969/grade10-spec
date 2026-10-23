@@ -11,9 +11,9 @@ same either way, and the same check refuses a page that breaks it.
 
 A page is YAML frontmatter followed by a sequence of blocks. Frontmatter keys
 come in this order. `title` is the surface's plain name — `Main Page`,
-`Product Listing`, `Checkout` — never a metaphor. `summary` is a card
-subtitle the house style leaves out: the title carries the weight, and the
-page shows the rest. `spec` names the spec the page documents. `icon` is the
+`Product Listing`, `Checkout` — never a metaphor. `summary` is an optional
+card subtitle; most pages leave it out, since the title carries the weight
+and the page shows the rest. `spec` names the spec the page documents. `icon` is the
 glyph a domain wears in the rail and on its card — one name from the fixed
 list the editor's field offers, and a landing page without one draws a
 warning. `audience` is `operator` or absent — `operator` files the page under
@@ -45,10 +45,8 @@ double-quoted, and a quote character can never appear inside one.
 
 ## Page Anatomy
 
-Pages follow the house style — `docs/governance/writing.md` in the store.
-Copy [Points](/p/grade10-site/loyalty/points) for a page about rules and
-[Product Listing](/p/grade10-site/store/product-listing) for a page about a
-surface. Top to bottom:
+There is no house style for the words: write whatever reads most naturally.
+The structure is what the tools read. Top to bottom:
 
 - **Frontmatter** — `title`, `spec`, `order`, and the other keys in their
   declared order
@@ -86,6 +84,13 @@ surface. Top to bottom:
   doc's. The check warns on a page past 120 lines of prose outside its
   examples and details, a section opening on an essay, an engineer block
   holding a paragraph, and a buried 🚧
+
+## Marks
+
+- **❓ or `TBC`** — not confirmed. Name who confirms it
+- **🚧** — confirmed and being built. One line per outcome; remove it when
+  the change is verified
+- **One mark a line** — never 🚧 and ❓ on the same line
 
 ## Blocks
 

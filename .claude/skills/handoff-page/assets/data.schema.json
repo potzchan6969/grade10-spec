@@ -88,7 +88,7 @@
     "words": {
       "type": "string",
       "minLength": 1,
-      "description": "Plain text in the reader's words, with plain hyphens and no dashes; **bold**, `code` and [text](https://...) render."
+      "description": "Plain text; **bold**, `code` and [text](https://...) render."
     },
     "href": {
       "type": "string",

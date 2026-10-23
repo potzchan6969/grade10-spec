@@ -460,7 +460,7 @@ export const ASKED_OF = /^❓\s+([a-z][a-z0-9._-]*)\s+-\s+(\S.*)$/;
  *
  * Q41 settles the default: the line counts against the proposal, which is the
  * product manager's artifact, so the product manager answers for it. But the
- * house style puts the confirmer on the line where somebody else owes the
+ * page puts the confirmer on the line where somebody else owes the
  * answer — "Operations confirms" — and the row grammar above may name a role
  * outright, so a line that says whose answer it is waiting for is read rather
  * than routed past them.

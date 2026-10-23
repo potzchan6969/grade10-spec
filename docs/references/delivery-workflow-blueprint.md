@@ -540,7 +540,7 @@ design-to-code skills unchanged; craft skills moved off the line.
 
 Unchanged: `design-system-primitives`, `design-tokens`,
 `design-sync-check`, `page-from-figma`, `reconcile-figma-annotations`,
-`ux-copy`, `email-templating`, `writing-style`. Off the line, under
+`ux-copy`, `email-templating`. Off the line, under
 `craft/`: the nine animation skills, `pick-ui-library`, `prototype`.
 
 Documents, in the order a newcomer needs them: Start here; The delivery line

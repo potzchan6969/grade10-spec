@@ -63,7 +63,7 @@ Ground rules:
 - Never run \`pnpm spec:accept\`, never pass --no-verify, never touch the tools/openspec-viewer pointer.${A.land ? "" : " Never push."}${A.app ? ` Read the application repo at ${A.app}; never edit it.` : ""}
 - The PRD pages under docs/prds are the source of truth.${A.app ? " Where a page line contradicts what the application builds, correct the page to the build and cite file and line." : ""}
 - A change branch never edits scripts/, tools/, packages/ or apps/. Report a tool bug as TOOL: <bug>; never patch it.
-- Take the writing-style skill before any prose. Commit with the /commit skill, one concern per commit, \`pnpm run lint\` first${A.session ? `, each message ending with the line \`${A.session}\`` : ""}.`;
+- Commit with the /commit skill, one concern per commit, \`pnpm run lint\` first${A.session ? `, each message ending with the line \`${A.session}\`` : ""}.`;
 
 const DEF = `Definitions:
 - **human**: a product preference between reasonable options, or an irreversible product choice.

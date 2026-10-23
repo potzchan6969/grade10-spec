@@ -14,8 +14,7 @@ description: Plan and accept one OpenSpec change in one invocation: QA1 writes b
   [What Does Not Go on the PRD](../../../docs/governance/prd-and-openspec.md#what-does-not-go-on-the-prd)
   allows: a rule no spec states as one ❓ line, a constraint that changes an
   outcome as one 🚧 or ❓ line. Cases, mechanisms and scenarios stay in their
-  own artifacts; run `docs/governance/writing.md`'s `Cut` pass on any line
-  added.
+  own artifacts.
 - **Cases** - Planning produces draft cases. Human classification and execution
   belong to `tcs-review` and `tcs-run-sheet` after deployment.
 

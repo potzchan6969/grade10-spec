@@ -84,7 +84,7 @@ function sandbox() {
     [UNLINKED]: "# Change Stages\n\nAnother change's page.\n",
     [REFERENCE]: "# Round Notes\n\nThe owner's draft.\n",
     [UNLINKED_REFERENCE]: "# Other Notes\n\nAnother change's evidence.\n",
-    "docs/governance/writing.md": "# Writing\n",
+    "docs/governance/system-design.md": "# System design\n",
     "openspec/specs/shared/planning/agent-rounds/spec.md": "# Spec\n",
     "openspec/schemas/demo-planning/schema.yaml": "name: demo-planning\n",
     "scripts/openspec/plan-land.mjs": "// the landing step\n",

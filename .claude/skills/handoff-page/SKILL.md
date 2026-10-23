@@ -25,13 +25,12 @@ One page, linked from its PR and behind the team's Cloudflare login, that hands 
 
 `<scratchpad>` is the session's scratchpad directory, or any folder outside the repository.
 
-1. **Load** - `writing-style` for every word on the page and in the reply, held to the store's `docs/governance/writing.md` Voice section
-2. **Gather** - the facts, from the sources under Gather; never from memory
-3. **Write the data** - copy `assets/example.json` to `<scratchpad>/handoff/data.json`, replace every value with your own, and delete `"example"`
-4. **Build** - from the repository root, `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/handoff/data.json`; fix every `FAIL`, weigh every `warn`, and build again until it passes; it writes `page.html` and `reply.md` beside the data
-5. **Check** - run the `next:` line the build prints from a folder where Playwright resolves, and look at the screenshots
-6. **Verify** - dispatch the `page-verifier` agent, as Check says; fix every finding in the data, build, and dispatch it again until it returns `clean`
-7. **Publish and reply** - as Publish and Hand Over says
+1. **Gather** - the facts, from the sources under Gather; never from memory
+2. **Write the data** - copy `assets/example.json` to `<scratchpad>/handoff/data.json`, replace every value with your own, and delete `"example"`
+3. **Build** - from the repository root, `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/handoff/data.json`; fix every `FAIL`, weigh every `warn`, and build again until it passes; it writes `page.html` and `reply.md` beside the data
+4. **Check** - run the `next:` line the build prints from a folder where Playwright resolves, and look at the screenshots
+5. **Verify** - dispatch the `page-verifier` agent, as Check says; fix every finding in the data, build, and dispatch it again until it returns `clean`
+6. **Publish and reply** - as Publish and Hand Over says
 
 Never edit `page.html` by hand: change the data and build again. What the template cannot draw goes in `extra`.
 
@@ -126,7 +125,7 @@ The same names in the same order on every handoff, so a reader who has seen one 
 | `engineers` | `commits` (`sha`, `subject`, `href`), `files`, `notes`, `links` (`text`, `href`) |
 | `extra` | `title` and `file`: an HTML fragment drawn as its own section after Try it |
 
-- **Words** - every value is plain text in the reader's words, with plain hyphens and no dashes; `**bold**`, `` `code` `` and `[text](https://...)` render, and nothing else does
+- **Words** - every value is plain text; `**bold**`, `` `code` `` and `[text](https://...)` render, and nothing else does
 - **One line each** - a reason, a title, a before and a now each fit one line; the build warns past that
 - **Proof per change** - give each change at least one proof row whose `change` is its `id`; the row's status shows on the change's card
 - **How** - the method and where it lives: `Unit test, CartDrawer.test.tsx: strikes only the line a product discount cuts`, `E2E on the lot page`, `Walk on staging`, or `Read in points.ts` for a fact the code states
@@ -233,7 +232,7 @@ A cloud session whose Playwright wants another browser build sets `CHROMIUM_PATH
 
 ### The Reply
 
-`reply.md` is a draft the person can read without opening the page: the verdict with its exceptions (`Ready, 7 of 9 claims verified`), what changed, what is not verified, then the Clarification Request. Long lists stop at six and point at the page. Trim or reword it to fit the conversation; `writing-style` governs the words.
+`reply.md` is a draft the person can read without opening the page: the verdict with its exceptions (`Ready, 7 of 9 claims verified`), what changed, what is not verified, then the Clarification Request. Long lists stop at six and point at the page. Trim or reword it to fit the conversation.
 
 - **Each line a result** - what a change does now, or what a check found, in the catalog's words: `The label reads **Time left (extended)** until the lot closes`
 - **Say where it was checked** - the workbench, staging or CI, on which commit; a failure says why, and whether it was already known

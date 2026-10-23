@@ -37,9 +37,9 @@ beside you.
   stated whole, or the draft says nothing about it
 - **The store's word for a defined thing** — the requirement's name for it,
   the same on every page
-- **The house style** — [`docs/governance/writing.md`](../../docs/governance/writing.md):
-  values first, items leading with the key term in bold, no flourish, present
-  tense, and the marks the style allows
+- **The marks** — ❓ or `TBC` on what is unconfirmed, 🚧 on what is confirmed
+  and being built, as [Marks](../../docs/prds/guides/writing-the-manual.md#marks)
+  reads them
 
 ## On a Bug
 

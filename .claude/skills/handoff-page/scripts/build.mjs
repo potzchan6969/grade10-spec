@@ -417,7 +417,6 @@ function words(value, at) {
         at,
         "markup shows as plain text; use **bold**, `code` or [text](https://...)",
       );
-    if (/[–—]/.test(value)) warn(at, "use a plain hyphen (-), not a dash");
     for (const m of value.matchAll(/\[[^\]]+\]\(([^)]*)\)/g)) {
       if (!/^(https?:\/\/|#)/.test(m[1]))
         fail(at, `link "${m[1]}" must start with https:// or #`);
