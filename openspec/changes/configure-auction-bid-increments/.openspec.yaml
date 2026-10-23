@@ -2,3 +2,5 @@ schema: grade10-planning
 created: 2026-10-22
 depends_on:
   - usd-lot-currency-winner-settlement-choice
+hands:
+  dev: "@htonyl"
