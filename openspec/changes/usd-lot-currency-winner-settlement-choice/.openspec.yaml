@@ -24,7 +24,7 @@ purpose_rewritten:
     lot currency"
 reviewed:
   user-journeys: a0d45191
-  specs: ee9ca35b
+  specs: 2cc0125f
   test-cases: c4407d65
   tech-design: 4dfdf767
   tasks: 8bbb1556
