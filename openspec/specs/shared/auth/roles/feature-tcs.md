@@ -1,7 +1,8 @@
 # shared/auth/roles Test Cases
 
-**Status:** approved · 15/15
-**Reviewed:** 2026-10-08, tcs-rules r4
+**Status:** reopened · 15/18
+**Drafts styled:** 2026-10-24, tcs-rules r7
+**Reviewed:** 2026-10-08, tcs-rules r4, lapsed 2026-10-24
 
 ## shared-auth-roles-US1: Collector holds the user role only
 
@@ -42,6 +43,43 @@
 
 * The ban is refused.
 
+
+<!-- trace:case id=g10.shared-roles.TC-5hv rev=2 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
+### shared-auth-roles-US1-TC2-2: Unknown role name is dropped
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-roles-US-01
+
+**Pre-conditions:**
+
+* `<collector A>`'s stored roles are `user` and `<unknown role>`, set up outside the console.
+* admin(holds `user:list`) is signed in to the console.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `collector A` | A collector holding no operator role |
+| `unknown role` | intern |
+
+**Steps:**
+
+1. In the console's user directory, search for `<collector A>` and open the account.
+2. Read the account's roles.
+
+**Expected Results:**
+
+* Step 2 lists `user` only.
+* `<unknown role>` appears nowhere on the account.
 <!-- trace:case id=g10.shared-roles.TC-u0g rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC4-1: Admin console rejects a user sign-in
 
@@ -454,6 +492,90 @@ Runs once per row of **Test data**.
 * The proof downloads.
 * `<item_1>` reads the custodian as owner, and a new move to the custodian sits above the one whose proof step 2 opened.
 
+
+<!-- trace:case id=g10.shared-roles.TC-af9 rev=2 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
+### shared-auth-roles-US2-TC8-2: Refund processing records a refund without the settle grant
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-roles-US-02
+
+**Pre-conditions:**
+
+* admin(only operator role is `<operator role>`) is signed in on `<grade10 admin url>`.
+* `<paid order>` is an auction order paid in full and not yet refunded.
+
+**Test data:**
+
+| `<operator role>` | Holds payment settlement |
+| --- | --- |
+| `admin` | yes |
+| `staff` | no |
+
+| Field | Value |
+| --- | --- |
+| `paid order` | An auction order whose invoice is paid in full, with no refund recorded |
+| `refund amount` | Any amount from 1 minor unit up to the amount paid |
+
+**Steps:**
+
+1. On `<grade10 admin url>`, open the auction Orders tab and open `<paid order>`.
+2. Select `Refund`, enter `<refund amount>`, and confirm.
+
+**Expected Results:**
+
+* Step 2 records the refund, and `<paid order>` shows `<refund amount>` refunded.
+* For `staff`, the refund is recorded although the role holds no payment settlement.
+
+<!-- trace:case id=g10.shared-roles.TC-gu0 rev=2 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
+### shared-auth-roles-US2-TC16-2: Treasurer holds no inventory grant
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-roles-US-02
+
+**Pre-conditions:**
+
+* admin(only operator role is `treasurer`) is signed in to the Grade10 console.
+* `<item_1>` is owned by `<collector A>`, no place marks it, and its top move carries one proof.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `collector A` | The collector who owns `<item_1>` |
+| `item_1` | A catalogue item owned by `<collector A>`, prepared as the pre-conditions say |
+| `grade10 admin item page url` | The console's item page for `<item_1>` |
+
+**Steps:**
+
+1. Look for Inventory in the console's navigation.
+2. Open `<grade10 admin item page url>`.
+3. As admin(role `admin`), open `<grade10 admin item page url>`.
+
+**Expected Results:**
+
+* Step 1 finds no Inventory section.
+* Step 2 does not show `<item_1>`, and offers no title edit, no `Transfer` and no proof download.
+* Step 3 shows `<item_1>` with its title, `<collector A>` as owner and its moves unchanged.
 ---
 
 ## shared-auth-roles-US3: Case work and money are separate grants
@@ -714,3 +836,5 @@ Runs once per row of **Test data**.
 - **Changed in review** - the console offers no per-submission grading approval, so `shared-auth-roles-US2-TC14-1` approves a settings or fee-sheet change; an offer is made only on a financed case with a recorded valuation, so `shared-auth-roles-US3-TC2-1`, `shared-auth-roles-US3-TC3-1` and `shared-auth-roles-US3-TC5-1` start from one, and `shared-auth-roles-US3-TC3-1` looks for each hidden act on a case where it would otherwise show; `shared-auth-roles-US3-TC5-1` reads the payout dialog's "Two people" line; `shared-auth-roles-US2-TC15-1` names the new move apart from the one whose proof it opens
 - **Contradicted** - none: every QA1 outcome agrees with the delta's role table and `ROLE_PERMISSIONS`
 - **Uncovered anchors** - none: `shared-auth-roles-US-02` has two new cases beside the durable nine, `shared-auth-roles-US-03` has five; the Feature set's "Two people on an approval" leaf is walked by `shared-auth-roles-US3-TC5-1`, and its "Split by cost" and "Identity documents" leaves by `shared-auth-roles-US3-TC2-1`, `shared-auth-roles-US3-TC3-1` and `shared-auth-roles-US3-TC4-1`, and "Resources and actions" by the durable `shared-auth-roles-US2-TC3-1`
+
+- **Under tcs-rules r7** - `shared-auth-roles-US1-TC1-1` (user only) is covered by `shared-auth-roles-US1-TC3-1`, which shows what the collector can reach. `shared-auth-roles-US2-TC3-1` (unknown permission) is out of suite: no screen asks for one. `shared-auth-roles-US2-TC9-1` became the `staff` row of `shared-auth-roles-US2-TC8-2`.

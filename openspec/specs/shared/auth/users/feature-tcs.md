@@ -1,7 +1,8 @@
 # shared/auth/users Test Cases
 
-**Status:** approved · 39/39
-**Reviewed:** 2026-10-23, tcs-rules r7
+**Status:** reopened · 38/41
+**Drafts styled:** 2026-10-24, tcs-rules r7
+**Reviewed:** 2026-10-23, tcs-rules r7, lapsed 2026-10-24
 **Out of suite (api):** shared-auth-users-SC-43
 
 ## shared-auth-users-US1: Operator lists people in the identity directory
@@ -634,6 +635,51 @@ Signed in as an operator who holds `user:delete`. `<an admin user id>` holds `ad
 * No erasure request is open for that account.
 * That person can still sign in.
 
+
+<!-- trace:case id=g10.shared-users.TC-lq8 rev=2 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
+### shared-auth-users-US2-TC12-2: Ban and unban are refused while an erasure request is open
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-02
+
+**Pre-conditions:**
+
+* admin(holds `user:ban` and `user:delete`) is signed in to the console.
+* `<subject account>` holds an open erasure request filed by `<request owner>`, and its standing is `<request standing>`.
+
+**Test data:**
+
+| `<request owner>` | `<request standing>` | `<act>` |
+| --- | --- | --- |
+| the account holder | unbanned | Ban |
+| an operator | banned by that filing | Unban |
+
+| Field | Value |
+| --- | --- |
+| `subject account` | An account other than the operator's own, holding no `admin` role |
+| `ban reason` | Erasure check |
+
+**Steps:**
+
+1. In the console's user directory, open `<subject account>`.
+2. Choose `<act>`, giving `<ban reason>` where a reason is asked, and confirm.
+
+**Expected Results:**
+
+* Step 2 is refused, naming the open erasure request.
+* `<subject account>` still reads `<request standing>`.
+* The erasure request still reads open.
 <!-- trace:case id=g10.shared-users.TC-wga rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
 ### shared-auth-users-US2-TC13-1: The last admin cannot be banned
 
@@ -1226,14 +1272,16 @@ Signed in as operator(holds `user:create` and `user:set-role`). No Auth account 
 * Step 2 opens that account with `<new name>` and roles including `admin`.
 * Create collected no password.
 
-<!-- trace:case id=g10.shared-users.TC-thu rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
-### shared-auth-users-US5-TC2-1: Create plain user with only user:create
+<!-- trace:case id=g10.shared-users.TC-thu rev=2 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
+### shared-auth-users-US5-TC2-2: Create plain user with only user:create
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1246,11 +1294,10 @@ Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| plain name | Pat Collector |
-| plain email | pat.collector@example.com |
-| roles | user |
+| `<plain name>` | `<plain email>`, any address no account holds | `<roles>` |
+| --- | --- | --- |
+| Pat Collector | pat.collector@example.com | user |
+| No Role Pick | no.role@example.com | none chosen |
 
 **Steps:**
 
@@ -1262,14 +1309,16 @@ Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account
 * Step 1 succeeds.
 * Step 2 opens that account with roles `user` only.
 
-<!-- trace:case id=g10.shared-users.TC-j13 rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
-### shared-auth-users-US5-TC3-1: Create without user:create is refused
+<!-- trace:case id=g10.shared-users.TC-j13 rev=2 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
+### shared-auth-users-US5-TC3-2: Create without user:create is refused
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1278,17 +1327,19 @@ Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`). No Auth account holds `<attempted email>`.
+Signed in as operator(holds `<grants>`). No Auth account holds `<attempted email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| attempted email | no.create@example.com |
+| `<grants>` | `<attempted email>`, any address no account holds | `<role>` |
+| --- | --- | --- |
+| `user:list` and `user:set-role`, not `user:create` | no.create@example.com | user |
+| `user:create` and `user:list`, not `user:set-role` | almost.staff@example.com | staff |
+| `user:create` and `user:list`, not `user:set-role` | almost.admin@example.com | admin |
 
 **Steps:**
 
-1. Try to create an Auth account with name, `<attempted email>`, and role `user`.
+1. Try to create an Auth account with a name, `<attempted email>`, and role `<role>`.
 
 **Expected Results:**
 
@@ -1685,6 +1736,41 @@ Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure 
 * The request becomes the operator's, with a ban applied.
 * Completing a sign-in method does not sign `<a subject user id>` in.
 
+
+<!-- trace:case id=g10.shared-users.TC-y5k rev=2 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
+### shared-auth-users-US6-TC9-2: A taken-over request refuses the account holder's own cancel
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-auth-users-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
+
+**Pre-conditions:**
+`<a subject user id>` filed their own erasure request, and an operator holding `user:delete` then filed over it. The seven-day window has not passed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+
+**Steps:**
+
+1. Send the account holder's own cancel as `<a subject user id>`.
+
+**Expected Results:**
+
+* The system refuses the cancel.
+* The request stays open, filed by the operator.
 ## Settled
 
 - Empty role selection at create leaves the account as `user` only (Q13).
@@ -1749,7 +1835,7 @@ Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure 
 | its scenario | Case added | `shared-auth-users-US2-TC9-1` |
 | its scenario | Case added | `shared-auth-users-US2-TC10-1` |
 | its scenario | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as Q52; walked by `shared-auth-users-US2-TC11-1` |
-| its scenario | Written for a shipped rule, case added | The vault walk found auth refusing a ban or an unban by name while an erasure request is open, with only the console's hidden buttons in any spec. The rule now stands in `An operator's erasure request bans the account`, and `shared-auth-users-US2-TC12-1` walks it, a row per filer |
+| its scenario | Written for a shipped rule, case added | The vault walk found auth refusing a ban or an unban by name while an erasure request is open, with only the console's hidden buttons in any spec. The rule now stands in `An operator's erasure request bans the account`, and `shared-auth-users-US2-TC12-2` walks it, a row per filer |
 | Design: Ask available, Ask confirmation, Ask filed, Ask cancelled, Window passed | Closed on the row | `ui-design.md` under Your data now names the scenarios these states prove, beside the vault scenarios that state what the same rows render |
 
 ### Manual
@@ -1763,3 +1849,5 @@ Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure 
 | `shared-auth-users-US6-TC5-1` | a person asks a second time from the page and reads the same request back |
 | `shared-auth-users-US6-TC7-1` | a person reads the window as passed and finds no cancel offered |
 | `shared-auth-users-US6-TC8-1` | a person tries to sign in after the shop's filing takes the request over |
+
+- **Joined under tcs-rules r7** - `shared-auth-users-US5-TC4-1` became the elevated-role rows of `shared-auth-users-US5-TC3-2`, and `shared-auth-users-US5-TC7-1` the empty-roles row of `shared-auth-users-US5-TC2-2`; their API calls became the create the console offers.
