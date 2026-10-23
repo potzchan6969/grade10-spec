@@ -42,7 +42,7 @@
   "closedAt": "Closed {when}",
   "closedSummary": "Closed at {time}. Ran {duration}",
   "completePurchase": "Confirm shipping and payment",
-  "completePurchaseAction": "Continue",
+  "completePurchaseAction": "Complete Order Setup",
   "completePurchaseBody": "Choose where we ship and how you pay. You cannot pay until both are confirmed.",
   "confirmTitle": "Confirm your bid",
   "continue": "Link Card",

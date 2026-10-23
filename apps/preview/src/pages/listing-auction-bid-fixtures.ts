@@ -135,9 +135,9 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     samePricePriorityTip: "When maximums match, the earlier one leads.",
   },
   auctionWon: "Auction won",
-  completePurchase: "Complete Order Setup",
+  completePurchase: "Confirm shipping and payment",
   completePurchaseBody:
-    "Complete Order Setup so Grade10 can prepare the invoice. Nothing is due yet.",
+    "Choose where we ship and how you pay. You cannot pay until both are confirmed.",
   completePurchaseAction: "Complete Order Setup",
   paid: "Paid",
   paidBody: "Track shipping and delivery for this auction.",
