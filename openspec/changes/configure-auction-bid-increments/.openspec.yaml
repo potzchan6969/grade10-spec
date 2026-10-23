@@ -5,3 +5,5 @@ depends_on:
 hands:
   dev: "@htonyl"
   pm: "@htonyl"
+reviewed:
+  proposal: c09cff14
