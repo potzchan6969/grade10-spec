@@ -127,7 +127,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
               qrCode: {
                 value: `g10:redeem:${reward.id}:${issued + 1}Q2M`,
                 altText: "Show this code to store staff",
-                toggleLabel: "Scan code",
+                toggleLabel: "Use now",
               },
             }
           : {
@@ -138,7 +138,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
               qrCode: {
                 value: `g10:collect:${reward.id}:${issued + 1}Q2M`,
                 altText: "Show this code to store staff",
-                toggleLabel: "Scan code",
+                toggleLabel: "Use now",
               },
             },
       );

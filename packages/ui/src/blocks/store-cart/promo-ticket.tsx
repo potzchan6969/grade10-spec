@@ -44,7 +44,7 @@ type PromoTicketQr = {
   value: string;
   /** Read to anyone who cannot see the code. Required — no built-in English. */
   altText: string;
-  /** The reveal control's visible label — "Scan code". Required — no
+  /** The reveal control's visible label — "Use now". Required — no
    * built-in English. */
   toggleLabel: string;
 };

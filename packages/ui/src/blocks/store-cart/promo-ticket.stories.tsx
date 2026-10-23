@@ -86,14 +86,14 @@ export const WithQrCode: Story = {
     qrCode: {
       value: "g10:redeem:voucher-50:7Q2M",
       altText: "Show this code to store staff",
-      toggleLabel: "Scan code",
+      toggleLabel: "Use now",
     },
   },
   play: async ({ canvasElement, userEvent }) => {
     const canvas = within(canvasElement);
     // The readable code is always shown; the QR starts folded away.
     expect(canvas.getByText("G10-50-7Q2M")).toBeInTheDocument();
-    const toggle = canvas.getByRole("button", { name: "Scan code" });
+    const toggle = canvas.getByRole("button", { name: "Use now" });
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     const qr = canvasElement.querySelector('[data-slot="promo-ticket-qr"]');
     expect(qr).not.toBeVisible();
@@ -110,7 +110,7 @@ export const WithQrCode: Story = {
 };
 
 /** A redeemed good's collection ticket — no discount code; the stub names
- * the collection under a storefront mark, the QR waits behind Scan code. */
+ * the collection under a storefront mark, the QR waits behind Use now. */
 export const CollectionTicket: Story = {
   args: {
     code: {
@@ -124,7 +124,7 @@ export const CollectionTicket: Story = {
     qrCode: {
       value: "g10:collect:reward-slab-sleeves:7Q2M",
       altText: "Show this code to store staff",
-      toggleLabel: "Scan code",
+      toggleLabel: "Use now",
     },
   },
   play: async ({ canvasElement, userEvent }) => {
@@ -133,7 +133,7 @@ export const CollectionTicket: Story = {
     expect(
       canvas.getByText("Collect at any Grade10 store"),
     ).toBeInTheDocument();
-    const toggle = canvas.getByRole("button", { name: "Scan code" });
+    const toggle = canvas.getByRole("button", { name: "Use now" });
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     await userEvent.click(toggle);
     expect(

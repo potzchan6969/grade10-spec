@@ -17,7 +17,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** The redeemed coupon ticket carries the unique code the redemption minted
- * and folds its scan QR behind Scan code; no Apply — that belongs to the
+ * and folds its scan QR behind Use now; no Apply — that belongs to the
  * cart. */
 export const RedeemedCoupon: Story = {
   args: {
@@ -30,7 +30,7 @@ export const RedeemedCoupon: Story = {
       qrCode: {
         value: "g10:redeem:reward-voucher-50:7Q2M",
         altText: "Show this code to store staff",
-        toggleLabel: "Scan code",
+        toggleLabel: "Use now",
       },
     },
   },
@@ -48,7 +48,7 @@ export const RedeemedCoupon: Story = {
     // The QR stays folded until the member asks.
     const qr = document.body.querySelector('[data-slot="promo-ticket-qr"]');
     expect(qr).not.toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: "Scan code" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Use now" }));
     await waitFor(() => expect(qr).toBeVisible());
 
     await userEvent.click(canvas.getByRole("button", { name: "Done" }));
@@ -60,7 +60,7 @@ export const RedeemedCoupon: Story = {
 };
 
 /** The redeemed good's ticket names the collection under a storefront mark
- * — no code — and folds its collection QR behind Scan code. */
+ * — no code — and folds its collection QR behind Use now. */
 export const RedeemedItem: Story = {
   args: {
     reward: ITEM,
@@ -72,7 +72,7 @@ export const RedeemedItem: Story = {
       qrCode: {
         value: "g10:collect:reward-halloween-potatoz:7Q2M",
         altText: "Show this code to store staff",
-        toggleLabel: "Scan code",
+        toggleLabel: "Use now",
       },
     },
   },
@@ -87,7 +87,7 @@ export const RedeemedItem: Story = {
 
     const qr = document.body.querySelector('[data-slot="promo-ticket-qr"]');
     expect(qr).not.toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: "Scan code" }));
+    await userEvent.click(canvas.getByRole("button", { name: "Use now" }));
     await waitFor(() => expect(qr).toBeVisible());
   },
 };

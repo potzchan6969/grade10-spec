@@ -70,7 +70,7 @@ function RewardsPage() {
               qrCode: {
                 value: `g10:redeem:${reward.id}:7Q2M`,
                 altText: "Show this code to store staff",
-                toggleLabel: "Scan code",
+                toggleLabel: "Use now",
               },
             }
           : {
@@ -81,7 +81,7 @@ function RewardsPage() {
               qrCode: {
                 value: `g10:collect:${reward.id}:7Q2M`,
                 altText: "Show this code to store staff",
-                toggleLabel: "Scan code",
+                toggleLabel: "Use now",
               },
             },
       );
