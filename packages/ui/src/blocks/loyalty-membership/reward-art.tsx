@@ -28,22 +28,15 @@ function RewardArt({
         data-slot="reward-art-coupon"
         className={cn(
           "relative grid overflow-hidden bg-[linear-gradient(135deg,var(--orange-200)_0%,var(--orange-400)_55%,var(--orange-600)_100%)]",
-          hero ? "aspect-2/1 w-full rounded-2xl" : "rounded-(--radius-lg)",
+          // The side cutouts are masked out, not painted over — the card's
+          // surface (or its hover fill) shows through the holes.
+          "[mask-composite:intersect] [mask-image:radial-gradient(circle_var(--notch)_at_0_50%,transparent_calc(var(--notch)-0.5px),black_var(--notch)),radial-gradient(circle_var(--notch)_at_100%_50%,transparent_calc(var(--notch)-0.5px),black_var(--notch))] [-webkit-mask-composite:source-in] [-webkit-mask-image:radial-gradient(circle_var(--notch)_at_0_50%,transparent_calc(var(--notch)-0.5px),black_var(--notch)),radial-gradient(circle_var(--notch)_at_100%_50%,transparent_calc(var(--notch)-0.5px),black_var(--notch))]",
+          hero
+            ? "aspect-2/1 w-full rounded-2xl [--notch:20px]"
+            : "rounded-(--radius-lg) [--notch:6px]",
           className,
         )}
       >
-        <span
-          className={cn(
-            "absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-card",
-            hero ? "size-10" : "size-3",
-          )}
-        />
-        <span
-          className={cn(
-            "absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 rounded-full bg-card",
-            hero ? "size-10" : "size-3",
-          )}
-        />
         <span className="place-self-center text-card">
           <Gift aria-hidden size={hero ? 64 : 32} />
         </span>

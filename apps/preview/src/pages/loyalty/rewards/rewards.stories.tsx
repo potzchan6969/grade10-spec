@@ -8,7 +8,7 @@ import {
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import {
   MEMBERSHIP_VIEW,
@@ -128,8 +128,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** The whole walk: a card opens the sheet, the balance reads before→after,
- * the redeemed ticket carries the code, and Done returns to the shop. */
+/** The rewards shop page. The checkout opens only when a card is pressed —
+ * each sheet state is drawn under `Loyalty/Rewards/Blocks/RewardCheckout`. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -137,39 +137,8 @@ export const Default: Story = {
       canvas.getByRole("heading", { level: 1, name: "Rewards" }),
     ).toBeInTheDocument();
     expect(canvas.getByText("Halloween Potatoz")).toBeInTheDocument();
-
-    const overlay = within(document.body);
-    await userEvent.click(
-      canvas.getByRole("button", { name: /HK\$50 off coupon/ }),
-    );
-    expect(await overlay.findByText("750 pts")).toBeInTheDocument();
-    await userEvent.click(
-      overlay.getByRole("button", { name: "Redeem for 500 pts" }),
-    );
     expect(
-      await overlay.findByText("Added to your coupons"),
-    ).toBeInTheDocument();
-    expect(overlay.getByText("G10-50-7Q2M")).toBeInTheDocument();
-    expect(
-      overlay.queryByRole("button", { name: "Apply" }),
+      document.body.querySelector('[data-slot="reward-checkout"]'),
     ).not.toBeInTheDocument();
-    await userEvent.click(overlay.getByRole("button", { name: "Done" }));
-  },
-};
-
-/** A short balance is refused before the points go — the row names the
- * deficit in the warning tone and the button disables. */
-export const InsufficientBalance: Story = {
-  render: () => <RewardsPage />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("button", { name: /Acrylic slab stand/ }),
-    );
-    const overlay = within(document.body);
-    expect(await overlay.findByText("Need 2,750 more pts")).toBeInTheDocument();
-    expect(
-      overlay.getByRole("button", { name: "Redeem for 4,000 pts" }),
-    ).toBeDisabled();
   },
 };

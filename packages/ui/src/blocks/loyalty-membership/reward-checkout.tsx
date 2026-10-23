@@ -264,7 +264,7 @@ function RewardCheckoutBody({
             )}
           </DialogFooter>
         ) : (
-          <HStack className="w-full" gap="md">
+          <HStack className="w-full" gap="sm">
             <Button
               className="flex-1"
               onClick={() => (onDone ? onDone() : onOpenChange(false))}
