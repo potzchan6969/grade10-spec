@@ -75,7 +75,6 @@
 * **Behaviour:** positive | negative | destructive
 * **Type:** functional | usability | security | performance | compatibility
 * **Suites:** acceptance | smoke | regression | health-check | prod | none
-* **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
 * **Trace:** <app>.<domain>-<capability>.US<n>
@@ -113,7 +112,6 @@
 * **Behaviour:** positive | negative | destructive
 * **Type:** functional | usability | security | performance | compatibility
 * **Suites:** acceptance | smoke | regression | health-check | prod | none
-* **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
 * **Trace:** <app>.<domain>-<capability>.US<n>
