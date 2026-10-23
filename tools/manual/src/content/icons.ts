@@ -21,6 +21,7 @@ export const PAGE_ICONS = [
   "sliders",
   "squares-four",
   "storefront",
+  "ticket",
   "user-circle",
   "vault",
 ] as const;

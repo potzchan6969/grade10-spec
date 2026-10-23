@@ -18,6 +18,7 @@ import {
   Sliders,
   SquaresFour,
   Storefront,
+  Ticket,
   UserCircle,
   Vault,
 } from "@phosphor-icons/react";
@@ -44,6 +45,7 @@ const GLYPHS: Record<PageIconName, Icon> = {
   sliders: Sliders,
   "squares-four": SquaresFour,
   storefront: Storefront,
+  ticket: Ticket,
   "user-circle": UserCircle,
   vault: Vault,
 };
