@@ -1,3 +1,5 @@
+**Walked by:** makers only - the store's own delivery rails, used by the hands of a change; no customer or admin reaches them in the products
+
 ## ADDED User journeys
 
 ### shared-planning-agent-rounds-US-10: Product manager keeps their page through the build
