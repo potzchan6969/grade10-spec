@@ -931,8 +931,8 @@ Runs once per row of **Test data**.
 **I want** to raise the house maximum any time the lot still takes a bid,
 **so that** I can keep protecting a lot that is running hotter than expected.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-gem rev=2 covers=g10adm.auction-internal-bid.SC-lqc -->
-### grade10-admin-auction-internal-bid-US3-TC1-2: A raise while outbid resolves as a new commitment
+<!-- trace:case id=g10adm.auction-internal-bid.TC-gem rev=3 covers=g10adm.auction-internal-bid.SC-lqc -->
+### grade10-admin-auction-internal-bid-US3-TC1-3: A raise while outbid resolves as a new commitment
 
 Runs once per row of **Test data**.
 
@@ -962,17 +962,17 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_11>` | A published USD listing taking bids, scheduled close a day away |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
+| `<house maximum>` | 500000 minor units (US$5,000.00) |
 | `<customer A maximum>` | 700000 minor units (US$7,000.00) |
-| `<current bid>` | 605000 minor units: `<house maximum>` plus its 5000 increment |
-| `<next minimum>` | 610000 minor units: `<current bid>` plus its 5000 increment |
+| `<current bid>` | 550000 minor units: `<house maximum>` plus its 50000 increment |
+| `<next minimum>` | 600000 minor units: `<current bid>` plus its 50000 increment |
 
 | Row | New amount | Leader | Highest bid |
 | --- | --- | --- | --- |
-| At the next minimum | `<next minimum>`, 610000 | customer A | 615000: the new amount plus its 5000 increment |
+| At the next minimum | `<next minimum>`, 600000 | customer A | 650000: the new amount plus its 50000 increment |
 | Equal to customer A | 700000, `<customer A maximum>` | customer A, the earlier maximum | 700000 |
-| Above customer A | 750000 | The house | 705000: `<customer A maximum>` plus its 5000 increment |
-| At the ceiling | 1000000000 (USD 10,000,000.00) | The house | 705000: `<customer A maximum>` plus its 5000 increment |
+| Above customer A | 800000 | The house | 750000: `<customer A maximum>` plus its 50000 increment |
+| At the ceiling | 1000000000 (USD 10,000,000.00) | The house | 750000: `<customer A maximum>` plus its 50000 increment |
 
 **Steps:**
 
@@ -1236,8 +1236,8 @@ Runs once per row of **Test data**.
 **I want** to lower the house maximum when the leader and the current bid stay as they are,
 **so that** I can loosen the protection without changing anything a collector has already seen.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-pw6 rev=2 covers=g10adm.auction-internal-bid.SC-x8q -->
-### grade10-admin-auction-internal-bid-US4-TC1-2: A lower that keeps the leader and the current bid is accepted
+<!-- trace:case id=g10adm.auction-internal-bid.TC-pw6 rev=3 covers=g10adm.auction-internal-bid.SC-x8q -->
+### grade10-admin-auction-internal-bid-US4-TC1-3: A lower that keeps the leader and the current bid is accepted
 
 Runs once per row of **Test data**.
 
@@ -1269,13 +1269,13 @@ Runs once per row of **Test data**.
 | `<listing_15>` | A published USD listing taking bids, scheduled close a day away |
 | `<house maximum>` | 700000 minor units (US$7,000.00) |
 | `<customer A maximum>` | 550000 minor units (US$5,500.00) |
-| `<current bid>` | 555000 minor units: `<customer A maximum>` plus its 5000 increment, the house's own placed bid |
-| `<probe maximum>` | 650000 minor units, above every row's lowered amount and below `<house maximum>` |
+| `<current bid>` | 600000 minor units: `<customer A maximum>` plus its 50000 increment, the house's own placed bid |
+| `<probe maximum>` | 690000 minor units, above every row's lowered amount and below `<house maximum>` |
 
 | Row | `<lowered amount>` | Customer B after `<probe maximum>` |
 | --- | --- | --- |
-| Between | 600000 minor units | Leads at 605000: `<lowered amount>` plus its 5000 increment |
-| Exactly the current bid | 555000 minor units, `<current bid>` | Leads at 560000: `<lowered amount>` plus its 5000 increment |
+| Between | 625000 minor units | Leads at 675000: `<lowered amount>` plus its 50000 increment |
+| Exactly the current bid | 600000 minor units, `<current bid>` | Leads at 650000: `<lowered amount>` plus its 50000 increment |
 
 **Steps:**
 
@@ -1291,8 +1291,8 @@ Runs once per row of **Test data**.
 * Step 3: Highest bid still reads `<current bid>`; customer A still reads Outbid; Recent bids gains no row.
 * Step 5 reads the row's outcome for customer B.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-cu7 rev=3 covers=g10adm.auction-internal-bid.SC-eng,g10adm.auction-internal-bid.SC-16a -->
-### grade10-admin-auction-internal-bid-US4-TC2-3: A lower that would move the lead or the price is refused
+<!-- trace:case id=g10adm.auction-internal-bid.TC-cu7 rev=4 covers=g10adm.auction-internal-bid.SC-eng,g10adm.auction-internal-bid.SC-16a -->
+### grade10-admin-auction-internal-bid-US4-TC2-4: A lower that would move the lead or the price is refused
 
 Runs once per row of **Test data**.
 
@@ -1326,9 +1326,9 @@ Runs once per row of **Test data**.
 
 | Row | Bidding | `<current bid>` | `<house bid>`, the highest bid placed for the house | `<lowered amount>` |
 | --- | --- | --- | --- | --- |
-| House leads, one unit below the current bid | The house leads over customer A's maximum of 550000 | 555000 | 555000, `<current bid>` | 554900, one major unit below `<current bid>` |
+| House leads, one unit below the current bid | The house leads over customer A's maximum of 550000 | 600000 | 600000, `<current bid>` | 599900, one major unit below `<current bid>` |
 | House leads at its own maximum | The house leads over customer A's maximum of 695000, the price capped at `<house maximum>` | 700000 | 700000, `<current bid>` | 699900, one major unit below |
-| House second, setting the price | The house led alone at `<starting price>`, then customer A committed a maximum of 800000 | 705000: `<house maximum>` plus its 5000 increment | 400000, `<starting price>`; customer A's commitment placed no bid for the house | 650000, at or above `<house bid>` |
+| House second, setting the price | The house led alone at `<starting price>`, then customer A committed a maximum of 800000 | 750000: `<house maximum>` plus its 50000 increment | 400000, `<starting price>`; customer A's commitment placed no bid for the house | 650000, at or above `<house bid>` |
 
 **Steps:**
 
@@ -1387,8 +1387,8 @@ Runs once per row of **Test data**.
 * Step 2 refuses the lower.
 * Step 3 still reads `<house maximum>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-0l0 rev=2 covers=g10adm.auction-internal-bid.SC-spg,g10adm.auction-internal-bid.SC-u2x -->
-### grade10-admin-auction-internal-bid-US4-TC4-2: A lower behind another's lead is held only to the house's own bid
+<!-- trace:case id=g10adm.auction-internal-bid.TC-0l0 rev=3 covers=g10adm.auction-internal-bid.SC-spg,g10adm.auction-internal-bid.SC-u2x -->
+### grade10-admin-auction-internal-bid-US4-TC4-3: A lower behind another's lead is held only to the house's own bid
 
 **Classification:**
 
@@ -1416,14 +1416,14 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_42>` | A published USD listing taking bids, scheduled close a day away |
-| `<customer A maximum>` | 410000 minor units (US$4,200.00) |
+| `<customer A maximum>` | 410000 minor units (US$4,100.00) |
 | `<house maximum>` | 450000 minor units (US$4,500.00) |
-| `<house bid>` | 422500 minor units: `<customer A maximum>` plus its 2500 increment |
+| `<house bid>` | 435000 minor units: `<customer A maximum>` plus its 25000 increment |
 | `<customer C maximum>` | 600000 minor units (US$6,000.00) |
 | `<customer B maximum>` | 700000 minor units (US$7,000.00) |
-| `<current bid>` | 605000 minor units: `<customer C maximum>` plus its 5000 increment |
-| `<kept lower>` | 430000 minor units (US$4,300.00), above `<house bid>` |
-| `<refused lower>` | 410000 minor units (US$4,200.00), below `<house bid>` |
+| `<current bid>` | 650000 minor units: `<customer C maximum>` plus its 50000 increment |
+| `<kept lower>` | 440000 minor units (US$4,400.00), above `<house bid>` |
+| `<refused lower>` | 410000 minor units (US$4,100.00), below `<house bid>` |
 
 **Steps:**
 
@@ -1447,8 +1447,8 @@ Runs once per row of **Test data**.
 **I want** to see that an internal bid was not placed because the price had already passed it,
 **so that** I can raise it or let the lot sell.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-6at rev=2 covers=g10adm.auction-internal-bid.SC-11v,g10adm.auction-internal-bid.SC-otk -->
-### grade10-admin-auction-internal-bid-US5-TC1-2: Placed at the next minimum, not placed one major unit below it
+<!-- trace:case id=g10adm.auction-internal-bid.TC-6at rev=3 covers=g10adm.auction-internal-bid.SC-11v,g10adm.auction-internal-bid.SC-otk -->
+### grade10-admin-auction-internal-bid-US5-TC1-3: Placed at the next minimum, not placed one major unit below it
 
 Runs once per row of **Test data**.
 
@@ -1481,8 +1481,8 @@ Runs once per row of **Test data**.
 
 | Row | Bidding at `<commit time>` | Next minimum | Internal bid | Outcome |
 | --- | --- | --- | --- | --- |
-| One major unit short | customer A leads at 600000 with maximum 700000 | 605000 | 604900 | Not placed; customer A leads at 600000 |
-| At the next minimum | customer A leads at 600000 with maximum 700000 | 605000 | 605000 | Placed; customer A leads at 610000, the internal bid plus its 5000 increment |
+| One major unit short | customer A leads at 600000 with maximum 700000 | 650000 | 649900 | Not placed; customer A leads at 600000 |
+| At the next minimum | customer A leads at 600000 with maximum 700000 | 650000 | 650000 | Placed; customer A leads at 700000, the internal bid plus its 50000 increment |
 | At the starting price | No bids | `<starting price>` | 400000 | Placed; the house leads at `<starting price>` |
 
 **Steps:**
@@ -1685,8 +1685,8 @@ Runs once per row of **Test data**.
 * Step 3 shows no internal bid.
 * Step 4: customer A still leads at `<current bid>`; Recent bids gains no row.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-jzx rev=2 covers=g10adm.auction-internal-bid.SC-qom,g10adm.auction-internal-bid.SC-x95 -->
-### grade10-admin-auction-internal-bid-US5-TC6-2: A raise or re-save of a not-placed internal bid still short is refused
+<!-- trace:case id=g10adm.auction-internal-bid.TC-jzx rev=3 covers=g10adm.auction-internal-bid.SC-qom,g10adm.auction-internal-bid.SC-x95 -->
+### grade10-admin-auction-internal-bid-US5-TC6-3: A raise or re-save of a not-placed internal bid still short is refused
 
 Runs once per row of **Test data**.
 
@@ -1719,11 +1719,11 @@ Runs once per row of **Test data**.
 | `<customer A maximum>` | 700000 minor units (US$7,000.00) |
 | `<current bid>` | 600000 minor units |
 | `<short amount>` | 550000 minor units, below `<current bid>` |
-| `<minimum next bid>` | 605000 minor units: `<current bid>` plus its 5000 increment |
+| `<minimum next bid>` | 650000 minor units: `<current bid>` plus its 50000 increment |
 
 | Row | `<saved amount>` |
 | --- | --- |
-| Short raise | 604900 minor units (US$6,049), one major unit below `<minimum next bid>` |
+| Short raise | 649900 minor units (US$6,499), one major unit below `<minimum next bid>` |
 | Same amount | `<short amount>`, saved unchanged |
 
 **Steps:**
@@ -2626,8 +2626,8 @@ Runs once per row of **Test data**.
 * Step 3: in the Committed row, each house bid is labelled House, with no account and no maximum.
 * Step 3: no house bid carries the house's listing pseudonym, or `<internal bidder>`'s name or email label.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-4b4 rev=2 covers=g10adm.auction-internal-bid.SC-fs2 -->
-### grade10-admin-auction-internal-bid-US7-TC9-2: Staff see no row for a house raise or lower
+<!-- trace:case id=g10adm.auction-internal-bid.TC-4b4 rev=3 covers=g10adm.auction-internal-bid.SC-fs2 -->
+### grade10-admin-auction-internal-bid-US7-TC9-3: Staff see no row for a house raise or lower
 
 **Classification:**
 
@@ -2657,7 +2657,7 @@ Runs once per row of **Test data**.
 | `<listing_43>` | A published USD listing taking bids, scheduled close a day away |
 | `<house maximum>` | 600000 minor units (US$6,000.00) |
 | `<customer A maximum>` | 500000 minor units (US$5,000.00) |
-| `<current bid>` | 505000 minor units: `<customer A maximum>` plus its 5000 increment |
+| `<current bid>` | 550000 minor units: `<customer A maximum>` plus its 50000 increment |
 | `<raised maximum>` | 700000 minor units (US$7,000.00) |
 | `<lowered maximum>` | 650000 minor units (US$6,500.00), above `<current bid>` |
 
