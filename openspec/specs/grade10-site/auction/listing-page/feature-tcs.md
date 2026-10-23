@@ -1,12 +1,10 @@
 # grade10-site/auction/listing-page Test Cases
 
-**Status:** reopened · 0/56
+**Status:** reopened · 0/59
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 **Drafts styled:** 2026-10-14, tcs-rules r5
 **Out of suite (unit):**
 - `grade10-site-auction-listing-page-SC-75` — the storefront locale test of task 6.1, added after the blind pass, because a page language the brand has no field for is a mapping in the views, not a route a collector walks
-
-**Out of suite (seo):** grade10-site-auction-listing-page-SC-03, grade10-site-auction-listing-page-SC-70, grade10-site-auction-listing-page-SC-71
 
 ## Walk 2: Collector opens an address that names no listing
 
@@ -1329,6 +1327,42 @@ without waiting for a script to run.
 **I want** a listing link to unfurl as that listing and its own canonical address,
 **so that** a link I pass on names the listing it points at instead of the auction
 catalogue.
+
+<!-- trace:case id=g10.auction-listing-page.TC-89i rev=2 -->
+### g10.auction-listing-page.US2-TC1: Shared listing link unfurls as that listing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
+
+**Pre-conditions:**
+JavaScript disabled in the browser.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps:**
+
+1. Navigate to `<published_listing_url>`.
+2. Check the page source for `og:title`, `og:description` and `og:url`.
+
+**Expected Results:**
+
+* Page source carries `og:title`, `og:description` and `og:url` naming that listing and its own address.
+* None of them names the auction catalogue in its place.
 
 ---
 
@@ -3767,6 +3801,104 @@ Runs once per row of **Test data**.
 
 * Step 2 reads `<title reads>`.
 * Step 3 reads `<description reads>`.
+
+<!-- trace:case id=g10.auction-listing-page.TC-k7m rev=1 -->
+### g10.auction-listing-page.US16-TC8: Page title, meta description and Open Graph tags follow the page's language
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-16
+
+**Pre-conditions:**
+
+* customer is on `<g10 site url>`.
+* `<listing_1>` is published with all three languages written.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_1 | A published listing with all three languages written, slug `<slug_1>` |
+| slug_1 | the address built from the English title |
+| english title | Charizard PSA 10 |
+| english description | 1999 Base Set, clean front. |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| traditional description | 1999 年基本系列，正面無瑕。 |
+| simplified title | 宝可梦 喷火龙 PSA 10 |
+| simplified description | 1999 年基本系列，正面无瑕。 |
+
+| lang | language | title reads | description reads |
+| --- | --- | --- | --- |
+| /tc | Traditional Chinese | `<traditional title>` | `<traditional description>` |
+| /sc | Simplified Chinese | `<simplified title>` | `<simplified description>` |
+| (none) | English, the default | `<english title>` | `<english description>` |
+
+**Steps:**
+
+1. Request `<lang>`/auction/listings/`<slug_1>` and read the response HTML.
+2. Read the page title.
+3. Read the meta description.
+4. Read the Open Graph title.
+5. Read the Open Graph description.
+
+**Expected Results:**
+
+* Step 2 includes `<title reads>`.
+* Step 3 includes `<description reads>`.
+* Step 4 includes `<title reads>`.
+* Step 5 includes `<description reads>`.
+
+<!-- trace:case id=g10.auction-listing-page.TC-hmv rev=1 -->
+### g10.auction-listing-page.US16-TC9: Share metadata falls back to English one text at a time
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-16
+
+**Pre-conditions:**
+
+* customer is on `<g10 site url>`.
+* `<listing_3>` is published with a Traditional Chinese title and no Traditional Chinese description.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_3 | A published listing with `<english title>`, `<english description>` and `<traditional title>`; no Traditional Chinese description |
+| slug_3 | the address built from the English title |
+| english title | Charizard PSA 10 |
+| english description | 1999 Base Set, clean front. |
+| traditional title | 寶可夢 噴火龍 PSA 10 |
+| traditional description | 1999 年基本系列，正面無瑕。 |
+
+**Steps:**
+
+1. Request `/tc/auction/listings/<slug_3>` and read the response HTML.
+2. Read the page title and the Open Graph title.
+3. Read the meta description and the Open Graph description.
+
+**Expected Results:**
+
+* Step 2 includes `<traditional title>` in both.
+* Step 3 includes `<english description>` in both.
 
 <!-- trace:case id=g10.auction-listing-page.TC-11y rev=1 covers=g10.auction-listing-page.SC-xpl -->
 ### g10.auction-listing-page.US16-TC11: Every language answers at the same lot address and the address names the English title
