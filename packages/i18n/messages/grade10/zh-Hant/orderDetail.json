@@ -5,8 +5,10 @@
   "loading": "正在載入訂單詳情…",
   "error": "無法載入此訂單。請再試一次。",
   "retry": "再試一次",
-  "notFound": "找不到訂單",
+  "notFound": "找不到此訂單",
+  "notFoundDescription": "請檢查訂單號碼，或在你的訂單中尋找此訂單。",
   "notFoundLinkDescription": "請檢查訂單電郵中的連結。",
+  "backToOrders": "返回你的訂單",
   "needHelp": "需要協助？",
   "table": {
     "items": "商品",

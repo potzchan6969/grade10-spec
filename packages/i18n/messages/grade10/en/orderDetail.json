@@ -5,8 +5,10 @@
   "loading": "Loading order details…",
   "error": "We couldn’t load this order. Try again.",
   "retry": "Try again",
-  "notFound": "Order not found",
+  "notFound": "We couldn’t find this order",
+  "notFoundDescription": "Check the order number, or find the order in your orders.",
   "notFoundLinkDescription": "Check the link in your order email.",
+  "backToOrders": "Back to Your Orders",
   "needHelp": "Need help?",
   "table": {
     "items": "Items",
