@@ -16,7 +16,6 @@ no-screen:
   commerce/site-content: where content lives
   grading/messages: emails, previewed in apps/emails
   loyalty/expiry-reminders: nothing is delivered yet
-  loyalty/coupons: a section of Membership; also drawn in the Cart Drawer
   loyalty/paying-with-points: drawn in the Cart Drawer's footer
   loyalty/points: earn and expiry rules; drawn as Membership activity
   loyalty/rewards: a section of Membership

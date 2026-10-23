@@ -1,0 +1,45 @@
+{
+  "breakpoints": {
+    "375": {
+      "name": "store-cart-promo-ticket",
+      "viewportWidth": 311,
+      "width": 311,
+      "height": 104,
+      "bones": [
+        [0, 0, 100, 64, "12px 12px 0px 0px"],
+        [0, 64, 100, 40, "0px 0px 12px 12px"]
+      ]
+    },
+    "768": {
+      "name": "store-cart-promo-ticket",
+      "viewportWidth": 416,
+      "width": 416,
+      "height": 104,
+      "bones": [
+        [0, 0, 100, 64, "12px 12px 0px 0px"],
+        [0, 64, 100, 40, "0px 0px 12px 12px"]
+      ]
+    },
+    "1280": {
+      "name": "store-cart-promo-ticket",
+      "viewportWidth": 416,
+      "width": 416,
+      "height": 104,
+      "bones": [
+        [0, 0, 100, 64, "12px 12px 0px 0px"],
+        [0, 64, 100, 40, "0px 0px 12px 12px"]
+      ]
+    },
+    "1440": {
+      "name": "store-cart-promo-ticket",
+      "viewportWidth": 416,
+      "width": 416,
+      "height": 104,
+      "bones": [
+        [0, 0, 100, 64, "12px 12px 0px 0px"],
+        [0, 64, 100, 40, "0px 0px 12px 12px"]
+      ]
+    }
+  },
+  "_hash": "1204c19a88abee71ee055115357f1714"
+}

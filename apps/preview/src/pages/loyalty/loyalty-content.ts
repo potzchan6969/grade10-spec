@@ -76,10 +76,8 @@ const REWARD_CHECKOUT_COPY: RewardCheckoutCopy = {
 
 const COUPON_LIST_COPY: CouponListCopy = {
   label: "Your coupons",
-  maskedCode: "Code hidden",
   spent: "Spent",
   void: "Void",
-  expired: "Expired",
 };
 
 /** The controls a surface hangs on an open coupon. */
@@ -177,6 +175,21 @@ const TIER_BENEFITS: readonly TierBenefitsRow[] = [
     invitationOnly: true,
   },
 ];
+
+const COUPONS_PAGE_COPY = {
+  title: "Coupons",
+  subtitle:
+    "Coupons your rewards and the shop have left you. Present one at the till, or apply it at checkout.",
+  availableTab: "Available",
+  historyTab: "Used & Expired",
+  noAvailable: "Nothing to use yet",
+  noAvailableDescription: "Coupons you earn or get from the shop appear here.",
+  noHistory: "No used or expired coupons",
+  noHistoryDescription:
+    "Coupons you've spent, or that have lapsed, appear here.",
+  noCoupons: "No coupons yet",
+  noCouponsDescription: "Coupons you earn or get from the shop appear here.",
+};
 
 const MEMBERSHIP_PAGE_COPY = {
   breadcrumbAccount: "Account",
@@ -288,22 +301,42 @@ const SHORT_BALANCE_COPY = {
     `You need ${missing.toLocaleString("en-HK")} more pts to redeem this reward. No points were taken.`,
 };
 
+/** The staff-facing scan every open coupon offers — the token the till
+ * reads, minted when the member chooses the coupon. */
+const COUPON_SCAN = {
+  altText: "Show this code to store staff",
+  toggleLabel: "Use now",
+  caption: "Staff scan this at the counter",
+};
+
 const COUPONS: CouponItem[] = [
   {
     id: "coupon-open",
     amount: "HK$50",
     code: "GRD-50-7Q2M",
     description: "HK$50 off any order",
-    expiry: `Valid until ${COUPON_VALID}`,
+    expiry: `Use by ${COUPON_VALID}`,
     status: "open",
+    qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-open:7Q2M" },
+  },
+  {
+    id: "coupon-online",
+    amount: "HK$30",
+    code: "GRD-30-W8BN",
+    description: "HK$30 off any order",
+    expiry: `Use by ${formatDay(Date.UTC(2027, 0, 15))}`,
+    status: "open",
+    scopeLabel: "Online only",
+    qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-online:W8BN" },
   },
   {
     id: "coupon-spent",
     amount: "HK$100",
     code: "GRD-100-XK4P",
     description: "HK$100 off any order",
-    expiry: `Valid until ${formatDay(Date.UTC(2026, 9, 15))}`,
+    expiry: `Use by ${formatDay(Date.UTC(2026, 9, 15))}`,
     status: "spent",
+    statusLabel: `Used on ${formatDay(Date.UTC(2026, 9, 12))}`,
   },
   {
     id: "coupon-void",
@@ -311,6 +344,7 @@ const COUPONS: CouponItem[] = [
     code: "GRD-50-9ZZT",
     expiry: `Expired ${formatDay(Date.UTC(2026, 5, 30))}`,
     status: "void",
+    statusLabel: `Void ${formatDay(Date.UTC(2026, 5, 30))}. Points returned`,
   },
   {
     id: "coupon-expired",
@@ -328,8 +362,9 @@ const ISSUED_COUPON: CouponItem = {
   amount: "HK$50 off",
   code: "GRD-50-4HVD",
   description: "HK$50 off any order",
-  expiry: `Valid until ${COUPON_VALID}`,
+  expiry: `Use by ${COUPON_VALID}`,
   status: "open",
+  qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-issued:4HVD" },
 };
 
 const ACTIVITY: ActivityEntry[] = [
@@ -491,6 +526,7 @@ export {
   COUPON_ACTION_COPY,
   COUPON_LIST_COPY,
   COUPONS,
+  COUPONS_PAGE_COPY,
   DROPPED_BALANCE,
   FLAKY_REWARDS,
   GOOGLE_HELD,

@@ -19,7 +19,13 @@ type AsyncAction = {
 
 type AsyncState<T> =
   | { status: "loading" }
-  | { status: "empty"; message: ReactNode; action?: AsyncAction }
+  | {
+      status: "empty";
+      message: ReactNode;
+      /** The empty surface's second line — why it is empty, or how to start. */
+      description?: ReactNode;
+      action?: AsyncAction;
+    }
   | { status: "error"; message: ReactNode; action?: AsyncAction }
   | { status: "ready"; data: T };
 

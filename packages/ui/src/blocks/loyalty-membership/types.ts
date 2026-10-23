@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { PromoTicketQr } from "../store-cart/promo-ticket";
 
 /** What a redemption settles as: a physical item, or a money-off coupon. */
 type RewardKind = "item" | "coupon";
@@ -73,11 +74,26 @@ type CouponItem = {
   code?: string;
   /** What the coupon is for. */
   description?: string;
-  /** When the code stops working, already formatted. */
+  /** When the code stops working, already formatted — "Use by 31 Dec".
+   * Drawn only on open and expired coupons; a spent or void coupon reads
+   * its `statusLabel` instead. */
   expiry: string;
   status: CouponStatus;
+  /** Where the coupon is spendable when the till cannot take it — "Online
+   * only". A scoped coupon reads the line under its expiry and never draws
+   * a Use now or a QR: there is no moment the member holds out a code the
+   * sale will refuse. */
+  scopeLabel?: string;
+  /** The one line a closed coupon says — "Used on 12 Oct" or "Void 30 Jun".
+   * Falls back to the copy's own word for the status. Never read on an
+   * expired coupon: its expiry already says so. */
+  statusLabel?: string;
   /** Consumer-owned control for this coupon — apply, copy, whatever the surface offers. */
   action?: ReactNode;
+  /** The staff-facing scan an open coupon offers — the token the till reads,
+   * minted when the member chooses the coupon. Draws a Use now control on the
+   * ticket that opens the scan card on its own surface. */
+  qrCode?: PromoTicketQr;
 };
 
 /** One ledger entry, already translated into member-readable terms. */

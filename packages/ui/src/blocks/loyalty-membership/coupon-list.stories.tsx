@@ -1,6 +1,5 @@
-import { Button } from "@grade10/design-system/components/forms/button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CouponList } from "./coupon-list";
 import { COUPONS } from "./fixtures";
 
@@ -19,25 +18,12 @@ const meta = {
   args: {
     copy: {
       label: "My coupons",
-      maskedCode: "••••••••",
       spent: "Used",
       void: "Void",
-      expired: "Expired",
     },
     state: {
       status: "ready",
-      data: COUPONS.map((coupon) =>
-        coupon.status === "open"
-          ? {
-              ...coupon,
-              action: (
-                <Button onClick={fn()} size="sm" variant="outline">
-                  Copy code
-                </Button>
-              ),
-            }
-          : coupon,
-      ),
+      data: COUPONS,
     },
   },
 } satisfies Meta<typeof CouponList>;
@@ -45,24 +31,84 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Open, spent, void and expired each say so; the action slot rides only
- * where the consumer put one. */
+/** Each coupon is a ticket: an open one carries its code and a Use by line,
+ * an online-only one names its scope and offers no scan, a spent or void
+ * one says its own line in the detail's place, and an expired one reads
+ * its expiry — which already says so. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("GRD-50-7Q2M")).toBeInTheDocument();
-    expect(canvas.getByText("Used")).toBeInTheDocument();
-    expect(canvas.getByText("Void")).toBeInTheDocument();
-    expect(canvas.getByText("Expired")).toBeInTheDocument();
-    expect(canvas.getAllByRole("button", { name: "Copy code" })).toHaveLength(
-      1,
+    expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
+    expect(canvas.getAllByText(/Use by/).length).toBeGreaterThan(0);
+    /* Online only: names its scope, never a Use now — no member holds out a
+     * code the sale refuses. */
+    expect(canvas.getByText("Online only")).toBeInTheDocument();
+    expect(canvas.getByText(/Used on/)).toBeInTheDocument();
+    expect(
+      canvas.getByText(/Void 30 Jun 2026\. Points returned/),
+    ).toBeInTheDocument();
+    expect(canvas.getByText(/Expired 1 May/)).toBeInTheDocument();
+    expect(canvas.getAllByRole("button", { name: "Use now" })).toHaveLength(1);
+  },
+};
+
+/** The open coupon's Use now opens its scan card — a dialog from 640px up —
+ * over the list, and closing hands the member back to it. */
+export const ScanCoupon: Story = {
+  /* The consumer's cue to refetch: open reports the coupon, close reports
+   * it again — by then a scanned one may have been spent at the till. */
+  args: { onScanOpenChange: fn() },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole("button", { name: "Use now" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await userEvent.click(toggle);
+    expect(args.onScanOpenChange).toHaveBeenLastCalledWith(
+      true,
+      expect.objectContaining({ id: "coupon-open" }),
+    );
+    const overlay = within(document.body);
+    /* The coupon's own ticket restates it inside; the surface's title is
+     * for assistive tech alone, not a second heading. */
+    expect(await overlay.findByRole("dialog")).toBeInTheDocument();
+    const qr = document.body.querySelector('[data-slot="promo-qr-card"]');
+    await waitFor(() => expect(qr).toBeVisible());
+    expect(
+      overlay.queryByRole("button", { name: "Use now" }),
+    ).not.toBeInTheDocument();
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() =>
+      expect(
+        document.body.querySelector('[data-slot="promo-qr-card"]'),
+      ).not.toBeVisible(),
+    );
+    expect(args.onScanOpenChange).toHaveBeenLastCalledWith(
+      false,
+      expect.objectContaining({ id: "coupon-open" }),
     );
   },
 };
 
-/** A reward coupon carries no code: it is spent from the wallet by id, so
- * no row draws a code or a copy action. */
-export const Wallet: Story = {
+/** Under 640px the same press slides the scan card up as a sheet. */
+export const ScanCouponNarrow: Story = {
+  globals: { viewport: { value: "mobile1" } },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Use now" }));
+    expect(
+      document.body.querySelector('[data-sheet="coupon-scan"]'),
+    ).toBeInTheDocument();
+    const qr = document.body.querySelector('[data-slot="promo-qr-card"]');
+    await waitFor(() => expect(qr).toBeVisible());
+  },
+};
+
+/** A coupon whose consumer never passes a code — a reward coupon spends
+ * from the wallet by id — reads its stub as its amount, and its scan is
+ * still its way to the till. */
+export const Codeless: Story = {
   args: {
     state: {
       status: "ready",
@@ -71,31 +117,38 @@ export const Wallet: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvasElement.querySelector('[data-slot="coupon-list-code"]'),
-    ).toBeNull();
     expect(canvas.queryByText("GRD-50-7Q2M")).not.toBeInTheDocument();
-    expect(canvas.queryByRole("button")).not.toBeInTheDocument();
     expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
-    expect(canvas.getByText("Used")).toBeInTheDocument();
+    expect(canvas.getByText(/Used on/)).toBeInTheDocument();
+    expect(canvas.getAllByRole("button", { name: "Use now" })).toHaveLength(1);
   },
 };
 
-/** A surface that must withhold codes masks every one with the same word. */
-export const Masked: Story = {
-  args: { masked: true },
+/** Three skeleton tickets while the wallet resolves. */
+export const Loading: Story = {
+  args: { state: { status: "loading" } },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.queryByText("GRD-50-7Q2M")).not.toBeInTheDocument();
-    expect(canvas.queryByText("GRD-100-XK4P")).not.toBeInTheDocument();
-    expect(canvas.getAllByText("••••••••")).toHaveLength(4);
+    expect(
+      canvasElement.querySelectorAll("[data-slot='coupon-list-loading']")
+        .length,
+    ).toBe(1);
   },
 };
 
-export const Loading: Story = { args: { state: { status: "loading" } } };
-
+/** The empty wallet names itself and says how to fill it. */
 export const Empty: Story = {
   args: {
-    state: { status: "empty", message: "No coupons yet." },
+    state: {
+      status: "empty",
+      message: "No coupons yet",
+      description: "Coupons you earn or get from the shop appear here.",
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("No coupons yet")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Coupons you earn or get from the shop appear here."),
+    ).toBeInTheDocument();
   },
 };

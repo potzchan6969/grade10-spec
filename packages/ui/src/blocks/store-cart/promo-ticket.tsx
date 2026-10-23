@@ -3,6 +3,7 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { QrCode, Tag } from "@phosphor-icons/react";
+import { Skeleton } from "boneyard-js/react";
 import { type ReactNode, useState } from "react";
 import type { HeldPromoCode } from "./types";
 
@@ -78,8 +79,37 @@ type PromoTicketProps = {
   /** Typically the Apply control for an applicable code — the online cart's
    * alone; a store-facing ticket takes none. */
   action?: ReactNode;
+  /** Boneyard skeleton while the consumer resolves the held codes. */
+  loading?: boolean;
   className?: string;
 };
+
+/** Stand-in silhouette for the skeleton: the ticket's two cards alone, so
+ * the bones read as its outline rather than a bar glued to a pill row. */
+const SKELETON_SHAPE = (
+  <div aria-hidden className="w-full">
+    <div className="h-16 rounded-t-(--radius-xl) border border-b-0 border-border bg-background" />
+    <div className="h-10 rounded-b-(--radius-xl) border border-t-0 border-border bg-background" />
+  </div>
+);
+
+/** Boneyard shell in a ticket's shape, for a list still resolving. */
+function PromoTicketSkeleton({ className }: { className?: string }) {
+  return (
+    <Skeleton
+      animate="pulse"
+      className={cn("w-full", className)}
+      color="#E6E6E6"
+      darkColor="rgba(249, 250, 250, 0.05)"
+      fixture={SKELETON_SHAPE}
+      loading
+      name="store-cart-promo-ticket"
+      transition={300}
+    >
+      {SKELETON_SHAPE}
+    </Skeleton>
+  );
+}
 
 /**
  * Promo code as a ticket: side cutouts, dashed tear line, drop-shadow that
@@ -87,6 +117,17 @@ type PromoTicketProps = {
  * Shopper copy on the surface must say “promo code”, never “coupon”.
  */
 function PromoTicket({
+  loading = false,
+  className,
+  ...props
+}: PromoTicketProps) {
+  if (loading) {
+    return <PromoTicketSkeleton className={className} />;
+  }
+  return <PromoTicketContent className={className} {...props} />;
+}
+
+function PromoTicketContent({
   code,
   selected = false,
   muted = false,
@@ -98,7 +139,7 @@ function PromoTicket({
   labelIcon,
   action,
   className,
-}: PromoTicketProps) {
+}: Omit<PromoTicketProps, "loading">) {
   const used = usedLabel != null;
   const borderTone = selected ? "border-ring" : "border-border";
   const hasDetail =
@@ -166,7 +207,9 @@ function PromoTicket({
         )}
         style={TICKET_BOTTOM_MASK}
       >
-        <HStack gap="sm" vAlign="center" className="w-full">
+        {/* min-h-6 holds the stub to the Use now button's height, so a
+         * ticket without one is the same height as a ticket with it. */}
+        <HStack gap="sm" vAlign="center" className="min-h-6 w-full">
           <HStack gap="xs" vAlign="center" className="min-w-0 flex-1">
             <span aria-hidden className="shrink-0 text-secondary-foreground">
               {labelIcon ?? <Tag size={14} weight="bold" />}
@@ -201,4 +244,4 @@ function PromoTicket({
 }
 
 export type { PromoTicketProps, PromoTicketQr };
-export { PromoTicket };
+export { PromoTicket, PromoTicketSkeleton };

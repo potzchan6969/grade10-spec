@@ -7,6 +7,7 @@ import _store_cart_amount from "./store-cart-amount.bones.json";
 import _store_cart_amount_lg from "./store-cart-amount-lg.bones.json";
 import _store_cart_badge from "./store-cart-badge.bones.json";
 import _store_cart_item from "./store-cart-item.bones.json";
+import _store_cart_promo_ticket from "./store-cart-promo-ticket.bones.json";
 import _store_product_card from "./store-product-card.bones.json";
 
 configureBoneyard({
@@ -21,5 +22,6 @@ registerBones({
   "store-cart-amount-lg": _store_cart_amount_lg,
   "store-cart-badge": _store_cart_badge,
   "store-cart-item": _store_cart_item,
+  "store-cart-promo-ticket": _store_cart_promo_ticket,
   "store-product-card": _store_product_card,
 });
