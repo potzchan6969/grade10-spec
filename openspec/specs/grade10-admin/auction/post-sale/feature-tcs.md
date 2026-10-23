@@ -4373,18 +4373,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<pending invoice>` is unpaid and its balance is 100000 minor units in HKD.
+* `<pending invoice>` is unpaid and its balance is 1177600 minor units in HKD (HK$11,776.00), the winner fixture's settled invoice.
 * admin(holds payment-processing) is on the order detail.
 
 **Steps:**
 
-1. Record a 40000-minor-unit payment with its method, reference and proof.
+1. Record a 40000-minor-unit payment (HK$400.00) with its method, reference and proof.
 
 **Expected Results:**
 
 * The payment is accepted.
 * The order outcome is Partially Paid.
-* The payment record has its own receipt number and the remaining balance is 60000 minor units.
+* The payment record has its own receipt number and the remaining balance is 1137600 minor units (HK$11,376.00).
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-3z7 rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
 ### post-sale-US12-TC2-1: Repeated payments keep one order history
@@ -4404,12 +4404,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<partially-paid invoice>` has one recorded payment and money remains due.
+* `<partially-paid invoice>` has one recorded payment of 588800 minor units (HK$5,888.00), half of its 1177600 minor-unit total (HK$11,776.00), and money remains due.
 * admin(holds payment-processing) is on the order detail.
 
 **Steps:**
 
-1. Record a second payment smaller than the current balance.
+1. Record a second payment of 20000 minor units (HK$200.00), smaller than the current balance.
 2. Read the payment history and the order outcome.
 
 **Expected Results:**
@@ -4436,19 +4436,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<partially-paid invoice>` has cumulative payments of 90000 minor units against an original total of 100000 minor units.
+* `<partially-paid invoice>` has cumulative payments of 588800 minor units (HK$5,888.00) against an original total of 1177600 minor units (HK$11,776.00).
 * admin(holds payment-processing) is recording another payment.
 
 **Steps:**
 
-1. Record a payment of 5000 minor units.
+1. Record a payment of 583800 minor units (HK$5,838.00), which leaves 5000 minor units unpaid and takes the cumulative payments to 90% or more of the original total.
 2. Choose to keep the invoice open.
-3. Record an exact 5000-minor-unit balance payment.
+3. Record an exact 5000-minor-unit (HK$50.00) balance payment.
 
 **Expected Results:**
 
 * Step 1 asks whether to close or keep collecting.
-* Step 2 leaves the order Partially Paid with the real balance.
+* Step 2 leaves the order Partially Paid with the real balance of 5000 minor units (HK$50.00).
 * Step 3 closes the invoice as Paid without a second prompt.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-qpm rev=1 covers=g10adm.auction-post-sale.SC-fmz,g10adm.auction-post-sale.SC-z26,g10adm.auction-post-sale.SC-u2w,g10adm.auction-post-sale.SC-k4t -->
@@ -4501,18 +4501,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<partially-paid invoice>` has cumulative payments of 80000 minor units against an original total of 100000 minor units.
+* `<partially-paid invoice>` has cumulative payments of 588800 minor units (HK$5,888.00) against an original total of 1177600 minor units (HK$11,776.00).
 * admin(holds payment-processing) is recording another payment.
 
 **Steps:**
 
-1. Record a payment of 5000 minor units and try to update the invoice to Paid.
-2. Record a further payment of 5000 minor units.
+1. Record a payment of 412160 minor units (HK$4,121.60) and try to update the invoice to Paid.
+2. Record a further payment of 58880 minor units (HK$588.80).
 
 **Expected Results:**
 
-* Step 1 is refused because 85000 minor units is below 90% of the original total; the payment is recorded and the order reads Partially Paid with the real 15000-minor-unit balance.
-* Step 2 brings the total to 90000 minor units and offers the choice to close as Paid or keep collecting.
+* Step 1 is refused because 1000960 minor units (HK$10,009.60) is below 90% of the original total; the payment is recorded and the order reads Partially Paid with the real 176640-minor-unit balance (HK$1,766.40).
+* Step 2 brings the total to 1059840 minor units (HK$10,598.40), 90% of the original total, and offers the choice to close as Paid or keep collecting.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-pfj rev=1 covers=g10adm.auction-post-sale.SC-pxo -->
 ### post-sale-US12-TC6-1: A recorded payment fixes the invoice
@@ -4532,7 +4532,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<partially-paid invoice>` has one recorded payment of 40000 minor units.
+* `<partially-paid invoice>` has one recorded payment of 588800 minor units (HK$5,888.00), half of its 1177600 minor-unit total (HK$11,776.00).
 * admin(holds payment-processing) is on the order detail.
 
 **Steps:**
