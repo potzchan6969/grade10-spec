@@ -1,6 +1,7 @@
 # grade10-site/vault/case-intake Test Cases
 
 **Status:** retired
+**Out of suite (api):** grade10-site-vault-case-intake-SC-20, grade10-site-vault-case-intake-SC-21, grade10-site-vault-case-intake-SC-30
 
 ## Background
 

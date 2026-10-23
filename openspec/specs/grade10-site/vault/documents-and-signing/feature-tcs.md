@@ -2,7 +2,11 @@
 
 **Status:** pending-review · 0/27
 **Drafts styled:** 2026-10-07, tcs-rules r4
-**Out of suite:** grade10-site-vault-documents-and-signing-SC-42 - the behaviour suite `packages/vault/backend/src/testing/suites/registerPaper.ts` in the application repository; it serves US-04, the auditor's journey, which no customer or admin walks (tasks 2.1, 2.4)
+**Out of suite (api):**
+- `grade10-site-vault-documents-and-signing-SC-42` — the behaviour suite `packages/vault/backend/src/testing/suites/registerPaper.ts` in the application repository
+- `grade10-site-vault-documents-and-signing-SC-28`
+- `grade10-site-vault-documents-and-signing-SC-29`
+- `grade10-site-vault-documents-and-signing-SC-38`
 
 ## grade10-site-vault-documents-and-signing-US1: Collector signs their case's papers at the counter
 

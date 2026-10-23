@@ -3,8 +3,7 @@
 **Status:** pending-review · 0/62
 **Drafts styled:** 2026-09-25, tcs-rules r3.0
 
-**Out of suite:**
-
+**Out of suite (unit):**
 - `shared-planning-change-stages-SC-01` — the manual's derivation tests: every rung of the stage table, read from a tree no person walks.
 - `shared-planning-change-stages-SC-02` — the manual's derivation tests: a proof landing out of order.
 - `shared-planning-change-stages-SC-04` — the manual's derivation tests: the four lanes as a projection of the eight stages.

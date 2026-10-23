@@ -3,7 +3,18 @@
 **Status:** pending-review · 0/94
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
-**Out of suite:** grade10-admin-console-daily-reminder-SC-07 - the backend list tests of task 2.4; grade10-admin-console-daily-reminder-SC-77 - the What's New read test of task 2.1; grade10-admin-console-daily-reminder-SC-78 - the Slack job test of task 3.1; grade10-admin-console-daily-reminder-SC-79 - the console storage tests of task 4.1; grade10-admin-console-daily-reminder-SC-80 - the Today page tests of task 4.1; grade10-admin-console-daily-reminder-SC-81 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-82 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-83 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-84 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-85 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-86 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-87 - the Slack message tests of task 5.2; grade10-admin-console-daily-reminder-SC-97 - the close-path Slack failure tests of task 2.1; grade10-admin-console-daily-reminder-SC-98 - the lifecycle not-configured tests of task 2.1 (both token and channel required)
+**Out of suite (api):**
+- `grade10-admin-console-daily-reminder-SC-07` — the backend list tests of task 2.4
+- `grade10-admin-console-daily-reminder-SC-77` — the What's New read test of task 2.1
+
+**Out of suite (unit):**
+- `grade10-admin-console-daily-reminder-SC-79` — the console storage tests of task 4.1
+
+**Out of suite (non-GUI):**
+- `grade10-admin-console-daily-reminder-SC-78` — the Slack job test of task 3.1
+- `grade10-admin-console-daily-reminder-SC-87` — the Slack message tests of task 5.2
+- `grade10-admin-console-daily-reminder-SC-97` — the close-path Slack failure tests of task 2.1
+- `grade10-admin-console-daily-reminder-SC-98` — the lifecycle not-configured tests of task 2.1 (both token and channel required)
 
 ## Walk 1: Flagged or still waiting in the dialog and on Today
 

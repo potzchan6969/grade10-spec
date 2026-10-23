@@ -4,13 +4,6 @@
 **Drafts styled:** 2026-09-29, tcs-rules r4
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 
-**Out of suite:**
-
-- `grade10-site-grading-counter-documents-SC-01` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-11`
-- `grade10-site-grading-counter-documents-SC-03` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-02`
-- `grade10-site-grading-counter-documents-SC-13` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-03`
-- `grade10-site-grading-counter-documents-SC-15` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-02`
-
 ## grade10-site-grading-counter-documents-US1: Collector signs the submission agreement at the counter
 
 **As a** collector at the shop counter with every card checked,

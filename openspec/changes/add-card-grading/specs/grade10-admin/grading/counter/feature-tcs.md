@@ -3,11 +3,8 @@
 **Status:** pending-review · 0/108
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
-**Out of suite:**
-
-- `grade10-admin-grading-counter-SC-11` - the queue row badging a letter that never went: `grade10-site/grading/submission-lifecycle`'s feature suite, where `grade10-site/grading/collector-notifications` routes its uncollected ladder. This suite reads the flagged letter on the submission, not the row's badge; the review left the badge to that suite.
-- `grade10-admin-grading-counter-SC-47` - a declined signature leaving nothing handed over: `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad. The counter only reads the decline back on its step.
-- `grade10-admin-grading-counter-SC-81` - an act with nowhere to record itself, refused: the grading worker's audit-write test, where the chain refuses the act's row and the act goes back with it (`grade10:packages/grading/backend/src/testing/suites/audit.ts`). No counter act reaches an unwritable audit entry from a screen; the review left it to that test.
+**Out of suite (api):**
+- `grade10-admin-grading-counter-SC-81` — an act with nowhere to record itself, refused: the grading worker's audit-write test, where the chain refuses the act's row and the act goes back with it (`grade10:packages/grading/backend/src/testing/suites/audit.ts`). No counter act reaches an unwritable audit entry from a screen; the review left it to that test.
 
 ## Background
 

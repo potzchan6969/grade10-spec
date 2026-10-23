@@ -2,6 +2,7 @@
 
 **Status:** pending-review · 0/16
 **Drafts styled:** 2026-10-02, tcs-rules r4
+**Out of suite (api):** grade10-site-vault-valuation-and-offer-SC-24, grade10-site-vault-valuation-and-offer-SC-27
 
 ## Background
 

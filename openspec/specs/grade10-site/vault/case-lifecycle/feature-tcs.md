@@ -2,7 +2,12 @@
 
 **Status:** pending-review · 0/12
 **Drafts styled:** 2026-10-02, tcs-rules r4
-**Out of suite:** grade10-site-vault-case-lifecycle-SC-53 - the vault's transition tests, which see no due row raised by a corrected advance (task 7.1); grade10-site-vault-case-lifecycle-SC-57 - the prepare-documents tests over a fake register answering absent; the console reaches this only while a word is parked (tasks 9.1, 9.2); grade10-site-vault-case-lifecycle-SC-59 - the prepare-documents tests over a fake register, where a case with no item id is registered inline; the console reaches this only on a case valued before the vault's deploy (tasks 9.1, 9.2); grade10-site-vault-case-lifecycle-SC-61 - the prepare-release tests over a fake register answering retired and unreachable; the console reaches a retired item at release only through a retire between Prepare documents and vaulting (tasks 9.1, 9.2)
+**Out of suite (api):**
+- `grade10-site-vault-case-lifecycle-SC-53` — the vault's transition tests, which see no due row raised by a corrected advance (task 7.1)
+- `grade10-site-vault-case-lifecycle-SC-57` — the prepare-documents tests over a fake register answering absent
+- `grade10-site-vault-case-lifecycle-SC-59` — the prepare-documents tests over a fake register, where a case with no item id is registered inline
+- `grade10-site-vault-case-lifecycle-SC-61` — the prepare-release tests over a fake register answering retired and unreachable
+- `grade10-site-vault-case-lifecycle-SC-18`
 
 ## grade10-site-vault-case-lifecycle-US1: Collector calls off a request before the item is in the vault
 

@@ -3,7 +3,6 @@
 **Status:** reopened · 3/37
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 **Drafts styled:** 2026-10-13, tcs-rules r5
-**Out of suite:** `grade10-site-auction-watchlist-SC-04` — signed-out watch from catalogue cards
 
 ## Walk 2: Collector places a bid inside the window
 

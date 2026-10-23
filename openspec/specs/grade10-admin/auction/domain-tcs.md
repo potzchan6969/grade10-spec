@@ -3,7 +3,8 @@
 **Status:** reopened · 1/5
 **Reviewed:** 2026-10-05, tcs-rules r4, lapsed 2026-10-06
 **Drafts styled:** 2026-10-14, tcs-rules r5
-**Out of suite:** grade10-admin-auction-internal-bid-SC-74 — the no-account-suspension assertion is covered by the backend expiry check; the admin cross-feature walk checks overdue status and order letters
+**Out of suite (api):**
+- `grade10-admin-auction-internal-bid-SC-74` — the no-account-suspension assertion is covered by the backend expiry check
 
 ## grade10-admin-auction-e2e-US1: Operator announces an event and puts a lot under it
 

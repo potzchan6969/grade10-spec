@@ -2,6 +2,7 @@
 
 **Status:** pending-review · 0/76
 **Drafts styled:** 2026-10-07, tcs-rules r4
+**Out of suite (api):** grade10-site-loyalty-programme-SC-199, grade10-site-loyalty-programme-SC-238
 
 ## grade10-site-loyalty-programme-US1: Member earns points on qualifying spend
 

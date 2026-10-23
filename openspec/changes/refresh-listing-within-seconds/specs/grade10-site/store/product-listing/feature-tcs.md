@@ -3,8 +3,7 @@
 **Status:** pending-review · 0/6
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
-**Out of suite:**
-
+**Out of suite (api):**
 - `grade10-site-store-product-listing-SC-53` — No journey lists it: the read-back guard is the store's own ordering rule, walked by the worker lane's tests rather than by a collector.
 
 ## grade10-site-store-product-listing-US14: Collector sees the shop as it is now

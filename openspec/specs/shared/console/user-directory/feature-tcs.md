@@ -2,6 +2,7 @@
 
 **Status:** pending-review · 0/14
 **Drafts styled:** 2026-10-06, tcs-rules r4
+**Out of suite (unit):** shared-console-user-directory-SC-30, shared-console-user-directory-SC-31, shared-console-user-directory-SC-32
 
 ## shared-console-user-directory-US1: Console renders auction standing on one account
 

@@ -2,6 +2,7 @@
 
 **Status:** pending-review · 0/48
 **Drafts styled:** 2026-10-06, tcs-rules r4
+**Out of suite (seo):** grade10-site-site-carried-surfaces-SC-14, grade10-site-site-carried-surfaces-SC-15, grade10-site-site-carried-surfaces-SC-32
 
 ## grade10-site-site-carried-surfaces-US1: Collector reads a site whose shop has not opened
 

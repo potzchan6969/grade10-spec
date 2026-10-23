@@ -2,6 +2,7 @@
 
 **Status:** pending-review · 0/6
 **Drafts styled:** 2026-10-19, tcs-rules r6
+**Out of suite (api):** shared-auth-test-sign-in-SC-06, shared-auth-test-sign-in-SC-07, shared-auth-test-sign-in-SC-08, shared-auth-test-sign-in-SC-09, shared-auth-test-sign-in-SC-10, shared-auth-test-sign-in-SC-100, shared-auth-test-sign-in-SC-101, shared-auth-test-sign-in-SC-102, shared-auth-test-sign-in-SC-103, shared-auth-test-sign-in-SC-104, shared-auth-test-sign-in-SC-23, shared-auth-test-sign-in-SC-24, shared-auth-test-sign-in-SC-25, shared-auth-test-sign-in-SC-26, shared-auth-test-sign-in-SC-27, shared-auth-test-sign-in-SC-28, shared-auth-test-sign-in-SC-30, shared-auth-test-sign-in-SC-31, shared-auth-test-sign-in-SC-34, shared-auth-test-sign-in-SC-99
 
 ## g10.shared-test-sign-in.US1: Sign-in without the /dev endpoint
 

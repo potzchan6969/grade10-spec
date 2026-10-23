@@ -3,7 +3,10 @@
 **Status:** reopened · 0/56
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 **Drafts styled:** 2026-10-14, tcs-rules r5
-**Out of suite:** grade10-site-auction-listing-page-SC-75 - the storefront locale test of task 6.1, added after the blind pass, because a page language the brand has no field for is a mapping in the views, not a route a collector walks
+**Out of suite (unit):**
+- `grade10-site-auction-listing-page-SC-75` — the storefront locale test of task 6.1, added after the blind pass, because a page language the brand has no field for is a mapping in the views, not a route a collector walks
+
+**Out of suite (seo):** grade10-site-auction-listing-page-SC-03, grade10-site-auction-listing-page-SC-70, grade10-site-auction-listing-page-SC-71
 
 ## Walk 2: Collector opens an address that names no listing
 

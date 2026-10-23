@@ -2,6 +2,9 @@
 
 **Status:** pending-review · 9/44
 **Drafts styled:** 2026-10-06, tcs-rules r4
+**Out of suite (api):** shared-auth-session-SC-34
+
+**Out of suite (non-GUI):** shared-auth-session-SC-07, shared-auth-session-SC-08, shared-auth-session-SC-10
 
 ## Background
 

@@ -3,7 +3,6 @@
 **Status:** pending-review · 2/20
 **Reviewed:** 2026-09-22, tcs-rules r3.0, lapsed 2026-10-02
 **Drafts styled:** 2026-10-13, tcs-rules r5
-**Out of suite:** grade10-site-auction-bid-increments-SC-03, grade10-site-auction-bid-increments-SC-14
 
 ## Walk 1: Collector places a bid across a price tier
 

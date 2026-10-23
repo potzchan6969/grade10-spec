@@ -2,6 +2,7 @@
 
 **Status:** approved · 39/39
 **Reviewed:** 2026-10-23, tcs-rules r7
+**Out of suite (api):** shared-auth-users-SC-43
 
 ## shared-auth-users-US1: Operator lists people in the identity directory
 

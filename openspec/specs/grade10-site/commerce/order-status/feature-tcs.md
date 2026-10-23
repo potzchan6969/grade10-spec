@@ -2,6 +2,7 @@
 
 **Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-06, tcs-rules r4
+**Out of suite (unit):** grade10-site-commerce-order-status-SC-11
 
 ## grade10-site-commerce-order-status-US1: Collector reads where an order stands
 

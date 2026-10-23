@@ -953,11 +953,11 @@ The scratch ledger was saved before covers edits. The following records the fina
 | `g10.store-order-detail.US8-TC1` | QA2 compares owner-picture reference and unchanged ownership/account entitlements through read-only fixture probes; automation-only testability. | `g10.store-order-detail.SC-4at` |
 | `g10.store-order-detail.US8-TC2` | QA2 adds the unowned member-address row to the same nondisclosure checking. | `g10.store-order-detail.SC-na2` |
 
-**Out of suite:** `grade10-site-store-order-detail-SC-07` has partial inherited coverage. Its original fixture does not explicitly omit points credit. Verify the complete absent-facts fixture in `grade10:packages/grade10-store/frontend/src/features/orders/checkout/presentation/projections.test.ts` and `grade10:apps/frontend/grade10/src/pages/orders/OrderDetailsPage.test.tsx` under the retained rich-order regression tasks and final walk. These are named implementation verifiers, not results observed by QA2. The original case body stays intact.
+**Verified outside this suite:** `grade10-site-store-order-detail-SC-07` has partial inherited coverage. Its original fixture does not explicitly omit points credit. Verify the complete absent-facts fixture in `grade10:packages/grade10-store/frontend/src/features/orders/checkout/presentation/projections.test.ts` and `grade10:apps/frontend/grade10/src/pages/orders/OrderDetailsPage.test.tsx` under the retained rich-order regression tasks and final walk. These are named implementation verifiers, not results observed by QA2. The original case body stays intact.
 
 Every new detail scenario has a whole-asserting case after the QA2 amendments. No assertion contradicts a scenario. For new scenarios serving both owner and private-link audiences, the owned-route case proves the visible outcome; private-link page tests in tasks 10.1/10.3 and the task 11.1 walk must repeat missing, blank-alt, lookup-failure, legacy and resource-failure fixtures through `grade10:apps/frontend/grade10/src/pages/orders/OrderLinkPage.test.tsx`. This explicit sibling-route verification preserves link account omissions without combining every path into a blind case.
 
-**Out of suite:** The following private-link sibling fixtures are planned in that existing page test and the task 11.1 controlled browser walk. Each valid link opens without sign-in and omits Points, Points to Earn, Points Earned, wallet and account details. No row is credited as executed or currently automated.
+**Verified outside this suite:** The following private-link sibling fixtures are planned in that existing page test and the task 11.1 controlled browser walk. Each valid link opens without sign-in and omits Points, Points to Earn, Points Earned, wallet and account details. No row is credited as executed or currently automated.
 
 | Private-Link Fixture | Additional Planned Assertions |
 | --- | --- |
@@ -971,9 +971,9 @@ The shared suite is read-only in this pass. Its inherited broad covers and class
 
 ### Technical Verifiers
 
-**Out of suite:** Deduplicated lookup batches, the 250-variant boundary, deadline, upstream metadata failures, completed-batch retention, access-before-enrichment and safe diagnostics are planned in tasks 9.1-9.4. Extend `grade10:packages/grade10-store/backend/test/services/orders/index.test.ts` and `grade10:packages/grade10-store/backend/test/trpc/routers/orders.test.ts`; a focused enrichment test beside the existing order-service tests may own the batch checks. Typed response, legacy and old-client decoding remain with tasks 8.1-8.3. No planned verifier is credited as a current pass.
+**Verified outside this suite:** Deduplicated lookup batches, the 250-variant boundary, deadline, upstream metadata failures, completed-batch retention, access-before-enrichment and safe diagnostics are planned in tasks 9.1-9.4. Extend `grade10:packages/grade10-store/backend/test/services/orders/index.test.ts` and `grade10:packages/grade10-store/backend/test/trpc/routers/orders.test.ts`; a focused enrichment test beside the existing order-service tests may own the batch checks. Typed response, legacy and old-client decoding remain with tasks 8.1-8.3. No planned verifier is credited as a current pass.
 
-**Out of suite:** The existing admin customer preview is technical parity. Tasks 9.3/10.3/11.2 verify detail/card images through `grade10:apps/admin/grade10/src/pages/store/StoreOrderPage.test.tsx` and the existing customer components. Backend router tests retain grants, Audit and card personal-data omissions. No staff workflow or collector journey is invented.
+**Verified outside this suite:** The existing admin customer preview is technical parity. Tasks 9.3/10.3/11.2 verify detail/card images through `grade10:apps/admin/grade10/src/pages/store/StoreOrderPage.test.tsx` and the existing customer components. Backend router tests retain grants, Audit and card personal-data omissions. No staff workflow or collector journey is invented.
 
 ### Classification
 

@@ -3,7 +3,8 @@
 **Status:** pending-review · 0/5
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
-**Out of suite:** grade10-admin-auction-test-winners-SC-13 — held by the admin console's bundle check, which fails a production build that carries the Test tab's code
+**Out of suite (non-GUI):**
+- `grade10-admin-auction-test-winners-SC-13` — held by the admin console's bundle check, which fails a production build that carries the Test tab's code
 
 ## g10adm.auction-test-winners.US1: Test winners for QA
 

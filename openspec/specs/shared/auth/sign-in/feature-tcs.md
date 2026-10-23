@@ -3,6 +3,7 @@
 **Status:** pending-review · 47/95
 **Drafts styled:** 2026-10-06, tcs-rules r4
 **Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-25
+**Out of suite (api):** shared-auth-sign-in-SC-110, shared-auth-sign-in-SC-111, shared-auth-sign-in-SC-112
 
 ## Background
 

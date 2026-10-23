@@ -7,6 +7,8 @@
 carries cases below. The capability is walked by nobody on their own; cases
 trace those groups.
 
+**Out of suite (non-GUI):** grade10-site-analytics-SC-01, grade10-site-analytics-SC-02, grade10-site-analytics-SC-03, grade10-site-analytics-SC-04, grade10-site-analytics-SC-05, grade10-site-analytics-SC-06, grade10-site-analytics-SC-07, grade10-site-analytics-SC-08, grade10-site-analytics-SC-09, grade10-site-analytics-SC-25, grade10-site-analytics-SC-26, grade10-site-analytics-SC-27, grade10-site-analytics-SC-28, grade10-site-analytics-SC-29, grade10-site-analytics-SC-30, grade10-site-analytics-SC-34, grade10-site-analytics-SC-36, grade10-site-analytics-SC-37, grade10-site-analytics-SC-38, grade10-site-analytics-SC-39, grade10-site-analytics-SC-40, grade10-site-analytics-SC-41, grade10-site-analytics-SC-42, grade10-site-analytics-SC-43, grade10-site-analytics-SC-46, grade10-site-analytics-SC-47, grade10-site-analytics-SC-48, grade10-site-analytics-SC-49, grade10-site-analytics-SC-50, grade10-site-analytics-SC-51, grade10-site-analytics-SC-52, grade10-site-analytics-SC-53, grade10-site-analytics-SC-54, grade10-site-analytics-SC-55, grade10-site-analytics-SC-56, grade10-site-analytics-SC-57, grade10-site-analytics-SC-58
+
 ## Background
 
 * A worker's waiting and held records are read in that worker's own database, its Mixpanel records by state; each sweep also reports the waiting count, the oldest record's age and the held count to Datadog, tagged by product.

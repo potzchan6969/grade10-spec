@@ -2,6 +2,9 @@
 
 **Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-02, tcs-rules r4
+**Out of suite (api):** grade10-site-vault-retention-and-erasure-SC-02, grade10-site-vault-retention-and-erasure-SC-03, grade10-site-vault-retention-and-erasure-SC-04, grade10-site-vault-retention-and-erasure-SC-05, grade10-site-vault-retention-and-erasure-SC-06, grade10-site-vault-retention-and-erasure-SC-07, grade10-site-vault-retention-and-erasure-SC-08, grade10-site-vault-retention-and-erasure-SC-09, grade10-site-vault-retention-and-erasure-SC-10, grade10-site-vault-retention-and-erasure-SC-44
+
+**Out of suite (non-GUI):** grade10-site-vault-retention-and-erasure-SC-01
 
 ## Background
 

@@ -2,7 +2,7 @@
 
 **Status:** pending-review · 0/184
 **Drafts styled:** 2026-10-22, tcs-rules r5
-**Out of suite:** winner-order-SC-04, winner-order-SC-05, winner-order-SC-38, winner-order-SC-39, winner-order-SC-62, winner-order-SC-63, winner-order-SC-69, winner-order-SC-96, winner-order-SC-110, winner-order-SC-111, winner-order-SC-180, winner-order-SC-184, winner-order-SC-214, winner-order-SC-215, winner-order-SC-216, winner-order-SC-249, winner-order-SC-257, winner-order-SC-287, winner-order-SC-26, winner-order-SC-27, winner-order-SC-28
+**Out of suite (api):** winner-order-SC-27
 
 ## Walk 1: Winner settles a won listing — phase 1
 
@@ -12788,7 +12788,7 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | SC-04, SC-287 | Out of suite, in the durable header |
 | SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-215, SC-278, SC-279, SC-280, SC-281, SC-282, SC-300 | Unchanged; they stay with the durable cases |
 
-**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15, g10.auction-winner-order.SC18, g10.auction-winner-order.SC19, g10.auction-winner-order.SC20
+**Verified outside this suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15, g10.auction-winner-order.SC18, g10.auction-winner-order.SC19, g10.auction-winner-order.SC20
 
 SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee beside a non-zero shipping line, SC7 a USD order's documents staying in USD, and SC18 that a USD order's invoice and receipt PDFs carry no note and no gap under Subtotal. The block tests of tasks 3.1 and 3.4 to 3.6 in this store (`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/fixtures.test.ts`, `invoice-pdf.test.ts` and `receipt-pdf.test.ts`) and the PDF tests of tasks 7.1 and 7.5 in the application repository (`invoicePdf.test.ts`, `receiptPdf.test.ts`, which hold a USD invoice and receipt without a note) verify the three. No hand case opens a USD order's PDFs; the walk of task 11.1 reads an HKD order's. `US26-TC10` and `TC11` read the same documents by hand. SC15 is an invoice sent before USD facts were stored, which no tester can create now; the breakdown tests of task 6.1 (`invoicePricing.test.ts`, which drops the note when a line has no USD fact) verify it, and `US27-TC11` reads the sibling pre-layout case by hand.
 

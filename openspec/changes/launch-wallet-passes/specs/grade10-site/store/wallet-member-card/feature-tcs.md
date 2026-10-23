@@ -2,7 +2,7 @@
 
 **Status:** pending-review · 0/9
 **Drafts styled:** 2026-10-06, tcs-rules r4
-**Out of suite:** grade10-site-store-wallet-member-card-SC-61, grade10-site-store-wallet-member-card-SC-68, grade10-site-store-wallet-member-card-SC-69, grade10-site-store-wallet-member-card-SC-70, grade10-site-store-wallet-member-card-SC-72, grade10-site-store-wallet-member-card-SC-73, grade10-site-store-wallet-member-card-SC-74
+**Out of suite (non-GUI):** grade10-site-store-wallet-member-card-SC-61, grade10-site-store-wallet-member-card-SC-68, grade10-site-store-wallet-member-card-SC-69, grade10-site-store-wallet-member-card-SC-70, grade10-site-store-wallet-member-card-SC-72, grade10-site-store-wallet-member-card-SC-73, grade10-site-store-wallet-member-card-SC-74
 
 ## grade10-site-store-wallet-member-card-US9: Operator ends a member's pass from the console
 

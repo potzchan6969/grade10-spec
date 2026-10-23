@@ -2,7 +2,6 @@
 
 **Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-13, tcs-rules r5
-**Out of suite:** grade10-admin-auction-payment-settings-SC-04, grade10-admin-auction-payment-settings-SC-08, grade10-admin-auction-payment-settings-SC-09, grade10-admin-auction-payment-settings-SC-10, grade10-admin-auction-payment-settings-SC-11
 
 ## grade10-admin-auction-payment-settings-US1: Operator maintains the auction premium minimums
 

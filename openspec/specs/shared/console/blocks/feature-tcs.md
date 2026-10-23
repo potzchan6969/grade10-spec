@@ -2,7 +2,11 @@
 
 **Status:** pending-review · 0/5
 **Drafts styled:** 2026-10-16, tcs-rules r6
-**Out of suite:** shared-console-blocks-SC-01 - the console package is the one source the consoles import, held by grade10's build and type check; shared-console-blocks-SC-02 - the same build and type check; shared-console-blocks-SC-03 - every listed export resolves in grade10's type check of the consoles; shared-console-blocks-SC-04 - the shared UI package's export list, held by its own type check and `pnpm run test`; shared-console-blocks-SC-12 - brand theming, a design review of the two brands' consoles
+**Out of suite (non-GUI):**
+- `shared-console-blocks-SC-01` — the console package is the one source the consoles import, held by grade10's build and type check
+- `shared-console-blocks-SC-02` — the same build and type check
+- `shared-console-blocks-SC-03` — every listed export resolves in grade10's type check of the consoles
+- `shared-console-blocks-SC-04` — the shared UI package's export list, held by its own type check and `pnpm run test`
 
 ## Background
 

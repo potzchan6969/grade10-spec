@@ -2,7 +2,6 @@
 
 **Status:** pending-review · 2/28
 **Drafts styled:** 2026-10-01, tcs-rules r4
-**Out of suite:** `grade10-site-vault-collector-notifications-SC-27` — its only anchor is `grade10-site/vault/loan-and-settlement`'s US-05, and that capability's suite walks the money email it names.
 
 ## grade10-site-vault-collector-notifications-US1: Borrower is warned before the due date and while it runs late
 

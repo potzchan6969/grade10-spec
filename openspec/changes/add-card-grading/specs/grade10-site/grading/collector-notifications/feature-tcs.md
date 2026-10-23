@@ -4,16 +4,8 @@
 **Drafts styled:** 2026-10-01, tcs-rules r4
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-01
 
-**Out of suite:**
-
+**Out of suite (non-GUI):**
 - `grade10-site-grading-collector-notifications-SC-01` — grade10's type check: the map from every submission event kind to its message or silence is exhaustive, so no event ships unanswered; no screen shows the map
-- `grade10-site-grading-collector-notifications-SC-08` — the booked message's anchor is `grade10-site/grading/dropoff-booking`'s journey; that suite walks it, and `grade10-site-grading-collector-notifications-US1-TC1-1` reaches the same send here
-- `grade10-site-grading-collector-notifications-SC-10` — `grade10-site/grading/dropoff-booking`'s suite: the collector who missed the visit walks it there
-- `grade10-site-grading-collector-notifications-SC-11` — `grade10-site/grading/submission-lifecycle`'s suite: the uncollected ladder is walked there
-- `grade10-site-grading-collector-notifications-SC-12` — `grade10-site/grading/submission-lifecycle`'s suite
-- `grade10-site-grading-collector-notifications-SC-13` — `grade10-site/grading/submission-lifecycle`'s suite
-- `grade10-site-grading-collector-notifications-SC-15` — `grade10-site/grading/submission-lifecycle`'s suite
-- `grade10-site-grading-collector-notifications-SC-22` — `grade10-admin/grading/counter`'s suite: the operator handing a list in meets the refusal there
 
 ## grade10-site-grading-collector-notifications-US1: Collector hears about everything that happens to the submission
 

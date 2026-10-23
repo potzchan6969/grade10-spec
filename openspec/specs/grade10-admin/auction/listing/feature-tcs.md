@@ -3,7 +3,12 @@
 **Status:** pending-review · 0/148
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
-**Out of suite:** grade10-admin-auction-listing-SC-176 - the listing service's save test, task 2.1 in `tasks.md`, because the editor always names the translations it holds and no route in the console sends an omitted object; grade10-admin-auction-listing-SC-177 - the same test, which saves a named object that holds fewer languages than the stored one; grade10-admin-auction-listing-SC-200, grade10-admin-auction-listing-SC-201 and grade10-admin-auction-listing-SC-202 - the Labs seed tests of task 2.8, because the Labs are a local developer panel the suite does not walk; grade10-admin-auction-listing-SC-203, grade10-admin-auction-listing-SC-204, grade10-admin-auction-listing-SC-205 and grade10-admin-auction-listing-SC-206 - the customer view tests of task 4.6, added after the blind pass; they stay without a case until QA2 or human review writes one; grade10-admin-auction-listing-SC-207 and grade10-admin-auction-listing-SC-208 - the Copy block tests of task 4.1, added after the blind pass
+**Out of suite (api):**
+- `grade10-admin-auction-listing-SC-176` — the listing service's save test, task 2.1 in `tasks.md`, because the editor always names the translations it holds and no route in the console sends an omitted object
+- `grade10-admin-auction-listing-SC-177` — the same test, which saves a named object that holds fewer languages than the stored one
+
+**Out of suite (non-GUI):**
+- `grade10-admin-auction-listing-SC-200`, `grade10-admin-auction-listing-SC-201`, `grade10-admin-auction-listing-SC-202` — the Labs seed tests of task 2.8, because the Labs are a local developer panel the suite does not walk
 
 ## Walk 1: Relist keeps the shared address through to Publish
 

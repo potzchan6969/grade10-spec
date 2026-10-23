@@ -4,6 +4,10 @@
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** none
 
+**Out of suite (unit):** shared-ui-auction-listing-SC-03, shared-ui-auction-listing-SC-04, shared-ui-auction-listing-SC-08, shared-ui-auction-listing-SC-14, shared-ui-auction-listing-SC-57
+
+**Out of suite (non-GUI):** shared-ui-auction-listing-SC-01, shared-ui-auction-listing-SC-02
+
 ## Background
 
 * The catalogue tile `AuctionLotCard` is a preview part, not a `@grade10/ui` export: it renders under Auction / Display / Screens / Auction List in the preview workbench, and its `locale` and `timeZone` props are settable in the Controls panel.

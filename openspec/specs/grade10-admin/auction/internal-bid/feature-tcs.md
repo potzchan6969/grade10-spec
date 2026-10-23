@@ -2,7 +2,8 @@
 
 **Status:** pending-review · 0/59
 **Drafts styled:** 2026-10-08, tcs-rules r4
-**Out of suite:** grade10-admin-auction-internal-bid-SC-74 — the no-account-suspension assertion is covered by the backend expiry check; the UI case checks overdue status and absent order letters
+**Out of suite (api):**
+- `grade10-admin-auction-internal-bid-SC-74` — the no-account-suspension assertion is covered by the backend expiry check
 
 ## Background
 

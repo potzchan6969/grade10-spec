@@ -1055,7 +1055,7 @@ The legacy `covers` lists on `TC13-2`, `TC15-2`, `TC16-2`, `TC18-2`, `TC32-2` an
 | SC-123, SC6, SC9 | `US8-TC10-2` (SC9 by row 3, on its own figures' class), asserted but not linkable until the durable case has a marker |
 | SC10 | None: it reads a log entry written before line parts carried a currency, which no tester can write now |
 
-**Out of suite:** g10adm.auction-post-sale.SC1, g10adm.auction-post-sale.SC4, g10adm.auction-post-sale.SC7, g10adm.auction-post-sale.SC8, g10adm.auction-post-sale.SC10
+**Verified outside this suite:** g10adm.auction-post-sale.SC1, g10adm.auction-post-sale.SC4, g10adm.auction-post-sale.SC7, g10adm.auction-post-sale.SC8, g10adm.auction-post-sale.SC10
 
 Each is a display claim of the quote dialog or the order page that the cases above assert in substance, with the operator shape and the exact fixture left to the dialog and order page tests of task 9.1 (`SendInvoiceDialog.test.tsx`, `quoteDraft.test.ts`, `OrderDetail.test.tsx`) in the application repository. `US21-TC1-1`, `TC3-1` and `US2-TC13-1` read the same surfaces by hand. SC10, an entry written before the rule, is verified by the history tests of task 9.1 in the application repository (`changeLine` in `orderCopy.ts` reads a part's currency before the entry's, per task 9.4).
 

@@ -2,7 +2,10 @@
 
 **Status:** pending-review · 0/88
 **Drafts styled:** 2026-10-14, tcs-rules r5
-**Out of suite:** grade10-admin-inventory-catalog-SC-205 - the product service's update test, task 3.1 in `tasks.md`, and the editor test of task 5.1, because the editor names every translation it holds and the console has no route that omits them; grade10-admin-inventory-catalog-SC-206 - the product service's write test, task 3.1, which reads the grade, set and Cert ID before and after a translation write; grade10-admin-inventory-catalog-SC-217 - the product service's write test, task 3.1, added after the blind pass; grade10-admin-inventory-catalog-SC-215 and grade10-admin-inventory-catalog-SC-216 - the Details and search tests of tasks 5.1 and 3.2, kept as already folded; grade10-admin-inventory-catalog-SC-218 - the Details section test of task 5.1, added after the blind pass
+**Out of suite (api):**
+- `grade10-admin-inventory-catalog-SC-205` — the product service's update test, task 3.1 in `tasks.md`, and the editor test of task 5.1, because the editor names every translation it holds and the console has no route that omits them
+- `grade10-admin-inventory-catalog-SC-206` — the product service's write test, task 3.1, which reads the grade, set and Cert ID before and after a translation write
+- `grade10-admin-inventory-catalog-SC-217` — the product service's write test, task 3.1, added after the blind pass
 
 ## grade10-admin-inventory-catalog-US4: Reconstruct stock changes
 

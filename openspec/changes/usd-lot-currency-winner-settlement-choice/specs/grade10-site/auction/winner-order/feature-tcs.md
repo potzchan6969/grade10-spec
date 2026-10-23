@@ -2,7 +2,7 @@
 
 **Status:** pending-review · 0/26
 **Drafts styled:** 2026-10-14, tcs-rules r5
-**Out of suite:** winner-order-SC-04, winner-order-SC-05, winner-order-SC-38, winner-order-SC-39, winner-order-SC-62, winner-order-SC-63, winner-order-SC-69, winner-order-SC-96, winner-order-SC-110, winner-order-SC-111, winner-order-SC-180, winner-order-SC-184, winner-order-SC-214, winner-order-SC-215, winner-order-SC-216, winner-order-SC-249, winner-order-SC-257, winner-order-SC-287, winner-order-SC-26, winner-order-SC-27, winner-order-SC-28
+**Out of suite (api):** winner-order-SC-27
 
 ## g10.auction-winner-order.US8: Winner pays an invoice with a policy premium
 

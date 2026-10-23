@@ -2,6 +2,7 @@
 
 **Status:** pending-review · 0/6
 **Drafts styled:** 2026-10-13, tcs-rules r4
+**Out of suite (unit):** shared-dates-and-times-SC-08, shared-dates-and-times-SC-09, shared-dates-and-times-SC-34
 
 ## g10.shared-dates-and-times.US1: The zone a date is stated in
 

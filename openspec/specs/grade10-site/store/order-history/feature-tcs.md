@@ -594,9 +594,9 @@ Every history scenario has a whole-asserting case. No contradicted reading or un
 
 ### Technical Verifiers
 
-**Out of suite:** Deduplicated lookup batches, the 250-variant boundary, deadline, upstream metadata failures, completed-batch retention, access-before-enrichment and safe diagnostics are planned in tasks 9.1-9.4. Extend `grade10:packages/grade10-store/backend/test/services/orders/index.test.ts` and `grade10:packages/grade10-store/backend/test/trpc/routers/orders.test.ts`; a focused enrichment test beside the existing order-service tests may own the batch checks. Typed response, legacy and old-client decoding remain with tasks 8.1-8.3. No planned verifier is credited as a current pass.
+**Verified outside this suite:** Deduplicated lookup batches, the 250-variant boundary, deadline, upstream metadata failures, completed-batch retention, access-before-enrichment and safe diagnostics are planned in tasks 9.1-9.4. Extend `grade10:packages/grade10-store/backend/test/services/orders/index.test.ts` and `grade10:packages/grade10-store/backend/test/trpc/routers/orders.test.ts`; a focused enrichment test beside the existing order-service tests may own the batch checks. Typed response, legacy and old-client decoding remain with tasks 8.1-8.3. No planned verifier is credited as a current pass.
 
-**Out of suite:** The existing admin customer preview is technical parity. Tasks 9.3/10.3/11.2 verify detail/card images through `grade10:apps/admin/grade10/src/pages/store/StoreOrderPage.test.tsx` and the existing customer components. Backend router tests retain grants, Audit and card personal-data omissions. No staff workflow or collector journey is invented.
+**Verified outside this suite:** The existing admin customer preview is technical parity. Tasks 9.3/10.3/11.2 verify detail/card images through `grade10:apps/admin/grade10/src/pages/store/StoreOrderPage.test.tsx` and the existing customer components. Backend router tests retain grants, Audit and card personal-data omissions. No staff workflow or collector journey is invented.
 
 ### Classification
 

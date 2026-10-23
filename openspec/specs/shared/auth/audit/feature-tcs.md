@@ -2,6 +2,7 @@
 
 **Status:** approved · 12/12
 **Reviewed:** 2026-10-23, tcs-rules r7
+**Out of suite (api):** shared-auth-audit-SC-29, shared-auth-audit-SC-35, shared-auth-audit-SC-36, shared-auth-audit-SC-37
 
 ## shared-auth-audit-US1: Operator's identity action is recorded
 

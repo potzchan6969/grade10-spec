@@ -3,7 +3,13 @@
 **Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
-**Out of suite:** grade10-site-store-cart-drawer-SC-36 - reordered, removed and unconfirmed variant-ID joins and quantity guards in Grade10 Group 4.1 frontend runtime tests; grade10-site-store-cart-drawer-SC-39 - guest/member review, basket quote and checkout response compatibility with current and previous production decoders in Grade10 Groups 2.1 and 3.1 runtime tests; grade10-site-store-cart-drawer-SC-40 - malformed picture-field refusal by the current production decoder in Grade10 Group 2.1 contract tests; grade10-site-store-cart-drawer-SC-43 - unavailable-variant field omission and drawer cleanup in Grade10 Group 5.3 review/drawer runtime tests
+**Out of suite (api):**
+- `grade10-site-store-cart-drawer-SC-36` — reordered, removed and unconfirmed variant-ID joins and quantity guards in Grade10 Group 4.1 frontend runtime tests
+- `grade10-site-store-cart-drawer-SC-39` — guest/member review, basket quote and checkout response compatibility with current and previous production decoders in Grade10 Groups 2.1 and 3.1 runtime tests
+- `grade10-site-store-cart-drawer-SC-40` — malformed picture-field refusal by the current production decoder in Grade10 Group 2.1 contract tests
+
+**Out of suite (unit):**
+- `grade10-site-store-cart-drawer-SC-43` — unavailable-variant field omission and drawer cleanup in Grade10 Group 5.3 review/drawer runtime tests
 
 ## Background
 

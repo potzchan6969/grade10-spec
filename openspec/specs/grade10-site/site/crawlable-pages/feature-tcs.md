@@ -2,6 +2,7 @@
 
 **Status:** pending-review · 0/2
 **Drafts styled:** 2026-09-02, tcs-rules r1
+**Out of suite (seo):** grade10-site-site-crawlable-pages-SC-01, grade10-site-site-crawlable-pages-SC-02, grade10-site-site-crawlable-pages-SC-03, grade10-site-site-crawlable-pages-SC-04, grade10-site-site-crawlable-pages-SC-05, grade10-site-site-crawlable-pages-SC-06, grade10-site-site-crawlable-pages-SC-07, grade10-site-site-crawlable-pages-SC-08, grade10-site-site-crawlable-pages-SC-09, grade10-site-site-crawlable-pages-SC-10, grade10-site-site-crawlable-pages-SC-11
 
 ## grade10-site-site-crawlable-pages-US1: Collector reads a public surface before scripts run
 

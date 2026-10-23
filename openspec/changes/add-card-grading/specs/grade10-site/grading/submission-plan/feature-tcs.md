@@ -2,7 +2,6 @@
 
 **Status:** pending-review · 0/63
 **Drafts styled:** 2026-09-29, tcs-rules r4
-**Out of suite:** grade10-site-grading-submission-plan-SC-02
 
 ## Background
 
