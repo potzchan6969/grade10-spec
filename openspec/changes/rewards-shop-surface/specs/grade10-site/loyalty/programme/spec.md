@@ -89,8 +89,11 @@ for SHALL close the surface — the refusal is raised outside it. Given a
 redemption it SHALL
 draw the redeemed phase in the same surface: the member-readable code a
 discount coupon's ticket carries, the collection a good's ticket names, and
-no code on it. The surface SHALL offer no Apply action — applying a coupon
-to a basket belongs to the cart alone.
+no code on it. The ticket SHALL fold the staff-facing scan QR the
+redemption supplies behind a reveal control — drawn collapsed until the
+member opens it — and none where it supplies none. The surface SHALL
+offer no Apply action — applying a coupon to a basket belongs to the cart
+alone.
 `CouponList` SHALL carry each issued
 coupon - what it is for, its own expiry, and whether it is spent, void or
 expired - and a code only where the consumer passes one; a reward coupon
@@ -194,6 +197,7 @@ SHALL require no export of its own.
 - **WHEN** the redeemed phase renders for a discount coupon and for a good
 - **THEN** the coupon's ticket carries the unique code the redemption minted
 - **AND** the good's ticket names the collection with no code
+- **AND** where the redemption supplies a scan token the ticket draws the QR
 - **AND** neither draws an Apply action
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-t8c rev=1 -->

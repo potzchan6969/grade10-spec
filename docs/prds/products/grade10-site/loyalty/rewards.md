@@ -78,9 +78,9 @@ Stock reads as a yes or no, never a count.
   Cancel; on the sheet the redeem spans the width
 - 🚧 **The redeemed state stays in the surface** - the ticket the
   redemption issued: a discount coupon's carries the code minted for that
-  redemption alone, a good's names the collection and no code. ❓ Whether
-  the ticket itself opens a QR is still the designer's call; the coupons
-  page will carry a per-coupon QR
+  redemption alone, a good's names the collection and no code. A ticket
+  spendable or collectable at the till carries the member's scan QR; an
+  online-only ticket carries none
 - 🚧 **Apply belongs to the cart** - nothing on the shop, the redeemed
   ticket or the coupons page offers to apply a coupon; the cart's
   apply-rewards flow is the only place it happens

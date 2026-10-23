@@ -67,12 +67,22 @@ function RewardsPage() {
               summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
               deadline: "Use by 28 Oct 2026",
               code: "G10-50-7Q2M",
+              qrCode: {
+                value: `g10:redeem:${reward.id}:7Q2M`,
+                altText: "Show this code to store staff",
+                toggleLabel: "Scan code",
+              },
             }
           : {
               balanceAfter: left,
               summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
               deadline: "Collect by 5 Nov 2026",
               note: "Collect at any Grade10 store",
+              qrCode: {
+                value: `g10:collect:${reward.id}:7Q2M`,
+                altText: "Show this code to store staff",
+                toggleLabel: "Scan code",
+              },
             },
       );
       setPending(false);

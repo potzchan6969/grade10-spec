@@ -22,7 +22,12 @@ import {
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CaretRight, CheckCircle, Clock } from "@phosphor-icons/react";
+import {
+  CaretRight,
+  CheckCircle,
+  Clock,
+  Storefront,
+} from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { PromoTicket } from "../store-cart/promo-ticket";
 import { RewardArt } from "./reward-art";
@@ -251,6 +256,12 @@ function RewardCheckoutBody({
             detailLabel: redemption.deadline,
             label: redemption.code ?? redemption.note ?? "",
           }}
+          labelIcon={
+            reward.kind === "item" ? (
+              <Storefront size={14} weight="bold" />
+            ) : undefined
+          }
+          qrCode={redemption.qrCode}
         />
         {smUp ? (
           <DialogFooter>

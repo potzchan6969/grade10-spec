@@ -47,6 +47,9 @@ type RewardRedemption = {
   code?: string;
   /** The ticket's footer line where no code stands — the collect-in-store line. */
   note?: string;
+  /** The staff-facing QR the redeemed ticket draws — the scan token the till
+   * reads. */
+  qrCode?: { value: string; altText: string; toggleLabel: string };
 };
 
 type CouponStatus = "open" | "spent" | "void" | "expired";

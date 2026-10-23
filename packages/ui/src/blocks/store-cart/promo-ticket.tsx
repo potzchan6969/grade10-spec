@@ -1,8 +1,10 @@
+import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { Tag } from "@phosphor-icons/react";
-import type { ReactNode } from "react";
+import { QrCode, Tag } from "@phosphor-icons/react";
+import { QRCodeSVG } from "qrcode.react";
+import { type ReactNode, useId, useState } from "react";
 import type { HeldPromoCode } from "./types";
 
 /** Half-circle punch at the bottom edge (left + right). Layers add, not intersect. */
@@ -36,13 +38,32 @@ const TICKET_BOTTOM_MASK = {
 const TICKET_SHADOW =
   "[filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.04))_drop-shadow(0_2px_6px_rgba(0,0,0,0.05))]";
 
+/** The scan code a member holds out to store staff, folded away until asked. */
+type PromoTicketQr = {
+  /** The token, encoded verbatim. */
+  value: string;
+  /** Read to anyone who cannot see the code. Required — no built-in English. */
+  altText: string;
+  /** The reveal control's visible label — "Scan code". Required — no
+   * built-in English. */
+  toggleLabel: string;
+};
+
 type PromoTicketProps = {
   code: HeldPromoCode;
   /** Highlights the ticket when this held code is the applied promo. */
   selected?: boolean;
   /** Softens inapplicable tickets; no product action. */
   muted?: boolean;
-  /** Typically the Apply control for an applicable code. */
+  /** The staff-facing QR — a QR button beside the title folds it into the
+   * stub, the half of the ticket the member holds out at the till.
+   * Online-cart tickets take none. */
+  qrCode?: PromoTicketQr;
+  /** The stub row's leading mark — a tag for a held code; a collection
+   * ticket passes its own (a storefront) instead. */
+  labelIcon?: ReactNode;
+  /** Typically the Apply control for an applicable code — the online cart's
+   * alone; a store-facing ticket takes none. */
   action?: ReactNode;
   className?: string;
 };
@@ -56,12 +77,16 @@ function PromoTicket({
   code,
   selected = false,
   muted = false,
+  qrCode,
+  labelIcon,
   action,
   className,
 }: PromoTicketProps) {
   const borderTone = selected ? "border-ring" : "border-border";
   const hasDetail =
     code.detailLabel != null || Boolean(code.inapplicableReason);
+  const qrId = useId();
+  const [qrOpen, setQrOpen] = useState(false);
 
   return (
     // biome-ignore lint/a11y/useSemanticElements: a ticket groups a name, its detail and at most one action, not form fields.
@@ -79,25 +104,41 @@ function PromoTicket({
         )}
         style={TICKET_TOP_MASK}
       >
-        <VStack gap="none">
-          <span className="text-sm font-medium leading-5 text-foreground">
-            {code.title}
-          </span>
-          {hasDetail ? (
-            <VStack gap="none">
-              {code.detailLabel != null ? (
-                <span className="text-xs font-normal leading-4 text-secondary-foreground">
-                  {code.detailLabel}
-                </span>
-              ) : null}
-              {code.inapplicableReason ? (
-                <span className="text-xs font-normal leading-4 text-secondary-foreground">
-                  {code.inapplicableReason}
-                </span>
-              ) : null}
-            </VStack>
+        <HStack gap="sm" vAlign="center" className="w-full">
+          <VStack gap="none" className="min-w-0 flex-1">
+            <span className="text-sm font-medium leading-5 text-foreground">
+              {code.title}
+            </span>
+            {hasDetail ? (
+              <VStack gap="none">
+                {code.detailLabel != null ? (
+                  <span className="text-xs font-normal leading-4 text-secondary-foreground">
+                    {code.detailLabel}
+                  </span>
+                ) : null}
+                {code.inapplicableReason ? (
+                  <span className="text-xs font-normal leading-4 text-secondary-foreground">
+                    {code.inapplicableReason}
+                  </span>
+                ) : null}
+              </VStack>
+            ) : null}
+          </VStack>
+          {qrCode ? (
+            <Button
+              aria-controls={qrId}
+              aria-expanded={qrOpen}
+              className="-my-1 shrink-0"
+              onClick={() => setQrOpen((open) => !open)}
+              size="sm"
+              type="button"
+              variant="secondary"
+            >
+              <QrCode aria-hidden />
+              {qrCode.toggleLabel}
+            </Button>
           ) : null}
-        </VStack>
+        </HStack>
       </div>
 
       <div className="relative h-0" aria-hidden>
@@ -111,10 +152,37 @@ function PromoTicket({
         )}
         style={TICKET_BOTTOM_MASK}
       >
+        {qrCode ? (
+          <div
+            aria-hidden={!qrOpen}
+            className={cn(
+              "grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none",
+              qrOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+            )}
+            id={qrId}
+          >
+            <div className={cn("overflow-hidden", !qrOpen && "invisible")}>
+              <span
+                className="mx-auto my-3 block w-fit rounded-(--radius-md) bg-white p-2"
+                data-slot="promo-ticket-qr"
+              >
+                <QRCodeSVG
+                  bgColor="#ffffff"
+                  fgColor="#000000"
+                  level="M"
+                  marginSize={2}
+                  size={160}
+                  title={qrCode.altText}
+                  value={qrCode.value}
+                />
+              </span>
+            </div>
+          </div>
+        ) : null}
         <HStack gap="sm" vAlign="center" className="w-full">
           <HStack gap="xs" vAlign="center" className="min-w-0 flex-1">
             <span aria-hidden className="shrink-0 text-secondary-foreground">
-              <Tag size={14} weight="bold" />
+              {labelIcon ?? <Tag size={14} weight="bold" />}
             </span>
             <span className="truncate text-xs font-normal leading-4 text-secondary-foreground">
               {code.label}
@@ -127,5 +195,5 @@ function PromoTicket({
   );
 }
 
-export type { PromoTicketProps };
+export type { PromoTicketProps, PromoTicketQr };
 export { PromoTicket };
