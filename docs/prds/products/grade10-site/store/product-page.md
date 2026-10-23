@@ -2,7 +2,7 @@
 title: Product Details
 spec: grade10-site/store/product-page
 order: 3
-reviewed: 2026-09-23
+reviewed: 2026-10-23
 ---
 
 The product details page shows one product, its price, and the one sellable
@@ -34,8 +34,10 @@ item a collector can add.
   the wide box a preview fetcher lays out and padded white, and says it is the
   wide card; a card the catalogue pictures no way unfurls without a picture,
   and asks for the small one
-- **URL** — `grade10.com/store/products/<handle>`; a handle that is not a
-  card answers 404 with the site's not-found page
+- 🚧 **Unknown product address** — `grade10.com/store/products/<handle>` still
+  answers 404 when the catalogue has no card for the handle, but the Store
+  product route shows its own not-found state with a way back to the product
+  listing rather than the generic site not-found page
 
 ## Buy
 
@@ -59,6 +61,8 @@ text, not a link
 ## Designs
 
 ::story{id="store-product-page-screens-product-detail--docs" title="Product details"}
+
+::story{id="store-product-page-screens-product-detail--unknown-product-address" title="Unknown product address"}
 
 :::detail{title="Implementation map" for="engineer"}
 - [Product listing page](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductListingPage.tsx)
