@@ -6,7 +6,7 @@ hands:
   pm: "@htonyl"
   dev: "@htonyl"
 reviewed:
-  proposal: 0a79d50c
+  proposal: "95926e81"
   decisions: 7fc7dd17
   user-journeys: "37851020"
   tech-design: aeb7d01c
