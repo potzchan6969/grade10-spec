@@ -688,6 +688,19 @@ card rule.
   keeps its HK Local details unchanged
 - **AND** the reissued entry names the bank rail as a changed part
 
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-xvo rev=1 -->
+#### Scenario: g10adm.auction-post-sale.SC5 - The reissue dialog shows the preview with the previous total beside the new
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose HKD bank transfer invoice has USD
+  lines of 10100, 2020 and 1001 minor units, a bank transfer fee of 0 and an
+  order total of 103000 minor units in HKD
+- **WHEN** an operator opens Reissue and raises Shipping & Handling to 2001
+  minor units in USD
+- **THEN** the dialog lists the USD lines of 10100, 2020 and 2001 minor units
+- **AND** below them it reads a Subtotal of 110850 and an order total of 110850
+  minor units in HKD, with the previous order total of 103000 beside the new one
+
 ### Requirement: An operator edits the address or method before send
 
 Before the invoice is sent, an operator changes the delivery address, the
