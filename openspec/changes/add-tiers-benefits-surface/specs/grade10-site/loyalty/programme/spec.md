@@ -91,7 +91,7 @@ SHALL require no export of its own.
 - **THEN** every count, date, state and word it shows arrived through props
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-8qm rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-262 - The card wears the skin of the tier held
+#### Scenario: grade10-site-loyalty-programme-SC-279 - The card wears the skin of the tier held
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** `TierCard` is rendered for a silver, a gold or a black member
@@ -99,14 +99,14 @@ SHALL require no export of its own.
 - **AND** the skin never follows the tier name the consumer words
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-3vf rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-263 - A tier that names no threshold renders no progress
+#### Scenario: grade10-site-loyalty-programme-SC-280 - A tier that names no threshold renders no progress
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
 - **THEN** neither the qualifying count nor its progress is rendered
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-264 - The whole card opens the tier-and-benefits surface
+#### Scenario: grade10-site-loyalty-programme-SC-281 - The whole card opens the tier-and-benefits surface
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** `TierCard` is given an `href`
@@ -138,31 +138,31 @@ SHALL require no export of its own.
 - **THEN** the store coupon shows its code, and the reward coupon shows none
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-vkq rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-265 - The held tier wears the emphasis
-**Serves:** grade10-site-loyalty-programme-US-12 - Member compares tiers and learns how points work
+#### Scenario: grade10-site-loyalty-programme-SC-275 - The held tier wears the emphasis
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
 
 - **WHEN** `TierInfoCard` renders the rung marked `currentTier`
 - **THEN** it wears the primary border and its tint
 - **AND** the unheld rungs wear the plain border
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-rwd rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-266 - An invitation-held tier earns nothing beneath it
-**Serves:** grade10-site-loyalty-programme-US-12 - Member compares tiers and learns how points work
+#### Scenario: grade10-site-loyalty-programme-SC-276 - An invitation-held tier earns nothing beneath it
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
 
 - **WHEN** `TierLadder` renders a member whose held rung is `invitationOnly`
 - **THEN** every other rung reads upcoming, never completed
 - **AND** no connector is drawn into the held rung, and neither the qualifying count nor its footnote renders
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-xnm rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-267 - The qualifying line waits for both figures
-**Serves:** grade10-site-loyalty-programme-US-12 - Member compares tiers and learns how points work
+#### Scenario: grade10-site-loyalty-programme-SC-277 - The qualifying line waits for both figures
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
 
 - **WHEN** `TierLadder` renders with a qualifying count but no target, or a target but no count
 - **THEN** no qualifying line is rendered
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-fzj rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-268 - The mechanics rows take the consumer's icons and words
-**Serves:** grade10-site-loyalty-programme-US-12 - Member compares tiers and learns how points work
+#### Scenario: grade10-site-loyalty-programme-SC-278 - The mechanics rows take the consumer's icons and words
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
 
 - **WHEN** `HowPointsWork` renders a member's mechanics
 - **THEN** every row's icon, title and body arrived through props

@@ -44,3 +44,7 @@ draws each coupon as a `PromoTicket`, and a Use now press opens the
 - A coupon detail view. The ticket's lines are the whole surface.
 - Backend or app changes. `onScanOpenChange` exists so a consumer can
   refetch on close; refresh-on-return is the settled mechanism.
+
+## References
+
+- [Coupons · Validity](../../../docs/prds/products/grade10-site/loyalty/coupons.md#validity)

@@ -48,6 +48,9 @@ export const FreeShipping: Story = {
 
 /** A Subtotal note wider than the summary wraps under the Subtotal. */
 export const WideSubtotalNote: Story = {
+  parameters: {
+    verification: { caseId: "vc_e900d4dd-b23b-4b31-abb9-c19708030c27" },
+  },
   args: { data: WIDE_NOTE_INVOICE },
 };
 

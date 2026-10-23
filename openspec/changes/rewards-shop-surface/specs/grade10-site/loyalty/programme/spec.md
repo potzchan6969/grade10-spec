@@ -60,17 +60,69 @@ mints for that coupon's spend: claiming mints and deactivates per sale as
 ### Requirement: The membership surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
-components for the membership surface — `MembershipSummary`, `RewardMenu`,
-`RewardItem`, `RewardCheckout`, `CouponList`, and `ActivityList` — and the
-props and copy type of each.
+components for the membership surface — `TierCard`, `TierInfoCard`,
+`TierLadder`, `HowPointsWork`, `MemberPass`, `RewardMenu`, `RewardItem`,
+`RewardCheckout`, `CouponList`, and `ActivityList` — and the props and copy
+type of each.
 
-`MembershipSummary` SHALL render the two counts as two counts, never one
-total, alongside the tier held, the date its validity ends, and progress
-toward retention. Where it is given an expiry line it SHALL render one line
-naming how many points expire and the day they go, in the tone supplied with
-it, and where it is given none it SHALL render no such line. It SHALL NOT
-derive that line, that day, or that tone from a clock or a balance of its own;
-the consumer withholds the line for a member holding no points.
+`TierCard` SHALL wear the skin of the tier held — silver, gold or black,
+taken through a `variant` prop and never derived from the tier name the
+consumer words — and SHALL render that tier name, the spendable balance,
+what the balance pays at checkout as the consumer formats it, and the tier's
+earn line. Where the tier names a qualifying threshold `TierCard` SHALL
+render the qualifying count apart from the balance, never summed into it,
+with the progress toward the threshold; where it names none it SHALL render
+neither count nor progress. Given an `href` to the tier-and-benefits surface,
+the whole card SHALL be the link to it. It SHALL NOT name a balance-expiry
+day or count, nor derive any expiry wording from a clock or a balance of its
+own — the whole balance lapses on one shared inactivity date, never in
+parts.
+The membership surface SHALL still render one line naming how many points
+expire and the day they go, in the tone supplied with it, a member holding
+no points seeing no such line — that line is the surface's own, never the
+card's, and it SHALL NOT derive its day or tone from a clock or a balance of
+its own.
+
+`TierInfoCard` SHALL render one tier of the programme — its name, the ask
+its rung states as consumer-worded copy, and its benefits behind checks —
+and SHALL wear the held tier's emphasis, a primary border and its tint,
+where a `currentTier` prop marks it the rung held, never derived from the
+tier name.
+
+`TierLadder` SHALL draw the tiers in climb order inside a card — each rung
+through the stepper, earned rungs beneath the held tier completed, the held
+rung in progress, unearned rungs upcoming — and SHALL draw no connector
+into a rung marked `invitationOnly`. Where the held rung is invitation-only
+every other rung SHALL read upcoming, never completed, and neither the
+qualifying count nor its footnote SHALL render however they are passed;
+otherwise the count SHALL render inside the ladder's card only where both
+the count and its target arrive. The ladder SHALL receive its rungs, the
+held rung's index and the figures through props.
+
+`HowPointsWork` SHALL render the programme's mechanics as rows — an icon,
+a title and a body each, the icons the consumer's own — stacked on a
+narrow viewport and paired across a wide one, every word arriving through
+props.
+
+`MemberPass` SHALL wear the skin of the tier held — silver, gold or
+black, taken through a `variant` prop and never derived from the tier
+name the consumer words — and SHALL render that tier name and the
+member's account email, there being no name collected at registration.
+`MemberPass` SHALL render the consumer's identification token as the
+scannable code verbatim — the square alone, no typed code beside it —
+and SHALL NOT mint, persist or substitute it — a fresh token arrives
+only through props after `onRefresh` reports the ask. While a refresh is
+in flight the refresh control SHALL show busy, and a refused refresh
+SHALL toast the reason the consumer passes, once per refusal. When a
+fresh token arrives, `MemberPass` SHALL dip the square out of view and
+settle the fresh one in — a transition, never an abrupt swap — and
+SHALL swap instantly under reduced motion. `MemberPass` SHALL
+still render the code's life as a countdown while it lives — never an
+expired rendering, the consumer rotating the code out before it lapses —
+and SHALL carry no used state of its own: a code the till takes is
+answered by the next minted token arriving through props,
+so the pass keeps rotating rather than freezing on what was spent.
+
 `RewardMenu` SHALL draw each reward as a card — the item's art or the
 coupon's gift tile, the name, the description, the deadline where the
 reward names one, and the price in points — and SHALL report a press on the
@@ -118,9 +170,9 @@ each came from, and SHALL NOT carry an operator reason, a retry key, or
 internal pricing.
 
 Each of those components SHALL take the words it renders in a single `copy`
-prop of its own copy type, and SHALL receive every count, date and state
-through props — none of them SHALL fetch, subscribe to, or store product
-state.
+prop of its own copy type, or an equivalent content prop where the shape is
+a list, and SHALL receive every count, date and state through props — none
+of them SHALL fetch, subscribe to, or store product state.
 
 The operator console composes these same exports as brand-owned view code and
 SHALL require no export of its own.
@@ -145,7 +197,7 @@ SHALL require no export of its own.
 #### Scenario: grade10-site-loyalty-programme-SC-125 - The components take content, not sources
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** any of the four components is rendered
+- **WHEN** any of the membership components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-tzp rev=1 -->
@@ -158,7 +210,7 @@ SHALL require no export of its own.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-dml rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-186 - The expiry line warns inside the last 30 days
-**Serves:** grade10-site-loyalty-programme-US-04 - the membership surface names one expiry line
+**Serves:** grade10-site-loyalty-programme-US-04 - the expiry line warns inside the last 30 days
 
 - **WHEN** a member's balance expires in 30 days or fewer
 - **THEN** the line is rendered in the warning tone, and says what keeps the points

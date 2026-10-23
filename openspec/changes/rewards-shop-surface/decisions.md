@@ -35,9 +35,10 @@
 | Q4 | Does quantity survive? | No — one redemption is one unit, confirmed by the designer; the stepper leaves the contract | A stepper inside the checkout sheet — nothing in the flow draws one, and the Figma button's "total points calculated by qty" annotation is stale |
 | Q5 | Where does the sheet/dialog line sit? | 640px (`sm`), the breakpoint the order-details and auction blocks already read | `md` — no surface reads it for this choice |
 | Q6 | Is `RewardMenu` a new export? | No — the export keeps its name and is redesigned under it, as `TierCard` was | A new `RewardList`/`RewardCard` export beside a deprecated menu — two exports for one shop |
+| Q7 | Does the redeemed ticket itself open a QR? | Yes, folded behind a Use now control on till-facing surfaces, generated from the redemption's code and dropped once spent; the coupons-page QR is settled later scope | Leaving every QR to the coupons page, so a ticket facing the till opens none |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| grade10-site/loyalty/programme | whether the redeemed ticket itself opens a QR — decided: folded behind a Use now control on till-facing surfaces, generated from the redemption's code, dropped once spent; the coupons-page QR is settled later scope | the programme spec delta — the ticket requirement and SC-268 |
+| grade10-site/loyalty/programme | whether the redeemed ticket itself opens a QR — decided: folded behind a Use now control on till-facing surfaces, generated from the redemption's code, dropped once spent; the coupons-page QR is settled later scope | Q7 |

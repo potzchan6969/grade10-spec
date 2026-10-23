@@ -8,7 +8,7 @@
 
 ## ADDED User journeys
 
-### grade10-site-loyalty-programme-US-12: Member compares tiers and learns how points work
+### grade10-site-loyalty-programme-US-13: Member compares tiers and learns how points work
 
 **As a** member,
 **I want** every tier's ask and benefits and the programme's mechanics on one surface,

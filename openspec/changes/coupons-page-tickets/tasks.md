@@ -40,3 +40,12 @@
       while held out
 - [ ] 3.3 Confirm whether coupons lands as its own page or a Membership
       section when the UI arrives
+
+## 4. The walk - the coupons wallet (grade10-spec)
+
+- [ ] 4.1 Walk `grade10-site-loyalty-programme-US-11` on the workbench:
+      `Loyalty/Coupons` tickets show their code only where one is passed;
+      Use now opens the scan surface as a sheet under 640px and a dialog
+      from it; a scoped coupon offers no Use now or QR; spent, void and
+      expired tickets mute and name their state
+      (`grade10-site-loyalty-programme-SC-272`, `grade10-site-loyalty-programme-SC-273`, `grade10-site-loyalty-programme-SC-274`)

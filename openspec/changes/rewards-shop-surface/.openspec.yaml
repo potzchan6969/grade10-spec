@@ -5,5 +5,7 @@ design_waived: all work is in this store - a `@grade10/ui` block rewrite and new
 depends_on:
   - never-lock-a-coupon
   - redesign-tier-card
+  - add-tiers-benefits-surface
+  - redesign-member-pass
 awaiting:
   specs: 2026-10-22, whether the redeemed ticket itself opens a QR - the designer is still deciding; the coupons-page QR is settled later scope - @tangconst

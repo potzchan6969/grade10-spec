@@ -39,6 +39,9 @@ export const Default: Story = {
 
 /** A Subtotal note wider than the summary wraps under the Subtotal. */
 export const WideSubtotalNote: Story = {
+  parameters: {
+    verification: { caseId: "vc_09b7ceeb-72ed-4bbd-9236-fdf449c16aa4" },
+  },
   args: { data: WIDE_NOTE_RECEIPT },
 };
 
