@@ -12,6 +12,6 @@
 - [x] 2.2 Retire `receiptNumbered` and `receiptNumberedPdf` (`Receipt · P{n}`) from `@grade10/i18n` `auctionOrders.json`
 - [x] 2.3 Verify: the page suite covering `winner-order-US2-TC57` and `winner-order-US2-TC58`
 
-## 3. The walk — Winner Order (grade10)
+## 3. The walk — Winner Order (grade10) (owner: @htonyl)
 
-- [ ] 3.1 Walk `winner-order-US-02`: a paid order's receipt link reads `Receipt #RC-LK7P2Q01P1 (22 Sep 2026)`; a partially paid order's links run oldest issued first (`winner-order-SC-307`, `winner-order-SC-308`)
+- [x] 3.1 Walk `winner-order-US-02`: a paid order's receipt link reads `Receipt #RC-LK7P2Q01P1 (22 Sep 2026)`; a partially paid order's links run oldest issued first (`winner-order-SC-307`, `winner-order-SC-308`)
