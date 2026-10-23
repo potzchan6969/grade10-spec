@@ -1,3 +1,7 @@
+---
+title: Store Location Test Cases
+---
+
 # grade10-site/store/store-locator Test Cases
 
 **Status:** pending-review · 0/8

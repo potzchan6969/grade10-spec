@@ -1,3 +1,7 @@
+---
+title: Store Landing Test Cases
+---
+
 # grade10-site/store/landing Test Cases
 
 **Status:** pending-review · 0/11

@@ -1,0 +1,106 @@
+{
+  "version": 2,
+  "change": "add-store-product-not-found-state",
+  "baseline": "300b3438516307fefe73cec67eab124e232e2ea07573cbef3a61015eb0d7fd2d",
+  "fingerprint": "cc076c6ebf231562314317c12e266d53bfe7a66c818b6b0ec30ef1b16ff243f4",
+  "reviewedBy": "Kin Chan",
+  "acceptedAt": "2026-10-23T07:51:44.814Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/site/navigation.md#one-address-one-surface",
+      "sha256": "169a9c93e62374086b2e50f14efad3fa79e49ebc84d01bd4a0f680d3a1e7164a",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/product-page.md#unknown-product-address",
+      "sha256": "cd1d2dc4c3c108fc92a372479ace0d0f1887552bd2c7456ec9e1777672d982e2",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-store-product-not-found-state/decisions.md",
+      "sha256": "0a689da3bf20ea7b6261983aea92eabf1f1adc90a358553b89eecc7a04e9e300",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-not-found-state/proposal.md",
+      "sha256": "9609ca2249652037a692cf792eba1fb0a959259599d4a84a25832e6ca7c7d050",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-not-found-state/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "c142c0a900f5a56e56011e21f84091bf81822c45fedb4bdfe99abe80b20f7ded",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-not-found-state/specs/grade10-site/store/product-page/feature-tcs.md",
+      "sha256": "69ef32ef704b59a0d193ec0a693452a483e12d94c6b1b551577c45a44bcc00b7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-not-found-state/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "af927c0c182f3b027762aee3ca39516451997ddae0c29876accf302307002236",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-not-found-state/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "fd132d69c65b1d1a37e5484522e9f933d689f6266fd5ce20c2fd19bec841b2fd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-not-found-state/tech-design.md",
+      "sha256": "469fb655f2f2feec0d3787c7a7bdb01fd78e4709851d11273b2a72f9171ede16",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-product-not-found-state/ui-design.md",
+      "sha256": "5fd985230f5a9c7baf603d596e1f37dc6dfda80abf68bf7c456de1cf4dfd02cd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "c142c0a900f5a56e56011e21f84091bf81822c45fedb4bdfe99abe80b20f7ded",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+      "sha256": "69ef32ef704b59a0d193ec0a693452a483e12d94c6b1b551577c45a44bcc00b7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "ba94c0136e314f506ba51d8ea2448f2190a521161d9af529f6ed959e5a577d81",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "022c165c53403d09e88b629cbeab0902ca018f7c792752880a679405072f4e3a",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-store-product-not-found-state/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: An address that names no card is refused"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

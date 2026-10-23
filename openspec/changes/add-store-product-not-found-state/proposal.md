@@ -56,7 +56,7 @@ None.
 
 ## References
 
-- [Product Details PRD](../../../docs/prds/products/grade10-site/store/product-page.md)
+- [Product Details · Unknown product address](../../../docs/prds/products/grade10-site/store/product-page.md#unknown-product-address)
 - [Product Detail · Unknown Product Address](https://storybook.grade10-stg.com/?path=/story/store-product-page-screens-product-detail--unknown-product-address)
 - [Site Navigation · One Address, One Surface](../../../docs/prds/products/grade10-site/site/navigation.md#one-address-one-surface)
 - [Completed Product Detail Redesign](../redesign-store-product-detail-page/proposal.md)

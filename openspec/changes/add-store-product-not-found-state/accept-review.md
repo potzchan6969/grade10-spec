@@ -1,26 +1,24 @@
-reviewed: working-tree-2026-10-23
-source-identity: HEAD fc20a0eb77e0 + uncommitted PM, QA1, Dev and QA2 artifacts
-baseline-identity: not issued; current acceptance preflight is blocked
-verdict: Not ready
+reviewed: 92e64a29305ea1559fcb501159e58f8a8446fa8f
+source-identity: 17e6166e3382604daabea15bd4b7427daa20c6e6c5a2a7596ac13e86ba122d68
+baseline-identity: 300b3438516307fefe73cec67eab124e232e2ea07573cbef3a61015eb0d7fd2d
+verdict: Ready to accept
 
-This review covers the working tree for `add-store-product-not-found-state`, including the PRD, proposal, decisions, UI design, journey context, technical design, modified capability requirement, QA1/QA2 suites and tasks. The requested behavior is internally consistent: a missing Store product keeps HTTP 404, receives the Storybook-aligned Store state and listing recovery action, and leaves unrelated unknown routes on the generic site-wide 404. The feature and domain suite drafts both reconcile to `grade10-site-store-product-page-SC-03`; the unchanged success path remains covered by the durable suite.
-
-| # | Severity | Where | Finding | Owner | Status |
-| --- | --- | --- | --- | --- | --- |
-| 1 | blocker | `accept:preflight add-store-product-not-found-state` | The repository's configured Node requirement is 24.14.1, but this checkout runs Node 23.10.0. The official acceptance command stops before the gate because `RegExp.escape` is unavailable. | Environment/store owner | open |
-| 2 | blocker | Acceptance fold's `tcs:validate --require-suites` | With a temporary compatibility polyfill, the fold reaches the repository-wide TCS gate but fails on pre-existing in-flight changes whose `user-journeys.md` has no companion feature suite, including `add-consignment`, `add-store-guest-checkout`, `add-store-public-codes` and others. Those unrelated changes are outside this scope and were not modified. | Store owner | open |
-| 3 | note | Full `pnpm run tcs:validate` | The ordinary validator exits 0 with existing warnings; the stricter `--require-suites` gate used by acceptance is the blocking check. | Store owner | recorded |
+| # | Severity | Where | Finding | Owner | Fix in | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| — | — | — | No acceptance-blocking or source-consistency findings. | — | — | — |
 
 ## Coverage
 
-| Source or dependency | Check | Result |
-| --- | --- | --- |
-| PM bundle and durable product-page contract | Page-to-delta, decisions, design ownership, route boundary and generic-404 non-goal | Consistent |
-| QA1 and Dev readings | Independent inputs, disjoint write scopes, QA2 reconciliation | Complete |
-| `pnpm run plan:review-preflight add-store-product-not-found-state --json` | Review-scope preflight | Passed |
-| `pnpm run validate:changes add-store-product-not-found-state` | Strict change validation | Passed |
-| `pnpm check:manual` | PRD/manual contract check | Passed |
-| `pnpm run tcs:validate` | Suite syntax and trace validation | Exit 0; existing warnings only |
-| `pnpm run accept:preflight add-store-product-not-found-state` | Official acceptance preflight | Blocked by Node 23 `RegExp.escape`; the compatibility run is then blocked by unrelated `--require-suites` failures |
-
-No acceptance or publication was performed because the acceptance gate is not green.
+| Source or dependency | Checked identity | Checks applied | Carried from |
+| --- | --- | --- | --- |
+| Current working tree and repaired source inputs | `HEAD 92e64a29305ea1559fcb501159e58f8a8446fa8f`; review-scope digest `17e6166e3382604daabea15bd4b7427daa20c6e6c5a2a7596ac13e86ba122d68` | Full independent review; prior ledger was not reusable because it recorded no commit or review-scope digest | Full review |
+| Change PM bundle: `proposal.md`, `decisions.md`, `ui-design.md`, `tech-design.md`, `tasks.md` | Source digest above | Page-to-delta, same facts, open decisions, design ownership, technical delivery and task scope | Full review |
+| Change delta and QA suites: `spec.md`, `user-journeys.md`, product-page `feature-tcs.md`, Store `domain-tcs.md` | Source digest above | Folded requirement, journey/feature-set coverage, QA2 dispositions, draft status and traceability | Full review |
+| Durable product-page contract and journeys | Baseline `300b3438516307fefe73cec67eab124e232e2ea07573cbef3a61015eb0d7fd2d` | MODIFIED requirement exists on baseline; Purpose and unchanged success-path contract remain compatible | Full review |
+| PRD and navigation pages: `store/product-page.md#unknown-product-address`, `site/navigation.md#one-address-one-surface` | Source digest above | Page-to-delta, exact facts, route ownership and generic unknown-route boundary | Full review |
+| Active same-capability changes: `activate-listing-tile-by-name`, `add-store-locator`, `add-store-product-status`, `redesign-store-product-detail-page`, `redraw-store-cart-frames` | Current working tree at `HEAD 92e64a29305ea1559fcb501159e58f8a8446fa8f` | Overlap search and delta comparison; none restates or contradicts the missing-product 404 requirement | Full review |
+| `pnpm run plan:review-preflight add-store-product-not-found-state --json` | `/tmp/add-store-product-not-found-review.Y6jX0Z/plan-review-preflight.json`; source digest above | Exit 0; scoped inputs and durable targets resolved | Fresh |
+| `pnpm run accept:preflight add-store-product-not-found-state` | `/tmp/add-store-product-not-found-accept.Lkzg4U/accept-preflight.log`; fingerprint `cc076c6ebf231562314317c12e266d53bfe7a66c818b6b0ec30ef1b16ff243f4` | Exit 0; ready to fold; four durable files identified | Fresh |
+| `pnpm run validate:changes add-store-product-not-found-state` | `/tmp/add-store-product-not-found-validate.z8VXZX/validate-changes.log`; current working tree | Exit 0; one change validated and no awaiting input | Fresh |
+| `pnpm check:manual` | `/tmp/add-store-product-not-found-manual.pPjhb8/check-manual.log`; current working tree | Exit 0; 0 failures, repository warnings only | Fresh |
+| `pnpm run tcs:validate` | `/tmp/add-store-product-not-found-tcs.8SbwrD/tcs-validate.log`; current working tree | Exit 0; target product-page and domain suites are present as pending draft cases; repository warnings only | Fresh |

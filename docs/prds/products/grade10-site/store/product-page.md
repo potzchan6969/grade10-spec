@@ -34,6 +34,9 @@ item a collector can add.
   the wide box a preview fetcher lays out and padded white, and says it is the
   wide card; a card the catalogue pictures no way unfurls without a picture,
   and asks for the small one
+
+## Unknown product address
+
 - 🚧 **Unknown product address** — `grade10.com/store/products/<handle>` still
   answers 404 when the catalogue has no card for the handle, but the Store
   product route shows its own not-found state with a way back to the product

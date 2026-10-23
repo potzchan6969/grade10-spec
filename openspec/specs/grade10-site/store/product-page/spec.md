@@ -1,6 +1,7 @@
 # grade10-site/store/product-page Specification
 
 ## Purpose
+
 What one card's address serves: the card's own page, in the response before
 any script runs, and the refusal when the catalogue holds no such card.
 
@@ -41,11 +42,13 @@ per card rather than per page.
   - Priced but unbuyable: a card nobody can buy keeps its prices and offers
     nothing to press
 - Held to the shop's count
-  - Ceiling from the shop: the page stops a collector at what the shop has of the chosen variant
+  - Ceiling from the shop: the page stops a collector at what the shop has of
+    the chosen variant
   - Silent where unknown: a shop exposing no count puts no ceiling on the page
 - Said when it is news
   - Few left: the page says how many remain once the shop is nearly out
-  - All of them asked for: the page says the same when the collector has taken the last one
+  - All of them asked for: the page says the same when the collector has taken
+    the last one
 - Shared link picture
   - First image: a product address unfurls with the card's first catalogue
     image
@@ -90,16 +93,37 @@ reads is the one the address names, not the catalogue it came from.
 
 The catalogue SHALL be what decides whether a handle is a card, asked when the
 address is asked for. An address under the store's products that names no
-card in the catalogue SHALL answer with status 404 and the site's not-found
-surface, never an empty product page.
+card in the catalogue SHALL answer with status 404 and render the Store
+product page's product-specific unknown state inside the existing site shell,
+never an empty product page or a redirect.
 
-<!-- trace:scenario id=g10.store-product-page.SC-f3e rev=1 -->
+The unknown state SHALL show a localized product-specific heading equivalent to
+“We couldn’t find this product”, a localized explanation equivalent to “Check
+the address, or browse the store for what is available.”, and a localized
+“Browse the store” action. The action SHALL open the Store product listing in
+the same tab. The existing Store header and footer SHALL remain present. The
+unknown state content SHALL contain no product details, Add to cart action,
+product or cart controls, or related-product rail.
+
+The change SHALL remain scoped to the Store product route. Arbitrary unknown
+addresses that are not matched to an owned surface SHALL continue to render the
+generic site-wide not-found surface and its existing recovery behavior.
+
+<!-- trace:scenario id=g10.store-product-page.SC-f3e rev=2 -->
 #### Scenario: grade10-site-store-product-page-SC-03 - A handle the catalogue has nothing for
 **Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
 - **WHEN** an address under the store's products naming no card is fetched
 - **THEN** the response has status 404
-- **AND** a collector opening it sees the site's not-found surface
+- **AND** the rendered page has the existing Store header and footer, a
+  current-locale product-specific heading and explanation, and a
+  current-locale “Browse the store” action
+- **AND** activating the action opens the Store product listing in the same
+  tab
+- **AND** the unknown-state content has no product details, Add to cart action,
+  product or cart controls, or related-product rail
+- **AND** an arbitrary unknown address outside the Store product route still
+  renders the existing generic site-wide not-found surface
 
 <!-- trace:scenario id=g10.store-product-page.SC-lk8 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-04 - A card added to the catalogue answers

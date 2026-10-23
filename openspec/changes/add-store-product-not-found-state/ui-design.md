@@ -17,4 +17,4 @@
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Unknown product address | The existing Store shell with the product-specific title, explanatory description and `Browse the store` action to the product listing; no product details, Add to cart control or related-product rail | `grade10-site-store-product-page-US-01` |
+| Unknown product address | The existing Store shell with the product-specific title, explanatory description and `Browse the store` action to the product listing; no product details, Add to cart control or related-product rail | `grade10-site-store-product-page-SC-03` |

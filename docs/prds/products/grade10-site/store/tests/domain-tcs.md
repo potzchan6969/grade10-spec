@@ -1,3 +1,7 @@
+---
+title: Store Test Cases
+---
+
 # grade10-site/store Test Cases
 
 **Status:** approved · 7/7

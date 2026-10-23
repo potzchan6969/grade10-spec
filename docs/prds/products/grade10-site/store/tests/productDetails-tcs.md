@@ -1,3 +1,7 @@
+---
+title: Store Product Details Test Cases
+---
+
 # grade10-site/store/product-page Test Cases
 
 **Status:** pending-review · 0/19
