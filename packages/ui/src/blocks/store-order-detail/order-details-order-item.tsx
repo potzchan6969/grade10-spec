@@ -61,7 +61,7 @@ function OrderDetailsOrderItem({
       data-slot="order-details-order-item"
       data-struck-through={struckThrough || undefined}
     >
-      <TableCell className="min-w-32 flex-1">
+      <TableCell className="min-w-0 flex-1">
         <HStack className="min-w-0 flex-1" gap="md" vAlign="center">
           <div
             aria-hidden={imageSrc ? undefined : true}
@@ -77,7 +77,7 @@ function OrderDetailsOrderItem({
             ) : null}
           </div>
           <VStack className="min-w-0 flex-1" gap="xs" hAlign="stretch">
-            <p className="w-full text-sm leading-5 font-medium text-foreground">
+            <p className="w-full break-words text-sm leading-5 font-medium text-foreground">
               {product}
             </p>
             {couponCode != null ? (
