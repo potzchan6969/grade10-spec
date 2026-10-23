@@ -140,17 +140,17 @@ one USD minimum,
 **I want** to see only the payment methods that currency offers, with each Hong Kong and overseas bank rail named,
 **so that** I choose a way to pay that works for the account I will send it from.
 
-### winner-order-US-26: Winner who settles in HKD reads the invoice and receipt in HKD
+### winner-order-US-26: Winner who settles in HKD reads the invoice and receipt with USD lines and an HKD total
 
 **As a** winner who picked HKD,
-**I want** every amount on my invoice, receipt and order letters in HKD,
-**so that** I pay and keep records in one currency without working out a rate.
+**I want** my invoice, receipt and receipt letter to list the same USD lines and end in the same HKD Subtotal, fee and Order Total as my Order Summary,
+**so that** every document I keep shows what the lot cost in USD and what I paid in HKD.
 
-### winner-order-US-27: Winner who settles in HKD reads the Order Summary in HKD
+### winner-order-US-27: Winner who settles in HKD reads the Order Summary with USD lines and an HKD total
 
 **As a** winner who picked HKD,
-**I want** my Order Summary in HKD, with each line's USD amount beneath it and one HKD total I will pay,
-**so that** I see what I won and what it costs me in HKD.
+**I want** my Order Summary to list what I won in USD, then one HKD Subtotal converted from their sum, the fee, and the Order Total I will pay,
+**so that** I see what the lot cost and check what I pay against the one rate the note names.
 
 ## Retired
 

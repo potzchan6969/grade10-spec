@@ -1,0 +1,358 @@
+{
+  "version": 2,
+  "change": "convert-hkd-order-at-subtotal",
+  "baseline": "c3c716bb52d2cbcdd180d302fa4b89e1d43dd5651446c0e3d0d5ff6f2e5d6c2c",
+  "fingerprint": "8a80e6d3d0d18d13ea6f2927fcc63fc2070673b1b3acbd1448afc2179bc201e0",
+  "reviewedBy": "@seankcw",
+  "acceptedAt": "2026-10-23T01:16:57.001Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#payment",
+      "sha256": "e50613074e01cdc829effc59ca6d18ee0f6d96399ebef0351041817e940bbe8e",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#letters",
+      "sha256": "0723f4816be525b2ee3a99089001f219dddfbfb9b19f520eff7a39ed0d099529",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#settling-in-hkd",
+      "sha256": "cb43f5dd4eddfc8fd3a514b6ef923283b98f4b6606efa29a524cee0abe0ef976",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#the-invoice",
+      "sha256": "39a24921c352308c361b290fe1ace3585819791f8e78ebfe016550f0f19b55d0",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/decisions.md",
+      "sha256": "10d2c8640ba2d0575619fbe5fe1b964e9e56e740a39fa112ea41f96b364ce3d8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/proposal.md",
+      "sha256": "361c9fd8a739d3255402f20e0fe579a4f654c6cd518a7b2ec0aeb0b360a30c43",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-admin/auction/domain-tcs.md",
+      "sha256": "ab2b49aca1194186e42c2b615595e8af18e684d3465e24c247cd9e7bdadfe751",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+      "sha256": "cbe3db22c1baa50e7bef1d16aa4160b06e349e190e8a12f366bd49e589615da4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-admin/auction/internal-bid/spec.md",
+      "sha256": "a7d03547d1f2f815c85f8d05a4665475e0682e16d9587e0687e6684f385e606a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-admin/auction/internal-bid/user-journeys.md",
+      "sha256": "409bf761ceb4982649b58d2b1275c0666f6e7f9b052f28389f5d133bb3bdf913",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "ec7a6c74baa8f7a9cd59923c51e8373e878eba2c9a68244f390f57fb24997189",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "bb80af28c95c511f98635e50e344b621e0c1f73e9d7f93f63ca150ee696f55c2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "b7759f68e54aeb7000ca5fa37b1ab83757b19d90b361e7e6d423bc4f492464ab",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-site/auction/domain-tcs.md",
+      "sha256": "47843f92a722bd58f248521759b657b73c953db4caf709488c30e350f5fb694f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+      "sha256": "e4b0fccfd4eb230fb6b80dbaccc36a51737334c6bd9bc4b02305512a8d6605df",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-site/auction/notifications-order/spec.md",
+      "sha256": "c3d47959b1f09cf2935c3a15e062da43c5854ff010537de71a6b93e612aad220",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-site/auction/notifications-order/user-journeys.md",
+      "sha256": "f00f5bf4095221ed45e9c930bbb51eef952decf5effbd069700e605084d0ff04",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "0a08c80171b5b770c82def01546a038a79df8ebdb7584c6a52af4b0ea570040c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "16a8fef8382cc0505d2b3c742054d3f60ebcf819c89b1a6ad13f21063aab4a25",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "31cdf5454dad8afc4e6605f225e7dad8951bf8394789b614f220b1a0b4f0ae53",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/shared/ui/auction-order/feature-tcs.md",
+      "sha256": "1ec52c76439258cf99301fbf7184ffb6ae5c58bc270277ea97f47c2d55c82a2b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/shared/ui/auction-order/spec.md",
+      "sha256": "b2796ed7e3794e6b15376c08cd8dcf5b833c7408821a42845f3bb95efb8eff2b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/shared/ui/auction-order/user-journeys.md",
+      "sha256": "e155a9abaae2fee54c31f99b2cb30c63500623f80f3e2eb7f9bb44d9ff2037a7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+      "sha256": "a7a5293cd9064a4b995c9fef8e18734c31551233034b433f3a9f4160009dadce",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+      "sha256": "c8ae839f918e5b78d4856acf4c9bf06d4b66c68bbc7c2943b5db45a7459b765e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+      "sha256": "13d68fa4cc2b377b6f4bc7c3fdeab58ecb5b206c8bbc0ad754fd69718fc324bc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/convert-hkd-order-at-subtotal/tech-design.md",
+      "sha256": "84a7867cb8d4ef0492838a96daca0b908f326aabb2e2fb371bc2997c6661693f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+      "sha256": "eecf01eeeae58e97d800c5cd23bc8f7d2aad8399402f3bb5d7cab6ef4aba6dbe",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+      "sha256": "64b7c5ab39607b03b4d5c6364f9a5d042a864dad3248aacbc8220863be878d61",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+      "sha256": "2f3647c2f237b89515ce379b053f60de8fbc0b17289c49db26d32a1f7338afb5",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/user-journeys.md",
+      "sha256": "0fe97656210f64a31fd1ea897a81f736eaf22a933921454124f462adae51fbb4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "3fd26bed8516eded4fd2b1b649e77acbf61d870ce7083c0780667cb1deea819d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "c2b0e34c8c2a7ae8863da199414154d9b4c65fbfb010c6501e0e79eb5ed70c41",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "33f8f6bcbcc757f24871f443b99803b452c78fb238174c0c33ef891f4f7629bb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+      "sha256": "dd79f6dc2b93b7ca48d6062b65e0478376fd9e41c47cc09e83cbf83893643750",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+      "sha256": "03b4b8fb43ee897fe69fe74b083f94bc6159e87e5e5962a6230ee96cba53bb7a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+      "sha256": "b663a903e48f314dd0b3b4d5cbd8ae98b9901eaeb1be99eb138ca547a8dc7f86",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/user-journeys.md",
+      "sha256": "32c337214216259754c82aab7a67f27f55c229006b94c8dd6b0f567a9c36f3f8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "3e4933e59dd028ebad9d8f5a473f35f6f64921a4067269f68b85ac58f1cadad8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "3274b05be39b581c54f67ee361c67e392479ed4d56fcc919d81943709b59ad31",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "efda8f96f56896ede0c026cc8b04869e188cc02456ce6ddbf93096c125a5d7b8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+      "sha256": "024b341a2488a39b14ab2c99d85189e530acf829f0c5739e515f8702611b6735",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/spec.md",
+      "sha256": "57aee8b9d389f5c0af39b627ee60c8f24428a0f4c0ac9f076a0324d8a1cd0cab",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/user-journeys.md",
+      "sha256": "814081aceef267b580e57f4a5ea1fb53eb63a8a9d5972919fca0f6209efb757b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+      "sha256": "9fca86e9bf91963cd7e8452e6c9733bc925a00de8e0606234b6af17682a2b1fb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+      "sha256": "3ad7d9a6a1ba6d4b0a87102b7b5ffac7d4bc3085eda10e76db472e2a74b3ae20",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+      "sha256": "7151f9ffacb3e818197516f58cec1f0b899a9901191daf7db7b30fac6d0f6f01",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: An internal bidder wins a lot the house leads at its close"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: An operator quotes and sends the invoice",
+        "Requirement: An operator reissues a sent invoice",
+        "Requirement: Invoice log history",
+        "Requirement: The order page lists a sent HKD invoice's USD lines, then its HKD Subtotal, fee and Total",
+        "Requirement: The payment processing fee follows the invoice's payment method",
+        "Requirement: The quote is typed in USD and read in the settlement currency"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Order letters read the currency the winner pays in"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: An HKD invoice and receipt list the USD lines, then the HKD Subtotal, fee and Order Total",
+        "Requirement: An HKD invoice, receipt and letter carry HKD only",
+        "Requirement: An HKD order converts each USD line at a fixed rate and rounds it up",
+        "Requirement: Insurance info tooltip",
+        "Requirement: Invoice fields",
+        "Requirement: Tax info tooltip",
+        "Requirement: The Order Summary reads the settlement currency, with USD beneath each HKD line"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The winner order takes two totals and one rail's bank details"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Each renderer produces A4 pages, one page when the content fits",
+        "Requirement: InvoicePdf and ReceiptPdf render only what they are given",
+        "Requirement: InvoicePdf and ReceiptPdf render their charges in the order given, ending in a summary"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

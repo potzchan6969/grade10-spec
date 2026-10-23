@@ -114,3 +114,9 @@ payments that failed,
 **As an** operator handling a winner who missed the setup deadline,
 **I want** to record the delivery and billing addresses, settlement currency and payment choice the winner gives me by telephone,
 **so that** I can prepare the invoice with the setup the winner confirmed.
+
+### post-sale-US-21: Operator previews the HKD total a quote will charge
+
+**As an** operator quoting an order whose winner picked HKD,
+**I want** to see the USD lines I typed, then the HKD Subtotal, fee and total the winner will be asked to pay,
+**so that** I send an invoice whose total I have read before the winner does.

@@ -46,6 +46,7 @@ amendment describes give way to this table. Each invoice still holds one lot.
     each column, then the charges given, an optional supplied Tax line, and a
     Subtotal/Payment Processing Fee/Order Total summary; one item reads
     as one row
+  - Subtotal note: the Subtotal row may carry a note, drawn muted directly under it when supplied and absent otherwise
 - ReceiptPdf export
   - Title and issuer mark, matching InvoicePdf's
   - Meta rows: receipt number, the invoice number it pays, date paid,
@@ -58,6 +59,7 @@ amendment describes give way to this table. Each invoice still holds one lot.
     rendered
   - Issuer block, matching InvoicePdf's
   - The same item table as InvoicePdf
+  - Subtotal note: the Subtotal row may carry a note, drawn muted directly under it when supplied and absent otherwise
 - Party address fields
   - Bill To and Ship To each render as up to seven lines — recipient, company,
     phone, address line 1, address line 2, a combined city/region/postal-code line,
@@ -298,7 +300,16 @@ the order the caller supplied it. **Summary** - InvoicePdf and ReceiptPdf SHALL
 render Subtotal and Payment Processing Fee in a summary below the other
 charges, with no border drawn around it, and SHALL render Order Total in that
 same summary, set off by a rule and rendered more heavily weighted than every
-other line.
+other line. **Subtotal note** - The Subtotal row MAY carry a note the caller
+supplies. When it does, InvoicePdf and ReceiptPdf SHALL draw the note directly
+under the Subtotal row and above the Payment Processing Fee row, left-aligned
+with the summary's labels, in the muted colour of the issuer email, no larger
+than the summary labels and not bold, and SHALL wrap it inside the summary's
+width when it is wider. The note is part of the summary: it SHALL stay with the
+Subtotal row on one page, so that when the document continues over further
+pages the note is never separated from the Subtotal row above it, and it adds
+no row to the charges. When no note is supplied, or the note is blank, neither document
+SHALL draw one or leave a gap where it would sit.
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-63o rev=3 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-3 - Charges render in the order given, with the summary below them
@@ -326,6 +337,78 @@ other line.
 - **THEN** no Insurance line appears
 - **AND** the Shipping & Handling line and the summary keep their given order
   below the Item Total row
+
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-ec5 rev=2 -->
+#### Scenario: g10.shared-invoice-and-receipt-pdf.SC1 - An invoice draws the Subtotal's note directly under it
+
+**Serves:** InvoicePdf export - the Subtotal row may carry a note, drawn muted directly under it
+
+- **GIVEN** one item and the charge Shipping & Handling `US$10.01`, followed by
+  Subtotal `HK$1,030.00` carrying the note
+  `Converted from US$131.21 at 1 USD = 7.85 HKD`, Payment Processing Fee `Free`
+  and Order Total `HK$1,030.00`
+- **WHEN** InvoicePdf renders them
+- **THEN** the summary reads, from the top, Subtotal, the note, Payment
+  Processing Fee and Order Total
+- **AND** the note shows exactly as supplied, in the muted colour of the issuer
+  email, no larger than the summary labels and not bold, with no other row
+  between it and Subtotal
+- **AND** the note adds no row above the summary: Shipping & Handling is still
+  the only charge under the Item Total row
+
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-53f rev=1 -->
+#### Scenario: g10.shared-invoice-and-receipt-pdf.SC2 - A receipt draws the Subtotal's note directly under it
+
+**Serves:** ReceiptPdf export - the Subtotal row may carry a note, drawn muted directly under it
+
+- **GIVEN** the data of `g10.shared-invoice-and-receipt-pdf.SC1` as a receipt,
+  with its four payment breakdown lines
+- **WHEN** ReceiptPdf renders it
+- **THEN** the summary reads, from the top, Subtotal, the note, Payment
+  Processing Fee and Order Total, drawn as on the invoice
+- **AND** the payment breakdown draws below the summary and carries no note
+
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-2p2 rev=1 -->
+#### Scenario: g10.shared-invoice-and-receipt-pdf.SC3 - Without a note the summary draws as before
+
+**Serves:** InvoicePdf export - the Subtotal row may carry a note, drawn muted directly under it
+
+- **GIVEN** an invoice and a receipt whose Subtotal row carries no note, one whose
+  note is omitted and one whose note is an empty string, with the charges of
+  `shared-ui-invoice-and-receipt-pdf-SC-3`
+- **WHEN** InvoicePdf and ReceiptPdf render them
+- **THEN** neither document draws a note, and Payment Processing Fee sits
+  directly under Subtotal with the line spacing of every other summary row
+- **AND** the four documents place Subtotal, Payment Processing Fee and Order
+  Total at the same positions as a document rendered before the note existed
+
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-bcn rev=1 -->
+#### Scenario: g10.shared-invoice-and-receipt-pdf.SC4 - A note wider than the summary wraps under the Subtotal
+
+**Serves:** InvoicePdf export - the Subtotal row may carry a note, drawn muted directly under it
+
+- **GIVEN** an invoice whose Subtotal note reads
+  `Converted from US$1,234,567,890.12 at 1 USD = 7.85 HKD`, wider than the
+  summary
+- **WHEN** InvoicePdf renders it
+- **THEN** the note wraps onto a second line, every line of it inside the
+  summary's width and above the Payment Processing Fee row
+- **AND** the whole note reads once, in order, with no part cut at the margin
+
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-zs0 rev=1 -->
+#### Scenario: g10.shared-invoice-and-receipt-pdf.SC7 - The note stays with its Subtotal row at a page end
+
+**Serves:** InvoicePdf export - the Subtotal row may carry a note, drawn muted directly under it
+
+- **GIVEN** invoices and receipts with 1 to 40 items, each title on one line, the
+  charges of `shared-ui-invoice-and-receipt-pdf-SC-3` and a Subtotal note of
+  `Converted from US$131.21 at 1 USD = 7.85 HKD`
+- **WHEN** InvoicePdf and ReceiptPdf render each of them
+- **THEN** in every document, the Subtotal row and its note are drawn on one page,
+  the note directly under the row
+- **AND** in at least one invoice and at least one receipt that page is the
+  second page while the last item row is on the first
+- **AND** no page ends with the Subtotal row and begins with its note
 
 ### Requirement: InvoicePdf renders bank details only on a bank-transfer invoice
 
@@ -556,7 +639,10 @@ argument. **Item amounts** - Each item's Winning Bid, Buyer's Premium and Total,
 and the three Item Total amounts, are amounts under this rule: the Item Total
 row SHALL show the strings given, never the sum of the rows above it, and an
 item's Total SHALL show the string given, never its Winning Bid plus its Buyer's
-Premium. **No label lookup** - InvoicePdf and ReceiptPdf SHALL render every
+Premium. **Subtotal note** - The Subtotal note is text under this rule: both
+documents SHALL draw the string given, and SHALL NOT build it from the
+Subtotal, a line's amount, a currency or a rate, or add a mark or a label to
+it. **No label lookup** - InvoicePdf and ReceiptPdf SHALL render every
 label from the `copy` argument and SHALL import no message catalog. **Blank
 content** - InvoicePdf and ReceiptPdf SHALL render the row of every required
 line and every item given even when its text is blank; a blank item title leaves
@@ -623,6 +709,19 @@ neither SHALL embed the time of rendering.
 - **WHEN** each is rendered twice, with the system clock one day later for the
   second render
 - **THEN** the two outputs of each document are identical byte for byte
+
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-v22 rev=1 -->
+#### Scenario: g10.shared-invoice-and-receipt-pdf.SC5 - The Subtotal note renders as given, never built
+
+**Serves:** Presentation-only contract - a rendered amount is exactly the value given, never a derived one
+
+- **GIVEN** an invoice and a receipt whose Subtotal reads `HK$1,030.00` and whose
+  note reads `Converted from US$999.00 at 1 USD = 7.00 HKD`, a figure and a rate
+  that match nothing else on the document
+- **WHEN** InvoicePdf and ReceiptPdf render them
+- **THEN** each document draws the note exactly as given
+- **AND** neither draws `US$131.21`, `7.85` or any other figure derived from
+  the amounts on the sheet
 
 ### Requirement: InvoicePdf and ReceiptPdf render an optional supplied tax line
 
@@ -980,7 +1079,8 @@ document made of A4 pages. A document whose content fits one page is one page.
 **Page size** - InvoicePdf and ReceiptPdf SHALL each return PDF bytes in which
 every page is sized 595.28×841.89pt (A4). **One page when it fits** -
 InvoicePdf and ReceiptPdf SHALL each return exactly one page when the item
-table, the summary and every other section fit it.
+table, the summary with its Subtotal note when one is supplied, and every other
+section fit it.
 
 <!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-oq2 rev=1 -->
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-67 - An invoice that fits is one A4 page
@@ -1006,3 +1106,16 @@ table, the summary and every other section fit it.
 - **WHEN** ReceiptPdf renders it
 - **THEN** the returned bytes parse as a PDF document with exactly one page
 - **AND** that page is sized 595.28×841.89pt
+
+<!-- trace:scenario id=g10.shared-invoice-and-receipt-pdf.SC-iem rev=1 -->
+#### Scenario: g10.shared-invoice-and-receipt-pdf.SC6 - A document with a Subtotal note that fits is one A4 page
+
+**Serves:** Document shape - an ordinary single-lot invoice stays on one sheet
+
+- **GIVEN** the invoice data of `shared-ui-invoice-and-receipt-pdf-SC-67` and the
+  receipt data of `shared-ui-invoice-and-receipt-pdf-SC-68`, each with a Subtotal
+  note of `Converted from US$131.21 at 1 USD = 7.85 HKD`
+- **WHEN** InvoicePdf and ReceiptPdf render them
+- **THEN** each returns exactly one page, sized 595.28×841.89pt
+- **AND** the note and the Payment Processing Fee row are on that page, and the
+  issuer block still sits at its foot
