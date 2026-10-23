@@ -15,6 +15,8 @@
   "contactUs": "Contact Us",
   "setup": {
     "settlementCurrency": "Settlement currency",
+    "payIn": "Pay in",
+    "payInCurrency": "Pay in {currency}",
     "currency": {
       "usd": "USD",
       "hkd": "HKD"
@@ -28,7 +30,6 @@
     },
     "fee": {
       "card": "Card fee about 3.4% + a fixed amount",
-      "bankTransfer": "Bank fee set on your invoice",
       "noFee": "No fee"
     },
     "cardUnavailable": "Card is not yet available in {currency}.",
@@ -207,8 +208,8 @@
     "cardPayment": "Card payment",
     "receipt": "Receipt",
     "receiptPdf": "Receipt PDF",
-    "receiptNumbered": "Receipt · P{n}",
-    "receiptNumberedPdf": "Receipt · P{n} PDF",
+    "receiptNamed": "Receipt #{id} ({date})",
+    "receiptNamedPdf": "Receipt #{id} ({date}) PDF",
     "setupStepOf": "Step {step} of 3",
     "setupContinue": "Continue",
     "setupBack": "Back",

@@ -15,6 +15,8 @@
   "contactUs": "聯絡我們",
   "setup": {
     "settlementCurrency": "結算貨幣",
+    "payIn": "支付幣別",
+    "payInCurrency": "以 {currency} 支付",
     "currency": {
       "usd": "USD",
       "hkd": "HKD"
@@ -28,7 +30,6 @@
     },
     "fee": {
       "card": "信用卡手續費約為 3.4% 加固定金額",
-      "bankTransfer": "銀行轉帳手續費會列在你的發票上",
       "noFee": "免手續費"
     },
     "cardUnavailable": "目前尚未提供 {currency} 信用卡付款。",
@@ -207,8 +208,8 @@
     "cardPayment": "信用卡付款",
     "receipt": "收據",
     "receiptPdf": "收據 PDF",
-    "receiptNumbered": "收據 · P{n}",
-    "receiptNumberedPdf": "收據 · P{n} PDF",
+    "receiptNamed": "收據 #{id} ({date})",
+    "receiptNamedPdf": "收據 #{id} ({date}) PDF",
     "setupStepOf": "第 {step} 步，共 3 步",
     "setupContinue": "繼續",
     "setupBack": "返回",
