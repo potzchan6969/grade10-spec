@@ -169,8 +169,8 @@ hours of the close.
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
-| Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | 🚧 The first offered currency preselected |
-| Payment method or bank rail | **HKD**: Card, FPS or HK Local; **USD**: Card, HK Local or International via SWIFT - [Payment Methods by Currency](#payment-methods-by-currency) | 🚧 The first offered method preselected |
+| Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | The first offered currency preselected |
+| Payment method or bank rail | **HKD**: Card, FPS or HK Local; **USD**: Card, HK Local or International via SWIFT - [Payment Methods by Currency](#payment-methods-by-currency) | The first offered method preselected |
 | Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 
 - **Form** — Personal or Company; first and last name, phone (country and
@@ -461,7 +461,7 @@ failure, and locks the form while work is in progress.
   a refund, reversal or void receives none
 - **One receipt per payment** — every receipt for an invoice lists on the
   same Receipt PDF row, oldest first
-- 🚧 **The link names the receipt** — `Receipt #RC-LK7P2Q01P1 (22 Sep
+- **The link names the receipt** — `Receipt #RC-LK7P2Q01P1 (22 Sep
   2026)`, keeping the `RC-` prefix the PDF and letters print; the date is
   day-only, in the viewer's local zone; a record carrying no ID reads
   `Receipt`
@@ -718,9 +718,11 @@ a second payment provider, and changes to the bid-time rules.
 | Receipts are append-only | Decided | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | Decided | An unsaved one-time address stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it. Chosen over clearing it on leaving. | Product (@tangconst) |
-| Payment fee wording | 🚧 In flight | Card reads `Card fee about {configured percentage}% + a fixed amount`; a bank rail reads no fee line — no fee is required for those options. | Product (@tangconst) |
+| Payment fee wording | Decided | Card reads `Card fee about {configured percentage}% + a fixed amount`; a bank rail reads no fee line — no fee is required for those options. | Product (@tangconst) |
 | USD card rule | 🚧 In flight | Finance configures a USD card fee rule before launch; the same configured percentage and fixed-amount rule applies to USD card invoices. | Finance |
-| Settlement currency | Decided | The winner picks USD or HKD at order setup — 🚧 the first offered currency preselected, the sole currency where one is — fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
+| Setup defaults | Decided | The payment step opens with the first offered currency and the first method it offers selected, card where a card fee rule applies, else the first bank rail. A currency switch keeps a method the new currency offers and otherwise clears it; it never re-selects. The winner still confirms. Chosen over nothing selected, which read like an error state, and over card always, which not every currency can take. | Product (@tangconst) |
+| Receipt link label | Decided | The link reads `Receipt #<receipt ID> (<issue date>)`, with the `RC-` prefix the PDF and letters print and the date day-only in the viewer's local zone; a record with no ID reads `Receipt`. Chosen over `Receipt · P1` ordinals, which match nothing a letter quotes. | Product (@tangconst) |
+| Settlement currency | Decided | The winner picks USD or HKD at order setup — the first offered currency preselected, the sole currency where one is — fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
 | HKD conversion | Decided | One fixed rate, 7.85 HKD to 1 USD, named only in the note under the Subtotal, on the HKD Order Summary and on the invoice and receipt PDFs; the invoice page and the letters name it nowhere. Chosen over a live or locked rate, since the pair is stable and a fixed rate needs no source, lock or refresh. | Product |
 | Rounding | 🚧 In flight | Every amount shows two decimals with trailing zeros, whatever the currency, and a fraction of a cent rounds up. The USD lines add up first and convert once, so the Subtotal, a converted bank fee and the card fee are whole cents and the Order Total is their sum. Chosen over rounding each line to the whole HK$, which moves the Subtotal off the rate, and over rounding the Order Total to the whole HK$, which charges the winner more than the lines add up to. | Product |
 | Payment methods by currency | Decided | HKD offers Card, FPS and HK Local; USD offers Card, HK Local and International via SWIFT. The winner chooses one method or rail. The invoice and bank-details dialog show only the selected rail, with no tabs or copy controls. | Product |

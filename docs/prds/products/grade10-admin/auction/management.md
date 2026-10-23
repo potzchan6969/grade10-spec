@@ -574,7 +574,7 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 | Email | The operator's own address with a `+qa-<code>` tag, checked by Grade10, so every letter lands in their own inbox. The same address makes one test winner; one that holds a verified account is refused |
 | The lot | `Test lot <code>`, a sandbox lot closed through the real close, now or up to 30 days back, so its order and letters are the real ones; never biddable |
 | Bid and settlement | The sandbox lot bids in USD. Its test winner chooses USD or HKD settlement and an offered payment method at order setup |
-| Setup defaults | 🚧 The first offered currency and the first offered method are preselected |
+| Setup defaults | The first offered currency and the first offered method are preselected |
 | Sign-in | The ordinary sign-in link, which the console emails to the test address after making it and again on request; opened in a private window, so the operator stays signed in |
 
 - **The list** - Winners in the Test tab lists test winners newest first,
