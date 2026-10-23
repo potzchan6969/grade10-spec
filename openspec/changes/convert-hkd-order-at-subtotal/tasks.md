@@ -22,7 +22,7 @@ The PDF blocks keep their contract but for one optional note on the Subtotal row
 - [ ] 3.6 Add `Converted from US$131.21 at 1 USD = 7.85 HKD` as the Subtotal note of `HKD_INVOICE`, `HKD_RECEIPT` and the part-payment receipt fixtures in `fixtures.ts`, leave the USD fixtures without one, and show it in the invoice and receipt stories; `fixtures.test.ts` holds both (`g10.auction-winner-order.SC16`, `g10.auction-winner-order.SC17`, `g10.auction-winner-order.SC18`)
 - [ ] 3.7 Verify: `pnpm --filter @grade10/ui exec vitest run src/blocks/auction-invoice-and-receipt-pdf`, `pnpm --filter @grade10/ui run typecheck`, `pnpm run lint`; a commit the hook stopped carries the person's `Design-Override:` line
 
-## 4. Preview pages and letter previews (grade10-spec)
+## 4. Preview pages and letter previews (grade10-spec) (owner: @seankcw)
 
 - [ ] 4.1 Write the tests first, in their own commit: the payment-received preview lists the USD lines, then Subtotal, Payment Processing Fee and Order Total in HKD, and names no rate; the other HKD letters still name only an HKD total; the winner order PDF stories in `apps/preview` read the new fixtures (`order-mail-SC-66`, `g10.auction-notifications-order.SC1`, `g10.auction-notifications-order.SC2`)
 - [ ] 4.2 Give `apps/emails/emails/auction/order/payment-received.tsx` a `lines` prop that renders as facts, and update `_components/preview-lot.ts` and `payment-received.test.mjs` (the HKD letter test no longer forbids `US$` on this letter) (`order-mail-SC-66`, `g10.auction-notifications-order.SC1`)
