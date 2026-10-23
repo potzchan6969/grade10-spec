@@ -17,7 +17,7 @@ Lands first: the submodule bump is the boundary for the grade10 groups. It lands
 - [ ] 2.5a Tests first, in the 2.1 commit: `openingPrice` tests in the contracts package for a starting price with cents (a whole-dollar amount plus one minor unit, and one minor unit below the next whole dollar, both return the next whole dollar), a whole-dollar price and a 0 start (unchanged), with the major unit taken from the money module's USD exponent and no literal 100 (Q20, `g10.auction-bid-increments.SC-n5d`). Then make `openingPrice` in `bidIncrements.ts` round a price with cents up to the next whole dollar, and leave the stored price alone
 - [ ] 2.6 Verify: the contracts package `typecheck` and `test`, including the validity test, then a grep that finds no tier amount outside the contracts package and that test
 
-## 3. Backend (grade10)
+## 3. Backend (grade10) (owner: @htonyl)
 
 Needs group 2 landed.
 
