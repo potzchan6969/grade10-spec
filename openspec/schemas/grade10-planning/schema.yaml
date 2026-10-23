@@ -888,8 +888,13 @@ artifacts:
       Fewer, sharper cases: each names the risk it guards that no other case
       does; a path a domain case already walks is left to it and recorded as
       **Covered at domain**; a result seen on a run an existing case walks is
-      joined to that case. The rulebook's **One purpose, one case** and **A
-      Case That Already Exists Is Not Written Twice** hold the rules.
+      joined to that case. The rulebook's **Levels** and **A Case That
+      Already Exists Is Not Written Twice** hold the rules.
+
+      Every case is a GUI walk by a product user, checked on a screen, email,
+      PDF or notification, worded the same for web, mobile and any
+      environment. A Grade10 store capability writes no suite here: its cases
+      live only in `docs/prds/products/grade10-site/store/tests/`.
 
       ## Anchors
 

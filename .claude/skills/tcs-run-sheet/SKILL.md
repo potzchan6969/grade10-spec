@@ -157,6 +157,14 @@ Configure `tcs/run-finalized` as a required PR check.
 - **Tab order** — Summary first, then run tabs by descending numeric run id. A reprint keeps its run id and position in that order. Other tabs follow the runs
 - **Summary** — four rows per run, one per surface. Identity, environment and source SHA appear on the first. `n/a` is excluded from the pass rate; `skipped` counts against it
 
+- **Platform tags** — a case titled `[Mobile only]` prints Web and Auto web as `n/a`; one titled `[Web only]` prints Mobile and Auto mobile as `n/a`
+
+## Environments
+
+A case names no environment: `<g10url>` is the site of whichever environment the run targets, recorded on the Summary. What a tester needs to reach each one:
+
+- **Staging** — the site is https://grade10-stg.com, backed by the Shopify shop `grade10-staging-wcmnrpar.myshopify.com`, whose Shopify admin is the store's admin for the setup recipes in `tcs-conventions.md`. A card's page is `<g10url>/store/products/<handle>`
+
 ## Boundaries
 
 - **Credentials** — only the workflow writes Sheets. Do not edit layout by hand; change `scripts/openspec/lib/run-sheet-layout.mjs`
