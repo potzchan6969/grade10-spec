@@ -126,7 +126,9 @@ function CouponTicket({
 }
 
 /** The scan card's own surface: a bottom sheet under 640px, a dialog from
- * it up — the member holds it out where the till reads it. */
+ * it up — the member holds it out where the till reads it. It restates the
+ * ticket above the card, as the redeemed phase does, so the surface names
+ * what is being spent; the ticket's own Use now folds the card back. */
 function CouponScanSurface({
   target,
   open,
@@ -140,11 +142,19 @@ function CouponScanSurface({
 }) {
   const { item } = target;
   const qrCode = item.qrCode;
+  const [cardOpen, setCardOpen] = useState(true);
+
+  /* Every fresh open lands on the unfolded card — the member pressed Use
+   * now to see it — and closing folds it back. */
+  useEffect(() => {
+    setCardOpen(open);
+  }, [open]);
+
   if (!qrCode) return null;
   const title = item.description ?? item.amount;
 
   const body = (
-    <>
+    <VStack className="w-full" gap="md">
       {smUp ? (
         <DialogTitle className="text-xl leading-7 font-semibold">
           {title}
@@ -163,14 +173,28 @@ function CouponScanSurface({
           {item.expiry}
         </DrawerDescription>
       )}
+      <PromoTicket
+        className="w-full"
+        code={{
+          applicable: true,
+          id: item.id,
+          title,
+          detailLabel: item.expiry,
+          label: item.code ?? item.amount,
+        }}
+        onQrToggle={setCardOpen}
+        qrCode={qrCode}
+        qrOpen={cardOpen}
+        qrRegionId={target.regionId}
+      />
       <PromoQrCard
         caption={qrCode.caption}
         className="w-full"
         id={target.regionId}
-        open={open}
+        open={cardOpen}
         qrCode={qrCode}
       />
-    </>
+    </VStack>
   );
 
   return smUp ? (

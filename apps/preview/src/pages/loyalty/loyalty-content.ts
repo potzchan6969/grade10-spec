@@ -178,6 +178,12 @@ const TIER_BENEFITS: readonly TierBenefitsRow[] = [
   },
 ];
 
+const COUPONS_PAGE_COPY = {
+  title: "Your coupons",
+  subtitle:
+    "Coupons your rewards and the shop have left you. Present one at the till, or apply it at checkout.",
+};
+
 const MEMBERSHIP_PAGE_COPY = {
   breadcrumbAccount: "Account",
   title: "Membership",
@@ -501,6 +507,7 @@ export {
   COUPON_ACTION_COPY,
   COUPON_LIST_COPY,
   COUPONS,
+  COUPONS_PAGE_COPY,
   DROPPED_BALANCE,
   FLAKY_REWARDS,
   GOOGLE_HELD,
