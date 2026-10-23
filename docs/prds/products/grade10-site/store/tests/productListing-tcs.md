@@ -6,6 +6,7 @@ title: Store Product Listing Test Cases
 
 **Status:** pending-review · 0/32
 **Drafts styled:** 2026-10-22, tcs-rules r6
+**Capabilities:** grade10-site/store/product-listing, grade10-site/store/discounts
 
 ## Walk 1: Browse, Narrow and Search on a Wide Screen
 
@@ -95,11 +96,7 @@ title: Store Product Listing Test Cases
 3. Click the card's remove control.
    - Record the card back to Add to cart `g10.store-product-listing.US7-TC2`
 
-## g10.store-product-listing.US1: Browse the catalogue
-
-**As a** customer,
-**I want** to read the whole catalogue as one list I scroll,
-**so that** I can find a product and open it.
+## product-listing: Product Listing
 
 <!-- trace:case id=g10.store-product-listing.TC-4yp rev=1 -->
 ### g10.store-product-listing.US1-TC1: Listing opens on latest product with the whole set's count
@@ -116,7 +113,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US1
+* **Trace:** product-listing
 
 **Pre-conditions:**
 
@@ -156,7 +153,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US1
+* **Trace:** product-listing
 
 **Pre-conditions:**
 
@@ -193,7 +190,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US1
+* **Trace:** product-listing
 
 **Pre-conditions:**
 
@@ -218,13 +215,57 @@ Runs once per row of **Test data**.
 * Step 2 matches `<expected opening>`.
 * Step 4 matches `<expected opening>`.
 
+<!-- trace:case id=g10.store-product-listing.TC-kkm rev=1 -->
+### g10.store-product-listing.US4-TC1: Price order covers the whole catalogue, cards for sale first
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** acceptance, regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** product-listing
+
+**Pre-conditions:**
+
+* customer is on `<store listing url>` with no narrowing, scrolled to its first page only.
+* `<cheapest product>` is for sale and not on the first page at rest.
+* `<sold-out product>` is sold out and cheaper than every card for sale.
+* `<multi-variant product>` has variants at `<lowest variant price>` and a higher price.
+
+**Test data:**
+
+| Partition | `<order>` | `<expected first card for sale>` |
+| --- | --- | --- |
+| Lowest price | Lowest price. | `<cheapest product>`. |
+| Highest price | Highest price. | The card with the highest lowest-variant price. |
+| Latest | Latest product. | The newest card for sale. |
+
+**Steps:**
+
+1. Click the sort control.
+2. Read the menu's choices.
+3. Choose `<order>`.
+4. Scroll through the cards to the end.
+5. Read the address bar.
+
+**Expected Results:**
+
+* Step 2 offers latest product, lowest price and highest price only.
+* Step 4 starts with `<expected first card for sale>`.
+* Every card for sale lists before `<sold-out product>`.
+* `<multi-variant product>` sorts at `<lowest variant price>`.
+* For a price order, step 5's address carries `sort=`.
+
 ---
 
-## g10.store-product-listing.US2: Narrow by world and type
-
-**As a** customer,
-**I want** to narrow the listing to the worlds and kinds of collectible I collect,
-**so that** I see how much is there before I pick.
+## product-listing#adaptive-filter: Adaptive Filter
 
 <!-- trace:case id=g10.store-product-listing.TC-5u2 rev=1 -->
 ### g10.store-product-listing.US2-TC1: Ticking a world and type narrows cards, counts and address
@@ -241,7 +282,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US2
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -286,7 +327,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US2
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -326,7 +367,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US2
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -350,161 +391,6 @@ Runs once per row of **Test data**.
 * The count matches the narrowing's count.
 * The listing shows its first page, at the top.
 
----
-
-## g10.store-product-listing.US3: Search the catalogue
-
-**As a** customer,
-**I want** to search the whole catalogue by words,
-**so that** I can jump to a product or a narrowing.
-
-<!-- trace:case id=g10.store-product-listing.TC-5h3 rev=1 -->
-### g10.store-product-listing.US3-TC1: Typing suggests up to five products and five filters
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US3
-
-**Pre-conditions:**
-
-* customer is on `<store listing url>` on a wide screen, with `<facets in force>`.
-
-**Test data:**
-
-| Partition | `<typed words>` | `<facets in force>` | `<expected suggestions>` |
-| --- | --- | --- | --- |
-| Many product hits | `<search words>`, in at least 6 titles. | None. | Exactly 5 products; no filter group. |
-| Filter hits | A word in at least 6 world or type names. | None. | Exactly 5 filters, each with World or Type beside its name. |
-| Hits beyond the facets | A word in a title outside `<world A>`. | `<world A>`. | That product listed among the products. |
-
-**Steps:**
-
-1. Click the search field in the sidebar.
-2. Type `<typed words>`.
-3. Read the suggestions.
-
-**Expected Results:**
-
-* Step 3 shows `<expected suggestions>`.
-* Every product suggestion is a store product.
-
-<!-- trace:case id=g10.store-product-listing.TC-dwm rev=1 -->
-### g10.store-product-listing.US3-TC2: Enter commits the words as a chip and clears the field
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US3
-
-**Pre-conditions:**
-
-* customer is on `<store listing url>` on a wide screen, narrowed by `<world A>`.
-
-**Test data:**
-
-| Partition | `<typed words>` |
-| --- | --- |
-| Words with hits | `<search words>`. |
-| Words with no hit | A string no title, world or type holds. |
-
-**Steps:**
-
-1. Type `<typed words>` in the search field.
-2. Press Enter.
-3. Read the chips, the field, the cards and the address bar.
-4. Dismiss the search chip.
-
-**Expected Results:**
-
-* Step 3 shows a search chip for `<typed words>` beside the `<world A>` chip.
-* Step 3 shows the search field empty.
-* Step 3 lists only cards matching both, over the whole catalogue.
-* Step 3's address carries `q=` with `<typed words>`.
-* Step 4 lists `<world A>` alone again.
-
----
-
-## g10.store-product-listing.US4: Order the listing
-
-**As a** customer,
-**I want** to order the whole catalogue by latest or by price,
-**so that** I find the cheapest or newest card in the shop.
-
-<!-- trace:case id=g10.store-product-listing.TC-kkm rev=1 -->
-### g10.store-product-listing.US4-TC1: Price order covers the whole catalogue, cards for sale first
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** acceptance, regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US4
-
-**Pre-conditions:**
-
-* customer is on `<store listing url>` with no narrowing, scrolled to its first page only.
-* `<cheapest product>` is for sale and not on the first page at rest.
-* `<sold-out product>` is sold out and cheaper than every card for sale.
-* `<multi-variant product>` has variants at `<lowest variant price>` and a higher price.
-
-**Test data:**
-
-| Partition | `<order>` | `<expected first card for sale>` |
-| --- | --- | --- |
-| Lowest price | Lowest price. | `<cheapest product>`. |
-| Highest price | Highest price. | The card with the highest lowest-variant price. |
-| Latest | Latest product. | The newest card for sale. |
-
-**Steps:**
-
-1. Click the sort control.
-2. Read the menu's choices.
-3. Choose `<order>`.
-4. Scroll through the cards to the end.
-5. Read the address bar.
-
-**Expected Results:**
-
-* Step 2 offers latest product, lowest price and highest price only.
-* Step 4 starts with `<expected first card for sale>`.
-* Every card for sale lists before `<sold-out product>`.
-* `<multi-variant product>` sorts at `<lowest variant price>`.
-* For a price order, step 5's address carries `sort=`.
-
----
-
-## g10.store-product-listing.US6: Narrow the listing on a small screen
-
-**As a** customer,
-**I want** to sort and narrow the listing on my phone,
-**so that** I browse the shop without a desktop.
-
 <!-- trace:case id=g10.store-product-listing.TC-qa1 rev=1 -->
 ### g10.store-product-listing.US6-TC1: Small screens show the count and pills, no search
 
@@ -520,7 +406,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US6
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -560,7 +446,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US6
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -599,7 +485,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US6
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -618,6 +504,97 @@ Runs once per row of **Test data**.
 * ❓ Step 2 closes the drawer.
 * Step 3 lists the highest-priced card for sale first.
 
+---
+
+## product-listing#search: Search
+
+<!-- trace:case id=g10.store-product-listing.TC-5h3 rev=1 -->
+### g10.store-product-listing.US3-TC1: Typing suggests up to five products and five filters
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** product-listing#search
+
+**Pre-conditions:**
+
+* customer is on `<store listing url>` on a wide screen, with `<facets in force>`.
+
+**Test data:**
+
+| Partition | `<typed words>` | `<facets in force>` | `<expected suggestions>` |
+| --- | --- | --- | --- |
+| Many product hits | `<search words>`, in at least 6 titles. | None. | Exactly 5 products; no filter group. |
+| Filter hits | A word in at least 6 world or type names. | None. | Exactly 5 filters, each with World or Type beside its name. |
+| Hits beyond the facets | A word in a title outside `<world A>`. | `<world A>`. | That product listed among the products. |
+
+**Steps:**
+
+1. Click the search field in the sidebar.
+2. Type `<typed words>`.
+3. Read the suggestions.
+
+**Expected Results:**
+
+* Step 3 shows `<expected suggestions>`.
+* Every product suggestion is a store product.
+
+<!-- trace:case id=g10.store-product-listing.TC-dwm rev=1 -->
+### g10.store-product-listing.US3-TC2: Enter commits the words as a chip and clears the field
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** product-listing#search
+
+**Pre-conditions:**
+
+* customer is on `<store listing url>` on a wide screen, narrowed by `<world A>`.
+
+**Test data:**
+
+| Partition | `<typed words>` |
+| --- | --- |
+| Words with hits | `<search words>`. |
+| Words with no hit | A string no title, world or type holds. |
+
+**Steps:**
+
+1. Type `<typed words>` in the search field.
+2. Press Enter.
+3. Read the chips, the field, the cards and the address bar.
+4. Dismiss the search chip.
+
+**Expected Results:**
+
+* Step 3 shows a search chip for `<typed words>` beside the `<world A>` chip.
+* Step 3 shows the search field empty.
+* Step 3 lists only cards matching both, over the whole catalogue.
+* Step 3's address carries `q=` with `<typed words>`.
+* Step 4 lists `<world A>` alone again.
+
+---
+
+## product-listing#product-tile: Product Tile
+
 <!-- trace:case id=g10.store-product-listing.TC-6x5 rev=1 -->
 ### g10.store-product-listing.US6-TC4: Cart control shows without hover on small and touch screens
 
@@ -633,7 +610,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US6
+* **Trace:** product-listing#product-tile
 
 **Pre-conditions:**
 
@@ -655,14 +632,6 @@ Runs once per row of **Test data**.
 
 * The card's Add to cart control is visible.
 
----
-
-## g10.store-product-listing.US7: Add to cart from the listing
-
-**As a** customer,
-**I want** to put cards in my cart straight from the listing,
-**so that** I can keep browsing while I shop.
-
 <!-- trace:case id=g10.store-product-listing.TC-glr rev=1 -->
 ### g10.store-product-listing.US7-TC1: A guest's Add to cart turns the card's control into a quantity
 
@@ -676,7 +645,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US7
+* **Trace:** product-listing#product-tile
 
 **Pre-conditions:**
 
@@ -711,7 +680,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US7
+* **Trace:** product-listing#product-tile
 
 **Pre-conditions:**
 
@@ -742,11 +711,7 @@ Runs once per row of **Test data**.
 
 ## Ungrouped
 
-### g10.store-product-listing.US1: Browse the catalogue
-
-**As a** customer,
-**I want** to read the whole catalogue as one list I scroll,
-**so that** I can find a product and open it.
+### product-listing#product-tile: Product Tile
 
 <!-- trace:case id=g10.store-product-listing.TC-mvj rev=1 -->
 #### g10.store-product-listing.US1-TC4: Tiles read sold out only when no variant is for sale
@@ -763,7 +728,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US1
+* **Trace:** product-listing#product-tile
 
 **Pre-conditions:**
 
@@ -789,6 +754,44 @@ Runs once per row of **Test data**.
 * Step 3 reads `<expected tile>`.
 * The card shows no remaining count or scarcity cue.
 
+<!-- trace:case id=g10.store-product-listing.TC-qil rev=1 -->
+#### g10.store-product-listing.US7-TC3: A member's card controls write the cart kept at the store
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** product-listing#product-tile
+
+**Pre-conditions:**
+
+* customer(signed-in member) is on `<store listing url>`, with an empty cart.
+* `<cart product>` is available on the first page, with at least 3 for sale.
+
+**Steps:**
+
+1. Click Add to cart on the card for `<cart product>`.
+2. Click the card's increase control twice, then its decrease control once.
+3. Sign in as the same member in another browser and open `<store listing url>`.
+4. Read the card for `<cart product>` there.
+5. Click the card's remove control in the first browser.
+6. Reload the second browser and read the card.
+
+**Expected Results:**
+
+* Step 4 shows `<cart product>` at quantity 2.
+* Step 6 shows Add to cart, no quantity.
+
+---
+
+### discounts#where-each-shows: Where Each Shows
+
 <!-- trace:case id=g10.store-product-listing.TC-zpe rev=1 -->
 #### g10.store-product-listing.US1-TC5: Tile prices show sales and basket-free discounts only
 
@@ -804,7 +807,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-product-listing.US1
+* **Trace:** discounts#where-each-shows
 
 **Pre-conditions:**
 
@@ -837,6 +840,10 @@ Runs once per row of **Test data**.
 * Step 2 matches `<expected strike>`.
 * The card names no discount.
 
+---
+
+### product-listing: Product Listing
+
 <!-- trace:case id=g10.store-product-listing.TC-gps rev=1 -->
 #### g10.store-product-listing.US1-TC6: An empty catalogue says so, with no Clear filters
 
@@ -850,7 +857,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-product-listing.US1
+* **Trace:** product-listing
 
 **Pre-conditions:**
 
@@ -866,13 +873,82 @@ Runs once per row of **Test data**.
 * Step 2 says the store has no products yet.
 * Step 2 offers no Clear filters action.
 
+<!-- trace:case id=g10.store-product-listing.TC-s9s rev=1 -->
+#### g10.store-product-listing.US5-TC1: A collection address opens inside it, named and dismissible
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** acceptance, regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** product-listing
+
+**Pre-conditions:**
+
+* `<collection>` is a published collection with a known name, handle and products.
+
+**Steps:**
+
+1. Navigate to `<store listing url>?collection=<collection handle>`.
+2. Read the area above the grid, the sort control and the cards.
+3. Dismiss the collection's name.
+4. Read the cards, the count and the address bar.
+
+**Expected Results:**
+
+* Step 2 names `<collection>` above the grid.
+* Step 2's sort control names latest product.
+* Every card in step 2 belongs to `<collection>`.
+* Step 4 lists the whole catalogue with its count.
+* Step 4's address names no collection.
+
+<!-- trace:case id=g10.store-product-listing.TC-qme rev=1 -->
+#### g10.store-product-listing.US5-TC2: Filtering or searching leaves the collection; ordering keeps it
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** product-listing
+
+**Pre-conditions:**
+
+* customer is on `<store listing url>?collection=<collection handle>` on a wide screen.
+
+**Test data:**
+
+| Partition | `<action>` | `<expected collection>` |
+| --- | --- | --- |
+| Tick a world | Tick `<world A>`. | Gone; `<world A>` over the whole catalogue. |
+| Commit a search | Type `<search words>` and press Enter. | Gone; the search over the whole catalogue. |
+| Choose an order | Choose lowest price. | Kept; `<collection>` in lowest-price order. |
+
+**Steps:**
+
+1. Do `<action>`.
+2. Read the area above the grid, the cards and the address bar.
+
+**Expected Results:**
+
+* Step 2 matches `<expected collection>`.
+* Step 2's address names the collection only where it is kept.
+
 ---
 
-### g10.store-product-listing.US2: Narrow by world and type
-
-**As a** customer,
-**I want** to narrow the listing to the worlds and kinds of collectible I collect,
-**so that** I see how much is there before I pick.
+### product-listing#adaptive-filter: Adaptive Filter
 
 <!-- trace:case id=g10.store-product-listing.TC-m8o rev=1 -->
 #### g10.store-product-listing.US2-TC2: Worlds show five and See all worlds; types show whole
@@ -887,7 +963,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US2
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -922,7 +998,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US2
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -962,7 +1038,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US2
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -992,7 +1068,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US2
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -1026,7 +1102,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-product-listing.US2
+* **Trace:** product-listing#adaptive-filter
 
 **Pre-conditions:**
 
@@ -1045,11 +1121,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-product-listing.US3: Search the catalogue
-
-**As a** customer,
-**I want** to search the whole catalogue by words,
-**so that** I can jump to a product or a narrowing.
+### product-listing#search: Search
 
 <!-- trace:case id=g10.store-product-listing.TC-xwq rev=1 -->
 #### g10.store-product-listing.US3-TC3: Suggestions say searching, or that nothing matched
@@ -1066,7 +1138,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-product-listing.US3
+* **Trace:** product-listing#search
 
 **Pre-conditions:**
 
@@ -1106,7 +1178,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US3
+* **Trace:** product-listing#search
 
 **Pre-conditions:**
 
@@ -1132,134 +1204,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-product-listing.US5: Browse inside a collection
-
-**As a** customer,
-**I want** to arrive in the listing inside a collection and step out of it,
-**so that** I can follow the shop's grouping or leave it for my own.
-
-<!-- trace:case id=g10.store-product-listing.TC-s9s rev=1 -->
-#### g10.store-product-listing.US5-TC1: A collection address opens inside it, named and dismissible
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** acceptance, regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US5
-
-**Pre-conditions:**
-
-* `<collection>` is a published collection with a known name, handle and products.
-
-**Steps:**
-
-1. Navigate to `<store listing url>?collection=<collection handle>`.
-2. Read the area above the grid, the sort control and the cards.
-3. Dismiss the collection's name.
-4. Read the cards, the count and the address bar.
-
-**Expected Results:**
-
-* Step 2 names `<collection>` above the grid.
-* Step 2's sort control names latest product.
-* Every card in step 2 belongs to `<collection>`.
-* Step 4 lists the whole catalogue with its count.
-* Step 4's address names no collection.
-
-<!-- trace:case id=g10.store-product-listing.TC-qme rev=1 -->
-#### g10.store-product-listing.US5-TC2: Filtering or searching leaves the collection; ordering keeps it
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US5
-
-**Pre-conditions:**
-
-* customer is on `<store listing url>?collection=<collection handle>` on a wide screen.
-
-**Test data:**
-
-| Partition | `<action>` | `<expected collection>` |
-| --- | --- | --- |
-| Tick a world | Tick `<world A>`. | Gone; `<world A>` over the whole catalogue. |
-| Commit a search | Type `<search words>` and press Enter. | Gone; the search over the whole catalogue. |
-| Choose an order | Choose lowest price. | Kept; `<collection>` in lowest-price order. |
-
-**Steps:**
-
-1. Do `<action>`.
-2. Read the area above the grid, the cards and the address bar.
-
-**Expected Results:**
-
-* Step 2 matches `<expected collection>`.
-* Step 2's address names the collection only where it is kept.
-
----
-
-### g10.store-product-listing.US7: Add to cart from the listing
-
-**As a** customer,
-**I want** to put cards in my cart straight from the listing,
-**so that** I can keep browsing while I shop.
-
-<!-- trace:case id=g10.store-product-listing.TC-qil rev=1 -->
-#### g10.store-product-listing.US7-TC3: A member's card controls write the cart kept at the store
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US7
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on `<store listing url>`, with an empty cart.
-* `<cart product>` is available on the first page, with at least 3 for sale.
-
-**Steps:**
-
-1. Click Add to cart on the card for `<cart product>`.
-2. Click the card's increase control twice, then its decrease control once.
-3. Sign in as the same member in another browser and open `<store listing url>`.
-4. Read the card for `<cart product>` there.
-5. Click the card's remove control in the first browser.
-6. Reload the second browser and read the card.
-
-**Expected Results:**
-
-* Step 4 shows `<cart product>` at quantity 2.
-* Step 6 shows Add to cart, no quantity.
-
----
-
-### g10.store-product-listing.US9: See the shop's current catalogue
-
-**As a** customer,
-**I want** the listing to show what the shop sells now,
-**so that** I do not chase a card that has gone or changed.
+### product-listing#product-data: Product Data
 
 <!-- trace:case id=g10.store-product-listing.TC-zzi rev=1 -->
 #### g10.store-product-listing.US9-TC1: A shop change reaches the listing within seconds
@@ -1276,7 +1221,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US9
+* **Trace:** product-listing#product-data
 
 **Pre-conditions:**
 
@@ -1319,7 +1264,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-product-listing.US9
+* **Trace:** product-listing#product-data
 
 **Pre-conditions:**
 
@@ -1349,7 +1294,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-product-listing.US9
+* **Trace:** product-listing#product-data
 
 **Pre-conditions:**
 
@@ -1383,7 +1328,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US9
+* **Trace:** product-listing#product-data
 
 **Pre-conditions:**
 

@@ -6,6 +6,7 @@ title: Store Product Details Test Cases
 
 **Status:** pending-review · 0/18
 **Drafts styled:** 2026-10-22, tcs-rules r6
+**Capabilities:** grade10-site/store/product-page, grade10-site/store/cross-sell, grade10-site/store/discounts
 
 ## Walk 1: Read and Buy One Product
 
@@ -39,11 +40,7 @@ title: Store Product Details Test Cases
 7. Click a rail card.
    - Record its own page opening, with no cart control in the rail `g10.store-product-page.US4-TC2`
 
-## g10.store-product-page.US1: Read a product
-
-**As a** customer,
-**I want** to read one product's name, pictures, price and description,
-**so that** I can decide whether to buy it.
+## product-page: Product Details
 
 <!-- trace:case id=g10.store-product-page.TC-xpc rev=1 -->
 ### g10.store-product-page.US1-TC1: Product page shows the card and its one item to buy
@@ -60,7 +57,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US1
+* **Trace:** product-page
 
 **Pre-conditions:**
 
@@ -101,7 +98,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US1
+* **Trace:** product-page
 
 **Pre-conditions:**
 
@@ -127,6 +124,10 @@ Runs once per row of **Test data**.
 * For the long row, step 4 shows the whole description.
 * Step 4's address is unchanged.
 
+---
+
+## product-page#free-pick-up: Free Pick-up
+
 <!-- trace:case id=g10.store-product-page.TC-e5z rev=1 -->
 ### g10.store-product-page.US1-TC6: Shipping and pick-up lines; the store name opens Store Locator
 
@@ -142,7 +143,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US1
+* **Trace:** product-page#free-pick-up
 
 **Pre-conditions:**
 
@@ -173,11 +174,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-product-page.US2: Buy from the product page
-
-**As a** customer,
-**I want** to choose a quantity and add the product to my cart,
-**so that** I can buy it.
+## product-page#buy: Buy
 
 <!-- trace:case id=g10.store-product-page.TC-mkn rev=1 -->
 ### g10.store-product-page.US2-TC1: Add to cart shows Adding…, opens the drawer and resets quantity
@@ -192,7 +189,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US2
+* **Trace:** product-page#buy
 
 **Pre-conditions:**
 
@@ -228,7 +225,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US2
+* **Trace:** product-page#buy
 
 **Pre-conditions:**
 
@@ -248,11 +245,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-product-page.US4: Find another card under this one
-
-**As a** customer,
-**I want** to see other cards that go with the one I am reading,
-**so that** I find another card worth opening without going back.
+## cross-sell#rail: Rail
 
 <!-- trace:case id=g10.store-product-page.TC-19g rev=1 -->
 ### g10.store-product-page.US4-TC1: The rail shows picks first, then similar cards, up to six
@@ -269,7 +262,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US4
+* **Trace:** cross-sell#rail
 
 **Pre-conditions:**
 
@@ -308,7 +301,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US4
+* **Trace:** cross-sell#rail
 
 **Pre-conditions:**
 
@@ -329,11 +322,7 @@ Runs once per row of **Test data**.
 
 ## Ungrouped
 
-### g10.store-product-page.US1: Read a product
-
-**As a** customer,
-**I want** to read one product's name, pictures, price and description,
-**so that** I can decide whether to buy it.
+### discounts#where-each-shows: Where Each Shows
 
 <!-- trace:case id=g10.store-product-page.TC-hp9 rev=1 -->
 #### g10.store-product-page.US1-TC3: The page strikes sales and names the shop's discounts
@@ -350,7 +339,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-product-page.US1
+* **Trace:** discounts#where-each-shows
 
 **Pre-conditions:**
 
@@ -381,6 +370,10 @@ Runs once per row of **Test data**.
 * Step 2 matches `<expected strike>`.
 * Step 2's badges include `<expected badge>`.
 
+---
+
+### product-page: Product Details
+
 <!-- trace:case id=g10.store-product-page.TC-p02 rev=1 -->
 #### g10.store-product-page.US1-TC4: A sold-out product says so, keeps its price, cannot be added
 
@@ -394,7 +387,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US1
+* **Trace:** product-page
 
 **Pre-conditions:**
 
@@ -413,6 +406,10 @@ Runs once per row of **Test data**.
 * Step 2 shows its price.
 * Step 4 shows no line for `<sold-out product>`.
 
+---
+
+### product-page#unknown-product-address: Unknown product address
+
 <!-- trace:case id=g10.store-product-page.TC-48a rev=1 -->
 #### g10.store-product-page.US1-TC5: An address that is not a card answers 404
 
@@ -426,7 +423,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US1
+* **Trace:** product-page#unknown-product-address
 
 **Pre-conditions:**
 
@@ -451,11 +448,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-product-page.US2: Buy from the product page
-
-**As a** customer,
-**I want** to choose a quantity and add the product to my cart,
-**so that** I can buy it.
+### product-page#buy: Buy
 
 <!-- trace:case id=g10.store-product-page.TC-xf6 rev=1 -->
 #### g10.store-product-page.US2-TC3: A quantity past the shop's stock is taken, then filled short
@@ -470,7 +463,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US2
+* **Trace:** product-page#buy
 
 **Pre-conditions:**
 
@@ -510,7 +503,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US2
+* **Trace:** product-page#buy
 
 **Pre-conditions:**
 
@@ -528,19 +521,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-product-page.US3: Share a product link
-
-**As a** customer,
-**I want** a pasted product address to preview the card,
-**so that** the person I send it to recognises it before opening.
-
----
-
-### g10.store-product-page.US4: Find another card under this one
-
-**As a** customer,
-**I want** to see other cards that go with the one I am reading,
-**so that** I find another card worth opening without going back.
+### cross-sell#picks: Picks
 
 <!-- trace:case id=g10.store-product-page.TC-psw rev=1 -->
 #### g10.store-product-page.US4-TC3: Sold-out picks stay and open; sold-out similar cards are left out
@@ -555,7 +536,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US4
+* **Trace:** cross-sell#picks
 
 **Pre-conditions:**
 
@@ -576,77 +557,6 @@ Runs once per row of **Test data**.
 * Step 2 leaves out `<sold-out similar>`.
 * Step 3 opens `/store/products/<sold-out pick handle>`.
 
-<!-- trace:case id=g10.store-product-page.TC-ygo rev=1 -->
-#### g10.store-product-page.US4-TC4: No rail and no empty space when nothing can show
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-product-page.US4
-
-**Pre-conditions:**
-
-* `<page product>` is in the state `<rail state>` describes.
-
-**Test data:**
-
-| Partition | `<rail state>` |
-| --- | --- |
-| Nothing to show | No picks, and no other card shares its world, language or type, by the recipe "A card sharing nothing". |
-| Switched off | 2 picks; the rail is switched off for this brand and environment. |
-| Catalogue copy not to hand | 2 picks; the store's copy of the catalogue cannot be read. |
-
-**Steps:**
-
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the area under the card.
-
-**Expected Results:**
-
-* Step 2 shows no rail and no empty space for one.
-* The card shows whole.
-
-<!-- trace:case id=g10.store-product-page.TC-2dx rev=1 -->
-#### g10.store-product-page.US4-TC5: Similar cards weigh world, then language, then type
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US4
-
-**Pre-conditions:**
-
-* `<page product>` has no picks, by the recipe "A card with chosen facts, on the staging shop".
-* The catalogue holds `<same world>`, `<same language>` and `<same type>`, each sharing only that fact.
-* `<newer same world>` shares only the world and is newer than `<same world>`.
-
-**Steps:**
-
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the rail's cards in order.
-
-**Expected Results:**
-
-* `<newer same world>` lists before `<same world>`.
-* `<same world>` lists before `<same language>`.
-* `<same language>` lists before `<same type>`.
-
 <!-- trace:case id=g10.store-product-page.TC-ait rev=1 -->
 #### g10.store-product-page.US4-TC6: A pick changed in Shopify reaches the rail within a minute
 
@@ -662,7 +572,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US4
+* **Trace:** cross-sell#picks
 
 **Pre-conditions:**
 
@@ -688,6 +598,49 @@ Runs once per row of **Test data**.
 
 * Step 4 starts with `<expected picks>`.
 
+---
+
+### cross-sell#rail: Rail
+
+<!-- trace:case id=g10.store-product-page.TC-ygo rev=1 -->
+#### g10.store-product-page.US4-TC4: No rail and no empty space when nothing can show
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** cross-sell#rail
+
+**Pre-conditions:**
+
+* `<page product>` is in the state `<rail state>` describes.
+
+**Test data:**
+
+| Partition | `<rail state>` |
+| --- | --- |
+| Nothing to show | No picks, and no other card shares its world, language or type, by the recipe "A card sharing nothing". |
+| Switched off | 2 picks; the rail is switched off for this brand and environment. |
+| Catalogue copy not to hand | 2 picks; the store's copy of the catalogue cannot be read. |
+
+**Steps:**
+
+1. Navigate to `/store/products/<page product handle>`.
+2. Read the area under the card.
+
+**Expected Results:**
+
+* Step 2 shows no rail and no empty space for one.
+* The card shows whole.
+
 <!-- trace:case id=g10.store-product-page.TC-qur rev=1 -->
 #### g10.store-product-page.US4-TC7: The rail is in the response and the card does not move
 
@@ -701,7 +654,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-product-page.US4
+* **Trace:** cross-sell#rail
 
 **Pre-conditions:**
 
@@ -733,7 +686,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US4
+* **Trace:** cross-sell#rail
 
 **Pre-conditions:**
 
@@ -750,3 +703,39 @@ Runs once per row of **Test data**.
 
 * Step 2 shows one row, part of the next card showing.
 * Step 3 reaches the sixth card.
+
+---
+
+### cross-sell#similar-cards: Similar Cards
+
+<!-- trace:case id=g10.store-product-page.TC-2dx rev=1 -->
+#### g10.store-product-page.US4-TC5: Similar cards weigh world, then language, then type
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** cross-sell#similar-cards
+
+**Pre-conditions:**
+
+* `<page product>` has no picks, by the recipe "A card with chosen facts, on the staging shop".
+* The catalogue holds `<same world>`, `<same language>` and `<same type>`, each sharing only that fact.
+* `<newer same world>` shares only the world and is newer than `<same world>`.
+
+**Steps:**
+
+1. Navigate to `/store/products/<page product handle>`.
+2. Read the rail's cards in order.
+
+**Expected Results:**
+
+* `<newer same world>` lists before `<same world>`.
+* `<same world>` lists before `<same language>`.
+* `<same language>` lists before `<same type>`.

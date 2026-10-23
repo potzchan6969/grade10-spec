@@ -6,6 +6,7 @@ title: Store Landing Test Cases
 
 **Status:** pending-review · 0/11
 **Drafts styled:** 2026-10-22, tcs-rules r6
+**Capabilities:** grade10-site/store/home
 
 ## Walk 1: Read the Shop Window
 
@@ -38,11 +39,7 @@ title: Store Landing Test Cases
 5. Click the card for `<displayed product>`.
    - Record its product address for the available-product row `g10.store-landing.US3-TC1`
 
-## g10.store-landing.US2: Browse the shop catalogue sections
-
-**As a** customer,
-**I want** to see the collections and products the shop leads with,
-**so that** I can choose what to browse.
+## home: Main Page
 
 <!-- trace:case id=g10.store-home.TC-w79 rev=1 -->
 ### g10.store-landing.US2-TC1: Main Page shows every collection once, in catalogue order
@@ -59,7 +56,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US2
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -98,7 +95,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US2
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -139,7 +136,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US2
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -165,14 +162,6 @@ Runs once per row of **Test data**.
 
 * Step 3 shows `<expected status>` on the Main Page card.
 
----
-
-## g10.store-landing.US3: Open a merchandised product
-
-**As a** customer,
-**I want** to open the product I choose in the row,
-**so that** I can read its own page before buying.
-
 <!-- trace:case id=g10.store-home.TC-egn rev=1 -->
 ### g10.store-landing.US3-TC1: Main Page cards open the product page and offer no cart
 
@@ -188,7 +177,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US3
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -217,11 +206,7 @@ Runs once per row of **Test data**.
 
 ## Ungrouped
 
-### g10.store-landing.US1: Read the store front door
-
-**As a** customer,
-**I want** to read the hero before scripts or the catalogue answer,
-**so that** I can understand the shop as soon as its response arrives.
+### home: Main Page
 
 <!-- trace:case id=g10.store-home.TC-5i5 rev=1 -->
 #### g10.store-landing.US1-TC1: Main Page hero arrives before scripts, whatever the catalogue does
@@ -238,7 +223,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-landing.US1
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -280,7 +265,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US1
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -303,14 +288,6 @@ Runs once per row of **Test data**.
 * Step 2 shows the Main Page, its hero first.
 * The address bar reads `<grade10 store url>`.
 
----
-
-### g10.store-landing.US2: Browse the shop catalogue sections
-
-**As a** customer,
-**I want** to see the collections and products the shop leads with,
-**so that** I can choose what to browse.
-
 <!-- trace:case id=g10.store-home.TC-usm rev=1 -->
 #### g10.store-landing.US2-TC2: New shop collections appear on Main Page without a site deployment
 
@@ -324,7 +301,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US2
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -371,7 +348,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-landing.US2
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -413,7 +390,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-landing.US2
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -459,7 +436,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-landing.US2
+* **Trace:** home
 
 **Pre-conditions:**
 
@@ -484,14 +461,6 @@ Runs once per row of **Test data**.
 * No heading for `<section>` remains.
 * Nothing shows `<section>` as loading or failed.
 
----
-
-### g10.store-landing.US4: Meet the store only where it is open
-
-**As a** customer,
-**I want** the store to appear only on the lanes where it is open,
-**so that** I never start shopping somewhere I cannot buy.
-
 <!-- trace:case id=g10.store-landing.TC-n1y rev=1 -->
 #### g10.store-landing.US4-TC1: Store address answers only on lanes that carry the store
 
@@ -507,7 +476,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression, prod
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US4
+* **Trace:** home
 
 **Pre-conditions:**
 

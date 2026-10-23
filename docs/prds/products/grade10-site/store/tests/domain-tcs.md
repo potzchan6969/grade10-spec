@@ -6,6 +6,7 @@ title: Store Test Cases
 
 **Status:** approved · 7/7
 **Reviewed:** 2026-10-22, tcs-rules r6
+**Capabilities:** grade10-site/store/home, grade10-site/store/product-listing, grade10-site/store/product-page, grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/order-detail, grade10-site/store/order-history
 
 ## Background
 
@@ -21,11 +22,7 @@ title: Store Test Cases
 
 ## Ungrouped
 
-### g10.store-dmn.US1: Browse from a collection tile
-
-**As a** customer,
-**I want** to browse the collection I choose on the Main Page,
-**so that** I can open a product from that collection.
+### home: Main Page
 
 <!-- trace:case id=g10.store-dmn.TC-2fr rev=1 -->
 #### g10.store-dmn.US1-TC1: A Main Page tile opens its collection, a product, then the whole listing
@@ -40,7 +37,7 @@ title: Store Test Cases
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US2, g10.store-product-listing.US5, g10.store-product-page.US1
+* **Trace:** home, product-listing, product-page
 
 **Pre-conditions:**
 
@@ -74,14 +71,6 @@ title: Store Test Cases
 * Step 5 returns to the collection listing, at the top.
 * Step 6 lists `<outside product>` in the whole catalogue, and the address names no collection.
 
----
-
-### g10.store-dmn.US2: Buy as a guest and find the order
-
-**As a** customer,
-**I want** to buy a card the Main Page shows without an account, and find the order later,
-**so that** I can shop first and keep my purchase in one place after.
-
 <!-- trace:case id=g10.store-dmn.TC-v5l rev=1 -->
 #### g10.store-dmn.US2-TC1: A guest buys from the Main Page, then the order joins their account
 
@@ -95,7 +84,7 @@ title: Store Test Cases
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-landing.US3, g10.store-product-page.US2, g10.store-cart.US4, g10.store-order-detail.US3, g10.store-order-history.US2
+* **Trace:** home, product-page#buy, cart#checkout, order-detail#back-from-checkout, checkout#guest-checkout
 
 **Pre-conditions:**
 
@@ -132,14 +121,6 @@ title: Store Test Cases
 * Step 9 says the order was added to the account.
 * Step 10 lists the order, with no points earned on it.
 
----
-
-### g10.store-dmn.US3: Compare a price across pages
-
-**As a** customer,
-**I want** a card's price to read the same wherever I meet it,
-**so that** I trust the price I pay.
-
 <!-- trace:case id=g10.store-dmn.TC-nuz rev=1 -->
 #### g10.store-dmn.US3-TC1: A sale or product cut reads the same on every store page
 
@@ -155,7 +136,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US2, g10.store-product-listing.US1, g10.store-product-page.US1, g10.store-cart.US1
+* **Trace:** home, product-listing, product-page, cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -186,14 +167,6 @@ Runs once per row of **Test data**.
 * Steps 2, 4, 6 and 8 each show `<expected price>`.
 * Steps 2, 4 and 6 each strike `<expected strike>`.
 
----
-
-### g10.store-dmn.US4: Meet a sold-out card the same way everywhere
-
-**As a** customer,
-**I want** a sold-out card to read sold out on every page and in my cart,
-**so that** I never try to pay for something I cannot have.
-
 <!-- trace:case id=g10.store-dmn.TC-mj0 rev=1 -->
 #### g10.store-dmn.US4-TC1: A sold-out card reads sold out everywhere and holds checkout
 
@@ -207,7 +180,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-landing.US2, g10.store-product-listing.US1, g10.store-product-page.US1, g10.store-cart.US1
+* **Trace:** home, product-listing, product-page, cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -239,11 +212,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-dmn.US5: Buy with a code and points and find the order
-
-**As a** customer,
-**I want** the code and points I choose in my cart to reach the order I see after paying,
-**so that** I know what I was charged and what I will earn.
+### product-listing#product-tile: Product Tile
 
 <!-- trace:case id=g10.store-dmn.TC-eel rev=1 -->
 #### g10.store-dmn.US5-TC1: A member's code and points carry from cart to order page
@@ -258,7 +227,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-product-listing.US7, g10.store-cart.US2, g10.store-cart.US3, g10.store-cart.US4, g10.store-order-history.US1, g10.store-order-detail.US1
+* **Trace:** product-listing#product-tile, cart#promo-code, cart#points, cart#checkout, order-history#orders, order-detail#order
 
 **Pre-conditions:**
 
@@ -297,14 +266,6 @@ Runs once per row of **Test data**.
 * Step 11's summary shows `Points (<points used> pts)` after Discount.
 * Step 11 shows Points to Earn.
 
----
-
-### g10.store-dmn.US6: Carry a guest cart into a member's checkout
-
-**As a** customer,
-**I want** the cart I built before signing in to come with me,
-**so that** I do not rebuild it to use my points.
-
 <!-- trace:case id=g10.store-dmn.TC-ssm rev=1 -->
 #### g10.store-dmn.US6-TC1: Cards added as a guest merge into the member's cart at sign-in
 
@@ -318,7 +279,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-product-listing.US7, g10.store-product-page.US2, g10.store-cart.US4
+* **Trace:** product-listing#product-tile, product-page#buy, cart#checkout
 
 **Pre-conditions:**
 
@@ -352,11 +313,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-dmn.US7: Open a member's order from its email
-
-**As a** customer,
-**I want** my order email's link to bring me to my order in my account,
-**so that** I read it with everything else I bought.
+### order-detail#order-link: Order Link
 
 <!-- trace:case id=g10.store-dmn.TC-hbl rev=1 -->
 #### g10.store-dmn.US7-TC1: A member's order link, opened signed out, leads into Your Orders
@@ -371,7 +328,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US2, g10.store-order-detail.US1, g10.store-order-history.US1
+* **Trace:** order-detail#order-link, order-detail#order, order-history#orders
 
 **Pre-conditions:**
 

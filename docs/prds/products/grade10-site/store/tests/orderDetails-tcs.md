@@ -6,6 +6,7 @@ title: Store Order Detail Test Cases
 
 **Status:** pending-review · 0/20
 **Drafts styled:** 2026-10-22, tcs-rules r6
+**Capabilities:** grade10-site/store/order-detail
 
 ## Walk 1: A Guest Back From Checkout
 
@@ -34,11 +35,7 @@ title: Store Order Detail Test Cases
    - Record the order page opening signed out, with no account facts `g10.store-order-detail.US2-TC1`
    - Record the absent points and wallet `g10.store-order-detail.US2-TC4`
 
-## g10.store-order-detail.US2: Open an order from its link
-
-**As a** customer,
-**I want** the link in my order email to open my order,
-**so that** I can check it without an account.
+## order-detail#order-link: Order Link
 
 <!-- trace:case id=g10.store-order-detail.TC-4hw rev=1 -->
 ### g10.store-order-detail.US2-TC1: A signed-out link holder sees the order and a sign-in ask
@@ -55,7 +52,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US2
+* **Trace:** order-detail#order-link
 
 **Pre-conditions:**
 
@@ -97,7 +94,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US2
+* **Trace:** order-detail#order-link
 
 **Pre-conditions:**
 
@@ -123,11 +120,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-order-detail.US3: Come back from checkout to my order
-
-**As a** customer,
-**I want** Shopify's Continue button to bring me to the order I just paid,
-**so that** I see it and can add it to my account.
+## order-detail#back-from-checkout: Back From Checkout
 
 <!-- trace:case id=g10.store-order-detail.TC-0pz rev=1 -->
 ### g10.store-order-detail.US3-TC1: Continue opens the order this browser just paid
@@ -144,7 +137,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-order-detail.US3
+* **Trace:** order-detail#back-from-checkout
 
 **Pre-conditions:**
 
@@ -183,7 +176,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US3
+* **Trace:** order-detail#back-from-checkout
 
 **Pre-conditions:**
 
@@ -223,7 +216,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-order-detail.US3
+* **Trace:** order-detail#back-from-checkout
 
 **Pre-conditions:**
 
@@ -253,11 +246,7 @@ Runs once per row of **Test data**.
 
 ## Ungrouped
 
-### g10.store-order-detail.US1: Read one of my orders
-
-**As a** customer,
-**I want** to open one of my Store orders and see what it holds,
-**so that** I know what I paid, what was refunded and where it is.
+### order-detail#order: Order
 
 <!-- trace:case id=g10.store-order-detail.TC-tb1 rev=1 -->
 #### g10.store-order-detail.US1-TC1: The owner sees the order's supplied facts, and nothing missing
@@ -274,7 +263,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US1
+* **Trace:** order-detail#order
 
 **Pre-conditions:**
 
@@ -312,7 +301,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US1
+* **Trace:** order-detail#order
 
 **Pre-conditions:**
 
@@ -348,7 +337,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US1
+* **Trace:** order-detail#order
 
 **Pre-conditions:**
 
@@ -380,7 +369,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-order-detail.US1
+* **Trace:** order-detail#order
 
 **Pre-conditions:**
 
@@ -422,7 +411,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US1
+* **Trace:** order-detail#order
 
 **Pre-conditions:**
 
@@ -447,6 +436,48 @@ Runs once per row of **Test data**.
 * Step 2's delivery step reads Shipping (in progress).
 * Step 3 matches `<expected track>`.
 
+<!-- trace:case id=g10.store-order-detail.TC-rup rev=1 -->
+#### g10.store-order-detail.US1-TC8: Delivery steps move from Order Placed through Shipping to Completed
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** order-detail#order
+
+**Pre-conditions:**
+
+* customer(signed-in member) owns `<order>`, a delivery order, in the state its row describes.
+
+**Test data:**
+
+| Partition | `<order>` | `<expected steps>` |
+| --- | --- | --- |
+| ❓ Placed | Paid, not yet fulfilled. | Order Placed reached, with its date; Shipping and Completed not reached. |
+| ❓ Sent | Fulfilled, not completed. | Order Placed and Shipping (in progress) reached, each with its date; Completed not reached. |
+| Done | Completed. | All three steps reached. |
+
+**Steps:**
+
+1. Navigate to `/profile/orders/<order id>`.
+2. Read the Delivery Status steps.
+
+**Expected Results:**
+
+* Step 2 shows `<expected steps>`.
+
+---
+
+### order-detail#order-summary: Order Summary
+
 <!-- trace:case id=g10.store-order-detail.TC-d7b rev=1 -->
 #### g10.store-order-detail.US1-TC6: Summary amounts use $ with two decimals, bare $0, and HK$ total
 
@@ -460,7 +491,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US1
+* **Trace:** order-detail#order-summary
 
 **Pre-conditions:**
 
@@ -494,7 +525,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US1
+* **Trace:** order-detail#order-summary
 
 **Pre-conditions:**
 
@@ -520,44 +551,6 @@ Runs once per row of **Test data**.
 
 * Step 2 shows `<expected points>`.
 
-<!-- trace:case id=g10.store-order-detail.TC-rup rev=1 -->
-#### g10.store-order-detail.US1-TC8: Delivery steps move from Order Placed through Shipping to Completed
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US1
-
-**Pre-conditions:**
-
-* customer(signed-in member) owns `<order>`, a delivery order, in the state its row describes.
-
-**Test data:**
-
-| Partition | `<order>` | `<expected steps>` |
-| --- | --- | --- |
-| ❓ Placed | Paid, not yet fulfilled. | Order Placed reached, with its date; Shipping and Completed not reached. |
-| ❓ Sent | Fulfilled, not completed. | Order Placed and Shipping (in progress) reached, each with its date; Completed not reached. |
-| Done | Completed. | All three steps reached. |
-
-**Steps:**
-
-1. Navigate to `/profile/orders/<order id>`.
-2. Read the Delivery Status steps.
-
-**Expected Results:**
-
-* Step 2 shows `<expected steps>`.
-
 <!-- trace:case id=g10.store-order-detail.TC-fbs rev=1 -->
 #### g10.store-order-detail.US1-TC9: A refund shows its amount beside what was paid
 
@@ -573,7 +566,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US1
+* **Trace:** order-detail#order-summary
 
 **Pre-conditions:**
 
@@ -612,7 +605,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US1
+* **Trace:** order-detail#order-summary
 
 **Pre-conditions:**
 
@@ -638,11 +631,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-order-detail.US2: Open an order from its link
-
-**As a** customer,
-**I want** the link in my order email to open my order,
-**so that** I can check it without an account.
+### order-detail#order-link: Order Link
 
 <!-- trace:case id=g10.store-order-detail.TC-roq rev=1 -->
 #### g10.store-order-detail.US2-TC2: Signed-in owners move to their profile; others see the link page
@@ -659,7 +648,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US2
+* **Trace:** order-detail#order-link
 
 **Pre-conditions:**
 
@@ -697,7 +686,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US2
+* **Trace:** order-detail#order-link
 
 **Pre-conditions:**
 
@@ -735,7 +724,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-order-detail.US2
+* **Trace:** order-detail#order-link
 
 **Pre-conditions:**
 
@@ -766,11 +755,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-order-detail.US3: Come back from checkout to my order
-
-**As a** customer,
-**I want** Shopify's Continue button to bring me to the order I just paid,
-**so that** I see it and can add it to my account.
+### order-detail#back-from-checkout: Back From Checkout
 
 <!-- trace:case id=g10.store-order-detail.TC-gn1 rev=1 -->
 #### g10.store-order-detail.US3-TC2: With no order remembered, latest opens the order list or the store
@@ -787,7 +772,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-detail.US3
+* **Trace:** order-detail#back-from-checkout
 
 **Pre-conditions:**
 
@@ -824,7 +809,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-order-detail.US3
+* **Trace:** order-detail#back-from-checkout
 
 **Pre-conditions:**
 

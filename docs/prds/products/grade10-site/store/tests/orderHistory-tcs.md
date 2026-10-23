@@ -6,6 +6,7 @@ title: Store Order History Test Cases
 
 **Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-22, tcs-rules r6
+**Capabilities:** grade10-site/store/order-history, grade10-site/store/checkout
 
 ## Walk 1: Read Your Orders
 
@@ -33,11 +34,7 @@ title: Store Order History Test Cases
 3. Click Track Order on `<shipped order>`.
    - Record the carrier's page opening `g10.store-order-history.US1-TC3`
 
-## g10.store-order-history.US1: Find my orders
-
-**As a** customer,
-**I want** one place in my account that lists my Store purchases,
-**so that** I can find and open any of them after checkout.
+## order-history#orders: Orders
 
 <!-- trace:case id=g10.store-order-history.TC-gdz rev=1 -->
 ### g10.store-order-history.US1-TC1: Active orders list above past ones, newest first in each
@@ -54,7 +51,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
@@ -99,7 +96,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
@@ -129,11 +126,7 @@ Runs once per row of **Test data**.
 
 ## Ungrouped
 
-### g10.store-order-history.US1: Find my orders
-
-**As a** customer,
-**I want** one place in my account that lists my Store purchases,
-**so that** I can find and open any of them after checkout.
+### order-history#orders: Orders
 
 <!-- trace:case id=g10.store-order-history.TC-xzr rev=1 -->
 #### g10.store-order-history.US1-TC2: Signing in from Your Orders comes back to it
@@ -148,7 +141,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
@@ -181,7 +174,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
@@ -220,7 +213,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-order-history.US1
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
@@ -260,7 +253,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
@@ -292,7 +285,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
@@ -325,11 +318,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-order-history.US2: Find the orders I placed as a guest
-
-**As a** customer,
-**I want** my guest orders listed in my account once it proves their email,
-**so that** every purchase I made is in one place.
+### checkout#guest-checkout: Guest Checkout
 
 <!-- trace:case id=g10.store-order-history.TC-2qs rev=1 -->
 #### g10.store-order-history.US2-TC1: A guest order joins the account that proves its email
@@ -346,7 +335,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US2
+* **Trace:** checkout#guest-checkout
 
 **Pre-conditions:**
 
@@ -386,7 +375,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US2
+* **Trace:** checkout#guest-checkout
 
 **Pre-conditions:**
 
@@ -423,7 +412,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US2
+* **Trace:** checkout#guest-checkout
 
 **Pre-conditions:**
 

@@ -6,6 +6,7 @@ title: Store Location Test Cases
 
 **Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-22, tcs-rules r6
+**Capabilities:** grade10-site/store/store-locator
 
 ## Walk 1: Find the Shop from the Header
 
@@ -31,11 +32,7 @@ title: Store Location Test Cases
 4. Click the map.
    - Record Google Maps opening in a new tab `g10.store-store-locator.US1-TC2`
 
-## g10.store-store-locator.US1: Find the shop's address and hours
-
-**As a** customer,
-**I want** to see where Grade10's Hong Kong shop is and when it is open,
-**so that** I can visit it or pick up an order.
+## store-locator#shop: Shop
 
 <!-- trace:case id=g10.store-store-locator.TC-mgx rev=1 -->
 ### g10.store-store-locator.US1-TC1: The page shows the shop's map, name, address and hours
@@ -52,7 +49,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression, prod
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-store-locator.US1
+* **Trace:** store-locator#shop
 
 **Pre-conditions:**
 
@@ -78,6 +75,10 @@ Runs once per row of **Test data**.
 * Step 2 shows 11am – 9pm for each day of the week.
 * Step 2 shows no phone number and no holiday hours.
 
+---
+
+## store-locator#the-page: The Page
+
 <!-- trace:case id=g10.store-store-locator.TC-nee rev=1 -->
 ### g10.store-store-locator.US1-TC2: The map opens Google Maps for the shop in a new tab
 
@@ -93,7 +94,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, regression, prod
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-store-locator.US1
+* **Trace:** store-locator#the-page
 
 **Pre-conditions:**
 
@@ -121,11 +122,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-store-locator.US2: Reach the shop's page from the site
-
-**As a** customer,
-**I want** the header and footer to lead me to the shop's page,
-**so that** I find it from wherever I am on the site.
+## store-locator#from-elsewhere: From Elsewhere
 
 <!-- trace:case id=g10.store-store-locator.TC-j4m rev=1 -->
 ### g10.store-store-locator.US2-TC1: Header and footer lead to Store Locator, in their places
@@ -142,7 +139,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-store-locator.US2
+* **Trace:** store-locator#from-elsewhere
 
 **Pre-conditions:**
 
@@ -180,7 +177,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-store-locator.US2
+* **Trace:** store-locator#from-elsewhere
 
 **Pre-conditions:**
 
@@ -208,11 +205,7 @@ Runs once per row of **Test data**.
 
 ## Ungrouped
 
-### g10.store-store-locator.US1: Find the shop's address and hours
-
-**As a** customer,
-**I want** to see where Grade10's Hong Kong shop is and when it is open,
-**so that** I can visit it or pick up an order.
+### store-locator#shop: Shop
 
 <!-- trace:case id=g10.store-store-locator.TC-1on rev=1 -->
 #### g10.store-store-locator.US1-TC3: Name, address and hours read in the page's language
@@ -229,7 +222,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** g10.store-store-locator.US1
+* **Trace:** store-locator#shop
 
 **Pre-conditions:**
 
@@ -256,6 +249,10 @@ Runs once per row of **Test data**.
 * Step 2's hours follow that language's own time format.
 * Step 2's store name matches step 4's.
 
+---
+
+### store-locator#the-page: The Page
+
 <!-- trace:case id=g10.store-store-locator.TC-x9i rev=1 -->
 #### g10.store-store-locator.US1-TC4: At 375px wide the page scrolls only vertically
 
@@ -269,7 +266,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-store-locator.US1
+* **Trace:** store-locator#the-page
 
 **Pre-conditions:**
 
@@ -287,11 +284,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-store-locator.US2: Reach the shop's page from the site
-
-**As a** customer,
-**I want** the header and footer to lead me to the shop's page,
-**so that** I find it from wherever I am on the site.
+### store-locator#from-elsewhere: From Elsewhere
 
 <!-- trace:case id=g10.store-store-locator.TC-36r rev=1 -->
 #### g10.store-store-locator.US2-TC2: Store Locator waits with the store on lanes that do not carry it
@@ -308,7 +301,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression, prod
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-store-locator.US2
+* **Trace:** store-locator#from-elsewhere
 
 **Pre-conditions:**
 
@@ -333,11 +326,3 @@ Runs once per row of **Test data**.
 * Step 1 shows `<expected links>`.
 * Steps 2 and 3 show `<expected page>`.
 * Step 4 lists `/store-locator` only where the store is carried.
-
----
-
-### g10.store-store-locator.US3: Preview the shop's page from a link
-
-**As a** customer,
-**I want** a pasted Store Locator address to preview as the shop's page,
-**so that** whoever I send it to knows what it is before opening it.

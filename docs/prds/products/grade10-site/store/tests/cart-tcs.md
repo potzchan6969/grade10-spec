@@ -6,6 +6,7 @@ title: Store Cart Test Cases
 
 **Status:** pending-review · 0/38
 **Drafts styled:** 2026-10-22, tcs-rules r6
+**Capabilities:** grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/discounts
 
 ## Background
 
@@ -57,11 +58,7 @@ title: Store Cart Test Cases
 6. Click Proceed to Checkout.
    - Record Shopify's page with the same code and points `g10.store-cart.US4-TC1`
 
-## g10.store-cart.US1: Review the cart
-
-**As a** customer,
-**I want** to open my cart over the page I am on and see current facts,
-**so that** I can trust the total before I pay.
+## cart#reviewing-the-cart: Reviewing the Cart
 
 <!-- trace:case id=g10.store-cart-checkout.TC-q5a rev=1 -->
 ### g10.store-cart.US1-TC1: Cart opens over the page and waits for the shop's read
@@ -78,7 +75,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -107,11 +104,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-cart.US2: Use a promo code
-
-**As a** customer,
-**I want** to type or pick one promo code against my cart,
-**so that** I see what it takes off before I pay.
+## cart#promo-code: Promo Code
 
 <!-- trace:case id=g10.store-cart-checkout.TC-bzv rev=1 -->
 ### g10.store-cart.US2-TC1: A known code cuts the total; a refused one stays with its reason
@@ -128,7 +121,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US2
+* **Trace:** cart#promo-code
 
 **Pre-conditions:**
 
@@ -169,7 +162,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US2
+* **Trace:** cart#promo-code
 
 **Pre-conditions:**
 
@@ -198,11 +191,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-cart.US3: Pay with points
-
-**As a** customer,
-**I want** to put my points against what the code leaves,
-**so that** I pay less money at checkout.
+## cart#points: Points
 
 <!-- trace:case id=g10.store-cart-checkout.TC-4o0 rev=1 -->
 ### g10.store-cart.US3-TC1: Points apply after the code, trimmed to the ceiling
@@ -219,7 +208,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US3
+* **Trace:** cart#points
 
 **Pre-conditions:**
 
@@ -263,7 +252,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US3
+* **Trace:** cart#points
 
 **Pre-conditions:**
 
@@ -284,11 +273,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.store-cart.US4: Check out
-
-**As a** customer,
-**I want** to send my reviewed cart to Shopify's checkout and pay,
-**so that** I place my order.
+## cart#checkout: Checkout
 
 <!-- trace:case id=g10.store-cart-checkout.TC-md9 rev=1 -->
 ### g10.store-cart.US4-TC1: Proceed to Checkout sends the lines, code and points to Shopify
@@ -303,7 +288,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US4
+* **Trace:** cart#checkout
 
 **Pre-conditions:**
 
@@ -327,11 +312,7 @@ Runs once per row of **Test data**.
 
 ## Ungrouped
 
-### g10.store-cart.US1: Review the cart
-
-**As a** customer,
-**I want** to open my cart over the page I am on and see current facts,
-**so that** I can trust the total before I pay.
+### cart#reviewing-the-cart: Reviewing the Cart
 
 <!-- trace:case id=g10.store-cart-checkout.TC-wf5 rev=1 -->
 #### g10.store-cart.US1-TC2: The drawer stays dismissible while it waits
@@ -348,7 +329,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -389,7 +370,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -430,7 +411,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -461,7 +442,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -501,7 +482,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -542,7 +523,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -580,7 +561,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -620,7 +601,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -656,7 +637,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -697,7 +678,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart.US1
+* **Trace:** cart#reviewing-the-cart
 
 **Pre-conditions:**
 
@@ -724,6 +705,49 @@ Runs once per row of **Test data**.
 * Step 2 offers Retry; checkout is unavailable.
 * Step 4 shows `<product A>` checked, with checkout available.
 
+<!-- trace:case id=g10.store-cart.TC-7wv rev=1 -->
+#### g10.store-cart.US1-TC14: An empty cart says so and offers no checkout
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** cart#reviewing-the-cart
+
+**Pre-conditions:**
+
+* customer(`<actor state>`) has an empty cart.
+
+**Test data:**
+
+| Partition | `<actor state>` |
+| --- | --- |
+| Guest | signed out |
+| Member | signed-in member |
+
+**Steps:**
+
+1. Click Cart in the site header.
+2. Read the drawer.
+
+**Expected Results:**
+
+* Step 2 says the cart is empty.
+* Step 2 shows no lines, no footer and no Proceed to Checkout.
+* The drawer's header shows no item count.
+
+---
+
+### discounts#struck-price-on-a-cart-line: Struck Price on a Cart Line
+
 <!-- trace:case id=g10.store-cart.TC-x4l rev=1 -->
 #### g10.store-cart.US1-TC12: A cart line strikes the price a site discount took off
 
@@ -739,7 +763,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** discounts#struck-price-on-a-cart-line
 
 **Pre-conditions:**
 
@@ -766,6 +790,10 @@ Runs once per row of **Test data**.
 * Step 2 shows `<expected line>`.
 * Step 3 shows `<expected footer>`.
 
+---
+
+### discounts#cart-footer: Cart Footer
+
 <!-- trace:case id=g10.store-cart.TC-bkm rev=1 -->
 #### g10.store-cart.US1-TC13: Footer rows keep their order; an order discount shows once its minimum is met
 
@@ -781,7 +809,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
+* **Trace:** discounts#cart-footer
 
 **Pre-conditions:**
 
@@ -809,52 +837,9 @@ Runs once per row of **Test data**.
 * The order discount row has no Remove; the code and Points rows do.
 * Step 2's Estimated Total is `<expected total>`.
 
-<!-- trace:case id=g10.store-cart.TC-7wv rev=1 -->
-#### g10.store-cart.US1-TC14: An empty cart says so and offers no checkout
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-cart.US1
-
-**Pre-conditions:**
-
-* customer(`<actor state>`) has an empty cart.
-
-**Test data:**
-
-| Partition | `<actor state>` |
-| --- | --- |
-| Guest | signed out |
-| Member | signed-in member |
-
-**Steps:**
-
-1. Click Cart in the site header.
-2. Read the drawer.
-
-**Expected Results:**
-
-* Step 2 says the cart is empty.
-* Step 2 shows no lines, no footer and no Proceed to Checkout.
-* The drawer's header shows no item count.
-
 ---
 
-### g10.store-cart.US2: Use a promo code
-
-**As a** customer,
-**I want** to type or pick one promo code against my cart,
-**so that** I see what it takes off before I pay.
+### cart#promo-code: Promo Code
 
 <!-- trace:case id=g10.store-cart-checkout.TC-nst rev=1 -->
 #### g10.store-cart.US2-TC3: A second code replaces the first
@@ -869,7 +854,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US2
+* **Trace:** cart#promo-code
 
 **Pre-conditions:**
 
@@ -886,49 +871,6 @@ Runs once per row of **Test data**.
 * Step 2 shows no row for `<member code>`.
 * Estimated Total is HKD1,280 = 1,300 − 20.
 
-<!-- trace:case id=g10.store-cart-checkout.TC-xm3 rev=1 -->
-#### g10.store-cart.US2-TC4: A code that cannot stack gives way to a larger site discount
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-cart.US2
-
-**Pre-conditions:**
-
-* customer(signed-in member) has `<product A>` and `<product B>` in the cart, HKD1,300.
-* The shop has the order discount Spend HKD1,000, save HKD100.
-* The member holds `<order code>`, set not to combine with order discounts.
-
-**Test data:**
-
-| Partition | `<order code>` | `<expected rows>` | `<expected total>` |
-| --- | --- | --- | --- |
-| Site discount larger | HKD80 off the order. | `Discount (Spend HKD1,000, save HKD100)` −HKD100; the code's field says the site discount applies instead. | HKD1,200 = 1,300 − 100 |
-| Code larger | HKD150 off the order. | `Discount (<order code>)` −HKD150; no order discount row. | HKD1,150 = 1,300 − 150 |
-
-**Steps:**
-
-1. Open Cart and wait for the read.
-2. Apply `<order code>`.
-3. Read the footer and the code's field.
-4. Open the code list.
-
-**Expected Results:**
-
-* Step 3 shows `<expected rows>`.
-* Step 3's Estimated Total is `<expected total>`.
-* For the site-discount row, step 4 still lists `<order code>`.
-
 <!-- trace:case id=g10.store-cart-checkout.TC-7r3 rev=1 -->
 #### g10.store-cart.US2-TC5: A code the shop refuses for this basket is listed with its reason
 
@@ -942,7 +884,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US2
+* **Trace:** cart#promo-code
 
 **Pre-conditions:**
 
@@ -976,7 +918,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US2
+* **Trace:** cart#promo-code
 
 **Pre-conditions:**
 
@@ -1013,7 +955,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart.US2
+* **Trace:** cart#promo-code
 
 **Pre-conditions:**
 
@@ -1045,7 +987,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US2
+* **Trace:** cart#promo-code
 
 **Pre-conditions:**
 
@@ -1065,6 +1007,57 @@ Runs once per row of **Test data**.
 * Step 2's total is unchanged by the gift line.
 * Step 4 shows no code row, and `<gift code>` listed again.
 
+---
+
+### discounts#one-discount-at-a-time: One Discount at a Time
+
+<!-- trace:case id=g10.store-cart-checkout.TC-xm3 rev=1 -->
+#### g10.store-cart.US2-TC4: A code that cannot stack gives way to a larger site discount
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** discounts#one-discount-at-a-time
+
+**Pre-conditions:**
+
+* customer(signed-in member) has `<product A>` and `<product B>` in the cart, HKD1,300.
+* The shop has the order discount Spend HKD1,000, save HKD100.
+* The member holds `<order code>`, set not to combine with order discounts.
+
+**Test data:**
+
+| Partition | `<order code>` | `<expected rows>` | `<expected total>` |
+| --- | --- | --- | --- |
+| Site discount larger | HKD80 off the order. | `Discount (Spend HKD1,000, save HKD100)` −HKD100; the code's field says the site discount applies instead. | HKD1,200 = 1,300 − 100 |
+| Code larger | HKD150 off the order. | `Discount (<order code>)` −HKD150; no order discount row. | HKD1,150 = 1,300 − 150 |
+
+**Steps:**
+
+1. Open Cart and wait for the read.
+2. Apply `<order code>`.
+3. Read the footer and the code's field.
+4. Open the code list.
+
+**Expected Results:**
+
+* Step 3 shows `<expected rows>`.
+* Step 3's Estimated Total is `<expected total>`.
+* For the site-discount row, step 4 still lists `<order code>`.
+
+---
+
+### discounts#order-of-application: Order of Application
+
 <!-- trace:case id=g10.store-cart.TC-ikv rev=1 -->
 #### g10.store-cart.US2-TC9: A code stacks with an order discount while the goods still clear its minimum
 
@@ -1080,7 +1073,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US2
+* **Trace:** discounts#order-of-application
 
 **Pre-conditions:**
 
@@ -1120,7 +1113,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US2
+* **Trace:** discounts#order-of-application
 
 **Pre-conditions:**
 
@@ -1149,11 +1142,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-cart.US3: Pay with points
-
-**As a** customer,
-**I want** to put my points against what the code leaves,
-**so that** I pay less money at checkout.
+### cart#points: Points
 
 <!-- trace:case id=g10.store-cart-checkout.TC-7st rev=1 -->
 #### g10.store-cart.US3-TC2: Points are not offered to a guest or a non-member
@@ -1170,7 +1159,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US3
+* **Trace:** cart#points
 
 **Pre-conditions:**
 
@@ -1207,7 +1196,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US3
+* **Trace:** cart#points
 
 **Pre-conditions:**
 
@@ -1225,11 +1214,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### g10.store-cart.US4: Check out
-
-**As a** customer,
-**I want** to send my reviewed cart to Shopify's checkout and pay,
-**so that** I place my order.
+### checkout#guest-checkout: Guest Checkout
 
 <!-- trace:case id=g10.store-cart-checkout.TC-lib rev=1 -->
 #### g10.store-cart.US4-TC2: A guest checks out from the guest button; signing in merges the cart
@@ -1246,7 +1231,7 @@ Runs once per row of **Test data**.
 * **Suites:** acceptance, smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US4
+* **Trace:** checkout#guest-checkout
 
 **Pre-conditions:**
 
@@ -1274,6 +1259,10 @@ Runs once per row of **Test data**.
 * Step 2's primary button is Check out as guest, a Sign in link under it.
 * Step 4 shows `<expected>`.
 
+---
+
+### cart#pending-operations: Pending Operations
+
 <!-- trace:case id=g10.store-cart-checkout.TC-mih rev=1 -->
 #### g10.store-cart.US4-TC3: A Pay in flight holds the drawer; closing does not cancel it
 
@@ -1287,7 +1276,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** g10.store-cart.US4
+* **Trace:** cart#pending-operations
 
 **Pre-conditions:**
 
@@ -1307,6 +1296,10 @@ Runs once per row of **Test data**.
 * Step 3 closes the drawer.
 * Step 4 opens Shopify's page for the cart sent at step 1.
 
+---
+
+### cart#checkout: Checkout
+
 <!-- trace:case id=g10.store-cart-checkout.TC-mvl rev=1 -->
 #### g10.store-cart.US4-TC4: An unchanged purchase reopens its invoice; a changed one starts anew
 
@@ -1322,7 +1315,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US4
+* **Trace:** cart#checkout
 
 **Pre-conditions:**
 
@@ -1363,7 +1356,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US4
+* **Trace:** cart#checkout
 
 **Pre-conditions:**
 
@@ -1388,6 +1381,39 @@ Runs once per row of **Test data**.
 
 * Step 3 shows `<expected cart>`.
 
+<!-- trace:case id=g10.store-cart-checkout.TC-b0s rev=1 -->
+#### g10.store-cart.US4-TC8: An uncertain payment hand-off opens no second invoice
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** cart#checkout
+
+**Pre-conditions:**
+
+* customer(signed-in member) pressed Proceed to Checkout; the hand-off's answer was lost.
+
+**Steps:**
+
+1. Open Cart.
+2. Click Proceed to Checkout again.
+
+**Expected Results:**
+
+* Step 1 keeps the purchase visible.
+* Step 2 opens the same invoice, or waits; never a second payable one.
+
+---
+
+### checkout#store--read-every-line-live: Store — Read every line live
+
 <!-- trace:case id=g10.store-cart-checkout.TC-rbr rev=1 -->
 #### g10.store-cart.US4-TC6: Shopify refuses an item that sold out after the drawer's read
 
@@ -1401,7 +1427,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US4
+* **Trace:** checkout#store--read-every-line-live
 
 **Pre-conditions:**
 
@@ -1419,66 +1445,6 @@ Runs once per row of **Test data**.
 * Step 3 refuses the payment, naming `<product A>`.
 * No order is placed.
 
-<!-- trace:case id=g10.store-cart-checkout.TC-k2d rev=1 -->
-#### g10.store-cart.US4-TC7: Shopify's thank-you page leads to Your Orders with the purchase
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** acceptance, regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** g10.store-cart.US4
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on Shopify's page for `<product A>`.
-
-**Steps:**
-
-1. Pay with `<test card>`.
-2. Read Shopify's thank-you page.
-3. Click its Grade10 Your Orders link.
-4. Read the list.
-
-**Expected Results:**
-
-* Step 2 offers a Grade10 Your Orders link.
-* Step 4 lists the order for `<product A>` within seconds.
-
-<!-- trace:case id=g10.store-cart-checkout.TC-b0s rev=1 -->
-#### g10.store-cart.US4-TC8: An uncertain payment hand-off opens no second invoice
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-cart.US4
-
-**Pre-conditions:**
-
-* customer(signed-in member) pressed Proceed to Checkout; the hand-off's answer was lost.
-
-**Steps:**
-
-1. Open Cart.
-2. Click Proceed to Checkout again.
-
-**Expected Results:**
-
-* Step 1 keeps the purchase visible.
-* Step 2 opens the same invoice, or waits; never a second payable one.
-
 <!-- trace:case id=g10.store-product-listing.TC-jdu rev=1 -->
 #### g10.store-cart.US4-TC9: Checkout's own read names moved lines and refuses a short fill
 
@@ -1494,7 +1460,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US4
+* **Trace:** checkout#store--read-every-line-live
 
 **Pre-conditions:**
 
@@ -1519,6 +1485,45 @@ Runs once per row of **Test data**.
 * Step 2 stays open and shows `<expected drawer>`.
 * Each line shows the shop's current answer.
 
+---
+
+### checkout#collector--open-your-orders-in-grade10: Collector — Open Your Orders in Grade10
+
+<!-- trace:case id=g10.store-cart-checkout.TC-k2d rev=1 -->
+#### g10.store-cart.US4-TC7: Shopify's thank-you page leads to Your Orders with the purchase
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** acceptance, regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** checkout#collector--open-your-orders-in-grade10
+
+**Pre-conditions:**
+
+* customer(signed-in member) is on Shopify's page for `<product A>`.
+
+**Steps:**
+
+1. Pay with `<test card>`.
+2. Read Shopify's thank-you page.
+3. Click its Grade10 Your Orders link.
+4. Read the list.
+
+**Expected Results:**
+
+* Step 2 offers a Grade10 Your Orders link.
+* Step 4 lists the order for `<product A>` within seconds.
+
+---
+
+### checkout#shopify--take-the-payment: Shopify — Take the payment
+
 <!-- trace:case id=g10.store-cart.TC-mhq rev=1 -->
 #### g10.store-cart.US4-TC10: A declined payment places no order and keeps the cart for another try
 
@@ -1534,7 +1539,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** g10.store-cart.US4
+* **Trace:** checkout#shopify--take-the-payment
 
 **Pre-conditions:**
 
