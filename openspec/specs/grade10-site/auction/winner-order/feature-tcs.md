@@ -6159,7 +6159,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the confirmation.
 * The order holds no delivery address and no method.
 
-<!-- trace:case id=g10.auction-winner-order.TC-z2f rev=1 covers=g10.auction-winner-order.SC-cz1 -->
+<!-- trace:case id=g10.auction-winner-order.TC-z2f rev=2 covers=g10.auction-winner-order.SC-cz1 -->
 ### g10.auction-winner-order.US1-TC53: With neither method the winner reads payment is not yet available
 
 **Classification:**
@@ -6177,8 +6177,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
-* customer(winner) holds an auction order in USD in Awaiting Setup.
+* Payment Settings holds no USD card fee rule and no HKD card fee rule, and Grade10 holds no USD or HKD bank details, so no currency offers a method.
+* customer(winner) holds an auction order in Awaiting Setup who picked USD.
 
 * The winner order under test is `<winner_order_48_1>`.
 

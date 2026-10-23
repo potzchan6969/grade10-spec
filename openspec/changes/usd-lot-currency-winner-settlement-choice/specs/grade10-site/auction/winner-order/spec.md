@@ -842,13 +842,15 @@ its own bank details, and card on its own rule.
 - **AND** a confirmation carrying card for that order is refused
 - **AND** the order holds no delivery address and no method
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-cz1 rev=2 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-cz1 rev=3 -->
 #### Scenario: winner-order-SC-249 - A currency with neither method cannot confirm setup
 **Serves:** Payment method - card only where Finance set a card fee rule
 
 - **GIVEN** an auction order in Awaiting Setup whose winner picked USD, where
   Payment Settings holds no USD card fee rule and Grade10 holds no HK Local
-  and no SWIFT bank details
+  and no SWIFT bank details, and no other currency the order can settle in
+  offers a method either (a currency with no method is not offered while
+  another one has a method - SC-305 and SC-306)
 - **WHEN** the winner reaches the payment method choice
 - **THEN** the page says payment is not yet available in USD and offers
   Contact Us
