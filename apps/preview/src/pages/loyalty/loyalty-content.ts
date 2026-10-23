@@ -320,6 +320,16 @@ const COUPONS: CouponItem[] = [
     qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-open:7Q2M" },
   },
   {
+    id: "coupon-online",
+    amount: "HK$30",
+    code: "GRD-30-W8BN",
+    description: "HK$30 off any order",
+    expiry: `Use by ${formatDay(Date.UTC(2027, 0, 15))}`,
+    status: "open",
+    scopeLabel: "Online only",
+    qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-online:W8BN" },
+  },
+  {
     id: "coupon-spent",
     amount: "HK$100",
     code: "GRD-100-XK4P",
@@ -334,7 +344,7 @@ const COUPONS: CouponItem[] = [
     code: "GRD-50-9ZZT",
     expiry: `Expired ${formatDay(Date.UTC(2026, 5, 30))}`,
     status: "void",
-    statusLabel: `Void ${formatDay(Date.UTC(2026, 5, 30))}`,
+    statusLabel: `Void ${formatDay(Date.UTC(2026, 5, 30))}. Points returned`,
   },
   {
     id: "coupon-expired",

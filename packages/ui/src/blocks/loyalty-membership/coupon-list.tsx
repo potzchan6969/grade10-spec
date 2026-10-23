@@ -89,14 +89,17 @@ function CouponTicket({
 }) {
   const regionId = useId();
   const open = item.status === "open";
-  const qrCode = open ? item.qrCode : undefined;
+  /* A scoped coupon is online's alone — no Use now, no QR, whatever the
+   * consumer passes. */
+  const qrCode = open && !item.scopeLabel ? item.qrCode : undefined;
   /* A spent or void coupon says its one line — "Used on …", "Void …" — in
-   * the detail's place. An expired coupon keeps its expiry, which already
-   * reads "Expired …". */
+   * the detail's place; an open scoped coupon's second line names where it
+   * is good. An expired coupon keeps its expiry, which already reads
+   * "Expired …". */
   const statusLabel =
     item.status === "spent" || item.status === "void"
       ? (item.statusLabel ?? copy[STATUS_LABEL[item.status]])
-      : undefined;
+      : item.scopeLabel;
 
   return (
     <ListItem

@@ -32,16 +32,22 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Each coupon is a ticket: an open one carries its code and a Use by line,
- * a spent or void one says its own line in the detail's place, and an
- * expired one reads its expiry — which already says so. */
+ * an online-only one names its scope and offers no scan, a spent or void
+ * one says its own line in the detail's place, and an expired one reads
+ * its expiry — which already says so. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("GRD-50-7Q2M")).toBeInTheDocument();
     expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
-    expect(canvas.getByText(/Use by/)).toBeInTheDocument();
+    expect(canvas.getAllByText(/Use by/).length).toBeGreaterThan(0);
+    /* Online only: names its scope, never a Use now — no member holds out a
+     * code the sale refuses. */
+    expect(canvas.getByText("Online only")).toBeInTheDocument();
     expect(canvas.getByText(/Used on/)).toBeInTheDocument();
-    expect(canvas.getByText(/Void 30 Jun/)).toBeInTheDocument();
+    expect(
+      canvas.getByText(/Void 30 Jun 2026\. Points returned/),
+    ).toBeInTheDocument();
     expect(canvas.getByText(/Expired 1 May/)).toBeInTheDocument();
     expect(canvas.getAllByRole("button", { name: "Use now" })).toHaveLength(1);
   },

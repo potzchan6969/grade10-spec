@@ -79,6 +79,11 @@ type CouponItem = {
    * its `statusLabel` instead. */
   expiry: string;
   status: CouponStatus;
+  /** Where the coupon is spendable when the till cannot take it — "Online
+   * only". A scoped coupon reads the line under its expiry and never draws
+   * a Use now or a QR: there is no moment the member holds out a code the
+   * sale will refuse. */
+  scopeLabel?: string;
   /** The one line a closed coupon says — "Used on 12 Oct" or "Void 30 Jun".
    * Falls back to the copy's own word for the status. Never read on an
    * expired coupon: its expiry already says so. */
