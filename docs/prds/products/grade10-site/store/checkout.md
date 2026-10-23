@@ -57,6 +57,7 @@ In Your Orders.
 
 - **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload, from a second tab or after a lost answer; a purchase already paid opens its order
 - **After a refusal** - A Pay after the purchase's order failed or was canceled starts the purchase again
+- ❓ **A declined card** - Shopify's page refuses it and places no order; the cart stays, and the next payment places exactly one order. Product confirms
 - **Changed purchase** - A changed basket or tender starts a new purchase and retires the older unpaid invoice. Only the member's own edit retires it; the shop's stock or price review leaves it for the next Pay to replace
 - **Recovery** - An uncertain payment handoff keeps the existing purchase visible and recoverable without opening a second payable invoice
 - **Lost answer** - Pay keeps looking for the invoice Shopify made for about 6 seconds before asking the collector to try again. A purchase Shopify holds no invoice for closes once **2 minutes** have passed, or later while Shopify cannot be read, returning its coupons and points, and the next Pay starts it again. Until then it holds only its own coupon and points; the collector's other purchases go ahead

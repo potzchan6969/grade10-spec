@@ -41,6 +41,10 @@ The product listing lets collectors browse the catalogue and open a product.
 - **Latest at rest** — the listing opens ordered by latest product and the
   sort control names that order; a link made at rest carries no order and
   opens on latest product just the same
+- ❓ **A product in Draft** — a product the shop holds as Draft is off the
+  cards, the counts and search, as a product taken down is. Product confirms
+- ❓ **Sort drawer on choose** — on a narrow viewport, choosing an order
+  also closes the sort drawer. Design confirms
 - **A collection is a way in, not a filter** — the front door's tiles open the
   listing already inside one, named above the grid and dismissible; filtering
   or searching leaves it behind, because the catalogue narrows by a collection

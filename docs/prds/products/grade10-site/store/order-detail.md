@@ -26,6 +26,16 @@ address, payment and refund facts, and leaves each missing fact absent
 **Progress and tracking** — a collector sees the Store-supplied fulfilment
 state and can follow a safe carrier address when one is supplied
 
+❓ **Steps not reached** — a delivery step the order has not reached shows
+with no date; a just-placed order has only Order Placed reached. Design
+confirms
+
+❓ **A full refund** — the summary keeps the paid total and shows the whole
+amount as its Refund row. Design confirms
+
+❓ **A safe carrier address** — an `https` address opens; any other scheme,
+such as `javascript:`, offers no Track Order. Engineering confirms
+
 **Read states** — loading, localized failure with Retry, and not-found stay
 distinct at the same address
 

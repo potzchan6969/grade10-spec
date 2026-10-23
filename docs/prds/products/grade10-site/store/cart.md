@@ -35,6 +35,8 @@ back to that page.
 - **Whose cart** - a signed-in member's cart is kept at the store; a guest's
   is kept in this browser. Signing in moves the browser's lines into the
   member's cart
+- ❓ **A product in both carts** — signing in combines the two lines into
+  one, its quantity the sum of both. Product confirms it runs
 - 🚧 **When the session ends** - an open drawer closes by itself, with no
   message, when the member signs out in another tab of this site or the
   session expires. A guest's drawer stays open, and so does a member's

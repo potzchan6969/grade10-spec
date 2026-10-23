@@ -14,6 +14,7 @@ How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.m
 - **A convention that must hold everywhere is a contract** — it moves to `specs-to-test-cases.md` with a rules revision, and leaves this file
 - **A confirmed line applies at once** — when the review that confirmed it ends, apply it to the reviewed suite's remaining drafts and its manual `actual` cases. A same-domain propagation may update other cases in a separately listed style-only follow-up, preserving purpose, expected results, trace, status, test-data meaning and automation links; a semantic change waits for that suite's review. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
 - **`automated` and `deprecated` cases are never restyled to it** — an `automated` case changes only with its behaviour, a `deprecated` one never
+- 2026-10-22, docs/prds/products/grade10-site/store/tests/domain-tcs.md: A signed-out customer is customer(guest) and a signed-in one is customer(member). Refused: kept as practice only, not a written rule.
 
 ## Before Adding a Convention
 
@@ -98,6 +99,7 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 
 ### Test data
 
+- 2026-10-22, docs/prds/products/grade10-site/store/tests/domain-tcs.md: Test data names no environment. An address is `<g10url>/<path>`, never "the staging site's …", and no pre-condition or starting state says which environment, unless the environment is the partition under test.
 - 2026-10-14, grade10-site/auction/winner-order/feature-tcs.md: Bind every replaceable test-data field by its inline-code `<placeholder>` in the pre-conditions, steps or expected results that use it; row-based tables name each bound column with that placeholder, never "the row's value". Write complete sentences that remain readable after binding concrete values, keeping fixture descriptions and selection notes outside the substituted value. Switch data rows without rewriting the route; keep each row in its stated partition, retain fixed boundaries and configured values, and state how derived results follow its inputs.
 - **Readable units, the requirement's unit** — `100 mebibytes`, `30 minutes`; never a rounded megabyte that moves the bound
 - **Rows with one checking** — keep one row when values share the same purpose, route and expected checking. Use separate rows when the expected provider answer or checking differs; use separate cases when the purpose differs
