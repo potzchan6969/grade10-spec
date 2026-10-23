@@ -32,6 +32,7 @@ any collector's maximum - [Internal Bid](/p/grade10-admin/auction/internal-bid).
   - No letters: no order letter is sent to an internal bidder
   - Automatic settlement choice: at close the order records HKD and bank transfer on FPS, without a winner or operator setup step
   - Operator invoice: the operator still quotes and sends the invoice, then lets it expire and cancels the order
+  - House order total: the operator's quote of an internal bidder's order reads like any HKD quote, one conversion of its USD lines into the HKD total
 - Internal bidders
   - Profiles: internal bidder profiles, each a name, a unique email label and a billing address, kept in auction admin with no site account behind them
   - Rename and retire: a label is fixed once the profile has bid; a profile is retired only when no Scheduled internal bid, and no Not placed internal bid on a listing before its effective close, uses it, and keeps its history
@@ -783,6 +784,11 @@ An operator SHALL then run the order by hand, through the flows of
    `grade10-site/auction/winner-order`.
 3. Cancel the order with a category and a note. The lot returns to stock.
 
+The quote of that order SHALL read as the quote of any HKD order: the USD lines
+the operator and Grade10 set, then one Subtotal and total in HKD, one conversion
+of those lines, per `grade10-admin/auction/post-sale`, "The quote is typed in USD
+and read in the settlement currency".
+
 Grade10 SHALL take none of these steps on its own. For an internal bidder's
 order Grade10 SHALL also:
 
@@ -828,7 +834,7 @@ label, for any operator.
 - **AND** the order still holds the billing address Harbour Cards had at the
   close
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-6fc rev=3 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-6fc rev=4 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-73 - An operator sends the internal order's invoice and nobody is mailed
 **Serves:** grade10-admin-auction-internal-bid-US-06 - the admin sends the invoice of the house's win
 
@@ -837,8 +843,9 @@ label, for any operator.
 - **WHEN** they enter Shipping & Handling of USD10.01 and a bank transfer fee of 0
   USD, then send the invoice at 2026-11-03T09:00:00Z
 - **THEN** the quote names bank transfer on FPS and reads a total of
-  103100 minor units in HKD, from the USD101 winning bid, USD20.20 premium,
-  USD10.01 shipping and USD0 bank transfer fee
+  103000 minor units in HKD, the 13121 minor units in USD of the USD101
+  winning bid, USD20.20 premium, USD10.01 shipping and USD0 bank transfer fee
+  converted once at 7.85
 - **AND** the invoice is `pending` with a payment deadline of
   2026-11-10T09:00:00Z, and the order reads Pending Payment
 - **AND** no invoice-sent letter is sent
