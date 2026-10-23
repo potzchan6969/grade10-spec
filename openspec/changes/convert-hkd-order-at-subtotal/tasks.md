@@ -10,7 +10,7 @@
 - [ ] 2.2 Retarget the Order Summary, Payment and Fulfilment stories and their fixtures to the same ids; the block's code needs no change because #1288 merged the props (`g10.shared-auction-order.SC1`, `g10.shared-auction-order.SC2`)
 - [ ] 2.3 Verify: `pnpm --filter @grade10/ui exec vitest run src/blocks/auction-order`, `pnpm --filter @grade10/ui run typecheck`, `pnpm run lint`
 
-## 3. Invoice and receipt PDF fixtures (grade10-spec)
+## 3. Invoice and receipt PDF fixtures (grade10-spec) (owner: @seankcw)
 
 The PDF blocks keep their contract but for one optional note on the Subtotal row (3.4 to 3.6); the fixtures, stories and tests change.
 
