@@ -3490,8 +3490,8 @@ Runs once per row of **Test data**.
 * Step 3 shows no released-stock note.
 * Step 4 reads the row's stock outcome.
 
-<!-- trace:case id=g10adm.auction-listing.TC-xzh rev=3 -->
-### grade10-admin-auction-listing-US9-TC3-3: Relist from the row opens a new draft holding stock on Save
+<!-- trace:case id=g10adm.auction-listing.TC-xzh rev=4 -->
+### grade10-admin-auction-listing-US9-TC3-4: Relist from the row opens a new draft holding stock on Save
 
 **Classification:**
 
@@ -3517,7 +3517,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An Unsold listing for `<product_3>` with `No Cert ID`, quantity `<quantity>`, a title, copy, starting price `<price>`, currency USD, a gallery of three items, slug `<slug_3>`, listing code `<code_3>`, extension 600 seconds, a taxonomy category, a start and close, and a history |
+| `<listing_3>` | An Unsold listing for `<product_3>` with `No Cert ID`, quantity `<quantity>`, a title, copy, starting price `<price>`, currency USD, a gallery of three items, slug `<slug_3>`, listing code `<code_3>`, extension 600 seconds, a taxonomy category, sandbox on, a start and close, and a history |
 | `<product_3>` | The product `<listing_3>` sold nothing of, regular stock without Cert IDs |
 | `<quantity>` | 2 units (any quantity from 1 to 500) |
 | `<price>` | USD80 (any positive whole amount) |
@@ -3532,22 +3532,24 @@ Runs once per row of **Test data**.
 4. Set a start and a close on the draft.
 5. Click Save.
 6. Read `<product_3>`'s available count again.
-7. Return to <grade10 auction admin listings url>.
-8. Read `<listing_3>`'s row.
-9. Open `<listing_3>`.
+7. Read the saved draft's campaign on its Overview, and its taxonomy and sandbox on its stored record.
+8. Return to <grade10 auction admin listings url>.
+9. Read `<listing_3>`'s row.
+10. Open `<listing_3>`.
 
 **Expected Results:**
 
 * Step 2 shows a new draft, not `<listing_3>`.
 * Step 2: product `<product_3>`, `No Cert ID`, quantity `<quantity>`, and `<listing_3>`'s title and copy.
 * Step 2: starting price `<price>`, currency USD, the same gallery in the same order.
-* Step 2: no start or close, no campaign, no bids, no history.
-* Step 2: extension, taxonomy and sandbox read as on a new blank draft.
+* Step 2: no start or close, no bids, no history.
+* Step 2: extension reads as on a new blank draft.
 * Step 3 still reads `<available before>`.
-* Step 5 saves a draft whose slug is not `<slug_3>` and whose listing code is not `<code_3>`.
+* Step 5 saves a draft holding `<slug_3>` and a listing code other than `<code_3>`.
 * Step 6 reads `<available after Save>`, `<available before>` minus `<quantity>`.
-* Step 8: the row still reads Unsold and offers no Relist.
-* Step 9: `<listing_3>` still reads Unsold, closed, with its history.
+* Step 7: the draft is sold on its own, with no taxonomy category and sandbox off, as on a new blank draft.
+* Step 9: the row still reads Unsold and offers no Relist.
+* Step 10: `<listing_3>` still reads Unsold, closed, with its history.
 
 <!-- trace:case id=g10adm.auction-listing.TC-bf8 rev=2 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
 ### grade10-admin-auction-listing-US9-TC4-2: Relist is hidden from an admin without the operate grant

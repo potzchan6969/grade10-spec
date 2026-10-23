@@ -155,11 +155,11 @@
 10. Open `<listing_url>` directly.
    - Step 10 returns 404. `g10.auction-lot-status.US2-TC4`
 11. Inspect its response body and page.
-   - Step 11 shows Page not found with no original-listing data or code. `g10.auction-lot-status.US2-TC4`
+   - Step 11 shows the not-found page, titled "Nothing is here", with no original-listing data or code. `g10.auction-lot-status.US2-TC4`
 12. Open `<grade10 auction url>/listings/<listing_code>`.
    - Step 12 returns 404 for either code casing. `g10.auction-lot-status.US2-TC4`
 13. Inspect its response body and page.
-   - Step 13 shows Page not found with no original-listing data or code. `g10.auction-lot-status.US2-TC4`
+   - Step 13 shows the not-found page, titled "Nothing is here", with no original-listing data or code. `g10.auction-lot-status.US2-TC4`
    - No alternate called-off page appears. `g10.auction-lot-status.US2-TC4`
 14. In customer A's session, navigate to `<my auctions url>`.
 15. Read `<listing_14>`'s row and history.
@@ -450,9 +450,9 @@ Runs once per row of **Test data**.
 * Step 2 does not find it in search.
 * Step 3 does not include it in the watchlist.
 * Step 4 returns 404.
-* Step 5 shows Page not found with no original-listing data or code.
+* Step 5 shows the not-found page, titled "Nothing is here", with no original-listing data or code.
 * Step 6 returns 404 for either code casing.
-* Step 7 shows Page not found with no original-listing data or code.
+* Step 7 shows the not-found page, titled "Nothing is here", with no original-listing data or code.
 * No alternate called-off page appears.
 
 ---
