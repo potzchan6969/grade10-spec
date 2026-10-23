@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T05:12:02.833Z",
+  "generatedAt": "2026-10-23T05:46:29.547Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -93,8 +93,8 @@
     "Radio List Item": "skipped",
     "Reward / Checkout Point Balance": "warn",
     "Reward / Checkout QR": "warn",
-    "Reward / Item / Media": "warn",
-    "Reward Item": "warn",
+    "Reward / Item": "warn",
+    "Reward / Item Media": "warn",
     "Search Input": "skipped",
     "Segmented Control": "skipped",
     "Segmented Control Item": "skipped",
@@ -991,7 +991,7 @@
     "7227-863": "Tier Info Card",
     "7229-7427": "How Points Work",
     "7250-1607": "Tiers & Benefits (small vp)",
-    "7254-2284": "Reward Item",
+    "7254-2284": "Reward / Item",
     "7254-2460": "Rewards Checkout (Item)",
     "7254-257": "Tier Ladder",
     "7254-384": "Tier Ladder",
@@ -1020,12 +1020,12 @@
     "7276-2728": "AttachmentMedia",
     "7276-2735": "Attachment",
     "7276-2761": "Attachment",
-    "7330-1081": "Reward / Item / Media",
-    "7330-1082": "Reward / Item / Media",
-    "7330-1083": "Reward / Item / Media",
-    "7330-1087": "Reward Item",
-    "7330-1128": "Reward Item",
-    "7330-1129": "Reward Item",
+    "7330-1081": "Reward / Item Media",
+    "7330-1082": "Reward / Item Media",
+    "7330-1083": "Reward / Item Media",
+    "7330-1087": "Reward / Item",
+    "7330-1128": "Reward / Item",
+    "7330-1129": "Reward / Item",
     "7330-1143": "Membership",
     "7330-7237": "Reward / Checkout QR",
     "86-3366": "Button",
@@ -1201,11 +1201,11 @@
     "Reward / Checkout QR": [
       "Reward / Checkout QR: no code component (looked for src/components/**/rewardcheckoutqr.tsx or checkoutqr.tsx)"
     ],
-    "Reward / Item / Media": [
-      "Reward / Item / Media: no code component (looked for src/components/**/rewarditemmedia.tsx or media.tsx)"
+    "Reward / Item": [
+      "Reward / Item: no code component (looked for src/components/**/rewarditem.tsx or item.tsx)"
     ],
-    "Reward Item": [
-      "Reward Item: no code component (looked for src/components/**/rewarditem.tsx or rewarditem.tsx)"
+    "Reward / Item Media": [
+      "Reward / Item Media: no code component (looked for src/components/**/rewarditemmedia.tsx or itemmedia.tsx)"
     ],
     "Stat": [
       "Stat: no code component (looked for src/components/**/stat.tsx or stat.tsx)"
