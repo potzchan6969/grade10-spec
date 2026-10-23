@@ -1417,7 +1417,12 @@ export function acceptanceReadiness(
     errors.push(`${file}: ${describeReuse(reuse)}`);
   for (const path of deltas) {
     const capabilityDir = dirname(join(root, path));
-    for (const file of ["user-journeys.md", "feature-tcs.md"]) {
+    // The Grade10 store's cases live only in its PRD folder (tcs-rules r7): a
+    // store delta owes no suite beside it, and carries none.
+    const store = /\/specs\/grade10-site\/store\//.test(path);
+    for (const file of store
+      ? ["user-journeys.md"]
+      : ["user-journeys.md", "feature-tcs.md"]) {
       if (!existsSync(join(capabilityDir, file)))
         errors.push(
           `${path.replace(/\/spec\.md$/, `/${file}`)} is required before acceptance`,

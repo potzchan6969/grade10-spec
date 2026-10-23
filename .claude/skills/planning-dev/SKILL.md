@@ -50,7 +50,8 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    product hit drafts that suite into the change. Then, in a fresh context,
    QA1 runs `spec-to-tcs` against only frozen anchors and the domain suite
    above, without requirements, scenarios, technical design, QA2 or archive
-   material. Keep `feature-tcs.md` draft.
+   material. Keep `feature-tcs.md` draft; a store capability writes none here,
+   as [Store](../../../docs/governance/specs-to-test-cases.md#store) says.
 2. **Dev** - Delivery draft. In another fresh context, Dev writes the
    technical design in `tech-design.md`, requirement scenarios in `spec.md`,
    then `tasks.md`. Dev does not read QA1 until this independent draft is

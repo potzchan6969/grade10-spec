@@ -1400,6 +1400,11 @@ for (const p of suites) {
 if (args.requireSuites) {
   for (const d of specs) {
     if (existsSync(join(d, "feature-tcs.md"))) continue;
+    // The store's cases live in its PRD folder, never beside its specs.
+    if (
+      /(^|\/)grade10-site\/store\//.test(relative(ROOT, d).split(sep).join("/"))
+    )
+      continue;
     const spec = readSpecIds(join(d, "spec.md"));
     if (spec?.hasJourneySection && spec.journeys.size > 0)
       record(
