@@ -59,7 +59,7 @@
 | `<current public price>` | `<increment>` | `<minimum next amount>` | Fixture notes |
 | --- | ---: | ---: | --- |
 | USD100 | USD5 | USD105 | `<current public price>`: (fixed tier boundary); `<increment>`: 500 USD minor units; `<minimum next amount>`: 10500 USD minor units |
-| USD99.99 | USD1 | USD100.99 | `<current public price>`: (range: 100–9999 minor units); `<increment>`: 100 USD minor units; `<minimum next amount>`: 10099 USD minor units |
+| USD99 | USD1 | USD100 | `<current public price>`: (one whole dollar below USD100); `<increment>`: 100 USD minor units; `<minimum next amount>`: 10000 USD minor units |
 | USD500 | USD10 | USD510 | `<current public price>`: (fixed tier boundary); `<increment>`: 1000 USD minor units; `<minimum next amount>`: 51000 USD minor units |
 
 **Steps 5–7 data:**
@@ -72,22 +72,21 @@
 
 | `<minimum>` | `<bid amount>` | Fixture notes |
 | --- | ---: | --- |
-| USD105 | USD104.99 | `<minimum>`: (range: 10000–49999 minor units); `<bid amount>`: 10499 USD minor units |
+| USD105 | USD104 | `<minimum>`: (range: 10000–49999 minor units); `<bid amount>`: 10400 USD minor units |
 
 **Steps 11–14 data:**
 
 | `<starting price>` | `<first bid>` | `<increment>` | `<minimum next amount>` | `<higher bid>` | Fixture notes |
 | --- | --- | --- | --- | --- | --- |
-| USD0 | USD1 | USD1 | USD2 | USD2.50 | `<first bid>`: (range: 100-9999 minor units); `<increment>`: (fixed tier increment); `<minimum next amount>`: (derived); `<higher bid>`: (above the minimum) |
+| USD0 | USD1 | USD1 | USD2 | USD3 | `<first bid>`: (range: 100-9999 minor units); `<increment>`: (fixed tier increment); `<minimum next amount>`: (derived); `<higher bid>`: (above the minimum) |
 | USD100 | USD100 | USD5 | USD105 | USD120 | `<starting price>`: (fixed tier boundary); `<first bid>`: (fixed tier boundary); `<increment>`: (fixed tier increment); `<minimum next amount>`: (derived); `<higher bid>`: (above the minimum) |
 
 **Steps 15–17 data:**
 
 | `<opening price>` | `<bid amount>` | Fixture notes |
 | --- | --- | --- |
-| USD1 | USD0.99 | `<opening price>`: (fixed minimum increment); `<bid amount>`: (fixed boundary) |
 | USD100 | USD99 | `<opening price>`: (fixed tier boundary); `<bid amount>`: (fixed boundary) |
-| USD105 | USD104.99 | `<opening price>`: (fixed opening price); `<bid amount>`: (one minor unit below minimum) |
+| USD105 | USD104 | `<opening price>`: (fixed opening price); `<bid amount>`: (one whole dollar below minimum) |
 
 **Steps 18–22 data:**
 
@@ -103,8 +102,8 @@
 
 1. Open the bid panel on the listing.
 2. Read the minimum next amount.
-   - The minimum next amount reads `<minimum next amount>`. `g10.auction-bid-increments.US1-TC1`
-   - A positive start is its own minimum; a zero start uses the lowest USD increment. `g10.auction-bid-increments.US1-TC1`
+   - The minimum next amount reads `<minimum next amount>`. `g10.auction-bid-increments.US1-TC9`
+   - A positive start is its own minimum; a zero start uses the lowest USD increment. `g10.auction-bid-increments.US1-TC9`
 3. Open the listing bid panel.
 4. Place a bid of `<current public price>` plus `<increment>`.
    - The new public price is `<minimum next amount>`. `g10.auction-bid-increments.US1-TC2`
@@ -193,7 +192,7 @@
 | Field | Value | Fixture notes |
 | --- | --- | --- |
 | ceiling | USD10,000,000 | (fixed configured value) |
-| bid amount | USD10,000,000.01 | (fixed boundary or equality) |
+| bid amount | USD10,000,001 | (fixed boundary or equality) |
 
 ### Route
 
@@ -1335,7 +1334,7 @@ The row is seeded in the database, because no screen saves a starting price with
 | Field | Value | Fixture notes |
 | --- | --- | --- |
 | ceiling | USD10,000,000 | (fixed configured value) |
-| bid amount | USD10,000,000.01 | (fixed boundary or equality) |
+| bid amount | USD10,000,001 | (fixed boundary or equality) |
 
 **Steps:**
 
