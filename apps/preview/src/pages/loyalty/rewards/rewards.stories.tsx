@@ -1,4 +1,5 @@
 import { Footer } from "@grade10/design-system/components/layout/footer";
+import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
   RewardCheckout,
   RewardMenu,
@@ -8,13 +9,15 @@ import {
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import {
   MEMBERSHIP_VIEW,
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   REWARDS,
+  SOLD_OUT_COPY,
+  SOLD_OUT_REWARDS,
 } from "../loyalty-content";
 
 const REWARDS_PAGE_COPY = {
@@ -33,6 +36,7 @@ function RewardsPage() {
   const [selected, setSelected] = useState<RewardMenuItem | null>(null);
   const [open, setOpen] = useState(false);
   const [redemption, setRedemption] = useState<RewardRedemption | null>(null);
+  const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
   /* The surface stays mounted once opened — only `open` flips — so the
@@ -46,6 +50,15 @@ function RewardsPage() {
     const cost = reward.pointCost;
     setPending(true);
     setTimeout(() => {
+      if (SOLD_OUT_REWARDS.has(reward.id)) {
+        /* The surface closes itself on a refusal; the page raises it. */
+        setPending(false);
+        setFailure(SOLD_OUT_COPY.title);
+        toast.error(SOLD_OUT_COPY.title, {
+          description: SOLD_OUT_COPY.description,
+        });
+        return;
+      }
       setBalance(left);
       setRedemption(
         reward.kind === "coupon"
@@ -71,6 +84,7 @@ function RewardsPage() {
     if (reward) {
       setSelected(reward);
       setRedemption(null);
+      setFailure(null);
       setPending(false);
       setOpen(true);
     }
@@ -98,10 +112,12 @@ function RewardsPage() {
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
+      <Toast position="bottom-right" />
       {selected ? (
         <RewardCheckout
           balance={balance}
           copy={REWARD_CHECKOUT_COPY}
+          failure={failure}
           onDone={close}
           onOpenChange={(next) => {
             if (!next) close();
@@ -140,5 +156,28 @@ export const Default: Story = {
     expect(
       document.body.querySelector('[data-slot="reward-checkout"]'),
     ).not.toBeInTheDocument();
+  },
+};
+
+/** The reward that ran out: the sheet refuses, closes itself, and the page
+ * raises the run-out toast. */
+export const SoldOut: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /UV slab sleeves/ }),
+    );
+    const overlay = within(document.body);
+    await userEvent.click(
+      await overlay.findByRole("button", { name: "Redeem for 300 pts" }),
+    );
+    expect(
+      await overlay.findByText("This reward just ran out"),
+    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        document.body.querySelector('[data-sheet="reward-checkout"]'),
+      ).not.toBeInTheDocument(),
+    );
   },
 };

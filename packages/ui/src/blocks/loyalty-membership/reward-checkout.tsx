@@ -82,7 +82,8 @@ type RewardCheckoutProps = {
   redemption?: RewardRedemption;
   /** The programme is settling the redemption. */
   pending?: boolean;
-  /** The last redemption's refusal, member-worded. */
+  /** The redemption's refusal, member-worded — the reward is gone. Its
+   * arrival closes the surface; the consumer raises it outside (a toast). */
   failure?: string | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -119,11 +120,16 @@ function RewardCheckout({
 }: RewardCheckoutProps) {
   const smUp = useSmUp();
 
+  /* A refusal means the reward is gone — the surface has nothing to show;
+   * close it and let the consumer raise the message. */
+  useEffect(() => {
+    if (open && failure) onOpenChange(false);
+  }, [open, failure, onOpenChange]);
+
   const body = (
     <RewardCheckoutBody
       balance={balance}
       copy={copy}
-      failure={failure}
       onDone={onDone}
       onOpenChange={onOpenChange}
       onRedeem={onRedeem}
@@ -196,7 +202,6 @@ function RewardCheckoutBody({
   balance,
   redemption,
   pending,
-  failure,
   onRedeem,
   onDone,
   onOpenChange,
@@ -210,7 +215,6 @@ function RewardCheckoutBody({
   balance: number;
   redemption?: RewardRedemption;
   pending: boolean;
-  failure?: string | null;
   onRedeem: () => void;
   onDone?: () => void;
   onOpenChange: (open: boolean) => void;
@@ -358,11 +362,6 @@ function RewardCheckoutBody({
           </Text>
         )}
       </HStack>
-      {failure ? (
-        <Text as="p" role="alert" size="sm" tone="error">
-          {failure}
-        </Text>
-      ) : null}
       {smUp ? (
         <DialogFooter>
           <Button

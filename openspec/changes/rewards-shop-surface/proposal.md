@@ -40,8 +40,11 @@ the collection line a good carries.
   discount coupon's ticket carries the unique code minted at redemption, a
   good's carries its collect-by and the collect-in-store line and no code
   and no apply.
+- `RewardItem` joins the exports — the card `RewardMenu` draws per reward,
+  on its own for consumers that place one outside the menu.
 - `RewardCheckoutCopy`, `RewardCheckoutProps`, `RewardRedemption`,
-  `RewardCheckoutReward` join the type exports; `RewardMenuItem` gains
+  `RewardCheckoutReward`, `RewardItemProps` join the type exports;
+  `RewardMenuItem` gains
   `kind`, `description`, `image`, `deadline`, `useAt` and `validFor` and
   loses `maxQuantity`, `validity`, `limits` and `collectionWindow`.
 - A reward coupon now carries a member-readable code: minted once, unique

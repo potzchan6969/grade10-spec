@@ -445,6 +445,10 @@ export {
   type RewardCheckoutProps,
 } from "./blocks/loyalty-membership/reward-checkout";
 export {
+  RewardItem,
+  type RewardItemProps,
+} from "./blocks/loyalty-membership/reward-item";
+export {
   RewardMenu,
   type RewardMenuCopy,
   type RewardMenuProps,

@@ -5,7 +5,7 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { Toast } from "@grade10/design-system/components/overlays/toast";
+import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
   ActivityList,
   CouponList,
@@ -41,6 +41,8 @@ import {
   type MembershipView,
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
+  SOLD_OUT_COPY,
+  SOLD_OUT_REWARDS,
   TIER_CARD_COPY,
   WALLET_PASS_COPY,
 } from "../loyalty-content";
@@ -68,6 +70,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
   const [selected, setSelected] = useState<RewardMenuItem | null>(null);
   const [open, setOpen] = useState(false);
   const [redemption, setRedemption] = useState<RewardRedemption | null>(null);
+  const [failure, setFailure] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
   /* The surface stays mounted once opened — only `open` flips — so the
@@ -80,6 +83,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
     if (reward) {
       setSelected(reward);
       setRedemption(null);
+      setFailure(null);
       setPending(false);
       setOpen(true);
     }
@@ -98,6 +102,15 @@ function MembershipPage({ view }: { view: MembershipView }) {
     };
     setPending(true);
     setTimeout(() => {
+      if (SOLD_OUT_REWARDS.has(reward.id)) {
+        /* The surface closes itself on a refusal; the page raises it. */
+        setPending(false);
+        setFailure(SOLD_OUT_COPY.title);
+        toast.error(SOLD_OUT_COPY.title, {
+          description: SOLD_OUT_COPY.description,
+        });
+        return;
+      }
       setBalance(left);
       setIssued((value) => value + 1);
       setCoupons((prev) => ({
@@ -267,6 +280,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
         <RewardCheckout
           balance={balance}
           copy={REWARD_CHECKOUT_COPY}
+          failure={failure}
           onDone={closeCheckout}
           onOpenChange={(next) => {
             if (!next) closeCheckout();

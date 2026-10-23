@@ -225,7 +225,26 @@ const REWARDS: RewardMenuItem[] = [
     useAt: "Grade10 store",
     validFor: "30 days from redemption",
   },
+  {
+    id: "uv-sleeves",
+    kind: "item",
+    name: "UV slab sleeves",
+    description: "Shield fifty graded slabs from light.",
+    pointCost: 300,
+    image: { src: REWARD_IMAGE, alt: "A pack of UV slab sleeves" },
+    useAt: "Grade10 store",
+    validFor: "30 days from redemption",
+  },
 ];
+
+/** Stand-in availability: these rewards have run out; redeeming one is
+ * refused and the surface closes. */
+const SOLD_OUT_REWARDS: ReadonlySet<string> = new Set(["uv-sleeves"]);
+
+const SOLD_OUT_COPY = {
+  title: "This reward just ran out",
+  description: "No points were taken. Pick another reward.",
+};
 
 const COUPONS: CouponItem[] = [
   {
@@ -445,6 +464,8 @@ export {
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   REWARDS,
+  SOLD_OUT_COPY,
+  SOLD_OUT_REWARDS,
   TIER_BENEFITS,
   TIER_BENEFITS_PAGE_COPY,
   TIER_CARD_COPY,

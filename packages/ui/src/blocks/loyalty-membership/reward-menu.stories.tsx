@@ -36,7 +36,7 @@ export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const cards = canvas.getAllByRole("button");
-    expect(cards).toHaveLength(3);
+    expect(cards).toHaveLength(4);
     expect(
       canvasElement.querySelectorAll('[data-slot="reward-art-coupon"]'),
     ).toHaveLength(1);

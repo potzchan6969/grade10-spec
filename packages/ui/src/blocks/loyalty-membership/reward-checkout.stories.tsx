@@ -103,20 +103,15 @@ export const Redeeming: Story = {
   },
 };
 
-/** The settling redemption draws the button busy; the refusal reads under it. */
+/** A refusal means the reward is gone: the surface asks to close and the
+ * consumer raises the message outside it. */
 export const RedemptionFailed: Story = {
   args: {
     reward: COUPON,
     failure: "This reward has just run out.",
   },
-  play: async () => {
-    const canvas = sheet();
-    expect(canvas.getByRole("alert")).toHaveTextContent(
-      "This reward has just run out.",
-    );
-    expect(
-      canvas.getByRole("button", { name: "Redeem for 500 pts" }),
-    ).toBeEnabled();
+  play: async ({ args }) => {
+    await waitFor(() => expect(args.onOpenChange).toHaveBeenCalledWith(false));
   },
 };
 

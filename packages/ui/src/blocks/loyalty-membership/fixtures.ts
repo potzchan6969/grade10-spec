@@ -48,6 +48,16 @@ const REWARDS: RewardMenuItem[] = [
     useAt: "Grade10 store",
     validFor: "30 days from redemption",
   },
+  {
+    id: "uv-sleeves",
+    kind: "item",
+    name: "UV slab sleeves",
+    description: "Shield fifty graded slabs from light.",
+    pointCost: 300,
+    image: { src: REWARD_IMAGE, alt: "A pack of UV slab sleeves" },
+    useAt: "Grade10 store",
+    validFor: "30 days from redemption",
+  },
 ];
 
 const COUPONS: CouponItem[] = [

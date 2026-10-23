@@ -55,8 +55,8 @@ mints for that coupon's spend: claiming mints and deactivates per sale as
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the membership surface — `MembershipSummary`, `RewardMenu`,
-`RewardCheckout`, `CouponList`, and `ActivityList` — and the props and copy
-type of each.
+`RewardItem`, `RewardCheckout`, `CouponList`, and `ActivityList` — and the
+props and copy type of each.
 
 `MembershipSummary` SHALL render the two counts as two counts, never one
 total, alongside the tier held, the date its validity ends, and progress
@@ -74,7 +74,9 @@ judged against the balance the consumer supplies, never derived. A
 redemption SHALL always be one unit: the menu SHALL offer no quantity
 control. A money-off reward's card SHALL still state its own validity period,
 and state what its coupon cannot be spent without — the basket it has to
-reach, and the one channel it is good at, where it is good at only one.
+reach, and the one channel it is good at, where it is good at only one. The
+card `RewardMenu` draws per reward SHALL be the exported `RewardItem`, which
+consumers may place outside the menu.
 `RewardCheckout` SHALL draw the checkout surface as a bottom sheet under
 640px and as a dialog from 640px up. On the dialog the actions sit on the
 trailing edge behind a Cancel, not stretched across the surface; on the
@@ -82,7 +84,9 @@ sheet the redeem action spans it. In its confirm phase it SHALL restate
 the reward — its hero, the deadline where named, the name and description —
 name where the coupon is spendable and how long it is good for, as supplied,
 show the balance before and after the cost, and refuse a short balance
-whole with the readout in the warning tone. Given a redemption it SHALL
+whole with the readout in the warning tone. A refusal the reward is gone
+for SHALL close the surface — the refusal is raised outside it. Given a
+redemption it SHALL
 draw the redeemed phase in the same surface: the member-readable code a
 discount coupon's ticket carries, the collection a good's ticket names, and
 no code on it. The surface SHALL offer no Apply action — applying a coupon
@@ -191,3 +195,12 @@ SHALL require no export of its own.
 - **THEN** the coupon's ticket carries the unique code the redemption minted
 - **AND** the good's ticket names the collection with no code
 - **AND** neither draws an Apply action
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-t8c rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-269 - A run-out refusal closes the surface
+**Serves:** grade10-site-loyalty-programme-US-12 - Member browses the shop, confirms the cost and sees the redemption
+
+- **GIVEN** the reward ran out — the consumer passes the refusal
+- **WHEN** the confirm phase renders
+- **THEN** the surface asks to close
+- **AND** the refusal is raised outside the surface

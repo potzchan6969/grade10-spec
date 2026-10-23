@@ -1,14 +1,10 @@
-import { Card } from "@grade10/design-system/components/display/card";
 import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
-import { Text } from "@grade10/design-system/components/display/text";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { ClockCountdown } from "@phosphor-icons/react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
-import { RewardArt } from "./reward-art";
+import { RewardItem } from "./reward-item";
 import type { RewardMenuItem } from "./types";
 
 /** The words the menu says, whatever rewards are on it. */
@@ -70,7 +66,7 @@ function RewardMenu({
         <List aria-label={copy.label}>
           {state.data.map((item) => (
             <ListItem className="px-0 py-2" divider={false} key={item.id}>
-              <RewardCard
+              <RewardItem
                 affordable={item.pointCost <= balance}
                 item={item}
                 onSelect={onSelect}
@@ -82,71 +78,6 @@ function RewardMenu({
         </List>
       ) : null}
     </VStack>
-  );
-}
-
-function RewardCard({
-  item,
-  affordable,
-  onSelect,
-  pointCount,
-  points,
-}: {
-  item: RewardMenuItem;
-  affordable: boolean;
-  onSelect: (rewardId: string) => void;
-  pointCount: (points: number) => string;
-  points: string;
-}) {
-  return (
-    <Card className="w-full border-border" padding={false}>
-      <button
-        className="flex w-full cursor-pointer items-center gap-4 p-4 text-left transition-colors hover:bg-background-subtle"
-        data-affordable={affordable}
-        data-slot="reward-menu-item"
-        onClick={() => onSelect(item.id)}
-        type="button"
-      >
-        <RewardArt className="size-16 shrink-0" reward={item} />
-        <VStack className="min-w-0 flex-1" gap="xs">
-          <VStack gap="none">
-            <Text weight="medium">{item.name}</Text>
-            {item.description ? (
-              <Text
-                className="line-clamp-2 text-secondary-foreground"
-                size="xs"
-              >
-                {item.description}
-              </Text>
-            ) : null}
-          </VStack>
-          {item.deadline ? (
-            <HStack data-slot="reward-menu-deadline" gap="xs" vAlign="center">
-              <span className="shrink-0 text-accent-foreground">
-                <ClockCountdown aria-hidden size={14} />
-              </span>
-              <Text
-                className="text-accent-foreground"
-                size="xs"
-                weight="medium"
-              >
-                {item.deadline}
-              </Text>
-            </HStack>
-          ) : null}
-        </VStack>
-        <VStack
-          className="shrink-0 items-end justify-center text-right"
-          data-slot="reward-menu-price"
-          gap="none"
-        >
-          <Text className="font-semibold">{pointCount(item.pointCost)}</Text>
-          <Text className="text-secondary-foreground" size="sm">
-            {points}
-          </Text>
-        </VStack>
-      </button>
-    </Card>
   );
 }
 
