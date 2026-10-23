@@ -4,3 +4,4 @@ depends_on:
   - usd-lot-currency-winner-settlement-choice
 hands:
   dev: "@htonyl"
+  pm: "@htonyl"
