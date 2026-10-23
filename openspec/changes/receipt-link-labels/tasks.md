@@ -8,9 +8,9 @@
 
 ## 2. Consumption (grade10) (owner: @htonyl)
 
-- [ ] 2.1 Supply each receipt's `label` and `ariaLabel` — `Receipt #<id> (<issued>)` / `… PDF` — oldest issued first, `Receipt` for a record with no ID (`winner-order-SC-307`, `winner-order-SC-308`)
-- [ ] 2.2 Retire `receiptNumbered` and `receiptNumberedPdf` (`Receipt · P{n}`) from `@grade10/i18n` `auctionOrders.json`
-- [ ] 2.3 Verify: the page suite covering `winner-order-US2-TC57` and `winner-order-US2-TC58`
+- [x] 2.1 Supply each receipt's `label` and `ariaLabel` — `Receipt #<id> (<issued>)` / `… PDF` — oldest issued first, `Receipt` for a record with no ID (`winner-order-SC-307`, `winner-order-SC-308`)
+- [x] 2.2 Retire `receiptNumbered` and `receiptNumberedPdf` (`Receipt · P{n}`) from `@grade10/i18n` `auctionOrders.json`
+- [x] 2.3 Verify: the page suite covering `winner-order-US2-TC57` and `winner-order-US2-TC58`
 
 ## 3. The walk — Winner Order (grade10)
 
