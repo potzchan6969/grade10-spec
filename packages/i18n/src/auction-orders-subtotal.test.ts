@@ -10,9 +10,12 @@ const EXPECTED_SUBTOTAL = {
 } as const;
 
 describe("winner order Subtotal label", () => {
-  it.each(locales)("answers winner.subtotal for %s", (locale) => {
-    expect(sharedCatalogs[locale].auctionOrders.winner.subtotal).toBe(
-      EXPECTED_SUBTOTAL[locale],
-    );
-  });
+  it.each(locales)(
+    "winner-order-SC-290 - answers winner.subtotal for %s",
+    (locale) => {
+      expect(sharedCatalogs[locale].auctionOrders.winner.subtotal).toBe(
+        EXPECTED_SUBTOTAL[locale],
+      );
+    },
+  );
 });

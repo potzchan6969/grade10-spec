@@ -249,7 +249,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(lotCard?.textContent).toContain("Winning bid: US$101.00");
   });
 
-  it("g10.shared-auction-order.SC1 - renders the Subtotal and fee rows between two separators, then the total", () => {
+  it("winner-order-SC-304 and g10.shared-auction-order.SC1 - renders the Subtotal and fee rows between two separators, then the total", () => {
     const { container } = mount({
       summary: {
         ...BASE_PROPS.summary,
@@ -311,6 +311,31 @@ describe("AuctionWinnerOrder settlement presentation", () => {
       summaryRow(container, "Payment Processing FeeHK$38.69"),
     ).not.toBeUndefined();
     expect(summaryRow(container, "Order TotalHK$1,068.69")).not.toBeUndefined();
+  });
+
+  it("winner-order-SC-290 - reads an HKD order's USD lines, the Subtotal with its note, a Free fee and the HKD total with no USD total", () => {
+    const note = "Converted from US$131.21 at 1 USD = 7.85 HKD";
+    const { container } = mount({
+      summary: {
+        ...BASE_PROPS.summary,
+        subtotal: { label: "Subtotal", value: "HK$1,030.00", footnote: note },
+        feeLines: [{ label: "Payment Processing Fee", value: "Free" }],
+        total: { label: "Order Total", value: "HK$1,030.00" },
+      },
+    });
+
+    expect(summaryRowText(container)).toEqual([
+      "Winning BidUS$101.00",
+      "Buyer's PremiumUS$20.20",
+      "Shipping & HandlingUS$10.01",
+      `SubtotalHK$1,030.00${note}`,
+      "Payment Processing FeeFree",
+      "Order TotalHK$1,030.00",
+    ]);
+    expect(
+      within(container).getByRole("complementary").querySelectorAll("hr"),
+    ).toHaveLength(2);
+    expect(within(container).queryByText("US$131.21")).toBeNull();
   });
 
   it("g10.shared-auction-order.SC4 - draws each prop on its own", () => {
@@ -386,7 +411,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     ]);
   });
 
-  it("shared-ui-auction-order-SC-28 and g10.shared-auction-order.SC3 - keeps a USD order to one total line, one separator and no Subtotal row", () => {
+  it("winner-order-SC-291 and shared-ui-auction-order-SC-28 and g10.shared-auction-order.SC3 - keeps a USD order to one total line, one separator and no Subtotal row", () => {
     const { container } = mount();
 
     const canvas = within(container);
@@ -398,6 +423,10 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     ]);
     expect(canvas.queryByText("HK$1,031.00")).toBeNull();
     expect(canvas.queryByText("Subtotal")).toBeNull();
+    expect(canvas.queryByText(/HK\$/)).toBeNull();
+    expect(
+      container.querySelectorAll('[data-slot="winner-order-summary-footnote"]'),
+    ).toHaveLength(0);
     expect(
       within(container).getByRole("complementary").querySelectorAll("hr"),
     ).toHaveLength(1);
