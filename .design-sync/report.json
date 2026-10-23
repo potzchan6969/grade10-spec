@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T07:47:17.892Z",
+  "generatedAt": "2026-10-23T02:39:32.717Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -92,7 +92,8 @@
     "Radio List": "skipped",
     "Radio List Item": "skipped",
     "Reward / Checkout Point Balance": "warn",
-    "Reward / Item": "warn",
+    "Reward / Item / Media": "warn",
+    "Reward Item": "warn",
     "Search Input": "skipped",
     "Segmented Control": "skipped",
     "Segmented Control Item": "skipped",
@@ -989,9 +990,7 @@
     "7227-863": "Tier Info Card",
     "7229-7427": "How Points Work",
     "7250-1607": "Tiers & Benefits (small vp)",
-    "7254-2284": "Reward / Item",
-    "7254-2285": "Reward / Item",
-    "7254-2286": "Reward / Item",
+    "7254-2284": "Reward Item",
     "7254-2460": "Rewards Checkout (Item)",
     "7254-257": "Tier Ladder",
     "7254-384": "Tier Ladder",
@@ -1020,6 +1019,10 @@
     "7276-2728": "AttachmentMedia",
     "7276-2735": "Attachment",
     "7276-2761": "Attachment",
+    "7330-1081": "Reward / Item / Media",
+    "7330-1082": "Reward / Item / Media",
+    "7330-1083": "Reward / Item / Media",
+    "7330-1087": "Reward Item",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1190,8 +1193,11 @@
     "Reward / Checkout Point Balance": [
       "Reward / Checkout Point Balance: no code component (looked for src/components/**/rewardcheckoutpointbalance.tsx or checkoutpointbalance.tsx)"
     ],
-    "Reward / Item": [
-      "Reward / Item: no code component (looked for src/components/**/rewarditem.tsx or item.tsx)"
+    "Reward / Item / Media": [
+      "Reward / Item / Media: no code component (looked for src/components/**/rewarditemmedia.tsx or media.tsx)"
+    ],
+    "Reward Item": [
+      "Reward Item: no code component (looked for src/components/**/rewarditem.tsx or rewarditem.tsx)"
     ],
     "Stat": [
       "Stat: no code component (looked for src/components/**/stat.tsx or stat.tsx)"
