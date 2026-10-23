@@ -85,7 +85,6 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - 2026-10-05, grade10-site/auction/bid-payment-method/feature-tcs.md: An expected result does not quote product copy. The spec's sentence is not assumed to match the product's words, so the result names the outcome.
 - **Before** — step `1. The user is able to open the store front door successfully.`, result `The front door renders successfully, with the marketing hero visible immediately, and both buttons work.`
 - **After** — steps `1. Navigate to <grade10 store url>.` `2. Click the shop button in the hero.` `3. Click the auction button in the hero.`, results `Front door renders, hero visible.` `Both buttons open their destinations without JavaScript.`
-- 2026-09-25, grade10-site/auction/auction/feature-tcs.md: When the case layer is `api` and the spec names a read as a contract, the step says `Read the API response`, not the spec's contract name.
 - 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: A step that enters a payment card names a **Test data** placeholder holding the provider's test value, never "a card".
 - 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: A step that changes a value on file enters a value different from the one on file, so the change is observable.
 
@@ -120,7 +119,7 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 
 ### Classification starting shapes
 
-Read the case against **Step 5: Classify the Case** in [Specs to Test Cases](specs-to-test-cases.md#step-5-classify-the-case). Presentation, code logic and a core-flow label do not determine its classification. A case run through the interface uses `e2e`; one suitable for both a script and a human uses `automation, manual`.
+Read the case against **Step 5: Classify the Case** in [Specs to Test Cases](specs-to-test-cases.md#step-5-classify-the-case). Presentation, code logic and a core-flow label do not determine its classification. One suitable for both a script and a human uses `automation, manual`.
 
 ## Setup Recipes
 

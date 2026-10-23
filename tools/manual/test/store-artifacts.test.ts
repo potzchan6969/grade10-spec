@@ -80,7 +80,6 @@ const ALPHA_CASES = [
   "- **Status:** draft",
   "- **Behaviour:** positive",
   "- **Type:** smoke",
-  "- **Layer:** e2e",
   "- **Automation status:** manual",
   "- **Testability:** automation",
   "- **Trace:** alpha-SC-01",

@@ -103,9 +103,16 @@ const AUTOMATION_STATUSES: ReadonlySet<AutomationStatus> = new Set([
   "manual",
   "automated",
 ]);
-/** The scenarios a suite deliberately leaves uncovered: a labelled list at
- * column 0, inline after the label or as bullets beneath it. */
-const OUT_OF_SUITE = /^\*\*Out of suite:\*\*(.*)$/;
+/** The scenarios QA does not test: a labelled list at column 0, inline after
+ * the label or as bullets beneath it, one label per category (tcs-rules r7). */
+const OUT_OF_SUITE = /^\*\*Out of suite(?: \(([^)]*)\))?:\*\*(.*)$/;
+/** The categories `docs/governance/specs-to-test-cases.md` defines. */
+export const OUT_OF_SUITE_CATEGORIES: ReadonlySet<string> = new Set([
+  "api",
+  "unit",
+  "non-GUI",
+  "seo",
+]);
 const BULLET = /^\s*[-*]\s+/;
 
 export function discoverSpecs(root: string): SpecShape {
@@ -202,6 +209,8 @@ function readSpec(
       entry.testCases = suite.cases;
       entry.testCasesStatus = suite.status;
       if (suite.outOfSuite.length > 0) entry.outOfSuite = suite.outOfSuite;
+      if (suite.outOfSuiteMislabelled.length > 0)
+        entry.outOfSuiteMislabelled = suite.outOfSuiteMislabelled;
     } catch (cause) {
       entry.testCasesError = toItemError(casesPath, cause);
     }
@@ -491,9 +500,12 @@ function readScenario(section: Section): Scenario {
 export type TestSuite = {
   status: TestSuiteStatus;
   cases: TestCase[];
-  /** `**Out of suite:**` ids — scenarios the suite leaves uncovered on
-   * purpose, so what remains untraced is always a real hole. */
+  /** `**Out of suite (<category>):**` ids — scenarios QA does not test, so
+   * what remains untraced is always a real hole. */
   outOfSuite: string[];
+  /** Out-of-suite labels with no category, or one the rules do not define,
+   * as written: `**Out of suite:**`, `**Out of suite (backend):**`. */
+  outOfSuiteMislabelled: string[];
 };
 
 /** `docs/governance/specs-to-test-cases.md`: journeys are `##` sections,
@@ -533,39 +545,67 @@ export function readTestCases(text: string): TestSuite {
     found.map(({ section, id }) => ({ id, line: section.line })),
   );
 
-  return { status, cases, outOfSuite: outOfSuite(text) };
+  return {
+    status,
+    cases,
+    outOfSuite: outOfSuite(text),
+    outOfSuiteMislabelled: outOfSuiteMislabelled(text),
+  };
 }
 
-/** The `**Out of suite:**` list, read from the text rather than the outline:
- * it sits inside a section's body, and ends at the blank line after its last
- * entry. */
+/** Out-of-suite labels that list at least one scenario but name no category
+ * the rules define, written back as the reader would see them. A label that
+ * lists nothing — `**Out of suite:** none` — has nothing to categorise. */
+function outOfSuiteMislabelled(text: string): string[] {
+  return outOfSuiteLists(text)
+    .filter(
+      ({ category, ids }) =>
+        ids.length > 0 &&
+        (category === undefined || !OUT_OF_SUITE_CATEGORIES.has(category)),
+    )
+    .map(({ category }) =>
+      category === undefined
+        ? "**Out of suite:**"
+        : `**Out of suite (${category}):**`,
+    );
+}
+
+/** Every out-of-suite id, whatever its label says. */
 function outOfSuite(text: string): string[] {
-  const ids = new Set<string>();
-  let listing = false;
+  return [...new Set(outOfSuiteLists(text).flatMap(({ ids }) => ids))];
+}
+
+/** The out-of-suite lists, read from the text rather than the outline: each
+ * sits inside a section's body, and ends at the blank line after its last
+ * entry. */
+function outOfSuiteLists(
+  text: string,
+): { category: string | undefined; ids: string[] }[] {
+  const lists: { category: string | undefined; ids: string[] }[] = [];
+  let current: { category: string | undefined; ids: string[] } | undefined;
   let started = false;
 
   for (const line of text.split("\n")) {
     const out = OUT_OF_SUITE.exec(line);
     if (out) {
-      const inline = scenarioIdsIn(out[1]);
-      for (const id of inline) ids.add(id);
-      listing = true;
-      started = inline.length > 0;
+      current = { category: out[1], ids: scenarioIdsIn(out[2]) };
+      lists.push(current);
+      started = current.ids.length > 0;
       continue;
     }
-    if (!listing) continue;
+    if (!current) continue;
     if (line.trim() === "") {
-      if (started) listing = false;
+      if (started) current = undefined;
       continue;
     }
     if (!BULLET.test(line)) {
-      listing = false;
+      current = undefined;
       continue;
     }
     started = true;
-    for (const id of scenarioIdsIn(line)) ids.add(id);
+    current.ids.push(...scenarioIdsIn(line));
   }
-  return [...ids];
+  return lists;
 }
 
 /**

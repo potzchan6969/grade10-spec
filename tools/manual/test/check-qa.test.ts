@@ -78,7 +78,7 @@ const suiteText = ({
     `**Status:** ${status}`,
     "",
     ...(outOfSuite.length > 0
-      ? [`**Out of suite:** ${outOfSuite.join(", ")}`, ""]
+      ? [`**Out of suite (api):** ${outOfSuite.join(", ")}`, ""]
       : []),
     "## alpha-US1: Someone does the thing",
     "",
@@ -247,7 +247,7 @@ describe("scenarios no case traces", () => {
   it("warns naming each untraced id", async () => {
     const root = store({ spec: two, cases: suiteText() });
     expect(lines(await check(root), "coverage")).toEqual([
-      `${CASES_FILE} — no case traces alpha-SC-02 — cover them, or list them under \`**Out of suite:**\``,
+      `${CASES_FILE} — no case traces alpha-SC-02 — cover them with a GUI case, or list them under \`**Out of suite (<category>):**\``,
     ]);
   });
 
@@ -257,6 +257,21 @@ describe("scenarios no case traces", () => {
       cases: suiteText({ outOfSuite: ["alpha-SC-02"] }),
     });
     expect(lines(await check(root), "coverage")).toEqual([]);
+  });
+
+  it("refuses an out-of-suite label with no category", async () => {
+    const root = store({
+      spec: two,
+      cases: suiteText().replace(
+        "## alpha-US1",
+        "**Out of suite:** alpha-SC-02\n\n## alpha-US1",
+      ),
+    });
+    const result = await check(root);
+    expect(lines(result, "coverage")).toEqual([]);
+    expect(lines(result, "out-of-suite")).toEqual([
+      `${CASES_FILE} — \`**Out of suite:**\` names no category QA can read — write \`**Out of suite (api):**\`, \`(unit)\`, \`(non-GUI)\` or \`(seo)\`, or cover the scenarios with a GUI case`,
+    ]);
   });
 
   it("warns on an out-of-suite id a case does trace", async () => {
@@ -359,7 +374,7 @@ describe("a case tracing the anchor it walks", () => {
       }),
     });
     expect(lines(await check(root), "coverage")).toEqual([
-      `${CASES_FILE} — no case traces alpha-SC-02 — cover them, or list them under \`**Out of suite:**\``,
+      `${CASES_FILE} — no case traces alpha-SC-02 — cover them with a GUI case, or list them under \`**Out of suite (<category>):**\``,
     ]);
   });
 });
@@ -374,7 +389,7 @@ describe("coverage when a scenario loses its last living case", () => {
       }),
     });
     expect(lines(await check(root), "coverage")).toEqual([
-      `${CASES_FILE} — no case traces alpha-SC-01 — cover them, or list them under \`**Out of suite:**\``,
+      `${CASES_FILE} — no case traces alpha-SC-01 — cover them with a GUI case, or list them under \`**Out of suite (<category>):**\``,
     ]);
   });
 

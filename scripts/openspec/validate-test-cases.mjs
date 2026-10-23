@@ -677,6 +677,11 @@ function checkSuite(root, filePath, rulesRev, allCases) {
             `case \`${tc.id}\` has **${name}:** \`${raw}\` — expected one of ${vocab.join(", ")}`,
           );
       }
+      if (tc.layerLine !== undefined)
+        err(
+          tc.layerLine + 1,
+          `case \`${tc.id}\` carries a **Layer:** line — every case is a GUI walk (tcs-rules r7); delete the line, or delete the case if no product user can see what it checks`,
+        );
       const order = tc.propOrder.filter((n) =>
         PROPERTIES.some(([p]) => p === n),
       );
@@ -1244,7 +1249,8 @@ for (const p of suites) {
 // suite does not name anywhere, was most likely left behind at the fold -
 // the carry gate that now refuses it did not exist then. A human decides each
 // one; a case found to be replaced is named in the durable suite, one line,
-// and the warning stops.
+// and the warning stops. An archived `api` or `unit` case is not left behind:
+// tcs-rules r7 deleted every one, since every case is now a GUI walk.
 {
   const unversioned = (id) => id.replace(/(-TC\d+)-\d+$/, "$1");
   const live = new Set(
@@ -1276,9 +1282,10 @@ for (const p of suites) {
       new RegExp(
         `${unversioned(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?!\\d)`,
       ).test(named);
-    const left = [...caseIndex(ROOT, [file]).keys()].filter(
-      (id) => !live.has(unversioned(id)) && !namedHere(id),
-    );
+    const left = [...caseIndex(ROOT, [file])]
+      .filter(([, one]) => one.layer !== "api" && one.layer !== "unit")
+      .map(([id]) => id)
+      .filter((id) => !live.has(unversioned(id)) && !namedHere(id));
     if (left.length === 0) continue;
     const shown = left
       .slice(0, 5)

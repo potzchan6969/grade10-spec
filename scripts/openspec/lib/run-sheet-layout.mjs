@@ -40,7 +40,6 @@ export const FILTER_COLUMNS = [
   "Domain",
   "Capability",
   "Level",
-  "Layer",
   "Severity",
   "Priority",
 ];
@@ -90,7 +89,6 @@ export const COLUMN_WIDTHS = {
   Domain: 110,
   Capability: 150,
   Level: 80,
-  Layer: 80,
   Severity: 90,
   Priority: 80,
 };

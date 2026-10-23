@@ -71,7 +71,6 @@ export const PROPERTIES = [
     true,
     true,
   ],
-  ["Layer", ["e2e", "api", "unit"]],
   ["Automation status", ["manual", "automated"]],
   [
     "Testability",
@@ -884,9 +883,13 @@ export function parseSuite(text) {
           tc.propLine = i;
           if (line.startsWith("-"))
             suite.legacy.add("`-` property bullets (current format uses `*`)");
+        } else if (name === "Layer") {
+          // Removed in tcs-rules r7: every case is a GUI walk. Read so the
+          // validator can refuse it by name rather than skip it.
+          tc.layerLine = i;
         } else if (name === "Decided by") {
           // The line written as an eleventh classification bullet. It is not
-          // a property - the block is ten, and the line is its own - so it is
+          // a property - the block is nine, and the line is its own - so it is
           // read where it stands and reported as the older shape rather than
           // dropped, which is what a parse that only knew the ten did.
           readDecidedBy(tc, prop[2], i, { bullet: true });
@@ -1182,6 +1185,7 @@ export function caseIndex(root, paths) {
                 : null,
             traces: [],
             status: null,
+            layer: null,
           });
         continue;
       }
@@ -1191,6 +1195,11 @@ export function caseIndex(root, paths) {
       const st = line.match(/^\*\s+\*\*Status:\*\*\s*(\S+)\s*$/);
       if (st && id && index.has(id) && index.get(id).status === null)
         index.get(id).status = st[1].toLowerCase();
+      // Gone from live suites since tcs-rules r7; an archived suite still
+      // carries it, and an `api` or `unit` case there was deleted, not lost.
+      const ly = line.match(/^[*-]\s+\*\*Layer:\*\*\s*(\S+)\s*$/);
+      if (ly && id && index.has(id) && index.get(id).layer === null)
+        index.get(id).layer = ly[1].toLowerCase();
     }
   }
   return index;

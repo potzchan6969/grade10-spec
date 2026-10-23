@@ -32,7 +32,6 @@ const CASE = (n) =>
     "* **Behaviour:** positive",
     "* **Type:** functional",
     "* **Suites:** regression",
-    "* **Layer:** e2e",
     "* **Automation status:** manual",
     "* **Testability:** manual",
     "* **Trace:** demo-alpha-US-01",
@@ -138,6 +137,20 @@ test("a case under no journey heading is refused by name, not as a count mismatc
   assert.match(out, /`demo-alpha-US1-TC1-1` sits under no journey heading/);
 });
 
+test("a case carrying a Layer line is refused: every case is a GUI walk", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8").replace(
+    "* **Suites:** regression\n",
+    "* **Suites:** regression\n* **Layer:** api\n",
+  );
+  writeFileSync(file, text);
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.notEqual(result.status, 0, out);
+  assert.match(out, /`demo-alpha-US1-TC1-1` carries a \*\*Layer:\*\* line/);
+});
+
 test("an approved actual anchor-only case is not export-eligible", () => {
   const root = store("", []);
   const file = join(root, `${CHANGE}/feature-tcs.md`);
@@ -204,7 +217,6 @@ test("product and platform suites validate their scoped journeys and id prefixes
       "* **Behaviour:** positive",
       "* **Type:** integration",
       "* **Suites:** smoke",
-      "* **Layer:** e2e",
       "* **Automation status:** manual",
       "* **Testability:** manual",
       `* **Trace:** ${trace}`,
@@ -414,7 +426,6 @@ test("a platform walk resolves a full lower-level feature case id", () => {
     "* **Behaviour:** positive",
     "* **Type:** functional",
     "* **Suites:** regression",
-    "* **Layer:** e2e",
     "* **Automation status:** manual",
     "* **Testability:** manual",
     "* **Trace:** demo-alpha-US-01",
@@ -472,7 +483,6 @@ test("a platform walk resolves a full lower-level feature case id", () => {
     "* **Behaviour:** positive",
     "* **Type:** integration",
     "* **Suites:** smoke",
-    "* **Layer:** e2e",
     "* **Automation status:** manual",
     "* **Testability:** manual",
     "* **Trace:** demo-alpha-US-01, another-market-US-01",
@@ -728,7 +738,7 @@ test("a Covered at domain line resolves a modern domain heading id", () => {
 // Archived changes copied suites across without their cases before the carry
 // gate refused it. The validator warns on each archived case no live suite
 // holds under its id, `<v>` aside, and the durable suite does not name.
-test("warns on an archived case the fold left behind, and not on one held, re-versioned or named", () => {
+test("warns on an archived case the fold left behind, and not on one held, re-versioned, named or deleted under r7", () => {
   const root = mkdtempSync(join(tmpdir(), "archived-cases-"));
   const heading = (id) => `### ${id}: A case\n\n* **Status:** actual\n`;
   const files = {
@@ -753,6 +763,8 @@ test("warns on an archived case the fold left behind, and not on one held, re-ve
         heading("demo-alpha-US1-TC1-1"),
         heading("demo-alpha-US1-TC2-1"),
         heading("demo-alpha-US1-TC3-1"),
+        `${heading("demo-alpha-US1-TC4-1")}* **Layer:** api\n`,
+        `${heading("demo-alpha-US1-TC5-1")}* **Layer:** unit\n`,
       ].join("\n"),
   };
   for (const [name, content] of Object.entries(files)) {
@@ -760,7 +772,8 @@ test("warns on an archived case the fold left behind, and not on one held, re-ve
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, content);
   }
-  // TC2 is one line, not a prefix hit on TC20.
+  // TC2 is one line, not a prefix hit on TC20. TC4 and TC5 were `api` and
+  // `unit` cases, which tcs-rules r7 deleted: not left behind.
   const out = run(root).stdout;
   assert.match(
     out,

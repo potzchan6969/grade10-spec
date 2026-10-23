@@ -23,7 +23,6 @@ Grade10 keeps agreements, photos and case records for 2,555 days (7 years) after
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -64,7 +63,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -101,7 +99,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -147,7 +144,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -190,7 +186,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -229,7 +224,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -267,7 +261,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -310,7 +303,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -348,7 +340,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -387,7 +378,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -421,7 +411,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04

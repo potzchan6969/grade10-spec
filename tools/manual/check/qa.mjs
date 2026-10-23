@@ -99,6 +99,7 @@ function suiteOf(spec) {
     status: spec.testCasesStatus,
     cases: spec.testCases ?? [],
     outOfSuite: spec.outOfSuite ?? [],
+    outOfSuiteMislabelled: spec.outOfSuiteMislabelled ?? [],
   };
 }
 
@@ -183,6 +184,7 @@ function checkSuite(ctx, spec, dir) {
   checkTraces(ctx, file, spec, suite, issued, accepted);
   checkAuthority(ctx, file, suite);
   checkCoverage(ctx, file, spec, suite, issued, traced);
+  checkOutOfSuiteLabels(ctx, file, suite);
 
   if (!ctx.cased.has(spec.id)) {
     ctx.add(
@@ -224,9 +226,22 @@ function checkAuthority(ctx, file, suite) {
   );
 }
 
+/** RULE `out-of-suite`: out of suite means QA does not test it, and the
+ * category says why - `api`, `unit`, `non-GUI` or `seo` (tcs-rules r7). A
+ * label with no category, or another one, says nothing a reader can act on. */
+function checkOutOfSuiteLabels(ctx, file, suite) {
+  for (const label of suite.outOfSuiteMislabelled) {
+    ctx.add(
+      "out-of-suite",
+      file,
+      `\`${label}\` names no category QA can read — write \`**Out of suite (api):**\`, \`(unit)\`, \`(non-GUI)\` or \`(seo)\`, or cover the scenarios with a GUI case`,
+    );
+  }
+}
+
 /** RULE `coverage`: an untraced scenario is a hole in the suite, and a
- * number with no names is not a task. `**Out of suite:**` is how a hole is
- * closed deliberately, so what this reports is always work. */
+ * number with no names is not a task. `**Out of suite (<category>):**` is how
+ * a hole is closed deliberately, so what this reports is always work. */
 function checkCoverage(ctx, file, spec, suite, issued, traced) {
   for (const id of suite.outOfSuite) {
     const test = traced.get(id);
@@ -253,7 +268,7 @@ function checkCoverage(ctx, file, spec, suite, issued, traced) {
   ctx.add(
     "coverage",
     file,
-    `no case traces ${untraced.join(", ")} — cover them, or list them under \`**Out of suite:**\``,
+    `no case traces ${untraced.join(", ")} — cover them with a GUI case, or list them under \`**Out of suite (<category>):**\``,
   );
 }
 

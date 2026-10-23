@@ -410,7 +410,6 @@ export function caseRow({ read, tc }, fill = null) {
     Domain: domain,
     Capability: capability,
     Level: read.level,
-    Layer: prop(tc, "Layer"),
     Severity: prop(tc, "Severity"),
     Priority: prop(tc, "Priority"),
   };

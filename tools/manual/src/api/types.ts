@@ -141,10 +141,12 @@ export type SpecEntry = {
   unwalked?: boolean;
   testCases?: TestCase[];
   testCasesStatus?: TestSuiteStatus;
-  /** Scenario ids the suite deliberately leaves uncovered
-   * (`**Out of suite:**`) — subtracted from coverage, so the untraced
-   * count that remains is always actionable. */
+  /** Scenario ids QA does not test (`**Out of suite (<category>):**`) —
+   * subtracted from coverage, so the untraced count that remains is always
+   * actionable. */
   outOfSuite?: string[];
+  /** Out-of-suite labels with no category or an unknown one, as written. */
+  outOfSuiteMislabelled?: string[];
   /** Highest permanent id issued per kind, counting durable text, every
    * in-flight delta, and the archive — the number the next author must
    * clear, which the durable file's own ceiling understates. */

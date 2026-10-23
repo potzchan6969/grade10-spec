@@ -76,7 +76,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** demo-thing-widget-US-01
@@ -110,7 +109,6 @@ The user holds \`<a thing>\`.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** demo-thing-widget-US-01
@@ -135,7 +133,6 @@ The user holds \`<a thing>\`.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** demo-thing-widget-US-01
@@ -160,7 +157,6 @@ The user holds \`<a thing>\`.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** demo-thing-widget-US-01
@@ -374,7 +370,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** demo-thing-widget-US-02
@@ -412,7 +407,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** demo-thing-widget-US-02
@@ -455,7 +449,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** demo-thing-widget-US-02
@@ -495,7 +488,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** demo-thing-widget-US-02
@@ -528,7 +520,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** demo-thing-widget-US-02
@@ -844,7 +835,6 @@ test("a row carries the case, its prefilled results, and its filter axes", () =>
   assert.equal(at(row, "Product"), "demo");
   assert.equal(at(row, "Domain"), "thing");
   assert.equal(at(row, "Capability"), "widget");
-  assert.equal(at(row, "Layer"), "e2e");
   assert.equal(at(row, "Severity"), "blocker");
 });
 

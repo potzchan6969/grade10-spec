@@ -49,7 +49,6 @@ function caseSuite({
     "* **Behaviour:** positive",
     "* **Type:** functional",
     "* **Suites:** smoke",
-    "* **Layer:** e2e",
     `* **Automation status:** ${automation}`,
     "* **Testability:** automation",
     "* **Trace:** demo-alpha-US-01",
@@ -121,10 +120,10 @@ const inChange = (options) => run(store(CHANGE, options));
 test("shared-planning-agent-rounds-SC-78 - the line reaches `decidedBy` with its own line number", () => {
   const suite = parseSuite(caseSuite({ decidedBy: DECIDER }));
   const [tc] = suite.journeys[0].cases;
-  assert.deepEqual(tc.decidedBy, [{ path: DECIDER, line: 27 }]);
+  assert.deepEqual(tc.decidedBy, [{ path: DECIDER, line: 26 }]);
   assert.deepEqual(tc.decidedByLines, [
     {
-      line: 27,
+      line: 26,
       bullet: false,
       misplaced: false,
       empty: false,
@@ -190,7 +189,7 @@ test("shared-planning-agent-rounds-SC-78 - a line anywhere but after the block i
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(
     result.stdout,
-    /`demo-alpha-US1-TC1-1`'s `\*\*Decided by:\*\*` line sits at line 30, not directly after the classification block/,
+    /`demo-alpha-US1-TC1-1`'s `\*\*Decided by:\*\*` line sits at line 29, not directly after the classification block/,
   );
 });
 
@@ -199,7 +198,7 @@ test("shared-planning-agent-rounds-SC-78 - a second line is refused as repeated"
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(
     result.stdout,
-    /`demo-alpha-US1-TC1-1` carries a second `\*\*Decided by:\*\*` line at line 29/,
+    /`demo-alpha-US1-TC1-1` carries a second `\*\*Decided by:\*\*` line at line 28/,
   );
 });
 
