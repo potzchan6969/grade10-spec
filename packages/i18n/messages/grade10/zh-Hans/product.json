@@ -1,3 +1,8 @@
 {
-  "hongKongGrade10Store": "香港 Grade10 商店"
+  "hongKongGrade10Store": "香港 Grade10 商店",
+  "unknownProduct": {
+    "title": "找不到此商品",
+    "description": "请检查地址，或浏览商店查看现有商品。",
+    "browseStore": "浏览商店"
+  }
 }
