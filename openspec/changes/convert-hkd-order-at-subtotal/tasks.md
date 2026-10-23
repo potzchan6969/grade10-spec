@@ -29,7 +29,7 @@ The PDF blocks keep their contract but for one optional note on the Subtotal row
 - [ ] 4.3 Update `apps/preview/src/pages/auction/post-bidding/winner-order.invoice-pdf.stories.tsx`, `winner-order.receipt-pdf.stories.tsx` and `winner-order-content.ts` to the same lines and the same Subtotal note (`g10.auction-winner-order.SC3`, `g10.auction-winner-order.SC4`, `g10.auction-winner-order.SC16`, `g10.auction-winner-order.SC17`)
 - [ ] 4.4 Verify: `pnpm --filter @grade10/emails run test`, `tsc --project apps/preview/tsconfig.app.json`, `pnpm run lint`
 
-## 5. PRD pages (grade10-spec)
+## 5. PRD pages (grade10-spec) (owner: @seankcw)
 
 - [ ] 5.1 Verify the pages the change touches read as the closed rows of `decisions.md` settle them: the Amount marks line in `post-bidding.md` reads `US$` for an Order Summary USD line (Q20); the Close paragraph and the Letters table read that the Auction won letter names the winning bid in US$ (Q25); the Payment received row of the Letters table lists the receipt letter's lines (Q9); the `Invoices sent before this layout` row reads as Q12 decides, test data kept as stored; `management.md` reads `A sent HKD invoice` (Q29) and `internal-bid.md` reads `House order total` (Q30); run `Cut` from `docs/governance/writing.md` on any line added
 - [ ] 5.2 Verify: `pnpm check:manual` names no line of `post-bidding.md`, `management.md`, `internal-bid.md`, `auction/index.md` or `money-amounts.md`; the failures that already stand on main are not this change's
