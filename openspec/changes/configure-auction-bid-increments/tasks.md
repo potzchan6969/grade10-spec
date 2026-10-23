@@ -45,7 +45,7 @@ Needs groups 2 and 3 landed.
 - [ ] 5.2 Audit `opening-price`, `auction-bids`, `auction`, `account-record`, `bidding-history`, `internal-bid` and `phone` specs for literal tier-derived amounts, and move each to `plusIncrement` or the configuration (`g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-w8f`)
 - [ ] 5.3 Verify: the local e2e lane for the auction specs
 
-## 6. The walk (grade10)
+## 6. The walk (grade10) (owner: @htonyl)
 
 Uses draft `feature-tcs.md` as its planning input, and groups 1 to 5 landed.
 
