@@ -6775,7 +6775,7 @@ Runs once per row of **Test data**.
 **I want** the buyer's premium on my invoice to follow one published rule,
 **so that** I can check what I am charged on top of my winning bid.
 
-<!-- trace:case id=g10.auction-winner-order.TC-x85 rev=3 covers=g10.auction-winner-order.SC-zhu,g10.auction-winner-order.SC-b16,g10.auction-winner-order.SC-2mz -->
+<!-- trace:case id=g10.auction-winner-order.TC-x85 rev=3 covers=g10.auction-winner-order.SC-zhu,g10.auction-winner-order.SC-b16,g10.auction-winner-order.SC-2mz,g10.auction-winner-order.SC-30s,g10.auction-winner-order.SC-ml2 -->
 ### g10.auction-winner-order.US3-TC5: The invoice's Buyer's Premium follows the published rule
 
 Runs once per row of **Test data**.
@@ -6806,6 +6806,7 @@ Runs once per row of **Test data**.
 | USD1,350 | USD0 | USD270.00 | USD1 | 20% of the winning bid | `<winning_bid>`: (range: 80000-399999 minor units); `<final_amount>`: 620.00 |
 | USD10.03 | USD0 | USD2.01 | USD12.04 | 20% is 200.6 minor units, rounded half up | `<winning_bid>`: (fixed boundary) |
 | USD10.02 | USD0 | USD2.00 | USD12.02 | 20% is 200.4 minor units, rounded half up | `<winning_bid>`: (fixed boundary) |
+| USD1.01 | USD0 | USD0.20 | USD1.21 | 20% is 20.2 minor units, rounded to a whole minor unit | `<winning_bid>`: (fixed boundary) |
 | USD50 | USD20 | USD20.00 | USD70.00 | The minimum, higher than 20% (USD10) | `<winning_bid>`: (fixed fixture); `<premium_minimum>`: (fixed configured value) |
 | USD2,500 | USD200.00 | USD500.00 | USD3 | 20% of the winning bid; operator does not enter it | `<winning_bid>`: (fixed scenario fixture); `<premium_minimum>`: (fixed configured value); `<final_amount>`: 000.00 |
 
@@ -12274,7 +12275,7 @@ Runs once per row of **Test data**.
 * Order Total reads `<total>`, `<subtotal_1>` plus `<bank_fee_hkd>`.
 * The amount due at step 4 reads `<total>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-oc2 rev=1 covers=g10.auction-winner-order.SC-8t1 -->
+<!-- trace:case id=g10.auction-winner-order.TC-oc2 rev=1 covers=g10.auction-winner-order.SC-8t1,g10.auction-winner-order.SC-16z -->
 ### g10.auction-winner-order.US27-TC8: Free shipping, absent Insurance and Tax, and a Free fee still show the Subtotal
 
 **Classification:**

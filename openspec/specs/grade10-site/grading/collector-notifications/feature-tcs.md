@@ -4,9 +4,6 @@
 **Drafts styled:** 2026-10-01, tcs-rules r4
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-01
 
-**Out of suite (non-GUI):**
-- `grade10-site-grading-collector-notifications-SC-01` — grade10's type check: the map from every submission event kind to its message or silence is exhaustive, so no event ships unanswered; no screen shows the map
-
 ## grade10-site-grading-collector-notifications-US1: Collector hears about everything that happens to the submission
 
 **As a** collector,

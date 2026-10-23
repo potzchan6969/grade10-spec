@@ -3,9 +3,6 @@
 **Status:** pending-review · 0/59
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
-**Out of suite (api):**
-- `grade10-admin-auction-internal-bid-SC-74` — the no-account-suspension assertion is covered by the backend expiry check
-
 ## Background
 
 * Every listing below is a USD listing in no campaign, starting price `<starting price>`, extension duration 1800s (30mins) and no cap, unless its row says otherwise.

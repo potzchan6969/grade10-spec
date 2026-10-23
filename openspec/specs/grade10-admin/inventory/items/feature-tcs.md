@@ -7,9 +7,6 @@
 - `grade10-admin-inventory-items-SC-20` — the repository test applying each case state twice and out of order (task 4.1)
 - `grade10-admin-inventory-items-SC-21` — `tell`'s service test
 - `grade10-admin-inventory-items-SC-22` — `tell`'s service test for the race, and `ItemPanel`'s component test for the slab line (tasks 4.1, 10.1)
-- `grade10-admin-inventory-items-SC-37` — the transfer service test, which sees no message sent (tasks 5.1, 5.3)
-- `grade10-admin-inventory-items-SC-39` — the transfer service test of a second send (tasks 5.1, 5.3)
-- `grade10-admin-inventory-items-SC-56` — the list's keyset test over PGlite (tasks 3.1, 5.1)
 - `grade10-admin-inventory-items-SC-72` — the `items.*` routers' audit declaration tests, which find ids, owner kinds and the retire code and no email, term or reason text in each entry (tasks 5.1, 5.8)
 
 **Out of suite (non-GUI):**
