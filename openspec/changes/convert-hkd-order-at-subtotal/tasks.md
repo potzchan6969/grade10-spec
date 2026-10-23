@@ -1,4 +1,4 @@
-## 1. Subtotal label in the language catalogs (grade10-spec)
+## 1. Subtotal label in the language catalogs (grade10-spec) (owner: @seankcw)
 
 - [ ] 1.1 Write the catalog test first, in its own commit: `auctionOrders.winner.subtotal` exists in `en`, `zh-Hans`, `zh-Hant` and `ko` and reads `Subtotal`, `小计`, `小計` and `소계` (`winner-order-SC-290`)
 - [ ] 1.2 Add `winner.subtotal` to `packages/i18n/messages/shared/{en,zh-Hans,zh-Hant,ko}/auctionOrders.json`; `winner.convertedFrom` already exists in all four and keeps the note's wording (`winner-order-SC-290`)
