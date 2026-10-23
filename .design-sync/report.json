@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T08:06:12.099Z",
+  "generatedAt": "2026-10-23T08:59:12.878Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -71,7 +71,7 @@
     "Product / Cart / Cart Drawer Header": "warn",
     "Product / Cart / Cart Item": "warn",
     "Product / Cart / Cart Item Slot": "warn",
-    "Product / Cart / Promo Ticket": "warn",
+    "Product / Cart / Promo Ticket": "ok",
     "Product / Image": "warn",
     "Product / Order / Order Details Delivery Status": "ok",
     "Product / Order / Order Details Header": "ok",
@@ -92,7 +92,6 @@
     "Radio List": "skipped",
     "Radio List Item": "skipped",
     "Reward / Checkout Point Balance": "warn",
-    "Reward / Checkout QR": "warn",
     "Reward / Item": "warn",
     "Reward / Item Media": "warn",
     "Search Input": "skipped",
@@ -1037,7 +1036,12 @@
     "7330-1128": "Reward / Item",
     "7330-1129": "Reward / Item",
     "7330-1143": "Membership",
-    "7330-7237": "Reward / Checkout QR",
+    "7365-7547": "Rewards",
+    "7373-2": "Product / Cart / Promo Ticket",
+    "7373-8037": "Product / Cart / Promo Ticket",
+    "7373-8062": "Product / Cart / Promo Ticket",
+    "7373-8077": "Product / Cart / Promo Ticket",
+    "7373-8092": "Product / Cart / Promo Ticket",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1178,9 +1182,6 @@
     "Product / Cart / Cart Item Slot": [
       "Product / Cart / Cart Item Slot: no code component (looked for src/components/**/productcartcartitemslot.tsx or cartitemslot.tsx)"
     ],
-    "Product / Cart / Promo Ticket": [
-      "Product / Cart / Promo Ticket.state: no getEnum('state') in any template — this Figma axis reaches no code prop"
-    ],
     "Product / Image": [
       "Product / Image: no code component (looked for src/components/**/productimage.tsx or image.tsx)"
     ],
@@ -1207,9 +1208,6 @@
     ],
     "Reward / Checkout Point Balance": [
       "Reward / Checkout Point Balance: no code component (looked for src/components/**/rewardcheckoutpointbalance.tsx or checkoutpointbalance.tsx)"
-    ],
-    "Reward / Checkout QR": [
-      "Reward / Checkout QR: no code component (looked for src/components/**/rewardcheckoutqr.tsx or checkoutqr.tsx)"
     ],
     "Reward / Item": [
       "Reward / Item.state: no getEnum('state') in any template — this Figma axis reaches no code prop"
