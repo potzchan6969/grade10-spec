@@ -107,7 +107,7 @@
   {
     "label": "reward-art/media",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7330-1082",
-    "classes": "object-cover rounded-(--radius-lg) bg-muted"
+    "classes": "object-contain rounded-(--radius-lg) bg-muted"
   },
   {
     "label": "reward-menu/card-hover",

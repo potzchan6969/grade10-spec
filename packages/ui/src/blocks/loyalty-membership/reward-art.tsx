@@ -54,7 +54,7 @@ function RewardArt({
     <img
       alt={reward.image.alt}
       className={cn(
-        "object-cover",
+        "object-contain",
         hero
           ? "aspect-2/1 w-full rounded-3xl bg-muted"
           : "rounded-(--radius-lg) bg-muted",
