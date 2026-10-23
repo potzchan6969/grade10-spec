@@ -21,7 +21,6 @@ bought, and the product page and cart to report the same internal sale item,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -66,7 +65,6 @@ bought, and the product page and cart to report the same internal sale item,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -110,7 +108,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -152,7 +149,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -185,7 +181,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -227,7 +222,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -270,7 +264,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -312,7 +305,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -356,7 +348,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -395,7 +386,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -440,7 +430,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -486,7 +475,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-01
@@ -547,7 +535,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-02
@@ -589,7 +576,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-02
@@ -632,7 +618,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-02
@@ -673,7 +658,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-02
@@ -714,7 +698,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-product-status-US-02

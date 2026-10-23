@@ -38,7 +38,6 @@ title: Store Test Cases
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-landing.US2, g10.store-product-listing.US5, g10.store-product-page.US1
@@ -94,7 +93,6 @@ title: Store Test Cases
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-landing.US3, g10.store-product-page.US2, g10.store-cart.US4, g10.store-order-detail.US3, g10.store-order-history.US2
@@ -155,7 +153,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-landing.US2, g10.store-product-listing.US1, g10.store-product-page.US1, g10.store-cart.US1
@@ -208,7 +205,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-landing.US2, g10.store-product-listing.US1, g10.store-product-page.US1, g10.store-cart.US1
@@ -260,7 +256,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-product-listing.US7, g10.store-cart.US2, g10.store-cart.US3, g10.store-cart.US4, g10.store-order-history.US1, g10.store-order-detail.US1
@@ -321,7 +316,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-listing.US7, g10.store-product-page.US2, g10.store-cart.US4
@@ -375,7 +369,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US2, g10.store-order-detail.US1, g10.store-order-history.US1

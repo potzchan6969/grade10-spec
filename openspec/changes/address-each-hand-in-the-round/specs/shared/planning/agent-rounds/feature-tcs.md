@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-10
@@ -52,7 +51,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-10
@@ -84,7 +82,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-10
@@ -116,7 +113,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-10
@@ -147,7 +143,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-10
@@ -179,7 +174,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-10
@@ -211,7 +205,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-10
@@ -253,11 +246,9 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-11
-
 
 **Pre-conditions:**
 
@@ -287,11 +278,9 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-11
-
 
 **Pre-conditions:**
 
@@ -318,7 +307,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-11
@@ -350,7 +338,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-11
@@ -381,7 +368,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-11
@@ -414,7 +400,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-11
@@ -463,7 +448,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -498,7 +482,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -531,7 +514,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -567,7 +549,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -608,7 +589,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -640,7 +620,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -673,7 +652,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -708,7 +686,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -746,7 +723,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -779,7 +755,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
@@ -827,7 +802,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-13
@@ -858,7 +832,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-13
@@ -889,7 +862,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-13
@@ -919,7 +891,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-13
@@ -952,7 +923,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-13
@@ -983,7 +953,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-13
@@ -1014,7 +983,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-13
@@ -1043,7 +1011,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-13
@@ -1081,7 +1048,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-14
@@ -1116,7 +1082,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-14
@@ -1149,7 +1114,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-14
@@ -1181,7 +1145,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-14
@@ -1212,7 +1175,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-14
@@ -1252,7 +1214,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-15
@@ -1285,7 +1246,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-15
@@ -1325,7 +1285,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-16
@@ -1359,7 +1318,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-16

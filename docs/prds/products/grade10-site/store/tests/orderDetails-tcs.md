@@ -4,7 +4,7 @@ title: Store Order Detail Test Cases
 
 # grade10-site/store/order-detail Test Cases
 
-**Status:** pending-review · 0/21
+**Status:** pending-review · 0/20
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Walk 1: A Guest Back From Checkout
@@ -53,7 +53,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US2
@@ -96,7 +95,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US2
@@ -144,7 +142,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-order-detail.US3
@@ -184,7 +181,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US3
@@ -225,7 +221,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-order-detail.US3
@@ -277,7 +272,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US1
@@ -316,7 +310,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US1
@@ -353,7 +346,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US1
@@ -386,7 +378,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-order-detail.US1
@@ -429,7 +420,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US1
@@ -468,7 +458,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US1
@@ -503,7 +492,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US1
@@ -545,7 +533,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US1
@@ -584,7 +571,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US1
@@ -624,7 +610,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US1
@@ -672,7 +657,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US2
@@ -711,7 +695,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US2
@@ -737,43 +720,6 @@ Runs once per row of **Test data**.
 * Step 2 shows the not-found state, with no order facts.
 * Its way out leads to the store, not Your Orders.
 
-<!-- trace:case id=g10.store-order-detail.TC-nq4 rev=1 -->
-#### g10.store-order-detail.US2-TC5: Order link and latest-order addresses tell search engines not to index
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-order-detail.US2
-
-**Pre-conditions:**
-
-* `<order>` exists.
-
-**Test data:**
-
-| Partition | `<address>` |
-| --- | --- |
-| Order link | `/orders/<order id>`. |
-| Back from checkout | `/orders/latest`. |
-
-**Steps:**
-
-1. Read the API response for `<address>`.
-
-**Expected Results:**
-
-* The response tells search engines not to index the address.
-
 <!-- trace:case id=g10.store-order-detail.TC-ogu rev=1 -->
 #### g10.store-order-detail.US2-TC6: Shopify's order email carries the View order link
 
@@ -787,7 +733,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-order-detail.US2
@@ -840,7 +785,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US3
@@ -878,7 +822,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-order-detail.US3

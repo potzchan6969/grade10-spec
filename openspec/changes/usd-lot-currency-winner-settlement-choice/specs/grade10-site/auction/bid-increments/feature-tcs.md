@@ -1,6 +1,6 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** pending-review · 0/12
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** grade10-site-auction-bid-increments-SC-03, grade10-site-auction-bid-increments-SC-06
 
@@ -23,7 +23,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -62,7 +61,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -94,7 +92,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -137,7 +134,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -165,47 +161,6 @@ Runs once per row of **Test data**.
 * Step 2: the bid is refused and names the row's opening price as the minimum.
 * The listing remains without an accepted bid, and the minimum remains the opening price.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-4ox rev=3 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-pd0 -->
-### g10.auction-bid-increments.US1-TC8: Lot starting at the ceiling takes one first bid there
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* `<listing_1>` is open in USD, starting price `<ceiling>`, with no accepted bid.
-* customer A and customer B are signed in with cards linked, on separate sessions.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<ceiling>` | USD10,000,000 (fixed configured value) |
-
-**Steps:**
-
-1. As customer A, submit a bid of `<ceiling>` on `<listing_1>`.
-2. Read the API response.
-3. As customer B, submit a bid of `<ceiling>` plus the increment at it.
-4. Read the API response.
-5. Read `<listing_1>`'s current bid, leader and bid count.
-
-**Expected Results:**
-
-* Step 2: customer A's bid is accepted at `<ceiling>`.
-* Step 4: customer B's bid is refused, naming the ceiling.
-* Step 5: current bid `<ceiling>`, customer A leads, bid count 1.
-
 ---
 
 ## g10.auction-bid-increments.US2: Collector bids up to the ceiling
@@ -225,7 +180,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-02
@@ -253,88 +207,6 @@ Runs once per row of **Test data**.
 * Highest bid and bid count are unchanged.
 * No row appears for the listing.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-dfw rev=3 covers=g10.auction-bid-increments.SC-xnb -->
-### g10.auction-bid-increments.US2-TC3: Auto-bid maximum above USD ceiling is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-02
-
-**Pre-conditions:**
-
-* A live USD listing has an accepted bid; a bid request sets a maximum above `<ceiling>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<ceiling>` | USD10,000,000 (fixed configured ceiling) |
-| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
-
-**Steps:**
-
-1. Read the bid request result.
-2. Read the listing's highest bid and the bidder's stored maximum.
-
-**Expected Results:**
-
-* The request is refused and names `<ceiling>`.
-* Neither highest bid nor stored maximum changes.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-dlk rev=3 covers=g10.auction-bid-increments.SC-pd0 -->
-### g10.auction-bid-increments.US2-TC4: Listing at the ceiling refuses a further direct bid
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-02
-
-**Pre-conditions:**
-
-* customer A leads the open USD listing at the ceiling.
-* customer B(card linked, account in good standing) can bid on the listing.
-* The request is sent directly, bypassing the custom maximum field.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<ceiling>` | USD10,000,000 (fixed configured value) |
-| `<bid amount>` | USD10,000,000.01 (fixed boundary or equality) |
-
-**Steps:**
-
-1. Read the listing's bid count and maximums.
-2. As customer B, submit `<bid amount>` through the authenticated auction API.
-3. Read the API response.
-4. Read the listing's price, leader, bid count and maximums.
-5. Read the operational refusal entry for this attempt.
-
-**Expected Results:**
-
-* Step 3: the service refuses with `AMOUNT_TOO_HIGH`.
-* Step 3: `ceilingMinor` equals `<ceiling>`.
-* Step 4: price remains the ceiling and customer A leads.
-* Step 4: bid count and maximums remain unchanged.
-* Step 5: one entry names bidder, listing, code, amount and ceiling.
-
 ---
 
 ## g10.auction-bid-increments.US3: Collector bids in USD on every lot
@@ -354,7 +226,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-03
@@ -376,46 +247,6 @@ Runs once per row of **Test data**.
 * The minimum next bid follows the same USD schedule on both lots.
 * No HKD or JPY bid tier or amount appears.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-fdc rev=1 covers=g10.auction-bid-increments.SC-60d,g10.auction-bid-increments.SC-5ea,g10.auction-bid-increments.SC-gq8 -->
-### g10.auction-bid-increments.US3-TC2: Non-USD currency cannot price an auction
-
-Runs once per row of **Test data**.
-
-**Pre-conditions:**
-
-None.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-03
-
-**Test data:**
-
-| Currency |
-| --- |
-| EUR |
-| HKD |
-| JPY |
-
-**Steps:**
-
-1. Submit an auction price using the row's currency.
-2. Read the result and look for a created lot.
-
-**Expected Results:**
-
-* The price is refused.
-* No lot is created or priced in the row's currency.
-
 <!-- trace:case id=g10.auction-bid-increments.TC-sze rev=1 covers=g10.auction-bid-increments.SC-xjw,g10.auction-bid-increments.SC-tke -->
 ### g10.auction-bid-increments.US3-TC3: A lot that was priced in HKD before the overwrite bids on the USD schedule
 
@@ -429,7 +260,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-03
@@ -468,7 +298,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-03

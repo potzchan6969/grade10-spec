@@ -1,6 +1,6 @@
 # grade10-admin/vault/operator-queue Test Cases
 
-**Status:** pending-review · 26/114
+**Status:** reopened · 24/112
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-admin-vault-operator-queue-US1: Operator opens the shop and sees what is waiting
@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-01
@@ -53,7 +52,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-01
@@ -96,7 +94,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-01
@@ -138,7 +135,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-01
@@ -173,7 +169,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-01
@@ -203,7 +198,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-01
@@ -243,7 +237,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-02
@@ -282,7 +275,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-02
@@ -322,7 +314,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-02
@@ -352,7 +343,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-02
@@ -382,7 +372,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-02
@@ -412,7 +401,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-02
@@ -443,7 +431,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-02
@@ -485,7 +472,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
@@ -524,7 +510,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
@@ -563,7 +548,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
@@ -593,7 +577,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
@@ -626,7 +609,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
@@ -663,7 +645,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
@@ -712,7 +693,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
@@ -751,7 +731,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
@@ -782,7 +761,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
@@ -814,7 +792,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
@@ -844,7 +821,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
@@ -874,7 +850,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
@@ -908,7 +883,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
@@ -943,7 +917,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
@@ -971,7 +944,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
@@ -1010,7 +982,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-05
@@ -1040,7 +1011,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-05
@@ -1070,7 +1040,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-05
@@ -1100,7 +1069,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-05
@@ -1139,11 +1107,9 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-06
-
 
 **Pre-conditions:**
 
@@ -1170,7 +1136,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-06
@@ -1200,11 +1165,9 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-06
-
 
 **Pre-conditions:**
 
@@ -1229,7 +1192,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-06
@@ -1257,7 +1219,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-06
@@ -1289,7 +1250,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-06
@@ -1324,7 +1284,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-06
@@ -1361,7 +1320,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
@@ -1393,7 +1351,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
@@ -1423,7 +1380,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
@@ -1455,7 +1411,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
@@ -1486,7 +1441,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
@@ -1526,7 +1480,6 @@ before the cure date, the notice sent on which day,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-08
@@ -1557,7 +1510,6 @@ before the cure date, the notice sent on which day,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-08
@@ -1587,7 +1539,6 @@ before the cure date, the notice sent on which day,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-08
@@ -1616,7 +1567,6 @@ before the cure date, the notice sent on which day,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-08
@@ -1644,7 +1594,6 @@ before the cure date, the notice sent on which day,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-08
@@ -1672,7 +1621,6 @@ before the cure date, the notice sent on which day,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-08
@@ -1722,7 +1670,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
@@ -1762,7 +1709,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
@@ -1792,7 +1738,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
@@ -1822,7 +1767,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
@@ -1851,7 +1795,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
@@ -1879,7 +1822,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
@@ -1920,7 +1862,6 @@ and the draft waits for them to send it.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -1972,7 +1913,6 @@ and the draft waits for them to send it.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2021,7 +1961,6 @@ and the draft waits for them to send it.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2055,7 +1994,6 @@ and the draft waits for them to send it.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2088,7 +2026,6 @@ and the draft waits for them to send it.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2122,7 +2059,6 @@ and the draft waits for them to send it.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2168,7 +2104,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2209,7 +2144,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2250,7 +2184,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2292,7 +2225,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2331,7 +2263,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2368,7 +2299,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2408,7 +2338,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2435,37 +2364,6 @@ Runs once per row of **Test data**.
 * Step 1 opens the draft, and the form asked for no contact number.
 * Step 2 is refused until the draft holds a photograph.
 
-<!-- trace:case id=g10adm.vault-operator-queue.TC-fh4 rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
-### grade10-admin-vault-operator-queue-US10-TC14-1: Staff photograph only an unsent draft staff opened
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-vault-operator-queue-US-10
-
-**Pre-conditions:**
-
-* admin(staff, holds vault:operate) holds a verified console session.
-* `<case_1>` is a request its collector sent; `<case_2>` is an unsent draft staff opened.
-
-**Steps:**
-
-1. Attach a photograph to `<case_1>`.
-2. Attach a photograph to `<case_2>`.
-
-**Expected Results:**
-
-* Step 1 is refused by name, and `<case_1>` is unchanged.
-* Step 2 attaches the photograph to `<case_2>`.
-
 <!-- trace:case id=g10adm.vault-operator-queue.TC-l20 rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC15-1: A malformed address is refused beside the email field before anything is sent
 
@@ -2479,7 +2377,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2535,7 +2432,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2596,7 +2492,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2642,7 +2537,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-10
@@ -2694,7 +2588,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
@@ -2735,7 +2628,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-11
@@ -2769,7 +2661,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-11
@@ -2805,7 +2696,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
@@ -2828,36 +2718,6 @@ Runs once per row of **Test data**.
 * Every other field reads as before this change.
 * The read carries no collector name.
 
-<!-- trace:case id=g10adm.vault-operator-queue.TC-f5e rev=1 covers=g10adm.vault-operator-queue.SC-lnp,g10adm.vault-operator-queue.SC-e22,g10adm.vault-operator-queue.SC-msu,g10adm.vault-operator-queue.SC-00c,g10adm.vault-operator-queue.SC-t8q -->
-### grade10-admin-vault-operator-queue-US11-TC5-1: The collector-name read refuses a caller without the identity grant
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-vault-operator-queue-US-11
-
-**Pre-conditions:**
-
-* admin(treasurer, holds vault:read and vault:payout) holds a verified console session.
-* `<case_1>` is a case of a collector with a name.
-
-**Steps:**
-
-1. Call the collector-name read for `<case_1>` directly.
-
-**Expected Results:**
-
-* The call is refused for the missing identity grant.
-* No name comes back.
-
 <!-- trace:case id=g10adm.vault-operator-queue.TC-2pj rev=1 covers=g10adm.vault-operator-queue.SC-lnp,g10adm.vault-operator-queue.SC-e22,g10adm.vault-operator-queue.SC-msu,g10adm.vault-operator-queue.SC-00c,g10adm.vault-operator-queue.SC-t8q -->
 ### grade10-admin-vault-operator-queue-US11-TC6-1: The overdue rows keep the reference and the contact, with no name
 
@@ -2869,7 +2729,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
@@ -2898,7 +2757,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-11
@@ -2942,7 +2800,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
@@ -2985,7 +2842,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-12
@@ -3022,7 +2878,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
@@ -3055,7 +2910,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
@@ -3088,7 +2942,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
@@ -3122,7 +2975,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
@@ -3160,7 +3012,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-12
@@ -3202,7 +3053,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-20
@@ -3246,7 +3096,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-20
@@ -3285,7 +3134,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-20
@@ -3327,7 +3175,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-20
@@ -3363,7 +3210,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-20
@@ -3400,7 +3246,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-20
@@ -3434,7 +3279,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-20
@@ -3482,7 +3326,6 @@ until it does,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-21
@@ -3513,7 +3356,6 @@ until it does,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-21
@@ -3561,7 +3403,6 @@ until it does,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-21
@@ -3591,7 +3432,6 @@ until it does,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-21
@@ -3624,7 +3464,6 @@ until it does,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-21
@@ -3664,7 +3503,6 @@ shop's clock and saying the collector is emailed,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-22
@@ -3715,7 +3553,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-22
@@ -3756,7 +3593,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-22
@@ -3797,7 +3633,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-22
@@ -3835,7 +3670,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-22
@@ -3875,7 +3709,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-22
@@ -3917,7 +3750,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-22
@@ -3962,7 +3794,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-22
@@ -4015,7 +3846,6 @@ will read it.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-23
@@ -4065,7 +3895,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-23
@@ -4107,7 +3936,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-23
@@ -4151,7 +3979,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-23
@@ -4193,7 +4020,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-23
@@ -4234,7 +4060,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-23
@@ -4276,7 +4101,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-23
@@ -4323,7 +4147,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-23
@@ -4378,7 +4201,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-24
@@ -4420,7 +4242,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-24
@@ -4464,7 +4285,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-24
@@ -4505,7 +4325,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-24
@@ -4548,7 +4367,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-24
@@ -4586,7 +4404,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-24
@@ -4623,7 +4440,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-24
@@ -4659,7 +4475,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-operator-queue-US-24
@@ -4796,7 +4611,6 @@ Runs once per row of **Test data**.
 | `grade10-admin-vault-operator-queue-US11-TC2-1` | Joined | `grade10-admin-vault-operator-queue-SC-64` and `grade10-admin-vault-operator-queue-SC-68` |
 | `grade10-admin-vault-operator-queue-US11-TC3-1` | Joined | `grade10-admin-vault-operator-queue-SC-69`, the short id narrowing and linking, Q41 |
 | `grade10-admin-vault-operator-queue-US11-TC4-1` | Joined | `grade10-admin-vault-operator-queue-SC-70`; which journey owns it was settled as Q48 |
-| `grade10-admin-vault-operator-queue-US11-TC5-1` | Joined | `grade10-admin-vault-operator-queue-SC-70`, the names refused by name |
 | `grade10-admin-vault-operator-queue-US11-TC6-1` | Joined | the money book's durable requirement *The arrears list every live loan past its due date*, which names no collector and which this change leaves as it stands under Q3 |
 | `grade10-admin-vault-operator-queue-US11-TC7-1` | Joined | `grade10-admin-vault-operator-queue-SC-81`; Q38 and Q55 record a page of names by ids, never names |
 | `grade10-admin-vault-operator-queue-US12-TC1-1` | Joined | `grade10-admin-vault-operator-queue-SC-71` and `grade10-admin-vault-operator-queue-SC-72` |
@@ -4913,8 +4727,6 @@ Runs once per row of **Test data**.
 | `grade10-admin-vault-operator-queue-US10-TC4-1` | A person reads that the form asks for no name and no contact number; the walk-in walk opens a draft without them, it does not read the form's fields |
 | `grade10-admin-vault-operator-queue-US10-TC10-1` | A person types a title and a description past their limits; no walk takes them |
 | `grade10-admin-vault-operator-queue-US10-TC12-1` | Layer api: the worker's own test refuses the open without vault:operate; the treasurer's console offers no walk-in to press |
-| `grade10-admin-vault-operator-queue-US10-TC14-1` | A person edits a sent walk-in and a draft the collector opened to see both refused; the walk-in walk edits only an unsent draft staff opened |
-| `grade10-admin-vault-operator-queue-US11-TC5-1` | Layer api: the vault worker's test refuses the names read without kyc:read |
 | `grade10-admin-vault-operator-queue-US11-TC6-1` | No walk reaches an overdue row; a person reads the Overdue view with a loan past due and finds no name |
 | `grade10-admin-vault-operator-queue-US12-TC7-1` | A person reads Overdue and a search with a collector in the address; the collectors walk narrows the cuts and Held items, never Overdue or a search |
 | `grade10-admin-vault-operator-queue-US10-TC6-1` | The walk proves the refusal for an address retyped in capitals and spaces, and nothing mailed; a person checks no second account was made for the address |

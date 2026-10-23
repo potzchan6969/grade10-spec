@@ -4,7 +4,7 @@ title: Store Product Details Test Cases
 
 # grade10-site/store/product-page Test Cases
 
-**Status:** pending-review · 0/19
+**Status:** pending-review · 0/18
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Walk 1: Read and Buy One Product
@@ -58,7 +58,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US1
@@ -100,7 +99,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US1
@@ -142,7 +140,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US1
@@ -193,7 +190,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US2
@@ -230,7 +226,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US2
@@ -272,7 +267,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US4
@@ -312,7 +306,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US4
@@ -355,7 +348,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-product-page.US1
@@ -400,7 +392,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US1
@@ -433,7 +424,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US1
@@ -478,7 +468,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US2
@@ -519,7 +508,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US2
@@ -546,47 +534,6 @@ Runs once per row of **Test data**.
 **I want** a pasted product address to preview the card,
 **so that** the person I send it to recognises it before opening.
 
-<!-- trace:case id=g10.store-product-page.TC-tvm rev=1 -->
-#### g10.store-product-page.US3-TC1: A shared link previews the first picture, whole, on a wide card
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-product-page.US3
-
-**Pre-conditions:**
-
-* `<shared product>` is in the catalogue as its row describes.
-
-**Test data:**
-
-| Partition | `<shared product>` | `<expected preview>` |
-| --- | --- | --- |
-| Pictured | A card with 2 images in a known shop order. | The first image, fitted whole on white, as the wide card. |
-| Narrow picture | A card whose first image is narrower than the preview box. | That image enlarged to fill the box, as the wide card. |
-| No picture | A card with no image. | No picture, as the small card. |
-
-**Steps:**
-
-1. Read the API response for `/store/products/<shared product handle>`, without running scripts.
-2. Paste the address into a chat that unfurls links.
-3. Read the preview.
-
-**Expected Results:**
-
-* Step 1's head names `<expected preview>`'s picture, where one exists, and its card shape.
-* Step 3 shows `<expected preview>`, nothing cropped.
-
 ---
 
 ### g10.store-product-page.US4: Find another card under this one
@@ -606,7 +553,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US4
@@ -643,7 +589,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-product-page.US4
@@ -681,7 +626,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US4
@@ -716,7 +660,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US4
@@ -756,7 +699,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-product-page.US4
@@ -789,7 +731,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-product-page.US4

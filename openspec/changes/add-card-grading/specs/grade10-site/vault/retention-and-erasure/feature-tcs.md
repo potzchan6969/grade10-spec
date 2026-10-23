@@ -1,6 +1,6 @@
 # grade10-site/vault/retention-and-erasure Test Cases
 
-**Status:** pending-review · 0/11
+**Status:** pending-review · 0/7
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## Background
@@ -24,7 +24,6 @@ Grade10 keeps agreements, photos and case records for 2,555 days (7 years) after
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -53,46 +52,6 @@ Grade10 keeps agreements, photos and case records for 2,555 days (7 years) after
 * The agreement, the hand-back receipt and the hand-in and hand-back photographs are kept under a hold named on `<submission_1>`.
 * The collector's contact details, postal address and the person named to collect are gone.
 
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-0py rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC2-1: Submission record's retention window starts at the end event
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Pre-conditions:**
-
-* `<submission_2>` is active and not yet ended, carrying a submission record.
-
-**Test data:**
-
-| `<end event>` | How the tester ends it | Recorded window start |
-| --- | --- | --- |
-| Collected | Seed it on to `collected` through grading's dev seed | The collection date |
-| Cancelled | Seed it on to `cancelled` through grading's dev seed, then write to it for another reason | The cancellation date |
-| Expired | Seed it at `planned` 30 days back and run grading's fast sweep lane | The plan's expiry date |
-| Its last card paid out | Record the payout on its last card from the Money tab of the console's One submission page | The payout date |
-
-**Steps:**
-
-1. End `<submission_2>` by `<end event>`, as the row says.
-2. Read the window start recorded for its submission record.
-
-**Expected Results:**
-
-* Grade10 reads the window start as the row states.
-
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-50v rev=2 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC3-2: Submission cancelled before hand-in is purged with the account
 
@@ -104,7 +63,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -152,7 +110,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -185,89 +142,6 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * `<submission_4>` is not touched.
 
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-ag4 rev=2 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC5-2: Live grading submission blocks an otherwise eligible vault erasure
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Pre-conditions:**
-
-* customer(closed account) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* The account holds `<submission_5>` and `<vault case_1>`, and has filed no ask.
-* `<submission_5>` is seeded at `sent` through grading's dev seed, under the account's email and user id.
-* admin(holds user:delete) is on `<grade10 admin erasure url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<submission_5>` | A submission `sent`, between booked and ready |
-| `<vault case_1>` | A closed, signed vault case past its own window, with nothing else blocking its erasure |
-
-**Steps:**
-
-1. File the ask to be forgotten under the account.
-2. Ask for the account's own read under it.
-3. Age the request past its 7-day window, uncancelled.
-4. As admin, open the request's Checklist.
-5. Click Erase beside Grading.
-6. Read Grading's answer on the Checklist.
-
-**Expected Results:**
-
-* Step 1 files the request; no vault case holds it back.
-* Step 2 reads the request filed, with no hold beside it.
-* Step 6 refuses the erasure, naming `<submission_5>` and cards with the grader.
-* `<submission_5>` and `<vault case_1>`'s data are unchanged.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-sth rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC6-1: Submission still with the grader is reported under no class
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Pre-conditions:**
-
-* `<submission_6>` was handed in and has not ended: seeded at `sent` through grading's dev seed, its anchors 2,600 days back.
-* The brand keeps agreements, photos and case records for 2,555 days (7 years).
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<submission_6>` | A submission `sent`, with the grader, carrying a sealed submission agreement, an intake receipt, hand-in photographs and a submission record, its drop-off 2,600 days ago (about 7.1 years, past every window) |
-
-**Steps:**
-
-1. Run the retention review on grading's slow sweep lane.
-2. Read the classes the review reports `<submission_6>` under.
-
-**Expected Results:**
-
-* `<submission_6>` is reported under no class: not agreements, not photos, not case records.
-* Nothing of `<submission_6>` is deleted or flagged for deletion.
-
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-56f rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC7-1: Ended submissions and a never-booked one refuse nothing
 
@@ -281,7 +155,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -327,7 +200,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -366,7 +238,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -406,7 +277,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -430,43 +300,6 @@ Runs once per row of **Test data**.
 * The ask is not offered, and nothing is filed.
 * What the vault keeps stays on screen.
 
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-l2w rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC11-1: A submission past its window is reported under each class it holds
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Pre-conditions:**
-
-* The brand keeps agreements, photos and case records for 2,555 days (7 years).
-* `<submission_11>` is seeded at `collected` through grading's dev seed, its anchors 2,600 days back.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<submission_11>` | A submission collected 2,600 days ago (about 7.1 years, past every window), carrying a sealed agreement, both receipts, the hand-in and hand-back photographs and a submission record |
-
-**Steps:**
-
-1. Run the retention review on grading's slow sweep lane.
-2. Read the classes the review reports `<submission_11>` under.
-
-**Expected Results:**
-
-* `<submission_11>` is reported under agreements, photos and case records.
-* It is reported under no identity class.
-
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-trp rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
 ### grade10-site-vault-retention-and-erasure-US4-TC12-1: A transfer not yet received holds the window
 
@@ -478,7 +311,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -513,7 +345,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
@@ -551,7 +382,6 @@ Run: 2026-09-22, blind pass over the isolated input — this capability's `## Pu
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `grade10-site-vault-retention-and-erasure-US4-TC1-1` | Covered, corrected | `grade10-site-vault-retention-and-erasure-SC-28` and `grade10-site-vault-retention-and-erasure-SC-35`. The draft read the erasure as leaving the submission record whole: it expected the collector's name, email, phone and postal address still on the record after the run. The erasure takes contact and address off every submission whichever class it falls in — the vault has held that since its own erasure requirement, and the compliance page the blind pass read states it — so the expectation now keeps the card list and the pickup code and loses the person. The record's window is the figure `grade10-site-vault-retention-and-erasure-SC-28` reads, 2,555 days |
-| `grade10-site-vault-retention-and-erasure-US4-TC2-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-29` |
 | `grade10-site-vault-retention-and-erasure-US4-TC3-1` | Covered, corrected | `grade10-site-vault-retention-and-erasure-SC-36`, with the record's window from `grade10-site-vault-retention-and-erasure-SC-28`. The draft kept the submission record after the erasure of a submission nobody signed; the author's ruling on the raised `planned` question says it is purged with the account like any unsigned record. The case now reads the record and its 2,555-day window before the run and the purge after it |
 | `grade10-site-vault-retention-and-erasure-US4-TC4-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-31` — the `checked_in` row; `grade10-site-vault-retention-and-erasure-SC-32` — the unsettled upcharge and the uncollected cards |
 | `grade10-site-vault-retention-and-erasure-US4-TC5-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-31` — one live submission refuses the whole ask and the closed vault case beside it is untouched |

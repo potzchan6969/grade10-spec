@@ -1,6 +1,6 @@
 # grade10-site/vault/documents-and-signing Test Cases
 
-**Status:** pending-review · 0/37
+**Status:** pending-review · 0/27
 **Drafts styled:** 2026-10-07, tcs-rules r4
 **Out of suite:** grade10-site-vault-documents-and-signing-SC-42 - the behaviour suite `packages/vault/backend/src/testing/suites/registerPaper.ts` in the application repository; it serves US-04, the auditor's journey, which no customer or admin walks (tasks 2.1, 2.4)
 
@@ -22,7 +22,6 @@ sign each document once,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
@@ -56,7 +55,6 @@ sign each document once,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
@@ -90,7 +88,6 @@ sign each document once,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
@@ -123,7 +120,6 @@ sign each document once,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
@@ -155,7 +151,6 @@ sign each document once,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
@@ -184,7 +179,6 @@ sign each document once,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
@@ -213,7 +207,6 @@ sign each document once,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
@@ -244,7 +237,6 @@ sign each document once,
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
@@ -275,7 +267,6 @@ sign each document once,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-01
@@ -293,100 +284,6 @@ sign each document once,
 **Expected Results:**
 
 * An email has arrived with the sealed PDF attached.
-
-<!-- trace:case id=g10.vault-documents-and-signing.TC-3zb rev=2 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
-### grade10-site-vault-documents-and-signing-US1-TC10-2: The collector's own read lists every sealed document with its fingerprint
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-01
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case; its packet is sealed, holding the custody agreement and the loan agreement.
-
-**Steps:**
-
-1. Ask for the collector's own read of `<case_1>`.
-2. Take each sealed document the API response lists.
-3. Compute each taken document's digest.
-
-**Expected Results:**
-
-* Step 1 lists the custody agreement and the loan agreement, each with its fingerprint, and the packet with its own.
-* Step 2 serves both documents.
-* Each step 3 digest equals the fingerprint step 1 listed for it.
-
-<!-- trace:case id=g10.vault-documents-and-signing.TC-svw rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
-### grade10-site-vault-documents-and-signing-US1-TC11-1: Anyone holding a document's digest can verify it belongs to the vault
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-01
-
-**Pre-conditions:**
-
-* <a sealed document's SHA-256 digest> is known from a sealed case.
-* The asker is not signed in.
-
-**Steps:**
-
-1. Ask <the public document verification page> whether the digest is one of ours.
-
-**Expected Results:**
-
-* The answer says the digest is a document the vault sealed.
-* It names the template and when the document was completed.
-* It names nobody.
-
-<!-- trace:case id=g10.vault-documents-and-signing.TC-slm rev=1 covers=g10.vault-documents-and-signing.SC-h1q,g10.vault-documents-and-signing.SC-k3s,g10.vault-documents-and-signing.SC-22x,g10.vault-documents-and-signing.SC-3o8,g10.vault-documents-and-signing.SC-faf,g10.vault-documents-and-signing.SC-leu -->
-### grade10-site-vault-documents-and-signing-US1-TC12-1: A digest nobody issued fails verification
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
-
-**Pre-conditions:**
-
-* <a digest no sealed document carries> is at hand.
-
-**Steps:**
-
-1. Ask <the public document verification page> whether the digest is one of ours.
-
-**Expected Results:**
-
-* The answer says the digest is not one of ours.
 
 ---
 
@@ -408,7 +305,6 @@ naming the shop and the person we checked,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
@@ -439,7 +335,6 @@ naming the shop and the person we checked,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
@@ -473,7 +368,6 @@ naming the shop and the person we checked,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
@@ -506,7 +400,6 @@ naming the shop and the person we checked,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
@@ -537,7 +430,6 @@ naming the shop and the person we checked,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
@@ -570,7 +462,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
@@ -608,7 +499,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-03
@@ -626,37 +516,6 @@ Runs once per row of **Test data**.
 * The packet is refused as outside its window.
 * The packet must be prepared again before it can be signed.
 
-<!-- trace:case id=g10.vault-documents-and-signing.TC-9m6 rev=1 covers=g10.vault-documents-and-signing.SC-m42,g10.vault-documents-and-signing.SC-1ll,g10.vault-documents-and-signing.SC-l9w,g10.vault-documents-and-signing.SC-iz4,g10.vault-documents-and-signing.SC-h2m,g10.vault-documents-and-signing.SC-z0d,g10.vault-documents-and-signing.SC-i4k,g10.vault-documents-and-signing.SC-kzm -->
-### grade10-site-vault-documents-and-signing-US3-TC8-1: The worker refuses a packet while the register names another owner
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-03
-
-**Pre-conditions:**
-
-* admin(staff) holds `vault:operate`.
-* `<case_4>` of `<collector A>` is accepted, ready to prepare; its item `<item_4>` is owned by `<collector B>`.
-
-**Steps:**
-
-1. Send Prepare documents for `<case_4>` straight to the vault worker.
-2. Read `<case_4>`.
-
-**Expected Results:**
-
-* Step 1 is refused, naming `<collector B>` as the owner the register shows.
-* `<case_4>` stays accepted, with no packet.
-
 ---
 
 ## grade10-site-vault-documents-and-signing-US5: Collector downloads every document they ever signed
@@ -665,71 +524,6 @@ Runs once per row of **Test data**.
 **I want** every sealed document from every case in one download, each with
 its fingerprint,
 **so that** I hold my own record without opening each case in turn.
-
-<!-- trace:case id=g10.vault-documents-and-signing.TC-hn3 rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
-### grade10-site-vault-documents-and-signing-US5-TC1-2: The one download holds every sealed document the collector's read lists
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-05
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* The collector holds sealed documents on two closed cases, `<case_1>` and `<case_2>`.
-* customer B, another collector, holds sealed documents of their own.
-
-**Steps:**
-
-1. Ask for Your data.
-2. Take the one download of every document.
-3. Open the bundle.
-
-**Expected Results:**
-
-* Step 1 carries the sealed documents of `<case_1>` and `<case_2>`.
-* Step 3 holds every sealed document step 1 lists, each with its fingerprint.
-* Step 3 holds nothing step 1 does not list, and none of customer B's documents.
-
-<!-- trace:case id=g10.vault-documents-and-signing.TC-vse rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
-### grade10-site-vault-documents-and-signing-US5-TC2-2: A collector who has signed nothing is carried none and downloads an empty file
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-05
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* The collector's cases hold no sealed document.
-
-**Steps:**
-
-1. Ask for Your data.
-2. Take the download anyway.
-
-**Expected Results:**
-
-* Step 1 carries no signed document.
-* Step 2 serves an empty archive.
 
 <!-- trace:case id=g10.vault-documents-and-signing.TC-w1x rev=1 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
 ### grade10-site-vault-documents-and-signing-US5-TC3-1: The download shows a pending state while in flight
@@ -742,7 +536,6 @@ its fingerprint,
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-05
@@ -770,7 +563,6 @@ its fingerprint,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-documents-and-signing-US-05
@@ -787,125 +579,6 @@ its fingerprint,
 
 * An error line appears under the button; no file downloads.
 * Download all is available again to retry.
-
-<!-- trace:case id=g10.vault-documents-and-signing.TC-xvr rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
-### grade10-site-vault-documents-and-signing-US5-TC5-2: The bundle is bounded to only the cases the page lists
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-05
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* The collector holds sealed documents on more cases than one page of Your data answers for.
-
-**Steps:**
-
-1. Ask for the first page of Your data.
-2. Take the download, naming the cursor step 1 was read at.
-
-**Expected Results:**
-
-* The file carries only documents from cases step 1 lists; no other collector's case is included.
-
-<!-- trace:case id=g10.vault-documents-and-signing.TC-3ew rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
-### grade10-site-vault-documents-and-signing-US5-TC6-2: The bulk download is recorded on the audit chain like a search
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-05
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* The collector holds sealed documents on their own cases.
-
-**Steps:**
-
-1. Take the download.
-
-**Expected Results:**
-
-* The audit chain gains an entry naming who downloaded, when, and how many documents.
-
-<!-- trace:case id=g10.vault-documents-and-signing.TC-nod rev=2 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
-### grade10-site-vault-documents-and-signing-US5-TC7-2: A download past 52,428,800 bytes is refused before anything is read
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-05
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* The collector's sealed documents come to more than 52,428,800 bytes together.
-
-**Steps:**
-
-1. Take the download.
-
-**Expected Results:**
-
-* The download is refused by name, before any document is read.
-* No file is sent, and no document is recorded as read.
-
-<!-- trace:case id=g10.vault-documents-and-signing.TC-6a7 rev=1 covers=g10.vault-documents-and-signing.SC-pe0,g10.vault-documents-and-signing.SC-wzw,g10.vault-documents-and-signing.SC-itg,g10.vault-documents-and-signing.SC-03w,g10.vault-documents-and-signing.SC-wpb -->
-### grade10-site-vault-documents-and-signing-US5-TC9-1: The one download is refused without a session
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-documents-and-signing-US-05
-
-**Pre-conditions:**
-
-* The tester holds no session on <grade10 site url>.
-* Collectors hold sealed documents in the vault.
-
-**Steps:**
-
-1. Ask for the one download of every document, with no session.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* No document is served.
 
 ---
 
@@ -927,7 +600,6 @@ stood when the papers were prepared,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-06
@@ -968,7 +640,6 @@ stood when the papers were prepared,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-06
@@ -1001,7 +672,6 @@ stood when the papers were prepared,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-06
@@ -1032,7 +702,6 @@ stood when the papers were prepared,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-06
@@ -1063,7 +732,6 @@ stood when the papers were prepared,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-06
@@ -1105,7 +773,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-07
@@ -1148,7 +815,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-07
@@ -1182,7 +848,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-07
@@ -1219,7 +884,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-07
@@ -1262,7 +926,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-08
@@ -1294,7 +957,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-documents-and-signing-US-08

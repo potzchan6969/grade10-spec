@@ -1,6 +1,6 @@
 # grade10-admin/inventory/items Test Cases
 
-**Status:** pending-review · 0/48
+**Status:** pending-review · 0/43
 **Drafts styled:** 2026-10-02, tcs-rules r4
 **Out of suite:** grade10-admin-inventory-items-SC-05 - grade10's inventory service and repository tests, which find no product or stock row after a register act (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-06 - the ZZZ panel's surface test in grade10's `apps/admin` (tasks 10.1, 10.2); grade10-admin-inventory-items-SC-15 - `ItemFactsDialog`'s component tests and `FormDialog`'s stories (task 10.1); grade10-admin-inventory-items-SC-20 - the repository test applying each case state twice and out of order (task 4.1); grade10-admin-inventory-items-SC-21 - `tell`'s service test; no console path opens two marks in this release (task 4.1); grade10-admin-inventory-items-SC-22 - `tell`'s service test for the race, and `ItemPanel`'s component test for the slab line (tasks 4.1, 10.1); grade10-admin-inventory-items-SC-37 - the transfer service test, which sees no message sent (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-39 - the transfer service test of a second send (tasks 5.1, 5.3); grade10-admin-inventory-items-SC-56 - the list's keyset test over PGlite (tasks 3.1, 5.1); grade10-admin-inventory-items-SC-66 - the retention review's gauge test (tasks 6.1, 6.3); grade10-admin-inventory-items-SC-72 - the `items.*` routers' audit declaration tests, which find ids, owner kinds and the retire code and no email, term or reason text in each entry (tasks 5.1, 5.8)
 
@@ -29,7 +29,6 @@ a place marks it,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -75,7 +74,6 @@ a place marks it,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -116,7 +114,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -159,7 +156,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -200,7 +196,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -231,37 +226,6 @@ Runs once per row of **Test data**.
 * Step 2 does as the row says.
 * Step 3 opens the item and its owner cell reads the same.
 
-<!-- trace:case id=g10adm.inventory-items.TC-udu rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
-### grade10-admin-inventory-items-US1-TC6-1: Reading an owner's name is recorded on the audit chain
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-items-US-01
-
-**Pre-conditions:**
-
-* admin(staff) is signed in to the Grade10 console and holds `kyc:read`.
-* `<item_6>` is owned by `<collector C>`.
-
-**Steps:**
-
-1. Navigate to <grade10 admin item page url> for `<item_6>`.
-2. Read the audit chain for the moment of step 1.
-
-**Expected Results:**
-
-* The page reads `<collector C>`'s name as the owner.
-* The audit chain holds an entry for the name read, naming the staff member.
-
 <!-- trace:case id=g10adm.inventory-items.TC-42v rev=1 covers=g10adm.inventory-items.SC-rsv,g10adm.inventory-items.SC-ujf,g10adm.inventory-items.SC-si1,g10adm.inventory-items.SC-dxk,g10adm.inventory-items.SC-cwd,g10adm.inventory-items.SC-cg2,g10adm.inventory-items.SC-tna,g10adm.inventory-items.SC-z8f,g10adm.inventory-items.SC-8em,g10adm.inventory-items.SC-3ic,g10adm.inventory-items.SC-ajw,g10adm.inventory-items.SC-k1r,g10adm.inventory-items.SC-g2i,g10adm.inventory-items.SC-ou0,g10adm.inventory-items.SC-fz5,g10adm.inventory-items.SC-oh4,g10adm.inventory-items.SC-9hc,g10adm.inventory-items.SC-du8 -->
 ### grade10-admin-inventory-items-US1-TC7-1: An item whose owners disagree shows both to staff
 
@@ -273,7 +237,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -310,7 +273,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -348,7 +310,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -385,7 +346,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -416,7 +376,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -448,7 +407,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -483,7 +441,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -527,7 +484,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-01
@@ -568,7 +524,6 @@ grade and cert, and to correct a fact later,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
@@ -619,7 +574,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
@@ -663,7 +617,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
@@ -699,7 +652,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-02
@@ -738,7 +690,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
@@ -781,7 +732,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-02
@@ -818,7 +768,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
@@ -853,7 +802,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-02
@@ -885,7 +833,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-02
@@ -928,7 +875,6 @@ one,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
@@ -974,7 +920,6 @@ one,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
@@ -1009,7 +954,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-03
@@ -1048,7 +992,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-03
@@ -1088,7 +1031,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
@@ -1119,7 +1061,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
@@ -1144,37 +1085,6 @@ Runs once per row of **Test data**.
 * The page reads the custodian as owner and `Charizard 1999 Base Set` as the title.
 * The top move reads from erased to the custodian.
 
-<!-- trace:case id=g10adm.inventory-items.TC-4ou rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
-### grade10-admin-inventory-items-US3-TC7-1: A move never names the lender
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-items-US-03
-
-**Pre-conditions:**
-
-* admin(staff) holds `inventory:transfer`.
-* `<item_12>` is owned by `<collector A>`; no place marks it.
-
-**Steps:**
-
-1. Send a transfer of `<item_12>` naming the lender, with a reason, straight to the register.
-2. Read `<item_12>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* `<item_12>` is still owned by `<collector A>`, with no new move.
-
 <!-- trace:case id=g10adm.inventory-items.TC-l1c rev=1 covers=g10adm.inventory-items.SC-gar,g10adm.inventory-items.SC-b7n,g10adm.inventory-items.SC-mkf,g10adm.inventory-items.SC-xzd,g10adm.inventory-items.SC-xvg,g10adm.inventory-items.SC-rwm,g10adm.inventory-items.SC-t95,g10adm.inventory-items.SC-f1a,g10adm.inventory-items.SC-2fo,g10adm.inventory-items.SC-4y8,g10adm.inventory-items.SC-ssg -->
 ### grade10-admin-inventory-items-US3-TC8-1: Opening a proof is recorded on the audit log
 
@@ -1186,7 +1096,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
@@ -1216,7 +1125,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-03
@@ -1249,7 +1157,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-03
@@ -1289,7 +1196,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-04
@@ -1321,7 +1227,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-04
@@ -1365,7 +1270,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
@@ -1409,7 +1313,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
@@ -1441,7 +1344,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
@@ -1474,7 +1376,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
@@ -1506,7 +1407,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-05
@@ -1548,7 +1448,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-06
@@ -1593,7 +1492,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-06
@@ -1622,72 +1520,6 @@ Runs once per row of **Test data**.
 * Step 1 offers no Close mark on the place row.
 * Step 2 is refused and `<item_1>` still reads marked.
 
-<!-- trace:case id=g10adm.inventory-items.TC-c47 rev=1 covers=g10adm.inventory-items.SC-t3v,g10adm.inventory-items.SC-iac,g10adm.inventory-items.SC-m22 -->
-### grade10-admin-inventory-items-US6-TC3-1: A later word from the vault does not reopen a closed mark
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-items-US-06
-
-**Pre-conditions:**
-
-* `<item_19>`'s mark on `<case_19>` was closed by hand; `<case_19>` reads released.
-* The vault's word marking `<item_19>` for `<case_19>` is held back and not yet delivered.
-
-**Steps:**
-
-1. Deliver the vault's held-back word for `<case_19>` to the register.
-2. Read `<item_19>`.
-
-**Expected Results:**
-
-* `<item_19>` reads not marked; the place row still reads closed by hand.
-
-<!-- trace:case id=g10adm.inventory-items.TC-l43 rev=1 covers=g10adm.inventory-items.SC-t3v,g10adm.inventory-items.SC-iac,g10adm.inventory-items.SC-m22 -->
-### grade10-admin-inventory-items-US6-TC4-1: A hand close on a forfeited case moves the item to the lender once
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-items-US-06
-
-**Pre-conditions:**
-
-* admin(staff) holds `inventory:write`.
-* `<item_19>` is owned by `<collector A>`, and its mark on `<case_19>` is open.
-* `<case_19>` reads forfeited, and the vault's word ending the mark, naming the lender, is held back and not yet delivered.
-
-**Steps:**
-
-1. Close the mark on `<case_19>` with a reason.
-2. Navigate to <grade10 admin item page url> for `<item_19>`.
-3. Deliver the vault's held-back word for `<case_19>` to the register.
-4. Reload the page.
-
-**Expected Results:**
-
-* Step 2's place row reads closed by hand, naming who closed it.
-* `<item_19>` reads owned by the lender's registered name.
-* Its newest move reads from `<collector A>` to the lender, made by the vault on `<case_19>`.
-* Step 4 reads the same: the mark closed by hand and one move to the lender.
-
 ---
 
 ## grade10-admin-inventory-items-US8: Admin erases a collector who owns items
@@ -1710,7 +1542,6 @@ their record.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-08
@@ -1747,7 +1578,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-items-US-08
@@ -1787,7 +1617,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-items-US-08
@@ -1818,36 +1647,6 @@ Runs once per row of **Test data**.
 * The other party's side still reads.
 * The proof cell reads as the row says.
 * Step 1's inventory line reads nothing remaining, whether or not the proof is kept.
-
-<!-- trace:case id=g10adm.inventory-items.TC-zdn rev=1 covers=g10adm.inventory-items.SC-p6v,g10adm.inventory-items.SC-xp1,g10adm.inventory-items.SC-x39,g10adm.inventory-items.SC-vig -->
-### grade10-admin-inventory-items-US8-TC4-1: Running the erasure a second time changes nothing
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-items-US-08
-
-**Pre-conditions:**
-
-* admin(holds `user:delete`) is on the erasure checklist for `<collector F>`, whose inventory erasure has already run.
-
-**Steps:**
-
-1. Run inventory's erasure again.
-2. Read `<item_21>`.
-
-**Expected Results:**
-
-* Step 1 reports nothing in its way and nothing remaining.
-* `<item_21>` reads as it did after the first run.
 
 ## Reconciliation
 

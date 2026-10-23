@@ -1,6 +1,6 @@
 # grade10-site/site/carried-surfaces Test Cases
 
-**Status:** pending-review · 0/53
+**Status:** pending-review · 0/48
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-site-carried-surfaces-US1: Collector reads a site whose shop has not opened
@@ -25,7 +25,6 @@ chrome for all three waiting products rather than the store alone.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-01
@@ -56,7 +55,6 @@ chrome for all three waiting products rather than the store alone.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-01
@@ -87,7 +85,6 @@ chrome for all three waiting products rather than the store alone.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-01
@@ -120,7 +117,6 @@ chrome for all three waiting products rather than the store alone.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-01
@@ -155,7 +151,6 @@ surfaces no longer keeps them open the way this case asserted.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-01
@@ -186,7 +181,6 @@ surfaces no longer keeps them open the way this case asserted.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-01
@@ -229,7 +223,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-02
@@ -276,7 +269,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-02
@@ -318,7 +310,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-02
@@ -349,7 +340,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-02
@@ -380,7 +370,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-02
@@ -410,7 +399,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-02
@@ -442,7 +430,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-02
@@ -473,130 +460,6 @@ answers,
 **so that** I never index a page that answers not-found and never carry it
 into a search result.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-xjk rev=3 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-wjy -->
-### grade10-site-site-carried-surfaces-US3-TC1-3: Sitemap names no store, vault or booking address
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-carried-surfaces-US-03
-
-**Pre-conditions:**
-
-* The site under test is a build that carries none of the store's, the
-  vault's or booking's surfaces.
-
-**Steps:**
-
-1. Fetch the sitemap on <grade10 public site url>.
-
-**Expected Results:**
-
-* No entry names the store, a collection, a card's page, the cart, the
-  checkout, an order page, Store Locator, the vault, a case's page or booking
-  a visit.
-* Every entry names a surface the build carries.
-
-<!-- trace:case id=g10.site-carried-surfaces.TC-1i5 rev=1 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
-### grade10-site-site-carried-surfaces-US3-TC2-1: robots.txt names no store address
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-carried-surfaces-US-03
-
-**Pre-conditions:**
-
-* The site under test is a build that carries no store surfaces.
-
-**Steps:**
-
-1. Fetch robots.txt on <grade10 public site url>.
-2. Read every address it names.
-
-**Expected Results:**
-
-* No line names a store address.
-* Every sitemap it names answers with status 200.
-
-<!-- trace:case id=g10.site-carried-surfaces.TC-v00 rev=1 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
-### grade10-site-site-carried-surfaces-US3-TC3-1: Every address the crawler files name answers
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-carried-surfaces-US-03
-
-**Pre-conditions:**
-
-* The site under test is a build that carries no store surfaces.
-
-**Steps:**
-
-1. Fetch the sitemap and robots.txt on <grade10 public site url>.
-2. Fetch every address the two files name.
-
-**Expected Results:**
-
-* Every fetch returns status 200.
-* No fetch renders the not-found surface.
-
-<!-- trace:case id=g10.site-carried-surfaces.TC-24a rev=3 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-wjy -->
-### grade10-site-site-carried-surfaces-US3-TC4-3: Crawler files name the store, the vault and booking where the build carries them
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-carried-surfaces-US-03
-
-**Pre-conditions:**
-
-* The site under test is a build that carries the store's, the vault's and
-  booking's surfaces.
-
-**Steps:**
-
-1. Fetch the sitemap on <grade10 staging site url>.
-2. Fetch every store, vault and booking address the sitemap names.
-
-**Expected Results:**
-
-* The sitemap names the store and the collections under it, Store Locator,
-  and booking a visit.
-* Every address it names for the three returns status 200.
-
 ---
 
 ## grade10-site-site-carried-surfaces-US4: Collector buys on the lane the shop is open on
@@ -619,7 +482,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-04
@@ -665,7 +527,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-04
@@ -703,7 +564,6 @@ front door for all three waiting products on a carrying lane.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-04
@@ -739,7 +599,6 @@ opening for the vault and shows the other two waiting products stay shut.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-04
@@ -783,7 +642,6 @@ ready to honour.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -815,7 +673,6 @@ ready to honour.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -846,7 +703,6 @@ ready to honour.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -880,7 +736,6 @@ ready to honour.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -901,39 +756,6 @@ ready to honour.
 * No collected link names a store, vault or booking address.
 * Every collected link opens a surface the build carries.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-u8n rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
-### grade10-site-site-carried-surfaces-US5-TC5-1: A carried page's head names no withheld address
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-carried-surfaces-US-05
-
-**Pre-conditions:**
-
-* The site under test is a build that carries none of the three waiting
-  products' surfaces.
-
-**Steps:**
-
-1. Fetch <grade10 public site url>.
-2. Read every address the response's head names.
-3. Fetch a second surface the build carries and read the same.
-
-**Expected Results:**
-
-* No canonical, alternate-language or sharing address in either head names a
-  store, vault or booking surface.
-* Every address the two heads name returns status 200.
-
 <!-- trace:case id=g10.site-carried-surfaces.TC-pwi rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC6-1: Nothing names a withheld product before scripts run
 
@@ -945,7 +767,6 @@ ready to honour.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -977,7 +798,6 @@ ready to honour.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -1008,7 +828,6 @@ ready to honour.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -1040,7 +859,6 @@ ready to honour.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -1072,7 +890,6 @@ ready to honour.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -1107,7 +924,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -1150,7 +966,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-05
@@ -1207,7 +1022,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1253,7 +1067,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1293,7 +1106,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1325,7 +1137,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1359,7 +1170,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1391,7 +1201,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1425,7 +1234,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1459,7 +1267,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1492,7 +1299,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1523,7 +1329,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1558,7 +1363,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-06
@@ -1597,7 +1401,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-07
@@ -1630,7 +1433,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-07
@@ -1662,7 +1464,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-07
@@ -1695,7 +1496,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-07
@@ -1727,7 +1527,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-07
@@ -1769,7 +1568,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-08
@@ -1809,7 +1607,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-08
@@ -1839,7 +1636,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-08
@@ -1873,7 +1669,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-08
@@ -1906,7 +1701,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-08
@@ -1940,7 +1734,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-carried-surfaces-US-08
@@ -1974,7 +1767,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-08
@@ -2018,7 +1810,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-carried-surfaces-US-08

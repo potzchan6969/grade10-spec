@@ -1,6 +1,6 @@
 # grade10-admin/auction/test-winners Test Cases
 
-**Status:** pending-review · 0/12
+**Status:** pending-review · 0/5
 **Drafts styled:** 2026-10-19, tcs-rules r5
 
 **Out of suite:** grade10-admin-auction-test-winners-SC-13 — held by the admin console's bundle check, which fails a production build that carries the Test tab's code
@@ -22,7 +22,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Making a test winner
@@ -50,222 +49,6 @@
 * Step 5 signs in as the test account and leaves the order in Awaiting Setup.
 * Step 6 offers USD or HKD and their offered payment choices, with the first offered currency and its first offered payment method preselected.
 
-<!-- trace:case id=g10adm.auction-test-winners.TC-abd rev=1 -->
-### g10adm.auction-test-winners.US1-TC8: Production, or a missing grant, makes nothing
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Making a test winner
-
-**Pre-conditions:**
-
-* admin(operator with the row's grants) is signed in on the row's lane.
-
-**Test data:**
-
-| Lane | Grants | Answer |
-| --- | --- | --- |
-| production | `auction:operate` and `user:create` | As if the action did not exist |
-| staging | `auction:operate` only | Refused |
-
-**Steps:**
-
-1. Send a make request at the operator's own address with a `+qa-` tag.
-
-**Expected Results:**
-
-* Grade10 gives the row's **Answer**.
-* No account, lot or order is made.
-
-<!-- trace:case id=g10adm.auction-test-winners.TC-p4o rev=1 -->
-### g10adm.auction-test-winners.US1-TC9: An address not the operator's tagged one, or holding a signed-in account, is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Making a test winner
-
-**Pre-conditions:**
-
-* admin(operator with `auction:operate` and `user:create`) is signed in as `qa.lead@grade10.com` on staging.
-* An account at `qa.lead+qa-7kq2@grade10.com` has signed in.
-
-**Test data:**
-
-| Email | The refusal |
-| --- | --- |
-| `someone@example.com` | Refused |
-| `qa.lead@grade10.com` | Refused |
-| `qa.lead+qa-7kq2@grade10.com` | Refused, saying the address already holds an account |
-
-**Steps:**
-
-1. Send a make request at the row's **Email**.
-
-**Expected Results:**
-
-* Grade10 gives the row's **The refusal**.
-* No account, lot or order is made.
-
-<!-- trace:case id=g10adm.auction-test-winners.TC-3qi rev=1 -->
-### g10adm.auction-test-winners.US1-TC10: The same address makes one test winner
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Making a test winner
-
-**Pre-conditions:**
-
-* admin(operator with `auction:operate` and `user:create`) is signed in as `qa.lead@grade10.com` on staging.
-* A test winner made at `qa.lead+qa-7kq2@grade10.com`, whose account has not signed in.
-
-**Steps:**
-
-1. Send a make request at `qa.lead+qa-7kq2@grade10.com` again.
-2. Read the list of test winners.
-
-**Expected Results:**
-
-* Grade10 returns the order it made the first time.
-* One account, one lot and one order exist for that address.
-
-<!-- trace:case id=g10adm.auction-test-winners.TC-47e rev=1 -->
-### g10adm.auction-test-winners.US1-TC11: A past close up to 30 days back, at the limit included, opens an overdue order
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Making a test winner
-
-**Pre-conditions:**
-
-* admin(operator with `auction:operate` and `user:create`) is signed in on staging at 2026-09-29T10:00:00Z.
-
-**Test data:**
-
-| Closed at | The order reads |
-| --- | --- |
-| 2026-09-26T10:00:00Z | Setup Overdue |
-| 2026-08-30T10:00:00Z | Setup Overdue |
-
-**Steps:**
-
-1. Send a make request closed at the row's **Closed at**.
-2. Read the order's status.
-
-**Expected Results:**
-
-* The order reads the row's **The order reads**.
-
-<!-- trace:case id=g10adm.auction-test-winners.TC-b5b rev=1 -->
-### g10adm.auction-test-winners.US1-TC12: A close beyond 30 days back or in the future is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Making a test winner
-
-**Pre-conditions:**
-
-* admin(operator with `auction:operate` and `user:create`) is signed in on staging at 2026-09-29T10:00:00Z.
-
-**Test data:**
-
-| Closed at |
-| --- |
-| 2026-08-30T09:59:00Z |
-| 2026-09-29T11:00:00Z |
-
-**Steps:**
-
-1. Send a make request closed at the row's **Closed at**.
-
-**Expected Results:**
-
-* Grade10 refuses it.
-* No account, lot or order is made.
-
-<!-- trace:case id=g10adm.auction-test-winners.TC-uu2 rev=1 -->
-### g10adm.auction-test-winners.US1-TC13: The test lot takes no bid, its order cancelled or not
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Making a test winner
-
-**Pre-conditions:**
-
-* Two test winners' sandbox lots on staging, one whose order an operator cancelled.
-* customer(collector) is signed in on staging.
-
-**Steps:**
-
-1. Send a bid on each lot.
-2. Read each lot.
-
-**Expected Results:**
-
-* Grade10 refuses both bids.
-* Each lot is still closed, with its winning bid unchanged.
-
 <!-- trace:case id=g10adm.auction-test-winners.TC-69r rev=1 -->
 ### g10adm.auction-test-winners.US1-TC14: The emailed link signs in as the test winner, and a new one can be sent
 
@@ -277,7 +60,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Making a test winner
@@ -311,7 +93,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Making a test winner
@@ -345,7 +126,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Making a test winner
@@ -376,7 +156,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Making a test winner
@@ -407,49 +186,6 @@ Runs once per row of **Test data**.
 * Step 3 offers USD and HKD; its available rails follow the chosen settlement currency.
 * Step 4 is accepted.
 * Step 5 reads the row's settlement currency and rail and Preparing Invoice.
-
-<!-- trace:case id=g10adm.auction-test-winners.TC-currency rev=1 -->
-### g10adm.auction-test-winners.US1-TC18: A non-USD bid currency refuses the test winner atomically
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Making a test winner
-
-**Pre-conditions:**
-
-* admin(operator with `auction:operate` and `user:create`) is signed in on staging.
-* `<email>` is a unique tagged email address controlled by QA.
-* No account, lot or order exists for `<email>`.
-
-**Test data:**
-
-| `<email>` | `qa+<row>@example.test`, a unique tagged address for this row in the controlled test domain |
-| Bid currency | Why this row |
-| --- | --- |
-| HKD | A retired bid currency |
-| JPY | A retired bid currency |
-| EUR | Any other unsupported bid currency |
-
-**Steps:**
-
-1. Send a make test winner request at the row's tagged email, with bid currency from the row.
-2. Read the response and search for an account, lot or order at that email.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 finds no account, lot or order.
 
 ## Settled
 

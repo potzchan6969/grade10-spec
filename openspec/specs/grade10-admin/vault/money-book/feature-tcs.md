@@ -1,6 +1,6 @@
 # grade10-admin/vault/money-book Test Cases
 
-**Status:** pending-review · 0/34
+**Status:** pending-review · 0/29
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## grade10-admin-vault-money-book-US1: Controller ties a month's money to the bank statement
@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-01
@@ -51,7 +50,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-01
@@ -81,7 +79,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-01
@@ -111,7 +108,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-01
@@ -141,7 +137,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-01
@@ -170,7 +165,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-01
@@ -197,164 +191,6 @@
 **I want** the principal and interest outstanding across every loan on the book at an instant — now, or a month-end I name — in one unit,
 **so that** what the business is owed is one figure I can quote and check against the cases behind it, and tie to the month it belongs to.
 
-<!-- trace:case id=g10adm.vault-money-book.TC-8gb rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
-### grade10-admin-vault-money-book-US2-TC1-1: The position agrees with the case screens behind it
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-vault-money-book-US-02
-
-**Pre-conditions:**
-
-* admin(holds vault:payout) is signed in to the console.
-* Three live loans are on the book, each in HKD.
-
-**Steps:**
-
-1. Read the position as at now.
-2. Read what each of the three cases owes at that instant.
-
-**Expected Results:**
-
-* The position's outstanding is the sum of the three case figures.
-* The position counts three loans on the book.
-
-<!-- trace:case id=g10adm.vault-money-book.TC-1ph rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
-### grade10-admin-vault-money-book-US2-TC2-1: A book holding two currencies is refused, not summed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-vault-money-book-US-02
-
-**Pre-conditions:**
-
-* admin(holds vault:payout) is signed in to the console.
-* Live loans are on the book in two currencies.
-
-**Steps:**
-
-1. Read the position as at now.
-
-**Expected Results:**
-
-* The position is refused by name.
-* No figure sums the two currencies.
-
-<!-- trace:case id=g10adm.vault-money-book.TC-9ls rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
-### grade10-admin-vault-money-book-US2-TC3-1: A past instant replays the book as it stood
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-vault-money-book-US-02
-
-**Pre-conditions:**
-
-* admin(holds vault:payout) is signed in to the console.
-* One loan was advanced in June, settled in July, and its item released in August.
-
-**Test data:**
-
-| Instant read | The loan reads |
-| --- | --- |
-| End of June | on the book, its whole term outstanding |
-| End of July | on the book, settled |
-| Now | not on the book |
-
-**Steps:**
-
-1. Read the position as at the row's instant.
-
-**Expected Results:**
-
-* The position reads the loan as <The loan reads>.
-
-<!-- trace:case id=g10adm.vault-money-book.TC-ql7 rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
-### grade10-admin-vault-money-book-US2-TC4-1: A position as at a future instant is refused
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-vault-money-book-US-02
-
-**Pre-conditions:**
-
-* admin(holds vault:payout) is signed in to the console.
-
-**Steps:**
-
-1. Read the position as at a date after today.
-
-**Expected Results:**
-
-* The position is refused by name.
-* No figure is given.
-
-<!-- trace:case id=g10adm.vault-money-book.TC-1tw rev=1 covers=g10adm.vault-money-book.SC-eog,g10adm.vault-money-book.SC-7yp,g10adm.vault-money-book.SC-cd9,g10adm.vault-money-book.SC-yco -->
-### grade10-admin-vault-money-book-US2-TC5-1: The position is refused without the money grant
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-vault-money-book-US-02
-
-**Pre-conditions:**
-
-* admin holds vault:read alone, with no vault:payout, and is signed in to the console.
-
-**Steps:**
-
-1. Read the position as at now.
-
-**Expected Results:**
-
-* The position is refused by name.
-* What the operator's own case owes still reads.
-
 ---
 
 ## grade10-admin-vault-money-book-US3: Operator works the loans that are running late
@@ -374,7 +210,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-03
@@ -403,7 +238,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-03
@@ -434,7 +268,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-03
@@ -466,7 +299,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-03
@@ -495,7 +327,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-03
@@ -512,7 +343,6 @@ Runs once per row of **Test data**.
 
 * The list is refused; no row or tile is shown.
 
-
 <!-- trace:case id=g10adm.vault-money-book.TC-vnd rev=1 covers=g10adm.vault-money-book.SC-k1b -->
 ### grade10-admin-vault-money-book-US3-TC6-1: Each arrears row prints in its loan's own currency
 
@@ -524,7 +354,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** `The arrears`
@@ -554,7 +383,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-03
@@ -594,7 +422,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
@@ -635,7 +462,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
@@ -666,7 +492,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
@@ -697,7 +522,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
@@ -727,7 +551,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
@@ -758,7 +581,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** `The export`
@@ -788,7 +610,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
@@ -819,7 +640,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
@@ -839,7 +659,6 @@ Runs once per row of **Test data**.
 * An error line appears by the button.
 * No file downloads.
 
-
 <!-- trace:case id=g10adm.vault-money-book.TC-7i4 rev=1 covers=g10adm.vault-money-book.SC-h86,g10adm.vault-money-book.SC-wgs,g10adm.vault-money-book.SC-ykd,g10adm.vault-money-book.SC-8ea,g10adm.vault-money-book.SC-jz6,g10adm.vault-money-book.SC-wco,g10adm.vault-money-book.SC-1d0,g10adm.vault-money-book.SC-tck,g10adm.vault-money-book.SC-4kg -->
 ### grade10-admin-vault-money-book-US4-TC9-1: The export is refused without the money grant
 
@@ -851,7 +670,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
@@ -880,7 +698,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
@@ -918,7 +735,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-05
@@ -949,7 +765,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-05
@@ -979,7 +794,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-05
@@ -1010,7 +824,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-05
@@ -1040,7 +853,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-05
@@ -1070,7 +882,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-05

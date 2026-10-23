@@ -1,6 +1,6 @@
 # grade10-site/store/cart-validation Test Cases
 
-**Status:** pending-review · 0/23
+**Status:** pending-review · 0/22
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-cart-validation-US1: Collector opens the cart and learns what moved
@@ -22,7 +22,6 @@ checkout for something the store already knew.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -58,7 +57,6 @@ checkout for something the store already knew.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -95,7 +93,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -134,7 +131,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -170,7 +166,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -208,7 +203,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -251,7 +245,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -293,7 +286,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -334,7 +326,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -379,7 +370,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -417,7 +407,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -451,7 +440,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -485,7 +473,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -529,7 +516,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-01
@@ -572,7 +558,6 @@ when I cannot, I know exactly what to fix.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-02
@@ -606,7 +591,6 @@ when I cannot, I know exactly what to fix.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-02
@@ -641,7 +625,6 @@ when I cannot, I know exactly what to fix.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-02
@@ -687,7 +670,6 @@ when I cannot, I know exactly what to fix.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-02
@@ -707,45 +689,6 @@ stock, and the cart is not reopened.
 * No checkout order is created.
 * That line is identified as out of stock.
 
-<!-- trace:case id=g10.store-cart-validation.TC-1qb rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d -->
-### grade10-site-store-cart-validation-US2-TC5-1: Price the browser supplies decides nothing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-validation-US-02
-
-**Pre-conditions:**
-
-* customer(member) is signed in.
-* The cart holds 1 of <product_a>, priced <shop price> in the staging shop's admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <supplied price> | HKD 1.00 (100 minor units) |
-| <shop price> | HKD 123.00 (12300 minor units) |
-
-**Steps:**
-
-1. Send the store's checkout request for the cart with <product_a>'s price set to <supplied price>.
-2. Read the API response.
-3. Open the checkout address the response names.
-
-**Expected Results:**
-
-* Step 3: Shopify's checkout page prices <product_a> at <shop price>.
-* <supplied price> appears nowhere on the checkout.
-
 <!-- trace:case id=g10.store-cart-validation.TC-cxb rev=1 covers=g10.store-cart-validation.SC-nv7,g10.store-cart-validation.SC-5dk,g10.store-cart-validation.SC-eqa,g10.store-cart-validation.SC-rpy,g10.store-cart-validation.SC-bl4,g10.store-cart-validation.SC-das,g10.store-cart-validation.SC-6ed,g10.store-cart-validation.SC-v8d -->
 ### grade10-site-store-cart-validation-US2-TC6-1: Line repriced or reduced at checkout is named, then goes as the shop answered
 
@@ -759,7 +702,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-02
@@ -803,7 +745,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-02
@@ -855,7 +796,6 @@ resolve, not a dead end.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-cart-validation-US-03
@@ -892,7 +832,6 @@ resolve, not a dead end.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-cart-validation-US-03
@@ -929,7 +868,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-cart-validation-US-03
@@ -1010,7 +948,6 @@ sold out and repriced on one read; Q22 needs no scenario.
 | `grade10-site-store-cart-validation-US2-TC2-1` | Folded | SC-15, SC-18 |
 | `grade10-site-store-cart-validation-US2-TC3-1` | Folded; QA1's deleted variant is SC-29 | SC-16, SC-27, SC-29 |
 | `grade10-site-store-cart-validation-US2-TC4-1` | Deprecated: US2-TC2-1 walks the same open-then-checkout path | SC-18 |
-| `grade10-site-store-cart-validation-US2-TC5-1` | Folded | SC-14 |
 | `grade10-site-store-cart-validation-US2-TC6-1` | Folded | SC-13, SC-16, SC-17 |
 | `grade10-site-store-cart-validation-US2-TC7-1` | Added by QA1, folded: a line reduced on open goes at the reduced quantity | SC-02, SC-05, SC-17 |
 | `grade10-site-store-cart-validation-US3-TC1-1` | Folded | SC-17, SC-19 |
@@ -1087,7 +1024,6 @@ against SC-23 at rev 2.
 | `grade10-site-store-cart-validation-US2-TC2-1` | Folded | SC-15, SC-18 |
 | `grade10-site-store-cart-validation-US2-TC3-1` | Folded | SC-16, SC-27 |
 | `grade10-site-store-cart-validation-US2-TC4-1` | Deprecated: US2-TC2-1 walks the same open-then-checkout path | SC-18 |
-| `grade10-site-store-cart-validation-US2-TC5-1` | Folded | SC-14 |
 | `grade10-site-store-cart-validation-US2-TC6-1` | Folded; its Reduced row walks **Back to the cart** after a checkout read | SC-13, SC-16, SC-17 |
 | `grade10-site-store-cart-validation-US3-TC1-1` | Folded | SC-17, SC-19 |
 | `grade10-site-store-cart-validation-US3-TC2-1` | Folded | SC-20, SC-28 |
@@ -1210,7 +1146,6 @@ SC-24, which no case reached.
 | `grade10-site-store-cart-validation-US2-TC2-1` | Folded | SC-15, SC-18 |
 | `grade10-site-store-cart-validation-US2-TC3-1` | Folded; step 7 asserts the withdrawn line leaves the cart (Q14) | SC-16, SC-27 |
 | `grade10-site-store-cart-validation-US2-TC4-1` | Deprecated: US2-TC2-1 walks the same open-then-checkout path | SC-18 |
-| `grade10-site-store-cart-validation-US2-TC5-1` | Folded | SC-14 |
 | `grade10-site-store-cart-validation-US2-TC6-1` | Folded | SC-13, SC-17 |
 | `grade10-site-store-cart-validation-US3-TC1-1` | Folded | SC-17, SC-19 |
 | `grade10-site-store-cart-validation-US3-TC2-1` | Folded | SC-20 |

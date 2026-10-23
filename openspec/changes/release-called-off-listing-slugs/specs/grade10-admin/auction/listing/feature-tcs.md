@@ -3,7 +3,6 @@
 **Status:** reopened · 0/4
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
-
 ## grade10-admin-auction-listing-US3: Operator creates a listing that is ready to sell
 
 **As an** auction operator,
@@ -21,11 +20,9 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
-
 
 **Pre-conditions:**
 
@@ -94,7 +91,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -161,7 +157,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -217,7 +212,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-73

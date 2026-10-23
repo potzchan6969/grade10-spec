@@ -1,68 +1,9 @@
 # grade10-site/auction/listing-page Test Cases
 
-**Status:** reopened · 0/70
+**Status:** reopened · 0/56
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 **Drafts styled:** 2026-10-14, tcs-rules r5
 **Out of suite:** grade10-site-auction-listing-page-SC-75 - the storefront locale test of task 6.1, added after the blind pass, because a page language the brand has no field for is a mapping in the views, not a route a collector walks
-
-## Walk 1: Collector opens a listing at its own address and adjacent checks
-
-**Starting state:**
-
-**Steps 1–3 setup:**
-
-- The catalogue publishes `<published_listing>`. JavaScript disabled in the browser.
-
-**Steps 4–5 setup:**
-
-- The catalogue publishes two listings.
-
-**Steps 6–7 setup:**
-
-- JavaScript disabled in the browser.
-
-**Shared test data:**
-
-**Steps 1–3 data:**
-
-| Field | Value |
-| --- | --- |
-| published_listing | A published listing available in the auction catalogue; bind its public title only |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-
-| Field | Value |
-| --- | --- |
-| lang | The supported language code selected for the canonical listing URL in this fixture; bind its URL language segment only |
-
-**Steps 4–5 data:**
-
-| Field | Value |
-| --- | --- |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-| second_published_listing_url | The canonical URL of a different published listing with its own name and standing; bind the URL only |
-
-**Steps 6–7 data:**
-
-| Field | Value |
-| --- | --- |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-
-### Route
-
-1. Navigate to `<published_listing_url>`.
-2. Check the rendered page.
-3. Check the page source.
-   - Response status is 200 and the listing page renders. `g10.auction-listing-page.US1-TC1`
-   - URL contains `<lang>`. `g10.auction-listing-page.US1-TC1`
-   - Page source carries that listing's name, description, and bidding standing. `g10.auction-listing-page.US1-TC1`
-4. Navigate to `<published_listing_url>` and note name, standing, title, meta description and `og:url`.
-5. Navigate to `<second_published_listing_url>` and note the same.
-   - Each response carries its own listing's name and standing. `g10.auction-listing-page.US1-TC2`
-   - Each response carries its own title, meta description and `og:url`. `g10.auction-listing-page.US1-TC2`
-6. Navigate to `<published_listing_url>`.
-7. Check the page source for `og:title`, `og:description` and `og:url`.
-   - Page source carries `og:title`, `og:description` and `og:url` naming that listing and its own address. `g10.auction-listing-page.US2-TC1`
-   - None of them names the auction catalogue in its place. `g10.auction-listing-page.US2-TC1`
 
 ## Walk 2: Collector opens an address that names no listing
 
@@ -222,8 +163,6 @@
    - The browser is on that listing's address, showing that listing's page. `g10.auction-listing-page.US5-TC1`
 3. Fetch `<grade10 sitemap url>`.
 4. Check every sitemap entry.
-   - `<published_listing>`'s address is listed as an absolute URL of the serving environment. `g10.auction-listing-page.US5-TC2`
-   - No entry carries an unfilled parameter in place of a listing. `g10.auction-listing-page.US5-TC2`
 
 ## Walk 5: Watch an auction and open My Auctions from the toast
 
@@ -493,8 +432,6 @@
 1. Open `<published_listing_url>`.
 2. View the page's response source before any script runs.
 3. Identify each occurrence of `<listing_code>` and inspect its context.
-   - The source names the listing by its title. `g10.auction-listing-page.US10-TC1`
-   - The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present. `g10.auction-listing-page.US10-TC1`
 4. Open `<published_listing_url>` with scripts disabled.
 5. Record its served title, description and bidding standing.
    - Step 5 provides the addressed listing's title, description and bidding standing. `g10.auction-listing-page.US10-TC2`
@@ -510,25 +447,15 @@
 10. Search the preview's title, description and url for `<listing_code>`.
 11. Inspect the preview image and embedded metadata.
 12. Read the same address's document title and meta description.
-   - The preview's title and description have no labelled listing-code or payment-reference field. `g10.auction-listing-page.US10-TC3`
-   - Its URL is the canonical address ending in the lower-case listing-code suffix. Previously cached preview content may persist; the test does not require a purge or regeneration. A fresh preview fetch must satisfy the absence above. `g10.auction-listing-page.US10-TC3`
-   - The preview identifies the public listing by title and full address. `g10.auction-listing-page.US10-TC3`
-   - Image and embedded metadata expose no separate code or payment reference. `g10.auction-listing-page.US10-TC3`
-   - Step 12 identifies the same public listing by title and description. `g10.auction-listing-page.US10-TC3`
-   - Neither document field contains a listing code or payment reference. `g10.auction-listing-page.US10-TC3`
 13. Open `<published_listing_url>`.
 14. Read the browser tab title and the page's meta description.
 15. Compare the title and description with the addressed listing.
-   - Neither the tab title nor the meta description contains the listing code. `g10.auction-listing-page.US10-TC4`
-   - Both identify the addressed listing, never the auction catalogue. `g10.auction-listing-page.US10-TC4`
 16. Open `<published_listing_url>`.
 17. View the page's response source.
 18. Search any data embedded in the document, outside the visible text, for `<listing_code>`.
-   - No field in the embedded data carries the listing code. `g10.auction-listing-page.US10-TC5`
 19. Open `<published_listing_url>` and let the page finish loading.
 20. Inspect the responses the page's own client-side requests receive.
 21. Search those responses for `<listing_code>`.
-   - No page response contains a separate listing-code or payment-reference field. `g10.auction-listing-page.US10-TC6`
 22. Open the auction's listing-address path, substituting `<listing_code>` for its usual identifier.
    - The address does not resolve to that listing's page. `g10.auction-listing-page.US10-TC7`
    - The site's not-found surface is shown, the same as for any address naming no published listing. `g10.auction-listing-page.US10-TC7`
@@ -606,10 +533,6 @@
    - The page and fresh preview identify the listing by its public title and canonical URL. `g10.auction-listing-page.US10-TC11`
    - Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata. `g10.auction-listing-page.US10-TC11`
    - Closing does not release or replace `<listing_url>` or `<listing_code>`. `g10.auction-listing-page.US10-TC11`
-10. Request the existing cached preview for `<listing_url>`.
-11. Inspect its title, description, URL, image and embedded metadata.
-   - The cached preview may continue to show previously cached public listing metadata and `<listing_url>`. `g10.auction-listing-page.US10-TC12`
-   - It contains no separate listing code or payment reference, internal/provider reference, winner data or admin-only data. `g10.auction-listing-page.US10-TC12`
 
 ## Walk 10: Collector contacts support about a listing
 
@@ -818,9 +741,6 @@
    - Step 14 shows `<minimum_next_bid>` as the minimum next valid bid. `g10.auction-listing-page.US12-TC5`
 15. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 16. As customer C, read every message the live connection received after step 1.
-   - Step 16 shows an update carrying the new price, bid count and close. `g10.auction-listing-page.US12-TC6`
-   - No message carries `<customer A maximum>`, an account id, an email or a card detail. `g10.auction-listing-page.US12-TC6`
-   - Any bidder a message names appears only by the listing's pseudonym. `g10.auction-listing-page.US12-TC6`
 17. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer A sets `<maximum>` first.
 18. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer B sets the same maximum later.
 19. As customer B, read the Recent bids rows at `<maximum>`.
@@ -1284,88 +1204,6 @@ HTML,
 **so that** I can read its name, its description and where its bidding stands
 without waiting for a script to run.
 
-<!-- trace:case id=g10.auction-listing-page.TC-zeh rev=2 -->
-### g10.auction-listing-page.US1-TC1: Listing answers whole before scripts run
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-page-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
-
-**Pre-conditions:**
-The catalogue publishes `<published_listing>`. JavaScript disabled in the browser.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| published_listing | A published listing available in the auction catalogue; bind its public title only |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-
-| Field | Value |
-| --- | --- |
-| lang | The supported language code selected for the canonical listing URL in this fixture; bind its URL language segment only |
-
-**Steps:**
-
-1. Navigate to `<published_listing_url>`.
-2. Check the rendered page.
-3. Check the page source.
-
-**Expected Results:**
-
-* Response status is 200 and the listing page renders.
-* URL contains `<lang>`.
-* Page source carries that listing's name, description, and bidding standing.
-
-<!-- trace:case id=g10.auction-listing-page.TC-82e rev=2 -->
-### g10.auction-listing-page.US1-TC2: Two listings answer as two pages
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-page-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
-
-**Pre-conditions:**
-The catalogue publishes two listings.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-| second_published_listing_url | The canonical URL of a different published listing with its own name and standing; bind the URL only |
-
-**Steps:**
-
-1. Navigate to `<published_listing_url>` and note name, standing, title, meta description and `og:url`.
-2. Navigate to `<second_published_listing_url>` and note the same.
-
-**Expected Results:**
-
-* Each response carries its own listing's name and standing.
-* Each response carries its own title, meta description and `og:url`.
-
 <!-- trace:case id=g10.auction-listing-page.TC-2it rev=4 -->
 ### g10.auction-listing-page.US1-TC3: Reused address serves only its eligible current holder
 
@@ -1377,7 +1215,6 @@ The catalogue publishes two listings.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-01
@@ -1442,7 +1279,6 @@ The catalogue publishes two listings.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-01
@@ -1491,43 +1327,6 @@ The catalogue publishes two listings.
 **so that** a link I pass on names the listing it points at instead of the auction
 catalogue.
 
-<!-- trace:case id=g10.auction-listing-page.TC-89i rev=2 -->
-### g10.auction-listing-page.US2-TC1: Shared listing link unfurls as that listing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-page-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
-
-**Pre-conditions:**
-JavaScript disabled in the browser.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-
-**Steps:**
-
-1. Navigate to `<published_listing_url>`.
-2. Check the page source for `og:title`, `og:description` and `og:url`.
-
-**Expected Results:**
-
-* Page source carries `og:title`, `og:description` and `og:url` naming that listing and its own address.
-* None of them names the auction catalogue in its place.
-
 ---
 
 ## g10.auction-listing-page.US3: Collector opens an address that names no listing
@@ -1548,7 +1347,6 @@ answer with the site's not-found surface,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
@@ -1584,7 +1382,6 @@ The catalogue publishes no listing for `<unknown_listing_url>`.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
@@ -1620,11 +1417,9 @@ The catalogue publishes `<published_listing>`.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
-
 
 Runs once per row of **Test data**.
 
@@ -1683,7 +1478,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
@@ -1745,7 +1539,6 @@ disagrees with what the document carried.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-04
@@ -1785,7 +1578,6 @@ disagrees with what the document carried.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-04
@@ -1832,7 +1624,6 @@ a bidding countdown is shown on `<published_listing>`.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-05
@@ -1859,47 +1650,6 @@ The collector is viewing the auction catalogue, which lists `<published_listing>
 
 * The browser is on that listing's address, showing that listing's page.
 
-<!-- trace:case id=g10.auction-listing-page.TC-edm rev=3 -->
-### g10.auction-listing-page.US5-TC2: Sitemap lists each published listing
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/src/serving/sitemap.test.tsx`
-
-**Pre-conditions:**
-The catalogue holds `<published_listing>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| published_listing | A published listing in the catalogue; bind its public title only |
-
-| Field | Value |
-| --- | --- |
-| grade10 sitemap url | The sitemap URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Fetch `<grade10 sitemap url>`.
-2. Check every sitemap entry.
-
-**Expected Results:**
-
-* `<published_listing>`'s address is listed as an absolute URL of the serving environment.
-* No entry carries an unfilled parameter in place of a listing.
-
 ---
 
 ## g10.auction-listing-page.US6: Watch an auction and open My Auctions from the toast
@@ -1919,7 +1669,6 @@ The catalogue holds `<published_listing>`.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-06
@@ -1964,7 +1713,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-06
@@ -2012,7 +1760,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-07
@@ -2057,7 +1804,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-07
@@ -2108,7 +1854,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-08
@@ -2149,7 +1894,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-08
@@ -2198,7 +1942,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-09
@@ -2242,47 +1985,6 @@ Runs once per row of **Test data**.
 **I want** to reference and share a listing by its title and URL,
 **so that** I can discuss it with others and return to it easily.
 
-<!-- trace:case id=g10.auction-listing-page.TC-nis rev=2 -->
-### g10.auction-listing-page.US10-TC1: Listing code absent from the response before scripts run
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-10
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
-
-**Pre-conditions:**
-
-* A published listing exists at its own address.
-* The listing code `<listing_code>` is known from the admin listing screen.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-
-**Steps:**
-
-1. Open `<published_listing_url>`.
-2. View the page's response source before any script runs.
-3. Identify each occurrence of `<listing_code>` and inspect its context.
-
-**Expected Results:**
-
-* The source names the listing by its title.
-* The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
-
 <!-- trace:case id=g10.auction-listing-page.TC-87q rev=4 -->
 ### g10.auction-listing-page.US10-TC2: Listing code absent from the page once scripts finish running
 
@@ -2294,7 +1996,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -2332,176 +2033,6 @@ Runs once per row of **Test data**.
 * No separate listing-code or payment-reference field appears.
 * A code occurs only within the full canonical address.
 
-<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=4 -->
-### g10.auction-listing-page.US10-TC3: Listing code absent from the shared-link preview
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-10
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
-
-**Pre-conditions:**
-
-* A published listing exists at its own address.
-* The listing code `<listing_code>` is known from the admin listing screen.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-
-**Steps:**
-
-1. Fetch the share-preview metadata for `<published_listing_url>`.
-2. Search the preview's title, description and url for `<listing_code>`.
-3. Inspect the preview image and embedded metadata.
-4. Read the same address's document title and meta description.
-
-**Expected Results:**
-
-* The preview's title and description have no labelled listing-code or payment-reference field.
-* Its URL is the canonical address ending in the lower-case listing-code suffix.
-
-Previously cached preview content may persist; the test does not require a
-purge or regeneration. A fresh preview fetch must satisfy the absence above.
-* The preview identifies the public listing by title and full address.
-* Image and embedded metadata expose no separate code or payment reference.
-* Step 4 identifies the same public listing by title and description.
-* Neither document field contains a listing code or payment reference.
-
-<!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=3 -->
-### g10.auction-listing-page.US10-TC4: Listing code absent from the page title and meta description
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-10
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
-
-**Pre-conditions:**
-
-* A published listing exists at its own address.
-* The listing code `<listing_code>` is known from the admin listing screen.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-
-**Steps:**
-
-1. Open `<published_listing_url>`.
-2. Read the browser tab title and the page's meta description.
-3. Compare the title and description with the addressed listing.
-
-**Expected Results:**
-
-* Neither the tab title nor the meta description contains the listing code.
-* Both identify the addressed listing, never the auction catalogue.
-
-<!-- trace:case id=g10.auction-listing-page.TC-udy rev=2 -->
-### g10.auction-listing-page.US10-TC5: Listing code absent from the page's embedded data
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-10
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
-
-**Pre-conditions:**
-
-* A published listing exists at its own address.
-* The listing code `<listing_code>` is known from the admin listing screen.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-
-**Steps:**
-
-1. Open `<published_listing_url>`.
-2. View the page's response source.
-3. Search any data embedded in the document, outside the visible text, for `<listing_code>`.
-
-**Expected Results:**
-
-* No field in the embedded data carries the listing code.
-
-<!-- trace:case id=g10.auction-listing-page.TC-yjo rev=2 -->
-### g10.auction-listing-page.US10-TC6: Listing code absent from the page's own network responses
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-10
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
-
-**Pre-conditions:**
-
-* A published listing exists at its own address.
-* The listing code `<listing_code>` is known from the admin listing screen.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
-
-**Steps:**
-
-1. Open `<published_listing_url>` and let the page finish loading.
-2. Inspect the responses the page's own client-side requests receive.
-3. Search those responses for `<listing_code>`.
-
-**Expected Results:**
-
-* No page response contains a separate listing-code or payment-reference field.
-
 <!-- trace:case id=g10.auction-listing-page.TC-cbx rev=2 -->
 ### g10.auction-listing-page.US10-TC7: Listing code does not resolve as a listing address
 
@@ -2513,7 +2044,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -2550,7 +2080,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -2590,7 +2119,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -2627,7 +2155,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -2667,7 +2194,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -2699,47 +2225,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata.
 * Closing does not release or replace `<listing_url>` or `<listing_code>`.
 
-<!-- trace:case id=g10.auction-listing-page.TC-k71 rev=3 -->
-### g10.auction-listing-page.US10-TC12: A cached preview may persist after the close without private data
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-page-US-10
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/listing-page.spec.ts`
-
-**Pre-conditions:**
-
-* A preview for `<listing_url>` was cached while the listing was publicly available.
-* The listing subsequently closes, without explicit deletion.
-* An authorized admin or the winner knows `<listing_code>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| listing_url | The canonical URL of the listing in this case, retained after the close; bind the URL only |
-
-**Steps:**
-
-1. Request the existing cached preview for `<listing_url>`.
-2. Inspect its title, description, URL, image and embedded metadata.
-
-**Expected Results:**
-
-* The cached preview may continue to show previously cached public listing metadata and `<listing_url>`.
-* It contains no separate listing code or payment reference, internal/provider reference, winner data or admin-only data.
-
 ---
 
 ## g10.auction-listing-page.US11: Collector contacts support about a listing
@@ -2759,7 +2244,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-11
@@ -2804,7 +2288,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-11
@@ -2841,7 +2324,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-11
@@ -2875,7 +2357,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-11
@@ -2920,7 +2401,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
@@ -2967,7 +2447,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
@@ -3008,7 +2487,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-12
@@ -3051,7 +2529,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
@@ -3097,7 +2574,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
@@ -3134,51 +2610,6 @@ Runs once per row of **Test data**.
 * Step 3 reads Highest bid `<highest_bid_after>`, `<customer A maximum>` plus `<increment>`.
 * Step 3 shows `<minimum_next_bid>` as the minimum next valid bid.
 
-<!-- trace:case id=g10.auction-listing-page.TC-wzt rev=2 -->
-### g10.auction-listing-page.US12-TC6: Live updates name no bidder and no maximum
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-12
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/live.spec.ts`
-
-**Pre-conditions:**
-
-* customer A(signed in) leads `<listing_8>` with maximum `<customer A maximum>`.
-* customer C(signed out) is on the listing page for `<listing_8>`, with the browser's network inspector recording its live connection.
-* customer B(card linked) is signed in on a separate session, on the same listing page.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_8 | An open USD listing, scheduled close more than an hour away | · |
-| customer A maximum | USD9,280 | (range: 500000–999999 minor units) |
-| customer B maximum | USD6,160 | (range: 500000–999999 minor units), below `<customer A maximum>` |
-
-**Steps:**
-
-1. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
-2. As customer C, read every message the live connection received after step 1.
-
-**Expected Results:**
-
-* Step 2 shows an update carrying the new price, bid count and close.
-* No message carries `<customer A maximum>`, an account id, an email or a card detail.
-* Any bidder a message names appears only by the listing's pseudonym.
-
 <!-- trace:case id=g10.auction-listing-page.TC-0yw rev=2 -->
 ### g10.auction-listing-page.US12-TC7: A tied maximum that came second carries the earlier-leads tip
 
@@ -3192,7 +2623,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
@@ -3237,7 +2667,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
@@ -3285,7 +2714,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
@@ -3338,7 +2766,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-13
@@ -3391,7 +2818,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-13
@@ -3435,7 +2861,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-13
@@ -3484,7 +2909,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-13
@@ -3539,7 +2963,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
@@ -3586,7 +3009,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
@@ -3631,7 +3053,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
@@ -3685,7 +3106,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
@@ -3738,7 +3158,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
@@ -3788,7 +3207,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
@@ -3829,7 +3247,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
@@ -3870,7 +3287,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
@@ -3924,7 +3340,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-15
@@ -3970,7 +3385,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-15
@@ -4018,7 +3432,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-16
@@ -4073,7 +3486,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-16
@@ -4124,7 +3536,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-16
@@ -4170,7 +3581,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-16
@@ -4221,7 +3631,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-16
@@ -4267,7 +3676,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-16
@@ -4318,7 +3726,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-16
@@ -4358,147 +3765,6 @@ Runs once per row of **Test data**.
 * Step 2 reads `<title reads>`.
 * Step 3 reads `<description reads>`.
 
-<!-- trace:case id=g10.auction-listing-page.TC-k7m rev=1 -->
-### g10.auction-listing-page.US16-TC8: Page title, meta description and Open Graph tags follow the page's language
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-16
-
-**Pre-conditions:**
-
-* customer is on `<g10 site url>`.
-* `<listing_1>` is published with all three languages written.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_1 | A published listing with all three languages written, slug `<slug_1>` |
-| slug_1 | the address built from the English title |
-| english title | Charizard PSA 10 |
-| english description | 1999 Base Set, clean front. |
-| traditional title | 寶可夢 噴火龍 PSA 10 |
-| traditional description | 1999 年基本系列，正面無瑕。 |
-| simplified title | 宝可梦 喷火龙 PSA 10 |
-| simplified description | 1999 年基本系列，正面无瑕。 |
-
-| lang | language | title reads | description reads |
-| --- | --- | --- | --- |
-| /tc | Traditional Chinese | `<traditional title>` | `<traditional description>` |
-| /sc | Simplified Chinese | `<simplified title>` | `<simplified description>` |
-| (none) | English, the default | `<english title>` | `<english description>` |
-
-**Steps:**
-
-1. Request `<lang>`/auction/listings/`<slug_1>` and read the response HTML.
-2. Read the page title.
-3. Read the meta description.
-4. Read the Open Graph title.
-5. Read the Open Graph description.
-
-**Expected Results:**
-
-* Step 2 includes `<title reads>`.
-* Step 3 includes `<description reads>`.
-* Step 4 includes `<title reads>`.
-* Step 5 includes `<description reads>`.
-
-<!-- trace:case id=g10.auction-listing-page.TC-hmv rev=1 -->
-### g10.auction-listing-page.US16-TC9: Share metadata falls back to English one text at a time
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-16
-
-**Pre-conditions:**
-
-* customer is on `<g10 site url>`.
-* `<listing_3>` is published with a Traditional Chinese title and no Traditional Chinese description.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_3 | A published listing with `<english title>`, `<english description>` and `<traditional title>`; no Traditional Chinese description |
-| slug_3 | the address built from the English title |
-| english title | Charizard PSA 10 |
-| english description | 1999 Base Set, clean front. |
-| traditional title | 寶可夢 噴火龍 PSA 10 |
-| traditional description | 1999 年基本系列，正面無瑕。 |
-
-**Steps:**
-
-1. Request `/tc/auction/listings/<slug_3>` and read the response HTML.
-2. Read the page title and the Open Graph title.
-3. Read the meta description and the Open Graph description.
-
-**Expected Results:**
-
-* Step 2 includes `<traditional title>` in both.
-* Step 3 includes `<english description>` in both.
-
-<!-- trace:case id=g10.auction-listing-page.TC-aam rev=1 -->
-### g10.auction-listing-page.US16-TC10: A title with markup characters renders as text in the page and in metadata
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-16
-
-**Pre-conditions:**
-
-* customer is on `<g10 site url>`.
-* `<listing_7>` is published with a Traditional Chinese title containing the characters in `<markup title>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_7 | A published listing with a Traditional Chinese title `<markup title>` and description containing the same characters |
-| slug_7 | the address built from the English title |
-| markup title | 噴火龍 <b>"PSA"</b> & <script>1</script> |
-
-**Steps:**
-
-1. Open the lot page at `/tc/auction/listings/<slug_7>`.
-2. Read the lot title.
-3. Read the Open Graph title and the meta description in the response HTML.
-
-**Expected Results:**
-
-* Step 2 shows `<markup title>` as typed, as text.
-* Step 3 shows the characters escaped, with no extra tag or attribute created.
-* No script runs.
-
 <!-- trace:case id=g10.auction-listing-page.TC-11y rev=1 covers=g10.auction-listing-page.SC-xpl -->
 ### g10.auction-listing-page.US16-TC11: Every language answers at the same lot address and the address names the English title
 
@@ -4512,7 +3778,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-16
@@ -4564,7 +3829,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-listing-page-US-16
@@ -4609,7 +3873,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-16

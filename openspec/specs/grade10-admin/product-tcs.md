@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-12, grade10-admin-auction-listing-US-11, grade10-admin-auction-listing-US-14
@@ -77,7 +76,6 @@
 * **Behaviour:** destructive
 * **Type:** integration
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-13, grade10-admin-auction-listing-US-12, grade10-admin-auction-listing-US-14

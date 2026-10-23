@@ -1,6 +1,6 @@
 # grade10-admin/inventory/card-price-reference Test Cases
 
-**Status:** pending-review · 0/13
+**Status:** pending-review · 0/9
 **Drafts styled:** 2026-09-03, tcs-rules r1
 
 ## grade10-admin-inventory-card-price-reference-US1: Inventory admin classifies a card product
@@ -21,7 +21,6 @@ right price reference.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-card-price-reference-US-01
@@ -60,7 +59,6 @@ An inventory admin can access <grade10 admin inventory product URL>.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** acceptance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-card-price-reference-US-01
@@ -88,7 +86,6 @@ An existing classified card product is open in <grade10 admin inventory product 
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-card-price-reference-US-01
@@ -125,7 +122,6 @@ The inventory catalogue already has the IP tag `Pokémon`.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-card-price-reference-US-01
@@ -145,33 +141,6 @@ matching card result for <a valid PriceCharting card URL>.
 
 * The product shows its confirmed PriceCharting reference.
 * Later price reads use the selected provider identity.
-
-<!-- trace:case id=g10adm.inventory-card-price-reference.TC-3k4 rev=1 covers=g10adm.inventory-card-price-reference.SC-76a,g10adm.inventory-card-price-reference.SC-3pc,g10adm.inventory-card-price-reference.SC-d8q,g10adm.inventory-card-price-reference.SC-rvp -->
-### grade10-admin-inventory-card-price-reference-US1-TC5-1: Refuse a non-card PriceCharting reference
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-card-price-reference-US-01
-
-**Pre-conditions:**
-A future inventory type-vocabulary release has seeded a non-card product.
-
-**Steps:**
-
-1. Submit a PriceCharting reference for the non-card product.
-
-**Expected Results:**
-
-* The reference is refused.
-* The product has no PriceCharting price request.
 
 ---
 
@@ -193,7 +162,6 @@ permanent product value or PSA certification data.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-card-price-reference-US-02
@@ -214,62 +182,6 @@ than 24 hours old with an ungraded baseline and PSA-oriented values.
 * The ungraded baseline and supplied PSA-oriented grades show in USD.
 * Missing grades show as unavailable rather than zero.
 
-<!-- trace:case id=g10adm.inventory-card-price-reference.TC-40r rev=1 covers=g10adm.inventory-card-price-reference.SC-h9s,g10adm.inventory-card-price-reference.SC-i6m,g10adm.inventory-card-price-reference.SC-13p,g10adm.inventory-card-price-reference.SC-wjl -->
-### grade10-admin-inventory-card-price-reference-US2-TC2-1: Refresh an expired regular cache
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-card-price-reference-US-02
-
-**Pre-conditions:**
-A matched Collectible Cards product has a successful price result more than 24
-hours old, and PriceCharting is configured to return a current result.
-
-**Steps:**
-
-1. Request the product's current price reference.
-
-**Expected Results:**
-
-* Grade10 requests a current provider result before answering.
-* The returned reference replaces the expired values and is fresh.
-
-<!-- trace:case id=g10adm.inventory-card-price-reference.TC-ayg rev=1 covers=g10adm.inventory-card-price-reference.SC-h9s,g10adm.inventory-card-price-reference.SC-i6m,g10adm.inventory-card-price-reference.SC-13p,g10adm.inventory-card-price-reference.SC-wjl -->
-### grade10-admin-inventory-card-price-reference-US2-TC3-1: Preserve stale prices after refresh failure
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-card-price-reference-US-02
-
-**Pre-conditions:**
-A matched Collectible Cards product has cached values, and its eligible
-PriceCharting refresh is configured to fail.
-
-**Steps:**
-
-1. Request the product's current price reference.
-
-**Expected Results:**
-
-* The prior values and their successful update time remain available.
-* The reference is marked stale.
-
 ---
 
 ## grade10-admin-inventory-card-price-reference-US3: Inventory admin imports card products
@@ -289,7 +201,6 @@ misidentified catalogue data.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-card-price-reference-US-03
@@ -329,7 +240,6 @@ PriceCharting search is configured to return one candidate for each row in
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** acceptance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-card-price-reference-US-03
@@ -361,7 +271,6 @@ unmatched PriceCharting link.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-card-price-reference-US-03
@@ -390,7 +299,6 @@ A valid card import preview is open with a PriceCharting candidate for each row.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-card-price-reference-US-03
@@ -407,31 +315,3 @@ A ready import preview contains two valid, confirmed card rows.
 
 * Both imported products appear with their required tags.
 * Each product has one empty inventory snapshot and a confirmed PriceCharting reference.
-
-<!-- trace:case id=g10adm.inventory-card-price-reference.TC-jsf rev=1 covers=g10adm.inventory-card-price-reference.SC-2k9,g10adm.inventory-card-price-reference.SC-5dl,g10adm.inventory-card-price-reference.SC-uot,g10adm.inventory-card-price-reference.SC-lmn -->
-### grade10-admin-inventory-card-price-reference-US3-TC5-1: Roll back a conflicted import
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-card-price-reference-US-03
-
-**Pre-conditions:**
-A ready import preview contains two valid confirmed rows, and one provider
-identity is claimed by another product before commit.
-
-**Steps:**
-
-1. Commit the ready import.
-
-**Expected Results:**
-
-* The import is refused for the conflicting provider identity.
-* Neither previewed product is created.

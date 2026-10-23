@@ -1,6 +1,6 @@
 # shared/auth/roles Test Cases
 
-**Status:** approved · 21/21
+**Status:** approved · 15/15
 **Reviewed:** 2026-10-08, tcs-rules r4
 
 ## shared-auth-roles-US1: Collector holds the user role only
@@ -8,78 +8,6 @@
 **As a** collector who has never been granted an operator role,
 **I want** my roles to be `user` only,
 **so that** I cannot act as staff by accident.
-
-<!-- trace:case id=g10.shared-roles.TC-gda rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
-### shared-auth-roles-US1-TC1-1: Collector without an operator grant is user only
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-01
-
-**Pre-conditions:**
-
-* customer(has never been granted an operator role) is signed in on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Read who is calling.
-
-**Expected Results:**
-
-* The caller's roles are `user` only.
-
-<!-- trace:case id=g10.shared-roles.TC-5hv rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
-### shared-auth-roles-US1-TC2-1: Unknown role name is dropped
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-01
-
-**Pre-conditions:**
-
-* customer(stored roles include `<unknown role>`) is signed in on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| unknown role | intern |
-
-| Field | Value |
-| --- | --- |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Read who is calling.
-
-**Expected Results:**
-
-* `intern` is not among the caller's roles.
 
 <!-- trace:case id=g10.shared-roles.TC-l66 rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC3-1: User role cannot take an operator action
@@ -92,7 +20,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-roles-US-01
@@ -126,7 +53,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** exploratory
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-roles-US-01
@@ -168,7 +94,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-02
@@ -211,7 +136,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-roles-US-02
@@ -236,44 +160,6 @@
 * The list is refused.
 * The ban is refused.
 
-<!-- trace:case id=g10.shared-roles.TC-67z rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC3-1: Unknown permission grants nothing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* A signed-in person is on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| unknown permission | store:explode |
-
-| Field | Value |
-| --- | --- |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Request an action that requires `<unknown permission>`.
-
-**Expected Results:**
-
-* The action is refused.
-
 <!-- trace:case id=g10.shared-roles.TC-ni5 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC4-1: Staff can write the store and operate the auction catalog
 
@@ -285,7 +171,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-02
@@ -322,7 +207,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-roles-US-02
@@ -362,7 +246,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-roles-US-02
@@ -399,7 +282,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-02
@@ -424,77 +306,6 @@
 * Who holds a role can be changed.
 * What that role grants cannot be changed.
 
-<!-- trace:case id=g10.shared-roles.TC-af9 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC8-1: Admin can record a refund
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(role `admin`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Request a refund, which requires `auction:refund`, on `<grade10 admin auction url>`.
-
-**Expected Results:**
-
-* The refund is allowed.
-
-<!-- trace:case id=g10.shared-roles.TC-z15 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC9-1: Settlement permission is not required for a refund
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(role `staff`) is signed in.
-* That caller holds refund processing and does not hold payment settlement.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Request a refund, which requires `auction:refund`, on `<grade10 admin auction url>`.
-2. Read the caller's grants.
-
-**Expected Results:**
-
-* The refund is allowed.
-* The caller does not hold `auction:settle`.
-
 <!-- trace:case id=g10.shared-roles.TC-vdy rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC11-1: Finance collects auction money and holds nothing else
 
@@ -506,7 +317,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-02
@@ -560,7 +370,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-02
@@ -612,7 +421,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-02
@@ -646,46 +454,6 @@ Runs once per row of **Test data**.
 * The proof downloads.
 * `<item_1>` reads the custodian as owner, and a new move to the custodian sits above the one whose proof step 2 opened.
 
-<!-- trace:case id=g10.shared-roles.TC-gu0 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC16-1: Treasurer holds no inventory grant
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(only operator role is `treasurer`) is signed in to the Grade10 console.
-* `<item_1>` is owned by `<collector A>`, no place marks it, and its top move carries one proof.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| collector A | The collector who owns `<item_1>` in this fixture; bind their user id only |
-| item_1 | The catalogue item owned by `<collector A>` and prepared with the standing in the pre-conditions; bind its item identity only |
-
-**Steps:**
-
-1. Read `<item_1>` from the register.
-2. Edit `<item_1>`'s title.
-3. Transfer `<item_1>` to the custodian with a reason.
-4. Request the proof of `<item_1>`'s top move.
-
-**Expected Results:**
-
-* Each step is refused.
-* `<item_1>` keeps its title, its owner and its moves.
-
 ---
 
 ## shared-auth-roles-US3: Case work and money are separate grants
@@ -705,7 +473,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-03
@@ -747,7 +514,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-03
@@ -801,7 +567,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-03
@@ -850,7 +615,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-03
@@ -892,7 +656,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-03

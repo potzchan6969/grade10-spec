@@ -19,7 +19,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-01
@@ -49,7 +48,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-01
@@ -77,7 +75,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-01
@@ -107,7 +104,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-01
@@ -143,7 +139,6 @@ the store,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-02
@@ -172,7 +167,6 @@ the store,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-02
@@ -200,7 +194,6 @@ the store,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-02
@@ -239,7 +232,6 @@ anyway,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-03
@@ -269,7 +261,6 @@ anyway,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-03
@@ -299,7 +290,6 @@ anyway,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-03
@@ -333,7 +323,6 @@ anyway,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-04
@@ -361,7 +350,6 @@ anyway,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-availability-US-04

@@ -21,7 +21,6 @@ item,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-03, grade10-site-store-product-page-US-03
@@ -62,7 +61,6 @@ item,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-03, grade10-site-store-product-page-US-03, grade10-site-store-cart-validation-US-01
@@ -117,7 +115,6 @@ when I open it,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-home-US-03, grade10-site-store-home-US-06, grade10-site-store-product-page-US-04
@@ -168,7 +165,6 @@ repaired cart sent on to Shopify's payment page,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-02, grade10-site-store-checkout-US-02, grade10-site-store-checkout-US-01

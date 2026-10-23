@@ -1,6 +1,6 @@
 # grade10-site/store/membership Test Cases
 
-**Status:** pending-review · 0/4
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-membership-US2: Member identifies and spends at the till
@@ -22,7 +22,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-membership-US-02
@@ -72,7 +71,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-membership-US-02
@@ -117,7 +115,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-membership-US-02
@@ -148,48 +145,6 @@ Runs once per row of **Test data**.
 
 * Step 2 reads <saved name>, not 會員.
 * Step 4 reads <saved name>.
-
-<!-- trace:case id=g10.store-membership.TC-80o rev=1 covers=g10.store-membership.SC-ymg -->
-### grade10-site-store-membership-US2-TC20-1: Till is sent an 80-character name whole
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-membership-US-02
-
-**Pre-conditions:**
-
-* admin(shop staff) is on <shop_1>'s till.
-* customer(member, saved <long name> as the display name on the profile) is <member_1>, signed in to the account as <signed-in address>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <member_1> | A member paired with a commerce customer |
-| <shop_1> | A physical store running the Grade10 till |
-| <signed-in address> | `kit.lam@example.com` |
-| <long name> | 80 Latin characters, the display name's limit |
-
-**Steps:**
-
-1. Identify <member_1> by typing <signed-in address> in the till's membership modal.
-2. Read the API response that answers the modal.
-3. Find <member_1>'s customer in the shop's own customer search.
-4. Read the API response that answers the customer details badge.
-
-**Expected Results:**
-
-* Step 2 names the member <long name>, all 80 characters.
-* Step 4 names the member <long name>, all 80 characters.
 
 ## Settled
 

@@ -1,6 +1,6 @@
 # grade10-site/auction/listing-media Test Cases
 
-**Status:** pending-review · 21/32
+**Status:** reopened · 20/31
 **Reviewed:** 2026-09-07, lapsed 2026-10-05
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
@@ -608,7 +608,6 @@
    - Zoom requests size `zoom`. `g10.auction-listing-media.US5-TC2`
 6. Request that image at `<unknown size>`.
 7. Request an image that does not exist.
-   - The unknown-size response matches a missing image. `g10.auction-listing-media.US5-TC3`
 8. Navigate to `<grade10 auction url>`.
 9. Find `<listing_29>`'s row.
    - The listing appears with its title and price. `g10.auction-listing-media.US5-TC4`
@@ -651,7 +650,6 @@ file, and the gallery stays within the cap admin-listing sets.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -694,7 +692,6 @@ file, and the gallery stays within the cap admin-listing sets.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -740,7 +737,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -784,7 +780,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -824,7 +819,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -864,7 +858,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -907,7 +900,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -944,7 +936,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -981,7 +972,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -1023,7 +1013,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -1068,7 +1057,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -1115,7 +1103,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -1162,7 +1149,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -1205,7 +1191,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -1248,7 +1233,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
@@ -1299,7 +1283,6 @@ reveal it at zoom size on hover,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-02
@@ -1338,7 +1321,6 @@ reveal it at zoom size on hover,
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-02
@@ -1376,7 +1358,6 @@ reveal it at zoom size on hover,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-02
@@ -1422,7 +1403,6 @@ listing with no image at all.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-03
@@ -1464,7 +1444,6 @@ listing with no image at all.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-03
@@ -1504,7 +1483,6 @@ listing with no image at all.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-03
@@ -1553,7 +1531,6 @@ title when I have written none.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-04
@@ -1591,7 +1568,6 @@ title when I have written none.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-04
@@ -1629,7 +1605,6 @@ title when I have written none.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-04
@@ -1671,7 +1646,6 @@ title when I have written none.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-04
@@ -1718,7 +1692,6 @@ details page.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
@@ -1762,7 +1735,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
@@ -1792,44 +1764,6 @@ Runs once per row of **Test data**.
 * The main frame requests size `detail`.
 * Zoom requests size `zoom`.
 
-<!-- trace:case id=g10.auction-listing-media.TC-77a rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
-### g10.auction-listing-media.US5-TC3: Unknown size is not found
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-media-US-05
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/worker/routes.spec.ts`
-
-**Pre-conditions:**
-
-* A published gallery image on `<listing_28>` is available at `card`, `detail`, `thumb`, and `zoom`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_28 | A published auction listing with a gallery image; bind its identity only |
-| unknown size | A size name other than `card`, `detail`, `thumb`, or `zoom`; bind its size name only |
-
-**Steps:**
-
-1. Request that image at `<unknown size>`.
-2. Request an image that does not exist.
-
-**Expected Results:**
-
-* The unknown-size response matches a missing image.
-
 <!-- trace:case id=g10.auction-listing-media.TC-mu3 rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
 ### g10.auction-listing-media.US5-TC4: Listing without a catalogue image still lists
 
@@ -1841,7 +1775,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
@@ -1878,7 +1811,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
@@ -1919,7 +1851,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
@@ -1960,7 +1891,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
@@ -2001,7 +1931,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05
@@ -2042,7 +1971,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05

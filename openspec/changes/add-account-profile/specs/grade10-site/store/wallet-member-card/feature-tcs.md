@@ -1,6 +1,6 @@
 # grade10-site/store/wallet-member-card Test Cases
 
-**Status:** pending-review · 0/5
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-wallet-member-card-US6: Member carries their card in a phone wallet
@@ -22,7 +22,6 @@ Runs once for each <member state> row on each <wallet>.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-store-wallet-member-card-US-06
@@ -60,177 +59,6 @@ Runs once for each <member state> row on each <wallet>.
 **Expected Results:**
 
 * Step 4 reads the row's name.
-
-<!-- trace:case id=g10.store-wallet-member-card.TC-0d5 rev=1 covers=g10.store-wallet-member-card.SC-vzv -->
-### grade10-site-store-wallet-member-card-US6-TC11-1: An account-name change reaches the pass within the daily floor
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-wallet-member-card-US-06
-
-**Pre-conditions:**
-
-* customer(member with a live Google Wallet pass, never saved a profile) has an account named <old name>, and the pass shows <old name>.
-* Nothing else the pass shows changes during the run.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <old name> | `Kit Lam` |
-| <new name> | `Kit L. Lam` |
-| <floor> | 86400s (24h) |
-
-**Steps:**
-
-1. Change the account's name to <new name> in the account service.
-2. Read what the sweeps send the wallet until <floor> after step 1.
-
-**Expected Results:**
-
-* Within <floor> of step 1, the wallet is sent the pass naming <new name>.
-
-<!-- trace:case id=g10.store-wallet-member-card.TC-nck rev=1 covers=g10.store-wallet-member-card.SC-nmv -->
-### grade10-site-store-wallet-member-card-US6-TC12-1: An unreachable account service leaves a pass with no shop name as it was
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-wallet-member-card-US-06
-
-**Pre-conditions:**
-
-* customer(member with a live Google Wallet pass, never saved a profile, account named <name>) has a pass showing <name> and <old balance>.
-* The member's balance has moved to <new balance>, so the pass is due.
-* The account service's name lookup is mocked to fail.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <name> | `Kit Lam` |
-| <old balance> | 1200 points |
-| <new balance> | 1100 points |
-
-**Steps:**
-
-1. Wait for the first sweep beginning after the balance moved.
-2. Read what that sweep sent the wallet.
-3. Restore the account service's name lookup.
-4. Wait for the next sweep.
-5. Read what that sweep sent the wallet.
-
-**Expected Results:**
-
-* Step 2 finds nothing sent: the pass still shows <name> and <old balance>.
-* Step 5 finds the pass sent naming <name> with <new balance>.
-
-<!-- trace:case id=g10.store-wallet-member-card.TC-scs rev=1 covers=g10.store-wallet-member-card.SC-4hb -->
-### grade10-site-store-wallet-member-card-US6-TC13-1: Pass is sent an 80-character name whole
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-wallet-member-card-US-06
-
-**Pre-conditions:**
-
-* customer(member with no pass, saved <long name> as the display name on the profile) is signed in.
-* The deployment is configured for <wallet>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <long name> | 80 Latin characters, the display name's limit |
-
-| <wallet> |
-| --- |
-| Google Wallet |
-| Apple Wallet |
-
-**Steps:**
-
-1. Navigate to <grade10 membership url>.
-2. Click the action that adds a <wallet> pass.
-3. Read the pass the store issues.
-
-**Expected Results:**
-
-* Step 3 names the member <long name>, all 80 characters.
-
-<!-- trace:case id=g10.store-wallet-member-card.TC-nh4 rev=1 covers=g10.store-wallet-member-card.SC-nmv,g10.store-wallet-member-card.SC-92j -->
-### grade10-site-store-wallet-member-card-US6-TC14-1: A saved name refreshes the pass through an account-service outage
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-wallet-member-card-US-06
-
-**Pre-conditions:**
-
-* customer A(member with a live Google Wallet pass, saved <saved name> as the display name on the profile) has a pass showing <saved name> and <old balance>.
-* customer B(member with a live Google Wallet pass, never saved a profile, account named <B's name>) has a pass showing <B's name> and <old balance>.
-* Both members' balances have moved to <new balance>, so both passes are due on the same sweep.
-* The account service's name lookup is mocked to fail.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <saved name> | `Kit Collector` |
-| <B's name> | `Mika Tan` |
-| <old balance> | 1200 points |
-| <new balance> | 1100 points |
-
-**Steps:**
-
-1. Wait for the first sweep beginning after the balances moved.
-2. Read what that sweep sent the wallet.
-3. Restore the account service's name lookup.
-4. Wait for the next sweep.
-5. Read what that sweep sent the wallet.
-
-**Expected Results:**
-
-* Step 2 finds customer A's pass sent naming <saved name> with <new balance>.
-* Step 2 finds nothing sent for customer B: the pass still shows <B's name> and <old balance>.
-* Step 5 finds customer B's pass sent naming <B's name> with <new balance>.
 
 ## Settled
 

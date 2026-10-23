@@ -29,7 +29,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
@@ -62,7 +61,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
@@ -93,7 +91,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
@@ -125,7 +122,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
@@ -154,7 +150,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
@@ -183,7 +178,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
@@ -221,7 +215,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -261,7 +254,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -291,7 +283,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -322,7 +313,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -360,7 +350,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -391,7 +380,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -430,7 +418,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -470,7 +457,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -512,7 +498,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -552,7 +537,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-02
@@ -589,7 +573,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-03
@@ -628,7 +611,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-03
@@ -666,7 +648,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-03
@@ -707,7 +688,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-03
@@ -746,7 +726,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-03
@@ -789,7 +768,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-03
@@ -819,7 +797,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-03
@@ -858,7 +835,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-03
@@ -909,7 +885,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-04
@@ -947,7 +922,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-04
@@ -986,7 +960,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-04
@@ -1026,7 +999,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-04
@@ -1067,7 +1039,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-04
@@ -1107,7 +1078,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-04
@@ -1155,7 +1125,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
@@ -1192,7 +1161,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
@@ -1229,7 +1197,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
@@ -1258,7 +1225,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
@@ -1296,7 +1262,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
@@ -1326,7 +1291,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
@@ -1357,7 +1321,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
@@ -1389,7 +1352,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
@@ -1429,7 +1391,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-05
@@ -1476,7 +1437,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1514,7 +1474,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1553,7 +1512,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1587,7 +1545,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1628,7 +1585,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1657,7 +1613,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1687,7 +1642,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1727,7 +1681,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1765,7 +1718,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1799,7 +1751,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-plan-US-06
@@ -1852,7 +1803,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -1889,7 +1839,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -1927,7 +1876,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -1955,7 +1903,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -1986,7 +1933,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -2023,7 +1969,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -2053,7 +1998,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -2086,7 +2030,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -2127,7 +2070,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -2158,7 +2100,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
@@ -2205,7 +2146,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-08
@@ -2240,7 +2180,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-08
@@ -2274,7 +2213,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-08
@@ -2305,7 +2243,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-08
@@ -2339,7 +2276,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-submission-plan-US-08

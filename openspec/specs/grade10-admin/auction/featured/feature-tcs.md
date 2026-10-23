@@ -21,7 +21,6 @@ Active or Upcoming listing and upload one front page image,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-01
@@ -51,7 +50,6 @@ Active or Upcoming listing and upload one front page image,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-01
@@ -93,7 +91,6 @@ Active or Upcoming listing and upload one front page image,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-01
@@ -135,7 +132,6 @@ Active or Upcoming listing and upload one front page image,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-01
@@ -166,7 +162,6 @@ Active or Upcoming listing and upload one front page image,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-01
@@ -204,7 +199,6 @@ Active or Upcoming listing and upload one front page image,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-01
@@ -242,7 +236,6 @@ Active or Upcoming listing and upload one front page image,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-01
@@ -274,7 +267,6 @@ Active or Upcoming listing and upload one front page image,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-01
@@ -303,7 +295,6 @@ Active or Upcoming listing and upload one front page image,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-01
@@ -344,7 +335,6 @@ no longer lead,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-02
@@ -384,7 +374,6 @@ no longer lead,
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-02
@@ -424,7 +413,6 @@ no longer lead,
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-featured-US-02

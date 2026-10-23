@@ -26,7 +26,6 @@ has left behind.
 * **Behaviour:** positive
 * **Type:** performance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-product-listing-US-14
@@ -59,7 +58,6 @@ has left behind.
 * **Behaviour:** positive
 * **Type:** performance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-product-listing-US-14
@@ -91,7 +89,6 @@ has left behind.
 * **Behaviour:** positive
 * **Type:** performance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-product-listing-US-14
@@ -133,7 +130,6 @@ has left behind.
 * **Behaviour:** positive
 * **Type:** performance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-store-product-listing-US-14
@@ -164,7 +160,6 @@ has left behind.
 * **Behaviour:** positive
 * **Type:** performance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-product-listing-US-14
@@ -204,7 +199,6 @@ has left behind.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-product-listing-US-15

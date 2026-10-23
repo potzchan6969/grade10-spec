@@ -1,6 +1,6 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** pending-review · 0/21
+**Status:** pending-review · 0/14
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** grade10-site-auction-bid-increments-SC-03, grade10-site-auction-bid-increments-SC-14
 
@@ -21,7 +21,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -68,7 +67,6 @@ Runs once per row of **Test data**, and once for every configured tier after the
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -117,7 +115,6 @@ Runs once per row of **Test data**, and once for every configured tier after the
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -158,7 +155,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -203,7 +199,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -245,7 +240,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -292,7 +286,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -347,7 +340,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -397,7 +389,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -433,200 +424,6 @@ Runs once per row of **Test data**.
 
 ---
 
-<!-- trace:case id=g10.auction-bid-increments.TC-gxd rev=1 covers=g10.auction-bid-increments.SC-a64,g10.auction-bid-increments.SC-bj0 -->
-### g10.auction-bid-increments.US1-TC13: A schedule change moves an open listing's minimum and keeps its standing bid
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* `<listing_7>` is open, in USD, and led by user A at `<standing bid>` with a maximum of `<standing maximum>`.
-* Two schedules are available to the minimum calculation: `<schedule A>` and `<schedule B>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_7 | An open USD listing led by user A, with recorded bids; bind its identity only | · |
-| standing bid | A price inside a configured tier, away from both bounds | (range: within that tier) |
-| standing maximum | A price above `<standing bid>` | (range: any amount above `<standing bid>`) |
-| schedule A | The configured schedule | (fixed configured value) |
-| old increment | The increment `<schedule A>` gives the tier holding `<standing bid>` | (fixed configured value) |
-| schedule B | `<schedule A>` with the increment of the tier holding `<standing bid>` changed to `<new increment>` | (fixed, a second schedule, never the deployed file) |
-| new increment | A positive whole-dollar amount different from `<old increment>` | (range: any such amount) |
-
-**Steps:**
-
-1. Read `<listing_7>`'s current bid, leader, maximum, bid count and recorded bids.
-2. Read `<listing_7>`'s minimum next amount under `<schedule A>`.
-3. Read `<listing_7>`'s minimum next amount under `<schedule B>`, with nothing written to `<listing_7>` between the reads.
-4. Read `<listing_7>`'s current bid, leader, maximum, bid count and recorded bids again.
-
-**Expected Results:**
-
-* Step 2 reads `<standing bid>` plus `<old increment>`.
-* Step 3 reads `<standing bid>` plus `<new increment>`, though `<listing_7>` was already open and holds no change of its own.
-* Step 4 reads the same current bid `<standing bid>`, the same leader, the same maximum `<standing maximum>`, the same bid count and the same recorded bids as step 1.
-
----
-
-<!-- trace:case id=g10.auction-bid-increments.TC-f10 rev=1 covers=g10.auction-bid-increments.SC-w3o -->
-### g10.auction-bid-increments.US1-TC14: A bid at the old minimum is refused after a schedule change
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* `<listing_8>` is open, in USD, and led by user A at `<standing bid>`.
-* User B is signed in with `<card>` saved, and the minimum user B last read on `<listing_8>` is `<old minimum>`.
-* `<schedule B>` is in force, and its increment for the tier holding `<standing bid>` is larger than `<schedule A>`'s.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| card | Visa ending 4242 | · |
-| listing_8 | An open USD listing led by user A; bind its identity only | · |
-| standing bid | A price inside a configured tier, away from both bounds | (range: within that tier) |
-| schedule A | The configured schedule | (fixed configured value) |
-| old minimum | `<standing bid>` plus the increment `<schedule A>` gives that tier | (fixed derived value) |
-| schedule B | `<schedule A>` with the increment of that tier raised to `<new increment>` | (fixed, a second schedule, never the deployed file) |
-| new increment | A whole-dollar amount larger than the increment in `<schedule A>` | (range: any such amount) |
-| new minimum | `<standing bid>` plus `<new increment>` | (fixed derived value) |
-
-**Steps:**
-
-1. As user B, submit a bid of `<old minimum>` on `<listing_8>`.
-2. Read the API response.
-3. Read `<listing_8>`'s current bid, leader and bid count.
-
-**Expected Results:**
-
-* Step 2 shows the bid is refused and names `<new minimum>` as the minimum.
-* Step 3 reads current bid `<standing bid>`, user A leading, and the bid count as before step 1.
-
----
-
-<!-- trace:case id=g10.auction-bid-increments.TC-epf rev=1 covers=g10.auction-bid-increments.SC-ywg -->
-### g10.auction-bid-increments.US1-TC15: A resolved price reads the schedule in force and a later change leaves it
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* `<listing_9>` is open, in USD, and led by user A with a maximum of `<user A maximum>`.
-* User B is signed in with `<card>` saved and holds no bid on `<listing_9>`.
-* `<schedule A>` is in force.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| card | Visa ending 4242 | · |
-| listing_9 | An open USD listing led by user A; bind its identity only | · |
-| user A maximum | A price in a configured tier above the tier of `<user B maximum>` | (range: within that tier) |
-| user B maximum | A price at least the minimum next amount and below `<user A maximum>`, inside one configured tier | (range: within that tier) |
-| schedule A | The configured schedule | (fixed configured value) |
-| increment | The increment `<schedule A>` gives the tier holding `<user B maximum>` | (fixed configured value) |
-| resolved price | `<user B maximum>` plus `<increment>`, capped at `<user A maximum>` | (fixed derived value) |
-| schedule B | `<schedule A>` with the increment of the tier holding `<user B maximum>` changed to another positive whole-dollar amount | (fixed, a second schedule, never the deployed file) |
-
-**Steps:**
-
-1. As user B, commit a maximum of `<user B maximum>` on `<listing_9>`.
-2. Read `<listing_9>`'s current bid, leader and the recorded bids.
-3. Put `<schedule B>` in force.
-4. Read `<listing_9>`'s current bid, leader and the recorded bids again.
-
-**Expected Results:**
-
-* Step 2 reads current bid `<resolved price>`, equal to `<user B maximum>` plus `<increment>`, with user A leading.
-* Step 4 reads the same current bid `<resolved price>`, the same leader and the same recorded bids as step 2.
-
----
-
-<!-- trace:case id=g10.auction-bid-increments.TC-ht2 rev=1 covers=g10.auction-bid-increments.SC-cx4 -->
-### g10.auction-bid-increments.US1-TC16: A bid with cents is refused
-
-The bid panel's amount field keeps whole dollars and cannot type cents, so the route is a direct call to the bid API.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* `<listing_14>` is open, in USD, and led by user A at `<standing bid>`, with a maximum of `<standing maximum>`.
-* User B is signed in with `<card>` saved and holds no bid on `<listing_14>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| card | Visa ending 4242 | · |
-| listing_14 | An open USD listing led by user A; bind its identity only | · |
-| standing bid | A whole-dollar price inside a configured tier | (range: within that tier) |
-| standing maximum | A whole-dollar amount above `<standing bid>` | (range: any such amount) |
-| minimum next bid | `<standing bid>` plus the configured increment of its tier | (fixed derived value), a whole-dollar amount |
-| bid with cents | `<minimum next bid>` plus one minor unit | (fixed boundary), the smallest amount above the minimum that is not whole dollars |
-
-**Steps:**
-
-1. As user B, submit a bid of `<bid with cents>` on `<listing_14>` through the bid API.
-2. Read the API response.
-3. Read `<listing_14>`'s current bid, leader, maximum, bid count and recorded bids.
-4. As user B, submit a bid of `<minimum next bid>` on `<listing_14>`.
-
-**Expected Results:**
-
-* Step 2 shows the bid is refused and names the whole-dollar rule.
-* Step 3 reads current bid `<standing bid>`, user A leading with maximum `<standing maximum>`, the bid count as before step 1, and no recorded bid at `<bid with cents>`.
-* Step 4 accepts the bid, so the refusal was for the cents and not for user B's standing.
-
----
-
 <!-- trace:case id=g10.auction-bid-increments.TC-jbt rev=1 covers=g10.auction-bid-increments.SC-kc7 -->
 ### g10.auction-bid-increments.US1-TC17: A starting price with cents is refused
 
@@ -640,7 +437,6 @@ The listing editor's money field takes cents, so the route is the editor itself.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -673,53 +469,6 @@ The listing editor's money field takes cents, so the route is the editor itself.
 
 ---
 
-<!-- trace:case id=g10.auction-bid-increments.TC-t8w rev=1 covers=g10.auction-bid-increments.SC-y9s -->
-### g10.auction-bid-increments.US1-TC18: A consignment ask with cents makes no listing
-
-The route is the consignment sync, reached through the API, because no screen of this capability makes a listing from an ask.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* `<ask_1>` is a consignment ask for the auction with a price of `<price with cents>` and no listing.
-* `<ask_2>` is a consignment ask for the auction with a price of `<whole price>` and no listing.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| ask_1 | A consignment ask for the auction; bind its identity only | · |
-| ask_2 | A consignment ask for the auction; bind its identity only | · |
-| whole price | USD120 | (range: any whole-dollar amount) |
-| price with cents | USD120.01 | (fixed boundary), one minor unit above a whole dollar |
-
-**Steps:**
-
-1. Run the sync that makes a listing from `<ask_1>`.
-2. Read the sync's result and the listing of `<ask_1>`.
-3. Run the sync that makes a listing from `<ask_2>`.
-4. Read the listing of `<ask_2>`.
-
-**Expected Results:**
-
-* Step 1 is refused and names the whole-dollar rule.
-* Step 2 reads no listing for `<ask_1>`, and `<ask_1>` is unchanged.
-* Step 4 reads a draft listing with a starting price of `<whole price>`, so the refusal was for the cents.
-
----
-
 <!-- trace:case id=g10.auction-bid-increments.TC-0es rev=1 covers=g10.auction-bid-increments.SC-n5d -->
 ### g10.auction-bid-increments.US1-TC19: A stored starting price with cents opens at the next whole dollar
 
@@ -733,7 +482,6 @@ The row is seeded in the database, because no screen saves a starting price with
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bid-increments-US-01
@@ -767,54 +515,6 @@ The row is seeded in the database, because no screen saves a starting price with
 
 ---
 
-<!-- trace:case id=g10.auction-bid-increments.TC-hx9 rev=1 covers=g10.auction-bid-increments.SC-r3d -->
-### g10.auction-bid-increments.US1-TC20: A house maximum in extended bidding steps on the same schedule
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* `<listing_11>` is open, in USD, in extended bidding, and led by user A with a maximum of `<user A maximum>`.
-* A house maximum of `<house maximum>` is saved on `<listing_11>` and its commit time has come.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_11 | An open USD listing in extended bidding, led by user A; bind its identity only | · |
-| user A maximum | A price in a configured tier above the tier of `<house maximum>` | (range: within that tier) |
-| house maximum | A price at least the minimum next amount and below `<user A maximum>`, inside one configured tier | (range: within that tier) |
-| increment | The configured increment of the tier holding `<house maximum>` | (fixed configured value) |
-| resolved price | `<house maximum>` plus `<increment>`, capped at `<user A maximum>` | (fixed derived value) |
-| next increment | The configured increment of the tier holding `<resolved price>` | (fixed configured value) |
-
-**Steps:**
-
-1. Read `<listing_11>`'s minimum next amount.
-2. Let the house maximum commit on `<listing_11>`.
-3. Read `<listing_11>`'s current bid and leader.
-4. Read `<listing_11>`'s minimum next amount again.
-
-**Expected Results:**
-
-* Step 1 reads a minimum at or below `<house maximum>`.
-* Step 2 accepts the house maximum.
-* Step 3 reads current bid `<resolved price>`, equal to `<house maximum>` plus `<increment>`, with user A leading.
-* Step 4 reads `<resolved price>` plus `<next increment>`, the same lookup a collector's bid reads outside extended bidding.
-
----
-
 ## g10.auction-bid-increments.US3: Collector bids in USD on every lot
 
 **As a** collector,
@@ -834,7 +534,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-03
@@ -881,7 +580,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-03
@@ -927,7 +625,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-03
@@ -960,49 +657,6 @@ Runs once per row of **Test data**.
 * Step 4 reads Highest bid `<minimum next bid>` in USD, and the user's own bid in Recent Bids in USD.
 
 ---
-
-<!-- trace:case id=g10.auction-bid-increments.TC-c9i rev=1 covers=g10.auction-bid-increments.SC-bs0 -->
-### g10.auction-bid-increments.US3-TC7: The configured schedule starts at 0 and its last tier is unbounded
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-03
-
-**Pre-conditions:**
-
-* The USD schedule in force for every auction is configured.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| zero amount | USD0 | (fixed boundary), 0 minor units |
-| large amount | USD10,000,000 | (fixed boundary), the ceiling, above the lower bound of every tier |
-
-**Steps:**
-
-1. Read the configured USD schedule.
-2. Select the tier for `<zero amount>`.
-3. Select the tier for `<large amount>`.
-4. Compare each tier's lower bound with the one before it.
-5. Select the tier for each tier's lower bound, and for the amount one whole dollar below it.
-
-**Expected Results:**
-
-* Step 1 reads one schedule for USD, with no per-listing schedule beside it.
-* Step 2 selects the first tier, whose lower bound is 0, so no amount lies below it.
-* Step 3 selects the last tier, which has no upper bound.
-* Step 4 reads lower bounds in strictly rising order.
-* Step 5 selects the tier that owns the lower bound, and the tier before it for the amount one whole dollar below, so every amount from 0 upward falls in exactly one tier.
 
 ## Settled
 

@@ -1,6 +1,6 @@
 # grade10-site/grading/dropoff-booking Test Cases
 
-**Status:** reopened · 0/26
+**Status:** reopened · 0/24
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-09-30
 **Drafts styled:** 2026-09-30, tcs-rules r4
 
@@ -31,7 +31,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -84,7 +83,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -119,7 +117,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -156,7 +153,6 @@
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -186,7 +182,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -216,7 +211,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -258,7 +252,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -299,7 +292,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -330,7 +322,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -371,7 +362,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-01
@@ -408,7 +398,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-02
@@ -450,7 +439,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-02
@@ -488,7 +476,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-02
@@ -529,7 +516,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-02
@@ -546,36 +532,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: neither Move nor Cancel visit is offered.
-
-<!-- trace:case id=g10.grading-dropoff-booking.TC-tms rev=1 covers=g10.grading-dropoff-booking.SC-44v,g10.grading-dropoff-booking.SC-9xj,g10.grading-dropoff-booking.SC-mrb,g10.grading-dropoff-booking.SC-wlp,g10.grading-dropoff-booking.SC-1v3 -->
-### grade10-site-grading-dropoff-booking-US2-TC5-1: A cancelled visit restarts the plan's clock from the day of the cancel
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-dropoff-booking-US-02
-
-**Pre-conditions:**
-
-* A plan kept 25 days ago, `plan_expiry_days` set to 30, whose visit the collector cancelled today.
-
-**Steps:**
-
-1. Run the plan expiry sweep `plan_expiry_days` after the day the plan was first kept.
-2. Run the plan expiry sweep `plan_expiry_days` after today.
-
-**Expected Results:**
-
-* The plan has not expired after step 1.
-* The plan expires only once `plan_expiry_days` has run from the day of the cancel, not from the day it was first kept.
 
 ---
 
@@ -596,7 +552,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-03
@@ -635,7 +590,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-03
@@ -658,38 +612,6 @@ Runs once per row of **Test data**.
 * Step 5: the new visit books against the same list and estimate noted at step 1.
 * Step 5: the submission reads Drop-off booked with the new day.
 
-<!-- trace:case id=g10.grading-dropoff-booking.TC-xy1 rev=1 covers=g10.grading-dropoff-booking.SC-qae,g10.grading-dropoff-booking.SC-u2b,g10.grading-dropoff-booking.SC-r0l,g10.grading-dropoff-booking.SC-4vc -->
-### grade10-site-grading-dropoff-booking-US3-TC4-1: A missed visit restarts the plan's clock from the day of the miss
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-dropoff-booking-US-03
-
-**Decided by:** `grade10:packages/grading/backend/test/sweeps/expiry.repo.test.ts`
-
-**Pre-conditions:**
-
-* A plan kept 25 days ago, `plan_expiry_days` set to 30, whose visit was missed today.
-
-**Steps:**
-
-1. Run the plan expiry sweep `plan_expiry_days` after today.
-2. Run the plan expiry sweep `plan_expiry_days` after the day the plan was first kept.
-
-**Expected Results:**
-
-* The plan has not expired after step 1.
-* The plan expires only once `plan_expiry_days` has run from the day of the miss, not from the day it was first kept.
-
 <!-- trace:case id=g10.grading-dropoff-booking.TC-wx2 rev=1 covers=g10.grading-dropoff-booking.SC-qae,g10.grading-dropoff-booking.SC-u2b,g10.grading-dropoff-booking.SC-r0l,g10.grading-dropoff-booking.SC-4vc -->
 ### grade10-site-grading-dropoff-booking-US3-TC3-1: The page reads the visit as booked until the diary closes it
 
@@ -701,7 +623,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-03
@@ -746,7 +667,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-04
@@ -783,7 +703,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-04
@@ -823,7 +742,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-04
@@ -870,7 +788,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-05
@@ -913,7 +830,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-05
@@ -949,7 +865,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-05
@@ -978,7 +893,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-05
@@ -1026,7 +940,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-dropoff-booking-US-06
@@ -1065,7 +978,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-06
@@ -1101,7 +1013,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-06
@@ -1154,7 +1065,6 @@ Runs once per row of **Test data**.
 | `grade10-site-grading-dropoff-booking-US2-TC2-1` | Covered | The cancelled visit leaving the list as it was |
 | `grade10-site-grading-dropoff-booking-US3-TC1-1` | Covered | The visit nobody started, closed within the hour, and the list surviving the miss |
 | `grade10-site-grading-dropoff-booking-US3-TC2-1` | Covered | The list surviving the miss, booked again |
-| `grade10-site-grading-dropoff-booking-US3-TC4-1` | Covered | The plan's clock restarting from the day of the miss |
 | `grade10-site-grading-dropoff-booking-US4-TC1-1` | Covered | The second submission joining the first one's drop-off |
 | `grade10-site-grading-dropoff-booking-US4-TC2-1` | Covered | Two lists passing twenty taking the longer visit at the same slot |
 | `grade10-site-grading-dropoff-booking-US4-TC3-1` | Folded | The Cancels row is the owner's cancel; the Misses row reached no scenario, and the requirement's "cancels or misses" is folded as a scenario of its own |

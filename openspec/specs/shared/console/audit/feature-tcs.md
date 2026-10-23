@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-console-audit-US-01
@@ -51,7 +50,6 @@ Writes on more than one product for more than one subject. Operator holds `audit
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-console-audit-US-01
@@ -88,7 +86,6 @@ A trail that has writes, including one in the final second of a calendar day. On
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-console-audit-US-02
@@ -125,7 +122,6 @@ A recorded write whose subject is a user id. Operator may or may not hold `user:
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-console-audit-US-03
@@ -158,7 +154,6 @@ A product chain reported broken at a position.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-console-audit-US-04

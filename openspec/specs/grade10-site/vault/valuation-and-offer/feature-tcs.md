@@ -1,6 +1,6 @@
 # grade10-site/vault/valuation-and-offer Test Cases
 
-**Status:** pending-review · 0/31
+**Status:** pending-review · 0/16
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## Background
@@ -35,7 +35,6 @@ what the business lends.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -71,7 +70,6 @@ what the business lends.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -106,7 +104,6 @@ what the business lends.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -139,7 +136,6 @@ what the business lends.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -176,7 +172,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -219,7 +214,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -261,7 +255,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -306,7 +299,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -349,7 +341,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -383,7 +374,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -417,7 +407,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -450,7 +439,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -482,7 +470,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
@@ -502,74 +489,6 @@ Runs once per row of **Test data**.
 * The attempt is refused for want of `vault:approve`.
 * The case carries no offer.
 
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-o7g rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC14-1: An unset loan particular refuses the offer in production
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Pre-conditions:**
-
-* The environment is production.
-* Every lending bound and the lender's registered name are set.
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `under_valuation` carrying `<valuation_1>`.
-
-**Test data:**
-
-| Unset value | Named in the refusal |
-| --- | --- |
-| licence number | the licence number |
-| FPS id | the FPS id |
-
-**Steps:**
-
-1. Leave the row's value unset, then send an offer inside every lending bound.
-
-**Expected Results:**
-
-* Every row is refused by name, naming the row's value, and no offer is written.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-46u rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC15-1: Recording a valuation never changes the register's slab
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Pre-conditions:**
-
-* admin(staff) holds `vault:approve`.
-* `<case_1>` is under valuation; its item `<item_1>` carries PSA, grade 10 and `AB12345`.
-
-**Steps:**
-
-1. Send a valuation of HKD 25,000.00 for `<case_1>` straight to the vault worker, carrying grade 9 and cert `AB99999`.
-2. Read `<item_1>` from the register.
-
-**Expected Results:**
-
-* `<item_1>` still carries PSA, grade 10 and `AB12345`.
-
 ---
 
 ## grade10-site-vault-valuation-and-offer-US2: Collector answers an offer from their own phone
@@ -578,277 +497,6 @@ Runs once per row of **Test data**.
 **I want** to accept or decline the offer on my case wherever I am reading it,
 **so that** I can say yes before I come in, or say no and still be offered
 something else.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-xf4 rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC1-2: The collector accepts the live offer as an act on their own case
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case holding `<offer_1>`, with `<visit_1>` booked on it, read at `<read instant>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<offer_1>` | A live offer of 1,000,000 HKD minor units principal, 200 basis points per 30 days, a 30-day term, open 7 days from when it was made |
-
-**Steps:**
-
-1. Accept `<offer_1>` as an act on the collector's own case, naming it and `<read instant>`.
-2. Ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is accepted, and its answer carries `<case_1>` as `accepted`.
-* Step 2 reads `<case_1>` `accepted`, `<offer_1>` accepted, `<visit_1>` as it was, no other visit booked, and nothing owed.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-1dp rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC2-2: The collector declines the live offer and the request stays open
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case, holding `<offer_1>`, with `<visit_1>` booked on it.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<offer_1>` | A live offer of 1,000,000 HKD minor units principal, 200 basis points per 30 days, a 30-day term, open 7 days from when it was made |
-
-**Steps:**
-
-1. Decline `<offer_1>` as an act on the collector's own case.
-2. Ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is accepted.
-* Step 2 reads `<offer_1>` closed as declined by the collector.
-* Step 2 reads `<case_1>` `under_valuation`, with `<visit_1>` still booked.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-z9w rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC3-2: An accept a minute before the offer runs out is taken
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case holding `<offer_1>`, whose expiry is `<expiry>`.
-* The clock reads 1 minute before `<expiry>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<offer_1>` | A live offer of 1,000,000 HKD minor units principal, 200 basis points per 30 days, a 30-day term, open 7 days from when it was made |
-
-**Steps:**
-
-1. Accept `<offer_1>` as an act on the collector's own case.
-2. Ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is accepted.
-* Step 2 reads `<case_1>` `accepted`.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-xvu rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC4-2: An answer after the offer ran out
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case, holding `<offer_1>` with a visit booked, whose expiry is `<expiry>`.
-* The clock reads 1 minute after `<expiry>`, and the expiry sweep has run as the row says.
-
-**Test data:**
-
-| Answer | Expiry sweep | Step 1 | Step 2 reads |
-| --- | --- | --- | --- |
-| Accept | not yet run | Refused by name: the offer ran out | `<case_1>` at `offer_made`, `<offer_1>` run out |
-| Decline | not yet run | Accepted: the decline has no expiry check | `<offer_1>` closed as `declined_by_customer`, `<case_1>` back at `under_valuation` |
-| Decline | run | Refused by name, `NO_OPEN_OFFER` | `<case_1>` as the sweep left it |
-
-**Steps:**
-
-1. Give the row's answer to `<offer_1>` as an act on the collector's own case.
-2. Ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is answered as the row says.
-* Step 2 reads what the row's last column says.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-oac rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC5-2: An answer on a case that moved under it is refused by name
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case, holding `<offer_1>`; after the collector's last read, staff moved it as the row says.
-
-**Test data:**
-
-| Staff's move |
-| --- |
-| Accepted `<offer_1>` at the counter |
-| Called the request off |
-
-**Steps:**
-
-1. Accept `<offer_1>` as an act on the collector's own case.
-2. Ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is refused by name, naming that the case moved.
-* Step 2 reads `<case_1>` as the row's move left it.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-amv rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC6-2: A collector cannot answer another collector's offer
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer A holds `<case_1>`, a financed case holding `<offer_1>`.
-* customer B holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<offer_1>` | A live offer of 1,000,000 HKD minor units principal, 200 basis points per 30 days, a 30-day term, open 7 days from when it was made |
-
-**Steps:**
-
-1. As customer B, accept `<offer_1>`.
-2. As customer A, ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is refused, and the response carries none of `<case_1>`'s facts.
-* Step 2 still reads `<offer_1>` live.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-wlm rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC7-2: The collector's read of the offer carries its terms, its valuation and the day to answer by
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case, valued at `<valuation>`, holding `<offer_1>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<valuation>` | 2,500,000 HKD minor units |
-| `<offer_1>` | A live offer of 1,000,000 HKD minor units principal, 200 basis points per 30 days, a 30-day term, open 7 days from when it was made |
-
-**Steps:**
-
-1. Ask for the collector's own read of `<case_1>`.
-2. Read the API response.
-
-**Expected Results:**
-
-* Step 2 carries the principal, the interest for the whole term, the term in days, the total to repay, what a late day costs and the day to answer by.
-* Step 2 carries `<valuation>` as what the offer was judged against.
-* Step 2 carries no due date.
 
 <!-- trace:case id=g10.vault-valuation-and-offer.TC-tnl rev=1 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
 ### grade10-site-vault-valuation-and-offer-US2-TC8-1: Going back from a confirmation leaves the offer live
@@ -863,7 +511,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-02
@@ -893,102 +540,6 @@ Runs once per row of **Test data**.
 * `<offer_1>` is still live, with Accept this offer and Decline this offer
   on it.
 
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-gdr rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC9-2: The same accept sent twice lands once
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case, holding `<offer_1>`, read at `<read instant>`.
-
-**Steps:**
-
-1. Accept `<offer_1>`, naming `<read instant>`.
-2. Send the same accept again.
-3. Ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is accepted, and its answer carries `<case_1>` as `accepted`.
-* Step 2 is refused by name.
-* Step 3 reads `<case_1>` `accepted` once, with one accepted `<offer_1>` and nothing else changed by step 2.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-xam rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC10-2: The day to answer by reads on own cases only while the offer is open
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case, holding `<offer_1>`, which expires at `<expiry>`.
-
-**Steps:**
-
-1. With the clock 1 day before `<expiry>`, ask for the collector's own cases.
-2. With the clock 1 minute after `<expiry>`, ask for the collector's own cases again.
-
-**Expected Results:**
-
-* Step 1 carries `<case_1>` with `<expiry>` as its day to answer by.
-* Step 2 carries `<case_1>` with no day to answer by.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-hp1 rev=2 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC11-2: An accept after the offer ran out under the reader is refused as run out
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-02
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* The collector read `<case_1>` at `<read instant>`, holding `<offer_1>` live, whose expiry is minutes after `<read instant>`.
-* `<offer_1>`'s expiry has since passed.
-
-**Steps:**
-
-1. Accept `<offer_1>`, naming `<read instant>`.
-2. Ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is refused by name, as an offer that ran out.
-* Step 2 reads `<case_1>` at `offer_made`, `<offer_1>` run out.
-
 ---
 
 ## grade10-site-vault-valuation-and-offer-US5: Collector reads and answers an offer that replaced the last
@@ -998,122 +549,6 @@ Runs once per row of **Test data**.
 with Accept and Decline on it,
 **so that** I answer the offer that stands and never the one that was
 withdrawn.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-tti rev=2 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
-### grade10-site-vault-valuation-and-offer-US5-TC1-2: The collector's own read names the replaced offer closed and the live one's terms
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-05
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case; staff replaced `<offer_1>` with `<offer_2>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<offer_1>` | 1,000,000 HKD minor units principal, 200 basis points per 30 days, a 30-day term |
-| `<offer_2>` | 900,000 HKD minor units principal, 180 basis points per 30 days, a 60-day term |
-
-**Steps:**
-
-1. Ask for the collector's own read of `<case_1>`.
-2. Read the API response.
-
-**Expected Results:**
-
-* Step 2 reads `<offer_1>` closed, replaced by a new offer.
-* Step 2 reads `<offer_2>`'s terms as the live offer.
-* Step 2 reads the case's history carrying the day `<offer_1>` closed.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-ggw rev=2 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
-### grade10-site-vault-valuation-and-offer-US5-TC2-2: The offer that replaced the last is accepted like any live offer
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-05
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case; staff replaced `<offer_1>` with `<offer_2>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<offer_2>` | 900,000 HKD minor units principal, 180 basis points per 30 days, a 60-day term |
-
-**Steps:**
-
-1. Accept `<offer_2>` as an act on the collector's own case.
-2. Ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is accepted.
-* Step 2 reads `<case_1>` `accepted` on `<offer_2>`'s terms, `<offer_1>` still closed.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-t5t rev=2 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
-### grade10-site-vault-valuation-and-offer-US5-TC3-2: An answer naming the replaced offer is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-05
-
-**Pre-conditions:**
-
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the collector's financed case; staff replaced `<offer_1>` with `<offer_2>`, now the one live offer.
-
-**Test data:**
-
-| Answer |
-| --- |
-| Accept |
-| Decline |
-
-**Steps:**
-
-1. Give the row's answer to `<offer_1>` as an act on the collector's own case.
-2. Ask for the collector's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 is refused by name.
-* Step 2 reads `<offer_1>` closed and `<offer_2>` open and unanswered.
 
 <!-- trace:case id=g10.vault-valuation-and-offer.TC-htu rev=1 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
 ### grade10-site-vault-valuation-and-offer-US5-TC4-1: A twice-superseded case reads only the most recent close
@@ -1126,7 +561,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-valuation-and-offer-US-05
@@ -1170,7 +604,6 @@ from memory.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-06
@@ -1203,7 +636,6 @@ from memory.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-06
@@ -1234,7 +666,6 @@ from memory.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-06

@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** pending-review · 0/2
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## grade10-admin-auction-listing-US1: Operator saves an unfinished listing and comes back to it
@@ -22,7 +22,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -62,49 +61,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 **As a** auction operator,
 **I want** the listing checked against everything an auction needs at the moment I create it,
 **so that** nothing incomplete can reach a bidder.
-
-<!-- trace:case id=g10adm.auction-listing.TC-v2n rev=1 covers=grade10-admin-auction-listing-SC-222 -->
-### g10adm.auction-listing.US3-TC31: A create or an update refuses a starting price with cents
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Pre-conditions:**
-
-* An operator holding the grant to set prices and the window holds an API session.
-* `<listing_2>` is a complete draft in USD, and `<listing_3>` is a created listing in USD with a starting price of `<starting price>`.
-
-**Test data:**
-
-| Write | Starting price sent | Fixture notes |
-| --- | --- | --- |
-| create `<listing_2>` | USD120.01 | (fixed boundary), one minor unit above a whole dollar |
-| update `<listing_3>` | `<starting price>` plus one minor unit | (fixed boundary) |
-
-`<starting price>` is USD120, a whole-dollar amount.
-
-**Steps:**
-
-1. Send the row's write with the row's starting price.
-2. Read the API response and the listing named in the row.
-
-**Expected Results:**
-
-* Step 1 is refused and the message names the whole-dollar rule.
-* Step 2 reads `<listing_2>` as a draft, not created, for the create row.
-* Step 2 reads `<listing_3>` with starting price `<starting price>`, the value before the write, for the update row.
 
 ---
 

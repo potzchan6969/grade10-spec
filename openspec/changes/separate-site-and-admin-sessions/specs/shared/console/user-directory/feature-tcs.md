@@ -1,6 +1,6 @@
 # shared/console/user-directory Test Cases
 
-**Status:** pending-review · 0/9
+**Status:** pending-review · 0/4
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-console-user-directory-US2: Operator reviews where an account is signed in
@@ -19,7 +19,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-02
@@ -56,7 +55,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-02
@@ -84,45 +82,6 @@ Runs once per row of **Test data**.
 * Step 3 no longer lists <session to end>.
 * Step 3 lists only <session that remains>, still naming its own surface.
 
-### shared-console-user-directory-US2-TC3-1: A session the console gave no surface shows none
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-console-user-directory-US-02
-
-**Pre-conditions:**
-
-* The console supplies <session with a surface> and <session without a surface> for one account.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<session with a surface>` | A session supplied with the console as its surface, where it was raised and when it ends |
-| `<session without a surface>` | A session supplied with where it was raised and when it ends, and no surface |
-
-**Steps:**
-
-1. Render the sessions dialog with both sessions.
-2. Read each entry in the dialog.
-3. Render the account panel with both sessions.
-4. Read each entry in the panel.
-
-**Expected Results:**
-
-* Steps 2 and 4 show <session with a surface> naming the console.
-* Steps 2 and 4 show <session without a surface> with where it was raised and when it ends, as supplied.
-* Steps 2 and 4 show <session without a surface> naming neither the site nor the console.
-
 ### shared-console-user-directory-US2-TC4-1: Account panel names sessions by identifier and shows no secret
 
 **Classification:**
@@ -133,7 +92,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-console-user-directory-US-02
@@ -172,7 +130,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-02
@@ -196,154 +153,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 opens the panel.
-* Step 2 says the account holds no sessions.
-* Step 2 shows the control that ends every session as unavailable.
-
-### shared-console-user-directory-US2-TC6-1: Sessions dialog names each session's surface
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-console-user-directory-US-02
-
-**Pre-conditions:**
-
-* The console supplies <site session> and <console session> for one account.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<site session>` | A session supplied with the site as its surface |
-| `<console session>` | A session supplied with the console as its surface |
-
-**Steps:**
-
-1. Render the sessions dialog with both sessions.
-2. Read each entry in the dialog.
-
-**Expected Results:**
-
-* Step 2 shows <site session> naming the site.
-* Step 2 shows <console session> naming the console.
-
-### shared-console-user-directory-US2-TC7-1: Ending a session in the dialog leaves the other's surface listed
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-console-user-directory-US-02
-
-**Pre-conditions:**
-
-* The console supplies a site session and a console session for one account, and the sessions dialog is rendered with both.
-
-**Test data:**
-
-| <session to end> | <session that remains> |
-| --- | --- |
-| The session naming the site | The session naming the console |
-| The session naming the console | The session naming the site |
-
-**Steps:**
-
-1. End <session to end> from its entry in the dialog.
-2. Read what the dialog reports.
-3. Render the dialog again with <session that remains> only, as the console would supply it after the end.
-4. Read the entry in the dialog.
-
-**Expected Results:**
-
-* Step 2 reports <session to end> by its own identifier.
-* Step 4 shows <session that remains> still naming its own surface.
-
-### shared-console-user-directory-US2-TC8-1: Sessions dialog names sessions by identifier and shows no secret
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-console-user-directory-US-02
-
-**Pre-conditions:**
-
-* The console holds a secret for each of two sessions and supplies only their identifiers.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<first session secret>` | A secret the console holds for the first session and does not supply |
-| `<second session secret>` | A secret the console holds for the second session and does not supply |
-
-**Steps:**
-
-1. Render the sessions dialog with the two sessions.
-2. Read each session entry in the dialog.
-3. Search the dialog's text and markup for <first session secret> and <second session secret>.
-
-**Expected Results:**
-
-* Step 2 shows each session with its identifier, the two identifiers differing.
-* Step 3 finds neither secret.
-
-### shared-console-user-directory-US2-TC9-1: Dialog says an account has no sessions and offers nothing to end
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-console-user-directory-US-02
-
-**Pre-conditions:**
-
-* The console supplies no session for <account with no sessions>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<account with no sessions>` | An account the console supplies no session for |
-
-**Steps:**
-
-1. Render the sessions dialog for <account with no sessions>.
-2. Read the dialog.
-
-**Expected Results:**
-
 * Step 2 says the account holds no sessions.
 * Step 2 shows the control that ends every session as unavailable.
 

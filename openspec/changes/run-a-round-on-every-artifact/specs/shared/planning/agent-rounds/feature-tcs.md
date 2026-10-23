@@ -1,6 +1,6 @@
 # shared/planning/agent-rounds Test Cases
 
-**Status:** pending-review · 0/81
+**Status:** pending-review · 0/75
 **Drafts styled:** 2026-09-20, tcs-rules r3.0
 **Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-25, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-109, shared-planning-agent-rounds-SC-110, shared-planning-agent-rounds-SC-111, shared-planning-agent-rounds-SC-112, shared-planning-agent-rounds-SC-113, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-67
 
@@ -21,7 +21,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-01
@@ -53,7 +52,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-01
@@ -85,7 +83,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-01
@@ -119,7 +116,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-01
@@ -151,7 +147,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-01
@@ -182,7 +177,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-01
@@ -215,7 +209,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-01
@@ -237,76 +230,6 @@
 * The tech design, the requirements and the plan follow on the branch, in that order.
 * Each draft's summary names the perspectives that read it, the branch carries a push per artifact, and nothing is on `main`.
 
-<!-- trace:case id=g10.shared-agent-rounds.TC-5y7 rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
-### shared-planning-agent-rounds-US1-TC8-1: The summary's button is the word pressed
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-planning-agent-rounds-US-01
-
-**Decided by:** `tools/relay/test/worker.test.ts`, `tools/relay/test/slack.test.ts`, `tools/relay/test/room.test.ts`
-
-**Pre-conditions:**
-
-* admin(product manager) is in <change thread>, where the proposal's summary waits on their word and carries the button `Confirm proposal`.
-* A second member, whom the team map does not name, is in the same thread.
-
-**Steps:**
-
-1. Press `Confirm proposal`.
-2. Read the summary and the replies in <change thread>.
-3. Read `main` once the wake that follows says it is done.
-4. As the unnamed member, press the button on another summary.
-
-**Expected Results:**
-
-* The thread reads `@<handle> pressed *Confirm proposal*`, and the button is replaced on the summary by who confirmed it.
-* The proposal lands as it lands on a typed `land`: the same check, the same `landed_by:` line.
-* The unnamed member's press lands nothing, and the thread says the team map does not name them.
-
-<!-- trace:case id=g10.shared-agent-rounds.TC-1hw rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
-### shared-planning-agent-rounds-US1-TC9-1: A landing word wakes the run at once
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-planning-agent-rounds-US-01
-
-**Decided by:** `tools/relay/test/room-state.test.ts`
-
-**Pre-conditions:**
-
-* admin(product manager) is in <change thread>, and no wake is running on it.
-
-**Steps:**
-
-1. Reply `land` and read when the acknowledgment arrives.
-2. In a fresh thread, reply one sentence, then `land` inside the same minute.
-3. Reply one sentence that is no landing word, and read when its acknowledgment arrives.
-
-**Expected Results:**
-
-* The first `land` is acknowledged at once, with no minute's wait.
-* The second wake fires on the `land` and carries the sentence before it.
-* The sentence alone is acknowledged after the minute.
-
 <!-- trace:case id=g10.shared-agent-rounds.TC-3yf rev=1 covers=g10.shared-agent-rounds.SC-o3z,g10.shared-agent-rounds.SC-aw7,g10.shared-agent-rounds.SC-mr8,g10.shared-agent-rounds.SC-ehb,g10.shared-agent-rounds.SC-s1y,g10.shared-agent-rounds.SC-esw,g10.shared-agent-rounds.SC-e3a,g10.shared-agent-rounds.SC-5op,g10.shared-agent-rounds.SC-v3d -->
 ### shared-planning-agent-rounds-US1-TC10-1: A sentence overlapping a change in flight is answered in its thread
 
@@ -320,7 +243,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-01
@@ -371,7 +293,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-02
@@ -404,7 +325,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-02
@@ -437,7 +357,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-02
@@ -469,7 +388,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-02
@@ -501,7 +419,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-02
@@ -535,7 +452,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-02
@@ -572,7 +488,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-02
@@ -613,7 +528,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-02
@@ -659,7 +573,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-02
@@ -709,7 +622,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-03
@@ -740,7 +652,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-03
@@ -773,7 +684,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-03
@@ -804,7 +714,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-03
@@ -850,7 +759,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -885,7 +793,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -916,7 +823,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -946,7 +852,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -978,7 +883,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -1010,7 +914,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -1048,7 +951,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -1080,7 +982,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -1113,7 +1014,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -1140,41 +1040,6 @@ Runs once per row of **Test data**.
 * The landing is the one the table names.
 * A landing on `land with recommendations` records both rows as answered in its own commit.
 
-<!-- trace:case id=g10.shared-agent-rounds.TC-ph0 rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
-### shared-planning-agent-rounds-US4-TC10-1: A run posts with its wake's token alone
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-planning-agent-rounds-US-04
-
-**Decided by:** `tools/relay/test/worker.test.ts`
-
-**Pre-conditions:**
-
-* admin(engineer of <change>) is at a terminal in the store.
-* A wake is running on <change thread>, and the run holds the token that wake was given.
-
-**Steps:**
-
-1. Read where the run's summary arrives.
-2. Post with that token to another change's thread.
-3. Post with it again once the wake's budget has passed.
-
-**Expected Results:**
-
-* The summary arrives in <change thread>, posted through the relay.
-* Both later posts are refused.
-* The run holds no chat token of its own.
-
 <!-- trace:case id=g10.shared-agent-rounds.TC-f5c rev=1 covers=g10.shared-agent-rounds.SC-osr,g10.shared-agent-rounds.SC-u76,g10.shared-agent-rounds.SC-vhq,g10.shared-agent-rounds.SC-aor,g10.shared-agent-rounds.SC-z36,g10.shared-agent-rounds.SC-bvo,g10.shared-agent-rounds.SC-ynm,g10.shared-agent-rounds.SC-l1g,g10.shared-agent-rounds.SC-1e2,g10.shared-agent-rounds.SC-kmg -->
 ### shared-planning-agent-rounds-US4-TC11-1: Two replies inside a minute wake one run
 
@@ -1186,7 +1051,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -1220,7 +1084,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -1253,7 +1116,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-04
@@ -1293,7 +1155,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1315,39 +1176,6 @@ Runs once per row of **Test data**.
 * Every artifact after the proposal is read, oldest first.
 * `reviewed:` carries one content id per artifact read.
 
-<!-- trace:case id=g10.shared-agent-rounds.TC-fjz rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
-### shared-planning-agent-rounds-US5-TC2-1: A read that changes nothing writes the record line alone
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-planning-agent-rounds-US-05
-
-**Pre-conditions:**
-
-* <change> has `tech-design.md` on `main` and fresh.
-* An edit to `proposal.md` that leaves the tech design right is ready to land.
-
-**Steps:**
-
-1. Say land for `proposal.md` in <change thread>.
-2. Check `tech-design.md` and the change's record.
-3. Read <change thread>.
-
-**Expected Results:**
-
-* `tech-design.md` is unchanged and its `reviewed:` line carries the new content id.
-* The reply says what was read and that nothing changed.
-* Writing `reviewed:` puts no artifact behind.
-
 <!-- trace:case id=g10.shared-agent-rounds.TC-g5c rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
 ### shared-planning-agent-rounds-US5-TC3-1: A read that edits opens a round for that hand
 
@@ -1359,7 +1187,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1393,7 +1220,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1431,7 +1257,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1465,7 +1290,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1499,7 +1323,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1532,7 +1355,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1564,7 +1386,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1596,7 +1417,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1630,7 +1450,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1661,7 +1480,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1694,7 +1512,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1725,7 +1542,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1759,7 +1575,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-05
@@ -1789,83 +1604,6 @@ Runs once per row of **Test data**.
 * The thread carries the failure line with <the run's link>.
 * The later reply wakes a run, so the thread was freed.
 
-<!-- trace:case id=g10.shared-agent-rounds.TC-ivf rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
-### shared-planning-agent-rounds-US5-TC16-1: A read that changed nothing lands with no word
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-planning-agent-rounds-US-05
-
-**Decided by:** `tools/relay/test/land.test.ts`, `tools/relay/test/room.test.ts`
-
-**Pre-conditions:**
-
-* admin(engineer of <change>) is at a terminal in the store.
-* An artifact of <change> is behind a landing that did not move what it says, and no hand has replied in <change thread> since.
-
-**Steps:**
-
-1. Let the run read that artifact again.
-2. Read `main` and the commit it added.
-
-**Expected Results:**
-
-* The artifact's `reviewed:` line is on `main` with no hand's word.
-* The commit changes nothing but `reviewed:` lines of <change>'s own record.
-* A commit touching anything else is refused.
-
-<!-- trace:case id=g10.shared-agent-rounds.TC-6cr rev=1 covers=g10.shared-agent-rounds.SC-z8s,g10.shared-agent-rounds.SC-b3r,g10.shared-agent-rounds.SC-hma,g10.shared-agent-rounds.SC-l3x,g10.shared-agent-rounds.SC-b5m,g10.shared-agent-rounds.SC-fxl,g10.shared-agent-rounds.SC-zmy,g10.shared-agent-rounds.SC-2x6,g10.shared-agent-rounds.SC-afx,g10.shared-agent-rounds.SC-pgu -->
-### shared-planning-agent-rounds-US5-TC17-1: A landing wakes the relay once per change
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-planning-agent-rounds-US-05
-
-**Decided by:** `scripts/openspec/reread-workflow.test.mjs`, `tools/relay/test/worker.test.ts`, `scripts/openspec/changed-changes.test.mjs`
-
-**Pre-conditions:**
-
-* admin(engineer of <change>) is at a terminal in the store.
-* A landing is ready to push to `main` that puts artifacts of two changes behind.
-
-**Test data:**
-
-| The repository variable carrying the wakes | The relay |
-| --- | --- |
-| on | is woken once for each of the two changes |
-| off | is not woken |
-
-**Steps:**
-
-1. Push the landing to `main`.
-2. Read what the push's workflow posted.
-3. Read what the relay queued.
-
-**Expected Results:**
-
-* The relay is woken as the table names.
-* Each wake is queued against its own change's thread.
-
 ---
 
 ## shared-planning-agent-rounds-US6: Engineer reads a landing that was checked
@@ -1885,7 +1623,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-06
@@ -1916,7 +1653,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-06
@@ -1947,7 +1683,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-06
@@ -1981,7 +1716,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-06
@@ -2011,7 +1745,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-06
@@ -2055,7 +1788,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-07
@@ -2096,7 +1828,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-07
@@ -2136,7 +1867,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-07
@@ -2176,7 +1906,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-08
@@ -2208,7 +1937,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-08
@@ -2242,7 +1970,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-08
@@ -2280,7 +2007,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-08
@@ -2312,7 +2038,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-08
@@ -2349,7 +2074,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-08
@@ -2397,7 +2121,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-08
@@ -2439,7 +2162,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2470,7 +2192,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2500,7 +2221,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2534,7 +2254,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2574,7 +2293,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2607,7 +2325,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2639,7 +2356,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2672,7 +2388,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2705,7 +2420,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2738,7 +2452,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2772,7 +2485,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2816,7 +2528,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-09
@@ -2852,7 +2563,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09

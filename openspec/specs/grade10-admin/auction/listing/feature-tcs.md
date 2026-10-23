@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** pending-review · 0/164
+**Status:** pending-review · 0/148
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 **Out of suite:** grade10-admin-auction-listing-SC-176 - the listing service's save test, task 2.1 in `tasks.md`, because the editor always names the translations it holds and no route in the console sends an omitted object; grade10-admin-auction-listing-SC-177 - the same test, which saves a named object that holds fewer languages than the stored one; grade10-admin-auction-listing-SC-200, grade10-admin-auction-listing-SC-201 and grade10-admin-auction-listing-SC-202 - the Labs seed tests of task 2.8, because the Labs are a local developer panel the suite does not walk; grade10-admin-auction-listing-SC-203, grade10-admin-auction-listing-SC-204, grade10-admin-auction-listing-SC-205 and grade10-admin-auction-listing-SC-206 - the customer view tests of task 4.6, added after the blind pass; they stay without a case until QA2 or human review writes one; grade10-admin-auction-listing-SC-207 and grade10-admin-auction-listing-SC-208 - the Copy block tests of task 4.1, added after the blind pass
@@ -50,7 +50,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -88,7 +87,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -123,7 +121,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -165,7 +162,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -205,7 +201,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -236,7 +231,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -288,7 +282,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -340,7 +333,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
@@ -372,7 +364,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
@@ -405,7 +396,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
@@ -455,7 +445,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-02
@@ -495,7 +484,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
@@ -528,7 +516,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-auction-listing-US-02
@@ -566,7 +553,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
@@ -602,7 +588,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
@@ -637,7 +622,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
@@ -680,7 +664,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -721,7 +704,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -757,7 +739,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -791,7 +772,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -825,7 +805,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -859,7 +838,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -893,7 +871,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -927,7 +904,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -961,7 +937,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -996,7 +971,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1037,7 +1011,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1078,7 +1051,6 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1111,11 +1083,9 @@ The editor's money field takes cents, so the route is the editor itself, then a 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
-
 
 **Pre-conditions:**
 
@@ -1176,7 +1146,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1219,7 +1188,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1259,7 +1227,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1293,7 +1260,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1314,89 +1280,6 @@ Runs once per row of **Test data**.
 * Step 2 refuses the write.
 * Step 3 still shows the listing as sandbox.
 
-<!-- trace:case id=g10adm.auction-listing.TC-xt0 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
-### grade10-admin-auction-listing-US3-TC20-1: Extension values the listing refuses
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_1>` is a created listing.
-
-**Test data:**
-
-| Setting | Value |
-| --- | --- |
-| Extension window | 1800 seconds (30mins) |
-| Extension duration | -60 seconds |
-
-**Steps:**
-
-1. Write the row's setting at the row's value on `<listing_1>`.
-2. Read the API response for its extension settings.
-
-**Expected Results:**
-
-* Step 1 refuses the write.
-* Step 2 reads the extension settings unchanged.
-
-<!-- trace:case id=g10adm.auction-listing.TC-o8h rev=2 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
-### grade10-admin-auction-listing-US3-TC19-2: Omitted extension duration defaults to 30 minutes
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) has an API session.
-* `<extension_default_draft>` meets every create requirement, with a matching inventory-unit hold.
-* The draft has no extension duration supplied; it does not hold an explicit 0.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| extension_default_draft | A draft with every create requirement and matching inventory-unit hold, with extension duration unset |
-| extension duration | Field absent from the create request; neither an empty string, null nor 0 |
-
-**Steps:**
-
-1. Send create for `<extension_default_draft>`, omitting extension duration.
-2. Read the API response for the listing's extension duration.
-
-**Expected Results:**
-
-* Step 1 creates the listing.
-* Step 2 reads 1800 seconds (30 minutes).
-
 <!-- trace:case id=g10adm.auction-listing.TC-h7v rev=2 -->
 ### grade10-admin-auction-listing-US3-TC21-2: Create accepts a starting price of 0 in USD
 
@@ -1408,7 +1291,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1433,91 +1315,6 @@ Runs once per row of **Test data**.
 * Step 4 shows the listing as created.
 * Step 6 reads 0 minor units USD.
 
-<!-- trace:case id=g10adm.auction-listing.TC-fc7 rev=2 -->
-### grade10-admin-auction-listing-US3-TC22-2: API create refuses a negative or non-whole starting price
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_5>` is a draft in USD with every create requirement set and starting price 0 minor units.
-
-**Test data:**
-
-| Starting price sent with create |
-| --- |
-| -1 minor unit |
-| 0.5 minor units |
-
-**Steps:**
-
-1. Send create for `<listing_5>` with the row's starting price.
-2. Read the API response for `<listing_5>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads the listing as a draft.
-* Step 2 reads starting price 0 minor units USD.
-
-<!-- trace:case id=g10adm.auction-listing.TC-1h5 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on,g10adm.auction-listing.SC-rhp,g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-hze,g10adm.auction-listing.SC-zho,g10adm.auction-listing.SC-rfu -->
-### grade10-admin-auction-listing-US3-TC23-1: API create with no starting price is refused, not stored as 0
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/schedule.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_6>` is a draft in USD with every create requirement set except the starting price, which is empty.
-
-**Test data:**
-
-| Starting price in the create request |
-| --- |
-| Field absent |
-| Field present, null |
-| Field present, an empty string |
-
-**Steps:**
-
-1. Send create for `<listing_6>` with the row's starting price.
-2. Read the API response for `<listing_6>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads the listing as a draft.
-* Step 2 reads the starting price empty, not 0.
-
 <!-- trace:case id=g10adm.auction-listing.TC-ebb rev=2 -->
 ### grade10-admin-auction-listing-US3-TC24-2: Operator lowers a created listing's starting price to 0
 
@@ -1529,7 +1326,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1560,45 +1356,6 @@ Runs once per row of **Test data**.
 * Step 5 reads 0 minor units USD.
 * Step 5 reads the listing as created.
 
-<!-- trace:case id=g10adm.auction-listing.TC-g4v rev=2 covers=grade10-admin-auction-listing-SC-160 -->
-### grade10-admin-auction-listing-US3-TC25-2: API create with 0 and no currency creates as USD 0
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_10>` is a draft with every create requirement set except the starting price, and no currency chosen.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_10>` | A draft, currency not chosen, starting price empty, every other create requirement set |
-| Starting price | 0 minor units |
-
-**Steps:**
-
-1. Send create for `<listing_10>` with starting price 0 and no currency.
-2. Read the API response for `<listing_10>`.
-
-**Expected Results:**
-
-* Step 1 is accepted.
-* Step 2 reads the listing as created.
-* Step 2 reads starting price 0 minor units USD.
-
 <!-- trace:case id=g10adm.auction-listing.TC-ow9 rev=1 covers=g10adm.auction-listing.SC-bcv -->
 ### grade10-admin-auction-listing-US3-TC27-1: Moving starts at into the past is refused
 
@@ -1610,7 +1367,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1646,7 +1402,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1671,37 +1426,6 @@ Runs once per row of **Test data**.
 * Step 3 refuses the save.
 * Step 4 still shows next week's close and the listing as created.
 
-<!-- trace:case id=g10adm.auction-listing.TC-pqm rev=1 covers=g10adm.auction-listing.SC-s0s -->
-### grade10-admin-auction-listing-US3-TC29-1: A starts at left as stored saves after it passes
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_1>` is a created listing whose stored starts at has passed.
-
-**Steps:**
-
-1. Save `<listing_1>` with a new title and its stored starts at, to the minute.
-2. Read `<listing_1>`.
-
-**Expected Results:**
-
-* Step 1 is accepted.
-* Step 2 shows the new title and the same starts at.
-
 <!-- trace:case id=g10adm.auction-listing.TC-nsg rev=1 covers=g10adm.auction-listing.SC-17a -->
 ### g10adm.auction-listing.US3-TC30: A draft may start from a Chinese title, but Create needs the English one
 
@@ -1713,7 +1437,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1749,49 +1472,6 @@ Runs once per row of **Test data**.
 * Step 5 shows `<listing_7>` still a draft.
 * Step 7 creates the listing.
 
-<!-- trace:case id=g10adm.auction-listing.TC-v2n rev=1 covers=grade10-admin-auction-listing-SC-222 -->
-### g10adm.auction-listing.US3-TC31: A create or an update refuses a starting price with cents
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Pre-conditions:**
-
-* An operator holding the grant to set prices and the window holds an API session.
-* `<listing_2>` is a complete draft in USD, and `<listing_3>` is a created listing in USD with a starting price of `<starting price>`.
-
-**Test data:**
-
-| Write | Starting price sent | Fixture notes |
-| --- | --- | --- |
-| create `<listing_2>` | USD120.01 | (fixed boundary), one minor unit above a whole dollar |
-| update `<listing_3>` | `<starting price>` plus one minor unit | (fixed boundary) |
-
-`<starting price>` is USD120, a whole-dollar amount.
-
-**Steps:**
-
-1. Send the row's write with the row's starting price.
-2. Read the API response and the listing named in the row.
-
-**Expected Results:**
-
-* Step 1 is refused and the message names the whole-dollar rule.
-* Step 2 reads `<listing_2>` as a draft, not created, for the create row.
-* Step 2 reads `<listing_3>` with starting price `<starting price>`, the value before the write, for the update row.
-
 <!-- trace:case id=g10adm.auction-listing.TC-m53 rev=2 -->
 ### grade10-admin-auction-listing-US3-TC26-2: Currency change reformats the same minor-unit price
 
@@ -1803,7 +1483,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -1846,7 +1525,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -1880,7 +1558,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -1915,7 +1592,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -1951,7 +1627,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -1987,7 +1662,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2031,7 +1705,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2071,7 +1744,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2111,7 +1783,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2145,7 +1816,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2181,7 +1851,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2215,7 +1884,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2249,7 +1917,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2283,7 +1950,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2315,7 +1981,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2356,7 +2021,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2399,7 +2063,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2424,37 +2087,6 @@ Runs once per row of **Test data**.
 * Step 3 refuses the save.
 * Step 4 shows no publish at.
 
-<!-- trace:case id=g10adm.auction-listing.TC-pc6 rev=1 covers=g10adm.auction-listing.SC-ji9 -->
-### grade10-admin-auction-listing-US4-TC17-1: A publish at equal to starts at is accepted
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-04
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_1>` is a created listing that opens on 2030-01-10 at 10:00.
-
-**Steps:**
-
-1. Set publish at on `<listing_1>` to 2030-01-10 10:00.
-2. Read `<listing_1>`.
-
-**Expected Results:**
-
-* Step 1 is accepted.
-* Step 2 shows publish at 2030-01-10 10:00 and the listing as created.
-
 <!-- trace:case id=g10adm.auction-listing.TC-dcp rev=1 covers=g10adm.auction-listing.SC-i7s -->
 ### grade10-admin-auction-listing-US4-TC18-1: Publish now on a scheduled listing asks first and clears publish at
 
@@ -2466,7 +2098,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2501,7 +2132,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2532,7 +2162,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2567,7 +2196,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2610,7 +2238,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
@@ -2664,7 +2291,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -2698,7 +2324,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -2735,7 +2360,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -2773,7 +2397,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -2807,7 +2430,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -2841,7 +2463,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -2875,7 +2496,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -2934,7 +2554,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -2968,7 +2587,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -3003,7 +2621,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -3037,7 +2654,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
@@ -3080,7 +2696,6 @@ campaign,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
@@ -3110,7 +2725,6 @@ campaign,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
@@ -3142,7 +2756,6 @@ campaign,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
@@ -3186,7 +2799,6 @@ campaign,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
@@ -3218,7 +2830,6 @@ campaign,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
@@ -3259,7 +2870,6 @@ surface for the same figure.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
@@ -3292,7 +2902,6 @@ surface for the same figure.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
@@ -3324,7 +2933,6 @@ surface for the same figure.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
@@ -3356,7 +2964,6 @@ surface for the same figure.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
@@ -3396,7 +3003,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3454,7 +3060,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3501,7 +3106,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3562,7 +3166,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3600,7 +3203,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3663,7 +3265,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3721,7 +3322,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3765,7 +3365,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3813,7 +3412,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3866,7 +3464,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3920,7 +3517,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -3961,7 +3557,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -4009,7 +3604,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -4056,7 +3650,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -4104,7 +3697,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -4155,7 +3747,6 @@ document the unit I selected.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
@@ -4198,7 +3789,6 @@ document the unit I selected.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
@@ -4241,7 +3831,6 @@ document the unit I selected.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
@@ -4285,7 +3874,6 @@ selected unit's normal media.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
@@ -4329,7 +3917,6 @@ selected unit's normal media.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
@@ -4373,7 +3960,6 @@ selected unit's normal media.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
@@ -4417,7 +4003,6 @@ copy's photographs apply.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-13
@@ -4469,7 +4054,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4512,7 +4096,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4554,7 +4137,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4601,7 +4183,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4644,7 +4225,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4685,7 +4265,6 @@ changes later.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4730,7 +4309,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4770,7 +4348,6 @@ changes later.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4811,7 +4388,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4852,7 +4428,6 @@ changes later.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
@@ -4892,7 +4467,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -4923,7 +4497,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -4952,7 +4525,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -4984,7 +4556,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -5015,7 +4586,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -5045,7 +4615,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -5075,7 +4644,6 @@ changes later.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -5109,7 +4677,6 @@ changes later.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -5131,66 +4698,6 @@ changes later.
 * The other operator receives the ordinary listing-access denial and cannot read private listing data.
 * Knowing `LK423` does not grant or broaden admin access; no separate code permission is evaluated.
 
-<!-- trace:case id=g10adm.auction-listing.TC-gc4 rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
-### grade10-admin-auction-listing-US72-TC9-1: Allocation retries a projected collision
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-listing-US-72
-
-**Pre-conditions:**
-
-* A newly created listing's 5-character candidate collides with an active code or retained reservation.
-
-**Steps:**
-
-1. Create the listing.
-2. Read its code on the admin screen.
-
-**Expected Results:**
-
-* Allocation retries atomically.
-* The stored code has the required shape and differs from the colliding code.
-
-<!-- trace:case id=g10adm.auction-listing.TC-4rj rev=1 covers=g10adm.auction-listing.SC-cza,g10adm.auction-listing.SC-xrt,g10adm.auction-listing.SC-7j9,g10adm.auction-listing.SC-xa1,g10adm.auction-listing.SC-hby,g10adm.auction-listing.SC-6yj,g10adm.auction-listing.SC-phl,g10adm.auction-listing.SC-rax -->
-### grade10-admin-auction-listing-US72-TC10-1: A retained listing-code reservation is never allocated again
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-listing-US-72
-
-**Pre-conditions:**
-
-* A retained reservation holds the previously issued code `LK423`.
-
-**Steps:**
-
-1. Create a later listing.
-2. Read its allocated code.
-
-**Expected Results:**
-
-* `LK423` remains unavailable.
-* The later listing receives a different code.
-
 <!-- trace:case id=g10adm.auction-listing.TC-1jo rev=3 -->
 ### grade10-admin-auction-listing-US72-TC11-3: Call off keeps its code after address reuse
 
@@ -5202,7 +4709,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-72
@@ -5258,7 +4764,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
@@ -5290,7 +4795,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
@@ -5320,7 +4824,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
@@ -5352,7 +4855,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
@@ -5383,7 +4885,6 @@ changes later.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
@@ -5406,38 +4907,6 @@ changes later.
 * The value remains available for correction.
 * Helper text states: `Slug must be unique. Completed, expired, and unsold listings also reserve their addresses.`
 
-<!-- trace:case id=g10adm.auction-listing.TC-m70 rev=1 covers=g10adm.auction-listing.SC-w4n,g10adm.auction-listing.SC-hi0,g10adm.auction-listing.SC-7ew,g10adm.auction-listing.SC-jow,g10adm.auction-listing.SC-96t,g10adm.auction-listing.SC-tb7 -->
-### grade10-admin-auction-listing-US73-TC6-1: Save remains authoritative after a race
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-listing-US-73
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/draft.spec.ts`
-
-**Pre-conditions:**
-
-* A draft's field-exit check reports `charizard-psa-10-lk423` available.
-* Another listing claims that slug before the draft is saved.
-
-**Steps:**
-
-1. Save the draft with `charizard-psa-10-lk423`.
-
-**Expected Results:**
-
-* Save is refused with an unavailable-slug result.
-* The draft's stored slug remains unchanged.
-
 <!-- trace:case id=g10adm.auction-listing.TC-wrn rev=2 covers=g10adm.auction-listing.SC-ejg -->
 ### grade10-admin-auction-listing-US73-TC7-2: Competing reuse saves leave only one slug holder
 
@@ -5449,7 +4918,6 @@ changes later.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-73
@@ -5501,7 +4969,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
@@ -5543,7 +5010,6 @@ changes later.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
@@ -5588,7 +5054,6 @@ changes later.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
@@ -5643,7 +5108,6 @@ changes later.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-74
@@ -5675,169 +5139,6 @@ changes later.
 * Step 4: the draft saves.
 * Step 6 reads 500 minor units USD.
 
-<!-- trace:case id=g10adm.auction-listing.TC-e4m rev=1 covers=grade10-admin-auction-listing-SC-164 -->
-### g10adm.auction-listing.US74-TC2: A draft refuses any currency other than USD
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-74
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_21>` is a draft in USD with starting price 100000 minor units.
-
-**Test data:**
-
-| Currency sent | Why this row |
-| --- | --- |
-| HKD | A retired listing currency |
-| JPY | A retired listing currency |
-| EUR | A currency the store never held, standing for any other |
-
-**Steps:**
-
-1. Send a draft save for `<listing_21>` with the row's currency.
-2. Read the API response for `<listing_21>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads currency USD and starting price 100000 minor units, unchanged.
-
-<!-- trace:case id=g10adm.auction-listing.TC-lej rev=2 covers=grade10-admin-auction-listing-SC-165,g10adm.auction-listing.SC-h88 -->
-### g10adm.auction-listing.US74-TC3: Create refuses any currency other than USD
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-74
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_22>` is a draft in USD with every create requirement set.
-
-**Test data:**
-
-| Currency sent | Why this row |
-| --- | --- |
-| HKD | A retired listing currency |
-| JPY | A retired listing currency |
-| EUR | A complete draft with an unsupported currency, as in the EUR create refusal |
-
-**Steps:**
-
-1. Send create for `<listing_22>` with the row's currency.
-2. Read the API response for `<listing_22>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads the listing as a draft in USD, not created.
-* For the EUR row, the API refuses create and the complete draft remains a draft.
-
-<!-- trace:case id=g10adm.auction-listing.TC-ctn rev=1 covers=grade10-admin-auction-listing-SC-161 -->
-### g10adm.auction-listing.US74-TC4: An update of a created listing refuses any currency other than USD
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-74
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_23>` is a created listing in USD with starting price 100000 minor units.
-
-**Test data:**
-
-| Currency sent | Why this row |
-| --- | --- |
-| HKD | A retired listing currency |
-| JPY | A retired listing currency |
-
-**Steps:**
-
-1. Send an update for `<listing_23>` with the row's currency.
-2. Read the API response for `<listing_23>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads currency USD, starting price 100000 minor units and the listing still created.
-
-<!-- trace:case id=g10adm.auction-listing.TC-mig rev=1 covers=grade10-admin-auction-listing-SC-162 -->
-### g10adm.auction-listing.US74-TC5: Earlier HKD and JPY listings keep their amounts and history when converted to USD
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-74
-
-**Pre-conditions:**
-
-* Before migration, `<listing_24>` has the row's currency, starting price, bid records and listing history shown in **Test data**.
-* The migration has run.
-* admin(holds the grant to read auction listings) holds an API session.
-
-**Test data:**
-
-| Original currency | Starting price before migration | Bid and history records before migration |
-| --- | --- | --- |
-| HKD | 400000 minor units | Bid A: 500000 minor units; history: created, published, bid A recorded |
-| JPY | 400000 minor units | Bid A: 500000 minor units; history: created, published, bid A recorded |
-
-**Steps:**
-
-1. Read `<listing_24>` and its price and history after migration.
-
-**Expected Results:**
-
-* The listing currency reads USD.
-* The starting price remains 400000 minor units, Bid A remains 500000 minor units, and the history still contains created, published and bid A recorded, with no amount conversion or other entry change.
-
 ---
 
 ## g10adm.auction-listing.US75: Operator writes a listing's title and description in each language
@@ -5857,7 +5158,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -5907,7 +5207,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -5950,7 +5249,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -5999,7 +5297,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -6049,7 +5346,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -6100,7 +5396,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -6145,7 +5440,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -6195,7 +5489,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -6241,7 +5534,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -6276,54 +5568,6 @@ Runs once per row of **Test data**.
 * Step 2 shows no edit control for the English title or description either.
 * The Traditional Chinese title is unchanged.
 
-<!-- trace:case id=g10adm.auction-listing.TC-cfb rev=1 covers=g10adm.auction-listing.SC-21e -->
-### g10adm.auction-listing.US75-TC10: A translation write to a frozen listing is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-75
-
-**Pre-conditions:**
-
-* admin(auction operator) is signed in.
-* `<listing_6>` is in status `<status>` and holds a Traditional Chinese title.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_6 | A listing in status `<status>` with English title `<english title>` and Traditional Chinese title `<traditional title>` |
-| english title | Charizard PSA 10 |
-| traditional title | 寶可夢 噴火龍 PSA 10 |
-| new traditional title | 寶可夢 噴火龍 初版 PSA 10 |
-
-| status |
-| --- |
-| Closed |
-| Settled |
-| Called off |
-
-**Steps:**
-
-1. Send an update to `<listing_6>` that sets the Traditional Chinese title to `<new traditional title>`.
-2. Read `<listing_6>` through the API.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 shows the Traditional Chinese title unchanged.
-
 <!-- trace:case id=g10adm.auction-listing.TC-sp9 rev=1 -->
 ### g10adm.auction-listing.US75-TC11: An admin who cannot edit a listing's texts cannot write translations
 
@@ -6335,7 +5579,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-75
@@ -6384,7 +5627,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-76
@@ -6435,7 +5677,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-76
@@ -6478,7 +5719,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-76
@@ -6523,7 +5763,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-76
@@ -6575,7 +5814,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-77
@@ -6619,7 +5857,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-77
@@ -6655,7 +5892,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-77
@@ -6698,7 +5934,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-77
@@ -6735,7 +5970,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-77

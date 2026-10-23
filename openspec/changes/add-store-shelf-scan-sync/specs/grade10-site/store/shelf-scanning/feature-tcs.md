@@ -1,6 +1,6 @@
 # grade10-site/store/shelf-scanning Test Cases
 
-**Status:** pending-review · 0/51
+**Status:** pending-review · 0/43
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
 ## Walk 1: Shopkeeper scans the staging shelf with the shop's link
@@ -66,7 +66,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -113,7 +112,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** performance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -142,90 +140,6 @@ Runs once per row of **Test data**.
 * Step 4 shows `<card_1>`'s new `<field read>`.
 * Step 4's other details are unchanged.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-sz9 rev=3 -->
-### g10.store-shelf-scanning.US1-TC3: A change only the store's re-read finds reaches the scanner within 11 minutes of the save
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** performance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-shelf-scanning.US1
-
-**Pre-conditions:**
-
-* `<card_1>` is a raw card published to the staging store, held on the scanner.
-* The shop's report of product changes does not reach the store.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| new price | A price different from `<card_1>`'s on file |
-
-**Steps:**
-
-1. In the staging shop's admin, set `<card_1>`'s price to `<new price>` and save; note the time.
-2. 660s (11mins) after step 1's time, read the scanner's item for `<card_1>`.
-
-**Expected Results:**
-
-* Step 2's item carries `<new price>`.
-
-<!-- trace:case id=g10.store-shelf-scanning.TC-k23 rev=2 covers=g10.store-shelf-scanning.SC-dan,g10.store-shelf-scanning.SC-icy,g10.store-shelf-scanning.SC-lrl -->
-### g10.store-shelf-scanning.US1-TC4: Every published product but gift cards is held on the scanner
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-shelf-scanning.US1
-
-**Pre-conditions:**
-
-* `<product>` exists in the staging shop in the state its row names, unchanged for the last 10 minutes.
-* `<product>` has at least one photo, older than the last photo run.
-
-**Test data:**
-
-| `<product>` | `<held>` |
-| --- | --- |
-| A raw card published to the store | held |
-| A slab published to the store | held |
-| A sealed box published to the store | held |
-| A comic published to the store | held |
-| A merch item published to the store | held |
-| A gift card published to the store | not held |
-| A draft product, published nowhere | not held |
-| A product published to another channel but not the store's | not held |
-| A product published to the ZZZ store | not held |
-
-**Steps:**
-
-1. Read the scanner's items for the grade10 store.
-2. Read the photos of a held `<product>`'s item and whether each is learned.
-
-**Expected Results:**
-
-* `<product>` is `<held>`.
-* A held `<product>` is one item, carrying its store title, price and availability.
-* Step 2's item carries `<product>`'s photos, each learned, sealed box, comic and merch alike.
-
 <!-- trace:case id=g10.store-shelf-scanning.TC-1o9 rev=1 covers=g10.store-shelf-scanning.SC-9kw -->
 ### g10.store-shelf-scanning.US1-TC5: A product the store drops leaves the scanner
 
@@ -239,7 +153,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -268,68 +181,6 @@ Runs once per row of **Test data**.
 * Step 3 does not name `<card_1>`.
 * Step 3 shows the scanner's not-recognised message.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-yj1 rev=1 covers=g10.store-shelf-scanning.SC-r9i -->
-### g10.store-shelf-scanning.US1-TC6: An item changed on the scanner is put back to the store's version
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-shelf-scanning.US1
-
-**Pre-conditions:**
-
-* `<card_1>` is a raw card published to the staging store, held on the scanner.
-* The scanner's item for `<card_1>` has been given a title and price the store does not carry.
-
-**Steps:**
-
-1. In the staging shop's admin, change a different product, so the store's copy of the catalogue moves.
-2. 360s (6mins) later, read the scanner's item for `<card_1>`.
-
-**Expected Results:**
-
-* Step 2's item carries the store's title and price for `<card_1>`.
-
-<!-- trace:case id=g10.store-shelf-scanning.TC-8xh rev=1 -->
-### g10.store-shelf-scanning.US1-TC7: A product with nothing moved is not written again
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** performance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-shelf-scanning.US1
-
-**Pre-conditions:**
-
-* `<card_1>` and `<card_2>` are raw cards published to the staging store, held on the scanner, their photos learned.
-
-**Steps:**
-
-1. Note the last write of the scanner's items for `<card_1>` and `<card_2>`.
-2. In the staging shop's admin, change `<card_2>`'s price.
-3. 360s (6mins) later, read both items and the scanner's photo queue.
-
-**Expected Results:**
-
-* `<card_2>`'s item carries the new price.
-* `<card_1>`'s item shows no write since step 1.
-* No photo of `<card_1>` is queued to be learned again.
-
 <!-- trace:case id=g10.store-shelf-scanning.TC-4sb rev=1 -->
 ### g10.store-shelf-scanning.US1-TC8: Production's scanner shows the store's answer before the store opens there
 
@@ -341,7 +192,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -376,7 +226,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -418,7 +267,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -460,7 +308,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** performance
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -500,7 +347,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -531,74 +377,6 @@ Runs once per row of **Test data**.
 * Step 3 `<new photo outcome>`.
 * Step 4 `<old photo outcome>`.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-3sh rev=2 covers=g10.store-shelf-scanning.SC-i2s -->
-### g10.store-shelf-scanning.US1-TC13: A run with no new photo does no work
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** performance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-shelf-scanning.US1
-
-**Pre-conditions:**
-
-* No photo of any store product changed since the last photo run, on `<environment>`.
-
-**Test data:**
-
-| `<environment>` |
-| --- |
-| staging |
-| production |
-
-**Steps:**
-
-1. Wait for the next photo run on `<environment>` (runs are 7200s (2h) apart).
-2. Read that run's record.
-
-**Expected Results:**
-
-* Step 2's run stopped before preparing any photo to learn.
-* Step 2's run sent the scanner no photo, learned none and rebuilt nothing.
-
-<!-- trace:case id=g10.store-shelf-scanning.TC-mg3 rev=1 covers=g10.store-shelf-scanning.SC-cz6 -->
-### g10.store-shelf-scanning.US1-TC14: A photo that failed to learn is tried again after 24 hours
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-shelf-scanning.US1
-
-**Pre-conditions:**
-
-* A photo of `<card_1>`, a published staging card, failed to learn at a photo run.
-* The cause of the failure is gone.
-
-**Steps:**
-
-1. Read the scanner's record of that photo at the photo runs over the next 86400s (24h).
-2. Read it again at the first photo run past 86400s (24h) after the failure.
-
-**Expected Results:**
-
-* Step 1 shows the photo left failed, not retried at every run.
-* Step 2 shows the photo learned.
-
 <!-- trace:case id=g10.store-shelf-scanning.TC-47l rev=3 covers=g10.store-shelf-scanning.SC-9ha,g10.store-shelf-scanning.SC-0a3,g10.store-shelf-scanning.SC-hdf -->
 ### g10.store-shelf-scanning.US1-TC15: An open scanner picks up a change without being reopened
 
@@ -612,7 +390,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -655,7 +432,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -695,7 +471,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -746,7 +521,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -778,7 +552,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -814,7 +587,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -855,7 +627,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -902,7 +673,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -945,7 +715,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -984,7 +753,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -1013,76 +781,6 @@ Runs once per row of **Test data**.
 * No row in step 4 shows a grade or a cert.
 * Step 5 shows `<slab_1>` alone, with its title, price and availability, and no grade or cert.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-dx2 rev=1 covers=g10.store-shelf-scanning.SC-fd7 -->
-### g10.store-shelf-scanning.US1-TC25: A pass with nothing changed in the shop publishes no new catalogue
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** performance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-shelf-scanning.US1
-
-**Pre-conditions:**
-
-* Every product published to the staging store is held on the scanner, its photos learned.
-* Nothing in the staging shop or inventory changes during the case.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| two passes | 600s (10mins): two of the store's 5-minute passes |
-
-**Steps:**
-
-1. Read the version of the scanner's catalogue for the grade10 store; note the time.
-2. `<two passes>` after step 1's time, read the version again.
-3. Read the scanner's photo queue.
-
-**Expected Results:**
-
-* Step 2's version is step 1's.
-* Step 3 holds no photo of a store product queued since step 1.
-
-<!-- trace:case id=g10.store-shelf-scanning.TC-gu0 rev=2 covers=g10.store-shelf-scanning.SC-a43 -->
-### g10.store-shelf-scanning.US1-TC26: The photo run stops when its model differs from the scanner's
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-shelf-scanning.US1
-
-**Pre-conditions:**
-
-* The photo run's model on staging differs from the scanner's.
-* A new photo of `<card_1>`, a raw card published to the staging store, waits to be learned.
-
-**Steps:**
-
-1. Wait for the next photo run on staging (runs are 7200s (2h) apart).
-2. Read that run's record.
-
-**Expected Results:**
-
-* Step 2's run failed before preparing any photo to learn.
-* Step 2's failure names both models, the photo run's and the scanner's.
-* Step 2's run sent the scanner no photo, learned none and rebuilt nothing.
-
 <!-- trace:case id=g10.store-shelf-scanning.TC-49c rev=2 covers=g10.store-shelf-scanning.SC-q13 -->
 ### g10.store-shelf-scanning.US1-TC27: A consigned raw card is held as a raw card, never alerted
 
@@ -1094,7 +792,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US1
@@ -1143,7 +840,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US2
@@ -1183,7 +879,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US2
@@ -1225,7 +920,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US2
@@ -1270,7 +964,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US3
@@ -1312,7 +1005,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US3
@@ -1355,7 +1047,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US3
@@ -1397,7 +1088,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US3
@@ -1435,7 +1125,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US3
@@ -1475,7 +1164,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US3
@@ -1512,7 +1200,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US3
@@ -1558,7 +1245,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US3
@@ -1602,7 +1288,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US3
@@ -1651,7 +1336,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US4
@@ -1693,7 +1377,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US4
@@ -1724,7 +1407,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-shelf-scanning.US4
@@ -1768,7 +1450,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US7
@@ -1808,7 +1489,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US7
@@ -1853,7 +1533,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US7
@@ -1895,7 +1574,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-shelf-scanning.US7
@@ -1947,7 +1625,6 @@ shopkeeper scans that slab.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US6
@@ -1988,7 +1665,6 @@ shopkeeper scans that slab.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US6
@@ -2030,7 +1706,6 @@ shopkeeper scans that slab.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US6
@@ -2077,7 +1752,6 @@ shopkeeper scans that slab.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US6
@@ -2119,7 +1793,6 @@ shopkeeper scans that slab.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US6

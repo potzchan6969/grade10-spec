@@ -1,6 +1,6 @@
 # grade10-site/store/discounts Test Cases
 
-**Status:** pending-review · 0/20
+**Status:** pending-review · 0/13
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-discounts-US3: Collector keeps the coupon when a checkout cannot take it
@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-03
@@ -62,7 +61,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-discounts-US-03
@@ -103,7 +101,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-discounts-US-03
@@ -140,7 +137,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-discounts-US-03
@@ -168,142 +164,6 @@
 * <facet coupon_1> is refused.
 * No discount code is minted.
 
-<!-- trace:case id=g10.store-discounts.TC-14n rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-cvt,g10.store-discounts.SC-82q -->
-### grade10-site-store-discounts-US3-TC5-1: A dead order's unspent code is deactivated
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-discounts-US-03
-
-**Pre-conditions:**
-
-* customer(member) has <order_1>, an unpaid order carrying <product coupon_1>'s minted, unspent code.
-
-**Test data:**
-
-| <ending> |
-| --- |
-| <order_1> is canceled |
-| <order_1> fails |
-
-**Steps:**
-
-1. End <order_1> as <ending> states.
-2. Read <product coupon_1>'s code at the shop.
-3. Open the member's coupon wallet.
-
-**Expected Results:**
-
-* The code is deactivated.
-* <product coupon_1> is back with the member.
-
-<!-- trace:case id=g10.store-discounts.TC-qeb rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-cvt,g10.store-discounts.SC-82q -->
-### grade10-site-store-discounts-US3-TC6-1: A counter sale nobody paid loses its code at the hour
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-discounts-US-03
-
-**Pre-conditions:**
-
-* admin(shop staff) planned <counter sale A> at <shop A> for customer(member holding <coupon>), with <coupon> on it, and nobody tendered it.
-* The clock stands at the row's <check time>.
-
-**Test data:**
-
-| <check time> | The code on <counter sale A> |
-| --- | --- |
-| 59 minutes after the sale's only plan | Live |
-| 61 minutes after the sale's only plan | No longer live |
-| 61 minutes after the first plan, 55 minutes after a second plan in the same till session | Live |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
-| <line_1> | One HK$780.00 product |
-| <counter sale A> | A till sale at <shop A> holding <line_1>, planned with <coupon> |
-
-**Steps:**
-
-1. Read the code minted for <coupon> on <counter sale A> at the shop.
-2. Read <counter sale A> at <shop A>.
-3. Read the member's coupons on <grade10 loyalty url>.
-
-**Expected Results:**
-
-* Step 1 reads the code as the row's second column says.
-* <counter sale A> is not cancelled and still holds <line_1>.
-* <coupon> reads unused.
-
-<!-- trace:case id=g10.store-discounts.TC-dsi rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-cvt,g10.store-discounts.SC-82q -->
-### grade10-site-store-discounts-US3-TC8-1: An expired online order keeps its code for the code's whole life
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-discounts-US-03
-
-**Pre-conditions:**
-
-* customer(member holding <coupon>) has <expired order>, which expired with its checkout still able to collect.
-* The clock stands at the row's <check time>.
-
-**Test data:**
-
-| <check time> | The code on <expired order> |
-| --- | --- |
-| 23 hours after <expired order> was written | Live |
-| 24 hours and 30 minutes after <expired order> was written | No longer live |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity |
-| <expired order> | An online order the member submitted with <coupon> and never paid, which the store could not close |
-
-**Steps:**
-
-1. Read the code minted for <coupon> on <expired order> at the shop.
-2. Read <expired order> in the member's orders.
-3. Read the member's coupons on <grade10 loyalty url>.
-
-**Expected Results:**
-
-* Step 1 reads the code as the row's second column says.
-* <expired order> is not cancelled.
-* <coupon> reads unused.
-
 <!-- trace:case id=g10.store-discounts.TC-93a rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-cvt,g10.store-discounts.SC-82q -->
 ### grade10-site-store-discounts-US3-TC9-1: A gift on a counter sale nobody paid goes back to the wallet
 
@@ -317,7 +177,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-03
@@ -372,7 +231,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-04
@@ -400,43 +258,6 @@ Runs once per row of **Test data**.
 * The paid order names <product coupon_1>'s own single-use code, with no welded line discount.
 * <product coupon_1> reads spent in the wallet.
 
-<!-- trace:case id=g10.store-discounts.TC-9h9 rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
-### grade10-site-store-discounts-US4-TC2-1: Re-planned sale keeps one code for its coupon
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-discounts-US-04
-
-**Pre-conditions:**
-
-* No automatic discount is active at the shop.
-* admin(shop staff) has a till session open for customer(member), on a sale holding <line_1> and carrying <product coupon_1>'s minted code.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <line_1> | One HK$780.00 product |
-| <product coupon_1> | A live product coupon that takes HK$50.00 off <line_1> |
-
-**Steps:**
-
-1. Apply the sale again with <product coupon_1> still chosen.
-2. Read the discount codes on the sale.
-
-**Expected Results:**
-
-* The sale carries exactly one code for <product coupon_1>.
-
 <!-- trace:case id=g10.store-discounts.TC-rf9 rev=2 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC3-2: A sale a reward was cleared off takes points, and no reward
 
@@ -450,7 +271,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-04
@@ -486,150 +306,6 @@ Runs once per row of **Test data**.
 * Step 2 answers as the row's second column says.
 * <product coupon_1> and <product coupon_2> stand live in the wallet.
 
-<!-- trace:case id=g10.store-discounts.TC-pic rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
-### grade10-site-store-discounts-US4-TC4-1: Code the paid sale does not name stops standing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-discounts-US-04
-
-**Pre-conditions:**
-
-* admin(shop staff) rang up a till sale for customer(member) whose record carries <product coupon_1>'s minted code.
-* The sale is paid, and its paid order does not name that code.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <line_1> | One HK$780.00 product |
-| <product coupon_1> | A live product coupon that takes HK$50.00 off <line_1> |
-
-**Steps:**
-
-1. Wait for the sale to settle.
-2. Read <product coupon_1>'s code at the shop.
-3. Read the member's order history and notifications.
-
-**Expected Results:**
-
-* The code no longer stands at the shop.
-* Nothing shows the member the code as money saved on the sale.
-
-<!-- trace:case id=g10.store-discounts.TC-w7h rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
-### grade10-site-store-discounts-US4-TC5-1: A sale that collects a reward another sale claims is reported and spends nothing
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-discounts-US-04
-
-**Pre-conditions:**
-
-* customer(member holding the row's reward) claimed that reward on <later checkout>, which took it off <counter sale A>.
-* admin(shop staff) tendered <counter sale A> without planning it again, and its paid order carries what the row names, with the shop's discount allocations.
-* <later checkout> is paid with the row's reward on it.
-* Neither sale has settled.
-
-**Test data:**
-
-| Reward | What <counter sale A>'s paid order carries | Settled first |
-| --- | --- | --- |
-| <coupon> | <coupon>'s deactivated code and its cut | <later checkout> |
-| <coupon> | <coupon>'s deactivated code and its cut | <counter sale A> |
-| <gift> | <gift>'s line, discounted to nothing | <later checkout> |
-| <gift> | <gift>'s line, discounted to nothing | <counter sale A> |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
-| <gift> | A gift reward the member holds, unused, inside its validity, whose threshold <line_1> passes |
-| <line_1> | One HK$780.00 product |
-| <counter sale A> | A till sale at <shop A> holding <line_1>, planned with the row's reward before <later checkout> claimed it |
-| <later checkout> | An online checkout the member submitted with the row's reward on <line_1> |
-
-**Steps:**
-
-1. Settle the sale the row's last column names.
-2. Settle the other sale.
-3. Read the member's coupons on <grade10 loyalty url>.
-4. Read the commerce monitors' alerts for a sale that collected a reward it gave up.
-
-**Expected Results:**
-
-* The row's reward reads used once, by <later checkout>.
-* <counter sale A> spends no reward.
-* Step 4 shows an alert whose log line names <counter sale A>'s order.
-
-<!-- trace:case id=g10.store-discounts.TC-99b rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
-### grade10-site-store-discounts-US4-TC6-1: A sale paid with what it gave up spends the coupon nobody else claims
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-discounts-US-04
-
-**Pre-conditions:**
-
-* admin(shop staff) planned <counter sale A> at <shop A> for customer(member holding the row's reward), with that reward on it.
-* <counter sale A> ran out its hour, and its cart still carries what the row names.
-* No other sale claims the row's reward.
-* admin(shop staff) tendered <counter sale A> without planning it again, and its paid order names the shop's discount allocations.
-
-**Test data:**
-
-| Reward | What the paid sale carries |
-| --- | --- |
-| <coupon> | <coupon>'s deactivated code and its cut |
-| <gift> | <gift>'s line, discounted to nothing |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward product coupon the member holds, unused, inside its validity, that takes HK$50.00 off <line_1>'s own variant |
-| <gift> | A gift reward the member holds, unused, inside its validity |
-| <line_1> | One HK$780.00 product |
-| <counter sale A> | A till sale at <shop A> holding <line_1> |
-
-**Steps:**
-
-1. Settle <counter sale A>.
-2. Read the member's coupons on <grade10 loyalty url>.
-3. Read the commerce monitors' alerts for a sale that collected a reward it gave up.
-
-**Expected Results:**
-
-* The row's reward reads used once, by <counter sale A>.
-* Step 3 shows an alert whose log line names <counter sale A>'s order.
-
 <!-- trace:case id=g10.store-discounts.TC-ofg rev=1 covers=g10.store-discounts.SC-fc9,g10.store-discounts.SC-evl,g10.store-discounts.SC-it9,g10.store-discounts.SC-l2h,g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr,g10.store-discounts.SC-elk,g10.store-discounts.SC-99a,g10.store-discounts.SC-0lx,g10.store-discounts.SC-9j2,g10.store-discounts.SC-8ib,g10.store-discounts.SC-6co,g10.store-discounts.SC-ou8 -->
 ### grade10-site-store-discounts-US4-TC7-1: A counter sale a newer promise retired takes no new plan
 
@@ -643,7 +319,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-04
@@ -696,7 +371,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-04
@@ -747,7 +421,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-04
@@ -792,7 +465,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-04
@@ -841,7 +513,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-04
@@ -891,7 +562,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-discounts-US-04

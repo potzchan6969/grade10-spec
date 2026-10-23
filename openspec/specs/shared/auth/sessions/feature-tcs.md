@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-01
@@ -55,7 +54,6 @@ Signed in as an operator who holds `session:list`. `<a subject user id>` has at 
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sessions-US-01
@@ -88,7 +86,6 @@ Signed in as a person who does not hold `session:list`.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sessions-US-01
@@ -129,7 +126,6 @@ Signed in as an operator whose role is `support`. `<an admin user id>` holds `ad
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-02
@@ -164,7 +160,6 @@ Signed in as an operator who holds `session:revoke`. `<a subject user id>` has a
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-02
@@ -198,7 +193,6 @@ Signed in as an operator who holds `session:revoke`. `<a subject user id>` has m
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sessions-US-02
@@ -231,7 +225,6 @@ Signed in as an operator who does not hold `session:revoke`. `<a subject user id
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sessions-US-02
@@ -264,7 +257,6 @@ Signed in as an operator whose role is `support`. `<an admin user id>` holds `ad
 * **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-02
@@ -298,7 +290,6 @@ Signed in as an operator who holds `session:revoke`.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-02
@@ -336,7 +327,6 @@ Signed in as an operator who holds `session:revoke`. `<a subject user id>` has t
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sessions-US-02
@@ -364,7 +354,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-02
@@ -416,7 +405,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-03
@@ -456,7 +444,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-03
@@ -495,7 +482,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-03
@@ -532,7 +518,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-03
@@ -579,7 +564,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-04
@@ -624,7 +608,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-04

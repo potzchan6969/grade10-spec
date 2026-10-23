@@ -1,6 +1,6 @@
 # grade10-site/store/wallet-member-card Test Cases
 
-**Status:** pending-review · 0/12
+**Status:** pending-review · 0/9
 **Drafts styled:** 2026-10-06, tcs-rules r4
 **Out of suite:** grade10-site-store-wallet-member-card-SC-61, grade10-site-store-wallet-member-card-SC-68, grade10-site-store-wallet-member-card-SC-69, grade10-site-store-wallet-member-card-SC-70, grade10-site-store-wallet-member-card-SC-72, grade10-site-store-wallet-member-card-SC-73, grade10-site-store-wallet-member-card-SC-74
 
@@ -23,7 +23,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-store-wallet-member-card-US-09
@@ -80,7 +79,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-wallet-member-card-US-09
@@ -123,7 +121,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-wallet-member-card-US-09
@@ -168,7 +165,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-wallet-member-card-US-09
@@ -189,38 +185,6 @@ Runs once per row of **Test data**.
 * The record names no wallet.
 * The record offers no ending.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-r84 rev=1 covers=g10.store-wallet-member-card.SC-ts9 -->
-### grade10-site-store-wallet-member-card-US9-TC5-1: Ending sent without store:write is refused and the pass stays live
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-wallet-member-card-US-09
-
-**Pre-conditions:**
-
-* admin(support, does not hold store:write) has a signed-in admin console session.
-* customer(member with a live Google Wallet pass).
-
-**Steps:**
-
-1. In the operator's session, send the request that ends the member's Google Wallet pass.
-2. Read the API response.
-3. As the member, navigate to <grade10 membership url>.
-
-**Expected Results:**
-
-* Step 2 is refused as forbidden.
-* Step 3 shows the member still carries a Google Wallet pass.
-
 <!-- trace:case id=g10.store-wallet-member-card.TC-4pc rev=1 covers=g10.store-wallet-member-card.SC-1an -->
 ### grade10-site-store-wallet-member-card-US9-TC7-1: Ending the operator declines ends nothing
 
@@ -232,7 +196,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-wallet-member-card-US-09
@@ -269,7 +232,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-wallet-member-card-US-09
@@ -302,7 +264,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-wallet-member-card-US-09
@@ -336,7 +297,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-wallet-member-card-US-09
@@ -360,71 +320,6 @@ Runs once per row of **Test data**.
 * Step 4 names no wallet.
 * Step 5 shows no Apple Wallet pass carried.
 
-<!-- trace:case id=g10.store-wallet-member-card.TC-e3d rev=1 covers=g10.store-wallet-member-card.SC-6nw -->
-### grade10-site-store-wallet-member-card-US9-TC11-1: Ending sent for a wallet never added ends nothing
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-wallet-member-card-US-09
-
-**Pre-conditions:**
-
-* admin(holds store:write, reads the audit trail) has a signed-in admin console session.
-* customer(member with a live Google Wallet pass, who never added an Apple Wallet pass).
-
-**Steps:**
-
-1. In the operator's session, send the request that ends the member's Apple Wallet pass.
-2. Read the API response.
-3. On <grade10 admin audit url>, read the newest row for the member.
-4. As the member, navigate to <grade10 membership url>.
-
-**Expected Results:**
-
-* Step 2 says no Apple Wallet pass was held, and nothing ended.
-* Step 3 names the operator, the member, Apple Wallet and step 1's time, and says nothing was ended.
-* Step 4 shows the member still carries a Google Wallet pass.
-
-<!-- trace:case id=g10.store-wallet-member-card.TC-doc rev=1 covers=g10.store-wallet-member-card.SC-7ub -->
-### grade10-site-store-wallet-member-card-US9-TC12-1: Wallets read without store:write is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-wallet-member-card-US-09
-
-**Pre-conditions:**
-
-* admin(support, does not hold store:write) has a signed-in admin console session.
-* customer(member with a live Google Wallet pass).
-
-**Steps:**
-
-1. In the operator's session, send the request that reads the member's wallets.
-2. Read the API response.
-
-**Expected Results:**
-
-* Step 2 is refused as forbidden.
-* Step 2 names no wallet.
-
 <!-- trace:case id=g10.store-wallet-member-card.TC-it3 rev=1 covers=g10.store-wallet-member-card.SC-p9m -->
 ### grade10-site-store-wallet-member-card-US9-TC13-1: Ending ends a pass the member added after the record opened
 
@@ -436,7 +331,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-wallet-member-card-US-09
@@ -530,11 +424,8 @@ No case is decided by an automated test yet. The tests that prove part of each, 
 | `grade10-site-store-wallet-member-card-US9-TC2-1` | the store's suite proves the wallets held and none; the console's test proves no ending offered for none; to be walked in the walk |
 | `grade10-site-store-wallet-member-card-US9-TC3-1` | the store's suite proves the nothing-held answer; the console's line and the audit outcome are task 2's; a person ends the pass from a second session first |
 | `grade10-site-store-wallet-member-card-US9-TC4-1` | the console's test proves no ending offered without `store:write`; flipped once task 1.3 links it, asserting it names no wallet either |
-| `grade10-site-store-wallet-member-card-US9-TC5-1` | the store's suite proves the refusal and the pass still identifying; flipped once task 1.3 links it |
 | `grade10-site-store-wallet-member-card-US9-TC7-1` | the console's test for a declined confirmation is task 2's; to be walked in the walk |
 | `grade10-site-store-wallet-member-card-US9-TC8-1` | the console's test proves an unreadable wallet is never called empty; flipped once task 1.3 links it, asserting it offers no ending either |
 | `grade10-site-store-wallet-member-card-US9-TC9-1` | the store's suite for an ending on the operator's own record is task 2's; a person signs in as an operator who is also a member |
 | `grade10-site-store-wallet-member-card-US9-TC10-1` | a person signs in as shop staff; which roles hold `store:write` is the console's role table, which no test here reads |
-| `grade10-site-store-wallet-member-card-US9-TC11-1` | the store's suite for the nothing-held answer and its audit outcome is task 2's; flipped once task 2.5 links it |
-| `grade10-site-store-wallet-member-card-US9-TC12-1` | the grant test, which fails until the read needs `store:write`, and the store's suite for a `support` operator's refused read are task 2's; flipped on the grant test once task 2.5 links it |
 | `grade10-site-store-wallet-member-card-US9-TC13-1` | the store's suite for an ending after a new pass was added is task 2's; flipped once task 2.5 links it |

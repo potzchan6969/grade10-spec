@@ -1,6 +1,6 @@
 # grade10-admin/console/collector-page Test Cases
 
-**Status:** pending-review · 12/19
+**Status:** reopened · 11/18
 **Drafts styled:** 2026-10-02, tcs-rules r4
 **Out of suite:** `grade10-admin-console-collector-page-SC-07` — the vault worker's test of `admin.collectorCases` with the audit write failing; `grade10-admin-console-collector-page-SC-17` — the `CollectorPage` story with the header held pending, and its colocated test.
 
@@ -22,7 +22,6 @@ every vault case they hold,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -61,7 +60,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -101,7 +99,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -135,7 +132,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -173,7 +169,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -205,7 +200,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -237,7 +231,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -279,7 +272,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -319,7 +311,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -356,7 +347,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -389,7 +379,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -429,7 +418,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -458,7 +446,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-01
@@ -499,7 +486,6 @@ shown a name my role does not hold.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-02
@@ -523,37 +509,6 @@ shown a name my role does not hold.
 * The vault cases section lists both cases with reference, item, status, lane and last touched.
 * Step 3's case page shows `tai.man@example.com` as its contact.
 
-<!-- trace:case id=g10adm.console-collector-page.TC-ug6 rev=1 covers=g10adm.console-collector-page.SC-4hc,g10adm.console-collector-page.SC-olt,g10adm.console-collector-page.SC-cf6,g10adm.console-collector-page.SC-zfs -->
-### grade10-admin-console-collector-page-US2-TC2-1: The header's name read refuses a caller without the identity grant
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-collector-page-US-02
-
-**Pre-conditions:**
-
-* admin(treasurer, holds vault:read and vault:payout) holds a verified console session.
-* `<collector_A>` is an account with a name and an email.
-
-**Steps:**
-
-1. Call the collector page's header read for `<collector_A>` directly.
-2. Call the collector page's vault cases read for `<collector_A>` directly.
-
-**Expected Results:**
-
-* Step 1 is refused for the missing identity grant, and no name or email comes back.
-* Step 2 answers with `<collector_A>`'s cases.
-
 ---
 
 ## grade10-admin-console-collector-page-US3: Operator reads a collector's items on their page
@@ -574,7 +529,6 @@ or not,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-03
@@ -609,7 +563,6 @@ or not,
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-03
@@ -639,7 +592,6 @@ or not,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-collector-page-US-03
@@ -669,7 +621,6 @@ or not,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-collector-page-US-03
@@ -714,7 +665,6 @@ or not,
 | `grade10-admin-console-collector-page-US1-TC8-1` | Joined | `grade10-admin-console-collector-page-SC-11`, the malformed id reading the same, Q40 |
 | `grade10-admin-console-collector-page-US1-TC9-1` | Joined | `grade10-admin-console-collector-page-SC-02` |
 | `grade10-admin-console-collector-page-US2-TC1-1` | Joined | `grade10-admin-console-collector-page-SC-04`, `grade10-admin-console-collector-page-SC-09` and `grade10-admin-console-collector-page-SC-15` |
-| `grade10-admin-console-collector-page-US2-TC2-1` | Folded | `grade10-admin-console-collector-page-SC-18`: the header reads under the identity grant, Q2 and Q9, and no scenario walked the read itself being refused |
 | `grade10-admin-console-collector-page-SC-05` | Case added | `grade10-admin-console-collector-page-US1-TC10-1` |
 | `grade10-admin-console-collector-page-SC-19` | Case added | `grade10-admin-console-collector-page-US1-TC11-1`, Q42 |
 | `grade10-admin-console-collector-page-SC-21` | Case added | `grade10-admin-console-collector-page-US1-TC12-1`, Q46 |
@@ -749,5 +699,4 @@ or not,
 | `grade10-admin-console-collector-page-US1-TC9-1` | Deferred at review: rows whose outcomes no rule states, and a console grant the tester has to choose |
 | `grade10-admin-console-collector-page-US1-TC10-1` | Deferred at review: a case whose account was erased has no route by hand, and no test decides it yet |
 | `grade10-admin-console-collector-page-US1-TC12-1` | Deferred at review: no route erases one case of a collector by hand, and no test decides it yet |
-| `grade10-admin-console-collector-page-US2-TC2-1` | Layer api: the vault worker's test refuses the header's read without kyc:read |
 | `grade10-admin-console-collector-page-US1-TC2-1` | The walk takes four routes; a person takes the search by phone number, which the seed cannot give a case |

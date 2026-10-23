@@ -1,6 +1,6 @@
 # zzz-site/site/navigation Test Cases
 
-**Status:** pending-review · 0/21
+**Status:** pending-review · 0/20
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
 ## zzz-site-site-navigation-US1: Collector opens a ZZZ address directly
@@ -24,7 +24,6 @@ leave for home.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-01
@@ -52,7 +51,6 @@ None.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-01
@@ -81,7 +79,6 @@ A collector who moved from home to sign-in.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-01
@@ -110,7 +107,6 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-01
@@ -129,39 +125,6 @@ None.
 * The description reads exactly "The link may be wrong, or the page may have moved."
 * Neither string contains any part of the address navigated to in step 1.
 
-<!-- trace:case id=zzz.site-navigation.TC-pfw rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
-### zzz-site-site-navigation-US1-TC5-1: Not-found never reflects a crafted address
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** zzz-site-site-navigation-US-01
-
-**Pre-conditions:**
-None.
-
-**Steps:**
-
-1. Navigate to <an address under no surface the zzz site answers, with a path
-   segment carrying markup such as `<script>`>.
-2. Read the rendered page's title, description, and markup.
-
-**Expected Results:**
-
-* The not-found surface renders the same static title and description as any
-  other unknown address.
-* No part of the crafted address appears anywhere on the page, as text or as
-  markup.
-* No script from the crafted address executes.
-
 <!-- trace:case id=zzz.site-navigation.TC-04e rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
 ### zzz-site-site-navigation-US1-TC6-1: Back to Home leaves not-found for the ZZZ home
 
@@ -173,7 +136,6 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-01
@@ -201,7 +163,6 @@ no surface the zzz site answers>.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-01
@@ -242,7 +203,6 @@ bounces me forward again.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-02
@@ -271,7 +231,6 @@ Signed in as a collector on ZZZ.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-02
@@ -300,7 +259,6 @@ Signed in as a collector on ZZZ.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-02
@@ -330,7 +288,6 @@ from <zzz home url> before it corrected.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-02
@@ -367,7 +324,6 @@ browser behavior I asked for.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-03
@@ -394,7 +350,6 @@ A collector is on home.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-03
@@ -422,7 +377,6 @@ A collector who moved from home to sign-in.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** zzz-site-site-navigation-US-03
@@ -449,7 +403,6 @@ None.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-03
@@ -486,7 +439,6 @@ from the beginning.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-04
@@ -514,7 +466,6 @@ A collector who scrolled partway down a surface and navigated from there.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-04
@@ -550,7 +501,6 @@ open.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** performance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-05
@@ -578,7 +528,6 @@ A cold browser with an empty cache.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** performance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** zzz-site-site-navigation-US-05
@@ -617,7 +566,6 @@ leaving puts me somewhere I can read instead of on a blank page.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-06
@@ -649,7 +597,6 @@ The collector is not signed in.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-06

@@ -1,6 +1,6 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review · 0/50
+**Status:** pending-review · 0/49
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
 **Out of suite:** shared-ui-store-cart-SC-01 - the store-cart export set in `packages/ui/src/index.test.ts`; shared-ui-store-cart-SC-22 - the type assertions in the same test, run by `pnpm run typecheck`; shared-ui-store-cart-SC-43 - the same test, which finds neither slot export
@@ -33,7 +33,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -81,7 +80,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -123,7 +121,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -170,7 +167,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -213,7 +209,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -255,7 +250,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -298,7 +292,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -344,7 +337,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -387,7 +379,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -434,7 +425,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -479,7 +469,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -523,7 +512,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-02
@@ -568,7 +556,6 @@ showing skeletons while that read is in flight,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-03
@@ -607,7 +594,6 @@ showing skeletons while that read is in flight,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-03
@@ -653,7 +639,6 @@ showing skeletons while that read is in flight,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-03
@@ -687,7 +672,6 @@ showing skeletons while that read is in flight,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-03
@@ -729,7 +713,6 @@ it.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-04
@@ -766,7 +749,6 @@ its label if it fails.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-05
@@ -805,7 +787,6 @@ sells.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-06
@@ -851,7 +832,6 @@ sells.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-06
@@ -880,36 +860,6 @@ sells.
 * No removal toast shows.
 * Step 4: no remove request.
 
-<!-- trace:case id=g10.shared-store-cart.TC-kiq rev=1 covers=g10.shared-store-cart.SC-sol,g10.shared-store-cart.SC-0wv,g10.shared-store-cart.SC-fy2,g10.shared-store-cart.SC-jbs,g10.shared-store-cart.SC-pvs,g10.shared-store-cart.SC-psl -->
-### shared-ui-store-cart-US6-TC3-1: Status values and toast copy are the named contract
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-06
-
-**Pre-conditions:**
-
-* None.
-
-**Steps:**
-
-1. Assign `CartItemStatus` on a cart line.
-2. Supply `CartDrawerCopy`.
-
-**Expected Results:**
-
-* Allowed status values are only `default`, `adjusted`, `soldOut`, and `unavailable`.
-* The copy includes `unavailableItemsRemoved`.
-
 <!-- trace:case id=g10.shared-store-cart.TC-ulg rev=1 covers=g10.shared-store-cart.SC-sol,g10.shared-store-cart.SC-0wv,g10.shared-store-cart.SC-fy2,g10.shared-store-cart.SC-jbs,g10.shared-store-cart.SC-pvs,g10.shared-store-cart.SC-psl -->
 ### shared-ui-store-cart-US6-TC4-1: A cart of only delisted lines ends on the empty state
 
@@ -921,7 +871,6 @@ sells.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-06
@@ -968,7 +917,6 @@ sells.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-06
@@ -1013,7 +961,6 @@ sells.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-06
@@ -1065,7 +1012,6 @@ sells.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-07
@@ -1092,7 +1038,6 @@ A cart line with status `adjusted`.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-07
@@ -1120,7 +1065,6 @@ A cart line with status `adjusted` showing the low-stock warning. The stepper ca
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-07
@@ -1159,7 +1103,6 @@ down.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-08
@@ -1199,7 +1142,6 @@ down.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-08
@@ -1237,7 +1179,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-08
@@ -1290,7 +1231,6 @@ at the prices I see on them.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-13
@@ -1332,7 +1272,6 @@ at the prices I see on them.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-13
@@ -1389,7 +1328,6 @@ at the prices I see on them.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-13
@@ -1440,7 +1378,6 @@ row.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-14
@@ -1499,7 +1436,6 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-15
@@ -1553,7 +1489,6 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-15
@@ -1598,7 +1533,6 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-15
@@ -1642,7 +1576,6 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-15
@@ -1707,7 +1640,6 @@ the sale from and show only that code's Discount in the footer,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-16
@@ -1768,7 +1700,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** destructive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-17
@@ -1818,7 +1749,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-17
@@ -1878,7 +1808,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-19
@@ -1906,7 +1835,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-19
@@ -1934,7 +1862,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-19
@@ -1962,7 +1889,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared.ui-store-cart.US19
@@ -2011,7 +1937,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared.ui-store-cart.US19
@@ -2060,7 +1985,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-04
@@ -2108,7 +2032,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared.ui-store-cart.US19
@@ -2150,7 +2073,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared.ui-store-cart.US20
@@ -2161,7 +2083,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 * `<drawer>` is open with the consumer pending input true.
 * The consumer supplies availability `<available>`, quantity constraint `<quantity_limit>` and unavailable-action setup `<unavailable_action>`.
 * Pointer and keyboard attempts on actions while pending have invoked no callbacks.
-
 
 * The restored fixture supplies `<available>`.
 **Test data:**
@@ -2205,7 +2126,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared.ui-store-cart.US20

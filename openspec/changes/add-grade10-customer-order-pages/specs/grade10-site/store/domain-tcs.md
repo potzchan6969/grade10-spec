@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-01, grade10-site-store-order-detail-US-01

@@ -1,6 +1,6 @@
 # shared/auth/session Test Cases
 
-**Status:** reopened · 9/53
+**Status:** pending-review · 9/44
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## Background
@@ -14,74 +14,6 @@
 **I want** a signed-in read to report my id, email, name, and roles, and a signed-out read to report nobody,
 **so that** every surface of this brand knows it is me, or that I have not signed in.
 
-<!-- trace:case id=g10.shared-session.TC-frz rev=1 covers=g10.shared-session.SC-xll,g10.shared-session.SC-yja,g10.shared-session.SC-4uk,g10.shared-session.SC-ol8,g10.shared-session.SC-qd6 -->
-### shared-auth-session-US1-TC1-1: Signed-in read names id, email, name and roles
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-session-US-01
-
-**Pre-conditions:**
-
-* customer is signed in on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Ask a Grade10 product who is calling.
-
-**Expected Results:**
-
-* The product receives that person's user id, email, name, and roles.
-
-<!-- trace:case id=g10.shared-session.TC-u5z rev=1 covers=g10.shared-session.SC-xll,g10.shared-session.SC-yja,g10.shared-session.SC-4uk,g10.shared-session.SC-ol8,g10.shared-session.SC-qd6 -->
-### shared-auth-session-US1-TC2-1: Signed-out read reports no person
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-01
-
-**Pre-conditions:**
-
-* customer is not signed in on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Ask a Grade10 product who is calling.
-
-**Expected Results:**
-
-* The product receives no person.
-
 <!-- trace:case id=g10.shared-session.TC-yh6 rev=1 covers=g10.shared-session.SC-xll,g10.shared-session.SC-yja,g10.shared-session.SC-4uk,g10.shared-session.SC-ol8,g10.shared-session.SC-qd6 -->
 ### shared-auth-session-US1-TC3-1: Another person is asked for by user id
 
@@ -93,7 +25,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-01
@@ -109,40 +40,6 @@
 **Expected Results:**
 
 * The product asks for that person by user id.
-
-<!-- trace:case id=g10.shared-session.TC-3ba rev=1 covers=g10.shared-session.SC-xll,g10.shared-session.SC-yja,g10.shared-session.SC-4uk,g10.shared-session.SC-ol8,g10.shared-session.SC-qd6 -->
-### shared-auth-session-US1-TC4-1: Client cannot claim a user on an anonymous event
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-01
-
-**Pre-conditions:**
-
-* customer is not signed in on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Submit an analytics event that names a user id.
-
-**Expected Results:**
-
-* The recorded event is not attributed to that user id.
 
 ---
 
@@ -163,7 +60,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-02
@@ -198,7 +94,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-02
@@ -232,7 +127,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-02
@@ -266,112 +160,6 @@
 **I want** a signed-in event to name me and an anonymous event to name the device,
 **so that** analytics does not mix my account with a browser I have not signed in on.
 
-<!-- trace:case id=g10.shared-session.TC-c3g rev=1 covers=g10.shared-session.SC-h04,g10.shared-session.SC-nhr,g10.shared-session.SC-4e0 -->
-### shared-auth-session-US3-TC1-1: Signed-in event is attributed to the user id
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-03
-
-**Pre-conditions:**
-
-* customer is signed in on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Trigger a product analytics event for that visit.
-
-**Expected Results:**
-
-* The event is attributed to that person's user id.
-
-<!-- trace:case id=g10.shared-session.TC-luw rev=1 covers=g10.shared-session.SC-h04,g10.shared-session.SC-nhr,g10.shared-session.SC-4e0 -->
-### shared-auth-session-US3-TC2-1: Anonymous event is attributed to the device
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-03
-
-**Pre-conditions:**
-
-* customer is not signed in on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Trigger a product analytics event for that visit.
-
-**Expected Results:**
-
-* The event is attributed to the device.
-* It is not attributed to a user id.
-
-<!-- trace:case id=g10.shared-session.TC-e7o rev=1 covers=g10.shared-session.SC-h04,g10.shared-session.SC-nhr,g10.shared-session.SC-4e0 -->
-### shared-auth-session-US3-TC3-1: Sign-in links the device to the person
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-03
-
-**Pre-conditions:**
-
-* customer is not signed in on `<grade10 store url>`.
-* Analytics events were recorded against this device while unsigned.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Sign in as that collector on this device.
-2. Trigger a product analytics event for that visit.
-
-**Expected Results:**
-
-* The later event is attributed to that person.
-* It still names that device.
-
 ---
 
 ## shared-auth-session-US4: Collector returns to a tab they left and it knows they signed in
@@ -391,7 +179,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-04
@@ -433,7 +220,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-04
@@ -474,7 +260,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-04
@@ -515,7 +300,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-04
@@ -557,7 +341,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-04
@@ -602,7 +385,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-session-US-04
@@ -642,7 +424,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-04
@@ -683,7 +464,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-04
@@ -719,7 +499,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-04
@@ -762,7 +541,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-session-US-04
@@ -807,7 +585,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-04
@@ -850,7 +627,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Open tabs
@@ -887,7 +663,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Open tabs
@@ -924,7 +699,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Open tabs
@@ -969,7 +743,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-05
@@ -1006,7 +779,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-05
@@ -1042,7 +814,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-05
@@ -1082,7 +853,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-05
@@ -1119,7 +889,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-05
@@ -1159,7 +928,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-05
@@ -1195,7 +963,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-05
@@ -1232,7 +999,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-05
@@ -1268,7 +1034,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-session-US-05
@@ -1318,7 +1083,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-06
@@ -1360,7 +1124,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-06
@@ -1408,7 +1171,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-06
@@ -1451,7 +1213,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-06
@@ -1494,7 +1255,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-06
@@ -1536,7 +1296,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-06
@@ -1578,7 +1337,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-06
@@ -1618,7 +1376,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-06
@@ -1658,7 +1415,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-06
@@ -1707,7 +1463,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -1754,7 +1509,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -1800,7 +1554,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -1847,7 +1600,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-07
@@ -1889,7 +1641,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-07
@@ -1931,7 +1682,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -1975,7 +1725,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -2010,125 +1759,7 @@ Runs once per row of **Test data**.
 * Step 2 shows tab A showing `<operator account>` signed in on the console, unreloaded.
 * Step 3 shows tab C unchanged, still showing `<operator account>` signed in on the site.
 
-### shared-auth-session-US7-TC8-1: A site session that holds a role is refused for a console request
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-07
-
-**Pre-conditions:**
-
-* `<operator account>` holds a role that grants `<operator action>`.
-* `<operator account>` is signed in on the site and has no console session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator action | An operator action the role grants, whose target `<target account>` is read before and after |
-| target account | An account the action would change |
-
-| Field | Value |
-| --- | --- |
-| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Request `<operator action>` as the console, carrying only the site session's credentials.
-2. Present the site session's credentials to the console as the console's own, and ask who is calling.
-
-**Expected Results:**
-
-* Step 1 is refused as not signed in.
-* `<target account>` is unchanged.
-* Step 2 receives no person.
-
-### shared-auth-session-US7-TC9-1: A console session without the second factor refuses an operator action beside a site session
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-07
-
-**Pre-conditions:**
-
-* `<operator account>` has a second factor and holds a role that grants `<operator action>`.
-* `<operator account>` is signed in on the site and on the console, and has not proved the second factor on that console session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator action | An operator action the role grants, whose target `<target account>` is read before and after |
-| target account | An account the action would change |
-
-| Field | Value |
-| --- | --- |
-| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Request `<operator action>` on the console session.
-
-**Expected Results:**
-
-* Step 1 is refused and asks for the second factor.
-* `<target account>` is unchanged.
-
 ---
-
-### shared-auth-session-US7-TC10-1: A site session presented to the console as its own names no one
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Surface sessions
-
-**Pre-conditions:**
-
-* `<operator account>` holds console access and is signed in on `<grade10 store url>` only.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator account | An account holding console access |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Take the site session's credentials from `<grade10 store url>`.
-2. Present them to `<grade10 admin console url>` as the console's own session and ask who is calling.
-
-**Expected Results:**
-
-* Step 2 receives no person.
 
 ## shared-auth-session-US8: Operator signs in to the console once more after release
 
@@ -2146,7 +1777,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-08
@@ -2191,7 +1821,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-08

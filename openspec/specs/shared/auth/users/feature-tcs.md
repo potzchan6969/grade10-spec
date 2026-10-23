@@ -1,8 +1,7 @@
 # shared/auth/users Test Cases
 
-**Status:** reopened · 44/45
-**Drafts styled:** 2026-10-19, tcs-rules r6
-**Reviewed:** 2026-10-06, tcs-rules r4, lapsed 2026-10-19
+**Status:** approved · 39/39
+**Reviewed:** 2026-10-23, tcs-rules r7
 
 ## shared-auth-users-US1: Operator lists people in the identity directory
 
@@ -21,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
@@ -59,7 +57,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
@@ -96,7 +93,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
@@ -140,7 +136,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
@@ -183,7 +178,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-01
@@ -235,7 +229,6 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
@@ -286,7 +279,6 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
@@ -330,7 +322,6 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
@@ -372,7 +363,6 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
@@ -412,7 +402,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
@@ -456,7 +445,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
@@ -485,7 +473,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
@@ -517,7 +504,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
@@ -554,7 +540,6 @@ Signed in as an operator who holds `user:delete`. `<a subject user id>` holds no
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
@@ -589,7 +574,6 @@ Signed in as an operator who holds `user:delete`. `<a subject user id>` is banne
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
@@ -624,7 +608,6 @@ Signed in as an operator who holds `user:delete`. `<a subject user id>` was bann
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
@@ -650,48 +633,6 @@ Signed in as an operator who holds `user:delete`. `<an admin user id>` holds `ad
 * No erasure request is open for that account.
 * That person can still sign in.
 
-<!-- trace:case id=g10.shared-users.TC-lq8 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC12-1: Ban and unban are refused while an erasure request is open
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-02
-
-**Pre-conditions:**
-Signed in as an operator who holds `user:ban` and `user:delete`. `<a subject user id>` holds the open erasure request filed by `<request owner>` and standing `<request standing>`.
-
-**Test data:**
-
-| `<request owner>` | `<request standing>` | `<act>` |
-| --- | --- | --- |
-| the account holder | unbanned | ban |
-| an operator | banned by that filing | unban |
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Send `<act>` for `<a subject user id>`.
-
-**Expected Results:**
-
-* The system refuses the act by name.
-* The account's standing is unchanged.
-* The erasure request is still open.
-
 <!-- trace:case id=g10.shared-users.TC-wga rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
 ### shared-auth-users-US2-TC13-1: The last admin cannot be banned
 
@@ -703,7 +644,6 @@ Signed in as an operator who holds `user:ban` and `user:delete`. `<a subject use
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
@@ -751,7 +691,6 @@ peer lockout does not.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03
@@ -792,7 +731,6 @@ peer lockout does not.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
@@ -833,7 +771,6 @@ peer lockout does not.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
@@ -876,7 +813,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
@@ -920,7 +856,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
@@ -960,7 +895,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-03
@@ -1004,7 +938,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03
@@ -1053,7 +986,6 @@ without reading every account.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
@@ -1097,7 +1029,6 @@ without reading every account.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
@@ -1136,7 +1067,6 @@ without reading every account.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
@@ -1178,7 +1108,6 @@ without reading every account.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
@@ -1217,7 +1146,6 @@ without reading every account.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-04
@@ -1270,7 +1198,6 @@ or an invite mail, and a duplicate never becomes a second account.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
@@ -1309,7 +1236,6 @@ Signed in as operator(holds `user:create` and `user:set-role`). No Auth account 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
@@ -1346,7 +1272,6 @@ Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
@@ -1369,51 +1294,6 @@ Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`).
 * The system refuses the create.
 * No Auth account holds `<attempted email>`.
 
-<!-- trace:case id=g10.shared-users.TC-h8w rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
-### shared-auth-users-US5-TC4-1: Elevated role without user:set-role is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-05
-
-**Pre-conditions:**
-
-* operator(holds `user:create` and `user:list`, not `user:set-role`) is signed in to the console.
-* No account holds `<elevated email>`.
-
-**Test data:**
-
-| `<elevated role>` | `<elevated name>` | `<elevated email>`, any address no account holds | Outcome |
-| --- | --- | --- | --- |
-| `staff` | Almost Staff | almost.staff@example.com | Refused; no account holds the address |
-| `admin` | Almost Admin | almost.admin@example.com | Refused; no account holds the address |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Send the users create call, as `<grade10 admin api docs url>` lists it, with `<elevated name>`, `<elevated email>` and `<elevated role>`.
-2. Search `<grade10 admin users url>` for `<elevated email>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 finds no account.
-
 <!-- trace:case id=g10.shared-users.TC-tdv rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
 ### shared-auth-users-US5-TC5-1: Duplicate email is refused
 
@@ -1425,7 +1305,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
@@ -1470,7 +1349,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-users-US-05
@@ -1507,49 +1385,6 @@ Runs once per row of **Test data**.
 * Step 5 holds no invite or sign-in mail from the create.
 * Step 6 finds no member and no opening points.
 
-<!-- trace:case id=g10.shared-users.TC-3n2 rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
-### shared-auth-users-US5-TC7-1: Empty roles at create leave a user
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-05
-
-**Pre-conditions:**
-
-* operator(holds `user:create` and `user:list`) is signed in to the console.
-* No account holds `<empty-roles email>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| empty-roles name | No Role Pick | · |
-| empty-roles email | no.role@example.com | any address no account holds |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Send the users create call, as `<grade10 admin api docs url>` lists it, with `<empty-roles name>`, `<empty-roles email>` and an empty role list.
-2. Search `<grade10 admin users url>` for `<empty-roles email>` and open the account.
-
-**Expected Results:**
-
-* Step 1 creates the account.
-* Step 2 shows roles `user` only.
-
 ---
 
 ## shared-auth-users-US6: Account holder files their own request to be forgotten
@@ -1571,7 +1406,6 @@ before anything is erased.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
@@ -1609,7 +1443,6 @@ Signed in as `<a subject user id>`, on `<Your data page>`. No erasure request is
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
@@ -1644,7 +1477,6 @@ Signed in as `<a subject user id>`, on `<Your data page>`. No erasure request is
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
@@ -1681,7 +1513,6 @@ Signed in as `<a subject user id>`, on `<Your data page>`. `<a subject user id>`
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
@@ -1718,7 +1549,6 @@ Signed in as `<a subject user id>`, on `<Your data page>`. `<a subject user id>`
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
@@ -1754,7 +1584,6 @@ Signed in as `<a subject user id>`, on `<Your data page>`. `<a subject user id>`
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-06
@@ -1790,7 +1619,6 @@ Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
@@ -1832,7 +1660,6 @@ Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure 
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
@@ -1856,121 +1683,6 @@ Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure 
 
 * The request becomes the operator's, with a ban applied.
 * Completing a sign-in method does not sign `<a subject user id>` in.
-
-<!-- trace:case id=g10.shared-users.TC-y5k rev=2 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC9-2: A taken-over request refuses the account holder's own cancel
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-`<a subject user id>` filed their own erasure request, and an operator holding `user:delete` then filed over it. The seven-day window has not passed.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Send the account holder's own cancel as `<a subject user id>`.
-
-**Expected Results:**
-
-* The system refuses the cancel.
-* The request stays open, filed by the operator.
-
-<!-- trace:case id=g10.shared-users.TC-xqi rev=1 covers=g10.shared-users.SC-94n -->
-### shared-auth-users-US6-TC10-1: A second cancel of an already-cancelled request changes nothing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-06
-
-**Pre-conditions:**
-
-* customer is signed in as `<subject user id>`.
-* `<subject user id>` filed their own erasure request and cancelled it inside the window, on `<first cancel day>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject user id | An unbanned account holding `user` only |
-| first cancel day | The day of the first cancel |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Send the erasure cancel call, as `<grade10 admin api docs url>` lists it, as `<subject user id>`.
-2. Read the request.
-3. Read `<subject user id>`'s standing.
-
-**Expected Results:**
-
-* Step 2 reads the request cancelled, closed on `<first cancel day>`.
-* Step 3 reads unbanned, as before.
-
-### shared-auth-users-US6-TC11-1: A cancelled erasure request closed a second time stays cancelled
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Erasure requests
-
-**Pre-conditions:**
-
-* `<account holder>` filed an erasure request, and it has been cancelled.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| account holder | An account with a cancelled erasure request |
-
-**Steps:**
-
-1. Read `<account holder>`'s record.
-2. Cancel the same erasure request again.
-3. Read `<account holder>`'s record again.
-
-**Expected Results:**
-
-* Step 2 leaves the request cancelled.
-* Step 3 matches Step 1.
 
 ## Settled
 

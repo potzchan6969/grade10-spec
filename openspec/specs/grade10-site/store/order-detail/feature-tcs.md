@@ -44,7 +44,6 @@
 **I want** available current product pictures beside the recorded items,
 **so that** I can recognise what I purchased while reading its details.
 
-
 <!-- trace:case id=g10.store-order-detail.TC-z59 rev=1 covers=g10.store-order-detail.SC-lss,g10.store-order-detail.SC-sdh -->
 ### g10.store-order-detail.US7-TC1: Current product pictures preserve the recorded purchase
 
@@ -56,7 +55,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-order-detail.US7
@@ -110,7 +108,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US7
@@ -163,7 +160,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -198,7 +194,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -234,7 +229,6 @@ The user is signed in; the selected order id is in the state named by **Test dat
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -263,7 +257,6 @@ The signed-in user owns an order paid at 11200 minor units `HKD` and refunded by
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -293,7 +286,6 @@ The signed-in user owns a point-of-sale order with a paid total but no quoted su
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -323,7 +315,6 @@ The signed-in user owns an order with no payment method, address, discount, ship
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -354,7 +345,6 @@ The signed-in user owns an undelivered order with an estimated delivery date and
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -382,7 +372,6 @@ The signed-in user owns an order with a carrier and tracking number but no safe 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -411,7 +400,6 @@ The owned-order read is delayed by network manipulation.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -442,7 +430,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -479,7 +466,6 @@ The signed-in user owns an order with Store id <store order id> and the shop ord
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -509,7 +495,6 @@ The signed-in user owns two otherwise equivalent paid orders. <stated-zero order
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -540,7 +525,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -577,7 +561,6 @@ The signed-in user owns an order with the payment instrument named by **Test dat
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -608,7 +591,6 @@ The signed-in user owns an order with an order promo discount of 17700 minor uni
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-01
@@ -654,7 +636,6 @@ The signed-in user owns <order>, paid with 100 points.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-detail-US-02
@@ -678,7 +659,6 @@ The user has no signed-in session and owns <requested order>.
 **I want** available current product pictures beside the recorded items,
 **so that** I can recognise what I purchased while reading its details.
 
-
 <!-- trace:case id=g10.store-order-detail.TC-g0k rev=1 covers=g10.store-order-detail.SC-dn2,g10.store-order-detail.SC-yx8 -->
 #### g10.store-order-detail.US7-TC3: Absent pictures keep placeholders beside readable purchases
 
@@ -692,7 +672,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US7
@@ -736,7 +715,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-order-detail.US7
@@ -779,7 +757,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-order-detail.US7
@@ -817,7 +794,6 @@ Runs once per row of **Test data**.
 **I want** the same available current product pictures on that order,
 **so that** I can recognise the purchase without signing in.
 
-
 <!-- trace:case id=g10.store-order-detail.TC-nlq rev=1 covers=g10.store-order-detail.SC-4at -->
 #### g10.store-order-detail.US8-TC1: Private order pictures disclose no account facts
 
@@ -831,7 +807,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-order-detail.US8
@@ -882,7 +857,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-detail.US8

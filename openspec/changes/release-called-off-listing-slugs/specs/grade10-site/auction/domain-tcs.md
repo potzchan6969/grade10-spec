@@ -70,13 +70,9 @@
 9. Check the served page.
    - Money reads as minor units with its currency code, and no reserve or Buy Now price appears. g10.auction-dmn.US2-TC2
 10. Fetch `<surface>`.
-   - The head names `<identity>`, and names no other auction surface in its place. g10.auction-dmn.US2-TC3
 11. Inspect the head for its title, meta description and Open Graph tags.
-   - The response status is `<status>`. g10.auction-dmn.US2-TC3
 12. Check the response status.
-   - Every lot the catalogue holds is listed as an absolute URL of the serving environment. g10.auction-dmn.US2-TC3
 13. Navigate to `<grade10 sitemap url>`.
-   - No sitemap entry carries an unfilled parameter in place of a lot. g10.auction-dmn.US2-TC3
 14. Step through the gallery thumbnails and open one image at zoom size.
    - The gallery walks in order at thumb, detail and zoom sizes. g10.auction-dmn.US3-TC1
 15. Enter `<bid amount>` in the bid field and select **Place Bid**.
@@ -316,11 +312,9 @@
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-lot-status-US-02, grade10-site-auction-listing-page-US-03, grade10-site-auction-listing-page-US-01, grade10-site-auction-lot-status-US-03
-
 
 **Pre-conditions:**
 

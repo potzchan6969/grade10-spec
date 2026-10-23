@@ -1,6 +1,6 @@
 # grade10-site/site/page-shell Test Cases
 
-**Status:** pending-review · 0/54
+**Status:** pending-review · 0/52
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## grade10-site-site-page-shell-US1: Collector opens any surface inside the site shell
@@ -22,7 +22,6 @@ shipped without it.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-01
@@ -53,7 +52,6 @@ None.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-01
@@ -83,7 +81,6 @@ A viewport 375 CSS pixels wide.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-01
@@ -133,7 +130,6 @@ disappearing under me.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-02
@@ -165,7 +161,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-02
@@ -223,7 +218,6 @@ without a second auction-orders link.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -253,7 +247,6 @@ without a second auction-orders link.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -283,7 +276,6 @@ without a second auction-orders link.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -318,7 +310,6 @@ without a second auction-orders link.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -337,36 +328,6 @@ without a second auction-orders link.
 
 * Step 2 opens <grade10 site url><lang>/profile/orders.
 
-<!-- trace:case id=g10.site-page-shell.TC-5jl rev=3 covers=g10.site-page-shell.SC-u71,g10.site-page-shell.SC-79q -->
-### grade10-site-site-page-shell-US3-TC5-3: Menu without Store omits My Orders and opens on Profile where the account page is carried
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-page-shell-US-03
-
-**Pre-conditions:**
-
-* The site shell renders for a signed-in collector on a build that carries the account page and withholds Store.
-
-**Steps:**
-
-1. Open the account menu.
-2. Read the account menu's items.
-
-**Expected Results:**
-
-* Step 2: the menu lists Profile, My Auctions, then Sign Out.
-* Step 2: no My Orders item.
-
 <!-- trace:case id=g10.site-page-shell.TC-1su rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1 -->
 ### grade10-site-site-page-shell-US3-TC6-1: Auction-launch account menu shows email, avatar, and reduced items
 
@@ -380,7 +341,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -419,7 +379,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -453,7 +412,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -482,7 +440,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -513,7 +470,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -543,7 +499,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -566,37 +521,6 @@ Runs once per row of **Test data**.
 * Step 2: Sign Out is the last item.
 * Step 3 opens the account page at <grade10 site url><lang>/profile.
 
-<!-- trace:case id=g10.site-page-shell.TC-kw9 rev=1 covers=g10.site-page-shell.SC-agf,g10.site-page-shell.SC-th1 -->
-### grade10-site-site-page-shell-US3-TC12-1: Store menu leaves out the account and membership pages a build withholds
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-page-shell-US-03
-
-**Pre-conditions:**
-
-* The site shell renders for a signed-in collector on a build that answers Store and withholds the account page and the membership page.
-
-**Steps:**
-
-1. Open the account menu.
-2. Read the account menu's items.
-
-**Expected Results:**
-
-* Step 2: the menu lists My Orders, My Auctions, then Sign Out, and nothing else.
-* Step 2: no Profile item.
-* Step 2: no Membership item.
-
 <!-- trace:case id=g10.site-page-shell.TC-74a rev=1 covers=g10.site-page-shell.SC-lcs -->
 ### grade10-site-site-page-shell-US3-TC13-1: Activating My Auctions opens My Auctions
 
@@ -608,7 +532,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-03
@@ -647,7 +570,6 @@ implies a currency I cannot switch.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-04
@@ -679,7 +601,6 @@ implies a currency I cannot switch.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-04
@@ -714,7 +635,6 @@ None.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-04
@@ -742,7 +662,6 @@ The site answers none of the utility destinations.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-04
@@ -781,7 +700,6 @@ none marked when no item owns it,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-05
@@ -809,7 +727,6 @@ A collector is on a surface the navigation lists, or on any address beneath it.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-05
@@ -849,7 +766,6 @@ drawer.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-06
@@ -886,7 +802,6 @@ drawer.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-06
@@ -916,7 +831,6 @@ drawer.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-06
@@ -948,7 +862,6 @@ drawer.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-06
@@ -997,7 +910,6 @@ auction-only or full primary nav.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-07
@@ -1034,7 +946,6 @@ auction-only or full primary nav.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-07
@@ -1069,7 +980,6 @@ auction-only or full primary nav.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-07
@@ -1108,7 +1018,6 @@ auction-only or full primary nav.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-07
@@ -1155,7 +1064,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1200,7 +1108,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1235,7 +1142,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1270,7 +1176,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1304,7 +1209,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1341,7 +1245,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1386,7 +1289,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1423,7 +1325,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1458,7 +1359,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1492,7 +1392,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1526,7 +1425,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1563,7 +1461,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1601,7 +1498,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1646,7 +1542,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1681,7 +1576,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1723,7 +1617,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-08
@@ -1765,7 +1658,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -1806,7 +1698,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -1839,7 +1730,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -1873,7 +1763,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -1914,7 +1803,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -1954,7 +1842,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -1992,7 +1879,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -2030,7 +1916,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -2071,7 +1956,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -2113,7 +1997,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -2152,7 +2035,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
@@ -2340,14 +2222,12 @@ Runs once per row of **Test data**.
 | `grade10-site-site-page-shell-US3-TC2-2` | Retired, `deprecated`, bumped | It put Profile first, which the removed `grade10-site-site-page-shell-SC-17` stated; the Store menu is `grade10-site-site-page-shell-US3-TC7-2`. Its marker covers none, so a retired case never reads as coverage of `grade10-site-site-page-shell-SC-56` |
 | `grade10-site-site-page-shell-US3-TC3-2` | Reached, bumped | `grade10-site-site-page-shell-SC-08` and `grade10-site-site-page-shell-SC-57`. The account page offers Sign Out only on a build that carries it, so the case runs on staging |
 | `grade10-site-site-page-shell-US3-TC4-1` | Reached | `grade10-site-site-page-shell-SC-64`; unchanged |
-| `grade10-site-site-page-shell-US3-TC5-3` | Rewritten on Q1, moved to unit | Its no-My-Orders result is `grade10-site-site-page-shell-SC-58`. With the account page carried, Profile is first (`grade10-site-site-page-shell-SC-66`), so the no-Profile result became a Profile-first result, and task 2.2 tests that state in `store-shut.test.tsx`. No lane carries the account page and withholds Store (grade10 `src/surfaces.ts:343-399`), so the case runs on the rendered shell with the gates overridden. It does not assert "nothing else": that build carries the membership page, which a later change offers (Q5) |
 | `grade10-site-site-page-shell-US3-TC6-1` | Reached, lane corrected | `grade10-site-site-page-shell-SC-06`, `grade10-site-site-page-shell-SC-58`, `grade10-site-site-page-shell-SC-60` and `grade10-site-site-page-shell-SC-61` on the auction-launch lanes. "Preview" is no lane in the gate table; the rows are UAT, where the walk runs, and Production. Its no-Cart result left with the journey's Cart clause: `grade10-site-site-page-shell-US-04` and `grade10-site-site-page-shell-US-06` own Cart |
 | `grade10-site-site-page-shell-US3-TC7-2` | Reached, rewritten | The blind reading listed Membership after My Auctions, from the journey; Membership follows its own page and a later change offers it (Q5), and no scenario places it, so the result is dropped. Its "no Profile" result needed a lane that answers Store and withholds the account page, which no lane is; it moved to `grade10-site-site-page-shell-US3-TC12-1`. The case runs on staging and walks `grade10-site-site-page-shell-SC-56` and `grade10-site-site-page-shell-SC-61`. Its Cart result left with the journey's Cart clause |
 | `grade10-site-site-page-shell-US3-TC8-1` | Reached | `grade10-site-site-page-shell-SC-62`; unchanged |
 | `grade10-site-site-page-shell-US3-TC9-2` | Retired, `deprecated`, bumped | The label fallback left this capability with Q14: a signed-in session always carries an email, so the fallback is `SiteHeader`'s alone, walked by `shared-ui-site-chrome-US1-TC17-2`. Its marker covers none: the retired `grade10-site-site-page-shell-SC-31` leaves the spec at the fold |
 | `grade10-site-site-page-shell-US3-TC10-2` | Retired, `deprecated`, bumped | `grade10-site-site-page-shell-SC-34` is removed: the app never supplies Membership, and a later change offers it (Q5) with its own case. Its marker covers none, not `grade10-site-site-page-shell-SC-63`, the opposite outcome, which `grade10-site-site-page-shell-US3-TC12-1` walks |
 | `grade10-site-site-page-shell-US3-TC11-3` | Rewritten on Q1 | On staging, which carries the account page, Profile is first and opens it (`grade10-site-site-page-shell-SC-66`, `grade10-site-site-page-shell-SC-67`); the rest of the case is `grade10-site-site-page-shell-SC-56` |
-| `grade10-site-site-page-shell-US3-TC12-1` | Case added | `grade10-site-site-page-shell-SC-59` and `grade10-site-site-page-shell-SC-63` had no case. No lane answers Store and withholds those pages, so the case runs on the rendered shell with the gates overridden, as task 2.2 does |
 | `grade10-site-site-page-shell-US3-TC13-1` | Case added | `grade10-site-site-page-shell-SC-65` had no case, before this change or after it |
 | Raised: Membership in the journey once Store answers | Landed as Q5, journey corrected | The journey named Membership once Store answers and "never a Profile item". Page Shell is the source: the journey names Profile first wherever the account page is carried (Q1), and not Membership, which a later change offers (Q5) |
 | Raised: the label fallback without an email | Landed as Q14, settled | The site always has the email, so page-shell drops the fallback with its scenario and `grade10-site-site-page-shell-US3-TC9-2` retires |

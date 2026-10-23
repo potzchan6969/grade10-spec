@@ -4,7 +4,7 @@ title: Store Location Test Cases
 
 # grade10-site/store/store-locator Test Cases
 
-**Status:** pending-review · 0/8
+**Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-22, tcs-rules r6
 
 ## Walk 1: Find the Shop from the Header
@@ -50,7 +50,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, smoke, regression, prod
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-store-locator.US1
@@ -92,7 +91,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** acceptance, regression, prod
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-store-locator.US1
@@ -142,7 +140,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-store-locator.US2
@@ -181,7 +178,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-store-locator.US2
@@ -231,7 +227,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-store-locator.US1
@@ -272,7 +267,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-store-locator.US1
@@ -312,7 +306,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression, prod
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-store-locator.US2
@@ -348,37 +341,3 @@ Runs once per row of **Test data**.
 **As a** customer,
 **I want** a pasted Store Locator address to preview as the shop's page,
 **so that** whoever I send it to knows what it is before opening it.
-
-<!-- trace:case id=g10.store-store-locator.TC-dzc rev=1 -->
-#### g10.store-store-locator.US3-TC1: The page has its own title, description and Open Graph tags
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-store-locator.US3
-
-**Pre-conditions:**
-
-* The lane under test carries the store.
-
-**Steps:**
-
-1. Read the API response for `<store locator url>`, without running scripts.
-2. Read the API response for `<store listing url>` the same way.
-3. Read `/sitemap.xml`.
-
-**Expected Results:**
-
-* Step 1's title is `Store Locator — Grade10`.
-* Step 1's meta description is `Where to find the Grade10 shop in Causeway Bay, Hong Kong, and when it is open.`
-* Step 1 has Open Graph title and description tags.
-* Step 1's title, description and Open Graph tags differ from step 2's.
-* Step 3 lists `/store-locator`.

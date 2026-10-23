@@ -1,6 +1,6 @@
 # grade10-admin/console/daily-reminder Test Cases
 
-**Status:** pending-review · 0/101
+**Status:** pending-review · 0/94
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
 **Out of suite:** grade10-admin-console-daily-reminder-SC-07 - the backend list tests of task 2.4; grade10-admin-console-daily-reminder-SC-77 - the What's New read test of task 2.1; grade10-admin-console-daily-reminder-SC-78 - the Slack job test of task 3.1; grade10-admin-console-daily-reminder-SC-79 - the console storage tests of task 4.1; grade10-admin-console-daily-reminder-SC-80 - the Today page tests of task 4.1; grade10-admin-console-daily-reminder-SC-81 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-82 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-83 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-84 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-85 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-86 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-87 - the Slack message tests of task 5.2; grade10-admin-console-daily-reminder-SC-97 - the close-path Slack failure tests of task 2.1; grade10-admin-console-daily-reminder-SC-98 - the lifecycle not-configured tests of task 2.1 (both token and channel required)
@@ -92,7 +92,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -126,7 +125,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -159,7 +157,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -191,7 +188,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -221,7 +217,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -255,7 +250,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -294,7 +288,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -330,7 +323,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -367,7 +359,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -398,7 +389,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -429,7 +419,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -458,7 +447,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -489,7 +477,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -522,7 +509,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -556,7 +542,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -587,7 +572,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -617,7 +601,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -650,7 +633,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -682,7 +664,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -725,7 +706,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -763,7 +743,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -794,7 +773,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -834,7 +812,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -866,7 +843,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -900,7 +876,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -942,7 +917,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -972,7 +946,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1009,7 +982,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1043,7 +1015,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1084,7 +1055,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1117,7 +1087,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1138,36 +1107,6 @@ Runs once per row of **Test data**.
 * Step 1 opens the dialog with a row for `<order_2>`.
 * Step 2 shows no row for `<order_3>` in the open dialog.
 * Step 3 finds no such control.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-x5p rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-bz8,g10adm.console-daily-reminder.SC-xxl,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-b5m,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-n4k,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-2u2,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-74n,g10adm.console-daily-reminder.SC-pxi,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-wmh,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd,g10adm.console-daily-reminder.SC-gxz,g10adm.console-daily-reminder.SC-k4n -->
-### g10adm.console-daily-reminder.TC-x5p (US1-TC32): The What's New read refuses a caller with no auction access
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-01
-
-**Pre-conditions:**
-
-* `<caller>` holds no auction grant.
-* `<listing_1>` closed sold yesterday, Hong Kong time.
-
-**Steps:**
-
-1. Read the API response for the What's New list as `<caller>`.
-
-**Expected Results:**
-
-* The response is a refusal.
-* The response holds no row.
 
 ---
 
@@ -1190,7 +1129,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1230,7 +1168,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1260,7 +1197,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1290,7 +1226,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1323,7 +1258,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1355,7 +1289,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1388,7 +1321,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1427,7 +1359,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1467,7 +1398,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1508,7 +1438,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1544,7 +1473,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1573,36 +1501,6 @@ Runs once per row of **Test data**.
 
 * Flagged or still waiting holds `<rows>`.
 
-<!-- trace:case id=g10adm.console-daily-reminder.TC-xnm rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-xnm (US2-TC12): The Flagged or still waiting read leaves out rows the caller's grants do not allow
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-02
-
-**Pre-conditions:**
-
-* `<caller>` holds auction:read and auction:shipment.
-* `<order_i>` waited 49 hours in Preparing Invoice and `<order_s>` in Preparing Shipment.
-
-**Steps:**
-
-1. Read the API response for the Flagged or still waiting list as `<caller>`.
-
-**Expected Results:**
-
-* The response holds `<order_s>`.
-* The response holds no row for `<order_i>`.
-
 <!-- trace:case id=g10adm.console-daily-reminder.TC-n4g rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-n4g (US2-TC14): The console shows the exact wait, not whole days
 
@@ -1614,7 +1512,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1645,7 +1542,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1665,36 +1561,6 @@ Runs once per row of **Test data**.
 
 * The rows read `<order_z>`, `<order_x>`, `<order_y>` from top to bottom.
 
-<!-- trace:case id=g10adm.console-daily-reminder.TC-e5w rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-b5m,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-e5w (US2-TC16): The Flagged or still waiting read refuses a caller with no auction access
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-02
-
-**Pre-conditions:**
-
-* `<caller>` holds no auction grant.
-* `<order_w>` has waited 49 hours in Preparing Invoice.
-
-**Steps:**
-
-1. Read the API response for the Flagged or still waiting list as `<caller>`.
-
-**Expected Results:**
-
-* The response is a refusal.
-* The response holds no row.
-
 <!-- trace:case id=g10adm.console-daily-reminder.TC-tbl rev=1 covers=g10adm.console-daily-reminder.SC-a99 -->
 ### g10adm.console-daily-reminder.US2-TC17: Flagged rows lead above 48-hour waits
 
@@ -1706,7 +1572,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1747,7 +1612,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1788,7 +1652,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1827,7 +1690,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1861,7 +1723,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1897,7 +1758,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -1929,7 +1789,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -1961,7 +1820,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -1991,7 +1849,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2023,7 +1880,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2062,7 +1918,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2090,7 +1945,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2124,7 +1978,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2155,7 +2008,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2188,7 +2040,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2219,7 +2070,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2255,7 +2105,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2295,7 +2144,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2326,7 +2174,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2357,7 +2204,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2392,7 +2238,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2431,7 +2276,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2463,7 +2307,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2495,7 +2338,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2525,7 +2367,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2558,7 +2399,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2597,7 +2437,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2630,7 +2469,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2656,46 +2494,6 @@ Runs once per row of **Test data**.
 
 * The row shows the listing code, then the lot title `<shown>`.
 
-<!-- trace:case id=g10adm.console-daily-reminder.TC-31k rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-31k (US4-TC8): The post follows the Hong Kong day on every day of the week
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured; `<listing_y>` closed yesterday at 23:59:59 and `<listing_t>` closed today at 07:59:59, both Hong Kong time.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| day (row 1) | A Saturday |
-| day (row 2) | A Sunday |
-| day (row 3) | A Wednesday |
-
-**Steps:**
-
-1. Run the scheduled post on `<day>` at 08:00 Hong Kong time.
-2. Read the message.
-
-**Expected Results:**
-
-* One message posts for `<day>`.
-* It holds a row for `<listing_y>` and none for `<listing_t>`.
-
 <!-- trace:case id=g10adm.console-daily-reminder.TC-5hn rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
 ### g10adm.console-daily-reminder.TC-5hn (US4-TC9): A list with no row is left out of a message that has rows
 
@@ -2709,7 +2507,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2747,7 +2544,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2779,7 +2575,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2812,7 +2607,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2831,117 +2625,6 @@ Runs once per row of **Test data**.
 
 * The channel holds no message from today.
 
-<!-- trace:case id=g10adm.console-daily-reminder.TC-7fe rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-6kr,g10adm.console-daily-reminder.SC-07a -->
-### g10adm.console-daily-reminder.TC-7fe (US4-TC16): A message that failed to send is not made up on a later day
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured; the Slack send fails on `<day_1>`.
-* On the next Hong Kong day `<day_2>` rows exist and sends succeed.
-
-**Steps:**
-
-1. Run the scheduled post on `<day_1>` at 08:00 Hong Kong time.
-2. Run the scheduled post on `<day_2>` at 08:00 Hong Kong time.
-3. Read the channel.
-
-**Expected Results:**
-
-* The channel holds no message for `<day_1>`.
-* The channel holds one message for `<day_2>` with the lists of `<day_2>`.
-* The log holds an error for `<day_1>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-7e7 rev=2 covers=g10adm.console-daily-reminder.SC-f3g -->
-### g10adm.console-daily-reminder.TC-7e7 (US4-TC17): Nothing posts without a channel or a token, and the log says it is not configured
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* `<missing>` is missing or empty for the environment.
-* Rows exist for the day.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| missing (row 1) | the Slack channel unset |
-| missing (row 2) | the Slack bot token unset |
-| missing (row 3) | both unset |
-| missing (row 4) | the Slack channel empty |
-| missing (row 5) | the Slack bot token empty |
-
-**Steps:**
-
-1. Run the scheduled post.
-2. Read the channel and the log.
-
-**Expected Results:**
-
-* No message posts.
-* The run does not post to any other channel.
-* The log says the reminder is not configured.
-* No error is raised into the scheduled run.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-g9s rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-6kr -->
-### g10adm.console-daily-reminder.TC-g9s (US4-TC18): A failed send is tried once, logged and not sent again
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured and a message is due for `<day>`.
-* The Slack send is made to fail.
-
-**Steps:**
-
-1. Run the scheduled post.
-2. Wait until the end of that Hong Kong day.
-3. Read the channel and the log.
-
-**Expected Results:**
-
-* The send is attempted once.
-* The log holds an error for the failed send.
-* The channel holds no message for `<day>`.
-
 <!-- trace:case id=g10adm.console-daily-reminder.TC-y0m rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
 ### g10adm.console-daily-reminder.TC-y0m (US4-TC19): Days waited are whole days, rounded down
 
@@ -2955,7 +2638,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -2992,7 +2674,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -3021,7 +2702,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -3053,7 +2733,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-04
@@ -3104,7 +2783,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3146,7 +2824,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3185,7 +2862,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3224,7 +2900,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3262,7 +2937,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3311,7 +2985,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-06
@@ -3354,7 +3027,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-06
@@ -3396,7 +3068,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-06
@@ -3437,7 +3108,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-06
@@ -3477,7 +3147,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-06
@@ -3526,7 +3195,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07
@@ -3570,7 +3238,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07
@@ -3613,7 +3280,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07
@@ -3654,7 +3320,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07
@@ -3695,7 +3360,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07

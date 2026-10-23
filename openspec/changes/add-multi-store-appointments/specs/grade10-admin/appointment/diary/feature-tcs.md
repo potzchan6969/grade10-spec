@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -60,7 +59,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -96,7 +94,6 @@
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -136,7 +133,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -178,7 +174,6 @@ The admin is signed in with the manage grant and is on the services list under `
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -211,7 +206,6 @@ The admin is signed in with the manage grant and is on the services list under `
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -243,7 +237,6 @@ The admin is signed in with the manage grant and is on the services list under `
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -279,7 +272,6 @@ The admin is signed in with the manage grant and has `<grading service>` open.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -317,7 +309,6 @@ The admin is signed in with the manage grant and has `<grading service>` open.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -358,7 +349,6 @@ The admin is signed in with the manage grant and has `<grading service>` open.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -388,7 +378,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-01
@@ -428,7 +417,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-02
@@ -467,7 +455,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-02
@@ -504,7 +491,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-02
@@ -543,7 +529,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-02
@@ -582,7 +567,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-02
@@ -612,7 +596,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-02
@@ -649,7 +632,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-02
@@ -685,7 +667,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-02
@@ -721,7 +702,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-02
@@ -765,7 +745,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-03
@@ -797,7 +776,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-03
@@ -828,7 +806,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-03
@@ -860,7 +837,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-03
@@ -892,7 +868,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-03
@@ -929,7 +904,6 @@ The admin is signed in with the read grant and without the manage grant.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-appointment-diary-US-03

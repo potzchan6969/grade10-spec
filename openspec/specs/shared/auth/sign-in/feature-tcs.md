@@ -1,6 +1,6 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** reopened · 51/108
+**Status:** pending-review · 47/95
 **Drafts styled:** 2026-10-06, tcs-rules r4
 **Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-25
 
@@ -26,7 +26,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -65,7 +64,6 @@ customer is on `<grade10 sign-in url>`, signed out.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -100,7 +98,6 @@ customer is signed out.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -142,7 +139,6 @@ customer is signed out.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -180,7 +176,6 @@ customer is on `<grade10 sign-in url>`, signed out.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -217,7 +212,6 @@ customer is on `<grade10 sign-in url>`, signed out.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -254,7 +248,6 @@ customer is on `<grade10 sign-in url>`, signed out.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -293,7 +286,6 @@ customer is on `<grade10 sign-in url>`, signed out.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-01
@@ -333,7 +325,6 @@ customer is on `<grade10 sign-in url>`, signed out.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -381,7 +372,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -423,7 +413,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -466,7 +455,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -494,45 +482,6 @@ Runs once per row of **Test data**.
 * Step 1 signs the collector in.
 * The collector is still signed in fifteen minutes after the send.
 
-<!-- trace:case id=g10.shared-sign-in.TC-fv6 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
-### shared-auth-sign-in-US1-TC13-1: Recorded link expiry is five minutes after the send
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-01
-
-**Pre-conditions:**
-
-* customer is signed out.
-* No unused sign-in link exists for `<collector email>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| collector email | collector@example.com | an address with an account |
-| send time | The instant the sign-in email is sent | · |
-
-**Steps:**
-
-1. Send a sign-in link to `<collector email>` at `<send time>`.
-2. Read the recorded expiry for that link.
-3. Let the sixty-second resend wait end and read the expiry again.
-
-**Expected Results:**
-
-* The recorded expiry is `<send time>` plus five minutes.
-* The expiry is unchanged at step 3.
-
 <!-- trace:case id=g10.shared-sign-in.TC-j99 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC14-1: The email promises five minutes in every locale
 
@@ -544,7 +493,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -590,7 +538,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -629,7 +576,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -670,7 +616,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -714,7 +659,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
@@ -753,7 +697,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Emailed link
@@ -798,7 +741,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-03
@@ -838,7 +780,6 @@ customer is signed out on a brand that has Google sign-in.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-03
@@ -871,7 +812,6 @@ customer is signed out on a brand that does not have Google sign-in.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-03
@@ -920,7 +860,6 @@ customer is signed out on a brand that does not have Google sign-in.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-04
@@ -959,7 +898,6 @@ customer is on `<grade10 sign-in url>`, signed out.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-04
@@ -1003,7 +941,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-04
@@ -1045,7 +982,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-04
@@ -1076,82 +1012,6 @@ Runs once per row of **Test data**.
 * A second account exists for `<plus-tag address>`.
 * It is not the account for `<email_1>`.
 
-<!-- trace:case id=g10.shared-sign-in.TC-4qd rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
-### shared-auth-sign-in-US4-TC5-1: Trusted product creates or enters by verified email
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-04
-
-Runs once per row of **Test data**.
-
-**Pre-conditions:**
-A product of this brand has verified `<address>`.
-
-**Test data:**
-
-| `<address>` | `<outcome>` |
-| --- | --- |
-| newcomer@example.com, never signed in | an account exists for it and its user id is returned |
-| collector@example.com, with an account from an emailed link | that same account's user id is returned |
-
-**Steps:**
-
-1. Ask the auth service to create or enter the account for `<address>`.
-
-**Expected Results:**
-
-* The product receives `<outcome>`.
-* No second account exists for `<address>`.
-
-<!-- trace:case id=g10.shared-sign-in.TC-kjy rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
-### shared-auth-sign-in-US4-TC6-1: Trusted product signs the person in on this brand
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-04
-
-**Pre-conditions:**
-
-* customer is signed out on this brand.
-* `<trusted product>` has verified `<product-verified email>` in its own flow.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| trusted product | The Grade10 hosted identity verification (e-KYC), a product of this brand | · |
-| product-verified email | collector-verified@example.com | verified by `<trusted product>` (e-KYC) |
-
-**Steps:**
-
-1. Complete `<trusted product>`'s identity verification for `<product-verified email>`.
-2. Ask the auth service, as `<trusted product>`, to sign that account in.
-3. Read who the caller is on this brand.
-
-**Expected Results:**
-
-* The person is signed in as the account for `<product-verified email>`.
-* No sign-in link or Google sign-in was completed for it.
-
 <!-- trace:case id=g10.shared-sign-in.TC-yvm rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC7-1: Sign-in after a product-created account is the same person
 
@@ -1163,7 +1023,6 @@ A product of this brand has verified `<address>`.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-04
@@ -1194,52 +1053,6 @@ A product of this brand has verified `<address>`.
 * The person enters the product-created account.
 * No second account exists for `<product-verified email>`.
 
-<!-- trace:case id=g10.shared-sign-in.TC-3pf rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
-### shared-auth-sign-in-US4-TC8-1: Client cannot claim an email
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-04
-
-Runs once per row of **Test data**.
-
-**Pre-conditions:**
-
-* `<untrusted client>` holds no trusted-product credential for this brand.
-* customer is signed out on this brand.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| untrusted client | A caller outside this brand's products, such as a script posting to the auth service directly |
-
-| `<claimed email>` | `<directory after>` |
-| --- | --- |
-| victim@example.com, an address with an account on this brand | the existing account is unchanged |
-| stranger@example.com, an address with no account | no account exists for it |
-
-**Steps:**
-
-1. Send the auth service a create-or-sign-in request naming `<claimed email>`, as `<untrusted client>`.
-2. Read who the caller is on this brand.
-3. Look `<claimed email>` up in the identity directory.
-
-**Expected Results:**
-
-* No account is created from that request.
-* The caller is not signed in as `<claimed email>`.
-* The directory shows `<directory after>`.
-
 ---
 
 ## shared-auth-sign-in-US5: Collector is not spammed or sent off-brand
@@ -1259,7 +1072,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-05
@@ -1297,7 +1109,6 @@ customer opened `<grade10 sign-in url>` directly, so the sign-in names no return
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-05
@@ -1338,7 +1149,6 @@ customer opened `<grade10 sign-in url>` directly, so the sign-in names no return
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-05
@@ -1393,7 +1203,6 @@ customer is on `<grade10 sign-in url>` naming `<off-brand location>`, signed out
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-06
@@ -1431,7 +1240,6 @@ customer is on `<grade10 sign-in url>` naming `<off-brand location>`, signed out
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-06
@@ -1469,7 +1277,6 @@ customer is on `<grade10 sign-in url>` naming `<off-brand location>`, signed out
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-06
@@ -1509,7 +1316,6 @@ customer is on `<grade10 sign-in url>` naming `<off-brand location>`, signed out
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-06
@@ -1546,7 +1352,6 @@ customer is on `<grade10 sign-in url>` naming `<off-brand location>`, signed out
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-06
@@ -1595,7 +1400,6 @@ Resend after a short wait,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
@@ -1640,7 +1444,6 @@ Resend after a short wait,
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
@@ -1673,7 +1476,6 @@ Resend after a short wait,
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
@@ -1711,7 +1513,6 @@ Resend after a short wait,
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
@@ -1750,7 +1551,6 @@ Resend after a short wait,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
@@ -1783,7 +1583,6 @@ Resend after a short wait,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
@@ -1817,7 +1616,6 @@ Resend after a short wait,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
@@ -1859,7 +1657,6 @@ Resend after a short wait,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -1904,7 +1701,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -1949,7 +1745,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -1995,7 +1790,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -2041,7 +1835,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -2083,7 +1876,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -2123,7 +1915,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -2167,7 +1958,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -2209,7 +1999,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -2250,7 +2039,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -2293,7 +2081,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -2338,7 +2125,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Emailed link
@@ -2383,7 +2169,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-09
@@ -2422,7 +2207,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-09
@@ -2459,7 +2243,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-09
@@ -2496,7 +2279,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-09
@@ -2533,7 +2315,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-09
@@ -2572,7 +2353,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-09
@@ -2608,7 +2388,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-09
@@ -2653,7 +2432,6 @@ elsewhere.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-10
@@ -2694,7 +2472,6 @@ elsewhere.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-10
@@ -2735,7 +2512,6 @@ elsewhere.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-10
@@ -2778,7 +2554,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-10
@@ -2826,7 +2601,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-10
@@ -2871,7 +2645,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-10
@@ -2907,7 +2680,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-10
@@ -2945,7 +2717,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-10
@@ -2976,81 +2747,7 @@ Runs once per row of **Test data**.
 * Device A ends its wait with a message that sign-in completed on another device.
 * No further resend email goes out from device A.
 
-<!-- trace:case id=g10.shared-sign-in.TC-pif rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
-### shared-auth-sign-in-US10-TC9-1: The check does not disclose whether an unrelated address is signed in
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-10
-
-**Pre-conditions:**
-
-* `<signed-in address>` is signed in on device B.
-* customer is on `<grade10 sign-in url>` on device A, signed out, having asked for no link.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| signed-in address | collector@example.com | currently signed in on device B |
-
-| Field | Value |
-| --- | --- |
-| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Ask the auth service, from device A, whether `<signed-in address>` currently holds a session, naming no flow of device A's own.
-
-**Expected Results:**
-
-* The request is refused.
-* Nothing in the response states whether `<signed-in address>` holds a session.
-
 ---
-
-### shared-auth-sign-in-US10-TC10-1: Checking an address without the asking flow's secret does not reveal its session
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Emailed link
-
-**Pre-conditions:**
-
-* `<collector email>` is signed in on `<grade10 store url>` on another device.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| collector email | An address that currently holds a session |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Without asking for a sign-in link, check whether `<collector email>` has signed in, as the waiting dialog does.
-
-**Expected Results:**
-
-* Step 1's answer is the same as for an address that holds no session.
 
 ## shared-auth-sign-in-US11: Collector is offered Google sign-in without opening the dialog
 
@@ -3069,7 +2766,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3097,7 +2793,6 @@ customer is signed out on a brand that has Google sign-in.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3126,7 +2821,6 @@ customer is signed out on a brand that does not have Google sign-in.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3163,7 +2857,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3192,7 +2885,6 @@ customer is signed out on a brand that has Google sign-in, with the sign-in dial
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3220,7 +2912,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3260,7 +2951,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3297,7 +2987,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3327,7 +3016,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3358,7 +3046,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-11
@@ -3395,7 +3082,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** negative
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-sign-in-US-11
@@ -3434,7 +3120,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3481,7 +3166,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3527,7 +3211,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3572,7 +3255,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3618,7 +3300,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3662,7 +3343,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3704,7 +3384,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3751,7 +3430,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3797,7 +3475,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3844,7 +3521,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3887,7 +3563,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -3925,47 +3600,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * Step 3 shows `<operator account>` signed in on the console.
 * Step 4 shows nobody signed in on the site.
 
-### shared-auth-sign-in-US12-TC12-1: A link asked from the console that names a site location lands on the console
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-12
-
-**Pre-conditions:**
-
-* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| operator email | operator@example.com | the address of an account holding console access |
-| site location | A page of `<grade10 store url>` | · |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Ask for a sign-in link as the console for `<operator email>`, naming `<site location>` as the location to return to.
-2. Follow the unused, unexpired link.
-
-**Expected Results:**
-
-* Step 2 ends on `<grade10 admin console url>`, not on `<site location>`.
-* The site has no signed-in person.
-
 <!-- trace:case id=g10.shared-sign-in.TC-7cx rev=1 -->
 ### shared-auth-sign-in-US12-TC13-1: Console session as a different account is kept when a console link is followed
 
@@ -3977,7 +3611,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -4023,7 +3656,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Google
@@ -4056,47 +3688,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * Step 2 opens the console as the account for `<google account>`'s address.
 * Step 3 shows nobody signed in on the site.
 
-### shared-auth-sign-in-US12-TC15-1: A product's verified-email sign-in is the site's and never the console's
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Link surface
-
-**Pre-conditions:**
-
-* `<operator account>` holds console access and is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator account | An account holding console access |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. A Grade10 product that has verified `<operator account>`'s email signs that account in.
-2. Ask who is calling as the site.
-3. Ask who is calling as the console.
-
-**Expected Results:**
-
-* Step 2 receives `<operator account>`.
-* Step 3 receives no person.
-
 ### shared-auth-sign-in-US12-TC16-1: A console link right after a site link for the same address is sent and the site link stays alive
 
 **Classification:**
@@ -4107,7 +3698,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -4151,7 +3741,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -4191,7 +3780,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -4243,7 +3831,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -4289,7 +3876,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -4332,7 +3918,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
@@ -4362,225 +3947,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * Step 1 keeps `<operator account A>` signed in on the console.
 * `<operator account C>` is not entered.
 
-### shared-auth-sign-in-US12-TC22-1: A site link an operator action sends signs in the site and not the console
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Link surface
-
-**Pre-conditions:**
-
-* `<operator account>` holds `admin` and is signed in on `<grade10 admin console url>` with the second factor proved.
-* `<customer account>` is signed out on `<grade10 store url>` and on `<grade10 admin console url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator account | An account holding `admin`, which holds `user:create` |
-| customer account | A customer account holding `user` only |
-| customer email | The address of `<customer account>` |
-| site location | A page of `<grade10 store url>` |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. As the console, with `<operator account>`'s session, ask for a sign-in link for the site to `<customer email>`, naming `<site location>` as the location to return to.
-2. Follow the unused, unexpired link with a client that holds no cookies.
-3. Ask who is calling as the site.
-4. Ask who is calling as the console.
-
-**Expected Results:**
-
-* Step 2 ends on `<site location>`, not on `<grade10 admin console url>`.
-* Step 3 receives `<customer account>`.
-* Step 4 receives no person.
-
-### shared-auth-sign-in-US12-TC23-1: Following an operator action's site link keeps the console session in place
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Link surface
-
-**Pre-conditions:**
-
-* `<operator account>` holds `admin` and is signed in on `<grade10 admin console url>` with the second factor proved, in one client.
-* `<customer account>` is signed out on `<grade10 store url>`.
-* An operator action asked for a sign-in link for the site to `<customer email>` and it has not been followed.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator account | An account holding `admin`, which holds `user:create` |
-| customer account | A customer account holding `user` only |
-| customer email | The address of `<customer account>` |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. In the client holding the console session, follow the unused, unexpired link.
-2. Ask who is calling as the site.
-3. Ask who is calling as the console.
-
-**Expected Results:**
-
-* Step 2 receives `<customer account>`.
-* Step 3 receives `<operator account>`.
-
-### shared-auth-sign-in-US12-TC24-1: A site link asked for with no console session is refused
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Link surface
-
-**Pre-conditions:**
-
-* `<operator account>` holds `admin`, is signed in on `<grade10 store url>`, and is signed out on `<grade10 admin console url>`.
-* `<customer account>` has received no sign-in email since the case began.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator account | An account holding `admin`, which holds `user:create` |
-| customer account | A customer account holding `user` only |
-| customer email | The address of `<customer account>` |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. As the console, presenting only `<operator account>`'s site session, ask for a sign-in link for the site to `<customer email>`.
-2. Read the mail sent to `<customer email>`.
-
-**Expected Results:**
-
-* Step 1 is refused as not signed in.
-* Step 2 shows no sign-in email.
-
-### shared-auth-sign-in-US12-TC25-1: A site link asked for by a console role without user:create is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Link surface
-
-**Pre-conditions:**
-
-* `<operator account>` holds `support` only and is signed in on `<grade10 admin console url>` with the second factor proved.
-* `<customer account>` has received no sign-in email since the case began.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator account | An account whose only operator role is `support`, which holds no `user:create` |
-| customer account | A customer account holding `user` only |
-| customer email | The address of `<customer account>` |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. As the console, with `<operator account>`'s console session, ask for a sign-in link for the site to `<customer email>`.
-2. Read the mail sent to `<customer email>`.
-
-**Expected Results:**
-
-* Step 1 is refused as not allowed.
-* Step 2 shows no sign-in email.
-
-### shared-auth-sign-in-US12-TC26-1: A site link asked for with an unproved second factor is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Link surface
-
-**Pre-conditions:**
-
-* `<operator account>` holds `admin`, has a second factor set up, and is signed in on `<grade10 admin console url>` without having proved it on this session.
-* `<customer account>` has received no sign-in email since the case began.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator account | An account holding `admin`, which holds `user:create`, with a second factor set up |
-| customer account | A customer account holding `user` only |
-| customer email | The address of `<customer account>` |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. As the console, with `<operator account>`'s console session, ask for a sign-in link for the site to `<customer email>`.
-2. Read the mail sent to `<customer email>`.
-
-**Expected Results:**
-
-* Step 1 is refused and asks for the second factor.
-* Step 2 shows no sign-in email.
-
 ### shared-auth-sign-in-US12-TC27-1: A console session does not withhold Google's prompt on the site
 
 **Classification:**
@@ -4591,7 +3957,6 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** Google

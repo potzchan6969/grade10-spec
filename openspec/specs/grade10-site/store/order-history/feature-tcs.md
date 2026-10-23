@@ -40,7 +40,6 @@
 **I want** available current product pictures beside my order items,
 **so that** I can recognise a purchase before opening its details.
 
-
 <!-- trace:case id=g10.store-order-history.TC-92a rev=1 covers=g10.store-order-history.SC-qrm,g10.store-order-history.SC-2qr -->
 ### g10.store-order-history.US5-TC1: Current product pictures preserve the recorded purchase
 
@@ -52,7 +51,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-history.US5
@@ -100,7 +98,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-history.US5
@@ -153,7 +150,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-01
@@ -185,7 +181,6 @@ The signed-in user owns active and past Store orders with different creation tim
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-01
@@ -214,7 +209,6 @@ The signed-in user owns a Store order with no paid amount and no quoted subtotal
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-01
@@ -244,7 +238,6 @@ The signed-in user owns a Store order with <safe carrier tracking url>, an absol
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-01
@@ -272,7 +265,6 @@ The signed-in user owns a Store order with a carrier and tracking number but no 
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-01
@@ -301,7 +293,6 @@ The order read is delayed by network manipulation.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-01
@@ -332,7 +323,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-01
@@ -378,7 +368,6 @@ The signed-in user owns an order with Store id <store order id> and the shop ord
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-02
@@ -415,7 +404,6 @@ The user has no signed-in session and has an account with Store orders.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-order-history-US-03
@@ -439,7 +427,6 @@ The signed-in user owns no Store orders.
 **I want** available current product pictures beside my order items,
 **so that** I can recognise a purchase before opening its details.
 
-
 <!-- trace:case id=g10.store-order-history.TC-u6q rev=1 covers=g10.store-order-history.SC-1ry,g10.store-order-history.SC-ds5 -->
 #### g10.store-order-history.US5-TC3: Absent pictures keep placeholders beside readable purchases
 
@@ -453,7 +440,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** g10.store-order-history.US5
@@ -499,7 +485,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-order-history.US5
@@ -538,7 +523,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.store-order-history.US5

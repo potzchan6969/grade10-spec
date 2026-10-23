@@ -1,6 +1,6 @@
 # grade10-site/grading/counter-documents Test Cases
 
-**Status:** reopened · 0/34
+**Status:** reopened · 0/33
 **Drafts styled:** 2026-09-29, tcs-rules r4
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 
@@ -28,7 +28,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -73,7 +72,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -117,7 +115,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -157,7 +154,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -197,7 +193,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -237,7 +232,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -275,7 +269,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -306,7 +299,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -340,7 +332,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -385,7 +376,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -426,7 +416,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-01
@@ -478,7 +467,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-02
@@ -513,7 +501,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-02
@@ -549,7 +536,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-02
@@ -592,7 +578,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -636,7 +621,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -676,7 +660,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -712,7 +695,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -746,7 +728,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -782,7 +763,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -815,7 +795,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -848,7 +827,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -886,7 +864,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -922,7 +899,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-03
@@ -967,7 +943,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-04
@@ -1008,7 +983,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-04
@@ -1058,7 +1032,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-05
@@ -1089,7 +1062,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-05
@@ -1119,7 +1091,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-05
@@ -1149,7 +1120,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-05
@@ -1178,7 +1148,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-05
@@ -1209,7 +1178,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-05
@@ -1229,45 +1197,6 @@ Runs once per row of **Test data**.
 * Step 2: the declined document is not listed and no download is offered for it.
 * Step 3: no email carries it as an attachment.
 
-<!-- trace:case id=g10.grading-counter-documents.TC-2b0 rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
-### grade10-site-grading-counter-documents-US5-TC7-1: A fingerprint grading never issued answers as none of its own
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* At least one document has sealed on the submission, so <grade10 grading submission page url> lists fingerprints.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Digest checked | <the SHA-256 of a PDF grading never issued or sealed> |
-
-**Steps:**
-
-1. Check <the SHA-256 of a PDF grading never issued or sealed> against grading's public digest check, and read the API response.
-2. Check the fingerprint the submission page lists for a sealed document the same way.
-
-**Expected Results:**
-
-* Step 1: the unknown digest answers that it is not one grading issued or sealed, and names nobody.
-* Step 2: the listed fingerprint answers as one grading sealed.
-
-
 <!-- trace:case id=g10.grading-counter-documents.TC-8gm rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
 ### grade10-site-grading-counter-documents-US5-TC8-1: A withdrawn card's receipt is issued and listed with its fingerprint
 
@@ -1279,7 +1208,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-grading-counter-documents-US-05

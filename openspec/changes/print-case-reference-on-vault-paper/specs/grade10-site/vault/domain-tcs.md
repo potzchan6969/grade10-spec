@@ -21,7 +21,6 @@ the counter's search finds,
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-05, grade10-site-vault-documents-and-signing-US-07, grade10-site-vault-documents-and-signing-US-08

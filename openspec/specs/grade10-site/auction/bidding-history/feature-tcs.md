@@ -1,6 +1,6 @@
 # grade10-site/auction/bidding-history Test Cases
 
-**Status:** pending-review · 16/41
+**Status:** pending-review · 15/38
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
 ## Walk 1: Collector reads their bidding index
@@ -507,8 +507,6 @@
    - The noted bid, maximum, listing standing and auction close match the note. `g10.auction-bidding-history.US4-TC4`
 8. Read the API response for an account bidding index with no storefront session.
 9. Read the API response for a public listing.
-   - Grade10 refuses the account index read. `g10.auction-bidding-history.US4-TC3`
-   - The public listing read shows public price movements and listing pseudonyms. `g10.auction-bidding-history.US4-TC3`
 
 ## Walk 5: Collector opens their bids at /bids
 
@@ -842,14 +840,8 @@
    - Account navigation stays on the bids page. `g10.auction-bidding-history.US8-TC1`
 5. Read the anonymous public listing response for `<listing_123>`.
 6. Find the public bid row for that bidder.
-   - The row's listing pseudonym is of the form Bidder N. `g10.auction-bidding-history.US9-TC1`
-   - The row's avatar character is `<expected_letter>`. `g10.auction-bidding-history.US9-TC1`
-   - The response body contains neither `<email_ada>` nor a personal display name for that bidder. `g10.auction-bidding-history.US9-TC1`
 7. Read the anonymous public listing response for `<listing_126>`.
 8. Check each of those two public bid rows.
-   - Each row's avatar character is `B`. `g10.auction-bidding-history.US9-TC2`
-   - Each row still shows a listing pseudonym of the form Bidder N. `g10.auction-bidding-history.US9-TC2`
-   - Neither row exposes an email. `g10.auction-bidding-history.US9-TC2`
 
 ## g10.auction-bidding-history.US1: Collector reads their bidding index
 
@@ -867,7 +859,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
@@ -907,7 +898,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
@@ -959,7 +949,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
@@ -1001,7 +990,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
@@ -1039,7 +1027,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
@@ -1081,7 +1068,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
@@ -1130,7 +1116,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
@@ -1186,7 +1171,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
@@ -1235,7 +1219,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
@@ -1281,7 +1264,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
@@ -1332,7 +1314,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
@@ -1378,7 +1359,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
@@ -1431,7 +1411,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
@@ -1489,7 +1468,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
@@ -1537,7 +1515,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
@@ -1587,7 +1564,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-03
@@ -1627,7 +1603,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-03
@@ -1681,7 +1656,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
@@ -1742,7 +1716,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
@@ -1781,7 +1754,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-04
@@ -1819,7 +1791,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-04
@@ -1843,37 +1814,6 @@ Runs once per row of **Test data**.
 
 * The ZZZ history lists that storefront's activity.
 
-<!-- trace:case id=g10.auction-bidding-history.TC-ls6 rev=1 covers=g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
-### g10.auction-bidding-history.US4-TC3: Anonymous reader cannot read private history
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bidding-history-US-04
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/publicState.spec.ts`, `grade10:packages/grade10-store/backend/src/testing/suites/auctionRouter.ts`
-
-**Pre-conditions:**
-No storefront session.
-
-**Steps:**
-
-1. Read the API response for an account bidding index with no storefront session.
-2. Read the API response for a public listing.
-
-**Expected Results:**
-
-* Grade10 refuses the account index read.
-* The public listing read shows public price movements and listing pseudonyms.
-
 <!-- trace:case id=g10.auction-bidding-history.TC-87o rev=1 covers=g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
 ### g10.auction-bidding-history.US4-TC4: Reading history is inert
 
@@ -1885,7 +1825,6 @@ No storefront session.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-04
@@ -1933,7 +1872,6 @@ listing's history,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -1972,7 +1910,6 @@ listing's history,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -2010,7 +1947,6 @@ listing's history,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -2048,7 +1984,6 @@ listing's history,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -2091,7 +2026,6 @@ listing's history,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -2130,7 +2064,6 @@ listing's history,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -2169,7 +2102,6 @@ listing's history,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -2208,7 +2140,6 @@ listing's history,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -2239,7 +2170,6 @@ A visible index or combined history page with a further cursor.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -2278,7 +2208,6 @@ A visible index or combined history page with a further cursor.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
@@ -2323,7 +2252,6 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-06
@@ -2366,7 +2294,6 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-06
@@ -2409,7 +2336,6 @@ None.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-06
@@ -2460,7 +2386,6 @@ maximums, open on **Bid placed** by default, and list that tab first,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-07
@@ -2503,7 +2428,6 @@ maximums, open on **Bid placed** by default, and list that tab first,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-07
@@ -2542,7 +2466,6 @@ maximums, open on **Bid placed** by default, and list that tab first,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-07
@@ -2589,7 +2512,6 @@ maximums, open on **Bid placed** by default, and list that tab first,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-08
@@ -2630,84 +2552,6 @@ without learning their email or name,
 **so that** I can tell rivals apart on the public ledger while identity stays
 behind the listing pseudonym.
 
-<!-- trace:case id=g10.auction-bidding-history.TC-ava rev=1 -->
-### g10.auction-bidding-history.US9-TC1: Public ledger avatar matches the email local-part letter
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-09
-
-**Pre-conditions:**
-
-* `<listing_123>` is published with at least one counted public bid from a bidder whose email is `<email_ada>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| email_ada | `ada@example.com` |
-| expected_letter | `A` |
-| listing_123 | A published listing with a counted public bid whose bidder email is `<email_ada>`; bind its identity only |
-
-**Steps:**
-
-1. Read the anonymous public listing response for `<listing_123>`.
-2. Find the public bid row for that bidder.
-
-**Expected Results:**
-
-* The row's listing pseudonym is of the form Bidder N.
-* The row's avatar character is `<expected_letter>`.
-* The response body contains neither `<email_ada>` nor a personal display name for that bidder.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-avb rev=1 -->
-### g10.auction-bidding-history.US9-TC2: Erased or letterless email falls back to B
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-09
-
-**Pre-conditions:**
-
-* `<listing_126>` has a public bid whose bidder email was erased, and a public bid whose email local part has no letter or digit before `@`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_126 | A listing with two public bids: one from an erased email and one from a letterless and digitless email local part; bind its identity only |
-
-**Steps:**
-
-1. Read the anonymous public listing response for `<listing_126>`.
-2. Check each of those two public bid rows.
-
-**Expected Results:**
-
-* Each row's avatar character is `B`.
-* Each row still shows a listing pseudonym of the form Bidder N.
-* Neither row exposes an email.
-
 ## Settled
 
 - A refused bid is not a bid: it adds no listing to `/bids`, no history entry and no standing, and moves no listing; failed-only standing and refusal reasons are gone.
@@ -2741,7 +2585,5 @@ Runs once per row of **Test data**.
 
 | Case | Disposition |
 | --- | --- |
-| `g10.auction-bidding-history.US9-TC1` | Folded — covered by `grade10-site-auction-bidding-history-SC-52` |
-| `g10.auction-bidding-history.US9-TC2` | Folded — covered by `grade10-site-auction-bidding-history-SC-53` |
 | `grade10-site-auction-bidding-history-SC-52` | Covered by `g10.auction-bidding-history.US9-TC1` |
 | `grade10-site-auction-bidding-history-SC-53` | Covered by `g10.auction-bidding-history.US9-TC2` |

@@ -1,6 +1,6 @@
 # grade10-admin/auction/post-sale Test Cases
 
-**Status:** pending-review · 0/160
+**Status:** pending-review · 0/141
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## post-sale-US1: Operator works the orders worklist by segment
@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-01
@@ -51,7 +50,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-01
@@ -89,7 +87,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-01
@@ -127,7 +124,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-01
@@ -166,7 +162,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-01
@@ -204,7 +199,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-01
@@ -238,7 +232,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-01
@@ -285,7 +278,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -320,7 +312,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -353,7 +344,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -385,7 +375,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -418,7 +407,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -450,7 +438,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -487,7 +474,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -521,7 +507,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -557,7 +542,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -601,7 +585,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-02
@@ -649,7 +632,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-03
@@ -688,7 +670,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-03
@@ -727,7 +708,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-03
@@ -767,7 +747,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** post-sale-US-03
@@ -792,39 +771,6 @@ Runs once per row of **Test data**.
 * After the second, the order is listed under Waiting on winner, still reading Pending Payment.
 * The timeline shows both flagged payment entries and both flag cleared entries, with the operator and the reasons.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-umi rev=1 covers=g10adm.auction-post-sale.SC-uf1,g10adm.auction-post-sale.SC-3uf,g10adm.auction-post-sale.SC-n2q,g10adm.auction-post-sale.SC-7jf,g10adm.auction-post-sale.SC-3bt,g10adm.auction-post-sale.SC-en4,g10adm.auction-post-sale.SC-c66,g10adm.auction-post-sale.SC-ccp,g10adm.auction-post-sale.SC-btq,g10adm.auction-post-sale.SC-gmi,g10adm.auction-post-sale.SC-amp -->
-### post-sale-US3-TC4-1: Card money pays an expired invoice late, and counts toward nothing in any other state
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-03
-
-**Pre-conditions:**
-
-* A Payment Overdue order whose card invoice totals 323225 minor units in HKD.
-* A Payment Verifying order whose bank transfer invoice totals 312000 minor units in HKD.
-
-**Steps:**
-
-1. Complete a card payment of 323225 minor units in HKD against the first order's invoice.
-2. Complete a card payment of 312000 minor units in HKD against the second order's invoice.
-3. As an operator, read both orders and their timelines.
-
-**Expected Results:**
-
-* The first payment is flagged Paid late; the invoice is `paid` and the order reads Preparing Shipment.
-* The second is flagged Unexpected status; the invoice is still `payment_verifying`, with nothing counted as paid.
-* Each timeline shows a flagged payment entry naming the card.
-
 ### post-sale-US3-TC6-1: The order page shows the winner's name, email and phone to reach them on
 
 **Classification:**
@@ -835,7 +781,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-03
@@ -873,7 +818,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-04
@@ -894,38 +838,6 @@ Runs once per row of **Test data**.
 * After dispatch the order reads Shipped; after delivery it reads Delivered.
 * The timeline shows the dispatched entry with the carrier, the tracking number, the tracker link, the operator and the delivery address, and the delivery confirmed entry with the date and the image.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-75e rev=1 covers=g10adm.auction-post-sale.SC-10k,g10adm.auction-post-sale.SC-js8,g10adm.auction-post-sale.SC-tl1,g10adm.auction-post-sale.SC-0vy,g10adm.auction-post-sale.SC-usw,g10adm.auction-post-sale.SC-82s,g10adm.auction-post-sale.SC-7rg,g10adm.auction-post-sale.SC-b2b,g10adm.auction-post-sale.SC-0ln -->
-### post-sale-US4-TC2-1: Dispatch and delivery out of order, or without tracking, are refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-04
-
-**Pre-conditions:**
-
-* An order in Pending Payment and an order in Preparing Shipment.
-* admin(operator with shipment processing).
-
-**Steps:**
-
-1. Record dispatch on the Pending Payment order.
-2. Record delivery on the Preparing Shipment order.
-3. Record dispatch on the Preparing Shipment order with a carrier and no tracking number.
-
-**Expected Results:**
-
-* Each is refused.
-* Neither order's status moves.
-
 <!-- trace:case id=g10adm.auction-post-sale.TC-kcn rev=1 covers=g10adm.auction-post-sale.SC-9wm,g10adm.auction-post-sale.SC-pvi -->
 ### post-sale-US4-TC3-1: The winner reads the tracking number as a link with a tracker link and as plain text without one
 
@@ -937,7 +849,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-04
@@ -978,7 +889,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1013,7 +923,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1054,7 +963,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-05
@@ -1084,7 +992,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-05
@@ -1114,7 +1021,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Quote and send
@@ -1146,7 +1052,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Quote and send
@@ -1179,7 +1084,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1213,7 +1117,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1245,7 +1148,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1277,7 +1179,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1310,7 +1211,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-05
@@ -1346,7 +1246,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1393,7 +1292,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1433,7 +1331,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -1475,7 +1372,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1520,7 +1416,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1563,7 +1458,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1612,7 +1506,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1652,7 +1545,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1691,7 +1583,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
@@ -1735,7 +1626,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-20
@@ -1777,7 +1667,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -1825,7 +1714,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-06
@@ -1864,7 +1752,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-06
@@ -1910,7 +1797,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -1952,7 +1838,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -1986,7 +1871,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -2019,7 +1903,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -2065,7 +1948,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -2104,7 +1986,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2135,7 +2016,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2166,7 +2046,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2206,7 +2085,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2246,7 +2124,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2284,7 +2161,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -2315,7 +2191,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2346,7 +2221,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2381,7 +2255,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2400,45 +2273,6 @@ Runs once per row of **Test data**.
 * The settlement is refused, asking for proof.
 * The invoice stays `pending`.
 
-### post-sale-US7-TC24-1: One bad proof file refuses the whole settlement
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-07
-
-**Pre-conditions:**
-
-* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
-* <order_1> has a bank transfer invoice, `pending`.
-
-**Test data:**
-
-| <bad file> |
-| --- |
-| A JPEG of 10,485,761 bytes |
-| A GIF |
-
-**Steps:**
-
-1. Attach one valid PDF and <bad file>.
-2. Commit the settlement with a reference.
-
-**Expected Results:**
-
-* The commit is refused.
-* No file is stored; the invoice stays `pending`.
-
 <!-- trace:case id=g10adm.auction-post-sale.TC-jn5 rev=2 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-rrz,g10adm.auction-post-sale.SC-sjw,g10adm.auction-post-sale.SC-y6v,g10adm.auction-post-sale.SC-xd7,g10adm.auction-post-sale.SC-guq,g10adm.auction-post-sale.SC-xt3,g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-0l6,g10adm.auction-post-sale.SC-miq,g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-13r,g10adm.auction-post-sale.SC-7b2,g10adm.auction-post-sale.SC-j60,g10adm.auction-post-sale.SC-htz -->
 ### post-sale-US7-TC25-2: The first bank transfer quote asks for the fee
 
@@ -2452,7 +2286,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Quote and send
@@ -2494,7 +2327,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2533,7 +2365,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2572,7 +2403,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** post-sale-US-07
@@ -2610,7 +2440,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2641,7 +2470,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2671,7 +2499,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2704,7 +2531,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Quote and send
@@ -2737,7 +2563,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Quote and send
@@ -2767,7 +2592,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Quote and send
@@ -2797,7 +2621,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Quote and send
@@ -2828,7 +2651,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -2858,7 +2680,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -2890,7 +2711,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -2922,7 +2742,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -2955,7 +2774,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -2989,7 +2807,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -3023,7 +2840,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -3069,7 +2885,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -3104,7 +2919,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -3131,39 +2945,6 @@ Runs once per row of **Test data**.
 * The server refuses all three actions and stores no file.
 * The cancel succeeds: the order reads Cancelled, and the timeline names the finance operator.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-h29 rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk,g10adm.auction-post-sale.SC-obc,g10adm.auction-post-sale.SC-5ky,g10adm.auction-post-sale.SC-5at,g10adm.auction-post-sale.SC-hto,g10adm.auction-post-sale.SC-ltc,g10adm.auction-post-sale.SC-3fi -->
-### post-sale-US7-TC37-1: Money that counts toward nothing blocks neither a reissue nor a cancel
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-07
-
-**Pre-conditions:**
-
-* Two Payment Overdue orders, each with a card invoice of 323225 minor units in HKD holding a card payment of 300000 flagged Amount mismatch.
-* admin(operator with payment processing).
-
-**Steps:**
-
-1. Reissue the first with the deadline restarted and a reason.
-2. Cancel the second with a category and a note.
-3. Read both orders, then Needs action.
-
-**Expected Results:**
-
-* The first reads Pending Payment on a new invoice, and the second reads Cancelled.
-* Each flagged payment is still recorded and flagged Amount mismatch.
-* Both orders are still listed under Needs action.
-
 ### post-sale-US7-TC39-1: A reissue leaves the winner's suspension standing
 
 **Classification:**
@@ -3174,7 +2955,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -3194,35 +2974,6 @@ Runs once per row of **Test data**.
 * The reissue dialog offers no reinstatement.
 * After the reissue the order reads Pending Payment, and the winner's account is still suspended.
 
-### post-sale-US7-TC40-1: Setup Overdue changes nothing however long it waits
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-07
-
-**Pre-conditions:**
-
-* An order in Setup Overdue, its address deadline passed 30 days ago with no operator action.
-* admin(operator) opens it.
-
-**Steps:**
-
-1. Read the order's status and the winner's account.
-
-**Expected Results:**
-
-* The order still reads Setup Overdue.
-* The winner's account is not suspended.
-
 ### post-sale-US7-TC41-1: An order in Setup Overdue is cancelled and its item is back in stock
 
 **Classification:**
@@ -3233,7 +2984,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -3264,7 +3014,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -3294,7 +3043,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -3324,7 +3072,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
@@ -3354,7 +3101,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -3387,7 +3133,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -3423,7 +3168,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-07
@@ -3442,36 +3186,6 @@ Runs once per row of **Test data**.
 
 * Both searches find <order_1>.
 * It shows <invoice_2> as current.
-
-### post-sale-US7-TC31-1: An edit before send does not reset the waiting time
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Quote and send
-
-**Pre-conditions:**
-
-* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
-* The winner confirmed <order_1>'s address at 2026-09-12T09:00:00Z.
-
-**Steps:**
-
-1. Edit the address with a reason at 2026-09-14T09:00:00Z.
-2. Open <order_1> at 2026-09-15T09:00:00Z.
-
-**Expected Results:**
-
-* The detail shows 72 hours waited since the winner's confirmation.
-* <order_1> carries the Overdue mark.
 
 ---
 
@@ -3493,7 +3207,6 @@ payments that failed,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
@@ -3526,7 +3239,6 @@ payments that failed,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
@@ -3565,7 +3277,6 @@ payments that failed,
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
@@ -3598,7 +3309,6 @@ payments that failed,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
@@ -3630,7 +3340,6 @@ payments that failed,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
@@ -3659,7 +3368,6 @@ payments that failed,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-08
@@ -3690,7 +3398,6 @@ payments that failed,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** post-sale-US-08
@@ -3719,7 +3426,6 @@ payments that failed,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-08
@@ -3741,37 +3447,6 @@ payments that failed,
 * The reissued entry shows `#00010490`.
 * The paid entry shows `#00010495`.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-gwq rev=1 covers=g10adm.auction-post-sale.SC-ua0,g10adm.auction-post-sale.SC-j3o,g10adm.auction-post-sale.SC-hgz,g10adm.auction-post-sale.SC-k8l,g10adm.auction-post-sale.SC-jce,g10adm.auction-post-sale.SC-dgt,g10adm.auction-post-sale.SC-fzw,g10adm.auction-post-sale.SC-37a -->
-### post-sale-US8-TC9-1: A log entry names the operator signed in, not the one claimed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-08
-
-**Pre-conditions:**
-
-* admin(operator with payment processing) is signed in as `ops@grade10.com`.
-* An order in Pending Payment.
-
-**Steps:**
-
-1. Reissue the invoice with a reason, sending an action that names another operator and a time a day earlier.
-2. Read the reissued entry.
-
-**Expected Results:**
-
-* The entry names `ops@grade10.com`.
-* Its time is when Grade10 received the reissue.
-
 ### post-sale-US8-TC10-2: A reissue's entry names its amount change and each part it changed
 
 Runs once per row of **Test data**.
@@ -3784,7 +3459,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
@@ -3830,7 +3504,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
@@ -3859,7 +3532,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
@@ -3893,7 +3565,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
@@ -3927,39 +3598,6 @@ Runs once per row of **Test data**.
 * It carries the new order total `<total after>` in HKD.
 * It names `<other parts named>` and no other part as changed.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-j9i rev=1 covers=g10adm.auction-post-sale.SC-lfk,g10adm.auction-post-sale.SC-98a -->
-### post-sale-US8-TC14-1: A repeated request happens once, and a request used for another action is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-08
-
-**Pre-conditions:**
-
-* An auction order in Preparing Invoice.
-* admin(operator with payment processing) opens it.
-
-**Steps:**
-
-1. Send the invoice, then submit the same request again.
-2. Make the same request to record a payment on the order.
-3. Read the order, its timeline and the winner's mail.
-
-**Expected Results:**
-
-* The repeat answers the outcome of the first send.
-* The order holds one invoice, one sent entry and one invoice letter.
-* The payment request is refused, the dialog tells the operator to open it again, and no payment or entry is added.
-
 ---
 
 ## post-sale-US10: Operator checks a winner's payment proof
@@ -3978,7 +3616,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-10
@@ -4015,7 +3652,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-10
@@ -4045,7 +3681,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-10
@@ -4085,7 +3720,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-10
@@ -4124,7 +3758,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-10
@@ -4155,7 +3788,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-10
@@ -4183,7 +3815,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** post-sale-US-10
@@ -4201,82 +3832,6 @@ Runs once per row of **Test data**.
 
 * Step 2 is refused.
 * The invoice stays `paid`; no proof-not-accepted letter goes out.
-
-### post-sale-US10-TC8-1: Who can read the winner's proof files
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-10
-
-**Pre-conditions:**
-
-* <order_1> is Payment Verifying with winner files.
-
-**Test data:**
-
-| <requester> | <outcome> |
-| --- | --- |
-| admin(without payment-processing), able to open <order_1> | The file is returned |
-| customer(winner of <order_1>) | Refused |
-| A signed-out request | Refused |
-
-**Steps:**
-
-1. Request a proof file on <order_1> as <requester>.
-
-**Expected Results:**
-
-* The request is <outcome>.
-
-### post-sale-US10-TC9-1: One bad operator file refuses the confirm
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-10
-
-**Pre-conditions:**
-
-* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
-* <order_1> is Payment Verifying.
-
-**Test data:**
-
-| <operator files> |
-| --- |
-| One PDF and one JPEG of 10,485,761 bytes |
-| Six PDFs |
-
-**Steps:**
-
-1. Attach <operator files>.
-2. Confirm the payment.
-
-**Expected Results:**
-
-* The confirm is refused.
-* No operator file is stored; the order stays Payment Verifying.
 
 ---
 
@@ -4296,7 +3851,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** post-sale-US-11
@@ -4325,7 +3879,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-11
@@ -4366,7 +3919,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
@@ -4397,7 +3949,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
@@ -4429,7 +3980,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
@@ -4462,7 +4012,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
@@ -4494,7 +4043,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
@@ -4525,7 +4073,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
@@ -4557,7 +4104,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
@@ -4597,7 +4143,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-13
@@ -4631,7 +4176,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-13
@@ -4659,7 +4203,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-13
@@ -4677,64 +4220,6 @@ Runs once per row of **Test data**.
 
 * The link opens the same lot, available for manual relisting.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-2ai rev=1 covers=g10adm.auction-post-sale.SC-6oq,g10adm.auction-post-sale.SC-1qh,g10adm.auction-post-sale.SC-kcq,g10adm.auction-post-sale.SC-30g,g10adm.auction-post-sale.SC-i4m -->
-### post-sale-US13-TC4-1: Money that counts toward nothing does not block cancellation
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-13
-
-**Pre-conditions:**
-
-* An unpaid order has a recorded card payment that counts toward nothing.
-
-**Steps:**
-
-1. Cancel the order with a category and note.
-
-**Expected Results:**
-
-* Cancellation succeeds, the order reads Cancelled and the lot returns to stock.
-* The recorded payment remains available for Finance to return outside Grade10.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-0dj rev=1 covers=g10adm.auction-post-sale.SC-6oq,g10adm.auction-post-sale.SC-1qh,g10adm.auction-post-sale.SC-kcq,g10adm.auction-post-sale.SC-30g,g10adm.auction-post-sale.SC-i4m -->
-### post-sale-US13-TC5-1: Money that counts toward the balance blocks cancellation
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-13
-
-**Pre-conditions:**
-
-* An unpaid order has a card payment that counts toward the balance committing before cancellation.
-
-**Steps:**
-
-1. Confirm cancellation with a category and note.
-
-**Expected Results:**
-
-* Cancellation is refused with "This order has a recorded payment. Refund it instead of cancelling."
-* The order reads Paid and the lot stays with it.
-
 ---
 
 ## post-sale-US14: Operator returns money paid after a cancel
@@ -4742,69 +4227,6 @@ Runs once per row of **Test data**.
 **As an** operator,
 **I want** a late card payment to remain flagged until Finance returns it,
 **so that** no winner pays for a cancelled lot without a follow-up.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-qn8 rev=1 covers=g10adm.auction-post-sale.SC-23g -->
-### post-sale-US14-TC1-1: A late payment is flagged without reviving the order
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** integration
-* **Suites:** smoke, regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-14
-
-**Pre-conditions:**
-
-* `<cancelled order>` is terminal and its lot is available.
-
-**Steps:**
-
-1. Record a card payment received after cancellation.
-
-**Expected Results:**
-
-* The payment is kept in the invoice log.
-* The order remains Cancelled and shows Paid after cancel.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-5vf rev=3 covers=g10adm.auction-post-sale.SC-23g,g10adm.auction-post-sale.SC-18a -->
-### post-sale-US14-TC2-3: Clearing the late-payment flag keeps the order cancelled
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-14
-
-**Pre-conditions:**
-
-* A cancelled order has two late payments, each with its own Paid after cancel flag.
-* Finance returned both payments outside Grade10; one has a return reference and one has none (the first none, the second one).
-
-**Steps:**
-
-1. As an operator holding `auction:payment`, clear the first payment's flag with a written reason and no return reference.
-2. Check the second payment's flag.
-3. Clear the second flag with a written reason and its return reference.
-
-**Expected Results:**
-
-* Each clear action succeeds and records the reason, actor and timestamp.
-* The first records no return reference; the second records its supplied one.
-* After step 1 the second payment is still flagged.
-* The order remains Cancelled and its lot remains in stock.
 
 ---
 
@@ -4825,7 +4247,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-15
@@ -4859,7 +4280,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-15
@@ -4900,7 +4320,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-16
@@ -4934,7 +4353,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** post-sale-US-16
@@ -4974,7 +4392,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-16
@@ -4994,37 +4411,6 @@ Runs once per row of **Test data**.
 * The order still reads Preparing Shipment.
 * The second refund is refused.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-iym rev=1 covers=g10adm.auction-post-sale.SC-7fc,g10adm.auction-post-sale.SC-dzs,g10adm.auction-post-sale.SC-dwy,g10adm.auction-post-sale.SC-brr,g10adm.auction-post-sale.SC-qno -->
-### post-sale-US16-TC4-1: An FPS email is kept to its first letter and domain
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** post-sale-US-16
-
-**Pre-conditions:**
-
-* A Delivered order paid 312000 minor units in HKD.
-* admin(operator with refund processing).
-
-**Steps:**
-
-1. Record a refund of `3120.00` by FPS to the bank `HSBC` and the email `collector@example.com`, with its reason, reference and proof.
-2. Read the refund record and the timeline.
-
-**Expected Results:**
-
-* The refund record keeps the email as its first letter `c` and its domain `example.com`.
-* Neither the refund record nor the timeline shows `collector@example.com`.
-
 ### post-sale-US16-TC5-1: A refund closes a partially paid order
 
 **Classification:**
@@ -5035,7 +4421,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-16
@@ -5074,7 +4459,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-17
@@ -5114,7 +4498,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
@@ -5154,7 +4537,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
@@ -5187,7 +4569,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
@@ -5219,7 +4600,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
@@ -5251,7 +4631,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
@@ -5290,7 +4669,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
@@ -5322,7 +4700,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
@@ -5354,7 +4731,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Audit trail
@@ -5391,7 +4767,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Queue
@@ -5425,7 +4800,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Queue
@@ -5466,7 +4840,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Queue
@@ -5503,7 +4876,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** Queue
@@ -5523,39 +4895,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The order remains Preparing Invoice rather than Setup Overdue, and is not cancelled or expired.
 * No payment Overdue timer or payment deadline exists before invoice send.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-kp5 rev=1 covers=g10adm.auction-post-sale.SC-ehu,g10adm.auction-post-sale.SC-8of,g10adm.auction-post-sale.SC-u12,g10adm.auction-post-sale.SC-lh7,g10adm.auction-post-sale.SC-pqn,g10adm.auction-post-sale.SC-w78,g10adm.auction-post-sale.SC-egm,g10adm.auction-post-sale.SC-jy7,g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-t9v -->
-### post-sale-US18-TC25-1: Concurrent address write, reopen, record and send serialize
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-18
-
-**Pre-conditions:**
-
-* A Setup Overdue order has an expired address deadline and no confirmed address.
-* A winner address write, an operator reopen, an operator record of setup and an operator invoice send can be submitted concurrently.
-
-**Steps:**
-
-1. Submit the four operations concurrently.
-2. Read the final address snapshot, deadline and derived status.
-
-**Expected Results:**
-
-* The operations serialize under the order boundary.
-* The final snapshot and deadline match the last committed transition.
-* A send that commits carries the setup the transition before it left; one refused for lack of setup changes nothing.
-* The order is internally consistent and no partial address overwrite exists.
-
 <!-- trace:case id=g10adm.auction-post-sale.TC-20s rev=1 covers=g10adm.auction-post-sale.SC-fzv,g10adm.auction-post-sale.SC-blu,g10adm.auction-post-sale.SC-su0 -->
 ### post-sale-US18-TC26-1: Phone-recorded address carries an audit actor and reason
 
@@ -5567,7 +4906,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Audit trail
@@ -5598,7 +4936,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Quote and send
@@ -5639,7 +4976,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Quote and send
@@ -5671,7 +5007,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Quote and send
@@ -5703,7 +5038,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Resolving an unpaid order
@@ -5741,7 +5075,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
@@ -5781,7 +5114,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Resolving an unpaid order
@@ -5811,38 +5143,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * The Expired invoice status is gone; the invoice reads paid.
 * Winner Order shows no amount owed and no card Pay.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-v9x rev=1 covers=g10adm.auction-post-sale.SC-v9x -->
-### post-sale-US19-TC2-1: An expired invoice keeps a recorded shortfall
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Resolving an unpaid order
-
-**Pre-conditions:**
-
-* `<expired-invoice order>` has a 100000 minor-unit balance after its deadline.
-* admin(holds payment-processing) is recording a payment.
-
-**Steps:**
-
-1. Record a 40000-minor-unit payment with method, reference and proof.
-2. Read the invoice status, remaining balance and winner payment controls.
-
-**Expected Results:**
-
-* The invoice reads Partially Paid with 60000 minor units remaining.
-* No new self-service payment deadline or close-as-paid choice appears.
-* Winner Order offers no card Pay control.
-
 <!-- trace:case id=g10adm.auction-post-sale.TC-0g4 rev=1 covers=g10adm.auction-post-sale.SC-d1w -->
 ### post-sale-US19-TC3-1: A card payment just before the deadline is accepted
 
@@ -5854,7 +5154,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Resolving an unpaid order
@@ -5893,7 +5192,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Resolving an unpaid order
@@ -5922,72 +5220,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * After reload, no card Pay is offered; Contact Us is.
 * The order still reads Pending Payment with Expired invoice.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-o2f rev=1 covers=g10adm.auction-post-sale.SC-d1w -->
-### post-sale-US19-TC5-1: A card payment started in time completes after the deadline
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** Resolving an unpaid order
-
-**Pre-conditions:**
-
-* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
-* The payment provider is set to confirm the winner's card payment 50 seconds after it is received.
-
-**Steps:**
-
-1. At 2026-09-19T08:59:30Z, submit the winner's card payment.
-2. Read the invoice status at 2026-09-19T09:00:05Z.
-3. Read it again after the payment confirms at 2026-09-19T09:00:20Z.
-
-**Expected Results:**
-
-* At 09:00:05 the invoice is still `pending`, not `expired`.
-* After confirmation the invoice is `paid` and the order is Preparing Shipment.
-* The invoice log holds no expired entry.
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-mon rev=1 covers=g10adm.auction-post-sale.SC-xct -->
-### post-sale-US19-TC6-1: A card payment started in time that fails expires the invoice when it fails
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Resolving an unpaid order
-
-**Pre-conditions:**
-
-* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
-* The payment provider is set to decline the winner's card payment 50 seconds after it is received.
-
-**Steps:**
-
-1. At 2026-09-19T08:59:30Z, submit the winner's card payment.
-2. Read the invoice status at 2026-09-19T09:00:05Z.
-3. Read it again after the decline at 2026-09-19T09:00:20Z.
-
-**Expected Results:**
-
-* At 09:00:05 the invoice is still `pending`.
-* After the decline the invoice is `expired`, with the expired entry timestamped at the decline.
-* The winner's order shows Contact Us and no card Pay.
-
 <!-- trace:case id=g10adm.auction-post-sale.TC-mpo rev=1 covers=g10adm.auction-post-sale.SC-o4m -->
 ### post-sale-US19-TC7-1: Reissuing an expired invoice gives card payment a fresh seven days
 
@@ -5999,7 +5231,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Resolving an unpaid order
@@ -6028,48 +5259,6 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * Winner Order offers card Pay again.
 * The card payment is accepted; the order derives Preparing Shipment.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-f9u rev=1 covers=g10adm.auction-post-sale.SC-gof -->
-### post-sale-US19-TC9-1: A card session that ends unpaid after the deadline expires the invoice then
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Resolving an unpaid order
-
-**Pre-conditions:**
-
-* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
-* Grade10 received the winner's card payment at 2026-09-19T08:59:30Z and its card session is open.
-
-**Test data:**
-
-| Session ends by | At |
-| --- | --- |
-| Timing out | 2026-09-19T09:30:30Z |
-| The winner abandoning it | 2026-09-19T09:30:30Z |
-
-**Steps:**
-
-1. Read the invoice status and the winner's order at 2026-09-19T09:05:00Z, while the session is open.
-2. End the session the way the row names.
-3. Read the invoice status, its log and the winner's order.
-
-**Expected Results:**
-
-* At 09:05 the invoice is `pending` and Winner Order offers no Pay Now.
-* After the session ends the invoice is `expired`, with the expired entry timestamped when the session ended.
-* The order reads Payment Overdue with Contact Us, and Pay Now stays closed.
-
 ---
 
 ## post-sale-US21: Operator previews the HKD total a quote will charge
@@ -6089,7 +5278,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-21
@@ -6136,7 +5324,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-21
@@ -6182,7 +5369,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** post-sale-US-21

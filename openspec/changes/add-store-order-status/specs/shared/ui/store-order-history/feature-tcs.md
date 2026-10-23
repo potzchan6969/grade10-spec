@@ -1,6 +1,6 @@
 # shared/ui/store-order-history Test Cases
 
-**Status:** pending-review · 0/2
+**Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-ui-store-order-history-US1: Collector reviews active and past orders
@@ -24,7 +24,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-order-history-US-01
@@ -55,34 +54,6 @@ Runs once per row of **Test data**.
 
 * Step 3: the badge shows the row's Label supplied, in the row's Variant style.
 * Step 3: the badge shows no words besides the supplied label.
-
-<!-- trace:case id=g10.shared-store-order-history.TC-hyr rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
-### shared-ui-store-order-history-US1-TC8-1: A status outside the six is refused at build
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-ui-store-order-history-US-01
-
-**Pre-conditions:**
-
-* A consuming file renders the status badge with a status that is not one of the six variants.
-
-**Steps:**
-
-1. Run the consuming application's type check.
-
-**Expected Results:**
-
-* Step 1: the type check fails on the status value.
 
 ## Reconciliation
 

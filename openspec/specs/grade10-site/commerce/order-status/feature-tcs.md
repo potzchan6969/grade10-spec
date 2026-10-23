@@ -1,6 +1,6 @@
 # grade10-site/commerce/order-status Test Cases
 
-**Status:** pending-review · 0/20
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-commerce-order-status-US1: Collector reads where an order stands
@@ -24,7 +24,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-order-status-US-01
@@ -56,133 +55,6 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads the row's Badge.
 * Step 2: the badge is not blank.
 
-<!-- trace:case id=g10.commerce-order-status.TC-93y rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC2-1: Cancellation or void outranks every other fact
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-01
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Canceled | Payment | Fulfilment | Badge |
-| --- | --- | --- | --- |
-| No | `voided` | `unfulfilled` | Canceled |
-| No | `voided` | `fulfilled` | Canceled |
-| Yes | `paid` | `fulfilled` | Canceled |
-| Yes | `refunded` | `unfulfilled` | Canceled |
-| Yes | `partially_refunded` | `on_hold` | Canceled |
-
-**Steps:**
-
-1. Resolve the order status for the row's facts.
-2. Read the badge.
-
-**Expected Results:**
-
-* Step 2: the badge reads the row's Badge.
-
-<!-- trace:case id=g10.commerce-order-status.TC-3zq rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC3-1: A refund reads ahead of shipping progress
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-01
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Payment | Fulfilment | Badge |
-| --- | --- | --- |
-| `partially_refunded` | `unfulfilled` | Refunded |
-| `partially_refunded` | `partially_fulfilled` | Refunded |
-| `partially_refunded` | `fulfilled` | Refunded |
-| `refunded` | `fulfilled` | Refunded |
-
-The order is not canceled in any row.
-
-**Steps:**
-
-1. Resolve the order status for the row's facts.
-2. Read the badge.
-
-**Expected Results:**
-
-* Step 2: the badge reads Refunded, never Shipped or Completed.
-
-<!-- trace:case id=g10.commerce-order-status.TC-yg8 rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC4-1: Held or scheduled order reads Processing, refunded or not
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-01
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Payment | Fulfilment | Badge |
-| --- | --- | --- |
-| `paid` | `on_hold` | Processing |
-| `partially_refunded` | `on_hold` | Processing |
-| `refunded` | `on_hold` | Processing |
-| `paid` | `scheduled` | Processing |
-| `partially_refunded` | `scheduled` | Processing |
-| `refunded` | `scheduled` | Processing |
-
-The order is not canceled in any row.
-
-**Steps:**
-
-1. Resolve the order status for the row's facts.
-2. Read the badge.
-
-**Expected Results:**
-
-* Step 2: the badge reads Processing, never Refunded.
-
 <!-- trace:case id=g10.commerce-order-status.TC-9iw rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
 ### grade10-site-commerce-order-status-US1-TC5-1: Till sale reads through the same rules as a web order
 
@@ -196,7 +68,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-order-status-US-01
@@ -239,7 +110,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-order-status-US-01
@@ -270,94 +140,6 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads the row's Badge, not a pickup badge.
 * Step 4: the badge reads the row's Badge, not a pickup badge.
 
-<!-- trace:case id=g10.commerce-order-status.TC-os8 rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC7-1: Letter case of a fact does not change the badge
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-01
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Payment | Fulfilment | Badge |
-| --- | --- | --- |
-| `PAID` | `FULFILLED` | Completed |
-| `paid` | `fulfilled` | Completed |
-| `Paid` | `Fulfilled` | Completed |
-| `PARTIALLY_REFUNDED` | `FULFILLED` | Refunded |
-| `partially_refunded` | `fulfilled` | Refunded |
-| `PAID` | `ON_HOLD` | Processing |
-| `VOIDED` | `UNFULFILLED` | Canceled |
-
-The order is not canceled in any row.
-
-**Steps:**
-
-1. Resolve the order status for the row's facts.
-2. Read the badge.
-
-**Expected Results:**
-
-* Step 2: the badge reads the row's Badge.
-
-<!-- trace:case id=g10.commerce-order-status.TC-40a rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC8-1: Completed is withheld until every item is fulfilled and paid in full
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-01
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Payment | Fulfilment | Badge |
-| --- | --- | --- |
-| `pending` | `fulfilled` | Shipped |
-| `authorized` | `fulfilled` | Shipped |
-| `partially_paid` | `fulfilled` | Shipped |
-| `paid` | `partially_fulfilled` | Shipped |
-| `paid` | `unfulfilled` | Processing |
-
-The order is not canceled in any row.
-
-**Steps:**
-
-1. Resolve the order status for the row's facts.
-2. Read the badge.
-
-**Expected Results:**
-
-* Step 2: the badge reads the row's Badge, not Completed.
-
 <!-- trace:case id=g10.commerce-order-status.TC-ydn rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
 ### grade10-site-commerce-order-status-US1-TC9-1: Carrier-reported delivery neither gives nor withholds Completed
 
@@ -371,7 +153,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-order-status-US-01
@@ -403,100 +184,6 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads the row's Badge, not the carrier's status.
 * Step 4: the badge reads the row's Badge.
 
-<!-- trace:case id=g10.commerce-order-status.TC-ly4 rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC10-1: Return state never moves the badge
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-01
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Payment | Fulfilment | Return state | Badge |
-| --- | --- | --- | --- |
-| `paid` | `fulfilled` | `RETURNED` | Completed |
-| `paid` | `fulfilled` | `RETURN_REQUESTED` | Completed |
-| `paid` | `partially_fulfilled` | `RETURNED` | Shipped |
-| `partially_refunded` | `fulfilled` | `RETURNED` | Refunded |
-
-The order is not canceled in any row.
-
-**Steps:**
-
-1. Resolve the order status for the row's facts with its return state.
-2. Read the badge.
-3. Resolve the order status for the same facts with no return state.
-4. Read the badge.
-
-**Expected Results:**
-
-* Step 2: the badge reads the row's Badge.
-* Step 4: the badge reads the same as step 2.
-
-<!-- trace:case id=g10.commerce-order-status.TC-lkv rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC11-1: Missing or unknown fact reads as that fact's default
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-01
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Fact | Value given | Other facts |
-| --- | --- | --- |
-| Payment | absent | `fulfilled`, not canceled |
-| Payment | `<a value outside the payment vocabulary>` | `fulfilled`, not canceled |
-| Payment | `<a value outside the payment vocabulary>` | `unfulfilled`, not canceled |
-| Fulfilment | absent | `paid`, not canceled |
-| Fulfilment | `<a value outside the fulfilment vocabulary>` | `paid`, not canceled |
-| Canceled | absent | `paid`, `unfulfilled` |
-| Every fact | absent | none |
-
-**Steps:**
-
-1. Resolve the order status for the row's facts.
-2. Read the badge.
-3. Read the note.
-4. Resolve the order status with the row's fact set to its default and the other facts unchanged.
-5. Read the badge.
-6. Read the note.
-
-**Expected Results:**
-
-* Step 2: the badge is one of Processing, Shipped, Completed, Canceled or Refunded, never blank.
-* Step 2: the badge reads the same as step 5.
-* Step 3: the note reads the same as step 6, or neither step shows one.
-
 <!-- trace:case id=g10.commerce-order-status.TC-fde rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
 ### grade10-site-commerce-order-status-US1-TC12-1: A just-placed web order reads Processing on both pages
 
@@ -508,7 +195,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-order-status-US-01
@@ -532,52 +218,6 @@ Runs once per row of **Test data**.
 * Step 4: Order Details opens for `<order_10>`.
 * Step 5: the badge reads Processing.
 
-<!-- trace:case id=g10.commerce-order-status.TC-csn rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC13-1: Archiving an order in Shopify never changes its badge
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-01
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Payment | Fulfilment | Badge |
-| --- | --- | --- |
-| `paid` | `fulfilled` | Completed |
-| `partially_paid` | `fulfilled` | Shipped |
-| `paid` | `partially_fulfilled` | Shipped |
-| `paid` | `unfulfilled` | Processing |
-| `partially_refunded` | `fulfilled` | Refunded |
-
-The order is not canceled in any row.
-
-**Steps:**
-
-1. Resolve the order status for the row's facts, the order not archived in Shopify.
-2. Read the badge.
-3. Resolve the order status for the same facts, the order archived in Shopify.
-4. Read the badge.
-
-**Expected Results:**
-
-* Step 2: the badge reads the row's Badge.
-* Step 4: the badge reads the same as step 2.
-
 ---
 
 ## grade10-site-commerce-order-status-US2: Collector understands a refund or a hold
@@ -587,149 +227,6 @@ The order is not canceled in any row.
 order as still being prepared,
 **so that** I can tell a refund from a shipment, and a held order from a
 finished one, without contacting support.
-
-<!-- trace:case id=g10.commerce-order-status.TC-8hx rev=1 covers=g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
-### grade10-site-commerce-order-status-US2-TC1-1: A confirmed combination names its one note
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Secondary note
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Canceled | Payment | Fulfilment | Return state | Badge | Note |
-| --- | --- | --- | --- | --- | --- |
-| No | `voided` | `unfulfilled` | absent | Canceled | `payment-voided` |
-| Yes | `paid` | `unfulfilled` | absent | Canceled | `awaiting-refund` |
-| Yes | `partially_paid` | `unfulfilled` | absent | Canceled | `awaiting-refund` |
-| Yes | `refunded` | `partially_fulfilled` | absent | Canceled | `canceled-some-items-shipped` |
-| No | `partially_refunded` | `fulfilled` | `RETURNED` | Refunded | `items-returned-partial-refund` |
-| No | `refunded` | `fulfilled` | `RETURNED` | Refunded | `items-returned` |
-| No | `partially_refunded` | `fulfilled` | absent | Refunded | `partial-refund-shipped` |
-| No | `partially_refunded` | `partially_fulfilled` | absent | Refunded | `partial-refund-partly-shipped` |
-| No | `partially_refunded` | `unfulfilled` | absent | Refunded | `partial-refund-unshipped` |
-| No | `refunded` | `fulfilled` | `RETURN_REQUESTED` | Refunded | `refunded-all-items-shipped` |
-| No | `refunded` | `fulfilled` | `IN_PROGRESS` | Refunded | `refunded-all-items-shipped` |
-| No | `refunded` | `fulfilled` | `returned` | Refunded | `items-returned` |
-| No | `paid` | `partially_fulfilled` | absent | Shipped | `some-items-shipped` |
-| No | `partially_refunded` | `on_hold` | absent | Processing | `on-hold-partial-refund` |
-| No | `paid` | `on_hold` | absent | Processing | `on-hold` |
-| No | `refunded` | `on_hold` | absent | Processing | `on-hold` |
-| No | `paid` | `scheduled` | absent | Processing | `scheduled` |
-| No | `partially_refunded` | `scheduled` | absent | Processing | `scheduled` |
-| No | `refunded` | `scheduled` | absent | Processing | `scheduled` |
-| No | `expired` | `unfulfilled` | absent | Processing | `payment-expired` |
-| No | absent | absent | absent | Processing | `status-indeterminate` |
-| No | `partially_paid` | `unfulfilled` | absent | Processing | `partial-payment-received` |
-| No | `authorized` | `unfulfilled` | absent | Processing | `payment-authorized` |
-| No | `pending` | `unfulfilled` | absent | Processing | `awaiting-payment` |
-
-**Steps:**
-
-1. Resolve the order status for the row's facts.
-2. Read the badge.
-3. Read the note.
-
-**Expected Results:**
-
-* Step 2: the badge reads the row's Badge.
-* Step 3: exactly one note identifier, the row's Note.
-* Step 3: the note is an identifier, carrying no display words.
-
-<!-- trace:case id=g10.commerce-order-status.TC-fur rev=1 covers=none -->
-### grade10-site-commerce-order-status-US2-TC2-1: Every note has words in each catalog language
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-order-status-US-02
-
-**Pre-conditions:**
-
-* None.
-
-**Steps:**
-
-1. List every note identifier the order status rule can name.
-2. Read each identifier from the Grade10 message catalogs in every language Grade10 speaks.
-
-**Expected Results:**
-
-* Step 2: every identifier resolves to words in every language.
-* Step 2: no identifier resolves to its own key.
-
-<!-- trace:case id=g10.commerce-order-status.TC-dxg rev=1 covers=g10.commerce-order-status.SC-t5o,g10.commerce-order-status.SC-x4g,g10.commerce-order-status.SC-34p,g10.commerce-order-status.SC-zkk,g10.commerce-order-status.SC-7ce,g10.commerce-order-status.SC-cvt,g10.commerce-order-status.SC-zdo,g10.commerce-order-status.SC-er5 -->
-### grade10-site-commerce-order-status-US2-TC3-1: Combination no confirmed note fits carries its badge alone
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Secondary note
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| Canceled | Payment | Fulfilment | Return state | Badge |
-| --- | --- | --- | --- | --- |
-| No | `paid` | `unfulfilled` | absent | Processing |
-| No | `paid` | `in_progress` | absent | Processing |
-| No | `paid` | `fulfilled` | absent | Completed |
-| No | `paid` | `fulfilled` | `RETURNED` | Completed |
-| No | `partially_paid` | `fulfilled` | absent | Shipped |
-| No | `pending` | `fulfilled` | absent | Shipped |
-| No | `authorized` | `fulfilled` | absent | Shipped |
-| Yes | `refunded` | `unfulfilled` | absent | Canceled |
-| Yes | `pending` | `unfulfilled` | absent | Canceled |
-| Yes | `authorized` | `unfulfilled` | absent | Canceled |
-| Yes | `partially_refunded` | `unfulfilled` | absent | Canceled |
-| Yes | `voided` | `unfulfilled` | absent | Canceled |
-
-**Steps:**
-
-1. Resolve the order status for the row's facts.
-2. Read the badge.
-3. Read the note.
-
-**Expected Results:**
-
-* Step 2: the badge reads the row's Badge.
-* Step 3: no note.
 
 <!-- trace:case id=g10.commerce-order-status.TC-z0s rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0 -->
 ### grade10-site-commerce-order-status-US2-TC4-1: A refunded or held order reads its badge on both pages, with no note
@@ -744,7 +241,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-order-status-US-02
@@ -799,7 +295,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-order-status-US-03
@@ -845,7 +340,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-order-status-US-03
@@ -893,7 +387,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-commerce-order-status-US-03
@@ -936,7 +429,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-order-status-US-03

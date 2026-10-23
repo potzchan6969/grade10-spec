@@ -22,7 +22,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-10
@@ -59,7 +58,6 @@ admin(tech PIC) has <change A> open at <manual change page url> on the hosted ma
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-10
@@ -89,7 +87,6 @@ admin(tech PIC) has <change A> open at <manual change page url>, the banner is u
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-10
@@ -120,7 +117,6 @@ admin(product manager) has the banner up at <manual change page url> and is typi
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-10
@@ -151,7 +147,6 @@ admin(engineer) has <manual board url> open on the hosted manual, built from the
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-10
@@ -181,7 +176,6 @@ The hosted manual is built with no relay origin set, and admin(engineer) has <ma
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-10
@@ -211,7 +205,6 @@ admin(tech PIC) has <change A> open at <manual change page url>, the banner is u
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-10
@@ -247,7 +240,6 @@ admin(tech PIC) has <change A> open at <manual change page url>, the banner is u
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-11
@@ -281,7 +273,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-11
@@ -320,7 +311,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-11
@@ -356,7 +346,6 @@ admin(designer) is on <locally run manual url>, run from <the checkout>.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-11

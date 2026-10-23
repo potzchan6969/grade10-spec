@@ -24,7 +24,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** g10.store-shelf-scanning.US1, g10.store-shelf-scanning.US2, g10.store-shelf-scanning.US3, g10.store-shelf-scanning.US4, grade10-site-store-product-page-US-01, grade10-site-store-product-page-US-04

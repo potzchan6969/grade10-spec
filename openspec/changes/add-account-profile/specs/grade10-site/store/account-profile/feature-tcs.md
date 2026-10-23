@@ -1,6 +1,6 @@
 # grade10-site/store/account-profile Test Cases
 
-**Status:** pending-review · 0/38
+**Status:** pending-review · 0/27
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## Background
@@ -27,7 +27,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-01
@@ -74,7 +73,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-01
@@ -110,7 +108,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-01
@@ -153,7 +150,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-account-profile-US-01
@@ -173,92 +169,6 @@ Runs once per row of **Test data**.
 * Step 1 shows no profile field.
 * After step 2, the page shows customer's own profile.
 
-<!-- trace:case id=g10.store-account-profile.TC-3qj rev=1 covers=g10.store-account-profile.SC-02h -->
-### grade10-site-store-account-profile-US1-TC5-1: Signed-out profile requests are refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-01
-
-**Pre-conditions:**
-
-* No session is sent with the request.
-
-**Test data:**
-
-| <request> |
-| --- |
-| Read the profile |
-| Save a display name |
-| Upload an avatar |
-
-**Steps:**
-
-1. Send <request> to the store.
-2. Read the API response.
-
-**Expected Results:**
-
-* The request is refused as signed out.
-* No profile is returned or written.
-
-<!-- trace:case id=g10.store-account-profile.TC-hxg rev=1 covers=g10.store-account-profile.SC-1s9 -->
-### grade10-site-store-account-profile-US1-TC6-1: Naming another collector reaches only the caller's own profile
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-01
-
-**Pre-conditions:**
-
-* customer A is signed in; customer B has saved a profile holding <B's name>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <B's id> | customer B's account id |
-| <B's name> | `Collector B` |
-| <new name> | `Changed By A` |
-
-| <request> |
-| --- |
-| Read the profile, with <B's id> added to the request |
-| Save <new name>, with <B's id> added to the request |
-
-**Steps:**
-
-1. Send <request> in customer A's session.
-2. Read the API response.
-3. Read customer B's profile in customer B's session.
-
-**Expected Results:**
-
-* Step 2 answers with customer A's profile, or refuses; never customer B's.
-* Step 3 still reads <B's name>.
-
 <!-- trace:case id=g10.store-account-profile.TC-akz rev=1 covers=g10.store-account-profile.SC-rz7,g10.store-account-profile.SC-9g2 -->
 ### grade10-site-store-account-profile-US1-TC7-1: A record the store wrote gives no name and no member-since
 
@@ -272,7 +182,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-01
@@ -314,7 +223,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-01
@@ -363,7 +271,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-02
@@ -415,7 +322,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-account-profile-US-02
@@ -459,7 +365,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-02
@@ -508,7 +413,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-account-profile-US-02
@@ -552,7 +456,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-account-profile-US-02
@@ -582,54 +485,6 @@ Runs once per row of **Test data**.
 * Step 3 leaves <field> holding <limit>, never more.
 * After step 5, <field> reads no more than <limit>.
 
-<!-- trace:case id=g10.store-account-profile.TC-p9l rev=1 covers=g10.store-account-profile.SC-3hb,g10.store-account-profile.SC-pve,g10.store-account-profile.SC-d7k,g10.store-account-profile.SC-cll -->
-### grade10-site-store-account-profile-US2-TC6-1: Store refuses an over-limit, empty or fieldless save
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-02
-
-**Pre-conditions:**
-
-* customer is signed in and has saved a profile holding <stored name> and <stored bio>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <stored name> | `Kit Collector` |
-| <stored bio> | `Pokémon since Base Set.` |
-
-| <save> | Refused for |
-| --- | --- |
-| A display name of 81 Latin characters | the 80-character limit |
-| A display name of 41 emoji, 82 code units | the 80-character limit |
-| A display name of three spaces | a display name is required |
-| A bio of 501 characters | the 500-character limit |
-| No field at all | nothing to save |
-
-**Steps:**
-
-1. Send a profile save carrying <save> in the collector's session.
-2. Read the API response.
-3. Read the profile.
-
-**Expected Results:**
-
-* Step 2 refuses the save, naming the row's reason.
-* Step 3 still reads <stored name> and <stored bio>.
-
 <!-- trace:case id=g10.store-account-profile.TC-5ip rev=1 covers=g10.store-account-profile.SC-akq -->
 ### grade10-site-store-account-profile-US2-TC7-1: Cancel discards the draft
 
@@ -641,7 +496,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-02
@@ -686,7 +540,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-account-profile-US-02
@@ -717,85 +570,6 @@ Runs once per row of **Test data**.
 * After step 5, customer B's display name reads <shared name>.
 * Step 6 still reads <shared name>.
 
-<!-- trace:case id=g10.store-account-profile.TC-ouz rev=1 covers=g10.store-account-profile.SC-1ku,g10.store-account-profile.SC-pve,g10.store-account-profile.SC-6r5 -->
-### grade10-site-store-account-profile-US2-TC9-1: Store trims a value before it measures the limit
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-02
-
-**Pre-conditions:**
-
-* customer is signed in and has saved a profile.
-
-**Test data:**
-
-| <save> | Saved as |
-| --- | --- |
-| A display name of 80 Latin characters, a space either side | the 80 characters, no spaces |
-| A bio of 500 Latin characters, a space either side | the 500 characters, no spaces |
-
-**Steps:**
-
-1. Send a profile save carrying <save> in the collector's session.
-2. Read the API response.
-3. Read the profile.
-
-**Expected Results:**
-
-* Step 2 accepts the save.
-* Step 3 reads the row's saved value.
-
-<!-- trace:case id=g10.store-account-profile.TC-n7t rev=1 covers=g10.store-account-profile.SC-oj6 -->
-### grade10-site-store-account-profile-US2-TC10-1: A first save that changes no field starts member-since
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-02
-
-**Pre-conditions:**
-
-* customer(has never saved a profile, holds no bio) is signed in, on an account named <account name>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <account name> | `Kit Lam` |
-| <run date> | The date of the run |
-
-**Steps:**
-
-1. Send a profile save carrying only an empty bio in the collector's session.
-2. Read the API response.
-3. Read the profile.
-
-**Expected Results:**
-
-* Step 2 accepts the save.
-* Step 3 reads <account name> as the display name and no bio.
-* Step 3 reads <run date> as member-since.
-
 <!-- trace:case id=g10.store-account-profile.TC-48c rev=1 covers=g10.store-account-profile.SC-w9n -->
 ### grade10-site-store-account-profile-US2-TC11-1: Saving a bio beside the default name keeps the name following the account
 
@@ -807,7 +581,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-02
@@ -858,7 +631,6 @@ Runs once for each <image> row on each <profile url>.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-03
@@ -907,7 +679,6 @@ Runs once for each <image> row on each <profile url>.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-03
@@ -949,7 +720,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-03
@@ -995,7 +765,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-03
@@ -1023,46 +792,6 @@ Runs once per row of **Test data**.
 * By step 4, <not an image> is refused as an unsupported type, and no upload is sent.
 * After step 5, the stored avatar still shows.
 
-<!-- trace:case id=g10.store-account-profile.TC-b0n rev=1 covers=g10.store-account-profile.SC-5wx,g10.store-account-profile.SC-31a -->
-### grade10-site-store-account-profile-US3-TC5-1: Store refuses an avatar upload outside its type and size
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-03
-
-**Pre-conditions:**
-
-* customer is signed in with an avatar of their own.
-
-**Test data:**
-
-| <upload> | Refused for |
-| --- | --- |
-| A GIF of about 100 KB | the accepted types: JPEG, PNG and WebP |
-| A JPEG of 5242881 bytes (5 MiB + 1 byte) | the 5 MB limit |
-
-**Steps:**
-
-1. Send an avatar upload of <upload> in the collector's session.
-2. Read the API response.
-3. Read the profile.
-
-**Expected Results:**
-
-* Step 2 refuses the upload, naming the row's reason.
-* Step 3 still carries the stored avatar.
-
 <!-- trace:case id=g10.store-account-profile.TC-l56 rev=1 covers=g10.store-account-profile.SC-q8y -->
 ### grade10-site-store-account-profile-US3-TC6-1: A refused name keeps the newly accepted avatar
 
@@ -1074,7 +803,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-03
@@ -1116,7 +844,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-account-profile-US-03
@@ -1142,86 +869,6 @@ Runs once per row of **Test data**.
 * Step 1 shows `K`, the first letter of <stored name>, in the avatar's place, no broken image.
 * Step 2 shows the same `K` in the form's avatar.
 
-<!-- trace:case id=g10.store-account-profile.TC-n6h rev=1 covers=g10.store-account-profile.SC-xy9,g10.store-account-profile.SC-f4k -->
-### grade10-site-store-account-profile-US3-TC8-1: An avatar's old address stops answering once it is replaced or removed
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-03
-
-**Pre-conditions:**
-
-* customer is signed in with an avatar of their own, its image address recorded as <old address>.
-
-**Test data:**
-
-| <change> |
-| --- |
-| Click the remove control on the avatar |
-| Choose a JPEG of about 1 MB with the avatar control |
-
-**Steps:**
-
-1. Navigate to <grade10 profile url>.
-2. Click the edit control.
-3. <change>.
-4. Click the save button.
-5. Request <old address> from a browser with no cached copy, once in the collector's session and once with no session.
-
-**Expected Results:**
-
-* Step 4 returns to the read view without the old image.
-* For the chosen-image row, the new avatar's address differs from <old address>.
-* Step 5 returns no image, in either request.
-
-<!-- trace:case id=g10.store-account-profile.TC-ln4 rev=1 covers=g10.store-account-profile.SC-31a -->
-### grade10-site-store-account-profile-US3-TC9-1: Store accepts an avatar upload at the 5 MB limit
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-03
-
-**Pre-conditions:**
-
-* customer is signed in and has no avatar.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <upload> | A JPEG of 5242880 bytes (5 MiB), at the limit |
-
-**Steps:**
-
-1. Send an avatar upload of <upload> in the collector's session.
-2. Read the API response.
-3. Read the profile.
-
-**Expected Results:**
-
-* Step 2 accepts the upload.
-* Step 3 carries an avatar.
-
 <!-- trace:case id=g10.store-account-profile.TC-ld5 rev=1 covers=g10.store-account-profile.SC-tb6 -->
 ### grade10-site-store-account-profile-US3-TC10-1: An avatar saved on its own starts member-since
 
@@ -1235,7 +882,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-03
@@ -1270,45 +916,6 @@ Runs once per row of **Test data**.
 * Step 4 returns to the read view showing the edit.
 * After step 5, member-since reads the row's date.
 
-<!-- trace:case id=g10.store-account-profile.TC-7o9 rev=1 covers=g10.store-account-profile.SC-hjj -->
-### grade10-site-store-account-profile-US3-TC11-1: Two collectors with the same image each hold their own address
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-03
-
-**Pre-conditions:**
-
-* customer A and customer B are each signed in on their own browser, with no avatar.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <same image> | One JPEG file of about 1 MB, used by both |
-
-**Steps:**
-
-1. As customer A, choose <same image> with the avatar control and save.
-2. As customer B, choose <same image> with the avatar control and save.
-3. Record each avatar's image address.
-4. As customer A, remove the avatar and save.
-5. Request customer B's image address in customer B's session, from a browser with no cached copy.
-
-**Expected Results:**
-
-* Step 3 records two different addresses.
-* Step 5 returns customer B's image.
-
 <!-- trace:case id=g10.store-account-profile.TC-a8t rev=1 covers=g10.store-account-profile.SC-8r3 -->
 ### grade10-site-store-account-profile-US3-TC12-1: A large photo or another image type becomes the avatar, square
 
@@ -1322,7 +929,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-03
@@ -1362,7 +968,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-03
@@ -1387,36 +992,6 @@ Runs once per row of **Test data**.
 * The avatar shows `K`, the first letter of <account name>.
 * The account's own picture shows nowhere on the page.
 
-<!-- trace:case id=g10.store-account-profile.TC-q2w rev=1 covers=g10.store-account-profile.SC-b6e -->
-### grade10-site-store-account-profile-US3-TC14-1: Anyone holding an avatar's address opens the image with no sign-in
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-03
-
-**Pre-conditions:**
-
-* customer is signed in with an avatar of their own, and a second browser holds no session.
-
-**Steps:**
-
-1. Navigate to <grade10 profile url>.
-2. Record the avatar's image address.
-3. In the second browser, request that address with no session.
-
-**Expected Results:**
-
-* Step 3 returns the customer's image.
-
 ---
 
 ## grade10-site-store-account-profile-US4: Collector's email stays the signed-in address
@@ -1438,7 +1013,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-account-profile-US-04
@@ -1471,52 +1045,6 @@ Runs once per row of **Test data**.
 * Step 3 shows <signed-in address> in the form.
 * Step 4 changes nothing: the email still reads <signed-in address>.
 
-<!-- trace:case id=g10.store-account-profile.TC-ta1 rev=1 covers=g10.store-account-profile.SC-mtr -->
-### grade10-site-store-account-profile-US4-TC2-1: A save carrying an email is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-account-profile-US-04
-
-**Pre-conditions:**
-
-* customer is signed in as <signed-in address> and has saved a profile holding <stored name>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <signed-in address> | `kit.lam@example.com` |
-| <stored name> | `Kit Collector` |
-| <other address> | `someone.else@example.com` |
-
-| <save> |
-| --- |
-| An email of <other address> alone |
-| An email of <other address> with a display name of `New Name` |
-
-**Steps:**
-
-1. Send a profile save carrying <save> in the collector's session.
-2. Read the API response.
-3. Read the profile.
-
-**Expected Results:**
-
-* Step 2 refuses the save.
-* Step 3 reads <signed-in address> as the email and <stored name> as the display name.
-
 ---
 
 ## grade10-site-store-account-profile-US5: Collector is told when a read or save fails
@@ -1536,7 +1064,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-account-profile-US-05
@@ -1575,7 +1102,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-account-profile-US-05
@@ -1622,7 +1148,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-store-account-profile-US-05

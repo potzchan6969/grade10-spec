@@ -1,6 +1,6 @@
 # shared/planning/change-stages Test Cases
 
-**Status:** pending-review · 0/64
+**Status:** pending-review · 0/62
 **Drafts styled:** 2026-09-25, tcs-rules r3.0
 
 **Out of suite:**
@@ -30,7 +30,6 @@
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -61,7 +60,6 @@ admin(engineer) is named as the `dev` hand on <change A>, which sits at Specifie
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -95,7 +93,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -133,7 +130,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -163,7 +159,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -193,7 +188,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -222,7 +216,6 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -252,7 +245,6 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -282,7 +274,6 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -312,7 +303,6 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -343,7 +333,6 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -377,7 +366,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -404,38 +392,6 @@ Runs once per row of **Test data**.
 * The thread holds what the row names.
 * A reply that went out is keyed, so a re-run of the same push posts nothing twice.
 
-<!-- trace:case id=g10.shared-change-stages.TC-5dp rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
-### shared-planning-change-stages-US1-TC13-1: A sent-keys file that cannot be read sends nothing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-planning-change-stages-US-01
-
-**Decided by:** `scripts/openspec/notify.test.mjs`
-
-**Pre-conditions:**
-
-* <change A> sits at Specified with <dev handle> as its `dev` hand, and one Your turn message is due for the push.
-* The path the sender reads its sent keys from is there and cannot be opened.
-
-**Steps:**
-
-1. Read the sent keys from that path, as the sender does before it sends.
-
-**Expected Results:**
-
-* The read stops with a refusal naming the path it could not open.
-* No message goes out for that push.
-
 <!-- trace:case id=g10.shared-change-stages.TC-4v6 rev=1 covers=g10.shared-change-stages.SC-zq2,g10.shared-change-stages.SC-v16,g10.shared-change-stages.SC-j3j,g10.shared-change-stages.SC-qit,g10.shared-change-stages.SC-kh9,g10.shared-change-stages.SC-2tz,g10.shared-change-stages.SC-yj5,g10.shared-change-stages.SC-x0i,g10.shared-change-stages.SC-h0f,g10.shared-change-stages.SC-hvz,g10.shared-change-stages.SC-o0l -->
 ### shared-planning-change-stages-US1-TC14-1: An open Raised row reaches Specified, tells the product manager and holds acceptance
 
@@ -447,7 +403,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
@@ -493,7 +448,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -524,7 +478,6 @@ admin(product manager) has one change in each of the eight stages, each with its
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -558,7 +511,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -597,7 +549,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -633,7 +584,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -673,7 +623,6 @@ The board holds a change whose current stage names <pm handle>, one with a wait,
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -703,7 +652,6 @@ No change is in flight and the archive holds none the board reads.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -734,7 +682,6 @@ No change is in flight and the archive holds none the board reads.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -765,7 +712,6 @@ No change is in flight and the archive holds none the board reads.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -796,7 +742,6 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-change-stages-US-02
@@ -829,7 +774,6 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -861,7 +805,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -899,7 +842,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
@@ -938,7 +880,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-03
@@ -971,7 +912,6 @@ admin(designer) <design handle> is addressed by two `❓` rows, is the hand of <
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-03
@@ -1002,7 +942,6 @@ No handle has been chosen in this browser.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-03
@@ -1033,7 +972,6 @@ No handle has been chosen in this browser.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-03
@@ -1070,7 +1008,6 @@ No handle has been chosen in this browser.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-04
@@ -1102,7 +1039,6 @@ admin(product manager) holds <change J> at Proposed with no `hands:`. The team m
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-04
@@ -1133,7 +1069,6 @@ The manual runs locally at <local manual url> and hosted at <hosted manual url>.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-04
@@ -1167,7 +1102,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-04
@@ -1205,7 +1139,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-04
@@ -1242,7 +1175,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-04
@@ -1274,7 +1206,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-04
@@ -1298,40 +1229,6 @@ The manual runs locally at <local manual url>. <change J> names no `dev` hand. T
 
 ---
 
-<!-- trace:case id=g10.shared-change-stages.TC-q8l rev=1 covers=g10.shared-change-stages.SC-20s,g10.shared-change-stages.SC-6qg,g10.shared-change-stages.SC-ff7,g10.shared-change-stages.SC-n1z,g10.shared-change-stages.SC-2zk,g10.shared-change-stages.SC-bfd,g10.shared-change-stages.SC-lql,g10.shared-change-stages.SC-zu5,g10.shared-change-stages.SC-c9w -->
-### shared-planning-change-stages-US4-TC8-1: A team map that cannot be read messages nobody
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-planning-change-stages-US-04
-
-**Decided by:** `scripts/openspec/team.test.mjs`
-
-**Pre-conditions:**
-
-* <change A> names <dev handle> as its `dev` hand, and one Your turn message is due for the push.
-* The team map is there and cannot be opened.
-
-**Steps:**
-
-1. Read the team map, as the sender does to address the message.
-
-**Expected Results:**
-
-* The read stops with a refusal naming the map.
-* No message goes out for that push.
-
----
-
 ## shared-planning-change-stages-US5: Designer says a change has no surface
 
 **As a** designer,
@@ -1351,7 +1248,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-05
@@ -1391,7 +1287,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-05
@@ -1430,7 +1325,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-05
@@ -1470,7 +1364,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-06
@@ -1503,7 +1396,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-06
@@ -1533,7 +1425,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-06
@@ -1565,7 +1456,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-06
@@ -1604,7 +1494,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-07
@@ -1637,7 +1526,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-07
@@ -1666,7 +1554,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-07
@@ -1697,7 +1584,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-change-stages-US-07
@@ -1735,7 +1621,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-08
@@ -1766,7 +1651,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-08
@@ -1796,7 +1680,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-08
@@ -1825,7 +1708,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-08
@@ -1854,7 +1736,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-08
@@ -1885,7 +1766,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-08
@@ -1922,7 +1802,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-09
@@ -1956,7 +1835,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-09
@@ -1986,7 +1864,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-09
@@ -2016,7 +1893,6 @@ admin(product manager) holds <change M> at Proposed, with its decisions, journey
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-09
@@ -2047,7 +1923,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-09
@@ -2072,7 +1947,6 @@ Runs once per row of **Test data**.
 * The digest reads as the row states.
 * The behind chip on the card is unchanged either way.
 
-
 ## shared-planning-change-stages-US12: Product manager reads component availability
 
 **As a** product manager,
@@ -2090,7 +1964,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-12
@@ -2121,7 +1994,6 @@ A change has two application components with receipts in <environment>. The rece
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-12
@@ -2152,7 +2024,6 @@ A GitHub Deployment receipt changes one application's status in <environment>. T
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-12
@@ -2171,7 +2042,6 @@ A GitHub Deployment receipt changes one application's status in <environment>. T
 * Both surfaces show the archived change and its latest per-component status.
 * The receipt links to the actual deployed ref and environment.
 * The stage remains Archived.
-
 
 ## Settled
 

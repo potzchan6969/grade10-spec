@@ -1,6 +1,6 @@
 # g10.auction-dmn Test Cases
 
-**Status:** reopened · 2/28
+**Status:** pending-review · 2/27
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 **Drafts styled:** 2026-10-19, tcs-rules r5
 
@@ -151,10 +151,6 @@
 11. Inspect the head for its title, meta description and Open Graph tags.
 12. Check the response status.
 13. Navigate to `<grade10 sitemap url>`.
-   - The head names `<identity>`, and names no other auction surface in its place. `g10.auction-dmn.US2-TC3`
-   - The response status is `<status>`. `g10.auction-dmn.US2-TC3`
-   - Every listing the catalogue holds is listed as an absolute URL of the serving environment. `g10.auction-dmn.US2-TC3`
-   - No sitemap entry carries an unfilled parameter in place of a listing. `g10.auction-dmn.US2-TC3`
 14. Step through the gallery thumbnails and open one image at zoom size.
 15. Enter `<bid amount>` in the bid field and select **Place Bid**.
 16. Read Time left, Highest bid and Recent Bids.
@@ -855,7 +851,6 @@ catalogue and the listing page show,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01, grade10-site-auction-listing-media-US-04, grade10-site-auction-listing-media-US-05
@@ -914,7 +909,6 @@ I read.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-page-US-05, grade10-site-auction-listing-media-US-05
@@ -958,7 +952,6 @@ I read.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-01, grade10-site-auction-auction-US-01
@@ -989,65 +982,6 @@ I read.
 * `<listing_9>`'s name, description, sale and current standing are in the response HTML.
 * Money reads as minor units with its currency code, and no reserve or Buy Now price appears.
 
-<!-- trace:case id=g10.auction-dmn.TC-qvl rev=2 -->
-### g10.auction-dmn.US2-TC3: Each auction surface names itself and is discoverable
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-page-US-02, grade10-site-auction-listing-page-US-03, grade10-site-auction-listing-page-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_12>` is published and the catalogue lists it.
-* The catalogue publishes no listing under `<unavailable listing url>`.
-* The reader's browser runs no client-side scripts.
-
-**Test data:**
-
-| `<surface>` | `<identity>` | `<status>` |
-| --- | --- | --- |
-| The auction catalogue at `<grade10 auction url>` | the catalogue's own title and description | 200 |
-| `<listing_12>`'s own address | `<listing_12>`'s title, description and canonical address, in `og:title`, `og:description` and `og:url` | 200 |
-| `<unavailable listing url>` | the site's not-found surface | 404 |
-
-| Field | Value |
-| --- | --- |
-| listing_12 | A published listing returned by the catalogue; bind its identity only |
-| unavailable listing url | A catalogue listing address with no published listing; bind its URL only |
-| listing_12 | The listing described by the pre-conditions; bind its identity only |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction url | The grade10 auction url; bind its URL only |
-| grade10 sitemap url | The grade10 sitemap url; bind its URL only |
-
-**Steps:**
-
-1. Fetch `<surface>`.
-2. Inspect the head for its title, meta description and Open Graph tags.
-3. Check the response status.
-4. Navigate to `<grade10 sitemap url>`.
-
-**Expected Results:**
-
-* The head names `<identity>`, and names no other auction surface in its place.
-* The response status is `<status>`.
-* Every listing the catalogue holds is listed as an absolute URL of the serving environment.
-* No sitemap entry carries an unfilled parameter in place of a listing.
-
 ---
 
 ## g10.auction-dmn.US3: Collector links a card and places a first bid
@@ -1067,7 +1001,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05, grade10-site-auction-auction-US-02, grade10-site-auction-bid-payment-method-US-01
@@ -1112,7 +1045,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-14, grade10-site-auction-bidding-history-US-01, grade10-site-auction-account-record-US-02
@@ -1178,7 +1110,6 @@ from my card until I win.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01, grade10-site-auction-auto-bidding-US-03, grade10-site-auction-auction-US-02
@@ -1241,7 +1172,6 @@ from my card until I win.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-auto-bidding-US-02, grade10-site-auction-bidding-history-US-01
@@ -1292,7 +1222,6 @@ from my card until I win.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05, grade10-site-auction-bidding-history-US-03, grade10-site-auction-listing-page-US-05
@@ -1342,7 +1271,6 @@ from my card until I win.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-02, grade10-site-auction-listing-page-US-04, grade10-site-auction-auction-US-02
@@ -1393,7 +1321,6 @@ from my card until I win.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-bidding-history-US-03
@@ -1448,7 +1375,6 @@ from my card until I win.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auction-US-12, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-listing-page-US-12
@@ -1501,7 +1427,6 @@ from my card until I win.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-page-US-12, grade10-site-auction-listing-page-US-13
@@ -1569,7 +1494,6 @@ it.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02, grade10-site-auction-auction-US-02, grade10-site-auction-bidding-history-US-04
@@ -1611,7 +1535,6 @@ it.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05, grade10-site-auction-bidding-history-US-04
@@ -1654,7 +1577,6 @@ it.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-bid-panel-enrollment-US-02
@@ -1708,7 +1630,6 @@ it.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03, grade10-site-auction-auction-US-01
@@ -1744,7 +1665,6 @@ it.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-03, grade10-site-auction-bidding-history-US-02, grade10-site-auction-bidding-history-US-01
@@ -1774,45 +1694,6 @@ it.
 * No bid, hold or fixture-backed outcome is created and Highest bid stays `<current bid>`.
 * The attempt appears as a failed event with a safe payment reason, and `<listing_12>` carries failed-only standing.
 
-<!-- trace:case id=g10.auction-dmn.TC-qus rev=1 -->
-### g10.auction-dmn.US9-TC3: A repeated card authorization event changes the lot once
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-03, grade10-site-auction-bidding-history-US-03
-
-**Pre-conditions:**
-
-* `<listing_13>` is live and holds one accepted bid of 505000 minor units.
-* That bid has exactly one recorded card authorization event.
-
-**Test data:**
-
-| `<event copy>` | `<outcome>` |
-| --- | --- |
-| The same event with its original provider event id | the recorded outcome is returned without a second state transition |
-| The same event with a tampered body and its original signature | the event is rejected on signature |
-
-**Steps:**
-
-1. Deliver `<event copy>` to the auction.
-2. Read `<listing_13>` and expand it at `<grade10 bids url>`.
-
-**Expected Results:**
-
-* `<outcome>`.
-* One accepted bid, one hold, and one history entry stand for that bid.
-* No bid, hold, release, capture or order state is duplicated.
-
 ---
 
 ## g10.auction-dmn.US11: Collector follows an old link to a hidden listing
@@ -1832,7 +1713,6 @@ it.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-lot-status-US-02, grade10-site-auction-listing-page-US-03, grade10-site-auction-listing-page-US-01, grade10-site-auction-lot-status-US-03
@@ -1913,7 +1793,6 @@ it.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-11, grade10-site-auction-listing-page-US-14, grade10-site-auction-account-record-US-10, grade10-site-auction-account-record-US-04
@@ -1965,7 +1844,6 @@ it.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-auction-US-11, grade10-site-auction-listing-page-US-14
@@ -2012,7 +1890,6 @@ it.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02, winner-order-US-01, winner-order-US-24, winner-order-US-25, winner-order-US-26, winner-order-US-27
@@ -2089,7 +1966,6 @@ it.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-notifications-US-03, grade10-site-auction-auction-US-01, grade10-site-auction-auction-US-11, grade10-site-auction-notifications-US-06, grade10-site-auction-notifications-US-07
@@ -2148,7 +2024,6 @@ it.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-auction-US-12, grade10-site-auction-auction-US-11, grade10-site-auction-auction-US-01
@@ -2208,7 +2083,6 @@ it.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01, grade10-site-auction-listing-media-US-05
@@ -2260,7 +2134,6 @@ it.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auto-bidding-US-05, grade10-site-auction-bidding-history-US-02
@@ -2314,7 +2187,6 @@ it.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01, grade10-site-auction-auto-bidding-US-02, grade10-site-auction-auction-US-14, grade10-site-auction-bidding-history-US-02
@@ -2367,7 +2239,6 @@ it.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** exploratory
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-media-US-05, grade10-site-auction-listing-page-US-01
@@ -2414,7 +2285,6 @@ it.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** exploratory
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-auction-US-02, grade10-site-auction-bidding-history-US-03

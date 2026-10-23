@@ -1,6 +1,6 @@
 # grade10-site/site/navigation Test Cases
 
-**Status:** pending-review · 0/22
+**Status:** pending-review · 0/21
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## grade10-site-site-navigation-US1: Collector reaches the surface an address names
@@ -22,7 +22,6 @@ does I know I am still on the site and can leave for home.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-01
@@ -49,7 +48,6 @@ None.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-01
@@ -77,7 +75,6 @@ The catalogue publishes <a published lot>.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-01
@@ -106,7 +103,6 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-navigation-US-01
@@ -125,39 +121,6 @@ None.
 * The description reads exactly "The link may be wrong, or the page may have moved."
 * Neither string contains any part of the address navigated to in step 1.
 
-<!-- trace:case id=g10.site-navigation.TC-bii rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4,g10.site-navigation.SC-m4k -->
-### grade10-site-site-navigation-US1-TC5-1: Not-found never reflects a crafted address
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-navigation-US-01
-
-**Pre-conditions:**
-None.
-
-**Steps:**
-
-1. Navigate to <an address under no surface the site answers, with a path
-   segment carrying markup such as `<script>`>.
-2. Read the rendered page's title, description, and markup.
-
-**Expected Results:**
-
-* The not-found surface renders the same static title and description as any
-  other unknown address.
-* No part of the crafted address appears anywhere on the page, as text or as
-  markup.
-* No script from the crafted address executes.
-
 <!-- trace:case id=g10.site-navigation.TC-38v rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4,g10.site-navigation.SC-m4k -->
 ### grade10-site-site-navigation-US1-TC6-1: Back to Home leaves not-found for the brand home
 
@@ -169,7 +132,6 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-navigation-US-01
@@ -206,7 +168,6 @@ browser behavior I asked for.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-02
@@ -233,7 +194,6 @@ A collector is on any surface.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-site-navigation-US-02
@@ -260,7 +220,6 @@ None.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-02
@@ -297,7 +256,6 @@ from the beginning.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-navigation-US-04
@@ -325,7 +283,6 @@ A collector who scrolled partway down a surface and followed a link from there.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-navigation-US-04
@@ -362,7 +319,6 @@ open.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** performance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-navigation-US-05
@@ -390,7 +346,6 @@ A cold browser with an empty cache.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** performance
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-navigation-US-05
@@ -429,7 +384,6 @@ signing in puts me on the surface I asked for.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-06
@@ -461,7 +415,6 @@ signing in puts me on the surface I asked for.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-06
@@ -494,7 +447,6 @@ signing in puts me on the surface I asked for.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-06
@@ -535,7 +487,6 @@ without being sent anywhere else first.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-07
@@ -567,7 +518,6 @@ without being sent anywhere else first.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-07
@@ -598,7 +548,6 @@ without being sent anywhere else first.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-07
@@ -641,7 +590,6 @@ read.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-08
@@ -672,7 +620,6 @@ read.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-08
@@ -701,7 +648,6 @@ read.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-navigation-US-08

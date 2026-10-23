@@ -1,6 +1,6 @@
 # grade10-admin/grading/counter Test Cases
 
-**Status:** pending-review · 0/116
+**Status:** pending-review · 0/107
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**
@@ -38,7 +38,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-01
@@ -79,7 +78,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-01
@@ -110,7 +108,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-01
@@ -144,7 +141,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-01
@@ -179,7 +175,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-01
@@ -211,7 +206,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-01
@@ -240,37 +234,6 @@ Runs once per row of **Test data**.
 * Step 3, in row A, loads the 51st row without repeating any row already shown; in row B, no next page is offered.
 * Each page shows how many rows stand behind the cut and whether more remain.
 
-<!-- trace:case id=g10adm.grading-counter.TC-bnt rev=1 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
-### grade10-admin-grading-counter-US1-TC7-1: A read-grant holder sees no row action beyond Open
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-grading-counter-US-01
-
-**Pre-conditions:**
-
-* admin(holds `grading:read`, not `grading:operate` or `grading:approve`) is on <grade10 admin grading queue url>.
-* The operator's grants are mocked to `grading:read` alone, since no shipped role holds that grant alone.
-* A submission is seeded at `booked`, as *Seeding a submission* says.
-
-**Steps:**
-
-1. Navigate to <grade10 admin grading queue url>.
-2. Read the actions on the `booked` submission's row.
-
-**Expected Results:**
-
-* Open is the only action offered; no hand-in, hand-back or settings act shows on the row.
-
 <!-- trace:case id=g10adm.grading-counter.TC-2fg rev=2 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
 ### grade10-admin-grading-counter-US1-TC8-2: The Today cut is made on the shop's own day, not the server's
 
@@ -282,7 +245,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-01
@@ -316,7 +278,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-01
@@ -348,7 +309,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-01
@@ -389,7 +349,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -420,7 +379,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -464,7 +422,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -506,7 +463,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -547,7 +503,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -587,7 +542,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -618,7 +572,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -653,7 +606,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -699,7 +651,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -732,7 +683,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -774,7 +724,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -812,7 +761,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -833,36 +781,6 @@ Runs once per row of **Test data**.
 
 * The second submission runs its own hand-in runbook, its own level check and its own till line, without depending on the first submission's state.
 
-<!-- trace:case id=g10adm.grading-counter.TC-zqu rev=1 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
-### grade10-admin-grading-counter-US2-TC13-1: Check in is refused while the agreement is unsealed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-grading-counter-US-02
-
-**Pre-conditions:**
-
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, every card checked at the desk and the agreement not sealed.
-
-**Steps:**
-
-1. Send the check-in for the submission directly, outside the runbook, which offers no step before the one above it is done.
-2. Read the submission's status word.
-
-**Expected Results:**
-
-* The check-in is refused by name, naming the unsealed agreement.
-* The submission stays `booked` and the cards stay with the collector.
-
 <!-- trace:case id=g10adm.grading-counter.TC-7b0 rev=1 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
 ### grade10-admin-grading-counter-US2-TC14-1: An order recorded on another submission is refused, and a replay answers the first its own lines
 
@@ -874,7 +792,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -916,7 +833,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-02
@@ -970,7 +886,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-03
@@ -1017,7 +932,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-03
@@ -1057,7 +971,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-03
@@ -1091,7 +1004,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-03
@@ -1129,7 +1041,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-03
@@ -1169,7 +1080,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-03
@@ -1216,7 +1126,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1252,7 +1161,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1293,7 +1201,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1333,7 +1240,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1370,7 +1276,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1410,7 +1315,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1441,7 +1345,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1477,7 +1380,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1508,7 +1410,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1542,7 +1443,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1579,7 +1479,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1614,7 +1513,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-04
@@ -1664,7 +1562,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-05
@@ -1706,7 +1603,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-05
@@ -1740,7 +1636,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-05
@@ -1770,7 +1665,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-05
@@ -1809,7 +1703,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-05
@@ -1850,7 +1743,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-06
@@ -1882,7 +1774,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-06
@@ -1916,7 +1807,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-06
@@ -1951,7 +1841,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-06
@@ -1989,7 +1878,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-07
@@ -2034,7 +1922,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-07
@@ -2070,7 +1957,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-07
@@ -2100,7 +1986,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-07
@@ -2132,7 +2017,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-07
@@ -2171,7 +2055,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-08
@@ -2217,7 +2100,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-08
@@ -2246,72 +2128,6 @@ Runs once per row of **Test data**.
 
 * The act is absent; nothing offers to write off before the cards are back.
 
-<!-- trace:case id=g10adm.grading-counter.TC-2gc rev=1 covers=g10adm.grading-counter.SC-cae,g10adm.grading-counter.SC-nkf,g10adm.grading-counter.SC-2iq,g10adm.grading-counter.SC-1zq,g10adm.grading-counter.SC-wab -->
-### grade10-admin-grading-counter-US8-TC3-1: The recorder cannot approve their own waiver
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-grading-counter-US-08
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
-
-**Pre-conditions:**
-
-* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it is `ready` owing an upcharge of 60000 minor units (HKD 600.00).
-* admin A(holds `grading:approve`) has asked for the upcharge's waiver on its Money tab at <grade10 admin grading submission url>, with a reason, and nobody has approved it.
-
-**Steps:**
-
-1. As admin A, send the approval of admin A's own request directly, outside the console, which offers the recorder no Approve on their own request.
-2. As admin A, reload the Money tab.
-
-**Expected Results:**
-
-* The approval is refused by name: the recorder cannot approve their own request.
-* No waiver is written and the due is unchanged.
-
-<!-- trace:case id=g10adm.grading-counter.TC-lql rev=1 covers=g10adm.grading-counter.SC-cae,g10adm.grading-counter.SC-nkf,g10adm.grading-counter.SC-2iq,g10adm.grading-counter.SC-1zq,g10adm.grading-counter.SC-wab -->
-### grade10-admin-grading-counter-US8-TC4-1: A waiver refuses a second person who does not hold `grading:approve`
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-grading-counter-US-08
-
-**Pre-conditions:**
-
-* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it is `ready` owing an upcharge of 60000 minor units (HKD 600.00).
-* admin A(holds `grading:approve`) has asked for the upcharge's waiver on its Money tab at <grade10 admin grading submission url>, with a reason, and nobody has approved it.
-* admin C(holds `grading:operate`, not `grading:approve`) is signed in to their own console.
-* admin C's grants are mocked to `grading:read` and `grading:operate` without `grading:approve`, since no shipped role holds `grading:operate` without `grading:approve`.
-
-**Steps:**
-
-1. As admin C, on admin C's own console, send the approval of admin A's request.
-2. As admin A, reload the Money tab.
-
-**Expected Results:**
-
-* The approval is refused by name, naming `grading:approve`.
-* No waiver is written and the due is unchanged.
-
 <!-- trace:case id=g10adm.grading-counter.TC-qba rev=1 covers=g10adm.grading-counter.SC-cae,g10adm.grading-counter.SC-nkf,g10adm.grading-counter.SC-2iq,g10adm.grading-counter.SC-1zq,g10adm.grading-counter.SC-wab -->
 ### grade10-admin-grading-counter-US8-TC5-1: A waived upcharge is filed under the submission on the audit chain
 
@@ -2323,7 +2139,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-08
@@ -2354,7 +2169,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-08
@@ -2407,7 +2221,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2451,7 +2264,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2492,7 +2304,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2516,39 +2327,6 @@ Runs once per row of **Test data**.
 
 * Step 4 shows the reversal written on the same record, the payout itself left as it was, and the card back on the submission.
 
-<!-- trace:case id=g10adm.grading-counter.TC-i1z rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
-### grade10-admin-grading-counter-US9-TC4-1: The recorder cannot approve their own payout
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-grading-counter-US-09
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* A submission of one card is received with that card not returned, as *Receiving with an exception* says.
-* admin A(holds `grading:approve`) has asked for its payout on the Money tab of <grade10 admin grading submission url>, with a reason, and nobody has approved it.
-
-**Steps:**
-
-1. As admin A, send the approval of admin A's own request directly, outside the console, which offers the recorder no Approve on their own request.
-2. As admin A, reload the Money tab.
-
-**Expected Results:**
-
-* The approval is refused by name: the recorder cannot approve their own request.
-* No payout and no refund is written.
-
 <!-- trace:case id=g10adm.grading-counter.TC-rha rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC5-1: A payout is filed under the submission on the audit chain
 
@@ -2560,7 +2338,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2593,7 +2370,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2626,7 +2402,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2660,7 +2435,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2697,7 +2471,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2738,7 +2511,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2781,7 +2553,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2822,7 +2593,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-09
@@ -2869,7 +2639,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-10
@@ -2907,7 +2676,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-10
@@ -2947,7 +2715,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-10
@@ -2977,7 +2744,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-10
@@ -3008,7 +2774,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-10
@@ -3039,7 +2804,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-10
@@ -3083,7 +2847,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
@@ -3116,7 +2879,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
@@ -3145,7 +2907,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
@@ -3179,7 +2940,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
@@ -3210,7 +2970,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
@@ -3242,7 +3001,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
@@ -3275,7 +3033,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
@@ -3311,7 +3068,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
@@ -3345,7 +3101,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-11
@@ -3392,7 +3147,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
@@ -3435,7 +3189,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
@@ -3476,7 +3229,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
@@ -3509,7 +3261,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
@@ -3551,7 +3302,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
@@ -3583,7 +3333,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-12
@@ -3624,7 +3373,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-12
@@ -3664,7 +3412,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-13
@@ -3699,7 +3446,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-13
@@ -3737,7 +3483,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-13
@@ -3770,7 +3515,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-13
@@ -3800,37 +3544,6 @@ Runs once per row of **Test data**.
 **I want** each tab to offer exactly the acts my grant and the submission's status allow, cancel only on the collector's word and never once a card is checked or refused, refused independently when the submission has moved under me,
 **so that** I am never shown a button that will only be refused, and two of us at one counter cannot leave a submission where neither meant.
 
-<!-- trace:case id=g10adm.grading-counter.TC-jrv rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
-### grade10-admin-grading-counter-US14-TC1-1: An operate-grant holder sees only the acts that grant covers
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** smoke
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-grading-counter-US-14
-
-**Pre-conditions:**
-
-* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it owes an upcharge.
-* admin(holds `grading:operate`, not `grading:approve`) is on <grade10 admin grading submission url> for it.
-* The operator's grants are mocked to `grading:read` and `grading:operate` without `grading:approve`, since no shipped role holds `grading:operate` without `grading:approve`.
-
-**Steps:**
-
-1. Click the Money tab.
-2. Read its acts for Waive the upcharge and for recording a payout.
-
-**Expected Results:**
-
-* Waive the upcharge and Payout are absent; only the acts `grading:operate` covers are offered.
-
 <!-- trace:case id=g10adm.grading-counter.TC-qdy rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC2-1: Cancel is never offered once the cards have left
 
@@ -3842,7 +3555,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-14
@@ -3875,7 +3587,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-14
@@ -3897,40 +3608,6 @@ Runs once per row of **Test data**.
 
 * Admin B's act is refused by name, naming that the submission has moved; the panel re-reads the current state rather than overwriting it.
 
-<!-- trace:case id=g10adm.grading-counter.TC-syb rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
-### grade10-admin-grading-counter-US14-TC4-1: A read-grant holder is offered no act on any tab
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-grading-counter-US-14
-
-**Pre-conditions:**
-
-* A submission of one card is received with that card moved from Regular to Express, as *Receiving with an exception* says, so it has cards back and an upcharge owed.
-* admin(holds `grading:read` only) is on <grade10 admin grading submission url> for it.
-* The operator's grants are mocked to `grading:read` alone, since no shipped role holds that grant alone.
-
-**Steps:**
-
-1. Click the Cards tab.
-2. Click the Money tab.
-3. Click the Documents tab.
-4. Send a request to waive the upcharge directly, outside the console.
-
-**Expected Results:**
-
-* Every tab offers reading only; no act appears on any of the three.
-* Step 4 is refused by name.
-
 <!-- trace:case id=g10adm.grading-counter.TC-zoh rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC5-1: An approve-grant holder sees the operate acts as well as the approve-only ones
 
@@ -3942,7 +3619,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-14
@@ -3975,7 +3651,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-14
@@ -4004,7 +3679,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-14
@@ -4034,7 +3708,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-14
@@ -4072,7 +3745,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-14
@@ -4114,7 +3786,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-14
@@ -4159,7 +3830,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
@@ -4190,7 +3860,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
@@ -4232,7 +3901,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
@@ -4265,37 +3933,6 @@ Runs once per row of **Test data**.
 * Step 3's row waits on a second approver; step 5's row reads 3500, carrying admin A's and admin B's names.
 * The audit entry is filed under `settings`, not under any submission.
 
-<!-- trace:case id=g10adm.grading-counter.TC-zxp rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
-### grade10-admin-grading-counter-US15-TC4-1: The recorder cannot approve their own settings change
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-grading-counter-US-15
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* admin A(holds `grading:approve`) has asked for a change to the storage fee on <grade10 admin grading settings url>, with a reason, and nobody has approved it.
-
-**Steps:**
-
-1. As admin A, send the approval of admin A's own request directly, outside the console, which offers the recorder no Approve on their own request.
-2. Reload the page and read the storage fee row.
-
-**Expected Results:**
-
-* Step 1 is refused by name, and step 2's row still waits on a second approver.
-
 <!-- trace:case id=g10adm.grading-counter.TC-c5k rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC5-1: A changed setting reaches only submissions not yet booked
 
@@ -4307,7 +3944,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
@@ -4338,38 +3974,6 @@ Runs once per row of **Test data**.
 * Step 2 still shows the old 3000 minor units (HKD 30.00) fee, unchanged.
 * Step 3 shows the new 3500 minor units (HKD 35.00) fee.
 
-<!-- trace:case id=g10adm.grading-counter.TC-if9 rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
-### grade10-admin-grading-counter-US15-TC6-1: An operate-grant holder sees the settings table read-only
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-grading-counter-US-15
-
-**Pre-conditions:**
-
-* admin(holds `grading:operate`, not `grading:approve`) is signed in to the console.
-* The operator's grants are mocked to `grading:read` and `grading:operate` without `grading:approve`, since no shipped role holds `grading:operate` without `grading:approve`.
-
-**Steps:**
-
-1. Navigate to <grade10 admin grading settings url>.
-2. Click a setting's value to edit it.
-3. Send a write of that setting directly, outside the console.
-
-**Expected Results:**
-
-* The table reads, but no field opens for editing.
-* Step 3 is refused by name.
-
 <!-- trace:case id=g10adm.grading-counter.TC-ntn rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC7-1: An unset fact is marked on Settings with its readiness owner
 
@@ -4381,7 +3985,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
@@ -4411,7 +4014,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
@@ -4443,7 +4045,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
@@ -4483,7 +4084,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-grading-counter-US-15
@@ -4525,7 +4125,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-grading-counter-US-15
@@ -4565,7 +4164,6 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US1-TC4-1` | Folded | The ready and settle tiles are `grade10-admin-grading-counter-SC-12`, `grade10-admin-grading-counter-SC-13`; the batch closing and with-graders tiles reached no scenario and are folded as `grade10-admin-grading-counter-SC-87` |
 | `grade10-admin-grading-counter-US1-TC5-1` | Covered | `grade10-admin-grading-counter-SC-05` |
 | `grade10-admin-grading-counter-US1-TC6-1` | Covered | `grade10-admin-grading-counter-SC-04` |
-| `grade10-admin-grading-counter-US1-TC7-1` | Covered | `grade10-admin-grading-counter-SC-75` |
 | `grade10-admin-grading-counter-US2-TC1-2` | Covered | `grade10-admin-grading-counter-SC-14`; `<v>` 2: a booked submission opens from Today with no Start at the desk step (`add-multi-store-appointments`) |
 | `grade10-admin-grading-counter-US2-TC2-1` | Covered | `grade10-admin-grading-counter-SC-15` |
 | `grade10-admin-grading-counter-US2-TC3-2` | Covered | `grade10-admin-grading-counter-SC-16`; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
@@ -4609,13 +4207,10 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US7-TC5-1` | Retired at review, `deprecated` | One starting state and one route with `grade10-admin-grading-counter-US7-TC1-1`; the rest staying in the batch is joined to that case, which walks it |
 | `grade10-admin-grading-counter-US8-TC1-1` | Covered | `grade10-admin-grading-counter-SC-59` |
 | `grade10-admin-grading-counter-US8-TC2-1` | Covered | `grade10-admin-grading-counter-SC-61` |
-| `grade10-admin-grading-counter-US8-TC3-1` | Covered | `grade10-admin-grading-counter-SC-60` |
-| `grade10-admin-grading-counter-US8-TC4-1` | Folded | A second approver who does not hold `grading:approve` is the permission matrix's other cell and reached no scenario; folded as `grade10-admin-grading-counter-SC-95` |
 | `grade10-admin-grading-counter-US8-TC5-1` | Covered | `grade10-admin-grading-counter-SC-80` |
 | `grade10-admin-grading-counter-US9-TC1-1` | Folded | Row A is `grade10-admin-grading-counter-SC-62`; row B, the bank transfer and its reference, reached no scenario and is folded as `grade10-admin-grading-counter-SC-96` |
 | `grade10-admin-grading-counter-US9-TC2-1` | Folded | A payout recorded past its window saying so reached no scenario; folded as `grade10-admin-grading-counter-SC-97` |
 | `grade10-admin-grading-counter-US9-TC3-1` | Covered | `grade10-admin-grading-counter-SC-64` |
-| `grade10-admin-grading-counter-US9-TC4-1` | Covered | `grade10-admin-grading-counter-SC-60` — one rule over a waiver, a payout and a money setting alike |
 | `grade10-admin-grading-counter-US9-TC5-1` | Covered | `grade10-admin-grading-counter-SC-80` |
 | `grade10-admin-grading-counter-US10-TC1-1` | Covered | `grade10-admin-grading-counter-SC-51` |
 | `grade10-admin-grading-counter-US10-TC2-1` | Covered | `grade10-admin-grading-counter-SC-52` |
@@ -4639,17 +4234,13 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US13-TC2-1` | Covered | `grade10-admin-grading-counter-SC-58` |
 | `grade10-admin-grading-counter-US13-TC3-1` | Covered, deferred at review | `grade10-admin-grading-counter-SC-57`; the letters step was added at review. Still `draft`: no act or surface marks a timeline entry staff-only, so no tester can reach the case's starting state; the spec's author owes it |
 | `grade10-admin-grading-counter-US13-TC4-1` | Covered | `grade10-admin-grading-counter-SC-80` |
-| `grade10-admin-grading-counter-US14-TC1-1` | Covered | `grade10-admin-grading-counter-SC-75`, `grade10-admin-grading-counter-SC-82` |
 | `grade10-admin-grading-counter-US14-TC2-1` | Covered | `grade10-admin-grading-counter-SC-83` |
 | `grade10-admin-grading-counter-US14-TC3-1` | Covered | `grade10-admin-grading-counter-SC-84` |
-| `grade10-admin-grading-counter-US14-TC4-1` | Covered | `grade10-admin-grading-counter-SC-75` |
 | `grade10-admin-grading-counter-US14-TC5-1` | Folded | An operator holding more than one grant being offered the acts of each reached no scenario; the grants requirement gains the rule and it is folded as `grade10-admin-grading-counter-SC-100` |
 | `grade10-admin-grading-counter-US15-TC1-1` | Raised, answered, folded | The blind pass could not tell whether an operator without `grading:approve` opens the settings at all. Answered: it opens them read-only, with every value and the owner who confirms it, and only `grading:approve` edits them. The feature set's grants line and the grants table are amended, folded as `grade10-admin-grading-counter-SC-99`, and landed as Q77 |
 | `grade10-admin-grading-counter-US15-TC2-1` | Covered | `grade10-admin-grading-counter-SC-71` |
 | `grade10-admin-grading-counter-US15-TC3-1` | Covered | `grade10-admin-grading-counter-SC-70` |
-| `grade10-admin-grading-counter-US15-TC4-1` | Covered | `grade10-admin-grading-counter-SC-60` |
 | `grade10-admin-grading-counter-US15-TC5-1` | Covered | `grade10-admin-grading-counter-SC-73`; it walks the storage fee, not the fee sheet, so `grade10-admin-grading-counter-SC-72` and `grade10-admin-grading-counter-SC-74` went to a case of their own at review |
-| `grade10-admin-grading-counter-US15-TC6-1` | Covered | `grade10-admin-grading-counter-SC-76` |
 | `grade10-admin-grading-counter-US15-TC7-1` | Folded | A setting nobody has written being marked on the settings page with its owner reached no scenario; folded as `grade10-admin-grading-counter-SC-98` |
 | `grade10-admin-grading-counter-SC-01` | Case added | `grade10-admin-grading-counter-US1-TC8-2` — the Today cut made on the shop's own day while the date in Coordinated Universal Time is still yesterday's; `<v>` 2: a submission opened just past the shop's midnight is cut into Today, with no Visit today badge, since the diary owns the visit (`add-multi-store-appointments`) |
 | `grade10-admin-grading-counter-SC-03` | Case added | `grade10-admin-grading-counter-US1-TC9-2` — a `planned` submission in none of the views; `<v>` 2: the plan is held back whether or not a visit is booked, since the diary owns the visit (`add-multi-store-appointments`) |

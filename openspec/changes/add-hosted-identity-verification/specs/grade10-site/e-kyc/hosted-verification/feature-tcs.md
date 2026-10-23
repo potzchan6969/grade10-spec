@@ -1,6 +1,6 @@
 # grade10-site/e-kyc/hosted-verification Test Cases
 
-**Status:** pending-review · 0/25
+**Status:** pending-review · 0/13
 **Drafts styled:** 2026-09-04, tcs-rules r2
 
 ## grade10-site-e-kyc-hosted-verification-US1: Collector verifies their identity before travelling to the store
@@ -21,7 +21,6 @@ document problem reaches me while I can still do something about it.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-01
@@ -62,7 +61,6 @@ document problem reaches me while I can still do something about it.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-01
@@ -90,325 +88,6 @@ document problem reaches me while I can still do something about it.
 * The check that opens is the one raised for `<a case in invited>`.
 * The surface offers nothing that selects `<a second case in invited>` or its user.
 
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-i7a rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
-### grade10-site-e-kyc-hosted-verification-US1-TC4-1: Invitation secret is left nowhere it can be read
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-01
-
-**Pre-conditions:**
-
-* `<a case in invited>` holds a check in Invited.
-* The user holds `<the invited invitation>` and has not opened it.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a case in invited>` | A pre-custody vault case with no verified identity, its hosted check in Invited |
-| `<the invited invitation>` | The invitation issued for `<a case in invited>`'s check, never opened |
-
-**Steps:**
-
-1. Open `<the invited invitation>` and let it hand the user on to the provider.
-2. Read the request path and the query string of every request the browser makes.
-3. Read the referrer the provider receives.
-4. Read the service log lines the run wrote.
-
-**Expected Results:**
-
-* The secret is in no request path and no query string.
-* The secret is in no log line.
-* The secret is in no referrer the provider receives.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-xd3 rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
-### grade10-site-e-kyc-hosted-verification-US1-TC5-1: Asking twice leaves one working invitation
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-01
-
-**Pre-conditions:**
-
-* `<a case in invited>` holds a check in Invited.
-* The user holds `<the invited invitation>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a case in invited>` | A pre-custody vault case with no verified identity, its hosted check in Invited |
-| `<the invited invitation>` | The invitation issued for `<a case in invited>`'s check, never opened |
-
-**Steps:**
-
-1. Ask for a check on `<a case in invited>` again.
-2. Ask for a check on that case twice at the same moment.
-3. Read the checks the case holds.
-
-**Expected Results:**
-
-* One check exists on the case.
-* Both requests answer with that check.
-* The user holds one working invitation.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-77s rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
-### grade10-site-e-kyc-hosted-verification-US1-TC6-1: Unproven verdict changes nothing and is not stored
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-01
-
-**Pre-conditions:**
-
-* A pre-custody vault case holds a hosted check in Submitted.
-
-**Test data:**
-
-| Verdict delivered | Outcome |
-| --- | --- |
-| Approved, with a signature that cannot be proven | Nothing changes; the attempt is counted, not stored |
-| Approved, signed with a secret this deployment does not hold | Nothing changes; the attempt is counted, not stored |
-
-**Steps:**
-
-1. Deliver the verdict in the row.
-2. Read the check's state and the case's identity.
-3. Read what the run recorded.
-
-**Expected Results:**
-
-* No check changes state.
-* No verified identity is created.
-* The attempt is counted rather than written to any durable record.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-bbu rev=2 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
-### grade10-site-e-kyc-hosted-verification-US1-TC7-2: Verdict naming a check nobody raised creates nothing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-01
-
-**Pre-conditions:**
-
-* No check exists under `<an unraised provider identifier>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<an unraised provider identifier>` | A provider check identifier Grade10 never raised |
-
-**Steps:**
-
-1. Deliver a provable verdict naming `<an unraised provider identifier>`.
-2. Read what the run created and what it counted.
-
-**Expected Results:**
-
-* Nothing is created.
-* The attempt is counted as rejected.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-bd1 rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
-### grade10-site-e-kyc-hosted-verification-US1-TC8-1: Repeated verdict is applied once
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-01
-
-**Pre-conditions:**
-
-* `<a case decided approved>` holds an approved verdict already applied.
-* A signing packet on that case was voided when the verdict bound.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a case decided approved>` | A pre-custody vault case whose hosted check is Approved, its verdict applied and its identity bound |
-
-**Steps:**
-
-1. Deliver the same verdict again.
-2. Deliver it once more under a different delivery.
-3. Read the check, the identities on file, and the case's packets.
-
-**Expected Results:**
-
-* The check stays Approved.
-* One verified identity exists and the case's identity is unchanged.
-* No packet is voided a second time.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-bu7 rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
-### grade10-site-e-kyc-hosted-verification-US1-TC9-1: Verdict for a check that is no longer live binds nothing
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-01
-
-**Pre-conditions:**
-
-* A pre-custody vault case holds the check named by the row, and the verdict names that check.
-
-**Test data:**
-
-| Check the verdict names | Outcome |
-| --- | --- |
-| Withdrawn | Stays Withdrawn; nothing bound |
-| Superseded by a newer check | Stays as it is; nothing bound |
-| Already decided | Stays decided; nothing bound |
-
-**Steps:**
-
-1. Deliver an approved verdict for the check in the row.
-2. Read the check's state and the case's identity.
-
-**Expected Results:**
-
-* The check keeps the state it held.
-* No identity is bound to the case.
-* Any identity the verdict created is discarded.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-htc rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
-### grade10-site-e-kyc-hosted-verification-US1-TC10-1: Grade10's own refusals decline an approved verdict
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-01
-
-**Pre-conditions:**
-
-* A pre-custody vault case holds a hosted check in Submitted.
-
-**Test data:**
-
-| Verdict the provider approves | Refusal named |
-| --- | --- |
-| A person under 18 | Under age |
-| A document whose expiry has passed | Expired document |
-
-**Steps:**
-
-1. Deliver the approved verdict in the row.
-2. Read the check's state and the refusal shown to the admin.
-3. Read the identities on file.
-
-**Expected Results:**
-
-* The check is Declined.
-* The refusal named is the one in the row.
-* No verified identity exists.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-i0p rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
-### grade10-site-e-kyc-hosted-verification-US1-TC11-1: Check that cannot be raised invites nobody and is reported
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-01
-
-**Pre-conditions:**
-
-* `<a case with nothing to reuse>` holds no verified identity and no live check.
-* The verification provider is stubbed to refuse every request that raises a check.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a case with nothing to reuse>` | A pre-custody vault case with no verified identity and no earlier check to reuse |
-
-**Steps:**
-
-1. Ask for a check on `<a case with nothing to reuse>`.
-2. Read the invitations sent and the checks the case holds.
-3. Read what the admin was told.
-4. Remove the provider stub and ask for a check again.
-
-**Expected Results:**
-
-* No invitation is sent and the case holds no live check.
-* The admin is told the check could not be raised.
-* Step 4 raises one check and sends one invitation.
-
 <!-- trace:case id=g10.e-kyc-hosted-verification.TC-1gc rev=1 covers=g10.e-kyc-hosted-verification.SC-a2i,g10.e-kyc-hosted-verification.SC-jav,g10.e-kyc-hosted-verification.SC-5n5,g10.e-kyc-hosted-verification.SC-1ve,g10.e-kyc-hosted-verification.SC-i84,g10.e-kyc-hosted-verification.SC-vvo,g10.e-kyc-hosted-verification.SC-lz8,g10.e-kyc-hosted-verification.SC-lv9,g10.e-kyc-hosted-verification.SC-14n,g10.e-kyc-hosted-verification.SC-bhk,g10.e-kyc-hosted-verification.SC-1en,g10.e-kyc-hosted-verification.SC-6w3,g10.e-kyc-hosted-verification.SC-csg -->
 ### grade10-site-e-kyc-hosted-verification-US1-TC12-1: Tampered invitation values open no other check
 
@@ -422,7 +101,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-01
@@ -470,7 +148,6 @@ minute.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02
@@ -510,7 +187,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02
@@ -556,7 +232,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02
@@ -597,7 +272,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02
@@ -637,7 +311,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02
@@ -676,7 +349,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02
@@ -715,7 +387,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02
@@ -754,7 +425,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02
@@ -781,166 +451,6 @@ Runs once per row of **Test data**.
 * The invitation is refused as expired.
 * The page says how to be invited again.
 
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-s8j rev=2 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
-### grade10-site-e-kyc-hosted-verification-US2-TC3-2: Check that runs out of time expires
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-02
-
-**Pre-conditions:**
-
-* A pre-custody vault case holds a hosted check in the state named by the row.
-* The service clock is advanced past the life the row names.
-
-**Test data:**
-
-| Check state | Life that runs out | Outcome |
-| --- | --- | --- |
-| Invited, never opened | `<invitation life>` — ❓ `TBC`, awaiting Product | Expired; no verified identity |
-| Started, never finished | `<started check life>` — ❓ `TBC`, awaiting Product | Expired; the case can be invited again |
-| Started, with less of `<invitation life>` left than `<started check life>` | `<invitation life>` — ❓ `TBC`, awaiting Product | Expired when the invitation's life runs out, before the started check's own |
-
-**Steps:**
-
-1. Read the check's state.
-2. Read whether the case can be invited again.
-
-**Expected Results:**
-
-* The check is Expired.
-* The outcome is the one the row names.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-yux rev=2 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
-### grade10-site-e-kyc-hosted-verification-US2-TC11-2: Verdict that never arrives leaves the check stalled
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-02
-
-**Pre-conditions:**
-
-* A pre-custody vault case holds a hosted check in Submitted.
-* The provider is stubbed to send no verdict.
-* The service clock is advanced past `<the usual verdict time>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<the usual verdict time>` | The time a verdict usually takes — ❓ `TBC`, awaiting Product |
-
-**Steps:**
-
-1. Read the check's state and what the case shows.
-2. Read what the run read back from the provider.
-
-**Expected Results:**
-
-* The check is Stalled, not Expired.
-* The case shows it as stalled rather than as arriving.
-* The check is read back from the provider and settled from what it says.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-a7d rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
-### grade10-site-e-kyc-hosted-verification-US2-TC12-1: Stalled check the provider never settles expires
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-02
-
-**Pre-conditions:**
-
-* `<a case in stalled>` holds a check in Stalled the provider has left undecided throughout `<the stalled period>`.
-* The service clock is advanced past that period.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a case in stalled>` | A pre-custody vault case whose hosted check is Stalled, the provider still undecided |
-| `<the stalled period>` | The period a stalled check is given before it expires — ❓ `TBC`, awaiting Product |
-
-**Steps:**
-
-1. Read the check's state.
-2. Read what the case shows.
-3. Ask for a check on `<a case in stalled>`.
-
-**Expected Results:**
-
-* The check is Expired.
-* The case shows it as lapsed.
-* Step 3 invites the case again.
-
-<!-- trace:case id=g10.e-kyc-hosted-verification.TC-6to rev=2 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
-### grade10-site-e-kyc-hosted-verification-US2-TC4-2: Decided check does not move again
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-e-kyc-hosted-verification-US-02
-
-**Pre-conditions:**
-
-* A pre-custody vault case holds a hosted check in the state named by the row.
-
-**Test data:**
-
-| Decided state | Outcome |
-| --- | --- |
-| Approved | Stays Approved; asking issues a new check with its own invitation |
-| Declined | Stays Declined; asking issues a new check with its own invitation |
-
-**Steps:**
-
-1. Deliver a further verdict for that check.
-2. Ask for a check on that case.
-3. Read the checks the case holds.
-
-**Expected Results:**
-
-* The decided check stays where it is.
-* Asking issues a new check with its own invitation.
-
 <!-- trace:case id=g10.e-kyc-hosted-verification.TC-7lm rev=1 covers=g10.e-kyc-hosted-verification.SC-8uf,g10.e-kyc-hosted-verification.SC-36d,g10.e-kyc-hosted-verification.SC-wu9,g10.e-kyc-hosted-verification.SC-fdu,g10.e-kyc-hosted-verification.SC-jan,g10.e-kyc-hosted-verification.SC-jz2,g10.e-kyc-hosted-verification.SC-hmw,g10.e-kyc-hosted-verification.SC-nym,g10.e-kyc-hosted-verification.SC-fuz,g10.e-kyc-hosted-verification.SC-y6x,g10.e-kyc-hosted-verification.SC-qkz,g10.e-kyc-hosted-verification.SC-4i1,g10.e-kyc-hosted-verification.SC-lod,g10.e-kyc-hosted-verification.SC-imv -->
 ### grade10-site-e-kyc-hosted-verification-US2-TC5-1: Withdrawing a check frees the case to be invited again
 
@@ -952,7 +462,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02
@@ -993,7 +502,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-e-kyc-hosted-verification-US-02

@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-visual-standard-US-01
@@ -56,7 +55,6 @@ Signed in as an operator who can open `<grade10 admin console url>` and `<a seco
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-visual-standard-US-01
@@ -91,7 +89,6 @@ An admin console renders a component that customer surfaces also render.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-visual-standard-US-01
@@ -134,7 +131,6 @@ An admin console renders a component that customer surfaces also render.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-visual-standard-US-02
@@ -169,7 +165,6 @@ Signed in as an operator who can open both brands' admin consoles.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-console-visual-standard-US-02

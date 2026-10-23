@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-store-account-profile-US-02, grade10-site-store-membership-US-02, grade10-site-store-wallet-member-card-US-06

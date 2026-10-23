@@ -1,6 +1,6 @@
 # shared/auth/session Test Cases
 
-**Status:** pending-review · 0/13
+**Status:** pending-review · 0/11
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-session-US2: Collector stays signed in across the brand
@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-02
@@ -47,7 +46,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-02
@@ -86,7 +84,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -126,7 +123,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -166,7 +162,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -208,7 +203,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-07
@@ -245,7 +239,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-07
@@ -281,7 +274,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -319,7 +311,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -348,80 +339,6 @@ Runs once per row of **Test data**.
 * Step 2 shows tab A showing <operator account> signed in on the console, unreloaded.
 * Step 3 shows tab C unchanged, still showing <operator account> signed in on the site.
 
-### shared-auth-session-US7-TC8-1: A site session that holds a role is refused for a console request
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-07
-
-**Pre-conditions:**
-
-* <operator account> holds a role that grants <operator action>.
-* <operator account> is signed in on the site and has no console session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<operator action>` | An operator action the role grants, whose target <target account> is read before and after |
-| `<target account>` | An account the action would change |
-
-**Steps:**
-
-1. Request <operator action> as the console, carrying only the site session's credentials.
-2. Present the site session's credentials to the console as the console's own, and ask who is calling.
-
-**Expected Results:**
-
-* Step 1 is refused as not signed in.
-* <target account> is unchanged.
-* Step 2 receives no person.
-
-### shared-auth-session-US7-TC9-1: A console session without the second factor refuses an operator action beside a site session
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-07
-
-**Pre-conditions:**
-
-* <operator account> has a second factor and holds a role that grants <operator action>.
-* <operator account> is signed in on the site and on the console, and has not proved the second factor on that console session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<operator action>` | An operator action the role grants, whose target <target account> is read before and after |
-| `<target account>` | An account the action would change |
-
-**Steps:**
-
-1. Request <operator action> on the console session.
-
-**Expected Results:**
-
-* Step 1 is refused and asks for the second factor.
-* <target account> is unchanged.
-
 ---
 
 ## shared-auth-session-US8: Operator signs in to the console once more after release
@@ -440,7 +357,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-08
@@ -479,7 +395,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-08

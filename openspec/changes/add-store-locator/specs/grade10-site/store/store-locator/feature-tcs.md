@@ -1,6 +1,6 @@
 # grade10-site/store/store-locator Test Cases
 
-**Status:** pending-review · 0/11
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-store-locator-US1: Collector finds the Hong Kong shop from chrome
@@ -21,7 +21,6 @@ page for the Hong Kong shop,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-01
@@ -64,7 +63,6 @@ page for the Hong Kong shop,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-01
@@ -86,48 +84,6 @@ page for the Hong Kong shop,
 * Step 3 finds no search field, store list, distance or filter.
 * Step 3 finds no store picker.
 
-<!-- trace:case id=g10.store-store-locator.TC-vei rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-iwa,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
-### grade10-site-store-store-locator-US1-TC3-1: Title and description differ from the store's other pages
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-store-locator-US-01
-
-**Pre-conditions:**
-
-* The site under test is a build that carries the store surfaces.
-
-**Test data:**
-
-| `<other surface url>` | Surface |
-| --- | --- |
-| <grade10 store url> | Store home |
-| <grade10 browse listing url> | The listing |
-| <grade10 product url> | A card's page |
-
-**Steps:**
-
-1. Fetch <grade10 store locator url> with scripts turned off.
-2. Read its title and meta description.
-3. Fetch `<other surface url>` with scripts turned off.
-4. Read its title and meta description.
-
-**Expected Results:**
-
-* Step 2's title differs from step 4's.
-* Step 2's meta description differs from step 4's.
-
 <!-- trace:case id=g10.store-store-locator.TC-2pc rev=1 covers=g10.store-store-locator.SC-ny2,g10.store-store-locator.SC-evn,g10.store-store-locator.SC-t9d,g10.store-store-locator.SC-iwa,g10.store-store-locator.SC-vb8,g10.store-store-locator.SC-la1,g10.store-store-locator.SC-ux5,g10.store-store-locator.SC-1zq,g10.store-store-locator.SC-l9w,g10.store-store-locator.SC-bfr -->
 ### grade10-site-store-store-locator-US1-TC4-1: Header Store Locator opens the page and marks it
 
@@ -139,7 +95,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-01
@@ -176,7 +131,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-01
@@ -208,7 +162,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-01
@@ -245,7 +198,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-01
@@ -294,7 +246,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-02
@@ -331,7 +282,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-02
@@ -372,7 +322,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-02
@@ -410,7 +359,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-store-locator-US-02
