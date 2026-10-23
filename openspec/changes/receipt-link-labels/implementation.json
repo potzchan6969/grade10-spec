@@ -34,5 +34,31 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-23T03:34:39.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Suite restated by convert-hkd-order-at-subtotal (419ccec2d), which moved HKD conversion to the Subtotal: cases reworded for USD lines, one HKD Subtotal and the conversion note. The receipt link label cases are unchanged."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature set bullets restate convert-hkd-order-at-subtotal (419ccec2d), which moved HKD conversion to the Subtotal (convert once, cent rounding, rate named in the note, same lines on every document). The receipt PDF requirement is unchanged."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "US-26 and US-27 reworded for USD lines under an HKD total, by convert-hkd-order-at-subtotal (419ccec2d), which moved HKD conversion to the Subtotal. US-02 is untouched."
+      }
+    ]
+  }
 }
