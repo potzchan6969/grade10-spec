@@ -55,6 +55,10 @@ type CouponListCopy = {
 type CouponListProps = {
   copy: CouponListCopy;
   state: AsyncState<readonly CouponItem[]>;
+  /** Fires when the scan surface opens and when it closes. The close is the
+   * consumer's cue to refetch — a scanned coupon may have been spent at the
+   * till meanwhile, and a fresh `state` moves it to history on its own. */
+  onScanOpenChange?: (open: boolean, coupon: CouponItem) => void;
   className?: string;
 };
 
@@ -206,7 +210,12 @@ function CouponScanSurface({
  * given. Spent, void and expired stay listed and say so — the consumer
  * decides how long history stays.
  */
-function CouponList({ copy, state, className }: CouponListProps) {
+function CouponList({
+  copy,
+  state,
+  onScanOpenChange,
+  className,
+}: CouponListProps) {
   const smUp = useSmUp();
   const [scan, setScan] = useState<ScanTarget | null>(null);
   const [scanOpen, setScanOpen] = useState(false);
@@ -255,8 +264,10 @@ function CouponList({ copy, state, className }: CouponListProps) {
               item={item}
               key={item.id}
               onScanToggle={(target) => {
-                setScan(target ?? scan);
+                const next = target ?? scan;
+                setScan(next);
                 setScanOpen(target != null);
+                if (next) onScanOpenChange?.(target != null, next.item);
               }}
               scanOpen={scanOpen && scan?.item.id === item.id}
             />
@@ -266,7 +277,10 @@ function CouponList({ copy, state, className }: CouponListProps) {
       {scan ? (
         <CouponScanSurface
           onOpenChange={(next) => {
-            if (!next) setScanOpen(false);
+            if (!next) {
+              setScanOpen(false);
+              onScanOpenChange?.(false, scan.item);
+            }
           }}
           open={scanOpen}
           smUp={smUp}

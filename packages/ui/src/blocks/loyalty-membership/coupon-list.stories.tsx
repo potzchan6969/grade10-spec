@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, waitFor, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CouponList } from "./coupon-list";
 import { COUPONS } from "./fixtures";
 
@@ -50,11 +50,18 @@ export const Default: Story = {
 /** The open coupon's Use now opens its scan card — a dialog from 640px up —
  * over the list, and closing hands the member back to it. */
 export const ScanCoupon: Story = {
-  play: async ({ canvasElement }) => {
+  /* The consumer's cue to refetch: open reports the coupon, close reports
+   * it again — by then a scanned one may have been spent at the till. */
+  args: { onScanOpenChange: fn() },
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const toggle = canvas.getByRole("button", { name: "Use now" });
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     await userEvent.click(toggle);
+    expect(args.onScanOpenChange).toHaveBeenLastCalledWith(
+      true,
+      expect.objectContaining({ id: "coupon-open" }),
+    );
     const overlay = within(document.body);
     /* The coupon's own ticket restates it inside; the surface's title is
      * for assistive tech alone, not a second heading. */
@@ -70,6 +77,10 @@ export const ScanCoupon: Story = {
       expect(
         document.body.querySelector('[data-slot="promo-qr-card"]'),
       ).not.toBeVisible(),
+    );
+    expect(args.onScanOpenChange).toHaveBeenLastCalledWith(
+      false,
+      expect.objectContaining({ id: "coupon-open" }),
     );
   },
 };
