@@ -15,9 +15,14 @@ member-readable code unique to it.
   shows the code each coupon is passed, not "a reward coupon carries none" —
   a money-off redemption now mints one.
 - **Arriving** — `grade10-site-loyalty-programme-SC-262` (one code per
-  redemption), `-SC-263` (a good mints none), `-SC-264` (a card per reward,
+  redemption), `-SC-263` (a good mints a code its collection ticket leaves
+  unseen), `-SC-264` (a card per reward,
   press reports), `-SC-265` (no quantity), `-SC-266` (sheet under 640px,
   dialog from it), `-SC-267` (short balance refused whole), `-SC-268`
-  (code or collection on the ticket, never Apply).
-- **Open** — ❓ whether the redeemed ticket itself opens a QR; the
-  coupons-page QR is settled later scope, not a case here.
+  (code or collection on the ticket, never Apply), `-SC-269` (a run-out
+  refusal closes the surface), `-SC-270` (a retryable refusal keeps it),
+  `-SC-271` (a dropped balance re-reads the deficit).
+- **Settled** — the redeemed ticket's QR is in the requirement: folded
+  behind a Use now control on till-facing surfaces, drawn from the
+  redemption's code, gone once spent. The coupons-page QR remains later
+  scope, not a case here.

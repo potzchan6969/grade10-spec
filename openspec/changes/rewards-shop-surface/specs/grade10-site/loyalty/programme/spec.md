@@ -3,9 +3,10 @@
 ## Feature set
 
 - Rewards and redemption
-  - Member-readable code: a money-off redemption mints one member-readable
-    code at the moment it settles, unique to that redemption and bound to
-    the member; a physical reward mints none
+  - Member-readable code: every redemption mints one member-readable code
+    at the moment it settles, unique to that redemption and bound to the
+    member — good or discount alike — and the scan QR is generated from
+    that code; the ticket shows code or collection line by context
 - Member surface
   - Reward shop: the menu draws each reward as a card — the item's art or
     the coupon's gift tile, name, description, its deadline where the
@@ -16,19 +17,22 @@
     it is good for, shows the balance before and after, refuses a short
     balance whole, and draws the redeemed state in the same surface
   - Redeemed ticket: a discount coupon's ticket carries the unique code the
-    redemption minted; a good's ticket names the collection and no code;
-    no surface outside the cart offers Apply
+    redemption minted; a good's ticket names the collection in the code's
+    place; no surface outside the cart offers Apply
 
 ## ADDED Requirements
 
 ### Requirement: A redemption's member-readable code is unique to it
 
-Where a reward settles as a money-off coupon, the redemption SHALL mint one
-member-readable code at the moment the coupon is issued — unique to that
-redemption, bound to the member, and good at the channels the coupon
-names. The code SHALL NOT be shared across redemptions, so a code another
-member reads answers as one nobody minted for them. A redemption that
-settles as a physical reward SHALL mint no member-readable code.
+Where a reward settles, the redemption SHALL mint one member-readable code
+at the moment the coupon is issued — unique to that redemption, bound to
+the member, and good at the channels the coupon names — and that holds
+for a physical reward as for a money-off coupon. The code SHALL NOT be
+shared across redemptions, so a code another member reads answers as one
+nobody minted for them. The staff-facing scan QR SHALL be generated from
+that code, never an unrelated token. Whether a ticket shows the code is
+the surface's choice — a collection ticket names the collection in the
+code's place.
 
 The member-readable code is separate from the discount code a sale's claim
 mints for that coupon's spend: claiming mints and deactivates per sale as
@@ -43,11 +47,13 @@ mints for that coupon's spend: claiming mints and deactivates per sale as
 - **AND** each code answers only for the member it was minted to
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-q8z rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-263 - A physical reward mints no code
+#### Scenario: grade10-site-loyalty-programme-SC-263 - A physical reward mints a code the collection ticket leaves unseen
 **Serves:** grade10-site-loyalty-programme-US-12 - Member browses the shop, confirms the cost and sees the redemption
 
 - **WHEN** a redemption of a physical reward settles
-- **THEN** its coupon carries no member-readable code
+- **THEN** it carries a member-readable code like a discount's
+- **AND** its scan QR is generated from that code
+- **AND** the collection ticket names the collection in the code's place
 
 ## MODIFIED Requirements
 
@@ -91,8 +97,8 @@ a balance dropped mid-checkout SHALL re-read the deficit row; either
 refusal is raised outside the surface. Given a
 redemption it SHALL
 draw the redeemed phase in the same surface: the member-readable code a
-discount coupon's ticket carries, the collection a good's ticket names, and
-no code on it. The ticket SHALL fold the staff-facing scan QR the
+discount coupon's ticket carries, the collection a good's ticket names in
+the code's place. The ticket SHALL fold the staff-facing scan QR the
 redemption supplies behind a reveal control — drawn collapsed until the
 member opens it — and none where it supplies none; a ticket facing the
 till from any member-opened surface carries it, and the cart's select
@@ -203,7 +209,7 @@ SHALL require no export of its own.
 
 - **WHEN** the redeemed phase renders for a discount coupon and for a good
 - **THEN** the coupon's ticket carries the unique code the redemption minted
-- **AND** the good's ticket names the collection with no code
+- **AND** the good's ticket names the collection in the code's place
 - **AND** where the redemption supplies a scan token the ticket draws the QR
 - **AND** neither draws an Apply action
 
