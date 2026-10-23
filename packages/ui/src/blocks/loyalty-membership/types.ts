@@ -43,9 +43,10 @@ type RewardRedemption = {
   summary: string;
   /** The ticket's deadline line — use-by or collect-by, as supplied. */
   deadline: string;
-  /** The member-readable code the redemption minted — a discount coupon's only. */
+  /** The member-readable code the redemption minted; a good's ticket shows
+   * `note` in its place. */
   code?: string;
-  /** The ticket's footer line where no code stands — the collect-in-store line. */
+  /** The ticket's footer line where no code is shown — the collect-in-store line. */
   note?: string;
   /** The staff-facing QR the redeemed ticket draws — the scan token the till
    * reads. */

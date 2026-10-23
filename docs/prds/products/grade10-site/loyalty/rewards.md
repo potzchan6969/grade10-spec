@@ -81,21 +81,21 @@ Stock reads as a yes or no, never a count.
   a toast, and a balance dropped mid-checkout re-reads the deficit row
   the same way
 - 🚧 **The redeemed state stays in the surface** - the ticket the
-  redemption issued: a discount coupon's carries the code minted for that
-  redemption alone, a good's names the collection and no code. A ticket
+  redemption issued: every redemption mints a member-readable code —
+  good or discount alike — and the scan QR is generated from that code.
+  A discount coupon's ticket carries the code, a good's names the
+  collection in its place. A ticket
   spendable or collectable at the till folds the member's scan QR behind
   a Use now control on the surfaces a member can open there — the rewards
   page, the coupons page; the cart's select sheet carries none, and an
   online-only ticket carries none. A spent coupon's ticket mutes, names
   it used, and drops the QR, and a spent coupon leaves the coupons
   section
-- ❓ **The scan QR's lifetime** - fixed per redemption, or rotating like
-  the member pass's
-- ❓ **What the till reads** - does the coupon or collection QR carry the
-  member, or does staff scan the member pass first for the member's
-  identity
-- ❓ **A store coupon's readable code** - whether every physical-store
-  coupon also carries a member-readable code under its QR
+- 🚧 **The scan QR is the code, drawn** - generated from the
+  redemption's member-readable code, so it is fixed for that redemption
+  rather than rotating like the member pass's
+- ❓ **What the till reads** - the QR carries the redemption's code;
+  whether staff additionally scan the member pass for identity is open
 - 🚧 **Apply belongs to the cart** - nothing on the shop, the redeemed
   ticket or the coupons page offers to apply a coupon; the cart's
   apply-rewards flow is the only place it happens
@@ -126,9 +126,10 @@ carrying the definition it was bought under.
   checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
   lines
-- 🚧 **The member reads a code of their own** — a money-off redemption
-  mints one member-readable code, unique to that redemption and bound to
-  the member; a physical reward mints none. The code is good online and at
+- 🚧 **The member reads a code of their own** — every redemption mints
+  one member-readable code, unique to that redemption and bound to the
+  member, and the scan QR is generated from it; a good's ticket shows the
+  collection in its place, by display choice. The code is good online and at
   the till; the per-sale discount code a claim mints is a different code,
   unchanged
 - **Applied at the counter** — for a scope the till can match, inside the
