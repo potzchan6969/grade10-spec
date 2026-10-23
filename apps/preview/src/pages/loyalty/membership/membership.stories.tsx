@@ -67,10 +67,12 @@ function MembershipPage({ view }: { view: MembershipView }) {
   const [held, setHeld] = useState<readonly string[]>(view.heldWallets);
   const [selected, setSelected] = useState<RewardMenuItem | null>(null);
   const [redemption, setRedemption] = useState<RewardRedemption | null>(null);
+  const [pending, setPending] = useState(false);
 
   const closeCheckout = () => {
     setSelected(null);
     setRedemption(null);
+    setPending(false);
   };
 
   const select = (rewardId: string) => {
@@ -80,36 +82,41 @@ function MembershipPage({ view }: { view: MembershipView }) {
   };
 
   const redeem = () => {
-    if (!selected || selected.pointCost > balance) return;
-    const left = balance - selected.pointCost;
-    const cost = selected.pointCost;
+    if (!selected || selected.pointCost > balance || pending) return;
+    const reward = selected;
+    const left = balance - reward.pointCost;
+    const cost = reward.pointCost;
     const coupon = {
       ...ISSUED_COUPON,
       id: `coupon-issued-${issued + 1}`,
-      amount: selected.name,
-      description: selected.description,
+      amount: reward.name,
+      description: reward.description,
     };
-    setBalance(left);
-    setIssued((value) => value + 1);
-    setCoupons((prev) => ({
-      status: "ready",
-      data: [...(prev.status === "ready" ? prev.data : []), coupon],
-    }));
-    setRedemption(
-      selected.kind === "coupon"
-        ? {
-            balanceAfter: left,
-            summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
-            deadline: "Use by 28 Oct 2026",
-            code: `G10-${cost}-${issued + 1}Q2M`,
-          }
-        : {
-            balanceAfter: left,
-            summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
-            deadline: "Collect by 5 Nov 2026",
-            note: "Collect at any Grade10 store",
-          },
-    );
+    setPending(true);
+    setTimeout(() => {
+      setBalance(left);
+      setIssued((value) => value + 1);
+      setCoupons((prev) => ({
+        status: "ready",
+        data: [...(prev.status === "ready" ? prev.data : []), coupon],
+      }));
+      setRedemption(
+        reward.kind === "coupon"
+          ? {
+              balanceAfter: left,
+              summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+              deadline: "Use by 28 Oct 2026",
+              code: `G10-${cost}-${issued + 1}Q2M`,
+            }
+          : {
+              balanceAfter: left,
+              summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+              deadline: "Collect by 5 Nov 2026",
+              note: "Collect at any Grade10 store",
+            },
+      );
+      setPending(false);
+    }, 700);
   };
 
   const addWallet = (id: string) =>
@@ -262,6 +269,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
           }}
           onRedeem={redeem}
           open
+          pending={pending}
           redemption={redemption ?? undefined}
           reward={selected}
           viewCouponsHref="#membership-coupons-heading"

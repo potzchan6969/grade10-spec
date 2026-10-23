@@ -209,11 +209,11 @@ function RewardCheckoutBody({
     return (
       <VStack
         align="center"
-        className="w-full"
+        className="w-full animate-in fade-in slide-in-from-bottom-2 duration-300 motion-reduce:animate-none"
         data-slot="reward-checkout-redeemed"
         gap="md"
       >
-        <span className="text-accent-foreground">
+        <span className="animate-in zoom-in-50 duration-500 text-accent-foreground motion-reduce:animate-none">
           <CheckCircle aria-hidden size={80} weight="fill" />
         </span>
         <VStack align="center" className="w-full text-center" gap="xs">

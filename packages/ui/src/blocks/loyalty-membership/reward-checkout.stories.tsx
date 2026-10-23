@@ -88,6 +88,18 @@ export const InsufficientBalance: Story = {
   },
 };
 
+/** While the redemption settles the button goes busy — a leading spinner,
+ * presses ignored — before the surface swaps to the redeemed phase. */
+export const Redeeming: Story = {
+  args: { reward: COUPON, pending: true },
+  play: async () => {
+    const canvas = sheet();
+    const button = canvas.getByRole("button", { name: "Redeem for 500 pts" });
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).toHaveAttribute("aria-disabled", "true");
+  },
+};
+
 /** The settling redemption draws the button busy; the refusal reads under it. */
 export const RedemptionFailed: Story = {
   args: {

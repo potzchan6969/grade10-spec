@@ -27,8 +27,8 @@ function RewardArt({
         aria-hidden
         data-slot="reward-art-coupon"
         className={cn(
-          "relative grid overflow-hidden rounded-2xl bg-[linear-gradient(135deg,var(--orange-200)_0%,var(--orange-400)_55%,var(--orange-600)_100%)]",
-          hero && "aspect-2/1 w-full",
+          "relative grid overflow-hidden bg-[linear-gradient(135deg,var(--orange-200)_0%,var(--orange-400)_55%,var(--orange-600)_100%)]",
+          hero ? "aspect-2/1 w-full rounded-2xl" : "rounded-(--radius-lg)",
           className,
         )}
       >
@@ -55,7 +55,9 @@ function RewardArt({
       alt={reward.image.alt}
       className={cn(
         "object-cover",
-        hero ? "aspect-2/1 w-full rounded-3xl bg-muted" : "rounded-2xl",
+        hero
+          ? "aspect-2/1 w-full rounded-3xl bg-muted"
+          : "rounded-(--radius-lg) bg-muted",
         className,
       )}
       src={reward.image.src}

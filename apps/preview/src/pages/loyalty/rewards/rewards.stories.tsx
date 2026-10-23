@@ -32,32 +32,39 @@ function RewardsPage() {
   const [balance, setBalance] = useState(MEMBERSHIP_VIEW.balance);
   const [selected, setSelected] = useState<RewardMenuItem | null>(null);
   const [redemption, setRedemption] = useState<RewardRedemption | null>(null);
+  const [pending, setPending] = useState(false);
 
   const close = () => {
     setSelected(null);
     setRedemption(null);
+    setPending(false);
   };
 
   const redeem = () => {
-    if (!selected || selected.pointCost > balance) return;
-    const left = balance - selected.pointCost;
-    const cost = selected.pointCost;
-    setBalance(left);
-    setRedemption(
-      selected.kind === "coupon"
-        ? {
-            balanceAfter: left,
-            summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
-            deadline: "Use by 28 Oct 2026",
-            code: "G10-50-7Q2M",
-          }
-        : {
-            balanceAfter: left,
-            summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
-            deadline: "Collect by 5 Nov 2026",
-            note: "Collect at any Grade10 store",
-          },
-    );
+    if (!selected || selected.pointCost > balance || pending) return;
+    const reward = selected;
+    const left = balance - reward.pointCost;
+    const cost = reward.pointCost;
+    setPending(true);
+    setTimeout(() => {
+      setBalance(left);
+      setRedemption(
+        reward.kind === "coupon"
+          ? {
+              balanceAfter: left,
+              summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+              deadline: "Use by 28 Oct 2026",
+              code: "G10-50-7Q2M",
+            }
+          : {
+              balanceAfter: left,
+              summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+              deadline: "Collect by 5 Nov 2026",
+              note: "Collect at any Grade10 store",
+            },
+      );
+      setPending(false);
+    }, 700);
   };
 
   const select = (rewardId: string) => {
@@ -97,6 +104,7 @@ function RewardsPage() {
           }}
           onRedeem={redeem}
           open
+          pending={pending}
           redemption={redemption ?? undefined}
           reward={selected}
           viewCouponsHref="#"

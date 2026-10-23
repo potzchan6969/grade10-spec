@@ -81,8 +81,8 @@
   },
   {
     "label": "reward-art/coupon-tile",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7264-6653",
-    "classes": "relative grid overflow-hidden rounded-2xl bg-[linear-gradient(135deg,var(--orange-200)_0%,var(--orange-400)_55%,var(--orange-600)_100%)]"
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7330-1081",
+    "classes": "relative grid overflow-hidden rounded-(--radius-lg) bg-[linear-gradient(135deg,var(--orange-200)_0%,var(--orange-400)_55%,var(--orange-600)_100%)]"
   },
   {
     "label": "reward-checkout/balance",
@@ -103,5 +103,15 @@
     "label": "reward-art/hero",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7254:2697",
     "classes": "aspect-2/1 w-full rounded-3xl bg-muted"
+  },
+  {
+    "label": "reward-art/media",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7330-1082",
+    "classes": "object-cover rounded-(--radius-lg) bg-muted"
+  },
+  {
+    "label": "reward-menu/card-hover",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7330-1129",
+    "classes": "bg-background-subtle border-border"
   }
 ]

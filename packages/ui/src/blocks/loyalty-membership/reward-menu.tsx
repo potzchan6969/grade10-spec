@@ -94,9 +94,9 @@ function RewardCard({
   points: string;
 }) {
   return (
-    <Card padding={false}>
+    <Card className="border-border" padding={false}>
       <button
-        className="flex w-full items-center gap-4 p-4 text-left"
+        className="flex w-full cursor-pointer items-center gap-4 p-4 text-left transition-colors hover:bg-background-subtle"
         data-affordable={affordable}
         data-slot="reward-menu-item"
         onClick={() => onSelect(item.id)}
@@ -107,7 +107,10 @@ function RewardCard({
           <VStack gap="none">
             <Text weight="medium">{item.name}</Text>
             {item.description ? (
-              <Text className="line-clamp-2" size="sm" tone="secondary">
+              <Text
+                className="line-clamp-2 text-secondary-foreground"
+                size="sm"
+              >
                 {item.description}
               </Text>
             ) : null}
@@ -133,7 +136,7 @@ function RewardCard({
           gap="none"
         >
           <Text className="font-semibold">{pointCount(item.pointCost)}</Text>
-          <Text size="sm" tone="secondary">
+          <Text className="text-secondary-foreground" size="sm">
             {points}
           </Text>
         </VStack>

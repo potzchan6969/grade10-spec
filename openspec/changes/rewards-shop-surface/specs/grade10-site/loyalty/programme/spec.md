@@ -68,7 +68,8 @@ the consumer withholds the line for a member holding no points.
 `RewardMenu` SHALL draw each reward as a card — the item's art or the
 coupon's gift tile, the name, the description, the deadline where the
 reward names one, and the price in points — and SHALL report a press on the
-card rather than perform a redemption. Whether the balance can pay SHALL be
+card rather than perform a redemption. A pointer over the card SHALL lift
+its fill to the subtle background. Whether the balance can pay SHALL be
 judged against the balance the consumer supplies, never derived. A
 redemption SHALL always be one unit: the menu SHALL offer no quantity
 control. A money-off reward's card SHALL still state its own validity period,
