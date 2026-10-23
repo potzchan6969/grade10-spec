@@ -4,13 +4,13 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-bank-details";
 import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 import {
   OUR_NOTE,
   REFERENCE_WARNING,
   WinnerOrderHowToPayDialog,
 } from "./winner-order-how-to-pay-dialog";
-import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-payment-proof-dialog";
 
 type HowToPayDemoProps = {
   onOpenChange?: (open: boolean) => void;

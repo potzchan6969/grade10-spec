@@ -338,6 +338,13 @@ export {
   auctionPhoneSoftReady,
 } from "./blocks/auction-order/auction-address-form";
 export {
+  PROOF_DIALOG_SUBTEXT,
+  type ProofRefusal,
+  WINNER_ORDER_PROOF_FILE_HINT,
+  WinnerOrderPaymentProofDialog,
+  type WinnerOrderPaymentProofDialogProps,
+} from "./blocks/auction-order/auction-payment-proof-dialog";
+export {
   AuctionPhoneField,
   type AuctionPhoneFieldProps,
 } from "./blocks/auction-order/auction-phone-field";

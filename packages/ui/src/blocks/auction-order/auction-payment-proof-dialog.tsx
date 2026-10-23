@@ -23,33 +23,7 @@ import {
 import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Warning } from "@phosphor-icons/react";
-import { useEffect, useId, useRef, useState } from "react";
-import { toastProofNotSubmitted } from "./winner-order-proof-feedback";
-
-/** Preview-only bank details — Grade10 / HSBC Hong Kong sample until Finance confirms live values. */
-// eslint-disable-next-line react-refresh/only-export-components -- Bank detail fixtures are shared with preview stories.
-export const WINNER_ORDER_BANK_DETAILS = {
-  beneficiaryName: "Grade10 Finance Limited",
-  beneficiaryAddress: "Unit 2602, 28 Stanley Street, Central, Hong Kong",
-  bankName: "HSBC Hong Kong",
-  /** Main branch address, city and country. */
-  bankAddress: "1 Queen's Road Central, Central, Hong Kong",
-  bankCode: "004",
-  branchCode: "001",
-  /**
-   * Full account number including bank and branch code
-   * (`bank-branch-account`).
-   */
-  accountNumber: "004-001-583291-001",
-  swiftCode: "HSBCHKHHXXX",
-  fpsId: "12345678",
-  /** Preview fixture aligned to bank-transfer invoice Order Total (fee Free). */
-  totalAmountDue: "HK$16,340.00",
-  /** Same invoice issued in US$ for a USD-settled order. */
-  usdTotalAmountDue: "US$16,340.00",
-  /** Payment reference — listing code, unchanged across reissues. */
-  transferReference: "LK7P2Q",
-} as const;
+import { useId, useRef, useState } from "react";
 
 /**
  * Winner payment proof — matches `add-winner-bank-transfer` after the
@@ -74,8 +48,6 @@ const PROOF_CONFIRM_MICROCOPY =
 const LEAVE_PROOF_CONFIRM =
   "Leave without submitting? Your payment proof will not be saved." as const;
 
-const SUBMIT_SIMULATE_MS = 400;
-
 type ProofDraft = {
   senderName: string;
   transferDate: string;
@@ -93,45 +65,32 @@ const EMPTY_PROOF: ProofDraft = {
 type WinnerOrderPaymentProofDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  /** Called after a successful submit (dialog already closing). */
-  onSubmit: () => void;
-  /**
-   * Preview only — simulated submit fails: dialog stays open, draft kept,
-   * failure toast. Default succeeds after the short beat.
-   */
-  forceFailure?: boolean;
+  /** Uploads proof files; resolves null once accepted, else its refusal. */
+  onSubmit: (files: File[]) => Promise<ProofRefusal | null>;
 };
 
+type ProofRefusal = { title: string; description: string };
+
 /**
- * Preview-only: Submit Payment Proof from Order summary primary control.
- * Not a published `@grade10/ui` export. Rails live in View Bank Details.
- * Field list explores product UX; OpenSpec stores files after confirm only.
+ * Submit Payment Proof — Winner Order primary control for a pending bank
+ * transfer. Rails live in View Bank Details. A blocked submit reveals the
+ * first invalid field inside the dialog body; a refused upload keeps the
+ * draft and shows the refusal in place.
  */
 function WinnerOrderPaymentProofDialog({
   open,
   onOpenChange,
   onSubmit,
-  forceFailure = false,
 }: WinnerOrderPaymentProofDialogProps) {
   const formId = useId();
   const [draft, setDraft] = useState<ProofDraft>(EMPTY_PROOF);
   const [attempted, setAttempted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [converting, setConverting] = useState(false);
-  const submitTimerRef = useRef<number | null>(null);
-  /** Bumps on abandon so a late timer cannot complete submit. */
-  const submitGenerationRef = useRef(0);
+  const [refusal, setRefusal] = useState<ProofRefusal | null>(null);
   const senderNameRef = useRef<HTMLInputElement>(null);
   const transferDateRef = useRef<HTMLInputElement>(null);
   const dropzoneRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    return () => {
-      if (submitTimerRef.current != null) {
-        window.clearTimeout(submitTimerRef.current);
-      }
-    };
-  }, []);
 
   function patch<K extends keyof ProofDraft>(key: K, value: ProofDraft[K]) {
     setDraft((held) => ({ ...held, [key]: value }));
@@ -157,16 +116,9 @@ function WinnerOrderPaymentProofDialog({
 
   const dropzoneFull = draft.files.length >= WINNER_ORDER_PROOF_MAX_FILES;
 
-  function clearSubmitTimer() {
-    if (submitTimerRef.current != null) {
-      window.clearTimeout(submitTimerRef.current);
-      submitTimerRef.current = null;
-    }
-  }
-
   function resetDraft() {
-    clearSubmitTimer();
     setDraft(EMPTY_PROOF);
+    setRefusal(null);
     setAttempted(false);
     setSubmitting(false);
     setConverting(false);
@@ -205,6 +157,12 @@ function WinnerOrderPaymentProofDialog({
       case "type":
         toast.error("File type not supported", {
           description: "Use PDF, PNG, JPG, or HEIC.",
+        });
+        break;
+      case "convert_failed":
+        toast.error("Couldn’t convert HEIC", {
+          description:
+            "Try exporting as JPG from your phone, then upload again.",
         });
         break;
     }
@@ -249,7 +207,7 @@ function WinnerOrderPaymentProofDialog({
     }
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     setAttempted(true);
     if (formLocked) return;
     if (!ready) {
@@ -258,21 +216,19 @@ function WinnerOrderPaymentProofDialog({
       requestAnimationFrame(revealFirstInvalid);
       return;
     }
-    const generation = submitGenerationRef.current;
     setSubmitting(true);
-    clearSubmitTimer();
-    submitTimerRef.current = window.setTimeout(() => {
-      submitTimerRef.current = null;
-      if (generation !== submitGenerationRef.current) return;
-      setSubmitting(false);
-      if (forceFailure) {
-        toastProofNotSubmitted();
-        return;
+    setRefusal(null);
+    try {
+      const refused = await onSubmit(usableFiles.map((item) => item.file));
+      if (refused) {
+        setRefusal(refused);
+      } else {
+        resetDraft();
+        onOpenChange(false);
       }
-      resetDraft();
-      onOpenChange(false);
-      onSubmit();
-    }, SUBMIT_SIMULATE_MS);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -422,6 +378,16 @@ function WinnerOrderPaymentProofDialog({
             </HStack>
           </VStack>
         </DialogBody>
+        {refusal ? (
+          <VStack gap="none" role="alert">
+            <Text size="sm" tone="error" weight="medium">
+              {refusal.title}
+            </Text>
+            <Text size="sm" tone="error">
+              {refusal.description}
+            </Text>
+          </VStack>
+        ) : null}
         <DialogFooter>
           <DialogClose
             render={
@@ -439,7 +405,7 @@ function WinnerOrderPaymentProofDialog({
             className="w-full sm:w-auto"
             disabled={formLocked}
             loading={submitting}
-            onClick={handleSubmit}
+            onClick={() => void handleSubmit()}
             size="md"
             type="button"
           >
@@ -451,5 +417,5 @@ function WinnerOrderPaymentProofDialog({
   );
 }
 
-export type { WinnerOrderPaymentProofDialogProps };
+export type { ProofRefusal, WinnerOrderPaymentProofDialogProps };
 export { WinnerOrderPaymentProofDialog };

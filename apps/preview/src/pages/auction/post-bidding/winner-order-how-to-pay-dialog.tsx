@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import type { ReactNode } from "react";
-import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-payment-proof-dialog";
+import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-bank-details";
 import type { WinnerOrderBankRail } from "./winner-order-setup-dialog";
 
 const REFERENCE_WARNING =

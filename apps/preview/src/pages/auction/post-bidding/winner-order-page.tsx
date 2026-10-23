@@ -12,6 +12,7 @@ import {
   type AuctionWinnerOrderStep,
   type OrderDetailsPaymentBrand,
   SiteHeader,
+  WinnerOrderPaymentProofDialog,
 } from "@grade10/ui";
 import { useState } from "react";
 import { AUCTION_SITE_HEADER } from "../../auction-lot-details-content";
@@ -34,8 +35,10 @@ import {
   type WinnerOrderStatus,
 } from "./winner-order-content";
 import { WinnerOrderHowToPayDialog } from "./winner-order-how-to-pay-dialog";
-import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
-import { toastProofSubmitted } from "./winner-order-proof-feedback";
+import {
+  simulateProofUpload,
+  toastProofSubmitted,
+} from "./winner-order-proof-feedback";
 import { WinnerOrderRefundDialog } from "./winner-order-refund-dialog";
 import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
 import { WinnerOrderSetupDialog } from "./winner-order-setup-dialog";
@@ -597,10 +600,13 @@ function WinnerOrderPageState({
     }, CARD_CHECKOUT_SIMULATE_MS);
   }
 
-  function handleProofSubmit() {
+  async function handleProofSubmit() {
+    const refusal = await simulateProofUpload();
+    if (refusal) return refusal;
     setStatus("payment_verifying");
     toastProofSubmitted();
     onPrimaryAction?.();
+    return null;
   }
 
   return (

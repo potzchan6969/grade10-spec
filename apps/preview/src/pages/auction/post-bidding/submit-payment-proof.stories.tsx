@@ -2,17 +2,18 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Toast } from "@grade10/design-system/components/overlays/toast";
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
-import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
   PROOF_DIALOG_SUBTEXT,
   WINNER_ORDER_PROOF_FILE_HINT,
   WinnerOrderPaymentProofDialog,
-} from "./winner-order-payment-proof-dialog";
+} from "@grade10/ui";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
   PROOF_NOT_SUBMITTED_TOAST,
   PROOF_SUBMITTED_TOAST,
+  simulateProofUpload,
   toastProofSubmitted,
 } from "./winner-order-proof-feedback";
 
@@ -48,12 +49,14 @@ function SubmitPaymentProofDemo({
       </VStack>
 
       <WinnerOrderPaymentProofDialog
-        forceFailure={forceFailure}
         onOpenChange={setOpen}
-        onSubmit={() => {
+        onSubmit={async () => {
+          const refusal = await simulateProofUpload(forceFailure);
+          if (refusal) return refusal;
           setSubmitted(true);
           toastProofSubmitted();
           onSubmit();
+          return null;
         }}
         open={open}
       />
@@ -228,7 +231,54 @@ export const SubmitEmpty: Story = {
   },
 };
 
-/** Forced failure — dialog stays open, draft kept, failure toast. */
+/** Names and date filled, no file — the dropzone scrolls into view and Choose Files takes focus. */
+export const SubmitMissingFile: Story = {
+  parameters: {
+    verification: { caseId: "vc_7a36ec1a-c2d1-477e-88d9-b86da0e922e0" },
+  },
+  name: "Submit missing file",
+  args: { onSubmit: fn() },
+  play: async ({ canvasElement, args }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const modal = within(dialog);
+
+    await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
+    const transferDate = modal.getByLabelText("Transfer Date");
+    Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      "value",
+    )?.set?.call(transferDate, "2026-09-20");
+    transferDate.dispatchEvent(new Event("input", { bubbles: true }));
+    transferDate.dispatchEvent(new Event("change", { bubbles: true }));
+
+    const body = dialog.querySelector(
+      '[data-slot="dialog-body"]',
+    ) as HTMLElement | null;
+    if (!body) throw new Error("Dialog body not found");
+    body.scrollTop = 0;
+
+    await userEvent.click(
+      modal.getByRole("button", { name: "Submit Payment Proof" }),
+    );
+
+    const choose = modal.getByRole("button", { name: "Choose Files" });
+    await waitFor(() => {
+      expect(choose).toHaveFocus();
+    });
+    await waitFor(() => {
+      const rect = choose.getBoundingClientRect();
+      const bodyRect = body.getBoundingClientRect();
+      expect(rect.top).toBeGreaterThanOrEqual(bodyRect.top - 1);
+      expect(rect.bottom).toBeLessThanOrEqual(bodyRect.bottom + 1);
+    });
+    expect(modal.getByText("Attach at least one proof file.")).toBeVisible();
+    expect(modal.queryByText("Enter the sender name.")).not.toBeInTheDocument();
+    expect(args.onSubmit).not.toHaveBeenCalled();
+  },
+};
+
+/** Refused upload — dialog stays open, draft kept, refusal shown in place. */
 export const SubmitFailure: Story = {
   parameters: {
     verification: { caseId: "vc_4df15e0e-b46d-4eb6-8daa-1be93e113bf5" },
@@ -247,10 +297,9 @@ export const SubmitFailure: Story = {
     );
 
     await waitFor(() => {
-      expect(page.getByText(PROOF_NOT_SUBMITTED_TOAST.title)).toBeVisible();
-      expect(
-        page.getByText(PROOF_NOT_SUBMITTED_TOAST.description),
-      ).toBeVisible();
+      const alert = modal.getByRole("alert");
+      expect(alert).toHaveTextContent(PROOF_NOT_SUBMITTED_TOAST.title);
+      expect(alert).toHaveTextContent(PROOF_NOT_SUBMITTED_TOAST.description);
     });
     expect(
       page.getByRole("dialog", { name: "Submit Payment Proof" }),
