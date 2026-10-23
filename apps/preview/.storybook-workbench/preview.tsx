@@ -36,6 +36,7 @@ const preview: Preview = {
           "Grading": ["Planning", "Drop Off", "Submission", "Documents", "Messages"],
           "Consignment": ["Operator Console"],
           "Appointment": ["Booking", "Visit"],
+          "Ticketing": ["Buying", "Waiting Line", "Your Tickets"],
           "Doc Sign": ["Service"],
           "Finance": [],
           "Site": ["Page Shell", "Crawlable Pages", "Navigation", "Carried Surfaces", "Typography", "About", "Shows", "Press", "Media Coverage"],
