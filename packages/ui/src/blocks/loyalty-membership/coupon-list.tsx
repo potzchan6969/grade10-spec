@@ -236,7 +236,7 @@ function CouponList({ copy, state, className }: CouponListProps) {
           }
           data-slot="coupon-list-empty"
           description={state.description}
-          icon={<Ticket aria-hidden />}
+          icon={<Ticket aria-hidden size={24} weight="regular" />}
           title={state.message}
         />
       ) : null}
