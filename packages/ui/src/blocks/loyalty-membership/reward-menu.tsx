@@ -4,6 +4,7 @@ import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import { ClockCountdown } from "@phosphor-icons/react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
@@ -46,7 +47,11 @@ function RewardMenu({
   className,
 }: RewardMenuProps) {
   return (
-    <VStack className={className} data-slot="reward-menu" gap="sm">
+    <VStack
+      className={cn("w-full", className)}
+      data-slot="reward-menu"
+      gap="sm"
+    >
       {state.status === "loading" ? (
         <VStack className="gap-3" data-slot="reward-menu-loading">
           <Skeleton className="h-28 w-full" />
@@ -94,7 +99,7 @@ function RewardCard({
   points: string;
 }) {
   return (
-    <Card className="border-border" padding={false}>
+    <Card className="w-full border-border" padding={false}>
       <button
         className="flex w-full cursor-pointer items-center gap-4 p-4 text-left transition-colors hover:bg-background-subtle"
         data-affordable={affordable}
@@ -109,7 +114,7 @@ function RewardCard({
             {item.description ? (
               <Text
                 className="line-clamp-2 text-secondary-foreground"
-                size="sm"
+                size="xs"
               >
                 {item.description}
               </Text>
@@ -122,7 +127,7 @@ function RewardCard({
               </span>
               <Text
                 className="text-accent-foreground"
-                size="sm"
+                size="xs"
                 weight="medium"
               >
                 {item.deadline}

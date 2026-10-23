@@ -147,7 +147,13 @@ function RewardCheckout({
     </Dialog>
   ) : (
     <Drawer onOpenChange={onOpenChange} open={open} swipeDirection="down">
-      <DrawerContent className={className} data-sheet="reward-checkout">
+      <DrawerContent
+        className={cn(
+          "bg-popover backdrop-blur-none [--drawer-bleed-background:var(--popover)]",
+          className,
+        )}
+        data-sheet="reward-checkout"
+      >
         <DrawerBody className="gap-4">{body}</DrawerBody>
       </DrawerContent>
     </Drawer>
@@ -222,7 +228,7 @@ function RewardCheckoutBody({
         gap="md"
       >
         <span className="animate-in zoom-in-50 duration-500 text-accent-foreground motion-reduce:animate-none">
-          <CheckCircle aria-hidden size={80} weight="fill" />
+          <CheckCircle aria-hidden size={64} weight="fill" />
         </span>
         <VStack align="center" className="w-full text-center" gap="xs">
           {renderTitle(
