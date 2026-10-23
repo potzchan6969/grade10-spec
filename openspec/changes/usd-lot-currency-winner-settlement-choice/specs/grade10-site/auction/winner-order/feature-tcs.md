@@ -295,9 +295,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order/keep-proof.spec.ts`
 
 **Pre-conditions:**
 

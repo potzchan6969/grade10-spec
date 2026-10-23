@@ -21,9 +21,11 @@
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Post-close letters
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/notifications-order.spec.ts`
 
 **Pre-conditions:**
 
@@ -165,9 +167,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Post-close letters
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/notifications-order.spec.ts`
 
 **Pre-conditions:**
 
@@ -244,9 +248,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Post-close letters
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/notifications-order.spec.ts`
 
 **Pre-conditions:**
 

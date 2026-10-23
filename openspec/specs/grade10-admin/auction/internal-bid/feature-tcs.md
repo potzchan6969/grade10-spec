@@ -50,7 +50,7 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
 
@@ -1824,7 +1824,7 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-06
 

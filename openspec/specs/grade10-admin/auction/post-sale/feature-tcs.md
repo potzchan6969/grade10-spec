@@ -768,7 +768,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** post-sale-US-03
 
@@ -874,7 +874,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-04
 
@@ -979,7 +979,7 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
 
@@ -1476,7 +1476,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
 
@@ -1736,7 +1736,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-20
 
@@ -2066,7 +2066,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
 
@@ -2642,7 +2642,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** post-sale-US-07
 
@@ -2829,7 +2829,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
 
@@ -2859,7 +2859,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
 
@@ -2956,7 +2956,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
 
@@ -3494,7 +3494,7 @@ payments that failed,
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
 
@@ -3631,7 +3631,7 @@ payments that failed,
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
 
@@ -3691,7 +3691,7 @@ payments that failed,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** post-sale-US-08
 
@@ -3894,7 +3894,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
 
@@ -3979,7 +3979,7 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-10
 
@@ -4367,7 +4367,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
 
@@ -4398,7 +4398,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
 
@@ -4430,7 +4430,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
 
@@ -4495,7 +4495,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
 
@@ -4526,7 +4526,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-12
 
@@ -4598,7 +4598,7 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-13
 
@@ -4660,7 +4660,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-13
 
@@ -4755,7 +4755,7 @@ Runs once per row of **Test data**.
 * **Type:** integration
 * **Suites:** smoke, regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-14
 
@@ -4784,7 +4784,7 @@ Runs once per row of **Test data**.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-14
 
@@ -4826,7 +4826,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-15
 
@@ -4901,7 +4901,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-16
 
@@ -4935,7 +4935,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** post-sale-US-16
 
@@ -4975,7 +4975,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-16
 
@@ -5036,7 +5036,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-16
 
@@ -5075,7 +5075,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-17
 
@@ -5115,7 +5115,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
 
@@ -5155,7 +5155,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
 
@@ -5188,7 +5188,7 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
 
@@ -5355,7 +5355,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Audit trail
 
@@ -5568,7 +5568,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Audit trail
 
@@ -5742,7 +5742,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-18
 
@@ -5934,7 +5934,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Resolving an unpaid order
 
@@ -6000,7 +6000,7 @@ Runs once per row of **Test data**. The Preparing Invoice stage is intentionally
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Resolving an unpaid order
 

@@ -548,9 +548,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/post-sale/reissue.spec.ts`
 
 **Pre-conditions:**
 
@@ -582,9 +584,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/post-sale/reissue.spec.ts`
 
 **Pre-conditions:**
 
@@ -612,9 +616,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/post-sale/reissue.spec.ts`
 
 **Pre-conditions:**
 
@@ -703,9 +709,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/post-sale/history.spec.ts`
 
 **Pre-conditions:**
 
