@@ -1,6 +1,6 @@
 # shared/ui/invoice-and-receipt-pdf Test Cases
 
-**Status:** pending-review · 0/10
+**Status:** pending-review · 0/39
 **Drafts styled:** 2026-10-23, tcs-rules r6
 
 ## g10.shared-invoice-and-receipt-pdf.US1: Invoice and Receipt PDF component contract
@@ -501,6 +501,1136 @@ Runs once per row of **Test data**.
 * Where the note takes a count over one page, the Item Total row and the whole summary start the next page under the column header.
 * No item row is moved over to sit with the summary.
 
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-23a rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC4: Insurance line renders only when supplied
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+Runs once per row of **Test data**.
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other order-value line supplied, and Insurance set to `<insurance prop>`.
+
+**Test data:**
+
+| `<insurance prop>` | `<insurance line>` |
+| --- | --- |
+| Supplied | Renders |
+| Omitted | Does not render |
+
+**Steps:**
+
+1. Render `InvoicePdf` with `<insurance prop>`.
+2. Inspect the order-value lines.
+
+**Expected Results:**
+
+* The Insurance line has this presence: `<insurance line>`.
+* Every other order-value line still renders.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-5dx rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC5: Subtotal and Order Total survive Insurance being omitted
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with Insurance omitted and every other order-value line supplied.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the Subtotal and Order Total rows.
+
+**Expected Results:**
+
+* Subtotal renders its supplied content.
+* Order Total renders its supplied content.
+* Neither row is dropped or reordered by Insurance's absence.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-e2u rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC6: Replaces invoice renders only when given
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+Runs once per row of **Test data**.
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other field supplied, and `replacesInvoice` set to `<replaces invoice>`.
+
+**Test data:**
+
+| `<replaces invoice>` | `<replacement line>` |
+| --- | --- |
+| `{ invoiceId: "IN-LK42301" }` | Renders `Replaces invoice IN-LK42301` |
+| Omitted or `null` | Does not render |
+
+**Steps:**
+
+1. Render `InvoicePdf` with `<replaces invoice>`.
+2. Inspect the meta rows.
+
+**Expected Results:**
+
+* The replacement line has this outcome: `<replacement line>` and names the prior invoice.
+* The prior invoice remains retained; this renderer does not mark it cancelled.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-d2d rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC9: Payment breakdown keeps its order at zero values
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with Previous Payments and Remaining Balance Due each supplied as a zero-reading `ReactNode`, and Original Invoice Total and Current Payment Received supplied as non-zero content, as a single full payment produces.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the payment breakdown.
+
+**Expected Results:**
+
+* All four payment-breakdown lines render; none is omitted for reading zero.
+* The order stays Original Invoice Total, Previous Payments, Current Payment Received, Remaining Balance Due.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-tnf rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC11: Payment method content renders unchanged across its variants
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+Runs once per row of **Test data**.
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with the payment method meta row set to `<payment method content>`.
+
+**Test data:**
+
+| `<payment method content>` |
+| --- |
+| Card brand and last four digits |
+| Bank Transfer |
+| An operator-given description with an external reference |
+
+**Steps:**
+
+1. Render `ReceiptPdf` with `<payment method content>`.
+2. Inspect the payment method meta row.
+
+**Expected Results:**
+
+* The payment method row renders `<payment method content>` verbatim, unchanged by which variant it is.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-exm rev=2 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC13: Insurance line renders only when given on the receipt
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with the item table and every charge and summary line supplied except Insurance, which is omitted.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the lines under the item table.
+
+**Expected Results:**
+
+* Every charge and summary line other than Insurance renders.
+* Insurance does not render.
+* The remaining lines keep the same shape as `InvoicePdf`'s, under the item table: Shipping & Handling, Subtotal, Payment Processing Fee, Order Total.
+* Winning Bid and Buyer's Premium appear in the item row only, not as lines under the table.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-ege rev=1 covers=none -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC17: Tax line renders with its content when supplied
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `taxLine` supplied as a plain `PdfLineItem` labelled `Tax` with amount `HKD 12.00`.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the order-value lines.
+
+**Expected Results:**
+
+* The tax line renders immediately before the summary with the supplied label and amount.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-2xh rev=1 covers=none -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC18: A null tax line behaves like an omitted tax line
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+Runs once per row of **Test data**.
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other order-value line supplied, and `taxLine` set to `<tax line>`.
+
+**Test data:**
+
+| `<tax line>` | `<tax row>` |
+| --- | --- |
+| Omitted entirely | Does not render |
+| `null` | Does not render |
+
+**Steps:**
+
+1. Render `InvoicePdf` with `<tax line>`.
+2. Inspect the order-value lines for a tax row.
+
+**Expected Results:**
+
+* The tax row's presence is `<tax row>`.
+* Omission and `null` are both treated as absent.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-8hd rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-i50,g10.shared-invoice-and-receipt-pdf.SC-m09,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC21: Tax line behaves the same on invoice and receipt
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with every other line supplied and `taxLine` omitted or set to `null`.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the order-value lines.
+
+**Expected Results:**
+
+* No tax line renders on the receipt.
+* The optional tax-line omission behavior matches `InvoicePdf`'s.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-elb rev=2 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC24: A blank amount or item title still renders its row
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Presentation-only contract
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with the Subtotal supplied as a whitespace-only string, `<item_blank>` as its only item, `<item_total_1>` as the Item Total amounts, and every other required line supplied normally.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| item_blank | An empty title, Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00`, Total `HKD 120.00` |
+| item_total_1 | Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00`, Total `HKD 120.00` |
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Parse the returned bytes as a PDF document and read page 1.
+3. Read the Subtotal row.
+4. Read the `<item_blank>` row in the item table.
+
+**Expected Results:**
+
+* Step 3: the Subtotal row still renders its label and row structure.
+* Step 4: the `<item_blank>` row still renders, with `HKD 100.00`, `HKD 20.00` and `HKD 120.00` under their columns and a blank Item cell.
+* Neither the Subtotal row nor the item row is silently dropped for carrying blank content.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-kbj rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC26: Re-rendering with new props leaves no stale content
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Presentation-only contract
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered once, then re-rendered with an entirely new, unrelated set of props for a different invoice.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the first set of props.
+2. Re-render it with the second set of props.
+3. Inspect the output after the second render.
+
+**Expected Results:**
+
+* The second render shows only the second set of props' content.
+* No row from the first render's props persists.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-kil rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC34: The issuer block sits at the foot of the invoice, right-aligned
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with an issuer block and a full order-value section.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the issuer block's position and alignment relative to the other sections.
+
+**Expected Results:**
+
+* The issuer block shows the value given.
+* The issuer block renders after every other section in the document.
+* The issuer block aligns to the right of the sheet.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-vwh rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC35: The issuer block sits at the foot of the receipt, right-aligned
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with an issuer block and a full order-value section.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the issuer block's position and alignment relative to the other sections.
+
+**Expected Results:**
+
+* The issuer block shows the value given.
+* The issuer block renders after every other section in the document.
+* The issuer block aligns to the right of the sheet.
+
+<!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-8la rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-i53,g10.shared-invoice-and-receipt-pdf.SC-2d5,g10.shared-invoice-and-receipt-pdf.SC-ca8,g10.shared-invoice-and-receipt-pdf.SC-0s1,g10.shared-invoice-and-receipt-pdf.SC-t8t,g10.shared-invoice-and-receipt-pdf.SC-1sf -->
+### g10.shared-invoice-and-receipt-pdf.US1-TC49: Each document date ends in GMT+8 across a Hong Kong midnight
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** Presentation-only contract
+
+**Decided by:** `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/pdf-dates.test.ts`
+
+**Pre-conditions:**
+
+* The machine clock is set to America/New_York.
+* `<document>` is rendered with the `<date row>` date supplied as `<date supplied>`, every other prop supplied normally.
+
+**Test data:**
+
+| `<document>` | `<date row>` | `<date supplied>` | `<Hong Kong day>` | `<Hong Kong month>` | `<Hong Kong year>` | `<Hong Kong clock>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `InvoicePdf` | sent-at | 2026-09-08T16:00:00Z | 9 | September | 2026 | 00:00 | `<date supplied>`: Hong Kong midnight |
+| `InvoicePdf` | payment deadline | 2026-09-08T15:59:00Z | 8 | September | 2026 | 23:59 | `<date supplied>`: one minute before Hong Kong midnight |
+| `InvoicePdf` | payment deadline | 2026-09-08T16:00:00Z | 9 | September | 2026 | 00:00 | `<date supplied>`: Hong Kong midnight |
+| `ReceiptPdf` | date paid | 2026-09-08T16:00:00Z | 9 | September | 2026 | 00:00 | `<date supplied>`: Hong Kong midnight |
+
+**Steps:**
+
+1. Render `<document>` with `<date supplied>`.
+2. Read the `<date row>` row.
+
+**Expected Results:**
+
+* The row shows the day `<Hong Kong day>`, the month `<Hong Kong month>` named in English and the year `<Hong Kong year>`, in the renderer's own arrangement, and the clock `<Hong Kong clock>`.
+* The row ends in `GMT+8`.
+* The row does not contain `HKT`.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC51: A one-item invoice reads as one row closed by Item Total
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `<item_1>` as its only item, `<item_total_1>` as the Item Total amounts, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| item_1 | Title `1999 Pokemon Base Set Charizard PSA 10`, Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` |
+| item_total_1 | Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` |
+| labels | `Item`, `Winning Bid`, `Buyer's Premium`, `Total` and `Item Total`, supplied through `copy` |
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props and `<labels>`.
+2. Parse the returned bytes as a PDF document and read page 1.
+3. Read the item table from its header down to the row under the item row.
+4. Read the lines under that row.
+
+**Expected Results:**
+
+* Step 3: the header row shows Item, Winning Bid, Buyer's Premium and Total, left to right.
+* A divider sits directly under the header row, above the item row.
+* One item row sits under the header, with the title, Winning Bid, Buyer's Premium and Total of `<item_1>` in their columns.
+* No second item row is drawn.
+* An Item Total row sits directly under the item row, with the three `<item_total_1>` amounts, one under each amount column.
+* No listing title heading and no Description or Amount header appears.
+* Step 4: the charges and the summary follow the Item Total row.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC54: A long item title wraps inside its column
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `<item_1>`, `<item_long>` and `<item_3>` as its items, in that order, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| item_1 | Title `1999 Pokemon Base Set Charizard PSA 10`, Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` |
+| item_long | Title `1999 Pokemon Base Set First Edition Shadowless Holographic Charizard 4/102 Graded PSA 10 Gem Mint From A Single Owner Collection Certified In 2019` (146 characters, wrapping to at least three lines in the Item column), Winning Bid `HKD 75,000.00`, Buyer's Premium `HKD 15,000.00`, Total `HKD 90,000.00` |
+| item_3 | Title `1996 Magic The Gathering Black Lotus BGS 9.5`, Winning Bid `HKD 50,000.00`, Buyer's Premium `HKD 10,000.00`, Total `HKD 60,000.00` |
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Parse the returned bytes as a PDF document and read page 1.
+3. Read the `<item_long>` row and the rows above and below it.
+
+**Expected Results:**
+
+* The `<item_long>` title wraps onto several lines inside the Item column, none of it crossing into an amount column.
+* The whole title reads, in order.
+* Its Winning Bid, Buyer's Premium and Total sit beside the title's first line.
+* The rows above and below keep their own lines, and no line overlaps another.
+* The `<item_3>` row starts under the last line of the wrapped title.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC55: A non-Latin item title draws in the supplied face
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `<item_1>` and `<item_cjk>` as its items, in that order, `<face>` supplied as the embedded font, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| item_1 | Title `1999 Pokemon Base Set Charizard PSA 10`, Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` |
+| item_cjk | Title `1999 寶可夢 初版 噴火龍 PSA 10`, Winning Bid `HKD 30,000.00`, Buyer's Premium `HKD 6,000.00`, Total `HKD 36,000.00` |
+| face | A font file that carries every character of the `<item_cjk>` title, such as a Traditional Chinese face |
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Parse the returned bytes as a PDF document and read page 1.
+3. Compare the `<item_cjk>` row with the `<item_1>` row.
+
+**Expected Results:**
+
+* Every character of the `<item_cjk>` title draws as a glyph of `<face>`, with no blank or placeholder box.
+* The `<item_cjk>` title sits in the Item column and its amounts in the amount columns.
+* The amount columns of the two rows line up.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC56: A one-item receipt shows its table above the payment breakdown
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with `<item_1>` as its only item, `<item_total_1>` as the Item Total amounts, `<charges_1>` as the charges, `<summary_1>` as the summary, `<breakdown_1>` as the payment breakdown, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| item_1 | Title `1999 Pokemon Base Set Charizard PSA 10`, Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` |
+| item_total_1 | Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` |
+| charges_1 | Shipping & Handling `HKD 800.00`, Insurance `HKD 500.00`, and a supplied Tax line `HKD 12.00`, in that order |
+| summary_1 | Subtotal `HKD 121,312.00`, Payment Processing Fee `HKD 4,000.00`, Order Total `HKD 125,312.00` |
+| breakdown_1 | Original Invoice Total `HKD 125,312.00`, Previous Payments `HKD 0.00`, Current Payment Received `HKD 125,312.00`, Remaining Balance Due `HKD 0.00` |
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the supplied props.
+2. Parse the returned bytes as a PDF document and read page 1.
+3. Read from the item table header down to the foot of the payment breakdown.
+
+**Expected Results:**
+
+* The header row, a divider under it, one `<item_1>` row and the Item Total row with the `<item_total_1>` amounts come first, in that order.
+* No listing title heading and no Description or Amount header appears.
+* The charge rows and the summary follow, with their supplied amounts.
+* The payment breakdown follows the summary: Original Invoice Total, Previous Payments, Current Payment Received, Remaining Balance Due, in that order, with the `<breakdown_1>` amounts.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC58: Long and non-Latin item titles keep the receipt row layout
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with `<item>` as its only item, `<embedded font>`, and every other required prop supplied.
+
+**Test data:**
+
+| `<item>` | `<embedded font>` | `<expected item row>` |
+| --- | --- | --- |
+| Title `1999 Pokemon Base Set First Edition Shadowless Holographic Charizard 4/102 Graded PSA 10 Gem Mint From A Single Owner Collection Certified In 2019` (146 characters), Winning Bid `HKD 75,000.00`, Buyer's Premium `HKD 15,000.00`, Total `HKD 90,000.00` | Not supplied | The title wraps onto at least three lines inside the Item column, and the three amounts sit beside its first line |
+| Title `1999 寶可夢 初版 噴火龍 PSA 10`, Winning Bid `HKD 30,000.00`, Buyer's Premium `HKD 6,000.00`, Total `HKD 36,000.00` | A font file that carries every character of the title | Every character draws as a glyph of the supplied font, and the three amounts sit in their columns on the title's line |
+| Title `ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ` (78 letters, no space), Winning Bid `HKD 50,000.00`, Buyer's Premium `HKD 10,000.00`, Total `HKD 60,000.00` | Not supplied | The title breaks inside the word onto at least two lines, and the three amounts sit beside its first line |
+
+**Steps:**
+
+1. Render `ReceiptPdf` with `<item>` and `<embedded font>`.
+2. Parse the returned bytes as a PDF document and read page 1.
+3. Read the item row and the row under it.
+
+**Expected Results:**
+
+* The item row has this outcome: `<expected item row>`.
+* No part of the title crosses into an amount column.
+* The Item Total row sits directly under the item row.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC59: A table at the page limit stays on one page
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Document shape
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `<items_fit>` items, `<item_total_n>` as the Item Total amounts, no bank details, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| items_fit | The largest count of items for which `InvoicePdf` returns one page: render 1, 2, 3, ... items until the page count first reads 2, and take the count before it. Items are titled `Lot 001`, `Lot 002`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
+| item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
+
+**Steps:**
+
+1. Find `<items_fit>` by rendering `InvoicePdf` with 1, 2, 3, ... items until it returns two pages.
+2. Render `InvoicePdf` with `<items_fit>` items.
+3. Parse the returned bytes as a PDF document.
+4. Count the pages and read the size of each.
+5. Read page 1 from the table header to the foot.
+
+**Expected Results:**
+
+* Step 4 shows one page, sized A4.
+* The last item row, the Item Total row, the summary and the issuer block are all on page 1.
+* No two of these overlap.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC60: One item past the page limit adds a second page
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Document shape
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `<items_over>` items, `<item_total_n>` as the Item Total amounts, no bank details, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| items_fit | The largest count of items for which `InvoicePdf` returns one page: render 1, 2, 3, ... items until the page count first reads 2, and take the count before it. Items are titled `Lot 001`, `Lot 002`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
+| items_over | `<items_fit>` plus 1, titled and priced as `<items_fit>` |
+| item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
+
+**Steps:**
+
+1. Find `<items_fit>` by rendering `InvoicePdf` with 1, 2, 3, ... items until it returns two pages.
+2. Render `InvoicePdf` with `<items_over>` items.
+3. Parse the returned bytes as a PDF document.
+4. Count the pages and read the size of each.
+5. Read each page from the top.
+
+**Expected Results:**
+
+* Step 4 shows two pages, not three.
+* Each page is sized A4.
+* The item rows `Lot 001` to `Lot <items_over>` each appear once across the two pages, in order.
+* The Item Total row and the summary each appear once across the two pages.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC64: Item Total, the charges and the summary stay together at a page end
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Document shape
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered once for each count in `<n>`, with `<item_total_n>` as the Item Total amounts, `<charges_1>` as the charges, no bank details, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| items_fit | The largest count of items for which `InvoicePdf` returns one page: render 1, 2, 3, ... items with `<charges_1>` until the page count first reads 2, and take the count before it. Items are titled `Lot 001`, `Lot 002`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
+| items_two | The smallest count of items for which `InvoicePdf` returns two pages and page 2 holds at least three item rows: from `<items_fit>`, add items one at a time. Titled and priced as `<items_fit>` |
+| n | Each count from `<items_fit>` to `<items_two>`, one render per count, titled and priced as `<items_fit>` |
+| item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
+| charges_1 | Shipping & Handling `HKD 800.00`, Insurance `HKD 500.00`, and a supplied Tax line `HKD 12.00`, in that order |
+
+**Steps:**
+
+1. Find `<items_fit>` and `<items_two>` by adding items one at a time.
+2. Render `InvoicePdf` with the first count in `<n>`.
+3. Parse the returned bytes as a PDF document.
+4. Find the page of the Item Total row, of the Shipping & Handling, Insurance and Tax rows, and of the Subtotal, Payment Processing Fee and Order Total lines, and read the lines under the column header on each page after the first.
+5. Repeat steps 2 to 4 for each other count in `<n>`.
+
+**Expected Results:**
+
+* At every count, the Item Total row, the three charge rows and the three summary lines sit on one page.
+* The Item Total row is never the last row on a page with the charges or the summary starting the next.
+* The three charge rows keep their order, between the Item Total row and the summary.
+* The three summary lines sit together, whole, with no border around them.
+* At least one count puts the last item row on page 1 and the Item Total row on page 2.
+* On that page 2 the column header, with a divider under it, comes first and the Item Total row follows it, with no item row between them.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC65: A receipt's totals and payment breakdown stay whole at a page end
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Document shape
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered once for each count in `<m>`, with `<item_total_n>` as the Item Total amounts, `<charges_1>` as the charges, `<breakdown_1>` as the payment breakdown, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| receipt_items_fit | The largest count of items for which `ReceiptPdf` returns one page: render 1, 2, 3, ... items with `<charges_1>` until the page count first reads 2, and take the count before it. Items are titled `Lot 001`, `Lot 002`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
+| receipt_items_two | The smallest count of items for which `ReceiptPdf` returns two pages and page 2 holds at least three item rows: from `<receipt_items_fit>`, add items one at a time. Titled and priced as `<receipt_items_fit>` |
+| m | Each count from `<receipt_items_fit>` to `<receipt_items_two>`, one render per count, titled and priced as `<receipt_items_fit>` |
+| item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
+| charges_1 | Shipping & Handling `HKD 800.00`, Insurance `HKD 500.00`, and a supplied Tax line `HKD 12.00`, in that order |
+| breakdown_1 | Original Invoice Total `HKD 125,312.00`, Previous Payments `HKD 0.00`, Current Payment Received `HKD 125,312.00`, Remaining Balance Due `HKD 0.00` |
+
+**Steps:**
+
+1. Find `<receipt_items_fit>` and `<receipt_items_two>` by adding items one at a time.
+2. Render `ReceiptPdf` with the first count in `<m>`.
+3. Parse the returned bytes as a PDF document.
+4. Find the page of the Item Total row, of the Shipping & Handling, Insurance and Tax rows, of the Subtotal, Payment Processing Fee and Order Total lines, and of each of the four payment breakdown lines, and read the lines under the column header on each page after the first.
+5. Repeat steps 2 to 4 for each other count in `<m>`.
+
+**Expected Results:**
+
+* At every count, the Item Total row, the three charge rows and the three summary lines sit on one page.
+* At every count, the four breakdown lines sit on one page, none left on the page before.
+* The lines read Original Invoice Total, Previous Payments, Current Payment Received, Remaining Balance Due, in that order, each with its `<breakdown_1>` amount.
+* A breakdown that does not fit below the summary starts the next page as four lines, and none stays beside the summary.
+* At least one count puts the last item row on page 1 and the Item Total row on page 2.
+* On that page 2 the column header, with a divider under it, comes first and the Item Total row follows it, with no item row between them.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC67: A multi-page invoice carries the issuer block once, on the last page
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Document shape
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `<items_three>` items, `<issuer>` as the issuer, `<item_total_n>` as the Item Total amounts, no bank details, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| items_three | The smallest count of items for which `InvoicePdf` returns three pages and page 3 holds at least three item rows: from the largest count that returns two pages, add items one at a time. Items are titled `Lot 001`, `Lot 002`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
+| issuer | Name `Issuer Co`, email `billing@example.com`. The name has no wordmark on file, so page 1 also draws it as text at the top right as the issuer mark. The issuer block is found by its email, with the name on the line directly above it |
+| item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
+
+**Steps:**
+
+1. Find `<items_three>` by adding items one at a time until the document has three pages with three item rows on page 3.
+2. Render `InvoicePdf` with `<items_three>` items.
+3. Parse the returned bytes as a PDF document.
+4. Search each page for the issuer email.
+5. Read the position of the issuer email and of the line directly above it on the last page.
+
+**Expected Results:**
+
+* The issuer email appears once in the document, on page 3.
+* Pages 1 and 2 carry no issuer email.
+* On page 3 the line directly above the issuer email is the issuer name.
+* The issuer block sits at the foot of page 3, right-aligned.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC68: A multi-page receipt carries the issuer block once, on the last page
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Document shape
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with `<receipt_items_two>` items, `<issuer>` as the issuer, `<item_total_n>` as the Item Total amounts, `<breakdown_1>` as the payment breakdown, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| receipt_items_two | The smallest count of items for which `ReceiptPdf` returns two pages and page 2 holds at least three item rows: from the largest count that returns one page, add items one at a time. Items are titled `Lot 001`, `Lot 002`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
+| issuer | Name `Issuer Co`, email `billing@example.com`. The name has no wordmark on file, so page 1 also draws it as text at the top right as the issuer mark. The issuer block is found by its email, with the name on the line directly above it |
+| item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
+| breakdown_1 | Original Invoice Total `HKD 125,312.00`, Previous Payments `HKD 0.00`, Current Payment Received `HKD 125,312.00`, Remaining Balance Due `HKD 0.00` |
+
+**Steps:**
+
+1. Find `<receipt_items_two>` by adding items one at a time until page 2 holds three item rows.
+2. Render `ReceiptPdf` with `<receipt_items_two>` items.
+3. Parse the returned bytes as a PDF document.
+4. Search each page for the issuer email.
+5. Read the position of the issuer email and of the line directly above it on page 2.
+
+**Expected Results:**
+
+* The issuer email appears once in the document, on page 2.
+* Page 1 carries no issuer email.
+* On page 2 the line directly above the issuer email is the issuer name.
+* The issuer block sits at the foot of page 2, right-aligned.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC69: The block draws every item amount as supplied and computes none
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Presentation-only contract
+
+**Pre-conditions:**
+
+* `<renderer>` is rendered with two items titled Lot A and Lot B, with amounts `<item 1 amounts>` and `<item 2 amounts>`, and Item Total amounts `<item total amounts>`, and every other required prop supplied.
+
+**Test data:**
+
+| `<renderer>` | `<item 1 amounts>` | `<item 2 amounts>` | `<item total amounts>` | `<cell drawn>` |
+| --- | --- | --- | --- | --- |
+| `InvoicePdf` | `HKD 100,000.00` / `HKD 20,000.00` / `HKD 120,000.00` | `HKD 50,000.00` / `HKD 10,000.00` / `HKD 60,000.00` | `HKD 1.00` / `HKD 30,000.00` / `HKD 180,000.00` | Item Total row, Winning Bid column: `HKD 1.00` |
+| `InvoicePdf` | `HKD 100,000.00` / `HKD 20,000.00` / `HKD 7.00` | `HKD 50,000.00` / `HKD 10,000.00` / `HKD 60,000.00` | `HKD 150,000.00` / `HKD 30,000.00` / `HKD 180,000.00` | Lot A row, Total column: `HKD 7.00` |
+| `InvoicePdf` | `HKD 100,000.00` / `HKD 20,000.00` / `HKD 120,000.00` | `HKD 50,000.00` / `HKD 10,000.00` / `HKD 60,000.00` | `HKD 150,000.00` / `HKD 30,000.00` / `180000.5` | Item Total row, Total column: `180000.5` |
+| `ReceiptPdf` | `HKD 100,000.00` / `HKD 20,000.00` / `HKD 120,000.00` | `HKD 50,000.00` / `HKD 10,000.00` / `HKD 60,000.00` | `HKD 1.00` / `HKD 30,000.00` / `HKD 180,000.00` | Item Total row, Winning Bid column: `HKD 1.00` |
+
+**Steps:**
+
+1. Render `<renderer>` with the two items with amounts `<item 1 amounts>` and `<item 2 amounts>`, and Item Total amounts `<item total amounts>`.
+2. Parse the returned bytes as a PDF document and read page 1.
+3. Read the cell described by `<cell drawn>`.
+4. Read every other amount cell in the item table.
+
+**Expected Results:**
+
+* The named cell reads exactly the supplied string.
+* Every other amount cell reads its own supplied string.
+* No cell shows a sum, a difference or a reformatted amount.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC70: A word wider than the Item column breaks inside the word
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `<item_word>` and `<item_serial>` as its items, in that order, `<item_total_2>` as the Item Total amounts, no embedded font, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| word | ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ | (78 letters, no space, wider than the Item column) |
+| item_word | Title `<word>`, Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` | · |
+| item_serial | Title `Serial <word> PSA-10`, Winning Bid `HKD 50,000.00`, Buyer's Premium `HKD 10,000.00`, Total `HKD 60,000.00` | · |
+| item_total_2 | Winning Bid `HKD 150,000.00`, Buyer's Premium `HKD 30,000.00`, Total `HKD 180,000.00` | · |
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Parse the returned bytes as a PDF document and read page 1.
+3. Read every line drawn for `<item_word>` and for `<item_serial>`, and the left edge of the Winning Bid column.
+
+**Expected Results:**
+
+* The `<item_word>` title is drawn on more than one line, and every line stops short of the Winning Bid column.
+* The `<item_serial>` title is drawn on more than one line, and every line stops short of the Winning Bid column.
+* Each item's three amounts are drawn once, on the first line of its title.
+* The first line of the `<item_serial>` title starts with `Serial`, and its last line ends with `PSA-10`.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC75: The issuer block never stands alone on a page
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Document shape
+
+**Pre-conditions:**
+
+* `<renderer>` is rendered once for each count in `<n>`, with `<charges_2>` as the charges, `<summary_1>` as the summary, `<item_total_n>` as the Item Total amounts, `<issuer>` as the issuer, no bank details, and, for `ReceiptPdf`, `<breakdown_1>` as the payment breakdown, and every other required prop supplied.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| n | Each count of items from 1 to 40, one render per count. Items are titled `Lot 01`, `Lot 02`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
+| item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
+| charges_2 | Shipping & Handling `HKD 80.00` and Insurance `HKD 40.00`, in that order |
+| summary_1 | Subtotal `HKD 121,312.00`, Payment Processing Fee `HKD 4,000.00`, Order Total `HKD 125,312.00` |
+| breakdown_1 | Original Invoice Total `HKD 125,312.00`, Previous Payments `HKD 0.00`, Current Payment Received `HKD 125,312.00`, Remaining Balance Due `HKD 0.00`, supplied to `ReceiptPdf` only |
+| issuer | Name `Issuer Co`, email `billing@example.com`. The name has no wordmark on file, so page 1 also draws it as text at the top right as the issuer mark. The issuer block is found by its email, with the name on the line directly above it |
+
+| `<renderer>` | Fixture notes |
+| --- | --- |
+| InvoicePdf | one full pass each |
+| ReceiptPdf | one full pass each |
+
+**Steps:**
+
+1. Render `<renderer>` with the first count in `<n>`.
+2. Parse the returned bytes as a PDF document.
+3. Find the page of the issuer email, of the summary and, on a receipt, of each of the four payment breakdown lines, and read every line drawn on the issuer email's page.
+4. Repeat steps 1 to 3 for each other count in `<n>`.
+5. Repeat steps 1 to 4 for the other renderer.
+
+**Expected Results:**
+
+* At every count, the page that shows the issuer email also shows the summary.
+* On a receipt, that page also shows the four payment breakdown lines.
+* On that page, no line of another section is drawn at or below the name line of the issuer block, the line directly above the issuer email.
+* At least one count of each renderer runs onto a second page.
+
+### g10.shared-invoice-and-receipt-pdf.US1-TC76: The issuer block sits in the same place on every document
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Document shape
+
+**Pre-conditions:**
+
+* Both documents are rendered with the issuer name `Issuer Co` and email `billing@example.com` (the name has no wordmark on file, so page 1 also draws it as text at the top right; the issuer block is found by its email, with the name on the line directly above it), items titled `Lot 01`, `Lot 02`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00`, Item Total amounts Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, and every other required prop supplied.
+* Bank details, where the row gives them, are a SWIFT rail (beneficiary `Test Beneficiary Ltd`, SWIFT/BIC `TESTHKHH`, account `000-123456-001`), an FPS rail (FPS ID `1234567`, beneficiary `Test Beneficiary Ltd`), an HK local transfer rail (bank and code `Test Bank 000`, beneficiary `Test Beneficiary Ltd`, account no. `123-456789-001`) and the reference `IN-LK42301`. A transfer reference, where the row gives one, is `TRF-7731`.
+
+**Test data:**
+
+| `<document>` | `<compared document>` |
+| --- | --- |
+| `InvoicePdf` with one item and bank details | `InvoicePdf` with one item and no bank details |
+| `InvoicePdf` with 30 items and no bank details | `InvoicePdf` with one item and no bank details |
+| `ReceiptPdf` with 30 items and no transfer reference | `ReceiptPdf` with one item and no transfer reference |
+| `ReceiptPdf` with one item and a transfer reference | `ReceiptPdf` with one item and no transfer reference |
+
+**Steps:**
+
+1. Render `<compared document>`.
+2. Parse the returned bytes as a PDF document and read the x and y of the issuer email and of the line directly above it on its last page.
+3. Render `<document>` with the same issuer.
+4. Parse the returned bytes as a PDF document and read the x and y of the issuer email and of the line directly above it on its last page.
+
+**Expected Results:**
+
+* Step 4: the issuer email and the line directly above it sit at the same x and y as in step 2.
+* The block sits at the foot of the last page, right-aligned, name above email.
+
 ## Settled
 
 - A Subtotal note that is an empty string or spaces only draws nothing and leaves no gap, as an omitted note does; the blank-content rule that keeps a required line's row does not reach an optional note (decisions Q34).
@@ -533,8 +1663,9 @@ Runs once per row of **Test data**.
 
 **Existing durable cases**
 
-QA1 flagged `TC1`, `TC5`, `TC8`, `TC42`, `TC53`, `TC64` and `TC65` as assuming a summary without a note. None asserts a note's absence: each supplies no Subtotal note, and the optional prop leaves what each asserts true. All seven are left `draft`, unchanged, and no re-issue is made.
+QA1 flagged `TC1`, `TC5`, `TC8`, `TC42`, `TC53`, `TC64` and `TC65` as assuming a summary without a note. None asserts a note's absence: each supplies no Subtotal note, and the optional prop leaves what each asserts true. All seven are left `draft` and their content unchanged; `TC5`, `TC64` and `TC65` are re-issued only for the r6 classification below.
 
+- Reclassified for tcs-rules r6: `TC4`, `TC5`, `TC6`, `TC9`, `TC11`, `TC13`, `TC17`, `TC18`, `TC21`, `TC24`, `TC26`, `TC34`, `TC35`, `TC49`, `TC51`, `TC54`, `TC55`, `TC56`, `TC58`, `TC59`, `TC60`, `TC64`, `TC65`, `TC67`, `TC68`, `TC69`, `TC70`, `TC75` and `TC76` are re-issued under their ids and markers with only Severity, Type or Suites changed, because the former values (`normal`, `acceptance`, `release`) are refused once this capability's suite is in the fold. Nothing else about them changed: steps, results, test data, trace, `covers`, `rev`, Status, Automation status and Decided-by are as the durable suite holds them, so the note above about `TC5`, `TC64` and `TC65` still stands for their content
 - `TC1`, `TC8` ("every prop supplied") predate the optional note. Their results list the charge and summary lines and none assumes a note is absent; a note row would not contradict them. A person who reads "every prop" as including the note finds it unasserted, which `TC81` and `TC88` assert
 - `TC5` (Insurance omitted), `TC53` (charges follow Item Total, three summary lines), `TC42` (one page) and `TC64`, `TC65` (page end) run without a note, and the summary they describe is the summary without one
 - The legacy `covers` lists on `TC1`, `TC2` and `TC5` name the same twelve scenarios each, far more than they assert; they include `SC-63o` and `SC-8b8`, whose text the amendment leaves as it was. They are over-claimed and left for `/tcs-review`
