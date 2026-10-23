@@ -311,9 +311,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-notifications-US-01
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/sweeps/progressFanout.spec.ts`
 
 **Pre-conditions:**
 
@@ -593,9 +595,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-notifications-US-02
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/sweeps/progressFanout.spec.ts`
 
 **Pre-conditions:**
 
@@ -1238,9 +1242,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-notifications-US-06
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/sweeps/notificationKinds.spec.ts`
 
 **Pre-conditions:**
 
@@ -1403,9 +1409,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-notifications-US-07
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/sweeps/closeOutcomeFanout.spec.ts`
 
 **Pre-conditions:**
 
@@ -1532,9 +1540,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-notifications-US-08
+
+**Decided by:** `grade10:apps/backend/grade10/auction/test/db/sweeps/closeOutcomeFanout.spec.ts`
 
 **Pre-conditions:**
 

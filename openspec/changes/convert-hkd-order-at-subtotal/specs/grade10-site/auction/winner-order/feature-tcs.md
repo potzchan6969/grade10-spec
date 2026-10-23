@@ -154,9 +154,11 @@
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order/keep-records.spec.ts`
 
 **Pre-conditions:**
 
@@ -300,9 +302,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order/keep-records.spec.ts`
 
 **Pre-conditions:**
 
@@ -405,9 +409,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order/keep-records.spec.ts`
 
 **Pre-conditions:**
 
@@ -496,9 +502,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order/keep-records.spec.ts`
 
 **Pre-conditions:**
 
@@ -842,9 +850,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts`
 
 **Pre-conditions:**
 
@@ -897,9 +907,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts`
 
 **Pre-conditions:**
 

@@ -228,9 +228,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** g10.auction-bidder-suspension.US1
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidder-suspension.spec.ts`
 
 **Pre-conditions:**
 
@@ -278,9 +280,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** g10.auction-bidder-suspension.US1
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidder-suspension.spec.ts`
 
 **Pre-conditions:**
 
@@ -518,9 +522,11 @@ and is signed in.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** g10.auction-bidder-suspension.US2
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidder-suspension.spec.ts`
 
 Runs once per row of **Test data**.
 
@@ -729,9 +735,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** g10.auction-bidder-suspension.US3
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidder-suspension.spec.ts`
 
 **Pre-conditions:**
 
