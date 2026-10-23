@@ -23,11 +23,9 @@ product page.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-product-page-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/src/serving/prerender.test.tsx`, `grade10:apps/frontend/grade10/src/chrome/navigation.test.tsx`
 
 **Pre-conditions:**
 
@@ -69,11 +67,9 @@ None.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-product-page-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/src/serving/prerender.test.tsx`, `grade10:apps/frontend/grade10/src/chrome/navigation.test.tsx`
 
 **Pre-conditions:**
 
