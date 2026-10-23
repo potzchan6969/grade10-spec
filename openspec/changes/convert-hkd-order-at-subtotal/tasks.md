@@ -34,7 +34,7 @@ The PDF blocks keep their contract but for one optional note on the Subtotal row
 - [ ] 5.1 Verify the pages the change touches read as the closed rows of `decisions.md` settle them: the Amount marks line in `post-bidding.md` reads `US$` for an Order Summary USD line (Q20); the Close paragraph and the Letters table read that the Auction won letter names the winning bid in US$ (Q25); the Payment received row of the Letters table lists the receipt letter's lines (Q9); the `Invoices sent before this layout` row reads as Q12 decides, test data kept as stored; `management.md` reads `A sent HKD invoice` (Q29) and `internal-bid.md` reads `House order total` (Q30); run `Cut` from `docs/governance/writing.md` on any line added
 - [ ] 5.2 Verify: `pnpm check:manual` names no line of `post-bidding.md`, `management.md`, `internal-bid.md`, `auction/index.md` or `money-amounts.md`; the failures that already stand on main are not this change's
 
-## 6. Pricing and the breakdown (grade10)
+## 6. Pricing and the breakdown (grade10) (owner: @seankcw)
 
 Needs groups 1 to 5 landed and the `external/grade10-spec` pin bumped, since `hkdFixtures.test.ts` reads the store's fixtures. Groups 7 to 9 need tasks 6.4 and 6.5 landed.
 
