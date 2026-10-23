@@ -44,10 +44,7 @@ function RewardItem({
           <VStack gap="none">
             <Text weight="medium">{item.name}</Text>
             {item.description ? (
-              <Text
-                className="line-clamp-2 text-secondary-foreground"
-                size="xs"
-              >
+              <Text className="line-clamp-2 text-xs text-secondary-foreground sm:text-sm">
                 {item.description}
               </Text>
             ) : null}
