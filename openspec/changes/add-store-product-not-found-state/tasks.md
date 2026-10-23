@@ -13,7 +13,7 @@
 - [ ] 2.2 Implement the route-local unknown-product presentation at the existing Store product `404` error boundary, preserving the loader's server/response boundary and non-404 rethrow behavior; use the existing design-system `Button`, Grade10 product catalog, and locale-aware listing address without adding a shared UI export, token, provider, or redirect.
 - [ ] 2.3 Run the focused serving/navigation tests, the frontend typecheck, and the relevant quality checks; confirm the existing product success path and generic catch-all not-found path remain unchanged.
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @kinisworking)
 
 - [ ] 3.1 Walk `grade10-site-store-product-page-US-01` end to end through the implemented product route using `g10.store-product-page.US1-TC1`, `g10.store-product-page.US1-TC2` and the composed `g10.store-dmn.US11-TC2`; verify `grade10-site-store-product-page-SC-03`, `grade10-site-store-product-page-SC-04`, the missing-product 404/UI contract, the generic unrelated-route boundary and the existing product success path, leaving draft manual cases for the later human QA walk.
 - [ ] 3.2 Mark only the cases the walk decides to automate with `pnpm run tcs:automated <case-id…> --decided-by grade10:openspec/changes/add-store-product-not-found-state/tasks.md` in the walk's own commit; keep the remaining cases manual for human QA.
