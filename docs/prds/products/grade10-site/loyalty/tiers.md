@@ -27,6 +27,8 @@ and it expires 12 months after the last activity.
 - **Reaching a tier** — what they earned in the last 12 months
 - **Keeping one** — what they earned in the tier period, the 12 months since
   it began
+- **Topped-up points** — count toward neither; a points pack adds to the
+  balance alone — [Top-ups](/p/grade10-site/loyalty/top-ups)
 
 Only earning moves the progress. Redeeming takes from the balance and leaves
 the progress untouched, so spending can never cost a member their tier.

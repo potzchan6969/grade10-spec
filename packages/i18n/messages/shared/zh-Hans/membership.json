@@ -87,7 +87,9 @@
     "adjust_credit": "积分已增加",
     "adjust_debit": "积分已扣除",
     "revoke": "积分已撤回",
-    "reverse": "积分已退回"
+    "reverse": "积分已退回",
+    "topup": "购买积分",
+    "topup_reversal": "已收回购买的积分"
   },
   "activityChannel": {
     "online": "网店",

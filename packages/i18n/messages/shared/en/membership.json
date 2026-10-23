@@ -87,7 +87,9 @@
     "adjust_credit": "Points added",
     "adjust_debit": "Points taken off",
     "revoke": "Points revoked",
-    "reverse": "Points returned"
+    "reverse": "Points returned",
+    "topup": "Points bought",
+    "topup_reversal": "Bought points taken back"
   },
   "activityChannel": {
     "online": "Online store",

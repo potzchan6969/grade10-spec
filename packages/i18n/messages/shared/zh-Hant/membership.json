@@ -87,7 +87,9 @@
     "adjust_credit": "積分已增加",
     "adjust_debit": "積分已扣除",
     "revoke": "積分已撤回",
-    "reverse": "積分已退回"
+    "reverse": "積分已退回",
+    "topup": "購買積分",
+    "topup_reversal": "已收回購買的積分"
   },
   "activityChannel": {
     "online": "網店",

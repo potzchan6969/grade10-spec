@@ -76,7 +76,7 @@ a Google account under it -
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
-| Activity | The member's own ledger. Every line says where it came from — the counter, the online store, or the programme itself |
+| Activity | The member's own ledger. Every line says where it came from — the counter, the online store, or the programme itself. Earned and topped-up points read apart, here and in the balance — [Top-ups](/p/grade10-site/loyalty/top-ups) |
 
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
@@ -164,6 +164,8 @@ The same pass can be added to a phone wallet —
 | Points taken off | An operator's correction, downward |
 | Points revoked | A refund's claw-back |
 | Points returned | A reversed redemption, or a cancelled or refunded sale that points paid for |
+| Points bought | A points pack, paid by card — [Top-ups](/p/grade10-site/loyalty/top-ups) |
+| Bought points taken back | A chargeback, or a refund made in Stripe's dashboard, on a pack |
 
 - **Notified** — every identification the member did not show a code for —
   email, phone, the customer on the cart, an Apple pass — sends a notice at
@@ -181,7 +183,8 @@ The same pass can be added to a phone wallet —
   leak of the loyalty database exposes balances and identifiers, not people
 - **Deleting the account ends the membership** — balance, tier progress
   and coupons end at once, a waiting collection is cancelled without a
-  refund, and the ledger record survives for audit
+  refund, an open or held top-up closes with nothing charged, and the ledger
+  record survives for audit
 
 :::callout{kind="note"}
 The tier card has a design frame. The
