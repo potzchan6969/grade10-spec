@@ -50,7 +50,7 @@ export const Default: Story = {
 
 /** The open coupon's Use now opens its scan card — a dialog from 640px up —
  * over the list, and closing hands the member back to it. */
-export const ScanCard: Story = {
+export const ScanCoupon: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const toggle = canvas.getByRole("button", { name: "Use now" });
@@ -76,7 +76,7 @@ export const ScanCard: Story = {
 };
 
 /** Under 640px the same press slides the scan card up as a sheet. */
-export const ScanCardNarrow: Story = {
+export const ScanCouponNarrow: Story = {
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -89,10 +89,10 @@ export const ScanCardNarrow: Story = {
   },
 };
 
-/** A reward coupon carries no code: it is spent from the wallet by id, so
- * its stub reads its own expiry instead — the scan is still its way to the
- * till. */
-export const Wallet: Story = {
+/** A coupon whose consumer never passes a code — a reward coupon spends
+ * from the wallet by id — reads its stub as its amount, and its scan is
+ * still its way to the till. */
+export const Codeless: Story = {
   args: {
     state: {
       status: "ready",
@@ -121,10 +121,31 @@ export const Masked: Story = {
   },
 };
 
-export const Loading: Story = { args: { state: { status: "loading" } } };
+/** Three skeleton tickets while the wallet resolves. */
+export const Loading: Story = {
+  args: { state: { status: "loading" } },
+  play: async ({ canvasElement }) => {
+    expect(
+      canvasElement.querySelectorAll("[data-slot='coupon-list-loading']")
+        .length,
+    ).toBe(1);
+  },
+};
 
+/** The empty wallet names itself and says how to fill it. */
 export const Empty: Story = {
   args: {
-    state: { status: "empty", message: "No coupons yet." },
+    state: {
+      status: "empty",
+      message: "No coupons yet",
+      description: "Coupons you earn or get from the shop appear here.",
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("No coupons yet")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Coupons you earn or get from the shop appear here."),
+    ).toBeInTheDocument();
   },
 };

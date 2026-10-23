@@ -183,8 +183,11 @@ const COUPONS_PAGE_COPY = {
     "Coupons your rewards and the shop have left you. Present one at the till, or apply it at checkout.",
   availableTab: "Available",
   historyTab: "Used & Expired",
-  noAvailable: "No coupons to spend right now.",
-  noHistory: "Nothing used or expired yet.",
+  noAvailable: "Nothing to use yet",
+  noAvailableDescription: "Coupons you earn or get from the shop appear here.",
+  noHistory: "No used or expired coupons",
+  noHistoryDescription:
+    "Coupons you've spent, or that have lapsed, appear here.",
 };
 
 const MEMBERSHIP_PAGE_COPY = {

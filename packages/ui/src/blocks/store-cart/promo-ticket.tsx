@@ -3,6 +3,7 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { QrCode, Tag } from "@phosphor-icons/react";
+import { Skeleton } from "boneyard-js/react";
 import { type ReactNode, useState } from "react";
 import type { HeldPromoCode } from "./types";
 
@@ -78,8 +79,44 @@ type PromoTicketProps = {
   /** Typically the Apply control for an applicable code — the online cart's
    * alone; a store-facing ticket takes none. */
   action?: ReactNode;
+  /** Boneyard skeleton while the consumer resolves the held codes. */
+  loading?: boolean;
   className?: string;
 };
+
+/** Stand-in ticket for the skeleton — the bones read its shape, never its
+ * words. */
+const SKELETON_CODE: HeldPromoCode = {
+  applicable: true,
+  id: "promo-ticket-skeleton",
+  title: "HK$50 off any order",
+  detailLabel: "Use by 30 Jun 2027",
+  label: "GRD-50-7Q2M",
+};
+
+const SKELETON_QR: PromoTicketQr = {
+  value: "g10:redeem:skeleton",
+  altText: "Skeleton scan code",
+  toggleLabel: "Use now",
+};
+
+/** Boneyard shell in a ticket's shape, for a list still resolving. */
+function PromoTicketSkeleton({ className }: { className?: string }) {
+  return (
+    <Skeleton
+      animate="pulse"
+      className={cn("w-full", className)}
+      color="#E6E6E6"
+      darkColor="rgba(249, 250, 250, 0.05)"
+      fixture={<PromoTicketContent code={SKELETON_CODE} qrCode={SKELETON_QR} />}
+      loading
+      name="store-cart-promo-ticket"
+      transition={300}
+    >
+      <PromoTicketContent code={SKELETON_CODE} qrCode={SKELETON_QR} />
+    </Skeleton>
+  );
+}
 
 /**
  * Promo code as a ticket: side cutouts, dashed tear line, drop-shadow that
@@ -87,6 +124,17 @@ type PromoTicketProps = {
  * Shopper copy on the surface must say “promo code”, never “coupon”.
  */
 function PromoTicket({
+  loading = false,
+  className,
+  ...props
+}: PromoTicketProps) {
+  if (loading) {
+    return <PromoTicketSkeleton className={className} />;
+  }
+  return <PromoTicketContent className={className} {...props} />;
+}
+
+function PromoTicketContent({
   code,
   selected = false,
   muted = false,
@@ -98,7 +146,7 @@ function PromoTicket({
   labelIcon,
   action,
   className,
-}: PromoTicketProps) {
+}: Omit<PromoTicketProps, "loading">) {
   const used = usedLabel != null;
   const borderTone = selected ? "border-ring" : "border-border";
   const hasDetail =
@@ -201,4 +249,4 @@ function PromoTicket({
 }
 
 export type { PromoTicketProps, PromoTicketQr };
-export { PromoTicket };
+export { PromoTicket, PromoTicketSkeleton };

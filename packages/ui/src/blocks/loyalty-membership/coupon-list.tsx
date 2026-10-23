@@ -1,7 +1,8 @@
 "use client";
 
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { List, ListItem } from "@grade10/design-system/components/display/list";
-import { Skeleton } from "@grade10/design-system/components/display/skeleton";
+import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
@@ -15,11 +16,13 @@ import {
   DrawerContent,
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
+import { cn } from "@grade10/design-system/lib/utils";
+import { Ticket } from "@phosphor-icons/react";
 import { useEffect, useId, useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
 import { PromoQrCard } from "../store-cart/promo-qr-card";
-import { PromoTicket } from "../store-cart/promo-ticket";
+import { PromoTicket, PromoTicketSkeleton } from "../store-cart/promo-ticket";
 import type { CouponItem } from "./types";
 
 const SM_UP_MQ = "(min-width: 640px)";
@@ -152,7 +155,9 @@ function CouponScanSurface({
   const title = item.description ?? item.amount;
 
   const body = (
-    <VStack className="w-full" gap="md">
+    /* The dialog's close control floats at its top corner — the ticket starts
+     * low enough to clear it. */
+    <VStack className={cn("w-full", smUp && "pt-10")} gap="md">
       {smUp ? (
         <DialogTitle className="sr-only">{title}</DialogTitle>
       ) : (
@@ -225,16 +230,37 @@ function CouponList({
   return (
     <VStack className={className} data-slot="coupon-list" gap="sm">
       {state.status === "loading" ? (
-        <VStack className="gap-3" data-slot="coupon-list-loading">
-          <Skeleton className="h-12 w-full" />
-          <Skeleton className="h-12 w-full" />
+        <VStack className="gap-2" data-slot="coupon-list-loading">
+          <PromoTicketSkeleton />
+          <PromoTicketSkeleton />
+          <PromoTicketSkeleton />
         </VStack>
       ) : null}
-      {state.status === "empty" || state.status === "error" ? (
+      {state.status === "empty" ? (
+        <EmptyState
+          actions={
+            state.action ? (
+              <Button
+                disabled={state.action.pending}
+                onClick={state.action.onAction}
+                type="button"
+                variant="secondary"
+              >
+                {state.action.label}
+              </Button>
+            ) : undefined
+          }
+          data-slot="coupon-list-empty"
+          description={state.description}
+          icon={<Ticket aria-hidden />}
+          title={state.message}
+        />
+      ) : null}
+      {state.status === "error" ? (
         <AsyncMessage
           action={state.action}
           message={state.message}
-          slot={`coupon-list-${state.status}`}
+          slot="coupon-list-error"
         />
       ) : null}
       {state.status === "ready" ? (

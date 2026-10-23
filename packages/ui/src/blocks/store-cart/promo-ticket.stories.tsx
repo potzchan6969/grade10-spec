@@ -206,6 +206,21 @@ export const UsedTicket: Story = {
   },
 };
 
+/** Boneyard skeleton while the held codes resolve. */
+export const Loading: Story = {
+  args: { loading: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("group")).not.toBeInTheDocument();
+    expect(canvas.queryByRole("button")).not.toBeInTheDocument();
+  },
+};
+
+/** Boneyard capture target — keep `loading` so the CLI reads the fixture. */
+export const BoneyardCapture: Story = {
+  args: { loading: true },
+};
+
 /** Stack of tickets as they appear in the promo sheet. */
 export const List: Story = {
   render: () => (

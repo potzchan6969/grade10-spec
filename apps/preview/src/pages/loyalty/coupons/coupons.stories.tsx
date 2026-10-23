@@ -17,10 +17,13 @@ import {
 
 const isOpen = (coupon: CouponItem) => coupon.status === "open";
 
-const couponState = (data: readonly CouponItem[], emptyMessage: string) =>
+const couponState = (
+  data: readonly CouponItem[],
+  empty: { message: string; description: string },
+) =>
   data.length > 0
     ? { status: "ready" as const, data }
-    : { status: "empty" as const, message: emptyMessage };
+    : { status: "empty" as const, ...empty };
 
 /**
  * The coupon wallet as a store assembles it: `SiteHeader`, the page's own
@@ -55,10 +58,10 @@ function CouponsPage() {
             <TabsContent className="pt-4" value="available">
               <CouponList
                 copy={COUPON_LIST_COPY}
-                state={couponState(
-                  COUPONS.filter(isOpen),
-                  COUPONS_PAGE_COPY.noAvailable,
-                )}
+                state={couponState(COUPONS.filter(isOpen), {
+                  message: COUPONS_PAGE_COPY.noAvailable,
+                  description: COUPONS_PAGE_COPY.noAvailableDescription,
+                })}
               />
             </TabsContent>
             <TabsContent className="pt-4" value="history">
@@ -66,7 +69,10 @@ function CouponsPage() {
                 copy={COUPON_LIST_COPY}
                 state={couponState(
                   COUPONS.filter((coupon) => !isOpen(coupon)),
-                  COUPONS_PAGE_COPY.noHistory,
+                  {
+                    message: COUPONS_PAGE_COPY.noHistory,
+                    description: COUPONS_PAGE_COPY.noHistoryDescription,
+                  },
                 )}
               />
             </TabsContent>

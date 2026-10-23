@@ -37,7 +37,7 @@ so redefining the reward never rewrites a coupon a member already holds —
 coupon is passed one; 🚧 a money-off redemption mints one member-readable
 code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 
-::story{id="loyalty-coupons-blocks-couponlist--wallet" title="The coupons a member holds"}
+::story{id="loyalty-coupons-blocks-couponlist--codeless" title="The coupons a member holds"}
 
 ## Applying one
 
