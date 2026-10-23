@@ -92,7 +92,13 @@ function StepIndicator({
         data-state={state}
         {...props}
       >
-        <CheckboxButton className="pointer-events-none" tabIndex={-1} />
+        {/* Controlled like the completed ring: the same element is reused when
+            a step completes, and Base UI fixes controlled-ness on first render. */}
+        <CheckboxButton
+          checked={false}
+          className="pointer-events-none"
+          tabIndex={-1}
+        />
       </span>
     );
   }
