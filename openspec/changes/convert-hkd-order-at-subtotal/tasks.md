@@ -4,7 +4,7 @@
 - [ ] 1.2 Add `winner.subtotal` to `packages/i18n/messages/shared/{en,zh-Hans,zh-Hant,ko}/auctionOrders.json`; `winner.convertedFrom` already exists in all four and keeps the note's wording (`winner-order-SC-290`)
 - [ ] 1.3 Verify: `pnpm --filter @grade10/i18n run test`, `pnpm --filter @grade10/i18n run typecheck`
 
-## 2. AuctionWinnerOrder rows (grade10-spec)
+## 2. AuctionWinnerOrder rows (grade10-spec) (owner: @seankcw)
 
 - [ ] 2.1 Write the block tests first, in their own commit: `summary.subtotal` and `summary.feeLines` render between two separators then the total, the Subtotal's footnote shows under it only, a summary with neither renders as before, and each prop draws on its own, both sets drawing when both arrive; retarget the existing summary tests from `winner-order-SC-290`, `winner-order-SC-304` and `winner-order-SC-291` to the scenarios below (`g10.shared-auction-order.SC1`, `g10.shared-auction-order.SC2`, `g10.shared-auction-order.SC3`, `g10.shared-auction-order.SC4`, `g10.shared-auction-order.SC5`)
 - [ ] 2.2 Retarget the Order Summary, Payment and Fulfilment stories and their fixtures to the same ids; the block's code needs no change because #1288 merged the props (`g10.shared-auction-order.SC1`, `g10.shared-auction-order.SC2`)
