@@ -58,7 +58,8 @@ In Your Orders.
 - **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload, from a second tab or after a lost answer; a purchase already paid opens its order
 - **After a refusal** - A Pay after the purchase's order failed or was canceled starts the purchase again
 - **Changed purchase** - A changed basket or tender starts a new purchase and retires the older unpaid invoice. Only the member's own edit retires it; the shop's stock or price review leaves it for the next Pay to replace
-- **Recovery** - An uncertain payment handoff keeps the existing purchase visible and recoverable without opening a second payable invoice; one Shopify cannot name waits for an operator, and the member starts no new purchase until it is settled
+- **Recovery** - An uncertain payment handoff keeps the existing purchase visible and recoverable without opening a second payable invoice
+- **Lost answer** - Pay keeps looking for the invoice Shopify made for about 6 seconds before asking the collector to try again. A purchase Shopify holds no invoice for closes once **2 minutes** have passed, or later while Shopify cannot be read, returning its coupons and points, and the next Pay starts it again. Until then it holds only its own coupon and points; the collector's other purchases go ahead
 
 🚧 **Return path** - Shopify's Thank You and Order status extension offers a
 Grade10 Your Orders link, and the staging walk proves the matching purchase
@@ -139,6 +140,7 @@ joins one under that email.
 | Guest paid cart | Decided | A guest's cart empties when this browser reads the order paid, not when the invoice opens; a cart changed after Pay is kept. Decided 2026-10-15, the owner's answer; supersedes emptying at invoice open. | Product |
 | Paid cart | Decided | Preserve later member edits and rebuilt carts; stock or price changes written by the shop's review alone still allow the paid cart to clear. | @kinisworking |
 | Invoice retirement | Decided | Only the member's own line or tender edit retires an open invoice. The shop's stock or price review leaves it for the next Pay to replace. Decided 2026-10-08. | Product |
+| Lost answer | Decided | A purchase whose Shopify answer was lost closes itself 2 minutes after it was written: the store deletes any unpaid invoice under its tag, cancels it and gives back its coupons and points. Until then it holds only its own coupon and points. Decided 2026-10-23; supersedes operator review, which held the member's every purchase until a person bound or canceled the invoice. | Product |
 | Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |
 | Verification gate | Decided | Dropped 2026-10-13. Grade10 never required a sign-in or a verified identity for a checkout at HKD 120,000, for a member or a guest. | Product |
 | Session ends at Proceed to Checkout | ❓ Open | When a member's session has ended as they press it, the cart drawer closes. Does the collector then meet a sign-in dialog, as the drawer opens today, or check out as a guest, as Guest Checkout says of a collector with no session? Recommended: no dialog; the collector presses Cart and checks out as a guest. | @kinisworking |
