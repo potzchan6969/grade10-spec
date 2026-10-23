@@ -25,8 +25,8 @@
 **I want** to set a hidden house maximum on a listing, the internal bidder it bids as, and the time Grade10 commits it,
 **so that** the lot cannot sell below what the house will accept, without a high starting price putting early bidders off.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-d07 rev=3 covers=g10adm.auction-internal-bid.SC-dq6,g10adm.auction-internal-bid.SC-glg -->
-### grade10-admin-auction-internal-bid-US1-TC1-3: At its time the internal bid is committed and resolved like a maximum
+<!-- trace:case id=g10adm.auction-internal-bid.TC-d07 rev=4 covers=g10adm.auction-internal-bid.SC-dq6,g10adm.auction-internal-bid.SC-glg -->
+### grade10-admin-auction-internal-bid-US1-TC1-4: At its time the internal bid is committed and resolved like a maximum
 
 Runs once per row of **Test data**.
 
@@ -62,8 +62,8 @@ Runs once per row of **Test data**.
 | Row | Bidding before `<commit time>` | Leader after `<commit time>` | Highest bid after `<commit time>` |
 | --- | --- | --- | --- |
 | No bids | None | The house | `<starting price>`, the first maximum standing on the starting price |
-| House higher | customer A leads at `<starting price>` with maximum 500000 | The house | 505000: customer A's maximum plus its 5000 increment |
-| Collector higher | customer A leads at `<starting price>` with maximum 700000 | customer A | 605000: `<house maximum>` plus its 5000 increment |
+| House higher | customer A leads at `<starting price>` with maximum 500000 | The house | 550000: customer A's maximum plus its 50000 increment |
+| Collector higher | customer A leads at `<starting price>` with maximum 700000 | customer A | 650000: `<house maximum>` plus its 50000 increment |
 
 **Steps:**
 
@@ -85,8 +85,8 @@ Runs once per row of **Test data**.
 * Step 8: every house row in Recent bids carries one listing pseudonym, as a collector's does, and nothing names the house.
 * Step 8: no row shows `<internal bidder>`'s name or email label.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-5y2 rev=3 covers=g10adm.auction-internal-bid.SC-2s1 -->
-### grade10-admin-auction-internal-bid-US1-TC2-3: Commit time at the limits of the window is accepted
+<!-- trace:case id=g10adm.auction-internal-bid.TC-5y2 rev=4 covers=g10adm.auction-internal-bid.SC-2s1 -->
+### grade10-admin-auction-internal-bid-US1-TC2-4: Commit time at the limits of the window is accepted
 
 Runs once per row of **Test data**.
 
@@ -121,7 +121,7 @@ Runs once per row of **Test data**.
 | Row | `<listing_2>` before the commit | `<commit time>` | After the commit |
 | --- | --- | --- | --- |
 | At the start | Upcoming, `<start>` 15 minutes away, no bids | Exactly `<start>` | The house leads at `<starting price>` from `<start>` |
-| At the scheduled close | Taking bids, customer A leads at `<starting price>` with maximum 500000, `<scheduled close>` 15 minutes away | Exactly `<scheduled close>` | The house leads at 505000, and the lot is in extended bidding with its close `<extension duration>` after `<scheduled close>` |
+| At the scheduled close | Taking bids, customer A leads at `<starting price>` with maximum 500000, `<scheduled close>` 15 minutes away | Exactly `<scheduled close>` | The house leads at 550000, and the lot is in extended bidding with its close `<extension duration>` after `<scheduled close>` |
 
 **Steps:**
 
@@ -288,8 +288,8 @@ Runs once per row of **Test data**.
 * Step 2 refuses the write as not editable.
 * Step 3: `<listing_5>` holds no internal bid.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-88a rev=2 covers=none -->
-### grade10-admin-auction-internal-bid-US1-TC6-2: An internal bid at the currency ceiling is committed
+<!-- trace:case id=g10adm.auction-internal-bid.TC-88a rev=3 covers=none -->
+### grade10-admin-auction-internal-bid-US1-TC6-3: An internal bid at the currency ceiling is committed
 
 **Classification:**
 
@@ -329,7 +329,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2 saves the internal bid.
-* Step 4: the house leads at `<customer A maximum>` plus its increment, 505000 minor units.
+* Step 4: the house leads at `<customer A maximum>` plus its increment, 550000 minor units.
 * Step 5 is refused at the ceiling; the house still leads.
 
 <!-- trace:case id=g10adm.auction-internal-bid.TC-jm4 rev=2 covers=none -->
@@ -572,8 +572,8 @@ Runs once per row of **Test data**.
 * Step 4: Recent bids holds no row.
 * Step 5: the house leads at `<starting price>`, one bid.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-6a2 rev=2 covers=g10adm.auction-internal-bid.SC-rzl -->
-### grade10-admin-auction-internal-bid-US1-TC12-2: One internal bidder serves internal bids on several listings
+<!-- trace:case id=g10adm.auction-internal-bid.TC-6a2 rev=3 covers=g10adm.auction-internal-bid.SC-rzl -->
+### grade10-admin-auction-internal-bid-US1-TC12-3: One internal bidder serves internal bids on several listings
 
 **Classification:**
 
@@ -607,7 +607,7 @@ Runs once per row of **Test data**.
 | `<customer B maximum>` | 500000 minor units (US$5,000.00) |
 | `<house maximum>` | 600000 minor units (US$6,000.00), on both listings |
 | `<commit time>` | 10 minutes from now, on both listings |
-| `<house bid on listing_52>` | 505000 minor units: `<customer B maximum>` plus its 5000 increment |
+| `<house bid on listing_52>` | 550000 minor units: `<customer B maximum>` plus its 50000 increment |
 
 **Steps:**
 
@@ -627,8 +627,8 @@ Runs once per row of **Test data**.
 * Step 7: on `<listing_53>` the house leads at `<starting price>`, one bid, as Bidder 1.
 * Step 7: neither lot page shows `<internal bidder>`'s name or email label, or names the other lot.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-akn rev=2 covers=g10adm.auction-internal-bid.SC-dnq,g10adm.auction-internal-bid.SC-i32 -->
-### grade10-admin-auction-internal-bid-US1-TC13-2: The internal bidder changes only before the internal bid's time
+<!-- trace:case id=g10adm.auction-internal-bid.TC-akn rev=3 covers=g10adm.auction-internal-bid.SC-dnq,g10adm.auction-internal-bid.SC-i32 -->
+### grade10-admin-auction-internal-bid-US1-TC13-3: The internal bidder changes only before the internal bid's time
 
 Runs once per row of **Test data**.
 
@@ -666,8 +666,8 @@ Runs once per row of **Test data**.
 | Row | Internal bid's state and amount | Save | Internal bidder after Save |
 | --- | --- | --- | --- |
 | Before its time | Scheduled, 800000 minor units, its time 10 minutes from now | Accepted | `<bidder Q>`; once its time passes, the house's bid names `<bidder Q>` |
-| Placed | Placed, 800000 minor units, committed at its time 10 minutes ago; the house leads at 705000 | Refused, saying the internal bidder is fixed | `<bidder P>` |
-| Not placed | Not placed, 400000 minor units (`<starting price>`), short of the 402500 minimum next bid at its time 10 minutes ago | Refused, saying the internal bidder is fixed | `<bidder P>` |
+| Placed | Placed, 800000 minor units, committed at its time 10 minutes ago; the house leads at 750000 | Refused, saying the internal bidder is fixed | `<bidder P>` |
+| Not placed | Not placed, 400000 minor units (`<starting price>`), short of the 425000 minimum next bid at its time 10 minutes ago | Refused, saying the internal bidder is fixed | `<bidder P>` |
 
 **Steps:**
 
@@ -735,8 +735,8 @@ Runs once per row of **Test data**.
 **I want** to change or remove the amount and the time until the internal bid is committed,
 **so that** I can react to the market before the house has bid at all.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-qbl rev=2 covers=g10adm.auction-internal-bid.SC-jtj -->
-### grade10-admin-auction-internal-bid-US2-TC1-2: A changed amount and time commit as changed
+<!-- trace:case id=g10adm.auction-internal-bid.TC-qbl rev=3 covers=g10adm.auction-internal-bid.SC-jtj -->
+### grade10-admin-auction-internal-bid-US2-TC1-3: A changed amount and time commit as changed
 
 **Classification:**
 
@@ -769,7 +769,7 @@ Runs once per row of **Test data**.
 | `<first time>` | 10 minutes from now |
 | `<second amount>` | 550000 minor units (US$5,500.00), lower than `<first amount>` |
 | `<second time>` | 30 minutes from now |
-| `<price after commit>` | 505000 minor units: `<customer A maximum>` plus its 5000 increment |
+| `<price after commit>` | 550000 minor units: `<customer A maximum>` plus its 50000 increment |
 
 **Steps:**
 
@@ -986,8 +986,8 @@ Runs once per row of **Test data**.
 * Step 3: Highest bid and the leader read the row's values.
 * Step 3: Recent bids gains the house's new bid under its listing pseudonym.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-vk1 rev=2 covers=none -->
-### grade10-admin-auction-internal-bid-US3-TC2-2: A raise while leading moves neither the price nor the leader
+<!-- trace:case id=g10adm.auction-internal-bid.TC-vk1 rev=3 covers=none -->
+### grade10-admin-auction-internal-bid-US3-TC2-3: A raise while leading moves neither the price nor the leader
 
 **Classification:**
 
@@ -1017,10 +1017,10 @@ Runs once per row of **Test data**.
 | `<listing_12>` | A published USD listing taking bids, scheduled close a day away |
 | `<house maximum>` | 600000 minor units (US$6,000.00) |
 | `<customer A maximum>` | 500000 minor units (US$5,000.00) |
-| `<current bid>` | 505000 minor units: `<customer A maximum>` plus its 5000 increment |
+| `<current bid>` | 550000 minor units: `<customer A maximum>` plus its 50000 increment |
 | `<raised maximum>` | 750000 minor units (US$7,500.00) |
 | `<customer B maximum>` | 700000 minor units, above `<house maximum>` and below `<raised maximum>` |
-| `<price after customer B>` | 705000 minor units: `<customer B maximum>` plus its 5000 increment |
+| `<price after customer B>` | 750000 minor units: `<customer B maximum>` plus its 50000 increment, capped at `<raised maximum>` |
 
 **Steps:**
 
@@ -1132,8 +1132,8 @@ Runs once per row of **Test data**.
 * Step 5 is refused, and says the time is fixed.
 * Step 6 still shows `<house maximum>` committed at `<commit time>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-nrn rev=2 covers=g10adm.auction-internal-bid.SC-hsd -->
-### grade10-admin-auction-internal-bid-US3-TC5-2: A raise still short of the next minimum is refused
+<!-- trace:case id=g10adm.auction-internal-bid.TC-nrn rev=3 covers=g10adm.auction-internal-bid.SC-hsd -->
+### grade10-admin-auction-internal-bid-US3-TC5-3: A raise still short of the next minimum is refused
 
 **Classification:**
 
@@ -1163,8 +1163,8 @@ Runs once per row of **Test data**.
 | `<listing_30>` | A published USD listing taking bids, scheduled close a day away |
 | `<house maximum>` | 600000 minor units (US$6,000.00) |
 | `<customer A maximum>` | 700000 minor units (US$7,000.00) |
-| `<current bid>` | 605000 minor units: `<house maximum>` plus its 5000 increment |
-| `<short raise>` | 609900 minor units (US$6,099), one major unit below `<current bid>` plus its 5000 increment |
+| `<current bid>` | 650000 minor units: `<house maximum>` plus its 50000 increment |
+| `<short raise>` | 699900 minor units (US$6,999), one major unit below `<current bid>` plus its 50000 increment |
 
 **Steps:**
 
@@ -1179,8 +1179,8 @@ Runs once per row of **Test data**.
 * Step 3 still shows `<house maximum>`, committed.
 * Step 4: customer A still leads at `<current bid>`; Recent bids gains no row.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-fku rev=2 covers=g10adm.auction-internal-bid.SC-ubh -->
-### grade10-admin-auction-internal-bid-US3-TC6-2: A placed internal bid still raises after its internal bidder is retired
+<!-- trace:case id=g10adm.auction-internal-bid.TC-fku rev=3 covers=g10adm.auction-internal-bid.SC-ubh -->
+### grade10-admin-auction-internal-bid-US3-TC6-3: A placed internal bid still raises after its internal bidder is retired
 
 **Classification:**
 
@@ -1212,9 +1212,9 @@ Runs once per row of **Test data**.
 | `<bidder P>` | A retired internal bidder profile: name "QA House P", email label qa-house-p@internal.test |
 | `<house maximum>` | 600000 minor units (US$6,000.00) |
 | `<customer A maximum>` | 700000 minor units (US$7,000.00) |
-| `<current bid>` | 605000 minor units: `<house maximum>` plus its 5000 increment |
+| `<current bid>` | 650000 minor units: `<house maximum>` plus its 50000 increment |
 | `<raised maximum>` | 800000 minor units (US$8,000.00) |
-| `<new highest bid>` | 705000 minor units: `<customer A maximum>` plus its 5000 increment |
+| `<new highest bid>` | 750000 minor units: `<customer A maximum>` plus its 50000 increment |
 
 **Steps:**
 
@@ -1345,8 +1345,8 @@ Runs once per row of **Test data**.
 * Step 3 still shows `<house maximum>`.
 * Step 4: Highest bid still reads `<current bid>`; the leader and Recent bids are unchanged.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-79d rev=2 covers=g10adm.auction-internal-bid.SC-wmp -->
-### grade10-admin-auction-internal-bid-US4-TC3-2: A lower at or after the close is refused
+<!-- trace:case id=g10adm.auction-internal-bid.TC-79d rev=3 covers=g10adm.auction-internal-bid.SC-wmp -->
+### grade10-admin-auction-internal-bid-US4-TC3-3: A lower at or after the close is refused
 
 **Classification:**
 
@@ -1373,8 +1373,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<house maximum>` | 700000 minor units (US$7,000.00) |
-| `<current bid>` | 555000 minor units |
-| `<lowered amount>` | 600000 minor units, above `<current bid>` |
+| `<current bid>` | 600000 minor units |
+| `<lowered amount>` | 600000 minor units, equal to `<current bid>`, an amount a lower accepts while the lot is open |
 
 **Steps:**
 
@@ -1500,8 +1500,8 @@ Runs once per row of **Test data**.
 * Step 5 reads the row's outcome.
 * Step 5: after a not-placed row, Recent bids gains no row and nothing tells a collector of it.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-7rg rev=2 covers=g10adm.auction-internal-bid.SC-quv -->
-### grade10-admin-auction-internal-bid-US5-TC2-2: Raising a not-placed internal bid places it at once
+<!-- trace:case id=g10adm.auction-internal-bid.TC-7rg rev=3 covers=g10adm.auction-internal-bid.SC-quv -->
+### grade10-admin-auction-internal-bid-US5-TC2-3: Raising a not-placed internal bid places it at once
 
 **Classification:**
 
@@ -1533,7 +1533,7 @@ Runs once per row of **Test data**.
 | `<current bid>` | 600000 minor units |
 | `<short amount>` | 550000 minor units, below `<current bid>` |
 | `<raised amount>` | 800000 minor units, above `<customer A maximum>` |
-| `<price after raise>` | 705000 minor units: `<customer A maximum>` plus its 5000 increment |
+| `<price after raise>` | 750000 minor units: `<customer A maximum>` plus its 50000 increment |
 
 **Steps:**
 
@@ -1855,8 +1855,8 @@ Runs once per row of **Test data**.
 **I want** the order and invoice of a lot an internal bidder won to be issued to that internal bidder and flagged internal,
 **so that** I can let the invoice expire and cancel the order as I do any unpaid order, while knowing it was the house's win.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-rzs rev=4 covers=none -->
-### grade10-admin-auction-internal-bid-US6-TC1-4: A house win opens one order for its internal bidder, flagged internal
+<!-- trace:case id=g10adm.auction-internal-bid.TC-rzs rev=5 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC1-5: A house win opens one order for its internal bidder, flagged internal
 
 Runs once per row of **Test data**.
 
@@ -1889,9 +1889,9 @@ Runs once per row of **Test data**.
 
 | Row | Bidding at the close | Order for `<listing_21>` after the close | customer A's row on My Auctions |
 | --- | --- | --- | --- |
-| House wins | The house leads at 505000 USD over customer A's maximum of 500000 USD | One order, flagged internal, buyer House with `<internal bidder>`'s name and email label, winning bid 505000 USD, HKD settlement on FPS | Didn't win, card not charged |
+| House wins | The house leads at 550000 USD over customer A's maximum of 500000 USD | One order, flagged internal, buyer House with `<internal bidder>`'s name and email label, winning bid 550000 USD, HKD settlement on FPS | Didn't win, card not charged |
 | House alone | The house leads at `<starting price>`, with no collector bid | One order, flagged internal, buyer House with `<internal bidder>`'s name and email label, winning bid `<starting price>` USD, HKD settlement on FPS | No row; customer A never bid |
-| Collector beats the house | customer A leads at 605000 USD with maximum 700000 USD, then chooses HKD and FPS at setup | One order, customer A's, not flagged internal, winning bid 605000 USD, HKD settlement on FPS | Won, with View order |
+| Collector beats the house | customer A leads at 650000 USD with maximum 700000 USD, then chooses HKD and FPS at setup | One order, customer A's, not flagged internal, winning bid 650000 USD, HKD settlement on FPS | Won, with View order |
 
 **Steps:**
 
@@ -1906,8 +1906,8 @@ Runs once per row of **Test data**.
 * Step 3 reads the row's order. Every house-win order has HKD settlement and FPS already set when it opens.
 * Step 4 reads the row's My Auctions outcome.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-17a rev=3 covers=g10adm.auction-internal-bid.SC-u1p -->
-### grade10-admin-auction-internal-bid-US6-TC2-3: Only a reserve holder reads the listing flagged as its internal bidder's win
+<!-- trace:case id=g10adm.auction-internal-bid.TC-17a rev=4 covers=g10adm.auction-internal-bid.SC-u1p -->
+### grade10-admin-auction-internal-bid-US6-TC2-4: Only a reserve holder reads the listing flagged as its internal bidder's win
 
 Runs once per row of **Test data**.
 
@@ -1938,10 +1938,10 @@ Runs once per row of **Test data**.
 
 | Row | admin | Bidding | Wait | `<listing_45>`'s Listings row and page |
 | --- | --- | --- | --- | --- |
-| House wins, reserve holder | admin(holds auction:reserve and auction:operate) | The house leads at 505000 under its committed internal bid of `<house maximum>` as `<internal bidder>`, over customer A's maximum of 500000 | Until the close passes | Flagged as won by its internal bidder, naming `<internal bidder>` |
+| House wins, reserve holder | admin(holds auction:reserve and auction:operate) | The house leads at 550000 under its committed internal bid of `<house maximum>` as `<internal bidder>`, over customer A's maximum of 500000 | Until the close passes | Flagged as won by its internal bidder, naming `<internal bidder>` |
 | House wins, staff | admin(staff, holds auction:operate, not auction:reserve) | As House wins, reserve holder | Until the close passes | Not flagged; reads as any won lot, offering Open order |
 | House leads, not yet closed | admin(holds auction:reserve and auction:operate) | As House wins, reserve holder | None; the lot is still taking bids | Not flagged |
-| Collector beats the house | admin(holds auction:reserve and auction:operate) | customer A leads at 605000 with maximum 700000, over the house's committed internal bid of `<house maximum>` | Until the close passes | Not flagged; reads as any won lot, offering Open order |
+| Collector beats the house | admin(holds auction:reserve and auction:operate) | customer A leads at 650000 with maximum 700000, over the house's committed internal bid of `<house maximum>` | Until the close passes | Not flagged; reads as any won lot, offering Open order |
 | Nobody bids | admin(holds auction:reserve and auction:operate) | No bid and no internal bid | Until the close passes | Not flagged; reads Unsold |
 
 **Steps:**
@@ -1955,8 +1955,8 @@ Runs once per row of **Test data**.
 * Steps 2 and 3 each read the row's outcome.
 * Steps 2 and 3 read Bought in in no row.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-vuc rev=4 covers=g10adm.auction-internal-bid.SC-on5 -->
-### grade10-admin-auction-internal-bid-US6-TC3-4: A house win's order enters Orders and sends no order letter
+<!-- trace:case id=g10adm.auction-internal-bid.TC-vuc rev=5 covers=g10adm.auction-internal-bid.SC-on5 -->
+### grade10-admin-auction-internal-bid-US6-TC3-5: A house win's order enters Orders and sends no order letter
 
 **Classification:**
 
@@ -1984,7 +1984,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<listing_46>` | A published USD listing in no campaign, protected by a committed internal bid of 600000 minor units |
 | `<customer A maximum>` | 500000 minor units (US$5,000.00) |
-| `<final price>` | 505000 minor units: `<customer A maximum>` plus the USD $50 increment |
+| `<final price>` | 550000 minor units: `<customer A maximum>` plus the USD $500 increment |
 | `<listing_51>` | A published USD listing in no campaign, no internal bid, led by customer B |
 
 **Steps:**
@@ -2004,8 +2004,8 @@ Runs once per row of **Test data**.
 * Step 6 holds no auction-won letter and no other order letter, to anyone.
 * Step 6 holds no row addressed to `<internal bidder>`'s email label.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-cww rev=3 covers=none -->
-### grade10-admin-auction-internal-bid-US6-TC4-3: At the close the internal order takes HKD settlement and FPS with the internal bidder's billing address
+<!-- trace:case id=g10adm.auction-internal-bid.TC-cww rev=4 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC4-4: At the close the internal order takes HKD settlement and FPS with the internal bidder's billing address
 
 **Classification:**
 
@@ -2032,7 +2032,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_70>` | A published USD listing in no campaign, protected by a committed internal bid of 600000 minor units |
-| `<final price>` | 505000 minor units: customer A's maximum of 500000 plus its 5000 increment |
+| `<final price>` | 550000 minor units: customer A's maximum of 500000 plus its 50000 increment |
 
 **Steps:**
 
@@ -2050,8 +2050,8 @@ Runs once per row of **Test data**.
 * Step 5: the status is the one step 3 read, not Setup Overdue; the invoice reads Not issued.
 * Step 6 holds no setup reminder, setup overdue or other order letter.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-dqh rev=3 covers=none -->
-### grade10-admin-auction-internal-bid-US6-TC5-3: An operator sends the internal order's invoice by hand, and no invoice letter goes out
+<!-- trace:case id=g10adm.auction-internal-bid.TC-dqh rev=4 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC5-4: An operator sends the internal order's invoice by hand, and no invoice letter goes out
 
 **Classification:**
 
@@ -2078,7 +2078,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_71>` | A USD listing in no campaign, closed with the house winning |
-| `<final price>` | 505000 minor units (US$5,050.00) |
+| `<final price>` | 550000 minor units (US$5,500.00) |
 | `<shipping>` | 0 minor units (US$0.00), Shipping & Handling |
 | `<transfer fee>` | 0 minor units (US$0.00), bank transfer fee |
 
@@ -2097,8 +2097,8 @@ Runs once per row of **Test data**.
 * Step 4: the deadline is 7 calendar days after the send.
 * Step 5 holds no invoice-sent letter and no payment reminder, to anyone.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-kgs rev=3 covers=none -->
-### grade10-admin-auction-internal-bid-US6-TC6-3: The internal invoice expires after its 7 days, silently, and the order waits for the operator
+<!-- trace:case id=g10adm.auction-internal-bid.TC-kgs rev=4 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC6-4: The internal invoice expires after its 7 days, silently, and the order waits for the operator
 
 **Classification:**
 
@@ -2125,7 +2125,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_72>` | A USD listing in no campaign, closed with the house winning at 505000 minor units |
+| `<listing_72>` | A USD listing in no campaign, closed with the house winning at 550000 minor units |
 | `<sent at>` | The time the invoice was sent; its deadline is 7 calendar days later |
 
 **Steps:**
@@ -2142,8 +2142,8 @@ Runs once per row of **Test data**.
 * Step 4: the order still reads Payment Overdue; nothing cancelled it.
 * Step 5 holds no day-3, day-6, final notice or payment overdue letter, to anyone.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-2d2 rev=3 covers=none -->
-### grade10-admin-auction-internal-bid-US6-TC7-3: An operator cancels the internal order by hand and the lot goes back to stock
+<!-- trace:case id=g10adm.auction-internal-bid.TC-2d2 rev=4 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC7-4: An operator cancels the internal order by hand and the lot goes back to stock
 
 Runs once per row of **Test data**.
 
@@ -2171,7 +2171,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_74>` | A USD listing in no campaign, closed with the house winning at 505000 minor units |
+| `<listing_74>` | A USD listing in no campaign, closed with the house winning at 550000 minor units |
 | `<product_74>` | A product with `<available before>` units available beside the hold |
 | `<held quantity>` | 1 unit (any quantity from 1 to 500) |
 | `<available before>` | 3 units (any count) |
@@ -2516,8 +2516,8 @@ Runs once per row of **Test data**.
 * Step 1 counts `<bidder count>` bidders, the house included.
 * Step 1's bid count equals step 2's, the house's bids included.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-g02 rev=2 covers=g10adm.auction-internal-bid.SC-ftu -->
-### grade10-admin-auction-internal-bid-US7-TC7-2: Once the house bids staff see House, never the amount or time
+<!-- trace:case id=g10adm.auction-internal-bid.TC-g02 rev=3 covers=g10adm.auction-internal-bid.SC-ftu -->
+### grade10-admin-auction-internal-bid-US7-TC7-3: Once the house bids staff see House, never the amount or time
 
 Runs once per row of **Test data**.
 
@@ -2550,7 +2550,7 @@ Runs once per row of **Test data**.
 | `<house maximum>` | 612300 minor units (US$6,123.00), an amount no bid reaches |
 | `<commit time>` | The internal bid's set time |
 | `<customer A maximum>` | 500000 minor units (US$5,000.00) |
-| `<current bid>` | 505000 minor units: `<customer A maximum>` plus its 5000 increment |
+| `<current bid>` | 550000 minor units: `<customer A maximum>` plus its 50000 increment |
 
 | Row | admin |
 | --- | --- |
@@ -2573,8 +2573,8 @@ Runs once per row of **Test data**.
 * Step 2 shows no internal bid state, and no time beside a House bid's own Accepted At.
 * Step 3: the house's bids read under its listing pseudonym; nothing reads House or `<internal bidder>`'s name or email label.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-gnk rev=2 covers=g10adm.auction-internal-bid.SC-ftu,g10adm.auction-internal-bid.SC-27a -->
-### grade10-admin-auction-internal-bid-US7-TC8-2: The staff listing read names the house only once it bids
+<!-- trace:case id=g10adm.auction-internal-bid.TC-gnk rev=3 covers=g10adm.auction-internal-bid.SC-ftu,g10adm.auction-internal-bid.SC-27a -->
+### grade10-admin-auction-internal-bid-US7-TC8-3: The staff listing read names the house only once it bids
 
 Runs once per row of **Test data**.
 
@@ -2611,7 +2611,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | Before its time | 800000 minor units, its time an hour ahead | customer A at 600000 |
 | Not placed | 550000 minor units, not placed at its time | customer A at 600000 |
-| Committed | 600000 minor units, committed | customer A at 605000: 600000 plus its 5000 increment, over the house's bid at 600000 |
+| Committed | 600000 minor units, committed | customer A at 650000: 600000 plus its 50000 increment, over the house's bid at 600000 |
 
 **Steps:**
 
@@ -2675,8 +2675,8 @@ Runs once per row of **Test data**.
 * Step 5 lists one House bid, at `<current bid>`.
 * Step 5: no row shows `<house maximum>`, `<raised maximum>` or `<lowered maximum>`, a raise or a lower.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-mnc rev=2 covers=g10adm.auction-internal-bid.SC-epm -->
-### grade10-admin-auction-internal-bid-US7-TC10-2: A reserve holder reads which internal bidder bid on each listing
+<!-- trace:case id=g10adm.auction-internal-bid.TC-mnc rev=3 covers=g10adm.auction-internal-bid.SC-epm -->
+### grade10-admin-auction-internal-bid-US7-TC10-3: A reserve holder reads which internal bidder bid on each listing
 
 **Classification:**
 
@@ -2710,7 +2710,7 @@ Runs once per row of **Test data**.
 | `<bidder P>` | An active internal bidder profile: name "QA House P", email label qa-house-p@internal.test |
 | `<bidder Q>` | An active internal bidder profile: name "QA House Q", email label qa-house-q@internal.test |
 | `<customer A maximum>` | 500000 minor units (US$5,000.00), on both listings |
-| `<current bid>` | 505000 minor units: `<customer A maximum>` plus its 5000 increment |
+| `<current bid>` | 550000 minor units: `<customer A maximum>` plus its 50000 increment |
 
 **Steps:**
 
@@ -2726,8 +2726,8 @@ Runs once per row of **Test data**.
 * Step 3: the house's bid reads House; nothing shows `<bidder P>`'s name or email label, or `<house maximum>`.
 * Step 4: the house's bid reads under its listing pseudonym; nothing shows `<bidder P>`'s name or email label.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-k1j rev=2 covers=g10adm.auction-internal-bid.SC-s2h -->
-### grade10-admin-auction-internal-bid-US7-TC11-2: An internal bidder's email label finds no listing and no bidder
+<!-- trace:case id=g10adm.auction-internal-bid.TC-k1j rev=3 covers=g10adm.auction-internal-bid.SC-s2h -->
+### grade10-admin-auction-internal-bid-US7-TC11-3: An internal bidder's email label finds no listing and no bidder
 
 Runs once per row of **Test data**.
 
@@ -2757,7 +2757,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<listing_64>` | A published USD listing taking bids, scheduled close a day away, internal bid 600000 minor units |
 | `<customer A maximum>` | 500000 minor units (US$5,000.00) |
-| `<current bid>` | 505000 minor units: `<customer A maximum>` plus its 5000 increment |
+| `<current bid>` | 550000 minor units: `<customer A maximum>` plus its 50000 increment |
 
 | Row | admin |
 | --- | --- |
@@ -2776,8 +2776,8 @@ Runs once per row of **Test data**.
 * Step 2 matches `<listing_64>`.
 * Step 3 lists no row for `<internal bidder>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-81p rev=2 covers=g10adm.auction-internal-bid.SC-rrc,g10adm.auction-internal-bid.SC-u1p -->
-### grade10-admin-auction-internal-bid-US7-TC12-2: After the close only a reserve holder's reads carry the internal bidder and its win
+<!-- trace:case id=g10adm.auction-internal-bid.TC-81p rev=3 covers=g10adm.auction-internal-bid.SC-rrc,g10adm.auction-internal-bid.SC-u1p -->
+### grade10-admin-auction-internal-bid-US7-TC12-3: After the close only a reserve holder's reads carry the internal bidder and its win
 
 Runs once per row of **Test data**.
 
@@ -2798,7 +2798,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_73>` closed with the house winning at 505000 under its internal bid of `<house maximum>` as `<internal bidder>`, over customer A; its order is open.
+* `<listing_73>` closed with the house winning at 550000 under its internal bid of `<house maximum>` as `<internal bidder>`, over customer A; its order is open.
 * The row's admin is signed in to the admin.
 
 **Test data:**
@@ -3354,8 +3354,8 @@ Runs once per row of **Test data**.
 * Step 3 shows the row's label for `<bidder P>`, its name unchanged.
 * Step 4 shows the internal bid Scheduled, still as `<bidder P>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-8at rev=3 covers=g10adm.auction-internal-bid.SC-bio -->
-### grade10-admin-auction-internal-bid-US9-TC5-3: A retired internal bidder is no longer offered and keeps its history
+<!-- trace:case id=g10adm.auction-internal-bid.TC-8at rev=4 covers=g10adm.auction-internal-bid.SC-bio -->
+### grade10-admin-auction-internal-bid-US9-TC5-4: A retired internal bidder is no longer offered and keeps its history
 
 Runs once per row of **Test data**.
 
@@ -3391,8 +3391,8 @@ Runs once per row of **Test data**.
 | Row | `<bidder P>`'s use |
 | --- | --- |
 | Never used | Named on no internal bid; `<listing_60>` unused |
-| Placed, lot taking bids | Named only on `<listing_60>`'s internal bid, committed, the house leading at 505000 over customer A's maximum of 500000 |
-| Won, order open | Named only on `<listing_60>`'s internal bid; the lot closed with the house winning at 505000, its order flagged internal and not cancelled |
+| Placed, lot taking bids | Named only on `<listing_60>`'s internal bid, committed, the house leading at 550000 over customer A's maximum of 500000 |
+| Won, order open | Named only on `<listing_60>`'s internal bid; the lot closed with the house winning at 550000, its order flagged internal and not cancelled |
 
 **Steps:**
 
@@ -3407,7 +3407,7 @@ Runs once per row of **Test data**.
 * Step 1 is accepted in every row.
 * Step 2 shows `<bidder P>` retired, its name and email label kept.
 * Step 3 does not offer `<bidder P>`.
-* Step 4: the house's bid at 505000 still names `<bidder P>`.
+* Step 4: the house's bid at 550000 still names `<bidder P>`.
 * Step 5: the order still names `<bidder P>` beside House.
 
 <!-- trace:case id=g10adm.auction-internal-bid.TC-skz rev=2 covers=g10adm.auction-internal-bid.SC-9ng -->
@@ -3612,8 +3612,8 @@ Runs once per row of **Test data**.
 * Step 2 shows `<bidder P>` retired, its name and email label kept.
 * Step 3 shows the internal bid Not placed at `<short amount>`, as `<bidder P>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-2nf rev=2 covers=g10adm.auction-internal-bid.SC-l6i -->
-### grade10-admin-auction-internal-bid-US9-TC10-2: A billing address change after a win leaves the internal order's address as it was
+<!-- trace:case id=g10adm.auction-internal-bid.TC-2nf rev=3 covers=g10adm.auction-internal-bid.SC-l6i -->
+### grade10-admin-auction-internal-bid-US9-TC10-3: A billing address change after a win leaves the internal order's address as it was
 
 **Classification:**
 
@@ -3632,7 +3632,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_75>` closed with the house winning at 505000 minor units as `<internal bidder>`, which held `<house billing address>` at the close; its order, flagged internal, has no invoice sent.
+* `<listing_75>` closed with the house winning at 550000 minor units as `<internal bidder>`, which held `<house billing address>` at the close; its order, flagged internal, has no invoice sent.
 * admin(holds auction:reserve and auction:payment) is on <grade10 auction admin internal bidders url>.
 
 **Test data:**
