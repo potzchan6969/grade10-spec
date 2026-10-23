@@ -17,7 +17,7 @@
 - [x] 2.3 A test winner's order opens setup through the same Winner Order defaults; no separate admin surface (`grade10-admin-auction-test-winners-SC-11`)
 - [x] 2.4 Verify: the page suite covering `winner-order-US24-TC1`, `winner-order-US25-TC6`, `winner-order-US25-TC9`, `winner-order-US9-TC22`, `winner-order-US9-TC23` and `winner-order-US1-TC51`
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @htonyl)
 
-- [ ] 3.1 Walk `winner-order-US-25`: a winner opening order setup reads the first offered currency selected under Pay in, the offered methods listed, and the first one checked; a single-currency order reads `Pay in HKD` with no picker (`winner-order-SC-305`, `winner-order-SC-306`)
-- [ ] 3.2 Walk `g10adm.auction-test-winners.US1-TC7`: a test winner's order opens setup with the first offered currency and method selected (`grade10-admin-auction-test-winners-SC-11`)
+- [x] 3.1 Walk `winner-order-US-25`: a winner opening order setup reads the first offered currency selected under Pay in, the offered methods listed, and the first one checked; a single-currency order reads `Pay in HKD` with no picker (`winner-order-SC-305`, `winner-order-SC-306`)
+- [x] 3.2 Walk `g10adm.auction-test-winners.US1-TC7`: a test winner's order opens setup with the first offered currency and method selected (`grade10-admin-auction-test-winners-SC-11`)
