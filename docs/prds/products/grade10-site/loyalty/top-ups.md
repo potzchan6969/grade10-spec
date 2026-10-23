@@ -35,8 +35,9 @@ A member buys points in packs an operator sets.
   with; the member's top-up history links it
 - **Account deleted** — an open checkout or a held pack closes with nothing
   charged; a payment that lands after is flagged for an operator to refund
-- ❓ **Told before paying** — what checkout says about no refund, no cash-out
-  and no transfer before the member pays. Legal words it
+- **Told before paying** — checkout says a pack is never refunded, cashed
+  out or moved, and the member accepts the terms before paying
+- ❓ **The words** — a draft until Legal confirms them. Legal
 - ❓ **A Grade10 email** — on credit, hold, approval and rejection; it waits
   on a way to reach members, chosen with the
   [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders) channel.
@@ -96,8 +97,7 @@ Topped-up points sit in a pool of their own inside the one balance.
 - **Lapse with the balance** — on its one inactivity date; a pack counts as
   activity and moves the date out, as a purchase does —
   [Points](/p/grade10-site/loyalty/points#expiry)
-- ❓ **Paid value lapsing** — whether topped-up points may lapse at all, and
-  what deleting an account does to them. Legal and Finance
+- **Account deleted** — topped-up points end with the rest of the balance
 
 :::example{title="Paid with both pools" tier="Silver"}
 - Booster box $1,000
@@ -177,10 +177,9 @@ Returned points go back to the pool they were paid from —
 
 - **Whole goods, or nothing** — a return of every good gives every point
   back; a part return gives none back
-- ❓ **In the ratio paid** — the owner's rule: on a bill paid 60% in points
-  and 40% by card, 60% of each refund comes back as points, to the pools the
-  payment took them from, and 40% goes to the card. It replaces whole goods
-  or nothing after the store's per-line settlement. Product confirms when
+- **A part return by hand** — an operator decides each case, and returns
+  points from the console where they are owed —
+  [Operator Console](/p/grade10-site/loyalty/operator-console#moving-points)
 
 ## Operator Console
 
@@ -189,8 +188,8 @@ console.
 
 - **Switching on** — refused while the daily top-up cap or the review
   threshold is unset
-- ❓ **Launch** — top-ups stay off until the open rows under Product
-  decisions close. Product, Legal and Finance
+- ❓ **Launch** — top-ups stay off until Stripe is set up and Legal
+  confirms the words checkout shows. Product and Legal
 - **Packs** — their points, discount and order, and whether each is on sale
 - **Limits** — the daily top-up cap, the review threshold and the daily spend
   cap
@@ -233,11 +232,12 @@ chargeback rate on top-ups.
 | Payment methods | ❓ Open | Shipped: card only, Apple Pay and Google Pay included; FPS, Alipay HK and WeChat Pay would need a path with no review. | Product |
 | Pause | ❓ Open | Shipped: the first chargeback or fraud warning pauses top-ups until an operator resumes them. | Product |
 | Refund in Stripe's dashboard | ❓ Open | Shipped: takes back the refunded share of the points, as a chargeback does. | Product |
-| Launch | ❓ Open | Shipped off; stays off until the rows below close. | Product, Legal and Finance |
-| Returns in the ratio paid | ❓ Open | When the ratio rule replaces whole goods or nothing; the store's per-line settlement comes first. | Product |
-| Told before paying | ❓ Open | The words checkout shows on no refund, no cash-out and no transfer, the proof a disputed charge is fought with. | Legal |
-| Paid value lapsing | ❓ Open | Whether topped-up points may lapse on inactivity, and what deleting an account does to them. | Legal and Finance |
-| Stored value licence | ❓ Open | The single-issuer exemption under the Payment Systems and Stored Value Facilities Ordinance (Cap. 584), confirmed before launch. | Legal |
+| Launch | ❓ Open | Shipped off; switched on once Stripe is set up and Legal confirms the words. | Product and Legal |
+| Part returns | Decided | A part return gives no points back; an operator handles each case by hand. | Product |
+| Told before paying | Decided | Checkout states no refund, no cash-out and no transfer, and the member accepts the terms: the proof a disputed charge is fought with. | Product |
+| The words | ❓ Open | What checkout says, a draft until confirmed. | Legal |
+| Paid value lapsing | Decided | Topped-up points lapse with the balance, and end with it when an account is deleted. | Product |
+| Stored value licence | Decided | Grade10 qualifies for the single-issuer exemption under the Payment Systems and Stored Value Facilities Ordinance (Cap. 584). | Legal |
 | Grade10 email | ❓ Open | An email on credit, hold, approval and rejection needs a way to reach members, chosen with the Expiry Reminders channel. | Product |
 | "Flag multiple limit" | ❓ Open | Read as several limits, each set by an operator and each flagged when reached. | Product |
 | Gift cards | ❓ Open | Whether topped-up points may pay on a sale holding a gift card. | Product |
@@ -247,7 +247,7 @@ chargeback rate on top-ups.
 | --- | --- |
 | A stolen card buys points and spends them, then the cardholder charges back | Review above the threshold; earned points spent first; the chargeback takes back its share and pauses top-ups; an operator recovers the rest |
 | Many top-ups a day to move money through the shop | The daily top-up cap per member, counting every checkout not yet closed |
-| Top up, buy goods, return them for a card refund (套現) | A whole return gives points back as points and money to the card; a part return gives no points back yet; a top-up itself is never refunded |
+| Top up, buy goods, return them for a card refund (套現) | A whole return gives points back as points and money to the card; a part return gives none back unless an operator decides; a top-up itself is never refunded |
 | Top up, pay for a gift card with points, sell the card | Points pay qualifying goods only, but the shop spreads a points discount over a gift card on the same sale — [Discounts](/p/grade10-site/store/discounts); open above |
 | Value moved to another member | No transfer exists; an operator credit lands in the earned pool |
 | A balance cashed out | No path pays points out |

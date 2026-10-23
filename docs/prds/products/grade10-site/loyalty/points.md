@@ -318,7 +318,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
 | What happens | The date |
 | --- | --- |
 | A purchase or a redemption, even one too small to earn a point | Twelve months from that day |
-| A points pack credited | ❓ Twelve months from that day, as a purchase moves it; Legal and Finance confirm bought points may lapse — [Top-ups](/p/grade10-site/loyalty/top-ups#topped-up-points) |
+| A points pack credited | Twelve months from that day, as a purchase moves it — [Top-ups](/p/grade10-site/loyalty/top-ups#topped-up-points) |
 | A grant or a correction | Unchanged; those points take the date the balance already has |
 | A grant or a correction with nothing live to join | The later of twelve months from its own day and the day still running, which moves out to it; with neither ahead, it is written already lapsed |
 | Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing |

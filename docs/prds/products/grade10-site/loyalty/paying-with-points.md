@@ -104,7 +104,8 @@ The session, the switches and the cart are on
 - **Whole goods, or nothing** — a refund returns the points paid only when
   the goods it states reach the whole of the order's goods; a part refund
   returns nothing, because the points discount is spread across every line
-  the shop sold and no line can be shown to carry it
+  the shop sold and no line can be shown to carry it; an operator decides
+  each part refund and returns points by hand where they are owed
 - **A kept exclusion holds it back** — a member who returns every
   qualifying good but keeps a gift card or a fee the same payment covered
   gets nothing back automatically; an operator returns it by hand from the
