@@ -257,6 +257,9 @@ function journeysHere(ctx, one) {
 function checkBlind(ctx, files, shape) {
   const durable = durableBlocks(ctx.roots.store, shape);
   for (const one of files) {
+    // The Grade10 store's second reading lives in its PRD folder, against the
+    // PRD and Storybook, not beside the delta (tcs-rules r7).
+    if (one.spec?.startsWith("grade10-site/store/")) continue;
     if (!movesBehaviour(one, durable)) continue;
     const at = one.file.replace(/spec\.md$/, "feature-tcs.md");
     const suite = readTextIfExists(join(ctx.roots.store, at));

@@ -585,7 +585,13 @@ export function parseWalks(text) {
     const line = lines[i];
     const heading = /^##\s+(Walk\b.*)$/i.exec(line);
     if (heading) {
-      current = { title: heading[1], line: i + 1, refs: [] };
+      current = {
+        title: heading[1],
+        line: i + 1,
+        refs: [],
+        steps: 0,
+        setupBlocks: 0,
+      };
       walks.push(current);
       continue;
     }
@@ -594,6 +600,10 @@ export function parseWalks(text) {
       continue;
     }
     if (!current) continue;
+    if (/^\d+\.\s/.test(line)) current.steps += 1;
+    // `**Steps 1–3 setup:**` - a second starting state inside the walk.
+    if (/^\*\*Steps?\s+\d+(?:\s*[–-]\s*\d+)?\s+(?:setup|data)\b/i.test(line))
+      current.setupBlocks += 1;
     DISPLAY_CASE_REFERENCE.lastIndex = 0;
     for (const match of line.matchAll(DISPLAY_CASE_REFERENCE)) {
       const fullId = match[1].toLowerCase();

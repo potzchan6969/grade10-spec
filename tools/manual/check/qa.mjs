@@ -147,6 +147,9 @@ function checkOutlineOnly(ctx, spec, dir, present) {
 }
 
 function checkSuite(ctx, spec, dir) {
+  // The Grade10 store's cases live in its PRD folder and trace PRD sections,
+  // so its specs' scenarios do not measure them (tcs-rules r7).
+  if (spec.id?.startsWith("grade10-site/store/")) return;
   const file = `${dir}/feature-tcs.md`;
   const present = existsSync(join(ctx.roots.store, file));
   checkDerived(ctx, spec, dir, present);

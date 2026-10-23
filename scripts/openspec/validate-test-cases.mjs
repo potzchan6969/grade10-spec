@@ -41,6 +41,11 @@ import {
   sectionSpan,
 } from "../../tools/manual/src/store/markdown.mts";
 import { parseArgs } from "./lib/args.mjs";
+import {
+  checkStoreSuite,
+  STORE_IN_OPENSPEC,
+  storeSuites,
+} from "./lib/store-suites.mjs";
 import { citesId } from "./lib/cites.mjs";
 import { applicationRoot, decidedByProblem } from "./lib/decided-by.mjs";
 import {
@@ -297,6 +302,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       pendingMarker = null;
     }
     for (const walk of parseWalks(text)) {
+      warnWalkShape(walk, warn);
       for (const ref of walk.refs) {
         const localCase =
           ref.caseId &&
@@ -945,7 +951,7 @@ if (args.stale) {
   process.exit(0);
 }
 
-if (suites.length === 0) {
+if (suites.length === 0 && storeSuites(ROOT).length === 0) {
   console.log(
     dim(`No suite found${args.scope ? ` for scope "${args.scope}"` : ""}.`),
   );
@@ -1013,6 +1019,92 @@ if (args.swept) {
 const summaries = suites.map((p) =>
   checkSuite(ROOT, p, rulesRev, allCaseIndex),
 );
+
+// --- the store's suites live only in its PRD folder -----------------------
+for (const p of suites) {
+  const rel = relative(ROOT, p).split(sep).join("/");
+  if (STORE_IN_OPENSPEC.test(rel))
+    record(
+      "error",
+      rel,
+      1,
+      "a Grade10 store suite under openspec — the store's cases live only in docs/prds/products/grade10-site/store/tests/ (tcs-rules r7); move or delete it",
+    );
+}
+// --- a state a story draws: UI matching <story-id> -------------------------
+// Warned, not refused: a story renamed without `pnpm storybook:rename` is a
+// fix in one line, and the workbench's index is read only when a case cites it.
+{
+  const cited = [];
+  for (const p of [...suites, ...storeSuites(ROOT)]) {
+    const rel = relative(ROOT, p);
+    if (args.scope && !rel.includes(args.scope)) continue;
+    readFileSync(p, "utf8")
+      .split("\n")
+      .forEach((line, i) => {
+        for (const m of line.matchAll(
+          /UI matching `?([a-z0-9-]+--[a-z0-9-]+)`?/g,
+        ))
+          cited.push({ rel, line: i + 1, id: m[1] });
+      });
+  }
+  if (cited.length > 0) {
+    const { storyIndex } = await import("../storybook/story-index.mjs");
+    const known = new Set(Object.keys(storyIndex({ root: ROOT }).entries));
+    for (const one of cited)
+      if (!known.has(one.id))
+        record(
+          "warning",
+          one.rel,
+          one.line,
+          `\`UI matching ${one.id}\` names no story in this store's Storybook — use the id the story's title and export make, or \`pnpm storybook:rename\` after a rename`,
+        );
+  }
+}
+
+{
+  const anchors = new Map();
+  for (const p of storeSuites(ROOT)) {
+    const rel = relative(ROOT, p);
+    if (args.scope && !rel.includes(args.scope)) continue;
+    checkStoreSuite(
+      ROOT,
+      p,
+      (severity, line, message) => record(severity, rel, line, message),
+      anchors,
+    );
+  }
+}
+
+// --- a walk saves a tester setup and time ---------------------------------
+// tcs-rules r7: at least 2 cases, about 25 steps at most, one starting state
+// along one route, and never a catch-all. Warned, so a suite written before
+// the rule is fixed at its next regeneration rather than refused today.
+function warnWalkShape(walk, warn) {
+  const catchAll =
+    /additional fixture checks|execute every|[—-]\s*phase\s+\d+|and adjacent checks/i;
+  const cases = new Set(walk.refs.map((ref) => ref.caseId ?? ref.id));
+  if (cases.size < 2)
+    warn(
+      walk.line,
+      `walk \`${walk.title}\` covers ${cases.size} ${cases.size === 1 ? "case" : "cases"} — a walk saves setup across at least 2 cases; list the case under \`## Ungrouped\` instead`,
+    );
+  if (walk.steps > 27)
+    warn(
+      walk.line,
+      `walk \`${walk.title}\` runs ${walk.steps} steps — split it at a new starting state so each walk stays within about 25`,
+    );
+  if (walk.setupBlocks > 1)
+    warn(
+      walk.line,
+      `walk \`${walk.title}\` strings ${walk.setupBlocks} separate setups together — one walk has one starting state; start another walk for each setup`,
+    );
+  if (catchAll.test(walk.title))
+    warn(
+      walk.line,
+      `walk \`${walk.title}\` is a catch-all or a continuation — title the route the tester drives, and put cases that share no route under \`## Ungrouped\``,
+    );
+}
 
 // --- every journey is walked by a product user or outside agent ---------
 // The classes are the store's two product users. An outside agent such as a

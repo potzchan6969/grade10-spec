@@ -232,8 +232,25 @@ export function automatedGateOf({ picked, refused, includeAutomated = false }) {
  *   script has landed yet.
  * - `automation, manual`: Web and Mobile `to_do`; Auto `to_do` if status is
  *   `automated`, else `n/a`.
+ *
+ * A title tagged `[Mobile only]` or `[Web only]` (tcs-rules r7) then marks the
+ * other platform's two columns `n/a`: the case cannot run there.
  */
 export function surfacePrefill(tc) {
+  const cells = testabilityPrefill(tc);
+  const only = /^\[(mobile|web) only\]/i.exec(tc.title ?? "")?.[1];
+  if (only?.toLowerCase() === "mobile") {
+    cells.Web = "n/a";
+    cells["Auto web"] = "n/a";
+  }
+  if (only?.toLowerCase() === "web") {
+    cells.Mobile = "n/a";
+    cells["Auto mobile"] = "n/a";
+  }
+  return cells;
+}
+
+function testabilityPrefill(tc) {
   const parts = prop(tc, "Testability")
     .toLowerCase()
     .split(/[,\s]+/)

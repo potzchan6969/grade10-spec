@@ -902,6 +902,35 @@ test("surface prefill follows Testability, then Automation status on mixed cases
   });
 });
 
+test("a [Mobile only] or [Web only] title marks the other platform's columns `n/a`", () => {
+  const titled = (title) => {
+    const base = candidates[0].tc;
+    const props = new Map(base.props);
+    props.set("Testability", "automation, manual");
+    props.set("Automation status", "automated");
+    return surfacePrefill({ ...base, title, props });
+  };
+
+  assert.deepEqual(titled("[Mobile only] The bid panel opens as a sheet"), {
+    Web: "n/a",
+    Mobile: "to_do",
+    "Auto web": "n/a",
+    "Auto mobile": "to_do",
+  });
+  assert.deepEqual(titled("[Web only] Hovering a card shows its price"), {
+    Web: "to_do",
+    Mobile: "n/a",
+    "Auto web": "to_do",
+    "Auto mobile": "n/a",
+  });
+  assert.deepEqual(titled("The bid panel opens"), {
+    Web: "to_do",
+    Mobile: "to_do",
+    "Auto web": "to_do",
+    "Auto mobile": "to_do",
+  });
+});
+
 test("a manual-only case starts Auto at `n/a`; an automation-only case starts Web and Mobile at `n/a`", () => {
   const manual = caseRow(candidates[0]);
   assert.equal(at(manual, "Web"), "to_do");
