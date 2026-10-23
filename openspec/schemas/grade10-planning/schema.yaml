@@ -351,6 +351,11 @@ artifacts:
       cross-cutting policy is exactly where a boundary, precision or timezone
       miss costs most, and exempting one from test design is how those ship.
 
+      A tool only the product's makers use - a test door, a docs reference, a
+      design-sync rail, the planning rails - writes `**Walked by:** makers
+      only - <who uses it, and why no product user does>` instead. It is no
+      product feature, so it gets no suite at all.
+
       Never invent an actor to fill the file. `pnpm check:manual` fails a
       capability with neither journeys nor the declaration, and a file holding
       both. It reads the declaration's first words alone, so the reason after
@@ -958,7 +963,8 @@ artifacts:
       beside the durable specs only.
 
       A capability whose journeys file says `**Walked by:** nobody` still gets
-      a suite, anchored on its feature set.
+      a suite, anchored on its feature set. One that says `**Walked by:**
+      makers only` gets none.
 
       `pnpm run tcs:validate` checks every suite in the store, and CI runs it
       on every push.

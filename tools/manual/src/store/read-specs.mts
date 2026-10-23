@@ -71,7 +71,10 @@ const FEATURE_GROUP = /^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/;
 /** The one line a journeys file holds in place of journeys when no end user
  * reaches the capability on its own (`openspec/config.yaml`,
  * `rules.user-journeys`): a policy, a package contract, a convention. */
-const WALKED_BY_NOBODY = /^\*\*Walked by:\*\*\s+nobody\b/m;
+const WALKED_BY_NOBODY = /^\*\*Walked by:\*\*\s+(?:nobody|makers only)\b/m;
+/** The narrower declaration: a tool only the product's makers use, which is
+ * no product feature and owes no suite (tcs-rules r7). */
+const WALKED_BY_MAKERS = /^\*\*Walked by:\*\*\s+makers only\b/m;
 const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
 /** What a `**Trace:**` names: the journey the case walks. A scenario id is
  * the older shape, and still resolves — the suite beside a spec that predates
@@ -194,6 +197,7 @@ function readSpec(
     try {
       entry.journeys = readJourneys(journeys);
       if (walkedByNobody(journeys)) entry.unwalked = true;
+      if (walkedByMakersOnly(journeys)) entry.makersOnly = true;
     } catch (cause) {
       entry.journeysError = toItemError(journeysPath, cause);
     }
@@ -435,6 +439,11 @@ export function walkedByNobody(text: string): boolean {
   return WALKED_BY_NOBODY.test(text);
 }
 
+/** Whether a journeys file declares a makers-only tool: no suite is owed. */
+export function walkedByMakersOnly(text: string): boolean {
+  return WALKED_BY_MAKERS.test(text);
+}
+
 export function readRequirement(section: Section): Requirement {
   if (!section.heading.startsWith(REQUIREMENT)) {
     throw new StoreFileError(
@@ -531,15 +540,13 @@ export function readTestCases(text: string): TestSuite {
   };
   visit(roots);
 
-  const cases = found.map(
-    ({ section, id, title }): TestCase => ({
-      id,
-      title,
-      traces: traces(section),
-      status: caseStatus(section),
-      automationStatus: automationStatusOf(section),
-    }),
-  );
+  const cases = found.map(({ section, id, title }): TestCase => ({
+    id,
+    title,
+    traces: traces(section),
+    status: caseStatus(section),
+    automationStatus: automationStatusOf(section),
+  }));
   refuseRepeats(
     "test case",
     found.map(({ section, id }) => ({ id, line: section.line })),

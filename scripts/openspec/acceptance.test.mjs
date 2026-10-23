@@ -2691,3 +2691,17 @@ test("a store delta needs no feature-tcs.md beside it; another delta still does"
     /feature-tcs\.md is required before acceptance/,
   );
 });
+
+test("a makers-only delta needs no feature-tcs.md beside it", () => {
+  const { root } = sandbox();
+  const dir = join(root, "openspec/changes/build-alpha/specs/site/search");
+  rmSync(join(dir, "feature-tcs.md"));
+  writeFileSync(
+    join(dir, "user-journeys.md"),
+    "**Walked by:** makers only - a docs reference only the makers read\n",
+  );
+  assert.doesNotMatch(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /feature-tcs\.md is required before acceptance/,
+  );
+});

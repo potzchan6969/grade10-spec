@@ -189,3 +189,19 @@ test("a walk of one case, a catch-all or strung setups warns", () => {
   assert.match(text, /is a catch-all or a continuation/);
   assert.match(text, /UI matching demo-alpha--nothing-like-it` names no story/);
 });
+
+test("a suite beside a makers-only capability is refused", () => {
+  const base = "openspec/specs/demo/alpha";
+  const files = specFiles(base);
+  files[`${base}/user-journeys.md`] =
+    "**Walked by:** makers only - a QA door no customer or admin reaches\n";
+  files[`${base}/feature-tcs.md`] = [
+    "# demo/alpha Test Cases",
+    "",
+    "**Status:** pending-review · 0/0",
+    "",
+  ].join("\n");
+  const { status, text } = out(store(files));
+  assert.notEqual(status, 0, text);
+  assert.match(text, /`\*\*Walked by:\*\* makers only`.*owes no test cases/);
+});

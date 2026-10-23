@@ -18,10 +18,11 @@ A **feature** suite is written **blind**: by a fresh reader who cannot see the s
 
 ## The Rule
 
-- **Every case is a GUI walk** - a product user, a customer or an admin, acts in the product's own screens in `grade10-site`, `grade10-admin`, `zzz-site` or `zzz-admin`, and checks what a screen, an email, a PDF or a notification shows. An admin screen is a product screen. Every case is worth a manual tester's run or a Playwright script
+- **Every case is a GUI walk** - a product user, a customer or an admin, acts in the product's own screens in `grade10-site`, `grade10-admin`, `zzz-site` or `zzz-admin`, and checks what a screen, an email, a PDF or a notification shows. A Slack message is not one of them. An admin screen is a product screen. Every case is worth a manual tester's run or a Playwright script
 - **GUI cases give the coverage** - cases derived from the journeys reach what the API answers, because a response shows on a screen. There is no separate API, unit, SEO or injection case
 - **A request the GUI never sends is still a GUI case** - the tester prepares the state, such as an invoice an operator rejected in admin or another collector's order address, and checks what the screen allows. A permission, ownership or disclosure check is checked this way, never with an injection payload
 - **A shared link's preview is a case** - the title, description and address a link unfurls with are what a person reads in a chat. It is not SEO
+- **A makers tool gets no suite** - a capability no customer or admin reaches in the products, used only by the people who build, test or run the store - a test door, a docs reference, a design-sync rail, the planning rails, a QA helper in the admin console - is not a product feature. Its journeys file says `**Walked by:** makers only - <who uses it>`; no suite is written or owed, and `pnpm run tcs:validate` refuses one. Who uses it decides, not where it is drawn
 - **Out of suite is not tested by QA** - a scenario no product user can reach from any screen is listed under **Out of suite**, and no case is owed
 - **The spec is correct** - once the two readings are reconciled, a suite that disagrees with the spec is regenerated. Before reconciliation the suite is the only reading there is. A proposal never links a suite in place of a spec delta
 - **A case comes from an anchor** - never from a scenario, which on a feature run does not exist yet. A case carrying behaviour no anchor implies is a product decision in disguise, settled at reconciliation
@@ -85,7 +86,7 @@ Once both readings land, QA2 joins them on anchors and writes `## Reconciliation
 | --- | --- |
 | `api` | a fact only the server holds, which no product user can reach from a screen even through a prepared state: a duplicate delivery, a race, a provider's metadata |
 | `unit` | a pure rule with no I/O and no screen that shows it |
-| `non-GUI` | an outcome no product user sees on a screen, email, PDF or notification: an analytics event, a cache header |
+| `non-GUI` | an outcome no product user sees on a screen, email, PDF or notification: an analytics event, a cache header, a Slack message |
 | `seo` | what only a crawler reads: canonical, robots, sitemap, structured data, indexability |
 
 - **One line per category** - an optional ` - <note>` follows the ids. It names no verifier
@@ -175,7 +176,6 @@ A walk is a route for a manual tester: it orders existing cases so one person re
 
 - **A role is a class with a state or grant** - collector, bidder, staff, treasurer: the state is a pre-condition, written as the qualifier, `customer(gold member)`
 - **Nobody else is an actor** - engineers, QA and consuming applications are not users. An outside agent acting on its own, such as a provider calling back, is a role whose result a class reads on a screen. A capability nobody reaches writes `**Walked by:** nobody on their own - <who inherits it>`; `pnpm run tcs:validate` fails a journey whose actor resolves to no class
-- **The team walks the delivery line** - under `shared/planning/` only, a teammate is an `admin` with the role as qualifier: `admin(product manager)`
 
 ## Where It Lives
 

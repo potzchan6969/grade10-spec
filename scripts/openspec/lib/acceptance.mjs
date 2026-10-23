@@ -1420,7 +1420,24 @@ export function acceptanceReadiness(
     // The Grade10 store's cases live only in its PRD folder (tcs-rules r7): a
     // store delta owes no suite beside it, and carries none.
     const store = /\/specs\/grade10-site\/store\//.test(path);
-    for (const file of store
+    // A makers-only tool owes no suite either (tcs-rules r7): its journeys
+    // file, beside the delta or durable, says `**Walked by:** makers only`.
+    const durableJourneys = join(
+      root,
+      "openspec",
+      "specs",
+      path.replace(/^.*?\/specs\//, "").replace(/\/spec\.md$/, ""),
+      "user-journeys.md",
+    );
+    const makersOnly = [
+      join(capabilityDir, "user-journeys.md"),
+      durableJourneys,
+    ]
+      .filter((one) => existsSync(one))
+      .some((one) =>
+        /^\*\*Walked by:\*\*\s+makers only\b/m.test(readFileSync(one, "utf8")),
+      );
+    for (const file of store || makersOnly
       ? ["user-journeys.md"]
       : ["user-journeys.md", "feature-tcs.md"]) {
       if (!existsSync(join(capabilityDir, file)))

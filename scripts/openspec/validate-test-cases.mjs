@@ -263,6 +263,11 @@ function checkSuite(root, filePath, rulesRev, allCases) {
   const err = (line, msg) => record("error", rel, line, msg);
   const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
+  if (level === "feature" && spec?.makersOnly)
+    err(
+      1,
+      "a suite beside a capability whose journeys say `**Walked by:** makers only` — a makers tool is no product feature and owes no test cases (tcs-rules r7); delete the suite",
+    );
 
   // Walk references are intentionally checked separately from case parsing.
   // A compact ref resolves in this suite. A composed walk may use a full
@@ -1400,6 +1405,7 @@ for (const p of suites) {
 if (args.requireSuites) {
   for (const d of specs) {
     if (existsSync(join(d, "feature-tcs.md"))) continue;
+    if (readSpecIds(join(d, "spec.md"))?.makersOnly) continue;
     // The store's cases live in its PRD folder, never beside its specs.
     if (
       /(^|\/)grade10-site\/store\//.test(relative(ROOT, d).split(sep).join("/"))

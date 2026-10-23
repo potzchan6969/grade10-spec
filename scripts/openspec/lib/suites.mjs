@@ -356,7 +356,9 @@ export function readSpecIds(specPath) {
     // A capability nobody walks routes its anchors to the feature set. It is
     // not exempt from a suite: it carries one section, and its cases trace
     // groups rather than journeys.
-    unwalked: /^\*\*Walked by:\*\*\s+nobody\b/m.test(stories),
+    unwalked: /^\*\*Walked by:\*\*\s+(?:nobody|makers only)\b/m.test(stories),
+    // A tool only the product's makers use: no product feature, no suite.
+    makersOnly: /^\*\*Walked by:\*\*\s+makers only\b/m.test(stories),
     // A durable file writes `## User journeys` and a change's file writes the
     // delta sections; `journey-vocabulary.test.mjs` pins the set. Matching only
     // the durable heading read every change's journeys as no journeys at all.

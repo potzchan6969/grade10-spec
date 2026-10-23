@@ -113,10 +113,7 @@ export type TestCase = {
  * returns it to pending, and no active cases retires it. Active review work is
  * an open `tcs-review/*` branch or pull request, not a file value. */
 export type TestSuiteStatus =
-  | "pending-review"
-  | "reopened"
-  | "approved"
-  | "retired";
+  "pending-review" | "reopened" | "approved" | "retired";
 
 export type SpecEntry = {
   /** `product/capability`, or a bare topic id. */
@@ -139,6 +136,9 @@ export type SpecEntry = {
    * this capability on its own, so it has no stories by decision rather
    * than by omission. */
   unwalked?: boolean;
+  /** The journeys file says `**Walked by:** makers only`: a tool only the
+   * product's makers use, which owes no test cases. */
+  makersOnly?: boolean;
   testCases?: TestCase[];
   testCasesStatus?: TestSuiteStatus;
   /** Scenario ids QA does not test (`**Out of suite (<category>):**`) —
@@ -687,11 +687,7 @@ export type Perspective = {
  * its name. The three spec-directory kinds are all per-capability, so each
  * reads out of the deltas rather than out of a file of its own. */
 export type ChangeArtifactKind =
-  | "doc"
-  | "specs"
-  | "journeys"
-  | "cases"
-  | "tasks";
+  "doc" | "specs" | "journeys" | "cases" | "tasks";
 
 /** One artifact a change's schema asks for, or a file the change carries that
  * the schema never named. Present or not, in the schema's own order. */
