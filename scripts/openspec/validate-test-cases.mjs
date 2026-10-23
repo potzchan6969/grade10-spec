@@ -1365,6 +1365,9 @@ for (const p of suites) {
       .match(/^([^/]+)\/specs\/(.+)$/);
     if (!m) continue;
     const [, change, path] = m;
+    // The store's cases moved to its PRD folder (tcs-rules r7): an archived
+    // store suite has no durable suite to have been folded into.
+    if (path.startsWith("grade10-site/store/")) continue;
     const target = join(ROOT, "openspec", "specs", path);
     const rel = relative(ROOT, target);
     if (args.scope && !rel.includes(args.scope)) continue;

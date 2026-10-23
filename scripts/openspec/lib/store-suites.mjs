@@ -139,12 +139,13 @@ export function checkStoreSuite(root, file, report, cache = new Map()) {
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean)) {
-      const section = /^([a-z0-9-]+)#([\p{L}\p{N}-]+)$/u.exec(target);
+      // `<page>#<anchor>`, or `<page>` alone for the page's opening rules.
+      const section = /^([a-z0-9-]+)(?:#([\p{L}\p{N}-]+))?$/u.exec(target);
       if (!section) {
         report(
           "warning",
           trace.line,
-          `case \`${tc.id}\` traces \`${target}\`, an openspec anchor — a store case traces a PRD section, \`<page>#<heading-anchor>\``,
+          `case \`${tc.id}\` traces \`${target}\`, an openspec anchor — a store case traces a PRD section, \`<page>#<heading-anchor>\`, or \`<page>\` for its opening rules`,
         );
         continue;
       }
@@ -155,7 +156,7 @@ export function checkStoreSuite(root, file, report, cache = new Map()) {
           trace.line,
           `case \`${tc.id}\` traces \`${target}\`, but ${STORE_PRD}/${section[1]}.md does not exist`,
         );
-      else if (!anchors.has(section[2]))
+      else if (section[2] !== undefined && !anchors.has(section[2]))
         report(
           "error",
           trace.line,

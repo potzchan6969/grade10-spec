@@ -196,7 +196,7 @@ The PRD and Storybook are the store's only sources of truth. What a store spec s
 
 - **One folder** - every store case lives in `docs/prds/products/grade10-site/store/tests/`. No `*-tcs.md` exists under `openspec/specs/grade10-site/store/` or under any change's `specs/grade10-site/store/`, and `pnpm run tcs:validate` refuses one
 - **A file per page** - each file covers one store page and states what it holds in a header line: `**Capabilities:** grade10-site/store/cart-drawer, grade10-site/store/checkout`. A feature shown on several pages stays in the page file it sits in
-- **A case traces a PRD section** - `**Trace:** order-detail#product-pictures`, a heading anchor on that page under `docs/prds/products/grade10-site/store/`. Sections in the file are named for PRD sections. Nothing in openspec is traced, unless the PM moves journeys into the PRD
+- **A case traces a PRD section** - `**Trace:** order-detail#product-pictures`, a heading anchor on that page under `docs/prds/products/grade10-site/store/`, or the page name alone, `**Trace:** home`, for the rules it states before its first heading. Sections in the file are named for PRD sections. Nothing in openspec is traced, unless the PM moves journeys into the PRD
 - **A store change writes there directly** - its QA1 drafts cases in the page file on the change's branch, and acceptance has nothing to fold. QA1 stays blind to the requirements; QA2 reconciles against the PRD page and Storybook, so store cases carry no scenario links
 - **Checked for shape, not scenarios** - store files are checked for format, ids, header, the `**Capabilities:**` line and that each trace resolves. Scenario coverage does not apply
 
