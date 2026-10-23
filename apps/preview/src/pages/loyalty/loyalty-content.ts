@@ -67,6 +67,7 @@ const REWARD_CHECKOUT_COPY: RewardCheckoutCopy = {
   pointCount: (points) => points.toLocaleString("en-HK"),
   pointsNeeded: (missing) => `Need ${missing.toLocaleString("en-HK")} more pts`,
   redeemFor: (cost) => `Redeem for ${cost.toLocaleString("en-HK")} pts`,
+  cancel: "Cancel",
   redeemedCouponTitle: "Added to your coupons",
   redeemedItemTitle: "Ready to Collect",
   done: "Done",

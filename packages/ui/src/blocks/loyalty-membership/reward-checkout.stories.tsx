@@ -20,6 +20,7 @@ const meta = {
       pointsNeeded: (missing: number) =>
         `Need ${missing.toLocaleString("en-HK")} more pts`,
       redeemFor: (cost: number) => `Redeem for ${cost} pts`,
+      cancel: "Cancel",
       redeemedCouponTitle: "Added to your coupons",
       redeemedItemTitle: "Ready to Collect",
       done: "Done",

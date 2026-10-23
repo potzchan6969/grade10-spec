@@ -66,19 +66,23 @@ function MembershipPage({ view }: { view: MembershipView }) {
   const [codes, setCodes] = useState(0);
   const [held, setHeld] = useState<readonly string[]>(view.heldWallets);
   const [selected, setSelected] = useState<RewardMenuItem | null>(null);
+  const [open, setOpen] = useState(false);
   const [redemption, setRedemption] = useState<RewardRedemption | null>(null);
   const [pending, setPending] = useState(false);
 
-  const closeCheckout = () => {
-    setSelected(null);
-    setRedemption(null);
-    setPending(false);
-  };
+  /* The surface stays mounted once opened — only `open` flips — so the
+   * drawer and dialog can play their exit transitions. */
+  const closeCheckout = () => setOpen(false);
 
   const select = (rewardId: string) => {
     if (view.rewards.status !== "ready") return;
     const reward = view.rewards.data.find((item) => item.id === rewardId);
-    if (reward) setSelected(reward);
+    if (reward) {
+      setSelected(reward);
+      setRedemption(null);
+      setPending(false);
+      setOpen(true);
+    }
   };
 
   const redeem = () => {
@@ -268,7 +272,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
             if (!next) closeCheckout();
           }}
           onRedeem={redeem}
-          open
+          open={open}
           pending={pending}
           redemption={redemption ?? undefined}
           reward={selected}

@@ -76,7 +76,9 @@ control. A money-off reward's card SHALL still state its own validity period,
 and state what its coupon cannot be spent without — the basket it has to
 reach, and the one channel it is good at, where it is good at only one.
 `RewardCheckout` SHALL draw the checkout surface as a bottom sheet under
-640px and as a dialog from 640px up. In its confirm phase it SHALL restate
+640px and as a dialog from 640px up. On the dialog the actions sit on the
+trailing edge behind a Cancel, not stretched across the surface; on the
+sheet the redeem action spans it. In its confirm phase it SHALL restate
 the reward — its hero, the deadline where named, the name and description —
 name where the coupon is spendable and how long it is good for, as supplied,
 show the balance before and after the cost, and refuse a short balance

@@ -31,14 +31,13 @@ const REWARDS_PAGE_COPY = {
 function RewardsPage() {
   const [balance, setBalance] = useState(MEMBERSHIP_VIEW.balance);
   const [selected, setSelected] = useState<RewardMenuItem | null>(null);
+  const [open, setOpen] = useState(false);
   const [redemption, setRedemption] = useState<RewardRedemption | null>(null);
   const [pending, setPending] = useState(false);
 
-  const close = () => {
-    setSelected(null);
-    setRedemption(null);
-    setPending(false);
-  };
+  /* The surface stays mounted once opened — only `open` flips — so the
+   * drawer and dialog can play their exit transitions. */
+  const close = () => setOpen(false);
 
   const redeem = () => {
     if (!selected || selected.pointCost > balance || pending) return;
@@ -69,7 +68,12 @@ function RewardsPage() {
 
   const select = (rewardId: string) => {
     const reward = REWARDS.find((item) => item.id === rewardId);
-    if (reward) setSelected(reward);
+    if (reward) {
+      setSelected(reward);
+      setRedemption(null);
+      setPending(false);
+      setOpen(true);
+    }
   };
 
   return (
@@ -103,7 +107,7 @@ function RewardsPage() {
             if (!next) close();
           }}
           onRedeem={redeem}
-          open
+          open={open}
           pending={pending}
           redemption={redemption ?? undefined}
           reward={selected}

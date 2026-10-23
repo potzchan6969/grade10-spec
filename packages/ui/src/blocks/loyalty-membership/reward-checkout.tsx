@@ -11,6 +11,7 @@ import {
   DialogBody,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import {
@@ -60,6 +61,8 @@ type RewardCheckoutCopy = {
   pointsNeeded: (missing: number) => string;
   /** The redeem button, given the cost — "Redeem for 120 pts". */
   redeemFor: (cost: number) => string;
+  /** Backs out of the dialog without redeeming — "Cancel". */
+  cancel: string;
   /** The redeemed heading for a discount coupon — "Added to your coupons". */
   redeemedCouponTitle: string;
   /** The redeemed heading for a good — "Ready to Collect". */
@@ -126,6 +129,7 @@ function RewardCheckout({
       onRedeem={onRedeem}
       pending={pending}
       redemption={redemption}
+      smUp={smUp}
       renderDescription={(text) => (
         <SheetOrDialogDescription smUp={smUp} text={text} />
       )}
@@ -137,7 +141,7 @@ function RewardCheckout({
 
   return smUp ? (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className={cn("gap-4", className)}>
+      <DialogContent className={cn("max-w-(--container-md) gap-4", className)}>
         <DialogBody className="gap-4">{body}</DialogBody>
       </DialogContent>
     </Dialog>
@@ -191,6 +195,7 @@ function RewardCheckoutBody({
   onDone,
   onOpenChange,
   viewCouponsHref,
+  smUp,
   renderTitle,
   renderDescription,
 }: {
@@ -204,6 +209,7 @@ function RewardCheckoutBody({
   onDone?: () => void;
   onOpenChange: (open: boolean) => void;
   viewCouponsHref?: string;
+  smUp: boolean;
   renderTitle: (text: string) => ReactNode;
   renderDescription: (text: string) => ReactNode;
 }) {
@@ -236,28 +242,51 @@ function RewardCheckoutBody({
             label: redemption.code ?? redemption.note ?? "",
           }}
         />
-        <HStack className="w-full" gap="md">
-          <Button
-            className="flex-1"
-            onClick={() => (onDone ? onDone() : onOpenChange(false))}
-            size="md"
-            type="button"
-            variant="secondary"
-          >
-            {copy.done}
-          </Button>
-          {viewCouponsHref ? (
+        {smUp ? (
+          <DialogFooter>
+            <Button
+              onClick={() => (onDone ? onDone() : onOpenChange(false))}
+              size="md"
+              type="button"
+              variant="secondary"
+            >
+              {copy.done}
+            </Button>
+            {viewCouponsHref ? (
+              <Button
+                render={<a href={viewCouponsHref}>{copy.viewCoupons}</a>}
+                size="md"
+              />
+            ) : (
+              <Button size="md" type="button">
+                {copy.viewCoupons}
+              </Button>
+            )}
+          </DialogFooter>
+        ) : (
+          <HStack className="w-full" gap="md">
             <Button
               className="flex-1"
-              render={<a href={viewCouponsHref}>{copy.viewCoupons}</a>}
+              onClick={() => (onDone ? onDone() : onOpenChange(false))}
               size="md"
-            />
-          ) : (
-            <Button className="flex-1" size="md" type="button">
-              {copy.viewCoupons}
+              type="button"
+              variant="secondary"
+            >
+              {copy.done}
             </Button>
-          )}
-        </HStack>
+            {viewCouponsHref ? (
+              <Button
+                className="flex-1"
+                render={<a href={viewCouponsHref}>{copy.viewCoupons}</a>}
+                size="md"
+              />
+            ) : (
+              <Button className="flex-1" size="md" type="button">
+                {copy.viewCoupons}
+              </Button>
+            )}
+          </HStack>
+        )}
       </VStack>
     );
   }
@@ -328,17 +357,42 @@ function RewardCheckoutBody({
           {failure}
         </Text>
       ) : null}
-      <Button
-        disabled={!affordable}
-        loading={pending}
-        onClick={() => {
-          if (!pending) onRedeem();
-        }}
-        size="md"
-        type="button"
-      >
-        {copy.redeemFor(reward.pointCost)}
-      </Button>
+      {smUp ? (
+        <DialogFooter>
+          <Button
+            onClick={() => onOpenChange(false)}
+            size="md"
+            type="button"
+            variant="secondary"
+          >
+            {copy.cancel}
+          </Button>
+          <Button
+            disabled={!affordable}
+            loading={pending}
+            onClick={() => {
+              if (!pending) onRedeem();
+            }}
+            size="md"
+            type="button"
+          >
+            {copy.redeemFor(reward.pointCost)}
+          </Button>
+        </DialogFooter>
+      ) : (
+        <Button
+          className="w-full"
+          disabled={!affordable}
+          loading={pending}
+          onClick={() => {
+            if (!pending) onRedeem();
+          }}
+          size="md"
+          type="button"
+        >
+          {copy.redeemFor(reward.pointCost)}
+        </Button>
+      )}
     </VStack>
   );
 }

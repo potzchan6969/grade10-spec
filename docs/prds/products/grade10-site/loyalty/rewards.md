@@ -74,7 +74,8 @@ Stock reads as a yes or no, never a count.
   640px, a dialog from it up; it restates the reward, names where the
   coupon is spendable and how long it is good for, and shows the balance
   before and after - a short balance names the deficit in the warning
-  tone and refuses whole
+  tone and refuses whole. On the dialog the actions sit right behind a
+  Cancel; on the sheet the redeem spans the width
 - 🚧 **The redeemed state stays in the surface** - the ticket the
   redemption issued: a discount coupon's carries the code minted for that
   redemption alone, a good's names the collection and no code. ❓ Whether
