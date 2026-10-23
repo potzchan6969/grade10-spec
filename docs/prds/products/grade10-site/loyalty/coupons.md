@@ -39,6 +39,13 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 
 ::story{id="loyalty-coupons-blocks-couponlist--codeless" title="The coupons a member holds"}
 
+- 🚧 **The wallet refreshes on return** — a spent coupon shows as used the
+  next time the page loads; the list does not listen while the card is up
+- ❓ **A close signal for a presented coupon** — `CouponList` reports its
+  scan surface's open and close so a consumer could refresh the moment the
+  member pockets their phone; whether the coupon and reward lists keep it,
+  or the return refresh covers it, is unconfirmed — Engineering
+
 ## Applying one
 
 | Channel | How it lands |
