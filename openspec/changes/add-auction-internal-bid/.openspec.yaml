@@ -7,7 +7,7 @@ hands:
   dev: "@htonyl"
 reviewed:
   proposal: "95926e81"
-  decisions: 7fc7dd17
+  decisions: 3c37159b
   user-journeys: "37851020"
   tech-design: aeb7d01c
   specs: c2b8dc5d
