@@ -39,9 +39,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid.spec.ts`
 
 **Pre-conditions:**
 
@@ -97,9 +99,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -149,9 +153,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -199,9 +205,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -245,9 +253,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -336,9 +346,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -381,9 +393,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -425,9 +439,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -520,9 +536,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -566,9 +584,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -621,9 +641,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -675,9 +697,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -723,9 +747,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -772,9 +798,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -818,9 +846,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -864,9 +894,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -913,9 +945,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -964,9 +998,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1060,9 +1096,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1106,9 +1144,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1151,9 +1191,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1208,9 +1250,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1261,9 +1305,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1311,9 +1357,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1351,9 +1399,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1411,9 +1461,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1460,9 +1512,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1506,9 +1560,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1549,9 +1605,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1594,9 +1652,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1639,9 +1699,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1691,9 +1753,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1749,9 +1813,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
 
 **Pre-conditions:**
 
@@ -1803,9 +1869,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid.spec.ts`
 
 **Pre-conditions:**
 
@@ -1994,9 +2062,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid.spec.ts`
 
 **Pre-conditions:**
 
@@ -2039,9 +2109,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid.spec.ts`
 
 **Pre-conditions:**
 
@@ -2084,9 +2156,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid.spec.ts`
 
 **Pre-conditions:**
 
@@ -2147,9 +2221,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2203,9 +2279,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2255,9 +2333,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2308,9 +2388,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2355,9 +2437,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2404,9 +2488,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2444,9 +2530,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2499,9 +2587,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2548,9 +2638,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2595,9 +2687,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2646,9 +2740,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2694,9 +2790,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
 
 **Pre-conditions:**
 
@@ -2749,9 +2847,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -2800,9 +2900,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -2900,9 +3002,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -2944,9 +3048,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -2991,9 +3097,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
 
 **Pre-conditions:**
 
@@ -3043,9 +3151,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 
@@ -3094,9 +3204,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 
@@ -3147,9 +3259,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 
@@ -3199,9 +3313,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 
@@ -3252,9 +3368,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 
@@ -3306,9 +3424,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 
@@ -3353,9 +3473,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 
@@ -3402,9 +3524,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 
@@ -3455,9 +3579,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 
@@ -3498,9 +3624,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 

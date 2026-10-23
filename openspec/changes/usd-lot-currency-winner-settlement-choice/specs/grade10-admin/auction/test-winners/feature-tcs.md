@@ -278,9 +278,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Making a test winner
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/test-winners.spec.ts`
 
 **Pre-conditions:**
 
@@ -312,9 +314,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Making a test winner
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/test-winners.spec.ts`
 
 **Pre-conditions:**
 
@@ -346,9 +350,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Making a test winner
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/test-winners.spec.ts`
 
 **Pre-conditions:**
 
