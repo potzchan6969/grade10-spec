@@ -1,9 +1,9 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** pending-review · 47/95
+**Status:** pending-review · 47/100
 **Drafts styled:** 2026-10-06, tcs-rules r4
 **Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-25
-**Out of suite (api):** shared-auth-sign-in-SC-110, shared-auth-sign-in-SC-111, shared-auth-sign-in-SC-112
+**Out of suite (api):** shared-auth-sign-in-SC-110
 
 ## Background
 
@@ -1013,6 +1013,51 @@ Runs once per row of **Test data**.
 * A second account exists for `<plus-tag address>`.
 * It is not the account for `<email_1>`.
 
+
+<!-- trace:case id=g10.shared-sign-in.TC-4qd rev=2 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
+### shared-auth-sign-in-US4-TC5-2: Completing identity verification creates or enters one account and signs the person in
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-04
+
+**Pre-conditions:**
+
+* customer is signed out on `<g10url>`.
+* `<verified email>` is in the row's starting state.
+
+**Test data:**
+
+| `<verified email>` starting state | Outcome |
+| --- | --- |
+| No account holds it | An account is created for it |
+| An account holds it, never signed in | That account is entered |
+
+| Field | Value |
+| --- | --- |
+| `verified email` | An inbox the tester reads |
+| `ekyc url` | The hosted identity verification (e-KYC) on `<g10url>` |
+
+**Steps:**
+
+1. Open `<ekyc url>` and complete the verification with `<verified email>`.
+2. Read who is signed in on `<g10url>`.
+3. As admin(holds `user:list`), search the console's user directory for `<verified email>`.
+
+**Expected Results:**
+
+* Step 2 shows the person signed in as the account for `<verified email>`, with no sign-in link or Google sign-in completed.
+* Step 3 finds exactly one account for `<verified email>`, as the row's outcome says.
 <!-- trace:case id=g10.shared-sign-in.TC-yvm rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC7-1: Sign-in after a product-created account is the same person
 
@@ -3601,6 +3646,44 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * Step 3 shows `<operator account>` signed in on the console.
 * Step 4 shows nobody signed in on the site.
 
+
+### shared-auth-sign-in-US12-TC12-2: A console link that names a site location lands on the console
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-12
+
+**Pre-conditions:**
+
+* admin is signed out on `<grade10 admin console url>` and on `<g10url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `operator email` | An operator's inbox the tester reads |
+| `site location` | `<g10url>/store` |
+| `console sign-in at a site location` | The console's sign-in address with `<site location>` as the place to return to |
+| `grade10 admin console url` | The console's address |
+
+**Steps:**
+
+1. Open `<console sign-in at a site location>` and ask for a sign-in link for `<operator email>`.
+2. Follow the unused, unexpired link from that email.
+3. Open `<site location>`.
+
+**Expected Results:**
+
+* Step 2 ends on `<grade10 admin console url>`, signed in, not on `<site location>`.
+* Step 3 shows no one signed in on the site.
 <!-- trace:case id=g10.shared-sign-in.TC-7cx rev=1 -->
 ### shared-auth-sign-in-US12-TC13-1: Console session as a different account is kept when a console link is followed
 
@@ -3689,6 +3772,43 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * Step 2 opens the console as the account for `<google account>`'s address.
 * Step 3 shows nobody signed in on the site.
 
+
+### shared-auth-sign-in-US12-TC15-2: Identity verification signs the site in, never the console
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Link surface
+
+**Pre-conditions:**
+
+* `<operator account>` holds console access and is signed out on `<grade10 admin console url>` and on `<g10url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `operator account` | An operator account whose email the tester's inbox receives |
+| `ekyc url` | The hosted identity verification (e-KYC) on `<g10url>` |
+| `grade10 admin console url` | The console's address |
+
+**Steps:**
+
+1. Open `<ekyc url>` and complete the verification with `<operator account>`'s email.
+2. Read who is signed in on `<g10url>`.
+3. Open `<grade10 admin console url>`.
+
+**Expected Results:**
+
+* Step 2 shows `<operator account>` signed in.
+* Step 3 asks for sign-in; the console shows no one signed in.
 ### shared-auth-sign-in-US12-TC16-1: A console link right after a site link for the same address is sent and the site link stays alive
 
 **Classification:**
@@ -3948,6 +4068,85 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * Step 1 keeps `<operator account A>` signed in on the console.
 * `<operator account C>` is not entered.
 
+
+### shared-auth-sign-in-US12-TC22-2: A site link an operator sends signs in the site, not the console, and keeps the console session
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Link surface
+
+**Pre-conditions:**
+
+* admin(`<operator account>`, holds `admin`) is signed in on `<grade10 admin console url>` with the second factor proved.
+* `<customer account>` is signed out on `<g10url>` and on `<grade10 admin console url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `customer account` | An account whose email the tester's inbox receives |
+| `customer email` | That account's email |
+| `site location` | `<g10url>/profile` |
+| `send link action` | The console's Email sign-in link action for `<customer account>`, returning to `<site location>` |
+| `grade10 admin console url` | The console's address |
+
+**Steps:**
+
+1. In the console, use `<send link action>`.
+2. In a browser holding no session, follow the unused, unexpired link from `<customer email>`.
+3. In that browser, open `<grade10 admin console url>`.
+4. In the operator's own browser, follow a second such link, then reload `<grade10 admin console url>`.
+
+**Expected Results:**
+
+* Step 2 ends on `<site location>`, signed in as `<customer account>`.
+* Step 3 asks for sign-in; that browser's console shows no one signed in.
+* Step 4 leaves `<operator account>` signed in on the console, while the site in that browser shows `<customer account>`.
+
+### shared-auth-sign-in-US12-TC25-2: A console role without user:create is offered no site link
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Link surface
+
+**Pre-conditions:**
+
+* admin(holds `support` only) is signed in on `<grade10 admin console url>` with the second factor proved.
+* `<customer account>` has received no sign-in email since the case began.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `customer account` | An account whose email the tester's inbox receives |
+| `customer email` | That account's email |
+| `grade10 admin console url` | The console's address |
+
+**Steps:**
+
+1. In the console, open `<customer account>` and look for the Email sign-in link action.
+2. Read the mail sent to `<customer email>`.
+
+**Expected Results:**
+
+* Step 1 offers no Email sign-in link action, or refuses it as not allowed.
+* Step 2 shows no sign-in email.
 ### shared-auth-sign-in-US12-TC27-1: A console session does not withhold Google's prompt on the site
 
 **Classification:**
@@ -4047,3 +4246,5 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 - **Contradicted** - none
 - **Uncovered anchors** - none: `shared-auth-sign-in-US-12` has `US12-TC1-1` to `US12-TC21-1`; every scenario from `shared-auth-sign-in-SC-91` to `shared-auth-sign-in-SC-112`, and `shared-auth-sign-in-SC-114`, is reached, shared-auth-sign-in-SC-113 being retired; the `Google` group has `US12-TC14-1` and `US12-TC27-1` beside the durable `US3-TC1-1` to `US3-TC3-1`, and the `Link surface` group has `US12-TC15-1` and `US12-TC22-1` to `US12-TC26-1`; `shared-auth-sign-in-US-08` has `US8-TC11-2` beside the durable `US8-TC1-1` to `US8-TC10-1`. `shared-auth-sign-in-SC-51` is walked by `US8-TC11-2` but not joined to it through an anchor, since it serves the `Emailed link` group and the case traces the journey; the durable suite held the same gap and this change leaves it
 - **Trace markers** - the new scenarios and cases carry none yet; the trace CLI allocates them with the walk; `shared-auth-sign-in-US8-TC11-2` carries the durable marker revised to `rev=2`, as `shared-auth-session-US2-TC1-2` does, and `shared-auth-sign-in-SC-50` and `shared-auth-sign-in-SC-51` carry the durable markers they already had, as the other modified scenarios do
+
+- **Under tcs-rules r7** - `shared-auth-sign-in-US4-TC6-1` became part of `shared-auth-sign-in-US4-TC5-2`, and `shared-auth-sign-in-US12-TC23-1` part of `shared-auth-sign-in-US12-TC22-2`. `shared-auth-sign-in-US1-TC13-1` is covered by `shared-auth-sign-in-US1-TC9-1` and `US1-TC11-1`; `shared-auth-sign-in-US12-TC26-1` by the session suite's `shared-auth-session-US4-TC11-1`, so its scenario comes off the out-of-suite list. `shared-auth-sign-in-US4-TC8-1`, `US10-TC9-1`, `US10-TC10-1` and `US12-TC24-1` are out of suite: no screen sends those requests.

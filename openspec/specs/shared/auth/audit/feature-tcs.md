@@ -712,7 +712,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `unverified email` | An inbox the tester reads |
 | `unverified account id` | That account's user id |
-| `verifying flow` | ❓ The product flow that marks an existing account's email verified - the auth owner confirms which one |
+| `verifying flow` | The hosted identity verification (e-KYC) on `<g10url>` |
 | `start time` | The time just before step 1 |
 | `grade10 admin audit url` | The console's identity audit trail page |
 
