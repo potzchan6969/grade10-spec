@@ -440,6 +440,15 @@ export {
   type MemberPassVariant,
 } from "./blocks/loyalty-membership/member-pass";
 export {
+  RewardCheckout,
+  type RewardCheckoutCopy,
+  type RewardCheckoutProps,
+} from "./blocks/loyalty-membership/reward-checkout";
+export {
+  RewardItem,
+  type RewardItemProps,
+} from "./blocks/loyalty-membership/reward-item";
+export {
   RewardMenu,
   type RewardMenuCopy,
   type RewardMenuProps,
@@ -464,7 +473,11 @@ export type {
   ActivityEntry,
   CouponItem,
   CouponStatus,
+  RewardCheckoutReward,
+  RewardImage,
+  RewardKind,
   RewardMenuItem,
+  RewardRedemption,
 } from "./blocks/loyalty-membership/types";
 export {
   type WalletPassArtwork,

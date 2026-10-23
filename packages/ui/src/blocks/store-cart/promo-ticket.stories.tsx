@@ -1,4 +1,5 @@
 import { Button } from "@grade10/design-system/components/forms/button";
+import { Storefront } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, within } from "storybook/test";
 import { SAMPLE_HELD_PROMO_CODES } from "./fixtures";
@@ -73,6 +74,103 @@ export const NotApplicable: Story = {
     const ticket = canvas.getByRole("group", { name: inapplicable.label });
     expect(ticket).toHaveAttribute("aria-disabled", "true");
     expect(ticket).toHaveClass("opacity-70");
+  },
+};
+
+/** Till-facing: a QR button beside the title unfolds the member's scan
+ * code into the stub; the readable code stays shown either way. No Apply —
+ * that belongs to the online cart. */
+export const WithQrCode: Story = {
+  args: {
+    code: { ...applicable, label: "G10-50-7Q2M" },
+    qrCode: {
+      value: "g10:redeem:voucher-50:7Q2M",
+      altText: "Show this code to store staff",
+      toggleLabel: "Use now",
+    },
+  },
+  play: async ({ canvasElement, userEvent }) => {
+    const canvas = within(canvasElement);
+    // The readable code is always shown; the QR starts folded away.
+    expect(canvas.getByText("G10-50-7Q2M")).toBeInTheDocument();
+    const toggle = canvas.getByRole("button", { name: "Use now" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    const qr = canvasElement.querySelector('[data-slot="promo-ticket-qr"]');
+    expect(qr).not.toBeVisible();
+    await userEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    expect(qr).toBeVisible();
+    await userEvent.click(toggle);
+    expect(qr).not.toBeVisible();
+    // No Apply on a store-facing ticket.
+    expect(
+      canvas.queryByRole("button", { name: "Apply" }),
+    ).not.toBeInTheDocument();
+  },
+};
+
+/** A redeemed good's collection ticket — no discount code; the stub names
+ * the collection under a storefront mark, the QR waits behind Use now. */
+export const CollectionTicket: Story = {
+  args: {
+    code: {
+      applicable: true,
+      id: "reward-slab-sleeves",
+      title: "UV slab sleeves",
+      detailLabel: "Collect by 5 Nov 2026",
+      label: "Collect at any Grade10 store",
+    },
+    labelIcon: <Storefront size={14} weight="bold" />,
+    qrCode: {
+      value: "g10:collect:reward-slab-sleeves:7Q2M",
+      altText: "Show this code to store staff",
+      toggleLabel: "Use now",
+    },
+  },
+  play: async ({ canvasElement, userEvent }) => {
+    const canvas = within(canvasElement);
+    // Collection line, never a discount code; QR folded until asked.
+    expect(
+      canvas.getByText("Collect at any Grade10 store"),
+    ).toBeInTheDocument();
+    const toggle = canvas.getByRole("button", { name: "Use now" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await userEvent.click(toggle);
+    expect(
+      canvasElement.querySelector('[data-slot="promo-ticket-qr"]'),
+    ).toBeVisible();
+  },
+};
+
+/** Spent: the ticket mutes, names it used, and drops both the QR and any
+ * action — there is nothing left to scan or apply. */
+export const UsedTicket: Story = {
+  args: {
+    code: { ...applicable, label: "G10-50-7Q2M" },
+    usedLabel: "Used on 12 Oct 2026",
+    qrCode: {
+      value: "g10:redeem:voucher-50:7Q2M",
+      altText: "Show this code to store staff",
+      toggleLabel: "Use now",
+    },
+    action: (
+      <Button size="sm" variant="secondary" onClick={fn()}>
+        Apply
+      </Button>
+    ),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const ticket = canvas.getByRole("group", { name: "G10-50-7Q2M" });
+    expect(ticket).toHaveAttribute("aria-disabled", "true");
+    expect(ticket).toHaveClass("opacity-70");
+    expect(canvas.getByText("Used on 12 Oct 2026")).toBeInTheDocument();
+    expect(canvas.queryByText("Use by 31 Dec 2026")).not.toBeInTheDocument();
+    expect(canvas.getByText("G10-50-7Q2M")).toBeInTheDocument();
+    expect(canvas.queryByRole("button")).not.toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="promo-ticket-qr"]'),
+    ).not.toBeInTheDocument();
   },
 };
 

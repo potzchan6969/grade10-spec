@@ -65,6 +65,43 @@ Stock reads as a yes or no, never a count.
   reach, and the one channel it is good at where there is only one
 - 🚧 **Online only on the menu** - a reward scoped to named products or a
   catalog filter reads online only, whatever channels it names
+- 🚧 **A card per reward** - the shop draws the item's art or the coupon's
+  gift tile, the deadline where one is named, and the price; a press opens
+  the checkout
+- 🚧 **One per press** - a redemption is always one unit; the menu offers
+  no quantity
+- 🚧 **The checkout is a surface, not a page** - a bottom sheet under
+  640px, a dialog from it up; it restates the reward, names where the
+  coupon is spendable and how long it is good for, and shows the balance
+  before and after - a short balance names the deficit in the warning
+  tone and refuses whole. On the dialog the actions sit right behind a
+  Cancel; on the sheet the redeem spans the width. A refusal splits two
+  ways: the reward being gone closes the surface, while a retryable
+  refusal keeps it open and the press live — either is raised outside as
+  a toast, and a balance dropped mid-checkout re-reads the deficit row
+  the same way
+- 🚧 **The redeemed state stays in the surface** - the ticket the
+  redemption issued: a discount coupon's carries the code minted for that
+  redemption alone, a good's names the collection and no code. A ticket
+  spendable or collectable at the till folds the member's scan QR behind
+  a Use now control on the surfaces a member can open there — the rewards
+  page, the coupons page; the cart's select sheet carries none, and an
+  online-only ticket carries none. A spent coupon's ticket mutes, names
+  it used, and drops the QR, and a spent coupon leaves the coupons
+  section
+- ❓ **The scan QR's lifetime** - fixed per redemption, or rotating like
+  the member pass's
+- ❓ **What the till reads** - does the coupon or collection QR carry the
+  member, or does staff scan the member pass first for the member's
+  identity
+- ❓ **A store coupon's readable code** - whether every physical-store
+  coupon also carries a member-readable code under its QR
+- 🚧 **Apply belongs to the cart** - nothing on the shop, the redeemed
+  ticket or the coupons page offers to apply a coupon; the cart's
+  apply-rewards flow is the only place it happens
+- ❓ **A settle that half-fails** - the points debit but the coupon never
+  mints: whether the redemption settles atomically or a refund path
+  catches it is Backend's call
 
 :::example{title="Buying from the shop"}
 | Step | Event | Points | Balance |
@@ -89,10 +126,15 @@ carrying the definition it was bought under.
   checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
   lines
+- 🚧 **The member reads a code of their own** — a money-off redemption
+  mints one member-readable code, unique to that redemption and bound to
+  the member; a physical reward mints none. The code is good online and at
+  the till; the per-sale discount code a claim mints is a different code,
+  unchanged
 - **Applied at the counter** — for a scope the till can match, inside the
   till session: staff apply it from the member's panel, or the member opens
   it on their phone and the till scans it; a product coupon's code is minted
-  when chosen, for that sale alone, never shown as the coupon, and a gift
+  when chosen, for that sale alone, and a gift
   goes on as its own line, discounted to nothing, with no code -
   [Reward Types](#reward-types)
 - **Used by the paid order** — the paid order is what marks the coupon
@@ -132,8 +174,9 @@ Every reward the programme knows, on sale or not; the
 
 - **How it is obtained** `TBC` - no field carries it, so every live reward
   is on sale
-- **Units per redemption** `TBC` - a reward is taken one at a time until
-  the per-redemption and per-day bounds are chosen
+- 🚧 **Units per redemption** - a redemption is always one unit; the
+  member surface offers no quantity. Any per-day bound stays an operator
+  rule the member never sees
 - ❓ **The physical catalog** - which items, and their point prices; Product's
   call
 

@@ -5,12 +5,15 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { Toast } from "@grade10/design-system/components/overlays/toast";
+import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
   ActivityList,
   CouponList,
   MemberPass,
+  RewardCheckout,
   RewardMenu,
+  type RewardMenuItem,
+  type RewardRedemption,
   SiteHeader,
   TierCard,
   WalletPassLinks,
@@ -36,7 +39,10 @@ import {
   MEMBERSHIP_STATE_VIEWS,
   MEMBERSHIP_VIEW,
   type MembershipView,
+  REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
+  SOLD_OUT_COPY,
+  SOLD_OUT_REWARDS,
   TIER_CARD_COPY,
   WALLET_PASS_COPY,
 } from "../loyalty-content";
@@ -61,25 +67,83 @@ function MembershipPage({ view }: { view: MembershipView }) {
   const [issued, setIssued] = useState(0);
   const [codes, setCodes] = useState(0);
   const [held, setHeld] = useState<readonly string[]>(view.heldWallets);
+  const [selected, setSelected] = useState<RewardMenuItem | null>(null);
+  const [open, setOpen] = useState(false);
+  const [redemption, setRedemption] = useState<RewardRedemption | null>(null);
+  const [failure, setFailure] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
-  const redeem = (rewardId: string, quantity: number) => {
+  /* The surface stays mounted once opened — only `open` flips — so the
+   * drawer and dialog can play their exit transitions. */
+  const closeCheckout = () => setOpen(false);
+
+  const select = (rewardId: string) => {
     if (view.rewards.status !== "ready") return;
     const reward = view.rewards.data.find((item) => item.id === rewardId);
-    if (!reward) return;
-    const cost = reward.pointCost * quantity;
-    if (cost > balance) return;
+    if (reward) {
+      setSelected(reward);
+      setRedemption(null);
+      setFailure(null);
+      setPending(false);
+      setOpen(true);
+    }
+  };
+
+  const redeem = () => {
+    if (!selected || selected.pointCost > balance || pending) return;
+    const reward = selected;
+    const left = balance - reward.pointCost;
+    const cost = reward.pointCost;
     const coupon = {
       ...ISSUED_COUPON,
       id: `coupon-issued-${issued + 1}`,
       amount: reward.name,
-      description: reward.limits ?? reward.collectionWindow,
+      description: reward.description,
     };
-    setBalance((value) => value - cost);
-    setIssued((value) => value + 1);
-    setCoupons((prev) => ({
-      status: "ready",
-      data: [...(prev.status === "ready" ? prev.data : []), coupon],
-    }));
+    setPending(true);
+    setTimeout(() => {
+      if (SOLD_OUT_REWARDS.has(reward.id)) {
+        /* The surface closes itself on a refusal; the page raises it. */
+        setPending(false);
+        setFailure(SOLD_OUT_COPY.title);
+        toast.error(SOLD_OUT_COPY.title, {
+          description: SOLD_OUT_COPY.description,
+        });
+        return;
+      }
+      setBalance(left);
+      setIssued((value) => value + 1);
+      setCoupons((prev) => ({
+        status: "ready",
+        data: [...(prev.status === "ready" ? prev.data : []), coupon],
+      }));
+      setRedemption(
+        reward.kind === "coupon"
+          ? {
+              balanceAfter: left,
+              summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+              deadline: "Use by 28 Oct 2026",
+              code: `G10-${cost}-${issued + 1}Q2M`,
+              qrCode: {
+                value: `g10:redeem:${reward.id}:${issued + 1}Q2M`,
+                altText: "Show this code to store staff",
+                toggleLabel: "Use now",
+              },
+            }
+          : {
+              balanceAfter: left,
+              summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+              deadline: "Collect by 5 Nov 2026",
+              note: "Collect at any Grade10 store",
+              qrCode: {
+                value: `g10:collect:${reward.id}:${issued + 1}Q2M`,
+                altText: "Show this code to store staff",
+                toggleLabel: "Use now",
+              },
+            },
+      );
+      setPending(false);
+    }, 700);
   };
 
   const addWallet = (id: string) =>
@@ -164,7 +228,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
             <RewardMenu
               balance={balance}
               copy={REWARD_MENU_COPY}
-              onRedeem={redeem}
+              onSelect={select}
               state={view.rewards}
             />
           </section>
@@ -179,7 +243,21 @@ function MembershipPage({ view }: { view: MembershipView }) {
             >
               {MEMBERSHIP_PAGE_COPY.couponsHeading}
             </h2>
-            <CouponList copy={COUPON_LIST_COPY} state={coupons} />
+            {/* Spent coupons leave the section — there is nothing left to
+             * spend; history lives elsewhere. */}
+            <CouponList
+              copy={COUPON_LIST_COPY}
+              state={
+                coupons.status === "ready"
+                  ? {
+                      status: "ready",
+                      data: coupons.data.filter(
+                        (coupon) => coupon.status !== "spent",
+                      ),
+                    }
+                  : coupons
+              }
+            />
           </section>
 
           <section
@@ -222,6 +300,23 @@ function MembershipPage({ view }: { view: MembershipView }) {
       </main>
       <Footer {...STORE_FOOTER} />
       <Toast position="bottom-right" />
+      {selected ? (
+        <RewardCheckout
+          balance={balance}
+          copy={REWARD_CHECKOUT_COPY}
+          failure={failure}
+          onDone={closeCheckout}
+          onOpenChange={(next) => {
+            if (!next) closeCheckout();
+          }}
+          onRedeem={redeem}
+          open={open}
+          pending={pending}
+          redemption={redemption ?? undefined}
+          reward={selected}
+          viewCouponsHref="#membership-coupons-heading"
+        />
+      ) : null}
     </div>
   );
 }
@@ -264,7 +359,17 @@ export const Default: Story = {
       canvas.getByRole("button", { name: "Go to checkout" }),
     ).toHaveAttribute("href", LOYALTY_PAY_PART_OF_BASKET_HREF);
 
-    await userEvent.click(canvas.getAllByRole("button", { name: "Redeem" })[0]);
+    const overlay = within(document.body);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /HK\$50 off coupon/ }),
+    );
+    await userEvent.click(
+      await overlay.findByRole("button", { name: "Redeem for 500 pts" }),
+    );
+    expect(
+      await overlay.findByText("Added to your coupons"),
+    ).toBeInTheDocument();
+    await userEvent.click(overlay.getByRole("button", { name: "Done" }));
     expect(canvas.getByText("750")).toBeInTheDocument();
   },
 };
@@ -280,8 +385,10 @@ export const NoPoints: Story = {
         "No activity yet. Purchases appear here once they are recorded.",
       ),
     ).toBeInTheDocument();
-    for (const control of canvas.getAllByRole("button", { name: "Redeem" })) {
-      expect(control).toBeDisabled();
+    for (const card of canvasElement.querySelectorAll(
+      '[data-slot="reward-menu-item"]',
+    )) {
+      expect(card).toHaveAttribute("data-affordable", "false");
     }
   },
 };

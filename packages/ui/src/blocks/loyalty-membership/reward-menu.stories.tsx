@@ -10,7 +10,7 @@ const meta = {
   parameters: { layout: "padded" },
   decorators: [
     (Story) => (
-      <div className="max-w-md">
+      <div className="w-full sm:max-w-md">
         <Story />
       </div>
     ),
@@ -18,92 +18,57 @@ const meta = {
   args: {
     copy: {
       label: "Rewards",
-      redeem: "Redeem",
       points: "pts",
-      atQuantityBound: "Limit per redemption reached",
-      insufficient: "Not enough points",
-      decreaseQuantity: "Fewer",
-      increaseQuantity: "More",
+      pointCount: (points: number) => points.toLocaleString("en-HK"),
     },
     state: { status: "ready", data: REWARDS },
     balance: BALANCE,
-    onQuantityChange: fn(),
-    onRedeem: fn(),
+    onSelect: fn(),
   },
 } satisfies Meta<typeof RewardMenu>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Affordability is judged against the balance: 4000 pts on 1250 disables. */
+/** A card per reward: the item draws its art, the coupon its gift tile; a
+ * press reports the reward's id and redeems nothing. */
 export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const redeemButtons = canvas.getAllByRole("button", { name: "Redeem" });
-    expect(redeemButtons).toHaveLength(3);
-    expect(redeemButtons[2]).toBeDisabled();
-    expect(canvas.getByText("Not enough points")).toBeInTheDocument();
-    await userEvent.click(redeemButtons[0] as HTMLElement);
-    expect(args.onRedeem).toHaveBeenCalledWith("voucher-50", 1);
-  },
-};
-
-/** The stepper input reports; the quantity moves only when the consumer supplies it. */
-export const QuantityChangeIsReported: Story = {
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "More" }));
-    expect(args.onQuantityChange).toHaveBeenCalledWith("sleeves", 2);
-  },
-};
-
-/** At the per-redemption bound the increment disables and the refusal is named. */
-export const QuantityAtBound: Story = {
-  args: { quantities: { sleeves: 3 } },
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "More" })).toBeDisabled();
+    const cards = canvas.getAllByRole("button");
+    expect(cards).toHaveLength(4);
     expect(
-      canvas.getByText("Limit per redemption reached"),
-    ).toBeInTheDocument();
-    await userEvent.click(
-      canvas.getAllByRole("button", { name: "Redeem" })[1] as HTMLElement,
-    );
-    expect(args.onRedeem).toHaveBeenCalledWith("sleeves", 3);
+      canvasElement.querySelectorAll('[data-slot="reward-art-coupon"]'),
+    ).toHaveLength(1);
+    expect(canvas.getByText("Halloween Potatoz")).toBeInTheDocument();
+    expect(canvas.getByText("Until 31 Dec 2026")).toBeInTheDocument();
+    expect(canvas.getByText("500")).toBeInTheDocument();
+
+    await userEvent.click(cards[0] as HTMLElement);
+    expect(args.onSelect).toHaveBeenCalledWith("potatoz");
   },
 };
 
-/** A physical reward states the window it must be collected in, word for word
- * as supplied; a money-off code states its validity instead. */
-export const CollectionWindowIsStated: Story = {
+/** Affordability is read off the balance the consumer supplies; a reward the
+ * balance cannot pay stays pressable — the checkout surface does the refusing. */
+export const AffordabilityIsRead: Story = {
   play: async ({ canvasElement }) => {
-    const stated = [
-      ...canvasElement.querySelectorAll(
-        '[data-slot="reward-menu-collection-window"]',
-      ),
-    ].map((node) => node.textContent);
+    const cards = [
+      ...canvasElement.querySelectorAll('[data-slot="reward-menu-item"]'),
+    ];
+    expect(cards[0]).toHaveAttribute("data-affordable", "true");
+    expect(cards[2]).toHaveAttribute("data-affordable", "false");
+  },
+};
 
-    expect(stated).toEqual(
-      REWARDS.filter((reward) => reward.collectionWindow).map(
-        (reward) => reward.collectionWindow,
-      ),
-    );
-    expect(stated.length).toBeGreaterThan(0);
+/** The menu offers no quantity — a redemption is always one unit. */
+export const NoQuantity: Story = {
+  play: async ({ canvasElement }) => {
     expect(
-      within(canvasElement).getByText("Code valid 90 days from redemption"),
-    ).toBeInTheDocument();
-  },
-};
-
-/** What the coupon needs before it comes off anything, stated on the menu —
- * a member decides with the limit in front of them, not after the points go. */
-export const CouponLimitsAreStated: Story = {
-  play: async ({ canvasElement }) => {
-    const stated = [
-      ...canvasElement.querySelectorAll('[data-slot="reward-menu-limits"]'),
-    ].map((node) => node.textContent);
-
-    expect(stated).toEqual(["Spend HK$300 or more · In store only"]);
+      canvasElement.querySelector(
+        '[role="spinbutton"], [data-slot="stepper-input"]',
+      ),
+    ).toBeNull();
   },
 };
 
@@ -117,33 +82,5 @@ export const Empty: Story = {
       message: "No rewards to redeem right now.",
       action: { label: "Refresh", onAction: fn() },
     },
-  },
-};
-
-/** The redeeming row draws busy; the other rows stay pressable. */
-export const Redeeming: Story = {
-  args: { busyRewardId: "voucher-50" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const [busy, other] = canvas.getAllByRole("button", { name: "Redeem" });
-    expect(busy).toHaveAttribute("aria-busy", "true");
-    expect(other).toBeEnabled();
-    expect(other).not.toHaveAttribute("aria-busy");
-  },
-};
-
-/** A refused redemption says why on its own row, which is pressable again. */
-export const RedeemFailed: Story = {
-  args: {
-    failedRewardId: "sleeves",
-    redeemFailed: "This reward has just run out.",
-  },
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    const alert = canvas.getByRole("alert");
-    expect(alert).toHaveTextContent("This reward has just run out.");
-    const row = alert.closest('[data-slot="reward-menu-item"]') as HTMLElement;
-    await userEvent.click(within(row).getByRole("button", { name: "Redeem" }));
-    expect(args.onRedeem).toHaveBeenCalledWith("sleeves", 1);
   },
 };

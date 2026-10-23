@@ -1,0 +1,9 @@
+schema: grade10-planning
+created: 2026-10-22
+ui_waived: the design is the designer's Figma frames (Grade10-DS-2026, nodes 7254:500, 7254:2285, 7254:2460, 7264:6580, 7266:6742, 7266:6909, 7266:6875); the change implements it rather than choosing a look
+design_waived: all work is in this store - a `@grade10/ui` block rewrite and new blocks with their stories and preview call sites; no application-side technical design
+depends_on:
+  - never-lock-a-coupon
+  - redesign-tier-card
+awaiting:
+  specs: 2026-10-22, whether the redeemed ticket itself opens a QR - the designer is still deciding; the coupons-page QR is settled later scope - @tangconst

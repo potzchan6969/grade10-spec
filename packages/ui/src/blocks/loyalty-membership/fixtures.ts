@@ -11,26 +11,52 @@ import type { ActivityEntry, CouponItem, RewardMenuItem } from "./types";
 
 const BALANCE = 1250;
 
+/** Stand-in product art for the item rewards. */
+const REWARD_IMAGE = new URL(
+  "../store-order-detail/product.fixture.png",
+  import.meta.url,
+).href;
+
 const REWARDS: RewardMenuItem[] = [
   {
-    id: "voucher-50",
-    name: "HK$50 off",
-    pointCost: 500,
-    validity: "Code valid 90 days from redemption",
-    limits: "Spend HK$300 or more · In store only",
+    id: "potatoz",
+    kind: "item",
+    name: "Halloween Potatoz",
+    description: "Pick one from Zombie, Demon and Halloween Hat Potatoz.",
+    pointCost: 100,
+    image: { src: REWARD_IMAGE, alt: "Three plush Potatoz keychains" },
+    deadline: "Until 31 Dec 2026",
+    useAt: "Grade10 store",
+    validFor: "14 days from redemption",
   },
   {
-    id: "sleeves",
-    name: "Grade10 card sleeves",
-    pointCost: 120,
-    maxQuantity: 3,
-    collectionWindow: "Collect in store within 14 days",
+    id: "voucher-50",
+    kind: "coupon",
+    name: "HK$50 off coupon",
+    description: "Spend at online or offline store",
+    pointCost: 500,
+    useAt: "Online or physical store",
+    validFor: "90 days from redemption",
   },
   {
     id: "slab-stand",
+    kind: "item",
     name: "Acrylic slab stand",
+    description: "Display one graded slab upright.",
     pointCost: 4000,
-    collectionWindow: "Collect in store within 30 days",
+    image: { src: REWARD_IMAGE, alt: "A clear acrylic slab stand" },
+    useAt: "Grade10 store",
+    validFor: "30 days from redemption",
+  },
+  {
+    id: "uv-sleeves",
+    kind: "item",
+    name: "UV slab sleeves",
+    description: "Shield fifty graded slabs from light.",
+    pointCost: 300,
+    image: { src: REWARD_IMAGE, alt: "A pack of UV slab sleeves" },
+    useAt: "Grade10 store",
+    validFor: "30 days from redemption",
   },
 ];
 
