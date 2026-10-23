@@ -7,14 +7,12 @@ import {
   Dialog,
   DialogBody,
   DialogContent,
-  DialogDescription,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import {
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerDescription,
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
 import { useEffect, useId, useState } from "react";
@@ -22,7 +20,7 @@ import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
 import { PromoQrCard } from "../store-cart/promo-qr-card";
 import { PromoTicket } from "../store-cart/promo-ticket";
-import type { CouponItem, CouponStatus } from "./types";
+import type { CouponItem } from "./types";
 
 const SM_UP_MQ = "(min-width: 640px)";
 
@@ -51,8 +49,6 @@ type CouponListCopy = {
   spent: string;
   /** Names a void coupon. */
   void: string;
-  /** Names a coupon whose own validity has passed. */
-  expired: string;
 };
 
 type CouponListProps = {
@@ -64,13 +60,14 @@ type CouponListProps = {
   className?: string;
 };
 
+/* An expired coupon reads its status off its own expiry — "Expired 1 May" —
+ * so only spent and void take a status line. */
 const STATUS_LABEL: Record<
-  Exclude<CouponStatus, "open">,
-  keyof Pick<CouponListCopy, "spent" | "void" | "expired">
+  "spent" | "void",
+  keyof Pick<CouponListCopy, "spent" | "void">
 > = {
   spent: "spent",
   void: "void",
-  expired: "expired",
 };
 
 /** The coupon whose scan card is open, and the region id its ticket's Use
@@ -95,8 +92,13 @@ function CouponTicket({
   /* A masked surface hands nothing over — no code text, and no scan either,
    * since the scan card is the code. */
   const qrCode = open && !masked ? item.qrCode : undefined;
+  /* A spent or void coupon says its one line — "Used on …", "Void …" — in
+   * the detail's place. An expired coupon keeps its expiry, which already
+   * reads "Expired …". */
   const statusLabel =
-    item.status === "open" ? undefined : copy[STATUS_LABEL[item.status]];
+    item.status === "spent" || item.status === "void"
+      ? (item.statusLabel ?? copy[STATUS_LABEL[item.status]])
+      : undefined;
 
   return (
     <ListItem
@@ -111,7 +113,8 @@ function CouponTicket({
           applicable: open,
           id: item.id,
           title: item.description ?? item.amount,
-          detailLabel: item.expiry,
+          detailLabel:
+            open || item.status === "expired" ? item.expiry : undefined,
           inapplicableReason: statusLabel,
           label: masked ? copy.maskedCode : (item.code ?? item.amount),
         }}
@@ -126,9 +129,11 @@ function CouponTicket({
 }
 
 /** The scan card's own surface: a bottom sheet under 640px, a dialog from
- * it up — the member holds it out where the till reads it. It restates the
- * ticket above the card, as the redeemed phase does, so the surface names
- * what is being spent; the ticket's own Use now folds the card back. */
+ * it up — the member holds it out where the till reads it. The coupon's own
+ * ticket sits above the unfolded card, as the redeemed phase lays it out,
+ * and carries no scan control of its own — the surface is already the
+ * answer to Use now. The coupon names the surface for assistive tech alone;
+ * a visible heading would only repeat the ticket. */
 function CouponScanSurface({
   target,
   open,
@@ -142,13 +147,6 @@ function CouponScanSurface({
 }) {
   const { item } = target;
   const qrCode = item.qrCode;
-  const [cardOpen, setCardOpen] = useState(true);
-
-  /* Every fresh open lands on the unfolded card — the member pressed Use
-   * now to see it — and closing folds it back. */
-  useEffect(() => {
-    setCardOpen(open);
-  }, [open]);
 
   if (!qrCode) return null;
   const title = item.description ?? item.amount;
@@ -156,22 +154,9 @@ function CouponScanSurface({
   const body = (
     <VStack className="w-full" gap="md">
       {smUp ? (
-        <DialogTitle className="text-xl leading-7 font-semibold">
-          {title}
-        </DialogTitle>
+        <DialogTitle className="sr-only">{title}</DialogTitle>
       ) : (
-        <DrawerTitle className="text-xl leading-7 font-semibold">
-          {title}
-        </DrawerTitle>
-      )}
-      {smUp ? (
-        <DialogDescription className="text-sm leading-5 text-secondary-foreground">
-          {item.expiry}
-        </DialogDescription>
-      ) : (
-        <DrawerDescription className="text-sm leading-5">
-          {item.expiry}
-        </DrawerDescription>
+        <DrawerTitle className="sr-only">{title}</DrawerTitle>
       )}
       <PromoTicket
         className="w-full"
@@ -182,16 +167,12 @@ function CouponScanSurface({
           detailLabel: item.expiry,
           label: item.code ?? item.amount,
         }}
-        onQrToggle={setCardOpen}
-        qrCode={qrCode}
-        qrOpen={cardOpen}
-        qrRegionId={target.regionId}
       />
       <PromoQrCard
         caption={qrCode.caption}
         className="w-full"
         id={target.regionId}
-        open={cardOpen}
+        open={open}
         qrCode={qrCode}
       />
     </VStack>

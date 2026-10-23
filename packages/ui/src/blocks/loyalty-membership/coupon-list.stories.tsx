@@ -21,7 +21,6 @@ const meta = {
       maskedCode: "••••••••",
       spent: "Used",
       void: "Void",
-      expired: "Expired",
     },
     state: {
       status: "ready",
@@ -33,16 +32,18 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Each coupon is a ticket: what it takes off, what it is for, its code in
- * the stub, and spent, void and expired each saying so. */
+/** Each coupon is a ticket: an open one carries its code and a Use by line,
+ * a spent or void one says its own line in the detail's place, and an
+ * expired one reads its expiry — which already says so. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("GRD-50-7Q2M")).toBeInTheDocument();
     expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
-    expect(canvas.getByText("Used")).toBeInTheDocument();
-    expect(canvas.getByText("Void")).toBeInTheDocument();
-    expect(canvas.getByText("Expired")).toBeInTheDocument();
+    expect(canvas.getByText(/Use by/)).toBeInTheDocument();
+    expect(canvas.getByText(/Used on/)).toBeInTheDocument();
+    expect(canvas.getByText(/Void 30 Jun/)).toBeInTheDocument();
+    expect(canvas.getByText(/Expired 1 May/)).toBeInTheDocument();
     expect(canvas.getAllByRole("button", { name: "Use now" })).toHaveLength(1);
   },
 };
@@ -56,11 +57,14 @@ export const ScanCard: Story = {
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     await userEvent.click(toggle);
     const overlay = within(document.body);
-    expect(
-      await overlay.findByRole("dialog", { name: "HK$50 off any order" }),
-    ).toBeInTheDocument();
+    /* The coupon's own ticket restates it inside; the surface's title is
+     * for assistive tech alone, not a second heading. */
+    expect(await overlay.findByRole("dialog")).toBeInTheDocument();
     const qr = document.body.querySelector('[data-slot="promo-qr-card"]');
     await waitFor(() => expect(qr).toBeVisible());
+    expect(
+      overlay.queryByRole("button", { name: "Use now" }),
+    ).not.toBeInTheDocument();
     expect(toggle).toHaveAttribute("aria-expanded", "true");
     await userEvent.keyboard("{Escape}");
     await waitFor(() =>
@@ -99,7 +103,7 @@ export const Wallet: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("GRD-50-7Q2M")).not.toBeInTheDocument();
     expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
-    expect(canvas.getByText("Used")).toBeInTheDocument();
+    expect(canvas.getByText(/Used on/)).toBeInTheDocument();
     expect(canvas.getAllByRole("button", { name: "Use now" })).toHaveLength(1);
   },
 };

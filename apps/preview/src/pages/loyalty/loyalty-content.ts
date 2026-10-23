@@ -79,7 +79,6 @@ const COUPON_LIST_COPY: CouponListCopy = {
   maskedCode: "Code hidden",
   spent: "Spent",
   void: "Void",
-  expired: "Expired",
 };
 
 /** The controls a surface hangs on an open coupon. */
@@ -179,9 +178,13 @@ const TIER_BENEFITS: readonly TierBenefitsRow[] = [
 ];
 
 const COUPONS_PAGE_COPY = {
-  title: "Your coupons",
+  title: "Coupons",
   subtitle:
     "Coupons your rewards and the shop have left you. Present one at the till, or apply it at checkout.",
+  availableTab: "Available",
+  historyTab: "Used & Expired",
+  noAvailable: "No coupons to spend right now.",
+  noHistory: "Nothing used or expired yet.",
 };
 
 const MEMBERSHIP_PAGE_COPY = {
@@ -308,7 +311,7 @@ const COUPONS: CouponItem[] = [
     amount: "HK$50",
     code: "GRD-50-7Q2M",
     description: "HK$50 off any order",
-    expiry: `Valid until ${COUPON_VALID}`,
+    expiry: `Use by ${COUPON_VALID}`,
     status: "open",
     qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-open:7Q2M" },
   },
@@ -317,8 +320,9 @@ const COUPONS: CouponItem[] = [
     amount: "HK$100",
     code: "GRD-100-XK4P",
     description: "HK$100 off any order",
-    expiry: `Valid until ${formatDay(Date.UTC(2026, 9, 15))}`,
+    expiry: `Use by ${formatDay(Date.UTC(2026, 9, 15))}`,
     status: "spent",
+    statusLabel: `Used on ${formatDay(Date.UTC(2026, 9, 12))}`,
   },
   {
     id: "coupon-void",
@@ -326,6 +330,7 @@ const COUPONS: CouponItem[] = [
     code: "GRD-50-9ZZT",
     expiry: `Expired ${formatDay(Date.UTC(2026, 5, 30))}`,
     status: "void",
+    statusLabel: `Void ${formatDay(Date.UTC(2026, 5, 30))}`,
   },
   {
     id: "coupon-expired",
@@ -343,7 +348,7 @@ const ISSUED_COUPON: CouponItem = {
   amount: "HK$50 off",
   code: "GRD-50-4HVD",
   description: "HK$50 off any order",
-  expiry: `Valid until ${COUPON_VALID}`,
+  expiry: `Use by ${COUPON_VALID}`,
   status: "open",
   qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-issued:4HVD" },
 };

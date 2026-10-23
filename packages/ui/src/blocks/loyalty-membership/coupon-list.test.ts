@@ -9,7 +9,6 @@ const COPY = {
   maskedCode: "Hidden",
   spent: "Spent",
   void: "Void",
-  expired: "Expired",
 };
 
 const markup = (items: readonly CouponItem[]) =>

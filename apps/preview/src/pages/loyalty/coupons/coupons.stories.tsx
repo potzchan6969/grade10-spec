@@ -1,5 +1,11 @@
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@grade10/design-system/components/display/tabs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { CouponList, SiteHeader } from "@grade10/ui";
+import { type CouponItem, CouponList, SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
@@ -9,11 +15,19 @@ import {
   COUPONS_PAGE_COPY,
 } from "../loyalty-content";
 
+const isOpen = (coupon: CouponItem) => coupon.status === "open";
+
+const couponState = (data: readonly CouponItem[], emptyMessage: string) =>
+  data.length > 0
+    ? { status: "ready" as const, data }
+    : { status: "empty" as const, message: emptyMessage };
+
 /**
  * The coupon wallet as a store assembles it: `SiteHeader`, the page's own
- * heading, and `CouponList`. The page owns the coupons; the block owns its
- * scan surface — a Use now press opens the till-facing code on a sheet or
- * dialog without the page knowing.
+ * heading, the Available / Used & Expired tabs, and `CouponList`. The page
+ * owns the coupons and the partition; the block owns its scan surface — a
+ * Use now press opens the till-facing code on a sheet or dialog without the
+ * page knowing.
  */
 function CouponsPage() {
   return (
@@ -29,10 +43,34 @@ function CouponsPage() {
               {COUPONS_PAGE_COPY.subtitle}
             </p>
           </header>
-          <CouponList
-            copy={COUPON_LIST_COPY}
-            state={{ status: "ready", data: COUPONS }}
-          />
+          <Tabs defaultValue="available">
+            <TabsList>
+              <TabsTrigger value="available">
+                {COUPONS_PAGE_COPY.availableTab}
+              </TabsTrigger>
+              <TabsTrigger value="history">
+                {COUPONS_PAGE_COPY.historyTab}
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent className="pt-4" value="available">
+              <CouponList
+                copy={COUPON_LIST_COPY}
+                state={couponState(
+                  COUPONS.filter(isOpen),
+                  COUPONS_PAGE_COPY.noAvailable,
+                )}
+              />
+            </TabsContent>
+            <TabsContent className="pt-4" value="history">
+              <CouponList
+                copy={COUPON_LIST_COPY}
+                state={couponState(
+                  COUPONS.filter((coupon) => !isOpen(coupon)),
+                  COUPONS_PAGE_COPY.noHistory,
+                )}
+              />
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
@@ -53,15 +91,20 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** The coupon wallet page. The scan surface opens only on a Use now press —
- * each of its states is drawn under `Loyalty/Coupons/Blocks/CouponList`. */
+/** The coupon wallet: Available holds what can still be spent, Used &
+ * Expired holds the rest — each saying its own line. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Your coupons" }),
+      canvas.getByRole("heading", { level: 1, name: "Coupons" }),
     ).toBeInTheDocument();
     expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
+    expect(canvas.queryByText(/Used on/)).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
+    expect(await canvas.findByText(/Used on/)).toBeInTheDocument();
+    expect(canvas.getByText(/Void/)).toBeInTheDocument();
+    expect(canvas.getByText(/Expired 1 May 2026/)).toBeInTheDocument();
     expect(
       document.body.querySelector('[data-slot="promo-qr-card"]'),
     ).not.toBeInTheDocument();
@@ -75,11 +118,14 @@ export const PresentAtTill: Story = {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Use now" }));
     const overlay = within(document.body);
-    expect(
-      await overlay.findByRole("dialog", { name: "HK$50 off any order" }),
-    ).toBeInTheDocument();
+    expect(await overlay.findByRole("dialog")).toBeInTheDocument();
     const qr = document.body.querySelector('[data-slot="promo-qr-card"]');
     await waitFor(() => expect(qr).toBeVisible());
+    /* The surface's ticket carries no Use now of its own — the card is
+     * already unfolded. */
+    expect(
+      overlay.queryByRole("button", { name: "Use now" }),
+    ).not.toBeInTheDocument();
   },
 };
 

@@ -66,7 +66,7 @@ const COUPONS: CouponItem[] = [
     amount: "HK$50",
     code: "GRD-50-7Q2M",
     description: "HK$50 off any order",
-    expiry: `Valid until ${formatDay(Date.UTC(2026, 11, 31))}`,
+    expiry: `Use by ${formatDay(Date.UTC(2026, 11, 31))}`,
     status: "open",
     qrCode: {
       value: "g10:redeem:coupon-open:7Q2M",
@@ -80,8 +80,9 @@ const COUPONS: CouponItem[] = [
     amount: "HK$100",
     code: "GRD-100-XK4P",
     description: "HK$100 off any order",
-    expiry: `Valid until ${formatDay(Date.UTC(2026, 9, 15))}`,
+    expiry: `Use by ${formatDay(Date.UTC(2026, 9, 15))}`,
     status: "spent",
+    statusLabel: `Used on ${formatDay(Date.UTC(2026, 9, 12))}`,
   },
   {
     id: "coupon-void",
@@ -89,6 +90,7 @@ const COUPONS: CouponItem[] = [
     code: "GRD-50-9ZZT",
     expiry: `Expired ${formatDay(Date.UTC(2026, 5, 30))}`,
     status: "void",
+    statusLabel: `Void ${formatDay(Date.UTC(2026, 5, 30))}`,
   },
   {
     id: "coupon-expired",
