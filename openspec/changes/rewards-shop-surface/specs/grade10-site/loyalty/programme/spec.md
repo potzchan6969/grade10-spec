@@ -178,7 +178,7 @@ SHALL require no export of its own.
 
 - **GIVEN** a balance short of the reward's cost
 - **WHEN** the confirm phase renders
-- **THEN** the balance row reads `have / cost` in the warning tone
+- **THEN** the balance row names the deficit in the warning tone
 - **AND** the redeem action is disabled
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-t8b rev=1 -->

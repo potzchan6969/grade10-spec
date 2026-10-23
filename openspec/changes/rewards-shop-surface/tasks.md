@@ -13,7 +13,7 @@
       `grade10-site-loyalty-programme-SC-264`, `grade10-site-loyalty-programme-SC-265`
 - [x] 1.3 Add `reward-checkout.tsx`: the confirm phase (hero, deadline
       badge, `Use at`/`Valid for` rows, balance before→after, warning
-      `have / cost`, disabled redeem), the redeemed phase (check, title,
+      deficit readout, disabled redeem), the redeemed phase (check, title,
       points line, `PromoTicket` with code or collection, Done + View
       Coupons), and the responsive shell — `Drawer swipeDirection="down"`
       under 640px, `Dialog` from 640px via `matchMedia`

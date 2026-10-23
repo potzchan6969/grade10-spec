@@ -153,8 +153,8 @@ export const Default: Story = {
   },
 };
 
-/** A short balance is refused before the points go — the row reads
- * have-over-cost in the warning tone and the button disables. */
+/** A short balance is refused before the points go — the row names the
+ * deficit in the warning tone and the button disables. */
 export const InsufficientBalance: Story = {
   render: () => <RewardsPage />,
   play: async ({ canvasElement }) => {
@@ -163,7 +163,7 @@ export const InsufficientBalance: Story = {
       canvas.getByRole("button", { name: /Acrylic slab stand/ }),
     );
     const overlay = within(document.body);
-    expect(await overlay.findByText("1,250 / 4,000 pts")).toBeInTheDocument();
+    expect(await overlay.findByText("Need 2,750 more pts")).toBeInTheDocument();
     expect(
       overlay.getByRole("button", { name: "Redeem for 4,000 pts" }),
     ).toBeDisabled();

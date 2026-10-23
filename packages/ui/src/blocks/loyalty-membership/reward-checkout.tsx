@@ -56,6 +56,8 @@ type RewardCheckoutCopy = {
   points: string;
   /** How a point count reads — "1,250". */
   pointCount: (points: number) => string;
+  /** The shortfall warning, given the deficit — "Need 2,750 more pts". */
+  pointsNeeded: (missing: number) => string;
   /** The redeem button, given the cost — "Redeem for 120 pts". */
   redeemFor: (cost: number) => string;
   /** The redeemed heading for a discount coupon — "Added to your coupons". */
@@ -317,8 +319,7 @@ function RewardCheckoutBody({
           </HStack>
         ) : (
           <Text className="text-warning" weight="medium">
-            {copy.pointCount(balance)} / {copy.pointCount(reward.pointCost)}{" "}
-            {copy.points}
+            {copy.pointsNeeded(reward.pointCost - balance)}
           </Text>
         )}
       </HStack>

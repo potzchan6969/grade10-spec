@@ -17,6 +17,8 @@ const meta = {
       pointBalance: "Point Balance",
       points: "pts",
       pointCount: (points: number) => points.toLocaleString("en-HK"),
+      pointsNeeded: (missing: number) =>
+        `Need ${missing.toLocaleString("en-HK")} more pts`,
       redeemFor: (cost: number) => `Redeem for ${cost} pts`,
       redeemedCouponTitle: "Added to your coupons",
       redeemedItemTitle: "Ready to Collect",
@@ -72,7 +74,7 @@ export const CouponConfirm: Story = {
   },
 };
 
-/** A short balance reads have-over-cost in the warning tone and refuses whole. */
+/** A short balance names the deficit in the warning tone and refuses whole. */
 export const InsufficientBalance: Story = {
   args: { reward: COUPON, balance: 10 },
   play: async () => {
@@ -81,7 +83,7 @@ export const InsufficientBalance: Story = {
       '[data-slot="reward-checkout-balance"]',
     );
     expect(row).toHaveAttribute("data-affordable", "false");
-    expect(canvas.getByText("10 / 500 pts")).toBeInTheDocument();
+    expect(canvas.getByText("Need 490 more pts")).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Redeem for 500 pts" }),
     ).toBeDisabled();

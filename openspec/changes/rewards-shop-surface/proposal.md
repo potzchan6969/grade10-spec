@@ -34,7 +34,7 @@ the collection line a good carries.
   tile), an optional deadline badge, the name and description, `Use at` and
   `Valid for` detail rows, the balance as `before → after`, and a
   `Redeem for N pts` button that disables when the balance is short — the
-  balance row then reads `have / cost` in the warning tone. Given a
+  balance row then names the deficit in the warning tone. Given a
   redemption it draws the redeemed phase instead: the check, the
   consumer-worded title, the points line, and the promo ticket — a
   discount coupon's ticket carries the unique code minted at redemption, a

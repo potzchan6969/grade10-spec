@@ -73,7 +73,7 @@ Stock reads as a yes or no, never a count.
 - 🚧 **The checkout is a surface, not a page** - a bottom sheet under
   640px, a dialog from it up; it restates the reward, names where the
   coupon is spendable and how long it is good for, and shows the balance
-  before and after - a short balance reads `have / cost` in the warning
+  before and after - a short balance names the deficit in the warning
   tone and refuses whole
 - 🚧 **The redeemed state stays in the surface** - the ticket the
   redemption issued: a discount coupon's carries the code minted for that
