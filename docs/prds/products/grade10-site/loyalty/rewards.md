@@ -79,8 +79,19 @@ Stock reads as a yes or no, never a count.
 - 🚧 **The redeemed state stays in the surface** - the ticket the
   redemption issued: a discount coupon's carries the code minted for that
   redemption alone, a good's names the collection and no code. A ticket
-  spendable or collectable at the till carries the member's scan QR; an
-  online-only ticket carries none
+  spendable or collectable at the till folds the member's scan QR behind
+  a Use now control on the surfaces a member can open there — the rewards
+  page, the coupons page; the cart's select sheet carries none, and an
+  online-only ticket carries none. A spent coupon's ticket mutes, names
+  it used, and drops the QR, and a spent coupon leaves the coupons
+  section
+- ❓ **The scan QR's lifetime** - fixed per redemption, or rotating like
+  the member pass's
+- ❓ **What the till reads** - does the coupon or collection QR carry the
+  member, or does staff scan the member pass first for the member's
+  identity
+- ❓ **A store coupon's readable code** - whether every physical-store
+  coupon also carries a member-readable code under its QR
 - 🚧 **Apply belongs to the cart** - nothing on the shop, the redeemed
   ticket or the coupons page offers to apply a coupon; the cart's
   apply-rewards flow is the only place it happens

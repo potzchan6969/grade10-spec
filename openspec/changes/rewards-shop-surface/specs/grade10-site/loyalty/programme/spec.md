@@ -91,13 +91,17 @@ draw the redeemed phase in the same surface: the member-readable code a
 discount coupon's ticket carries, the collection a good's ticket names, and
 no code on it. The ticket SHALL fold the staff-facing scan QR the
 redemption supplies behind a reveal control — drawn collapsed until the
-member opens it — and none where it supplies none. The surface SHALL
+member opens it — and none where it supplies none; a ticket facing the
+till from any member-opened surface carries it, and the cart's select
+sheet carries none. A spent coupon's ticket SHALL mute, name it used,
+and drop the scan QR. The surface SHALL
 offer no Apply action — applying a coupon to a basket belongs to the cart
 alone.
 `CouponList` SHALL carry each issued
 coupon - what it is for, its own expiry, and whether it is spent, void or
 expired - and a code only where the consumer passes one; a reward coupon
-carries none.
+carries none. The coupons page SHALL list no spent coupon — a spent one
+leaves the section.
 `ActivityList` SHALL name entries in terms a member reads, name the channel
 each came from, and SHALL NOT carry an operator reason, a retry key, or
 internal pricing.

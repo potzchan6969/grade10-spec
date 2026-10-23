@@ -50,6 +50,9 @@ type RewardRedemption = {
   /** The staff-facing QR the redeemed ticket draws — the scan token the till
    * reads. */
   qrCode?: { value: string; altText: string; toggleLabel: string };
+  /** Set when the issued coupon is already spent — the ticket mutes, says
+   * so, and drops its scan QR. */
+  usedLabel?: string;
 };
 
 type CouponStatus = "open" | "spent" | "void" | "expired";

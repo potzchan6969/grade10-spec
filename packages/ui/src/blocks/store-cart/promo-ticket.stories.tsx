@@ -142,6 +142,38 @@ export const CollectionTicket: Story = {
   },
 };
 
+/** Spent: the ticket mutes, names it used, and drops both the QR and any
+ * action — there is nothing left to scan or apply. */
+export const UsedTicket: Story = {
+  args: {
+    code: { ...applicable, label: "G10-50-7Q2M" },
+    usedLabel: "Used on 12 Oct 2026",
+    qrCode: {
+      value: "g10:redeem:voucher-50:7Q2M",
+      altText: "Show this code to store staff",
+      toggleLabel: "Use now",
+    },
+    action: (
+      <Button size="sm" variant="secondary" onClick={fn()}>
+        Apply
+      </Button>
+    ),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const ticket = canvas.getByRole("group", { name: "G10-50-7Q2M" });
+    expect(ticket).toHaveAttribute("aria-disabled", "true");
+    expect(ticket).toHaveClass("opacity-70");
+    expect(canvas.getByText("Used on 12 Oct 2026")).toBeInTheDocument();
+    expect(canvas.queryByText("Use by 31 Dec 2026")).not.toBeInTheDocument();
+    expect(canvas.getByText("G10-50-7Q2M")).toBeInTheDocument();
+    expect(canvas.queryByRole("button")).not.toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="promo-ticket-qr"]'),
+    ).not.toBeInTheDocument();
+  },
+};
+
 /** Stack of tickets as they appear in the promo sheet. */
 export const List: Story = {
   render: () => (

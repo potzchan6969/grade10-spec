@@ -262,6 +262,7 @@ function RewardCheckoutBody({
             ) : undefined
           }
           qrCode={redemption.qrCode}
+          usedLabel={redemption.usedLabel}
         />
         {smUp ? (
           <DialogFooter>

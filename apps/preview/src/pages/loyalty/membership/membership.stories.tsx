@@ -243,7 +243,21 @@ function MembershipPage({ view }: { view: MembershipView }) {
             >
               {MEMBERSHIP_PAGE_COPY.couponsHeading}
             </h2>
-            <CouponList copy={COUPON_LIST_COPY} state={coupons} />
+            {/* Spent coupons leave the section — there is nothing left to
+             * spend; history lives elsewhere. */}
+            <CouponList
+              copy={COUPON_LIST_COPY}
+              state={
+                coupons.status === "ready"
+                  ? {
+                      status: "ready",
+                      data: coupons.data.filter(
+                        (coupon) => coupon.status !== "spent",
+                      ),
+                    }
+                  : coupons
+              }
+            />
           </section>
 
           <section

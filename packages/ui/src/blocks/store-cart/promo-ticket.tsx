@@ -55,6 +55,9 @@ type PromoTicketProps = {
   selected?: boolean;
   /** Softens inapplicable tickets; no product action. */
   muted?: boolean;
+  /** Set once the coupon is spent: the ticket mutes, names it used, and
+   * drops the scan QR — there is nothing left to scan. */
+  usedLabel?: string;
   /** The staff-facing QR — a QR button beside the title folds it into the
    * stub, the half of the ticket the member holds out at the till.
    * Online-cart tickets take none. */
@@ -77,14 +80,18 @@ function PromoTicket({
   code,
   selected = false,
   muted = false,
+  usedLabel,
   qrCode,
   labelIcon,
   action,
   className,
 }: PromoTicketProps) {
+  const used = usedLabel != null;
   const borderTone = selected ? "border-ring" : "border-border";
   const hasDetail =
-    code.detailLabel != null || Boolean(code.inapplicableReason);
+    (!used && code.detailLabel != null) ||
+    Boolean(code.inapplicableReason) ||
+    used;
   const qrId = useId();
   const [qrOpen, setQrOpen] = useState(false);
 
@@ -93,9 +100,14 @@ function PromoTicket({
     <div
       data-slot="promo-ticket"
       role="group"
-      aria-disabled={muted || undefined}
+      aria-disabled={muted || used || undefined}
       aria-label={code.label}
-      className={cn("w-full", muted && "opacity-70", TICKET_SHADOW, className)}
+      className={cn(
+        "w-full",
+        (muted || used) && "opacity-70",
+        TICKET_SHADOW,
+        className,
+      )}
     >
       <div
         className={cn(
@@ -111,7 +123,7 @@ function PromoTicket({
             </span>
             {hasDetail ? (
               <VStack gap="none">
-                {code.detailLabel != null ? (
+                {!used && code.detailLabel != null ? (
                   <span className="text-xs font-normal leading-4 text-secondary-foreground">
                     {code.detailLabel}
                   </span>
@@ -121,10 +133,15 @@ function PromoTicket({
                     {code.inapplicableReason}
                   </span>
                 ) : null}
+                {used ? (
+                  <span className="text-xs font-normal leading-4 text-secondary-foreground">
+                    {usedLabel}
+                  </span>
+                ) : null}
               </VStack>
             ) : null}
           </VStack>
-          {qrCode ? (
+          {qrCode && !used ? (
             <Button
               aria-controls={qrId}
               aria-expanded={qrOpen}
@@ -152,7 +169,7 @@ function PromoTicket({
         )}
         style={TICKET_BOTTOM_MASK}
       >
-        {qrCode ? (
+        {qrCode && !used ? (
           <div
             aria-hidden={!qrOpen}
             className={cn(
@@ -188,7 +205,7 @@ function PromoTicket({
               {code.label}
             </span>
           </HStack>
-          {action}
+          {used ? null : action}
         </HStack>
       </div>
     </div>
