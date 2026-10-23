@@ -43,7 +43,7 @@ Needs groups 2 and 3 landed.
 
 - [x] 5.1 Tests first, in their own commit: rewrite `tests/auction/bid-increments.spec.ts` to derive the lowest-tier, above and below amounts and the 10000 boundary row from the configuration, with one boundary case per configured tier through `plusIncrement`, "below" being the minimum minus one whole dollar, add one case that enters a starting price with cents in the listing editor and asserts the refusal (`g10.auction-bid-increments.SC-kc7`, `g10adm.auction-listing.SC-qd4`), and replace the cents literals (`BELOW_OPENING_ROWS`, `USD_BOUNDARY_ROWS`, the 10499 note on `USD_BELOW_FLOOR`) with whole-dollar amounts (`g10.auction-bid-increments.SC-mn9`, `g10.auction-bid-increments.SC-u6t`, `g10.auction-bid-increments.SC-b2w`, `g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-p50`)
 - [x] 5.2 Audit `opening-price`, `auction-bids`, `auction`, `account-record`, `bidding-history`, `internal-bid` and `phone` specs for literal tier-derived amounts, and move each to `plusIncrement` or the configuration (`g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-w8f`)
-- [ ] 5.3 Verify: the local e2e lane for the auction specs
+- [x] 5.3 Verify: the local e2e lane for the auction specs
 
 ## 6. The walk (grade10) (owner: @htonyl)
 
