@@ -98,12 +98,14 @@ refusal is raised outside the surface. Given a
 redemption it SHALL
 draw the redeemed phase in the same surface: the member-readable code a
 discount coupon's ticket carries, the collection a good's ticket names in
-the code's place. The ticket SHALL fold the staff-facing scan QR the
-redemption supplies behind a reveal control — drawn collapsed until the
-member opens it — and none where it supplies none; a ticket facing the
-till from any member-opened surface carries it, and the cart's select
-sheet carries none. A spent coupon's ticket SHALL mute, name it used,
-and drop the scan QR. The surface SHALL
+the code's place. Where the redemption supplies a scan QR the ticket
+SHALL carry a Use now control in its action slot, and the surface SHALL
+draw the scan QR as its own card apart from the ticket — collapsed until
+the member opens it — placed where the surface lays the scan out, never
+inside the ticket; a ticket facing the till from any member-opened
+surface carries the control, and the cart's select sheet carries none.
+A spent coupon's ticket SHALL mute, name it used, and drop the scan
+control. The surface SHALL
 offer no Apply action — applying a coupon to a basket belongs to the cart
 alone.
 `CouponList` SHALL carry each issued

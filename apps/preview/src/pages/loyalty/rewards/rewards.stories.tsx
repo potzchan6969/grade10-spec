@@ -93,24 +93,26 @@ function RewardsPage() {
         reward.kind === "coupon"
           ? {
               balanceAfter: left,
-              summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+              summary: `${cost} pts redeemed`,
               deadline: "Use by 28 Oct 2026",
               code: "G10-50-7Q2M",
               qrCode: {
                 value: `g10:redeem:${reward.id}:7Q2M`,
                 altText: "Show this code to store staff",
                 toggleLabel: "Use now",
+                caption: "Staff scan this at the counter",
               },
             }
           : {
               balanceAfter: left,
-              summary: `${cost} pts redeemed. ${left.toLocaleString("en-HK")} pts left`,
+              summary: `${cost} pts redeemed`,
               deadline: "Collect by 5 Nov 2026",
               note: "Collect at any Grade10 store",
               qrCode: {
                 value: `g10:collect:${reward.id}:7Q2M`,
                 altText: "Show this code to store staff",
                 toggleLabel: "Use now",
+                caption: "Staff scan this at the counter",
               },
             },
       );

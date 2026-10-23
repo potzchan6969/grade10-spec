@@ -28,7 +28,8 @@ import {
   Clock,
   Storefront,
 } from "@phosphor-icons/react";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useId, useState } from "react";
+import { PromoQrCard } from "../store-cart/promo-qr-card";
 import { PromoTicket } from "../store-cart/promo-ticket";
 import { RewardArt } from "./reward-art";
 import type { RewardCheckoutReward, RewardRedemption } from "./types";
@@ -106,8 +107,10 @@ type RewardCheckoutProps = {
  * spendable and how long it is good for — shows the balance before and
  * after, and refuses a short balance whole. Given a `redemption` it draws
  * the redeemed phase in the same surface: the coupon's ticket carries the
- * unique code the redemption minted, the good's names the collection and no
- * code. Apply belongs to the cart; the surface offers none.
+ * unique code the redemption minted, the good's names the collection in
+ * the code's place, and a Use now control on either unfolds the scan-QR
+ * card below the ticket. Apply belongs to the cart; the surface offers
+ * none.
  */
 function RewardCheckout({
   copy,
@@ -230,86 +233,17 @@ function RewardCheckoutBody({
 }) {
   if (redemption) {
     return (
-      <VStack
-        align="center"
-        className="w-full animate-in fade-in slide-in-from-bottom-2 duration-300 motion-reduce:animate-none"
-        data-slot="reward-checkout-redeemed"
-        gap="md"
-      >
-        <span className="animate-in zoom-in-50 duration-500 text-accent-foreground motion-reduce:animate-none">
-          <CheckCircle aria-hidden size={64} weight="fill" />
-        </span>
-        <VStack align="center" className="w-full text-center" gap="xs">
-          {renderTitle(
-            reward.kind === "coupon"
-              ? copy.redeemedCouponTitle
-              : copy.redeemedItemTitle,
-          )}
-          {renderDescription(redemption.summary)}
-        </VStack>
-        <PromoTicket
-          className="w-full"
-          code={{
-            applicable: true,
-            id: reward.id,
-            title: reward.name,
-            detailLabel: redemption.deadline,
-            label: redemption.code ?? redemption.note ?? "",
-          }}
-          labelIcon={
-            reward.kind === "item" ? (
-              <Storefront size={14} weight="bold" />
-            ) : undefined
-          }
-          qrCode={redemption.qrCode}
-          usedLabel={redemption.usedLabel}
-        />
-        {smUp ? (
-          <DialogFooter>
-            <Button
-              onClick={() => (onDone ? onDone() : onOpenChange(false))}
-              size="md"
-              type="button"
-              variant="secondary"
-            >
-              {copy.done}
-            </Button>
-            {viewCouponsHref ? (
-              <Button
-                render={<a href={viewCouponsHref}>{copy.viewCoupons}</a>}
-                size="md"
-              />
-            ) : (
-              <Button size="md" type="button">
-                {copy.viewCoupons}
-              </Button>
-            )}
-          </DialogFooter>
-        ) : (
-          <HStack className="w-full" gap="sm">
-            <Button
-              className="flex-1"
-              onClick={() => (onDone ? onDone() : onOpenChange(false))}
-              size="md"
-              type="button"
-              variant="secondary"
-            >
-              {copy.done}
-            </Button>
-            {viewCouponsHref ? (
-              <Button
-                className="flex-1"
-                render={<a href={viewCouponsHref}>{copy.viewCoupons}</a>}
-                size="md"
-              />
-            ) : (
-              <Button className="flex-1" size="md" type="button">
-                {copy.viewCoupons}
-              </Button>
-            )}
-          </HStack>
-        )}
-      </VStack>
+      <RedeemedPhase
+        copy={copy}
+        onDone={onDone}
+        onOpenChange={onOpenChange}
+        redemption={redemption}
+        renderDescription={renderDescription}
+        renderTitle={renderTitle}
+        reward={reward}
+        smUp={smUp}
+        viewCouponsHref={viewCouponsHref}
+      />
     );
   }
 
@@ -409,6 +343,116 @@ function RewardCheckoutBody({
         >
           {copy.redeemFor(reward.pointCost)}
         </Button>
+      )}
+    </VStack>
+  );
+}
+
+/** The settled redemption: the ticket, then the scan card folded below it
+ * — the member opens it where the till reads it. */
+function RedeemedPhase({
+  copy,
+  reward,
+  redemption,
+  onDone,
+  onOpenChange,
+  viewCouponsHref,
+  smUp,
+  renderTitle,
+  renderDescription,
+}: {
+  copy: RewardCheckoutCopy;
+  reward: RewardCheckoutReward;
+  redemption: RewardRedemption;
+  onDone?: () => void;
+  onOpenChange: (open: boolean) => void;
+  viewCouponsHref?: string;
+  smUp: boolean;
+  renderTitle: (text: string) => ReactNode;
+  renderDescription: (text: string) => ReactNode;
+}) {
+  const qrRegionId = useId();
+  const [qrOpen, setQrOpen] = useState(false);
+  const done = (
+    <Button
+      className={smUp ? undefined : "flex-1"}
+      onClick={() => (onDone ? onDone() : onOpenChange(false))}
+      size="md"
+      type="button"
+      variant="secondary"
+    >
+      {copy.done}
+    </Button>
+  );
+  const viewCoupons = viewCouponsHref ? (
+    <Button
+      className={smUp ? undefined : "flex-1"}
+      render={<a href={viewCouponsHref}>{copy.viewCoupons}</a>}
+      size="md"
+    />
+  ) : (
+    <Button className={smUp ? undefined : "flex-1"} size="md" type="button">
+      {copy.viewCoupons}
+    </Button>
+  );
+
+  return (
+    <VStack
+      align="center"
+      className="w-full animate-in fade-in slide-in-from-bottom-2 duration-300 motion-reduce:animate-none"
+      data-slot="reward-checkout-redeemed"
+      gap="md"
+    >
+      <span className="animate-in zoom-in-50 duration-500 text-accent-foreground motion-reduce:animate-none">
+        <CheckCircle aria-hidden size={64} weight="fill" />
+      </span>
+      <VStack align="center" className="w-full text-center" gap="xs">
+        {renderTitle(
+          reward.kind === "coupon"
+            ? copy.redeemedCouponTitle
+            : copy.redeemedItemTitle,
+        )}
+        {renderDescription(redemption.summary)}
+      </VStack>
+      <PromoTicket
+        className="w-full"
+        code={{
+          applicable: true,
+          id: reward.id,
+          title: reward.name,
+          detailLabel: redemption.deadline,
+          label: redemption.code ?? redemption.note ?? "",
+        }}
+        labelIcon={
+          reward.kind === "item" ? (
+            <Storefront size={14} weight="bold" />
+          ) : undefined
+        }
+        onQrToggle={setQrOpen}
+        qrCode={redemption.qrCode}
+        qrOpen={qrOpen}
+        qrRegionId={qrRegionId}
+        usedLabel={redemption.usedLabel}
+      />
+      {redemption.qrCode && !redemption.usedLabel ? (
+        <PromoQrCard
+          caption={redemption.qrCode.caption}
+          className="w-full"
+          id={qrRegionId}
+          open={qrOpen}
+          qrCode={redemption.qrCode}
+        />
+      ) : null}
+      {smUp ? (
+        <DialogFooter>
+          {done}
+          {viewCoupons}
+        </DialogFooter>
+      ) : (
+        <HStack className="w-full" gap="sm">
+          {done}
+          {viewCoupons}
+        </HStack>
       )}
     </VStack>
   );
