@@ -1,6 +1,6 @@
 # Tasks: Store product not-found state
 
-## 1. Contract and catalog (grade10-spec)
+## 1. Contract and catalog (grade10-spec) (owner: @kinisworking)
 
 - [ ] 1.1 Add failing catalog-resolution coverage for the three product-specific unknown-state messages required by `grade10-site-store-product-page-SC-03` in every supported Grade10 locale.
 - [ ] 1.2 Update `docs/prds/products/grade10-site/store/product-page.md` to record the shipped-scope Store product unknown state, its preserved 404 response, and its listing recovery action.

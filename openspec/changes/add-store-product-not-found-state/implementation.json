@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "cc076c6ebf231562314317c12e266d53bfe7a66c818b6b0ec30ef1b16ff243f4"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "7eeb24ec34d789bda2911531f1afba48ff8bab21",
+    "capturedAt": "2026-10-23T09:18:20.996Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-store-product-not-found-state/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: An address that names no card is refused"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
