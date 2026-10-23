@@ -53,6 +53,12 @@ const PRODUCT_DETAIL_KEYS = [
   "soldOutAction",
 ];
 
+const UNKNOWN_PRODUCT_KEYS = [
+  "unknownProduct.title",
+  "unknownProduct.description",
+  "unknownProduct.browseStore",
+];
+
 const STORE_PRODUCT_DETAIL_KEYS = ["adding", "addedToCart"];
 
 /* What the listing's filter panel says for itself. A facet choice is named by
@@ -251,6 +257,20 @@ describe("what a brand and a language answer between them", () => {
 
       for (const key of STORE_PRODUCT_DETAIL_KEYS) {
         expect(store[key as keyof typeof store]).toEqual(expect.any(String));
+      }
+    },
+  );
+
+  /* Scenario: grade10-site-store-product-page-SC-03 - the Store-specific
+     missing-product state has title, explanation and recovery copy in every
+     Grade10 language. */
+  it.each(localesOf("grade10"))(
+    "resolves unknown product copy for grade10 in %s",
+    (locale) => {
+      const product = flatten(getMessages("grade10", locale).product);
+
+      for (const key of UNKNOWN_PRODUCT_KEYS) {
+        expect(product[key]).toEqual(expect.any(String));
       }
     },
   );

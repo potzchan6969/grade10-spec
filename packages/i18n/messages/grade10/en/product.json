@@ -1,3 +1,8 @@
 {
-  "hongKongGrade10Store": "Hong Kong Grade10 Store"
+  "hongKongGrade10Store": "Hong Kong Grade10 Store",
+  "unknownProduct": {
+    "title": "We couldn’t find this product",
+    "description": "Check the address, or browse the store for what is available.",
+    "browseStore": "Browse the store"
+  }
 }
