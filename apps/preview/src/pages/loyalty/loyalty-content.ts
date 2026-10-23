@@ -76,7 +76,6 @@ const REWARD_CHECKOUT_COPY: RewardCheckoutCopy = {
 
 const COUPON_LIST_COPY: CouponListCopy = {
   label: "Your coupons",
-  maskedCode: "Code hidden",
   spent: "Spent",
   void: "Void",
 };
@@ -188,6 +187,8 @@ const COUPONS_PAGE_COPY = {
   noHistory: "No used or expired coupons",
   noHistoryDescription:
     "Coupons you've spent, or that have lapsed, appear here.",
+  noCoupons: "No coupons yet",
+  noCouponsDescription: "Coupons you earn or get from the shop appear here.",
 };
 
 const MEMBERSHIP_PAGE_COPY = {

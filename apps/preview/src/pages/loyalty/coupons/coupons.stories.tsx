@@ -32,7 +32,7 @@ const couponState = (
  * Use now press opens the till-facing code on a sheet or dialog without the
  * page knowing.
  */
-function CouponsPage() {
+function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...STORE_SITE_HEADER} />
@@ -46,37 +46,50 @@ function CouponsPage() {
               {COUPONS_PAGE_COPY.subtitle}
             </p>
           </header>
-          <Tabs defaultValue="available">
-            <TabsList>
-              <TabsTrigger value="available">
-                {COUPONS_PAGE_COPY.availableTab}
-              </TabsTrigger>
-              <TabsTrigger value="history">
-                {COUPONS_PAGE_COPY.historyTab}
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent className="pt-4" value="available">
-              <CouponList
-                copy={COUPON_LIST_COPY}
-                state={couponState(COUPONS.filter(isOpen), {
-                  message: COUPONS_PAGE_COPY.noAvailable,
-                  description: COUPONS_PAGE_COPY.noAvailableDescription,
-                })}
-              />
-            </TabsContent>
-            <TabsContent className="pt-4" value="history">
-              <CouponList
-                copy={COUPON_LIST_COPY}
-                state={couponState(
-                  COUPONS.filter((coupon) => !isOpen(coupon)),
-                  {
-                    message: COUPONS_PAGE_COPY.noHistory,
-                    description: COUPONS_PAGE_COPY.noHistoryDescription,
-                  },
-                )}
-              />
-            </TabsContent>
-          </Tabs>
+          {coupons.length === 0 ? (
+            /* Nothing to part — the wallet's own empty state stands for the
+             * whole page, no tab bar. */
+            <CouponList
+              copy={COUPON_LIST_COPY}
+              state={{
+                status: "empty",
+                message: COUPONS_PAGE_COPY.noCoupons,
+                description: COUPONS_PAGE_COPY.noCouponsDescription,
+              }}
+            />
+          ) : (
+            <Tabs defaultValue="available">
+              <TabsList>
+                <TabsTrigger value="available">
+                  {COUPONS_PAGE_COPY.availableTab}
+                </TabsTrigger>
+                <TabsTrigger value="history">
+                  {COUPONS_PAGE_COPY.historyTab}
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent className="pt-4" value="available">
+                <CouponList
+                  copy={COUPON_LIST_COPY}
+                  state={couponState(coupons.filter(isOpen), {
+                    message: COUPONS_PAGE_COPY.noAvailable,
+                    description: COUPONS_PAGE_COPY.noAvailableDescription,
+                  })}
+                />
+              </TabsContent>
+              <TabsContent className="pt-4" value="history">
+                <CouponList
+                  copy={COUPON_LIST_COPY}
+                  state={couponState(
+                    coupons.filter((coupon) => !isOpen(coupon)),
+                    {
+                      message: COUPONS_PAGE_COPY.noHistory,
+                      description: COUPONS_PAGE_COPY.noHistoryDescription,
+                    },
+                  )}
+                />
+              </TabsContent>
+            </Tabs>
+          )}
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
@@ -132,6 +145,17 @@ export const PresentAtTill: Story = {
     expect(
       overlay.queryByRole("button", { name: "Use now" }),
     ).not.toBeInTheDocument();
+  },
+};
+
+/** A member with no coupons at all: no tabs to flip between, just the
+ * wallet's empty state. */
+export const NoCoupons: Story = {
+  args: { coupons: [] },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("tab")).not.toBeInTheDocument();
+    expect(canvas.getByText("No coupons yet")).toBeInTheDocument();
   },
 };
 

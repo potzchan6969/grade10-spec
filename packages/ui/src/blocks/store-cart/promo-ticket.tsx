@@ -84,21 +84,14 @@ type PromoTicketProps = {
   className?: string;
 };
 
-/** Stand-in ticket for the skeleton — the bones read its shape, never its
- * words. */
-const SKELETON_CODE: HeldPromoCode = {
-  applicable: true,
-  id: "promo-ticket-skeleton",
-  title: "HK$50 off any order",
-  detailLabel: "Use by 30 Jun 2027",
-  label: "GRD-50-7Q2M",
-};
-
-const SKELETON_QR: PromoTicketQr = {
-  value: "g10:redeem:skeleton",
-  altText: "Skeleton scan code",
-  toggleLabel: "Use now",
-};
+/** Stand-in silhouette for the skeleton: the ticket's two cards alone, so
+ * the bones read as its outline rather than a bar glued to a pill row. */
+const SKELETON_SHAPE = (
+  <div aria-hidden className="w-full">
+    <div className="h-16 rounded-t-(--radius-xl) border border-b-0 border-border bg-background" />
+    <div className="h-10 rounded-b-(--radius-xl) border border-t-0 border-border bg-background" />
+  </div>
+);
 
 /** Boneyard shell in a ticket's shape, for a list still resolving. */
 function PromoTicketSkeleton({ className }: { className?: string }) {
@@ -108,12 +101,12 @@ function PromoTicketSkeleton({ className }: { className?: string }) {
       className={cn("w-full", className)}
       color="#E6E6E6"
       darkColor="rgba(249, 250, 250, 0.05)"
-      fixture={<PromoTicketContent code={SKELETON_CODE} qrCode={SKELETON_QR} />}
+      fixture={SKELETON_SHAPE}
       loading
       name="store-cart-promo-ticket"
       transition={300}
     >
-      <PromoTicketContent code={SKELETON_CODE} qrCode={SKELETON_QR} />
+      {SKELETON_SHAPE}
     </Skeleton>
   );
 }
@@ -214,7 +207,9 @@ function PromoTicketContent({
         )}
         style={TICKET_BOTTOM_MASK}
       >
-        <HStack gap="sm" vAlign="center" className="w-full">
+        {/* min-h-6 holds the stub to the Use now button's height, so a
+         * ticket without one is the same height as a ticket with it. */}
+        <HStack gap="sm" vAlign="center" className="min-h-6 w-full">
           <HStack gap="xs" vAlign="center" className="min-w-0 flex-1">
             <span aria-hidden className="shrink-0 text-secondary-foreground">
               {labelIcon ?? <Tag size={14} weight="bold" />}

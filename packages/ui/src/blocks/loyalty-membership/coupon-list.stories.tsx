@@ -18,7 +18,6 @@ const meta = {
   args: {
     copy: {
       label: "My coupons",
-      maskedCode: "••••••••",
       spent: "Used",
       void: "Void",
     },
@@ -105,19 +104,6 @@ export const Codeless: Story = {
     expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
     expect(canvas.getByText(/Used on/)).toBeInTheDocument();
     expect(canvas.getAllByRole("button", { name: "Use now" })).toHaveLength(1);
-  },
-};
-
-/** A surface that must withhold codes masks every one with the same word —
- * and offers no scan, since the scan is the code. */
-export const Masked: Story = {
-  args: { masked: true },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.queryByText("GRD-50-7Q2M")).not.toBeInTheDocument();
-    expect(canvas.queryByText("GRD-100-XK4P")).not.toBeInTheDocument();
-    expect(canvas.getAllByText("••••••••")).toHaveLength(4);
-    expect(canvas.queryByRole("button")).not.toBeInTheDocument();
   },
 };
 

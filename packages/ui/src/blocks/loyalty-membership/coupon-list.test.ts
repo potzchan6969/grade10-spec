@@ -6,7 +6,6 @@ import type { CouponItem } from "./types";
 
 const COPY = {
   label: "Your coupons",
-  maskedCode: "Hidden",
   spent: "Spent",
   void: "Void",
 };

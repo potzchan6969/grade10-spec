@@ -46,8 +46,6 @@ function useSmUp() {
 type CouponListCopy = {
   /** Accessible name of the list. */
   label: string;
-  /** Stands in for every code on a surface that must withhold them. */
-  maskedCode: string;
   /** Names a spent coupon. */
   spent: string;
   /** Names a void coupon. */
@@ -57,9 +55,6 @@ type CouponListCopy = {
 type CouponListProps = {
   copy: CouponListCopy;
   state: AsyncState<readonly CouponItem[]>;
-  /** Withholds every code — the stub reads the masked word and no coupon
-   * offers its scan. */
-  masked?: boolean;
   className?: string;
 };
 
@@ -80,21 +75,17 @@ type ScanTarget = { item: CouponItem; regionId: string };
 function CouponTicket({
   copy,
   item,
-  masked,
   scanOpen,
   onScanToggle,
 }: {
   copy: CouponListCopy;
   item: CouponItem;
-  masked: boolean;
   scanOpen: boolean;
   onScanToggle: (target: ScanTarget | null) => void;
 }) {
   const regionId = useId();
   const open = item.status === "open";
-  /* A masked surface hands nothing over — no code text, and no scan either,
-   * since the scan card is the code. */
-  const qrCode = open && !masked ? item.qrCode : undefined;
+  const qrCode = open ? item.qrCode : undefined;
   /* A spent or void coupon says its one line — "Used on …", "Void …" — in
    * the detail's place. An expired coupon keeps its expiry, which already
    * reads "Expired …". */
@@ -119,7 +110,7 @@ function CouponTicket({
           detailLabel:
             open || item.status === "expired" ? item.expiry : undefined,
           inapplicableReason: statusLabel,
-          label: masked ? copy.maskedCode : (item.code ?? item.amount),
+          label: item.code ?? item.amount,
         }}
         muted={!open}
         onQrToggle={(next) => onScanToggle(next ? { item, regionId } : null)}
@@ -210,19 +201,12 @@ function CouponScanSurface({
  * The coupons a member holds, one ticket apiece. An open coupon carries a
  * code only where the consumer passes one — a reward coupon spends from the
  * wallet by id and carries none, and its stub reads what the coupon takes
- * off instead. `masked` swaps every code for the masked word and drops every
- * scan, for a surface that may state a coupon exists but must not hand it
- * over. Where an open coupon carries `qrCode`, its Use now opens the scan
+ * off instead. Where an open coupon carries `qrCode`, its Use now opens the scan
  * card on a sheet or dialog; a consumer `action` rides instead where one is
  * given. Spent, void and expired stay listed and say so — the consumer
  * decides how long history stays.
  */
-function CouponList({
-  copy,
-  state,
-  masked = false,
-  className,
-}: CouponListProps) {
+function CouponList({ copy, state, className }: CouponListProps) {
   const smUp = useSmUp();
   const [scan, setScan] = useState<ScanTarget | null>(null);
   const [scanOpen, setScanOpen] = useState(false);
@@ -270,7 +254,6 @@ function CouponList({
               copy={copy}
               item={item}
               key={item.id}
-              masked={masked}
               onScanToggle={(target) => {
                 setScan(target ?? scan);
                 setScanOpen(target != null);
