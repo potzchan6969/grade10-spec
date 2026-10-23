@@ -38,6 +38,21 @@ pnpm storybook:workbench
 - **Capture** - Follow `tools/ui-verification/README.md` in the application repository. The short form is `pnpm ui:verify capture --config ./ui-verification.json --selection all`, pointed at the same archive directory.
 - **Demo data** - `pnpm ui:verify demo --archive <dir>` in the application repository writes two synthetic runs without Chromium.
 
+## Give A Story A Case
+
+- **Rule** - Every Auction story, bar those under State Tests, carries `parameters.verification.caseId` in the form `vc_<uuid>`. A case names one story, so no two stories share one.
+- **Permanent** - Mint it once and never change it. Archived runs find the story by it, so a new id orphans the history.
+- **New story** - `pnpm storybook:check` fails an Auction story with no id. `pnpm storybook:case-ids --write` adds one to each story that lacks it; then run Biome on the files.
+- **Other domains** - Add the domain to `VERIFIED_DOMAINS` in `scripts/storybook/case-ids.mjs`, then run the same command.
+- **State Tests** - These stories drive an API response and have no site screen to compare, so they carry no id.
+
+## Capture One Domain
+
+❓ The capture tool is in the application repository, and this repository holds no copy of its options. Run `pnpm ui:verify capture --help` there for how to select cases.
+
+- **Case list** - `pnpm storybook:case-ids --list Auction` prints each Auction `caseId` and its story id, for a selection or a declaration file.
+- **Check** - Capture one case first. Press Refresh in the panel and confirm the story shows the run.
+
 ## Read The Panel
 
 - **Expected layout (Story)** - The story open in Storybook. It is filled in, not chosen. A target choice appears only when the story maps to more than one site target.
@@ -64,6 +79,7 @@ pnpm storybook:workbench
 - **Deploy** - `pnpm --dir apps/preview run deploy-storybook:staging` builds the workbench and deploys with `apps/preview/wrangler.storybook.jsonc`.
 - **Human access** - Set `ACCESS_ISSUER` and `ACCESS_AUD` for the Cloudflare Access application protecting the Storybook origin. The Worker verifies signed assertions before it reads evidence.
 - **Publishing** - Set the Worker secret `PUBLISHER_TOKEN`. A capture runner publishes with `pnpm ui:verify publish --run <runId> --archive <dir> --endpoint <storybook origin> --token-env UI_VERIFICATION_TOKEN`. When Access protects the host, the runner also needs its service credentials.
+- **Publisher token** - `PUBLISHER_TOKEN` is a value you choose, not one Cloudflare issues. Generate it with `openssl rand -hex 32`. Store it on the Worker with `pnpm dlx wrangler@4.120.0 secret put PUBLISHER_TOKEN -c wrangler.storybook.jsonc` in `apps/preview`. Give the same value to the runner as `UI_VERIFICATION_TOKEN`. Keep it in the team's secret manager, never in git or in the Storybook bundle.
 - **Reuse** - A run that reuses captures needs its source run published first.
 - **Origins** - The Worker allows its own origin. Set `ALLOWED_ORIGINS` only for a separate development workbench.
 - **Secrets** - Browser bundles hold no R2, publisher or Access credentials.

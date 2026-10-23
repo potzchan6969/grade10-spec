@@ -33,6 +33,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Card brand logo and masked number — Store Order Details / card refund. */
 export const Visa: Story = {
+  parameters: {
+    verification: { caseId: "vc_41146f92-675c-496c-b71a-7ca53f6e98dc" },
+  },
   args: {
     leading: <OrderDetailsPaymentLogo brand="visa" />,
     label: "···· 4242",
@@ -46,6 +49,9 @@ export const Visa: Story = {
 
 /** Mastercard mark. */
 export const Mastercard: Story = {
+  parameters: {
+    verification: { caseId: "vc_b6ca757e-5f9a-47f0-a97e-29d0539c233c" },
+  },
   args: {
     leading: <OrderDetailsPaymentLogo brand="mastercard" />,
     label: "···· 0561",
@@ -54,6 +60,9 @@ export const Mastercard: Story = {
 
 /** Bank transfer — masked account with bank name as subtext. */
 export const BankTransfer: Story = {
+  parameters: {
+    verification: { caseId: "vc_d5ad9ba0-8c15-4d68-a4ba-85505157a17d" },
+  },
   name: "Bank Transfer",
   args: {
     leading: <Bank aria-label="Bank" size={20} weight="regular" />,
@@ -70,6 +79,9 @@ export const BankTransfer: Story = {
 
 /** Long free-text bank name wraps under the masked account. */
 export const LongBankName: Story = {
+  parameters: {
+    verification: { caseId: "vc_a3befaee-1dd0-488e-9cb4-57eeb2c2b7fd" },
+  },
   name: "Long Bank Name",
   args: {
     leading: <Bank aria-label="Bank" size={20} weight="regular" />,
@@ -87,6 +99,9 @@ export const LongBankName: Story = {
 
 /** With a trailing Change control — bid enrollment payment row. */
 export const WithChange: Story = {
+  parameters: {
+    verification: { caseId: "vc_0ac8ba73-bf34-440c-8b38-115e61a290fe" },
+  },
   name: "With Change",
   args: {
     leading: <OrderDetailsPaymentLogo brand="visa" />,
@@ -101,6 +116,9 @@ export const WithChange: Story = {
 
 /** Side-by-side card and bank for docs. */
 export const CardAndBank: Story = {
+  parameters: {
+    verification: { caseId: "vc_66955e0e-a38a-4633-9376-e0d0d22c8f55" },
+  },
   name: "Card And Bank",
   args: {
     leading: <OrderDetailsPaymentLogo brand="visa" />,

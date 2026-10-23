@@ -24,6 +24,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const AwaitingSetup: Story = {
+  parameters: {
+    verification: { caseId: "vc_aa5772ee-41af-4fef-b46e-9fc44584e270" },
+  },
   args: {
     badge: { label: "Awaiting Setup", variant: "warning" },
     progress: {
@@ -72,6 +75,9 @@ export const AwaitingSetup: Story = {
 };
 
 export const SetupOverdue: Story = {
+  parameters: {
+    verification: { caseId: "vc_98b28699-f1b1-486a-9e81-a47a8eddd547" },
+  },
   args: {
     badge: { label: "Setup Overdue", variant: "error" },
     progress: {
@@ -112,6 +118,9 @@ export const SetupOverdue: Story = {
 
 /** A press in flight draws busy on the button and a second press does nothing. */
 export const SetupConfirmPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_9717608c-84d6-4cf9-8a08-d31cf76d8834" },
+  },
   args: {
     ...AwaitingSetup.args,
     delivery: {
@@ -157,6 +166,9 @@ function RefusedSetupConfirm({ delivery, ...args }: AuctionWinnerOrderProps) {
 
 /** A refused press toasts the reason; the button stays ready for another press. */
 export const SetupConfirmRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_d6129911-e84f-43b5-8a01-3f040dedb7d1" },
+  },
   args: {
     ...AwaitingSetup.args,
     delivery: {

@@ -73,6 +73,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const ShowsSuppliedFieldError: Story = {
+  parameters: {
+    verification: { caseId: "vc_3596a37c-eb1c-456b-8239-07fd701af08a" },
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Enter a town or city.")).toBeVisible();
@@ -85,7 +88,12 @@ export const ShowsSuppliedFieldError: Story = {
   },
 };
 
-export const Default: Story = { args: { errors: undefined } };
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_0662380e-9337-4c41-bdd8-463dddcbb2d0" },
+  },
+  args: { errors: undefined },
+};
 
 /** How far a focused control paints past its own box: the widest outer
  * `box-shadow` it computes once its focus transition ends. */
@@ -111,6 +119,9 @@ async function ringOf(control: HTMLElement) {
  * keeps room for its whole focus ring.
  */
 export const ActionsKeepTheirFocusRing: Story = {
+  parameters: {
+    verification: { caseId: "vc_60e638b1-dfc0-4b65-a3bb-23b9f66abf61" },
+  },
   args: { errors: undefined },
   play: async ({ canvasElement }) => {
     const slot = (name: string) => {
@@ -135,6 +146,9 @@ export const ActionsKeepTheirFocusRing: Story = {
 
 /** Personal default — Company Name hidden; Confirm clears company (SC-09, SC-12). */
 export const Personal: Story = {
+  parameters: {
+    verification: { caseId: "vc_cebc22b0-ab17-46a3-8efa-16a9b02054e5" },
+  },
   args: {
     errors: undefined,
     initialValues: {
@@ -160,6 +174,9 @@ export const Personal: Story = {
 
 /** Company — Company Name required (SC-10). */
 export const Company: Story = {
+  parameters: {
+    verification: { caseId: "vc_842041a6-25b4-4370-a535-90eb74a2c16c" },
+  },
   args: {
     errors: undefined,
     initialValues: {
@@ -188,6 +205,9 @@ export const Company: Story = {
 
 /** Empty phone country refuses beside Phone (SC-07). */
 export const EmptyPhoneCountryRefuse: Story = {
+  parameters: {
+    verification: { caseId: "vc_1f08b2a2-649d-4942-b157-6336414f3225" },
+  },
   args: {
     errors: undefined,
     initialValues: {
@@ -206,6 +226,9 @@ export const EmptyPhoneCountryRefuse: Story = {
 
 /** Empty digits with country selected refuses (SC-07). Unusual digits still confirm (SC-08). */
 export const PhoneSoftRule: Story = {
+  parameters: {
+    verification: { caseId: "vc_3f09c763-e2c9-4cd6-9495-abaae0050a6a" },
+  },
   args: {
     errors: undefined,
     initialValues: {
@@ -224,6 +247,9 @@ export const PhoneSoftRule: Story = {
 
 /** Unusual digit string with country still confirms and keeps the value (SC-08). */
 export const UnusualPhoneAccepted: Story = {
+  parameters: {
+    verification: { caseId: "vc_ba6007cc-a650-4ed7-abf2-e48e5858d40c" },
+  },
   args: {
     errors: undefined,
     initialValues: {
@@ -246,6 +272,9 @@ export const UnusualPhoneAccepted: Story = {
 
 /** Parseable national digits export as E.164 (SC-08, SC-12). */
 export const PhoneReportsE164: Story = {
+  parameters: {
+    verification: { caseId: "vc_204a1078-cb35-41fe-a6a4-7e40f428340c" },
+  },
   args: {
     errors: undefined,
     initialValues: {
@@ -273,6 +302,9 @@ export const PhoneReportsE164: Story = {
 
 /** Line 2 and state optional; no Apt. field (SC-11). */
 export const OptionalLocality: Story = {
+  parameters: {
+    verification: { caseId: "vc_212ec7ae-b74e-4257-817e-43072fd075b3" },
+  },
   args: {
     errors: undefined,
     initialValues: COMPLETE_PERSONAL,
@@ -298,6 +330,9 @@ export const OptionalLocality: Story = {
 
 /** Confirm draws busy while the address saves; a second submit does nothing. */
 export const ConfirmPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_b09cd3c6-9fd8-4b01-bad9-ba054634a83e" },
+  },
   args: { errors: undefined, initialValues: COMPLETE_PERSONAL, pending: true },
   play: async ({ args, canvasElement }) => {
     const confirm = within(canvasElement).getByRole("button", {
@@ -311,6 +346,9 @@ export const ConfirmPending: Story = {
 
 /** A refused confirm says why above the actions, and Confirm submits again. */
 export const ConfirmRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_43a8c5bf-a812-49b1-b358-c8c5e054e262" },
+  },
   args: {
     errors: undefined,
     initialValues: COMPLETE_PERSONAL,

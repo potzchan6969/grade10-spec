@@ -26,6 +26,7 @@ export const CustomMaximumCeiling: Story = {
     view: liveView({ currency: "USD", ceilingMinor: 1_000_000_000 }),
   },
   parameters: {
+    verification: { caseId: "vc_ad969572-208f-45ea-bfc3-936eb0b692d3" },
     docs: {
       description: {
         story:
@@ -58,6 +59,9 @@ export const CustomMaximumCeiling: Story = {
  * the minimum above the submitted amount, so a kept draft would read as invalid.
  */
 export const AcceptedRaiseClearsCustomField: Story = {
+  parameters: {
+    verification: { caseId: "vc_105d0116-12e4-44b6-ad50-fbf9eef55cc2" },
+  },
   render: (args) => {
     const [status, setStatus] = useState<"idle" | "pending">("idle");
     const [maximumMinor, setMaximumMinor] = useState(6_050_000);
@@ -100,6 +104,9 @@ export const AcceptedRaiseClearsCustomField: Story = {
  * maximum unmoved, so the draft and its commit action stay.
  */
 export const RefusedCommitKeepsCustomField: Story = {
+  parameters: {
+    verification: { caseId: "vc_cf4b6ad9-70d0-4cec-a41f-ed638a9b08a6" },
+  },
   render: (args) => {
     const [status, setStatus] = useState<"idle" | "pending">("idle");
     return (
@@ -143,6 +150,9 @@ export const RefusedCommitKeepsCustomField: Story = {
  * Scenario: shared-ui-auction-listing-SC-64 - A maximum at the ceiling collapses the entry group
  */
 export const MaximumAtCeiling: Story = {
+  parameters: {
+    verification: { caseId: "vc_1a04f48a-bfcd-4128-8182-f2bd3546e614" },
+  },
   args: {
     view: liveView({
       currency: "USD",
@@ -173,6 +183,9 @@ export const MaximumAtCeiling: Story = {
  * Scenario: shared-ui-auction-listing-SC-65 - A lot priced past the ceiling offers no entry
  */
 export const LotAtCeilingWithoutMaximum: Story = {
+  parameters: {
+    verification: { caseId: "vc_76b6f5ca-5b9f-4617-aac0-99bd89926421" },
+  },
   args: {
     view: liveView({
       currency: "USD",
@@ -204,6 +217,9 @@ export const LotAtCeilingWithoutMaximum: Story = {
  * Scenario: shared-ui-auction-listing-SC-62 - Chips that clamp to the same amount merge to one
  */
 export const ChipsClampedAtCeiling: Story = {
+  parameters: {
+    verification: { caseId: "vc_54910692-5089-4c26-a3b0-551d5727f6df" },
+  },
   args: {
     view: liveView({
       currency: "USD",

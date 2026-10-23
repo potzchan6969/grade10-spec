@@ -58,6 +58,9 @@ type Story = StoryObj<typeof meta>;
 const roundUpClock = createFakeClock(START_MS);
 
 export const RoundsUp: Story = {
+  parameters: {
+    verification: { caseId: "vc_4ed5b00b-63a7-476f-9100-25d3011fc3d1" },
+  },
   args: { closesAtMs: DEADLINE_MS },
   render: (args) => (
     <ClockProvider store={roundUpClock.store}>
@@ -82,6 +85,9 @@ export const RoundsUp: Story = {
 const wholeSecondClock = createFakeClock(START_MS);
 
 export const RendersOnWholeSeconds: Story = {
+  parameters: {
+    verification: { caseId: "vc_6a8ec1fd-53eb-4bc9-81be-68939f67be7f" },
+  },
   name: "Renders only when the whole second changes",
   render: () => (
     <ClockProvider store={wholeSecondClock.store}>
@@ -110,6 +116,9 @@ export const RendersOnWholeSeconds: Story = {
 const noDeadlineClock = createFakeClock(START_MS);
 
 export const NoDeadline: Story = {
+  parameters: {
+    verification: { caseId: "vc_90ba45ed-8448-4215-8af7-316f8323b770" },
+  },
   name: "No deadline reads null",
   render: () => (
     <ClockProvider store={noDeadlineClock.store}>
@@ -129,6 +138,9 @@ export const NoDeadline: Story = {
 const staticClock = createFakeClock(START_MS);
 
 export const StaticWithoutCloseInstant: Story = {
+  parameters: {
+    verification: { caseId: "vc_46b105bd-2d9c-4d07-9b79-c6843a210880" },
+  },
   name: "Static seconds without a close instant",
   args: { closesAtMs: null, initialSeconds: 90 },
   render: (args) => (
@@ -148,6 +160,9 @@ export const StaticWithoutCloseInstant: Story = {
 const minuteClock = createFakeClock(START_MS);
 
 export const MinuteUnit: Story = {
+  parameters: {
+    verification: { caseId: "vc_41bcf664-6235-4f2c-90f8-1c429989b42f" },
+  },
   name: "Minute displays change by the minute",
   render: () => (
     <ClockProvider store={minuteClock.store}>
@@ -172,6 +187,9 @@ export const MinuteUnit: Story = {
 };
 
 export const DeviceClock: Story = {
+  parameters: {
+    verification: { caseId: "vc_f85a73b6-9bc9-42de-b999-aa831b594de4" },
+  },
   name: "Device clock without a provider",
   args: { closesAtMs: null },
   render: (args) => (

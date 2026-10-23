@@ -105,6 +105,9 @@ async function openBankDetails(canvasElement: HTMLElement) {
 
 /** HKD invoice — FPS default, QR, reference at bottom; no Copy controls. */
 export const HkdFpsRail: Story = {
+  parameters: {
+    verification: { caseId: "vc_1bced522-d071-4dc7-a77c-42496b3e87e2" },
+  },
   name: "HKD — FPS rail",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -143,6 +146,9 @@ export const HkdFpsRail: Story = {
 
 /** HKD invoice — Hong Kong rail shows branch code. */
 export const HkdHongKongRail: Story = {
+  parameters: {
+    verification: { caseId: "vc_3f64b404-9ddf-45bb-946b-71a430d53364" },
+  },
   name: "HKD — Hong Kong rail",
   args: { settlementCurrency: "HKD", paymentRail: "hk_local" },
   play: async ({ canvasElement }) => {
@@ -173,6 +179,9 @@ export const HkdHongKongRail: Story = {
 
 /** USD invoice — one HK Local bank rail, without FPS or SWIFT details. */
 export const UsdRails: Story = {
+  parameters: {
+    verification: { caseId: "vc_62f395d7-0b83-44e3-87a2-f45e6e069bba" },
+  },
   name: "USD — HK Local rail",
   args: { settlementCurrency: "USD", paymentRail: "hk_local" },
   play: async ({ canvasElement }) => {
@@ -190,6 +199,9 @@ export const UsdRails: Story = {
 
 /** USD invoice — the selected SWIFT rail shows only international details. */
 export const UsdInternationalRail: Story = {
+  parameters: {
+    verification: { caseId: "vc_7cdc4d54-2f9a-4c8c-a79f-d92b3255c8dc" },
+  },
   name: "USD — International rail",
   args: { settlementCurrency: "USD", paymentRail: "swift" },
   play: async ({ canvasElement }) => {

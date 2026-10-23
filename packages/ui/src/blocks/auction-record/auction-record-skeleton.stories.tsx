@@ -18,6 +18,9 @@ type Story = StoryObj<typeof meta>;
 /** The record's layout while it is read: one busy status a reader hears once,
  * no placeholder announced on its own. */
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_fbdbf90d-126d-4cd2-b010-9cd9a1d292b3" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const statuses = canvas.getAllByRole("status");

@@ -237,10 +237,17 @@ function LinkedCardEditablePreview() {
 
 /** Ready card used by Bid Panel Docs. Controls toggle enrollment and bid mode. */
 export const Overview: Story = {
+  parameters: {
+    verification: { caseId: "vc_ea553698-b4d6-4023-9d00-a4f27e83273c" },
+  },
   tags: ["!dev"],
 };
 
 export const SignedOut = enrollmentStory(ENROLLMENT_SNAPSHOT_SIGNED_OUT);
+SignedOut.parameters = {
+  ...SignedOut.parameters,
+  verification: { caseId: "vc_0b6ea4eb-42bb-4679-8d05-834ad82f5542" },
+};
 SignedOut.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   expect(canvas.getByRole("button", { name: "Sign In to Bid" })).toBeVisible();
@@ -253,7 +260,10 @@ SignedOut.play = async ({ canvasElement }) => {
 };
 
 export const NeedCard: Story = {
-  parameters: SNAPSHOT_DOCS,
+  parameters: {
+    ...SNAPSHOT_DOCS,
+    verification: { caseId: "vc_fa1f1033-fe18-4280-8b47-e907251e386b" },
+  },
   render: () => <NeedCardPreview />,
 };
 NeedCard.play = async ({ canvasElement }) => {
@@ -288,7 +298,10 @@ NeedCard.play = async ({ canvasElement }) => {
 };
 
 export const LinkedCardEditable: Story = {
-  parameters: SNAPSHOT_DOCS,
+  parameters: {
+    ...SNAPSHOT_DOCS,
+    verification: { caseId: "vc_0aef0785-59de-47e9-946c-828bd67ddc0c" },
+  },
   render: () => <LinkedCardEditablePreview />,
 };
 LinkedCardEditable.play = async ({ canvasElement }) => {
@@ -315,6 +328,10 @@ LinkedCardEditable.play = async ({ canvasElement }) => {
 };
 
 export const LinkedCard = enrollmentStory(ENROLLMENT_SNAPSHOT_LINKED_CARD);
+LinkedCard.parameters = {
+  ...LinkedCard.parameters,
+  verification: { caseId: "vc_0a028355-6d7c-48e7-8a30-c651c6a091c5" },
+};
 LinkedCard.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   expect(canvas.getByText("•••• 4242")).toBeVisible();
@@ -324,6 +341,10 @@ LinkedCard.play = async ({ canvasElement }) => {
 };
 
 export const Ready = enrollmentStory(ENROLLMENT_SNAPSHOT_READY);
+Ready.parameters = {
+  ...Ready.parameters,
+  verification: { caseId: "vc_ef81621b-a6b3-48ab-b8bf-0b5978c03616" },
+};
 Ready.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   expect(canvas.getByText("•••• 4242")).toBeVisible();
@@ -338,7 +359,10 @@ Ready.play = async ({ canvasElement }) => {
 };
 
 export const PaymentAuthorization: Story = {
-  parameters: SNAPSHOT_DOCS,
+  parameters: {
+    ...SNAPSHOT_DOCS,
+    verification: { caseId: "vc_1e13550b-6688-48b4-88e9-493b18a58bbb" },
+  },
   render: () => <PaymentAuthorizationPreview />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -43,6 +43,9 @@ function ToggleCategory({
 }
 
 export const Idle: Story = {
+  parameters: {
+    verification: { caseId: "vc_c0910fea-46cd-4162-b640-21e0ed1b183b" },
+  },
   name: "Idle",
   args: {
     name: "Pokémon",
@@ -60,6 +63,9 @@ export const Idle: Story = {
 };
 
 export const Selected: Story = {
+  parameters: {
+    verification: { caseId: "vc_d025598c-5807-4976-bf2a-1fc311110a48" },
+  },
   name: "Selected",
   args: {
     name: "Pokémon",

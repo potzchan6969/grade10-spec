@@ -37,6 +37,9 @@ async function findVisibleDialog(
 
 /** Step 2 preselects USD and Card; the winner can switch or pick a rail. */
 export const PaymentMethod: Story = {
+  parameters: {
+    verification: { caseId: "vc_f44818f2-f267-4692-b3c4-21a1cd9d220f" },
+  },
   name: "Payment method",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -92,6 +95,9 @@ export const PaymentMethod: Story = {
 
 /** USD is the default: Card, HK Local and International via SWIFT offered. */
 export const PaymentMethodUsd: Story = {
+  parameters: {
+    verification: { caseId: "vc_a1326ef1-aa74-4a10-80b5-17f607c98b53" },
+  },
   name: "Payment method — USD",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -115,6 +121,9 @@ export const PaymentMethodUsd: Story = {
 
 /** HKD offers Card, FPS and HK Local; the Card pick carries over. */
 export const PaymentMethodHkd: Story = {
+  parameters: {
+    verification: { caseId: "vc_9b853d63-b67b-4320-93cf-c9c18d47e8ac" },
+  },
   name: "Payment method — HKD",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -138,6 +147,9 @@ export const PaymentMethodHkd: Story = {
 
 /** A shared rail stays selected; a currency-specific rail clears on switch. */
 export const CurrencySwitchKeepsOnlyOfferedRail: Story = {
+  parameters: {
+    verification: { caseId: "vc_9d2152ce-b1b1-480c-b29d-dde27fcab9ff" },
+  },
   name: "Currency switch keeps only an offered rail",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -171,6 +183,9 @@ export const CurrencySwitchKeepsOnlyOfferedRail: Story = {
 
 /** One offered currency is fixed; Card is still the preselected method. */
 export const UsdOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_8748467c-7a79-4562-9490-1226bbf42113" },
+  },
   name: "USD only",
   args: { settlementCurrencies: ["USD"] },
   play: async ({ canvasElement }) => {
@@ -195,6 +210,9 @@ export const UsdOnly: Story = {
 
 /** A missing USD card fee rule leaves card unavailable; HK Local is preselected. */
 export const UsdWithoutCardRule: Story = {
+  parameters: {
+    verification: { caseId: "vc_ccb47afc-9b78-4032-b0eb-46a2f1892f4a" },
+  },
   name: "USD without a card rule",
   args: { cardFeePercentages: { HKD: 3.4 } },
   play: async ({ canvasElement }) => {

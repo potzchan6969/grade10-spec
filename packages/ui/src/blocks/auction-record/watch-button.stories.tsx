@@ -41,6 +41,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Watch: Story = {
+  parameters: {
+    verification: { caseId: "vc_312e9df7-9ad0-419a-9580-af4b3b22a890" },
+  },
   name: "Watch",
   args: {
     copy: WATCH_COPY,
@@ -57,6 +60,9 @@ export const Watch: Story = {
 };
 
 export const Watching: Story = {
+  parameters: {
+    verification: { caseId: "vc_c734e0e6-3c1b-472f-b2ff-ede7988105a0" },
+  },
   name: "Watching",
   args: {
     copy: WATCH_COPY,
@@ -67,6 +73,9 @@ export const Watching: Story = {
 
 /** Bid stands — Watching stays on; press is not reported. */
 export const LockedWatching: Story = {
+  parameters: {
+    verification: { caseId: "vc_f1614692-224b-476a-ba11-6da98cbccab4" },
+  },
   name: "Locked Watching",
   args: {
     copy: WATCH_COPY,
@@ -112,6 +121,9 @@ function WatchWithToasts({
 }
 
 export const WatchAnnounces: Story = {
+  parameters: {
+    verification: { caseId: "vc_404af8ce-4106-4aba-9ca6-fa028073d873" },
+  },
   name: "Watch announces",
   args: {
     copy: WATCH_COPY,
@@ -141,6 +153,9 @@ export const WatchAnnounces: Story = {
 };
 
 export const UnwatchAnnounces: Story = {
+  parameters: {
+    verification: { caseId: "vc_85ec0e5e-4052-460d-a40b-1d2c6279429f" },
+  },
   name: "Unwatch announces",
   args: {
     copy: WATCH_COPY,
@@ -175,6 +190,9 @@ export const UnwatchAnnounces: Story = {
 
 /** The owner's write is in flight: busy, still focusable, a second press is refused. */
 export const Pending: Story = {
+  parameters: {
+    verification: { caseId: "vc_ebfa142f-ac61-41b6-a75d-8acf00deb109" },
+  },
   name: "Pending",
   args: {
     copy: WATCH_COPY,
@@ -198,6 +216,9 @@ export const Pending: Story = {
 
 /** The owner refused the last press: the refusal shows beside the control. */
 export const Refused: Story = {
+  parameters: {
+    verification: { caseId: "vc_5072b61d-f9f3-4c00-b6aa-57fadb5c341c" },
+  },
   name: "Refused",
   args: {
     copy: WATCH_COPY,
@@ -246,6 +267,9 @@ function WatchRefusedOwner() {
 
 /** A refused write moves back and says why; no Watched toast announces it. */
 export const RefusedRollbackIsSilent: Story = {
+  parameters: {
+    verification: { caseId: "vc_e4f63145-9846-4a51-8a83-392a0098afad" },
+  },
   name: "Refused rollback is silent",
   args: {
     copy: WATCH_COPY,

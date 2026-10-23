@@ -192,6 +192,9 @@ async function auctionRecordSettled(canvasElement: HTMLElement) {
 
 /** Default composition: bid rows first, watch-only after, one table from md. */
 export const Filled: Story = {
+  parameters: {
+    verification: { caseId: "vc_6968ce6b-01e2-400a-bc56-5f50beb0a308" },
+  },
   name: "Filled",
   render: () => <MyAuctions />,
   play: async ({ canvasElement }) => {
@@ -229,6 +232,7 @@ export const FilledSmallViewport: Story = {
   name: "Filled — small viewport",
   globals: { viewport: { value: "mobile1" } },
   parameters: {
+    verification: { caseId: "vc_6894c117-19d8-4602-b71c-c70d1b6c2cd4" },
     docs: {
       description: {
         story: `Card anatomy SoT: [Auction Card](${AUCTION_CARD_STORY}).`,
@@ -264,6 +268,9 @@ export const FilledSmallViewport: Story = {
 
 /** Sparse page: bids only — no Unwatch column actions. */
 export const BiddingOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_db4736d1-9b1f-4a2a-92bb-5e928271a16c" },
+  },
   name: "Bidding only",
   render: () => <MyAuctions watching={[]} />,
   play: async ({ canvasElement }) => {
@@ -278,6 +285,9 @@ export const BiddingOnly: Story = {
 };
 
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_eb5be423-fbd4-4b9e-906f-2d047aecb834" },
+  },
   name: "Empty",
   args: {
     biddingItems: [],
@@ -300,6 +310,9 @@ export const Empty: Story = {
  * the watched row; a bid that did not win stays with Didn’t win standing.
  */
 export const Ended: Story = {
+  parameters: {
+    verification: { caseId: "vc_9ee85690-4278-4984-8e1f-11e6bc712d5d" },
+  },
   name: "Ended",
   render: () => (
     <MyAuctions bidding={[BIDDING_ENDED]} watching={[WATCHING_ENDED]} />
@@ -346,6 +359,9 @@ export const Ended: Story = {
  * pay control and no payment helper copy on Won rows.
  */
 export const PostAuctionStanding: Story = {
+  parameters: {
+    verification: { caseId: "vc_013ca351-6d25-4e77-9dc2-09c7dea51109" },
+  },
   name: "Post-auction standing",
   render: () => (
     <MyAuctions
@@ -536,6 +552,9 @@ export const PostAuctionStanding: Story = {
 };
 
 export const Unwatch: Story = {
+  parameters: {
+    verification: { caseId: "vc_434c9a88-bd3c-42e0-957f-d35dabf59a1d" },
+  },
   name: "Unwatch",
   render: () => <MyAuctions bidding={[]} watching={[WATCHING_POSTER]} />,
   play: async ({ canvasElement }) => {
@@ -563,6 +582,9 @@ export const Unwatch: Story = {
 };
 
 export const EmailAlertsMuted: Story = {
+  parameters: {
+    verification: { caseId: "vc_b78021aa-24a2-4139-a91f-b8f16936e7af" },
+  },
   name: "Email alerts muted",
   render: () => <MyAuctions />,
   play: async ({ canvasElement }) => {
@@ -592,6 +614,9 @@ export const EmailAlertsMuted: Story = {
 };
 
 export const AlertsPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_3cc1bea7-96f5-4567-9b66-88483f4d136f" },
+  },
   name: "Email alerts pending",
   args: {
     biddingItems: [
@@ -668,6 +693,9 @@ function RefusingRecord() {
 
 /** A refused Unwatch keeps the row on screen, pressable, with its refusal. */
 export const UnwatchRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_41ee53e0-5b2c-493b-bba6-a4b09ca03106" },
+  },
   name: "Unwatch refused",
   render: () => <RefusingRecord />,
   play: async ({ canvasElement }) => {
@@ -691,6 +719,9 @@ export const UnwatchRefused: Story = {
 
 /** A refused alerts change moves the switch back and says why, with no toast. */
 export const EmailAlertsRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_077a48ad-6538-49cf-b534-3612a2c976ce" },
+  },
   name: "Email alerts refused",
   render: () => <RefusingRecord />,
   play: async ({ canvasElement }) => {

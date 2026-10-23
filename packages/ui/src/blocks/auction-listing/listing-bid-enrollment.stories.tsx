@@ -48,6 +48,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const LinkedCardEditable: Story = {
+  parameters: {
+    verification: { caseId: "vc_3196476a-3ece-48b3-8f83-953e9e3cbaab" },
+  },
   render: () => (
     <PaymentMethodRow
       brand="visa"
@@ -65,6 +68,9 @@ export const LinkedCardEditable: Story = {
 };
 
 export const LinkedCard: Story = {
+  parameters: {
+    verification: { caseId: "vc_62be9b0d-103c-4d2a-8adf-8113ffe74971" },
+  },
   render: () => (
     <PaymentMethodRow brand="visa" copy={COPY} maskedNumber="•••• 4242" />
   ),
@@ -78,6 +84,9 @@ export const LinkedCard: Story = {
 };
 
 export const LinkedCardKeepsStableHeight: Story = {
+  parameters: {
+    verification: { caseId: "vc_1f8b61e2-1ffc-4fc3-89e3-2737f8fe220d" },
+  },
   render: () => (
     <div className="flex flex-col gap-4">
       <section aria-label="editable linked card">
@@ -110,6 +119,9 @@ export const LinkedCardKeepsStableHeight: Story = {
 const onLinkEmpty = fn();
 
 export const EmptyLinkedCard: Story = {
+  parameters: {
+    verification: { caseId: "vc_d0a72bcf-3057-450c-9f5c-3527fb511c1f" },
+  },
   render: () => <PaymentMethodEmptyState copy={COPY} onLink={onLinkEmpty} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -121,6 +133,9 @@ export const EmptyLinkedCard: Story = {
 };
 
 export const SetupSheet: Story = {
+  parameters: {
+    verification: { caseId: "vc_000b57da-e559-42cf-a89c-e9b8220b5170" },
+  },
   render: () => (
     <EnrollmentSetupSheet
       copy={COPY}
@@ -162,6 +177,9 @@ export const SetupSheet: Story = {
 };
 
 export const SetupSheetLoadedMockStripe: Story = {
+  parameters: {
+    verification: { caseId: "vc_3ff7a44d-d0ca-4294-bf10-31b7fd10c5d6" },
+  },
   render: () => (
     <EnrollmentSetupSheet
       cardReady
@@ -189,6 +207,9 @@ export const SetupSheetLoadedMockStripe: Story = {
 };
 
 export const SetupSheetFromChange: Story = {
+  parameters: {
+    verification: { caseId: "vc_01fe138f-fdd6-4216-bd84-1df3e0543fa1" },
+  },
   render: () => (
     <EnrollmentSetupSheet
       cardReady
@@ -229,6 +250,9 @@ export const SetupSheetFromChange: Story = {
 };
 
 export const SetupSheetError: Story = {
+  parameters: {
+    verification: { caseId: "vc_c3e8f293-244e-47a8-a444-8d2bfb3a7ca0" },
+  },
   render: () => (
     <EnrollmentSetupSheet
       cardReady
@@ -267,6 +291,9 @@ export const SetupSheetError: Story = {
 const onLinkingOpenChange = fn();
 
 export const SetupSheetLinking: Story = {
+  parameters: {
+    verification: { caseId: "vc_22115a9e-d6df-44f7-9da2-5da6774f52ef" },
+  },
   render: () => (
     <EnrollmentSetupSheet
       cardReady
@@ -308,6 +335,9 @@ export const SetupSheetLinking: Story = {
 };
 
 export const SetupSheetProviderFieldIsLockedWhileLinking: Story = {
+  parameters: {
+    verification: { caseId: "vc_852aa8a2-8e5b-4ea7-9f2d-0d974712573a" },
+  },
   render: () => (
     <EnrollmentSetupSheet
       cardReady
@@ -340,6 +370,9 @@ export const SetupSheetProviderFieldIsLockedWhileLinking: Story = {
 const onContinueFromReadyField = fn();
 
 export const SetupSheetProviderFieldReadiness: Story = {
+  parameters: {
+    verification: { caseId: "vc_6328e052-46a0-4de4-b9b6-730c5d0ec0ee" },
+  },
   render: () => (
     <EnrollmentSetupSheet
       cardReady={false}
@@ -366,6 +399,9 @@ export const SetupSheetProviderFieldReadiness: Story = {
 };
 
 export const SetupSheetProviderFieldReady: Story = {
+  parameters: {
+    verification: { caseId: "vc_48f8c1c1-0e0b-4436-8cd1-9312236eb5ca" },
+  },
   render: () => (
     <EnrollmentSetupSheet
       cardReady

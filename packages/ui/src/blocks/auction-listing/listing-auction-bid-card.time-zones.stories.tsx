@@ -29,6 +29,9 @@ type Story = StoryObj<typeof meta>;
  * Case: shared-dates-and-times-US1-TC10-1
  */
 export const ViewerZoneNewYork: Story = {
+  parameters: {
+    verification: { caseId: "vc_120367d6-8c53-4c07-bc3f-f21138fa1b1e" },
+  },
   args: {
     timeZone: FIXTURE_ALT_TIME_ZONE,
     view: liveView({ deadlineAtMs: Date.UTC(2027, 8, 1, 12, 0) }),
@@ -68,6 +71,9 @@ function closedView(
  * Case: shared-dates-and-times-US1-TC10-1
  */
 export const DeadlineZoneHongKong: Story = {
+  parameters: {
+    verification: { caseId: "vc_61713e9b-0acc-40ee-8e65-345098b904bc" },
+  },
   args: { view: liveView({ deadlineAtMs: SEPTEMBER_2027_CLOSE_MS }) },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -85,6 +91,9 @@ export const DeadlineZoneHongKong: Story = {
  * Case: shared-dates-and-times-US1-TC11-1
  */
 export const ClosedZoneHongKong: Story = {
+  parameters: {
+    verification: { caseId: "vc_f999db6b-f4b9-4b63-9450-45fb4cc9c5ba" },
+  },
   args: { history: [], view: closedView() },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -101,6 +110,9 @@ export const ClosedZoneHongKong: Story = {
  * Case: shared-dates-and-times-US1-TC11-1
  */
 export const ClosedZoneNewYork: Story = {
+  parameters: {
+    verification: { caseId: "vc_4f5f694e-9153-4064-b649-02aef0f3fd18" },
+  },
   args: {
     history: [],
     timeZone: FIXTURE_ALT_TIME_ZONE,
@@ -124,6 +136,9 @@ export const ClosedZoneNewYork: Story = {
  * Case: shared-dates-and-times-US1-TC11-1
  */
 export const ClosedSummaryWithoutOpeningTimeHongKong: Story = {
+  parameters: {
+    verification: { caseId: "vc_dafeaea3-25cb-49a4-9447-b3781f46b6a6" },
+  },
   args: { history: [], view: closedView({ opensAtMs: undefined }) },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -136,6 +151,9 @@ export const ClosedSummaryWithoutOpeningTimeHongKong: Story = {
  * Case: shared-dates-and-times-US1-TC11-1
  */
 export const ClosedSummaryWithoutOpeningTimeNewYork: Story = {
+  parameters: {
+    verification: { caseId: "vc_cce4650c-56d0-4128-8c4b-0220cb12ab69" },
+  },
   args: {
     history: [],
     timeZone: FIXTURE_ALT_TIME_ZONE,
@@ -157,6 +175,9 @@ const DAY_ALONE_CLOSE_MS = Date.UTC(2027, 8, 1, 23, 30);
  * Case: shared-dates-and-times-US1-TC18-1
  */
 export const ClosedDayAloneHongKong: Story = {
+  parameters: {
+    verification: { caseId: "vc_c0e640d9-c4b9-450f-8acf-ac15f8506cba" },
+  },
   args: {
     history: [],
     view: closedView({
@@ -177,6 +198,9 @@ export const ClosedDayAloneHongKong: Story = {
  * Case: shared-dates-and-times-US1-TC18-1
  */
 export const ClosedDayAloneNewYork: Story = {
+  parameters: {
+    verification: { caseId: "vc_ec5d193c-2e12-465b-b2c0-3cce7580f431" },
+  },
   args: {
     history: [],
     timeZone: FIXTURE_ALT_TIME_ZONE,
@@ -206,6 +230,9 @@ const NAMES_A_ZONE = /HKT|EDT|EST|GMT|UTC/;
  * Case: shared-dates-and-times-US1-TC13-1
  */
 export const OpenLotTimeLeftNamesNoZone: Story = {
+  parameters: {
+    verification: { caseId: "vc_528dafd6-66a4-4e13-9cbf-a06992bc45b9" },
+  },
   args: {
     timeZone: FIXTURE_ALT_TIME_ZONE,
     view: liveView({
@@ -233,6 +260,9 @@ export const OpenLotTimeLeftNamesNoZone: Story = {
  * Case: shared-dates-and-times-US1-TC13-1
  */
 export const ScheduledLotOpensInNamesNoZone: Story = {
+  parameters: {
+    verification: { caseId: "vc_829a64b0-fbfd-45d5-bec0-2066102ad8b5" },
+  },
   args: {
     history: [],
     bidEnrollment: undefined,
@@ -274,6 +304,9 @@ export const ScheduledLotOpensInNamesNoZone: Story = {
  * Case: shared-ui-auction-listing-US1-TC58-1
  */
 export const DisplayTextReplacesARowsTime: Story = {
+  parameters: {
+    verification: { caseId: "vc_704281c6-fc0a-43d8-a387-424a4aad5c1e" },
+  },
   args: {
     history: [
       {

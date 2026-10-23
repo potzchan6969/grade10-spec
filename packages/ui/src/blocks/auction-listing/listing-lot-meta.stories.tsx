@@ -72,6 +72,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_8ab46fa8-5ef6-44c1-a835-e5d32b418ec2" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("About this auction")).toBeInTheDocument();
@@ -87,6 +90,9 @@ export const Default: Story = {
 };
 
 export const BodyOnly: Story = {
+  parameters: {
+    verification: { caseId: "vc_31578be8-d8ba-4be8-8f72-908be9f1f59b" },
+  },
   args: {
     facts: undefined,
     marketComps: undefined,
@@ -95,6 +101,9 @@ export const BodyOnly: Story = {
 };
 
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_2cb20425-f353-4c3b-a8e0-58382002080d" },
+  },
   render: () => (
     <VStack className="w-full" gap="lg">
       <VStack gap="md">
@@ -117,6 +126,9 @@ export const Loading: Story = {
 
 /** Closed lot: hammer price lives on the bid card, so market comps are omitted. */
 export const AfterSale: Story = {
+  parameters: {
+    verification: { caseId: "vc_2b1f7121-6216-4f1b-8348-5f0e0f22671f" },
+  },
   args: {
     marketComps: undefined,
   },

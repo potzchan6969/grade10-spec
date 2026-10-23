@@ -147,6 +147,9 @@ function lotPage(state: BiddingState) {
 }
 
 export const Loading: Story = {
+  parameters: {
+    verification: { caseId: "vc_c2daf616-acfa-4bf1-b411-92c156a303fd" },
+  },
   render: () =>
     lotShell(
       <>
@@ -168,6 +171,9 @@ export const Loading: Story = {
 };
 
 export const PreAuction: Story = {
+  parameters: {
+    verification: { caseId: "vc_230b2a3a-0146-4ab7-bea4-6ce3525a5ad4" },
+  },
   render: () => lotPage("opens"),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -184,6 +190,9 @@ export const PreAuction: Story = {
 };
 
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_c156033f-3865-4fbc-996d-c71751120559" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -204,6 +213,9 @@ export const Default: Story = {
 };
 
 export const PostSold: Story = {
+  parameters: {
+    verification: { caseId: "vc_0104253c-4da8-47ad-bd2a-85d9015486b8" },
+  },
   render: () => lotPage("closed-sold"),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -213,6 +225,9 @@ export const PostSold: Story = {
 };
 
 export const PostWonPaymentDue: Story = {
+  parameters: {
+    verification: { caseId: "vc_577e448d-7553-45a3-b032-7e22dd871afd" },
+  },
   name: "Post — awaiting setup",
   render: () => lotPage("closed-won-payment-due"),
   play: async ({ canvasElement }) => {
@@ -224,6 +239,9 @@ export const PostWonPaymentDue: Story = {
 };
 
 export const PostWonSettled: Story = {
+  parameters: {
+    verification: { caseId: "vc_61d34f38-0986-45c5-9bc1-a94f4e917a8c" },
+  },
   render: () => lotPage("closed-won-settled"),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -235,6 +253,9 @@ export const PostWonSettled: Story = {
 };
 
 export const PostLost: Story = {
+  parameters: {
+    verification: { caseId: "vc_4f36bd90-d316-4392-af66-9c1af90daa5e" },
+  },
   render: () => lotPage("closed-lost"),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -244,6 +265,9 @@ export const PostLost: Story = {
 };
 
 export const PostUnsold: Story = {
+  parameters: {
+    verification: { caseId: "vc_221616fd-2b94-4ce6-8efe-2f72306aaa9e" },
+  },
   render: () => lotPage("closed-unsold"),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

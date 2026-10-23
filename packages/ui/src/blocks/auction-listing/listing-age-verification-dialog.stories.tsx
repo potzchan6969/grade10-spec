@@ -54,6 +54,9 @@ async function enterAdultBirthDate() {
 
 /** Confirm reports the date and leaves closing to the consumer, who closes it once the verification lands. */
 export const ConfirmLeavesTheDialogOpen: Story = {
+  parameters: {
+    verification: { caseId: "vc_19294d3c-a1af-4c3d-903a-2474a0921f97" },
+  },
   play: async ({ args }) => {
     const dialog = await enterAdultBirthDate();
     await userEvent.click(
@@ -67,6 +70,9 @@ export const ConfirmLeavesTheDialogOpen: Story = {
 
 /** While the verification runs Confirm draws busy, and a second press does nothing. */
 export const ConfirmPending: Story = {
+  parameters: {
+    verification: { caseId: "vc_e8a063c2-80e3-4edb-a923-ee0f91f889b6" },
+  },
   render: function Render(args) {
     const [pending, setPending] = useState(false);
     return (
@@ -92,6 +98,9 @@ export const ConfirmPending: Story = {
 
 /** A refused verification shows under the fields, and Confirm presses again. */
 export const ConfirmRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_80830786-5f6b-421a-a2af-1506a8dc72a8" },
+  },
   args: { confirmFailed: "We couldn't verify your age. Try again." },
   play: async ({ args }) => {
     const dialog = await enterAdultBirthDate();

@@ -125,6 +125,9 @@ async function findVisibleDialog(
 
 /** Payment deadline passed — subject and body quote the invoice ID. */
 export const PaymentOverdue: Story = {
+  parameters: {
+    verification: { caseId: "vc_58ef6dae-b0b9-4f34-bd52-2ea8f3495328" },
+  },
   name: "Payment Overdue",
   args: { reason: "payment_overdue" },
   play: async ({ canvasElement }) => {
@@ -174,6 +177,9 @@ export const PaymentOverdue: Story = {
 
 /** Setup deadline passed — no invoice yet; subject quotes the lot title. */
 export const SetupOverdue: Story = {
+  parameters: {
+    verification: { caseId: "vc_6ca7b917-9190-4d4a-9d82-0d3717fcc7ce" },
+  },
   name: "Setup Overdue",
   args: { reason: "setup_overdue", invoiceId: null },
   play: async ({ canvasElement }) => {
@@ -192,6 +198,9 @@ export const SetupOverdue: Story = {
 
 /** Partially paid — invoice ID plus receipt IDs in the message body. */
 export const PartialPayment: Story = {
+  parameters: {
+    verification: { caseId: "vc_2c4e825d-6952-4aed-b480-15bc8bafbc0e" },
+  },
   name: "Partial Payment",
   args: {
     reason: "partial_payment",

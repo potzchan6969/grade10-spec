@@ -68,6 +68,7 @@ export const ClosedSoldEqualMax: Story = {
     }),
   },
   parameters: {
+    verification: { caseId: "vc_39047716-30a6-4701-874b-86bc734a78a4" },
     docs: {
       description: {
         story:
@@ -96,6 +97,7 @@ export const ClosedSoldEqualMaxWithoutWinnerCopy: Story = {
     copy: { ...COPY, bidHistory: { ...COPY.bidHistory, winner: undefined } },
   },
   parameters: {
+    verification: { caseId: "vc_ea6b0377-396a-41ed-bced-27b3fdea2495" },
     docs: {
       description: {
         story:

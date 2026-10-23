@@ -44,6 +44,9 @@ function deliveryAddressBlock(canvasElement: HTMLElement) {
  * (winner-order-SC-171).
  */
 export const AwaitingSetup: Story = {
+  parameters: {
+    verification: { caseId: "vc_9efbc3ea-1be3-4f1f-8a54-dd678cfacea5" },
+  },
   name: "Awaiting Setup",
   args: { status: "awaiting_address" },
   play: async ({ canvasElement }) => {
@@ -100,6 +103,9 @@ export const AwaitingSetup: Story = {
 
 /** HKD selected before invoice send: the lot stays in USD until invoice creation. */
 export const AwaitingSetupHkdBeforeInvoice: Story = {
+  parameters: {
+    verification: { caseId: "vc_0b96462e-4df1-4e1d-98b1-b2a5eacd40e8" },
+  },
   name: "Awaiting Setup - HKD before invoice - winner-order-SC-292",
   args: {
     status: "awaiting_address",
@@ -139,6 +145,9 @@ export const AwaitingSetupHkdBeforeInvoice: Story = {
  * contact from the overdue alert.
  */
 export const ExpiredSetup: Story = {
+  parameters: {
+    verification: { caseId: "vc_7d7d5d8f-3f81-47fc-b2e5-c54fd6cb0acd" },
+  },
   name: "Expired Setup",
   args: { status: "awaiting_address_expired" },
   play: async ({ canvasElement }) => {
@@ -178,6 +187,9 @@ export const ExpiredSetup: Story = {
  * (winner-order-SC-171).
  */
 export const PreparingInvoice: Story = {
+  parameters: {
+    verification: { caseId: "vc_8f1ad8bf-eee7-4bbd-9b06-1157dd4f334e" },
+  },
   name: "Preparing Invoice",
   args: { status: "preparing_invoice" },
   play: async ({ canvasElement }) => {
@@ -220,6 +232,9 @@ export const PreparingInvoice: Story = {
 
 /** Stepped setup: delivery → payment → billing (same as delivery) → Preparing Invoice. */
 export const CompleteSetupFlow: Story = {
+  parameters: {
+    verification: { caseId: "vc_1309fb6d-8731-4ddc-b371-3a44a31450af" },
+  },
   name: "Complete Setup Flow",
   args: { status: "awaiting_address" },
   play: async ({ canvasElement }) => {
@@ -337,6 +352,9 @@ export const CompleteSetupFlow: Story = {
 
 /** Nested add-address on step 1, then finish setup with card. */
 export const AddNewAddressSetupFlow: Story = {
+  parameters: {
+    verification: { caseId: "vc_7477bba4-bd4f-48dd-80a6-1d7d781d70db" },
+  },
   name: "Add New Address Setup Flow",
   args: { status: "awaiting_address" },
   play: async ({ canvasElement }) => {

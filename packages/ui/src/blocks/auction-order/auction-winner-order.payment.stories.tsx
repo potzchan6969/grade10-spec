@@ -24,6 +24,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const PendingPayment: Story = {
+  parameters: {
+    verification: { caseId: "vc_7efc9f9c-da08-4ed0-8121-bd71629aa67d" },
+  },
   play: async ({ args, canvasElement }) => {
     await settled(canvasElement);
     const canvas = within(canvasElement);
@@ -50,6 +53,9 @@ export const PendingPayment: Story = {
 };
 
 export const BankTransferDue: Story = {
+  parameters: {
+    verification: { caseId: "vc_e838f66f-048e-43e9-947e-bac4723a3ab8" },
+  },
   args: {
     summary: {
       lines: INVOICE_LINES,
@@ -70,6 +76,9 @@ export const BankTransferDue: Story = {
 };
 
 export const CardRedirecting: Story = {
+  parameters: {
+    verification: { caseId: "vc_4d533ef9-a934-4616-9813-8881c076f644" },
+  },
   args: {
     summary: {
       lines: INVOICE_LINES,
@@ -93,6 +102,9 @@ export const CardRedirecting: Story = {
 };
 
 export const PaymentVerifying: Story = {
+  parameters: {
+    verification: { caseId: "vc_ba468fda-283f-4e0c-8da7-cad7c08e522d" },
+  },
   args: {
     badge: { label: "Payment Verifying", variant: "default" },
     note: {
@@ -117,6 +129,9 @@ export const PaymentVerifying: Story = {
 };
 
 export const ProofReturned: Story = {
+  parameters: {
+    verification: { caseId: "vc_e537a4a9-d9ff-46f1-896f-da82ee71c6da" },
+  },
   args: {
     summary: {
       lines: INVOICE_LINES,
@@ -144,6 +159,9 @@ export const ProofReturned: Story = {
 };
 
 export const PartiallyPaid: Story = {
+  parameters: {
+    verification: { caseId: "vc_54a85a58-102f-4dd0-86a4-715a509d9b4e" },
+  },
   args: {
     badge: { label: "Partially Paid", variant: "warning" },
     summary: {

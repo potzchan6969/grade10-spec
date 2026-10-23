@@ -94,6 +94,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Default — two or three slides with progress (SC-31, SC-34, SC-35). */
 export const CarouselBanner: Story = {
+  parameters: {
+    verification: { caseId: "vc_dd1f5fd4-ea2d-4677-a6a2-8c44e9f613ab" },
+  },
   name: "Carousel banner",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -143,6 +146,9 @@ export const CarouselBanner: Story = {
 
 /** One Featured slide needs no multi-dot advance (SC-36). */
 export const OneSlide: Story = {
+  parameters: {
+    verification: { caseId: "vc_4dab7017-a0ab-41f4-bb74-28b0afd611bf" },
+  },
   name: "Live bidding",
   args: { slides: [SLIDES[0]] },
   play: async ({ canvasElement }) => {
@@ -165,6 +171,9 @@ export const OneSlide: Story = {
 
 /** Upcoming slide counts down to open (SC-33, SC-58). */
 export const Upcoming: Story = {
+  parameters: {
+    verification: { caseId: "vc_780a9f8b-47dc-497c-bd45-00b4ab9cdbdd" },
+  },
   name: "Upcoming",
   args: { slides: [SLIDES[2]] },
   play: async ({ canvasElement }) => {
@@ -204,6 +213,9 @@ function RollingBidDemo() {
 }
 
 export const RollingBid: Story = {
+  parameters: {
+    verification: { caseId: "vc_528b8f94-61dc-4842-b030-8e9c91cfb844" },
+  },
   name: "Rolling bid",
   render: () => <RollingBidDemo />,
   play: async ({ canvasElement }) => {

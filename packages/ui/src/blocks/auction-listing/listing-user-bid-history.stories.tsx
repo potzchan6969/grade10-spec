@@ -111,6 +111,9 @@ type Story = StoryObj<typeof meta>;
 
 /** One maximum with several placed bids — defaults to Bid placed (leading tab). */
 export const OneMaxSeveralBids: Story = {
+  parameters: {
+    verification: { caseId: "vc_a43be10b-c853-47e5-95f5-e73e8686de16" },
+  },
   name: "One maximum, several bids",
   args: {
     maximumRows: SINGLE_MAXIMUM,
@@ -138,6 +141,9 @@ export const OneMaxSeveralBids: Story = {
 
 /** Maximum raised over time — defaults to Bid placed; maximums list every raise. */
 export const MaxRaisedOverTime: Story = {
+  parameters: {
+    verification: { caseId: "vc_0a28a86c-ecd9-448b-a1f9-003beda5c4d0" },
+  },
   name: "Maximum raised over time",
   args: {
     maximumRows: RAISED_MAXIMUMS,
@@ -171,6 +177,9 @@ export const MaxRaisedOverTime: Story = {
  * empty state; Your maximums still shows the maximum.
  */
 export const EmptyBidsFrameless: Story = {
+  parameters: {
+    verification: { caseId: "vc_59c26ea1-3d86-4e91-8a4a-d32ac2f928dc" },
+  },
   name: "Empty bids, frameless state",
   args: {
     maximumRows: SINGLE_MAXIMUM,
@@ -213,6 +222,9 @@ const historyClock = createFakeClock(CLOCK_START_MS);
 
 /** Relative times follow the supplied clock, not the device's. */
 export const FollowsTheClock: Story = {
+  parameters: {
+    verification: { caseId: "vc_d538635f-b51c-43a0-b430-b99d3e14516b" },
+  },
   name: "Relative times follow the clock",
   args: {
     maximumRows: [],

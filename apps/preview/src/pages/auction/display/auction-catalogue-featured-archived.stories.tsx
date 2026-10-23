@@ -75,6 +75,9 @@ function FeaturedPair() {
 
 /** Grade10 Auctions band with the four soonest lots in one scrolling row. */
 export const Scrolling: Story = {
+  parameters: {
+    verification: { caseId: "vc_3d3272e2-13db-4654-81af-6a2e5aea4a12" },
+  },
   name: "Scrolling row",
   render: () => <FeaturedRow />,
   play: async ({ canvasElement }) => {
@@ -108,7 +111,10 @@ export const Scrolling: Story = {
  */
 export const FeaturedLot: Story = {
   name: "A featured lot",
-  parameters: { layout: "padded" },
+  parameters: {
+    verification: { caseId: "vc_72d7c816-cb4d-4222-9580-3ac58b5f6e1e" },
+    layout: "padded",
+  },
   decorators: [
     (Story) => (
       <div className="w-72">
@@ -163,6 +169,7 @@ export const OverlappingPair: Story = {
   name: "Overlapping pair",
   render: () => <FeaturedPair />,
   parameters: {
+    verification: { caseId: "vc_b7772ca9-8ad4-4a64-90ed-cf7e72a8a93f" },
     docs: {
       description: {
         story:

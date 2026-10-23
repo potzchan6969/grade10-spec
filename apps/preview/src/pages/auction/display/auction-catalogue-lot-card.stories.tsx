@@ -71,6 +71,9 @@ const cardArgs = {
 
 /** A live lot on the list. The title is a heading, and watch is on the card. */
 export const Active: Story = {
+  parameters: {
+    verification: { caseId: "vc_479ffa4f-3f16-4e83-babe-8f55016bdd37" },
+  },
   name: "Active",
   args: cardArgs,
   render: () => <WatchedCard lot={activeLot} />,
@@ -99,6 +102,9 @@ export const Active: Story = {
 
 /** A lot that has not opened. Watch is still there. */
 export const Upcoming: Story = {
+  parameters: {
+    verification: { caseId: "vc_eb72b549-a745-411f-bb75-0c2268ad266e" },
+  },
   name: "Upcoming",
   args: { ...cardArgs, lot: upcomingLot },
   render: () => <WatchedCard lot={upcomingLot} />,
@@ -116,6 +122,9 @@ export const Upcoming: Story = {
 
 /** A closed lot. The card keeps the result and drops watch. */
 export const Ended: Story = {
+  parameters: {
+    verification: { caseId: "vc_f1a5e14a-33b3-4fce-a8be-5b2ff68ec8dd" },
+  },
   name: "Closed",
   args: { ...cardArgs, lot: endedLot },
   render: () => <WatchedCard lot={endedLot} />,

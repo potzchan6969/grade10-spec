@@ -51,6 +51,7 @@
     "storybook:workbench": "pnpm run storybook",
     "storybook:pages": "node scripts/storybook/storybook.mjs",
     "storybook:check": "node scripts/storybook/check.mjs",
+    "storybook:case-ids": "node scripts/storybook/case-ids.mjs",
     "storybook:coverage": "node scripts/storybook/coverage.mjs",
     "storybook:rename": "node scripts/storybook/rename.mjs",
     "storybook:sort": "node scripts/storybook/sidebar.mjs",

@@ -111,6 +111,51 @@ function parametersOf(object) {
 }
 
 /**
+ * `parameters.verification.caseId` of a meta or a story, and where a missing
+ * one goes: just inside the parameters literal when there is one, else just
+ * inside the object. `edit` is null when no literal holds the place.
+ */
+function verificationOf(object) {
+  const t = ts();
+  if (!object) return { caseId: null, edit: null };
+  const parameters = parametersOf(object);
+  const verification =
+    parameters &&
+    objectLiteral(propertyOf(parameters, "verification")?.initializer);
+  const caseProperty = verification && propertyOf(verification, "caseId");
+  const caseId =
+    caseProperty && t.isStringLiteralLike(caseProperty.initializer)
+      ? caseProperty.initializer.text
+      : null;
+  if (caseId || verification) return { caseId, edit: null };
+  const hasParameters = Boolean(propertyOf(object, "parameters"));
+  if (hasParameters && !parameters) {
+    // `parameters: SHARED` - wrap the name so its settings stay.
+    const initializer = propertyOf(object, "parameters").initializer;
+    return {
+      caseId,
+      edit: {
+        kind: "wrap",
+        offset: initializer.getStart(),
+        end: initializer.getEnd(),
+      },
+    };
+  }
+  const hasSpread = object.properties.some((property) =>
+    t.isSpreadAssignment(property),
+  );
+  if (hasSpread && !hasParameters) return { caseId, edit: null };
+  const target = parameters ?? object;
+  return {
+    caseId,
+    edit: {
+      kind: parameters ? "parameters" : "story",
+      offset: target.getStart() + 1,
+    },
+  };
+}
+
+/**
  * Where one file's names come from: its own top-level consts, and what it
  * imports from a relative module, read on demand. A Scenario spreads shared
  * settings and rules from a module beside it, so the check follows them.
@@ -252,9 +297,31 @@ export function parseStoryFile(path, text, loader) {
   const scope = moduleScope(path, source, loader);
   const declarations = new Map();
   const exported = [];
+  const statementEnds = new Map();
+  const assigned = new Map();
   let metaNode;
 
   for (const statement of source.statements) {
+    // `Name.parameters = { verification: { caseId } }` beside a story built by a helper.
+    if (
+      t.isExpressionStatement(statement) &&
+      t.isBinaryExpression(statement.expression) &&
+      statement.expression.operatorToken.kind === t.SyntaxKind.EqualsToken &&
+      t.isPropertyAccessExpression(statement.expression.left) &&
+      statement.expression.left.name.text === "parameters" &&
+      t.isIdentifier(statement.expression.left.expression)
+    ) {
+      const parameters = objectLiteral(statement.expression.right);
+      const verification =
+        parameters &&
+        objectLiteral(propertyOf(parameters, "verification")?.initializer);
+      const caseProperty = verification && propertyOf(verification, "caseId");
+      if (caseProperty && t.isStringLiteralLike(caseProperty.initializer))
+        assigned.set(
+          statement.expression.left.expression.text,
+          caseProperty.initializer.text,
+        );
+    }
     if (t.isVariableStatement(statement)) {
       const isExported = statement.modifiers?.some(
         (modifier) => modifier.kind === t.SyntaxKind.ExportKeyword,
@@ -262,6 +329,7 @@ export function parseStoryFile(path, text, loader) {
       for (const declaration of statement.declarationList.declarations) {
         if (!t.isIdentifier(declaration.name)) continue;
         declarations.set(declaration.name.text, declaration.initializer);
+        statementEnds.set(declaration.name.text, statement.getEnd());
         if (isExported) exported.push(declaration.name.text);
       }
     }
@@ -294,6 +362,7 @@ export function parseStoryFile(path, text, loader) {
   const journeys = journeysOf(meta);
   const settings = keysOf(meta, "argTypes", scope);
   const rules = rulesOf(meta, scope);
+  const verification = verificationOf(meta);
 
   const stories = exported
     .filter((name) => name !== "__namedExportsOrder")
@@ -309,6 +378,18 @@ export function parseStoryFile(path, text, loader) {
         name,
         journeys: story ? journeysOf(story) : [],
         rules: story ? rulesOf(story, scope) : {},
+        ...(story
+          ? verificationOf(story)
+          : {
+              caseId: assigned.get(exportName) ?? null,
+              edit: assigned.has(exportName)
+                ? null
+                : {
+                    kind: "assign",
+                    offset: statementEnds.get(exportName),
+                    name: exportName,
+                  },
+            }),
       };
     });
 
@@ -320,6 +401,7 @@ export function parseStoryFile(path, text, loader) {
     journeys,
     settings,
     rules,
+    caseId: verification.caseId,
     stories,
   };
 }

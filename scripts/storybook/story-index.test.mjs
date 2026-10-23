@@ -87,10 +87,13 @@ export const OnSale: Story = { name: "On sale" };
     assert.equal(file.component, "CartItem");
     assert.deepEqual(file.tags, ["autodocs"]);
     assert.deepEqual(file.journeys, []);
-    assert.deepEqual(file.stories, [
-      { exportName: "Default", name: "Default", journeys: [], rules: {} },
-      { exportName: "OnSale", name: "On sale", journeys: [], rules: {} },
-    ]);
+    assert.deepEqual(
+      file.stories.map(({ caseId, edit, ...story }) => story),
+      [
+        { exportName: "Default", name: "Default", journeys: [], rules: {} },
+        { exportName: "OnSale", name: "On sale", journeys: [], rules: {} },
+      ],
+    );
   });
 
   it("reads the journeys a story names on its meta and its stories", () => {

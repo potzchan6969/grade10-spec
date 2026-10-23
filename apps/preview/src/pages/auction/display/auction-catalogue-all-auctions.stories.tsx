@@ -84,6 +84,9 @@ function AllAuctionsList({ lots }: { lots: readonly CatalogueLot[] }) {
 
 /** Launch All auctions grid — same band as Auction/Display/Auction List → Default. */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_d2e72123-390d-4a8b-a779-159df5e2fbcd" },
+  },
   name: "All auctions",
   render: () => <AllAuctionsList lots={CATALOGUE_PAGE_LOTS} />,
   play: async ({ canvasElement }) => {
@@ -130,6 +133,9 @@ export const Default: Story = {
 
 /** Empty All auctions — no lots to list. */
 export const Empty: Story = {
+  parameters: {
+    verification: { caseId: "vc_4f0eccac-9e75-4dc3-98c4-18ec1822e05c" },
+  },
   name: "No auctions",
   render: () => <AllAuctionsList lots={[]} />,
   play: async ({ canvasElement }) => {

@@ -8,6 +8,7 @@ import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import { join, sep } from "node:path";
 import { promisify } from "node:util";
+import { caseIdErrors } from "./case-ids.mjs";
 import { COVERAGE_FILE, declared, featureCoverage } from "./coverage.mjs";
 import { DESIGN_SYSTEM, KINDS, START_HERE, titleCase } from "./grammar.mjs";
 import {
@@ -339,6 +340,7 @@ export async function checkStories({ root = rootDirectory, files } = {}) {
     errors.push(...placementErrors(root, path, file));
   }
   errors.push(...(await siblingImports(root)));
+  errors.push(...caseIdErrors(parsed));
   const journeyProblems = journeyErrors(root, parsed);
   errors.push(...journeyProblems.errors);
   warnings.push(...journeyProblems.warnings);

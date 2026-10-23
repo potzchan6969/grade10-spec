@@ -23,6 +23,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Shipped: Story = {
+  parameters: {
+    verification: { caseId: "vc_8f88c327-8c80-445f-a329-fce7b046b42c" },
+  },
   args: {
     badge: { label: "Shipped", variant: "default" },
     progress: {
@@ -55,6 +58,9 @@ export const Shipped: Story = {
 };
 
 export const Delivered: Story = {
+  parameters: {
+    verification: { caseId: "vc_4d850a2e-6ec3-4f52-a8ad-3366fc0aba4f" },
+  },
   args: {
     badge: { label: "Delivered", variant: "outline" },
     progress: {
@@ -85,6 +91,9 @@ export const Delivered: Story = {
 };
 
 export const Cancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_00974de6-2df3-4539-b99f-cba7051d56b7" },
+  },
   args: {
     badge: { label: "Cancelled", variant: "outline" },
     progress: null,
@@ -109,6 +118,9 @@ export const Cancelled: Story = {
 };
 
 export const Refunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_73afd969-0f79-4726-a309-82a6e417eb16" },
+  },
   args: {
     badge: { label: "Refunded", variant: "outline" },
     progress: null,

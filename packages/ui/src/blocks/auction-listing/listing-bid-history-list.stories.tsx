@@ -44,7 +44,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Newest first; the list animates a row in when a new bid lands. */
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_efb1ffaf-356a-4bf4-8da7-0ad23bd452cc" },
+  },
+};
 
 function ScrollableHistory() {
   const [rows, setRows] = useState(LONG_HISTORY);
@@ -94,6 +98,9 @@ function ScrollableHistory() {
  * row above the fold.
  */
 export const NewBidScrollsIntoView: Story = {
+  parameters: {
+    verification: { caseId: "vc_e192d5cc-8b5d-4a5c-8876-965095705997" },
+  },
   name: "New bid scrolls into view",
   render: () => <ScrollableHistory />,
   play: async ({ canvasElement }) => {

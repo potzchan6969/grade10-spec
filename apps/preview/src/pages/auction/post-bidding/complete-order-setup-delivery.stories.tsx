@@ -39,6 +39,9 @@ async function findVisibleDialog(
 
 /** Step 1 — saved-address cards, remove controls, Add New Address. */
 export const DeliveryPicker: Story = {
+  parameters: {
+    verification: { caseId: "vc_1d928687-d9c0-4b71-96b1-da689528fd4d" },
+  },
   name: "Delivery picker",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -62,6 +65,9 @@ export const DeliveryPicker: Story = {
 
 /** Nested Add Address form — Country/Region stays closed until opened. */
 export const AddDeliveryAddress: Story = {
+  parameters: {
+    verification: { caseId: "vc_c0a5c52d-f570-420c-9a52-27b9d7343efe" },
+  },
   name: "Add delivery address",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -117,6 +123,9 @@ export const AddDeliveryAddress: Story = {
 
 /** Empty account address book — EmptyState; Continue disabled. */
 export const NoSavedAddresses: Story = {
+  parameters: {
+    verification: { caseId: "vc_8c3128b7-7fe3-44c9-97cf-7446b3f0a58b" },
+  },
   name: "No saved addresses",
   args: { savedAddresses: [] },
   play: async ({ canvasElement }) => {
@@ -139,6 +148,9 @@ export const NoSavedAddresses: Story = {
 
 /** Remove a saved card from the delivery picker. */
 export const RemoveSavedAddress: Story = {
+  parameters: {
+    verification: { caseId: "vc_a0e0ebbe-2d34-4e51-840d-a520f7ca6ce1" },
+  },
   name: "Remove saved address",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -164,6 +176,9 @@ export const RemoveSavedAddress: Story = {
  * refused so Use This Address keeps a one-time draft on step 1.
  */
 export const AddressBookFull: Story = {
+  parameters: {
+    verification: { caseId: "vc_de808460-f954-4209-a198-0ab489c9c350" },
+  },
   name: "Address book full",
   args: {
     savedAddresses: [...WINNER_ORDER_FULL_SAVED_ADDRESSES],

@@ -47,6 +47,9 @@ const BANK_PENDING_CONTENT = {
 
 /** Invoice sent — pay by card within 7 days of send (not of lot close). */
 export const PendingPayment: Story = {
+  parameters: {
+    verification: { caseId: "vc_786527f8-f594-4f95-b3d2-14198b48b4f0" },
+  },
   name: "Pending Payment — Card",
   args: { status: "pending_payment" },
   play: async ({ canvasElement }) => {
@@ -107,6 +110,9 @@ export const PendingPayment: Story = {
 
 /** Bank transfer invoice — Pay + View Bank Details under it. */
 export const PendingPaymentBankTransfer: Story = {
+  parameters: {
+    verification: { caseId: "vc_a1465781-af4f-4a45-892c-38dac9dfb156" },
+  },
   name: "Pending Payment — Bank Transfer",
   args: {
     status: "pending_payment",
@@ -144,6 +150,9 @@ export const PendingPaymentBankTransfer: Story = {
 
 /** HKD invoice — the selected HK Local rail has its own bank details. */
 export const PendingPaymentHkdHongKongBankTransfer: Story = {
+  parameters: {
+    verification: { caseId: "vc_67b75c86-204d-47a3-bdc3-2a9f958d2c54" },
+  },
   name: "Pending Payment — HKD Local Bank Transfer",
   args: {
     status: "pending_payment",
@@ -173,6 +182,9 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
  * International via SWIFT was selected.
  */
 export const PendingPaymentUsdBankTransfer: Story = {
+  parameters: {
+    verification: { caseId: "vc_1294d488-5983-4c6f-8952-00bd68cd2231" },
+  },
   name: "Pending Payment — USD Bank Transfer",
   args: {
     status: "pending_payment",
@@ -200,6 +212,9 @@ export const PendingPaymentUsdBankTransfer: Story = {
  * Dialog field coverage lives under the Submit Payment Proof folder.
  */
 export const SubmitBankPaymentProof: Story = {
+  parameters: {
+    verification: { caseId: "vc_eae831b6-bbdb-4643-be9b-fb2218d92e75" },
+  },
   name: "Submit Payment Proof Flow",
   args: {
     status: "pending_payment",
@@ -285,6 +300,9 @@ export const SubmitBankPaymentProof: Story = {
 
 /** Simulated card host return → Preparing Shipment + Payment received toast. */
 export const PayWithCardCheckout: Story = {
+  parameters: {
+    verification: { caseId: "vc_f0e99b93-b4ab-4e87-8ff3-892e0b3cef1f" },
+  },
   name: "Pay with Card Flow",
   args: { status: "pending_payment" },
   play: async ({ canvasElement }) => {
@@ -325,6 +343,9 @@ export const PayWithCardCheckout: Story = {
 
 /** Proof under check — Payment step current with no pay-by date. */
 export const PaymentVerifying: Story = {
+  parameters: {
+    verification: { caseId: "vc_be0dfe3a-80e5-40a5-87ec-79ce3bbdba4d" },
+  },
   name: "Payment Verifying",
   args: { status: "payment_verifying" },
   play: async ({ canvasElement }) => {
@@ -371,6 +392,9 @@ export const PaymentVerifying: Story = {
  * running balance, Receipt PDF row lists every payment, oldest issued first.
  */
 export const PartiallyPaid: Story = {
+  parameters: {
+    verification: { caseId: "vc_71202ae6-0cfd-46e3-b717-02ff5af515f4" },
+  },
   name: "Partially Paid",
   args: { status: "partially_paid" },
   play: async ({ canvasElement }) => {
@@ -428,6 +452,9 @@ export const PartiallyPaid: Story = {
 
 /** Payment deadline passed — no Pay CTA; contact from the overdue alert. */
 export const ExpiredInvoice: Story = {
+  parameters: {
+    verification: { caseId: "vc_3659923d-83d2-4751-be2a-408834482b54" },
+  },
   name: "Payment Overdue",
   args: { status: "pending_payment_expired" },
   play: async ({ canvasElement }) => {

@@ -63,6 +63,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SeveralImages: Story = {
+  parameters: {
+    verification: { caseId: "vc_fa13364b-7dd7-4314-9f6b-413e9114a546" },
+  },
   name: "Several images - wide",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -202,6 +205,9 @@ export const SeveralImages: Story = {
 };
 
 export const StackedSeveralImages: Story = {
+  parameters: {
+    verification: { caseId: "vc_8c0187f3-0f7b-44c5-aeae-315a73720aa1" },
+  },
   name: "Several images - stacked",
   decorators: [
     (Story) => (
@@ -246,6 +252,9 @@ export const StackedSeveralImages: Story = {
 };
 
 export const SingleImage: Story = {
+  parameters: {
+    verification: { caseId: "vc_a0807017-edc0-4801-b711-01d5bc1e3195" },
+  },
   name: "Single image",
   args: {
     images: [{ src: source("detail", "single"), alt: "Lot image, front" }],
@@ -283,6 +292,9 @@ export const SingleImage: Story = {
 };
 
 export const EmptyGallery: Story = {
+  parameters: {
+    verification: { caseId: "vc_f386087f-3814-4eb6-b659-834a1fd2acc3" },
+  },
   name: "Empty gallery",
   args: { images: [] },
   play: async ({ canvasElement }) => {

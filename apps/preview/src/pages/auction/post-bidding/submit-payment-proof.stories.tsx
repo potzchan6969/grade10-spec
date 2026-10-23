@@ -116,6 +116,9 @@ async function fillProofForm(modal: ReturnType<typeof within>) {
 
 /** Proof fields only — no amount/reference box or Proof of Payment heading. */
 export const Form: Story = {
+  parameters: {
+    verification: { caseId: "vc_df8ac641-e66b-4e9a-adf1-4663566d045b" },
+  },
   name: "Form",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -151,6 +154,9 @@ export const Form: Story = {
 
 /** Required fields + one file → submit closes the dialog and toasts success. */
 export const SubmitProof: Story = {
+  parameters: {
+    verification: { caseId: "vc_a916238b-5bfb-4182-a113-af1438711380" },
+  },
   name: "Submit proof",
   args: { onSubmit: fn() },
   play: async ({ canvasElement, args }) => {
@@ -179,6 +185,9 @@ export const SubmitProof: Story = {
 
 /** Empty submit — the first invalid field takes focus and its error shows. */
 export const SubmitEmpty: Story = {
+  parameters: {
+    verification: { caseId: "vc_279b38de-6cf9-4bfa-8eeb-134169a86da3" },
+  },
   name: "Submit empty",
   args: { onSubmit: fn() },
   play: async ({ canvasElement, args }) => {
@@ -221,6 +230,9 @@ export const SubmitEmpty: Story = {
 
 /** Forced failure — dialog stays open, draft kept, failure toast. */
 export const SubmitFailure: Story = {
+  parameters: {
+    verification: { caseId: "vc_4df15e0e-b46d-4eb6-8daa-1be93e113bf5" },
+  },
   name: "Submit failure",
   args: { forceFailure: true, onSubmit: fn() },
   play: async ({ canvasElement, args }) => {
@@ -251,6 +263,9 @@ export const SubmitFailure: Story = {
 
 /** A dirty, non-busy draft asks before leaving and stays open when declined. */
 export const DirtyLeave: Story = {
+  parameters: {
+    verification: { caseId: "vc_e12ca1f5-b8d6-4da4-9a45-59202bb8f0d6" },
+  },
   name: "Confirm dirty leave",
   args: { onSubmit: fn() },
   play: async ({ canvasElement }) => {
@@ -287,6 +302,9 @@ export const DirtyLeave: Story = {
 
 /** Submitting locks the form and blocks Cancel, Escape and overlay dismiss. */
 export const SubmittingBusy: Story = {
+  parameters: {
+    verification: { caseId: "vc_7edb3e9f-be73-4a6a-9113-2443138451c2" },
+  },
   name: "Submitting",
   args: { onSubmit: fn() },
   play: async ({ canvasElement }) => {
@@ -319,6 +337,9 @@ export const SubmittingBusy: Story = {
 
 /** Three files — the dropzone target collapses into the list. */
 export const DropzoneFull: Story = {
+  parameters: {
+    verification: { caseId: "vc_12b864dd-fcd2-4f0b-aa76-adba84b59771" },
+  },
   name: "Dropzone full",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -348,6 +369,9 @@ export const DropzoneFull: Story = {
 
 /** HEIC ingest enters its busy state and blocks leaving while conversion runs. */
 export const ConvertingHeic: Story = {
+  parameters: {
+    verification: { caseId: "vc_f624af39-78b5-43f8-b9ea-1354979fecc1" },
+  },
   name: "Converting HEIC",
   args: { onSubmit: fn() },
   play: async ({ canvasElement }) => {

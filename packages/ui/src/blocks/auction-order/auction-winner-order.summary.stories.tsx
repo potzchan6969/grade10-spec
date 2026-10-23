@@ -142,6 +142,9 @@ function subtexts(canvasElement: HTMLElement) {
  * (winner-order-SC-291).
  */
 export const UsdBankNoFee: Story = {
+  parameters: {
+    verification: { caseId: "vc_d1d56b5a-456d-4000-a3cc-520959c1f87e" },
+  },
   args: {
     summary: {
       lines: [
@@ -188,6 +191,9 @@ export const UsdBankNoFee: Story = {
  * is a USD line and the Order Total includes it (winner-order-SC-110).
  */
 export const UsdBankWithFee: Story = {
+  parameters: {
+    verification: { caseId: "vc_ecc2e6e8-11fa-432e-b1ac-9ddb3e5e9895" },
+  },
   args: {
     summary: {
       lines: [
@@ -225,6 +231,9 @@ export const UsdBankWithFee: Story = {
  * sum of the two, to the cent (g10.shared-auction-order.SC1, winner-order-SC-111).
  */
 export const HkdBankNoFee: Story = {
+  parameters: {
+    verification: { caseId: "vc_8bd87cdc-3b01-45ed-933e-4e92447c53fe" },
+  },
   args: {
     summary: {
       lines: USD_LINES,
@@ -280,6 +289,9 @@ export const HkdBankNoFee: Story = {
  * lines (g10.shared-auction-order.SC2).
  */
 export const HkdBankWithFee: Story = {
+  parameters: {
+    verification: { caseId: "vc_3e6533f7-d49f-402d-a54c-3a76398bbc04" },
+  },
   args: {
     summary: {
       lines: USD_LINES,
@@ -324,6 +336,9 @@ export const HkdBankWithFee: Story = {
  * only the converted USD lines (g10.shared-auction-order.SC1).
  */
 export const HkdCardWithFee: Story = {
+  parameters: {
+    verification: { caseId: "vc_7bb8542e-5073-46ce-8160-a46820ac9edd" },
+  },
   args: {
     summary: {
       lines: USD_LINES,
@@ -366,6 +381,9 @@ export const HkdCardWithFee: Story = {
  * (winner-order-SC-292).
  */
 export const HkdPreInvoice: Story = {
+  parameters: {
+    verification: { caseId: "vc_74c75176-9765-4304-a0ec-4b498e465828" },
+  },
   args: {
     badge: { label: "Preparing Invoice", variant: "default" },
     progress: {
@@ -399,6 +417,9 @@ export const HkdPreInvoice: Story = {
 
 /** The invoice link spins while its PDF opens, and stays focusable. */
 export const InvoicePdfLoading: Story = {
+  parameters: {
+    verification: { caseId: "vc_0f085545-8bb4-4111-bbc3-29223326e077" },
+  },
   args: {
     summary: {
       lines: USD_LINES,
@@ -421,6 +442,9 @@ export const InvoicePdfLoading: Story = {
 };
 
 export const InvoicePdfRefused: Story = {
+  parameters: {
+    verification: { caseId: "vc_ed072832-e3dc-474d-aa5e-9b2b29089da3" },
+  },
   args: {
     summary: {
       lines: USD_LINES,

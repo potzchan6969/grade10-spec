@@ -134,6 +134,9 @@ async function myAuctionsSettled(canvasElement: HTMLElement) {
 }
 
 export const PostAuction: Story = {
+  parameters: {
+    verification: { caseId: "vc_70d2d304-517e-4c99-bbbc-674dd1ca6198" },
+  },
   name: "Post-auction",
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -316,6 +319,9 @@ export const PostAuction: Story = {
 
 /** Below md: stacked lot cards — same post-auction facts without sideways pan. */
 export const PostAuctionSmallViewport: Story = {
+  parameters: {
+    verification: { caseId: "vc_498f8d14-854b-4480-a96b-88a3ef9f0f75" },
+  },
   name: "Post-auction — small viewport",
   globals: { viewport: { value: "mobile1" } },
   play: async ({ canvasElement }) => {

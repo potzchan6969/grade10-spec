@@ -31,6 +31,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Paid by card — preparing to ship (Shipping step current); receipt PDF available. */
 export const Processing: Story = {
+  parameters: {
+    verification: { caseId: "vc_6cd6b257-08d0-47f2-8e6d-5296853f666f" },
+  },
   name: "Preparing Shipment",
   args: { status: "processing" },
   play: async ({ canvasElement }) => {
@@ -67,6 +70,9 @@ export const Processing: Story = {
  * difference.
  */
 export const ProcessingOverpaid: Story = {
+  parameters: {
+    verification: { caseId: "vc_066774f3-be1c-4140-b1ce-37d4b4d93801" },
+  },
   name: "Preparing Shipment — Overpaid",
   args: {
     status: "processing",
@@ -125,6 +131,9 @@ export const ProcessingOverpaid: Story = {
  * Processing fee may be Free when the operator set none.
  */
 export const ProcessingBankTransfer: Story = {
+  parameters: {
+    verification: { caseId: "vc_bb58d319-bbcb-4d5a-87c5-a7c6838c0e0c" },
+  },
   name: "Preparing Shipment Bank Transfer",
   args: {
     status: "processing",
@@ -180,6 +189,9 @@ export const ProcessingBankTransfer: Story = {
 
 /** Dispatched — track shipment; Shipping step shows day-only date. */
 export const Shipped: Story = {
+  parameters: {
+    verification: { caseId: "vc_9147ebe2-b7b4-4759-bdcd-172378ee1879" },
+  },
   name: "Shipped",
   args: { status: "shipped" },
   play: async ({ canvasElement }) => {
@@ -213,6 +225,9 @@ export const Shipped: Story = {
 
 /** Dispatched with a tracking number, but no carrier tracking URL recorded. */
 export const ShippedWithoutTrackerLink: Story = {
+  parameters: {
+    verification: { caseId: "vc_f3ec8195-8010-43be-bd54-8486a0b14ecb" },
+  },
   name: "Shipped without tracker link",
   args: {
     status: "shipped",
@@ -244,6 +259,9 @@ export const ShippedWithoutTrackerLink: Story = {
 
 /** Carrier delivery confirmed — Completed shows day-only date. */
 export const Delivered: Story = {
+  parameters: {
+    verification: { caseId: "vc_e0d4f0ad-dac1-4c67-a2f6-aa60fed834c1" },
+  },
   name: "Delivered",
   args: { status: "delivered" },
   play: async ({ canvasElement }) => {

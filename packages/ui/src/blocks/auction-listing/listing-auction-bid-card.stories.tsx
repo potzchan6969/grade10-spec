@@ -26,6 +26,9 @@ type Story = StoryObj<typeof meta>;
  * Scenario: shared-ui-auction-listing-SC-51 - Equal-max non-leader shows earlier-leads tip
  */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_7d5f059a-62f3-44a3-9c48-7285454baa46" },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Current Bid")).toBeInTheDocument();
@@ -47,6 +50,9 @@ export const Default: Story = {
 };
 
 export const SignedOut: Story = {
+  parameters: {
+    verification: { caseId: "vc_6de5f3eb-15a4-4d50-ac03-47be2d49fa53" },
+  },
   args: {
     bidEnrollment: "signed-out",
     history: HISTORY.map((row) => ({ ...row, isViewer: false })),
@@ -67,6 +73,9 @@ const openSetupFromNeedsCard = fn();
 const commitMaximumFromNeedsCard = fn();
 
 export const NeedsCard: Story = {
+  parameters: {
+    verification: { caseId: "vc_0e873e8a-2a99-4d10-b20c-6a5a6b344db1" },
+  },
   args: {
     bidEnrollment: "needs-card",
     onCommitMaximum: commitMaximumFromNeedsCard,
@@ -93,6 +102,9 @@ export const NeedsCard: Story = {
 const commitMaximumWhenReady = fn();
 
 export const Ready: Story = {
+  parameters: {
+    verification: { caseId: "vc_a9522883-a781-45a8-91d2-465e56461529" },
+  },
   args: {
     bidEnrollment: "ready",
     onCommitMaximum: commitMaximumWhenReady,
@@ -110,6 +122,9 @@ export const Ready: Story = {
 };
 
 export const Outbid: Story = {
+  parameters: {
+    verification: { caseId: "vc_44c71f20-ae95-4ccf-9b22-567c3a6cd0f3" },
+  },
   args: {
     view: liveView({
       standing: "outbid",
@@ -125,6 +140,9 @@ export const Outbid: Story = {
 };
 
 export const Leading: Story = {
+  parameters: {
+    verification: { caseId: "vc_8ee05417-f337-432f-b4c5-bd8011607b9c" },
+  },
   args: {
     view: liveView({
       standing: "leading-max",
@@ -162,6 +180,7 @@ export const ExtendedBidding: Story = {
     }),
   },
   parameters: {
+    verification: { caseId: "vc_f288430a-1b66-467c-877a-681baa5cb007" },
     docs: {
       description: {
         story:
@@ -183,6 +202,9 @@ export const ExtendedBidding: Story = {
 };
 
 export const Opens: Story = {
+  parameters: {
+    verification: { caseId: "vc_db10fed5-4715-436e-9f2a-b100d39c20a4" },
+  },
   args: {
     history: [],
     bidEnrollment: undefined,
@@ -218,6 +240,9 @@ export const Opens: Story = {
 };
 
 export const LiveNoBids: Story = {
+  parameters: {
+    verification: { caseId: "vc_ff0b6a9e-3d49-4b45-9ffd-ec3eb81a0d89" },
+  },
   args: {
     history: [],
     view: liveView({
@@ -241,6 +266,9 @@ export const LiveNoBids: Story = {
 };
 
 export const SuspendedBidderRefusal: Story = {
+  parameters: {
+    verification: { caseId: "vc_67c29cdb-5d2d-4a5d-92aa-0cef012655d6" },
+  },
   name: "Suspended bidder refusal (TBC)",
   args: {
     authorizationStatus: "error",

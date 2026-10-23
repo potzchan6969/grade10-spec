@@ -32,6 +32,9 @@ type Story = StoryObj<typeof meta>;
 
 /** Operator cancelled an unpaid order - retained facts stay visible. */
 export const Cancelled: Story = {
+  parameters: {
+    verification: { caseId: "vc_50a247eb-9fc8-4e6d-9ceb-ab35306d564a" },
+  },
   name: "Cancelled",
   args: { status: "cancelled" },
   play: async ({ canvasElement }) => {
@@ -105,6 +108,9 @@ export const Cancelled: Story = {
  * Not a non-payment outcome — fail-to-pay stays Pending Payment / Cancelled.
  */
 export const Refunded: Story = {
+  parameters: {
+    verification: { caseId: "vc_9360b19f-1e40-43c2-a89b-a9cce45338e9" },
+  },
   name: "Refunded",
   args: { status: "refunded" },
   play: async ({ canvasElement }) => {

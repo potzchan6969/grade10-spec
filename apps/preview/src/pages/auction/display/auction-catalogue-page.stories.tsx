@@ -63,6 +63,9 @@ async function waitForPageEnter(canvas: ReturnType<typeof within>) {
 
 /** Launch — Featured present, quiet All auctions (no category chrome). */
 export const Default: Story = {
+  parameters: {
+    verification: { caseId: "vc_fdaef17e-3a5f-4fbd-a902-7966ff9f5b64" },
+  },
   name: "Default",
   play: async ({ canvasElement }) => {
     const canvas = await expectCatalogueHead(canvasElement);

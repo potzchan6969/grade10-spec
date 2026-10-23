@@ -31,6 +31,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const LiveAutoLeading: Story = {
+  parameters: {
+    verification: { caseId: "vc_2f984f7b-e96d-421c-af78-c7f31ffbe791" },
+  },
   args: { state: "live-auto-leading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -53,6 +56,9 @@ export const LiveAutoLeading: Story = {
 };
 
 export const Opens: Story = {
+  parameters: {
+    verification: { caseId: "vc_2b9deaa9-3861-4487-b21d-a5be4fc6a4cb" },
+  },
   args: { state: "opens" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -68,6 +74,9 @@ export const Opens: Story = {
   },
 };
 export const LiveNoBids: Story = {
+  parameters: {
+    verification: { caseId: "vc_cb78b3fb-b7f9-46a8-a235-fef8a2847987" },
+  },
   args: { state: "live-no-bids" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -81,8 +90,16 @@ export const LiveNoBids: Story = {
     ).not.toBeInTheDocument();
   },
 };
-export const LiveManual: Story = { args: { state: "live-manual" } };
+export const LiveManual: Story = {
+  parameters: {
+    verification: { caseId: "vc_ce34c9a7-496d-43c3-8ace-d01a81cbf8a1" },
+  },
+  args: { state: "live-manual" },
+};
 export const LiveAutoOutbid: Story = {
+  parameters: {
+    verification: { caseId: "vc_7aaeccfc-f5cc-4422-ad9c-537cdbd0c604" },
+  },
   args: { state: "live-auto-outbid" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -93,6 +110,9 @@ export const LiveAutoOutbid: Story = {
   },
 };
 export const ClosedSold: Story = {
+  parameters: {
+    verification: { caseId: "vc_2ff7bedb-ce5f-405d-a59f-de5def5f17cb" },
+  },
   args: { state: "closed-sold" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -106,6 +126,9 @@ export const ClosedSold: Story = {
   },
 };
 export const ClosedWonPaymentDue: Story = {
+  parameters: {
+    verification: { caseId: "vc_dd2d8fd6-214b-4d14-b1a5-1612f33308e2" },
+  },
   name: "Closed — awaiting setup",
   args: { state: "closed-won-payment-due" },
   play: async ({ canvasElement }) => {
@@ -119,6 +142,9 @@ export const ClosedWonPaymentDue: Story = {
   },
 };
 export const ClosedWonSettled: Story = {
+  parameters: {
+    verification: { caseId: "vc_d0f4c9cd-9a71-4960-b0cd-1125a53760b8" },
+  },
   args: { state: "closed-won-settled" },
   play: async ({ canvasElement }) => {
     expect(
@@ -127,6 +153,9 @@ export const ClosedWonSettled: Story = {
   },
 };
 export const ClosedLost: Story = {
+  parameters: {
+    verification: { caseId: "vc_aa1bc036-4062-4ccd-a3f3-27c9c3fd058f" },
+  },
   args: { state: "closed-lost" },
   play: async ({ canvasElement }) => {
     expect(
@@ -135,6 +164,9 @@ export const ClosedLost: Story = {
   },
 };
 export const ClosedUnsold: Story = {
+  parameters: {
+    verification: { caseId: "vc_2955d200-a7e5-4f1e-9ad1-6758029b23b7" },
+  },
   args: { state: "closed-unsold" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

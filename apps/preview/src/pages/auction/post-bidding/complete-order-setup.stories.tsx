@@ -38,6 +38,9 @@ async function findVisibleDialog(
 
 /** Step 3 — same-as-delivery default. */
 export const BillingAddress: Story = {
+  parameters: {
+    verification: { caseId: "vc_672da980-c0e3-4ba3-8dfc-152845c63efa" },
+  },
   name: "Billing address",
   args: { initialStep: 3 },
   play: async ({ canvasElement }) => {
@@ -54,6 +57,9 @@ export const BillingAddress: Story = {
 
 /** Full three steps → confirmed payload on the demo surface. */
 export const FinishSetup: Story = {
+  parameters: {
+    verification: { caseId: "vc_8b86eba2-64a3-4cfa-a992-56695a52888a" },
+  },
   name: "Finish setup",
   args: { onConfirm: fn() },
   play: async ({ canvasElement, args }) => {

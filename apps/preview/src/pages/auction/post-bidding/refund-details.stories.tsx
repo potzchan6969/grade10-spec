@@ -88,6 +88,9 @@ async function findVisibleDialog(
 
 /** Closing refund — full amount returned. */
 export const ClosingRefund: Story = {
+  parameters: {
+    verification: { caseId: "vc_f4ab11c9-b7cc-497e-964f-3533e2d7673f" },
+  },
   name: "Closing Refund",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
@@ -113,6 +116,9 @@ export const ClosingRefund: Story = {
 
 /** Overpayment — difference only. */
 export const Overpaid: Story = {
+  parameters: {
+    verification: { caseId: "vc_16e6cdf1-24f2-4906-9126-af2f804f6d35" },
+  },
   name: "Overpaid",
   args: { refund: WINNER_ORDER_REFUND_OVERPAID },
   play: async ({ canvasElement }) => {
