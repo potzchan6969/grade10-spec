@@ -69,8 +69,9 @@ Before and after:
 
 ### Test data
 
-- **Values survive a fixture change** - a value that only sets the case up states its rule or range, so any fixture meeting it will do: `HKD280 (range: 1000-79999 minor units)`, `HKD70 (range: >0 minor units)`. A boundary, equality, derived or configured value is fixed and says so: `HKD10 (fixed boundary)`. An exact reading has no tilde, `1800s (30mins)`; `~` only where the reading has a remainder, `1024b (1KiB or ~1KB)`. Omit trailing `.00`
-- **Pick a value of your own** - where a rule accepts a range, use a representative value other than the scenario's example; keep the scenario's value when it is a boundary, threshold, equality or computed fixture
+- **Values survive a fixture change** - a value that only sets the case up states its rule or range, so any fixture meeting it will do: `HKD280 (range: 1000-79999 minor units)`, `HKD70 (range: >0 minor units)`. A boundary, equality, derived or configured value is fixed and says so: `HKD10 (fixed boundary)`. An exact reading has no tilde, `1800s (30mins)`; `~` only where the reading has a remainder, `1024b (1KiB or ~1KB)`. Omit trailing `.00`. The reading guides fixture choice; it does not say how the product displays the amount
+- **Pick values of your own, and vary them** - where a rule accepts a range, use representative values other than the scenario's example, and not the same number across cases; keep the scenario's value only when it is a boundary, tier threshold, equality, comparison, computed or spec-fixed value
+- **Executable and replaceable** - every value is one a tester can set up today, and any other value meeting its rule or range works the same
 - **`Field | Value`** - `Field` is a plain name such as `listing_1`; `Value` is the exact value or the conditions a fixture must meet. A run binds the name to a concrete value; results refer to the name, never paste the row
 - **Rows bind by placeholder** - a row-based table names each bound column with its `<placeholder>`, never "the row's value". Sentences read correctly once values are bound
 - **A computed result is a concrete value** in **Test data**; the result states the formula that equals it, and a step never states the outcome
@@ -85,14 +86,44 @@ Before and after:
 
 ### Walks
 
-- **Shape** - `## Walk <n>: <title>`, then `**Starting state:**`, an optional `**Shared test data:**`, and `### Route`
-- **Concrete starting state** - the actor, the surface or address, and the seeded state; never "reset to each case's pre-conditions"
-- **Bound test data** - the values the route uses, in the walk; never "use each case's test data"
+A walk exists to cut a tester's setup and running time. Its shape:
+
+```markdown
+## Walk 1: Publish a listing and place the first bid
+
+**Starting state:**
+
+- customer(enrolled bidder) is signed in.
+- `<listing_1>` is published, open for bidding, and visible at `<g10url>/auction/listings/<slug_1>`.
+- The tester waits for the scheduled close on the listing page.
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `listing_1` | A published listing open for bidding |
+| `opening price` | `HKD280 (range: 1000-79999 minor units)` |
+
+### Route
+
+1. Open `<g10url>/auction/listings/<slug_1>`. `g10.auction-auction.US1-TC1`
+2. Read the listing's status and current bid.
+   - The listing is open for bidding. `g10.auction-auction.US1-TC2`
+3. Enter `<opening price>` in the bid panel and select the bid action.
+   - The bid is accepted. `g10.auction-auction.US2-TC1`
+4. Wait on the listing page until the scheduled close.
+   - The listing closes with the expected result. `g10.auction-auction.US2-TC2`
+```
+
+- **Title names the route** - what the tester does, in a few words; never "Additional fixture checks", "Execute every case", "— phase 2" or "… and adjacent checks"
+- **One starting state** - the tester's identity, every fixture's state, the page the route starts on, and where the tester waits. Never a list of `Steps 1–3 setup` blocks, and never "reset to each case's pre-conditions"
+- **Shared test data the tester can use as is** - the values or ranges the route uses, in the walk; never "use each case's test data"
+- **One numbered step per action**, numbered straight through the walk
+- **`-` only for an observation** - an expected result an existing case records, ending with that case's full current heading id
+- **`a.` and `b.` only for a real alternative route** - each carries its own observations
+- **Real actions** - write what the tester enters; never "Type the query from Test data" or "Run the route for TC …"
 - **A waiting point names its surface** - where the spec names none, mark it ❓
-- **One continuous route** - group cases sharing the actor or session, surface and route; split for a different state, recipe or page path. A walk carries 2 to about 25 cases
-- **Numbered actions, nested observations** - a numbered item per action; under it, `-` bullets for the observations recorded there, each ending with the case's full heading id
-- **Branches** - `a.` and `b.` under a step, only for real alternative routes
-- **No description** - a walk carries setup, data and route only
+- **No description** - setup, data and route only
 
 ## Setup Recipes
 

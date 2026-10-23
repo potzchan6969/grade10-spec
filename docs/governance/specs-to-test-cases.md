@@ -118,7 +118,7 @@ A case has two coverage relationships, never collapsed into one.
 - **Issued by a command** - `pnpm run spec:issue` prints every new journey, scenario and case id, read from the branch and the fetched `main` together; nobody counts by hand. `pnpm run spec:issue move <change>` moves a branch's ids above `main`'s
 - **Markers are immutable** - never change the `id`, `rev` or `covers` text of an existing marker, except QA2 adding links to `covers`. The marker is the machine identity; the heading id is the human reference
 - **A heading may move** - a case moving journey changes only its heading and references; its marker and number stay
-- **Numbers are permanent** - a deprecated case keeps its number, never reused. The full heading id is the reference everywhere; no second local reference
+- **Numbers are permanent** - a deprecated case keeps its number, never reused, except that a full regeneration may renumber headings to remove duplicate numbering. The full heading id is the reference everywhere; no second local reference
 - **`rev` tracks behaviour, not prose**
 
 | What happened | `rev` | Status |
@@ -157,11 +157,14 @@ A walk is a route for a manual tester: it orders existing cases so one person re
 
 - **Never coverage, never a source** - a walk is not a journey, a case or a requirement. Nothing cites a walk: no Decided-by line, automated test, `tasks.md`, `tech-design.md` or other suite. The `tasks.md` group titled "The walk" is an engineering step and unrelated
 - **Written in review** - `/spec-to-tcs` may draft a walk; `/tcs-review` settles it with a human
+- **It saves setup and time** - a walk covers at least 2 cases and aims for 3 to 20, in no more than about 25 steps (23 to 27 where the route needs it). One walk per case, or a walk of a hundred steps, saves nothing and is not written
+- **One walk, one starting state, one continuous route** - a case that needs a different setup, record or page path starts another walk. A walk never continues another walk, and never strings separate setups together under one title
+- **Not a catch-all** - cases that share no route are not gathered into a walk such as "Additional fixture checks" or "Execute every case"; they sit under `## Ungrouped`
 - **A case stays independent** - its own pre-conditions, test data, steps and complete expected results run without another case having passed
 - **A walk invents nothing** - every observation on a route belongs to a referenced case. A higher-level walk may add a continuity check, such as the same listing id crossing from admin to site, with no case id and no result recorded in the suite
 - **Scope follows the file** - a feature walk stays in its capability, a domain walk in its domain, and so on. A route crossing the file's scope moves to the parent suite
 - **Referenced once, printed once** - a case is defined once, under its journey; a higher-level walk references a lower case without copying it. A case no walk at its level references sits under `## Ungrouped`. Deprecated cases come last in their group
-- **Checked** - `pnpm run tcs:validate` requires every walk reference to resolve to one case definition; a feature walk cannot reference another suite
+- **Checked** - `pnpm run tcs:validate` requires every walk reference to resolve to one case definition, and that a feature walk references no other suite. It warns on a walk of fewer than 2 cases, more than 27 steps, more than one starting state, or a catch-all title
 
 ## Who the Actor Is
 
@@ -217,6 +220,20 @@ The PRD and Storybook are the store's only sources of truth. What a store spec s
 | Another target | leaves the suite alone |
 
 - **Regeneration guard** - a whole-file regenerate is refused when the file is `approved` or holds an `actual` case. A reviewer moves those back to `draft` by hand first; an agent never does
+
+### Full Regeneration
+
+A full regeneration rebuilds the whole file from its first line. When one is asked for, nothing less is delivered and nothing less is called one.
+
+- **Sources** - the latest `origin/main` only: the durable PRD pages, the capability's `## Purpose`, `## Feature set` and `user-journeys.md`, the governance documents, and the durable suite's markers and fold records. For the store, the PRD pages and Storybook. `openspec/changes/` and its archive are never a source of case content or ids
+- **The old file is not a template** - every existing case is analysed again, never copied: does it still hold against the current spec, as QA2 reconciles it; is it a duplicate; should it merge; should it be deprecated, folded or replaced; does it suit automation, manual or both
+- **Merge what is the same** - cases with the same setup, route, purpose and assertions become one. Cases that look alike but differ in meaning, boundary or the rule that requires them stay, and the reconciliation records why
+- **Ids** - every marker's stable id stays unique and unchanged. Headings may be renumbered to remove duplicate numbering; a heading never overrides its marker
+- **Test data** - every value is checked to be executable and replaceable, as **Test Data** and the conventions require
+- **Walks** - rebuilt for the new cases, as **Walks** requires
+- **Everything computed is recomputed** - the header, status and counts, `**Drafts styled:**`, traces, scenario links, and fold and replacement records
+
+A **partial update** is anything less, and is never called a regeneration: changing a few cases' numbers or words, adding or rewriting walks, renaming headings, re-applying draft or actual formatting, keeping old case content and adding traces, resolving a conflict or merge without re-analysing the cases, writing one walk per case, or leaving a placeholder where the tester needs a real step.
 - **A delta that moves the ground under an `actual` case** - resolved in the same change: what it verifies changed → `rev` bumped, back to `draft`; behaviour removed → `rev` bumped, `deprecated`; untouched → left `actual`, and the run says so
 
 ## Writing the Case
