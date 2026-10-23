@@ -633,6 +633,7 @@ export {
 export {
   PromoTicket,
   type PromoTicketProps,
+  type PromoTicketQr,
 } from "./blocks/store-cart/promo-ticket";
 export type {
   CartDrawerCopy,

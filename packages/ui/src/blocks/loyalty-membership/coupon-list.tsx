@@ -1,12 +1,45 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
+"use client";
+
 import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
-import { Text } from "@grade10/design-system/components/display/text";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@grade10/design-system/components/overlays/dialog";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+} from "@grade10/design-system/components/overlays/drawer";
+import { useEffect, useId, useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
-import type { CouponItem } from "./types";
+import { PromoQrCard } from "../store-cart/promo-qr-card";
+import { PromoTicket } from "../store-cart/promo-ticket";
+import type { CouponItem, CouponStatus } from "./types";
+
+const SM_UP_MQ = "(min-width: 640px)";
+
+/** Reads the 640px line — the sheet below it, the dialog from it up. */
+function useSmUp() {
+  const [smUp, setSmUp] = useState(
+    () => typeof window === "undefined" || window.matchMedia(SM_UP_MQ).matches,
+  );
+  useEffect(() => {
+    const media = window.matchMedia(SM_UP_MQ);
+    const onChange = () => setSmUp(media.matches);
+    onChange();
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+  return smUp;
+}
 
 /** The words the list says, whichever coupons are in it. */
 type CouponListCopy = {
@@ -25,77 +58,154 @@ type CouponListCopy = {
 type CouponListProps = {
   copy: CouponListCopy;
   state: AsyncState<readonly CouponItem[]>;
-  /** Withholds every code's text — for a surface that must not show it. */
+  /** Withholds every code — the stub reads the masked word and no coupon
+   * offers its scan. */
   masked?: boolean;
   className?: string;
 };
 
-function CouponRow({
+const STATUS_LABEL: Record<
+  Exclude<CouponStatus, "open">,
+  keyof Pick<CouponListCopy, "spent" | "void" | "expired">
+> = {
+  spent: "spent",
+  void: "void",
+  expired: "expired",
+};
+
+/** The coupon whose scan card is open, and the region id its ticket's Use
+ * now control points at. Stays set through the surface's exit transition. */
+type ScanTarget = { item: CouponItem; regionId: string };
+
+function CouponTicket({
   copy,
   item,
   masked,
+  scanOpen,
+  onScanToggle,
 }: {
   copy: CouponListCopy;
   item: CouponItem;
   masked: boolean;
+  scanOpen: boolean;
+  onScanToggle: (target: ScanTarget | null) => void;
 }) {
+  const regionId = useId();
+  const open = item.status === "open";
+  /* A masked surface hands nothing over — no code text, and no scan either,
+   * since the scan card is the code. */
+  const qrCode = open && !masked ? item.qrCode : undefined;
+  const statusLabel =
+    item.status === "open" ? undefined : copy[STATUS_LABEL[item.status]];
+
   return (
-    <VStack
-      className="w-full"
+    <ListItem
+      className="p-0"
       data-slot="coupon-list-item"
       data-status={item.status}
-      gap="xs"
+      divider={false}
     >
-      <HStack align="baseline" gap="md" justify="space-between">
-        <HStack align="baseline" gap="sm">
-          <Text weight="medium">{item.amount}</Text>
-          {item.status === "spent" ? (
-            <Badge size="sm" variant="outline">
-              {copy.spent}
-            </Badge>
-          ) : null}
-          {item.status === "void" ? (
-            <Badge size="sm" variant="error">
-              {copy.void}
-            </Badge>
-          ) : null}
-          {item.status === "expired" ? (
-            <Badge size="sm" variant="outline">
-              {copy.expired}
-            </Badge>
-          ) : null}
-        </HStack>
-        {item.code ? (
-          <Text
-            className="shrink-0 font-mono"
-            data-slot="coupon-list-code"
-            size="sm"
-          >
-            {masked ? copy.maskedCode : item.code}
-          </Text>
-        ) : null}
-      </HStack>
-      {item.description ? (
-        <Text size="sm" tone="secondary">
-          {item.description}
-        </Text>
-      ) : null}
-      <HStack align="center" gap="md" justify="space-between">
-        <Text size="sm" tone="secondary">
+      <PromoTicket
+        action={open ? item.action : undefined}
+        code={{
+          applicable: open,
+          id: item.id,
+          title: item.description ?? item.amount,
+          detailLabel: item.expiry,
+          inapplicableReason: statusLabel,
+          label: masked ? copy.maskedCode : (item.code ?? item.amount),
+        }}
+        muted={!open}
+        onQrToggle={(next) => onScanToggle(next ? { item, regionId } : null)}
+        qrCode={qrCode}
+        qrOpen={scanOpen}
+        qrRegionId={regionId}
+      />
+    </ListItem>
+  );
+}
+
+/** The scan card's own surface: a bottom sheet under 640px, a dialog from
+ * it up — the member holds it out where the till reads it. */
+function CouponScanSurface({
+  target,
+  open,
+  onOpenChange,
+  smUp,
+}: {
+  target: ScanTarget;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  smUp: boolean;
+}) {
+  const { item } = target;
+  const qrCode = item.qrCode;
+  if (!qrCode) return null;
+  const title = item.description ?? item.amount;
+
+  const body = (
+    <>
+      {smUp ? (
+        <DialogTitle className="text-xl leading-7 font-semibold">
+          {title}
+        </DialogTitle>
+      ) : (
+        <DrawerTitle className="text-xl leading-7 font-semibold">
+          {title}
+        </DrawerTitle>
+      )}
+      {smUp ? (
+        <DialogDescription className="text-sm leading-5 text-secondary-foreground">
           {item.expiry}
-        </Text>
-        {item.action}
-      </HStack>
-    </VStack>
+        </DialogDescription>
+      ) : (
+        <DrawerDescription className="text-sm leading-5">
+          {item.expiry}
+        </DrawerDescription>
+      )}
+      <PromoQrCard
+        caption={qrCode.caption}
+        className="w-full"
+        id={target.regionId}
+        open={open}
+        qrCode={qrCode}
+      />
+    </>
+  );
+
+  return smUp ? (
+    <Dialog onOpenChange={onOpenChange} open={open}>
+      <DialogContent className="max-w-(--container-md) gap-4" showCloseButton>
+        <DialogBody className="gap-4">{body}</DialogBody>
+      </DialogContent>
+    </Dialog>
+  ) : (
+    <Drawer
+      onOpenChange={onOpenChange}
+      open={open}
+      showSwipeHandle
+      swipeDirection="down"
+    >
+      <DrawerContent
+        className="bg-popover backdrop-blur-none [--drawer-bleed-background:var(--popover)]"
+        data-sheet="coupon-scan"
+      >
+        <DrawerBody className="gap-4">{body}</DrawerBody>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
 /**
- * The coupons a member holds. Codes render as supplied; `masked` swaps every
- * one for the masked word, for a surface that may state a coupon exists but
- * must not hand its code over; a coupon spent from the wallet by id carries
- * none. Spent, void and expired stay listed and say so — the consumer decides
- * how long history stays.
+ * The coupons a member holds, one ticket apiece. An open coupon carries a
+ * code only where the consumer passes one — a reward coupon spends from the
+ * wallet by id and carries none, and its stub reads what the coupon takes
+ * off instead. `masked` swaps every code for the masked word and drops every
+ * scan, for a surface that may state a coupon exists but must not hand it
+ * over. Where an open coupon carries `qrCode`, its Use now opens the scan
+ * card on a sheet or dialog; a consumer `action` rides instead where one is
+ * given. Spent, void and expired stay listed and say so — the consumer
+ * decides how long history stays.
  */
 function CouponList({
   copy,
@@ -103,6 +213,10 @@ function CouponList({
   masked = false,
   className,
 }: CouponListProps) {
+  const smUp = useSmUp();
+  const [scan, setScan] = useState<ScanTarget | null>(null);
+  const [scanOpen, setScanOpen] = useState(false);
+
   return (
     <VStack className={className} data-slot="coupon-list" gap="sm">
       {state.status === "loading" ? (
@@ -119,17 +233,31 @@ function CouponList({
         />
       ) : null}
       {state.status === "ready" ? (
-        <List aria-label={copy.label}>
-          {state.data.map((item, index) => (
-            <ListItem
-              className="px-0 py-3"
-              divider={index < state.data.length - 1}
+        <List aria-label={copy.label} className="gap-2">
+          {state.data.map((item) => (
+            <CouponTicket
+              copy={copy}
+              item={item}
               key={item.id}
-            >
-              <CouponRow copy={copy} item={item} masked={masked} />
-            </ListItem>
+              masked={masked}
+              onScanToggle={(target) => {
+                setScan(target ?? scan);
+                setScanOpen(target != null);
+              }}
+              scanOpen={scanOpen && scan?.item.id === item.id}
+            />
           ))}
         </List>
+      ) : null}
+      {scan ? (
+        <CouponScanSurface
+          onOpenChange={(next) => {
+            if (!next) setScanOpen(false);
+          }}
+          open={scanOpen}
+          smUp={smUp}
+          target={scan}
+        />
       ) : null}
     </VStack>
   );

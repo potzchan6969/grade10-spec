@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { PromoTicketQr } from "../store-cart/promo-ticket";
 
 /** What a redemption settles as: a physical item, or a money-off coupon. */
 type RewardKind = "item" | "coupon";
@@ -78,6 +79,10 @@ type CouponItem = {
   status: CouponStatus;
   /** Consumer-owned control for this coupon — apply, copy, whatever the surface offers. */
   action?: ReactNode;
+  /** The staff-facing scan an open coupon offers — the token the till reads,
+   * minted when the member chooses the coupon. Draws a Use now control on the
+   * ticket that opens the scan card on its own surface. */
+  qrCode?: PromoTicketQr;
 };
 
 /** One ledger entry, already translated into member-readable terms. */

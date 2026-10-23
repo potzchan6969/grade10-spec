@@ -288,6 +288,14 @@ const SHORT_BALANCE_COPY = {
     `You need ${missing.toLocaleString("en-HK")} more pts to redeem this reward. No points were taken.`,
 };
 
+/** The staff-facing scan every open coupon offers — the token the till
+ * reads, minted when the member chooses the coupon. */
+const COUPON_SCAN = {
+  altText: "Show this code to store staff",
+  toggleLabel: "Use now",
+  caption: "Staff scan this at the counter",
+};
+
 const COUPONS: CouponItem[] = [
   {
     id: "coupon-open",
@@ -296,6 +304,7 @@ const COUPONS: CouponItem[] = [
     description: "HK$50 off any order",
     expiry: `Valid until ${COUPON_VALID}`,
     status: "open",
+    qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-open:7Q2M" },
   },
   {
     id: "coupon-spent",
@@ -330,6 +339,7 @@ const ISSUED_COUPON: CouponItem = {
   description: "HK$50 off any order",
   expiry: `Valid until ${COUPON_VALID}`,
   status: "open",
+  qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-issued:4HVD" },
 };
 
 const ACTIVITY: ActivityEntry[] = [

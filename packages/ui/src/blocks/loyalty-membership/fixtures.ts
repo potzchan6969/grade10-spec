@@ -68,6 +68,12 @@ const COUPONS: CouponItem[] = [
     description: "HK$50 off any order",
     expiry: `Valid until ${formatDay(Date.UTC(2026, 11, 31))}`,
     status: "open",
+    qrCode: {
+      value: "g10:redeem:coupon-open:7Q2M",
+      altText: "Show this code to store staff",
+      toggleLabel: "Use now",
+      caption: "Staff scan this at the counter",
+    },
   },
   {
     id: "coupon-spent",
