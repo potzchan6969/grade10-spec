@@ -3,8 +3,7 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { QrCode, Tag } from "@phosphor-icons/react";
-import { QRCodeSVG } from "qrcode.react";
-import { type ReactNode, useId, useState } from "react";
+import { type ReactNode, useState } from "react";
 import type { HeldPromoCode } from "./types";
 
 /** Half-circle punch at the bottom edge (left + right). Layers add, not intersect. */
@@ -38,7 +37,8 @@ const TICKET_BOTTOM_MASK = {
 const TICKET_SHADOW =
   "[filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.04))_drop-shadow(0_2px_6px_rgba(0,0,0,0.05))]";
 
-/** The scan code a member holds out to store staff, folded away until asked. */
+/** The scan code a member holds out to store staff, drawn by the consumer
+ * wherever fits — the ticket only carries the control that opens it. */
 type PromoTicketQr = {
   /** The token, encoded verbatim. */
   value: string;
@@ -47,6 +47,9 @@ type PromoTicketQr = {
   /** The reveal control's visible label — "Use now". Required — no
    * built-in English. */
   toggleLabel: string;
+  /** The line under the code where a scan card draws it — the card's own,
+   * never the ticket's. */
+  caption?: string;
 };
 
 type PromoTicketProps = {
@@ -56,12 +59,19 @@ type PromoTicketProps = {
   /** Softens inapplicable tickets; no product action. */
   muted?: boolean;
   /** Set once the coupon is spent: the ticket mutes, names it used, and
-   * drops the scan QR — there is nothing left to scan. */
+   * drops the scan control — there is nothing left to scan. */
   usedLabel?: string;
-  /** The staff-facing QR — a QR button beside the title folds it into the
-   * stub, the half of the ticket the member holds out at the till.
-   * Online-cart tickets take none. */
+  /** The staff-facing scan — draws a Use now control in the stub's action
+   * slot. The QR itself is the consumer's to place: `qrOpen` /
+   * `onQrToggle` / `qrRegionId` wire the control to it. Online-cart
+   * tickets take none. */
   qrCode?: PromoTicketQr;
+  /** Whether the consumer's scan region is open — `aria-expanded`. */
+  qrOpen?: boolean;
+  /** Reports presses on the scan control. */
+  onQrToggle?: (open: boolean) => void;
+  /** The consumer-owned scan region's id — `aria-controls`. */
+  qrRegionId?: string;
   /** The stub row's leading mark — a tag for a held code; a collection
    * ticket passes its own (a storefront) instead. */
   labelIcon?: ReactNode;
@@ -82,6 +92,9 @@ function PromoTicket({
   muted = false,
   usedLabel,
   qrCode,
+  qrOpen,
+  onQrToggle,
+  qrRegionId,
   labelIcon,
   action,
   className,
@@ -92,8 +105,8 @@ function PromoTicket({
     (!used && code.detailLabel != null) ||
     Boolean(code.inapplicableReason) ||
     used;
-  const qrId = useId();
-  const [qrOpen, setQrOpen] = useState(false);
+  const [qrOpenInner, setQrOpenInner] = useState(false);
+  const open = qrOpen ?? qrOpenInner;
 
   return (
     // biome-ignore lint/a11y/useSemanticElements: a ticket groups a name, its detail and at most one action, not form fields.
@@ -116,46 +129,30 @@ function PromoTicket({
         )}
         style={TICKET_TOP_MASK}
       >
-        <HStack gap="sm" vAlign="center" className="w-full">
-          <VStack gap="none" className="min-w-0 flex-1">
-            <span className="text-sm font-medium leading-5 text-foreground">
-              {code.title}
-            </span>
-            {hasDetail ? (
-              <VStack gap="none">
-                {!used && code.detailLabel != null ? (
-                  <span className="text-xs font-normal leading-4 text-secondary-foreground">
-                    {code.detailLabel}
-                  </span>
-                ) : null}
-                {code.inapplicableReason ? (
-                  <span className="text-xs font-normal leading-4 text-secondary-foreground">
-                    {code.inapplicableReason}
-                  </span>
-                ) : null}
-                {used ? (
-                  <span className="text-xs font-normal leading-4 text-secondary-foreground">
-                    {usedLabel}
-                  </span>
-                ) : null}
-              </VStack>
-            ) : null}
-          </VStack>
-          {qrCode && !used ? (
-            <Button
-              aria-controls={qrId}
-              aria-expanded={qrOpen}
-              className="-my-1 shrink-0"
-              onClick={() => setQrOpen((open) => !open)}
-              size="sm"
-              type="button"
-              variant="secondary"
-            >
-              <QrCode aria-hidden />
-              {qrCode.toggleLabel}
-            </Button>
+        <VStack gap="none" className="min-w-0">
+          <span className="text-sm font-medium leading-5 text-foreground">
+            {code.title}
+          </span>
+          {hasDetail ? (
+            <VStack gap="none">
+              {!used && code.detailLabel != null ? (
+                <span className="text-xs font-normal leading-4 text-secondary-foreground">
+                  {code.detailLabel}
+                </span>
+              ) : null}
+              {code.inapplicableReason ? (
+                <span className="text-xs font-normal leading-4 text-secondary-foreground">
+                  {code.inapplicableReason}
+                </span>
+              ) : null}
+              {used ? (
+                <span className="text-xs font-normal leading-4 text-secondary-foreground">
+                  {usedLabel}
+                </span>
+              ) : null}
+            </VStack>
           ) : null}
-        </HStack>
+        </VStack>
       </div>
 
       <div className="relative h-0" aria-hidden>
@@ -169,33 +166,6 @@ function PromoTicket({
         )}
         style={TICKET_BOTTOM_MASK}
       >
-        {qrCode && !used ? (
-          <div
-            aria-hidden={!qrOpen}
-            className={cn(
-              "grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none",
-              qrOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
-            )}
-            id={qrId}
-          >
-            <div className={cn("overflow-hidden", !qrOpen && "invisible")}>
-              <span
-                className="mx-auto my-3 block w-fit rounded-(--radius-md) bg-white p-2"
-                data-slot="promo-ticket-qr"
-              >
-                <QRCodeSVG
-                  bgColor="#ffffff"
-                  fgColor="#000000"
-                  level="M"
-                  marginSize={2}
-                  size={160}
-                  title={qrCode.altText}
-                  value={qrCode.value}
-                />
-              </span>
-            </div>
-          </div>
-        ) : null}
         <HStack gap="sm" vAlign="center" className="w-full">
           <HStack gap="xs" vAlign="center" className="min-w-0 flex-1">
             <span aria-hidden className="shrink-0 text-secondary-foreground">
@@ -205,7 +175,25 @@ function PromoTicket({
               {code.label}
             </span>
           </HStack>
-          {used ? null : action}
+          {used
+            ? null
+            : (action ??
+              (qrCode ? (
+                <Button
+                  aria-controls={qrRegionId}
+                  aria-expanded={open}
+                  className="-my-1 shrink-0"
+                  onClick={() =>
+                    onQrToggle ? onQrToggle(!open) : setQrOpenInner(!open)
+                  }
+                  size="sm"
+                  type="button"
+                  variant="secondary"
+                >
+                  <QrCode aria-hidden />
+                  {qrCode.toggleLabel}
+                </Button>
+              ) : null))}
         </HStack>
       </div>
     </div>

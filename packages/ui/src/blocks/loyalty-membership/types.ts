@@ -50,7 +50,13 @@ type RewardRedemption = {
   note?: string;
   /** The staff-facing QR the redeemed ticket draws — the scan token the till
    * reads. */
-  qrCode?: { value: string; altText: string; toggleLabel: string };
+  qrCode?: {
+    value: string;
+    altText: string;
+    toggleLabel: string;
+    /** The line under the code on the scan card. */
+    caption?: string;
+  };
   /** Set when the issued coupon is already spent — the ticket mutes, says
    * so, and drops its scan QR. */
   usedLabel?: string;

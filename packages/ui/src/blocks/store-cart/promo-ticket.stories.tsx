@@ -1,8 +1,10 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Storefront } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { useId, useState } from "react";
+import { expect, fn, waitFor, within } from "storybook/test";
 import { SAMPLE_HELD_PROMO_CODES } from "./fixtures";
+import { PromoQrCard } from "./promo-qr-card";
 import { PromoTicket } from "./promo-ticket";
 
 const applicable = SAMPLE_HELD_PROMO_CODES.find((c) => c.applicable)!;
@@ -77,9 +79,35 @@ export const NotApplicable: Story = {
   },
 };
 
-/** Till-facing: a QR button beside the title unfolds the member's scan
- * code into the stub; the readable code stays shown either way. No Apply —
- * that belongs to the online cart. */
+/** Wires the ticket's Use now control to the scan card a surface lays out
+ * for it — the QR never lives inside the ticket, so a coupons grid picks
+ * where it opens. */
+function TicketWithScanCard(args: Parameters<typeof PromoTicket>[0]) {
+  const regionId = useId();
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex w-full flex-col gap-2">
+      <PromoTicket
+        {...args}
+        onQrToggle={setOpen}
+        qrOpen={open}
+        qrRegionId={regionId}
+      />
+      {args.qrCode ? (
+        <PromoQrCard
+          caption={args.qrCode.caption}
+          id={regionId}
+          open={open}
+          qrCode={args.qrCode}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+/** Till-facing: a Use now control in the stub unfolds the member's scan
+ * card below the ticket; the readable code stays shown either way. No
+ * Apply — that belongs to the online cart. */
 export const WithQrCode: Story = {
   args: {
     code: { ...applicable, label: "G10-50-7Q2M" },
@@ -87,21 +115,23 @@ export const WithQrCode: Story = {
       value: "g10:redeem:voucher-50:7Q2M",
       altText: "Show this code to store staff",
       toggleLabel: "Use now",
+      caption: "Staff scan this at the counter",
     },
   },
+  render: (args) => <TicketWithScanCard {...args} />,
   play: async ({ canvasElement, userEvent }) => {
     const canvas = within(canvasElement);
-    // The readable code is always shown; the QR starts folded away.
+    // The readable code is always shown; the scan card starts folded away.
     expect(canvas.getByText("G10-50-7Q2M")).toBeInTheDocument();
     const toggle = canvas.getByRole("button", { name: "Use now" });
     expect(toggle).toHaveAttribute("aria-expanded", "false");
-    const qr = canvasElement.querySelector('[data-slot="promo-ticket-qr"]');
+    const qr = canvasElement.querySelector('[data-slot="promo-qr-card"]');
     expect(qr).not.toBeVisible();
     await userEvent.click(toggle);
     expect(toggle).toHaveAttribute("aria-expanded", "true");
-    expect(qr).toBeVisible();
+    await waitFor(() => expect(qr).toBeVisible());
     await userEvent.click(toggle);
-    expect(qr).not.toBeVisible();
+    await waitFor(() => expect(qr).not.toBeVisible());
     // No Apply on a store-facing ticket.
     expect(
       canvas.queryByRole("button", { name: "Apply" }),
@@ -110,7 +140,8 @@ export const WithQrCode: Story = {
 };
 
 /** A redeemed good's collection ticket — no discount code; the stub names
- * the collection under a storefront mark, the QR waits behind Use now. */
+ * the collection under a storefront mark, and Use now opens its scan
+ * card. */
 export const CollectionTicket: Story = {
   args: {
     code: {
@@ -125,25 +156,26 @@ export const CollectionTicket: Story = {
       value: "g10:collect:reward-slab-sleeves:7Q2M",
       altText: "Show this code to store staff",
       toggleLabel: "Use now",
+      caption: "Staff scan this at the counter",
     },
   },
+  render: (args) => <TicketWithScanCard {...args} />,
   play: async ({ canvasElement, userEvent }) => {
     const canvas = within(canvasElement);
-    // Collection line, never a discount code; QR folded until asked.
+    // Collection line, never a discount code; scan card folded until asked.
     expect(
       canvas.getByText("Collect at any Grade10 store"),
     ).toBeInTheDocument();
     const toggle = canvas.getByRole("button", { name: "Use now" });
     expect(toggle).toHaveAttribute("aria-expanded", "false");
     await userEvent.click(toggle);
-    expect(
-      canvasElement.querySelector('[data-slot="promo-ticket-qr"]'),
-    ).toBeVisible();
+    const qr = canvasElement.querySelector('[data-slot="promo-qr-card"]');
+    await waitFor(() => expect(qr).toBeVisible());
   },
 };
 
-/** Spent: the ticket mutes, names it used, and drops both the QR and any
- * action — there is nothing left to scan or apply. */
+/** Spent: the ticket mutes, names it used, and drops both the scan
+ * control and any action — there is nothing left to scan or apply. */
 export const UsedTicket: Story = {
   args: {
     code: { ...applicable, label: "G10-50-7Q2M" },
@@ -169,7 +201,7 @@ export const UsedTicket: Story = {
     expect(canvas.getByText("G10-50-7Q2M")).toBeInTheDocument();
     expect(canvas.queryByRole("button")).not.toBeInTheDocument();
     expect(
-      canvasElement.querySelector('[data-slot="promo-ticket-qr"]'),
+      canvasElement.querySelector('[data-slot="promo-qr-card"]'),
     ).not.toBeInTheDocument();
   },
 };

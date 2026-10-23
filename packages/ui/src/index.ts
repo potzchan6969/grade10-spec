@@ -627,6 +627,10 @@ export {
   type CartPromoSheetProps,
 } from "./blocks/store-cart/cart-drawer";
 export {
+  PromoQrCard,
+  type PromoQrCardProps,
+} from "./blocks/store-cart/promo-qr-card";
+export {
   PromoTicket,
   type PromoTicketProps,
 } from "./blocks/store-cart/promo-ticket";

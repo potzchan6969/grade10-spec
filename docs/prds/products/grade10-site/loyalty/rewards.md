@@ -85,11 +85,13 @@ Stock reads as a yes or no, never a count.
   good or discount alike — and the scan QR is generated from that code.
   A discount coupon's ticket carries the code, a good's names the
   collection in its place. A ticket
-  spendable or collectable at the till folds the member's scan QR behind
-  a Use now control on the surfaces a member can open there — the rewards
+  spendable or collectable at the till carries a Use now control, and the
+  member's scan QR opens as its own card apart from the ticket — a
+  coupons grid lays the scan out where it fits without reshaping the
+  ticket — on the surfaces a member can open there, the rewards
   page, the coupons page; the cart's select sheet carries none, and an
   online-only ticket carries none. A spent coupon's ticket mutes, names
-  it used, and drops the QR, and a spent coupon leaves the coupons
+  it used, and drops the scan control, and a spent coupon leaves the coupons
   section
 - 🚧 **The scan QR is the code, drawn** - generated from the
   redemption's member-readable code, so it is fixed for that redemption
