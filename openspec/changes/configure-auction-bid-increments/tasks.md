@@ -37,7 +37,7 @@ Needs groups 2 and 3 landed; verified against contracts and fixtures, not a runn
 - [ ] 4.2 Confirm the quick-bid chips (chip 1x is the opening price itself, the server's `minimumNextAmount`, so a stored price with cents shows the next whole dollar there), the view's `incrementMinor`, the `NextBids` admin preview, the `ListingEditor` first-bid preview and `FakeAuctionService` follow the configuration and `openingPrice` with no local copy, and change only what a failing test shows; the editor's starting-price refusal comes from `priceError` in `listingForm.ts`, changed in 3.4 (`g10.auction-bid-increments.SC-xjw`, `g10.auction-bid-increments.SC-kc7`)
 - [ ] 4.3 Verify: the frontend, admin-frontend and demo package tests and typechecks
 
-## 5. End-to-end cases (grade10)
+## 5. End-to-end cases (grade10) (owner: @htonyl)
 
 Needs groups 2 and 3 landed.
 
