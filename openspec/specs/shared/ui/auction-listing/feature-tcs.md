@@ -1,8 +1,8 @@
 # shared/ui/auction-listing Test Cases
 
 **Status:** pending-review · 0/11
-**Drafts styled:** 2026-10-13, tcs-rules r5
-**Out of suite:** none
+**Drafts styled:** 2026-10-24, tcs-rules r7
+**Regenerated:** 2026-10-24, tcs-rules r7
 
 **Out of suite (unit):** shared-ui-auction-listing-SC-03, shared-ui-auction-listing-SC-04, shared-ui-auction-listing-SC-08, shared-ui-auction-listing-SC-14, shared-ui-auction-listing-SC-57
 
@@ -10,7 +10,8 @@
 
 ## Background
 
-* The catalogue tile `AuctionLotCard` is a preview part, not a `@grade10/ui` export: it renders under Auction / Display / Screens / Auction List in the preview workbench, and its `locale` and `timeZone` props are settable in the Controls panel.
+* The blocks are read where Grade10 composes them: a listing's page on the Grade10 site of the environment under test, its bid panel showing Set maximum to a collector who holds no maximum and Raise to one who leads.
+* A listing near the ceiling is set up in the admin console with a starting price at the stated amount; every amount is in whole USD. The custom maximum ceiling is USD10,000,000, and the increment from USD1,500,000 is USD100,000.
 
 ## g10.shared-auction-listing.US1: The listing surface's rendering contract
 
@@ -21,18 +22,18 @@
 **so that** the collector reads the limit instead of a broken raise form.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=3 covers=g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-qdv -->
-### g10.shared-auction-listing.US1-TC22: Oversized replacement of a draft becomes the ceiling
+### g10.shared-auction-listing.US1-TC22: An oversized replacement of the draft becomes the ceiling
 
-Runs once per row of **Test data**, in both set and raise modes.
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
@@ -41,359 +42,30 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
-* The custom maximum draft is `500`.
+* customer(signed in, card linked) is on an open listing's page in `<mode>`, with 500 typed in the custom maximum.
 
 **Test data:**
 
-| `<currency>` | `<replacement>` | `<entry>` | `<ceiling>` |
-| --- | --- | --- | --- |
-| USD | 10000001 | Paste | 10000000 |
-| USD | 10000001 | Selected multi-character insertText | 10000000 |
-| USD | 10000001 | Fill with multi-character insertText | 10000000 |
+| `<mode>` | `<entry>` |
+| --- | --- |
+| Set maximum | Paste 10000001 over the selected draft |
+| Set maximum | Drop the dragged text 10000001 onto the selected draft |
+| Raise | Paste 10000001 over the selected draft |
 
 **Steps:**
 
-1. Select the existing custom maximum draft.
-2. Replace it using `<entry>` with replacement `<replacement>`.
-3. Read the displayed draft and reviewed amount.
+1. Select the draft and replace it by `<entry>`.
+2. Read the draft and the amount the panel reviews.
 
 **Expected Results:**
 
-* The displayed draft equals `<ceiling>`.
-* The reviewed amount agrees with the corrected draft.
-* No ceiling message appears.
+* The draft reads 10000000, the ceiling, and the reviewed amount agrees.
+* No message about the ceiling shows.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-bfp rev=3 covers=g10.shared-auction-listing.SC-y2e -->
-### g10.shared-auction-listing.US1-TC23: Oversized fractional paste becomes the ceiling after cleaning
-
-Runs once per row of **Test data**, in both set and raise modes.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
-* The custom maximum draft is `500`.
-
-**Test data:**
-
-| `<currency>` | `<paste>` | `<ceiling>` |
-| --- | --- | --- |
-| USD | 10000001.99 | 10000000 |
-| USD | 999999999999999999999999999999.99 | 10000000 |
-
-**Steps:**
-
-1. Select the existing custom maximum draft.
-2. Paste `<paste>` into the custom maximum field.
-
-**Expected Results:**
-
-* The fractional suffix is discarded without rounding.
-* The displayed draft equals `<ceiling>`.
-* The reviewed amount agrees with the corrected draft.
-* No ceiling message appears.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=3 covers=g10.shared-auction-listing.SC-xxl -->
-### g10.shared-auction-listing.US1-TC24: Raise field retains typed draft and clamps replacement
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` in `<currency>`, in raise mode.
-* The collector leads with a committed maximum below `500`.
-* The raise custom maximum draft equals `<ceiling>`.
-
-**Test data:**
-
-| `<currency>` | `<ceiling>` | `<replacement>` |
-| --- | --- | --- |
-| USD | 10000000 | 10000001 |
-
-**Steps:**
-
-1. Append `1` to the raise custom maximum field.
-2. Read the displayed draft.
-3. Select the draft and paste `<replacement>`.
-4. Read the displayed draft.
-5. Set the draft to `500`, put the caret at its end.
-6. Paste `<replacement>` without selecting the draft.
-7. Read the displayed draft and reviewed amount.
-8. Repeat steps 5 to 7 in set mode.
-
-**Expected Results:**
-
-* Step 2: the displayed draft remains `<ceiling>`.
-* Step 4: the displayed draft equals `<ceiling>`.
-* Steps 7 and 8: paste clamps to `<ceiling>`.
-* The reviewed amount agrees with every corrected draft.
-* No ceiling message appears in either mode.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-ftm rev=3 covers=g10.shared-auction-listing.SC-z2x -->
-### g10.shared-auction-listing.US1-TC25: Ceiling correction shows no maximum or invalid amount message
-
-Runs once in set mode and once in raise mode.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
-* The custom maximum draft is `60500`.
-* The listing's next minimum is at or below `60500`.
-* No message appears beside the custom maximum field.
-
-**Test data:**
-
-| `<currency>` | `<paste>` | `<ceiling>` |
-| --- | --- | --- |
-| USD | 10000001 | 10000000 |
-
-**Steps:**
-
-1. Select the existing draft and paste `<paste>`.
-2. Read the custom maximum field and surrounding messages.
-
-**Expected Results:**
-
-* The displayed draft equals `<ceiling>`.
-* No maximum-bid, invalid-amount or below-floor message appears.
-* The reviewed amount agrees with the corrected draft.
-* No ceiling message appears.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-g02 rev=3 covers=g10.shared-auction-listing.SC-6n7 -->
-### g10.shared-auction-listing.US1-TC26: Fractional paste at the currency ceiling is accepted
-
-Runs once in set mode and once in raise mode.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** release
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
-* The custom maximum draft is `500`.
-
-**Test data:**
-
-| `<currency>` | `<paste>` | `<ceiling>` |
-| --- | --- | --- |
-| USD | 10000000.99 | 10000000 |
-
-**Steps:**
-
-1. Select the existing draft and paste `<paste>`.
-2. Read the displayed draft and reviewed amount.
-3. Commit the maximum and read the callback amount.
-
-**Expected Results:**
-
-* The fractional suffix is discarded without rounding.
-* The displayed draft equals `<ceiling>`.
-* The reviewed amount agrees with the displayed draft.
-* The callback receives the ceiling in integer minor units.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-dej rev=2 covers=g10.shared-auction-listing.SC-huw -->
-### g10.shared-auction-listing.US1-TC59: A quick bid above the ceiling is offered at the ceiling
+### g10.shared-auction-listing.US1-TC23: An oversized pasted amount with cents is cleaned, then capped
 
 Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** release
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Quick bids
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` in `<currency>`.
-* The collector leads with `<committed maximum>`.
-* The configured increment `<increment>` produces the corrected chip amounts `<chips offered>`; the stepped bids before clamping hold at least one amount above `<ceiling>` and at least one below it.
-
-**Test data:**
-
-| `<currency>` | `<ceiling>` | `<committed maximum>` | `<increment>` | `<chips offered>` | Fixture notes |
-| --- | --- | --- | --- | --- | --- |
-| USD | 10000000 | 9999800 | 100 | 9999900, 10000000 | All amounts are whole major units; the 2x and 4x amounts both land on the ceiling and merge to one chip |
-| USD | 10000000 | 9999700 | 100 | 9999800, 9999900, 10000000 | All amounts are whole major units |
-
-| Field | Value |
-| --- | --- |
-| ceiling minor units | 1000000000 |
-
-**Steps:**
-
-1. Read each quick-bid chip's caption and amount.
-2. Select the chip whose stepped amount exceeds the ceiling.
-3. Commit the maximum and read the callback amount.
-
-**Expected Results:**
-
-* Every chip amount is at or below `<ceiling>`.
-* A chip whose stepped amount exceeds the ceiling shows `<ceiling>` and is captioned as the auction's limit, not the amount's delta.
-* A chip at or below the ceiling keeps its stepped amount and caption.
-* Committing a clamped chip passes `<ceiling minor units>`, equal to `<ceiling>` × 100 in USD minor units.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-w4r rev=2 covers=g10.shared-auction-listing.SC-atq -->
-### g10.shared-auction-listing.US1-TC60: Chips clamped onto the same amount merge to one
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** release
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Quick bids
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` in USD.
-* The collector leads with a committed maximum of `9999900`, and the increment is `100`, so all three stepped amounts land at or above the `10000000` ceiling.
-
-**Steps:**
-
-1. Read the quick-bid chip row.
-2. Select the chip and commit.
-
-**Expected Results:**
-
-* The row shows one chip at `10000000`, captioned as the limit; no duplicate amount appears twice.
-* The callback receives `1000000000` minor units.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-9rx rev=2 covers=g10.shared-auction-listing.SC-v6g,g10.shared-auction-listing.SC-1mi -->
-### g10.shared-auction-listing.US1-TC61: A maximum at the ceiling collapses the entry group
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, release
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** `Raise floor`, `Ceiling reached`
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` in USD with the `10000000` ceiling.
-* The whole-major-unit fixture has the collector leading with maximum `<committed maximum>` and current bid `<current bid>`.
-
-**Test data:**
-
-| `<committed maximum>` | `<current bid>` | Floor driving the collapse |
-| --- | --- | --- |
-| 10000000 | 1200 | maximum plus the minimum raise |
-| 9999950 | 9999950 | minimum next bid 10000050, already above the ceiling |
-
-**Steps:**
-
-1. Read the raise group on the bid panel.
-2. Look for quick-bid chips, the custom maximum field and the bid action.
-3. Read the status row and the copy under it.
-
-**Expected Results:**
-
-* No quick-bid chip, no custom maximum field and no bid action render.
-* A status row leads with Max: `<committed maximum>`.
-* The row carries the private-maximum explanation behind its Info tooltip and one line that the auction accepts no higher amount; the raise mechanism line does not appear.
-* The buyer-fee line still renders.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-5dh rev=2 covers=g10.shared-auction-listing.SC-cfl -->
-### g10.shared-auction-listing.US1-TC62: A listing priced past the ceiling offers no entry
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** release
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Ceiling reached
-
-**Pre-conditions:**
-
-* Storybook renders `ListingAuctionBidCard` in USD with the `10000000` ceiling.
-* The listing's minimum next bid is above the ceiling.
-* The collector holds no maximum on the listing.
-
-**Steps:**
-
-1. Read the bid panel's entry group.
-
-**Expected Results:**
-
-* No quick-bid chip, no custom maximum field and no bid action render.
-* A status row names the ceiling amount and a line that bidding has reached the highest amount the auction accepts.
-* The buyer-fee line still renders.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-swf rev=2 covers=g10.shared-auction-listing.SC-rnz -->
-### g10.shared-auction-listing.US1-TC63: The collapse outranks the card setup lock
 
 **Classification:**
 
@@ -401,37 +73,335 @@ Runs once per row of **Test data**.
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** release
-* **Automation status:** manual
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
 * **Testability:** automation, manual
-* **Trace:** `Ceiling reached`, `Bid enrollment`
+* **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` under the needs-card enrollment signal.
-* The collector leads with a committed maximum at the USD ceiling.
+* customer(signed in, card linked) is on an open listing's page with Set maximum, 500 typed in the custom maximum.
+
+**Test data:**
+
+| `<paste>` |
+| --- |
+| 10000001.99 |
+| 999999999999999999999999999999.99 |
 
 **Steps:**
 
-1. Read the bid panel's entry group.
+1. Select the draft and paste `<paste>`.
+2. Read the draft and the reviewed amount.
 
 **Expected Results:**
 
-* The collapsed status row renders; the disabled chips, custom field and link-card action do not.
+* The cents are dropped without rounding, and the draft reads 10000000.
+* The reviewed amount agrees, and no message about the ceiling shows.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-oem rev=1 covers=g10.shared-auction-listing.SC-2wv -->
-### g10.shared-auction-listing.US1-TC64: A digit appended at the ceiling is kept by paste and dropped by typing
+<!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=3 covers=g10.shared-auction-listing.SC-xxl -->
+### g10.shared-auction-listing.US1-TC24: A Raise draft at the ceiling keeps it against a typed digit and a paste
 
-Runs once in set mode and once in raise mode.
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
+
+**Pre-conditions:**
+
+* customer(signed in, card linked) leads an open listing with a maximum below 500, and is on its page with Raise, 10000000 typed in the custom maximum.
+
+**Steps:**
+
+1. Type 1 at the end of the draft and read it.
+2. Select the draft, paste 10000001 and read it.
+3. Set the draft to 500, put the caret at its end, paste 10000001 without selecting, and read the draft and reviewed amount.
+
+**Expected Results:**
+
+* Step 1 still reads 10000000.
+* Steps 2 and 3 read 10000000, and the reviewed amount agrees each time.
+* No message about the ceiling shows.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-ftm rev=3 covers=g10.shared-auction-listing.SC-z2x -->
+### g10.shared-auction-listing.US1-TC25: A ceiling correction shows no too-large or invalid-amount message
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
+
+**Pre-conditions:**
+
+* customer(signed in, card linked) is on an open listing's page in `<mode>`, whose minimum next bid is at or below 60500, with 60500 typed in the custom maximum and no message beside the field.
+
+**Test data:**
+
+| `<mode>` |
+| --- |
+| Set maximum |
+| Raise |
+
+**Steps:**
+
+1. Select the draft, paste 10000001, and read the field and the messages around it.
+
+**Expected Results:**
+
+* The draft reads 10000000, and the reviewed amount agrees.
+* No maximum-bid, invalid-amount or below-minimum message shows.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-g02 rev=3 covers=g10.shared-auction-listing.SC-6n7 -->
+### g10.shared-auction-listing.US1-TC26: A paste at the ceiling with cents commits the ceiling
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/shared/ui/auction-listing/custom-maximum-ceiling.spec.ts`
+
+**Pre-conditions:**
+
+* customer(signed in, card linked) is on an open listing's page in `<mode>`, with 500 typed in the custom maximum.
+
+**Test data:**
+
+| `<mode>` |
+| --- |
+| Set maximum |
+| Raise |
+
+**Steps:**
+
+1. Select the draft and paste 10000000.99.
+2. Read the draft and the reviewed amount, then confirm the maximum.
+3. Read Your maximum.
+
+**Expected Results:**
+
+* Step 2: the cents are dropped without rounding, and both read 10000000.
+* Step 3 reads USD10,000,000.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-dej rev=2 covers=g10.shared-auction-listing.SC-huw -->
+### g10.shared-auction-listing.US1-TC59: A quick bid past the ceiling is offered at the ceiling
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Quick bids
+
+**Pre-conditions:**
+
+* customer(signed in, card linked) leads an open listing with maximum `<maximum>`, and is on its page with Raise.
+
+**Test data:**
+
+| `<maximum>` | `<chips>` |
+| --- | --- |
+| USD9,850,000 | USD9,950,000; USD10,000,000, the 2× and 4× chips merged at the limit |
+| USD9,750,000 | USD9,850,000; USD9,950,000; USD10,000,000, the 4× chip at the limit |
+
+**Steps:**
+
+1. Read each quick-bid chip's amount and caption.
+2. Select the chip at USD10,000,000 and confirm.
+3. Read Your maximum.
+
+**Expected Results:**
+
+* Step 1 shows `<chips>`, none above USD10,000,000.
+* The chip at the ceiling is captioned as the auction's limit; every other chip keeps its step and caption.
+* Step 3 reads USD10,000,000.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-w4r rev=2 covers=g10.shared-auction-listing.SC-atq -->
+### g10.shared-auction-listing.US1-TC60: Chips capped onto the same amount merge to one
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Quick bids
+
+**Pre-conditions:**
+
+* customer(signed in, card linked) leads an open listing with maximum `<maximum>`, and is on its page with Raise.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<maximum>` | USD9,950,000 (range: 9900001–9999999 whole dollars, so every step passes the ceiling) |
+
+**Steps:**
+
+1. Read the quick-bid chips.
+2. Select the chip and confirm, then read Your maximum.
+
+**Expected Results:**
+
+* Step 1 shows one chip, USD10,000,000, captioned as the limit.
+* Step 2 reads USD10,000,000.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-9rx rev=2 covers=g10.shared-auction-listing.SC-v6g,g10.shared-auction-listing.SC-1mi -->
+### g10.shared-auction-listing.US1-TC61: A leader with no amount left below the ceiling sees the entry collapse
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Ceiling reached
+
+**Pre-conditions:**
+
+* customer(signed in, card linked) leads an open listing with maximum `<maximum>` at current bid `<current bid>`, and is on its page.
+
+**Test data:**
+
+| `<maximum>` | `<current bid>` | `<why no amount is left>` |
+| --- | --- | --- |
+| USD10,000,000 | USD1,200 | The raise floor, the maximum plus USD1, is past the ceiling |
+| USD9,999,950 | USD9,999,950 | The minimum next bid, USD10,099,950, is past the ceiling |
+
+**Steps:**
+
+1. Read the raise area of the bid panel.
+
+**Expected Results:**
+
+* No quick-bid chip, custom maximum field or bid action shows.
+* A status row leads with Max `<maximum>`, its Info tooltip explaining the private maximum, and one line that the auction accepts no higher amount; no line explains how to raise.
+* The buyer-fee line still shows.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-5dh rev=2 covers=g10.shared-auction-listing.SC-cfl -->
+### g10.shared-auction-listing.US1-TC62: A listing priced past the ceiling offers no entry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** acceptance
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Ceiling reached
+
+**Pre-conditions:**
+
+* customer(signed in, card linked) holds no maximum on an open listing whose current bid is `<current bid>`, and is on its page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current bid>` | USD9,950,000 (range: 9900001–9999999 whole dollars, so the minimum next bid passes the ceiling) |
+
+**Steps:**
+
+1. Read the bid panel's entry area.
+
+**Expected Results:**
+
+* No quick-bid chip, custom maximum field or bid action shows.
+* A status row names USD10,000,000 and says bidding has reached the highest amount the auction accepts.
+* The buyer-fee line still shows.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-swf rev=2 covers=g10.shared-auction-listing.SC-rnz -->
+### g10.shared-auction-listing.US1-TC63: The ceiling collapse outranks the card setup lock
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Ceiling reached
+
+**Pre-conditions:**
+
+* customer(signed in) leads an open listing with a maximum of USD10,000,000, and their card on file has since been removed, so the panel asks for a card; customer is on the listing's page.
+
+**Steps:**
+
+1. Read the bid panel's entry area.
+
+**Expected Results:**
+
+* The collapsed status row shows; the disabled chips, custom field and link-card action do not.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-oem rev=1 covers=g10.shared-auction-listing.SC-2wv -->
+### g10.shared-auction-listing.US1-TC64: A digit added at the ceiling is capped by paste and dropped by typing
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -439,347 +409,44 @@ Runs once in set mode and once in raise mode.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
-* The custom maximum draft equals the USD ceiling of `10000000` and the caret is at its end.
+* customer(signed in, card linked) is on an open listing's page in `<mode>`, with 10000000 typed in the custom maximum and the caret at its end.
+
+**Test data:**
+
+| `<mode>` |
+| --- |
+| Set maximum |
+| Raise |
 
 **Steps:**
 
-1. Append `1` by paste and read the displayed draft.
-2. Set the draft to `10000000` again, append `1` by typing and read the displayed draft.
+1. Paste 1 at the end and read the draft.
+2. Set the draft to 10000000 again, type 1 at the end and read the draft.
 
 **Expected Results:**
 
-* Step 1: the displayed draft reads `10000000`, the USD ceiling.
-* Step 2: the displayed draft reads `10000000`, the previous draft.
-* No ceiling message appears in either step.
-
-## Raised
-
-- None; this change introduces no unresolved product question.
+* Step 1 reads 10000000, the ceiling.
+* Step 2 reads 10000000, the draft before the digit.
+* No message about the ceiling shows.
 
 ## Settled
 
-- A lost standing on the bid card is the Did not win badge alone; that the card was not charged is said on My Auctions, never on the lot card (decisions Q2).
-- The linked-card tooltip scenario keeps its title, since retitling needs a new id (decisions Q18).
-- Ceiling is 9,999,999,999 whole major units for any listing currency (`cap-custom-maximum-entry` Q1).
-- Overshoot restores the previous valid draft, including empty; never clamps (`cap-custom-maximum-entry` Q2).
-- Refuse is silent; no dedicated too-large copy (`cap-custom-maximum-entry` Q3).
-- Auction-service keeps its own refusal above the currency's bid ceiling; with the JPY ceiling at 5,000,000,000, every currency's ceiling sits below the field (`cap-custom-maximum-entry` Q4, Q6).
-- Winner is a primary crown after the amount when the consumer sets
-  `isWinner` (closed sold), not a Winner badge (`bid-history-winner-priority` Q1, Q3).
-- Equal-max non-leaders use the Info tip in the amount tone with
-  earlier-leads copy (`bid-history-winner-priority` Q2).
-- No new Badge size or footnote under Recent bids (`bid-history-winner-priority` non-goals).
-- The tip icon's tone and the crown's place before You are requirement
-  clauses the cases walk, with no scenario of their own (`bid-history-winner-priority` Q5).
-- Wide enough means the gallery can place a left rail beside the main frame;
-  the implementation threshold stays in code.
-- Stacked several-image galleries hide the rail; previous/next and progress
-  remain; no substitute strip under the stage.
-- A one-image gallery shows no rail or previous/next. An empty gallery shows
-  no item or previous/next.
-- `ListingGallery` strip rules are unchanged by this change.
+- A lost standing on the bid card is the Did not win badge alone; that the card was not charged is said on My Auctions, never on the listing's card.
+- Winner is a primary crown after the amount on a closed sold listing, not a Winner badge.
+- Equal-maximum rows below the leader use the Info tip in the amount's tone, with earlier-leads copy.
+- No new badge size or footnote under Recent bids.
+- Wide enough means the gallery can place a left rail beside the main frame; the threshold stays in code.
+- A stacked gallery of several images hides the rail; previous, next and the progress remain, with no other strip under the stage.
+- A one-image gallery shows no rail or previous and next; an empty gallery shows no item or previous and next.
 - A catalogue tile's Ends, Opens and Closed lines all name the viewer's zone.
-- The lot bid card carries a dated collector deadline line beside its countdown, and its closed block names the viewer's zone after a close time that shows a clock; a close shown as a day alone names none.
-- An older bid row's time carries no zone name; each row keeps its accepted instant as data, and a supplied display text replaces only the formatted time.
+- The bid card carries a dated collector deadline beside its countdown, and its closed block names the viewer's zone after a close time that shows a clock; a close shown as a day alone names none.
+- An older bid row's time carries no zone name; a supplied display text replaces only the formatted time.
 - Activity time reads relative below seven days and as a local moment from seven days.
 - A zone name on a tile or a bid card is English in every language: the zone's short name in US English, HKT for Hong Kong, and an offset where US English has none.
-- The tile's Ends, Opens and Closed words stay English in every language, and a Chinese month's wording is not asserted by these cases; a month that reads as a bare number goes to the bug lane.
-- The field uses the listing currency's bid ceiling: USD 10,000,000, HKD 80,000,000 and JPY 5,000,000,000 whole major units (Q1).
-- An appended typed digit above the ceiling retains the valid draft; oversized paste or replacement becomes the ceiling after whole-major cleaning (Q2, Q5).
-- Ceiling correction shows no maximum-bid or invalid-amount message; set and raise share the rule (Q3, Q5).
-- The field uses the listing currency's bid ceiling: USD 10,000,000, HKD 80,000,000 and JPY 5,000,000,000 whole major units (`cap-custom-maximum-at-currency-ceiling` Q1).
-- Chips step 1×, 2× and 4× the increment - from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1.
-- Ceiling correction of a typed draft shows no maximum-bid or invalid-amount message; set and raise share the rule.
-- A lost standing on the bid card is the Did not win badge alone; that the card was not charged is said on My Auctions, never on the lot card.
-- None this run. The blind reading raised the question whether the HKD and JPY ceilings stay as dead branches; it went to `decisions.md` `## Raised` and landed as Q26.
-- Magnification happens in place under a pointer-following lens; the
-  magnifier button and zoom dialog are gone (decisions Q1).
-- A touch pointer raises nothing, and no fallback replaces the dialog on
-  touch (decisions Q2).
-- The lens group takes the consumer's `zoom` plus optional
-  `zoomInstructions` as its accessible name; the magnified copy stays
-  hidden from assistive technology (decisions Q3).
-- `zoomSrc` feeds the magnified view and still falls back to `src`
-  (decisions Q4).
-
-## Reconciliation
-
-**Run:** QA2, 2026-10-01, for change `relay-auction-live-state`. Joined QA1's blind cases, written from the frozen Feature set and `user-journeys.md`, the change's `proposal.md` and `decisions.md` with `## Raised`, the linked pages under `docs/prds/` and the durable suite, with this delta's scenarios, the durable requirements beside them, `tech-design.md`, `tasks.md` and the built block in `packages/ui`. QA1 was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the archive.
-
-| Finding | Disposition |
-| --- | --- |
-| TC5-2: before any bid chip 1× is the opening price, on a positive start and a 0 start, and no chip reads 0 | **Folded in:** `shared-ui-auction-listing-SC-52` (Q28, Q35) |
-| TC5-2: chips 2× and 4× before any bid read one and three increments above chip 1× | **Rejected:** Q28 and `shared-ui-auction-listing-SC-52` - they add two and four increments to the opening price, as built in `quickMaximumPresetAmount`. QA2 rewrote the rows' amounts; the case stays draft |
-| `shared-ui-auction-listing-SC-52`'s caption, chip 1× as the next eligible bid; no blind case asserted it | **Patched:** TC5-2 asserts the caption |
-| TC3-1: a non-leader's chips step from the current bid, a first bid at a 0 start's opening price included | **Folded in:** `shared-ui-auction-listing-SC-36` |
-| TC4-1: a leader's chips step from the committed maximum | **Folded in:** `shared-ui-auction-listing-SC-35` |
-| TC6-1: a leader's typed raise starts at the greater of the next minimum and the maximum plus 100, and chip 1× is not that floor | **Folded in:** the modified requirement's last sentence and durable `shared-ui-auction-listing-SC-37` |
-| TC1-1, TC2-1: the buyer fee inline at 20%, absent signed out | **Folded in:** durable `shared-ui-auction-listing-SC-44`, `shared-ui-auction-listing-SC-45` |
-| TC7-1 to TC15-1, TC17-1, TC18-1: exports, gallery sources and strip, consumer labels, bid-row time, personal bidding, the enrollment signal, the accessory and lost standing | **Folded in:** durable `shared-ui-auction-listing-SC-01`, `-SC-02`, `-SC-03`, `-SC-04`, `-SC-05`, `-SC-06`, `-SC-07`, `-SC-08`, `-SC-13`, `auction-listing-SC-22`, `-SC-09`, `-SC-31`, `-SC-10`, `-SC-33`, `-SC-20`, `-SC-21`, `-SC-26`, `-SC-27`, `-SC-12`, `-SC-46`; this change does not alter them |
-| TC16-1: setup keeps continue disabled until a card and an attestation, and says which is missing | **Folded in:** durable `shared-ui-auction-listing-SC-16` (Q36) - setup names nothing, so QA2 dropped the Says missing column and its step; the case stays draft |
-
-**Uncovered anchors:** none for this change. Its three scenarios each have a case. The durable scenarios no case here asserts - `-SC-11`, `-SC-14`, `-SC-14a`, `-SC-15`, `-SC-17`, `-SC-18`, `-SC-19`, `-SC-24`, `-SC-25`, `-SC-28`, `-SC-29`, `-SC-30`, `-SC-32`, `-SC-34` - are untouched by this change and owed by the durable suite.
-
-**Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
-
-- **Folded in** - `shared-ui-auction-listing-SC-46` by `shared-ui-auction-listing-US1-TC18-2`
-- **Revised** - QA1 kept `shared-ui-auction-listing-US1-TC18-1`, but it now reads no banner of any kind under a lost standing, so it moves up a revision
-- **Out of suite** - the enrollment blocks' props, which no longer take `authorizing` or `authorizationRefused`: the store's type check and the block stories. `shared-ui-auction-listing-SC-30` changed its Serves line only and stands by its story
-- **Raised, answered** - Q18: `shared-ui-auction-listing-SC-30` keeps its title, since retitling needs a new id, recommended; answer in `## Settled`
-- **Contradicted** - none
-- **Uncovered anchors** - none
-
-**Run:** QA2 reconciliation 2026-10-05 for change `cap-custom-maximum-entry`, rereading every case in this suite against the delta's scenarios and the `Custom maximum ceiling` anchor after the accept-review fix round. Read the change's `proposal.md`, `decisions.md` (Q1 to Q6 and `## Raised`), `ui-design.md`, `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the PRD's Custom Maximum section and the bidding page's Ceiling, Custom maximum and Bid ceiling lines, the durable `spec.md` and suite, the `bid-history-winner-priority` and `lot-gallery-strip-by-width` suites on this capability, `listing-bid-money.test.ts` and the `ListingAuctionBidCard` stories. QA1's blind pass had read the Purpose, the Feature set, the journeys, the proposal, Q1 to Q4, the stripped `ui-design.md`, the PRD lines and the durable suite with its Reconciliation stripped, and was denied every Requirements section and the archive.
-
-| Finding | Disposition |
-| --- | --- |
-| Draft at ceiling `9999999999` accepted | **Folded in:** `shared-ui-auction-listing-SC-38` / `shared-ui-auction-listing-US1-TC19-1` |
-| Typed digit past ceiling restores prior draft | **Folded in:** `shared-ui-auction-listing-SC-39` / `shared-ui-auction-listing-US1-TC20-1` |
-| Paste past ceiling from empty stays empty, silent | **Folded in:** `shared-ui-auction-listing-SC-40` / `shared-ui-auction-listing-US1-TC21-1` for the empty draft; the silence is `shared-ui-auction-listing-US1-TC25-1`'s since the rerun after the final accept-review fixes |
-| Paste past ceiling restores prior draft | **Folded in:** `shared-ui-auction-listing-SC-41` / `shared-ui-auction-listing-US1-TC22-1` |
-| Fractional paste exceeds after whole-major cleaning restores | **Folded in:** `shared-ui-auction-listing-SC-42` / `shared-ui-auction-listing-US1-TC23-1` |
-| Raise path restores on overshoot | **Folded in:** `shared-ui-auction-listing-SC-43` / `shared-ui-auction-listing-US1-TC24-1` |
-| Over-ceiling refuse has no dedicated error | **Folded in:** `shared-ui-auction-listing-SC-40` and the requirement's no-ceiling-error-copy rule / `shared-ui-auction-listing-US1-TC25-1` |
-| Raised questions from the blind pass | None - Q1 to Q4 already settled the ceiling, restore, silence and the service's own refusal |
-| Accept-review, 2026-10-05: case ids `TC3` to `TC9` were the durable suite's quick-bid, raise-floor and gallery cases, which the fold would have overwritten | **Renumbered:** `shared-ui-auction-listing-US1-TC19-1` to `shared-ui-auction-listing-US1-TC25-1`, after the durable suite's last, `TC18`. QA2 found no collision with the durable suite or with `TC27`, `TC28` in `bid-history-winner-priority` |
-| Accept-review, 2026-10-05: Q5 had no scenario - a fractional paste whose whole part equals the ceiling is accepted | **Folded in:** `shared-ui-auction-listing-SC-53` / `shared-ui-auction-listing-US1-TC26-1`. QA2 reread it: seed `500`, paste `9999999999.99` and the draft `9999999999` match the scenario |
-| QA2: `TC25` expected "no dedicated too-large or over-ceiling error copy", but the requirement names the copy that stays away - the invalid-amount and below-floor messages | **Folded in:** `shared-ui-auction-listing-US1-TC25-1` now expects no invalid-amount, below-floor or too-large message |
-| QA2: `TC26` expected no invalid-amount message, which `shared-ui-auction-listing-SC-53` does not state | **Folded in:** dropped from `shared-ui-auction-listing-US1-TC26-1`; the case asserts the scenario's THEN alone |
-| QA2: `TC20` and `TC24` type "one more digit" where `shared-ui-auction-listing-SC-39` types `0` and `shared-ui-auction-listing-SC-43` types `1` | **Rejected** for `TC20`: any digit past `9999999999` overshoots, so the step covers the scenario's value, and an automated case's wording moves only with its behaviour. `TC24`, manual since the rerun after the 5,000,000,000 JPY ceiling, now types `1` |
-| QA2: `TC24` names `listing-bid-money.test.ts`, which never renders the raise title | **Folded in:** the rerun after the 5,000,000,000 JPY ceiling set `shared-ui-auction-listing-US1-TC24-1` to manual - task 2.2 walks the raise path rather than unit-testing it, and no test title names `shared-ui-auction-listing-SC-43` |
-| QA2: the cases name Storybook stories, not the scenarios' HKD listing | **Rejected:** `CustomMaximumCeiling` and `Leading` render an HKD listing, so the values match |
-| QA2: `TC26` stays manual though `listing-bid-money.test.ts` pastes `9999999999.99` with an empty seed | **Rejected:** not QA's to flip; engineering flips it with `pnpm run tcs:automated` if that test is taken to decide it |
-| QA2: facts across the artifacts - field ceiling 9,999,999,999 in any currency, restore not clamp, silent refuse, set and raise on one field, and the JPY bid ceiling | **Rejected:** no artifact states one differently; the JPY bid ceiling is now 5,000,000,000 (Q6), rechecked in the rerun after it |
-
-**Uncovered anchors:** none for `Custom maximum ceiling`.
-
-**Run:** QA2 reconciliation 2026-10-05, rerun after the accept-review fixes, for change `cap-custom-maximum-entry`. Reread every case in this suite against the delta's seven scenarios and the `Custom maximum ceiling` anchor, after the decisions rows named their carriers, `tech-design.md` and `ui-design.md` put `CUSTOM_MAXIMUM_MAJOR_CEILING` and `sanitizeCustomMaximumDraft` outside the contract, task 3.3 took the `TC26` walk, and the US1 header and journeys line took the durable text. Read the change's `proposal.md`, `decisions.md` (Q1 to Q6 with their carriers, and `## Raised`), `ui-design.md`, `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the PRD's Custom Maximum section and the bidding page's Ceiling, Custom maximum and Bid ceiling lines, the durable `spec.md`, suite and journeys, the `bid-history-winner-priority` and `lot-gallery-strip-by-width` suites on this capability, `listing-bid-money.ts` and its test, `listing-quick-maximum-bid-actions.tsx` and the `ListingAuctionBidCard` stories. It is a statement, not proof.
-
-| Finding | Disposition |
-| --- | --- |
-| Each case against its scenario - `TC19` / `SC-38`, `TC20` / `SC-39`, `TC21` / `SC-40`, `TC22` / `SC-41`, `TC23` / `SC-42`, `TC24` / `SC-43`, `TC26` / `SC-53` | **Joined:** the GIVEN drafts, the typed and pasted values and the drafts each THEN names match; `TC25` carries the requirement's No ceiling error copy clause |
-| The decisions rows' carriers - Q1 to `shared-ui-auction-listing-SC-38`, Q2 to `shared-ui-auction-listing-SC-39` to `-SC-43`, Q3 to `shared-ui-auction-listing-SC-40`, Q5 to `shared-ui-auction-listing-SC-53` | **Joined:** each carrier has a case here, and no case asserts what its row did not decide |
-| The ceiling helpers are exports for stories and tests outside the listing surface's contract, yet `TC19` to `TC23` name `listing-bid-money.test.ts`, which tests the helper | **Rejected:** a Decided-by line names what decides a case, not a contract export; the set path routes every edit through `sanitizeCustomMaximumDraft` in `listing-quick-maximum-bid-actions.tsx`, so the helper's test decides the draft each case reads. `TC24` is manual since the rerun after the 5,000,000,000 JPY ceiling |
-| The US1 header and the journeys line now read as the durable suite's | **Joined:** both match the durable text verbatim, so the fold rewrites neither |
-| Task 3.3 walks `shared-ui-auction-listing-US1-TC26-1` on CustomMaximumCeiling with the seed `500`, paste `9999999999.99`, draft `9999999999` | **Joined:** the walk's values are `shared-ui-auction-listing-SC-53`'s and the case's |
-| `TC19` and `TC21` start from an empty field, while CustomMaximumCeiling's play seeds `500` | **Rejected:** a pre-condition states the field's state, and clearing the seed reaches it; both cases are automated, so their wording moves only with their behaviour |
-| The suite's two manual cases had no `### Manual` row saying what a person drives | **Folded in:** `### Manual` below names the walk for `shared-ui-auction-listing-US1-TC25-1` and `shared-ui-auction-listing-US1-TC26-1` |
-| Case ids against the durable suite (last `TC18`) and the other active changes on this capability - `bid-history-winner-priority` now issues `TC27` to `TC29`, `lot-gallery-strip-by-width` `TC10` to `TC12` | **Joined:** `TC19` to `TC26` collide with none; scenario ids `SC-38` to `SC-43` and `SC-53` collide with neither the durable spec nor `SC-47` to `SC-51` and `SC-54` |
-| Facts across the artifacts after the fixes - field ceiling 9,999,999,999 in any currency, restore not clamp, silent refuse, set and raise on one field, and the JPY bid ceiling | **Joined:** the proposal, Q1 to Q6, `ui-design.md`, `tech-design.md`, `tasks.md`, both PRD pages and every case agree; the JPY bid ceiling is now 5,000,000,000 (Q6); nothing for `## Raised` |
-
-**Uncovered anchors:** none for `Custom maximum ceiling`; every scenario on the anchor has a case asserting its THEN.
-
-**Run:** QA2 reconciliation 2026-10-05, rerun after the 5,000,000,000 JPY ceiling, for change `cap-custom-maximum-entry`. Reread every case in this suite against the delta's seven scenarios and the `Custom maximum ceiling` anchor, after Q6 moved the JPY bid ceiling to 5,000,000,000, `tech-design.md` dropped the quick-chip claim, `listing-bid-money.test.ts` named `SC-38` to `SC-42` and `SC-53` in its titles, and task 2.2 left `SC-43` to the walk; and closed the accept-review finding on `TC25`. Read the change's `proposal.md`, `decisions.md` (Q1 to Q6 and `## Raised`), `ui-design.md`, `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the PRD's Custom Maximum section and the bidding page's Ceiling, Custom maximum and Bid ceiling lines, the durable `spec.md` and suite, the `bid-history-winner-priority` and `lot-gallery-strip-by-width` suites on this capability, `listing-bid-money.ts` and its test, `listing-quick-maximum-bid-actions.tsx` and the `CustomMaximumCeiling` and `Leading` stories. It is a statement, not proof.
-
-| Finding | Disposition |
-| --- | --- |
-| Each case against its scenario - `TC19` / `SC-38`, `TC20` / `SC-39`, `TC21` / `SC-40`, `TC22` / `SC-41`, `TC23` / `SC-42`, `TC24` / `SC-43`, `TC26` / `SC-53` | **Joined:** the seeds, the typed and pasted values and the drafts each THEN names match; Q6 moves no value on this capability |
-| `TC19` to `TC23` name `listing-bid-money.test.ts` as their decider | **Joined:** its titles now name `shared-ui-auction-listing-SC-38` to `-SC-42`, and its assertions are those scenarios' values |
-| `TC24` was automated by `listing-bid-money.test.ts`, which renders no raise panel; task 2.2 says the raise path is walked, not unit-tested, and no test title names `shared-ui-auction-listing-SC-43` | **Folded in:** `shared-ui-auction-listing-US1-TC24-1` is manual, its Decided-by line gone, its step types `1` as the scenario does, and `### Manual` names task 3.1's walk on Leading |
-| Accept-review: `TC25` expected no below-floor message at all after a refused edit, but the requirement keeps away only a message the refusal alone causes, and on CustomMaximumCeiling the seeded `500` already shows the below-floor helper (floor HKD 60,500) | **Folded in:** `shared-ui-auction-listing-US1-TC25-1` clears the seed and enters `60500`, the floor, so no message shows before the paste; after pasting `99999999999` the draft stays `60500` and any invalid-amount, below-floor or too-large message would be the refusal's |
-| `TC26` stays manual though the test's `SC-53` title pastes `9999999999.99` over an empty seed | **Joined:** the case seeds `500` as task 3.3's walk does; engineering flips it with `pnpm run tcs:automated` if that test is taken to decide it |
-| Earlier rows that named the JPY bid ceiling 10,000,000,000 as current, or credited `TC24` to the helper's test | **Folded in:** each row now states its outcome - the JPY bid ceiling is 5,000,000,000, `TC24` is walked |
-| Case ids against the durable suite (last `TC18`) and the other active changes on this capability - `bid-history-winner-priority` `TC27` to `TC29`, `lot-gallery-strip-by-width` `TC10` to `TC12` | **Joined:** `TC19` to `TC26` collide with none; scenario ids `SC-38` to `SC-43` and `SC-53` collide with no durable or active scenario |
-| Questions for the PM | None - Q1 to Q6 settle the ceiling, the restore, the silence, the service's refusal, the fractional paste and the JPY ceiling |
-
-**Uncovered anchors:** none for `Custom maximum ceiling`; every scenario on the anchor has a case asserting its THEN, and every case stays draft.
-
-**Run:** QA2 reconciliation 2026-10-05, rerun after the final accept-review fixes, for change `cap-custom-maximum-entry`. Reread every case in this suite against the delta's seven scenarios, the requirement's clauses and the `Custom maximum ceiling` anchor, after task 2.2 stopped citing `SC-43`, task 4.1's e2e note named `TC19` to `TC23` and `TC25`, and the PRD's Ceiling line said no message explains the refusal; and closed QA's accept-review finding on `TC21`. Read the change's `proposal.md`, `decisions.md` (Q1 to Q6 and `## Raised`), `ui-design.md`, `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the PRD's Custom Maximum section and the bidding page's Ceiling, Custom maximum and Bid ceiling lines, the durable `spec.md` and suite, the `bid-history-winner-priority` and `lot-gallery-strip-by-width` suites and deltas on this capability, `listing-bid-money.ts` and its test, and `listing-quick-maximum-bid-actions.tsx`. It is a statement, not proof.
-
-| Finding | Disposition |
-| --- | --- |
-| Accept-review (QA): `TC21` is automated by `listing-bid-money.test.ts`, which returns a draft and renders no panel, so it cannot decide "no invalid-amount or too-large message" | **Folded in:** `shared-ui-auction-listing-US1-TC21-1` asserts the empty draft alone and stays automated; `shared-ui-auction-listing-US1-TC25-1`, manual, reads the panel for any invalid-amount, below-floor or too-large message, so `shared-ui-auction-listing-SC-40`'s AND keeps a case |
-| `TC20` also expected "the field is not clamped to another value", which `shared-ui-auction-listing-SC-39` does not state, and from a seed of `9999999999` a clamp and a restore give the same draft | **Folded in:** dropped from `shared-ui-auction-listing-US1-TC20-1`, which asserts the scenario's THEN alone; `shared-ui-auction-listing-US1-TC22-1` tells restore from clamp, since its seed `500` stays `500` |
-| Each automated case against its Decided-by test - `TC19` with `""` to `9999999999`, `TC20` with `99999999990` over `9999999999`, `TC21` with `10000000000` over `""`, `TC22` with `99999999999` over `500`, `TC23` with `10000000000.99` over `500` | **Joined:** each test call returns the draft the case's one result names, and the change handler sets the field to that draft and resets the input to it on a refusal; the painted field is walked in task 3.1 and driven by task 4.1's e2e |
-| `TC25` is cited by task 4.1's e2e but stays manual | **Joined:** the e2e is not landed; engineering flips it with `pnpm run tcs:automated` once the e2e reads the panel |
-| Each case against its scenario - `TC19` / `SC-38`, `TC20` / `SC-39`, `TC21` / `SC-40`, `TC22` / `SC-41`, `TC23` / `SC-42`, `TC24` / `SC-43`, `TC26` / `SC-53`, and `TC25` against `SC-40`'s AND and the No ceiling error copy clause | **Joined:** the seeds, the typed and pasted values and the drafts match; the PRD's Ceiling line now agrees with `TC25` that no message says why |
-| Case ids against the durable suite (last `TC18`) and the active changes on this capability - `bid-history-winner-priority` `TC27` to `TC29`, `lot-gallery-strip-by-width` `TC10` to `TC12` | **Joined:** `TC19` to `TC26` collide with none; `SC-38` to `SC-43` and `SC-53` collide with neither the durable spec nor `SC-47` to `SC-51` and `SC-54` |
-| Questions for the PM | None - Q1 to Q6 settle every value and outcome the cases read |
-
-**Uncovered anchors:** none for `Custom maximum ceiling`; every scenario on the anchor has a case asserting its THEN, every automated case's results are decided by its test, and every case stays draft.
-
-**Run:** Blind pass read Purpose (durable), Feature set (delta),
-user-journeys.md, proposal.md, decisions.md (goals, non-goals, Q1-Q3),
-ui-design.md with state dispositions stripped to the Public bid history
-outcome anchor, PRD Bid History / Auction Panel Winner lines, and durable
-feature-tcs.md for id continuity with Reconciliation stripped. Denied:
-every Requirements section, openspec/specs/ beyond those excerpts,
-openspec/changes/archive/.
-
-**Run:** QA2 reconciliation 2026-10-05, for change `bid-history-winner-priority`. Read the blind cases above, this delta `spec.md` after the accept-review fixes, `proposal.md`, `decisions.md` (Q1 to Q3), `ui-design.md`, `tech-design.md`, `tasks.md`, the PRD lines on Bidding · Auction Panel and Listing Page Blocks · Bid History, the durable spec and suite, `cap-custom-maximum-entry`'s and `lot-gallery-strip-by-width`'s suites on this capability, and the build: `listing-bid-history-list.tsx`, `types.ts`, the ClosedSoldEqualMax and Default plays in `listing-auction-bid-card.stories.tsx`, and the `en` catalog. It is a statement, not proof.
-
-| Finding | Disposition |
-| --- | --- |
-| Closed sold winning row shows a winner crown | **Folded in:** `shared-ui-auction-listing-SC-50` / `shared-ui-auction-listing-US1-TC27-1` |
-| Equal-max non-leader shows earlier-leads tip | **Folded in:** `shared-ui-auction-listing-SC-51` / `shared-ui-auction-listing-US1-TC28-1` |
-| Live lots must not show a winner crown without `isWinner` | **Folded in:** `shared-ui-auction-listing-SC-50`'s AND; TC27 now walks Default as its own step and pre-condition, where it was an expected result with no setup |
-| Raised questions from the blind pass | None - Q1 to Q3 already settled closed-only winner mark, tooltip vs footnote, and Badge reuse |
-| Accept-review, 2026-10-05: case ids `TC13` and `TC14` were the durable suite's personal bid history cases, which the fold would have overwritten | **Renumbered:** `shared-ui-auction-listing-US1-TC27-1` and `shared-ui-auction-listing-US1-TC28-1`; `cap-custom-maximum-entry` takes `TC19` to `TC26` and `lot-gallery-strip-by-width` `TC10` to `TC12`, so neither collides with this change |
-| `shared-ui-auction-listing-SC-50` now draws the crown only with `copy.winner` supplied; TC27 supplied none | **Folded in:** TC27's pre-conditions supply `winner` as `Winner`, as both stories' copy does |
-| TC27 and TC28 were `automated`, decided by the story plays; the plays assert only that a `Winner` name and the tip's name exist, not the crown's place or colour nor the icon's tone | **Reclassified:** `manual`, Decided-by line dropped; the cases are walked under task 3.1. A play that asserts the rest flips them with `pnpm run tcs:automated` |
-| TC27 and TC28 were `e2e`, both `smoke` | **Reclassified:** `unit`, as every Storybook case in the durable suite; `regression, release`, since a missing crown or tip leaves the journey usable and a journey holds at most one smoke case |
-| TC28 read the accessible name in place of activating the control | **Folded in:** its steps hover the Info control and read the tooltip, `shared-ui-auction-listing-SC-51`'s WHEN |
-| TC28 asserts the Info icon in the amount's tone, decided by Q2 and stated by the requirement, which no scenario's THEN carries | **Kept:** reported to Dev for an AND on `shared-ui-auction-listing-SC-51`; Q5 declined it, since the requirement's Equal-max tip clause states the tone and TC28 walks it |
-| The requirement draws no crown where `copy.winner` is absent, and places the crown after any Info control and before You; no scenario states either | **Folded in:** the first as `shared-ui-auction-listing-SC-54` / `shared-ui-auction-listing-US1-TC29-1`, below; Q5 declined a scenario for the second, so TC27 now asserts the crown after the amount and before You on ClosedSoldEqualMax's viewer row, as the requirement's Winner crown clause states |
-| The section carried its own journey title and an application as actor, where the durable suite's `US1` names the listing page blocks and a customer | **Folded in:** heading, Walked-by line and statement copied from the durable suite |
-| Facts across the PRD lines, Q1 to Q3, `ui-design.md`, `tech-design.md`, the delta and the cases | **Agree:** primary filled crown after the amount, named by consumer copy, only on a closed sold lot; Info tip in the amount tone, reading when maximums match, the earlier one leads |
-| Accept-review fix round, 2026-10-05, at the owner's word: the crown draws only with `copy.winner`, a rule with no scenario | **Folded in:** `shared-ui-auction-listing-SC-54` / `shared-ui-auction-listing-US1-TC29-1`; task 2.4 builds it |
-
-**Run:** QA2 reconciliation 2026-10-05, rerun after Q4 and Q5, for change `bid-history-winner-priority`. Reread every case against `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54`, the requirement as Q4 left it, `decisions.md` (Q1 to Q5), `ui-design.md`, `tech-design.md`, `tasks.md`, the PRD lines on Bidding · Auction Panel and Listing Page Blocks · Bid History, the durable spec and suite, `cap-custom-maximum-entry`'s and `lot-gallery-strip-by-width`'s suites on this capability, and the build: `listing-bid-history-list.tsx`, the ClosedSoldEqualMax and Default stories and their meta, and the `en` catalog. It is a statement, not proof.
-
-| Finding | Disposition |
-| --- | --- |
-| Q4: the Equal-max flag now covers any older tie lower down | **Agree:** the list draws whatever row the consumer flags, so `shared-ui-auction-listing-SC-51` and TC28 hold unchanged; where the flag is set is the lot page's, walked there |
-| TC29, written without a QA2 read, against `shared-ui-auction-listing-SC-54` | **Folded in:** its result asserts no row carries a name the copy does not supply, the scenario's AND, where it read only Winner |
-| TC29's pre-condition named a Storybook render, but no story leaves `winner` unset and the bid card's `copy` is not a Storybook control | **Reported:** to Dev; task 2.4 owes a story or a play that renders ClosedSoldEqualMax without `winner`. The case stays `draft`, and fails until task 2.4 removes the built-in `"Winner"` |
-| Case ids `US1-TC27-1` to `US1-TC29-1` | **Checked:** the durable suite ends at `TC18`; `cap-custom-maximum-entry` takes `TC19` to `TC26` and `lot-gallery-strip-by-width` `TC10` to `TC12`. No collision |
-| Facts across the PRD lines, Q1 to Q5, `ui-design.md`, `tech-design.md`, the delta and the cases | **Agree:** primary filled crown after the amount and any tip, before You, named only by consumer copy, on a closed sold lot; Info tip in the amount tone on every row the consumer flags, reading when maximums match, the earlier one leads |
-| Raised questions | None - Q1 to Q5 settle what this capability turns on |
-
-**Run:** QA2 reconciliation 2026-10-05, rerun after Q6, for change `bid-history-winner-priority`. Reread every case against `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54`, the requirement, `decisions.md` (Q1 to Q6), `ui-design.md`, `tech-design.md`, `tasks.md` 2.1 to 2.4, the PRD lines on Bidding · Auction Panel and Listing Page Blocks · Bid History, the durable spec and suite, `cap-custom-maximum-entry`'s and `lot-gallery-strip-by-width`'s suites on this capability, and the build: `types.ts`, the ClosedSoldEqualMax story and its scenario lines. It is a statement, not proof.
-
-| Finding | Disposition |
-| --- | --- |
-| Q6: rows tied on amount list in the order their maximums were set | **Agree:** the order and the flag are the consumer's, walked on the lot page; the list draws whatever row is flagged, so `shared-ui-auction-listing-SC-51` and TC28 hold unchanged |
-| The `samePricePriority` doc comment in `types.ts` says the row matches the leading price, which Q4 widened to any older tie | **Agree:** task 2.4 corrects it; no case reads a doc comment |
-| TC29 still has no render that leaves `winner` unset | **Kept:** task 2.4 owes the story; the case stays `draft` |
-| Case ids `US1-TC27-1` to `US1-TC29-1` | **Checked:** the durable suite ends at `TC18`; `cap-custom-maximum-entry` takes `TC19` to `TC26` and `lot-gallery-strip-by-width` `TC10` to `TC12`. No collision |
-| Raised questions | None - Q1 to Q6 settle what this capability turns on |
-
-**Uncovered anchors:** none. Public bid history outcome's three items each have a case - winner crown by TC27 and TC29, equal-max tip by TC28, live lots by TC27's second step - and `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54` are each asserted by one of them.
-
-**Run:** QA2 reconciliation 2026-10-05, rerun after the built tie order, for change `bid-history-winner-priority`. Reread every case against `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54` and the requirement, `decisions.md` (Q1 to Q6, as Q6 now names the one-ms answer stamp), `tech-design.md` Decisions 1 to 5, `tasks.md` 2.1 to 2.4 and 3.1 to 3.2, `ui-design.md`, the PRD lines on Bidding · Auction Panel and Listing Page Blocks · Bid History, the durable spec and suite, `cap-custom-maximum-entry`'s and `lot-gallery-strip-by-width`'s suites on this capability, and the build: `listing-bid-history-list.tsx`, `types.ts` and the ClosedSoldEqualMax and Default stories. It is a statement, not proof.
-
-| Finding | Disposition |
-| --- | --- |
-| Q6 now says the build lists the earlier maximum first by stamping the leader's automatic answer one ms after the challenger | **Agree:** the order is the consumer's; the list draws whatever row is flagged, so `shared-ui-auction-listing-SC-51` and TC28 hold unchanged |
-| Each case against its scenario - TC27 / `shared-ui-auction-listing-SC-50`, TC28 / `-SC-51`, TC29 / `-SC-54` | **Agree:** pre-conditions, copy and expected results match each GIVEN and THEN, the ANDs included |
-| Accept-review: the `## Settled` lines cited `decisions Q4/Q5/Q6` without the change, and fold beside other changes' Settled lines | **Folded in:** each Settled line names `bid-history-winner-priority` and its question |
-| Accept-review: no `### Manual` table for TC27 to TC29 | **Folded in:** `### Manual` below names what a person drives for each |
-| The built crown still falls back to `"Winner"` and no story leaves `winner` unset | **Kept:** task 2.4 owes both; TC29 stays `draft` and fails until then |
-| Case ids `US1-TC27-1` to `US1-TC29-1` | **Checked:** the durable suite ends at `TC18`; `cap-custom-maximum-entry` issues `TC19` to `TC26` and `lot-gallery-strip-by-width` `TC10` to `TC12`. No collision |
-| Questions for the PM | None - Q1 to Q6 settle what this capability turns on |
-
-**Uncovered anchors:** none. Public bid history outcome's three items each have a case - winner crown by TC27 and TC29, equal-max tip by TC28, live lots by TC27's second step - and `shared-ui-auction-listing-SC-50`, `-SC-51` and `-SC-54` are each asserted by one of them; every case stays `draft`.
-
-**Run:** Blind pass read Purpose (durable), Feature set (delta),
-user-journeys.md (Walked by nobody), proposal.md, decisions.md (goals,
-non-goals, Q1–Q4, empty Raised), PRD Gallery strip lines, and durable
-feature-tcs.md for id continuity with Reconciliation stripped. Denied:
-every Requirements section, openspec/specs/ beyond those excerpts,
-openspec/changes/archive/.
-
-| Finding | Disposition |
-| --- | --- |
-| Wide ListingLotGallery shows a left rail | Folded as covered by `shared-ui-auction-listing-SC-47` / `shared-ui-auction-listing-US1-TC30-1` |
-| Stacked ListingLotGallery hides the rail, keeps previous/next and progress | Folded as covered by `shared-ui-auction-listing-SC-48` / `shared-ui-auction-listing-US1-TC31-1` |
-| One ListingLotGallery image has no rail | Folded as covered by `shared-ui-auction-listing-SC-49` / `shared-ui-auction-listing-US1-TC32-1` |
-| Empty ListingLotGallery has no item or navigation | Folded as covered by `shared-ui-auction-listing-SC-56` / `shared-ui-auction-listing-US1-TC33-1` |
-| Raised questions from the blind pass | None — Q1–Q4 already settled width rule, stacked replacement, ListingGallery carve-out, and unnamed threshold |
-
-**Uncovered anchors:** none after the stated scenario and case patches.
-
-**Run:** QA2 re-run, 2026-10-06, for change `align-collector-times-to-local-zone`, in a fresh context, after the final accept-review's blocker was fixed in the `shared/dates-and-times` delta (a scenario narrowed, decisions Q20 and Q21, the tech design, the tasks and the PRD pages aligned with it) and after decisions Q28, which the planning owner settled by default and the human has not yet answered (a grading letter's shop-hours line keeps its own wording, a recorded non-goal). No new blind reading ran, and QA1 and Dev were not run again: no anchor changed after they read them, so both readings stand. It joined three readings on the anchors: QA1's blind cases from the first run, Dev's delta `spec.md`, `tech-design.md` and `tasks.md` as the editor revised them, and the human's answers (decisions Q5 to Q27, with the Q28 default) as the editor applied them to the proposal, the specs, the design, the tasks, the suites and the PRD pages. QA1, as its run recorded, read the rulebook, the `spec-to-tcs` skill, `writing.md`, `test-traceability.md` and `tcs-conventions.md`, and a bundle of the change's `proposal.md`, `decisions.md` with `## Raised`, `openspec/config.yaml`'s `context`, each capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, its PRD page and the durable suite with its `## Reconciliation` stripped; it was denied every `## Requirements` section and scenario, `tech-design.md`, `tasks.md`, every other suite, application code and every validator. Dev, as its run recorded, was denied every `feature-tcs.md`, every domain suite, every reconciliation and QA1's output. This pass was not blind and wrote no case. It read the planning skill and the rulebooks whole (`specs-to-test-cases.md`, `tcs-conventions.md`, `test-traceability.md`, `writing.md`, `task-ownership.md`), the change's artifacts, the durable spec and suite this change folds into, the touched PRD pages as a diff against `HEAD`, the store's `packages/ui` formatter, tile and bid card closed-block code, stories and tests and, read-only, searches of the application for callers of `AuctionCard`, `formatListing*` and `formatCollectorDeadline`. It re-derived the clocks the cases state (Hong Kong, Tokyo, New York and Kiritimati, and the tile's zone names) from Node's `Intl` and found them as written, and checked that no other open change issues the new scenario or the two new case ids of this capability. It ran `pnpm run tcs:validate` on this scope, plain and with `--strict`, with no findings; `pnpm run trace validate` on the working tree and on a clean `git archive HEAD` export, where the only new issues are the delta-against-durable duplicate-id pairs (the `shared-ui-auction-listing-US1-TC11-1` case); `openspec validate --strict`; `pnpm check:manual`, with no failures and no warning naming this change; `accept-preflight`; a fold of all three deltas in a scratch copy of the store, read against the durable files (every kept marker byte-identical but for revision 2 on `shared-dates-and-times-SC-11` to `shared-dates-and-times-SC-14`, every durable heading verbatim, `tcs:validate --require-suites` clean on the folded copy); and the store's node-lane tests for the formatter, PDF and `AuctionCard` files (39 pass) and the `@grade10/ui` type check. It ran none of the application's tests and did not run the story lane. It changed this line and no other in this file. No domain, product or platform suite sits above this capability (the proposal records no domain and no platform impact), so no scenario is covered at domain. It is a statement, not proof.
-
-| Finding | Disposition |
-| --- | --- |
-| TC11: bid rows read in the supplied locale and time zone (durable draft, restated by QA1 with one new result, no zone name after the older time) | **Agreed:** `shared-ui-auction-listing-SC-13` and the requirement's `timeZone` thread; the added result follows `shared-dates-and-times-SC-23`. QA2 restyled `1 September 2026` to `1 Sep 2026` (the requirement states `DD Mon YYYY, HH:MM`) and took in the rows of QA1's `shared/dates-and-times` TC5 (Traditional Chinese with New York, with Kiritimati, English with Tokyo): the same steps on the same block with other values. **Restyled after clarification:** the Traditional Chinese rows asserted a month "worded in zh-Hant", which the built formatter does not draw (it prints a bare month number); decisions Q15 leaves that wording out of this change, so those rows now assert the day, the year and the clock only. The case keeps its id, its revision and its marker: it is a draft nobody has reviewed and no test accepts, and the rules keep a draft's revision when a result joins it |
-| TC56: a lot's tile and bid card state one deadline in Hong Kong and New York | **Dropped:** its tile step repeats durable `shared-ui-auction-listing-US1-TC55-1` (Hong Kong `HKT`, New York `EDT`); its bid card step moved to the `shared/dates-and-times` suite, whose scenario states it. QA1's acceptance duty passes to that case and to durable TC55 |
-| TC57: a tile's close line takes the supplied locale and zone together | **Agreed:** `shared-ui-auction-listing-SC-55` with the requirement's `locale` and `timeZone`. **Trimmed:** the result "the line is worded in the locale": no scenario states what the tile's words are in another locale, and the built line keeps its English prefix and prints the month of a Chinese locale as a bare number; decisions Q15 leaves both out. **Result added after clarification:** the zone's name is English in a Traditional Chinese tile, `GMT+9` for Tokyo and `EDT` for New York (decisions Q5) |
-| TC58: a bid row in a non-timestamp state shows its supplied display text | **Folded in:** `shared-ui-auction-listing-SC-57`, for the requirement's "unless `timeOverride` is set" and the PRD's display text; Dev wrote none because this change does not move it, and the clause is cheap to hold now. The case stays draft and covers it |
-| `shared-ui-auction-listing-SC-55`: a catalogue tile's close follows the viewer | **Agreed:** durable `shared-ui-auction-listing-US1-TC55-1` already walks it and this change does not rewrite it; it is not carried here |
-| Raised: which tile states show a dated line that names a zone, and whether Closed names one | **Rejected** for the tile: the requirement says the Ends, Opens and Closed line names the viewer's zone. For the lot bid card's closed block, which named no zone, **landed:** decisions Q6. The requirement now says the closed lot's close time names the zone, `shared-dates-and-times-SC-14` states it, and `shared-dates-and-times-US1-TC11-1` walks the block |
-| Raised: does the lot bid card show a dated deadline, and does it name the zone | **Rejected:** the requirement has the bid card thread `timeZone` to a collector deadline line, and the open lot's line names the zone; the closed block is the row above |
-| Raised: does an older bid row state its zone | **Rejected:** the local-moment requirement and the PRD say no zone suffix |
-| Raised: what a row shows with neither an accepted instant nor display text | **Rejected:** the PRD says each row keeps its accepted instant as data, and the row type requires it; the display text replaces only the formatted time |
-| Raised: does a tile's zone name follow a Traditional Chinese locale | **Landed:** decisions Q5, restated by decisions Q18 as the zone's short name in US English, `HKT` for Hong Kong, an English offset where it has none. The name is English in every locale, which TC57 reads |
-| Raised: are the tile's Ends, Opens and Closed words English in every language, and may a Chinese month read as a bare number | **Landed:** decisions Q15, left out of this change; no scenario and no result asserts either. The bare month number goes to the bug lane |
-| Raised: at what age a recent bid row becomes a local moment | **Rejected:** the activity-time requirement says seven days |
-| Second re-run: the display-text scenario and case named the row by its state ("no timestamp"), while the requirement and durable `auction-listing-SC-22` name the supplied `timeOverride` on a row that still carries its accepted instant | **Restyled:** `shared-ui-auction-listing-SC-57` names `timeOverride`; `shared-ui-auction-listing-US1-TC58-1` says the row carries both an accepted instant and a display text and drops the timestamp wording. Ids, revisions and markers kept |
-| Raised: does the lot bid card's closed block name a zone when it shows the close day alone (decisions Q20) | **Landed:** decisions Q20, narrowed by Q21. The requirement says a close that shows a clock names the viewer's zone and a close shown as a day alone names none; the clock form is read by `shared-dates-and-times-US1-TC11-1` and the day-only form by `shared-dates-and-times-US1-TC18-1`, and no case here asserts either |
-| Accept-review: the delta's journey statement was older than the durable one, so the fold would have replaced the statement an earlier change folded in | **Restated:** the delta suite carries the durable `Walked by` line and journey statement word for word, so the fold changes neither |
-| Accept-review: the requirement's bid card and tile sentences named only `HKT` and `EDT`, while `shared-ui-auction-listing-US1-TC57-1` reads `GMT+9` | **Restated:** both sentences point at the dates rule, and a closing sentence says the viewer's zone is named as `shared/dates-and-times` names it: its short name in US English, or its offset in English where US English has none, whatever the locale |
-| Contradictions between QA1's cases and Dev's scenarios | **Contradicted:** none. QA1's TC58 premise, a row with no timestamp, is the display-text override on a row that still carries its accepted instant, and TC57's "worded in the locale" is not a claim any scenario makes |
-| tech-design.md decision 3: require `locale` on `AuctionCard` | **Joined:** the requirement already says `AuctionCard` requires `locale` and `timeZone`, and the built tile defaults `locale` to English, so task 2.3 closes the gap; TC57 supplies `locale` in every row. No case or scenario moves |
-| `shared-ui-auction-listing-SC-13` for the personal bidding dialog's rows | **Out of suite:** the dialog (`ListingUserBidHistory`) takes the same required `locale` and `timeZone`; the store's type check holds the props and `listing-user-bid-history.stories.tsx` renders it. The scenario names a bid card only |
-
-**Uncovered anchors:** none for `Localized activity`.
-
-**Run:** QA1 read only the frozen behavioral bundle at `/private/tmp/issue-1008-01a11f70-1791528937777/qa1-input`: outline, journeys, proposal, decisions, UI states, linked PRDs, configuration, continuity cases and the auction domain suite. It was denied Requirements, scenario markers and coverage, technical design, tasks, reconciliation and archives. QA2 read that bundle, independent Dev output and durable continuity markers at checkpoint `7e827ba031b8083adb5d16105a7bae40e689d3e2`, against fetched main `68548f870`.
-
-| Blind case | Disposition | Scenario claims verified |
-| --- | --- | --- |
-| US1-TC19-2 | **Folded in** - exact ceilings in USD/HKD/JPY; both modes and callback units | SC-38, SC-58 |
-| US1-TC20-2 | **Folded in** - native single-digit append retains the prior draft; includes prior drafts below the ceiling to distinguish restoration from clamping | SC-39, typed branch of SC-60 |
-| US1-TC21-2 | **Folded in** - native paste into empty field becomes the ceiling in both modes | SC-40 |
-| US1-TC22-2 | **Folded in** - selected paste and multi-character replacement become the ceiling; fill using insertText is replacement | SC-41, SC-59 |
-| US1-TC23-2 | **Folded in** - fractional paste is cleaned before clamping, including amounts beyond safe Number precision | SC-42 |
-| US1-TC24-2 | **Folded in** - raise shares append restoration and replacement correction; appended paste clamps in both modes | SC-43, SC-59, pasted branch of SC-60 |
-| US1-TC25-2 | **Folded in** - correction alone shows no ceiling, invalid-amount or below-floor copy | No-copy clauses of SC-38 to SC-43 and SC-53; SC-59, SC-60 |
-| US1-TC26-2 | **Folded in** - fractional paste at the cleaned ceiling is accepted without rounding; both modes and committed minor units | SC-53, SC-58 |
-
-- **Native operations** - The browser walk drives keyboard append, selection replacement, multi-character fill and paste. Shared component regressions check actual input DOM, draft/review state and callback units together. Every corrected draft agrees with the reviewed amount. Existing cleaning, clear and ordinary below-ceiling paths remain focused money/component regressions in tasks 1.1 and 1.4.
-- **Consumer contract** - The required `view.ceilingMinor` is supplied with currency by the consumer from `bidCeiling(currency)`. Type checks in tasks 1.4 and 2.3 verify required migration; the adapter regression in task 2.1 verifies policy wiring. Shared code does not duplicate currency policy.
-- **Superseded reading** - Empty-on-paste and restore-on-paste are rejected by Q1/Q2/Q5. SC-40 to SC-43 keep issued titles for CLI identity; their current result clauses control the cases. No case is dropped.
-- **Continuity** - Unchanged cases remain in the durable suite and are retained by the acceptance fold; they are not copied into this narrow active suite. The changed ceiling anchor lists current scenarios in source order. TC19 to TC26 remain draft at revision 2.
-- **Tasks** - Group 1 owns shared input, helper/component tests, fixtures and source/type/story verification. Groups 2 and 4 own consumer wiring and native collector walks. This records planned verification, not executed test results.
-- **Questions** - None. Frozen Q1 to Q5 settle the ceiling branches. QA2 adds executable detail without changing anchors or product decisions.
-
-**Run:** QA1 read the frozen anchors - the feature-set groups, the walked-by-nobody journeys line, the proposal, the decisions and the UI states - and drafted cases without the requirement texts or scenarios. QA2 reconciled each case against the scenarios Dev wrote, adding the `covers` links below.
-
-| Blind case | Disposition | Scenario claims verified |
-| --- | --- | --- |
-| US1-TC59 | **Folded in** - a stepped amount above the ceiling is offered at the ceiling and captioned as the limit; unclamped chips keep their stepped amount; a committed clamped chip passes the ceiling in minor units | SC-61 |
-| US1-TC60 | **Folded in** - chips clamped onto the same amount merge to one chip | SC-62 |
-| US1-TC61 | **Folded in** - both collapse readings: a maximum at the ceiling and a floor pushed past it by the minimum next bid; the row leads with `Max`, keeps the Info explanation, drops the raise-mechanism line and keeps the buyer fee | SC-63, SC-64 |
-| US1-TC62 | **Folded in** - a viewer holding no maximum sees the ceiling amount and the limit line, with the fee line intact | SC-65 |
-| US1-TC63 | **Folded in** - the collapse renders ahead of the needs-card lock | SC-66 |
-
-- **Continuity** - Unchanged cases stay in the durable suite and are retained by the acceptance fold; they are not copied into this active suite.
-- **Tasks** - Group 1 owns the shared helpers, component, catalogs, fixtures, stories and verification; group 2 owns consumer copy supply; the walk is group 3. This records planned verification, not executed test results.
-- **Questions** - None. Q1 to Q5 settle the collapse, the trigger, the fee line and the clamp.
-
-**Cases** - All 14 cases remain drafts. `TC-fb2@4` covers SC-9e0 and SC-q3n; `TC-ygd@3` SC-8ym; `TC-35i@3` SC-wdd; `TC-jr1@3` SC-z2x and SC-qdv; `TC-bfp@3` SC-y2e; `TC-hsy@3` SC-xxl; `TC-ftm@3` SC-z2x; `TC-g02@3` SC-6n7; `TC-dej@2` SC-huw; `TC-w4r@2` SC-atq; `TC-9rx@2` SC-v6g and SC-1mi; `TC-5dh@2` SC-cfl; `TC-swf@2` SC-rnz; and `TC-oem@1` SC-2wv. `TC-fb2` was repaired in place at rev4 to assert the exact 1,000,000,000 USD-minor-unit callback in both set and raise routes. No case was added.
-
-**Scenario coverage** - The 16 linked scenarios are fully asserted. `SC-7o5`, `SC-t9f`, `SC-2s5` and `SC-dv0` remain out of suite and are exercised by their existing durable cases. Those unchanged durable rows still have older HKD/JPY fixtures for archive reconciliation. Automated `Decided by` labels on draft cases are not execution evidence. `TC-19` remains a draft manual case after the callback repair. No contradictory assertion remains.
-
-**Run:** no blind pass - a carrier repoint: `AuctionCard` is removed and the tile deadline requirement moves to `AuctionLotCard`, the tile the catalogue draws. The two tile cases were revised in place; no case joins or leaves.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| US1-TC55 | Revised as US1-TC55-2, rev 2 | Its carrier is now a closed `AuctionLotCard`; the expected zone names are unchanged |
-| US1-TC57 | Revised as US1-TC57-2, rev 2 | Its carrier is now the preview workbench tile; the deciding formatter test `packages/date/src/local.test.ts` is unchanged, same rows and results |
-
-**Run:** Not a blind pass — the change was written code-first on its own
-decision (decisions Q6), so these cases were drafted with sight of the
-implementation and the delta scenarios. This reconciliation maps each
-modified and added anchor to a case, records what the durable suite already
-carries, and names what remains pending.
-
-| Finding | Disposition |
-| --- | --- |
-| The pointer raises the lens over the selected image | Covered by `shared-ui-auction-listing-SC-67` / `g10.shared-auction-listing.US1-TC65` (`TC-9l4`) |
-| A focused lens moves with arrows, never steps, and hides on Escape | Covered by `shared-ui-auction-listing-SC-68`, `shared-ui-auction-listing-SC-69` / `g10.shared-auction-listing.US1-TC67` (`TC-jd4`) |
-| A touch pointer raises no lens and a swipe still steps | Covered by `shared-ui-auction-listing-SC-70` / `g10.shared-auction-listing.US1-TC68` (`TC-br7`) |
-| Non-selected slides and video carry no focusable lens | Covered by `shared-ui-auction-listing-SC-71`, `shared-ui-auction-listing-SC-72` / `g10.shared-auction-listing.US1-TC69` (`TC-v48`) |
-| The magnified view requests `zoomSrc` | Modified `shared-ui-auction-listing-SC-03` (`SC-v9a`) is covered by `g10.shared-auction-listing.US1-TC65` (`TC-9l4`) |
-| An omitted zoom source magnifies `src` | Modified `shared-ui-auction-listing-SC-04` (`SC-4sr`) is covered by `g10.shared-auction-listing.US1-TC66` (`TC-ar2`) |
-| Labels, including `zoomInstructions`, come from the consumer | Durable `g10.shared-auction-listing.US1-TC10` carries modified `shared-ui-auction-listing-SC-08`; no new case needed |
-| Raised questions from the reading | None — Q1–Q6 settled the dialog removal, the touch limitation, the accessible name, the zoom source, the package, and the order |
-
-**Uncovered anchors:** none. Post-hoc `covers` links for the modified
-source scenarios land on TC65 and TC66.
-
-### Manual
-
-| Manual | Why |
-| --- | --- |
-| `shared-ui-auction-listing-US1-TC24-1` | A person enters `9999999999` on Leading, under Raise your private maximum, types `1` and reads the draft, in task 3.1's walk; the helper's test proves the set path's restore and renders no raise panel |
-| `shared-ui-auction-listing-US1-TC25-1` | A person enters the floor `60500` on CustomMaximumCeiling, pastes `99999999999` and reads the panel around the field for any invalid-amount, below-floor or too-large message; the helper's test returns a draft and renders no panel |
-| `shared-ui-auction-listing-US1-TC26-1` | A person pastes `9999999999.99` over the seeded `500` on CustomMaximumCeiling and reads the draft, in task 3.3's walk; engineering flips it with `pnpm run tcs:automated` if the helper's paste from an empty seed is taken to decide it |
-| `shared-ui-auction-listing-US1-TC27-1` | A person opens ClosedSoldEqualMax and Default in Storybook and reads where the crown sits, after the amount and before You, and that it is the primary colour, in task 3.1's walk; the two plays prove only that a Winner name shows on ClosedSoldEqualMax and none on Default |
-| `shared-ui-auction-listing-US1-TC28-1` | A person hovers the Info control on ClosedSoldEqualMax's second row and compares its tone with the amount's, in task 3.1's walk; the play proves only that the tip's name exists |
-| `shared-ui-auction-listing-US1-TC29-1` | To be walked in task 2.4's story that renders ClosedSoldEqualMax with `winner` copy unset: a person reads every row for a crown or a name the copy does not supply; no render leaves `winner` unset today |
-| `shared-ui-auction-listing-US1-TC11-1` | A person reads each locale's older row in Storybook beside the time zone control, to be walked in task 5.1's walk; no test reads a Chinese or Korean row yet |
-| `shared-ui-auction-listing-US1-TC57-1` | A person reads the tile's close line in Storybook with the locale set to Traditional Chinese and the time zone control on Tokyo and on New York, to be walked in task 5.1's walk; the store test (task 2.1) is to decide the rendered string, not what a reader sees in a Chinese Storybook |
+- The tile's Ends, Opens and Closed words stay English in every language.
+- The custom maximum ceiling is USD10,000,000 whole dollars; the HKD and JPY ceilings are retired.
+- An appended typed digit above the ceiling keeps the valid draft; an oversized paste or replacement becomes the ceiling after whole-dollar cleaning.
+- A ceiling correction shows no maximum-bid or invalid-amount message; Set maximum and Raise share the rule.
+- Chips step 1×, 2× and 4× the increment, from the committed maximum for a leader and from the current bid otherwise; a leader's typed floor is the maximum plus USD1 and is not chip 1.
+- Magnification happens in place under a pointer-following lens; there is no magnifier button or zoom dialog, and a touch pointer raises nothing.
+- The lens takes the consumer's zoom name, with optional instructions, as its accessible name; the magnified copy stays hidden from assistive technology.
