@@ -1,51 +1,82 @@
 # shared/auth/roles Test Cases
 
-**Status:** reopened · 15/18
+**Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Reviewed:** 2026-10-08, tcs-rules r4, lapsed 2026-10-24
 
-## shared-auth-roles-US1: Collector holds the user role only
+## Background
+
+* `<console url>` is the Grade10 console of the environment under test. Each operator holds the role a case names and no other operator role.
+* The vault fixtures: `<vault case A>`, financed, in progress, no cost agreed; `<vault case B>`, cost agreed, not yet paid out, with an identity capture and a signed document; `<vault case C>`, financed, paid out, a repayment due; `<vault case D>`, financed, a recorded valuation and no offer.
+* `<auction order>` has an unpaid invoice; `<paid order>` is paid in full with no refund; `<item_1>` is owned by `<collector A>`, no place marks it, and its top move carries one proof.
+
+## Walk 1: Staff's console
+
+**Starting state:**
+
+- staff signed in on `<console url>`
+
+### Route
+
+1. Write a store record, then open the auction catalogue and operate it.
+   - Both are saved `shared.auth-roles.US2-TC1`
+2. Open the user directory.
+   - No accounts are listed `shared.auth-roles.US2-TC2`
+3. On `<vault case A>`, start the valuation, record a valuation and make an offer.
+   - Each is saved and shown on the case `shared.auth-roles.US3-TC1`
+4. Open `<vault case B>` and look for its Payouts tab.
+   - There is none `shared.auth-roles.US3-TC2`
+
+## Walk 2: Treasurer's console
+
+**Starting state:**
+
+- treasurer signed in on `<console url>`
+
+### Route
+
+1. Open `<vault case B>` and record the payout on its Payouts tab.
+   - The case shows the payout `shared.auth-roles.US3-TC1`
+2. Open `<vault case A>`'s Case tab, then `<vault case B>`'s Documents tab.
+   - No `Start the valuation`, and no `View photograph` `shared.auth-roles.US3-TC2`
+3. Look for Inventory in the navigation.
+   - There is none `shared.auth-roles.US2-TC2`
+
+## shared.auth-roles.US1: Collector holds the user role only
 
 **As a** collector who has never been granted an operator role,
 **I want** my roles to be `user` only,
 **so that** I cannot act as staff by accident.
 
-<!-- trace:case id=g10.shared-roles.TC-l66 rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
-### shared-auth-roles-US1-TC3-1: User role cannot take an operator action
+<!-- trace:case id=g10.shared-roles.TC-l66 rev=1 -->
+### shared.auth-roles.US1-TC1: A collector holding only the user role is refused operator actions
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-01
 
 **Pre-conditions:**
 
 * customer(roles are `user` only) is signed in.
 
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
 **Steps:**
 
-1. On `<grade10 admin users url>`, try to ban an account.
+1. Open the console's user directory and try to ban an account.
 
 **Expected Results:**
 
-* The ban is refused.
+* The ban is refused, and the account is not banned.
 
-
-<!-- trace:case id=g10.shared-roles.TC-5hv rev=2 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
-### shared-auth-roles-US1-TC2-2: Unknown role name is dropped
+<!-- trace:case id=g10.shared-roles.TC-5hv rev=2 -->
+### shared.auth-roles.US1-TC2: A role name nobody declared shows nowhere and grants nothing
 
 **Classification:**
 
@@ -53,448 +84,35 @@
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-01
-
-**Pre-conditions:**
-
-* `<collector A>`'s stored roles are `user` and `<unknown role>`, set up outside the console.
-* admin(holds `user:list`) is signed in to the console.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `collector A` | A collector holding no operator role |
-| `unknown role` | intern |
-
-**Steps:**
-
-1. In the console's user directory, search for `<collector A>` and open the account.
-2. Read the account's roles.
-
-**Expected Results:**
-
-* Step 2 lists `user` only.
-* `<unknown role>` appears nowhere on the account.
-<!-- trace:case id=g10.shared-roles.TC-u0g rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
-### shared-auth-roles-US1-TC4-1: Admin console rejects a user sign-in
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
 * **Type:** security
-* **Suites:** exploratory
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-roles-US-01
 
 **Pre-conditions:**
 
-* customer(roles are `user` only) is signed out.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <collector email> | collector@example.com, an address whose roles are `user` only |
+* `<collector A>`'s stored roles are `user` and `intern`, set up outside the console.
+* admin is signed in on `<console url>`.
 
 **Steps:**
 
-1. Sign in as <collector email> on <grade10 admin url>.
+1. In the user directory, open `<collector A>`.
 
 **Expected Results:**
 
-* The admin console rejects the sign-in.
+* The account's roles read `user` only; `intern` appears nowhere on it.
 
 ---
 
-## shared-auth-roles-US2: Operator's grants follow the closed vocabulary
+## shared.auth-roles.US2: Operator's grants follow the closed vocabulary
 
 **As an** operator,
 **I want** each action allowed only when my role grants that permission,
 **so that** support cannot set roles, staff cannot ban, and an unknown permission grants nothing.
 
-<!-- trace:case id=g10.shared-roles.TC-m1b rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC1-1: Support cannot set roles but can still list and ban
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(role `support`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject user id | An account that does not hold `admin` |
-| subject session | A session of an account that does not hold `admin` |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, try to change another account's roles.
-2. List the accounts.
-3. Ban `<subject user id>`.
-4. End `<subject session>`.
-
-**Expected Results:**
-
-* The role change is refused.
-* Listing accounts, the ban, and ending the session are allowed.
-
-<!-- trace:case id=g10.shared-roles.TC-cd2 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC2-1: Staff cannot list or ban users
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(role `staff`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, try to list accounts.
-2. Try to ban an account.
-
-**Expected Results:**
-
-* The list is refused.
-* The ban is refused.
-
-<!-- trace:case id=g10.shared-roles.TC-ni5 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC4-1: Staff can write the store and operate the auction catalog
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(role `staff`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin auction catalog url | The Grade10 operator auction catalogue URL in the test environment; bind its URL only |
-| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Write a store record on `<grade10 admin url>`.
-2. Operate the auction catalog on `<grade10 admin auction catalog url>`.
-
-**Expected Results:**
-
-* The store write is allowed.
-* The auction operate action is allowed.
-
-<!-- trace:case id=g10.shared-roles.TC-c1m rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC5-1: Auditor reads the trail and nothing else
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(only operator role is `auditor`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Read the identity audit trail on `<grade10 admin audit url>`.
-2. On `<grade10 admin users url>`, try to ban an account.
-3. Try a store write on `<grade10 admin url>`.
-4. Try to change another account's roles.
-
-**Expected Results:**
-
-* Reading the trail is allowed.
-* The ban, the store write, and the role change are refused.
-
-<!-- trace:case id=g10.shared-roles.TC-ozo rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC6-1: Combined roles stack their grants
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(holds `support` and `staff`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. List accounts on `<grade10 admin users url>`.
-2. Write a store record on `<grade10 admin url>`.
-
-**Expected Results:**
-
-* The list is allowed.
-* The store write is allowed.
-
-<!-- trace:case id=g10.shared-roles.TC-8ru rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC7-1: Operator cannot widen what a role grants
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(holds `user:set-role`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Open another account on `<grade10 admin users url>`.
-2. Read what can be changed for that account.
-
-**Expected Results:**
-
-* Who holds a role can be changed.
-* What that role grants cannot be changed.
-
-<!-- trace:case id=g10.shared-roles.TC-vdy rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC11-1: Finance collects auction money and holds nothing else
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(only operator role is `finance`) is signed in on `<grade10 admin url>`.
-* `<auction order>` is awaiting payment.
-* `<vault case>` is awaiting payout.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| auction order | An auction order with an unpaid invoice |
-| vault case | A vault case whose cost is agreed and not yet paid out |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
-| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin auction url>`, open the Orders tab and open `<auction order>`.
-2. Click `Record payment` and record the payment of `<auction order>`.
-3. Look at `Dispatch` on `<auction order>`.
-4. Look at `Refund` on `<auction order>`.
-5. Open the Listings tab and look for `Create listing`.
-6. Open the Campaigns tab and look for `Open new campaign`.
-7. Look for Store in the console's navigation.
-8. Look for Vault in the console's navigation, then navigate to `<grade10 admin vault url>`/cases/`<vault case>`.
-
-**Expected Results:**
-
-* Step 1 shows `<auction order>`; step 2 records the payment and `<auction order>` shows it.
-* `Dispatch` is disabled with "Needs shipment processing", and `Refund` with "Needs refund processing".
-* The Listings tab offers no `Create listing`, and the Campaigns tab no `Open new campaign`.
-* Store and Vault are not in the navigation, and step 8 lands on another section, so neither `<vault case>` nor its payout is offered.
-* `<auction order>` shows no shipment and no refund; `<vault case>` shows no payout.
-
-<!-- trace:case id=g10.shared-roles.TC-bs3 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC14-1: Staff run the grading counter, bookings, stock and catalogue
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(only operator role is `staff`) is signed in on `<grade10 admin url>`.
-* `<grading request>` was asked for by another staff member and awaits approval.
-* `<booking>` and `<stock item>` exist.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grading request | A settings or fee-sheet change another staff member asked for, awaiting approval |
-| booking | A booked appointment |
-| stock item | An inventory item with stock on hand |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin appointments url | The Grade10 operator appointments URL in the test environment; bind its URL only |
-| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
-| grade10 admin grading url | The Grade10 operator grading URL in the test environment; bind its URL only |
-| grade10 admin inventory url | The Grade10 operator inventory URL in the test environment; bind its URL only |
-| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin grading url>`/walk-in, click `Start at the desk` and record a walk-in submission.
-2. On `<grade10 admin grading url>`/settings, click `Approve` on `<grading request>`.
-3. On `<grade10 admin appointments url>`, open the Bookings tab, click `Open` on `<booking>`, then `Move` it to another free slot.
-4. On `<stock item>`'s product page under `<grade10 admin inventory url>`, click `Intake` and add one unit.
-5. On `<grade10 admin auction url>`, open the Campaigns tab, click `Open new campaign` and save it.
-
-**Expected Results:**
-
-* The walk-in submission, the approval, the moved booking, the added unit and the new campaign are each saved and shown.
-
-<!-- trace:case id=g10.shared-roles.TC-tw2 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC15-1: Staff and admin move an item and open its proof
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-02
-
-**Pre-conditions:**
-
-* admin(only operator role is `<operator role>`) is signed in to the Grade10 console.
-* `<item_1>` is owned by `<collector A>`, no place marks it, and its top move carries one proof.
-
-**Test data:**
-
-| `<operator role>` |
-| --- |
-| `staff` |
-| `admin` |
-
-| Field | Value |
-| --- | --- |
-| collector A | The collector who owns `<item_1>` in this fixture; bind their user id only |
-| grade10 admin item page url | The Grade10 operator item page URL for `<item_1>` in the test environment; bind its URL only |
-| item_1 | The catalogue item owned by `<collector A>` and prepared with the standing in the pre-conditions; bind its item identity only |
-
-**Steps:**
-
-1. Navigate to `<grade10 admin item page url>` for `<item_1>`.
-2. In the Moves panel, click the proof's file name on the top move.
-3. Click `Transfer`, choose the custodian as Owner, enter a Reason, and click `Transfer`.
-
-**Expected Results:**
-
-* The proof downloads.
-* `<item_1>` reads the custodian as owner, and a new move to the custodian sits above the one whose proof step 2 opened.
-
-
-<!-- trace:case id=g10.shared-roles.TC-af9 rev=2 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC8-2: Refund processing records a refund without the settle grant
+<!-- trace:case id=g10.shared-roles.TC-ni5 rev=2 -->
+### shared.auth-roles.US2-TC1: Each role can take the actions its grants allow
 
 Runs once per row of **Test data**.
 
@@ -507,38 +125,47 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 
-* admin(only operator role is `<operator role>`) is signed in on `<grade10 admin url>`.
-* `<paid order>` is an auction order paid in full and not yet refunded.
+* The row's role is signed in on `<console url>`.
 
 **Test data:**
 
-| `<operator role>` | Holds payment settlement |
-| --- | --- |
-| `admin` | yes |
-| `staff` | no |
-
-| Field | Value |
-| --- | --- |
-| `paid order` | An auction order whose invoice is paid in full, with no refund recorded |
-| `refund amount` | Any amount from 1 minor unit up to the amount paid |
+| Role | Action | Shown afterwards |
+| --- | --- | --- |
+| support | list the accounts in the user directory | the accounts are listed |
+| support | ban an account that does not hold `admin` | the account reads banned |
+| support | end a session of an account that does not hold `admin` | the session is gone from its list |
+| staff | write a store record | the record is saved |
+| staff | open the auction catalogue and operate it | the change is saved |
+| staff | on grading's walk-in page, select `Start at the desk` and record a submission | the submission is listed |
+| staff | on grading's settings, select `Approve` on a change another staff member asked for | the change reads approved |
+| staff | in appointments, open a booking and `Move` it to another free slot | the booking shows the new slot |
+| staff | on a stock item's product page, select `Intake` and add one unit | stock on hand is one higher |
+| staff | on the auction Campaigns tab, select `Open new campaign` and save it | the campaign is listed |
+| staff | on `<item_1>`'s page, download the top move's proof, then `Transfer` it to the custodian with a reason | the proof downloads; the custodian reads as owner, with a new move on top |
+| admin | the same as the row above | the same |
+| support and staff together | list the accounts, then write a store record | both are allowed |
+| auditor | open the identity audit trail | the trail's entries are listed |
+| finance | on `<auction order>`, select `Record payment` and record it | the order shows the payment |
+| admin | on `<paid order>`, select `Refund` and refund 1 minor unit | the order shows the refund |
+| staff | on `<paid order>`, select `Refund` and refund the amount paid | the order shows the refund, although staff hold no payment settlement |
 
 **Steps:**
 
-1. On `<grade10 admin url>`, open the auction Orders tab and open `<paid order>`.
-2. Select `Refund`, enter `<refund amount>`, and confirm.
+1. Do the row's action.
 
 **Expected Results:**
 
-* Step 2 records the refund, and `<paid order>` shows `<refund amount>` refunded.
-* For `staff`, the refund is recorded although the role holds no payment settlement.
+* The row's result shows.
 
-<!-- trace:case id=g10.shared-roles.TC-gu0 rev=2 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
-### shared-auth-roles-US2-TC16-2: Treasurer holds no inventory grant
+<!-- trace:case id=g10.shared-roles.TC-cd2 rev=2 -->
+### shared.auth-roles.US2-TC2: Each role is refused the actions its grants do not allow
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -549,268 +176,155 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** shared-auth-roles-US-02
 
 **Pre-conditions:**
 
-* admin(only operator role is `treasurer`) is signed in to the Grade10 console.
-* `<item_1>` is owned by `<collector A>`, no place marks it, and its top move carries one proof.
+* The row's role is signed in on `<console url>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `collector A` | The collector who owns `<item_1>` |
-| `item_1` | A catalogue item owned by `<collector A>`, prepared as the pre-conditions say |
-| `grade10 admin item page url` | The console's item page for `<item_1>` |
+| Role | Tried | Shown |
+| --- | --- | --- |
+| support | change another account's roles | the change is refused; the roles are as they were |
+| staff | open the user directory | no accounts are listed |
+| staff | ban an account | the ban is refused |
+| auditor | ban an account, write a store record, change another account's roles | each is refused, and nothing changes |
+| finance | `Dispatch` and `Refund` on `<auction order>` | both disabled, with "Needs shipment processing" and "Needs refund processing" |
+| finance | `Create listing` on the Listings tab, `Open new campaign` on the Campaigns tab | neither is offered |
+| finance | Store and Vault in the navigation, then the address of `<vault case B>` | neither is in the navigation; the address lands on another section |
+| treasurer | Inventory in the navigation, then the address of `<item_1>`'s page | no Inventory section; `<item_1>` is not shown, with no title edit, `Transfer` or proof download |
+| admin holding `user:set-role` | change what a role grants, on another account's page | only who holds a role can be changed; what a role grants offers no control |
 
 **Steps:**
 
-1. Look for Inventory in the console's navigation.
-2. Open `<grade10 admin item page url>`.
-3. As admin(role `admin`), open `<grade10 admin item page url>`.
+1. Try the row's action.
 
 **Expected Results:**
 
-* Step 1 finds no Inventory section.
-* Step 2 does not show `<item_1>`, and offers no title edit, no `Transfer` and no proof download.
-* Step 3 shows `<item_1>` with its title, `<collector A>` as owner and its moves unchanged.
+* The row's result shows.
+
 ---
 
-## shared-auth-roles-US3: Case work and money are separate grants
+## shared.auth-roles.US3: Case work and money are separate grants
 
 **As an** operator,
 **I want** the grants that run a case and the grants that pay against it to sit in different roles,
 **so that** a person who only records payouts cannot open a customer's identity document.
 
-<!-- trace:case id=g10.shared-roles.TC-w8z rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
-### shared-auth-roles-US3-TC1-1: Identity documents open with their own read grant
+<!-- trace:case id=g10.shared-roles.TC-w8z rev=2 -->
+### shared.auth-roles.US3-TC1: The role that runs a case, the one that pays it, and the identity read each work
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** security
-* **Suites:** smoke
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** shared-auth-roles-US-03
 
 **Pre-conditions:**
 
-* admin(holds `kyc:read`) is on `<grade10 admin vault url>`.
-* `<vault case>` holds a customer's identity capture and a signed document.
+* The row's operator is signed in on `<console url>`, in the vault.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| vault case | A vault case whose customer has submitted an identity capture and signed its document |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
+| Operator | Action | Shown afterwards |
+| --- | --- | --- |
+| holds `kyc:read` | on `<vault case B>`'s Documents tab, select `View photograph`, then `Download` on the signed document | the photograph shows; the document downloads |
+| staff | on `<vault case A>`'s Case tab, select `Start the valuation`, record a valuation, then `Make an offer` and send it | the valuation and the offer show on the case |
+| treasurer | open `<vault case B>`, then select `Record the payout` on its Payouts tab | the case shows the payout |
 
 **Steps:**
 
-1. On the Queue tab, open `<vault case>` and go to its Documents tab.
-2. Click `View photograph` on the identity record.
-3. Click `Download` on the signed document.
+1. Do the row's action.
 
 **Expected Results:**
 
-* The identity photograph shows.
-* The signed document downloads.
+* The row's result shows.
 
-<!-- trace:case id=g10.shared-roles.TC-ug8 rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
-### shared-auth-roles-US3-TC2-1: Staff runs a vault case and is refused its money
+<!-- trace:case id=g10.shared-roles.TC-zgr rev=2 -->
+### shared.auth-roles.US3-TC2: Case work and money stay out of each other's reach, and the identity read is its own grant
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** shared-auth-roles-US-03
 
 **Pre-conditions:**
 
-* admin(only operator role is `staff`) is on `<grade10 admin vault url>`.
-* `<vault case A>` is awaiting an agreed cost.
-* `<vault case B>` has an agreed cost and is awaiting payout.
-* `<vault case C>` is a financed case with a repayment due.
-* `<auction order>` is awaiting payment.
+* The row's operator is signed in on `<console url>`, in the vault.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| vault case A | A financed vault case in progress with no cost agreed |
-| vault case B | A vault case whose cost is agreed and not yet paid out |
-| vault case C | A financed vault case, paid out, with a repayment due |
-| auction order | An auction order with an unpaid invoice |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
-| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
+| Operator | Looked for | Shown |
+| --- | --- | --- |
+| staff | the Payouts tab on `<vault case B>` and on `<vault case C>`, and the vault's Money tab | none of them |
+| staff | `Record payment` on `<auction order>` | disabled, with "Needs payment processing" |
+| treasurer | `Start the valuation` on `<vault case A>`, `Make an offer` on `<vault case D>` | neither is offered, and neither case changes |
+| treasurer | `View photograph` on `<vault case B>`'s Documents tab | not offered; no identity document shows |
+| holds `vault:read` without `kyc:read` | `View photograph` and the signed document's `Download` on `<vault case B>` | the case shows, but neither control is offered |
 
 **Steps:**
 
-1. Open `<vault case A>` from the Queue tab and click `Start the valuation` on its Case tab.
-2. Click `Record a valuation` and record one.
-3. Click `Make an offer` on `<vault case A>`'s Case tab and send the offer.
-4. Open `<vault case B>` and look for its Payouts tab.
-5. Open `<vault case C>` and look for its Payouts tab.
-6. On `<grade10 admin vault url>`, look for the Money tab.
-7. On `<grade10 admin auction url>`, open the Orders tab, open `<auction order>` and look at `Record payment`.
+1. Look for the row's controls.
 
 **Expected Results:**
 
-* Steps 1 to 3 are allowed; `<vault case A>` shows the valuation started and the offer made.
-* `<vault case B>` and `<vault case C>` show no Payouts tab, the vault shows no Money tab, and `Record payment` is disabled with "Needs payment processing".
-* `<vault case B>` shows no payout, `<vault case C>` no repayment, `<auction order>` no payment.
+* The row's result shows.
 
-<!-- trace:case id=g10.shared-roles.TC-8gk rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
-### shared-auth-roles-US3-TC3-1: Treasurer pays out but cannot run a case, set its cost or open the identity document
+<!-- trace:case id=g10.shared-roles.TC-dak rev=1 -->
+### shared.auth-roles.US3-TC3: Nobody pays out an offer they made
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** shared-auth-roles-US-03
 
 **Pre-conditions:**
 
-* admin(only operator role is `treasurer`) is on `<grade10 admin vault url>`.
-* `<vault case A>` is not yet under valuation.
-* `<vault case D>` is financed, has a recorded valuation and no offer.
-* `<vault case B>` has an agreed cost, is awaiting payout, and holds a customer's identity document.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| vault case A | A vault case not yet under valuation |
-| vault case D | A financed vault case with a recorded valuation and no offer |
-| vault case B | A vault case whose cost is agreed, not yet paid out, with an identity document submitted |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On the Queue tab, open `<vault case B>`.
-2. On its Payouts tab, click `Record the payout` and record it.
-3. Open `<vault case A>` and look for `Start the valuation` on its Case tab.
-4. Open `<vault case D>` and look for `Make an offer` on its Case tab.
-5. Open `<vault case B>`'s Documents tab and look for `View photograph` on the identity record.
-
-**Expected Results:**
-
-* Step 1 shows the case; step 2 records the payout and `<vault case B>` shows it.
-* `<vault case A>`'s Case tab offers no `Start the valuation`, `<vault case D>`'s no `Make an offer`, and `<vault case B>`'s Documents tab offers no `View photograph`.
-* `<vault case A>` shows no valuation started and `<vault case D>` no offer made, and no identity document shows.
-
-<!-- trace:case id=g10.shared-roles.TC-zgr rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
-### shared-auth-roles-US3-TC4-1: Reading a case does not open the person's identity documents
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-03
-
-**Pre-conditions:**
-
-* admin(holds `vault:read` and does not hold `kyc:read`) is on `<grade10 admin vault url>`.
-* `<vault case>` holds a customer's identity capture and a signed document.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| vault case | A vault case whose customer has submitted an identity capture and signed its document |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On the Queue tab, open `<vault case>`.
-2. Go to its Documents tab and look for `View photograph` on the identity record.
-3. Look for `Download` on the signed document.
-
-**Expected Results:**
-
-* Step 1 shows the case.
-* The Documents tab offers neither `View photograph` nor `Download`; neither document shows.
-
-<!-- trace:case id=g10.shared-roles.TC-dak rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
-### shared-auth-roles-US3-TC5-1: One person holding staff and treasurer cannot pay out their own offer
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** smoke, regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-roles-US-03
-
-**Pre-conditions:**
-
-* admin(holds `staff` and `treasurer`) is on `<grade10 admin vault url>`.
+* admin(holds `staff` and `treasurer`) is signed in on `<console url>`, in the vault.
 * `<second operator>` holds `treasurer` only.
-* `<vault case>` is financed, has a recorded valuation and no offer.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| vault case | A financed vault case with a recorded valuation and no offer |
-| second operator | Another operator, holding `treasurer` only |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
+| `<second operator>` | another operator, holding `treasurer` only |
 
 **Steps:**
 
-1. On `<vault case>`'s Case tab, click `Make an offer` and send it, then have the customer accept it on their vault case page.
-2. On `<vault case>`'s Payouts tab, click `Record the payout` and confirm.
-3. As `<second operator>`, open `<vault case>`'s Payouts tab and record the payout.
+1. On `<vault case D>`'s Case tab, select `Make an offer` and send it; have the customer accept it on their vault case page.
+2. On `<vault case D>`'s Payouts tab, select `Record the payout` and confirm.
+3. As `<second operator>`, record the payout on the same tab.
 
 **Expected Results:**
 
-* The offer is made.
-* Step 2's dialog reads "Two people" as unmet, naming the admin as the one who priced it; confirming is refused and `<vault case>` shows no payout.
-* In step 3, the dialog reads "Two people" as met.
-* Step 3 is allowed and `<vault case>` shows the payout.
+* Step 2: the dialog reads "Two people" as unmet, naming the admin as the one who priced it; confirming is refused and the case shows no payout.
+* Step 3: the dialog reads "Two people" as met, and the case shows the payout.
 
 ## Settled
 
@@ -836,5 +350,3 @@ Runs once per row of **Test data**.
 - **Changed in review** - the console offers no per-submission grading approval, so `shared-auth-roles-US2-TC14-1` approves a settings or fee-sheet change; an offer is made only on a financed case with a recorded valuation, so `shared-auth-roles-US3-TC2-1`, `shared-auth-roles-US3-TC3-1` and `shared-auth-roles-US3-TC5-1` start from one, and `shared-auth-roles-US3-TC3-1` looks for each hidden act on a case where it would otherwise show; `shared-auth-roles-US3-TC5-1` reads the payout dialog's "Two people" line; `shared-auth-roles-US2-TC15-1` names the new move apart from the one whose proof it opens
 - **Contradicted** - none: every QA1 outcome agrees with the delta's role table and `ROLE_PERMISSIONS`
 - **Uncovered anchors** - none: `shared-auth-roles-US-02` has two new cases beside the durable nine, `shared-auth-roles-US-03` has five; the Feature set's "Two people on an approval" leaf is walked by `shared-auth-roles-US3-TC5-1`, and its "Split by cost" and "Identity documents" leaves by `shared-auth-roles-US3-TC2-1`, `shared-auth-roles-US3-TC3-1` and `shared-auth-roles-US3-TC4-1`, and "Resources and actions" by the durable `shared-auth-roles-US2-TC3-1`
-
-- **Under tcs-rules r7** - `shared-auth-roles-US1-TC1-1` (user only) is covered by `shared-auth-roles-US1-TC3-1`, which shows what the collector can reach. `shared-auth-roles-US2-TC3-1` (unknown permission) is out of suite: no screen asks for one. `shared-auth-roles-US2-TC9-1` became the `staff` row of `shared-auth-roles-US2-TC8-2`.
