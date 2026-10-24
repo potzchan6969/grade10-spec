@@ -1,12 +1,13 @@
 # grade10-site/auction/lot-status Test Cases
 
-**Status:** reopened · 2/6
+**Status:** reopened · 2/5
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
 
 ## Background
 
-* `<auction url>` is the Grade10 auction catalogue and `<my auctions url>` the signed-in account's My Auctions page; a listing's page opens from its card.
+* A collector sees one lot status: Upcoming before bidding starts, Active while bids are taken, extended bidding included, and Ended after the close, whatever happened to the order. A winner's order status shows apart from it.
+* Drafts and called-off lots are hidden from the catalogue, its search and the watchlist; only a collector who bid on a called-off lot still finds it, on My Auctions.
 
 ## g10.auction-lot-status.US1: Collector sees whether a listing can still be bid on
 
@@ -15,7 +16,7 @@
 **so that** I can see at a glance whether I can still bid on it.
 
 <!-- trace:case id=g10.auction-lot-status.TC-3wx rev=1 -->
-### g10.auction-lot-status.US1-TC1: Each listing reads the status its schedule and close give it
+### g10.auction-lot-status.US1-TC1: Every page reads the same lot status for the lot's moment
 
 Runs once per row of **Test data**.
 
@@ -33,34 +34,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) watches `<listing>` and is on `<auction url>`.
-* `<listing>` is in the state `<listing state>`.
+* customer(signed in) watches `<listing>`, which is `<moment>`.
 
 **Test data:**
 
-| `<listing state>` | `<status>` |
+| `<moment>` | `<status>` |
 | --- | --- |
-| Published, its start still ahead | Upcoming |
-| Published and open for bids | Active |
-| Closed with no winner | Ended |
-| Won, its order Preparing Shipment | Ended |
-
-| Field | Value |
-| --- | --- |
-| `<listing>` | A published listing in `<listing state>` |
+| published, its start still ahead | Upcoming |
+| open for bids | Active |
+| past its scheduled close, in extended bidding | Active |
+| closed with no winner | Ended |
+| won, its order Preparing Shipment | Ended |
 
 **Steps:**
 
-1. Find `<listing>`'s card on `<auction url>`.
-2. Open `<listing>`'s page.
-3. Open `<my auctions url>` and find `<listing>`.
+1. Read `<listing>`'s card on `<g10url>/auction`, its page, and its row on My Auctions.
 
 **Expected Results:**
 
-* Steps 1, 2 and 3 each read `<status>`.
+* All three read `<status>`.
 
 <!-- trace:case id=g10.auction-lot-status.TC-bfm rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
-### g10.auction-lot-status.US1-TC2: A winner reads their order status apart from the listing status
+### g10.auction-lot-status.US1-TC2: A winner reads the order status apart from the lot status
 
 **Classification:**
 
@@ -76,23 +71,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<listing_4>`) is signed in.
-* `<listing_4>`'s order is awaiting payment.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_4>` | A listing this customer won, its order awaiting payment |
+* customer(signed in) won `<listing>`, whose order reads Pending Payment.
 
 **Steps:**
 
-1. Open `<my auctions url>` and read `<listing_4>`'s row.
+1. Open `<listing>`'s page, then My Auctions.
 
 **Expected Results:**
 
-* The listing status reads Ended.
-* Your Standing reads the order's own status.
+* The page reads Ended; My Auctions reads Won, Pending Payment, never Pending Payment as the lot's status.
 
 ---
 
@@ -103,7 +90,7 @@ Runs once per row of **Test data**.
 **so that** I do not mistake an unfinished or withdrawn listing for an available auction.
 
 <!-- trace:case id=g10.auction-lot-status.TC-22a rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw -->
-### g10.auction-lot-status.US2-TC1: A hidden listing is not in the catalogue or its search
+### g10.auction-lot-status.US2-TC1: A draft or called-off lot is nowhere a collector browses, and its address shows nothing
 
 Runs once per row of **Test data**.
 
@@ -112,7 +99,7 @@ Runs once per row of **Test data**.
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
@@ -123,39 +110,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_6>` is in the state `<listing state>`, titled `<listing title>`.
-* `<listing_7>` ended with no winner.
+* customer(signed in) holds `<listing>`'s former address and code; no other listing has taken its slug; `<listing>` is `<state>`.
 
 **Test data:**
 
-| `<listing state>` |
+| `<state>` |
 | --- |
-| A draft, never published |
-| Published, then called off by an operator |
-
-| Field | Value |
-| --- | --- |
-| `<listing_6>` | A listing in `<listing state>` |
-| `<listing title>` | `<listing_6>`'s title |
-| `<listing_7>` | A published listing whose bidding ended with no winner |
+| a draft, never published |
+| called off after customer watched it |
 
 **Steps:**
 
-1. Open `<auction url>` and read All auctions.
-2. Search the catalogue for `<listing title>`.
+1. Read `<g10url>/auction` and search it for `<listing>`'s title.
+2. Open the watchlist.
+3. Open the former address, then `<g10url>/auction/listings/<code>` with the code in upper and in lower case.
 
 **Expected Results:**
 
-* Step 1 does not list `<listing_6>`, and lists `<listing_7>` as Ended.
-* Step 2 does not find `<listing_6>`.
+* Steps 1 and 2 never list `<listing>`.
+* Step 3 shows Nothing is here each time.
 
 <!-- trace:case id=g10.auction-lot-status.TC-wlb rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
-### g10.auction-lot-status.US2-TC2: A called-off listing leaves the watchlist while an unsold one stays
+### g10.auction-lot-status.US2-TC2: An unsold lot stays on the watchlist after its close
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
@@ -166,72 +147,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) watches `<listing_8>` and `<listing_9>`.
-* `<listing_8>` ended with no winner; `<listing_9>` was called off.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_8>` | A watched listing that ended with no winner |
-| `<listing_9>` | A watched listing an operator called off |
+* customer(signed in) watches `<listing>`, which closed with no bid.
 
 **Steps:**
 
-1. Open `<my auctions url>` and read the list.
+1. Open the watchlist.
 
 **Expected Results:**
 
-* `<listing_9>` is not in the list.
-* `<listing_8>` is in the list, Ended.
-
-<!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=4 covers=g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-w9d -->
-### g10.auction-lot-status.US2-TC4: A called-off listing's address and code show Nothing is here
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-lot-status-US-02
-
-**Pre-conditions:**
-
-* customer(signed in) watched `<listing_12>` and saved its address and code before it was called off.
-* No eligible listing holds `<listing_12>`'s slug.
-
-**Test data:**
-
-| `<code>` |
-| --- |
-| `<listing_12>`'s code in upper case |
-| `<listing_12>`'s code in lower case |
-
-| Field | Value |
-| --- | --- |
-| `<listing_12>` | A called-off listing this customer watched |
-| `<listing title>` | `<listing_12>`'s title |
-| `<former address>` | The address `<listing_12>` was published at |
-
-**Steps:**
-
-1. Open `<auction url>`, read its listings and search for `<listing title>`.
-2. Open the watchlist and look for `<listing_12>`.
-3. Open `<former address>`.
-4. Open `<auction url>/listings/<code>`.
-
-**Expected Results:**
-
-* Step 1 neither lists nor finds `<listing_12>`.
-* Step 2 does not include it.
-* Steps 3 and 4 each show the not-found page titled "Nothing is here", with none of `<listing_12>`'s details or its code.
+* `<listing>` is listed, Ended.
 
 ---
 
@@ -242,11 +166,11 @@ Runs once per row of **Test data**.
 **so that** I can see my card was not charged.
 
 <!-- trace:case id=g10.auction-lot-status.TC-byf rev=3 covers=g10.auction-lot-status.SC-yoe,g10.auction-lot-status.SC-cmh -->
-### g10.auction-lot-status.US3-TC1: Only the bidder still sees a called-off listing
+### g10.auction-lot-status.US3-TC1: Only a collector who bid still finds a called-off lot, on My Auctions
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -258,23 +182,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A bid on `<listing_14>`, and customer B watched it without bidding; both are signed in on separate sessions.
-* `<listing_14>` was called off, and `<listing_15>` is now public at its former address.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_14>` | A called-off listing customer A bid on and customer B watched |
-| `<listing_15>` | A public listing with a different title, at `<listing_14>`'s released address |
+* customer A bid on `<listing>` and customer B only watched it; an operator then called it off.
 
 **Steps:**
 
-1. As customer A, open `<my auctions url>` and read `<listing_14>`'s row, its history and its links.
-2. As customer B, open `<my auctions url>`.
+1. As customer A, open My Auctions.
+2. As customer B, open My Auctions and the watchlist.
 
 **Expected Results:**
 
-* Step 1's row names `<listing_14>`, not `<listing_15>`, and says Your card was not charged.
-* Step 1 keeps the original bids and history with `<listing_14>`, shows no card hold, release or authorization, and links nowhere to `<listing_15>`.
-* Step 2 does not list `<listing_14>`.
+* Step 1 lists `<listing>`, Didn't win, the card not charged.
+* Step 2 lists it nowhere.
