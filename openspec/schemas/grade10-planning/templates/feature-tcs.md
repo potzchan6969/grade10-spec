@@ -32,27 +32,39 @@
 
 <!-- Optional. Only the conditions and test data every case shares. -->
 
-## Walk 1: <title>
+## Walk 1: <title naming the route>
 
-<!-- Optional, for manual testers only. Walks come before cases. -->
+<!-- Optional, for manual testers only. Walks come before cases. One starting
+     state and one shared test data table per walk: a branch that needs its
+     own record says so in the starting state and names it as a data row,
+     never as a second setup or data block. -->
 
-**Starting state:**
+Starting state:
 
-- <the actor, the surface or address, and the seeded state>
+- <actor(qualifier)> is on `<surface url>` with <the grant or state the route needs>.
+- <every fixture's state before the first step>.
+- For the <branch> branch, `<branch record>` <its state>; use it instead of <the main record>.
 
-**Shared test data:**
+Shared test data:
 
 | Field | Value |
 | --- | --- |
-| `<fixture>` | <value or the conditions a fixture meets> |
+| surface url | <the screen, by what it shows> |
+| <fixture> | <exact value, or its rule or range in brackets> |
+| branch record | <a separate record and the state it is in> |
 
 ### Route
 
 1. <action>.
-   - <observation recorded here> `g10.<domain>-<capability>.US1-TC1`
-2. <action with alternative routes>.
-   a. <condition and observation> `g10.<domain>-<capability>.US1-TC2`
-   b. <condition and observation> `g10.<domain>-<capability>.US1-TC3`
+   - <observation an existing case records> `<app>.<domain>-<capability>.US<n>-TC<m>`
+   - <another observation on the same screen> `<app>.<domain>-<capability>.US<n>-TC<m>`
+2. <action leading into alternative routes>:
+   a. <the condition, then the actions on this branch>.
+      - <observation on this branch> `<app>.<domain>-<capability>.US<n>-TC<m>`
+   b. For `<branch record>`, <the actions on this branch>.
+      - <observation on this branch> `<app>.<domain>-<capability>.US<n>-TC<m>`
+3. <the next action, back on the shared route>.
+   - <observation> `<app>.<domain>-<capability>.US<n>-TC<m>`
 
 ## <app>.<domain>-<capability>.US<n>: <journey title, copied from user-journeys.md>
 

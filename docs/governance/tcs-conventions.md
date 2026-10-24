@@ -89,38 +89,45 @@ Before and after:
 A walk exists to cut a tester's setup and running time. Its shape:
 
 ```markdown
-## Walk 1: Publish a listing and place the first bid
+## Walk 1: Record refunds and read them on both sides
 
-**Starting state:**
+Starting state:
 
-- customer(enrolled bidder) is signed in.
-- `<listing_1>` is published, open for bidding, and visible at `<g10url>/auction/listings/<slug_1>`.
-- The tester waits for the scheduled close on the listing page.
+- admin(refund operator) is on `<admin order url>` with refund-processing.
+- The Delivered order collected `<paid amount>` in HKD and has no recorded refund.
+- The bank sandbox refund is already complete. customer(winner) is on `<winner order url>`.
+- For the overpayment branch, `<overpayment order>` has the stated amounts and its external refund of `<difference>` is complete; use it instead of the Delivered order.
 
-**Shared test data:**
+Shared test data:
 
 | Field | Value |
 | --- | --- |
-| `listing_1` | A published listing open for bidding |
-| `opening price` | `HKD280 (range: 1000-79999 minor units)` |
+| admin order url | Admin detail for the Delivered HKD order |
+| winner order url | Winner Order for the same order |
+| paid amount | HKD3,120 (range: 1000-79999 minor units) |
+| reference | FPS-99812 |
+| overpayment order | A separate Preparing Shipment order: HKD1,000 invoiced, HKD1,050 collected; no refund recorded |
+| difference | HKD50 (fixed: collected minus invoiced) |
 
 ### Route
 
-1. Open `<g10url>/auction/listings/<slug_1>`. `g10.auction-auction.US1-TC1`
-2. Read the listing's status and current bid.
-   - The listing is open for bidding. `g10.auction-auction.US1-TC2`
-3. Enter `<opening price>` in the bid panel and select the bid action.
-   - The bid is accepted. `g10.auction-auction.US2-TC1`
-4. Wait on the listing page until the scheduled close.
-   - The listing closes with the expected result. `g10.auction-auction.US2-TC2`
+1. Run each refund row on its own order; after each, read the record:
+   a. For the Delivered order, enter `<paid amount>` and `<reference>`, review the masked destination, then confirm.
+      - The order reads Refunded and follows the recorded stock choice. `g10adm.auction-post-sale.US16-TC1`
+      - The record masks the destination and keeps its audit details. `g10adm.auction-post-sale.US16-TC1`
+   b. For `<overpayment order>`, record only `<difference>`.
+      - Only the excess is returned; the invoice lines stay unchanged. `g10.auction-winner-order.US15-TC1`
+      - The order keeps Preparing Shipment. `g10adm.auction-post-sale.US16-TC3`
+2. As customer(winner), open `<winner order url>`.
+   - The invoice and issued receipts remain available. `g10.auction-winner-order.US26-TC2`
 ```
 
 - **Title names the route** - what the tester does, in a few words; never "Additional fixture checks", "Execute every case", "— phase 2" or "… and adjacent checks"
-- **One starting state** - the tester's identity, every fixture's state, the page the route starts on, and where the tester waits. Never a list of `Steps 1–3 setup` blocks, and never "reset to each case's pre-conditions"
-- **Shared test data the tester can use as is** - the values or ranges the route uses, in the walk; never "use each case's test data"
+- **One starting state** - the tester's identity, every fixture's state, the page the route starts on, and where the tester waits. A branch that needs its own record names it here, "use it instead of …". Never a list of `Steps 1–3 setup` blocks, and never "reset to each case's pre-conditions"
+- **Shared test data the tester can use as is** - one `Field | Value` table of the values or ranges the route uses, in the walk; never "use each case's test data", a second table per step range or a notes column
 - **One numbered step per action**, numbered straight through the walk
 - **`-` only for an observation** - an expected result an existing case records, ending with that case's full current heading id
-- **`a.` and `b.` only for a real alternative route** - each carries its own observations
+- **`a.` and `b.` only for a real alternative route** - its actions on the lettered line, its own observations as `-` beneath it
 - **Real actions** - write what the tester enters; never "Type the query from Test data" or "Run the route for TC …"
 - **A waiting point names its surface** - where the spec names none, mark it ❓
 - **No description** - setup, data and route only
