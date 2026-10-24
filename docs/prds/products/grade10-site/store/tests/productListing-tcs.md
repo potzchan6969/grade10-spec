@@ -4,7 +4,7 @@ title: Store Product Listing Test Cases
 
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review · 0/35
+**Status:** pending-review · 0/36
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/product-listing, grade10-site/store/discounts
 
@@ -141,6 +141,8 @@ Runs once per row of **Test data**.
 <!-- trace:case id=g10.store-product-listing.TC-m0e rev=2 -->
 ### g10.store-product-listing.TC3: An available card's name and photo open its product page
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** critical
@@ -157,14 +159,27 @@ Runs once per row of **Test data**.
 
 * `<tile product>` is for sale, with a known handle, on the first page of `<listing url>`.
 
+**Test data:**
+
+| `<open by>` | `<opens in>` |
+| --- | --- |
+| Select the name | this tab |
+| Select the photo | this tab |
+| Cmd-click (Ctrl-click) the name | a new tab, this one staying on the listing |
+| Cmd-click (Ctrl-click) the photo | a new tab, this one staying on the listing |
+| Tab to the name and press Enter | this tab |
+
 **Steps:**
 
-1. Select `<tile product>`'s name.
-2. Go back, then select its photo.
+1. Read the name at rest, then with the pointer over it.
+2. Tab through the card from the one before it.
+3. `<open by>`.
 
 **Expected Results:**
 
-* Each opens `/store/products/<handle>`.
+* Step 1: the name is plain at rest and underlined on hover.
+* Step 2 stops on the name, underlined, and on the cart control, and never on the photo; a screen reader announces one control named for the product.
+* Step 3 opens `/store/products/<handle>` in `<opens in>`.
 
 <!-- trace:case id=g10.store-product-listing.TC-kkm rev=1 -->
 ### g10.store-product-listing.TC4: Ordering by price covers the whole catalogue, cards for sale first
@@ -592,6 +607,50 @@ Runs once per row of **Test data**.
 * Step 1 asks for no sign-in and shows the row's card; step 2 shows it still.
 
 ---
+
+### g10.store-product-listing.TC36: A card's photo shows whole on every store surface
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-listing#product-tile
+
+**Pre-conditions:**
+
+* `<photo product>` is for sale with `<photo>` as its first photo, in the Main Page's merchandised row and a pick on `<another card>`, by the recipes "Put a card in the Main Page's merchandised row" and "Choose picks on a staging-shop card"; the pointer rests outside its card.
+
+**Test data:**
+
+| `<photo>` | `<surface>` |
+| --- | --- |
+| A graded slab, label to base, taller than wide, shot on white | `<listing url>` at 1440 pixels |
+| A graded slab, label to base, taller than wide, shot on white | `<listing url>` at 390 pixels |
+| A graded slab, label to base, taller than wide, shot on white | `<g10url>/store`, the merchandised row |
+| A graded slab, label to base, taller than wide, shot on white | `<another card>`'s page, You May Also Like |
+| A card wider than tall, on a white studio fill | `<listing url>` at 1440 pixels |
+| A small card photo, smaller than the well | `<listing url>` at 1440 pixels |
+| A square card photo | `<listing url>` at 1440 pixels |
+| A slab taller than wide, sold out by the recipe "Sell a card out" | `<listing url>` at 1440 pixels |
+
+**Steps:**
+
+1. Open `<surface>` and find `<photo product>`'s card.
+2. Compare the photo in the well with the photo file opened on its own.
+
+**Expected Results:**
+
+* The well is square and holds the whole photo, every edge of the file showing, scaled until its longer side meets the well and centred with the well's own ground equal on each side; only a square photo's corners round with the well's.
+* A white fill reads white, never blended into the grey well; a sold-out photo shows whole and faded.
+
 
 ## Ungrouped
 
@@ -1303,3 +1362,9 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Neither count includes `<draft product>`; it is not listed, suggested or found.
+
+## Settled
+
+- A card is always given its product's name, so no case walks a nameless card.
+- A photo the card grows on hover may lose its edges until the pointer leaves; the whole photo holds at rest.
+- A photo that leaves part of the well empty sits centred, scaled until it meets the two edges along its longer side; a square photo's corners round with the well's, which is not a crop.

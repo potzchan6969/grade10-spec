@@ -75,6 +75,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * One tile per returned collection, in the order returned, UI matching store-home-blocks-storecollectiongrid--default.
+* Each section's heading shows its title alone, with no browse-all link beside it.
 
 <!-- trace:case id=g10.store-home.TC-q4t rev=1 -->
 ### g10.store-home.TC5: The row shows cards from the collection the shop lists first
