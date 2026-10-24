@@ -169,8 +169,10 @@ Runs once per row of **Test data**.
 **I want** Grade10 to refuse an amount above the ceiling and tell me the limit,
 **so that** a mistyped bid or maximum never commits me to an amount I cannot settle.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-d9d rev=3 covers=g10.auction-bid-increments.SC-hm3 -->
-### g10.auction-bid-increments.US2-TC2: Direct bid above USD ceiling is refused without effects
+<!-- trace:case id=g10.auction-bid-increments.TC-d9d rev=4 covers=g10.auction-bid-increments.SC-hm3 -->
+### g10.auction-bid-increments.US2-TC2: An amount past the ceiling becomes the ceiling in the field, with no message
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -186,28 +188,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A live USD listing's minimum next bid is at or below `<ceiling>`; a linked-card customer is on the listing.
+* customer(card linked) is on an open USD listing's page in `<mode>`, whose minimum next bid is at or below USD60,500, with `<draft>` typed in the custom maximum.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<ceiling>` | USD10,000,000 (fixed configured ceiling) |
-| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
+| `<mode>` | `<draft>` | `<entry>` |
+| --- | --- | --- |
+| Set maximum | 500 | Select the draft and paste 10000001 |
+| Set maximum | 500 | Select the draft and drop the dragged text 10000001 on it |
+| Raise | 500 | Select the draft and paste 10000001 |
+| Raise | 500 | Put the caret at the end and paste 10000001 without selecting |
+| Set maximum | 500 | Select the draft and paste 10000001.99 |
+| Set maximum | 500 | Select the draft and paste 999999999999999999999999999999.99 |
+| Raise | 500 | Select the draft and paste 10000000.99 |
+| Set maximum | 10000000 | Type 1 at the end |
+| Raise | 10000000 | Paste 1 at the end |
 
 **Steps:**
 
-1. Enter `<over ceiling>` as the custom maximum and confirm.
-2. Read the refusal, highest bid, and bid count.
-3. Read the customer's My Auctions row.
+1. Make `<entry>`, and read the field, the reviewed amount and the messages around it.
+2. Confirm, then read Your maximum, Highest bid and the bid count.
 
 **Expected Results:**
 
-* The bid is refused and names `<ceiling>` as the maximum.
-* Highest bid and bid count are unchanged.
-* No row appears for the listing.
+* Step 1: the field and the reviewed amount read 10000000, cents dropped without rounding; no maximum-bid, invalid-amount or below-minimum message shows.
+* Step 2: Your maximum reads USD10,000,000, and no amount above it is recorded.
 
----
 
 ## g10.auction-bid-increments.US3: Collector bids in USD on every lot
 

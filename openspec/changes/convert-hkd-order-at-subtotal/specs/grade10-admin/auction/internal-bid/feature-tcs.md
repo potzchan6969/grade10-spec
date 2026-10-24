@@ -9,8 +9,8 @@
 **I want** a house win to open an order with HKD settlement and bank transfer on FPS already set,
 **so that** the operator can quote and send its invoice, let it expire, and cancel it without a winner or operator choosing the currency or rail.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-dqh rev=4 covers=g10adm.auction-internal-bid.SC-6fc -->
-### grade10-admin-auction-internal-bid-US6-TC5-4: An operator sends the internal order's invoice by hand, reading it as any HKD quote, and no invoice letter goes out
+<!-- trace:case id=g10adm.auction-internal-bid.TC-dqh rev=5 covers=g10adm.auction-internal-bid.SC-6fc -->
+### grade10-admin-auction-internal-bid-US6-TC5-5: An operator sends the internal order's invoice by hand, reading it as any HKD quote, and no invoice letter goes out
 
 Runs once per row of **Test data**.
 
@@ -28,7 +28,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_71>` closed with the house winning at `<final price>` USD as `<internal bidder>`; its order, flagged internal, holds HKD settlement and FPS and has no invoice sent.
+* `<listing_71>` closed with the house winning at `<final price>` as `<internal bidder>`; its order, flagged internal, holds HKD settlement and FPS and has no invoice sent.
 * admin(holds auction:reserve and auction:payment) is on `<listing_71>`'s order page.
 
 **Test data:**
@@ -37,10 +37,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<listing_71>` | A USD listing in no campaign, closed with the house winning at `<final price>` |
 
-| Row | `<final price>` | `<premium>` | `<shipping>` | `<transfer fee>` | `<usd sum>` | `<house subtotal>` | `<fee in HKD>` | `<house total>` | Why this row |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Zero fee | 505000 minor units (US$5,050.00) | 101000 minor units (US$1,010.00), 20% of `<final price>` | 0 minor units (US$0.00), Shipping & Handling | 0 minor units (US$0.00), bank transfer fee | 606000 minor units (US$6,060.00) | 4757100 minor units (HK$47,571.00), `<usd sum>` times 7.85 converted once | 0 minor units | 4757100 minor units (HK$47,571.00) | Converting each line on its own would read HK$47,572 |
-| Typed fee | 10100 minor units (US$101.00) | 2020 minor units (US$20.20), 20% of `<final price>` | 1001 minor units (US$10.01), Shipping & Handling | 2504 minor units (US$25.04), bank transfer fee | 13121 minor units (US$131.21) | 103000 minor units (HK$1,030.00), `<usd sum>` times 7.85 converted once | 19657 minor units (HK$196.57), `<transfer fee>` times 7.85 rounded up | 122657 minor units (HK$1,226.57) | Converting each line on its own would read HK$1,031 for the Subtotal |
+| Row | `<final price>` | `<premium>` | `<shipping>` | `<transfer fee>` | `<usd sum>` | `<house subtotal>` | `<fee in HKD>` | `<house total>` |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Zero fee | USD5,500 | USD1,100, 20% of `<final price>` | USD0, Shipping & Handling | USD0, bank transfer fee | USD6,600 | HKD51,810, `<usd sum>` times 7.85 converted once | Free | HKD51,810 |
+| Typed fee | USD101 | USD20.20, 20% of `<final price>` | USD10.01, Shipping & Handling | USD25.04, bank transfer fee | USD131.21 | HKD1,030, `<usd sum>` times 7.85 converted once | HKD196.57, `<transfer fee>` times 7.85 rounded up | HKD1,226.57 |
 
 **Steps:**
 
@@ -49,20 +49,19 @@ Runs once per row of **Test data**.
 3. Read the quote preview.
 4. Send the invoice.
 5. Read the order's status, its invoice lines and the payment deadline.
-6. Open <grade10 auction send log url>, filter by `<listing_71>` and read the rows from the send.
+6. Open the send log, filter by `<listing_71>` and read the rows from the send.
 
 **Expected Results:**
 
-* Step 1: the quote shows winning bid `<final price>` USD, billing address `<house billing address>`, HKD settlement and FPS. Quote amounts take USD.
+* Step 1: the quote shows winning bid `<final price>`, billing address `<house billing address>`, HKD settlement and FPS. Quote amounts take USD.
 * Step 3: the preview lists the winning bid, `<premium>` and `<shipping>` in USD, then one HKD Subtotal of `<house subtotal>`.
-* Step 3: the bank transfer fee adds nothing to the Subtotal; below it the fee adds `<fee in HKD>` in HKD and the total reads `<house total>`.
+* Step 3: the bank transfer fee adds nothing to the Subtotal; below it the fee reads `<fee in HKD>` and the total reads `<house total>`.
 * Step 3: no per-line HKD amount and no rate shows.
 * Step 5: the order reads Pending Payment, the invoice Pending.
 * Step 5: the order page lists the same USD lines, then the HKD Subtotal `<house subtotal>`, the Payment Processing Fee `<fee in HKD>`, Free where zero, and the Total `<house total>`.
 * Step 5: the deadline is 7 calendar days after the send.
 * Step 6 holds no invoice-sent letter and no payment reminder, to anyone.
 
----
 
 ## Settled
 

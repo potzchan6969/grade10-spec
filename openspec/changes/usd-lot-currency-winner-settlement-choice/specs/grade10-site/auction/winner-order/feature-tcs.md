@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/27
+**Status:** pending-review · 0/28
 **Drafts styled:** 2026-10-14, tcs-rules r5
 **Out of suite (api):** winner-order-SC-27
 
@@ -49,10 +49,8 @@
 * The dialog shows FPS ID, account name and an FPS QR only, without rail tabs or copy controls.
 * No HK Local or SWIFT details show.
 
-<!-- trace:case id=g10.auction-winner-order.TC-eu8 rev=3 covers=g10.auction-winner-order.SC-v59 -->
-### g10.auction-winner-order.US9-TC22:
-
-Runs once per row of **Test data**. The picked rail is recorded with the address where Grade10 holds bank details
+<!-- trace:case id=g10.auction-winner-order.TC-eu8 rev=4 covers=g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-pt5 -->
+### g10.auction-winner-order.US9-TC22: The bank rail picked before confirming is recorded with the address
 
 Runs once per row of **Test data**.
 
@@ -63,19 +61,18 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
 
 **Pre-conditions:**
 
-* Grade10 holds the sample bank details for each rail outside production, and Payment Settings holds a card fee rule in the row's currency.
-* customer(winner) holds an order won in USD in Awaiting Setup with a saved home address.
+* customer(winner) holds `<order>`, won in USD, in Awaiting Setup with a saved Home address.
 
 **Test data:**
 
-| Settlement currency | Rail |
+| `<currency>` | `<rail>` |
 | --- | --- |
 | HKD | FPS |
 | HKD | HK Local |
@@ -83,14 +80,14 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Choose the row's settlement currency and read the method choices.
-2. Confirm the delivery address with the row's rail.
+1. Choose Home and `<currency>`, and read the method choices.
+2. Choose `<rail>` in place of the selected card, then choose another rail and back to `<rail>`, and confirm.
 3. Reload the order.
 
 **Expected Results:**
 
-* Step 1: Card and the row's rails are offered, none selected.
-* Step 3: the order records bank transfer on the row's rail and reads Preparing Invoice.
+* Step 1 offers card and `<rail>`, card selected.
+* Step 3 records bank transfer on `<rail>` and reads Preparing Invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9v4 rev=5 covers=g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii -->
 ### g10.auction-winner-order.US9-TC24: HK Local and SWIFT details show their expanded fields
@@ -681,8 +678,10 @@ Runs once per row of **Test data**.
 
 * The row's method remains selected because HKD still offers it.
 
-<!-- trace:case id=g10.auction-winner-order.TC-jfi rev=1 covers=g10.auction-winner-order.SC-8dl -->
-### g10.auction-winner-order.US25-TC6: Each HKD method reads its fee wording and none is selected
+<!-- trace:case id=g10.auction-winner-order.TC-jfi rev=2 covers=g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-o4y -->
+### g10.auction-winner-order.US25-TC6: Card names its fee as the picked currency's percentage; a bank rail names none
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -698,25 +697,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in HKD.
-* customer(winner) holds `<order_9>` in Awaiting Setup with a saved home address.
+* customer(winner) is on setup for `<order>`, in Awaiting Setup; the USD card fee rule is 4.4% and the HKD rule 3.4%, each plus a fixed amount.
 
 **Test data:**
 
-| Field | Value |
+| `<currency>` | `<card reads>` |
 | --- | --- |
-| `<order_9>` | An order won in USD, in Awaiting Setup |
+| USD | Card fee about 4.4% + a fixed amount |
+| HKD | Card fee about 3.4% + a fixed amount |
 
 **Steps:**
 
-1. Choose the home address and HKD.
-2. Read each method in the payment method choice.
+1. Choose `<currency>`, and read each method.
 
 **Expected Results:**
 
-* Card reads `Card fee about 3.4% + a fixed amount`.
-* FPS and HK Local each read `Bank fee set on your invoice`, naming no amount.
-* No method is selected.
+* Card reads `<card reads>` and is selected; each bank rail shows no fee line.
 
 <!-- trace:case id=g10.auction-winner-order.TC-pes rev=1 covers=g10.auction-winner-order.SC-1aa,g10.auction-winner-order.SC-er5 -->
 ### g10.auction-winner-order.US25-TC7: A bank rail is offered only where Grade10 holds its bank details

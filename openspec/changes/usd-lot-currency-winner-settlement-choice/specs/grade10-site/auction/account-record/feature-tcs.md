@@ -1709,8 +1709,8 @@ Runs once per row of **Test data**.
 * At step 2 Your Standing reads Leading with no next valid bid, neither Won nor Didn't win.
 * At step 5 Your Standing reads Won.
 
-<!-- trace:case id=g10.auction-account-record.TC-y6p rev=3 covers=g10.auction-account-record.SC-fao -->
-### g10.auction-account-record.US10-TC3: Open row shows the auction's current price, not the collector's bid
+<!-- trace:case id=g10.auction-account-record.TC-y6p rev=4 covers=g10.auction-account-record.SC-fao -->
+### g10.auction-account-record.US10-TC3: An open row shows the auction's current price, not the collector's bid
 
 **Classification:**
 
@@ -1728,26 +1728,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer B(signed in) bid `<customer B bid>` on `<lot_3>`.
-* customer A has since raised `<lot_3>`'s current bid to `<current bid>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| lot_3 | An open USD lot, its close more than an hour away |
-| customer B bid | 100000 USD minor units |
-| current bid | 120000 USD minor units, above `<customer B bid>` |
+* customer B(signed in) bid USD1,000 on open `<listing_4>`; customer A has since raised its current bid to USD1,200.
 
 **Steps:**
 
-1. As customer B, navigate to `<grade10 my auctions url>`.
-2. Find `<lot_3>`'s row.
+1. As customer B, open My Auctions and find `<listing_4>`.
 
 **Expected Results:**
 
-* Current bid reads 120000 USD minor units, not `<customer B bid>`.
-* Your Standing reads Outbid, with the next valid bid.
+* Current bid reads USD1,200, not USD1,000; Status reads Outbid with the next valid bid.
 
 <!-- trace:case id=g10.auction-account-record.TC-j99 rev=2 -->
 ### g10.auction-account-record.US10-TC1: Ended row shows the final price and the recorded result
