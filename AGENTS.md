@@ -8,6 +8,7 @@ This repository is the versioned source of truth for product requirements and th
 - There is no house writing style: write whatever reads most naturally. The marks are tools the manual and its check read: ❓ or `TBC` on anything unconfirmed, naming who confirms it; 🚧 only on what is confirmed and being built - [Marks](docs/prds/guides/writing-the-manual.md#marks). Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability. A case that proves a rule, a state that dresses an outcome and a mechanism belong to the suite, the design record and the architecture doc.
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
 - Keep changes reviewable: one product decision or component capability per push where practical.
+- `spec-to-tcs`, its rulebook and its template have one owner, `docs/prds/team.yaml`'s `owns: [tcs-rules]` handle: change them only for that person - [The Rules Have One Owner](docs/governance/specs-to-test-cases.md#rules-revisions).
 - Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
 
 ## Questions and blockers
@@ -99,7 +100,7 @@ For a new product feature:
 4. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. It lands in the PRD's `Product decisions` block; skip it when there is no such judgment.
 5. Accept and publish the finished contract before implementation. Keep task checkboxes accurate as work lands; after implementation is verified, take the 🚧 marks off delivered outcomes and archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`. The archive preserves history and does not fold requirements a second time.
 
-Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories, from `openspec new change` to archive.
+Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories.
 
 Ask only what the [held test](.claude/skills/workflow-round/SKILL.md#questions-held-or-decided-by-the-round) holds: questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
 
@@ -131,13 +132,13 @@ Use the `design-system-primitives` skill whenever creating or changing a primiti
 - Stories sit beside each primitive: [`docs/governance/storybook.md`](docs/governance/storybook.md).
 - Token flow: `tokens.json` is the source of truth, `tokens.config.json` holds the engineer-owned projection rules, and Figma plus the theme CSS files are both projections. Read `packages/design-system/DESIGN.md` before touching any leg of that pipeline.
 - Read [`docs/governance/design-code-sync.md`](docs/governance/design-code-sync.md) before adding a primitive or changing one that has a Figma counterpart. A component may not offer a variant or size the Figma component set does not define; where code and design genuinely disagree, record it as an OpenSpec change rather than absorbing it into the Code Connect template.
-- The Figma legs (`tokens:import`, `tokens:push`, `tokens:plugin`) require a human to run a plugin inside Figma; they have no unattended path.
+- The Figma legs (`tokens:import`, `tokens:push`, `tokens:plugin`) require a human in Figma.
 
 ## Sharing with consuming apps
 
 Consumers add this repository as a Git submodule and build from `openspec/specs/`, reading the manual's pages for rationale and the design tokens for values. Shared compound components are consumed from `@grade10/ui` from source, so a shared component change lands once here and reaches every application through a submodule bump. Application-owned state, adapters, and wiring remain implementation work in each application.
 
-Pin the submodule SHA in the application repository; updates are normal pull requests that move that SHA. Do not use git submodules inside this repository; this repository itself is the reusable submodule.
+Pin the submodule SHA in the application repository; updates are normal pull requests that move that SHA. Use no git submodules inside this repository; it is the submodule.
 
 ## Validation
 
