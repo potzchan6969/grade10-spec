@@ -1,247 +1,176 @@
 # shared/auth/sign-out Test Cases
 
-**Status:** reopened · 5/8
+**Status:** pending-review · 0/4
 **Reviewed:** 2026-09-23, tcs-rules r3.0, lapsed 2026-10-06
-**Drafts styled:** 2026-10-06, tcs-rules r4
+**Drafts styled:** 2026-10-24, tcs-rules r7
 
-## shared-auth-sign-out-US1: Collector or operator signs out and lands signed out
+## Background
+
+* `<g10url>` is the Grade10 site and `<console url>` the Grade10 console of the environment under test.
+
+## Walk 1: An operator signs out of each side in turn
+
+**Starting state:**
+
+- staff(operator) signed in on `<console url>` in tab A, with the second factor proved, and on `<g10url>` in tab B, with `<cart item>` in the cart
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<cart item>` | a card in the operator's cart |
+
+### Route
+
+1. In tab A, select sign out and wait for it to finish.
+   - The console shows its sign-in page `shared.auth-sign-out.US1-TC2`
+2. Return to tab B.
+   - Tab B is still signed in, with `<cart item>` in the cart and no signed-out message `shared.auth-sign-out.US3-TC1`
+3. In tab B, open the profile and select sign out.
+   - The site shows the marketing page `shared.auth-sign-out.US1-TC2`
+
+## shared.auth-sign-out.US1: Collector or operator signs out and lands signed out
 
 **As a** signed-in person,
 **I want** the control to show the request in flight and, on success, leave the signed-in surface,
 **so that** I know the tap registered and I am not still looking at my account.
 
-<!-- trace:case id=g10.shared-sign-out.TC-lsq rev=1 covers=g10.shared-sign-out.SC-9oa,g10.shared-sign-out.SC-vrp,g10.shared-sign-out.SC-x67 -->
-### shared-auth-sign-out-US1-TC1-1: Sign-out control is busy until the request settles
+<!-- trace:case id=g10.shared-sign-out.TC-lsq rev=2 -->
+### shared.auth-sign-out.US1-TC1: The sign-out control is busy until the request finishes
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-sign-out-US-01
-
-**Pre-conditions:**
-
-* customer is signed in on `<grade10 profile url>`.
-* Network manipulation holds the sign-out request in flight.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 profile url | The signed-in Grade10 customer profile URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 profile url>`.
-2. Activate the sign-out control.
-3. Sign out again while the request is still running.
-
-**Expected Results:**
-
-* The control shows a busy state until the auth service answers.
-* The second activation starts no second request.
-
-<!-- trace:case id=g10.shared-sign-out.TC-p3n rev=1 covers=g10.shared-sign-out.SC-9oa,g10.shared-sign-out.SC-vrp,g10.shared-sign-out.SC-x67 -->
-### shared-auth-sign-out-US1-TC2-1: Operator sign-out returns the admin panel to sign-in
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-out-US-01
-
-**Pre-conditions:**
-
-* admin is signed in on `<grade10 admin console url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 admin console url>`.
-2. Activate the sign-out control and wait for the auth service to confirm.
-
-**Expected Results:**
-
-* The panel shows its sign-in page.
-
-<!-- trace:case id=g10.shared-sign-out.TC-r6b rev=1 covers=g10.shared-sign-out.SC-9oa,g10.shared-sign-out.SC-vrp,g10.shared-sign-out.SC-x67 -->
-### shared-auth-sign-out-US1-TC3-1: Collector sign-out returns the grade10 site to marketing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-out-US-01
-
-**Pre-conditions:**
-
-* customer is signed in on `<grade10 profile url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 profile url | The signed-in Grade10 customer profile URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 profile url>`.
-2. Activate the sign-out control and wait for the auth service to confirm.
-
-**Expected Results:**
-
-* The site shows the marketing page.
-
-### shared-auth-sign-out-US1-TC4-1: Console sign-out control is busy until the request settles
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** regression
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sign-out-US-01
 
 **Pre-conditions:**
 
-* admin is signed in on `<grade10 admin console url>` with the second factor proved.
-* Network manipulation holds the sign-out request in flight.
+* The row's person is signed in on the row's page.
+* The sign-out request is held in flight.
 
 **Test data:**
 
-| Field | Value |
+| Person | Page |
 | --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| customer(collector) | `<g10url>/profile` |
+| admin | `<console url>`, with the second factor proved |
 
 **Steps:**
 
-1. Navigate to `<grade10 admin console url>`.
-2. Activate the sign-out control.
-3. Activate the sign-out control again while the request is still running.
+1. Open the row's page and select sign out.
+2. Select sign out again while the request is still running.
 
 **Expected Results:**
 
-* The control shows a busy state until the auth service answers.
-* The second activation starts no second request.
+* Step 1: the control shows it is busy until the request finishes.
+* Step 2: no second request starts.
+
+<!-- trace:case id=g10.shared-sign-out.TC-p3n rev=2 -->
+### shared.auth-sign-out.US1-TC2: A confirmed sign-out leaves the signed-in page
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-out-US-01
+
+**Pre-conditions:**
+
+* The row's person is signed in on the row's page.
+
+**Test data:**
+
+| Person | Page | Afterwards |
+| --- | --- | --- |
+| customer(collector) | `<g10url>/profile` | the marketing page |
+| admin | `<console url>` | the console's sign-in page |
+
+**Steps:**
+
+1. Open the row's page, select sign out and wait for it to finish.
+2. Reload the page.
+
+**Expected Results:**
+
+* Step 1: the row's page shows.
+* Step 2: still the row's page; nobody is signed in.
 
 ---
 
-## shared-auth-sign-out-US2: Collector or operator retries a refused sign-out
+## shared.auth-sign-out.US2: Collector or operator retries a refused sign-out
 
 **As a** signed-in person,
 **I want** a refused sign-out named as a failure I can retry,
 **so that** a network miss does not leave me signed in with no explanation.
 
-<!-- trace:case id=g10.shared-sign-out.TC-d61 rev=1 covers=g10.shared-sign-out.SC-ud0,g10.shared-sign-out.SC-i5o -->
-### shared-auth-sign-out-US2-TC1-1: Refused sign-out is reported beside the control
+<!-- trace:case id=g10.shared-sign-out.TC-d61 rev=2 -->
+### shared.auth-sign-out.US2-TC1: A refused sign-out is reported, and a retry clears it and signs out
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sign-out-US-02
 
 **Pre-conditions:**
 
-* customer is signed in on `<grade10 profile url>`.
-* `<The sign-out endpoint>` is mocked to refuse the request.
+* The row's person is signed in on the row's page.
+* The first sign-out request is made to fail; the next one succeeds.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| The sign-out endpoint | The auth service sign-out endpoint in the test environment; bind its endpoint URL only |
-| grade10 profile url | The signed-in Grade10 customer profile URL in the test environment; bind its URL only |
+| Person | Page | After the retry |
+| --- | --- | --- |
+| customer(collector) | `<g10url>/profile` | the marketing page |
+| admin | `<console url>` | the console's sign-in page |
 
 **Steps:**
 
-1. Navigate to `<grade10 profile url>`.
-2. Activate the sign-out control.
+1. Open the row's page and select sign out.
+2. Select sign out again.
 
 **Expected Results:**
 
-* The surface stays signed in.
-* Failure feedback appears beside the sign-out control.
-
-<!-- trace:case id=g10.shared-sign-out.TC-t2b rev=1 covers=g10.shared-sign-out.SC-ud0,g10.shared-sign-out.SC-i5o -->
-### shared-auth-sign-out-US2-TC2-1: Retry clears the failure and can complete
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-sign-out-US-02
-
-**Pre-conditions:**
-
-* customer is signed in on `<grade10 profile url>` with sign-out failure feedback showing.
-* `<The sign-out endpoint>` then confirms.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| The sign-out endpoint | The auth service sign-out endpoint in the test environment; bind its endpoint URL only |
-| grade10 profile url | The signed-in Grade10 customer profile URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 profile url>`.
-2. Activate the sign-out control again.
-
-**Expected Results:**
-
-* The failure feedback clears for the new attempt.
-* A confirmed answer signs the surface out.
+* Step 1: still signed in, with a failure message beside the sign-out control.
+* Step 2: the failure message clears, then the row's page shows.
 
 ---
 
-## shared-auth-sign-out-US3: Operator signs out of the console and stays signed in on the site
+## shared.auth-sign-out.US3: Operator signs out of the console and stays signed in on the site
 
 **As an** operator,
 **I want** signing out of one surface to end that surface's session only,
 **so that** I do not lose my cart or watchlist by closing the console, nor leave the console open by leaving the site.
 
-### shared-auth-sign-out-US3-TC1-1: Console sign-out leaves the site session and the console stays out
+<!-- trace:case id=g10.shared-sign-out.TC-vnx rev=2 -->
+### shared.auth-sign-out.US3-TC1: Signing out of one side leaves the other signed in
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -257,77 +186,28 @@
 
 **Pre-conditions:**
 
-* `<operator account>` is signed in on `<grade10 admin console url>` in tab A, with the second factor proved.
-* `<site account>` is signed in on `<grade10 store url>` in tab B, with `<cart item>` in its cart.
+* staff(operator) is signed in on `<console url>` with the second factor proved, and on `<g10url>` as `<site account>` with `<cart item>` in the cart, each in its own tab.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| operator account | An account holding console access |
-| site account | `<operator account>`, or a different account |
-| cart item | A card in `<site account>`'s cart |
+| `<site account>` | the operator's own account, or another account |
+| `<cart item>` | a card in `<site account>`'s cart |
 
-| Field | Value |
+| Signed out of | The other tab |
 | --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| the console | the site, still `<site account>`, `<cart item>` in the cart |
+| the site | the console, still the operator |
 
 **Steps:**
 
-1. In tab A, activate the sign-out control and wait for the auth service to confirm.
-2. Reload tab A.
-3. Return to tab B.
+1. In the row's tab, select sign out and wait for it to finish.
+2. Return to the other tab without reloading it, then reload it.
 
 **Expected Results:**
 
-* Step 1 shows the console's sign-in page.
-* Step 2 still shows the console's sign-in page.
-* Tab B still names `<site account>`, with `<cart item>` in its cart.
-* Tab B shows no signed-out message.
-
-<!-- trace:case id=g10.shared-sign-out.TC-vnx rev=1 -->
-### shared-auth-sign-out-US3-TC2-1: Site sign-out leaves the console session open
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-out-US-03
-
-**Pre-conditions:**
-
-* `<operator account>` is signed in on `<grade10 store url>` in tab A.
-* `<operator account>` is signed in on `<grade10 admin console url>` in tab B, with the second factor proved.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| operator account | An account holding console access |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. In tab A, activate the sign-out control and wait for the auth service to confirm.
-2. Return to tab B without reloading it.
-3. Reload tab B.
-
-**Expected Results:**
-
-* Step 1 shows the site returned to marketing.
-* Step 2 shows the console open as `<operator account>`, with no signed-out message.
-* Step 3 still shows the console open as `<operator account>`.
+* Step 2: the other tab shows the row's outcome both times, with no signed-out message.
 
 ## Settled
 
