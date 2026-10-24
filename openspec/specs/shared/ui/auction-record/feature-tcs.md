@@ -1,7 +1,8 @@
 # shared/ui/auction-record Test Cases
 
 **Status:** pending-review · 0/1
-**Drafts styled:** 2026-09-18, tcs-rules r3.0
+**Drafts styled:** 2026-10-24, tcs-rules r7
+**Regenerated:** 2026-10-24, tcs-rules r7
 
 ## g10.shared-auction-record.US1: Content ownership
 
@@ -10,15 +11,15 @@
 **so that** order-state vocabulary stays owned by the application.
 
 <!-- trace:case id=g10.shared-auction-record.TC-6rs rev=1 covers=g10.shared-auction-record.SC-bab,g10.shared-auction-record.SC-jun,g10.shared-auction-record.SC-tft,g10.shared-auction-record.SC-xe3,g10.shared-auction-record.SC-rup -->
-### g10.shared-auction-record.US1-TC1: The record surface calls the mixed column Status
+### g10.shared-auction-record.US1-TC1: My Auctions names the mixed standing and order column Status
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** high
+* **Severity:** minor
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -26,21 +27,12 @@
 
 **Pre-conditions:**
 
-* An application supplies open bid standings and won order statuses to the shared record surface.
+* customer(signed in) leads an open lot and won a closed lot whose order is open.
 
 **Steps:**
 
-1. Render the record surface.
+1. Open My Auctions and read the table's column headers.
 
 **Expected Results:**
 
-* The mixed column header is Status.
-* The component does not label it Your Standing.
-
-## Settled
-
-## Reconciliation
-
-| Finding | Disposition |
-| --- | --- |
-| The shared component renders application-owned status copy | **Folded in** |
+* The column holding Leading beside the won lot's order status is headed Status, never Your Standing.
