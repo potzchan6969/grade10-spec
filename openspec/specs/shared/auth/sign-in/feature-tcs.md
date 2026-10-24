@@ -1,55 +1,55 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** pending-review · 0/29
-**Drafts styled:** 2026-10-24, tcs-rules r7
-**Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-25
+**Status:** pending-review · 0/26
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 **Out of suite (api):** shared-auth-sign-in-SC-34
 
 ## Background
 
-* Every tab a case names is open in one browser on one device, unless the case names another device.
-* A tab is returned to as the person left it, never reloaded.
-* `<g10url>` is the Grade10 site and `<console url>` the Grade10 console of the environment under test.
+* `<g10url>` is the Grade10 site and `<console url>` the Grade10 console of the environment under test. A sign-in link lasts five minutes, and a second send for the same address and surface waits a minute.
+* Every tab a case names is open in one browser on one device unless the case names another; a tab is returned to as it was left, never reloaded.
+* A brand with Google on offers the Google button in the sign-in dialog and the corner prompt; the browser is signed in to Google where a case uses it.
 
 ## Walk 1: A collector signs in by email on the site
 
-**Starting state:**
+Starting state:
 
-- customer(collector) signed out on `<g10url>`, with a second tab open on the same site
+- customer(collector) signed out on `<g10url>`, a second tab open on the same site.
 
-**Shared test data:**
+Shared test data:
 
 | Field | Value |
 | --- | --- |
-| `<collector email>` | an address with an account |
+| collector email | an address with an account |
 
 ### Route
 
-1. Open sign-in, enter `<collector email>` and select **Sign In with Email**.
-   - The dialog reads **Check Your Email**, the address on its own line, **Resend** counting down `shared.auth-sign-in.US7-TC1`
-2. Follow the link in the second tab, then return to the first.
-   - The dialog has closed and the collector is signed in `shared.auth-sign-in.US8-TC1`
+1. Open sign-in, enter `<collector email>`, and select Sign In with Email.
+   - Check Your Email, the address on its own line, Resend counting down. `shared.auth-sign-in.US7-TC1`
+2. Follow the link in the second tab; return to the first.
+   - The dialog has closed, and the collector is signed in. `shared.auth-sign-in.US8-TC1`
 3. Sign out, then follow the same link again.
-   - The brand home, signed out, with the toast that the link no longer works `shared.auth-sign-in.US6-TC1`
+   - The brand home, signed out, with the toast that the link no longer works. `shared.auth-sign-in.US6-TC1`
 
 ## Walk 2: An operator signs in to the console beside the site
 
-**Starting state:**
+Starting state:
 
-- staff(operator) whose role holds `user:create`, signed in on `<g10url>` as a customer account, signed out on `<console url>`
+- staff(operator) whose role holds `user:create`, signed in on `<g10url>` as a customer account and signed out on `<console url>`.
 
-**Shared test data:**
+Shared test data:
 
 | Field | Value |
 | --- | --- |
-| `<operator email>` | the operator's console address |
+| operator email | the operator's console address |
 
 ### Route
 
-1. On `<console url>`, ask for a link for `<operator email>` and follow it in a new tab.
-   - The console is signed in as the operator, and the site is still the customer's `shared.auth-sign-in.US12-TC1`
-2. Open a test winner's page, select **Email sign-in link** beside it, and follow the customer's link in another browser that holds no session.
-   - The site is signed in as the customer, and the operator's console session is unchanged `shared.auth-sign-in.US12-TC5`
+1. On `<console url>`, ask for a link for `<operator email>`, and follow it in a new tab.
+   - The console signed in as the operator; the site still the customer's. `shared.auth-sign-in.US12-TC1`
+2. On a test winner's page, select Email sign-in link; follow the customer's link in a browser holding no session.
+   - The site signed in as the customer; the operator's console unchanged. `shared.auth-sign-in.US12-TC5`
 
 ## shared.auth-sign-in.US1: Collector asks for and follows a sign-in link
 
@@ -58,7 +58,7 @@
 **so that** I reach my account without a password, and a used or expired link cannot.
 
 <!-- trace:case id=g10.shared-sign-in.TC-2hq rev=2 -->
-### shared.auth-sign-in.US1-TC1: An emailed link signs the collector in
+### shared.auth-sign-in.US1-TC1: One email link signs the collector in to the account its address names, or a new one
 
 Runs once per row of **Test data**.
 
@@ -80,26 +80,26 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Address | Signs in to |
+| `<address>` | `<signs in to>` |
 | --- | --- |
 | an address with an account | that account |
 | an address never used before | a new account |
-| an address with an account, typed with a space before and after | that account |
+| an address with an account, a space typed before and after | that account |
 
 **Steps:**
 
 1. Open sign-in.
-2. Enter the address and select **Sign In with Email** twice quickly.
-3. Open the sign-in email and follow its link.
+2. Enter `<address>` and select Sign In with Email twice quickly.
+3. Follow the link in the email.
 
 **Expected Results:**
 
 * Step 1: UI matching account-sign-in-blocks-signinemailform--default; no code field, and no screen says magic link.
-* Step 2: one request runs, UI matching account-sign-in-blocks-signinemailform--link-request-running; one email arrives; the dialog reads the same for both rows.
-* Step 3: the site shows the row's account signed in.
+* Step 2: one request runs, UI matching account-sign-in-blocks-signinemailform--link-request-running; one email arrives; the dialog reads the same for every row.
+* Step 3 shows `<signs in to>` signed in.
 
 <!-- trace:case id=g10.shared-sign-in.TC-vri rev=2 -->
-### shared.auth-sign-in.US1-TC2: A link signs in at any time within its five minutes, and the email says so
+### shared.auth-sign-in.US1-TC2: A link signs in any time within its five minutes, and the email says so
 
 Runs once per row of **Test data**.
 
@@ -112,42 +112,40 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** Emailed link
 
 **Pre-conditions:**
 
-* customer(collector) is signed out on `<g10url>`, the site set to the row's language.
+* customer(collector) is signed out on `<g10url>`, the site in `<language>`.
 
 **Test data:**
 
-| Language | Link followed |
+| `<language>` | `<link followed>` |
 | --- | --- |
 | English | the first, about four minutes after its send, after the resend countdown ended |
-| Chinese (Traditional) | the resent one, about four minutes after the resend and more than five after the first send |
+| Chinese (Traditional) | the resent one, about four minutes after the resend and over five after the first send |
 
 **Steps:**
 
-1. Ask for a link; for the second row, select **Resend** when it turns on.
-2. Read the newest sign-in email.
-3. Follow the row's link.
-4. Wait ten minutes and open the account page.
+1. Ask for a link; for the second row, select Resend when it turns on.
+2. Read the newest email, and follow `<link followed>`.
+3. Wait ten minutes, and open the account page.
 
 **Expected Results:**
 
-* Step 2: the email says the link lasts five minutes, written with a digit, in the row's language.
-* Step 3: signed in.
-* Step 4: still signed in.
+* Step 2: the email says the link lasts 5 minutes, in `<language>`; the link signs in.
+* Step 3: still signed in.
 
 <!-- trace:case id=g10.shared-sign-in.TC-p0g rev=2 -->
-### shared.auth-sign-in.US1-TC3: The email step refuses a send that cannot go out
+### shared.auth-sign-in.US1-TC3: The email step refuses an address it cannot send to, keeping what was typed
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -158,28 +156,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector) is signed out on `<g10url>`.
+* customer(collector) is signed out on `<g10url>`; `<prepared>`.
 
 **Test data:**
 
-| Address entered | Prepared |
+| `<entered>` | `<prepared>` |
 | --- | --- |
-| an address with an account | the environment's mail sending is made to fail |
-| nothing | - |
-| three spaces | - |
-| `collector.example.com`, with no `@` | - |
-| `collector@example`, with no `.` in the domain | - |
-| a 255-character address | - |
+| an address with an account | the environment's mail sending made to fail |
+| nothing | nothing |
+| three spaces | nothing |
+| collector.example.com | nothing |
+| collector@example | nothing |
+| a 255-character address | nothing |
 
 **Steps:**
 
-1. Open sign-in.
-2. Enter the row's address and select **Sign In with Email**.
+1. Open sign-in, enter `<entered>`, and select Sign In with Email.
 
 **Expected Results:**
 
-* The dialog stays on the email step with an error, UI matching account-sign-in-blocks-signinemailform--error-state.
-* What was entered is still in the field; no email arrives, and nobody is signed in.
+* The dialog stays on the email step with an error, UI matching account-sign-in-blocks-signinemailform--error-state, keeping what was entered; no email arrives and nobody is signed in.
 
 ---
 
@@ -190,7 +186,7 @@ Runs once per row of **Test data**.
 **so that** I can use an account I already have, and a brand that does not offer it does not show it.
 
 <!-- trace:case id=g10.shared-sign-in.TC-2dd rev=2 -->
-### shared.auth-sign-in.US3-TC1: A verified Google account signs in
+### shared.auth-sign-in.US3-TC1: A verified Google account signs in from the button or the corner prompt
 
 Runs once per row of **Test data**.
 
@@ -201,9 +197,9 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-03
 
 **Pre-conditions:**
@@ -212,14 +208,14 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Entry |
+| `<entry>` |
 | --- |
 | the Google button in the sign-in dialog |
 | the corner prompt |
 
 **Steps:**
 
-1. Choose the Google account through the row's entry.
+1. Choose the Google account through `<entry>`.
 
 **Expected Results:**
 
@@ -239,7 +235,7 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-03
 
 **Pre-conditions:**
@@ -248,14 +244,14 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Entry |
+| `<entry>` |
 | --- |
 | the Google button in the sign-in dialog |
 | the corner prompt |
 
 **Steps:**
 
-1. Choose the Google account through the row's entry.
+1. Choose the Google account through `<entry>`.
 
 **Expected Results:**
 
@@ -273,12 +269,12 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-03
 
 **Pre-conditions:**
 
-* customer(collector) is signed out on a brand with Google off, in a browser signed in to Google.
+* customer(collector) is signed out on a brand with Google off.
 
 **Steps:**
 
@@ -287,8 +283,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: no corner prompt.
-* Step 2: no Google button.
+* No corner prompt, and no Google button.
 
 ---
 
@@ -299,7 +294,7 @@ Runs once per row of **Test data**.
 **so that** a later visit, a product-created account, or letter case does not split me.
 
 <!-- trace:case id=g10.shared-sign-in.TC-ary rev=2 -->
-### shared.auth-sign-in.US4-TC1: Each sign-in enters the account its address names
+### shared.auth-sign-in.US4-TC1: Each sign-in enters the account its address names, however it was made
 
 Runs once per row of **Test data**.
 
@@ -317,53 +312,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector) signed in once at `<address>`, which holds an order, then signed out.
+* customer(collector) is signed out on `<g10url>`; `<address>` holds an order, `<made by>`.
 
 **Test data:**
 
-| Second sign-in with | Account entered |
-| --- | --- |
-| `<address>` | the same account, the order listed |
-| `<address>` in capitals | the same account, the order listed |
-| `<address>` with a new plus-tag | a new account, no order |
+| `<made by>` | `<signs in with>` | `<enters>` |
+| --- | --- | --- |
+| a sign-in, then a sign-out | `<address>` | the same account, the order listed |
+| a sign-in, then a sign-out | `<address>` in capitals | the same account, the order listed |
+| a sign-in, then a sign-out | `<address>` with a new plus-tag | a new account, no order |
+| checkout's email verification for a guest, then a sign-out | `<address>` | the same account, the checkout's order listed |
 
 **Steps:**
 
-1. Sign in by email with the row's address.
-2. Open the account's orders.
+1. Sign in by email with `<signs in with>`, and open the account's orders.
 
 **Expected Results:**
 
-* The row's account.
-
-<!-- trace:case id=g10.shared-sign-in.TC-4qd rev=3 -->
-### shared.auth-sign-in.US4-TC2: Identity verification creates one account that a later sign-in enters
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** shared-auth-sign-in-US-04
-
-**Pre-conditions:**
-
-* customer(guest) is signed out on `<g10url>` with an address that has no account.
-
-**Steps:**
-
-1. Complete checkout's email verification with the address.
-2. Sign out, then sign in by email with the same address.
-
-**Expected Results:**
-
-* Step 1: the site shows the person signed in.
-* Step 2: the same account, holding the checkout's order.
+* It enters `<enters>`.
 
 ---
 
@@ -387,7 +353,7 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
@@ -396,7 +362,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Sign-in opened at | Lands on |
+| `<sign-in opened at>` | `<lands on>` |
 | --- | --- |
 | `<g10url>`'s sign-in, naming no return | the brand home |
 | `<g10url>`'s sign-in, naming a page of this brand | that page |
@@ -404,12 +370,11 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open the row's sign-in address and ask for a link.
-2. Follow the link.
+1. Open `<sign-in opened at>`, ask for a link, and follow it.
 
 **Expected Results:**
 
-* Signed in, on the row's page.
+* Signed in, on `<lands on>`.
 
 ---
 
@@ -430,7 +395,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** security
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -438,27 +403,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(collector) is signed out on `<g10url>`, with the sign-in dialog of the tab that asked still open.
+* customer(collector) is signed out on `<g10url>`, the dialog of the tab that asked still open.
 
 **Test data:**
 
-| Link | How it is prepared | Toast |
+| `<link>` | `<prepared>` | `<toast>` |
 | --- | --- | --- |
-| used | followed once already | UI matching account-sign-in-blocks-linkfollowtoasts--no-longer-works |
-| replaced | a newer link was sent after it | UI matching account-sign-in-blocks-linkfollowtoasts--no-longer-works |
-| altered | one character of the link changed | UI matching account-sign-in-blocks-linkfollowtoasts--no-longer-works |
-| expired | followed more than five minutes after its send, also with the device clock set back | UI matching account-sign-in-blocks-linkfollowtoasts--expired |
-| banned account | the address is banned on the console | UI matching account-sign-in-blocks-linkfollowtoasts--banned, offering no new link |
+| used | followed once already | account-sign-in-blocks-linkfollowtoasts--no-longer-works |
+| replaced | a newer link sent after it | account-sign-in-blocks-linkfollowtoasts--no-longer-works |
+| altered | one character changed | account-sign-in-blocks-linkfollowtoasts--no-longer-works |
+| expired | followed over five minutes after its send, also with the device clock set back | account-sign-in-blocks-linkfollowtoasts--expired |
+| for a banned account | the address banned on the console | account-sign-in-blocks-linkfollowtoasts--banned, offering no new link |
 
 **Steps:**
 
-1. Follow the row's link.
+1. Follow `<link>`.
 2. Return to the tab that asked.
 
 **Expected Results:**
 
-* Step 1: the brand home opens signed out, with the row's toast.
-* Step 2: the tab that asked still shows its dialog waiting, and nothing it was stopped from is done.
+* Step 1 opens the brand home signed out, UI matching `<toast>`.
+* Step 2: that tab's dialog is still waiting, and nothing it was stopped from is done.
 
 ---
 
@@ -471,7 +436,7 @@ own line, and let me resend after a short wait,
 the entry step.
 
 <!-- trace:case id=g10.shared-sign-in.TC-v74 rev=2 -->
-### shared.auth-sign-in.US7-TC1: The dialog confirms the send, makes the collector wait, then resends
+### shared.auth-sign-in.US7-TC1: The dialog confirms the send, makes the collector wait a minute, then resends
 
 **Classification:**
 
@@ -492,14 +457,14 @@ the entry step.
 **Steps:**
 
 1. Ask for a link.
-2. Dismiss the dialog, open sign-in again and ask for the same address before the minute ends.
-3. Wait until **Resend** turns on and select it.
+2. Dismiss the dialog, reopen sign-in, and ask for the same address before the minute ends.
+3. Wait until Resend turns on, and select it.
 
 **Expected Results:**
 
-* Step 1: UI matching account-sign-in-blocks-signinlinksent--resend-cooldown: **Check Your Email**, the address on its own line, no Back control, **Resend** off and counting down.
-* Step 2: the dialog opens at the email step; asking again gets a message to wait, and no second email arrives.
-* Step 3: a second email arrives and the countdown starts again; the first link no longer works.
+* Step 1: UI matching account-sign-in-blocks-signinlinksent--resend-cooldown: Check Your Email, the address on its own line, no Back control, Resend off and counting down.
+* Step 2 opens at the email step; asking again is told to wait, and no second email arrives.
+* Step 3: a second email arrives, the countdown restarts, and the first link no longer works.
 
 ---
 
@@ -510,7 +475,7 @@ the entry step.
 **so that** I am not sent back to press the same thing a second time.
 
 <!-- trace:case id=g10.shared-sign-in.TC-oaf rev=2 -->
-### shared.auth-sign-in.US8-TC1: The tab that asked closes its dialog and finishes what it stopped
+### shared.auth-sign-in.US8-TC1: The tab that asked closes its dialog and carries on with what it stopped
 
 Runs once per row of **Test data**.
 
@@ -521,7 +486,7 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-08
@@ -532,55 +497,25 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Sign-in asked from | Before the link is followed | Asking tab afterwards |
+| `<asked from>` | `<in between>` | `<asking tab afterwards>` |
 | --- | --- | --- |
-| **Add to cart** on a product | nothing | signed in, the product in the cart once |
+| Add to cart on a product | nothing | signed in, the product in the cart once |
 | the header's sign-in | nothing | signed in, nothing else done |
-| **Add to cart** on a product | the tab opens another page | signed in on that page, nothing added |
+| Add to cart on a product | the tab opens another page | signed in on that page, nothing added |
+| Add to cart on the last one of a product | another account buys it | signed in, told the product can no longer be added, the cart empty |
 
 **Steps:**
 
-1. Select the row's control, then ask for a link (UI matching account-sign-in-screens-sign-in--from-add-to-cart for an add-to-cart row).
-2. Do the row's step in between.
-3. Follow the link in the second tab.
-4. Return to the asking tab.
+1. Select `<asked from>`, and ask for a link (UI matching account-sign-in-screens-sign-in--from-add-to-cart from Add to cart).
+2. Let `<in between>` happen.
+3. Follow the link in the second tab, and return to the asking tab.
 
 **Expected Results:**
 
-* Step 4: the dialog has closed without a reload, and the row's outcome.
-
-<!-- trace:case id=g10.shared-sign-in.TC-lnk rev=2 -->
-### shared.auth-sign-in.US8-TC2: An action that can no longer be done is refused after sign-in, not skipped
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** shared-auth-sign-in-US-08
-
-**Pre-conditions:**
-
-* customer(collector) is signed out on `<g10url>`, on a product with one left, with a second tab open.
-
-**Steps:**
-
-1. Select **Add to cart**, then ask for a link.
-2. Sell the last one from another account.
-3. Follow the link in the second tab.
-4. Return to the asking tab.
-
-**Expected Results:**
-
-* Step 4: signed in, told the product can no longer be added; the cart is empty.
+* The dialog has closed without a reload, and the tab reads `<asking tab afterwards>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-3kv rev=2 -->
-### shared.auth-sign-in.US8-TC3: Other tabs on the same side close their dialog when the link is followed
+### shared.auth-sign-in.US8-TC3: Other tabs of the same side close their dialog when the link is followed
 
 Runs once per row of **Test data**.
 
@@ -593,30 +528,28 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-08
 
 **Pre-conditions:**
 
-* customer(collector) signed out, with the row's other tab open and the sign-in dialog open in it.
-* An asking tab on `<g10url>` has a link waiting.
+* customer(collector) is signed out, `<other tab>` open with its sign-in dialog open; an asking tab on `<g10url>` has a link waiting.
 
 **Test data:**
 
-| Other tab | Afterwards |
+| `<other tab>` | `<afterwards>` |
 | --- | --- |
 | another page of `<g10url>`, which did not ask | dialog closed, signed in |
-| another page of `<g10url>`, which also asked, from **Add to cart** | dialog closed, the product added once |
+| another page of `<g10url>`, which asked from Add to cart | dialog closed, the product added once |
 | another site of the same brand | dialog closed, signed in |
 
 **Steps:**
 
-1. Follow the asking tab's link in a third tab.
-2. Return to the row's other tab.
+1. Follow the asking tab's link in a third tab, and return to `<other tab>`.
 
 **Expected Results:**
 
-* The row's outcome.
+* It reads `<afterwards>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-j4x rev=2 -->
 ### shared.auth-sign-in.US8-TC4: Tabs on another brand or the console stay signed out when a site link is followed
@@ -629,32 +562,30 @@ Runs once per row of **Test data**.
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** security
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-08
 
 **Pre-conditions:**
 
-* customer(collector) signed out, with the row's other tab open and its sign-in open.
-* An asking tab on `<g10url>` has a link waiting.
+* customer(collector) is signed out, `<other tab>` open with its sign-in open; an asking tab on `<g10url>` has a link waiting.
 
 **Test data:**
 
-| Other tab |
+| `<other tab>` |
 | --- |
 | a ZZZ site, its sign-in dialog open |
 | `<console url>`'s sign-in page |
 
 **Steps:**
 
-1. Follow the asking tab's link in a third tab.
-2. Return to the row's other tab.
+1. Follow the asking tab's link in a third tab, and return to `<other tab>`.
 
 **Expected Results:**
 
-* The other tab still asks for sign-in and is signed out.
+* It still asks for sign-in, signed out.
 
 ---
 
@@ -675,7 +606,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -687,21 +618,21 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Choice | Afterwards |
+| `<choice>` | `<afterwards>` |
 | --- | --- |
-| **Switch** | signed in as `<account B>` |
-| **Stay** | still `<account A>`; the link still works once |
+| Switch | signed in as `<account B>` |
+| Stay | still `<account A>`; the link still works once |
 | dismiss the toast | still `<account A>`; the link still works once |
 
 **Steps:**
 
-1. Follow the link for `<account B>`.
-2. Wait ten seconds, then make the row's choice.
+1. Follow the link.
+2. Wait ten seconds, then make `<choice>`.
 
 **Expected Results:**
 
-* Step 1: UI matching account-sign-in-blocks-linkfollowtoasts--different-account, naming `<account B>`'s email; still signed in as `<account A>`.
-* Step 2: the toast is still there before the choice; then the row's outcome.
+* Step 1: UI matching account-sign-in-blocks-linkfollowtoasts--different-account, naming `<account B>`'s email; still `<account A>`.
+* Step 2: the toast is still there before the choice; then `<afterwards>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-0gq rev=1 -->
 ### shared.auth-sign-in.US9-TC2: A link for the signed-in account itself asks nothing
@@ -709,13 +640,13 @@ Runs once per row of **Test data**.
 **Classification:**
 
 * **Severity:** minor
-* **Priority:** low
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-09
 
 **Pre-conditions:**
@@ -728,7 +659,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No toast; still signed in as `<account A>`.
+* No toast; still `<account A>`.
 
 ---
 
@@ -740,7 +671,7 @@ Runs once per row of **Test data**.
 elsewhere.
 
 <!-- trace:case id=g10.shared-sign-in.TC-uxi rev=2 -->
-### shared.auth-sign-in.US10-TC1: A waiting dialog ends its wait when the address signs in on another device
+### shared.auth-sign-in.US10-TC1: A waiting dialog ends its wait when its address signs in on another device
 
 Runs once per row of **Test data**.
 
@@ -753,28 +684,28 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-10
 
 **Pre-conditions:**
 
-* customer(collector) asked for a link for `<address>` on device 1, on `<g10url>`, in two tabs; one tab is left in the background.
+* customer(collector) asked for a link for `<address>` on device 1, on `<g10url>`, in two tabs, one in the background.
 
 **Test data:**
 
-| On device 2 |
+| `<on device 2>` |
 | --- |
-| follows device 1's link, before **Resend** turns on |
-| signs in with Google as `<address>`, after **Resend** turns on |
+| follows device 1's link, before Resend turns on |
+| signs in with Google as `<address>`, after Resend turns on |
 
 **Steps:**
 
-1. Do the row's step on device 2.
-2. Look at device 1's front tab, then select the background tab.
+1. Do `<on device 2>`.
+2. Look at device 1's front tab, then select its background tab.
 
 **Expected Results:**
 
-* Both tabs end the wait, UI matching account-sign-in-blocks-linkfollowtoasts--settled-elsewhere; device 1 stays signed out.
+* Both end the wait, UI matching account-sign-in-blocks-linkfollowtoasts--settled-elsewhere; device 1 stays signed out.
 
 <!-- trace:case id=g10.shared-sign-in.TC-1jo rev=2 -->
 ### shared.auth-sign-in.US10-TC2: A waiting dialog keeps waiting when no sign-in for its address happens
@@ -790,7 +721,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-10
 
 **Pre-conditions:**
@@ -799,15 +730,14 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| On device 2 |
+| `<on device 2>` |
 | --- |
 | follows a used link for `<address>` |
 | signs in as another address |
 
 **Steps:**
 
-1. Do the row's step on device 2.
-2. Look at device 1.
+1. Do `<on device 2>`, and look at device 1.
 
 **Expected Results:**
 
@@ -837,33 +767,33 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
 
 **Pre-conditions:**
 
-* A browser signed in to Google, on a brand with Google on, signed out on the site.
+* customer is signed out on the site of a brand with Google on; the console is `<console>`.
 
 **Test data:**
 
-| Page | Console session |
+| `<page>` | `<console>` |
 | --- | --- |
-| the home | none |
-| checkout | none |
+| the home | signed out |
+| checkout | signed out |
 | the home | signed in on `<console url>` |
 
 **Steps:**
 
-1. Open the row's page.
-2. Leave the prompt alone for thirty seconds.
+1. Open `<page>`, and leave the prompt alone for thirty seconds.
 
 **Expected Results:**
 
-* Step 1: the corner prompt shows.
-* Step 2: the page is as it was; nobody is signed in.
+* The corner prompt shows; the page stays as it was, nobody signed in.
 
 <!-- trace:case id=g10.shared-sign-in.TC-y7m rev=1 -->
-### shared.auth-sign-in.US11-TC2: A person signed in on the site is not offered the corner prompt
+### shared.auth-sign-in.US11-TC2: No corner prompt for a person signed in, or where Google's prompt cannot load
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -874,50 +804,30 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
 
 **Pre-conditions:**
 
-* customer(collector) is signed in on `<g10url>`, a brand with Google on, in a browser signed in to Google.
+* customer is on `<g10url>`, a brand with Google on, `<state>`.
+
+**Test data:**
+
+| `<state>` | `<then>` |
+| --- | --- |
+| signed in | open three pages |
+| signed out, with Google's script blocked | open the home and select Add to cart on a product |
 
 **Steps:**
 
-1. Open three pages of the site.
+1. `<then>`.
 
 **Expected Results:**
 
-* No corner prompt on any of them.
-
-<!-- trace:case id=g10.shared-sign-in.TC-x2b rev=1 -->
-### shared.auth-sign-in.US11-TC3: The page works when Google's prompt cannot load
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** shared-auth-sign-in-US-11
-
-**Pre-conditions:**
-
-* customer(collector) is signed out on a brand with Google on, with Google's script blocked in the browser.
-
-**Steps:**
-
-1. Open the home and select **Add to cart** on a product.
-
-**Expected Results:**
-
-* No corner prompt; the page works and the sign-in dialog opens.
+* No corner prompt shows; the pages work, and Add to cart opens the sign-in dialog.
 
 <!-- trace:case id=g10.shared-sign-in.TC-m40 rev=2 -->
-### shared.auth-sign-in.US11-TC4: The corner prompt yields to the sign-in dialog
+### shared.auth-sign-in.US11-TC4: The corner prompt yields to the sign-in dialog for the rest of the visit
 
 **Classification:**
 
@@ -925,26 +835,25 @@ Runs once per row of **Test data**.
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** usability
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-11
 
 **Pre-conditions:**
 
-* customer(collector) signed out on `<g10url>`, a brand with Google on, the corner prompt showing.
+* customer is signed out on `<g10url>`, a brand with Google on, the corner prompt showing.
 
 **Steps:**
 
-1. Open sign-in.
-2. Close the dialog without signing in.
-3. Open three more pages of the site.
+1. Open sign-in; close it without signing in.
+2. Open three more pages.
 
 **Expected Results:**
 
 * Step 1: the prompt is gone while the dialog is open.
-* Step 3: the prompt does not come back for the rest of the visit.
+* Step 2: it does not come back.
 
 ---
 
@@ -954,51 +863,8 @@ Runs once per row of **Test data**.
 **I want** a link I asked for from the console to sign in the console and nothing else,
 **so that** my shopping session on the site stays as it was, whoever it belongs to.
 
+<!-- trace:case id=g10.shared-sign-in.TC-rwo rev=1 -->
 ### shared.auth-sign-in.US12-TC1: A sign-in signs in only the side it was asked from
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** smoke, regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-12
-
-**Pre-conditions:**
-
-* staff(operator) has the row's site session, and no console session.
-
-**Test data:**
-
-| Brand | Asked from | Site session before | Followed | Afterwards |
-| --- | --- | --- | --- | --- |
-| Grade10 | the console, by email | none | in a console tab | console signed in, site signed out |
-| Grade10 | the console, by email | another customer account | on another device, no console tab open | console signed in as the operator, site still the customer |
-| Grade10 | the console, by email, after one **Resend** | the operator's own account | in a new tab | console signed in, site unchanged |
-| Grade10 | the console, opened at an address naming a site page | none | in a new tab | lands on the console, signed in |
-| Grade10 | the console, with Google | none | - | console signed in, site signed out |
-| Grade10 | the site, by email | none | in a new tab | site signed in, the console asks for sign-in |
-| Grade10 | checkout's email verification | none | - | site signed in, the console asks for sign-in |
-| ZZZ | the ZZZ console, by email | none | in a new tab | ZZZ console signed in only |
-
-**Steps:**
-
-1. Ask for sign-in from the row's place.
-2. Follow the link as the row says.
-3. Open the site and the console in new tabs.
-
-**Expected Results:**
-
-* Step 3: the row's outcome; nothing asks which account to keep.
-
-<!-- trace:case id=g10.shared-sign-in.TC-xvi rev=2 -->
-### shared.auth-sign-in.US12-TC2: A console link that cannot sign in says why on the console's sign-in page
 
 Runs once per row of **Test data**.
 
@@ -1007,11 +873,54 @@ Runs once per row of **Test data**.
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-12
+
+**Pre-conditions:**
+
+* staff(operator) has `<site before>` on the site and no console session.
+
+**Test data:**
+
+| `<asked from>` | `<site before>` | `<followed>` | `<afterwards>` |
+| --- | --- | --- | --- |
+| the console, by email | none | in a console tab | console signed in, site signed out |
+| the console, by email | another customer account | on another device, no console tab open | console signed in as the operator, site still the customer |
+| the console, by email, after one Resend | the operator's own account | in a new tab | console signed in, site unchanged |
+| the console, opened at an address naming a site page | none | in a new tab | on the console, signed in |
+| the console, with Google | none | not applicable | console signed in, site signed out |
+| the site, by email | none | in a new tab | site signed in, the console asks for sign-in |
+| checkout's email verification | none | not applicable | site signed in, the console asks for sign-in |
+| the ZZZ console, by email | none | in a new tab | ZZZ console signed in only |
+
+**Steps:**
+
+1. Ask for sign-in from `<asked from>`, and follow as `<followed>` says.
+2. Open the site and the console in new tabs.
+
+**Expected Results:**
+
+* Step 2 reads `<afterwards>`, and nothing asks which account to keep.
+
+<!-- trace:case id=g10.shared-sign-in.TC-xvi rev=2 -->
+### shared.auth-sign-in.US12-TC2: A console link that cannot sign in says why on the console's sign-in page
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
 
 **Pre-conditions:**
@@ -1020,7 +929,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Link | Console sign-in page says |
+| `<link>` | `<page says>` |
 | --- | --- |
 | expired | the link has expired |
 | used | the link no longer works |
@@ -1028,12 +937,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Follow the row's link.
+1. Follow `<link>`.
 2. Open the site.
 
 **Expected Results:**
 
-* Step 1: the console's sign-in page with the row's message in the page, no toast; still signed out.
+* Step 1 shows the console's sign-in page with `<page says>` in the page, no toast; still signed out.
 * Step 2: the site is still the customer's.
 
 <!-- trace:case id=g10.shared-sign-in.TC-7cx rev=2 -->
@@ -1043,14 +952,14 @@ Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
 
 **Pre-conditions:**
@@ -1059,24 +968,23 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Choice | Console afterwards |
+| `<choice>` | `<console afterwards>` |
 | --- | --- |
-| **Switch** | `<operator B>` |
-| **Stay** | `<operator A>` |
+| Switch | `<operator B>` |
+| Stay | `<operator A>` |
 
 **Steps:**
 
-1. Follow the link for `<operator B>`.
-2. Make the row's choice.
-3. Open the site.
+1. Follow the link, and make `<choice>`.
+2. Open the site.
 
 **Expected Results:**
 
-* Step 1: the console's sign-in page names `<operator B>`'s email and offers **Switch** and **Stay**.
-* Step 2: the row's console account.
-* Step 3: the site is still the customer's.
+* Step 1: the console's sign-in page names `<operator B>`'s email and offers Switch and Stay; then the console is `<console afterwards>`.
+* Step 2: the site is still the customer's.
 
-### shared.auth-sign-in.US12-TC4: Waits and limits on the console and the site run apart
+<!-- trace:case id=g10.shared-sign-in.TC-vz1 rev=1 -->
+### shared.auth-sign-in.US12-TC4: Waits and send limits on the console and the site run apart
 
 **Classification:**
 
@@ -1087,7 +995,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
 
 **Pre-conditions:**
@@ -1096,31 +1004,29 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Ask for a site link for `<operator email>`.
-2. At once, ask for a console link for the same address.
-3. Ask for a second console link before the minute ends.
-4. On another device, follow the console link.
-5. Look at the site tab.
+1. Ask for a site link for the operator's address, then at once a console link for it.
+2. Ask for a second console link before the minute ends.
+3. On another device, follow the console link; look at the site tab.
 
 **Expected Results:**
 
-* Step 2: the console link is sent.
-* Step 3: told to wait; no third email.
-* Step 4: the console tab's wait ends.
-* Step 5: the site tab still waits, and the site link still signs in.
+* Step 1 sends both.
+* Step 2 is told to wait; no third email.
+* Step 3: the console tab's wait ends; the site tab still waits, and the site link still signs in.
 
+<!-- trace:case id=g10.shared-sign-in.TC-41r rev=1 -->
 ### shared.auth-sign-in.US12-TC5: A site link an operator sends from the console signs in the site only
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** Link surface
 
 **Pre-conditions:**
@@ -1129,15 +1035,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Select **Email sign-in link** beside the test winner.
-2. Follow the customer's link in another browser that holds no session.
+1. Select Email sign-in link beside the test winner.
+2. Follow the customer's link in another browser holding no session.
 3. Return to the operator's console tab.
 
 **Expected Results:**
 
-* Step 2: the site is signed in as the customer; the console in that browser asks for sign-in.
+* Step 2 signs in the site as the customer; the console in that browser asks for sign-in.
 * Step 3: the operator's console session is unchanged.
 
+<!-- trace:case id=g10.shared-sign-in.TC-7kf rev=1 -->
 ### shared.auth-sign-in.US12-TC6: A console role without user:create is offered no site link
 
 **Classification:**
@@ -1149,7 +1056,7 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-12
 
 **Pre-conditions:**
@@ -1162,66 +1069,22 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No **Email sign-in link** action.
+* No Email sign-in link action.
 
 ## Settled
 
-* Whether a console tab carries on a refused action after its second factor
-  belongs to the console's own capability, which specifies no second factor
-  at all today.
-* An absolute expiry time alongside the link's duration was rejected; the
-  duration is the only form the promise takes.
-* The confirmation dialog stating the link's lifetime was rejected; the
-  promise lives in the email only.
-* A lifetime settable per environment or brand was rejected; one lifetime
-  applies everywhere.
-* A pending, unused, unexpired link stays valid after its address settles
-  elsewhere by another method; only the link's own expiry or a later send
-  ends it, exactly as before this change.
-* A settle on a different brand does not close this brand's wait: grade10
-  and zzz run entirely separate auth deployments and databases (no shared
-  account, no shared check between them), so a settle on one brand
-  affecting the other's wait is not a reachable case for this capability's
-  mechanism to guard against.
-* Dismissing the wait and reopening sign-in starts fresh: already governed
-  by the existing dismiss/reopen contract (opening sign-in again starts at
-  the email step); nothing persists across a dismissal that would need
-  asserting separately.
-* A link asked from the console signs in the console whoever follows it and on whichever device: the token names the surface, so a follow with no console tab open still signs in the console.
-* A sign-in link sent before release carries no surface and signs in the site, as every pre-release link did. A token that is malformed, unknown or carries no console prefix reads the same way, so a failed follow of one lands on the brand home with the site's toast.
-* The send cap and a new link's replacing earlier links count per address and surface: a console link right after a site link for the same address is sent and does not invalidate it (decisions Q12).
-* When an address signs in on one surface, only a wait on the same surface stops; a wait on the other surface keeps running (decisions Q13).
-* A failed, expired, banned or different-account console-asked link lands on the console's own sign-in page with an inline message, and the different-account case offers Switch and Stay there; the console has no toasts (decisions Q14).
-* A sign-in dialog closes for a session that arrives on its own side: two tabs of the site, or two of the console, close together, and a sign-in on the other side leaves a dialog open (decisions Q11).
-* The brand guard that ignores an off-brand location also ignores a location on the other surface, on send and again on follow, so a console link naming a site page lands on the console.
-* A link an operator action on the console sends for a customer account asks for the site and signs in the site, not the console: it is the one exception to the asking surface, only an elevated console session whose role holds `user:create` may ask for it, a request with no console session, a role without the grant or a second factor not yet proved is refused and sends nothing, and the sender's console session is left as it was (decisions Q16). The human confirmed the grant 2026-10-06, which the planning run had named from the test-winner action's existing gate in `complete-auction-post-sale`.
-* Google's auto-prompt is the site's and reads the session of the surface it shows on, so a console session does not withhold it: a person signed in on the console only is still offered it on the site. The site's SPAs mount the prompt and the console does not; this change adds no console mount, since no decision gives the console one, so there is no console prompt for a site session to withhold or offer.
+* Whether a console tab carries on a refused action after its second factor belongs to the console's own capability.
+* The link's duration is the only form its promise takes, stated in the email only, with one lifetime everywhere.
+* A pending link stays valid after its address signs in elsewhere by another method; only its expiry or a later send ends it.
+* The two brands run separate auth, so a sign-in on one never ends the other's wait.
+* Dismissing the wait and reopening sign-in starts again at the email step.
+* A link asked from the console signs in the console whoever follows it, on any device. A link sent before release, or a token with no console prefix, signs in the site, and a failed follow lands on the brand home with the site's toast.
+* The send cap and a new link's replacing earlier links count per address and surface (decisions Q12); a sign-in stops only a wait on its own surface (Q13).
+* A console-asked link that fails, is expired or banned, or is for another account lands on the console's own sign-in page with an inline message; the console has no toasts (Q14).
+* A sign-in dialog closes only for a session that arrives on its own side (Q11). An off-brand or other-surface return location is ignored on send and on follow.
+* A link an operator sends from the console for a customer signs in the site; only an elevated console session whose role holds `user:create` may send it, and the sender's console session is left as it was (Q16).
+* The corner prompt is the site's and reads the site's session, so a console session does not withhold it; the console has no prompt.
 
 ## Reconciliation
 
-**Run:** QA2, 2026-10-06, in a fresh context. QA1's blind pass read the Purpose and Feature set, `user-journeys.md`, `proposal.md`, `decisions.md` (its `## Raised` was empty), the Session and Sign-In pages, the durable suite for id continuity and `shared/auth/domain-tcs.md`, and was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read both readings, `decisions.md`, `tech-design.md`, `tasks.md`, the delta and the durable suite. It is a statement, not proof. No case of this change has been accepted or published, so a draft keeps its `<v>` when it is reworded.
-
-- **Agreed** - `shared-auth-sign-in-US12-TC1-1` with `shared-auth-sign-in-SC-91`; `shared-auth-sign-in-US12-TC2-1` with `shared-auth-sign-in-SC-92`; `shared-auth-sign-in-US12-TC3-1` with `shared-auth-sign-in-SC-91`, the site session left as it was; `shared-auth-sign-in-US12-TC4-1` with `shared-auth-sign-in-SC-96`; `shared-auth-sign-in-US12-TC6-1` with `shared-auth-sign-in-SC-69` read on the console and `shared-auth-sign-in-SC-96`; `shared-auth-sign-in-US12-TC8-1` with `shared-auth-sign-in-SC-91`; `shared-auth-sign-in-US12-TC9-1` with `shared-auth-sign-in-SC-91` and the durable followed-elsewhere rule; `shared-auth-sign-in-US12-TC10-1` with `shared-auth-sign-in-SC-91` on ZZZ, one case for the second brand
-- **Adjusted, by QA2** - `shared-auth-sign-in-US12-TC3-1` and `shared-auth-sign-in-US12-TC7-1` named `<operator TOTP code>` from an account the case does not hold; TC3 now takes the code from `<collector account>` and TC7 from `<operator account C>`, the account each one signs in on the console
-- **Adjusted, by QA2 (review)** - `shared-auth-sign-in-US12-TC18-1` walked only the site half of the pair; it now also signs in the console while a site wait runs, so `shared-auth-sign-in-SC-102` is reached by a step and not by the title alone
-- **Adjusted, by QA2, a case revised** - `shared-auth-sign-in-US8-TC11-2` revises the durable `US8-TC11-1`, whose pre-condition read "tabs A and C open on the same brand" and so claimed more than the re-scoped `shared-auth-sign-in-SC-51` states: two tabs on the same side, the site or the console. It runs once per row for the site and for the console, goes back to `draft` as the durable case was `actual`, and carries the durable case's `trace:case` marker at `rev=2` with its `covers` list as it was, since `pnpm run accept:preflight` refuses a revised case that reuses a durable case's id without it; no marker is allocated for it
-- **Adjusted, by QA2 (second pass)** - `shared-auth-sign-in-SC-110` and `shared-auth-sign-in-US12-TC24-1` now name an account whose role holds `user:create`, so the missing console session is the one thing that refuses the request, and both say no console session where they said no elevated one, a wording `shared-auth-sign-in-SC-111` and `shared-auth-sign-in-SC-112` now share; `shared-auth-sign-in-US12-TC22-1` and `shared-auth-sign-in-US12-TC23-1` name `admin` and its grant where they said any console access, which `support` also holds and which the requirement refuses
-- **Raised, folded into spec** - a console session as a different account when a console link is followed, which `shared-auth-sign-in-US12-TC5-1` and `shared-auth-sign-in-US12-TC7-1` asserted and no scenario stated: `shared-auth-sign-in-SC-98`, which holds what decisions Q8 settles (the console's own session is judged, kept, and no console session is made for the link's account) and leaves the choice's presentation to the raised row below; its case is `shared-auth-sign-in-US12-TC13-1`. Scenarios no QA1 case walked: `shared-auth-sign-in-SC-93` by `shared-auth-sign-in-US12-TC11-1`; `shared-auth-sign-in-SC-97` by the api case `shared-auth-sign-in-US12-TC12-1`; `shared-auth-sign-in-SC-94` by `shared-auth-sign-in-US12-TC14-1`; `shared-auth-sign-in-SC-95` by the api case `shared-auth-sign-in-US12-TC15-1`
-- **Raised, rejected** - none
-- **Raised, settled by the artifacts** - whether a link followed with no console tab open still signs in the console, and what a link sent before release signs in (the token's prefix, decisions Q8 and `shared-auth-sign-in-SC-91`). Each is in `## Settled`; none goes to `decisions.md`
-- **Raised, answered 2026-10-06** - the three rows below were put to the human and landed as decisions Q12 to Q14: the send cap and supersession count per address and surface, so `shared-auth-sign-in-SC-99` and `shared-auth-sign-in-SC-100`, walked by `shared-auth-sign-in-US12-TC16-1` and `shared-auth-sign-in-US12-TC17-1`; a wait stops only for a sign-in on the same surface, so `shared-auth-sign-in-SC-101` and `shared-auth-sign-in-SC-102`, walked by `shared-auth-sign-in-US12-TC18-1`; a failed or different-account console-asked link lands on the console's sign-in page with an inline message, so `shared-auth-sign-in-SC-103`, walked by `shared-auth-sign-in-US12-TC19-1`, `shared-auth-sign-in-SC-104`, walked by `shared-auth-sign-in-US12-TC20-1`, `shared-auth-sign-in-SC-105`, walked by `shared-auth-sign-in-US12-TC5-1`, `shared-auth-sign-in-SC-106`, walked by `shared-auth-sign-in-US12-TC7-1`, and `shared-auth-sign-in-SC-107`, walked by `shared-auth-sign-in-US12-TC21-1`, with `shared-auth-sign-in-US12-TC5-1` and `shared-auth-sign-in-US12-TC7-1` reworded from a toast to the inline choice. The cases are new drafts; no case was `actual`.
-- **Raised after QA2, answered 2026-10-06** - which surface a link signs in when a console operator sends it for a customer account, as the test-winner flow in `complete-auction-post-sale` does: the site, the one exception to decisions Q8 and `shared-auth-sign-in-SC-91` (decisions Q16). The new scenarios are `shared-auth-sign-in-SC-108`, walked by `shared-auth-sign-in-US12-TC22-1`, `shared-auth-sign-in-SC-109`, walked by `shared-auth-sign-in-US12-TC23-1`, and `shared-auth-sign-in-SC-110`, walked by `shared-auth-sign-in-US12-TC24-1`. The cases are new drafts, written by the author from the answer: no fresh blind pass was run for them, and none was `actual`
-- **Raised after QA2, the grant confirmed 2026-10-06** - which elevated console session may ask for a site link: one whose role holds `user:create`, the grant the test-winner action already needs, named by the planning run from `complete-auction-post-sale` and confirmed by the human (decisions Q16). It adds `shared-auth-sign-in-SC-111`, walked by `shared-auth-sign-in-US12-TC25-1`, for a role without the grant, refused as not allowed, and `shared-auth-sign-in-SC-112`, walked by `shared-auth-sign-in-US12-TC26-1`, for a second factor not yet proved, refused with the ask for it. Both are new drafts; no case was `actual`
-- **Written after the blind pass, reconciled here** - `shared-auth-sign-in-SC-108` to `shared-auth-sign-in-SC-112` with `shared-auth-sign-in-US12-TC22-1` to `shared-auth-sign-in-US12-TC26-1`, written from the human's answer Q16, the grant named by the planning run and confirmed by the human; and the re-scope of `shared-auth-sign-in-SC-51` with `shared-auth-sign-in-US8-TC11-2`, written at the human's direction to read the dialog requirement against decisions Q11 to Q13. QA1's blind pass never saw them, so none of them has a blind reading beside it; QA2 reconciled them against the delta, `decisions.md`, `tech-design.md` D2 and D5, `tasks.md` 4.1, 4.3 and 4.11 and the durable suite in this fresh context, in a second pass the same day as the run above. It is a statement, not proof
-- **Raised, as escalated** - three rows in `decisions.md`'s `## Raised`: whether the send cap and link supersession are per address or per address and surface; whether a wait ends when the address signs in on the other surface; where a failed or mismatched console-asked link lands and how the console says so. `shared-auth-sign-in-US12-TC5-1` and `shared-auth-sign-in-US12-TC7-1` assume a Switch and Stay choice on the console and were reworded when the third was answered
-- **Adjusted, by QA2 (review), same-side wording** - the GIVENs and WHENs of `shared-auth-sign-in-SC-70` to `shared-auth-sign-in-SC-78` now name the sign-in, the follow or the settle as on another device on the same side as the waiting surface, or on the side the link was asked from, so none reads as a settle across the brand or across surfaces. Their ids and markers are as they were
-- **Raised after QA2, the auto-prompt's reading** - `shared-auth-sign-in-SC-86` read "a person who already has a session" with no surface, so a console session could be read as withholding the prompt on the site. The requirement is modified: it is the site's prompt, `shared-auth-sign-in-SC-80` to `shared-auth-sign-in-SC-90` carry their markers, `shared-auth-sign-in-SC-86` reads "a site session", and `shared-auth-sign-in-SC-114`, a console session on the site, is new. `shared-auth-sign-in-US12-TC27-1` walks it, with one row, the person signed in on the console only visiting the site; it is a new draft with no blind reading beside it, and no case was `actual`. The first draft also had shared-auth-sign-in-SC-113, a site session on a console page that offers the prompt, and a console row in the case. Both were removed before acceptance: only the site's SPAs mount the prompt, the console does not, and no decision in `decisions.md` adds a console mount, so the scenario described a surface that does not exist. shared-auth-sign-in-SC-113 is retired and its id is not reused. The durable `US11-TC3-1` still holds on the site and is left as it is
-- **Adjusted, by QA2 (review), loose wording** - `shared-auth-sign-in-SC-23` and its requirement now say the site, "on this brand's site", with `shared-auth-sign-in-SC-21` to `shared-auth-sign-in-SC-25` carried with their markers. The durable case `US4-TC6-1`, "Trusted product signs the person in on this brand", still holds on the site and is left as it is
-- **Left to the durable cases** - `shared-auth-sign-in-SC-31` and `shared-auth-sign-in-SC-32`, whose wording only gained the surface: `US5-TC1-1` and `US5-TC3-1` still verify them and are left as they are; `shared-auth-sign-in-SC-63` to `shared-auth-sign-in-SC-69`, the site's mismatch, by `US9-TC1-1` to `US9-TC7-1`; the settled-elsewhere wait by `US10-TC1-1` to `US10-TC9-1`, whose scenarios gained only the same-side wording and whose `US10-TC6-1` reads "every surface waiting" on the site's own surfaces and stays as it is, since the wait is now scoped to the same surface (decisions Q13); `shared-auth-sign-in-SC-37` to `shared-auth-sign-in-SC-41`, whose GIVEN now says the link was asked from the site, by the customer cases `US6-TC1-1` to `US6-TC5-1`, which stay as they are because the wording moved nothing they assert; `shared-auth-sign-in-SC-50`, by `US8-TC1-1`, which holds on either side; and `US8-TC7-1`, whose "another site of the brand" is a page of the one customer site, so it still holds, stays `actual` and `automated`, and is not touched
-- **Covered at domain** - the site's link sign-in, which this change leaves as it was, is walked by `shared.auth-dmn.US2-TC1`; the console-against-site lifecycle across session, sign-in and sessions is a draft domain case in this change's `domain-tcs.md` (`shared.auth-dmn.US8-TC1`)
-- **Contradicted** - none
-- **Uncovered anchors** - none: `shared-auth-sign-in-US-12` has `US12-TC1-1` to `US12-TC21-1`; every scenario from `shared-auth-sign-in-SC-91` to `shared-auth-sign-in-SC-112`, and `shared-auth-sign-in-SC-114`, is reached, shared-auth-sign-in-SC-113 being retired; the `Google` group has `US12-TC14-1` and `US12-TC27-1` beside the durable `US3-TC1-1` to `US3-TC3-1`, and the `Link surface` group has `US12-TC15-1` and `US12-TC22-1` to `US12-TC26-1`; `shared-auth-sign-in-US-08` has `US8-TC11-2` beside the durable `US8-TC1-1` to `US8-TC10-1`. `shared-auth-sign-in-SC-51` is walked by `US8-TC11-2` but not joined to it through an anchor, since it serves the `Emailed link` group and the case traces the journey; the durable suite held the same gap and this change leaves it
-- **Trace markers** - the new scenarios and cases carry none yet; the trace CLI allocates them with the walk; `shared-auth-sign-in-US8-TC11-2` carries the durable marker revised to `rev=2`, as `shared-auth-session-US2-TC1-2` does, and `shared-auth-sign-in-SC-50` and `shared-auth-sign-in-SC-51` carry the durable markers they already had, as the other modified scenarios do
-
-
-- **Assumed** - an email address has one `@`, a domain containing a `.`, and at most 254 characters; a required field holding nothing or only spaces is refused; spaces around a typed email address are ignored; after a refused submit, what was typed stays (Common Rules). They ride on `shared.auth-sign-in.US1-TC1` and `shared.auth-sign-in.US1-TC3`
+- **Covered at domain** - `shared.auth-dmn.US1-TC1` walks a link sign-in naming the collector until sign-out; `shared.auth-dmn.US7-TC1` walks the asking tab opening the page it was refused; `shared.auth-dmn.US8-TC1` walks a site sign-in and a console sign-in starting apart
