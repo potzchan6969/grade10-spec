@@ -106,9 +106,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts`
 
 **Pre-conditions:**
 
@@ -338,9 +340,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts`
 
 **Pre-conditions:**
 
@@ -374,9 +378,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts`
 
 **Pre-conditions:**
 
@@ -457,9 +463,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts`
 
 **Pre-conditions:**
 
@@ -502,9 +510,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** post-sale-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts`
 
 **Pre-conditions:**
 

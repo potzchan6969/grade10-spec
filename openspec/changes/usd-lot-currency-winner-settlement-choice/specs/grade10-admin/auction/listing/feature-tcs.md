@@ -378,9 +378,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-74
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/usd-listing.spec.ts`
 
 **Pre-conditions:**
 

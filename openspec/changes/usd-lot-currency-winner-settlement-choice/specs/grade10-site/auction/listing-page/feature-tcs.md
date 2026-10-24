@@ -983,9 +983,11 @@ a bidding countdown is shown on <a published lot>.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 The collector is viewing the auction catalogue, which lists <a published lot>.

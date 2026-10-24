@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/26
+**Status:** pending-review · 0/27
 **Drafts styled:** 2026-10-14, tcs-rules r5
 **Out of suite (api):** winner-order-SC-27
 
@@ -402,9 +402,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts`
 
 **Pre-conditions:**
 
@@ -568,9 +570,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts`
 
 **Pre-conditions:**
 
@@ -597,9 +601,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts`
 
 **Pre-conditions:**
 
@@ -627,10 +633,8 @@ Runs once per row of **Test data**.
 * Step 5 reads the order in Awaiting Setup, holding no delivery address, no currency and no method.
 
 <!-- trace:case id=g10.auction-winner-order.TC-rwy rev=2 covers=g10.auction-winner-order.SC-6un -->
-### g10.auction-winner-order.US25-TC4:
-
-Runs once per row of **Test data**. Switching currency keeps a still-offered method
-
+### g10.auction-winner-order.US25-TC4: Switching currency keeps a still-offered method
+Runs once per row of **Test data**.
 **Classification:**
 
 * **Severity:** major
@@ -639,9 +643,11 @@ Runs once per row of **Test data**. Switching currency keeps a still-offered met
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts`
 
 **Pre-conditions:**
 
@@ -753,9 +759,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts`
 
 **Pre-conditions:**
 
