@@ -1,0 +1,77 @@
+{
+  "version": 2,
+  "change": "order-bid-history-by-amount",
+  "baseline": "ea76cb9b921c36f9d1bd06d7445a80e6e12bfdd3fe204b0993903c9466b0a1cb",
+  "fingerprint": "7744ed9b26f7c155562fd03bc23415d1d57933e98623ad4ed8f85b42d1a91ce7",
+  "reviewedBy": "htonyl",
+  "acceptedAt": "2026-10-24T17:31:30.243Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/bidding.md#bidding-history",
+      "sha256": "7975043de519cec83e38150a05a42e3d741c5f13f6a46ab65b8ab05ed21644d1",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/order-bid-history-by-amount/decisions.md",
+      "sha256": "b77ca052beb73b7ed0a907a41e3944f773a9034cf8ab6a0048011e5b01369149",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/order-bid-history-by-amount/proposal.md",
+      "sha256": "4f51287ace6c257e981747a3ef5bd33ebd5d7f76217a9a6a022914c863430d43",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/order-bid-history-by-amount/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+      "sha256": "41a2a44c0c40ea0e2f58d3dcd5a2b4f6050b2fe22aa7d30ab1cc3db0e62a90db",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/order-bid-history-by-amount/specs/grade10-site/auction/bidding-history/spec.md",
+      "sha256": "994340ca37e085f26e140538a493817511c93058bd0bab25bec7c3456a9e2d11",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/order-bid-history-by-amount/specs/grade10-site/auction/bidding-history/user-journeys.md",
+      "sha256": "ad1edaabddd8a52af073f0e0863f41e2a21b0f82906e6332cd5fd010c44a0db0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/order-bid-history-by-amount/tech-design.md",
+      "sha256": "782d0693a0773c8e9fabe230e926dfa07a30c1d0b08a553998ca31aa768cb1dc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+      "sha256": "5a743f1fadf088bba7fd193924cbda24d56cd7b9c5de2c1e3de4f6df255375e3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/spec.md",
+      "sha256": "1ba0110f506f76d02d0a131800986813a735b936769025d4e80fec0ec1eae494",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/user-journeys.md",
+      "sha256": "aafc70c794c5fd4dd364bdfaea12d68588987a0fa407a203bc7dd3f4bfc0fb8d",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: One listing history combines public movement and private meaning in whole decisions"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidding-history/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
