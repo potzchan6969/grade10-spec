@@ -2,635 +2,105 @@
 
 **Status:** reopened · 20/31
 **Reviewed:** 2026-09-07, lapsed 2026-10-05
-**Drafts styled:** 2026-10-12, tcs-rules r5
+**Drafts styled:** 2026-10-24, tcs-rules r7
+**Regenerated:** 2026-10-24, tcs-rules r7
 
-## Walk 1: Operator attaches an image to a listing gallery
+## Background
 
-**Starting state:**
+* `<admin listings url>` is the Auction listings page of the Grade10 admin console; a listing's media manager opens from its editor there. `<auction url>` is the Grade10 auction catalogue, and a listing's page opens from its card.
+* The operator is admin(holds the catalogue grant). A supported image is a JPEG, PNG, WebP or AVIF file of at most 100 mebibytes; a gallery holds at most eight media items.
 
-**Steps 1–4 setup:**
+## Walk 1: Build a draft gallery by choosing, dropping and arranging images
 
-- An admin holds the catalogue grant.
-- `<listing_1>` is a draft with only JPEG `<existing_image>` in the gallery.
+Starting state:
 
-**Steps 5–8 setup:**
+- admin(holds the catalogue grant) has `<draft listing>`'s media manager open.
+- `<draft listing>`'s gallery holds only `<existing image>`.
 
-- An admin holds the catalogue grant.
-- `<listing_2>` is a draft with fewer than eight media items.
-
-**Steps 9–12 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_3>` is a draft with fewer than eight media items.
-
-**Steps 13–15 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_6>` is a draft with eight media items.
-
-**Steps 16–16 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_7>` is a draft open in the admin media manager.
-
-**Steps 17–17 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_8>` is a draft open in the admin media manager.
-
-**Steps 18–21 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_9>` is published with one gallery image and room under the eight-item cap.
-
-**Steps 22–24 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_10>` is closed with one gallery image.
-
-**Shared test data:**
-
-**Steps 1–4 data:**
+Shared test data:
 
 | Field | Value |
 | --- | --- |
-| listing_1 | A draft auction listing whose gallery holds exactly one JPEG; bind its identity only |
-| existing_image | The sole JPEG seeded in `<listing_1>`; bind its image identity only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-| listing_1 public url | The public URL of `<listing_1>`; bind its URL only |
-
-**Steps 5–8 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_2 | A draft auction listing with fewer than eight media items; bind its identity only | · |
-| jpeg_ok | charizard-front.jpg | JPEG, under the media size bound |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps 9–12 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_3 | A draft auction listing with fewer than eight media items; bind its identity only | · |
-| jpeg_ok | charizard-front.jpg | JPEG, under the media size bound |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps 13–15 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_6 | A draft auction listing with eight media items; bind its identity only | · |
-| jpeg_ok | charizard-front.jpg | JPEG, under the media size bound |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps 16–16 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_7 | A draft auction listing open in the media manager; bind its identity only | · |
-| pdf_file | grading-report.pdf | PDF, unsupported gallery type |
-
-**Steps 17–17 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_8 | A draft auction listing open in the media manager; bind its identity only |
-| oversized_image | An image larger than 100 mebibytes; bind its file path only |
-
-**Steps 18–21 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_9 | A published auction listing with one gallery image and room under the cap; bind its identity only |
-| jpeg_second | A second JPEG under the media size bound; bind its file path only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-| listing_9 public url | The public URL of `<listing_9>`; bind its URL only |
-
-**Steps 22–24 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_10 | A closed auction listing with one gallery image; bind its identity only | · |
-| jpeg_ok | charizard-front.jpg | JPEG, under the media size bound |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
+| draft listing | A draft listing whose gallery holds one image |
+| existing image | The gallery's one stored image |
+| chosen image | charizard-front.jpg, a 3.6 MB JPEG |
+| batch images | three supported images, chosen in the order A, B, C |
+| replacement image | charizard-back.png, a 2.1 MB PNG |
 
 ### Route
 
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_1>`.
-3. Create `<listing_1>`, then publish it.
-4. Navigate to `<listing_1 public url>`.
-   - `<listing_1>` is published. `g10.auction-listing-media.US1-TC1`
-   - The details page shows `<existing_image>`. `g10.auction-listing-media.US1-TC1`
-   - No empty gallery slots are invented. `g10.auction-listing-media.US1-TC1`
-5. Navigate to `<grade10 auction admin listings url>`.
-6. Open `<listing_2>`.
-7. Upload `<jpeg_ok>` into the gallery and confirm.
-8. Check `<listing_2>` on the admin listings surface.
-   - `<jpeg_ok>` is stored in gallery order. `g10.auction-listing-media.US1-TC2`
-   - The admin listings surface can show it on `<listing_2>`. `g10.auction-listing-media.US1-TC2`
-9. Navigate to `<grade10 auction admin listings url>`.
-10. Open the media manager for `<listing_3>`.
-11. Choose `<jpeg_ok>`.
-12. Check the gallery.
-   - `<jpeg_ok>` is stored in the gallery immediately. `g10.auction-listing-media.US1-TC3`
-   - No preview, confirm or discard step is required. `g10.auction-listing-media.US1-TC3`
-13. Navigate to `<grade10 auction admin listings url>`.
-14. Open `<listing_6>`.
-15. Upload `<jpeg_ok>` as a ninth image.
-   - The upload is refused. `g10.auction-listing-media.US1-TC6`
-   - The gallery still has eight items. `g10.auction-listing-media.US1-TC6`
-16. Upload `<pdf_file>` as gallery media.
-   - The upload is refused. `g10.auction-listing-media.US1-TC7`
-   - The gallery is unchanged. `g10.auction-listing-media.US1-TC7`
-17. Upload `<oversized_image>`.
-   - The upload is refused. `g10.auction-listing-media.US1-TC8`
-   - The gallery is unchanged. `g10.auction-listing-media.US1-TC8`
-18. Navigate to `<grade10 auction admin listings url>`.
-19. Open `<listing_9>`.
-20. Upload `<jpeg_second>` and confirm.
-21. Navigate to `<listing_9 public url>`.
-   - The details page shows both images in gallery order. `g10.auction-listing-media.US1-TC9`
-   - The first image is unchanged. `g10.auction-listing-media.US1-TC9`
-22. Navigate to `<grade10 auction admin listings url>`.
-23. Open `<listing_10>`.
-24. Upload `<jpeg_ok>`.
-   - The upload is refused. `g10.auction-listing-media.US1-TC10`
-   - The gallery is unchanged. `g10.auction-listing-media.US1-TC10`
+1. Choose `<chosen image>` with the file picker.
+   - It stores at once, with no preview, confirm or discard step. `g10.auction-listing-media.US1-TC3`
+2. Drop `<batch images>` onto the gallery together.
+   - Each stores without a confirm step, appended after `<chosen image>` in the order A, B, C. `g10.auction-listing-media.US1-TC11`
+3. Choose `<replacement image>` for the image in the second position.
+   - It stores at once in the second position, and every other item keeps its position. `g10.auction-listing-media.US1-TC13`
+4. Drag the last image before the first, drop it, then close and reopen the media manager.
+   - The new order shows after the drop and is still there after reopening, with no Save. `g10.auction-listing-media.US1-TC14`
 
-## Walk 2: Operator attaches an image to a listing gallery
+## Walk 2: Inspect and correct a published listing's gallery
 
-**Starting state:**
+Starting state:
 
-**Steps 1–4 setup:**
+- admin(holds the catalogue grant) has `<published listing>`'s media manager open.
+- `<published listing>` is published, with `<first image>` described by `<old alt>` and room under the eight-item cap.
 
-- An admin holds the catalogue grant.
-- `<listing_11>` is a draft whose gallery already contains `<existing_image>`.
-
-**Steps 5–7 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_12>` is a draft with room for two more media items.
-
-**Steps 8–10 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_13>` is a draft with a stored image at `<gallery_position>`.
-
-**Steps 11–13 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_14>` is a draft with direct-upload images in order `<image_a>`, `<image_b>`, `<image_c>`.
-
-**Steps 14–16 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_15>` has inventory assets staged in the media manager but not saved.
-
-**Shared test data:**
-
-**Steps 1–4 data:**
+Shared test data:
 
 | Field | Value |
 | --- | --- |
-| listing_11 | A draft auction listing with one existing gallery image; bind its identity only |
-| batch_images | `<batch_image_a>`, `<batch_image_b>`, `<batch_image_c>` |
-| existing_image | The existing gallery image on `<listing_11>`; bind its image identity only |
-| batch_image_a | The first supported image in the three-file selection; bind its file path only |
-| batch_image_b | The second supported image in the three-file selection; bind its file path only |
-| batch_image_c | The third supported image in the three-file selection; bind its file path only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps 5–7 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_12 | A draft auction listing with room for two more media items; bind its identity only | · |
-| mixed_files | `<supported_image_a>`, `<supported_image_b>`, `<pdf_file>`, `<oversized_image>`, `<over_cap_file>` | · |
-| supported_image_a | The first supported image in the mixed selection; bind its file path only | · |
-| supported_image_b | The second supported image in the mixed selection; bind its file path only | · |
-| pdf_file | grading-report.pdf | PDF, unsupported gallery type |
-| oversized_image | An image over the shared size bound; bind its file path only | · |
-| over_cap_file | A supported image beyond the eight-item cap in the mixed selection; bind its file path only | · |
-
-**Steps 8–10 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_13 | A draft auction listing with at least two gallery images; bind its identity only |
-| replacement_image | A supported image different from the image being replaced; bind its file path only |
-| gallery_position | The seeded position selected for replacement, within the gallery; bind its position only |
-
-**Steps 11–13 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_14 | A draft auction listing with three direct-upload images in order `<image_a>`, `<image_b>`, `<image_c>`; bind its identity only |
-| image_a | The seeded direct-upload image originally named A; bind its image identity only |
-| image_b | The seeded direct-upload image originally named B; bind its image identity only |
-| image_c | The seeded direct-upload image originally named C; bind its image identity only |
-
-**Steps 14–16 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_15 | A draft listing with two staged inventory assets; bind its identity only |
-| stored_order | The stored inventory asset order before staging; bind its ordered asset identities only |
-| staged_order | A different order of the two staged inventory assets; bind its ordered asset identities only |
+| published listing | A published listing with one gallery image |
+| first image | The listing's one stored image |
+| old alt | Holo Charizard, front of slab |
+| second image | charizard-side.jpg, a 2.4 MB JPEG |
+| replacement image | charizard-side-retake.jpg, a 2.6 MB JPEG |
+| new alt | Holo Charizard, front of slab, centred |
 
 ### Route
 
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open the media manager for `<listing_11>`.
-3. Drop `<batch_images>` together.
-4. Check the gallery order.
-   - Each image stores without a confirm step. `g10.auction-listing-media.US1-TC11`
-   - The gallery appends `<batch_image_a>`, `<batch_image_b>`, `<batch_image_c>` after `<existing_image>`, in selection order. `g10.auction-listing-media.US1-TC11`
-5. Open the media manager for `<listing_12>`.
-6. Choose `<mixed_files>` together.
-7. Read the gallery and each refusal result.
-   - The supported images `<supported_image_a>` and `<supported_image_b>` are stored. `g10.auction-listing-media.US1-TC12`
-   - The files `<pdf_file>`, `<oversized_image>` and `<over_cap_file>` remain unstored. `g10.auction-listing-media.US1-TC12`
-   - Each refused file is named with its refusal reason. `g10.auction-listing-media.US1-TC12`
-8. Open the media manager for `<listing_13>`.
-9. Choose `<replacement_image>` for the stored image at `<gallery_position>`.
-10. Check `<gallery_position>` and the other gallery items.
-   - `<replacement_image>` is stored immediately at `<gallery_position>`. `g10.auction-listing-media.US1-TC13`
-   - No confirm step appears. `g10.auction-listing-media.US1-TC13`
-   - Other gallery items retain their positions. `g10.auction-listing-media.US1-TC13`
-11. Open the media manager for `<listing_14>`.
-12. Drag `<image_c>` before `<image_a>` and drop it.
-13. Leave and reopen the media manager.
-   - The gallery order is `<image_c>`, `<image_a>`, `<image_b>` after the drop. `g10.auction-listing-media.US1-TC14`
-   - The order remains `<image_c>`, `<image_a>`, `<image_b>` after reopening without a separate Save action. `g10.auction-listing-media.US1-TC14`
-14. Reorder the staged inventory assets to `<staged_order>`.
-15. Leave the listing without saving.
-16. Reopen the listing.
-   - The stored listing retains `<stored_order>`, its prior inventory order. `g10.auction-listing-media.US1-TC15`
-   - The staged order `<staged_order>` applies only after the listing is saved. `g10.auction-listing-media.US1-TC15`
+1. Read `<first image>` in the media manager.
+   - It shows at card size. `g10.auction-listing-media.US2-TC1`
+2. Hover the magnify control on `<first image>`, then move the pointer off it.
+   - A zoom-size preview at least three-quarters of the viewport high shows while hovering. `g10.auction-listing-media.US2-TC2`
+   - It hides when the pointer leaves. `g10.auction-listing-media.US2-TC3`
+3. Choose `<second image>`, then open the listing's page.
+   - The page shows both images in gallery order, the first unchanged. `g10.auction-listing-media.US1-TC9`
+   - `<first image>` reads `<old alt>` as its accessible name. `g10.auction-listing-media.US4-TC2`
+4. In the media manager, choose `<replacement image>` for the second image.
+   - The second position holds `<replacement image>`, and the first is unchanged. `g10.auction-listing-media.US3-TC1`
+5. Change only `<first image>`'s alt text to `<new alt>`, then reload the listing's page.
+   - The image is unchanged, and the page names it `<new alt>`. `g10.auction-listing-media.US4-TC3`
 
-## Walk 3: Operator inspects a stored image at zoom size
+## Walk 3: Read galleries on the catalogue and on listing pages
 
-**Starting state:**
+Starting state:
 
-**Steps 1–3 setup:**
+- customer is on `<auction url>` at a width where a listing page's gallery has room for a left rail.
+- `<three image listing>`, `<one image listing>` and `<no image listing>` are published.
 
-- An admin holds the catalogue grant.
-- `<listing_16>` is a draft with stored gallery image `<stored_image>`.
-
-**Steps 4–5 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_17>` is open in the media manager with stored gallery image `<stored_image>`.
-
-**Steps 6–6 setup:**
-
-- An admin holds the catalogue grant.
-- The zoom-size preview of `<stored_image>` on `<listing_18>` is visible from hovering the magnify control.
-
-**Shared test data:**
-
-**Steps 1–3 data:**
+Shared test data:
 
 | Field | Value |
 | --- | --- |
-| listing_16 | A draft auction listing with one stored gallery image; bind its identity only |
-| stored_image | The sole stored gallery image on `<listing_16>`; bind its image identity only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps 4–5 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_17 | A draft auction listing with one stored gallery image, open in the media manager; bind its identity only |
-| stored_image | The sole stored gallery image on `<listing_17>`; bind its image identity only |
-
-**Steps 6–6 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_18 | A draft auction listing with one stored gallery image; zoom preview is visible; bind its identity only |
-| stored_image | The sole stored gallery image on `<listing_18>`; bind its image identity only |
+| three image listing | A published listing titled 1999 Charizard, PSA 10, its gallery images A, B, C in that order, A with no alt text |
+| one image listing | A published listing with one gallery image |
+| no image listing | A published listing with no gallery image |
 
 ### Route
 
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open the media manager for `<listing_16>`.
-3. Check `<stored_image>`.
-   - The image `<stored_image>` shows at card size. `g10.auction-listing-media.US2-TC1`
-4. Hover the magnify control on `<stored_image>`.
-5. Check the zoom preview.
-   - A zoom-size preview of `<stored_image>` is shown. `g10.auction-listing-media.US2-TC2`
-   - That preview is at least three-quarters of the viewport height. `g10.auction-listing-media.US2-TC2`
-6. Move the pointer off the magnify control.
-   - The zoom-size preview is hidden. `g10.auction-listing-media.US2-TC3`
-
-## Walk 4: Operator corrects a listing's gallery images
-
-**Starting state:**
-
-**Steps 1–4 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_19>` is published with a gallery image at `<gallery_position>`.
-
-**Steps 5–7 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_20>` is published with only JPEG `<existing_image>`.
-
-**Steps 8–11 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_21>` is a draft with one gallery image.
-
-**Shared test data:**
-
-**Steps 1–4 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_19 | A published auction listing with at least one gallery image; bind its identity only |
-| jpeg_replacement | A replacement JPEG under the media size bound; bind its file path only |
-| gallery_position | The seeded gallery position selected for replacement; bind its position only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps 5–7 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_20 | A published auction listing with exactly one JPEG; bind its identity only |
-| existing_image | The sole JPEG seeded in `<listing_20>`; bind its image identity only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps 8–11 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_21 | A draft auction listing with one gallery image; bind its identity only |
-| jpeg_replacement | A replacement JPEG under the media size bound; bind its file path only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-### Route
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_19>`.
-3. Replace the image at `<gallery_position>` with `<jpeg_replacement>` and confirm.
-4. Check `<gallery_position>` and the other gallery items.
-   - The position `<gallery_position>` holds `<jpeg_replacement>`. `g10.auction-listing-media.US3-TC1`
-   - Other gallery items are unchanged. `g10.auction-listing-media.US3-TC1`
-5. Navigate to `<grade10 auction admin listings url>`.
-6. Open `<listing_20>`.
-7. Remove `<existing_image>`.
-   - The removal is refused. `g10.auction-listing-media.US3-TC2`
-   - The gallery still has `<existing_image>`. `g10.auction-listing-media.US3-TC2`
-8. Navigate to `<grade10 auction admin listings url>`.
-9. Open `<listing_21>`.
-10. Replace the gallery image with `<jpeg_replacement>` and confirm.
-11. Remove it.
-   - `<listing_21>` has no gallery images. `g10.auction-listing-media.US3-TC3`
-
-## Walk 5: Operator describes a gallery image with alt text
-
-**Starting state:**
-
-**Steps 1–2 setup:**
-
-- `<listing_22>` is published titled `<listing title>`.
-- Its first gallery image has no alt text.
-
-**Steps 3–4 setup:**
-
-- `<listing_23>` is published.
-- Its first gallery image has alt text `<alt text>`.
-
-**Steps 5–8 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_24>` is published with a gallery image.
-
-**Steps 9–9 setup:**
-
-- An admin holds the catalogue grant.
-- `<listing_25>` is a draft open with a gallery image that already has alt text.
-
-**Shared test data:**
-
-**Steps 1–2 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_22 | A published auction listing titled `<listing title>`; first gallery image has no alt; bind its identity only |
-| listing title | 1999 Charizard, PSA 10 |
-| listing_22 public url | The public URL of `<listing_22>`; bind its URL only |
-
-**Steps 3–4 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_23 | A published auction listing whose first gallery image has alt text; bind its identity only |
-| alt text | Holo Charizard, front of slab |
-| listing_23 public url | The public URL of `<listing_23>`; bind its URL only |
-
-**Steps 5–8 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_24 | A published auction listing with a gallery image; bind its identity only |
-| alt text | Updated accessible name for the image |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-| listing_24 public url | The public URL of `<listing_24>`; bind its URL only |
-
-**Steps 9–9 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_25 | A draft auction listing open; gallery image already has alt text; bind its identity only |
-| previous alt | The alt text already stored on that image; bind its string value only |
-| alt text | A string longer than 200 characters; bind its string value only |
-
-### Route
-
-1. Navigate to `<listing_22 public url>`.
-2. Check the first gallery image's accessible name.
-   - That image's accessible name is `<listing title>`. `g10.auction-listing-media.US4-TC1`
-3. Navigate to `<listing_23 public url>`.
-4. Check the first gallery image's accessible name.
-   - That image's accessible name is `<alt text>`. `g10.auction-listing-media.US4-TC2`
-5. Navigate to `<grade10 auction admin listings url>`.
-6. Open `<listing_24>`.
-7. Change only that image's alt text to `<alt text>`.
-8. Check the image bytes and `<listing_24 public url>`.
-   - The image bytes are unchanged. `g10.auction-listing-media.US4-TC3`
-   - The details page uses `<alt text>`. `g10.auction-listing-media.US4-TC3`
-9. Set alt text to `<alt text>`.
-   - The edit is refused. `g10.auction-listing-media.US4-TC4`
-   - The stored alt remains `<previous alt>`. `g10.auction-listing-media.US4-TC4`
-
-## Walk 6: Collector views a listing's gallery images and adjacent checks
-
-**Starting state:**
-
-**Steps 1–3 setup:**
-
-- `<listing_26>` is published.
-- Its gallery is `<image_a>` then `<image_b>`.
-
-**Steps 4–5 setup:**
-
-- `<listing_27>` is published with two gallery images.
-- The details gallery is wide enough for a left rail beside the main frame.
-
-**Steps 6–7 setup:**
-
-- A published gallery image on `<listing_28>` is available at `card`, `detail`, `thumb`, and `zoom`.
-
-**Steps 8–9 setup:**
-
-- `<listing_29>` is published with no gallery images.
-
-**Steps 10–11 setup:**
-
-- `<listing_30>` is published with three gallery images uploaded in order `<image_a>`, `<image_b>`, `<image_c>`.
-
-**Steps 12–13 setup:**
-
-- `<listing_31>` is published with one gallery image.
-
-**Steps 14–15 setup:**
-
-- `<listing_32>` is published without gallery images.
-
-**Steps 16–17 setup:**
-
-- `<listing_33>` is published with two or more gallery images.
-- The details gallery is wide enough for a left rail beside the main frame.
-
-**Steps 18–19 setup:**
-
-- `<listing_34>` is published with two or more gallery images.
-- The details gallery is stacked and not wide enough for a left rail beside the main frame.
-
-**Shared test data:**
-
-**Steps 1–3 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_26 | A published auction listing whose gallery is `<image_a>` then `<image_b>`; bind its identity only |
-| image_a | The seeded gallery image originally named A; bind its image identity only |
-| image_b | The seeded gallery image originally named B; bind its image identity only |
-| grade10 auction url | The Grade10 auction catalogue URL; bind its URL only |
-
-**Steps 4–5 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_27 | A published auction listing with two gallery images; bind its identity only |
-| listing_27 public url | The public URL of `<listing_27>`; bind its URL only |
-
-**Steps 6–7 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_28 | A published auction listing with a gallery image; bind its identity only |
-| unknown size | A size name other than `card`, `detail`, `thumb`, or `zoom`; bind its size name only |
-
-**Steps 8–9 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_29 | A published auction listing with no gallery images; bind its identity only |
-| grade10 auction url | The Grade10 auction catalogue URL; bind its URL only |
-
-**Steps 10–11 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_30 | A published auction listing with gallery images `<image_a>`, `<image_b>`, `<image_c>` in that order; bind its identity only |
-| image_a | The seeded gallery image originally named A; bind its image identity only |
-| image_b | The seeded gallery image originally named B; bind its image identity only |
-| image_c | The seeded gallery image originally named C; bind its image identity only |
-| listing_30 public url | The public URL of `<listing_30>`; bind its URL only |
-
-**Steps 12–13 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_31 | A published listing with one gallery image; bind its identity only |
-| listing_31 public url | The public URL of `<listing_31>`; bind its URL only |
-
-**Steps 14–15 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_32 | A published listing with no gallery images; bind its identity only |
-| listing_32 public url | The public URL of `<listing_32>`; bind its URL only |
-
-**Steps 16–17 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_33 | A published auction listing with two or more gallery images; bind its identity only |
-| listing_33 public url | The public URL of `<listing_33>`; bind its URL only |
-
-**Steps 18–19 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_34 | A published auction listing with two or more gallery images; bind its identity only |
-| listing_34 public url | The public URL of `<listing_34>`; bind its URL only |
-
-### Route
-
-1. Navigate to `<grade10 auction url>`.
-2. Find `<listing_26>`'s row.
-3. Check which image is requested and shown.
-   - The listing row shows `<image_a>` at card size. `g10.auction-listing-media.US5-TC1`
-   - It does not show `<image_b>` on the card. `g10.auction-listing-media.US5-TC1`
-   - That listing's card image is requested at size `card`. `g10.auction-listing-media.US5-TC1`
-4. Navigate to `<listing_27 public url>`.
-5. Check the thumbnail rail, the main frame, and zoom.
-   - The thumbnail rail requests size `thumb`. `g10.auction-listing-media.US5-TC2`
-   - The main frame requests size `detail`. `g10.auction-listing-media.US5-TC2`
-   - Zoom requests size `zoom`. `g10.auction-listing-media.US5-TC2`
-6. Request that image at `<unknown size>`.
-7. Request an image that does not exist.
-8. Navigate to `<grade10 auction url>`.
-9. Find `<listing_29>`'s row.
-   - The listing appears with its title and price. `g10.auction-listing-media.US5-TC4`
-   - No image is shown for it by this capability. `g10.auction-listing-media.US5-TC4`
-10. Navigate to `<listing_30 public url>`.
-11. Check the gallery.
-   - The gallery shows three images in the order `<image_a>`, `<image_b>`, `<image_c>`. `g10.auction-listing-media.US5-TC5`
-12. Navigate to `<listing_31 public url>`.
-13. Check the gallery controls.
-   - The image is shown. `g10.auction-listing-media.US5-TC6`
-   - No thumbnail rail, previous control, or next control is shown. `g10.auction-listing-media.US5-TC6`
-14. Navigate to `<listing_32 public url>`.
-15. Check the gallery and the listing page.
-   - The gallery has no image and no previous or next control. `g10.auction-listing-media.US5-TC7`
-   - The listing title and bid panel remain visible. `g10.auction-listing-media.US5-TC7`
-16. Navigate to `<listing_33 public url>`.
-17. Check the gallery for a thumbnail rail beside the main frame.
-   - A thumbnail rail is shown beside the main frame. `g10.auction-listing-media.US5-TC8`
-18. Navigate to `<listing_34 public url>` at a stacked gallery width.
-19. Check for a thumbnail rail, previous/next.
-   - No thumbnail rail is shown. `g10.auction-listing-media.US5-TC9`
-   - Previous and next remain available. `g10.auction-listing-media.US5-TC9`
-   - Carousel progress remains available. `g10.auction-listing-media.US5-TC9`
+1. Find the three listings' cards.
+   - `<three image listing>`'s card shows image A at card size, not B. `g10.auction-listing-media.US5-TC1`
+   - `<no image listing>`'s card shows its title and price with no image. `g10.auction-listing-media.US5-TC4`
+2. Open `<three image listing>`.
+   - The gallery shows A, B, C in that order. `g10.auction-listing-media.US5-TC5`
+   - A thumbnail rail shows beside the main frame. `g10.auction-listing-media.US5-TC8`
+   - The rail shows thumbnails, the main frame the detail-size image, and zoom the image at zoom size. `g10.auction-listing-media.US5-TC2`
+   - Image A's accessible name is 1999 Charizard, PSA 10. `g10.auction-listing-media.US4-TC1`
+3. Narrow the window until the gallery stacks.
+   - The rail is gone; previous, next and the carousel progress remain. `g10.auction-listing-media.US5-TC9`
+4. Open `<one image listing>`, then `<no image listing>`.
+   - The one image shows, with no rail, previous or next. `g10.auction-listing-media.US5-TC6`
+   - The listing with none shows no image and no previous or next, and its title and bid panel remain. `g10.auction-listing-media.US5-TC7`
 
 ## g10.auction-listing-media.US1: Operator attaches an image to a listing gallery
 
@@ -640,102 +110,736 @@ and see each one stored as it lands,
 **so that** photographing a card costs one move rather than a confirm per
 file, and the gallery stays within the cap admin-listing sets.
 
-### g10.auction-listing-media.US1-TC1: One-image listing publishes with no empty slots
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_1>` is a draft with only JPEG `<existing_image>` in the gallery.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_1 | A draft auction listing whose gallery holds exactly one JPEG; bind its identity only |
-| existing_image | The sole JPEG seeded in `<listing_1>`; bind its image identity only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-| listing_1 public url | The public URL of `<listing_1>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_1>`.
-3. Create `<listing_1>`, then publish it.
-4. Navigate to `<listing_1 public url>`.
-
-**Expected Results:**
-
-* `<listing_1>` is published.
-* The details page shows `<existing_image>`.
-* No empty gallery slots are invented.
-
-<!-- trace:case id=g10.auction-listing-media.TC-sga rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
-### g10.auction-listing-media.US1-TC2: Accepted JPEG becomes a gallery image
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_2>` is a draft with fewer than eight media items.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_2 | A draft auction listing with fewer than eight media items; bind its identity only | · |
-| jpeg_ok | charizard-front.jpg | JPEG, under the media size bound |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_2>`.
-3. Upload `<jpeg_ok>` into the gallery and confirm.
-4. Check `<listing_2>` on the admin listings surface.
-
-**Expected Results:**
-
-* `<jpeg_ok>` is stored in gallery order.
-* The admin listings surface can show it on `<listing_2>`.
-
 <!-- trace:case id=g10.auction-listing-media.TC-oyk rev=2 covers=g10.auction-listing-media.SC-31 -->
-### g10.auction-listing-media.US1-TC3: Choosing a file stores it without a preview
-
-Runs once per row of **Test data**.
+### g10.auction-listing-media.US1-TC3: Choosing a file stores it at once
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_3>`'s media manager open.
+* `<listing_3>` is a draft with fewer than eight media items.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_3>` | A draft listing with 1 to 7 media items |
+| `<image>` | charizard-front.jpg, a 3.6 MB JPEG |
+
+**Steps:**
+
+1. Choose `<image>` with the file picker.
+2. Read the gallery.
+
+**Expected Results:**
+
+* `<image>` is stored in the gallery at once.
+* No preview, confirm or discard step appears.
+
+<!-- trace:case id=g10.auction-listing-media.TC-bat rev=1 covers=g10.auction-listing-media.SC-32 -->
+### g10.auction-listing-media.US1-TC11: Several dropped files append after the last item in selection order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_11>`'s media manager open.
+* `<listing_11>` is a draft whose gallery holds only `<existing image>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_11>` | A draft listing with one gallery image |
+| `<existing image>` | The gallery's one stored image |
+| `<batch images>` | three supported images, selected in the order A, B, C |
+
+**Steps:**
+
+1. Drop `<batch images>` onto the gallery together.
+2. Read the gallery order.
+
+**Expected Results:**
+
+* Each image stores without a confirm step.
+* The gallery reads `<existing image>`, then A, B and C.
+
+<!-- trace:case id=g10.auction-listing-media.TC-rep rev=1 covers=g10.auction-listing-media.SC-33 -->
+### g10.auction-listing-media.US1-TC13: A replacement stores at once in place
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_13>`'s media manager open.
+* `<listing_13>` is a draft with three gallery images.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_13>` | A draft listing with three gallery images |
+| `<replacement image>` | charizard-back.png, a 2.1 MB PNG |
+
+**Steps:**
+
+1. Choose `<replacement image>` for the second image.
+2. Read the gallery.
+
+**Expected Results:**
+
+* `<replacement image>` is stored at once in the second position, with no confirm step.
+* The first and third images keep their positions.
+
+<!-- trace:case id=g10.auction-listing-media.TC-ord rev=1 covers=g10.auction-listing-media.SC-35 -->
+### g10.auction-listing-media.US1-TC14: A dropped reorder of uploaded images holds without Save
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_14>`'s media manager open.
+* `<listing_14>` is a draft whose uploaded images read A, B, C.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_14>` | A draft listing with three uploaded images in the order A, B, C |
+
+**Steps:**
+
+1. Drag C before A and drop it.
+2. Close and reopen the media manager.
+
+**Expected Results:**
+
+* After step 1 the gallery reads C, A, B.
+* After step 2 it still reads C, A, B, with no Save selected.
+
+---
+
+## g10.auction-listing-media.US2: Operator inspects a stored image at zoom size
+
+**As an** operator with catalogue grant,
+**I want** the admin media manager to show each stored image at card size and
+reveal it at zoom size on hover,
+**so that** I can judge a card's condition without clicking through to it.
+
+<!-- trace:case id=g10.auction-listing-media.TC-92w rev=1 covers=g10.auction-listing-media.SC-ez7,g10.auction-listing-media.SC-wuz,g10.auction-listing-media.SC-qgb -->
+### g10.auction-listing-media.US2-TC1: The media manager shows a stored image at card size
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-02
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) is on `<admin listings url>`.
+* `<listing_16>` is a draft with one stored gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_16>` | A draft listing with one stored gallery image |
+
+**Steps:**
+
+1. Open `<listing_16>`'s media manager and read its image.
+
+**Expected Results:**
+
+* The image shows at card size.
+
+<!-- trace:case id=g10.auction-listing-media.TC-sss rev=1 covers=g10.auction-listing-media.SC-ez7,g10.auction-listing-media.SC-wuz,g10.auction-listing-media.SC-qgb -->
+### g10.auction-listing-media.US2-TC2: Hovering the magnify control shows the image at zoom size
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-02
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_17>`'s media manager open.
+* `<listing_17>` is a draft with one stored gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_17>` | A draft listing with one stored gallery image |
+
+**Steps:**
+
+1. Hover the magnify control on the image.
+
+**Expected Results:**
+
+* A zoom-size preview of the image shows.
+* The preview is at least three-quarters of the viewport high.
+
+<!-- trace:case id=g10.auction-listing-media.TC-mkq rev=1 covers=g10.auction-listing-media.SC-ez7,g10.auction-listing-media.SC-wuz,g10.auction-listing-media.SC-qgb -->
+### g10.auction-listing-media.US2-TC3: Leaving the magnify control hides the zoom
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-02
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_18>`'s media manager open, with the zoom preview of its image showing from a hover on the magnify control.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_18>` | A draft listing with one stored gallery image |
+
+**Steps:**
+
+1. Move the pointer off the magnify control.
+
+**Expected Results:**
+
+* The zoom preview hides.
+
+---
+
+## g10.auction-listing-media.US3: Operator corrects a listing's gallery images
+
+**As an** operator with catalogue grant,
+**I want** to replace and remove gallery images while the listing is still
+writable,
+**so that** I can fix a bad photograph without ever leaving a published
+listing with no image at all.
+
+<!-- trace:case id=g10.auction-listing-media.TC-8sq rev=1 covers=g10.auction-listing-media.SC-dgy,g10.auction-listing-media.SC-gj8,g10.auction-listing-media.SC-82s -->
+### g10.auction-listing-media.US3-TC1: A gallery image on a published listing is replaced
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-03
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_19>`'s media manager open.
+* `<listing_19>` is published with two gallery images.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_19>` | A published listing with two gallery images |
+| `<replacement image>` | charizard-side-retake.jpg, a 2.6 MB JPEG |
+
+**Steps:**
+
+1. Choose `<replacement image>` for the second image.
+2. Read the gallery.
+
+**Expected Results:**
+
+* The second position holds `<replacement image>`.
+* The first image is unchanged.
+
+---
+
+## g10.auction-listing-media.US4: Operator describes a gallery image with alt text
+
+**As an** operator with catalogue grant,
+**I want** to supply and later change optional alt text on a gallery image,
+**so that** each image has an accessible name, falling back to the listing
+title when I have written none.
+
+<!-- trace:case id=g10.auction-listing-media.TC-ygm rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
+### g10.auction-listing-media.US4-TC1: An image with no alt text takes the listing title as its name
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-04
+
+**Pre-conditions:**
+
+* `<listing_22>` is published, titled `<listing title>`, and its first gallery image has no alt text.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_22>` | A published listing whose first gallery image has no alt text |
+| `<listing title>` | 1999 Charizard, PSA 10 |
+
+**Steps:**
+
+1. Open `<listing_22>`'s page and read the first image's accessible name.
+
+**Expected Results:**
+
+* The first image's accessible name is `<listing title>`.
+
+<!-- trace:case id=g10.auction-listing-media.TC-m2x rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
+### g10.auction-listing-media.US4-TC2: An image's alt text is its accessible name
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-04
+
+**Pre-conditions:**
+
+* `<listing_23>` is published, and its first gallery image has alt text `<alt text>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_23>` | A published listing whose first gallery image has alt text |
+| `<alt text>` | Holo Charizard, front of slab |
+
+**Steps:**
+
+1. Open `<listing_23>`'s page and read the first image's accessible name.
+
+**Expected Results:**
+
+* The first image's accessible name is `<alt text>`.
+
+<!-- trace:case id=g10.auction-listing-media.TC-eeh rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
+### g10.auction-listing-media.US4-TC3: Alt text changes on a published listing without touching the image
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-04
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_24>`'s media manager open.
+* `<listing_24>` is published with a gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_24>` | A published listing with a gallery image |
+| `<alt text>` | Holo Charizard, front of slab, centred |
+
+**Steps:**
+
+1. Change only the image's alt text to `<alt text>`.
+2. Read the image in the media manager, then on `<listing_24>`'s page.
+
+**Expected Results:**
+
+* The image is unchanged.
+* The page names the image `<alt text>`.
+
+---
+
+## g10.auction-listing-media.US5: Collector views a listing's gallery images
+
+**As a** collector,
+**I want** a listing's images at the size the surface needs, in gallery order,
+**so that** I can pick a listing off the catalogue and study its images on the
+details page.
+
+<!-- trace:case id=g10.auction-listing-media.TC-v1b rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
+### g10.auction-listing-media.US5-TC1: The catalogue card shows the first gallery image at card size
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Pre-conditions:**
+
+* customer is on `<auction url>`.
+* `<listing_26>` is published, its gallery A then B.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_26>` | A published listing whose gallery is image A, then image B |
+
+**Steps:**
+
+1. Find `<listing_26>`'s card.
+
+**Expected Results:**
+
+* The card shows image A at card size.
+* The card does not show image B.
+
+<!-- trace:case id=g10.auction-listing-media.TC-mu3 rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
+### g10.auction-listing-media.US5-TC4: A listing with no image still lists on the catalogue
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Pre-conditions:**
+
+* customer is on `<auction url>`.
+* `<listing_29>` is published with no gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_29>` | A published listing with no gallery image |
+
+**Steps:**
+
+1. Find `<listing_29>`'s card.
+
+**Expected Results:**
+
+* The card shows its title and price.
+* The card shows no image.
+
+<!-- trace:case id=g10.auction-listing-media.TC-del rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
+### g10.auction-listing-media.US5-TC5: Several images show in gallery order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Pre-conditions:**
+
+* `<listing_30>` is published with gallery images A, B, C in that order.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_30>` | A published listing whose gallery is images A, B, C |
+
+**Steps:**
+
+1. Open `<listing_30>`'s page and read the gallery.
+
+**Expected Results:**
+
+* The gallery shows A, B, C in that order.
+
+<!-- trace:case id=g10.auction-listing-media.TC-pls rev=1 covers=g10.auction-listing-media.SC-5tk -->
+### g10.auction-listing-media.US5-TC8: A wide gallery shows a thumbnail rail
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
+
+**Pre-conditions:**
+
+* customer's window is wide enough for the gallery to place a left rail beside its main frame.
+* `<listing_33>` is published with two or more gallery images.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_33>` | A published listing with two to eight gallery images |
+
+**Steps:**
+
+1. Open `<listing_33>`'s page and read the gallery.
+
+**Expected Results:**
+
+* A thumbnail rail shows beside the main frame.
+
+<!-- trace:case id=g10.auction-listing-media.TC-3vh rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
+### g10.auction-listing-media.US5-TC2: The gallery shows thumbnails, the detail image and the zoom image
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
+
+**Pre-conditions:**
+
+* customer's window is wide enough for the gallery to place a left rail beside its main frame.
+* `<listing_27>` is published with two gallery images.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_27>` | A published listing with two gallery images |
+
+**Steps:**
+
+1. Open `<listing_27>`'s page.
+2. Read the thumbnail rail and the main frame, then open zoom.
+
+**Expected Results:**
+
+* The rail shows each image as a thumbnail.
+* The main frame shows the selected image at detail size.
+* Zoom shows it at zoom size.
+
+<!-- trace:case id=g10.auction-listing-media.TC-pbt rev=1 covers=g10.auction-listing-media.SC-cd3 -->
+### g10.auction-listing-media.US5-TC9: A stacked gallery drops the rail and keeps its navigation
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
+
+**Pre-conditions:**
+
+* customer's window is narrow enough for the gallery to stack.
+* `<listing_34>` is published with two or more gallery images.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_34>` | A published listing with two to eight gallery images |
+
+**Steps:**
+
+1. Open `<listing_34>`'s page and read the gallery.
+
+**Expected Results:**
+
+* No thumbnail rail shows.
+* Previous, next and the carousel progress remain.
+
+<!-- trace:case id=g10.auction-listing-media.TC-ic0 rev=2 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
+### g10.auction-listing-media.US5-TC6: One image shows no rail or navigation
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
+
+**Pre-conditions:**
+
+* `<listing_31>` is published with one gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_31>` | A published listing with one gallery image |
+
+**Steps:**
+
+1. Open `<listing_31>`'s page and read the gallery.
+
+**Expected Results:**
+
+* The image shows.
+* No thumbnail rail, previous or next control shows.
+
+<!-- trace:case id=g10.auction-listing-media.TC-l76 rev=2 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
+### g10.auction-listing-media.US5-TC7: A listing with no image still shows its page
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
+
+**Pre-conditions:**
+
+* `<listing_32>` is published with no gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_32>` | A published listing with no gallery image |
+
+**Steps:**
+
+1. Open `<listing_32>`'s page and read it.
+
+**Expected Results:**
+
+* The gallery shows no image and no previous or next control.
+* The listing's title and bid panel remain.
+
+## Ungrouped
+
+### g10.auction-listing-media.US1: Operator attaches an image to a listing gallery
+
+<!-- trace:case id=g10.auction-listing-media.TC-4xd rev=1 -->
+#### g10.auction-listing-media.US1-TC1: A one-image listing publishes with no empty slots
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -743,46 +847,336 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An admin holds the catalogue grant.
-* `<listing_3>` is a draft with fewer than eight media items.
+* admin(holds the catalogue grant) is on `<admin listings url>`.
+* `<listing_1>` is a draft whose gallery holds only the JPEG `<existing image>`.
 
 **Test data:**
 
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_3 | A draft auction listing with fewer than eight media items; bind its identity only | · |
-| jpeg_ok | charizard-front.jpg | JPEG, under the media size bound |
-
 | Field | Value |
 | --- | --- |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
+| `<listing_1>` | A draft listing whose gallery holds exactly one JPEG |
+| `<existing image>` | The gallery's one JPEG |
 
 **Steps:**
 
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open the media manager for `<listing_3>`.
-3. Choose `<jpeg_ok>`.
-4. Check the gallery.
+1. Open `<listing_1>`, create it, then publish it.
+2. Open `<listing_1>`'s page.
 
 **Expected Results:**
 
-* `<jpeg_ok>` is stored in the gallery immediately.
-* No preview, confirm or discard step is required.
+* Step 1 publishes `<listing_1>`.
+* Step 2 shows `<existing image>`, and no empty gallery slot.
 
-<!-- trace:case id=g10.auction-listing-media.TC-eq0 rev=1 covers=g10.auction-listing-media.SC-07 -->
-### g10.auction-listing-media.US1-TC4: Confirming a preview stores the image
+<!-- trace:case id=g10.auction-listing-media.TC-sga rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
+#### g10.auction-listing-media.US1-TC2: An accepted JPEG becomes a gallery image
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
-* **Status:** deprecated
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) is on `<admin listings url>`.
+* `<listing_2>` is a draft with fewer than eight media items.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_2>` | A draft listing with 1 to 7 media items |
+| `<image>` | charizard-front.jpg, a 3.6 MB JPEG |
+
+**Steps:**
+
+1. Open `<listing_2>`'s media manager and choose `<image>`.
+2. Return to `<admin listings url>` and read `<listing_2>`.
+
+**Expected Results:**
+
+* `<image>` is stored last in gallery order.
+* `<listing_2>` shows it on the listings page.
+
+<!-- trace:case id=g10.auction-listing-media.TC-c94 rev=1 covers=g10.auction-listing-media.SC-c93 -->
+#### g10.auction-listing-media.US1-TC6: A ninth media item is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_6>`'s media manager open.
+* `<listing_6>` is a draft with eight media items.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_6>` | A draft listing with eight media items (fixed boundary: the cap) |
+| `<image>` | charizard-front.jpg, a 3.6 MB JPEG |
+
+**Steps:**
+
+1. Choose `<image>`.
+
+**Expected Results:**
+
+* The upload is refused.
+* The gallery still holds eight items.
+
+<!-- trace:case id=g10.auction-listing-media.TC-ark rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
+#### g10.auction-listing-media.US1-TC7: An unsupported file type is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_7>`'s media manager open; `<listing_7>` is a draft.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_7>` | A draft listing with 1 to 7 media items |
+| `<pdf file>` | grading-report.pdf, a 1.3 MB PDF |
+
+**Steps:**
+
+1. Choose `<pdf file>`.
+
+**Expected Results:**
+
+* The upload is refused.
+* The gallery is unchanged.
+
+<!-- trace:case id=g10.auction-listing-media.TC-brl rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
+#### g10.auction-listing-media.US1-TC8: An image over 100 mebibytes is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_8>`'s media manager open; `<listing_8>` is a draft.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_8>` | A draft listing with 1 to 7 media items |
+| `<oversized image>` | A JPEG of 104857601 bytes or more (fixed boundary: one byte over 100 mebibytes) |
+
+**Steps:**
+
+1. Choose `<oversized image>`.
+
+**Expected Results:**
+
+* The upload is refused.
+* The gallery is unchanged.
+
+<!-- trace:case id=g10.auction-listing-media.TC-5c5 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
+#### g10.auction-listing-media.US1-TC9: A published listing gains another image
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_9>`'s media manager open.
+* `<listing_9>` is published with one gallery image and room under the cap.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_9>` | A published listing with one gallery image |
+| `<second image>` | charizard-side.jpg, a 2.4 MB JPEG |
+
+**Steps:**
+
+1. Choose `<second image>`.
+2. Open `<listing_9>`'s page.
+
+**Expected Results:**
+
+* The page shows both images in gallery order.
+* The first image is unchanged.
+
+<!-- trace:case id=g10.auction-listing-media.TC-qd3 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
+#### g10.auction-listing-media.US1-TC10: Adding an image after the close is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_10>`'s media manager open.
+* `<listing_10>` is closed with one gallery image.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_10>` | A closed listing with one gallery image |
+| `<image>` | charizard-front.jpg, a 3.6 MB JPEG |
+
+**Steps:**
+
+1. Choose `<image>`.
+
+**Expected Results:**
+
+* The upload is refused.
+* The gallery is unchanged.
+
+<!-- trace:case id=g10.auction-listing-media.TC-ref rev=1 covers=g10.auction-listing-media.SC-34 -->
+#### g10.auction-listing-media.US1-TC12: Refused files in a mixed selection each name their reason
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_12>`'s media manager open.
+* `<listing_12>` is a draft with six media items, room for two more.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_12>` | A draft listing with six media items |
+| `<supported a>`, `<supported b>` | two supported images, first in the selection |
+| `<pdf file>` | grading-report.pdf, a 1.3 MB PDF |
+| `<oversized image>` | A JPEG of 104857601 bytes or more |
+| `<over cap image>` | A third supported image, last in the selection |
+
+**Steps:**
+
+1. Choose `<supported a>`, `<supported b>`, `<pdf file>`, `<oversized image>` and `<over cap image>` together.
+2. Read the gallery and the refusals.
+
+**Expected Results:**
+
+* `<supported a>` and `<supported b>` are stored.
+* `<pdf file>`, `<oversized image>` and `<over cap image>` are not stored.
+* Each refused file is named with its reason: its type, its size, and the eight-item cap.
+
+<!-- trace:case id=g10.auction-listing-media.TC-stg rev=1 covers=g10.auction-listing-media.SC-36 -->
+#### g10.auction-listing-media.US1-TC15: A staged reorder of inventory images waits for Save
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
+
+**Pre-conditions:**
+
+* admin(holds the catalogue grant) has `<listing_15>`'s editor open, with two inventory images staged in the media manager and not saved, stored in the order A, B.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_15>` | A draft listing with two staged inventory images, stored A, B |
+
+**Steps:**
+
+1. Reorder the staged images to B, A.
+2. Leave the listing without saving, then reopen it.
+
+**Expected Results:**
+
+* The reopened listing reads A, B.
+* The order B, A applies only once the listing is saved.
+
+<!-- trace:case id=g10.auction-listing-media.TC-eq0 rev=1 covers=g10.auction-listing-media.SC-07 -->
+#### g10.auction-listing-media.US1-TC4: Confirming a preview stores the image
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-media-US-01
+
+**Retirement:** Superseded by immediate upload on drop or choose; replaced by `g10.auction-listing-media.US1-TC3`
 
 **Pre-conditions:**
 
@@ -806,10 +1200,8 @@ Runs once per row of **Test data**.
 * That slot holds `<jpeg_ok>`.
 * The preview is cleared.
 
-**Deprecated:** Superseded by immediate upload on drop or choose; the confirm step no longer exists.
-
 <!-- trace:case id=g10.auction-listing-media.TC-h3k rev=1 covers=g10.auction-listing-media.SC-08 -->
-### g10.auction-listing-media.US1-TC5: Discarding the preview leaves the gallery unchanged
+#### g10.auction-listing-media.US1-TC5: Discarding the preview leaves the gallery unchanged
 
 **Classification:**
 
@@ -822,6 +1214,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01
+
+**Retirement:** Superseded by immediate upload on drop or choose; the discard step no longer exists
 
 **Pre-conditions:**
 
@@ -845,596 +1239,10 @@ Runs once per row of **Test data**.
 * The preview is cleared.
 * No upload was sent.
 
-**Deprecated:** Superseded by immediate upload on drop or choose; the discard step no longer exists.
-
-<!-- trace:case id=g10.auction-listing-media.TC-c94 rev=1 covers=g10.auction-listing-media.SC-c93 -->
-### g10.auction-listing-media.US1-TC6: Ninth media item is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_6>` is a draft with eight media items.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_6 | A draft auction listing with eight media items; bind its identity only | · |
-| jpeg_ok | charizard-front.jpg | JPEG, under the media size bound |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_6>`.
-3. Upload `<jpeg_ok>` as a ninth image.
-
-**Expected Results:**
-
-* The upload is refused.
-* The gallery still has eight items.
-
-<!-- trace:case id=g10.auction-listing-media.TC-ark rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
-### g10.auction-listing-media.US1-TC7: Unsupported type is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_7>` is a draft open in the admin media manager.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_7 | A draft auction listing open in the media manager; bind its identity only | · |
-| pdf_file | grading-report.pdf | PDF, unsupported gallery type |
-
-**Steps:**
-
-1. Upload `<pdf_file>` as gallery media.
-
-**Expected Results:**
-
-* The upload is refused.
-* The gallery is unchanged.
-
-<!-- trace:case id=g10.auction-listing-media.TC-brl rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
-### g10.auction-listing-media.US1-TC8: Oversized image is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_8>` is a draft open in the admin media manager.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_8 | A draft auction listing open in the media manager; bind its identity only |
-| oversized_image | An image larger than 100 mebibytes; bind its file path only |
-
-**Steps:**
-
-1. Upload `<oversized_image>`.
-
-**Expected Results:**
-
-* The upload is refused.
-* The gallery is unchanged.
-
-<!-- trace:case id=g10.auction-listing-media.TC-5c5 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
-### g10.auction-listing-media.US1-TC9: Published listing can gain another image
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_9>` is published with one gallery image and room under the eight-item cap.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_9 | A published auction listing with one gallery image and room under the cap; bind its identity only |
-| jpeg_second | A second JPEG under the media size bound; bind its file path only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-| listing_9 public url | The public URL of `<listing_9>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_9>`.
-3. Upload `<jpeg_second>` and confirm.
-4. Navigate to `<listing_9 public url>`.
-
-**Expected Results:**
-
-* The details page shows both images in gallery order.
-* The first image is unchanged.
-
-<!-- trace:case id=g10.auction-listing-media.TC-qd3 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
-### g10.auction-listing-media.US1-TC10: Adding after close is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_10>` is closed with one gallery image.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_10 | A closed auction listing with one gallery image; bind its identity only | · |
-| jpeg_ok | charizard-front.jpg | JPEG, under the media size bound |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_10>`.
-3. Upload `<jpeg_ok>`.
-
-**Expected Results:**
-
-* The upload is refused.
-* The gallery is unchanged.
-
-<!-- trace:case id=g10.auction-listing-media.TC-bat rev=1 covers=g10.auction-listing-media.SC-32 -->
-### g10.auction-listing-media.US1-TC11: Several files append after the last gallery item
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_11>` is a draft whose gallery already contains `<existing_image>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_11 | A draft auction listing with one existing gallery image; bind its identity only |
-| batch_images | `<batch_image_a>`, `<batch_image_b>`, `<batch_image_c>` |
-| existing_image | The existing gallery image on `<listing_11>`; bind its image identity only |
-| batch_image_a | The first supported image in the three-file selection; bind its file path only |
-| batch_image_b | The second supported image in the three-file selection; bind its file path only |
-| batch_image_c | The third supported image in the three-file selection; bind its file path only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open the media manager for `<listing_11>`.
-3. Drop `<batch_images>` together.
-4. Check the gallery order.
-
-**Expected Results:**
-
-* Each image stores without a confirm step.
-* The gallery appends `<batch_image_a>`, `<batch_image_b>`, `<batch_image_c>` after `<existing_image>`, in selection order.
-
-<!-- trace:case id=g10.auction-listing-media.TC-ref rev=1 covers=g10.auction-listing-media.SC-34 -->
-### g10.auction-listing-media.US1-TC12: Refused files keep their reasons in a mixed selection
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_12>` is a draft with room for two more media items.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_12 | A draft auction listing with room for two more media items; bind its identity only | · |
-| mixed_files | `<supported_image_a>`, `<supported_image_b>`, `<pdf_file>`, `<oversized_image>`, `<over_cap_file>` | · |
-| supported_image_a | The first supported image in the mixed selection; bind its file path only | · |
-| supported_image_b | The second supported image in the mixed selection; bind its file path only | · |
-| pdf_file | grading-report.pdf | PDF, unsupported gallery type |
-| oversized_image | An image over the shared size bound; bind its file path only | · |
-| over_cap_file | A supported image beyond the eight-item cap in the mixed selection; bind its file path only | · |
-
-**Steps:**
-
-1. Open the media manager for `<listing_12>`.
-2. Choose `<mixed_files>` together.
-3. Read the gallery and each refusal result.
-
-**Expected Results:**
-
-* The supported images `<supported_image_a>` and `<supported_image_b>` are stored.
-* The files `<pdf_file>`, `<oversized_image>` and `<over_cap_file>` remain unstored.
-* Each refused file is named with its refusal reason.
-
-<!-- trace:case id=g10.auction-listing-media.TC-rep rev=1 covers=g10.auction-listing-media.SC-33 -->
-### g10.auction-listing-media.US1-TC13: Replacement stores without confirmation
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_13>` is a draft with a stored image at `<gallery_position>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_13 | A draft auction listing with at least two gallery images; bind its identity only |
-| replacement_image | A supported image different from the image being replaced; bind its file path only |
-| gallery_position | The seeded position selected for replacement, within the gallery; bind its position only |
-
-**Steps:**
-
-1. Open the media manager for `<listing_13>`.
-2. Choose `<replacement_image>` for the stored image at `<gallery_position>`.
-3. Check `<gallery_position>` and the other gallery items.
-
-**Expected Results:**
-
-* `<replacement_image>` is stored immediately at `<gallery_position>`.
-* No confirm step appears.
-* Other gallery items retain their positions.
-
-<!-- trace:case id=g10.auction-listing-media.TC-ord rev=1 covers=g10.auction-listing-media.SC-35 -->
-### g10.auction-listing-media.US1-TC14: Direct-upload reorder holds on drop
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_14>` is a draft with direct-upload images in order `<image_a>`, `<image_b>`, `<image_c>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_14 | A draft auction listing with three direct-upload images in order `<image_a>`, `<image_b>`, `<image_c>`; bind its identity only |
-| image_a | The seeded direct-upload image originally named A; bind its image identity only |
-| image_b | The seeded direct-upload image originally named B; bind its image identity only |
-| image_c | The seeded direct-upload image originally named C; bind its image identity only |
-
-**Steps:**
-
-1. Open the media manager for `<listing_14>`.
-2. Drag `<image_c>` before `<image_a>` and drop it.
-3. Leave and reopen the media manager.
-
-**Expected Results:**
-
-* The gallery order is `<image_c>`, `<image_a>`, `<image_b>` after the drop.
-* The order remains `<image_c>`, `<image_a>`, `<image_b>` after reopening without a separate Save action.
-
-<!-- trace:case id=g10.auction-listing-media.TC-stg rev=1 covers=g10.auction-listing-media.SC-36 -->
-### g10.auction-listing-media.US1-TC15: Staged inventory reorder waits for Save
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_15>` has inventory assets staged in the media manager but not saved.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_15 | A draft listing with two staged inventory assets; bind its identity only |
-| stored_order | The stored inventory asset order before staging; bind its ordered asset identities only |
-| staged_order | A different order of the two staged inventory assets; bind its ordered asset identities only |
-
-**Steps:**
-
-1. Reorder the staged inventory assets to `<staged_order>`.
-2. Leave the listing without saving.
-3. Reopen the listing.
-
-**Expected Results:**
-
-* The stored listing retains `<stored_order>`, its prior inventory order.
-* The staged order `<staged_order>` applies only after the listing is saved.
-
----
-
-## g10.auction-listing-media.US2: Operator inspects a stored image at zoom size
-
-**As an** operator with catalogue grant,
-**I want** the admin media manager to show each stored image at card size and
-reveal it at zoom size on hover,
-**so that** I can judge a card's condition without clicking through to it.
-
-<!-- trace:case id=g10.auction-listing-media.TC-92w rev=1 covers=g10.auction-listing-media.SC-ez7,g10.auction-listing-media.SC-wuz,g10.auction-listing-media.SC-qgb -->
-### g10.auction-listing-media.US2-TC1: Media manager shows stored image at card size
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-02
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_16>` is a draft with stored gallery image `<stored_image>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_16 | A draft auction listing with one stored gallery image; bind its identity only |
-| stored_image | The sole stored gallery image on `<listing_16>`; bind its image identity only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open the media manager for `<listing_16>`.
-3. Check `<stored_image>`.
-
-**Expected Results:**
-
-* The image `<stored_image>` shows at card size.
-
-<!-- trace:case id=g10.auction-listing-media.TC-sss rev=1 covers=g10.auction-listing-media.SC-ez7,g10.auction-listing-media.SC-wuz,g10.auction-listing-media.SC-qgb -->
-### g10.auction-listing-media.US2-TC2: Hovering the magnify control shows zoom size
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-02
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_17>` is open in the media manager with stored gallery image `<stored_image>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_17 | A draft auction listing with one stored gallery image, open in the media manager; bind its identity only |
-| stored_image | The sole stored gallery image on `<listing_17>`; bind its image identity only |
-
-**Steps:**
-
-1. Hover the magnify control on `<stored_image>`.
-2. Check the zoom preview.
-
-**Expected Results:**
-
-* A zoom-size preview of `<stored_image>` is shown.
-* That preview is at least three-quarters of the viewport height.
-
-<!-- trace:case id=g10.auction-listing-media.TC-mkq rev=1 covers=g10.auction-listing-media.SC-ez7,g10.auction-listing-media.SC-wuz,g10.auction-listing-media.SC-qgb -->
-### g10.auction-listing-media.US2-TC3: Leaving the magnify control hides zoom
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-02
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* The zoom-size preview of `<stored_image>` on `<listing_18>` is visible from hovering the magnify control.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_18 | A draft auction listing with one stored gallery image; zoom preview is visible; bind its identity only |
-| stored_image | The sole stored gallery image on `<listing_18>`; bind its image identity only |
-
-**Steps:**
-
-1. Move the pointer off the magnify control.
-
-**Expected Results:**
-
-* The zoom-size preview is hidden.
-
----
-
-## g10.auction-listing-media.US3: Operator corrects a listing's gallery images
-
-**As an** operator with catalogue grant,
-**I want** to replace and remove gallery images while the listing is still
-writable,
-**so that** I can fix a bad photograph without ever leaving a published
-listing with no image at all.
-
-<!-- trace:case id=g10.auction-listing-media.TC-8sq rev=1 covers=g10.auction-listing-media.SC-dgy,g10.auction-listing-media.SC-gj8,g10.auction-listing-media.SC-82s -->
-### g10.auction-listing-media.US3-TC1: Replacing a gallery image on a published listing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-03
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_19>` is published with a gallery image at `<gallery_position>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_19 | A published auction listing with at least one gallery image; bind its identity only |
-| jpeg_replacement | A replacement JPEG under the media size bound; bind its file path only |
-| gallery_position | The seeded gallery position selected for replacement; bind its position only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_19>`.
-3. Replace the image at `<gallery_position>` with `<jpeg_replacement>` and confirm.
-4. Check `<gallery_position>` and the other gallery items.
-
-**Expected Results:**
-
-* The position `<gallery_position>` holds `<jpeg_replacement>`.
-* Other gallery items are unchanged.
+### g10.auction-listing-media.US3: Operator corrects a listing's gallery images
 
 <!-- trace:case id=g10.auction-listing-media.TC-2we rev=1 covers=g10.auction-listing-media.SC-dgy,g10.auction-listing-media.SC-gj8,g10.auction-listing-media.SC-82s -->
-### g10.auction-listing-media.US3-TC2: Removing the last image after create is refused
+#### g10.auction-listing-media.US3-TC2: Removing the last image after create is refused
 
 **Classification:**
 
@@ -1450,30 +1258,27 @@ listing with no image at all.
 
 **Pre-conditions:**
 
-* An admin holds the catalogue grant.
-* `<listing_20>` is published with only JPEG `<existing_image>`.
+* admin(holds the catalogue grant) has `<listing_20>`'s media manager open.
+* `<listing_20>` is published with only the JPEG `<existing image>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| listing_20 | A published auction listing with exactly one JPEG; bind its identity only |
-| existing_image | The sole JPEG seeded in `<listing_20>`; bind its image identity only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
+| `<listing_20>` | A published listing with exactly one JPEG |
+| `<existing image>` | The gallery's one JPEG |
 
 **Steps:**
 
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_20>`.
-3. Remove `<existing_image>`.
+1. Remove `<existing image>`.
 
 **Expected Results:**
 
 * The removal is refused.
-* The gallery still has `<existing_image>`.
+* The gallery still holds `<existing image>`.
 
 <!-- trace:case id=g10.auction-listing-media.TC-c4i rev=1 covers=g10.auction-listing-media.SC-dgy,g10.auction-listing-media.SC-gj8,g10.auction-listing-media.SC-82s -->
-### g10.auction-listing-media.US3-TC3: Draft gallery image can be replaced and removed
+#### g10.auction-listing-media.US3-TC3: A draft's only image can be replaced and then removed
 
 **Classification:**
 
@@ -1489,158 +1294,34 @@ listing with no image at all.
 
 **Pre-conditions:**
 
-* An admin holds the catalogue grant.
+* admin(holds the catalogue grant) has `<listing_21>`'s media manager open.
 * `<listing_21>` is a draft with one gallery image.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| listing_21 | A draft auction listing with one gallery image; bind its identity only |
-| jpeg_replacement | A replacement JPEG under the media size bound; bind its file path only |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
+| `<listing_21>` | A draft listing with one gallery image |
+| `<replacement image>` | charizard-back.png, a 2.1 MB PNG |
 
 **Steps:**
 
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_21>`.
-3. Replace the gallery image with `<jpeg_replacement>` and confirm.
-4. Remove it.
+1. Choose `<replacement image>` for the image.
+2. Remove it.
 
 **Expected Results:**
 
-* `<listing_21>` has no gallery images.
+* Step 1 stores `<replacement image>` in place.
+* After step 2 `<listing_21>` has no gallery image.
 
----
-
-## g10.auction-listing-media.US4: Operator describes a gallery image with alt text
-
-**As an** operator with catalogue grant,
-**I want** to supply and later change optional alt text on a gallery image,
-**so that** each image has an accessible name, falling back to the listing
-title when I have written none.
-
-<!-- trace:case id=g10.auction-listing-media.TC-ygm rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
-### g10.auction-listing-media.US4-TC1: Missing alt uses the listing title
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-04
-
-**Pre-conditions:**
-
-* `<listing_22>` is published titled `<listing title>`.
-* Its first gallery image has no alt text.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_22 | A published auction listing titled `<listing title>`; first gallery image has no alt; bind its identity only |
-| listing title | 1999 Charizard, PSA 10 |
-| listing_22 public url | The public URL of `<listing_22>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<listing_22 public url>`.
-2. Check the first gallery image's accessible name.
-
-**Expected Results:**
-
-* That image's accessible name is `<listing title>`.
-
-<!-- trace:case id=g10.auction-listing-media.TC-m2x rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
-### g10.auction-listing-media.US4-TC2: Supplied alt is shown
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-04
-
-**Pre-conditions:**
-
-* `<listing_23>` is published.
-* Its first gallery image has alt text `<alt text>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_23 | A published auction listing whose first gallery image has alt text; bind its identity only |
-| alt text | Holo Charizard, front of slab |
-| listing_23 public url | The public URL of `<listing_23>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<listing_23 public url>`.
-2. Check the first gallery image's accessible name.
-
-**Expected Results:**
-
-* That image's accessible name is `<alt text>`.
-
-<!-- trace:case id=g10.auction-listing-media.TC-eeh rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
-### g10.auction-listing-media.US4-TC3: Alt can be edited on a published listing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-04
-
-**Pre-conditions:**
-
-* An admin holds the catalogue grant.
-* `<listing_24>` is published with a gallery image.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_24 | A published auction listing with a gallery image; bind its identity only |
-| alt text | Updated accessible name for the image |
-| grade10 auction admin listings url | The Grade10 auction admin listings URL; bind its URL only |
-| listing_24 public url | The public URL of `<listing_24>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction admin listings url>`.
-2. Open `<listing_24>`.
-3. Change only that image's alt text to `<alt text>`.
-4. Check the image bytes and `<listing_24 public url>`.
-
-**Expected Results:**
-
-* The image bytes are unchanged.
-* The details page uses `<alt text>`.
+### g10.auction-listing-media.US4: Operator describes a gallery image with alt text
 
 <!-- trace:case id=g10.auction-listing-media.TC-rn2 rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
-### g10.auction-listing-media.US4-TC4: Over-length alt is refused
+#### g10.auction-listing-media.US4-TC4: Alt text over 200 characters is refused
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** actual
 * **Behaviour:** negative
@@ -1652,398 +1333,29 @@ title when I have written none.
 
 **Pre-conditions:**
 
-* An admin holds the catalogue grant.
-* `<listing_25>` is a draft open with a gallery image that already has alt text.
+* admin(holds the catalogue grant) has `<listing_25>`'s media manager open.
+* `<listing_25>` is a draft whose image's alt text is `<previous alt>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| listing_25 | A draft auction listing open; gallery image already has alt text; bind its identity only |
-| previous alt | The alt text already stored on that image; bind its string value only |
-| alt text | A string longer than 200 characters; bind its string value only |
+| `<listing_25>` | A draft listing whose gallery image has alt text |
+| `<previous alt>` | Holo Charizard, front of slab |
+| `<long alt>` | 201 characters (fixed boundary: one over the 200-character limit) |
 
 **Steps:**
 
-1. Set alt text to `<alt text>`.
+1. Set the image's alt text to `<long alt>`.
 
 **Expected Results:**
 
 * The edit is refused.
-* The stored alt remains `<previous alt>`.
-
----
-
-## g10.auction-listing-media.US5: Collector views a listing's gallery images
-
-**As a** collector,
-**I want** a listing's images at the size the surface needs, in gallery order,
-**so that** I can pick a listing off the catalogue and study its images on the
-details page.
-
-<!-- trace:case id=g10.auction-listing-media.TC-v1b rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
-### g10.auction-listing-media.US5-TC1: Catalogue shows the first gallery image at card size
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-05
-
-**Pre-conditions:**
-
-* `<listing_26>` is published.
-* Its gallery is `<image_a>` then `<image_b>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_26 | A published auction listing whose gallery is `<image_a>` then `<image_b>`; bind its identity only |
-| image_a | The seeded gallery image originally named A; bind its image identity only |
-| image_b | The seeded gallery image originally named B; bind its image identity only |
-| grade10 auction url | The Grade10 auction catalogue URL; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction url>`.
-2. Find `<listing_26>`'s row.
-3. Check which image is requested and shown.
-
-**Expected Results:**
-
-* The listing row shows `<image_a>` at card size.
-* It does not show `<image_b>` on the card.
-* That listing's card image is requested at size `card`.
-
-<!-- trace:case id=g10.auction-listing-media.TC-3vh rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
-### g10.auction-listing-media.US5-TC2: Details gallery uses thumb, detail, and zoom
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_27>` is published with two gallery images.
-* The details gallery is wide enough for a left rail beside the main frame.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_27 | A published auction listing with two gallery images; bind its identity only |
-| listing_27 public url | The public URL of `<listing_27>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<listing_27 public url>`.
-2. Check the thumbnail rail, the main frame, and zoom.
-
-**Expected Results:**
-
-* The thumbnail rail requests size `thumb`.
-* The main frame requests size `detail`.
-* Zoom requests size `zoom`.
-
-<!-- trace:case id=g10.auction-listing-media.TC-mu3 rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
-### g10.auction-listing-media.US5-TC4: Listing without a catalogue image still lists
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-05
-
-**Pre-conditions:**
-
-* `<listing_29>` is published with no gallery images.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_29 | A published auction listing with no gallery images; bind its identity only |
-| grade10 auction url | The Grade10 auction catalogue URL; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction url>`.
-2. Find `<listing_29>`'s row.
-
-**Expected Results:**
-
-* The listing appears with its title and price.
-* No image is shown for it by this capability.
-
-<!-- trace:case id=g10.auction-listing-media.TC-del rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
-### g10.auction-listing-media.US5-TC5: Several images appear in gallery order
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-05
-
-**Pre-conditions:**
-
-* `<listing_30>` is published with three gallery images uploaded in order `<image_a>`, `<image_b>`, `<image_c>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_30 | A published auction listing with gallery images `<image_a>`, `<image_b>`, `<image_c>` in that order; bind its identity only |
-| image_a | The seeded gallery image originally named A; bind its image identity only |
-| image_b | The seeded gallery image originally named B; bind its image identity only |
-| image_c | The seeded gallery image originally named C; bind its image identity only |
-| listing_30 public url | The public URL of `<listing_30>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<listing_30 public url>`.
-2. Check the gallery.
-
-**Expected Results:**
-
-* The gallery shows three images in the order `<image_a>`, `<image_b>`, `<image_c>`.
-
-<!-- trace:case id=g10.auction-listing-media.TC-ic0 rev=2 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
-### g10.auction-listing-media.US5-TC6: One image has no thumbnail strip or navigation
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_31>` is published with one gallery image.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_31 | A published listing with one gallery image; bind its identity only |
-| listing_31 public url | The public URL of `<listing_31>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<listing_31 public url>`.
-2. Check the gallery controls.
-
-**Expected Results:**
-
-* The image is shown.
-* No thumbnail rail, previous control, or next control is shown.
-
-<!-- trace:case id=g10.auction-listing-media.TC-l76 rev=2 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
-### g10.auction-listing-media.US5-TC7: No images still shows the listing without navigation
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_32>` is published without gallery images.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_32 | A published listing with no gallery images; bind its identity only |
-| listing_32 public url | The public URL of `<listing_32>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<listing_32 public url>`.
-2. Check the gallery and the listing page.
-
-**Expected Results:**
-
-* The gallery has no image and no previous or next control.
-* The listing title and bid panel remain visible.
-
-<!-- trace:case id=g10.auction-listing-media.TC-pls rev=1 covers=g10.auction-listing-media.SC-5tk -->
-### g10.auction-listing-media.US5-TC8: Wide details gallery shows a left rail
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_33>` is published with two or more gallery images.
-* The details gallery is wide enough for a left rail beside the main frame.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_33 | A published auction listing with two or more gallery images; bind its identity only |
-| listing_33 public url | The public URL of `<listing_33>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<listing_33 public url>`.
-2. Check the gallery for a thumbnail rail beside the main frame.
-
-**Expected Results:**
-
-* A thumbnail rail is shown beside the main frame.
-
-<!-- trace:case id=g10.auction-listing-media.TC-pbt rev=1 covers=g10.auction-listing-media.SC-cd3 -->
-### g10.auction-listing-media.US5-TC9: Stacked details gallery hides the rail
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-listing-media-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_34>` is published with two or more gallery images.
-* The details gallery is stacked and not wide enough for a left rail beside the main frame.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_34 | A published auction listing with two or more gallery images; bind its identity only |
-| listing_34 public url | The public URL of `<listing_34>`; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<listing_34 public url>` at a stacked gallery width.
-2. Check for a thumbnail rail, previous/next.
-
-**Expected Results:**
-
-* No thumbnail rail is shown.
-* Previous and next remain available.
-* Carousel progress remains available.
+* The alt text stays `<previous alt>`.
 
 ## Settled
 
-- Wide enough means the gallery can place a left rail beside the main frame;
-  the implementation threshold stays in code.
-- Stacked several-image galleries hide the rail; previous/next and progress
-  remain.
-- Named size `thumb` applies when the rail is shown; `detail` and `zoom`
-  still apply to the main frame.
-- A one-image details gallery has no rail or previous/next. An empty details
-  gallery has no image or previous/next while the listing page remains.
-
-## Reconciliation
-
-Two independent readings of the same anchors: QA1 wrote the blind cases
-without sight of the scenarios, and Dev wrote the scenarios without sight of
-the blind suite. QA2 reconciled both against the modified US-01 journey and
-the upload feature-set root.
-
-| Finding | Disposition |
-| --- | --- |
-| The preview, confirm and discard flow no longer matches the journey | **Deprecated:** `US1-TC4-1` and `US1-TC5-1`; `US1-TC3-2` carries the revised case and `SC-31` |
-| A single supported file stores as soon as it is chosen | **Folded in:** `SC-31` and `US1-TC3-2` |
-| Several files need deterministic append order | **Folded in:** `SC-32` and `US1-TC11-1` |
-| Replacement follows the same immediate path | **Folded in:** `SC-33` and `US1-TC13-1` |
-| Mixed selections need per-file refusal reasons without rolling back accepted files | **Folded in:** `SC-34` and `US1-TC12-1` |
-| Direct-upload reorder and staged inventory reorder have different persistence timing | **Folded in:** `SC-35` and `SC-36`, walked by `US1-TC14-1` and `US1-TC15-1` |
-| Existing accepted types, size bound, cap, remove confirmation, alt text, zoom and writable-state behavior | **Kept:** these remain covered by the durable suite and unchanged requirements |
-| QA1 or Dev raised an unresolved product question | **None:** decisions Q1 to Q6 settle the changed behavior |
-
-**Run:** Blind pass read Purpose (durable), Feature set (delta),
-user-journeys.md (US-05), proposal.md, decisions.md (goals, non-goals,
-Q1–Q4, empty Raised), PRD Media Gallery strip lines, and durable
-feature-tcs.md for id continuity with Reconciliation stripped. Denied:
-every Requirements section, openspec/specs/ beyond those excerpts,
-openspec/changes/archive/.
-
-| Finding | Disposition |
-| --- | --- |
-| Details gallery uses thumb, detail, and zoom when a rail is shown | Folded as covered by `grade10-site-auction-listing-media-SC-22` / `g10.auction-listing-media.US5-TC2` |
-| Wide details gallery shows a left rail | Folded as covered by `grade10-site-auction-listing-media-SC-29` / `g10.auction-listing-media.US5-TC8` |
-| Stacked details gallery hides the rail, keeps previous/next and progress | Folded as covered by `grade10-site-auction-listing-media-SC-30` / `g10.auction-listing-media.US5-TC9` |
-| One details image has no rail or previous/next | Revised durable `g10.auction-listing-media.US5-TC6` as `TC6-2`, keeping trace id `g10.auction-listing-media.TC-ic0` at rev 2, for `grade10-site-auction-listing-media-SC-27` |
-| Empty details gallery leaves the listing visible without previous/next | Revised durable `g10.auction-listing-media.US5-TC7` as `TC7-2`, keeping trace id `g10.auction-listing-media.TC-l76` at rev 2, for `grade10-site-auction-listing-media-SC-28` |
-| Details order | Covered by durable `grade10-site-auction-listing-media-SC-26` / `US5-TC5-1` — unchanged by this change |
-| Raised questions from the blind pass | None — Q1–Q4 already settled width rule, stacked replacement, ListingGallery carve-out, and unnamed threshold |
-
-**Uncovered anchors:** none after the stated scenario and case patches.
+- Wide enough means the gallery can place a left rail beside the main frame; the threshold stays in code.
+- A stacked gallery of several images hides the rail; previous, next and the progress remain.
+- The thumbnail size applies when the rail shows; the detail and zoom sizes still apply to the main frame.
+- A one-image gallery has no rail or previous and next. An empty gallery has no image or previous and next, while the listing page remains.
