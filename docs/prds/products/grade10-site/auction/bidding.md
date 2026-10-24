@@ -326,7 +326,8 @@ account's bids address; signed out, sign-in runs first.
 - 🚧 **Highest bid on top** — a listing's story follows bid amount, the higher
   amount above the lower. When one bid and the automatic bid it set off share a
   moment, the automatic response reads above the bid that caused it; a maximum
-  set or raised reads below the bid it causes
+  set or raised reads below the bid it causes; a raise that causes no bid
+  reads by its time, newer above older
 - **Your bidding, on the lot** — two tabs, Bid placed, the bids Grade10 placed
   for them, then Your maximums; amount and time only, owner only
 - **Never edited** — nothing deletes or hides an entry, because the record is

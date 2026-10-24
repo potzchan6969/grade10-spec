@@ -12,8 +12,9 @@
   - **Outbid outcome:** records only the bidder who submits the higher maximum when no automatic response is placed for the displaced bidder
   - **History order:** the combined history reads by bid amount, higher on top;
     at one timestamp the automatic response reads above the challenger's
-    record, and a maximum set reads below the bid it causes, whatever order
-    the auction recorded them in
+    record, a maximum set reads below the bid it causes, and a maximum raise
+    that causes no bid reads by its own time, newer above older, whatever
+    order the auction recorded them in
   - **Whole decisions per page:** a history page ends on a whole auction
     decision, never splitting one
 - Boundary cases
@@ -38,8 +39,10 @@ and standing transitions. An accepted public history record may represent a
 bidder's accepted maximum-setting action at the amount submitted or a bid
 Grade10 places automatically. The history SHALL follow bid amount order, the
 higher amount above the lower, and every record one auction decision wrote
-SHALL sort with that decision's highest public bid. Public recent bids are
-not part of this history and keep their order. Events with the same timestamp SHALL keep a
+SHALL sort with that decision's highest public bid; a record whose decision
+wrote no public bid, such as a maximum raise that causes none, SHALL sort by
+its own time among the other records, the newer above the older. Public recent
+bids are not part of this history and keep their order. Events with the same timestamp SHALL keep a
 stable order that applies the rules below, so that later pages cannot reorder
 them.
 
@@ -91,6 +94,24 @@ the requested size by the rest of its last decision.
 - **WHEN** the collector reads the combined history
 - **THEN** the history reads that bid above the collector's maximum-set event when they share a timestamp, even where the maximum is the higher amount
 - **AND** the history reads a higher amount above a lower one across timestamps
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-d6n rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-55 - A rival's automatic response reads above the collector's bid
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
+
+- **GIVEN** a collector's accepted maximum-setting action causes a rival's automatic response
+- **WHEN** the collector reads the combined history
+- **THEN** the rival's automatic response, under the listing pseudonym, reads above the collector's own bid when they share a timestamp
+- **AND** where the two maximums are equal, both records show the same amount, the earlier leader remains leading, and the response still reads above the collector's bid
+
+<!-- trace:scenario id=g10.auction-bidding-history.SC-y3v rev=1 -->
+#### Scenario: grade10-site-auction-bidding-history-SC-56 - A maximum raise that causes no bid reads by its time
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
+
+- **GIVEN** a collector leads a listing and raises their maximum, which causes no public bid
+- **WHEN** the collector reads the combined history
+- **THEN** the raise reads above every record older than it and below every record newer than it
+- **AND** it reads above the maximum it raised and the bid that maximum caused
 
 <!-- trace:scenario id=g10.auction-bidding-history.SC-k4s rev=1 -->
 #### Scenario: grade10-site-auction-bidding-history-SC-14 - Full retained history remains pageable
