@@ -41,9 +41,9 @@
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| listing_42 | An open HKD listing, opening price `<opening price>`; bind its identity only | · |
-| customer B maximum | HK$520 | (range: 1000–79999 minor units) |
-| opening price | HK$360 | (range: 1000–79999 minor units) |
+| listing_42 | An open listing, opening price `<opening price>`; bind its identity only | · |
+| customer B maximum | 520 | (range: 1000–79999 minor units) |
+| opening price | 360 | (range: 1000–79999 minor units) |
 
 | Field | Value |
 | --- | --- |
@@ -54,11 +54,11 @@
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| listing_45 | An open HKD listing, current bid `<current bid>`; bind its identity only | · |
-| customer A maximum | HK$650 | (range: 1000–79999 minor units) |
-| customer B maximum | HK$410 | (range: 1000–79999 minor units) |
-| current bid | HK$300 | (range: 1000–79999 minor units) |
-| increment | The HKD tier increment at `<customer B maximum>`; bind its amount only | (fixed tier increment) |
+| listing_45 | An open listing, current bid `<current bid>`; bind its identity only | · |
+| customer A maximum | 650 | (range: 1000–79999 minor units) |
+| customer B maximum | 410 | (range: 1000–79999 minor units) |
+| current bid | 300 | (range: 1000–79999 minor units) |
+| increment | The tier increment at `<customer B maximum>`; bind its amount only | (fixed tier increment) |
 | response price | `<customer B maximum>` plus `<increment>` | (derived) |
 
 | Field | Value |
@@ -76,13 +76,13 @@
 
 | Field | Value |
 | --- | --- |
-| listing_51 | An open USD listing customer A and customer B both bid on; bind its identity only |
+| listing_51 | An open listing customer A and customer B both bid on; bind its identity only |
 | split decision | The decision containing customer A's accepted price `<accepted price>`, customer B's response `<response price>` and customer A's outbid standing; bind its identity only |
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| accepted price | USD320 | (range: 10000–49999 minor units) |
-| response price | USD330 | (range: 10000–49999 minor units) |
+| accepted price | 320 | (range: 10000–49999 minor units) |
+| response price | 330 | (range: 10000–49999 minor units) |
 
 | Field | Value |
 | --- | --- |
@@ -92,19 +92,19 @@
 
 | `<customer B maximum>` | `<public history>` | `<leader>` | `<account history>` | Fixture notes |
 | --- | --- | --- | --- | --- |
-| USD5 | customer B bids USD5, then customer A responds automatically at USD6, at the same time | customer A | customer B's maximum is retained at USD5 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 500, 600 |
-| USD7 | customer B bids USD7, then customer A responds automatically at USD8, at the same time | customer A | customer B's maximum is retained at USD7 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 700, 800 |
-| USD9.50 | customer B bids USD9.50, then customer A responds automatically at USD10 without exceeding USD10 | customer A | — | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 950, 1000 |
-| USD10 | customer B bids USD10 first, then customer A responds automatically at USD10, at the same time | customer A | the maximum stays private; customer A's automatic response at USD10 reads above customer B's bid at USD10 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 1000 |
-| USD10.01 | customer B bids USD10.01 once; customer A has no new bid record | customer B | customer B's maximum is retained at USD10.01 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 1001 |
-| USD11 | customer B bids USD11 once, with no intermediate record or new bid record for customer A | customer B | — | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 1100 |
-| USD11.20 | customer B bids USD11 once, one increment above customer A's maximum; customer A has no new bid record | customer B | customer B's maximum is retained at USD11.20, and reads below customer B's bid at USD11 though it is the higher amount | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 1100, 1120 |
+| 5 | customer B bids 5, then customer A responds automatically at 6, at the same time | customer A | customer B's maximum is retained at 5 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 500, 600 |
+| 7 | customer B bids 7, then customer A responds automatically at 8, at the same time | customer A | customer B's maximum is retained at 7 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 700, 800 |
+| 9.50 | customer B bids 9.50, then customer A responds automatically at 10 without exceeding 10 | customer A | — | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 950, 1000 |
+| 10 | customer B bids 10 first, then customer A responds automatically at 10, at the same time | customer A | the maximum stays private; customer A's automatic response at 10 reads above customer B's bid at 10 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 1000 |
+| 10.01 | customer B bids 10.01 once; customer A has no new bid record | customer B | customer B's maximum is retained at 10.01 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 1001 |
+| 11 | customer B bids 11 once, with no intermediate record or new bid record for customer A | customer B | — | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 1100 |
+| 11.20 | customer B bids 11 once, one increment above customer A's maximum; customer A has no new bid record | customer B | customer B's maximum is retained at 11.20, and reads below customer B's bid at 11 though it is the higher amount | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 1100, 1120 |
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| customer A maximum | USD10 | (fixed boundary for these history rows) |
-| current bid | USD4 | (fixed starting state) |
-| increment | USD1 | (fixed tier increment) |
+| customer A maximum | 10 | (fixed boundary for these history rows) |
+| current bid | 4 | (fixed starting state) |
+| increment | 1 | (fixed tier increment) |
 | listing_54 | The listing with the retained activity described in the pre-conditions; bind its identity only | · |
 
 | Field | Value |
@@ -177,9 +177,9 @@
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| listing_42 | An open HKD listing, opening price `<opening price>`; bind its identity only | · |
-| customer B maximum | HK$520 | (range: 1000–79999 minor units) |
-| opening price | HK$360 | (range: 1000–79999 minor units) |
+| listing_42 | An open listing, opening price `<opening price>`; bind its identity only | · |
+| customer B maximum | 520 | (range: 1000–79999 minor units) |
+| opening price | 360 | (range: 1000–79999 minor units) |
 
 | Field | Value |
 | --- | --- |
@@ -224,11 +224,11 @@
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| listing_45 | An open HKD listing, current bid `<current bid>`; bind its identity only | · |
-| customer A maximum | HK$650 | (range: 1000–79999 minor units) |
-| customer B maximum | HK$410 | (range: 1000–79999 minor units) |
-| current bid | HK$300 | (range: 1000–79999 minor units) |
-| increment | The HKD tier increment at `<customer B maximum>`; bind its amount only | (fixed tier increment) |
+| listing_45 | An open listing, current bid `<current bid>`; bind its identity only | · |
+| customer A maximum | 650 | (range: 1000–79999 minor units) |
+| customer B maximum | 410 | (range: 1000–79999 minor units) |
+| current bid | 300 | (range: 1000–79999 minor units) |
+| increment | The tier increment at `<customer B maximum>`; bind its amount only | (fixed tier increment) |
 | response price | `<customer B maximum>` plus `<increment>` | (derived) |
 
 | Field | Value |
@@ -318,13 +318,13 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| listing_51 | An open USD listing customer A and customer B both bid on; bind its identity only |
+| listing_51 | An open listing customer A and customer B both bid on; bind its identity only |
 | split decision | The decision containing customer A's accepted price `<accepted price>`, customer B's response `<response price>` and customer A's outbid standing; bind its identity only |
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| accepted price | USD320 | (range: 10000–49999 minor units) |
-| response price | USD330 | (range: 10000–49999 minor units) |
+| accepted price | 320 | (range: 10000–49999 minor units) |
+| response price | 330 | (range: 10000–49999 minor units) |
 
 | Field | Value |
 | --- | --- |
@@ -370,19 +370,19 @@ Runs once per row of **Test data**.
 
 | `<customer B maximum>` | `<public history>` | `<leader>` | `<account history>` | Fixture notes |
 | --- | --- | --- | --- | --- |
-| USD5 | customer B bids USD5, then customer A responds automatically at USD6, at the same time | customer A | customer B's maximum is retained at USD5 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 500, 600 |
-| USD7 | customer B bids USD7, then customer A responds automatically at USD8, at the same time | customer A | customer B's maximum is retained at USD7 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 700, 800 |
-| USD9.50 | customer B bids USD9.50, then customer A responds automatically at USD10 without exceeding USD10 | customer A | — | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 950, 1000 |
-| USD10 | customer B bids USD10 first, then customer A responds automatically at USD10, at the same time | customer A | the maximum stays private; customer A's automatic response at USD10 reads above customer B's bid at USD10 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 1000 |
-| USD10.01 | customer B bids USD10.01 once; customer A has no new bid record | customer B | customer B's maximum is retained at USD10.01 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 1001 |
-| USD11 | customer B bids USD11 once, with no intermediate record or new bid record for customer A | customer B | — | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 1100 |
-| USD11.20 | customer B bids USD11 once, one increment above customer A's maximum; customer A has no new bid record | customer B | customer B's maximum is retained at USD11.20, and reads below customer B's bid at USD11 though it is the higher amount | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in USD minor units: 1100, 1120 |
+| 5 | customer B bids 5, then customer A responds automatically at 6, at the same time | customer A | customer B's maximum is retained at 5 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 500, 600 |
+| 7 | customer B bids 7, then customer A responds automatically at 8, at the same time | customer A | customer B's maximum is retained at 7 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 700, 800 |
+| 9.50 | customer B bids 9.50, then customer A responds automatically at 10 without exceeding 10 | customer A | — | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 950, 1000 |
+| 10 | customer B bids 10 first, then customer A responds automatically at 10, at the same time | customer A | the maximum stays private; customer A's automatic response at 10 reads above customer B's bid at 10 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 1000 |
+| 10.01 | customer B bids 10.01 once; customer A has no new bid record | customer B | customer B's maximum is retained at 10.01 | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 1001 |
+| 11 | customer B bids 11 once, with no intermediate record or new bid record for customer A | customer B | — | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 1100 |
+| 11.20 | customer B bids 11 once, one increment above customer A's maximum; customer A has no new bid record | customer B | customer B's maximum is retained at 11.20, and reads below customer B's bid at 11 though it is the higher amount | `<customer B maximum>`: (range: 100–9999 minor units); Exact recorded amounts in minor units: 1100, 1120 |
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| customer A maximum | USD10 | (fixed boundary for these history rows) |
-| current bid | USD4 | (fixed starting state) |
-| increment | USD1 | (fixed tier increment) |
+| customer A maximum | 10 | (fixed boundary for these history rows) |
+| current bid | 4 | (fixed starting state) |
+| increment | 1 | (fixed tier increment) |
 | listing_54 | The listing with the retained activity described in the pre-conditions; bind its identity only | · |
 
 | Field | Value |
@@ -439,7 +439,7 @@ Runs once per row of **Test data**.
 **Run:** QA2, 2026-10-24. QA1's blind pass read only the frozen Feature set, the journeys, the proposal, the decisions, the Bidding History page and the live suites; the requirement and scenarios were written apart from it.
 
 - **Revised** - `g10.auction-bidding-history.US3-TC1`, `g10.auction-bidding-history.US3-TC2` and `g10.auction-bidding-history.US3-TC6`: each now verifies the amount order, so each moves up a revision and reads manual until the end-to-end test is updated
-- **Added by QA2** - the maximum set reading below the bid it causes, though higher in amount, is asserted by `g10.auction-bidding-history.US3-TC2` step 5 and the USD11.20 row of `g10.auction-bidding-history.US3-TC6`; the higher-above-lower half is asserted by `g10.auction-bidding-history.US3-TC2` step 3
+- **Added by QA2** - the maximum set reading below the bid it causes, though higher in amount, is asserted by `g10.auction-bidding-history.US3-TC2` step 5 and the 11.20 row of `g10.auction-bidding-history.US3-TC6`; the higher-above-lower half is asserted by `g10.auction-bidding-history.US3-TC2` step 3
 - **Corrected** - covers lists that claimed the whole journey were cut to the scenarios each case fully asserts
 - **Contradicted** - none
 - **Uncovered anchors** - none. The outbid standing and notification rows of `g10.auction-bidding-history.US3-TC6` stay as the live suite left them; this change does not touch them
