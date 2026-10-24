@@ -1782,7 +1782,7 @@ Runs once per row of **Test data**.
 ## Reconciliation
 
 - **Covered at domain** — `g10.auction-dmn.US7-TC3` walks `grade10-site-auction-auction-SC-06`: a price-moving bid in extended bidding restarts the close
-- **Covered at domain** — `g10.auction-dmn.US7-TC4` walks `grade10-site-auction-auction-SC-65` and `grade10-site-auction-auction-SC-66`: the card moves with a bid and counts to the new close
-- **Covered at domain** — `g10.auction-dmn.US12-TC2` walks `grade10-site-auction-auction-SC-88`: the card shows its closed state with no result, then the result, without a reload
-- **Covered at domain** - `g10.auction-dmn.US4-TC3` reads the bid form's words for a maximum not raised, the row of `grade10-site-auction-auction-SC-91` this suite leaves to it
-- **Covered at domain** - `grade10-site-auction-auction-SC-109` is also walked by `g10.auction-dmn.US13-TC1`; `grade10-site-auction-auction-SC-02` by `g10.auction-dmn.US13-TC2`
+- **Covered at domain** — `g10.auction-dmn.US7-TC3` walks `grade10-site-auction-auction-SC-65` and `grade10-site-auction-auction-SC-66`: the card moves with a bid and counts to the new close
+- **Covered at domain** — `g10.auction-dmn.US12-TC1` walks `grade10-site-auction-auction-SC-88`: the card shows its closed state with no result, then the result, without a reload
+- **Covered at domain** - `g10.auction-dmn.US3-TC2` reads the bid form's words for a maximum not raised, the row of `grade10-site-auction-auction-SC-91` this suite leaves to it
+- **Covered at domain** - `grade10-site-auction-auction-SC-109` is also walked by `g10.auction-dmn.US13-TC1`; `grade10-site-auction-auction-SC-02` by `g10.auction-dmn.US13-TC1`
