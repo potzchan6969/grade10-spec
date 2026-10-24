@@ -6,7 +6,7 @@
 ## Background
 
 * `<bids url>` is `<g10url>/bids`, the signed-in account's Bids page, where a listing's summary expands into its history.
-* Bids and maximums are whole units. The step is chosen by the amount being beaten: 1 from 0, 2 from 10, 25 from 200, 100 from 1,000, 500 from 5,000.
+* Bids and maximums are whole units. The step is chosen by the amount being beaten: 1 from 0, 2 from 10, 25 from 200, 50 from 500, 100 from 1,000, 500 from 5,000.
 * Collectors are signed in with a card linked, on separate sessions.
 
 ## g10.auction-bidding-history.US3: Collector reads one listing's combined history
@@ -28,9 +28,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -65,9 +67,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -107,9 +111,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -120,8 +126,8 @@ Runs once per row of **Test data**.
 | `<then B places>` | `<A history>` |
 | --- | --- |
 | nothing | your maximum raised to 560, caused no bid; then your bid at 280; then your maximum set at 420, below the bid though the higher amount |
-| a maximum of 700 | customer B's bid at 585 marking You were outbid, as one step; then your maximum raised to 560; then your bid at 280; then your maximum set at 420 |
-| a maximum of 500 | your automatic response at 525 and customer B's bid at 500, as one step, both newer than the raise and so above it though lower; then your maximum raised to 560; then your bid at 280; then your maximum set at 420 |
+| a maximum of 700 | customer B's bid at 610 marking You were outbid, as one step; then your maximum raised to 560; then your bid at 280; then your maximum set at 420 |
+| a maximum of 500 | your automatic response at 550 and customer B's bid at 500, as one step, both newer than the raise and so above it though lower; then your maximum raised to 560; then your bid at 280; then your maximum set at 420 |
 
 **Steps:**
 
