@@ -1,643 +1,180 @@
 # shared/auth/users Test Cases
 
-**Status:** reopened · 38/41
+**Status:** pending-review · 0/20
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Reviewed:** 2026-10-23, tcs-rules r7, lapsed 2026-10-24
 **Out of suite (api):** shared-auth-users-SC-43
 
-## shared-auth-users-US1: Operator lists people in the identity directory
+## Background
+
+* `<g10url>` is the Grade10 site and `<console url>` the Grade10 console of the environment under test.
+* The user directory is the console's Users page; an account opens in its panel, by user id. The account holder's request to be forgotten is on `<g10url>`'s Your data page.
+* A change to standing or roles shows on the affected person's next page within 70 seconds.
+
+## Walk 1: An admin works the user directory
+
+**Starting state:**
+
+- admin(holds `user:list`, `user:ban` and `user:set-role`) signed in on `<console url>`, on the user directory
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<subject account>` | `collector@example.com`, unbanned, holding `user` only, signed in on `<g10url>` |
+| `<peer admin>` | another account holding `admin` |
+
+### Route
+
+1. Search for `COLLECTOR` and open `<subject account>`.
+   - The account opens by its user id `shared.auth-users.US1-TC1`
+2. Narrow the directory to accounts that hold `admin`.
+   - Every listed account holds `admin` `shared.auth-users.US4-TC2`
+3. Give `<subject account>` the role `staff`, then clear it again.
+   - The account holds `staff`, then `user` only `shared.auth-users.US3-TC1`
+4. Try to ban `<peer admin>`.
+   - The ban is refused `shared.auth-users.US2-TC2`
+5. Ban `<subject account>` with reason `Account closed after a ticket`.
+   - Its store session ends and it stays listed, marked banned `shared.auth-users.US2-TC1`
+
+## Walk 2: A collector asks to be forgotten and changes their mind
+
+**Starting state:**
+
+- customer(collector) signed in on `<g10url>`, on the Your data page, with no request open
+
+### Route
+
+1. Select Ask to be forgotten and confirm.
+   - One open request, maturing in seven days `shared.auth-users.US6-TC1`
+2. Cancel the request.
+   - It no longer shows open, and Ask to be forgotten is offered again `shared.auth-users.US6-TC2`
+
+## shared.auth-users.US1: Operator lists people in the identity directory
 
 **As an** operator who can list users,
 **I want** to search and open accounts by user id,
 **so that** I can find a person without seeing records I am not granted.
 
-<!-- trace:case id=g10.shared-users.TC-oy8 rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
-### shared-auth-users-US1-TC1-1: Granted operator lists accounts by user id
+<!-- trace:case id=g10.shared-users.TC-oy8 rev=2 -->
+### shared.auth-users.US1-TC1: An operator with the list grant searches the directory and opens an account by user id
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
-* **Automation status:** automated
+* **Suites:** smoke, regression
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
 **Pre-conditions:**
 
-* admin(holds `user:list`) is signed in.
+* admin(holds `user:list`) is signed in on `<console url>`.
+* The directory holds `<subject account>`, an `<other account>` sharing its email attribute, and a banned account.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| `<subject account>` | `collector@example.com` |
+| `<other account>` | a different account sharing an email attribute with `<subject account>` |
 
 **Steps:**
 
-1. Open `<grade10 admin users url>`.
-2. Read the listed accounts.
+1. Open the user directory.
+2. Search for `COLLECTOR`.
+3. Open `<subject account>`.
+4. Clear the search and find the banned account.
 
 **Expected Results:**
 
-* The directory lists accounts from this brand.
-* Each account is named by its user id.
+* Step 1 lists this brand's accounts, each named by user id.
+* Step 2 lists `<subject account>`, and every listed email contains `collector`, ignoring letter case.
+* Step 3 shows `<subject account>`'s user id, not `<other account>`.
+* Step 4 lists the banned account, marked banned.
 
-<!-- trace:case id=g10.shared-users.TC-caj rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
-### shared-auth-users-US1-TC2-1: Caller without the list grant is refused
+<!-- trace:case id=g10.shared-users.TC-caj rev=1 -->
+### shared.auth-users.US1-TC2: An operator without the list grant sees no accounts
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(does not hold `user:list`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Open `<grade10 admin users url>`.
-
-**Expected Results:**
-
-* The directory refuses the list.
-* No account is shown.
-
-<!-- trace:case id=g10.shared-users.TC-2wn rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
-### shared-auth-users-US1-TC3-1: Search matches email without letter case
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
 **Pre-conditions:**
 
-* admin(holds `user:list`) is signed in.
-* The directory holds `<subject email>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject email | collector@example.com |
-| email fragment | COLLECTOR |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+* staff(does not hold `user:list`) is signed in on `<console url>`.
 
 **Steps:**
 
-1. Open `<grade10 admin users url>`.
-2. Search the directory for `<email fragment>`.
+1. Open the user directory.
 
 **Expected Results:**
 
-* The account for `<subject email>` is listed.
-* Every listed email contains that fragment, ignoring letter case.
-
-<!-- trace:case id=g10.shared-users.TC-b3k rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
-### shared-auth-users-US1-TC4-1: Account opens by user id
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:list`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject user id | The account to open |
-| other user id | A different account that shares an email attribute with `<subject user id>` |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Open `<grade10 admin users url>`.
-2. Open the account for `<subject user id>`.
-
-**Expected Results:**
-
-* The account shown is `<subject user id>`.
-* `<other user id>` is not the account shown.
-
-<!-- trace:case id=g10.shared-users.TC-jkd rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
-### shared-auth-users-US1-TC5-1: Banned account stays in the directory
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:list`) is signed in.
-* `<subject user id>` is banned.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject user id | A banned account |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Open `<grade10 admin users url>`.
-2. Find `<subject user id>`.
-
-**Expected Results:**
-
-* `<subject user id>` is listed.
-* The account is marked banned.
+* The directory refuses the list, and no account is shown.
 
 ---
 
-## shared-auth-users-US2: Operator bans and unbans an account
+## shared.auth-users.US2: Operator bans and unbans an account
 
 **As an** operator who can ban,
 **I want** a ban to stop money-moving and sign-in, and an unban to restore them,
 **so that** a person who must leave cannot keep acting, a mistaken ban is
 reversible, and a compromised admin cannot lock peer admins out by ban.
 
-<!-- trace:case id=g10.shared-users.TC-lde rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC1-1: Ban stops money-moving and sign-in
+<!-- trace:case id=g10.shared-users.TC-lde rev=2 -->
+### shared.auth-users.US2-TC1: A ban stops payment and sign-in, and an unban lets the person sign in again
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:ban`) is signed in.
-* `<subject user id>` is unbanned and signed in on `<grade10 store url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject user id | An unbanned account |
-| subject email | That account's email |
-| ban reason | Account closed after a ticket |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, ban `<subject user id>` with `<ban reason>` and confirm.
-2. In the pre-ban store session, start a payment.
-3. Sign in as `<subject email>` on `<grade10 sign-in url>`.
-4. Reopen `<grade10 store url>` in the pre-ban session.
-
-**Expected Results:**
-
-* The payment does not complete.
-* Sign-in does not start a session.
-* The store shows nobody signed in.
-* `<subject user id>` stays listed, marked banned.
-
-<!-- trace:case id=g10.shared-users.TC-v0p rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC2-1: Unban lets the person sign in again
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:ban`) is signed in.
-* `<subject user id>` is banned.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject user id | A banned account |
-| subject email | That account's email |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, unban `<subject user id>`.
-2. Complete sign-in as `<subject email>` on `<grade10 sign-in url>`.
-
-**Expected Results:**
-
-* `<subject email>` is signed in.
-
-<!-- trace:case id=g10.shared-users.TC-hx1 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC3-1: Caller without the ban grant is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
 * **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(does not hold `user:ban`) is signed in.
-* `<subject user id>` is unbanned.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject user id | An unbanned account |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, try to ban `<subject user id>`.
-
-**Expected Results:**
-
-* The directory refuses the ban.
-* `<subject user id>` stays unbanned.
-
-<!-- trace:case id=g10.shared-users.TC-3i2 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC4-1: Operator cannot ban themselves
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:ban`) is signed in.
-* The signed-in account is unbanned.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, try to ban the signed-in account.
-
-**Expected Results:**
-
-* The directory refuses the ban.
-* The signed-in account stays unbanned.
-
-<!-- trace:case id=g10.shared-users.TC-xzw rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC5-1: No caller bans an account that holds admin
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* `<caller>` is signed in and holds `user:ban`.
-* `<subject>` holds `admin` and is unbanned.
-
-**Test data:**
-
-| `<caller>` | `<subject>` | `<expected outcome>` | Fixture notes |
-| --- | --- | --- | --- |
-| admin(role `support`, holds `user:ban`) | `<admin user id>` | Ban is refused. The account stays unbanned. | · |
-| admin(holds `admin` and `user:ban`) | `<peer admin user id>` | Ban is refused. The account stays unbanned. | Subject differs from the signed-in caller |
-
-| Field | Value |
-| --- | --- |
-| admin user id | The unbanned account holding `admin` targeted by the support caller; bind its user id only |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-| peer admin user id | The other admin account in this fixture; bind its user id only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, try to ban `<subject>`.
-
-**Expected Results:**
-
-* The directory answers with this outcome: `<expected outcome>`.
-
-<!-- trace:case id=g10.shared-users.TC-ka8 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC6-1: Last admin cannot be banned
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** none
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-02
-
-**Pre-conditions:**
-
-* Signed in as an operator who can ban. <an admin user id> is the only account that holds `admin`.
-
-**Steps:**
-
-1. Try to ban <an admin user id>.
-
-**Expected Results:**
-
-* The system refuses the request.
-* The account remains unbanned.
-
-<!-- trace:case id=g10.shared-users.TC-5i0 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC7-1: A cached browse read of a banned account closes on the very next read
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
 
-* admin(holds `user:ban`) is signed in.
-* <subject user id> is unbanned, signed in, and an ordinary browse read of the store has already warmed its session cache.
-
-**Steps:**
-
-1. Read <subject user id>'s signed-in state on <grade10 store url> (an ordinary browse read).
-2. On <grade10 admin users url>, ban <subject user id>.
-3. Immediately read <subject user id>'s signed-in state, the same way as step 1.
-
-**Expected Results:**
-
-* Step 3 shows nobody signed in, even though step 1's read would otherwise have kept the cache answering "signed in" for up to five more minutes.
-* <subject user id> stays listed, marked banned.
-
-<!-- trace:case id=g10.shared-users.TC-tlp rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC8-1: An operator's erasure filing bans the account
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-Signed in as an operator who holds `user:delete`. `<a subject user id>` holds no open erasure request and is unbanned.
+* admin(holds `user:ban`) is signed in on `<console url>`.
+* `<subject account>` is unbanned, signed in on `<g10url>` in another browser, with a product in the cart.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+| `<subject account>` | an unbanned account holding `user` only |
 
 **Steps:**
 
-1. File an erasure request for `<a subject user id>` from the directory.
-2. Complete a sign-in method as that person.
+1. Ban `<subject account>` with reason `Account closed after a ticket`.
+2. In the other browser, start checkout.
+3. Sign in there as `<subject account>`.
+4. Unban `<subject account>`, then sign in as `<subject account>` again.
 
 **Expected Results:**
 
-* One open erasure request stands for that person.
-* Completing a sign-in method does not sign them in.
+* Step 1: `<subject account>` stays listed, marked banned.
+* Step 2: the payment does not complete, and the site shows nobody signed in.
+* Step 3: no session starts.
+* Step 4: `<subject account>` is signed in.
 
-<!-- trace:case id=g10.shared-users.TC-s18 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC9-1: Cancelling an operator's request lets the person back in
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-02
-
-**Pre-conditions:**
-Signed in as an operator who holds `user:delete`. `<a subject user id>` is banned by an operator's open erasure request, filed less than seven days ago, and was unbanned before it.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Cancel that erasure request.
-2. Complete a sign-in method as `<a subject user id>`.
-
-**Expected Results:**
-
-* The request closes as cancelled.
-* That person can sign in again.
-
-<!-- trace:case id=g10.shared-users.TC-k21 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC10-1: A cancel leaves a ban the filing did not apply
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-02
-
-**Pre-conditions:**
-Signed in as an operator who holds `user:delete`. `<a subject user id>` was banned for conduct before an operator's erasure request was filed over the account, and that request is open.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Cancel that erasure request.
-2. Complete a sign-in method as `<a subject user id>`.
-
-**Expected Results:**
-
-* The account is still banned.
-* Completing a sign-in method does not sign them in.
-
-<!-- trace:case id=g10.shared-users.TC-sp3 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC11-1: An erasure request over an admin is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-Signed in as an operator who holds `user:delete`. `<an admin user id>` holds `admin` and is unbanned.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| an admin user id | The admin account prepared with the sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Try to file an erasure request for `<an admin user id>`.
-
-**Expected Results:**
-
-* The system refuses the filing.
-* No erasure request is open for that account.
-* That person can still sign in.
-
-
-<!-- trace:case id=g10.shared-users.TC-lq8 rev=2 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC12-2: Ban and unban are refused while an erasure request is open
+<!-- trace:case id=g10.shared-users.TC-hx1 rev=2 -->
+### shared.auth-users.US2-TC2: A ban, unban or erasure filing the operator may not make is refused
 
 Runs once per row of **Test data**.
 
@@ -655,70 +192,123 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `user:ban` and `user:delete`) is signed in to the console.
-* `<subject account>` holds an open erasure request filed by `<request owner>`, and its standing is `<request standing>`.
+* The row's operator is signed in on `<console url>`.
+* The row's account is in the row's state.
 
 **Test data:**
 
-| `<request owner>` | `<request standing>` | `<act>` |
+| Operator | Account | Act |
 | --- | --- | --- |
-| the account holder | unbanned | Ban |
-| an operator | banned by that filing | Unban |
-
-| Field | Value |
-| --- | --- |
-| `subject account` | An account other than the operator's own, holding no `admin` role |
-| `ban reason` | Erasure check |
+| staff without `user:ban` | unbanned, holding `user` only | ban |
+| admin holding `user:ban` | the admin's own | ban |
+| support holding `user:ban` | holding `admin` | ban |
+| admin holding `user:ban` | another account holding `admin` | ban |
+| admin holding `user:delete` | holding `admin`, unbanned | file an erasure request |
+| admin holding `user:ban` | unbanned, with a request to be forgotten its holder filed | ban, reason `Erasure check` |
+| admin holding `user:ban` | banned by an operator's open erasure filing | unban |
 
 **Steps:**
 
-1. In the console's user directory, open `<subject account>`.
-2. Choose `<act>`, giving `<ban reason>` where a reason is asked, and confirm.
+1. Open the row's account and do the row's act.
 
 **Expected Results:**
 
-* Step 2 is refused, naming the open erasure request.
-* `<subject account>` still reads `<request standing>`.
-* The erasure request still reads open.
-<!-- trace:case id=g10.shared-users.TC-wga rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
-### shared-auth-users-US2-TC13-1: The last admin cannot be banned
+* The act is refused, naming the open request where there is one.
+* The account's standing, and any request, are as they were, and the account holder can sign in exactly as before.
+
+<!-- trace:case id=g10.shared-users.TC-tlp rev=1 -->
+### shared.auth-users.US2-TC3: An operator's erasure filing bans the account
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
 
-* operator(holds `user:ban`, does not hold `admin`) is on <grade10 admin users url>.
-* Exactly one account holds `admin`: <only admin user id>, unbanned.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<only admin user id>` | The one account holding `admin` |
+* admin(holds `user:delete`) is signed in on `<console url>`.
+* `<subject account>` is unbanned, with no open erasure request.
 
 **Steps:**
 
-1. Paste <only admin user id> into the search.
-2. Try to ban <only admin user id>.
+1. Open `<subject account>` and file an erasure request.
+2. Sign in as `<subject account>` in another browser.
 
 **Expected Results:**
 
-* Step 2 is refused.
-* <only admin user id> stays unbanned.
+* Step 1: one open erasure request stands for `<subject account>`, and it reads banned.
+* Step 2: no session starts.
+
+<!-- trace:case id=g10.shared-users.TC-s18 rev=1 -->
+### shared.auth-users.US2-TC4: Cancelling an operator's erasure request lifts the ban it applied
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-02
+
+**Pre-conditions:**
+
+* admin(holds `user:delete`) is signed in on `<console url>`.
+* `<subject account>` was unbanned, then banned by an operator's erasure request filed less than seven days ago.
+
+**Steps:**
+
+1. Open `<subject account>` and cancel the erasure request.
+2. Sign in as `<subject account>` in another browser.
+
+**Expected Results:**
+
+* Step 1: the request reads cancelled, and the account unbanned.
+* Step 2: `<subject account>` is signed in.
+
+<!-- trace:case id=g10.shared-users.TC-k21 rev=1 -->
+### shared.auth-users.US2-TC5: Cancelling an operator's erasure request leaves a ban it did not apply
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-02
+
+**Pre-conditions:**
+
+* admin(holds `user:delete`) is signed in on `<console url>`.
+* `<subject account>` was banned for conduct, then an operator filed an erasure request over it, still open.
+
+**Steps:**
+
+1. Open `<subject account>` and cancel the erasure request.
+2. Sign in as `<subject account>` in another browser.
+
+**Expected Results:**
+
+* Step 1: the request reads cancelled, and the account still banned.
+* Step 2: no session starts.
 
 ---
 
-## shared-auth-users-US3: Operator changes roles
+## shared.auth-users.US3: Operator changes roles
 
 **As an** admin,
 **I want** to set roles on any account I can open — including my own — and to
@@ -727,294 +317,123 @@ from a peer,
 **so that** ordinary grants and cooperative offboarding stay in the console and
 peer lockout does not.
 
-<!-- trace:case id=g10.shared-users.TC-g0n rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
-### shared-auth-users-US3-TC1-1: Admin sets another account to staff
+<!-- trace:case id=g10.shared-users.TC-g0n rev=2 -->
+### shared.auth-users.US3-TC1: An admin sets roles on any account, their own included
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
-* **Automation status:** automated
+* **Suites:** regression
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
 **Pre-conditions:**
 
-* admin(holds `user:set-role`) is signed in.
-* `<subject user id>` does not hold `staff`.
+* admin(holds `admin` and `user:set-role`) is signed in on `<console url>`; another account also holds `admin`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| subject user id | An account that does not hold `staff` |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| Account | Roles saved | Holds afterwards |
+| --- | --- | --- |
+| another, holding no `staff` | adds `staff` | `staff` |
+| another, holding an operator role and no `admin` | no operator role | `user` only |
+| the admin's own | `staff` and `admin` | `staff` and `admin` |
+| the admin's own | without `admin` | no `admin` |
 
 **Steps:**
 
-1. On `<grade10 admin users url>`, save `<subject user id>` with `staff` among its roles.
+1. Open the row's account and save the row's roles.
 
 **Expected Results:**
 
-* `<subject user id>` holds `staff`.
+* The account holds the row's roles.
 
-<!-- trace:case id=g10.shared-users.TC-3wy rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
-### shared-auth-users-US3-TC2-1: Clearing operator roles leaves a user
+<!-- trace:case id=g10.shared-users.TC-g3z rev=2 -->
+### shared.auth-users.US3-TC2: A role change the operator may not make is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-03
+
+**Pre-conditions:**
+
+* The row's operator is signed in on `<console url>`.
+
+**Test data:**
+
+| Operator | Account | Change |
+| --- | --- | --- |
+| support, without `user:set-role` | another account | any role change |
+| admin holding `user:set-role` | another account holding `admin` | remove `admin` |
+| staff holding `user:set-role`, not `admin`, while one account alone holds `admin` | that account | remove `admin` |
+| the one account holding `admin` | its own | remove `admin` |
+
+**Steps:**
+
+1. Open the row's account and try the row's change.
+
+**Expected Results:**
+
+* The change is refused, and the account's roles are as they were.
+
+<!-- trace:case id=g10.shared-users.TC-q92 rev=2 -->
+### shared.auth-users.US3-TC3: A role change shows on the person's next page within 70 seconds
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:set-role`) is signed in.
-* `<subject user id>` holds an operator role and does not hold `admin`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject user id | An account with an operator role and no `admin` |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, save `<subject user id>` with no operator role selected.
-
-**Expected Results:**
-
-* `<subject user id>` holds `user` only.
-
-<!-- trace:case id=g10.shared-users.TC-g3z rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
-### shared-auth-users-US3-TC3-1: Support cannot set roles
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(role `support`, holds `user:ban`, does not hold `user:set-role`) is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject user id | Another account |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, try to change `<subject user id>`'s roles.
-
-**Expected Results:**
-
-* The directory refuses the change.
-* `<subject user id>`'s roles are unchanged.
-
-<!-- trace:case id=g10.shared-users.TC-j1l rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
-### shared-auth-users-US3-TC4-1: Operator may change their own roles
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:set-role` and `admin`) is signed in.
-* At least one other account holds `admin`.
-
-**Test data:**
-
-| `<roles saved>` | `<expected result>` |
-| --- | --- |
-| `staff` and `admin` | The account holds `staff` and `admin`. |
-| no `admin` | The account does not hold `admin`. |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, save the signed-in account with `<roles saved>`.
-
-**Expected Results:**
-
-* The account answers with this result: `<expected result>`.
-
-<!-- trace:case id=g10.shared-users.TC-60a rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
-### shared-auth-users-US3-TC5-1: Last admin keeps admin
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-03
-
-**Pre-conditions:**
-
-* Exactly one account holds `admin`; `<caller>` is signed in.
-
-**Test data:**
-
-| `<caller>` | `<account saved>` |
-| --- | --- |
-| admin(holds `user:set-role`, does not hold `admin`) | `<only admin user id>` |
-| admin(holds `admin` and `user:set-role`), the only admin | The signed-in account |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-| only admin user id | The sole remaining admin account in this fixture; bind its user id only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, save `<account saved>` without `admin`.
-
-**Expected Results:**
-
-* That account still holds `admin`.
-
-<!-- trace:case id=g10.shared-users.TC-hwr rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
-### shared-auth-users-US3-TC6-1: Peer admin keeps admin
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `admin` and `user:set-role`) is signed in.
-* `<peer admin user id>` holds `admin` and is not the signed-in account.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| peer admin user id | An admin other than the signed-in account |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. On `<grade10 admin users url>`, save `<peer admin user id>` without `admin`.
-
-**Expected Results:**
-
-* The directory refuses the save.
-* `<peer admin user id>` still holds `admin`.
-
-<!-- trace:case id=g10.shared-users.TC-q92 rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
-### shared-auth-users-US3-TC7-1: An ordinary read of the caller's own permissions reflects a role change on the very next read
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
 **Pre-conditions:**
 
-* `<target>` is signed in, and an ordinary (non-elevated) browse read of its own current permissions has already warmed its session cache.
+* The row's account is signed in on `<console url>` in tab A, and has just opened a page there.
+* admin(holds `user:set-role`) is signed in on `<console url>` in tab B; another account also holds `admin`.
 
 **Test data:**
 
-| `<target>` | `<role change>` |
-| --- | --- |
-| Another account | `staff` granted, previously held no operator role |
-| The signed-in admin's own account | Own `admin` stripped; another admin remains |
+| Account | Change | Tab A afterwards |
+| --- | --- | --- |
+| another, holding no operator role | give it `staff` | the navigation shows the sections `staff` reach |
+| the admin's own | remove `admin` | the navigation no longer shows the sections only `admin` reaches |
 
 **Steps:**
 
-1. Read `<target>`’s permissions on an ordinary, non-elevated browse surface.
-2. An admin holding `user:set-role` saves `<target>` with `<role change>`.
-3. Immediately read `<target>`’s permissions the same way as step 1.
+1. In tab B, make the row's change.
+2. Within 70 seconds, open another page in tab A.
 
 **Expected Results:**
 
-* Step 3 reflects the new roles from `<role change>`, even though step 1's read would otherwise have kept the cache answering the old roles for up to five more minutes.
+* Step 2: the row's outcome.
 
 ---
 
-## shared-auth-users-US4: Operator finds the accounts they mean
+## shared.auth-users.US4: Operator finds the accounts they mean
 
 **As an** operator who can list users,
 **I want** to search by the name I was given and narrow the directory to the
@@ -1022,174 +441,14 @@ accounts I mean,
 **so that** I can reach one person from a ticket, and answer who holds a role,
 without reading every account.
 
-<!-- trace:case id=g10.shared-users.TC-axp rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
-### shared-auth-users-US4-TC1-1: Search matches a name without letter case
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:list`) is signed in.
-* The directory holds `<account name>`, and that name is not part of the account’s email `<subject email>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| account name | Alex Collector |
-| name fragment | ALEX |
-| subject email | collector@example.com |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Open `<grade10 admin users url>`.
-2. Search the directory for `<name fragment>`.
-
-**Expected Results:**
-
-* The account named `<account name>` is listed.
-
-<!-- trace:case id=g10.shared-users.TC-1nn rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
-### shared-auth-users-US4-TC2-1: Directory narrows to a role
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:list`) is signed in.
-* The directory holds an account with `admin` and an account with no elevated role.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Open `<grade10 admin users url>`.
-2. Narrow the directory to accounts that hold `admin`.
-
-**Expected Results:**
-
-* Every listed account holds `admin`.
-* An account with no elevated role is not listed.
-
-<!-- trace:case id=g10.shared-users.TC-xq6 rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
-### shared-auth-users-US4-TC3-1: Two narrowings and chosen order apply
+<!-- trace:case id=g10.shared-users.TC-axp rev=1 -->
+### shared.auth-users.US4-TC1: A search matches a name without letter case
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:list`) is signed in.
-* The directory holds banned and unbanned `support` accounts that joined on different days.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Open `<grade10 admin users url>`.
-2. Narrow to banned accounts that hold `support`.
-3. Order by when the account joined, oldest first.
-4. Clear the order.
-
-**Expected Results:**
-
-* Step 2 lists only banned accounts that hold `support`.
-* Step 3 lists the oldest account first.
-* Step 4 lists the newest account first.
-
-<!-- trace:case id=g10.shared-users.TC-l4g rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
-### shared-auth-users-US4-TC4-1: Directory narrows to the user population
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/users.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `user:list`) is signed in.
-* The directory holds an account with `admin` and an account with no elevated role.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Open `<grade10 admin users url>`.
-2. Narrow the directory to the user population.
-
-**Expected Results:**
-
-* Every listed account holds no elevated role.
-* An account that holds `admin` is not listed.
-
-<!-- trace:case id=g10.shared-users.TC-htg rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
-### shared-auth-users-US4-TC5-1: Directory narrows to elevated accounts
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1199,33 +458,89 @@ without reading every account.
 
 **Pre-conditions:**
 
-* admin(holds `user:list`) is on `<grade10 admin users url>`.
-* The directory holds `<elevated account>` and `<plain account>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| elevated account | An account holding `staff`, any elevated role |
-| plain account | An account holding `user` only |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+* admin(holds `user:list`) is signed in on `<console url>`.
+* The directory holds an account named `Alex Collector`, whose email `collector@example.com` does not contain the name.
 
 **Steps:**
 
-1. Set Type to Elevated.
-2. Read the listed accounts.
+1. Search the user directory for `ALEX`.
 
 **Expected Results:**
 
-* Every listed account holds at least one elevated role.
-* `<plain account>` is not listed.
+* The account named `Alex Collector` is listed.
+
+<!-- trace:case id=g10.shared-users.TC-1nn rev=2 -->
+### shared.auth-users.US4-TC2: The directory narrows to the accounts asked for
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-04
+
+**Pre-conditions:**
+
+* admin(holds `user:list`) is signed in on `<console url>`.
+* The directory holds an account holding `admin`, one holding `staff`, one holding `user` only, and banned and unbanned accounts holding `support`.
+
+**Test data:**
+
+| Narrowed to | Listed | Not listed |
+| --- | --- | --- |
+| role `admin` | accounts holding `admin` | the `user`-only account |
+| Type Elevated | accounts holding any elevated role | the `user`-only account |
+| the user population | accounts holding no elevated role | the `admin` account |
+| banned, and role `support` | banned accounts holding `support` | the unbanned `support` account |
+
+**Steps:**
+
+1. Open the user directory and narrow it as the row says.
+
+**Expected Results:**
+
+* Only the row's listed accounts show; the row's not-listed account is absent.
+
+<!-- trace:case id=g10.shared-users.TC-xq6 rev=2 -->
+### shared.auth-users.US4-TC3: The directory lists in the order chosen, newest first when none is
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-users-US-04
+
+**Pre-conditions:**
+
+* admin(holds `user:list`) is signed in on `<console url>`.
+* The directory holds accounts that joined on different days.
+
+**Steps:**
+
+1. Order the user directory by when the account joined, oldest first.
+2. Clear the order.
+
+**Expected Results:**
+
+* Step 1 lists the oldest account first.
+* Step 2 lists the newest account first.
 
 ---
 
-## shared-auth-users-US5: Operator creates an Auth account
+## shared.auth-users.US5: Operator creates an Auth account
 
 **As an** operator holding `user:create`,
 **I want** to create a passwordless Auth account with name, email, and roles
@@ -1234,46 +549,8 @@ when the email already exists —
 **so that** access can be granted before first sign-in without loyalty enroll
 or an invite mail, and a duplicate never becomes a second account.
 
-<!-- trace:case id=g10.shared-users.TC-yx9 rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
-### shared-auth-users-US5-TC1-1: Create passwordless Auth account with elevated role
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-05
-
-**Pre-conditions:**
-Signed in as operator(holds `user:create` and `user:set-role`). No Auth account holds `<new email>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| new name | Ada Operator |
-| new email | ada.operator@example.com |
-| roles | admin |
-
-**Steps:**
-
-1. Create an Auth account with `<new name>`, `<new email>`, and `<roles>`.
-2. Open the account named by `<new email>`.
-3. Check that account's roles and whether a password was required at create.
-
-**Expected Results:**
-
-* Step 1 succeeds and creates one Auth account for `<new email>`.
-* Step 2 opens that account with `<new name>` and roles including `admin`.
-* Create collected no password.
-
-<!-- trace:case id=g10.shared-users.TC-thu rev=2 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
-### shared-auth-users-US5-TC2-2: Create plain user with only user:create
+<!-- trace:case id=g10.shared-users.TC-yx9 rev=2 -->
+### shared.auth-users.US5-TC1: An operator creates a passwordless account with the roles their grants allow
 
 Runs once per row of **Test data**.
 
@@ -1282,122 +559,6 @@ Runs once per row of **Test data**.
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-05
-
-**Pre-conditions:**
-Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account holds `<plain email>`.
-
-**Test data:**
-
-| `<plain name>` | `<plain email>`, any address no account holds | `<roles>` |
-| --- | --- | --- |
-| Pat Collector | pat.collector@example.com | user |
-| No Role Pick | no.role@example.com | none chosen |
-
-**Steps:**
-
-1. Create an Auth account with `<plain name>`, `<plain email>`, and `<roles>`.
-2. Open the account named by `<plain email>`.
-
-**Expected Results:**
-
-* Step 1 succeeds.
-* Step 2 opens that account with roles `user` only.
-
-<!-- trace:case id=g10.shared-users.TC-j13 rev=2 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
-### shared-auth-users-US5-TC3-2: Create without user:create is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-05
-
-**Pre-conditions:**
-Signed in as operator(holds `<grants>`). No Auth account holds `<attempted email>`.
-
-**Test data:**
-
-| `<grants>` | `<attempted email>`, any address no account holds | `<role>` |
-| --- | --- | --- |
-| `user:list` and `user:set-role`, not `user:create` | no.create@example.com | user |
-| `user:create` and `user:list`, not `user:set-role` | almost.staff@example.com | staff |
-| `user:create` and `user:list`, not `user:set-role` | almost.admin@example.com | admin |
-
-**Steps:**
-
-1. Try to create an Auth account with a name, `<attempted email>`, and role `<role>`.
-
-**Expected Results:**
-
-* The system refuses the create.
-* No Auth account holds `<attempted email>`.
-
-<!-- trace:case id=g10.shared-users.TC-tdv rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
-### shared-auth-users-US5-TC5-1: Duplicate email is refused
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-05
-
-**Pre-conditions:**
-
-* operator(holds `user:create`, `user:set-role` and `user:list`) is on `<grade10 admin users url>`.
-* `<existing account>` holds `<existing email>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| existing account | An account that has signed in at least once |
-| existing email | That account's email |
-| new name | Second Taker, any name other than the existing account's |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Click Create.
-2. Enter `<new name>` and `<existing email>`, and select `user`.
-3. Submit the form.
-4. Search the directory for `<existing email>`.
-
-**Expected Results:**
-
-* Step 3 is refused.
-* Step 4 lists exactly one account for `<existing email>`.
-
-<!-- trace:case id=g10.shared-users.TC-p4w rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
-### shared-auth-users-US5-TC6-1: Create does not enroll loyalty or send invite mail
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1407,143 +568,140 @@ Signed in as operator(holds `<grants>`). No Auth account holds `<attempted email
 
 **Pre-conditions:**
 
-* operator(holds `user:create`, `user:set-role` and `loyalty:read`) is on `<grade10 admin users url>`.
-* No account holds `<silent email>`.
+* The row's operator, also holding `loyalty:read`, is signed in on `<console url>`.
+* No account holds the row's email; its inbox is one the tester reads.
 
 **Test data:**
 
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| silent name | Silent Create | · |
-| silent email | An inbox the tester reads, held by no account | · |
-| silent role | staff | any role from the closed set |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| Operator | Name | Email | Roles chosen | Holds afterwards |
+| --- | --- | --- | --- | --- |
+| holds `user:create` and `user:set-role` | Ada Operator | `ada.operator+<run>@example.com` | `admin` | `admin` |
+| holds `user:create` only | Pat Collector | `pat.collector+<run>@example.com` | `user` | `user` only |
+| holds `user:create` only | No Role Pick | `no.role+<run>@example.com` | none | `user` only |
 
 **Steps:**
 
-1. Click Create.
-2. Enter `<silent name>` and `<silent email>`, and select `<silent role>`.
-3. Submit the form.
-4. Click Confirm.
-5. Open the inbox for `<silent email>`.
-6. Search the loyalty Members page for `<silent email>`.
+1. On the user directory, select Create, enter the row's name and email, choose the row's roles, submit and confirm.
+2. Open the new account.
+3. Open the email's inbox, then search the loyalty Members page for the email.
 
 **Expected Results:**
 
-* Step 4 creates the account.
-* Step 5 holds no invite or sign-in mail from the create.
-* Step 6 finds no member and no opening points.
+* Step 1 asks for no password and creates one account.
+* Step 2 shows the row's name and roles.
+* Step 3: no invite or sign-in mail from the create, and no loyalty member or opening points.
+
+<!-- trace:case id=g10.shared-users.TC-j13 rev=3 -->
+### shared.auth-users.US5-TC2: A create the operator may not make is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-users-US-05
+
+**Pre-conditions:**
+
+* The row's operator, also holding `user:list`, is signed in on `<console url>`.
+
+**Test data:**
+
+| Operator | Name | Email | Role |
+| --- | --- | --- | --- |
+| holds `user:set-role`, not `user:create` | No Create | `no.create@example.com`, held by no account | `user` |
+| holds `user:create`, not `user:set-role` | Almost Staff | `almost.staff@example.com`, held by no account | `staff` |
+| holds `user:create`, not `user:set-role` | Almost Admin | `almost.admin@example.com`, held by no account | `admin` |
+| holds `user:create` and `user:set-role` | Second Taker | the email of an account that has signed in | `user` |
+| holds `user:create` | nothing | `nobody.named@example.com` | `user` |
+| holds `user:create` | No At | `no.at.example.com` | `user` |
+| holds `user:create` | Long Address | a 255-character address | `user` |
+
+**Steps:**
+
+1. On the user directory, select Create, enter the row's name and email, choose the row's role and submit.
+2. Search the directory for the row's email.
+
+**Expected Results:**
+
+* Step 1 is refused, and what was typed stays in the form.
+* Step 2 lists no new account; an email already held still has exactly one.
 
 ---
 
-## shared-auth-users-US6: Account holder files their own request to be forgotten
+## shared.auth-users.US6: Account holder files their own request to be forgotten
 
-**As an** account holder,
+**As a** person with an account,
 **I want** to file the request to be forgotten from my own account's Your data
 page, and to cancel it there inside the seven days,
 **so that** I need not ask an operator to file it, and can change my mind
 before anything is erased.
 
-<!-- trace:case id=g10.shared-users.TC-kac rev=1 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC1-1: Filing opens a seven-day erasure window
+<!-- trace:case id=g10.shared-users.TC-kac rev=2 -->
+### shared.auth-users.US6-TC1: The account holder files a request, which opens a seven-day window and leaves sign-in working
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
-* **Automation status:** automated
+* **Suites:** smoke, regression
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
 **Pre-conditions:**
-Signed in as `<a subject user id>`, on `<Your data page>`. No erasure request is open for that account.
+
+* customer(holds `user` only) is signed in on `<g10url>`, on the Your data page, with the row's history.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Your data page | The signed-in Grade10 Your data URL in the test environment; bind its URL only |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+| History |
+| --- |
+| never filed a request |
+| filed one earlier and cancelled it |
 
 **Steps:**
 
-1. Open Ask to be forgotten.
+1. Select Ask to be forgotten.
 2. Confirm the request.
+3. Sign out, then sign in again.
 
 **Expected Results:**
 
-* Step 1 opens a confirmation naming the seven-day window and that the request can be cancelled inside it.
-* The account holds one open erasure request, filed today, that matures in seven days.
+* Step 1: a confirmation names the seven-day window and that the request can be cancelled inside it.
+* Step 2: one open request, filed today, maturing in seven days.
+* Step 3: signed in; the open request does not block it.
 
-<!-- trace:case id=g10.shared-users.TC-j41 rev=1 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC2-1: An open self-filed request leaves sign-in working
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-`<a subject user id>` has filed their own erasure request. The seven-day window is still open.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Complete a sign-in method as `<a subject user id>`.
-
-**Expected Results:**
-
-* That person signs in; the open request does not block it.
-
-<!-- trace:case id=g10.shared-users.TC-ov6 rev=1 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC3-1: Cancelling inside the window closes the request
+<!-- trace:case id=g10.shared-users.TC-ov6 rev=1 -->
+### shared.auth-users.US6-TC2: The account holder cancels the request inside the window
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
 **Pre-conditions:**
-Signed in as `<a subject user id>`, on `<Your data page>`. `<a subject user id>` has an open self-filed erasure request, filed six days ago on the brand's own zone, so the day an erasure may run has not opened.
 
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Your data page | The signed-in Grade10 Your data URL in the test environment; bind its URL only |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+* customer is signed in on `<g10url>`, on the Your data page, with a request they filed six days ago, so the day an erasure may run has not opened.
 
 **Steps:**
 
@@ -1551,123 +709,18 @@ Signed in as `<a subject user id>`, on `<Your data page>`. `<a subject user id>`
 
 **Expected Results:**
 
-* The request no longer shows as open.
-* The page offers Ask to be forgotten again.
+* The request no longer shows as open, and Ask to be forgotten is offered again.
 
-<!-- trace:case id=g10.shared-users.TC-h4v rev=1 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC4-1: A new request can be filed after cancelling
+<!-- trace:case id=g10.shared-users.TC-z1x rev=2 -->
+### shared.auth-users.US6-TC3: Asking twice is asking once
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** minor
 * **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-Signed in as `<a subject user id>`, on `<Your data page>`. `<a subject user id>` previously filed and then cancelled an erasure request.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Your data page | The signed-in Grade10 Your data URL in the test environment; bind its URL only |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Open Ask to be forgotten.
-2. Confirm the request.
-
-**Expected Results:**
-
-* A new open erasure request is created, filed today.
-
-<!-- trace:case id=g10.shared-users.TC-z1x rev=1 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC5-1: A second filing answers the already-open request
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** shared-auth-users-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-`<a subject user id>` already has an open self-filed erasure request.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. File the request to be forgotten again.
-
-**Expected Results:**
-
-* No second request is created.
-* The existing open request is unchanged, still maturing on its original date.
-
-<!-- trace:case id=g10.shared-users.TC-8yc rev=1 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC6-1: Cancelling with nothing open changes nothing
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** none
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** shared-auth-users-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure request.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Try to cancel the request to be forgotten.
-
-**Expected Results:**
-
-* Nothing changes.
-* No erasure request exists for that account after the attempt.
-
-<!-- trace:case id=g10.shared-users.TC-vwr rev=1 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC7-1: Cancel is refused once the window has matured
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1677,100 +730,93 @@ Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure 
 
 **Pre-conditions:**
 
-* customer is signed in as `<subject user id>` and on `<grade10 your data url>`.
-* `<subject user id>` filed their own erasure request seven days ago, on the brand's zone, so today an erasure may run.
+* customer is signed in on `<g10url>`, with the Your data page open in tabs A and B, in the row's state.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| subject user id | An account holding `user` only, with that request open |
-
-| Field | Value |
-| --- | --- |
-| grade10 your data url | The signed-in Grade10 Your data URL in the test environment; bind its URL only |
+| State | In tab A | Then in tab B, not reloaded | Afterwards |
+| --- | --- | --- | --- |
+| no request open | file the request | file the request | one open request, maturing on tab A's date |
+| one request open | cancel it | cancel it | no request open, and nothing else changes |
 
 **Steps:**
 
-1. Read the erasure request on the page.
-2. Look for a cancel control.
+1. Do the row's act in tab A.
+2. Do the row's act in tab B.
+3. Reload tab B.
 
 **Expected Results:**
 
-* Step 1 reads the request as filed, the window passed.
-* Step 2 finds no cancel offered.
-* The request stays open.
+* Step 3: the row's outcome.
 
-<!-- trace:case id=g10.shared-users.TC-o0n rev=1 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC8-1: An operator's filing bans and takes over the request
+<!-- trace:case id=g10.shared-users.TC-vwr rev=2 -->
+### shared.auth-users.US6-TC4: The account holder cannot cancel once the window has passed or an operator took the request over
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
 **Pre-conditions:**
-`<a subject user id>` has an open self-filed erasure request, inside the seven-day window. An operator holding `user:delete` files an erasure request for `<a subject user id>` from the directory.
+
+* customer is signed in on `<g10url>`, on the Your data page, with the row's request.
 
 **Test data:**
 
-| Field | Value |
+| Request | Shown |
 | --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+| filed by the holder seven days ago, so today an erasure may run | the request reads filed, the window passed, and no cancel is offered |
+| filed by the holder, then an operator filed over it, inside the window | a cancel, if selected, is refused |
 
 **Steps:**
 
-1. Try to complete a sign-in method as `<a subject user id>`.
+1. Read the request, and select cancel where it is offered.
+2. Reload the page.
 
 **Expected Results:**
 
-* The request becomes the operator's, with a ban applied.
-* Completing a sign-in method does not sign `<a subject user id>` in.
+* Step 1: the row's outcome.
+* Step 2: the request is still open; a taken-over one reads filed by the operator.
 
-
-<!-- trace:case id=g10.shared-users.TC-y5k rev=2 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
-### shared-auth-users-US6-TC9-2: A taken-over request refuses the account holder's own cancel
+<!-- trace:case id=g10.shared-users.TC-o0n rev=1 -->
+### shared.auth-users.US6-TC5: An operator's filing over the holder's request bans the account and takes the request over
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
 **Pre-conditions:**
-`<a subject user id>` filed their own erasure request, and an operator holding `user:delete` then filed over it. The seven-day window has not passed.
 
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+* `<subject account>` holds a request it filed itself, inside the seven-day window.
+* admin(holds `user:delete`) is signed in on `<console url>`.
 
 **Steps:**
 
-1. Send the account holder's own cancel as `<a subject user id>`.
+1. Open `<subject account>` and file an erasure request.
+2. Sign in as `<subject account>` on `<g10url>`.
 
 **Expected Results:**
 
-* The system refuses the cancel.
-* The request stays open, filed by the operator.
+* Step 1: the request reads filed by the operator, and the account banned.
+* Step 2: no session starts.
+
 ## Settled
 
 - Empty role selection at create leaves the account as `user` only (Q13).
@@ -1784,6 +830,8 @@ Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure 
 - The cancel is refused from the first instant of the day an erasure may run, and the request stands until every product has erased what it holds. The guard that holds it to that day is the tech design's, raised there for engineering.
 
 ## Reconciliation
+
+- **Assumed** - an email address has one `@`, a domain containing a `.`, and at most 254 characters; after a refused submit, what was typed stays (Common Rules). They ride on `shared.auth-users.US5-TC2`
 
 **Run:** Blind pass read Purpose, Feature set, user-journeys.md, decisions.md (Raised included), the linked Users · Ban and Unban / Role Changes PRD sections, this suite for id continuity, and `shared/auth/domain-tcs.md` for id continuity, all with Reconciliation/Requirements stripped. Denied: every Requirements section, openspec/specs/ beyond Purpose, Feature set and the domain suite, openspec/changes/archive/. (Change: `close-revoked-session-cache-gap`.)
 
