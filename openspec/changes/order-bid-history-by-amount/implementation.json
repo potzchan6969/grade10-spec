@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "7744ed9b26f7c155562fd03bc23415d1d57933e98623ad4ed8f85b42d1a91ce7"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "9e8eef613aa06b54a3700883e388c1ada6593221",
+    "capturedAt": "2026-10-24T19:34:20.762Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: One listing history combines public movement and private meaning in whole decisions"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

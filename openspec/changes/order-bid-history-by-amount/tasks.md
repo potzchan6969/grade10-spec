@@ -1,4 +1,4 @@
-## 1. Bidding Rules page (grade10-spec)
+## 1. Bidding Rules page (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Keep the Bidding History line and the "Story order" decision row on the Bidding Rules page in step with the accepted delta (`grade10-site-auction-bidding-history-SC-12`, `grade10-site-auction-bidding-history-SC-54`, `grade10-site-auction-bidding-history-SC-55`, `grade10-site-auction-bidding-history-SC-56`)
 - [ ] 1.2 Verify: `pnpm check:manual`, `pnpm run validate:changes`
