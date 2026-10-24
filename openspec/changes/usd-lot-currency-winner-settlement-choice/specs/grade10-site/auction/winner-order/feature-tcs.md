@@ -323,16 +323,18 @@ Runs once per row of **Test data**.
 **I want** to settle in USD or HKD when I set the order up,
 **so that** I pay in the currency my money is already in.
 
-<!-- trace:case id=g10.auction-winner-order.TC-ayp rev=1 covers=g10.auction-winner-order.SC-o92 -->
-### g10.auction-winner-order.US24-TC1: Order setup offers USD and HKD without a choice
+<!-- trace:case id=g10.auction-winner-order.TC-ayp rev=2 covers=g10.auction-winner-order.SC-o92,g10.auction-winner-order.SC-zk3,g10.auction-winner-order.SC-mw8 -->
+### g10.auction-winner-order.US24-TC1: Setup opens on the first currency offered and its first method a currency can take
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
+* **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -340,16 +342,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A winner is on setup for a won lot whose auction bids were in USD.
+* customer(winner) holds `<order>`, won in USD, in Awaiting Setup with a saved Home address; Grade10 offers `<currencies>`, with `<card rule>`.
+
+**Test data:**
+
+| `<currencies>` | `<card rule>` | `<opens>` | `<selected method>` |
+| --- | --- | --- | --- |
+| USD and HKD | an HKD card fee rule | a currency picker, USD selected | Card |
+| HKD only | an HKD card fee rule | Pay in HKD, with no picker | Card |
+| HKD only | no card fee rule | Pay in HKD, with no picker | FPS, card not selectable |
 
 **Steps:**
 
-1. Read the settlement currency and payment method choices.
+1. Read the settlement currency and the payment methods.
+2. Where both currencies are offered, choose another method and confirm.
 
 **Expected Results:**
 
-* USD and HKD are offered; neither is selected.
-* No payment method is selected before a currency is chosen.
+* Step 1 reads `<opens>`, `<selected method>` selected; the order stays Awaiting Setup.
+* Step 2 records the method chosen, and the order reads Preparing Invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-79a rev=2 covers=g10.auction-winner-order.SC-8c6 -->
 ### g10.auction-winner-order.US24-TC2: Chosen settlement currency prices the invoice
