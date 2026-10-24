@@ -1,50 +1,44 @@
 # grade10-site/auction/bidding-history Test Cases
 
-**Status:** reopened · 15/40
+**Status:** reopened · 9/26
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
 
 ## Background
 
-* `<bids url>` is `<g10url>/bids`, the signed-in account's Bids page on the Grade10 site of the environment under test: Active and Completed summaries, each expanding into that listing's combined history. A listing's page carries Your bidding beside public Recent bids. `<zzz url>` is the ZZZ site.
-* Every listing is priced in USD. The step is chosen by the amount being beaten: +USD1 from USD0, +USD2 from USD10, +USD25 from USD200, +USD100 from USD1,000, +USD500 from USD5,000.
+* `<bids url>` is `<g10url>/bids`, the signed-in account's Bids page: Active and Completed summaries, each expanding into that listing's history. A listing's page carries Your bidding beside public Recent bids. `<zzz url>` is the ZZZ site.
+* Every listing is priced in USD, whole dollars: +USD1 from USD0, +USD2 from USD10, +USD25 from USD200, +USD100 from USD1,000, +USD500 from USD5,000.
+* Collectors are signed in with a card linked, on separate sessions.
 
 ## Walk 1: Read one collector's bids across states
 
 Starting state:
 
-- customer A(signed in) bid on `<leading listing>` and still leads it, and set then raised a maximum there.
-- customer A bid on `<outbid listing>`, since led by customer B; won `<won listing>`; and bid on `<called-off listing>` before an operator called it off.
+- customer A leads `<leading listing>`, where it set then raised a maximum; customer B leads `<outbid listing>` over customer A; customer A won `<won listing>` and bid on `<called-off listing>` before an operator called it off.
 
 Shared test data:
 
 | Field | Value |
 | --- | --- |
-| leading listing | An open USD listing customer A leads |
-| outbid listing | An open USD listing customer B leads |
-| won listing | A closed listing customer A won |
+| leading listing | An open USD listing |
+| outbid listing | An open USD listing |
+| won listing | A closed listing |
 | called-off listing | A listing called off after customer A's bid |
 
 ### Route
 
 1. Open `<bids url>`.
-   - Active shows inside the site chrome. `g10.auction-bidding-history.US5-TC1`
-   - Active lists `<leading listing>` and `<outbid listing>` only. `g10.auction-bidding-history.US1-TC3`
-   - `<leading listing>` shows once, Leading, with its current price; `<outbid listing>` shows Outbid. `g10.auction-bidding-history.US1-TC6`
-   - `<leading listing>` shows once, at its latest activity, though customer A set and raised a maximum on it. `g10.auction-bidding-history.US1-TC1`
-2. Expand `<outbid listing>`.
-   - Its history names the public movement that outbid You, and offers a way to the open listing. `g10.auction-bidding-history.US5-TC2`
+   - Active, inside the site chrome, lists the leading and outbid listings once each, Leading and Outbid with their prices. `g10.auction-bidding-history.US1-TC1`
+2. Expand `<leading listing>`.
+   - A maximum set, then a maximum raised, and no refusal. `g10.auction-bidding-history.US8-TC1`
 3. Select Completed.
-   - The page stays the same, now listing `<won listing>` and `<called-off listing>`. `g10.auction-bidding-history.US5-TC1`
-   - `<won listing>` reads Won and `<called-off listing>` Canceled, each with its final price. `g10.auction-bidding-history.US1-TC6`
+   - The won listing reads Won and the called-off one Canceled, each with its final price. `g10.auction-bidding-history.US1-TC1`
 
 ## Walk 2: Read one listing's bidding from its page
 
 Starting state:
 
-- customer A(signed in) set a maximum on `<listing>`, raised it, then had a further raise refused; Grade10 has placed bids for customer A there.
-- customer B, whose account email is ada@example.com, holds a private maximum on `<listing>`.
-- customer A is on `<listing>`'s page, with Recent bids, the live maximum and standing noted.
+- customer A set a maximum on `<listing>`, raised it, then had a further raise refused; Grade10 has placed bids for customer A there; customer B, email ada@example.com, holds a private maximum there; customer A is on its page, with Recent bids, the live maximum and standing noted.
 
 Shared test data:
 
@@ -55,13 +49,13 @@ Shared test data:
 ### Route
 
 1. Read customer B's row in Recent bids.
-   - Its avatar shows A beside the listing pseudonym, never the email or a name. `g10.auction-bidding-history.US9-TC1`
+   - Its avatar shows A beside the listing pseudonym. `g10.auction-bidding-history.US9-TC1`
 2. Activate Your bidding.
-   - It opens on Bid placed, listed first, showing each bid Grade10 placed for customer A. `g10.auction-bidding-history.US7-TC1`
+   - It opens on Bid placed, listed first, with each bid Grade10 placed for customer A. `g10.auction-bidding-history.US7-TC1`
 3. Activate Your maximums.
-   - It lists the raise, then the set, each an amount and a time, and never the refused raise or customer B's maximum. `g10.auction-bidding-history.US6-TC2`
-4. Close the dialog and read the listing.
-   - Recent bids, the live maximum and standing match the note. `g10.auction-bidding-history.US7-TC3`
+   - The raise, then the set, never the refused raise or customer B's maximum. `g10.auction-bidding-history.US6-TC2`
+4. Close the dialog.
+   - Recent bids, the live maximum and standing match the note. `g10.auction-bidding-history.US6-TC3`
 
 ## g10.auction-bidding-history.US1: Collector reads their bidding index
 
@@ -69,66 +63,7 @@ Shared test data:
 **I want** every listing I placed a bid on in one private index,
 **so that** I can see my standing without hunting through the catalogue.
 
-### g10.auction-bidding-history.US1-TC1: Repeated activity is grouped under one listing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) set a maximum on `<listing_3>`, then raised it.
-
-**Steps:**
-
-1. Open `<bids url>` and find `<listing_3>`.
-
-**Expected Results:**
-
-* `<listing_3>` shows once, at the place of its latest activity, with the customer's current standing.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-c6d rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz -->
-### g10.auction-bidding-history.US1-TC3: Active and Completed separate open from finished listings
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) has accepted bids on open `<listing_9>`, closed `<listing_10>` and called-off `<listing_11>`.
-
-**Steps:**
-
-1. Open `<bids url>`, select Active, then Completed.
-
-**Expected Results:**
-
-* Active lists `<listing_9>` only.
-* Completed lists `<listing_10>` and `<listing_11>`.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-wit rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
-### g10.auction-bidding-history.US1-TC6: Each listing reads Leading, Outbid, Won or Canceled
+### g10.auction-bidding-history.US1-TC1: Each listing shows once, under Active or Completed, reading its standing
 
 Runs once per row of **Test data**.
 
@@ -148,65 +83,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in) placed a bid on `<listing_18>`, which is now `<state>`.
+* customer A placed bids on `<listing>`, set and raised a maximum there, and it is now `<state>`.
 
 **Test data:**
 
 | `<state>` | `<filter>` | `<standing>` |
 | --- | --- | --- |
-| Open, customer A leading | Active | Leading |
-| Open, customer B leading | Active | Outbid |
-| Closed, customer A won | Completed | Won |
-| Closed, customer B won | Completed | Outbid |
-| Called off after customer A's bid | Completed | Canceled |
+| open, customer A leading | Active | Leading |
+| open, customer B leading | Active | Outbid |
+| closed, customer A won | Completed | Won |
+| closed, customer B won | Completed | Outbid |
+| called off after customer A's bid | Completed | Canceled |
 
 **Steps:**
 
-1. Open `<bids url>`, select `<filter>`, and find `<listing_18>`.
+1. Open `<bids url>`, select `<filter>`, and find `<listing>`; then select the other filter.
 
 **Expected Results:**
 
-* `<listing_18>` shows once, reading `<standing>` with its current or final price.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-bhz rev=2 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz -->
-### g10.auction-bidding-history.US1-TC2: A listing whose only bid was refused is not in the Bids page
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in, card linked) has an accepted bid on `<listing_6>`, has never bid on `<listing_7>`, and is on `<listing_7>`'s page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_6>` | An open USD listing the customer bid on |
-| `<listing_7>` | An open USD listing with no bid, starting at `<opening price>` |
-| `<opening price>` | USD370 (range: 20000–99999 minor units) |
-| `<refused bid>` | USD120 (range: below `<opening price>`) |
-
-**Steps:**
-
-1. Enter `<refused bid>` in the custom maximum and confirm.
-2. Open `<bids url>`, select Active, then Completed.
-
-**Expected Results:**
-
-* Step 1: the bid form names the minimum, `<opening price>`.
-* Step 2 lists `<listing_6>` and never `<listing_7>`; every standing reads Leading, Outbid, Won or Canceled.
+* Under `<filter>` it shows once, at its latest activity, reading `<standing>` with its current or final price; it is absent under the other filter.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-s3o rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz -->
 ### g10.auction-bidding-history.US1-TC4: Paging repeats and skips no listing
@@ -227,7 +122,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) has more Active listings than one page holds, and no new activity happens during the pass.
+* customer has more Active listings than one page holds; no new activity happens during the pass.
 
 **Steps:**
 
@@ -256,55 +151,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) has placed no bid; another Grade10 account, and a ZZZ account with the same account id, have bids.
+* customer has placed no bid; another Grade10 account, and a ZZZ account with the same account id, have bids.
 
 **Steps:**
 
-1. Open `<bids url>`.
+1. Open `<bids url>`, under Active and Completed.
 
 **Expected Results:**
 
-* The page is empty, and it is this account's.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-hv4 rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
-### g10.auction-bidding-history.US1-TC7: A refused bid leaves an Outbid listing where it was
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer A(signed in, card linked) bid on `<listing_21>` and `<listing_22>`, later on `<listing_22>`; customer B has since outbid customer A on `<listing_21>`.
-* customer A is on `<listing_21>`'s page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<current bid>` | USD5,460 (range: 500000–799999 minor units), `<listing_21>`'s current bid |
-| `<next minimum>` | USD5,960 (fixed derived): `<current bid>` plus the USD500 step |
-| `<refused bid>` | `<current bid>` (fixed: below `<next minimum>`) |
-
-**Steps:**
-
-1. Enter `<refused bid>` in the custom maximum and confirm.
-2. Open `<bids url>`, read Active, and expand `<listing_21>`.
-
-**Expected Results:**
-
-* Step 1: the bid form names `<next minimum>`.
-* Step 2: `<listing_21>` reads Outbid at `<current bid>`, still below `<listing_22>`, its latest activity time and its history those of its last accepted bid.
+* Both are empty, each with its empty state, and nothing of the other accounts shows.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-92c rev=1 covers=g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
 ### g10.auction-bidding-history.US1-TC8: A call-off adds no listing for a collector who never bid on it
@@ -325,17 +180,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A placed a bid on `<listing_24>`; customer B watches it and never bid; an operator then called it off.
+* customer B watches `<listing>` and never bid; an operator called it off.
 
 **Steps:**
 
-1. As customer A, open `<bids url>` and select Completed.
-2. As customer B, open `<bids url>` and select Active, then Completed.
+1. As customer B, open `<bids url>` under Active and Completed.
 
 **Expected Results:**
 
-* Step 1 lists `<listing_24>`, Canceled.
-* Step 2 lists customer B's own listings and never `<listing_24>`.
+* `<listing>` is never listed.
 
 ---
 
@@ -345,8 +198,8 @@ Runs once per row of **Test data**.
 **I want** every maximum Grade10 accepts for me kept as a private event,
 **so that** I can see what I set or raised, and what was placed automatically, without exposing my maximum to a rival.
 
-<!-- trace:case id=g10.auction-bidding-history.TC-1ao rev=2 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
-### g10.auction-bidding-history.US2-TC1: An accepted bid is recorded once, as a maximum
+<!-- trace:case id=g10.auction-bidding-history.TC-5aw rev=1 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
+### g10.auction-bidding-history.US2-TC4: Each accepted maximum is recorded once, set or raised, and stays private
 
 **Classification:**
 
@@ -354,7 +207,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** security
 * **Suites:** regression
 * **Automation status:** automated
 * **Testability:** automation, manual
@@ -364,22 +217,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked) has not bid on `<listing_27>`, which has no other bidder and opens at USD100, and is on its page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<maximum>` | USD560 (range: 50000–99999 minor units) |
+* customer A has not bid on `<listing>`, which opens at USD280 with no other bidder; customer B can open the same listing.
 
 **Steps:**
 
-1. Enter `<maximum>` in the custom maximum and place the bid.
-2. Open `<bids url>` and expand `<listing_27>`.
+1. As customer A, place a maximum of USD420, then raise it to USD560.
+2. Open `<bids url>` and expand `<listing>`.
+3. As customer B, open `<bids url>`; then, signed out, open `<listing>` and read Recent bids.
 
 **Expected Results:**
 
-* Step 2 shows one event, a maximum set at `<maximum>`.
+* Step 2 records one maximum set at USD420, then one raised to USD560.
+* Step 3: customer B's Bids page lists only its own listings; Recent bids shows the public price under a listing pseudonym, and neither maximum.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-q0n rev=2 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
 ### g10.auction-bidding-history.US2-TC2: A refused raise adds nothing to the history
@@ -400,24 +249,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in, card linked) leads `<listing_30>` with a maximum of `<maximum>`; its history on `<bids url>` and its bid count are noted; customer A is on its page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<maximum>` | USD200 (range: 1000–79999 minor units) |
-| `<refused raise>` | `<maximum>` (fixed equality) |
+* customer A leads `<listing>` with a maximum of USD200; its history and bid count are noted.
 
 **Steps:**
 
-1. Enter `<refused raise>` in the custom maximum and confirm.
-2. Open `<bids url>`, expand `<listing_30>`, then return to its page and read the bid count.
+1. Commit USD200 again.
+2. Expand `<listing>` on `<bids url>`, and read its bid count.
 
 **Expected Results:**
 
-* Step 1 keeps `<maximum>` as the maximum on file.
-* Step 2 shows the noted history and bid count.
+* Step 1 keeps USD200 as the maximum; step 2 matches the note.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-l6l rev=1 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
 ### g10.auction-bidding-history.US2-TC3: An amount with cents is stopped in the field and sends nothing
@@ -438,64 +279,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked) has not bid on `<listing_33>`; `<bids url>` is noted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<malformed maximum>` | 10.50 (fixed: not whole dollars) |
+* customer has not bid on `<listing>`; `<bids url>` is noted.
 
 **Steps:**
 
-1. Open `<listing_33>`, type `<malformed maximum>` in the custom maximum, and read it.
+1. On `<listing>`, type 10.50 in the custom maximum and read it.
 2. Return to `<bids url>`.
 
 **Expected Results:**
 
-* Step 1 shows `<malformed maximum>` not accepted, and no bid is sent.
-* Step 2 matches the note.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-5aw rev=1 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
-### g10.auction-bidding-history.US2-TC4: Set and raised maximums are recorded and stay private
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer A(signed in, card linked) has not bid on `<listing_36>`, which opens at USD280, and is on its page; customer B can open the same listing.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<first maximum>` | USD420 (range: 28000–79999 minor units) |
-| `<raised maximum>` | USD560 (range: above `<first maximum>`) |
-
-**Steps:**
-
-1. As customer A, place `<first maximum>`, then `<raised maximum>`.
-2. Open `<bids url>` and expand `<listing_36>`.
-3. As customer B, open `<bids url>`.
-4. Signed out, open `<listing_36>` and read Recent bids.
-
-**Expected Results:**
-
-* Step 2 records `<first maximum>`, then `<raised maximum>`.
-* Step 3 lists customer B's own listings only.
-* Step 4 shows the public price under a listing pseudonym, and neither maximum.
+* Step 1 does not accept 10.50 and sends no bid; step 2 matches the note.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-shn rev=1 covers=g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv -->
 ### g10.auction-bidding-history.US2-TC5: A bid Grade10 placed is labelled automatic
@@ -516,26 +309,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A leads `<listing_39>` at USD280 with a maximum of USD680; customer B(signed in, card linked) is on its page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<customer B maximum>` | USD430 (range: below USD680) |
+* customer A leads `<listing>` at USD280 with a maximum of USD680.
 
 **Steps:**
 
-1. As customer B, place `<customer B maximum>`.
-2. As customer A, open `<bids url>` and expand `<listing_39>`.
-3. Signed out, open `<listing_39>` and read the new price.
+1. As customer B, place a maximum of USD430.
+2. As customer A, expand `<listing>` on `<bids url>`.
 
 **Expected Results:**
 
-* Step 2 labels customer A's answering movement as automatic.
-* Step 3 shows the new price under the listing pseudonym.
+* customer A's answering movement, to USD455 (USD430 plus the USD25 step), is labelled automatic.
 
 ---
+
 ## g10.auction-bidding-history.US3: Collector reads one listing's combined history
 
 **As a** collector,
@@ -543,7 +329,9 @@ Runs once per row of **Test data**.
 **so that** I can see how I was outbid without seeing anyone's hidden maximum.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-sow rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### g10.auction-bidding-history.US3-TC1: A competing bid shows customer A outbid at the public price
+### g10.auction-bidding-history.US3-TC1: A listing's history interleaves the public movement with the collector's own, in order
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -561,131 +349,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in) leads `<listing_42>` at `<opening price>`, with a maximum equal to `<opening price>`.
-* customer B(signed in, card linked) is on `<listing_42>`'s page.
+* customer A leads `<listing>` at USD300 with a maximum of `<A maximum>`; customer B is on its page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<opening price>` | USD360 (range: 1000–79999 minor units) |
-| `<customer B maximum>` | USD520 (range: above `<opening price>`) |
+| `<A maximum>` | `<B maximum>` | `<history after>` |
+| --- | --- | --- |
+| USD300 | USD520 | customer B's bid under the listing pseudonym, then customer A outbid at USD325, never USD520 |
+| USD650 | USD410 | customer B's bid first, then customer A's automatic answer at USD435, read as one step |
 
 **Steps:**
 
-1. As customer B, enter `<customer B maximum>` in the custom maximum and place the bid.
-2. As customer A, open `<bids url>` and expand `<listing_42>`.
+1. As customer B, place `<B maximum>`.
+2. As customer A, expand `<listing>` on `<bids url>`.
 
 **Expected Results:**
 
-* Step 2 shows customer B under the listing pseudonym, and customer A outbid at the public price, never at `<customer B maximum>`.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-i8u rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### g10.auction-bidding-history.US3-TC2: An automatic response is attributed to customer A after the bid it answers
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer A(signed in) leads `<listing_45>` at `<current bid>` with a maximum of `<customer A maximum>`.
-* customer B(signed in, card linked) is on `<listing_45>`'s page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<current bid>` | USD300 (range: 1000–79999 minor units) |
-| `<customer A maximum>` | USD650 (range: above `<customer B maximum>`) |
-| `<customer B maximum>` | USD410 (range: above `<current bid>`) |
-
-**Steps:**
-
-1. As customer B, enter `<customer B maximum>` in the custom maximum and place the bid.
-2. As customer A, open `<bids url>` and expand `<listing_45>`.
-
-**Expected Results:**
-
-* Customer B's bid comes first and customer A's answering movement follows it, labelled automatic, the two read as one step.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-mug rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### g10.auction-bidding-history.US3-TC4: A long history loads in full, each entry once
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) has more history entries on `<listing_48>` than one page holds; no new bid lands during the pass.
-
-**Steps:**
-
-1. Open `<bids url>`, expand `<listing_48>`, and load every further page of its history.
-
-**Expected Results:**
-
-* Every entry shows exactly once, in the same order.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-iuc rev=1 covers=g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
-### g10.auction-bidding-history.US3-TC5: Loading more never splits one bid and its answer
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* On `<listing_51>`, customer A raised to `<accepted price>`, customer B answered automatically at `<response price>`, and customer A was outbid, between an older and a newer rival price; the history holds more than one page; no new bid lands during the pass.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<accepted price>` | USD320 (range: 10000–49999 minor units) |
-| `<response price>` | USD330 (fixed derived): `<accepted price>` plus the USD10 step |
-
-**Steps:**
-
-1. As customer A, open `<bids url>`, expand `<listing_51>`, and load every further page.
-
-**Expected Results:**
-
-* `<accepted price>`, customer B's answer at `<response price>` and the Outbid standing show together, never split by a further page.
+* It reads `<history after>`, in the public price, never a rival's maximum.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-mq5 rev=1 covers=g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
-### g10.auction-bidding-history.US3-TC6: A rival maximum at or below the leader's is answered automatically
+### g10.auction-bidding-history.US3-TC6: A rival maximum against a leader's writes the stated public history
 
 Runs once per row of **Test data**.
 
@@ -693,6 +376,44 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Pre-conditions:**
+
+* customer A leads `<listing>` at USD4 with a maximum of USD10; customer B has not bid on it.
+
+**Test data:**
+
+| `<B maximum>` | `<recent bids>` |
+| --- | --- |
+| USD5 | customer B at USD5, then customer A's automatic USD6 |
+| USD9 | customer B at USD9, then customer A's automatic USD10 |
+| USD10 (fixed: tie) | customer B at USD10, then customer A's automatic USD10, customer A leading as the earlier maximum |
+| USD11 | customer B at USD11 once (USD10 plus the USD2 step, capped), no new row for customer A |
+| USD13 | customer B at USD12 once (USD10 plus the USD2 step), no new row for customer A |
+
+**Steps:**
+
+1. As customer B, place `<B maximum>`.
+2. Read Recent bids, and customer B's history on `<bids url>`.
+
+**Expected Results:**
+
+* Recent bids reads `<recent bids>` under listing pseudonyms; customer B's history records a maximum set at `<B maximum>`.
+
+<!-- trace:case id=g10.auction-bidding-history.TC-mug rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
+### g10.auction-bidding-history.US3-TC4: A long history loads in full, each entry once, never splitting one bid from its answer
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -705,95 +426,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A leads `<listing_54>` at USD4 with a maximum of USD10.
-* customer B(signed in, card linked) has not bid on `<listing_54>` and is on its page.
-
-**Test data:**
-
-| `<customer B maximum>` | `<answer>` |
-| --- | --- |
-| USD5 | USD6 |
-| USD7 | USD8 |
-| USD9 | USD10 |
-| USD10 | USD10 (fixed: tie, the earlier maximum keeps the lead) |
+* customer A's history on `<listing>` holds more entries than one page; in it customer A raised to USD320, customer B answered automatically at USD330, and customer A was outbid; no new bid lands during the pass.
 
 **Steps:**
 
-1. As customer B, enter `<customer B maximum>` in the custom maximum and place the bid.
-2. Read Recent bids.
+1. Open `<bids url>`, expand `<listing>`, and load every further page.
 
 **Expected Results:**
 
-* Customer B's bid at `<customer B maximum>` comes first, then customer A's automatic answer at `<answer>`, both under listing pseudonyms; customer A leads.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-sc6 rev=1 -->
-### g10.auction-bidding-history.US3-TC7: A rival maximum above the leader's takes the lead once, capped at that maximum
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-03
-
-**Pre-conditions:**
-
-* customer A leads `<listing_54>` at USD4 with a maximum of USD10.
-* customer B(signed in, card linked) has not bid on `<listing_54>` and is on its page.
-
-**Test data:**
-
-| `<customer B maximum>` | `<price>` |
-| --- | --- |
-| USD11 | USD11 (fixed: USD10 plus the USD2 step, capped at `<customer B maximum>`) |
-| USD13 | USD12 (fixed derived: USD10 plus the USD2 step) |
-
-**Steps:**
-
-1. As customer B, enter `<customer B maximum>` in the custom maximum and place the bid.
-2. Read Recent bids.
-3. Open `<bids url>` and expand `<listing_54>`.
-
-**Expected Results:**
-
-* Step 2 adds one bid, customer B's at `<price>`, and no new bid for customer A; customer B leads.
-* Step 3 shows `<customer B maximum>` as customer B's maximum set.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-ybl rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### g10.auction-bidding-history.US3-TC3: Failed attempt sits beside unchanged auction state
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-auction-bidding-history-US-03
-
-**Retirement:** A refused bid is no longer kept as a history event; `g10.auction-bidding-history.US2-TC2` holds that a refusal adds nothing.
-
-**Pre-conditions:**
-
-* A collector's attempt fails while another bidder leads.
-
-**Steps:**
-
-1. Open `<bids url>` and expand that listing.
-
-**Expected Results:**
-
-* The listing's price and leading pseudonym are unchanged.
+* Every entry shows once, in order, and USD320, customer B's USD330 and the Outbid standing show together, never split by a further page.
 
 ---
 
@@ -822,16 +463,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in) and customer B have each bid on `<listing_57>`, and customer B on `<listing_58>`, where customer A never bid.
+* customer A and customer B have each bid on `<listing A>`; customer B alone bid on `<listing B>`.
 
 **Steps:**
 
-1. As customer A, open `<bids url>`, select Active then Completed, and expand `<listing_57>`.
+1. As customer A, open `<bids url>`, under Active and Completed, and expand `<listing A>`.
 
 **Expected Results:**
 
-* `<listing_58>` is never listed.
-* `<listing_57>`'s history shows customer A's own maximums and the public price under listing pseudonyms, never customer B's maximum.
+* `<listing B>` is never listed; `<listing A>`'s history shows customer A's own maximums and the public price, never customer B's maximum.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-0mp rev=1 covers=g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
 ### g10.auction-bidding-history.US4-TC2: The same account id on ZZZ sees none of the Grade10 bidding
@@ -850,7 +490,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Grade10 and ZZZ each have an account with the same account id; the Grade10 account has bid on `<listing_60>`.
+* Grade10 and ZZZ each have an account with the same account id; the Grade10 one bid on `<listing>`.
 
 **Steps:**
 
@@ -858,10 +498,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* `<listing_60>` and its maximums never show; only ZZZ's own activity does.
+* `<listing>` and its maximums never show.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-87o rev=1 covers=g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
-### g10.auction-bidding-history.US4-TC4: Reading history changes nothing on the listing
+### g10.auction-bidding-history.US4-TC4: Reading the Bids page changes nothing on the listing
 
 **Classification:**
 
@@ -879,12 +519,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) has a history on `<listing_63>`; its price, the customer's maximum and standing, and its closing time are noted.
+* customer has a history on `<listing>`; its price, the customer's maximum and standing, and its close are noted.
 
 **Steps:**
 
-1. Open `<bids url>`, load every page, and expand and page `<listing_63>`'s history.
-2. Open `<listing_63>`.
+1. Open `<bids url>`, load every page, and expand and page `<listing>`'s history.
+2. Open `<listing>`.
 
 **Expected Results:**
 
@@ -900,7 +540,9 @@ listing's history,
 **so that** I can audit standing without leaving the page.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-p6t rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### g10.auction-bidding-history.US5-TC1: The Bids page opens on Active inside the site chrome
+### g10.auction-bidding-history.US5-TC1: The Bids page opens on Active inside the site chrome, an empty filter saying so
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -918,7 +560,14 @@ listing's history,
 
 **Pre-conditions:**
 
-* customer(signed in) has active and completed bids.
+* customer has `<bids>`.
+
+**Test data:**
+
+| `<bids>` | `<active reads>` |
+| --- | --- |
+| active and completed bids | the Active summaries |
+| completed bids only | the Active empty state |
 
 **Steps:**
 
@@ -927,39 +576,7 @@ listing's history,
 
 **Expected Results:**
 
-* Step 1 shows the Active summaries inside the site chrome.
-* Step 2 stays on the same page, showing the Completed summaries.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-04o rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### g10.auction-bidding-history.US5-TC2: An Outbid summary explains the outbid and leads to the listing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) is outbid on open `<listing_66>`.
-
-**Steps:**
-
-1. Open `<bids url>` and expand `<listing_66>`.
-2. Follow its way to the listing.
-
-**Expected Results:**
-
-* Step 1 names the public movement that outbid You.
-* Step 2 opens `<listing_66>`'s page.
+* Step 1 shows `<active reads>` inside the site chrome; step 2 stays on the same page with the Completed summaries.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-9al rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
 ### g10.auction-bidding-history.US5-TC3: Signing in from the Bids page returns to it
@@ -980,49 +597,20 @@ listing's history,
 
 **Pre-conditions:**
 
-* The visitor is signed out and has a Grade10 account.
+* A signed-out visitor has an account.
 
 **Steps:**
 
-1. Open `<bids url>`.
-2. Sign in.
+1. Open `<bids url>` and sign in.
 
 **Expected Results:**
 
-* Step 1 opens the sign-in.
-* Step 2 lands on the Bids page.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-u0u rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### g10.auction-bidding-history.US5-TC4: An empty filter says so
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) has completed bids and no active bid.
-
-**Steps:**
-
-1. Open `<bids url>` on Active.
-
-**Expected Results:**
-
-* The list shows the Active empty state in its place.
+* Sign-in opens first, then the Bids page.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-5h6 rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### g10.auction-bidding-history.US5-TC5: A slow first load holds the list's place
+### g10.auction-bidding-history.US5-TC5: A slow read holds its place with a labelled loading state
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1040,18 +628,27 @@ listing's history,
 
 **Pre-conditions:**
 
-* customer(signed in) has bids; the Bids list is slow to answer.
+* customer has bids; `<read>` is slow to answer.
+
+**Test data:**
+
+| `<read>` | `<route>` |
+| --- | --- |
+| the list | open `<bids url>` |
+| one listing's history | expand that listing |
 
 **Steps:**
 
-1. Open `<bids url>` and read the page before the list answers.
+1. `<route>` and read the page before the read answers.
 
 **Expected Results:**
 
-* A labelled loading state holds the list's place inside the site chrome.
+* A labelled loading state holds the read's place inside the site chrome; an expanded summary stays in view.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-u23 rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### g10.auction-bidding-history.US5-TC6: A failed list offers a retry
+### g10.auction-bidding-history.US5-TC6: A failed read offers a retry and leaves the rest usable
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1069,44 +666,22 @@ listing's history,
 
 **Pre-conditions:**
 
-* customer(signed in) has bids; the Bids list fails to load.
+* customer has bids on `<listing A>` and `<listing B>`; `<read>` fails.
+
+**Test data:**
+
+| `<read>` | `<route>` |
+| --- | --- |
+| the list | open `<bids url>` |
+| `<listing A>`'s history | expand `<listing A>`, then `<listing B>` |
 
 **Steps:**
 
-1. Open `<bids url>`.
+1. `<route>`.
 
 **Expected Results:**
 
-* The list's place shows an error with a retry.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-jy9 rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### g10.auction-bidding-history.US5-TC7: A slow history keeps its summary in view
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bidding-history-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) has a summary for `<listing_69>` on `<bids url>`; its history is slow to answer.
-
-**Steps:**
-
-1. Expand `<listing_69>` and read it before the history answers.
-
-**Expected Results:**
-
-* The summary stays in view, with a labelled loading state in the history's place.
+* The failed read's place shows an error with a retry, `<listing A>`'s summary staying in view, and `<listing B>`'s history opens.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-h9q rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
 ### g10.auction-bidding-history.US5-TC8: Loading more keeps what is shown and loads the page once
@@ -1127,7 +702,7 @@ listing's history,
 
 **Pre-conditions:**
 
-* customer(signed in) has more Active listings than one page holds, on `<bids url>`.
+* customer has more Active listings than one page holds, on `<bids url>`.
 
 **Steps:**
 
@@ -1135,38 +710,7 @@ listing's history,
 
 **Expected Results:**
 
-* The listings already shown stay in view, and the next page appears once, with no listing repeated.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-e9b rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
-### g10.auction-bidding-history.US5-TC9: A failed history keeps its summary and the others usable
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bidding-history-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) has summaries for `<listing_72>` and `<listing_73>` on `<bids url>`; `<listing_72>`'s history fails to load.
-
-**Steps:**
-
-1. Expand `<listing_72>`.
-2. Expand `<listing_73>`.
-
-**Expected Results:**
-
-* Step 1 keeps `<listing_72>`'s summary, with an error and a retry in its history's place.
-* Step 2 shows `<listing_73>`'s history.
+* The listings shown stay, and the next page appears once, with no listing repeated.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-nyy rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw -->
 ### g10.auction-bidding-history.US5-TC10: ZZZ has no Bids page
@@ -1189,13 +733,11 @@ listing's history,
 
 **Steps:**
 
-1. Sign in to `<zzz url>` and look through its account menu.
-2. Open `<zzz url>/bids`.
+1. Sign in to `<zzz url>`, look through its account menu, and open `<zzz url>/bids`.
 
 **Expected Results:**
 
-* Step 1 offers no Bids page.
-* Step 2 shows Page not found.
+* No Bids page is offered, and the address shows Page not found.
 
 ---
 
@@ -1224,17 +766,17 @@ listing's history,
 
 **Pre-conditions:**
 
-* customer(signed in) set one maximum on `<listing_102>`, and Grade10 has placed no bid for them there; customer is on its page.
+* customer set one maximum on `<listing>`, and Grade10 has placed no bid for them there; customer is on its page.
 
 **Steps:**
 
 1. Activate Your bidding.
-2. Activate Your maximums.
+2. Activate Your maximums, then Bid placed.
 
 **Expected Results:**
 
 * Step 1 opens Your bidding with Bid placed, then Your maximums; Bid placed is active and empty.
-* Step 2 lists the maximum's amount and time; the live maximum stays on the bid panel.
+* Step 2 lists the maximum's amount and time, then returns to the empty Bid placed; the live maximum stays on the bid panel.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-3hn rev=2 covers=g10.auction-bidding-history.SC-roe -->
 ### g10.auction-bidding-history.US6-TC2: Your maximums lists each set and raise, never a refused raise
@@ -1255,20 +797,18 @@ listing's history,
 
 **Pre-conditions:**
 
-* customer(signed in) set a maximum on `<listing_105>`, raised it, then had a further raise refused; customer is on its page.
+* customer set a maximum on `<listing>`, raised it, then had a further raise refused; customer is on its page.
 
 **Steps:**
 
 1. Activate Your bidding, then Your maximums.
-2. Open `<bids url>` and expand `<listing_105>`.
 
 **Expected Results:**
 
-* Step 1 lists the raise, then the set, each an amount and a time, and never the refused raise.
-* Step 2 lists the same two amounts.
+* It lists the raise, then the set, each an amount and a time, and never the refused raise.
 
 <!-- trace:case id=g10.auction-bidding-history.TC-s22 rev=1 covers=g10.auction-bidding-history.SC-roe -->
-### g10.auction-bidding-history.US6-TC3: Your bidding is private and reading it changes nothing
+### g10.auction-bidding-history.US6-TC3: Your bidding is private, and reading it changes nothing
 
 **Classification:**
 
@@ -1286,12 +826,12 @@ listing's history,
 
 **Pre-conditions:**
 
-* customer A(signed in) and customer B have both bid on `<listing_108>`, customer B with a private maximum; customer A is on its page, with Recent bids, the live maximum and standing noted.
+* customer A and customer B have both bid on `<listing>`, customer B with a private maximum; customer A is on its page, with Recent bids, the live maximum and standing noted.
 
 **Steps:**
 
-1. Activate Your bidding and read Bid placed and Your maximums.
-2. Close the dialog and read the listing.
+1. Activate Your bidding, switch between Bid placed and Your maximums, and close it.
+2. Read the listing.
 
 **Expected Results:**
 
@@ -1326,7 +866,7 @@ maximums, open on **Bid placed** by default, and list that tab first,
 
 **Pre-conditions:**
 
-* customer(signed in) has a maximum on `<listing_111>` and Grade10 has placed bids for them there; customer is on its page.
+* customer holds a maximum on `<listing>` and Grade10 has placed bids for them there; customer is on its page.
 
 **Steps:**
 
@@ -1335,69 +875,8 @@ maximums, open on **Bid placed** by default, and list that tab first,
 
 **Expected Results:**
 
-* Step 1 opens on Bid placed, listed first, showing each bid Grade10 placed for the customer with its amount and time.
-* Step 2 lists every set and raise, newest first, each an amount and a time; the live maximum stays on the bid panel.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-j30 rev=1 covers=g10.auction-bidding-history.SC-mx5,g10.auction-bidding-history.SC-u76,g10.auction-bidding-history.SC-g01 -->
-### g10.auction-bidding-history.US7-TC2: Bid placed stays the default before any bid is placed
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) set one maximum on `<listing_114>`, and Grade10 has placed no bid for them there; customer is on its page.
-
-**Steps:**
-
-1. Activate Your bidding.
-2. Activate Your maximums, then Bid placed.
-
-**Expected Results:**
-
-* Step 1 opens on Bid placed, empty.
-* Step 2 keeps the two tabs separate.
-
-<!-- trace:case id=g10.auction-bidding-history.TC-7py rev=1 covers=g10.auction-bidding-history.SC-mx5,g10.auction-bidding-history.SC-u76,g10.auction-bidding-history.SC-g01 -->
-### g10.auction-bidding-history.US7-TC3: Switching tabs changes nothing on the listing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) has rows in both tabs on `<listing_117>` and is on its page, with standing, live maximum and Recent bids noted.
-
-**Steps:**
-
-1. Activate Your bidding and switch between Bid placed and Your maximums.
-2. Close the dialog and read the listing.
-
-**Expected Results:**
-
-* Step 2 matches the note.
+* Step 1 opens on Bid placed, listed first, with each bid Grade10 placed for the customer, its amount and time.
+* Step 2 lists every set and raise, newest first; the live maximum stays on the bid panel.
 
 ---
 
@@ -1426,15 +905,15 @@ maximums, open on **Bid placed** by default, and list that tab first,
 
 **Pre-conditions:**
 
-* customer(signed in) set a maximum on `<listing_120>`, raised it, then had a further raise refused.
+* customer set a maximum on `<listing>`, raised it, then had a further raise refused.
 
 **Steps:**
 
-1. Open `<bids url>` and expand `<listing_120>`.
+1. Open `<bids url>` and expand `<listing>`.
 
 **Expected Results:**
 
-* The history reads a maximum set and a maximum raised, with their amounts, and no refusal; the account navigation stays on the Bids page.
+* It reads a maximum set and a maximum raised, with their amounts, and no refusal; the account navigation stays on the Bids page.
 
 ---
 
@@ -1465,7 +944,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer B, whose account email is `<email>`, has bid on `<listing_123>`; customer A(signed in) is on its page.
+* customer B, whose account email is `<email>`, has bid on `<listing>`; customer A is on its page.
 
 **Test data:**
 
@@ -1481,7 +960,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The row's avatar shows `<letter>` beside the listing pseudonym, and never customer B's email or name.
+* Its avatar shows `<letter>` beside the listing pseudonym, never customer B's email or name.
 
 ---
 
@@ -1493,4 +972,4 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-- **Covered at domain** - `g10.auction-dmn.US3-TC2` walks `grade10-site-auction-bidding-history-SC-29`: a maximum below the next bid is refused and its history gains no event
+- **Covered at domain** - `g10.auction-dmn.US3-TC2` walks a refused bid that adds no listing, no history and no standing, and leaves an Outbid listing in place; `g10.auction-dmn.US4-TC1` walks an Outbid summary naming the movement that outbid You and offering the listing
