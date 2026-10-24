@@ -146,7 +146,7 @@ A question the record cannot answer belongs in `decisions.md`, whose `Decided` c
 | --- | --- | --- |
 | `skip_specs: true` + `skip_specs_why: <why>` | The author | No spec delta exists at all |
 | `blind_pass_skipped` | The checker | A delta exists but carries no new behaviour |
-| `**Walked by:** nobody` | The author | Not a hatch — the capability's anchors route to its feature set, and it still owes a suite |
+| `**Walked by:** nobody` | The author | Not a hatch — the capability's anchors route to its feature set, and the suites of the capabilities that reach it walk its rules; it owes no suite of its own |
 | `**Walked by:** makers only` | The author | No product user reaches it, so it owes no suite; QA reads the reason |
 
 `skip_specs` turns the entire planning cross-check off in one line: no journeys, no blind suite, no scenarios, no reconciliation. It is also the cheapest line in the manifest to write, and author-declared. The realistic failure is not dishonesty but an author who sincerely believes a refactor moves no behaviour and is wrong, which is a thing honour systems do not catch. Three guards, none of them new machinery: it owes a `skip_specs_why` beside it; a change carrying it cannot mark a 🚧 line, because 🚧 means an outcome a reader can see and claiming both is a contradiction; and QA reads the `## Why` and the reason of every change that claims it.

@@ -4,7 +4,7 @@ title: Store Product Details Test Cases
 
 # grade10-site/store/product-page Test Cases
 
-**Status:** pending-review · 0/19
+**Status:** pending-review · 0/20
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/product-page, grade10-site/store/cross-sell, grade10-site/store/discounts
 
@@ -111,6 +111,32 @@ Runs once per row of **Test data**.
 * Step 2 shows the whole description, UI matching store-product-page-screens-product-detail--description-expanded, and the address is unchanged.
 
 ---
+
+### g10.store-product-page.TC20: A product's title stays as the shop wrote it on a Chinese page
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-page
+
+**Pre-conditions:**
+
+* `<product>` is for sale, its title typed in English in the shop, with no translation anywhere.
+
+**Steps:**
+
+1. Open `<g10url>/tc/store/products/<handle>` and read the title.
+
+**Expected Results:**
+
+* The title reads exactly as the shop wrote it, in English, while the page's own words read in Traditional Chinese.
 
 ## product-page#free-pick-up: Free Pick-up
 

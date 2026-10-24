@@ -1,713 +1,37 @@
 # grade10-site/auction/auto-bidding Test Cases
 
-**Status:** reopened · 0/24
-**Drafts styled:** 2026-10-12, tcs-rules r5
+**Status:** pending-review · 0/10
+**Drafts styled:** 2026-10-24, tcs-rules r7
+**Regenerated:** 2026-10-24, tcs-rules r7
 
-## Walk 1: Collector commits a maximum on an open listing
+## Background
 
-**Starting state:**
+* Every bid is a maximum: Grade10 bids for its holder up to it. Of two maxima the price is the lower one plus the step of its tier, capped at the higher; an equal later maximum is accepted and the earlier one keeps the lead. Grade10 never steps through the amounts between.
+* Every listing is priced in USD, whole dollars: +USD1 from USD0, +USD25 from USD200, +USD50 from USD500, +USD500 from USD5,000, +USD3,000 from USD30,000. Collectors are signed in with a card linked, on separate sessions.
+* An operator reads a listing's committed maximums in its bid history on Listings in the admin console.
 
-**Steps 1–3 setup:**
+## Walk 1: Two collectors trade maxima
 
-- An open listing with no bids, with `<starting price>`.
-- The listing under test is `<listing_2>`.
-- The listing is priced in `<currency>`.
+Starting state:
 
-**Steps 4–7 setup:**
+- `<listing>` is open at USD100 with no bid; customer A and customer B are on its page.
 
-- An open listing has current bid `<current bid>` and minimum increment `<minimum increment>`.
-- The listing under test is `<listing_4>`.
-- The listing is priced in `<currency>`.
-
-**Steps 8–10 setup:**
-
-- customer(leads with committed maximum `<committed maximum>`) is on `<listing_6 url>`.
-- The listing under test is `<listing_6>`.
-- The listing is priced in `<currency>`.
-
-**Steps 11–13 setup:**
-
-- customer(has committed maximum `<committed maximum>`) is on `<listing_8 url>`.
-- The listing under test is `<listing_8>`.
-- The listing is priced in `<currency>`.
-
-**Steps 14–16 setup:**
-
-- An open listing in `<currency>`, starting price 0, with no maximum committed.
-- customer is signed in with a card linked and is on `<listing_10 url>`.
-- The listing under test is `<listing_10>`.
-
-**Steps 17–19 setup:**
-
-- An open listing in `<currency>`, starting price 0, with this standing: `<standing>`.
-- customer B is signed in with a card linked.
-- The listing under test is `<listing_12>`.
-
-**Steps 20–21 setup:**
-
-- An open listing in `<currency>`, starting price 0, extension duration 0, scheduled close 10 minutes ahead.
-- customer A committed `<maximum>` before the scheduled close, the only maximum on the listing.
-- The listing under test is `<listing_14>`.
-
-**Steps 22–24 setup:**
-
-- `<listing_16>` starts at 0 `USD`, and customer A's maximum `<customer A maximum>` stands alone at `<opening price>`.
-- customer B(card linked) is signed in on a separate session, on the listing page for `<listing_16>`.
-
-**Shared test data:**
-
-**Steps 1–3 data:**
-
-| `<currency>` | `<starting price>` | `<maximum>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD56 | USD235 | `<starting price>`: (range: 1–9999 minor units); `<maximum>`: (range: 10000–49999 minor units) |
-| USD | USD28 | USD280 | `<starting price>`: (range: 1–9999 minor units); `<maximum>`: (range: 10000–49999 minor units) |
-| USD | USD2,350 | USD23,500 | `<starting price>`: (range: 100000–499999 minor units); `<maximum>`: (range: 1000000–999999999 minor units) |
+Shared test data:
 
 | Field | Value |
 | --- | --- |
-| listing_2 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_2 url | The URL of `<listing_2>`; bind its URL only |
-
-**Steps 4–7 data:**
-
-| `<currency>` | `<current bid>` | `<minimum increment>` | `<attempted maximum>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| USD | USD235 | USD5 | USD239 | `<current bid>`: (range: 10000–49999 minor units); `<minimum increment>`: (fixed tier increment); `<attempted maximum>`: (range: 10000–49999 minor units) |
-| USD | USD280 | USD5 | USD284 | `<current bid>`: (range: 10000–49999 minor units); `<minimum increment>`: (fixed tier increment); `<attempted maximum>`: (range: 10000–49999 minor units) |
-| USD | USD23,500 | USD100 | USD23,599 | `<current bid>`: (range: 1000000–999999999 minor units); `<minimum increment>`: (fixed tier increment); `<attempted maximum>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_4 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_4 url | The URL of `<listing_4>`; bind its URL only |
-
-**Steps 8–10 data:**
-
-| `<currency>` | `<committed maximum>` | `<raised maximum>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD235 | USD470 | `<committed maximum>`: (range: 10000–49999 minor units); `<raised maximum>`: (range: 10000–49999 minor units) |
-| USD | USD280 | USD560 | `<committed maximum>`: (range: 10000–49999 minor units); `<raised maximum>`: (range: 50000–99999 minor units) |
-| USD | USD23,500 | USD47,000 | `<committed maximum>`: (range: 1000000–999999999 minor units); `<raised maximum>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_6 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_6 url | The URL of `<listing_6>`; bind its URL only |
-
-**Steps 11–13 data:**
-
-| `<currency>` | `<committed maximum>` | `<attempted maximum>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD470 | USD235 | `<committed maximum>`: (range: 10000–49999 minor units); `<attempted maximum>`: (range: 10000–49999 minor units) |
-| USD | USD560 | USD280 | `<committed maximum>`: (range: 50000–99999 minor units); `<attempted maximum>`: (range: 10000–49999 minor units) |
-| USD | USD47,000 | USD23,500 | `<committed maximum>`: (range: 1000000–999999999 minor units); `<attempted maximum>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_8 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_8 url | The URL of `<listing_8>`; bind its URL only |
-
-**Steps 14–16 data:**
-
-| `<currency>` | `<maximum>` | `<lowest increment>` | `<current bid after>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| USD | USD1 | USD1 | USD1 | `<maximum>`: (fixed boundary), the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD500 | USD1 | USD1 | `<maximum>`: (fixed tier boundary), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD10 | USD1 | USD1 | `<maximum>`: (range: 1–9999 minor units), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD920 | USD1 | USD1 | `<maximum>`: (range: 50000–99999 minor units), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD100 | USD1 | USD1 | `<maximum>`: (range: 1–9999 minor units), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD47,000 | USD1 | USD1 | `<maximum>`: (range: 1000000–999999999 minor units), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-
-| Field | Value |
-| --- | --- |
-| listing_10 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_10 url | The URL of `<listing_10>`; bind its URL only |
-
-**Steps 17–19 data:**
-
-| `<currency>` | `<standing>` | `<minimum next bid>` | `<attempted maximum>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| USD | No maximum committed on a zero-start listing | USD1 | USD0.99 | `<minimum next bid>`: (fixed boundary); `<attempted maximum>`: (range: 1–9999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_12 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-
-**Steps 20–21 data:**
-
-| `<currency>` | `<lowest increment>` | `<winning bid>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD1 | USD1 | `<lowest increment>`: (fixed boundary); `<winning bid>`: (fixed derived value) |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| maximum | USD1 | (fixed example, at `<lowest increment>`; any committed maximum at or above the lowest increment fits this setup) |
-| listing_14 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only | · |
-
-**Steps 22–24 data:**
-
-| `<customer B maximum>` | `<outcome>` | `<current bid after>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD1 | Grade10 refuses the commitment, naming `<minimum next bid>` | USD1 | `<customer B maximum>`: (fixed boundary), the opening price; `<current bid after>`: (fixed derived value), equal to `<opening price>` |
-| USD2 | Grade10 accepts the commitment | USD3 | `<customer B maximum>`: (fixed derived value), the opening price plus one increment; `<current bid after>`: (fixed derived value), `<customer B maximum>` plus `<increment>` |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_16 | An open USD listing, starting price 0, scheduled close more than an hour away; bind its identity only | · |
-| customer A maximum | USD560 | (range: 50000–99999 minor units) |
-| opening price | USD1 | (fixed boundary), the lowest USD increment |
-| minimum next bid | USD2 | (fixed derived value), `<opening price>` plus `<increment>` |
-| increment | USD1 | (fixed lowest increment) |
+| listing | An open USD listing starting at USD100 |
 
 ### Route
 
-1. Navigate to `<listing_2 url>` priced in `<currency>`.
-2. Enter `<maximum>`.
-3. Confirm the commitment.
-   - Grade10 accepts the commitment. `g10.auction-auto-bidding.US1-TC1`
-   - The current bid is `<starting price>`. `g10.auction-auto-bidding.US1-TC1`
-   - Customer leads. `g10.auction-auto-bidding.US1-TC1`
-4. Navigate to `<listing_4 url>` priced in `<currency>`.
-5. Enter `<attempted maximum>`.
-6. Confirm the commitment.
-7. Check the current bid and the leader.
-   - Grade10 refuses the commitment. `g10.auction-auto-bidding.US1-TC2`
-   - The current bid and the leader are unchanged. `g10.auction-auto-bidding.US1-TC2`
-8. Enter `<raised maximum>`.
-9. Confirm the raise.
-10. Check who leads and the current bid.
-   - Grade10 accepts the raise. `g10.auction-auto-bidding.US1-TC3`
-   - Customer still leads. `g10.auction-auto-bidding.US1-TC3`
-   - The current bid is unchanged. `g10.auction-auto-bidding.US1-TC3`
-11. Enter `<attempted maximum>`.
-12. Confirm the commitment.
-13. Check the committed maximum.
-   - Grade10 refuses it. `g10.auction-auto-bidding.US1-TC4`
-   - Customer's committed maximum remains `<committed maximum>`. `g10.auction-auto-bidding.US1-TC4`
-14. Enter `<maximum>` in the custom maximum on the bid panel.
-15. Confirm the commitment.
-16. Read the current bid, the leader, the bid count and Recent Bids.
-   - Grade10 accepts the commitment. `g10.auction-auto-bidding.US1-TC5`
-   - The current bid reads `<current bid after>`, equal to 0 plus `<lowest increment>`, not 0. `g10.auction-auto-bidding.US1-TC5`
-   - The current bid is not the increment of the tier the maximum sits in. `g10.auction-auto-bidding.US1-TC5`
-   - The bid count reads 1, and Recent Bids shows one bid at `<current bid after>`. `g10.auction-auto-bidding.US1-TC5`
-   - Customer leads. `g10.auction-auto-bidding.US1-TC5`
-17. As customer B, submit `<attempted maximum>` on the listing.
-18. Read the API response.
-19. Read the listing's current bid, leader and committed maxima.
-20. Wait until the scheduled close passes with no further commitment.
-21. Read the listing's state, winner and winning bid.
-22. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel.
-23. Confirm the commitment.
-   - Step 23: `<outcome>`. `g10.auction-auto-bidding.US1-TC8`
-24. Read the current bid, the leader and Recent Bids.
-   - Step 24 reads current bid `<current bid after>` with customer A leading, and `<customer A maximum>` appears nowhere. `g10.auction-auto-bidding.US1-TC8`
-
-## Walk 2: Collector reads their own maximum and standing
-
-**Starting state:**
-
-**Steps 1–1 setup:**
-
-- customer(committed maximum `<committed maximum>`) is on a listing with current bid `<current bid>`.
-- The listing under test is `<listing_18>`.
-- The listing is priced in `<currency>`.
-
-**Steps 2–2 setup:**
-
-- customer(has been overtaken on an open listing) is on `<listing_20 url>`.
-- The listing under test is `<listing_20>`.
-
-**Steps 3–4 setup:**
-
-- customer A(leads with maximum `<customer A maximum>`) is on a listing with current bid `<current bid>`.
-- The listing under test is `<listing_22>`.
-- The listing is priced in `<currency>`.
-
-**Steps 5–7 setup:**
-
-- customer B leads an open USD listing with maximum `<customer B maximum>`.
-- The listing under test is `<listing_24>`.
-
-**Shared test data:**
-
-**Steps 1–1 data:**
-
-| `<currency>` | `<committed maximum>` | `<current bid>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD470 | USD235 | `<committed maximum>`: (range: 10000–49999 minor units); `<current bid>`: (range: 10000–49999 minor units) |
-| USD | USD560 | USD280 | `<committed maximum>`: (range: 50000–99999 minor units); `<current bid>`: (range: 10000–49999 minor units) |
-| USD | USD47,000 | USD23,500 | `<committed maximum>`: (range: 1000000–999999999 minor units); `<current bid>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_18 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-
-**Steps 2–2 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_20 | The listing prepared by the pre-conditions; bind its identity only |
-| listing_20 url | The URL of `<listing_20>`; bind its URL only |
-
-**Steps 3–4 data:**
-
-| `<currency>` | `<customer A maximum>` | `<current bid>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD470 | USD235 | `<customer A maximum>`: (range: 10000–49999 minor units); `<current bid>`: (range: 10000–49999 minor units) |
-| USD | USD560 | USD280 | `<customer A maximum>`: (range: 50000–99999 minor units); `<current bid>`: (range: 10000–49999 minor units) |
-| USD | USD47,000 | USD23,500 | `<customer A maximum>`: (range: 1000000–999999999 minor units); `<current bid>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_22 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-
-**Steps 5–7 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer C maximum | USD600 | (range: 50000–99999 minor units) |
-| customer B maximum | USD600 | (range: 50000–99999 minor units) |
-| resolved current bid | USD600 | (fixed derived value), equal to both maxima |
-| listing_24 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-### Route
-
-1. Open `<listing_18>`.
-   - Customer sees their own maximum, `<committed maximum>`. `g10.auction-auto-bidding.US2-TC1`
-   - Customer sees the current bid, `<current bid>`, as a separate fact. `g10.auction-auto-bidding.US2-TC1`
-   - Customer sees that they lead. `g10.auction-auto-bidding.US2-TC1`
-2. Open `<listing_20>`.
-   - Customer sees that they do not lead. `g10.auction-auto-bidding.US2-TC2`
-   - Customer's own committed maximum is unchanged. `g10.auction-auto-bidding.US2-TC2`
-3. Sign in as customer B.
-4. Open `<listing_22>`'s public facts.
-   - The facts carry the current bid `<current bid>`. `g10.auction-auto-bidding.US2-TC3`
-   - The facts do not carry, and do not allow deriving, customer A's maximum `<customer A maximum>`. `g10.auction-auto-bidding.US2-TC3`
-5. Commit maximum `<customer C maximum>` as customer C.
-6. Read customer C's standing.
-7. Read the listing's public bid history.
-   - Grade10 accepts customer C's commitment. `g10.auction-auto-bidding.US2-TC4`
-   - Customer C is reported as not leading. `g10.auction-auto-bidding.US2-TC4`
-   - The public history records customer C's accepted action followed by customer B's automatic response, both at `<resolved current bid>`. `g10.auction-auto-bidding.US2-TC4`
-
-## Walk 3: Collector competes through two maxima and adjacent checks
-
-**Starting state:**
-
-**Steps 1–2 setup:**
-
-- An open USD listing has customer A leading with maximum `<customer A maximum>`, current bid `<current bid>` and applicable increment `<increment>`.
-- The listing under test is `<listing_26>`.
-
-**Steps 3–4 setup:**
-
-- customer A leads an open USD listing at `<current bid>` with maximum `<customer A maximum>`; customer B holds maximum `<customer B maximum>`.
-- The listing under test is `<listing_28>`.
-
-**Steps 5–6 setup:**
-
-- customer B leads an open USD listing with maximum `<customer B maximum>` after overtaking customer A; customer A holds maximum `<customer A maximum>`, and the current bid is `<current bid>`.
-- The listing under test is `<listing_30>`.
-
-**Steps 7–8 setup:**
-
-- customer B leads an open USD listing with maximum `<customer B maximum>` after overtaking customer A; customer A holds maximum `<customer A maximum>`, and the current bid is `<current bid>`.
-- The listing under test is `<listing_32>`.
-
-**Steps 9–10 setup:**
-
-- customer A leads an open USD listing with maximum `<customer A maximum>`.
-- The listing under test is `<listing_34>`.
-
-**Steps 11–13 setup:**
-
-- customer B leads an open USD listing with maximum `<customer B maximum>`.
-- The listing under test is `<listing_36>`.
-
-**Steps 14–14 setup:**
-
-- admin(holds `auction:operate`) is on `<grade10 auction admin listings url>`. That listing has several committed maximums recorded.
-- The listing under test is `<listing_46>`.
-
-**Shared test data:**
-
-**Steps 1–2 data:**
-
-| `<customer B maximum>` | `<resolved current bid>` | `<resolved leader>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD450 | USD455 | customer A | `<customer B maximum>`: (range: 10000–49999 minor units); `<resolved current bid>`: (fixed derived value) |
-| USD500 | USD500 | customer A | `<customer B maximum>`: (fixed tier boundary); `<resolved current bid>`: (fixed derived value) |
-| USD501 | USD510 | customer B | `<customer B maximum>`: (range: 50000–99999 minor units); `<resolved current bid>`: (fixed derived value) |
-| USD600 | USD510 | customer B | `<customer B maximum>`: (range: 50000–99999 minor units); `<resolved current bid>`: (fixed derived value) |
-| USD601 | USD510 | customer B | `<customer B maximum>`: (range: 50000–99999 minor units); `<resolved current bid>`: (fixed derived value) |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer A maximum | USD500 | (fixed tier boundary) |
-| current bid | USD100 | (fixed tier boundary) |
-| increment | USD5 | (fixed tier increment at the current bid) |
-| listing_26 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps 3–4 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer B raised maximum | USD34,000 | (range: 1000000–999999999 minor units) |
-| customer A maximum | USD56,000 | (range: 1000000–999999999 minor units) |
-| customer B maximum | USD28,000 | (range: 1000000–999999999 minor units) |
-| current bid | USD28,100 | (fixed derived value) |
-| increment | USD100 | (fixed tier increment) |
-| resolved current bid | USD34,100 | (fixed derived value), `<customer B raised maximum>` plus `<increment>` |
-| listing_28 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps 5–6 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer A raised maximum | USD34,000 | (range: 1000000–999999999 minor units) |
-| customer B maximum | USD34,000 | (range: 1000000–999999999 minor units) |
-| customer A maximum | USD30,000 | (range: 1000000–999999999 minor units) |
-| current bid | USD30,100 | (fixed derived value) |
-| resolved current bid | USD34,000 | (fixed derived value), equal to the tied maxima |
-| listing_30 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps 7–8 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer A raised maximum | USD60,000 | (range: 1000000–999999999 minor units) |
-| customer B maximum | USD34,000 | (range: 1000000–999999999 minor units) |
-| customer A maximum | USD30,000 | (range: 1000000–999999999 minor units) |
-| current bid | USD30,100 | (fixed derived value) |
-| increment | USD100 | (fixed tier increment) |
-| resolved current bid | USD34,100 | (fixed derived value), `<customer B maximum>` plus `<increment>` |
-| listing_32 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps 9–10 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer B maximum | USD9,200 | (range: 500000–999999 minor units) |
-| customer A maximum | USD8,400 | (range: 500000–999999 minor units) |
-| increment | USD50 | (fixed tier increment) |
-| resolved current bid | USD8,450 | (fixed derived value), `<customer A maximum>` plus `<increment>`, capped at `<customer B maximum>` |
-| listing_34 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps 11–13 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer C maximum | USD600 | (range: 50000–99999 minor units) |
-| customer B maximum | USD600 | (range: 50000–99999 minor units) |
-| resolved current bid | USD600 | (fixed derived value), equal to both maxima |
-| listing_36 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps 14–14 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_46 | The listing prepared by the pre-conditions; bind its identity only |
-| grade10 auction admin listings url | The grade10 auction admin listings url; bind its URL only |
-
-### Route
-
-1. Commit `<customer B maximum>` as customer B.
-2. Read the listing's current bid and leader.
-   - The current bid matches `<resolved current bid>`. `g10.auction-auto-bidding.US3-TC1`
-   - The leader matches `<resolved leader>`. `g10.auction-auto-bidding.US3-TC1`
-   - Grade10 accepts no intermediate bid between the previous current bid and the resolved one. `g10.auction-auto-bidding.US3-TC1`
-3. Raise customer B's maximum to `<customer B raised maximum>`.
-4. Read the listing's leader and current bid.
-   - Customer A still leads. `g10.auction-auto-bidding.US3-TC2`
-   - The current bid is `<resolved current bid>`, equal to `<customer B raised maximum>` plus `<increment>`. `g10.auction-auto-bidding.US3-TC2`
-5. Raise customer A's maximum to `<customer A raised maximum>`.
-6. Read the listing's leader and current bid.
-   - Customer B still leads. `g10.auction-auto-bidding.US3-TC3`
-   - The current bid is `<resolved current bid>`, equal to the tied maxima. `g10.auction-auto-bidding.US3-TC3`
-7. Raise customer A's maximum to `<customer A raised maximum>`.
-8. Read the listing's leader and current bid.
-   - Customer A leads. `g10.auction-auto-bidding.US3-TC4`
-   - The current bid is `<resolved current bid>`, equal to `<customer B maximum>` plus `<increment>`. `g10.auction-auto-bidding.US3-TC4`
-9. Commit maximum `<customer B maximum>` as customer B.
-10. Read the listing's leader and current bid.
-   - Customer B leads. `g10.auction-auto-bidding.US3-TC5`
-   - The current bid is `<resolved current bid>`, equal to `<customer A maximum>` plus `<increment>` and capped below `<customer B maximum>`. `g10.auction-auto-bidding.US3-TC5`
-11. Commit maximum `<customer C maximum>` as customer C.
-12. Read the listing's leader and current bid.
-13. Read the public bid history's ordering and timestamps.
-   - Customer B remains the leader. `g10.auction-auto-bidding.US3-TC6`
-   - The current bid is `<resolved current bid>`. `g10.auction-auto-bidding.US3-TC6`
-   - The history records customer C's accepted action at `<customer C maximum>`, then customer B's automatic response at `<resolved current bid>`, both in the same resolution timestamp group. `g10.auction-auto-bidding.US3-TC6`
-14. Open `<listing_46>`'s bid history.
-   - Each commitment shows its bidder, its maximum, and its Accepted At. `g10.auction-auto-bidding.US4-TC1`
-
-## Walk 4: Collector's auto-bid counts as a bid
-
-**Starting state:**
-
-**Steps 1–2 setup:**
-
-- Grade10 has raised a bidder's bid on their behalf.
-- The listing under test is `<listing_52>`.
-
-**Steps 3–4 setup:**
-
-- Two bidders have committed maxima and the listing has been resolved to the two-maximum price.
-- The listing under test is `<listing_54>`.
-
-**Steps 5–9 setup:**
-
-- customer A(card linked) leads `<listing_56>` with a committed maximum of `<customer A maximum>`, at `<leader price>`.
-- customer B(card linked, no bid on `<listing_56>`) is signed in on a separate session.
-
-**Steps 10–12 setup:**
-
-- `<listing_58>` is in extended bidding.
-- customer A leads `<listing_58>` with a committed maximum of `<customer A maximum>`.
-- customer B is signed in with a card saved and is on `<listing_58>`.
-
-**Steps 13–14 setup:**
-
-- `<listing_60>` is open, and its only bidder, customer A, committed a maximum before the scheduled close and leads at the starting price.
-
-**Shared test data:**
-
-**Steps 1–2 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_52 | The listing prepared by the pre-conditions; bind its identity only |
-
-**Steps 3–4 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_54 | The listing prepared by the pre-conditions; bind its identity only |
-
-**Steps 5–9 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_56 | An open USD listing taking bids, led by customer A; bind its identity only | · |
-| leader price | USD280 | (range: 10000–49999 minor units), the starting price |
-| customer A maximum | USD560 | (range: 50000–99999 minor units) |
-| customer B maximum | USD340 | (range: 10000–49999 minor units), below `<customer A maximum>` |
-| increment | USD5 | (fixed tier increment), the USD10,000 tier at `<customer B maximum>` |
-| customer A raise | USD920 | (range: 50000–99999 minor units) |
-| resolved current bid | USD345 | (fixed derived value), `<customer B maximum>` plus `<increment>` |
-
-**Steps 10–12 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_58 | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap; bind its identity only | · |
-| extension duration | 1800 seconds | · |
-| customer A maximum | USD8,400 | (range: 500000–999999 minor units) |
-| customer B maximum | USD5,700 | (range: 500000–999999 minor units), below `<customer A maximum>` |
-| bid time | The moment customer B confirms; bind its timestamp only | · |
-
-**Steps 13–14 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_60 | An open listing, scheduled close `<scheduled close>`, extension duration `<extension duration>`; bind its identity only |
-| scheduled close | 20:00 UTC |
-| extension duration | 1800 seconds |
-| extended close | 20:30 UTC |
-
-### Route
-
-1. Read the listing's bid count.
-2. Read the listing's bid history.
-3. Let time pass with no further commitment accepted.
-4. Read the current bid and whether Grade10 placed any further bid.
-5. As customer B, commit `<customer B maximum>` on `<listing_56>`.
-6. Read the API response and `<listing_56>`'s bids.
-7. As customer A, raise the maximum to `<customer A raise>`.
-8. Read the API response.
-9. Read both customers' card activity at the card provider.
-10. As customer B, commit a maximum of `<customer B maximum>` at `<bid time>`.
-11. Read the current bid and Time left.
-12. Wait until the new close passes with no further commitment.
-   - Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`. `g10.auction-auto-bidding.US5-TC8`
-   - No further bid is placed on either maximum before the close. `g10.auction-auto-bidding.US5-TC8`
-13. Wait for `<scheduled close>`.
-14. Read the listing's state and recorded close.
-
-## Walk 5: Collector competes with the house maximum
-
-**Starting state:**
-
-**Steps 1–2 setup:**
-
-- `<listing_38>`'s internal bid of `<house maximum>` was committed at its time, and the house leads at `<starting price>` with no other bid.
-- customer A(card linked) is signed in on the listing page for `<listing_38>`.
-
-**Steps 3–4 setup:**
-
-- `<listing_40>` is published and taking bids, with an internal bid of `<equal maximum>`.
-- Commitments occur in this order: `<first committed>`, then `<then committed>`.
-- customer A(card linked) is signed in on the listing page for `<listing_40>`.
-
-**Steps 5–8 setup:**
-
-- `<listing_42>`'s internal bid of `<house maximum>` is committed, and the house leads at `<current bid>` over customer A's maximum `<customer A maximum>`.
-- `<listing_43>` is published and taking bids with no internal bid, led by customer B at `<current bid>` with maximum `<house maximum>`, over customer A's maximum `<customer A maximum>`.
-- customer C is signed in, has never bid on either listing, and is on the listing page for `<listing_42>`.
-
-**Steps 9–14 setup:**
-
-- `<listing_44>` is published and taking bids, with no bids, and its house maximum of `<house maximum>` is set for `<commit time>`.
-- `<listing_44>`'s scheduled close is a day away. customer A(card linked) and customer B(card linked) have separate sessions.
-
-**Shared test data:**
-
-**Steps 1–2 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_38 | A published USD listing taking bids, starting price `<starting price>`, scheduled close a day away; bind its identity only | · |
-| starting price | 400000 minor units | (US$4,000.00) |
-| house maximum | 600000 minor units | (USD6,000) |
-
-| Row | `<customer A maximum>` | `<leader>` | `<highest bid>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| Below the house | USD5,000 | The house | USD5,050 | 500000 and 505000 minor units; `<highest bid>` equals `<customer A maximum>` plus 5000 minor units |
-| One increment short of the house | USD5,950 | The house | USD6,000 | 595000 and 600000 minor units; `<highest bid>` equals `<customer A maximum>` plus 5000 minor units, capped at `<house maximum>` |
-| Above the house | USD7,000 | customer A | USD6,050 | 700000 and 605000 minor units; `<highest bid>` equals `<house maximum>` plus 5000 minor units |
-
-**Steps 3–4 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_40 | A published USD listing taking bids, starting price 400000 minor units, scheduled close a day away; bind its identity only | · |
-| equal maximum | 600000 minor units | (USD6,000), the house's and customer A's maximum |
-
-| Row | `<first committed>` | `<then committed>` | `<leader>` | `<highest bid>` |
-| --- | --- | --- | --- | --- |
-| Collector earlier | customer A commits `<equal maximum>` before the internal bid's time | the house commits `<equal maximum>` at its set time | customer A | `<equal maximum>` |
-| House earlier | the house commits `<equal maximum>` at its set time | customer A commits `<equal maximum>` after the internal bid's time | The house | `<equal maximum>` |
-
-**Steps 5–8 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_42 | A published USD listing taking bids, protected by an internal bid; bind its identity only | · |
-| listing_43 | A published USD listing taking bids, with no internal bid; bind its identity only | · |
-| house maximum | 600000 minor units | (USD6,000) |
-| customer A maximum | 500000 minor units | (USD5,000) |
-| current bid | 505000 minor units | `<customer A maximum>` plus its 5000 increment |
-
-**Steps 9–14 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_44 | A published USD listing taking bids, starting price 20000 USD minor units, scheduled close a day away; bind its identity only | · |
-| customer A maximum | 30000 USD minor units | · |
-| house maximum | 50000 USD minor units | · |
-| commit time | 18:00:00 UTC | · |
-| house first bid | 30500 USD minor units | `<customer A maximum>` plus its USD500 tier increment |
-| customer B maximum | 40000 USD minor units | · |
-| price after | 40500 USD minor units | `<customer B maximum>` plus its USD500 tier increment |
-| starting price | 20000 USD minor units | (fixed opening price) |
-
-### Route
-
-1. As customer A, enter `<customer A maximum>` in the custom maximum on the bid panel and confirm.
-   - Step 1 is accepted. `g10.auction-auto-bidding.US3-TC7`
-2. Read the standing, Highest bid and Recent bids.
-   - Step 2: the leader reads `<leader>` and Highest bid reads `<highest bid>`; customer A reads Outbid or Leading to match. `g10.auction-auto-bidding.US3-TC7`
-   - Step 2: Recent bids lists customer A's bid and the house's bid that answers it, the house under its listing pseudonym. `g10.auction-auto-bidding.US3-TC7`
-3. Resolve these commitments in order: `<first committed>`, then `<then committed>`.
-4. As customer A, read the standing, Highest bid and Recent bids.
-   - Step 4: the leader is `<leader>`, the earlier maximum. `g10.auction-auto-bidding.US3-TC8`
-   - Step 4: Highest bid reads `<equal maximum>`. `g10.auction-auto-bidding.US3-TC8`
-   - Step 4: Recent bids lists both bids at `<equal maximum>`, the earlier maximum's row first. `g10.auction-auto-bidding.US3-TC8`
-5. As customer C, read the bid panel, Highest bid and Recent bids on `<listing_42>`.
-   - Step 5 reads like step 7: the leader's row carries a listing pseudonym, with no house, reserve or floor wording. `g10.auction-auto-bidding.US3-TC9`
-6. Read the API response for `<listing_42>`'s public facts.
-   - Step 6 reads like step 8, save the pseudonyms and times: no field names the house or holds `<house maximum>`. `g10.auction-auto-bidding.US3-TC9`
-7. Open the listing page for `<listing_43>` and read the same.
-8. Read the API response for `<listing_43>`'s public facts.
-   - Neither listing shows the leader's maximum. `g10.auction-auto-bidding.US3-TC9`
-   - The house has a different pseudonym on each listing, and no public fact links the two pseudonyms. `g10.auction-auto-bidding.US3-TC9`
-9. Before `<commit time>`, as customer A, commit `<customer A maximum>`.
-10. Read the current bid, bid count and leader.
-   - Step 10: customer A leads at `<starting price>`, and the bid count is 1. `g10.auction-auto-bidding.US3-TC10`
-11. Wait until `<commit time>` passes, opening no page on `<listing_44>`.
-12. Within a minute, as customer B, open the listing page for `<listing_44>`.
-13. Enter `<customer B maximum>` in the custom maximum on the bid panel and confirm.
-   - Step 13 is accepted. `g10.auction-auto-bidding.US3-TC10`
-14. Read the standing, Highest bid and Recent bids.
-   - Step 14: customer B reads Outbid; Highest bid reads `<price after>`, and the house leads under one listing pseudonym. `g10.auction-auto-bidding.US3-TC10`
-   - Step 14: Recent bids lists the house's bid at `<house first bid>` timed at `<commit time>`, before customer B's bid at `<customer B maximum>` and the house's answer at `<price after>`. `g10.auction-auto-bidding.US3-TC10`
-
-## Walk 6: Operator reads the house commitment trace
-
-**Starting state:**
-
-**Steps 1–2 setup:**
-
-- customer A committed `<customer A maximum>` on `<listing_48>`.
-- `<listing_48>` is a published USD listing with the house maximum committed at `<commit time>`, raised at `<raise time>`, collectors A and C committed maxima `<customer A maximum>` and `<customer C maximum>` at `<customer A accepted at>` and `<customer C accepted at>`, and the house maximum lowered at `<lower time>`.
-- admin(holds auction:reserve and auction:operate) is on `<grade10 auction admin listings url>`.
-
-**Steps 3–5 setup:**
-
-- customer A committed `<customer A maximum>` on `<listing_50>`.
-- `<listing_50>`'s internal bid of `<house maximum>` was committed at `<commit time>`, and the house leads at `<current bid>`.
-- admin(staff, holds auction:operate, not auction:reserve) is on `<grade10 auction admin listings url>`.
-
-**Shared test data:**
-
-**Steps 1–2 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_48 | A published USD listing taking bids, starting price 20000 USD minor units; bind its identity only |
-| house maximum | 25000 USD minor units |
-| commit time | 18:00:00 UTC |
-| raised maximum | 30000 USD minor units |
-| raise time | 18:10:00 UTC |
-| customer A maximum | 40000 USD minor units |
-| customer C maximum | 60000 USD minor units |
-| lowered maximum | 21000 USD minor units |
-| customer A accepted at | 18:20:00 UTC |
-| customer C accepted at | 18:30:00 UTC |
-| lower time | 19:00:00 UTC |
-| grade10 auction admin listings url | The grade10 auction admin listings url; bind its URL only |
-
-**Steps 3–5 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_50 | A published USD listing taking bids; bind its identity only | · |
-| customer A maximum | 500000 minor units | (USD5,000) |
-| house maximum | 612300 minor units | (US$6,123.00), an amount no bid reaches |
-| current bid | 505000 minor units | `<customer A maximum>` plus its 5000 increment |
-| commit time | The internal bid's set time | · |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction admin listings url | The grade10 auction admin listings url; bind its URL only |
-
-### Route
-
-1. Open `<listing_48>`'s bid history.
-2. Read each committed maximum.
-   - Step 2 lists the house's `<house maximum>` at `<commit time>`, `<raised maximum>` at `<raise time>`, and `<lowered maximum>` at `<lower time>`, all in USD minor units. `g10.auction-auto-bidding.US4-TC2`
-   - Step 2 lists collector A's `<customer A maximum>` at `<customer A accepted at>` and collector C's `<customer C maximum>` at `<customer C accepted at>`. `g10.auction-auto-bidding.US4-TC2`
-3. Open `<listing_50>`'s bid history.
-4. Read each committed maximum and each bid.
-   - Step 4 lists customer A's commitment, with its Accepted At. `g10.auction-auto-bidding.US4-TC3`
-   - Step 4: the house's bid at `<current bid>` reads House, with no account. `g10.auction-auto-bidding.US4-TC3`
-   - Step 4: no house row shows a maximum; `<house maximum>` shows nowhere. `g10.auction-auto-bidding.US4-TC3`
-   - Step 4: the house's bid shows its own Accepted At, the time Recent bids shows for it; no house row shows when a maximum was accepted. `g10.auction-auto-bidding.US4-TC3`
-   - Step 4: no row reads the house's listing pseudonym, or an internal bid. `g10.auction-auto-bidding.US4-TC3`
-5. As customer B, open the listing page for `<listing_50>` and read Recent bids.
-   - Step 5: the house's bid reads under its listing pseudonym; nothing reads House. `g10.auction-auto-bidding.US4-TC3`
+1. As customer A, commit a maximum of USD500.
+   - customer A leads at USD100, reading Your maximum USD500 apart from Highest bid. `g10.auction-auto-bidding.US1-TC1`
+2. As customer B, commit USD450, then USD500.
+   - USD475, then USD500 with customer A leading as the earlier maximum, the records side by side. `g10.auction-auto-bidding.US3-TC1`
+3. As customer B, read the panel.
+   - Your maximum USD500, Highest bid USD500, not leading. `g10.auction-auto-bidding.US2-TC1`
+4. As customer A, raise to USD800, then try USD600.
+   - The raise keeps the price; the lower one is refused. `g10.auction-auto-bidding.US1-TC3`
 
 ## g10.auction-auto-bidding.US1: Collector commits a maximum on an open listing
 
@@ -715,7 +39,7 @@
 **I want** to commit the most I will pay and raise it later,
 **so that** Grade10 bids for me only as far as needed to lead.
 
-### g10.auction-auto-bidding.US1-TC1: First maximum opens bidding at the starting price
+### g10.auction-auto-bidding.US1-TC1: A first maximum leads at the opening price, its cap hidden
 
 Runs once per row of **Test data**.
 
@@ -726,7 +50,7 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
@@ -734,46 +58,37 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-* An open listing with no bids, with `<starting price>`.
 
-* The listing under test is `<listing_2>`.
-
-* The listing is priced in `<currency>`.
+* customer is on `<listing>`, open with no bid, starting at `<start>`; customer B watches it from another session.
 
 **Test data:**
 
-| `<currency>` | `<starting price>` | `<maximum>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD56 | USD235 | `<starting price>`: (range: 1–9999 minor units); `<maximum>`: (range: 10000–49999 minor units) |
-| USD | USD28 | USD280 | `<starting price>`: (range: 1–9999 minor units); `<maximum>`: (range: 10000–49999 minor units) |
-| USD | USD2,350 | USD23,500 | `<starting price>`: (range: 100000–499999 minor units); `<maximum>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_2 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_2 url | The URL of `<listing_2>`; bind its URL only |
+| `<start>` | `<maximum>` | `<price>` |
+| --- | --- | --- |
+| USD56 | USD235 | USD56 |
+| USD2,350 | USD23,500 | USD2,350 |
+| USD0 | USD1 (fixed boundary: the minimum) | USD1 |
+| USD0 | USD500 (fixed boundary: a tier's bound) | USD1 |
+| USD0 | USD47,000 | USD1, not the step of the maximum's tier |
 
 **Steps:**
 
-1. Navigate to `<listing_2 url>` priced in `<currency>`.
-2. Enter `<maximum>`.
-3. Confirm the commitment.
+1. Commit `<maximum>`.
+2. Read Highest bid, the leader, the bid count and Recent bids; as customer B, read the page.
 
 **Expected Results:**
 
-* Grade10 accepts the commitment.
-* The current bid is `<starting price>`.
-* Customer leads.
+* customer leads at `<price>` with one bid; customer B reads `<price>`, and `<maximum>` shows nowhere to customer B.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-7gl rev=2 -->
-### g10.auction-auto-bidding.US1-TC2: Maximum below the minimum next bid is refused
+<!-- trace:case id=g10.auction-auto-bidding.TC-ic0 rev=3 covers=g10.auction-auto-bidding.SC-qbr -->
+### g10.auction-auto-bidding.US1-TC8: A second maximum on a zero start must clear the opening price by a step
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
-* **Priority:** high
+* **Severity:** major
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -785,41 +100,27 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-* An open listing has current bid `<current bid>` and minimum increment `<minimum increment>`.
 
-* The listing under test is `<listing_4>`.
-
-* The listing is priced in `<currency>`.
+* `<listing>` starts at USD0; customer A's maximum of USD560 stands alone at USD1; customer B is on its page.
 
 **Test data:**
 
-| `<currency>` | `<current bid>` | `<minimum increment>` | `<attempted maximum>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| USD | USD235 | USD5 | USD239 | `<current bid>`: (range: 10000–49999 minor units); `<minimum increment>`: (fixed tier increment); `<attempted maximum>`: (range: 10000–49999 minor units) |
-| USD | USD280 | USD5 | USD284 | `<current bid>`: (range: 10000–49999 minor units); `<minimum increment>`: (fixed tier increment); `<attempted maximum>`: (range: 10000–49999 minor units) |
-| USD | USD23,500 | USD100 | USD23,599 | `<current bid>`: (range: 1000000–999999999 minor units); `<minimum increment>`: (fixed tier increment); `<attempted maximum>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_4 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_4 url | The URL of `<listing_4>`; bind its URL only |
+| `<customer B maximum>` | `<outcome>` | `<price after>` |
+| --- | --- | --- |
+| USD1 (fixed boundary: the opening price) | refused, naming USD2 | USD1 |
+| USD2 (fixed boundary: a step above) | accepted | USD3 (USD2 plus the USD1 step) |
 
 **Steps:**
 
-1. Navigate to `<listing_4 url>` priced in `<currency>`.
-2. Enter `<attempted maximum>`.
-3. Confirm the commitment.
-4. Check the current bid and the leader.
+1. As customer B, commit `<customer B maximum>`.
+2. Read Highest bid, the leader and Recent bids.
 
 **Expected Results:**
 
-* Grade10 refuses the commitment.
-* The current bid and the leader are unchanged.
+* Step 1 is `<outcome>`; step 2 reads `<price after>`, customer A leading, USD560 shown nowhere.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-9qy rev=2 -->
-### g10.auction-auto-bidding.US1-TC3: Leader raises their own maximum
-
-Runs once per row of **Test data**.
+### g10.auction-auto-bidding.US1-TC3: A leader's raise is accepted and leaves the price where it was
 
 **Classification:**
 
@@ -836,36 +137,17 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-* customer(leads with committed maximum `<committed maximum>`) is on `<listing_6 url>`.
 
-* The listing under test is `<listing_6>`.
-
-* The listing is priced in `<currency>`.
-
-**Test data:**
-
-| `<currency>` | `<committed maximum>` | `<raised maximum>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD235 | USD470 | `<committed maximum>`: (range: 10000–49999 minor units); `<raised maximum>`: (range: 10000–49999 minor units) |
-| USD | USD280 | USD560 | `<committed maximum>`: (range: 10000–49999 minor units); `<raised maximum>`: (range: 50000–99999 minor units) |
-| USD | USD23,500 | USD47,000 | `<committed maximum>`: (range: 1000000–999999999 minor units); `<raised maximum>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_6 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_6 url | The URL of `<listing_6>`; bind its URL only |
+* customer leads `<listing>` at USD280 with a maximum of USD560, and is on its page.
 
 **Steps:**
 
-1. Enter `<raised maximum>`.
-2. Confirm the raise.
-3. Check who leads and the current bid.
+1. Raise to USD1,120.
+2. Read Your maximum, the leader and Highest bid.
 
 **Expected Results:**
 
-* Grade10 accepts the raise.
-* Customer still leads.
-* The current bid is unchanged.
+* Your maximum reads USD1,120; customer still leads at USD280.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-vq3 rev=2 -->
 ### g10.auction-auto-bidding.US1-TC4: Lowering a maximum is refused
@@ -887,141 +169,24 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
-* customer(has committed maximum `<committed maximum>`) is on `<listing_8 url>`.
 
-* The listing under test is `<listing_8>`.
-
-* The listing is priced in `<currency>`.
+* customer holds a maximum of `<held>` on `<listing>`, `<standing>`, and is on its page.
 
 **Test data:**
 
-| `<currency>` | `<committed maximum>` | `<attempted maximum>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD470 | USD235 | `<committed maximum>`: (range: 10000–49999 minor units); `<attempted maximum>`: (range: 10000–49999 minor units) |
-| USD | USD560 | USD280 | `<committed maximum>`: (range: 50000–99999 minor units); `<attempted maximum>`: (range: 10000–49999 minor units) |
-| USD | USD47,000 | USD23,500 | `<committed maximum>`: (range: 1000000–999999999 minor units); `<attempted maximum>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_8 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_8 url | The URL of `<listing_8>`; bind its URL only |
-
-**Steps:**
-
-1. Enter `<attempted maximum>`.
-2. Confirm the commitment.
-3. Check the committed maximum.
-
-**Expected Results:**
-
-* Grade10 refuses it.
-* Customer's committed maximum remains `<committed maximum>`.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-j8v rev=3 -->
-### g10.auction-auto-bidding.US1-TC5: Lone maximum on a zero start stands at the lowest increment
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/opening-price.spec.ts`
-
-**Pre-conditions:**
-
-* An open listing in `<currency>`, starting price 0, with no maximum committed.
-* customer is signed in with a card linked and is on `<listing_10 url>`.
-
-* The listing under test is `<listing_10>`.
-
-**Test data:**
-
-| `<currency>` | `<maximum>` | `<lowest increment>` | `<current bid after>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| USD | USD1 | USD1 | USD1 | `<maximum>`: (fixed boundary), the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD500 | USD1 | USD1 | `<maximum>`: (fixed tier boundary), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD10 | USD1 | USD1 | `<maximum>`: (range: 1–9999 minor units), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD920 | USD1 | USD1 | `<maximum>`: (range: 50000–99999 minor units), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD100 | USD1 | USD1 | `<maximum>`: (range: 1–9999 minor units), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-| USD | USD47,000 | USD1 | USD1 | `<maximum>`: (range: 1000000–999999999 minor units), above the minimum; `<lowest increment>`: (fixed boundary); `<current bid after>`: (fixed derived value) |
-
-| Field | Value |
-| --- | --- |
-| listing_10 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-| listing_10 url | The URL of `<listing_10>`; bind its URL only |
-
-**Steps:**
-
-1. Enter `<maximum>` in the custom maximum on the bid panel.
-2. Confirm the commitment.
-3. Read the current bid, the leader, the bid count and Recent Bids.
-
-**Expected Results:**
-
-* Grade10 accepts the commitment.
-* The current bid reads `<current bid after>`, equal to 0 plus `<lowest increment>`, not 0.
-* The current bid is not the increment of the tier the maximum sits in.
-* The bid count reads 1, and Recent Bids shows one bid at `<current bid after>`.
-* Customer leads.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-ic0 rev=3 covers=g10.auction-auto-bidding.SC-qbr -->
-### g10.auction-auto-bidding.US1-TC8: Second maximum on a zero start must clear one increment above the opening price
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_16>` starts at 0 `USD`, and customer A's maximum `<customer A maximum>` stands alone at `<opening price>`.
-* customer B(card linked) is signed in on a separate session, on the listing page for `<listing_16>`.
-
-**Test data:**
-
-| `<customer B maximum>` | `<outcome>` | `<current bid after>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD1 | Grade10 refuses the commitment, naming `<minimum next bid>` | USD1 | `<customer B maximum>`: (fixed boundary), the opening price; `<current bid after>`: (fixed derived value), equal to `<opening price>` |
-| USD2 | Grade10 accepts the commitment | USD3 | `<customer B maximum>`: (fixed derived value), the opening price plus one increment; `<current bid after>`: (fixed derived value), `<customer B maximum>` plus `<increment>` |
-
-| Field | Value | Fixture notes |
+| `<held>` | `<standing>` | `<attempt>` |
 | --- | --- | --- |
-| listing_16 | An open USD listing, starting price 0, scheduled close more than an hour away; bind its identity only | · |
-| customer A maximum | USD560 | (range: 50000–99999 minor units) |
-| opening price | USD1 | (fixed boundary), the lowest USD increment |
-| minimum next bid | USD2 | (fixed derived value), `<opening price>` plus `<increment>` |
-| increment | USD1 | (fixed lowest increment) |
+| USD560 | leading at USD280 | USD300 |
+| USD47,000 | leading at USD23,500 | USD23,500 |
 
 **Steps:**
 
-1. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel.
-2. Confirm the commitment.
-3. Read the current bid, the leader and Recent Bids.
+1. Commit `<attempt>`.
+2. Read Your maximum.
 
 **Expected Results:**
 
-* Step 2: `<outcome>`.
-* Step 3 reads current bid `<current bid after>` with customer A leading, and `<customer A maximum>` appears nowhere.
+* Step 1 is refused; Your maximum still reads `<held>`.
 
 ---
 
@@ -1032,94 +197,7 @@ Runs once per row of **Test data**.
 **so that** I know where I stand without my cap being shown to anyone else.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-mjs rev=3 covers=g10.auction-auto-bidding.SC-nqo -->
-### g10.auction-auto-bidding.US2-TC1: Bidder reads their own commitment apart from the current bid
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-* customer(committed maximum `<committed maximum>`) is on a listing with current bid `<current bid>`.
-
-* The listing under test is `<listing_18>`.
-
-* The listing is priced in `<currency>`.
-
-**Test data:**
-
-| `<currency>` | `<committed maximum>` | `<current bid>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD470 | USD235 | `<committed maximum>`: (range: 10000–49999 minor units); `<current bid>`: (range: 10000–49999 minor units) |
-| USD | USD560 | USD280 | `<committed maximum>`: (range: 50000–99999 minor units); `<current bid>`: (range: 10000–49999 minor units) |
-| USD | USD47,000 | USD23,500 | `<committed maximum>`: (range: 1000000–999999999 minor units); `<current bid>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_18 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-
-**Steps:**
-
-1. Open `<listing_18>`.
-
-**Expected Results:**
-
-* Customer sees their own maximum, `<committed maximum>`.
-* Customer sees the current bid, `<current bid>`, as a separate fact.
-* Customer sees that they lead.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-13a rev=3 covers=g10.auction-auto-bidding.SC-dmo -->
-### g10.auction-auto-bidding.US2-TC2: Overtaken bidder sees that they no longer lead
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-
-* customer(has been overtaken on an open listing) is on `<listing_20 url>`.
-
-* The listing under test is `<listing_20>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_20 | The listing prepared by the pre-conditions; bind its identity only |
-| listing_20 url | The URL of `<listing_20>`; bind its URL only |
-
-**Steps:**
-
-1. Open `<listing_20>`.
-
-**Expected Results:**
-
-* Customer sees that they do not lead.
-* Customer's own committed maximum is unchanged.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-7io rev=3 covers=g10.auction-auto-bidding.SC-x57 -->
-### g10.auction-auto-bidding.US2-TC3: Leader's maximum is not disclosed to another bidder
+### g10.auction-auto-bidding.US2-TC1: A bidder reads their maximum, the price and their standing as three facts
 
 Runs once per row of **Test data**.
 
@@ -1129,54 +207,6 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-* customer A(leads with maximum `<customer A maximum>`) is on a listing with current bid `<current bid>`.
-
-* The listing under test is `<listing_22>`.
-
-* The listing is priced in `<currency>`.
-
-**Test data:**
-
-| `<currency>` | `<customer A maximum>` | `<current bid>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD | USD470 | USD235 | `<customer A maximum>`: (range: 10000–49999 minor units); `<current bid>`: (range: 10000–49999 minor units) |
-| USD | USD560 | USD280 | `<customer A maximum>`: (range: 50000–99999 minor units); `<current bid>`: (range: 10000–49999 minor units) |
-| USD | USD47,000 | USD23,500 | `<customer A maximum>`: (range: 1000000–999999999 minor units); `<current bid>`: (range: 1000000–999999999 minor units) |
-
-| Field | Value |
-| --- | --- |
-| listing_22 | The listing prepared by the pre-conditions in `<currency>`; bind its identity only |
-
-**Steps:**
-
-1. Sign in as customer B.
-2. Open `<listing_22>`'s public facts.
-
-**Expected Results:**
-
-* The facts carry the current bid `<current bid>`.
-* The facts do not carry, and do not allow deriving, customer A's maximum `<customer A maximum>`.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-nmi rev=3 covers=g10.auction-auto-bidding.SC-eiw -->
-### g10.auction-auto-bidding.US2-TC4: A tie is accepted and reported as not leading
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
@@ -1187,30 +217,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer B leads an open USD listing with maximum `<customer B maximum>`.
-
-* The listing under test is `<listing_24>`.
+* customer holds a maximum of `<maximum>` on `<listing>`, where `<situation>`.
 
 **Test data:**
 
-| Field | Value | Fixture notes |
+| `<maximum>` | `<situation>` | `<reads>` |
 | --- | --- | --- |
-| customer C maximum | USD600 | (range: 50000–99999 minor units) |
-| customer B maximum | USD600 | (range: 50000–99999 minor units) |
-| resolved current bid | USD600 | (fixed derived value), equal to both maxima |
-| listing_24 | The listing prepared by the pre-conditions; bind its identity only | · |
+| USD560 | customer leads at USD280 | Your maximum USD560, Highest bid USD280, Leading |
+| USD560 | customer B then committed USD800 | Your maximum USD560, Highest bid USD610, Outbid |
+| USD600 | customer committed USD600 after customer B's equal USD600 | Your maximum USD600, Highest bid USD600, not leading |
 
 **Steps:**
 
-1. Commit maximum `<customer C maximum>` as customer C.
-2. Read customer C's standing.
-3. Read the listing's public bid history.
+1. Open `<listing>` and read the bid panel.
 
 **Expected Results:**
 
-* Grade10 accepts customer C's commitment.
-* Customer C is reported as not leading.
-* The public history records customer C's accepted action followed by customer B's automatic response, both at `<resolved current bid>`.
+* It reads `<reads>`.
 
 ---
 
@@ -1222,290 +245,7 @@ Runs once per row of **Test data**.
 with whoever committed first.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-1qu rev=3 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-wgx -->
-### g10.auction-auto-bidding.US3-TC1: Current bid resolves from the leader's and challenger's maxima
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-* An open USD listing has customer A leading with maximum `<customer A maximum>`, current bid `<current bid>` and applicable increment `<increment>`.
-
-* The listing under test is `<listing_26>`.
-
-**Test data:**
-
-| `<customer B maximum>` | `<resolved current bid>` | `<resolved leader>` | Fixture notes |
-| --- | --- | --- | --- |
-| USD450 | USD455 | customer A | `<customer B maximum>`: (range: 10000–49999 minor units); `<resolved current bid>`: (fixed derived value) |
-| USD500 | USD500 | customer A | `<customer B maximum>`: (fixed tier boundary); `<resolved current bid>`: (fixed derived value) |
-| USD501 | USD510 | customer B | `<customer B maximum>`: (range: 50000–99999 minor units); `<resolved current bid>`: (fixed derived value) |
-| USD600 | USD510 | customer B | `<customer B maximum>`: (range: 50000–99999 minor units); `<resolved current bid>`: (fixed derived value) |
-| USD601 | USD510 | customer B | `<customer B maximum>`: (range: 50000–99999 minor units); `<resolved current bid>`: (fixed derived value) |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer A maximum | USD500 | (fixed tier boundary) |
-| current bid | USD100 | (fixed tier boundary) |
-| increment | USD5 | (fixed tier increment at the current bid) |
-| listing_26 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps:**
-
-1. Commit `<customer B maximum>` as customer B.
-2. Read the listing's current bid and leader.
-
-**Expected Results:**
-
-* The current bid matches `<resolved current bid>`.
-* The leader matches `<resolved leader>`.
-* Grade10 accepts no intermediate bid between the previous current bid and the resolved one.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-hpg rev=3 covers=g10.auction-auto-bidding.SC-edj -->
-### g10.auction-auto-bidding.US3-TC2: Challenger raises again and still stays below the leader
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-
-* customer A leads an open USD listing at `<current bid>` with maximum `<customer A maximum>`; customer B holds maximum `<customer B maximum>`.
-
-* The listing under test is `<listing_28>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer B raised maximum | USD34,000 | (range: 1000000–999999999 minor units) |
-| customer A maximum | USD56,000 | (range: 1000000–999999999 minor units) |
-| customer B maximum | USD28,000 | (range: 1000000–999999999 minor units) |
-| current bid | USD28,100 | (fixed derived value) |
-| increment | USD100 | (fixed tier increment) |
-| resolved current bid | USD34,100 | (fixed derived value), `<customer B raised maximum>` plus `<increment>` |
-| listing_28 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps:**
-
-1. Raise customer B's maximum to `<customer B raised maximum>`.
-2. Read the listing's leader and current bid.
-
-**Expected Results:**
-
-* Customer A still leads.
-* The current bid is `<resolved current bid>`, equal to `<customer B raised maximum>` plus `<increment>`.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-29q rev=3 covers=g10.auction-auto-bidding.SC-xwb -->
-### g10.auction-auto-bidding.US3-TC3: Overtaken bidder raises but stays below the new leader
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-
-* customer B leads an open USD listing with maximum `<customer B maximum>` after overtaking customer A; customer A holds maximum `<customer A maximum>`, and the current bid is `<current bid>`.
-
-* The listing under test is `<listing_30>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer A raised maximum | USD34,000 | (range: 1000000–999999999 minor units) |
-| customer B maximum | USD34,000 | (range: 1000000–999999999 minor units) |
-| customer A maximum | USD30,000 | (range: 1000000–999999999 minor units) |
-| current bid | USD30,100 | (fixed derived value) |
-| resolved current bid | USD34,000 | (fixed derived value), equal to the tied maxima |
-| listing_30 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps:**
-
-1. Raise customer A's maximum to `<customer A raised maximum>`.
-2. Read the listing's leader and current bid.
-
-**Expected Results:**
-
-* Customer B still leads.
-* The current bid is `<resolved current bid>`, equal to the tied maxima.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-s1n rev=3 covers=g10.auction-auto-bidding.SC-n5u -->
-### g10.auction-auto-bidding.US3-TC4: Overtaken bidder raises past the current leader
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-
-* customer B leads an open USD listing with maximum `<customer B maximum>` after overtaking customer A; customer A holds maximum `<customer A maximum>`, and the current bid is `<current bid>`.
-
-* The listing under test is `<listing_32>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer A raised maximum | USD60,000 | (range: 1000000–999999999 minor units) |
-| customer B maximum | USD34,000 | (range: 1000000–999999999 minor units) |
-| customer A maximum | USD30,000 | (range: 1000000–999999999 minor units) |
-| current bid | USD30,100 | (fixed derived value) |
-| increment | USD100 | (fixed tier increment) |
-| resolved current bid | USD34,100 | (fixed derived value), `<customer B maximum>` plus `<increment>` |
-| listing_32 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps:**
-
-1. Raise customer A's maximum to `<customer A raised maximum>`.
-2. Read the listing's leader and current bid.
-
-**Expected Results:**
-
-* Customer A leads.
-* The current bid is `<resolved current bid>`, equal to `<customer B maximum>` plus `<increment>`.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-wr4 rev=2 -->
-### g10.auction-auto-bidding.US3-TC5: The current bid cannot exceed the new leader's own maximum
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-
-* customer A leads an open USD listing with maximum `<customer A maximum>`.
-
-* The listing under test is `<listing_34>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer B maximum | USD9,200 | (range: 500000–999999 minor units) |
-| customer A maximum | USD8,400 | (range: 500000–999999 minor units) |
-| increment | USD50 | (fixed tier increment) |
-| resolved current bid | USD8,450 | (fixed derived value), `<customer A maximum>` plus `<increment>`, capped at `<customer B maximum>` |
-| listing_34 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps:**
-
-1. Commit maximum `<customer B maximum>` as customer B.
-2. Read the listing's leader and current bid.
-
-**Expected Results:**
-
-* Customer B leads.
-* The current bid is `<resolved current bid>`, equal to `<customer A maximum>` plus `<increment>` and capped below `<customer B maximum>`.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-7oh rev=3 covers=g10.auction-auto-bidding.SC-52s -->
-### g10.auction-auto-bidding.US3-TC6: Equal maximum keeps the earlier leader and orders both public records together
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
-
-**Pre-conditions:**
-
-* customer B leads an open USD listing with maximum `<customer B maximum>`.
-
-* The listing under test is `<listing_36>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| customer C maximum | USD600 | (range: 50000–99999 minor units) |
-| customer B maximum | USD600 | (range: 50000–99999 minor units) |
-| resolved current bid | USD600 | (fixed derived value), equal to both maxima |
-| listing_36 | The listing prepared by the pre-conditions; bind its identity only | · |
-
-**Steps:**
-
-1. Commit maximum `<customer C maximum>` as customer C.
-2. Read the listing's leader and current bid.
-3. Read the public bid history's ordering and timestamps.
-
-**Expected Results:**
-
-* Customer B remains the leader.
-* The current bid is `<resolved current bid>`.
-* The history records customer C's accepted action at `<customer C maximum>`, then customer B's automatic response at `<resolved current bid>`, both in the same resolution timestamp group.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-m47 rev=2 -->
-### g10.auction-auto-bidding.US3-TC7: A collector's maximum resolves against the house maximum like any other
+### g10.auction-auto-bidding.US3-TC1: Two maxima set the price once, from the lower plus its step, capped at the higher
 
 Runs once per row of **Test data**.
 
@@ -1517,42 +257,38 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
 
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
+
 **Pre-conditions:**
 
-* `<listing_38>`'s internal bid of `<house maximum>` was committed at its time, and the house leads at `<starting price>` with no other bid.
-* customer A(card linked) is signed in on the listing page for `<listing_38>`.
+* customer A leads `<listing>` at `<price before>` with a maximum of `<A maximum>`; customer B, holding `<B before>`, is on its page.
 
 **Test data:**
 
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_38 | A published USD listing taking bids, starting price `<starting price>`, scheduled close a day away; bind its identity only | · |
-| starting price | 400000 minor units | (US$4,000.00) |
-| house maximum | 600000 minor units | (USD6,000) |
-
-| Row | `<customer A maximum>` | `<leader>` | `<highest bid>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| Below the house | USD5,000 | The house | USD5,050 | 500000 and 505000 minor units; `<highest bid>` equals `<customer A maximum>` plus 5000 minor units |
-| One increment short of the house | USD5,950 | The house | USD6,000 | 595000 and 600000 minor units; `<highest bid>` equals `<customer A maximum>` plus 5000 minor units, capped at `<house maximum>` |
-| Above the house | USD7,000 | customer A | USD6,050 | 700000 and 605000 minor units; `<highest bid>` equals `<house maximum>` plus 5000 minor units |
+| `<price before>` | `<A maximum>` | `<B before>` | `<B commits>` | `<price>` | `<leader>` |
+| --- | --- | --- | --- | --- | --- |
+| USD100 | USD500 | nothing | USD450 | USD475 (USD450 plus the USD25 step) | customer A |
+| USD100 | USD500 | nothing | USD500 (fixed equality) | USD500; customer B's row, then customer A's automatic answer at the same time | customer A, the earlier maximum |
+| USD100 | USD500 | nothing | USD501 (fixed boundary) | USD501 (USD500 plus USD50, capped at customer B's maximum) | customer B |
+| USD100 | USD500 | nothing | USD600 | USD550 (USD500 plus the USD50 step) | customer B |
+| USD30,000 | USD56,000 | USD28,000 | a raise to USD34,000 | USD37,000 (USD34,000 plus the USD3,000 step) | customer A |
+| USD8,400 | USD8,400 | nothing | USD8,600 | USD8,600 (USD8,900 capped at customer B's maximum) | customer B |
 
 **Steps:**
 
-1. As customer A, enter `<customer A maximum>` in the custom maximum on the bid panel and confirm.
-2. Read the standing, Highest bid and Recent bids.
+1. As customer B, commit `<B commits>`.
+2. Read Highest bid, the leader and Recent bids.
 
 **Expected Results:**
 
-* Step 1 is accepted.
-* Step 2: the leader reads `<leader>` and Highest bid reads `<highest bid>`; customer A reads Outbid or Leading to match.
-* Step 2: Recent bids lists customer A's bid and the house's bid that answers it, the house under its listing pseudonym.
+* Highest bid reads `<price>`, `<leader>` leads, and no bid is recorded between `<price before>` and `<price>`.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-6gi rev=3 covers=g10.auction-auto-bidding.SC-gct -->
-### g10.auction-auto-bidding.US3-TC8: A tie with the house stays with whoever committed first
+<!-- trace:case id=g10.auction-auto-bidding.TC-m47 rev=2 -->
+### g10.auction-auto-bidding.US3-TC7: A collector's maximum meets the house's like any other, a tie going to the earlier
 
 Runs once per row of **Test data**.
 
@@ -1565,131 +301,31 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
 
 **Pre-conditions:**
 
-* `<listing_40>` is published and taking bids, with an internal bid of `<equal maximum>`.
-* Commitments occur in this order: `<first committed>`, then `<then committed>`.
-* customer A(card linked) is signed in on the listing page for `<listing_40>`.
+* `<listing>` is open, starting at USD4,000, with an internal bid of USD6,000 at a set time; customer A is on its page.
 
 **Test data:**
 
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_40 | A published USD listing taking bids, starting price 400000 minor units, scheduled close a day away; bind its identity only | · |
-| equal maximum | 600000 minor units | (USD6,000), the house's and customer A's maximum |
-
-| Row | `<first committed>` | `<then committed>` | `<leader>` | `<highest bid>` |
-| --- | --- | --- | --- | --- |
-| Collector earlier | customer A commits `<equal maximum>` before the internal bid's time | the house commits `<equal maximum>` at its set time | customer A | `<equal maximum>` |
-| House earlier | the house commits `<equal maximum>` at its set time | customer A commits `<equal maximum>` after the internal bid's time | The house | `<equal maximum>` |
+| `<when>` | `<customer A maximum>` | `<leader>` | `<price>` |
+| --- | --- | --- | --- |
+| after the internal bid's time | USD5,000 | the house | USD5,500 (USD5,000 plus the USD500 step) |
+| after the internal bid's time | USD5,950 | the house | USD6,000 (capped at the house's maximum) |
+| after the internal bid's time | USD7,000 | customer A | USD6,500 (USD6,000 plus the USD500 step) |
+| before the internal bid's time | USD6,000 | customer A, the earlier maximum | USD6,000 |
+| after the internal bid's time | USD6,000 | the house, the earlier maximum | USD6,000 |
 
 **Steps:**
 
-1. Resolve these commitments in order: `<first committed>`, then `<then committed>`.
-2. As customer A, read the standing, Highest bid and Recent bids.
+1. As customer A, commit `<customer A maximum>` `<when>`, and let the internal bid's time pass.
+2. Read the standing, Highest bid and Recent bids.
 
 **Expected Results:**
 
-* Step 2: the leader is `<leader>`, the earlier maximum.
-* Step 2: Highest bid reads `<equal maximum>`.
-* Step 2: Recent bids lists both bids at `<equal maximum>`, the earlier maximum's row first.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-19o rev=3 covers=g10.auction-auto-bidding.SC-7m7 -->
-### g10.auction-auto-bidding.US3-TC9: A collector learns nothing of the house beyond a bidder's pseudonym
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-03
-
-**Pre-conditions:**
-
-* `<listing_42>`'s internal bid of `<house maximum>` is committed, and the house leads at `<current bid>` over customer A's maximum `<customer A maximum>`.
-* `<listing_43>` is published and taking bids with no internal bid, led by customer B at `<current bid>` with maximum `<house maximum>`, over customer A's maximum `<customer A maximum>`.
-* customer C is signed in, has never bid on either listing, and is on the listing page for `<listing_42>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_42 | A published USD listing taking bids, protected by an internal bid; bind its identity only | · |
-| listing_43 | A published USD listing taking bids, with no internal bid; bind its identity only | · |
-| house maximum | 600000 minor units | (USD6,000) |
-| customer A maximum | 500000 minor units | (USD5,000) |
-| current bid | 505000 minor units | `<customer A maximum>` plus its 5000 increment |
-
-**Steps:**
-
-1. As customer C, read the bid panel, Highest bid and Recent bids on `<listing_42>`.
-2. Read the API response for `<listing_42>`'s public facts.
-3. Open the listing page for `<listing_43>` and read the same.
-4. Read the API response for `<listing_43>`'s public facts.
-
-**Expected Results:**
-
-* Step 1 reads like step 3: the leader's row carries a listing pseudonym, with no house, reserve or floor wording.
-* Step 2 reads like step 4, save the pseudonyms and times: no field names the house or holds `<house maximum>`.
-* Neither listing shows the leader's maximum.
-* The house has a different pseudonym on each listing, and no public fact links the two pseudonyms.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-9jg rev=3 covers=g10.auction-auto-bidding.SC-rh7,g10.auction-auto-bidding.SC-jd3 -->
-### g10.auction-auto-bidding.US3-TC10: A bid just after the house's time meets the house first
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-03
-
-**Pre-conditions:**
-
-* `<listing_44>` is published and taking bids, with no bids, and its house maximum of `<house maximum>` is set for `<commit time>`.
-* `<listing_44>`'s scheduled close is a day away. customer A(card linked) and customer B(card linked) have separate sessions.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_44 | A published USD listing taking bids, starting price 20000 USD minor units, scheduled close a day away; bind its identity only | · |
-| customer A maximum | 30000 USD minor units | · |
-| house maximum | 50000 USD minor units | · |
-| commit time | 18:00:00 UTC | · |
-| house first bid | 30500 USD minor units | `<customer A maximum>` plus its USD500 tier increment |
-| customer B maximum | 40000 USD minor units | · |
-| price after | 40500 USD minor units | `<customer B maximum>` plus its USD500 tier increment |
-| starting price | 20000 USD minor units | (fixed opening price) |
-
-**Steps:**
-
-1. Before `<commit time>`, as customer A, commit `<customer A maximum>`.
-2. Read the current bid, bid count and leader.
-3. Wait until `<commit time>` passes, opening no page on `<listing_44>`.
-4. Within a minute, as customer B, open the listing page for `<listing_44>`.
-5. Enter `<customer B maximum>` in the custom maximum on the bid panel and confirm.
-6. Read the standing, Highest bid and Recent bids.
-
-**Expected Results:**
-
-* Step 2: customer A leads at `<starting price>`, and the bid count is 1.
-* Step 5 is accepted.
-* Step 6: customer B reads Outbid; Highest bid reads `<price after>`, and the house leads under one listing pseudonym.
-* Step 6: Recent bids lists the house's bid at `<house first bid>` timed at `<commit time>`, before customer B's bid at `<customer B maximum>` and the house's answer at `<price after>`.
+* `<leader>` leads at `<price>`; customer A reads Leading or Outbid to match; the house's rows read under one listing pseudonym; tied rows list the earlier maximum first.
 
 ---
 
@@ -1699,92 +335,36 @@ Runs once per row of **Test data**.
 **I want** to read every committed maximum and when it was accepted,
 **so that** I can answer a dispute about who committed what.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-de4 rev=3 covers=g10.auction-auto-bidding.SC-aqd -->
-### g10.auction-auto-bidding.US4-TC1: Operator reads every committed maximum to answer a dispute
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-04
-
-**Pre-conditions:**
-
-* admin(holds `auction:operate`) is on `<grade10 auction admin listings url>`. That listing has several committed maximums recorded.
-
-* The listing under test is `<listing_46>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_46 | The listing prepared by the pre-conditions; bind its identity only |
-| grade10 auction admin listings url | The grade10 auction admin listings url; bind its URL only |
-
-**Steps:**
-
-1. Open `<listing_46>`'s bid history.
-
-**Expected Results:**
-
-* Each commitment shows its bidder, its maximum, and its Accepted At.
-
 <!-- trace:case id=g10.auction-auto-bidding.TC-63a rev=3 covers=g10.auction-auto-bidding.SC-j3t -->
-### g10.auction-auto-bidding.US4-TC2: The house's commitment, raise and lower are traced with when each was accepted
+### g10.auction-auto-bidding.US4-TC2: An operator reads every committed maximum, the house's included, with when each was accepted
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** grade10-site-auction-auto-bidding-US-04
 
 **Pre-conditions:**
 
-* customer A committed `<customer A maximum>` on `<listing_48>`.
-* `<listing_48>` is a published USD listing with the house maximum committed at `<commit time>`, raised at `<raise time>`, collectors A and C committed maxima `<customer A maximum>` and `<customer C maximum>` at `<customer A accepted at>` and `<customer C accepted at>`, and the house maximum lowered at `<lower time>`.
-* admin(holds auction:reserve and auction:operate) is on `<grade10 auction admin listings url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_48 | A published USD listing taking bids, starting price 20000 USD minor units; bind its identity only |
-| house maximum | 25000 USD minor units |
-| commit time | 18:00:00 UTC |
-| raised maximum | 30000 USD minor units |
-| raise time | 18:10:00 UTC |
-| customer A maximum | 40000 USD minor units |
-| customer C maximum | 60000 USD minor units |
-| lowered maximum | 21000 USD minor units |
-| customer A accepted at | 18:20:00 UTC |
-| customer C accepted at | 18:30:00 UTC |
-| lower time | 19:00:00 UTC |
-| grade10 auction admin listings url | The grade10 auction admin listings url; bind its URL only |
+* On `<listing>`, starting at USD200, the house's maximum was committed at USD250 at 18:00:00 UTC and raised to USD300 at 18:10:00; customer A committed USD400 at 18:20:00 and customer C USD600 at 18:30:00; the house's maximum was lowered to USD210 at 19:00:00.
+* admin(holds auction:reserve and auction:operate) is on Listings.
 
 **Steps:**
 
-1. Open `<listing_48>`'s bid history.
-2. Read each committed maximum.
+1. Open `<listing>`'s bid history.
 
 **Expected Results:**
 
-* Step 2 lists the house's `<house maximum>` at `<commit time>`, `<raised maximum>` at `<raise time>`, and `<lowered maximum>` at `<lower time>`, all in USD minor units.
-* Step 2 lists collector A's `<customer A maximum>` at `<customer A accepted at>` and collector C's `<customer C maximum>` at `<customer C accepted at>`.
+* Each commitment shows its bidder, its maximum and its Accepted At: the house's USD250, USD300 and USD210, customer A's USD400 and customer C's USD600, at those times.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-vzk rev=2 -->
-### g10.auction-auto-bidding.US4-TC3: Staff without secret-floor access read House in the trace, never its maximum
+### g10.auction-auto-bidding.US4-TC3: Staff without the reserve grant read House in the trace, never its maximum
 
 **Classification:**
 
@@ -1795,43 +375,23 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** grade10-site-auction-auto-bidding-US-04
 
 **Pre-conditions:**
 
-* customer A committed `<customer A maximum>` on `<listing_50>`.
-* `<listing_50>`'s internal bid of `<house maximum>` was committed at `<commit time>`, and the house leads at `<current bid>`.
-* admin(staff, holds auction:operate, not auction:reserve) is on `<grade10 auction admin listings url>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_50 | A published USD listing taking bids; bind its identity only | · |
-| customer A maximum | 500000 minor units | (USD5,000) |
-| house maximum | 612300 minor units | (US$6,123.00), an amount no bid reaches |
-| current bid | 505000 minor units | `<customer A maximum>` plus its 5000 increment |
-| commit time | The internal bid's set time | · |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction admin listings url | The grade10 auction admin listings url; bind its URL only |
+* customer A committed USD5,000 on `<listing>`; its internal bid of USD6,123 is committed and the house leads at USD5,500.
+* admin(holds auction:operate, not auction:reserve) is on Listings.
 
 **Steps:**
 
-1. Open `<listing_50>`'s bid history.
-2. Read each committed maximum and each bid.
-3. As customer B, open the listing page for `<listing_50>` and read Recent bids.
+1. Open `<listing>`'s bid history.
+2. As customer B, read `<listing>`'s Recent bids.
 
 **Expected Results:**
 
-* Step 2 lists customer A's commitment, with its Accepted At.
-* Step 2: the house's bid at `<current bid>` reads House, with no account.
-* Step 2: no house row shows a maximum; `<house maximum>` shows nowhere.
-* Step 2: the house's bid shows its own Accepted At, the time Recent bids shows for it; no house row shows when a maximum was accepted.
-* Step 2: no row reads the house's listing pseudonym, or an internal bid.
-* Step 3: the house's bid reads under its listing pseudonym; nothing reads House.
+* Step 1 lists customer A's commitment and the house's USD5,500 bid as House, each with its own Accepted At, and no house maximum, no USD6,123, no pseudonym for the house and no internal bid.
+* Step 2 shows the house's bid under its listing pseudonym, and nothing reads House.
 
 ---
 
@@ -1842,9 +402,7 @@ Runs once per row of **Test data**.
 **so that** my auto-bids keep a listing open during extended bidding as a manual bid would.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-y3w rev=2 -->
-### g10.auction-auto-bidding.US5-TC8: Auto bid during extended bidding restarts the timer once
-
-Runs once per row of **Test data**.
+### g10.auction-auto-bidding.US5-TC8: An auto-bid in extended bidding counts as a bid and restarts the close once
 
 **Classification:**
 
@@ -1862,105 +420,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_58>` is in extended bidding.
-* customer A leads `<listing_58>` with a committed maximum of `<customer A maximum>`.
-* customer B is signed in with a card saved and is on `<listing_58>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_58 | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap; bind its identity only | · |
-| extension duration | 1800 seconds | · |
-| customer A maximum | USD8,400 | (range: 500000–999999 minor units) |
-| customer B maximum | USD5,700 | (range: 500000–999999 minor units), below `<customer A maximum>` |
-| bid time | The moment customer B confirms; bind its timestamp only | · |
+* `<listing>` is in extended bidding, no cap, extension 30 minutes; customer A leads with a maximum of USD8,400; customer B is on its page.
 
 **Steps:**
 
-1. As customer B, commit a maximum of `<customer B maximum>` at `<bid time>`.
-2. Read the current bid and Time left.
-3. Wait until the new close passes with no further commitment.
+1. As customer B, commit USD5,700 and note the time.
+2. Read Highest bid, the bid count and Time left.
+3. Let the new close pass with no further commitment.
 
 **Expected Results:**
 
-* Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`.
-* No further bid is placed on either maximum before the close.
+* Step 2 reads USD6,200 (USD5,700 plus the USD500 step), placed on customer A's behalf and counted, and the close 30 minutes after the noted time.
+* Step 3: neither maximum bids again before the close.
+
+---
 
 ## Settled
 
-- A first maximum on a 0 start must reach 0 plus the currency's lowest increment; a first bid of 0 or of one minor unit is a non-goal, and no case asserts either.
-- Committing or raising a maximum takes nothing from the card, and a bid Grade10 places for a collector takes nothing either; no case reads a card authorization or a hold switch (decisions Q1, Q5).
-- A raise is accepted or refused on the auction's rules alone; a raise refused for a card reason no longer exists, and its case is deprecated.
-- An auto-bid step's price is US3's to assert; with no card check left to tell it apart, the US5 case that read it is deprecated.
-
-### Archived fold records
-
-- Archived suites are reconciliation evidence only; they are not regeneration input.
-- **2026-09-16-default-auction-bid-holds-off** — `grade10-site-auction-auto-bidding-US5-TC1-1` → `g10.auction-auto-bidding.US5-TC1`; `grade10-site-auction-auto-bidding-US5-TC2-1` → `g10.auction-auto-bidding.US5-TC2`; `grade10-site-auction-auto-bidding-US5-TC3-1` → `g10.auction-auto-bidding.US5-TC3`
-- **2026-09-17-revise-auction-extended-bidding** — `grade10-site-auction-auto-bidding-US5-TC4-2` → `g10.auction-auto-bidding.US5`; `grade10-site-auction-auto-bidding-US5-TC7-1` → `g10.auction-auto-bidding.US5-TC7`
-- **2026-10-02-relay-auction-live-state** — `grade10-site-auction-auto-bidding-US1-TC5-1` → `g10.auction-auto-bidding.US1-TC5`; `grade10-site-auction-auto-bidding-US1-TC6-1` → `g10.auction-auto-bidding.US1-TC6`; `grade10-site-auction-auto-bidding-US1-TC7-1` → `g10.auction-auto-bidding.US1-TC7`; `grade10-site-auction-auto-bidding-US1-TC8-1` → `g10.auction-auto-bidding.US1-TC8`
-- **2026-10-03-refused-bid-is-not-a-bid** — `grade10-site-auction-auto-bidding-US1-TC8-1` → `g10.auction-auto-bidding.US1-TC8`; `grade10-site-auction-auto-bidding-US5-TC1-1` → `g10.auction-auto-bidding.US5-TC1`; `grade10-site-auction-auto-bidding-US5-TC2-1` → `g10.auction-auto-bidding.US5-TC2`; `grade10-site-auction-auto-bidding-US5-TC3-1` → `g10.auction-auto-bidding.US5-TC3`; `grade10-site-auction-auto-bidding-US5-TC7-2` → `g10.auction-auto-bidding.US5-TC7`
-- Operators read the house as House; only `auction:reserve` reads its maximum, and every commitment, raise and lower of it with its Accepted At (Q9, Q25)
-- A House bid shows any operator its own Accepted At, as the public history does, even where it equals the commit time (Q26)
-- A reserve holder's committed-maximum trace names the internal bidder the house maximum was committed as; other operators read House alone (Q39)
+- A first maximum on a 0 start must reach 0 plus the lowest step; a first bid of 0 is a non-goal, and no case asserts it.
+- Committing or raising a maximum takes nothing from the card, and neither does a bid Grade10 places; a raise is accepted or refused on the auction's rules alone.
 
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-01 for change `relay-auction-live-state`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-auto-bidding-US-01`. Read the change's `proposal.md`, `decisions.md` (Q16 to Q30), `tech-design.md`, `tasks.md`, this delta `spec.md`, `user-journeys.md` and `domain-tcs.md`. QA1 had read the frozen anchors only.
-
-| Finding | Disposition |
-| --- | --- |
-| A lone maximum on a 0 start stands at the lowest increment, in each currency, whatever tier the maximum sits in | **Folded in:** `grade10-site-auction-auto-bidding-SC-30` (Q19) |
-| That stand is one public bid: bid count 1, one Recent Bids row | **Folded in:** `grade10-site-auction-auto-bidding-SC-30`, which this run gave the public-record line (Q25) |
-| A first maximum one minor unit below the opening price is refused, naming it | **Folded in:** `grade10-site-auction-auction-SC-63` and `grade10-site-auction-bid-increments-SC-12`; a maximum is a bid under the same minimum |
-| A lone bidder on a 0 start wins at the lowest increment, never 0 | **Folded in:** `grade10-site-auction-auto-bidding-SC-31` |
-| A second maximum must clear the opening price plus one increment, and the price then resolves by the two-maximum rule | **Folded in:** `grade10-site-auction-auto-bidding-SC-30a`, added by this run (Q19); the accepted row follows the requirement's two-maximum resolution |
-| Unchanged two-maximum scenarios restated by the modified block - `SC-09` to `SC-18` | **Out of suite:** the durable suite's existing `-US-02` and `-US-03` cases; this change only adds the 0-start sentence |
-
-**Uncovered anchors:** none for `grade10-site-auction-auto-bidding-US-01`.
-
-**Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
-
-- **Folded in** - `grade10-site-auction-auto-bidding-SC-25` and the accepted raise of `grade10-site-auction-auto-bidding-SC-32` by `g10.auction-auto-bidding.US5-TC7`
-- **Covered at domain** - `g10.auction-dmn.US4-TC3` reads the refusal and the bid form's words of `grade10-site-auction-auto-bidding-SC-32`'s second half, a maximum not raised
-- **Revised** - `g10.auction-auto-bidding.US5-TC7` reads that nothing is taken from the card; its marker drops grade10-site-auction-auto-bidding-SC-19, grade10-site-auction-auto-bidding-SC-20 and grade10-site-auction-auto-bidding-SC-21 and covers `grade10-site-auction-auto-bidding-SC-32`. `g10.auction-auto-bidding.US1-TC8` loses the hold switch pre-condition only, `<v>` kept
-- **Deprecated** - `g10.auction-auto-bidding.US5-TC1`, `g10.auction-auto-bidding.US5-TC2` and `g10.auction-auto-bidding.US5-TC3`, with the hold requirement
-- **Raised** - none
-- **Contradicted** - none
-- **Uncovered anchors** - none; the Feature set's No card hold leaf by `g10.auction-auto-bidding.US5-TC7`
-
-**Run:** QA2 round 5, 2026-10-12, over the round-4 run below: Dev added `grade10-site-auction-auto-bidding-SC-47` and named the internal bidder in the reserve holder's trace; QA1's round-5 blind pass wrote no case here. Round 4, 2026-10-08. Dev's round-4 reading moved scenario anchors onto journeys after the accept review; QA1's round-4 blind pass, denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`, revised the internal-bid suite and drafted the winner-order case. QA2 read both, the delta specs, `decisions.md` through Q35, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. It is a statement, not proof.
-
-- **Folded in** - `g10.auction-auto-bidding.US3-TC7` by `grade10-site-auction-auto-bidding-SC-33`; `g10.auction-auto-bidding.US3-TC8` by `grade10-site-auction-auto-bidding-SC-34`, its House earlier row the durable tie rule; `g10.auction-auto-bidding.US3-TC9` by `grade10-site-auction-auto-bidding-SC-33` and `grade10-site-auction-auto-bidding-SC-07`; `g10.auction-auto-bidding.US4-TC2` by `grade10-site-auction-auto-bidding-SC-45`; `g10.auction-auto-bidding.US4-TC3` by `grade10-site-auction-auto-bidding-SC-08` and `grade10-admin-auction-internal-bid-SC-32`
-- **Added by QA2** - `g10.auction-auto-bidding.US3-TC10`: a collector bid just after the house's time meets the house first, for `grade10-site-auction-auto-bidding-SC-37`, which no blind case reached
-- **Corrected to the decisions** - `g10.auction-auto-bidding.US4-TC3` expected no time on a House row; Q26 shows a house bid's own Accepted At, so it now expects it and refuses only when a maximum was accepted
-- **Covered at domain** - `grade10-site-auction-auto-bidding-SC-33` is also walked by `g10.auction-dmn.US13-TC1`
-- **Out of suite** - `grade10-site-auction-auto-bidding-SC-36` by `grade10-admin-auction-internal-bid-US1-TC4-1`; `grade10-site-auction-auto-bidding-SC-38` by `grade10-admin-auction-internal-bid-US5-TC1-1`; `grade10-site-auction-auto-bidding-SC-39` by `g10.auction-auction.US1-TC4`; `grade10-site-auction-auto-bidding-SC-40` by `g10.auction-auction.US12-TC3`; `grade10-site-auction-auto-bidding-SC-41` by `grade10-admin-auction-internal-bid-US3-TC2-1` and `g10.auction-auction.US12-TC3`; `grade10-site-auction-auto-bidding-SC-42` and `grade10-site-auction-auto-bidding-SC-44` by `grade10-admin-auction-internal-bid-US4-TC4-1`; `grade10-site-auction-auto-bidding-SC-43` by `grade10-admin-auction-internal-bid-US4-TC2-2`; `grade10-site-auction-auto-bidding-SC-46` by `grade10-admin-auction-internal-bid-US5-TC7-1`; `grade10-site-auction-auto-bidding-SC-35` by the backend tests of tasks 3.1 and 3.2, since a person sees only that the house bids; `grade10-site-auction-auto-bidding-SC-01` to `grade10-site-auction-auto-bidding-SC-08`, `grade10-site-auction-auto-bidding-SC-22` to `grade10-site-auction-auto-bidding-SC-24` and `grade10-site-auction-auto-bidding-SC-25a` restate collector behaviour this change does not move, and stay with the durable suite's cases
-- **Anchors** - `grade10-site-auction-auto-bidding-SC-35`, `grade10-site-auction-auto-bidding-SC-38` and `grade10-site-auction-auto-bidding-SC-46` serve the Feature set group `House maximum`, rules with no actor; `grade10-site-auction-auto-bidding-SC-42`, `grade10-site-auction-auto-bidding-SC-43` and `grade10-site-auction-auto-bidding-SC-44` now serve `grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-04`, the journey their covering cases trace; `grade10-site-auction-auto-bidding-SC-39` and `grade10-site-auction-auto-bidding-SC-40` serve the durable journey `grade10-site-auction-auto-bidding-US-05`, carried under Context user journeys. `grade10-site-auction-auto-bidding-US-04` reads for an operator holding `auction:reserve`; what an operator without it reads of the house maximum is `grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-07`, served there by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-internal-bid-SC-40`. No scenario here serves that exception, so none is re-anchored; `g10.auction-auto-bidding.US4-TC3` keeps its trace to `grade10-site-auction-auto-bidding-US-04` for `grade10-site-auction-auto-bidding-SC-08` and joins `grade10-admin-auction-internal-bid-SC-32` on the behaviour
-- **Round 5, out of suite** - `grade10-site-auction-auto-bidding-SC-47` by `grade10-admin-auction-internal-bid-US1-TC12-1`, which reads one internal bidder under each lot's own pseudonym; it serves the Feature set group `House maximum`, a rule with no actor
-- **Round 5, anchors** - `grade10-admin-auction-internal-bid-SC-67` serves `grade10-site-auction-auto-bidding-US-04` beside its own journey, for the internal bidder the reserve holder's trace names (Q39); `grade10-admin-auction-internal-bid-US7-TC10-1` covers it, joined on the behaviour, and no case here is revised
-- **Rejected** - none
-- **Raised** - none
-- **Contradicted** - none
-- **Uncovered anchors** - none
-
-**Run:** independent QA2, 2026-10-14. Sources read: frozen QA1 packet (digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`); current delta auto-bidding `spec.md` and `user-journeys.md`; current bid-increments delta; proposal, decisions, PRDs, tech design, tasks; durable auto-bidding contract; `docs/governance/specs-to-test-cases.md`, `docs/governance/tcs-conventions.md`, and `.claude/skills/planning-dev/SKILL.md`.
-
-- Case disposition register (opaque IDs and historical groups retained): `TC-7gl@2`, `TC-9qy@2`, `TC-vq3@2`, `TC-j8v@3`, `TC-65a@3`, `TC-y4r@3`, `TC-ic0@3`, `TC-mjs@3`, `TC-13a@3`, `TC-7io@3`, `TC-nmi@3`, `TC-1qu@3`, `TC-hpg@3`, `TC-29q@3`, `TC-s1n@3`, `TC-wr4@2`, `TC-7oh@3`, `TC-m47@2`, `TC-6gi@3`, `TC-19o@3`, `TC-9jg@3`, `TC-de4@3`, `TC-63a@3`, `TC-vzk@2`, `TC-rmo@2`, `TC-zjt@2`, `TC-s4f@4`, `TC-y3w@2`, and `TC-wqa@2` remain active draft cases. `TC-dhr@2`, `TC-5xp@2` and `TC-hqr@2` retain their inherited deprecated status and revision; QA2 did not edit those historical cases. `US1-TC1` remains the single unmarked case inherited from QA1. QA2 revisions were advanced for marker, fixture or assertion changes; case text changes made during QA1 remain draft.
-- Linked scenario register: `TC-mjs` -> SC-05; `TC-13a` -> SC-06; `TC-7io` -> SC-07; `TC-de4` -> SC-08; `TC-63a` -> SC-45; `TC-1qu` -> SC-09, SC-11, SC-12 and SC-16; `TC-hpg` -> SC-10; `TC-29q` -> SC-13; `TC-s1n` -> SC-14; `TC-7oh` -> SC-17; `TC-nmi` -> SC-18; `TC-65a` -> SC-30; `TC-ic0` -> SC-30a; `TC-y4r` -> SC-31; `TC-s4f` -> SC-25; `TC-6gi` -> SC-34; `TC-19o` -> SC-47; and `TC-9jg` -> SC-36 and SC-37. These markers name only cases whose preconditions, route and expected result assert the linked scenario behavior.
-- The changed suite data follows the single USD schedule in `bid-increments/spec.md`. For example, the USD501 maximum row in `TC-1qu` resolves to USD510 because its second-highest maximum is in the 50000-minor-unit tier. `TC-63a` uses SC-45's exact set/raise/collector/lower times and amounts. The accidental duplicate walk observation in `TC-7oh` was removed. `TC-19o` now asserts per-listing pseudonym separation required by SC-47.
-- SC-32, SC-35, SC-38/39/40/44/46 remain out of this feature suite; task 7.14 now names focused regression tests for these behaviors, but they are planned verification, not case coverage or execution evidence. SC-15 remains unlinked because no feature case fully asserts its route and result. Its source scenario was corrected in rev3 to 805000 minor units, matching `min(810000, 800000 + 5000)`; tasks 7.7 and 7.8 name the planned schedule-outcome regression, not execution evidence.
-- Out of this feature suite: SC-33 and SC-41/42/43 have exact planned implementation-test references in tasks 7.7 and 7.8. These are planned verifiers, not executed evidence or coverage links. SC-32, SC-35, SC-38/39/40/44/46 have no full feature case; exact planned regression task 7.14 now identifies each behavior. SC-33 and SC-41/42/43 remain mapped to planned test tasks 7.7 and 7.8. Planned tasks are not case coverage or execution evidence. No vague backend check or unrelated durable case is offered as a verifier.
-- QA2 made no human-facing product decision or question. All active cases changed by QA1/QA2 remain draft. No implementation tests were run and no execution, acceptance or approval is claimed.
-
-### Archived fold records
-
-- Archived suites are reconciliation evidence only; they are not regeneration input.
-- **2026-09-16-default-auction-bid-holds-off** — `grade10-site-auction-auto-bidding-US5-TC1-1` → `g10.auction-auto-bidding.US5-TC1`; `grade10-site-auction-auto-bidding-US5-TC2-1` → `g10.auction-auto-bidding.US5-TC2`; `grade10-site-auction-auto-bidding-US5-TC3-1` → `g10.auction-auto-bidding.US5-TC3`
-- **2026-09-17-revise-auction-extended-bidding** — `grade10-site-auction-auto-bidding-US5-TC4-2` → `g10.auction-auto-bidding.US5`; `grade10-site-auction-auto-bidding-US5-TC7-1` → `g10.auction-auto-bidding.US5-TC7`
-- **2026-10-02-relay-auction-live-state** — `grade10-site-auction-auto-bidding-US1-TC5-1` → `g10.auction-auto-bidding.US1-TC5`; `grade10-site-auction-auto-bidding-US1-TC6-1` → `g10.auction-auto-bidding.US1-TC6`; `grade10-site-auction-auto-bidding-US1-TC7-1` → `g10.auction-auto-bidding.US1-TC7`; `grade10-site-auction-auto-bidding-US1-TC8-1` → `g10.auction-auto-bidding.US1-TC8`
-- **2026-10-03-refused-bid-is-not-a-bid** — `grade10-site-auction-auto-bidding-US1-TC8-1` → `g10.auction-auto-bidding.US1-TC8`; `grade10-site-auction-auto-bidding-US5-TC1-1` → `g10.auction-auto-bidding.US5-TC1`; `grade10-site-auction-auto-bidding-US5-TC2-1` → `g10.auction-auto-bidding.US5-TC2`; `grade10-site-auction-auto-bidding-US5-TC3-1` → `g10.auction-auto-bidding.US5-TC3`; `grade10-site-auction-auto-bidding-US5-TC7-2` → `g10.auction-auto-bidding.US5-TC7`
-- Operators read the house as House; only `auction:reserve` reads its maximum, and every commitment, raise and lower of it with its Accepted At (Q9, Q25)
-- A House bid shows any operator its own Accepted At, as the public history does, even where it equals the commit time (Q26)
-- A reserve holder's committed-maximum trace names the internal bidder the house maximum was committed as; other operators read House alone (Q39)
+- **Covered at domain** - `g10.auction-dmn.US3-TC2` walks a maximum below the minimum next bid refused; `g10.auction-dmn.US4-TC1` walks a rival who never reads the leader's maximum; `g10.auction-dmn.US13-TC1` walks a collector who learns nothing of the house beyond its pseudonym

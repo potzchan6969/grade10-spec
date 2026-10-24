@@ -275,6 +275,22 @@ test("a walk cut into step ranges is refused under the current rules", () => {
   assert.doesNotMatch(errorsOf(inChange.text), /step-range/);
 });
 
+test("a suite beside a capability nobody walks is warned, not refused", () => {
+  const base = "openspec/specs/demo/alpha";
+  const files = specFiles(base);
+  files[`${base}/user-journeys.md`] =
+    "**Walked by:** nobody on their own - demo/beta's journeys reach it\n";
+  files[`${base}/feature-tcs.md`] = [
+    "# demo/alpha Test Cases",
+    "",
+    "**Status:** pending-review · 0/0",
+    "",
+  ].join("\n");
+  const { status, text } = out(store(files));
+  assert.equal(status, 0, text);
+  assert.match(text, /`\*\*Walked by:\*\* nobody`.*owes no suite of its own/);
+});
+
 test("a suite beside a makers-only capability is refused", () => {
   const base = "openspec/specs/demo/alpha";
   const files = specFiles(base);
