@@ -2131,101 +2131,68 @@ test("suite fold drops the Settled placeholder once a real item exists", () => {
   );
 });
 
-test("suite fold keeps each reconciliation run whole under one Manual table", () => {
-  const recon = (run, row) =>
-    `## Reconciliation\n\n${run}\n\n| Case | Disposition |\n| --- | --- |\n| ${row} | Covered |\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| ${row} | A person reads it |`;
+const foldReconciliation = (current, delta) => {
   const merged = merge(
-    suiteOf(
-      group(1, caseBlock("site-search-US1-TC1-1")),
-      recon("**Run:** first.", "`site-search-US1-TC1-1`"),
-    ),
-    suiteOf(
-      group(2, caseBlock("site-search-US2-TC1-1")),
-      recon("Run: second.", "`site-search-US2-TC1-1`"),
-    ),
+    suiteOf(group(1, caseBlock("site-search-US1-TC1-1")), current),
+    suiteOf(group(2, caseBlock("site-search-US2-TC1-1")), delta),
   );
-  const reconciliation = merged.slice(merged.indexOf("## Reconciliation"));
-  assert.equal(
-    reconciliation,
-    "## Reconciliation\n\n**Run:** first.\n\n| Case | Disposition |\n| --- | --- |\n| `site-search-US1-TC1-1` | Covered |\n\nRun: second.\n\n| Case | Disposition |\n| --- | --- |\n| `site-search-US2-TC1-1` | Covered |\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| `site-search-US1-TC1-1` | A person reads it |\n| `site-search-US2-TC1-1` | A person reads it |\n",
-  );
-});
-
-const runOf = (heading, ...rows) =>
-  [
-    heading,
-    `| Case | Disposition |\n| --- | --- |\n${rows.map((row) => `| ${row} | Covered |`).join("\n")}`,
-  ]
-    .filter(Boolean)
-    .join("\n\n");
-const foldRuns = (current, delta) => {
-  const merged = merge(
-    suiteOf(
-      group(1, caseBlock("site-search-US1-TC1-1")),
-      `## Reconciliation\n\n${current.join("\n\n")}`,
-    ),
-    suiteOf(
-      group(1, caseBlock("site-search-US1-TC1-1")),
-      `## Reconciliation\n\n${delta.join("\n\n")}`,
-    ),
-  );
-  return merged.slice(merged.indexOf("## Reconciliation"));
+  const at = merged.indexOf("## Reconciliation");
+  return at < 0 ? "" : merged.slice(at);
 };
+const manualOf = (row) =>
+  `### Manual\n\n| Manual | Why |\n| --- | --- |\n| ${row} | A person reads it |`;
+const dispositions = (row) =>
+  `| Case | Disposition |\n| --- | --- |\n| ${row} | Covered |`;
 
-for (const heading of ["**Run:** first.", "Run: first.", "**Run** — first."]) {
-  test(`suite fold takes a reconciliation run the change grew, rather than repeating it (${heading})`, () => {
-    const table = runOf("", "`site-search-US1-TC1-1`");
-    assert.equal(
-      foldRuns([heading, table], [heading, table, "- **Raised:** none."]),
-      `## Reconciliation\n\n${heading}\n\n${table}\n\n- **Raised:** none.\n`,
-    );
-  });
-}
-
-test("suite fold keeps a reworded reconciliation paragraph beside the old one", () => {
+test("suite fold keeps only Covered at domain, Assumed and one Manual table", () => {
+  const covered = "- **Covered at domain** - the shared path - `g.dmn.US1-TC1`";
+  const assumed = "- **Assumed** - an email address has one @ (Common Rules)";
   assert.equal(
-    foldRuns(
-      [runOf("**Run:** first.", "`site-search-US1-TC1-1`")],
-      [runOf("**Run:** first.", "`site-search-US1-TC1-1`, corrected")],
+    foldReconciliation(
+      [
+        "## Reconciliation",
+        "**Run:** first.",
+        dispositions("`site-search-US1-TC1-1`"),
+        covered,
+        manualOf("`site-search-US1-TC1-1`"),
+      ].join("\n\n"),
+      [
+        "## Reconciliation",
+        "Run: second.",
+        dispositions("`site-search-US2-TC1-1`"),
+        [
+          "- **Revised** - `site-search-US2-TC1-1` moves up a revision",
+          "- **Contradicted** - none",
+          assumed,
+          "- **New, not an extension** - `site-search-US2-TC1-1` - no live route shows it",
+          covered,
+        ].join("\n"),
+        manualOf("`site-search-US2-TC1-1`"),
+      ].join("\n\n"),
     ),
-    `## Reconciliation\n\n${runOf("**Run:** first.", "`site-search-US1-TC1-1`, corrected")}\n\n${runOf("", "`site-search-US1-TC1-1`")}\n`,
+    `## Reconciliation\n\n${covered}\n${assumed}\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| \`site-search-US1-TC1-1\` | A person reads it |\n| \`site-search-US2-TC1-1\` | A person reads it |\n`,
   );
 });
 
-test("suite fold takes a grown reconciliation run in place and adds a new one after it", () => {
-  const first = (...rows) => runOf("**Run:** first.", ...rows);
-  const second = runOf("**Run:** second.", "`site-search-US1-TC2-1`");
+test("suite fold keeps a wrapped Covered at domain bullet whole", () => {
+  const wrapped =
+    "- **Covered at domain** - the shared path, walked across two\n  capabilities - `g.dmn.US1-TC2`";
   assert.equal(
-    foldRuns(
-      [first("`site-search-US1-TC1-1`")],
-      [first("`site-search-US1-TC1-1`"), "- **Raised:** none.", second],
+    foldReconciliation(
+      `## Reconciliation\n\nRun: one.\n\n${wrapped}`,
+      `## Reconciliation\n\nRun: two.\n\n${wrapped}`,
     ),
-    `## Reconciliation\n\n${first("`site-search-US1-TC1-1`")}\n\n- **Raised:** none.\n\n${second}\n`,
+    `## Reconciliation\n\n${wrapped}\n`,
   );
 });
 
-test("suite fold keeps the headless records an earlier run absorbed when that run is folded again", () => {
-  const first = runOf("**Run:** first.", "`site-search-US1-TC1-1`");
-  const orphan = runOf("", "`site-search-US1-TC2-1`");
-  const later = runOf("**Run:** later.", "`site-search-US1-TC3-1`");
+test("suite fold drops a reconciliation that holds only a run's narration", () => {
   assert.equal(
-    foldRuns([first, orphan, later], [first, "- **Raised:** none."]),
-    `## Reconciliation\n\n${first}\n\n- **Raised:** none.\n\n${orphan}\n\n${later}\n`,
-  );
-});
-
-test("suite fold appends a headless delta reconciliation rather than replacing the durable one", () => {
-  const lead = runOf("", "`site-search-US1-TC1-1`");
-  const first = runOf("**Run:** first.", "`site-search-US1-TC2-1`");
-  const headless = runOf("", "`site-search-US1-TC3-1`");
-  const once = foldRuns([lead, first], [headless]);
-  assert.equal(
-    once,
-    `## Reconciliation\n\n${lead}\n\n${first}\n\n${headless}\n`,
-  );
-  assert.equal(
-    foldRuns([lead, first, headless], [headless, "- **Raised:** none."]),
-    `## Reconciliation\n\n${lead}\n\n${first}\n\n${headless}\n\n- **Raised:** none.\n`,
+    foldReconciliation(
+      `## Reconciliation\n\n**Run:** first.\n\n${dispositions("`site-search-US1-TC1-1`")}\n\n- **Raised:** none.`,
+      `## Reconciliation\n\nRun: second.\n\n${dispositions("`site-search-US2-TC1-1`")}`,
+    ),
+    "",
   );
 });
 
@@ -2363,24 +2330,28 @@ test("suite fold reads CRLF input as LF", () => {
   assert.doesNotMatch(merge(crlf(durable), crlf(delta)), /\r/);
 });
 
-test("suite fold keeps the durable reconciliation when the delta has none, and adds Manual to one without", () => {
+test("suite fold keeps the durable standing lines when the delta has none, and adds Manual to one without", () => {
+  const covered = "- **Covered at domain** - the shared path - `g.dmn.US1-TC1`";
   const durable = suiteOf(
     group(1, caseBlock("site-search-US1-TC1-1")),
-    "## Reconciliation\n\nRun: one.",
+    `## Reconciliation\n\nRun: one.\n\n${covered}`,
   );
-  assert.match(
-    merge(durable, suiteOf(group(2, caseBlock("site-search-US2-TC1-1")))),
-    /## Reconciliation\n\nRun: one\.\n$/,
+  assert.ok(
+    merge(
+      durable,
+      suiteOf(group(2, caseBlock("site-search-US2-TC1-1"))),
+    ).endsWith(`## Reconciliation\n\n${covered}\n`),
   );
-  assert.match(
+  assert.ok(
     merge(
       durable,
       suiteOf(
         group(2, caseBlock("site-search-US2-TC1-1")),
         "## Reconciliation\n\nRun: two.\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| `site-search-US2-TC1-1` | Read |",
       ),
+    ).endsWith(
+      `## Reconciliation\n\n${covered}\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| \`site-search-US2-TC1-1\` | Read |\n`,
     ),
-    /## Reconciliation\n\nRun: one\.\n\nRun: two\.\n\n### Manual\n\n\| Manual \| Why \|\n\| --- \| --- \|\n\| `site-search-US2-TC1-1` \| Read \|\n$/,
   );
 });
 
@@ -2431,12 +2402,9 @@ test("suite fold of the vault erasure suite with grading's delta keeps every sec
   ]);
   assert.match(merged, /^\*\*Status:\*\* pending-review · 10\/41$/m);
   assert.doesNotMatch(merged, /None yet/);
-  assert.equal(merged.match(/^Run: 2026-09-22/gm).length, 2);
-  assert.match(merged, /walked here and given cases\.\n\n\| Case or scenario/);
-  assert.match(
-    merged,
-    /reads the history keeping its entries and losing the person \|\n\nRun: 2026-09-22/,
-  );
+  // The runs and their dispositions stay in the archived change.
+  assert.doesNotMatch(merged, /^\*{0,2}Run\b/m);
+  assert.doesNotMatch(merged, /\| Case or scenario/);
   assert.equal(merged.match(/^### Manual$/gm).length, 1);
   assert.equal(merged.match(/^\| Manual \| Why \|$/gm).length, 1);
   const manual = merged.slice(merged.indexOf("### Manual"));

@@ -605,42 +605,27 @@ function splitManual(raw) {
   };
 }
 
-const RUN_LINE = /^(\*\*Run\b|Run:)/;
+/** A reconciliation line the durable suite keeps: a `Covered at domain`
+ *  bullet, which the validator reads to find the feature's verifier, or an
+ *  `Assumed` Common Rule. Read as `listItems` does, so a wrapped bullet
+ *  stays whole. */
+const STANDING = /^\s*[-*]\s+\*\*(?:Covered at domain|Assumed)\*\*/;
 
-/** A run is its `Run` paragraph and what follows until the next one; text
- *  before the first is a run with no heading. A delta run whose heading the
- *  durable suite already holds is that run grown since its last fold: it
- *  takes the run's place, and the durable paragraphs it does not carry stay
- *  after it, since records appended later without a heading read as part of
- *  it. A delta run with no heading adds the paragraphs the durable suite does
- *  not hold, and any other run is added whole. */
-function mergeRuns(currentRuns, deltaRuns) {
-  if (!deltaRuns || currentRuns.includes(deltaRuns)) return currentRuns;
-  const runsOf = (text) =>
-    paragraphs(text).reduce((runs, one) => {
-      if (runs.length === 0 || RUN_LINE.test(one)) runs.push([one]);
-      else runs.at(-1).push(one);
-      return runs;
-    }, []);
-  const headed = (run) => RUN_LINE.test(run[0]);
-  const merged = runsOf(currentRuns);
-  for (const run of runsOf(deltaRuns)) {
-    const at = merged.findIndex((one) => headed(run) && one[0] === run[0]);
-    if (at >= 0)
-      merged[at] = [...run, ...merged[at].filter((one) => !run.includes(one))];
-    else if (headed(run)) merged.push(run);
-    else {
-      const missing = run.filter((one) => !merged.flat().includes(one));
-      if (missing.length) merged.push(missing);
-    }
-  }
-  return merged.map((run) => run.join("\n\n")).join("\n\n");
+function standingLines(text) {
+  return listItems(text).filter((item) => STANDING.test(item));
 }
 
+/** A durable suite holds what a tester runs and what a tool reads
+ *  (specs-to-test-cases.md, What a Suite Holds): its reconciliation keeps
+ *  only the standing lines and the `### Manual` table. A change's run, its
+ *  dispositions and its `New, not an extension` lines stay in the archived
+ *  change, and the durable suite's own older narration goes at this fold. */
 function mergeReconciliation(currentRaw, deltaRaw) {
   const current = splitManual(currentRaw);
   const delta = splitManual(deltaRaw);
-  const runs = mergeRuns(current.runs, delta.runs);
+  const standing = [
+    ...new Set([...standingLines(current.runs), ...standingLines(delta.runs)]),
+  ].join("\n");
   const tables = [current.manual, delta.manual].map((lines) =>
     lines.filter((line) => line.startsWith("|")),
   );
@@ -656,7 +641,7 @@ function mergeReconciliation(currentRaw, deltaRaw) {
   );
   const table = [...header, ...rows.values()].join("\n");
   const manual = [prose, table].filter(Boolean).join("\n\n");
-  return [runs, manual && `### Manual\n\n${manual}`]
+  return [standing, manual && `### Manual\n\n${manual}`]
     .filter(Boolean)
     .join("\n\n");
 }

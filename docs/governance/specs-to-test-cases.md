@@ -327,7 +327,7 @@ A suite holds what a tester runs and what a tool reads. What a run did is histor
 | in a change, until acceptance: the `**Run:**` line, QA2's dispositions and `**New, not an extension**` | a notes column or a binding note in test data; a note on how a case or walk was written |
 
 - **The commit message carries the run** - the old→new case map, the cases kept and reset, the dispositions of a pass, and an unfinished test migration
-- **Acceptance keeps what the durable suite holds** - the fold drops the change's run and dispositions, which stay in the archived change
+- **Acceptance keeps what the durable suite holds** - the fold carries `**Covered at domain**`, `**Assumed**` and the `### Manual` rows into the durable reconciliation and drops the rest, the durable suite's own older narration included; the change's run and dispositions stay in the archived change
 
 ## How a Case Reads
 
