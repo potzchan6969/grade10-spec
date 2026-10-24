@@ -41,13 +41,13 @@ import {
   sectionSpan,
 } from "../../tools/manual/src/store/markdown.mts";
 import { parseArgs } from "./lib/args.mjs";
+import { citesId } from "./lib/cites.mjs";
+import { applicationRoot, decidedByProblem } from "./lib/decided-by.mjs";
 import {
   checkStoreSuite,
   STORE_IN_OPENSPEC,
   storeSuites,
 } from "./lib/store-suites.mjs";
-import { citesId } from "./lib/cites.mjs";
-import { applicationRoot, decidedByProblem } from "./lib/decided-by.mjs";
 import {
   activeChangeSpecRoots,
   caseIndex,

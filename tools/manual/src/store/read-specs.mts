@@ -540,13 +540,15 @@ export function readTestCases(text: string): TestSuite {
   };
   visit(roots);
 
-  const cases = found.map(({ section, id, title }): TestCase => ({
-    id,
-    title,
-    traces: traces(section),
-    status: caseStatus(section),
-    automationStatus: automationStatusOf(section),
-  }));
+  const cases = found.map(
+    ({ section, id, title }): TestCase => ({
+      id,
+      title,
+      traces: traces(section),
+      status: caseStatus(section),
+      automationStatus: automationStatusOf(section),
+    }),
+  );
   refuseRepeats(
     "test case",
     found.map(({ section, id }) => ({ id, line: section.line })),

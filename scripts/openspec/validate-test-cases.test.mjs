@@ -1034,7 +1034,9 @@ test("a change's new case on a journey with live durable cases warns until it jo
         .replace(CASE(2), "")
         .replace(CASE(3), "")
         .replace("0/3", "0/1"),
-      [`${CHANGE}/feature-tcs.md`]: SUITE(reconciliation ? [reconciliation] : []),
+      [`${CHANGE}/feature-tcs.md`]: SUITE(
+        reconciliation ? [reconciliation] : [],
+      ),
       ...(accepted ? { "openspec/changes/demo/acceptance.json": "{}" } : {}),
     };
     for (const [name, content] of Object.entries(files)) {
@@ -1049,7 +1051,9 @@ test("a change's new case on a journey with live durable cases warns until it jo
   };
   assert.deepEqual(warned(), ["TC2", "TC3"]);
   assert.deepEqual(
-    warned("- **New, not an extension** - demo-alpha-US1-TC2-1 - another route"),
+    warned(
+      "- **New, not an extension** - demo-alpha-US1-TC2-1 - another route",
+    ),
     ["TC3"],
   );
   assert.deepEqual(warned("", true), []);
