@@ -1,6 +1,6 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review · 0/6
+**Status:** pending-review · 0/5
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## Background
@@ -27,7 +27,6 @@ sells.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-06
@@ -69,7 +68,6 @@ sells.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-06
@@ -98,36 +96,6 @@ sells.
 * No removal toast shows.
 * Step 4: no remove request.
 
-<!-- trace:case id=g10.shared-store-cart.TC-kiq rev=1 covers=g10.shared-store-cart.SC-sol,g10.shared-store-cart.SC-0wv,g10.shared-store-cart.SC-fy2,g10.shared-store-cart.SC-jbs,g10.shared-store-cart.SC-pvs,g10.shared-store-cart.SC-psl -->
-### shared-ui-store-cart-US6-TC3-1: Status values and toast copy are the named contract
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-ui-store-cart-US-06
-
-**Pre-conditions:**
-
-* None.
-
-**Steps:**
-
-1. Assign `CartItemStatus` on a cart line.
-2. Supply `CartDrawerCopy`.
-
-**Expected Results:**
-
-* Allowed status values are only `default`, `adjusted`, `soldOut`, and `unavailable`.
-* The copy includes `unavailableItemsRemoved`.
-
 <!-- trace:case id=g10.shared-store-cart.TC-ulg rev=1 covers=g10.shared-store-cart.SC-sol,g10.shared-store-cart.SC-0wv,g10.shared-store-cart.SC-fy2,g10.shared-store-cart.SC-jbs,g10.shared-store-cart.SC-pvs,g10.shared-store-cart.SC-psl -->
 ### shared-ui-store-cart-US6-TC4-1: A cart of only delisted lines ends on the empty state
 
@@ -139,7 +107,6 @@ sells.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-06
@@ -182,7 +149,6 @@ sells.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-06
@@ -227,7 +193,6 @@ sells.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-06

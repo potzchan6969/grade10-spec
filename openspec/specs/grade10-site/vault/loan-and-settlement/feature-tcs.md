@@ -1,6 +1,6 @@
 # grade10-site/vault/loan-and-settlement Test Cases
 
-**Status:** pending-review · 0/43
+**Status:** pending-review · 0/28
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 ## Background
@@ -32,7 +32,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
@@ -75,7 +74,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
@@ -117,7 +115,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
@@ -154,7 +151,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
@@ -190,7 +186,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
@@ -224,7 +219,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
@@ -258,7 +252,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
@@ -292,39 +285,6 @@ payment to cut what my arrears run on,
 **so that** I can pay some now and the rest later without being charged for
 money I have already returned.
 
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-fyv rev=2 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
-### grade10-site-vault-loan-and-settlement-US2-TC1-2: The borrower's read gives one figure owed across two reads
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-02
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
-* The clock reads 20 September, and no money is recorded between the two reads.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-2. Ask for the borrower's own read of `<case_1>` again.
-
-**Expected Results:**
-
-* Step 1 reads 10,300,000 HKD minor units outstanding: the principal plus the whole term's interest.
-* Step 1 names the due date, 1 October, and the instant it computed the figure at.
-* Step 2 reads the same figure owed and the same due date.
-
 <!-- trace:case id=g10.vault-loan-and-settlement.TC-c92 rev=1 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
 ### grade10-site-vault-loan-and-settlement-US2-TC2-1: A repayment on time still owes the whole term's interest, and settles the loan
 
@@ -336,7 +296,6 @@ money I have already returned.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
@@ -374,7 +333,6 @@ money I have already returned.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
@@ -416,7 +374,6 @@ money I have already returned.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
@@ -453,7 +410,6 @@ money I have already returned.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
@@ -490,7 +446,6 @@ money I have already returned.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
@@ -530,7 +485,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
@@ -571,7 +525,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
@@ -605,7 +558,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
@@ -632,40 +584,6 @@ Runs once per row of **Test data**.
 
 * Every row reads as its Result column says
 
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-m0p rev=2 covers=g10.vault-loan-and-settlement.SC-t4w,g10.vault-loan-and-settlement.SC-3d7,g10.vault-loan-and-settlement.SC-1wl,g10.vault-loan-and-settlement.SC-epv,g10.vault-loan-and-settlement.SC-yni,g10.vault-loan-and-settlement.SC-1f2 -->
-### grade10-site-vault-loan-and-settlement-US2-TC9-2: Total interest owed never passes the brand's accrual ceiling of the principal
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-02
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* The case is `active`, its payout of 10,000,000 (HKD) at 3% for 30 days
-  recorded, advanced 1 September, due 1 October, with no repayment made and
-  a very large number of days now overdue
-
-**Steps:**
-
-1. Ask for the borrower's own read of the case, long past the point where
-   the term's and overdue interest together would otherwise exceed the
-   principal.
-
-**Expected Results:**
-
-* The amount owed reads at most 20,000,000 (HKD) — the term's interest and
-  the overdue interest together never passing 100% of the principal
-
 ---
 
 ## grade10-site-vault-loan-and-settlement-US4: Operator takes the collateral only after warning the borrower
@@ -686,7 +604,6 @@ gave them,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-04
@@ -716,7 +633,6 @@ gave them,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-loan-and-settlement-US-04
@@ -750,7 +666,6 @@ gave them,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-04
@@ -781,7 +696,6 @@ gave them,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-04
@@ -812,7 +726,6 @@ gave them,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-04
@@ -846,7 +759,6 @@ gave them,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-04
@@ -866,40 +778,6 @@ gave them,
 * Forfeiture is refused by name, naming that no disbursed loan stands
 * The case stays `repaid`
 
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-zz5 rev=2 covers=g10.vault-loan-and-settlement.SC-4xb,g10.vault-loan-and-settlement.SC-6xk,g10.vault-loan-and-settlement.SC-u4f,g10.vault-loan-and-settlement.SC-ii8,g10.vault-loan-and-settlement.SC-57m -->
-### grade10-site-vault-loan-and-settlement-US4-TC7-2: A brand that shortens its notice period does not move the date the borrower was given
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-04
-
-**Pre-conditions:**
-
-* The case is `active`, past its due date, with a forfeiture notice sent on
-  1 November naming 15 November as the date to pay by
-* The brand's notice period is shortened to 7 days after that notice was
-  sent
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-
-**Steps:**
-
-1. Ask for the borrower's own read of the case.
-
-**Expected Results:**
-
-* The read carries 15 November as the date to pay by, the date the notice
-  itself named
-* No date recomputed from the brand's shortened period is carried
-
 ---
 
 ## grade10-site-vault-loan-and-settlement-US5: Borrower knows where to send the money
@@ -908,85 +786,6 @@ gave them,
 **I want** the page and every money email to name the FPS id, the bank
 account, whose name it is under and the reference to type,
 **so that** I can pay at my own bank without asking the shop where.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-o4d rev=2 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
-### grade10-site-vault-loan-and-settlement-US5-TC1-2: The borrower's read of a live loan carries the how-to-pay block and how long the figure holds
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-05
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan, reference `<case reference>`, on a brand whose FPS id and bank account are set; due at `<due instant>`.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 carries the lender's registered name as payee, its FPS id, its bank account and `<case reference>` as the transfer reference.
-* Step 1 carries `<due instant>`, the instant the read was made at, and what each further started day adds.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-g6e rev=2 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
-### grade10-site-vault-loan-and-settlement-US5-TC2-2: The same how-to-pay block appears in every money email on the case
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-loan-and-settlement-US-05
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* The case is `active`, its six-character reference issued, the brand's FPS
-  id and bank account set
-* An event of the row's kind fires on the case
-
-**Test data:**
-
-| Kind |
-| --- |
-| payout_recorded |
-| repayment_due_soon |
-| repayment_overdue |
-| repayment_recorded |
-| payout_reversed |
-| repayment_reversed |
-| loan_repaid |
-| forfeited |
-
-**Steps:**
-
-1. Ask for the borrower's own read of the case.
-2. Send the row's message.
-3. Open the message the borrower received.
-
-**Expected Results:**
-
-* The message names the same FPS id, bank account and case reference as
-  step 1's how-to-pay block
 
 <!-- trace:case id=g10.vault-loan-and-settlement.TC-mld rev=1 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
 ### grade10-site-vault-loan-and-settlement-US5-TC3-1: The how-to-pay block also offers card or cash at the counter
@@ -999,7 +798,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-05
@@ -1020,73 +818,6 @@ Runs once per row of **Test data**.
 * The block names card or cash at the counter as an alternative to the
   bank transfer
 
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-nld rev=2 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
-### grade10-site-vault-loan-and-settlement-US5-TC4-2: An unset FPS id reads as a placeholder off production and as no block on it
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-05
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan, advanced while the FPS id and bank account were set; the FPS id is since cleared on the row's environment.
-
-**Test data:**
-
-| Environment | Step 1 carries |
-| --- | --- |
-| Staging | The block, a marked placeholder in place of the FPS id |
-| Production | No block: no payee, no FPS id, no bank account and no transfer reference |
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-
-**Expected Results:**
-
-* Step 1 carries what the row says.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-jiy rev=2 covers=g10.vault-loan-and-settlement.SC-7o0,g10.vault-loan-and-settlement.SC-yd8,g10.vault-loan-and-settlement.SC-u5e,g10.vault-loan-and-settlement.SC-p4p -->
-### grade10-site-vault-loan-and-settlement-US5-TC5-2: A stored item with no live loan carries no how-to-pay block
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-05
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_2>` is the collector's storage case, its item in the vault, with no loan.
-
-**Steps:**
-
-1. Ask for the collector's own read of `<case_2>`.
-
-**Expected Results:**
-
-* Step 1 carries no block naming a payee, an account or a reference.
-
 ---
 
 ## grade10-site-vault-loan-and-settlement-US6: Borrower follows each repayment and the notice on the page
@@ -1095,103 +826,6 @@ Runs once per row of **Test data**.
 **I want** each repayment listed with the day it arrived and the balance
 after it, and the final notice with its date to pay by,
 **so that** I know what I still owe and how long I have.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-pye rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
-### grade10-site-vault-loan-and-settlement-US6-TC1-2: With no repayments, the borrower's read lists none and the whole figure owed
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-06
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
-* No repayment is recorded on `<case_1>`, and the clock reads 25 September.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-2. Read the repayments in the API response.
-
-**Expected Results:**
-
-* Step 2 lists no repayment.
-* Outstanding reads 10,300,000.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-fy8 rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
-### grade10-site-vault-loan-and-settlement-US6-TC2-2: With one repayment, the borrower's read lists its value date, method and balance after
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-06
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
-* 3,000,000 by FPS, value-dated 10 September, was recorded on 11 September, and the clock reads 25 September.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-2. Read the repayments in the API response.
-
-**Expected Results:**
-
-* Step 2 lists one repayment: 3,000,000, FPS, value date 10 September, recorded 11 September.
-* Its balance after reads 7,300,000: 10,300,000 less 3,000,000.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-nhz rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
-### grade10-site-vault-loan-and-settlement-US6-TC3-2: With several repayments, the borrower's read lists each in value-date order with its own balance after
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-06
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
-* 2,000,000 in cash at the counter, value-dated and recorded 20 September, then 3,000,000 by FPS, value-dated 10 September, recorded 21 September; the clock reads 25 September.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-2. Read the repayments in the API response.
-
-**Expected Results:**
-
-* Step 2 lists the 10 September repayment first, then the 20 September one, whatever order they were recorded in.
-* The 10 September repayment's balance after reads 7,300,000; the 20 September one's reads 5,300,000.
-* Each balance after equals 10,300,000 less every repayment value-dated on or before it.
 
 <!-- trace:case id=g10.vault-loan-and-settlement.TC-fze rev=1 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
 ### grade10-site-vault-loan-and-settlement-US6-TC4-1: Past due with no notice sent, the page shows no final-notice card
@@ -1204,7 +838,6 @@ after it, and the final notice with its date to pay by,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-06
@@ -1222,171 +855,6 @@ after it, and the final notice with its date to pay by,
 
 * The past-due figure and the reminders card show
 * No final-notice card shows
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-i84 rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
-### grade10-site-vault-loan-and-settlement-US6-TC5-2: Once a notice is sent, the borrower's read carries the day it was written and the date to pay by
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-loan-and-settlement-US-06
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
-* Staff sent the forfeiture notice on `<case_1>` on 10 October; the brand's notice period is 14 days.
-* The clock reads 12 October.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-2. Read the notice in the API response.
-
-**Expected Results:**
-
-* Step 2 reads the notice written on 10 October.
-* Step 2 reads the date to pay by: 24 October, the notice day plus 14 days.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-7ss rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
-### grade10-site-vault-loan-and-settlement-US6-TC6-2: Once a notice is sent, the borrower's read carries no reminder to come
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-06
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
-* Staff sent the forfeiture notice on `<case_1>` on 10 October, after the reminders of 24 September, 30 September and 8 October.
-* The clock reads 20 October.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-2. Read the reminders in the API response.
-
-**Expected Results:**
-
-* Step 2 lists the three reminders sent, with their days.
-* Step 2 carries no reminder to come.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-zs4 rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
-### grade10-site-vault-loan-and-settlement-US6-TC7-2: Before its due date, the borrower's read carries the reminder dates to come
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-06
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
-* No forfeiture notice has been sent on `<case_1>`, and the clock reads 20 September.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-2. Read the reminders in the API response.
-
-**Expected Results:**
-
-* Step 2 carries reminders to come on 24 September and 30 September: 7 days and 1 day before the due date.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-juh rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
-### grade10-site-vault-loan-and-settlement-US6-TC8-2: A repayment taken back leaves the borrower's read as if never recorded
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-06
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
-* 3,000,000 by FPS value-dated 10 September and 2,000,000 in cash value-dated 20 September are recorded on `<case_1>`.
-* A second money holder, not its recorder, took the 10 September repayment back.
-* The clock reads 25 September.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-2. Read the repayments in the API response.
-
-**Expected Results:**
-
-* Step 2 lists the 20 September repayment alone.
-* Its balance after reads 8,300,000: 10,300,000 less 2,000,000.
-* Outstanding reads 8,300,000.
-
-<!-- trace:case id=g10.vault-loan-and-settlement.TC-pro rev=2 covers=g10.vault-loan-and-settlement.SC-0fj,g10.vault-loan-and-settlement.SC-agp,g10.vault-loan-and-settlement.SC-7jd,g10.vault-loan-and-settlement.SC-job,g10.vault-loan-and-settlement.SC-fps,g10.vault-loan-and-settlement.SC-u2t,g10.vault-loan-and-settlement.SC-re7,g10.vault-loan-and-settlement.SC-ygz -->
-### grade10-site-vault-loan-and-settlement-US6-TC9-2: Past due with no notice, the borrower's read carries the reminders sent and the next one
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-06
-
-**Pre-conditions:**
-
-* customer(borrower) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-* `<case_1>` is the borrower's live loan: principal 10,000,000 HKD minor units at 3% for a 30-day term, advanced 1 September, due 1 October, no grace.
-* No forfeiture notice has been sent on `<case_1>`, and the clock reads 10 October.
-
-**Steps:**
-
-1. Ask for the borrower's own read of `<case_1>`.
-2. Read the reminders and the notice in the API response.
-
-**Expected Results:**
-
-* Step 2 lists the reminders sent on 24 September, 30 September and 8 October.
-* Step 2 carries the next reminder on 15 October, every 7 days overdue.
-* Step 2 carries no notice and no date to pay by.
 
 ---
 
@@ -1411,7 +879,6 @@ reminder days a payout sets — before I send,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-loan-and-settlement-US-07
@@ -1446,7 +913,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-07
@@ -1484,7 +950,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-loan-and-settlement-US-07
@@ -1516,7 +981,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-loan-and-settlement-US-07
@@ -1553,7 +1017,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-07
@@ -1591,7 +1054,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** `The rule before the act`
@@ -1628,7 +1090,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-07

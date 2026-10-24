@@ -12,12 +12,12 @@
  * rather than a copy of the script beside the fixture.
  */
 import assert from "node:assert/strict";
-import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 
-import { isAutomated, parseSuite, ROOT, readSuite } from "./lib/suites.mjs";
+import { parseSuite } from "./lib/suites.mjs";
 import { runValidator, specFiles } from "./test/suite-store.mjs";
 
 /** A file every fixture holds, for a line to name. */
@@ -49,7 +49,6 @@ function caseSuite({
     "* **Behaviour:** positive",
     "* **Type:** functional",
     "* **Suites:** smoke",
-    "* **Layer:** e2e",
     `* **Automation status:** ${automation}`,
     "* **Testability:** automation",
     "* **Trace:** demo-alpha-US-01",
@@ -121,10 +120,10 @@ const inChange = (options) => run(store(CHANGE, options));
 test("shared-planning-agent-rounds-SC-78 - the line reaches `decidedBy` with its own line number", () => {
   const suite = parseSuite(caseSuite({ decidedBy: DECIDER }));
   const [tc] = suite.journeys[0].cases;
-  assert.deepEqual(tc.decidedBy, [{ path: DECIDER, line: 27 }]);
+  assert.deepEqual(tc.decidedBy, [{ path: DECIDER, line: 26 }]);
   assert.deepEqual(tc.decidedByLines, [
     {
-      line: 27,
+      line: 26,
       bullet: false,
       misplaced: false,
       empty: false,
@@ -190,7 +189,7 @@ test("shared-planning-agent-rounds-SC-78 - a line anywhere but after the block i
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(
     result.stdout,
-    /`demo-alpha-US1-TC1-1`'s `\*\*Decided by:\*\*` line sits at line 30, not directly after the classification block/,
+    /`demo-alpha-US1-TC1-1`'s `\*\*Decided by:\*\*` line sits at line 29, not directly after the classification block/,
   );
 });
 
@@ -199,7 +198,7 @@ test("shared-planning-agent-rounds-SC-78 - a second line is refused as repeated"
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(
     result.stdout,
-    /`demo-alpha-US1-TC1-1` carries a second `\*\*Decided by:\*\*` line at line 29/,
+    /`demo-alpha-US1-TC1-1` carries a second `\*\*Decided by:\*\*` line at line 28/,
   );
 });
 
@@ -356,28 +355,4 @@ test("shared-planning-agent-rounds-SC-107 - --app-paths-only leaves the store's 
   ]);
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.doesNotMatch(result.stdout, /no application repository/);
-});
-
-// --- the two suites this store back-filled ---------------------------------
-
-test("shared-planning-agent-rounds-SC-78 - every automated case of the two back-filled suites names a file that exists", () => {
-  const suites = [
-    "openspec/changes/run-a-round-on-every-artifact/specs/shared/planning/agent-rounds/feature-tcs.md",
-    "openspec/changes/stage-changes-and-notify-hands/specs/shared/planning/change-stages/feature-tcs.md",
-  ];
-  let checked = 0;
-  for (const rel of suites) {
-    const read = readSuite(ROOT, join(ROOT, rel));
-    for (const tc of read.cases.filter(isAutomated)) {
-      assert.ok(
-        tc.decidedBy.length > 0,
-        `${tc.id} is automated and names no deciding test`,
-      );
-      for (const { path } of tc.decidedBy) {
-        assert.ok(existsSync(join(ROOT, path)), `${tc.id} names ${path}`);
-        checked += 1;
-      }
-    }
-  }
-  assert.ok(checked > 0, "neither suite holds an automated case any more");
 });

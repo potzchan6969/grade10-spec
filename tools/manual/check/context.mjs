@@ -308,6 +308,11 @@ export const RULES = [
     title: "Scenarios no test case traces",
   },
   {
+    key: "out-of-suite",
+    level: "fail",
+    title: "Out-of-suite lists with no category QA can read",
+  },
+  {
     key: "role",
     level: "warn",
     title: "Journeys walked by the system, not an actor",

@@ -1,16 +1,42 @@
 # shared/auth/sessions Test Cases
 
-**Status:** pending-review · 1/16
-**Drafts styled:** 2026-10-06, tcs-rules r4
+**Status:** pending-review · 0/6
+**Drafts styled:** 2026-10-24, tcs-rules r7
 
-## shared-auth-sessions-US1: Operator lists a person's sessions
+## Background
+
+* `<g10url>` is the Grade10 site and `<console url>` the Grade10 console of the environment under test.
+* An account's sessions are on its Sessions page in the console, opened by user id.
+
+## Walk 1: An admin reads and ends one account's sessions
+
+**Starting state:**
+
+- admin(holds session:list and session:revoke) on `<subject account>`'s Sessions page; `<subject account>` signed in on `<g10url>` in tab A and on `<console url>` in tab B, with the second factor proved
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<subject account>` | an account holding console access |
+
+### Route
+
+1. Read the list.
+   - Each session names its surface, with no secret shown `shared.auth-sessions.US3-TC1`
+2. Revoke the console session, wait 70 seconds, then look at tabs A and B.
+   - Tab B is signed out; tab A is still signed in `shared.auth-sessions.US2-TC1`
+3. Revoke every session, wait 70 seconds, then look at tab A.
+   - Tab A is signed out too `shared.auth-sessions.US4-TC1`
+
+## shared.auth-sessions.US1: Operator lists a person's sessions
 
 **As an** operator who can list sessions,
 **I want** to see one account's sessions without their secrets,
 **so that** I can tell which device is signed in without becoming that person.
 
-<!-- trace:case id=g10.shared-sessions.TC-jes rev=1 covers=g10.shared-sessions.SC-h95,g10.shared-sessions.SC-bo7,g10.shared-sessions.SC-jz2 -->
-### shared-auth-sessions-US1-TC1-1: Granted operator lists one account's sessions without secrets
+<!-- trace:case id=g10.shared-sessions.TC-jes rev=1 -->
+### shared.auth-sessions.US1-TC1: An operator with the list grant sees one account's sessions, never their secrets
 
 **Classification:**
 
@@ -18,341 +44,33 @@
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-01
-
-**Pre-conditions:**
-Signed in as an operator who holds `session:list`. `<a subject user id>` has at least one session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 admin sessions url>` for `<a subject user id>`.
-2. Check the listed sessions.
-
-**Expected Results:**
-
-* That account's sessions are listed.
-* No session secret is in the result.
-
-<!-- trace:case id=g10.shared-sessions.TC-7dr rev=1 covers=g10.shared-sessions.SC-h95,g10.shared-sessions.SC-bo7,g10.shared-sessions.SC-jz2 -->
-### shared-auth-sessions-US1-TC2-1: Caller without the list grant is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sessions-US-01
-
-**Pre-conditions:**
-Signed in as a person who does not hold `session:list`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Try to list sessions for `<a subject user id>`.
-
-**Expected Results:**
-
-* The system refuses the request.
-* No sessions are returned.
-
-<!-- trace:case id=g10.shared-sessions.TC-97h rev=1 covers=g10.shared-sessions.SC-h95,g10.shared-sessions.SC-bo7,g10.shared-sessions.SC-jz2 -->
-### shared-auth-sessions-US1-TC3-1: Support cannot list an admin's sessions
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sessions-US-01
-
-**Pre-conditions:**
-Signed in as an operator whose role is `support`. `<an admin user id>` holds `admin`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| an admin user id | The admin account prepared with the sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Try to list sessions for `<an admin user id>`.
-
-**Expected Results:**
-
-* The system refuses the request.
-* No sessions are returned.
-
----
-
-## shared-auth-sessions-US2: Operator ends a session
-
-**As an** operator who can revoke,
-**I want** to end one session or every session of an account,
-**so that** a stolen device is signed out, including my own if I revoke the current one.
-
-<!-- trace:case id=g10.shared-sessions.TC-ffj rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
-### shared-auth-sessions-US2-TC1-1: Revoked session is no longer signed in
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-02
-
-**Pre-conditions:**
-Signed in as an operator who holds `session:revoke`. `<a subject user id>` has a session other than the operator's.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 admin sessions url>` for `<a subject user id>`.
-2. Revoke one of that account's sessions.
-3. Check who is calling on the revoked session.
-
-**Expected Results:**
-
-* A product reading who is calling on that session reports no person.
-
-<!-- trace:case id=g10.shared-sessions.TC-oys rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
-### shared-auth-sessions-US2-TC2-1: Every session of an account can be revoked
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-02
-
-**Pre-conditions:**
-Signed in as an operator who holds `session:revoke`. `<a subject user id>` has more than one session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 admin sessions url>` for `<a subject user id>`.
-2. Revoke every session of that account.
-
-**Expected Results:**
-
-* None of that account's sessions is signed in.
-
-<!-- trace:case id=g10.shared-sessions.TC-eau rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
-### shared-auth-sessions-US2-TC3-1: Caller without the revoke grant is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sessions-US-02
-
-**Pre-conditions:**
-Signed in as an operator who does not hold `session:revoke`. `<a subject user id>` has a live session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Try to revoke a session of `<a subject user id>`.
-
-**Expected Results:**
-
-* The system refuses the request.
-* The session remains signed in.
-
-<!-- trace:case id=g10.shared-sessions.TC-cuz rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
-### shared-auth-sessions-US2-TC4-1: Support cannot revoke an admin's session
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sessions-US-02
-
-**Pre-conditions:**
-Signed in as an operator whose role is `support`. `<an admin user id>` holds `admin` and has a live session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| an admin user id | The admin account prepared with the sessions in the pre-conditions; bind its user id only |
-
-**Steps:**
-
-1. Try to revoke a session of `<an admin user id>`.
-
-**Expected Results:**
-
-* The system refuses the request.
-* The session remains signed in.
-
-<!-- trace:case id=g10.shared-sessions.TC-i70 rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
-### shared-auth-sessions-US2-TC5-1: Revoking the current session signs the operator out
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-02
-
-**Pre-conditions:**
-Signed in as an operator who holds `session:revoke`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 admin sessions url>` for the operator's own user id.
-2. Revoke the session currently in use.
-
-**Expected Results:**
-
-* The operator is not signed in.
-
-<!-- trace:case id=g10.shared-sessions.TC-g0e rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots,g10.shared-sessions.SC-bui -->
-### shared-auth-sessions-US2-TC6-1: A cached browse read closes on the very next read after a revoke
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/sessions.spec.ts`
+* **Trace:** shared-auth-sessions-US-01
 
 **Pre-conditions:**
-Signed in as an operator who holds `session:revoke`. `<a subject user id>` has two sessions, A and B; an ordinary browse read of A's signed-in state has already warmed its cache and is still within the cache window.
+
+* staff(holds session:list) is signed in on `<console url>`.
+* `<subject account>` is signed in on two devices.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+| `<subject account>` | an account with no `admin` role |
 
 **Steps:**
 
-1. Read A's signed-in state (an ordinary browse read, not a mutation or an elevated call).
-2. Revoke session A only.
-3. Immediately read A's and B's signed-in state, the same way as step 1.
+1. Open `<subject account>`'s Sessions page.
 
 **Expected Results:**
 
-* Step 3 shows A as nobody signed in, even though step 1's read would otherwise have kept the cache answering "signed in" for up to five more minutes.
-* Step 3 still shows B signed in — revoking A does not touch a session it did not name.
+* Two sessions are listed, and no session secret or token is shown.
 
-<!-- trace:case id=g10.shared-sessions.TC-f08 rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots,g10.shared-sessions.SC-bui -->
-### shared-auth-sessions-US2-TC7-1: A caller without the revoke grant cannot force a stale read either
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** none
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** shared-auth-sessions-US-02
-
-**Pre-conditions:**
-<a subject user id> has a live, cache-warmed session. No revoke has happened.
-
-**Steps:**
-
-1. Read the session's signed-in state.
-
-**Expected Results:**
-
-* The session still shows signed in — nothing about this change causes a session to close on its own, absent a revoke.
-
-### shared-auth-sessions-US2-TC8-1: Revoking one session leaves the account's other surface signed in
+<!-- trace:case id=g10.shared-sessions.TC-7dr rev=2 -->
+### shared.auth-sessions.US1-TC2: An operator who may not list an account's sessions sees none
 
 Runs once per row of **Test data**.
 
@@ -361,52 +79,45 @@ Runs once per row of **Test data**.
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** destructive
+* **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-02
+* **Trace:** shared-auth-sessions-US-01
 
 **Pre-conditions:**
 
-* admin(holds session:list and session:revoke) is on `<grade10 admin sessions url>` for `<subject account>`.
-* `<subject account>` is signed in on `<grade10 store url>` in tab A and on `<grade10 admin console url>` in tab B, with the second factor proved.
+* The row's operator is signed in on `<console url>`.
+* The row's account has a live session.
 
 **Test data:**
 
-| `<revoked session>` | Tab that still shows `<subject account>` |
+| Operator | Account |
 | --- | --- |
-| The site session | Tab B, the console |
-| The console session | Tab A, the site |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| staff without `session:list` | an account with no `admin` role |
+| support | an account holding `admin` |
 
 **Steps:**
 
-1. Revoke `<revoked session>`.
-2. Wait 70 seconds, the stated closing bound, then return to tab A.
-3. Return to tab B.
+1. Open the row's account's Sessions page.
 
 **Expected Results:**
 
-* The tab on the revoked surface shows nobody signed in.
-* The other tab still shows `<subject account>` signed in.
+* No session is listed, and the console says the operator may not see them.
 
 ---
 
-## shared-auth-sessions-US3: Operator tells a console session from a site session
+## shared.auth-sessions.US2: Operator ends a session
 
-**As an** operator,
-**I want** each listed session to say whether it is the site's or the console's,
-**so that** I know what I am ending before I end it.
+**As an** operator who can revoke,
+**I want** to end one session or every session of an account,
+**so that** a stolen device is signed out, including my own if I revoke the current one.
 
-### shared-auth-sessions-US3-TC1-1: List names each session as site or console
+<!-- trace:case id=g10.shared-sessions.TC-ffj rev=2 -->
+### shared.auth-sessions.US2-TC1: A revoked session is signed out within 70 seconds, and no other session is
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -414,252 +125,169 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** e2e
+* **Type:** security
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-03
+* **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
 
-* admin(holds session:list) is on `<grade10 admin sessions url>`.
-* `<subject account>` has a site session on a desktop, a console session on the same desktop and a site session on a phone.
+* admin(holds session:list and session:revoke) is signed in on `<console url>`.
+* The row's sessions are open, each in its own tab, and each tab has just been opened, so its signed-in state is fresh.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| subject account | An account holding console access, named by user id |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
+| Sessions | Revoked | Afterwards |
+| --- | --- | --- |
+| `<subject account>` on `<g10url>` on two devices | the first device's | the first signed out; the second still signed in |
+| `<subject account>` on `<g10url>` and on `<console url>` | the site's | the site signed out; the console still signed in |
+| `<subject account>` on `<g10url>` and on `<console url>` | the console's | the console signed out; the site still signed in |
+| the admin's own, on `<console url>` | the one in use | the admin signed out of the console |
 
 **Steps:**
 
-1. List `<subject account>`'s sessions by user id.
+1. Open the Sessions page of the row's account and revoke the row's session.
+2. Wait 70 seconds, then open a page in each tab.
 
 **Expected Results:**
 
-* The list shows three sessions.
-* Two are named as site sessions and one as a console session, matching where each was signed in.
-* No session secret is shown.
+* Step 2: the row's outcome.
 
-### shared-auth-sessions-US3-TC2-1: Account holding only a console session lists one console session
+<!-- trace:case id=g10.shared-sessions.TC-eau rev=2 -->
+### shared.auth-sessions.US2-TC2: An operator who may not revoke a session is offered no revoke
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
+* **Behaviour:** negative
+* **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-03
+* **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
 
-* admin(holds session:list) is on `<grade10 admin sessions url>`.
-* `<subject account>` is signed in on the console only.
+* The row's operator is signed in on `<console url>`.
+* The row's account is signed in on `<g10url>` in another tab.
 
 **Test data:**
 
-| Field | Value |
+| Operator | Account |
 | --- | --- |
-| subject account | An account holding console access, named by user id |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
+| staff holding `session:list` without `session:revoke` | an account with no `admin` role |
+| support | an account holding `admin` |
 
 **Steps:**
 
-1. List `<subject account>`'s sessions by user id.
+1. Open the row's account's Sessions page.
+2. Wait 70 seconds, then open a page in the account's tab.
 
 **Expected Results:**
 
-* The list shows one session, named as a console session.
-* No site session is listed.
-
-### shared-auth-sessions-US3-TC3-1: Operator's own listing names the console session they are using
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-03
-
-**Pre-conditions:**
-
-* admin(holds session:list) is signed in on `<grade10 admin console url>` and on `<grade10 store url>`.
-* admin is on `<grade10 admin sessions url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. List the operator's own sessions by user id.
-
-**Expected Results:**
-
-* The list shows the console session in use, named as a console session.
-* The list shows the site session, named as a site session.
-
-### shared-auth-sessions-US3-TC4-1: Session made before release lists as a site session
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-03
-
-**Pre-conditions:**
-
-* admin(holds session:list) is on `<grade10 admin sessions url>`.
-* `<subject account>` holds a session made before release, which carries no surface stamp.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject account | An account with a pre-release session, named by user id |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. List `<subject account>`'s sessions by user id.
-
-**Expected Results:**
-
-* The pre-release session is listed, named as a site session.
-* No session secret is shown.
+* Step 1: no revoke control is offered.
+* Step 2: the account is still signed in.
 
 ---
 
-## shared-auth-sessions-US4: Operator ends every session of an account on both surfaces
+## shared.auth-sessions.US3: Operator tells a console session from a site session
+
+**As an** operator,
+**I want** each listed session to say whether it is the site's or the console's,
+**so that** I know what I am ending before I end it.
+
+### shared.auth-sessions.US3-TC1: Each listed session says whether it is the site's or the console's
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sessions-US-03
+
+**Pre-conditions:**
+
+* admin(holds session:list) is signed in on `<console url>`.
+* The row's account holds the row's sessions.
+
+**Test data:**
+
+| Account | Sessions | Listed |
+| --- | --- | --- |
+| `<subject account>` | the site on a desktop, the console on the same desktop, the site on a phone | two site sessions and one console session |
+| `<subject account>` | the console only | one console session |
+| the admin's own | the console in use and the site | one console session and one site session |
+| an account with a session made before release | that session | one site session |
+
+**Steps:**
+
+1. Open the row's account's Sessions page.
+
+**Expected Results:**
+
+* The row's list, each session named as the site's or the console's, with no secret shown.
+
+---
+
+## shared.auth-sessions.US4: Operator ends every session of an account on both surfaces
 
 **As an** operator,
 **I want** ending every session of an account to close its site and console sessions together,
 **so that** a person I have cut off keeps no live console session.
 
-### shared-auth-sessions-US4-TC1-1: Revoking every session ends the site and the console sessions
+### shared.auth-sessions.US4-TC1: Ending every session, or a ban, signs the account out of the site and the console
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** destructive
+* **Behaviour:** positive
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-04
 
 **Pre-conditions:**
 
-* admin(holds session:list and session:revoke) is on `<grade10 admin sessions url>` for `<subject account>`.
-* `<subject account>` is signed in on `<grade10 store url>` in tab A and on `<grade10 admin console url>` in tab B, with the second factor proved.
+* admin(holds session:revoke and user:ban) is signed in on `<console url>`.
+* `<subject account>` is not banned, and is signed in on `<g10url>` in tab A and on `<console url>` in tab B, with the second factor proved.
 
 **Test data:**
 
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| subject account | An account holding console access, named by user id | · |
-| closing bound | 70 seconds | (the stated closing bound) |
-
 | Field | Value |
 | --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| `<subject account>` | an account holding console access |
+
+| Action |
+| --- |
+| revoke every session on `<subject account>`'s Sessions page |
+| ban `<subject account>` from the user directory, reason `Chargeback dispute open` |
 
 **Steps:**
 
-1. Revoke every session of `<subject account>`.
-2. Wait `<closing bound>`, then return to tab A.
-3. Return to tab B.
+1. Do the row's action.
+2. Wait 70 seconds, then open a page in tab A and in tab B.
 
 **Expected Results:**
 
 * Step 1 is accepted.
-* Tab A shows nobody signed in.
-* Tab B shows nobody signed in and not the console.
-
-### shared-auth-sessions-US4-TC2-1: Ban ends the site and the console sessions
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sessions-US-04
-
-**Pre-conditions:**
-
-* admin(holds user:ban) is on `<admin users directory url>`.
-* `<subject account>` is not banned, and is signed in on `<grade10 store url>` in tab A and on `<grade10 admin console url>` in tab B, with the second factor proved.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| subject account | An account holding console access, named by user id | · |
-| ban reason | Chargeback dispute open | · |
-| closing bound | 70 seconds | (the stated closing bound) |
-
-| Field | Value |
-| --- | --- |
-| admin users directory url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Open `<subject account>` by user id.
-2. Ban it with `<ban reason>`.
-3. Wait `<closing bound>`, then return to tab A.
-4. Return to tab B.
-
-**Expected Results:**
-
-* Step 2 is accepted.
-* Tab A shows nobody signed in.
-* Tab B shows nobody signed in and not the console.
+* Step 2: tab A is signed out, and tab B shows the console's sign-in page.
 
 ## Settled
 
@@ -706,7 +334,7 @@ Runs once per row of **Test data**.
 - **Raised, settled by the artifacts** - how a session held before release is listed, and whether the two surfaces share one closing bound (`shared-auth-session-SC-38`, `shared-auth-sessions-SC-09`). Both are in `## Settled`; none goes to `decisions.md`
 - **Raised, escalated** - none
 - **Left to the durable cases** - `shared-auth-sessions-SC-01` to `shared-auth-sessions-SC-03`, whose requirement only gained the surface in its wording: `US1-TC1-1` to `US1-TC3-1` still verify them; `shared-auth-sessions-SC-04` to `shared-auth-sessions-SC-09`: `US2-TC1-1` to `US2-TC6-1` still verify them, `US2-TC7-1` stays retired, and every `actual` one is left `actual` because the wording moved nothing they assert
-- **Covered at domain** - a revoke of one session leaving the device signed out is walked by `shared-auth-e2e-US4-TC1-1`, which still holds; ending both surfaces at once is walked by the draft domain case `shared-auth-e2e-US8-TC1-1` in this change's `domain-tcs.md`, step 7; a ban ending both stays with the capability's own cases
+- **Covered at domain** - a revoke of one session leaving the device signed out is walked by `shared.auth-dmn.US4-TC1`, which still holds; ending both surfaces at once is walked by the draft domain case `shared.auth-dmn.US8-TC1` in this change's `domain-tcs.md`, step 7; a ban ending both stays with the capability's own cases
 - **Contradicted** - none
 - **Uncovered anchors** - none: `shared-auth-sessions-US-03` has `US3-TC1-1` to `US3-TC4-1`; `shared-auth-sessions-US-04` has `US4-TC1-1` and `US4-TC2-1`; `shared-auth-sessions-US-02` has `US2-TC8-1` beside the durable `US2-TC1-1` to `US2-TC6-1`; every scenario from `shared-auth-sessions-SC-10` to `shared-auth-sessions-SC-14` is reached
 - **Trace markers** - the new scenarios and cases carry none yet; the trace CLI allocates them with the walk

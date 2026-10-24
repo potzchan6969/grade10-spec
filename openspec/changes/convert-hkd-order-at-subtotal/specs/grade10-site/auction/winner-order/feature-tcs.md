@@ -1,6 +1,6 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/26
+**Status:** pending-review · 0/23
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## g10.auction-winner-order.US1: Winner settles a won listing
@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -61,7 +60,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -94,46 +92,6 @@
 * Each PDF's Subtotal includes Tax of USD70 (range: >0 minor units).
 * Step 4: Order Summary shows Tax as `US$60.00` between Insurance and Payment Processing Fee, with the Tax info tip and its stated copy.
 
-<!-- trace:case id=g10.auction-winner-order.TC-dvc rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.US1-TC33: Card fee is grossed up on tax
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* admin(operator with payment-processing) is on a card order in Preparing Invoice, settled in HKD.
-* The order's USD lines before Tax total USD320 (fixed derived value).
-
-* The winner order under test is `<winner_order_43_1>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_43_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
-
-**Steps:**
-
-1. Add Tax of USD80 (fixed derived value).
-2. Send the invoice.
-3. Read its Subtotal and payment processing fee inputs.
-
-**Expected Results:**
-
-* The Subtotal is HKD3,140.00 (fixed derived value), the USD400 sum of the lines and Tax converted once at 7.85.
-* Grade10 computes the payment processing fee from that Subtotal.
-
 ---
 
 ## g10.auction-winner-order.US2: Winner follows a settled listing to delivery
@@ -153,7 +111,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -194,45 +151,6 @@
 **I want** my invoice to calculate the stated buyer premium correctly using the current currency minimum,
 **so that** the amount I pay is explainable and collectible.
 
-<!-- trace:case id=g10.auction-winner-order.TC-xji rev=2 -->
-### g10.auction-winner-order.US8-TC5: HKD order converts the premium and minimum together
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-03
-
-**Pre-conditions:**
-
-* The invoice is for an HKD settlement and the USD premium rule has a non-zero minimum.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| winning bid | USD1 | (fixed fixture): 20% of it is below the minimum |
-| minimum premium | USD1 | (fixed configured minimum) |
-| exchange rate | 7.85 HKD per USD | · |
-| USD sum | USD2.00 | (fixed derived value): `<winning bid>` plus the premium |
-| Subtotal | HKD15.70 | (fixed derived value): `<USD sum>` times `<exchange rate>`, converted once |
-
-**Steps:**
-
-1. Read the invoice premium, its lines and its Subtotal.
-
-**Expected Results:**
-
-* The premium is the greater of 20% of `<winning bid>` or `<minimum premium>`, in USD.
-* The lines stay in USD and the Subtotal reads `<Subtotal>`, `<USD sum>` converted once at `<exchange rate>` and rounded up to the next cent, not each line converted on its own.
-
 ---
 
 ## g10.auction-winner-order.US24: Winner chooses the currency they pay in
@@ -254,7 +172,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -301,7 +218,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -352,7 +268,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -408,7 +323,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -464,7 +378,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -501,7 +414,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -536,45 +448,6 @@ Runs once per row of **Test data**.
 * The total is 106,869 minor units in HKD, the Subtotal plus the fee.
 * The USD rule is not applied.
 
-<!-- trace:case id=g10.auction-winner-order.TC-uz6 rev=3 -->
-### g10.auction-winner-order.US26-TC6: A USD sum converts to HKD once, rounded up to the next cent
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-26
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| `<usd sum>` | `<hkd subtotal>` | Why this row | Fixture notes |
-| --- | --- | --- | --- |
-| USD120.00 | HK$942.00 | Exact: 942.00, nothing to round | `<usd sum>`: (fixed boundary) |
-| USD131.21 | HK$1,030.00 | 1029.9985 rounds up to the next cent | `<usd sum>`: (fixed boundary) |
-| USD0.04 | HK$0.32 | 0.314 rounds up, not to nearest | `<usd sum>`: (fixed boundary) |
-| USD0.01 | HK$0.08 | 0.0785 rounds up to the next cent | `<usd sum>`: (fixed boundary) |
-
-**Steps:**
-
-1. Convert `<usd sum>` to HKD once.
-
-**Expected Results:**
-
-* The result is `<hkd subtotal>`.
-
 <!-- trace:case id=g10.auction-winner-order.TC-k5y rev=3 covers=g10.auction-winner-order.SC-ida,g10.auction-winner-order.SC-63n -->
 ### g10.auction-winner-order.US26-TC7: The note names the conversion rate on the Order Summary and the two PDFs, and nowhere else
 
@@ -586,7 +459,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-26
@@ -628,7 +500,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -676,7 +547,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -732,7 +602,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -784,7 +653,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-26
@@ -849,7 +717,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -906,7 +773,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -937,7 +803,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -979,7 +844,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -1032,7 +896,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -1083,7 +946,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -1131,7 +993,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-27
@@ -1180,7 +1041,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-27
@@ -1224,7 +1084,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -1352,7 +1211,7 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | SC-04, SC-287 | Out of suite, in the durable header |
 | SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-215, SC-278, SC-279, SC-280, SC-281, SC-282, SC-300 | Unchanged; they stay with the durable cases |
 
-**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15, g10.auction-winner-order.SC18, g10.auction-winner-order.SC19, g10.auction-winner-order.SC20
+**Verified outside this suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15, g10.auction-winner-order.SC18, g10.auction-winner-order.SC19, g10.auction-winner-order.SC20
 
 SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee beside a non-zero shipping line, SC7 a USD order's documents staying in USD, and SC18 that a USD order's invoice and receipt PDFs carry no note and no gap under Subtotal. The block tests of tasks 3.1 and 3.4 to 3.6 in this store (`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/fixtures.test.ts`, `invoice-pdf.test.ts` and `receipt-pdf.test.ts`) and the PDF tests of tasks 7.1 and 7.5 in the application repository (`invoicePdf.test.ts`, `receiptPdf.test.ts`, which hold a USD invoice and receipt without a note) verify the three. No hand case opens a USD order's PDFs; the walk of task 11.1 reads an HKD order's. `US26-TC10` and `TC11` read the same documents by hand. SC15 is an invoice sent before USD facts were stored, which no tester can create now; the breakdown tests of task 6.1 (`invoicePricing.test.ts`, which drops the note when a line has no USD fact) verify it, and `US27-TC11` reads the sibling pre-layout case by hand.
 

@@ -4,89 +4,40 @@ title: Store Order History Test Cases
 
 # grade10-site/store/order-history Test Cases
 
-**Status:** pending-review · 0/10
-**Drafts styled:** 2026-10-22, tcs-rules r6
+**Status:** pending-review · 0/13
+**Drafts styled:** 2026-10-24, tcs-rules r7
+**Capabilities:** grade10-site/store/order-history, grade10-site/store/checkout
+
+## Background
+
+* `<your orders url>` is `<g10url>/profile/orders`.
 
 ## Walk 1: Read Your Orders
 
 **Starting state:**
 
-- customer(signed-in member) is on `<your orders url>`.
-- The member has `<shipped order>`, `<processing order>`, `<completed order>` and `<canceled order>`, placed on known dates.
+- customer(signed-in member) on `<your orders url>`, with `<shipped order>`, `<processing order>`, `<completed order>` and `<canceled order>`, placed on known dates
 
 **Shared test data:**
 
 | Field | Value |
 | --- | --- |
-| `your orders url` | `<g10url>/profile/orders` |
-| `shipped order` | A paid web order, shipped, with a safe carrier address. |
-| `processing order` | A paid web order, not yet shipped, newer than `<shipped order>`. |
-| `completed order` | A completed web order. |
-| `canceled order` | A canceled web order, newer than `<completed order>`. |
+| `<shipped order>` | a paid web order, shipped, with an `https` carrier address |
+| `<processing order>` | a paid web order, not yet shipped, newer than `<shipped order>` |
+| `<completed order>` | a completed web order |
+| `<canceled order>` | a canceled web order, newer than `<completed order>` |
 
 ### Route
 
 1. Read the two groups from top to bottom.
-   - Record each order's group and order `g10.store-order-history.US1-TC1`
-2. Click View Details on `<shipped order>`, then press Back.
-   - Record the order's own page opening `g10.store-order-history.US1-TC3`
-3. Click Track Order on `<shipped order>`.
-   - Record the carrier's page opening `g10.store-order-history.US1-TC3`
+   - Each order sits in its group, newest first `g10.store-order-history.TC1`
+2. Select View Details on `<shipped order>`, go back, then select Track Order.
+   - The order's page opens, then the carrier's page `g10.store-order-history.TC2`
 
-## g10.store-order-history.US1: Find my orders
-
-**As a** customer,
-**I want** one place in my account that lists my Store purchases,
-**so that** I can find and open any of them after checkout.
+## order-history#orders: Orders
 
 <!-- trace:case id=g10.store-order-history.TC-gdz rev=1 -->
-### g10.store-order-history.US1-TC1: Active orders list above past ones, newest first in each
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** acceptance, smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
-
-**Pre-conditions:**
-
-* customer(signed-in member) has `<order>` and `<newer order>` in the state its row describes, `<newer order>` placed later.
-
-**Test data:**
-
-| Partition | `<order state>` | `<expected group>` |
-| --- | --- | --- |
-| Processing | Paid, not shipped. | Active |
-| Shipped | Shipped, not completed. | Active |
-| Held | Held, whatever its refund. | Active |
-| Partly refunded, items owed | Refunded in part, items still to send. | Active |
-| Completed | Completed. | Past |
-| Canceled | Canceled. | Past |
-| Refunded in full | Refunded in full. | Past |
-| Partly refunded, all sent | Refunded in part, every item fulfilled. | Past |
-
-**Steps:**
-
-1. Navigate to `<your orders url>`.
-2. Read the Active Orders group, then the Past Orders group.
-
-**Expected Results:**
-
-* Active Orders lists above Past Orders.
-* `<order>` and `<newer order>` list under `<expected group>`.
-* `<newer order>` lists above `<order>`.
-
-<!-- trace:case id=g10.store-order-history.TC-zbs rev=1 -->
-### g10.store-order-history.US1-TC3: View Details opens the order; Track Order only when safe
+### g10.store-order-history.TC1: Active orders list above past ones, newest first in each
 
 Runs once per row of **Test data**.
 
@@ -96,49 +47,102 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Testability:** manual
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
-* customer(signed-in member) has `<order>` with `<carrier address>`.
+* customer(signed-in member) has `<order>` and `<newer order>` in the row's state, `<newer order>` placed later.
 
 **Test data:**
 
-| Partition | `<carrier address>` | `<expected track>` |
-| --- | --- | --- |
-| ❓ Safe | A carrier's `https` tracking address. | Track Order opens it. |
-| ❓ Not safe | A `javascript:` address. | No Track Order. |
-| None | No tracking supplied. | No Track Order. |
+| Both orders | Group |
+| --- | --- |
+| paid, not shipped | Active |
+| shipped, not completed | Active |
+| held, whatever its refund | Active |
+| refunded in part, items still to send | Active |
+| completed | Past |
+| canceled | Past |
+| refunded in full | Past |
+| refunded in part, every item fulfilled | Past |
 
 **Steps:**
 
-1. Navigate to `<your orders url>`.
-2. Click View Details on `<order>`.
-3. Return to `<your orders url>`.
-4. Read `<order>`'s actions.
+1. Open `<your orders url>`.
+2. Read Active Orders, then Past Orders.
 
 **Expected Results:**
 
-* Step 2 opens `/profile/orders/<order id>`.
-* Step 4 matches `<expected track>`.
+* Active Orders lists above Past Orders, UI matching store-order-history-screens-order-history--filled.
+* Both orders list under the row's group, `<newer order>` above `<order>`.
+
+<!-- trace:case id=g10.store-order-history.TC-zbs rev=2 -->
+### g10.store-order-history.TC2: View Details opens the order, and Track Order opens a safe carrier page
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** order-history#orders
+
+**Pre-conditions:**
+
+* customer(signed-in member) has `<shipped order>`, whose carrier address is an `https` tracking address.
+
+**Steps:**
+
+1. On `<your orders url>`, select View Details on `<shipped order>`, then go back.
+2. Select Track Order on `<shipped order>`.
+
+**Expected Results:**
+
+* Step 1 opens `/profile/orders/<order id>`, and Back returns to `<your orders url>`.
+* Step 2 opens the carrier's tracking page, UI matching store-order-history-blocks-orderhistorycardheader--with-track-order.
 
 ---
 
 ## Ungrouped
 
-### g10.store-order-history.US1: Find my orders
+### order-history#orders: Orders
 
-**As a** customer,
-**I want** one place in my account that lists my Store purchases,
-**so that** I can find and open any of them after checkout.
+#### g10.store-order-history.TC3: An order with no carrier address offers no Track Order
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** order-history#orders
+
+**Pre-conditions:**
+
+* customer(signed-in member) has `<completed order>`, for which the shop supplied no tracking address.
+
+**Steps:**
+
+1. On `<your orders url>`, read `<completed order>`'s actions.
+
+**Expected Results:**
+
+* View Details only, and no Track Order, UI matching store-order-history-blocks-orderhistorycard--completed-without-track.
 
 <!-- trace:case id=g10.store-order-history.TC-xzr rev=1 -->
-#### g10.store-order-history.US1-TC2: Signing in from Your Orders comes back to it
+#### g10.store-order-history.TC4: Signing in from Your Orders comes back to it
 
 **Classification:**
 
@@ -148,10 +152,9 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Testability:** manual
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
@@ -159,58 +162,43 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to `<your orders url>`.
+1. Open `<your orders url>`.
 2. Sign in.
-3. Read the address bar and the page.
 
 **Expected Results:**
 
 * Step 1 asks the customer to sign in.
-* Step 3's address is `<your orders url>`.
-* Step 3 lists the member's orders.
+* Step 2 returns to `<your orders url>`, listing the member's orders.
 
-<!-- trace:case id=g10.store-order-history.TC-ykc rev=1 -->
-#### g10.store-order-history.US1-TC4: A web checkout lists only once the shop records the order
-
-Runs once per row of **Test data**.
+<!-- trace:case id=g10.store-order-history.TC-ykc rev=2 -->
+#### g10.store-order-history.TC5: A paid web checkout lists once the shop records the order
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Testability:** manual
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
 * customer(signed-in member) has opened Shopify's checkout for `<product A>`.
 
-**Test data:**
-
-| Partition | `<checkout end>` | `<expected list>` |
-| --- | --- | --- |
-| Paid | Pay with the payment provider's published test card that succeeds. | The new order, at the top of Active Orders. |
-| Refused | Pay with the payment provider's published test card that is declined. | No new order. |
-| Left to expire | Leave the invoice unpaid until it expires. | No new order. |
-
 **Steps:**
 
-1. Do `<checkout end>`.
-2. Navigate to `<your orders url>`.
-3. Read Active Orders.
+1. Pay with the payment provider's published test card that succeeds.
+2. Open `<your orders url>`.
 
 **Expected Results:**
 
-* Step 3 shows `<expected list>`.
+* Step 2 lists the new order at the top of Active Orders.
 
-<!-- trace:case id=g10.store-order-history.TC-svt rev=1 -->
-#### g10.store-order-history.US1-TC5: Loading, a failed read with Retry, and empty stay distinct
+#### g10.store-order-history.TC6: A checkout that fails or expires never lists
 
 Runs once per row of **Test data**.
 
@@ -222,38 +210,87 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-order-history.US1
+* **Testability:** manual
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
-* customer(signed-in member) has orders.
-* The orders read is `<read state>`.
+* customer(signed-in member) has opened Shopify's checkout for `<product A>`.
 
 **Test data:**
 
-| Partition | `<read state>` | `<expected page>` |
-| --- | --- | --- |
-| Pending | Held pending. | Loading, with no empty message. |
-| Failed | Failing once, then answering. | A failure in the site's language, with Retry. |
+| Checkout ends |
+| --- |
+| paid with the provider's published test card that is declined |
+| left unpaid until the invoice expires |
 
 **Steps:**
 
-1. Navigate to `<your orders url>`.
-2. Read the page.
-3. Click Retry, where offered.
-4. Read the page and the address bar.
+1. End the checkout as the row says.
+2. Open `<your orders url>`.
 
 **Expected Results:**
 
-* Step 2 shows `<expected page>`.
-* For the failed row, step 4 lists the orders.
-* Step 4's address is `<your orders url>`.
+* Step 2 lists no new order.
+
+<!-- trace:case id=g10.store-order-history.TC-svt rev=2 -->
+#### g10.store-order-history.TC7: While the orders load, the page shows loading, never empty
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** order-history#orders
+
+**Pre-conditions:**
+
+* customer(signed-in member) has orders; the orders read is held in flight.
+
+**Steps:**
+
+1. Open `<your orders url>`.
+
+**Expected Results:**
+
+* The page shows it is loading, with no empty message, UI matching store-order-history-screens-order-history--loading.
+
+#### g10.store-order-history.TC8: A failed read says so, and Retry lists the orders at the same address
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** order-history#orders
+
+**Pre-conditions:**
+
+* customer(signed-in member) has orders; the orders read fails once, then answers.
+
+**Steps:**
+
+1. Open `<your orders url>`.
+2. Select Retry.
+
+**Expected Results:**
+
+* Step 1: a failure message in the site's language, with Retry, UI matching store-order-history-screens-order-history--recoverable-failure.
+* Step 2 lists the orders, and the address is still `<your orders url>`.
 
 <!-- trace:case id=g10.store-order-history.TC-cbg rev=1 -->
-#### g10.store-order-history.US1-TC6: An account with no orders offers a way back to the Store
+#### g10.store-order-history.TC9: An account with no orders offers a way back to the Store
 
 **Classification:**
 
@@ -263,10 +300,9 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Testability:** manual
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
@@ -274,72 +310,103 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to `<your orders url>`.
-2. Read the page.
-3. Click Shop Now.
+1. Open `<your orders url>`.
+2. Select Shop Now.
 
 **Expected Results:**
 
-* Step 2 says there are no orders yet.
-* Step 3 opens the Store.
+* Step 1 says there are no orders yet, UI matching store-order-history-blocks-orderhistory--empty.
+* Step 2 opens the Store.
 
 <!-- trace:case id=g10.store-order-history.TC-sw9 rev=1 -->
-#### g10.store-order-history.US1-TC7: Each order shows the badge for its status
+#### g10.store-order-history.TC10: Each order shows the badge for its status
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US1
+* **Testability:** manual
+* **Trace:** order-history#orders
 
 **Pre-conditions:**
 
-* customer(signed-in member) has `<order>` in the state its row describes.
+* customer(signed-in member) has `<order>` in the row's state.
 
 **Test data:**
 
-| Partition | `<order>` | `<expected badge>` |
-| --- | --- | --- |
-| Paid, not sent | Paid, not yet fulfilled. | Processing |
-| Held | On hold, refunded in part. | Processing |
-| Sent in part | Some items fulfilled, paid in full. | Shipped |
-| Sent, not paid in full | Every item fulfilled, not paid in full. | Shipped |
-| Done | Every item fulfilled and paid in full. | Completed |
-| Called off | Canceled. | Canceled |
-| Money back in part | Refunded in part, not on hold or scheduled. | Refunded |
-| Money back in full | Refunded in full. | Refunded |
-| Pick-up order | A pick-up order, paid, not yet fulfilled. | Processing; no pick-up badge |
+| `<order>` | Badge |
+| --- | --- |
+| paid, not yet fulfilled | Processing |
+| on hold, refunded in part | Processing |
+| some items fulfilled, paid in full | Shipped |
+| every item fulfilled, not paid in full | Shipped |
+| every item fulfilled and paid in full | Completed |
+| canceled | Canceled |
+| refunded in part, not on hold or scheduled | Refunded |
+| refunded in full | Refunded |
+| a pick-up order, paid, not yet fulfilled | Processing, and no pick-up badge |
 
 **Steps:**
 
-1. Navigate to `<your orders url>`.
-2. Read `<order>`'s status badge.
-3. Click View Details and read the badge there.
+1. On `<your orders url>`, read `<order>`'s badge.
+2. Select View Details and read the badge there.
 
 **Expected Results:**
 
-* Step 2 reads `<expected badge>`.
-* Step 3 reads the same badge.
+* Both read the row's badge, UI matching store-order-history-blocks-orderhistorystatus--all-statuses.
 
 ---
 
-### g10.store-order-history.US2: Find the orders I placed as a guest
+### order-history#product-pictures: Product Pictures
 
-**As a** customer,
-**I want** my guest orders listed in my account once it proves their email,
-**so that** every purchase I made is in one place.
+#### g10.store-order-history.TC11: Order items show their current product pictures, or a placeholder
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** order-history#product-pictures
+
+**Pre-conditions:**
+
+* customer(signed-in member) has an order holding the row's item.
+
+**Test data:**
+
+| Item | Shown |
+| --- | --- |
+| a product whose picture has changed since the purchase | its current picture, as the cart shows it |
+| a product with no picture | the placeholder, UI matching store-order-history-blocks-orderhistorylineitem--without-image, with the order still readable |
+
+**Steps:**
+
+1. On `<your orders url>`, read the order's items.
+
+**Expected Results:**
+
+* The row's picture.
+
+---
+
+### checkout#guest-checkout: Guest Checkout
 
 <!-- trace:case id=g10.store-order-history.TC-2qs rev=1 -->
-#### g10.store-order-history.US2-TC1: A guest order joins the account that proves its email
+#### g10.store-order-history.TC12: A guest order joins the account that proves its email, and earns no points
 
 Runs once per row of **Test data**.
 
@@ -350,37 +417,36 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** acceptance, regression
-* **Layer:** e2e
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US2
+* **Testability:** manual
+* **Trace:** checkout#guest-checkout
 
 **Pre-conditions:**
 
-* customer(signed out) paid `<guest order A>` and `<guest order B>` as a guest under `<order email>`.
-* `<account state>`.
+* customer(signed out) paid `<guest order A>` and `<guest order B>` as a guest under `<order email>`; the member's points balance is known.
 
 **Test data:**
 
-| Partition | `<account state>` | `<sign-in>` |
-| --- | --- | --- |
-| Account existed at payment | An account under `<order email>` existed when the orders were paid. | Any sign-in to that account. |
-| Account made later, magic link | No account existed at payment. | A magic link sent to `<order email>`. |
-| Account made later, Google | No account existed at payment. | A Google account under `<order email>`. |
+| Account | Signs in by |
+| --- | --- |
+| existed under `<order email>` when the orders were paid | any sign-in to it |
+| made later | a sign-in link sent to `<order email>` |
+| made later | a Google account under `<order email>` |
 
 **Steps:**
 
-1. Sign in by `<sign-in>`.
-2. Navigate to `<your orders url>`.
-3. Read the list.
+1. Sign in as the row says.
+2. Open `<your orders url>`.
+3. Complete `<guest order A>` in the shop's admin, then read the points balance and open the order.
 
 **Expected Results:**
 
-* Step 3 lists `<guest order A>` and `<guest order B>`.
+* Step 2 lists both orders, UI matching store-order-history-screens-order-history--with-guest-orders.
+* Step 3: the balance is unchanged, and the order shows no points section.
 
 <!-- trace:case id=g10.store-order-history.TC-eq2 rev=1 -->
-#### g10.store-order-history.US2-TC2: Guest orders under another email do not join
+#### g10.store-order-history.TC13: A guest order under another email does not join
 
 Runs once per row of **Test data**.
 
@@ -392,61 +458,26 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US2
+* **Testability:** manual
+* **Trace:** checkout#guest-checkout
 
 **Pre-conditions:**
 
-* `<member>`'s account holds `<account email>`.
-* `<guest order>` was paid as a guest under `<order email>`.
+* `<member>`'s account holds `<account email>`; `<guest order>` was paid as a guest under the row's email.
 
 **Test data:**
 
-| Partition | `<order email>` | `<sign-in>` |
-| --- | --- | --- |
-| Another person's email | An email no account of `<member>` holds. | `<member>`'s own sign-in. |
-| A changed Google email | The new email of `<member>`'s Google account, the account still holding the old one. | Google, as `<member>`. |
+| Order email | Signs in by |
+| --- | --- |
+| an email no account of `<member>` holds | `<member>`'s own sign-in |
+| the new email of `<member>`'s Google account, the account still holding the old one | Google, as `<member>` |
 
 **Steps:**
 
-1. Sign in by `<sign-in>`.
-2. Navigate to `<your orders url>`.
-3. Read the list.
+1. Sign in as the row says.
+2. Open `<your orders url>`.
 
 **Expected Results:**
 
-* Step 3 does not list `<guest order>`.
-
-<!-- trace:case id=g10.store-order-history.TC-pea rev=1 -->
-#### g10.store-order-history.US2-TC3: A joined guest order earns no points
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-order-history.US2
-
-**Pre-conditions:**
-
-* customer(signed-in member) holds a known points balance.
-* `<guest order>` was paid as a guest under the member's email and has joined the account.
-
-**Steps:**
-
-1. Complete `<guest order>` in the shop's admin.
-2. Read the member's points balance.
-3. Open `<guest order>` from `<your orders url>`.
-
-**Expected Results:**
-
-* Step 2 is unchanged.
-* Step 3 shows no points section.
+* `<guest order>` is not listed.

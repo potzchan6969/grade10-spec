@@ -1,3 +1,5 @@
+**Walked by:** makers only - the store's own delivery rails, used by the hands of a change; no customer or admin reaches them in the products
+
 ## ADDED User journeys
 
 ### shared-planning-change-stages-US-10: Teammate with a page open learns that `main` moved

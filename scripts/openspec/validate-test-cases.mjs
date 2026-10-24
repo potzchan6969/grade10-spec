@@ -44,6 +44,11 @@ import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
 import { applicationRoot, decidedByProblem } from "./lib/decided-by.mjs";
 import {
+  checkStoreSuite,
+  STORE_IN_OPENSPEC,
+  storeSuites,
+} from "./lib/store-suites.mjs";
+import {
   activeChangeSpecRoots,
   caseIndex,
   changeOf,
@@ -258,6 +263,12 @@ function checkSuite(root, filePath, rulesRev, allCases) {
   const err = (line, msg) => record("error", rel, line, msg);
   const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
+  if (level === "feature") warnUngroupedNewCases(root, rel, text, suite, warn);
+  if (level === "feature" && spec?.makersOnly)
+    err(
+      1,
+      "a suite beside a capability whose journeys say `**Walked by:** makers only` — a makers tool is no product feature and owes no test cases (tcs-rules r7); delete the suite",
+    );
 
   // Walk references are intentionally checked separately from case parsing.
   // A compact ref resolves in this suite. A composed walk may use a full
@@ -297,6 +308,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       pendingMarker = null;
     }
     for (const walk of parseWalks(text)) {
+      warnWalkShape(walk, warn);
       for (const ref of walk.refs) {
         const localCase =
           ref.caseId &&
@@ -677,6 +689,11 @@ function checkSuite(root, filePath, rulesRev, allCases) {
             `case \`${tc.id}\` has **${name}:** \`${raw}\` — expected one of ${vocab.join(", ")}`,
           );
       }
+      if (tc.layerLine !== undefined)
+        err(
+          tc.layerLine + 1,
+          `case \`${tc.id}\` carries a **Layer:** line — every case is a GUI walk (tcs-rules r7); delete the line, or delete the case if no product user can see what it checks`,
+        );
       const order = tc.propOrder.filter((n) =>
         PROPERTIES.some(([p]) => p === n),
       );
@@ -940,7 +957,7 @@ if (args.stale) {
   process.exit(0);
 }
 
-if (suites.length === 0) {
+if (suites.length === 0 && storeSuites(ROOT).length === 0) {
   console.log(
     dim(`No suite found${args.scope ? ` for scope "${args.scope}"` : ""}.`),
   );
@@ -1008,6 +1025,139 @@ if (args.swept) {
 const summaries = suites.map((p) =>
   checkSuite(ROOT, p, rulesRev, allCaseIndex),
 );
+
+// --- the store's suites live only in its PRD folder -----------------------
+for (const p of suites) {
+  const rel = relative(ROOT, p).split(sep).join("/");
+  if (STORE_IN_OPENSPEC.test(rel))
+    record(
+      "error",
+      rel,
+      1,
+      "a Grade10 store suite under openspec — the store's cases live only in docs/prds/products/grade10-site/store/tests/ (tcs-rules r7); move or delete it",
+    );
+}
+// --- a state a story draws: UI matching <story-id> -------------------------
+// Warned, not refused: a story renamed without `pnpm storybook:rename` is a
+// fix in one line, and the workbench's index is read only when a case cites it.
+{
+  const cited = [];
+  for (const p of [...suites, ...storeSuites(ROOT)]) {
+    const rel = relative(ROOT, p);
+    if (args.scope && !rel.includes(args.scope)) continue;
+    readFileSync(p, "utf8")
+      .split("\n")
+      .forEach((line, i) => {
+        for (const m of line.matchAll(
+          /UI matching `?([a-z0-9-]+--[a-z0-9-]+)`?/g,
+        ))
+          cited.push({ rel, line: i + 1, id: m[1] });
+      });
+  }
+  if (cited.length > 0) {
+    const { storyIndex } = await import("../storybook/story-index.mjs");
+    const known = new Set(Object.keys(storyIndex({ root: ROOT }).entries));
+    for (const one of cited)
+      if (!known.has(one.id))
+        record(
+          "warning",
+          one.rel,
+          one.line,
+          `\`UI matching ${one.id}\` names no story in this store's Storybook — use the id the story's title and export make, or \`pnpm storybook:rename\` after a rename`,
+        );
+  }
+}
+
+{
+  const anchors = new Map();
+  for (const p of storeSuites(ROOT)) {
+    const rel = relative(ROOT, p);
+    if (args.scope && !rel.includes(args.scope)) continue;
+    checkStoreSuite(
+      ROOT,
+      p,
+      (severity, line, message) => record(severity, rel, line, message),
+      anchors,
+    );
+  }
+}
+
+// --- a walk saves a tester setup and time ---------------------------------
+// tcs-rules r7: at least 2 cases, about 25 steps at most, one starting state
+// along one route, and never a catch-all. Warned, so a suite written before
+// the rule is fixed at its next regeneration rather than refused today.
+/** A change's new case on a journey the durable suite already holds live
+ *  cases for joins one of them, or its Reconciliation says why it stays new
+ *  (tcs-rules r7, "A change's new case is grouped before it folds"). Asked
+ *  only before acceptance: an accepted change's cases are already folded. A
+ *  warning, never a refusal - acceptance is a developer's step. */
+function warnUngroupedNewCases(root, rel, text, suite, warn) {
+  const at = /^openspec\/changes\/([^/]+)\/specs\/(.+\/feature-tcs\.md)$/.exec(
+    rel.split(sep).join("/"),
+  );
+  if (!at) return;
+  if (existsSync(join(root, "openspec", "changes", at[1], "acceptance.json")))
+    return;
+  const durablePath = join(root, "openspec", "specs", at[2]);
+  if (!existsSync(durablePath)) return;
+  const durable = parseSuite(readFileSync(durablePath, "utf8"));
+  const live = (tc) => tc.props.get("Status") !== "deprecated";
+  const ids = new Set();
+  const markers = new Set();
+  const liveJourneys = new Set();
+  for (const journey of durable.journeys)
+    for (const tc of journey.cases) {
+      ids.add(tc.id);
+      if (tc.markerId) markers.add(tc.markerId);
+      if (live(tc)) liveJourneys.add(journey.num);
+    }
+  const span = sectionSpan(text, "Reconciliation");
+  const kept = span
+    ? text
+        .split("\n")
+        .slice(span.from, span.until)
+        .filter((line) => /\*\*New, not an extension\*\*/.test(line))
+        .join("\n")
+    : "";
+  for (const journey of suite.journeys) {
+    if (!liveJourneys.has(journey.num)) continue;
+    for (const tc of journey.cases) {
+      if (!live(tc) || ids.has(tc.id)) continue;
+      if (tc.markerId && markers.has(tc.markerId)) continue;
+      if (kept.includes(tc.id)) continue;
+      warn(
+        tc.line,
+        `case \`${tc.id}\` is new on a journey whose durable suite already holds live cases — join it to one as a row or a revision, or say why not with \`- **New, not an extension** - ${tc.id} - <why>\` in \`## Reconciliation\``,
+      );
+    }
+  }
+}
+
+function warnWalkShape(walk, warn) {
+  const catchAll =
+    /additional fixture checks|execute every|[—-]\s*phase\s+\d+|and adjacent checks/i;
+  const cases = new Set(walk.refs.map((ref) => ref.caseId ?? ref.id));
+  if (cases.size < 2)
+    warn(
+      walk.line,
+      `walk \`${walk.title}\` covers ${cases.size} ${cases.size === 1 ? "case" : "cases"} — a walk saves setup across at least 2 cases; list the case under \`## Ungrouped\` instead`,
+    );
+  if (walk.steps > 27)
+    warn(
+      walk.line,
+      `walk \`${walk.title}\` runs ${walk.steps} steps — split it at a new starting state so each walk stays within about 25`,
+    );
+  if (walk.setupBlocks > 1)
+    warn(
+      walk.line,
+      `walk \`${walk.title}\` strings ${walk.setupBlocks} separate setups together — one walk has one starting state; start another walk for each setup`,
+    );
+  if (catchAll.test(walk.title))
+    warn(
+      walk.line,
+      `walk \`${walk.title}\` is a catch-all or a continuation — title the route the tester drives, and put cases that share no route under \`## Ungrouped\``,
+    );
+}
 
 // --- every journey is walked by a product user or outside agent ---------
 // The classes are the store's two product users. An outside agent such as a
@@ -1244,7 +1394,8 @@ for (const p of suites) {
 // suite does not name anywhere, was most likely left behind at the fold -
 // the carry gate that now refuses it did not exist then. A human decides each
 // one; a case found to be replaced is named in the durable suite, one line,
-// and the warning stops.
+// and the warning stops. An archived `api` or `unit` case is not left behind:
+// tcs-rules r7 deleted every one, since every case is now a GUI walk.
 {
   const unversioned = (id) => id.replace(/(-TC\d+)-\d+$/, "$1");
   const live = new Set(
@@ -1267,6 +1418,9 @@ for (const p of suites) {
       .match(/^([^/]+)\/specs\/(.+)$/);
     if (!m) continue;
     const [, change, path] = m;
+    // The store's cases moved to its PRD folder (tcs-rules r7): an archived
+    // store suite has no durable suite to have been folded into.
+    if (path.startsWith("grade10-site/store/")) continue;
     const target = join(ROOT, "openspec", "specs", path);
     const rel = relative(ROOT, target);
     if (args.scope && !rel.includes(args.scope)) continue;
@@ -1276,9 +1430,10 @@ for (const p of suites) {
       new RegExp(
         `${unversioned(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?!\\d)`,
       ).test(named);
-    const left = [...caseIndex(ROOT, [file]).keys()].filter(
-      (id) => !live.has(unversioned(id)) && !namedHere(id),
-    );
+    const left = [...caseIndex(ROOT, [file])]
+      .filter(([, one]) => one.layer !== "api" && one.layer !== "unit")
+      .map(([id]) => id)
+      .filter((id) => !live.has(unversioned(id)) && !namedHere(id));
     if (left.length === 0) continue;
     const shown = left
       .slice(0, 5)
@@ -1298,6 +1453,12 @@ for (const p of suites) {
 if (args.requireSuites) {
   for (const d of specs) {
     if (existsSync(join(d, "feature-tcs.md"))) continue;
+    if (readSpecIds(join(d, "spec.md"))?.makersOnly) continue;
+    // The store's cases live in its PRD folder, never beside its specs.
+    if (
+      /(^|\/)grade10-site\/store\//.test(relative(ROOT, d).split(sep).join("/"))
+    )
+      continue;
     const spec = readSpecIds(join(d, "spec.md"));
     if (spec?.hasJourneySection && spec.journeys.size > 0)
       record(

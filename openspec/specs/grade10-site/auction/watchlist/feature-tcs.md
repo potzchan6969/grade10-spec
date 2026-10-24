@@ -1,6 +1,6 @@
 # grade10-site/auction/watchlist Test Cases
 
-**Status:** pending-review · 0/12
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
 ## Walk 1: Collector watches a listing to come back to it
@@ -55,8 +55,6 @@
    - The watch is still present after reload. `g10.auction-watchlist.US1-TC1`
 4. Submit a second watch for `<listing_2>`.
 5. Read the collector's watches ordered by Watched At.
-   - Exactly one watch exists for that collector and listing. `g10.auction-watchlist.US1-TC2`
-   - Watched At remains `<first watched at>`. `g10.auction-watchlist.US1-TC2`
 6. Attempt to watch the listing from `<listing_3 url>` or catalogue.
    - Sign-in is offered. `g10.auction-watchlist.US1-TC3`
    - No watch is stored in the browser. `g10.auction-watchlist.US1-TC3`
@@ -214,9 +212,6 @@
 ### Route
 
 1. As an operator, read the watch count for `<listing_11>`.
-   - The count reads `<watch count>`, one Grade10 watch plus one ZZZ watch. `g10.auction-watchlist.US4-TC1`
-   - No watcher identity is disclosed. `g10.auction-watchlist.US4-TC1`
-   - Public listing facts still carry no watch count. `g10.auction-watchlist.US4-TC1`
 2. Navigate to `<my auctions url>` and open Watching.
 3. Turn email alerts off for `<listing_12>`.
    - The listing `<listing_12>` remains watched. `g10.auction-watchlist.US5-TC1`
@@ -240,7 +235,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-01
@@ -269,45 +263,6 @@
 * Email alerts for `<listing_1>` are on.
 * The watch is still present after reload.
 
-<!-- trace:case id=g10.auction-watchlist.TC-eyd rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
-### g10.auction-watchlist.US1-TC2: Watching twice leaves the original Watched At
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-watchlist-US-01
-
-**Pre-conditions:**
-
-* Collector already watches `<listing_2>`.
-
-* The original watch has Watched At `<first watched at>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_2 | A listing already watched by this collector at `<first watched at>`; bind its identity only |
-| first watched at | The original seeded watch timestamp for `<listing_2>`; bind its datetime only |
-
-**Steps:**
-
-1. Submit a second watch for `<listing_2>`.
-2. Read the collector's watches ordered by Watched At.
-
-**Expected Results:**
-
-* Exactly one watch exists for that collector and listing.
-* Watched At remains `<first watched at>`.
-
 <!-- trace:case id=g10.auction-watchlist.TC-jxa rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
 ### g10.auction-watchlist.US1-TC3: Signed-out viewer is offered sign-in
 
@@ -319,7 +274,6 @@
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-01
@@ -362,7 +316,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-02
@@ -399,7 +352,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-02
@@ -437,7 +389,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-02
@@ -479,7 +430,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-03
@@ -519,7 +469,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-03
@@ -554,7 +503,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-03
@@ -590,7 +538,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-03
@@ -621,45 +568,6 @@
 **I want** to see how many collectors watch a listing, across both brands,
 **so that** I can judge interest without treating a watch as a commitment to buy.
 
-<!-- trace:case id=g10.auction-watchlist.TC-bma rev=1 covers=g10.auction-watchlist.SC-x1c -->
-### g10.auction-watchlist.US4-TC1: Operator count includes both brands and no names
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-watchlist-US-04
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/watches/listingStats.spec.ts`
-
-**Pre-conditions:**
-
-* One Grade10 collector and one ZZZ collector each watch `<listing_11>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_11 | A listing watched by one Grade10 collector and one ZZZ collector; bind its identity only | · |
-| watch count | 2 | Fixed derived value: one Grade10 watch plus one ZZZ watch |
-
-**Steps:**
-
-1. As an operator, read the watch count for `<listing_11>`.
-
-**Expected Results:**
-
-* The count reads `<watch count>`, one Grade10 watch plus one ZZZ watch.
-* No watcher identity is disclosed.
-* Public listing facts still carry no watch count.
-
 ## g10.auction-watchlist.US5: Collector mutes email alerts without unwatching
 
 **As a** signed-in collector,
@@ -677,7 +585,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-05

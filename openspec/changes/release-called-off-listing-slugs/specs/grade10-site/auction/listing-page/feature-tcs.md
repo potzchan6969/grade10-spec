@@ -1,6 +1,6 @@
 # grade10-site/auction/listing-page Test Cases
 
-**Status:** reopened · 0/12
+**Status:** reopened · 0/10
 **Drafts styled:** 2026-10-08, tcs-rules r4
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 
@@ -23,7 +23,6 @@ without waiting for a script to run.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-01
@@ -86,7 +85,6 @@ without waiting for a script to run.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-01
@@ -146,11 +144,9 @@ answer with the site's not-found surface,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
-
 
 Runs once per row of **Test data**.
 
@@ -209,7 +205,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
@@ -266,7 +261,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -295,78 +289,6 @@ Runs once per row of **Test data**.
 * No separate listing-code or payment-reference field appears.
 * A code occurs only within the full canonical address.
 
-<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=3 covers=g10.auction-listing-page.SC-oq9 -->
-### g10.auction-listing-page.US10-TC3: Listing code absent from the shared-link preview
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-10
-
-**Pre-conditions:**
-
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
-
-**Steps:**
-
-1. Fetch the share-preview metadata for `<a published lot's address>`.
-2. Search the preview's title, description and url for the lot's listing code.
-3. Inspect the preview image and embedded metadata.
-4. Read the same address's document title and meta description.
-
-**Expected Results:**
-
-* The preview's title and description have no labelled listing-code or payment-reference field.
-* Its URL is the canonical address ending in the lower-case listing-code suffix.
-
-Previously cached preview content may persist; the test does not require a
-purge or regeneration. A fresh preview fetch must satisfy the absence above.
-* The preview identifies the public lot by title and full address.
-* Image and embedded metadata expose no separate code or payment reference.
-* Step 4 identifies the same public lot by title and description.
-* Neither document field contains a listing code or payment reference.
-
-<!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=2 -->
-### g10.auction-listing-page.US10-TC4: Listing code absent from the page title and meta description
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-10
-
-**Pre-conditions:**
-
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
-
-**Steps:**
-
-1. Open `<a published lot's address>`.
-2. Read the browser tab title and the page's meta description.
-3. Compare the title and description with the addressed lot.
-
-**Expected Results:**
-
-* Neither the tab title nor the meta description contains the listing code.
-* Both identify the addressed lot, never the auction catalogue.
-
 <!-- trace:case id=g10.auction-listing-page.TC-6de rev=2 covers=g10.auction-listing-page.SC-dc3 -->
 ### g10.auction-listing-page.US10-TC9: Listing code stays absent once an order exists on the lot
 
@@ -378,7 +300,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -413,7 +334,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -445,7 +365,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-10
@@ -489,7 +408,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-11
@@ -527,7 +445,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-11
@@ -561,7 +478,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-11

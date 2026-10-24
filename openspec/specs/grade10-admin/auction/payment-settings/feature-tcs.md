@@ -1,8 +1,7 @@
 # grade10-admin/auction/payment-settings Test Cases
 
-**Status:** pending-review · 0/16
+**Status:** pending-review · 0/9
 **Drafts styled:** 2026-10-13, tcs-rules r5
-**Out of suite:** grade10-admin-auction-payment-settings-SC-04, grade10-admin-auction-payment-settings-SC-08, grade10-admin-auction-payment-settings-SC-09, grade10-admin-auction-payment-settings-SC-10, grade10-admin-auction-payment-settings-SC-11
 
 ## grade10-admin-auction-payment-settings-US1: Operator maintains the auction premium minimums
 
@@ -21,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-01
@@ -41,113 +39,6 @@
 * Step 1: one USD minimum is shown, reading USD0.00.
 * Step 2: no HKD or JPY minimum is shown.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-nzx rev=2 -->
-### grade10-admin-auction-payment-settings-US1-TC2-2: A saved USD minimum persists
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-payment-settings-US-01
-
-**Pre-conditions:**
-
-* admin(holds the auction settlement permission) is on Payment settings under `/auction`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<usd>` | 100 minor units (any whole amount of 0 or more) |
-
-**Steps:**
-
-1. Set the USD minimum to `<usd>`.
-2. Save.
-3. Reload Payment settings.
-
-**Expected Results:**
-
-* Step 3 shows `<usd>` as saved.
-* The save names this operator and the time it was saved.
-
-<!-- trace:case id=g10adm.auction-payment-settings.TC-s5q rev=2 -->
-### grade10-admin-auction-payment-settings-US1-TC3-2: Invalid save changes nothing
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-payment-settings-US-01
-
-**Pre-conditions:**
-
-* admin(holds the auction settlement permission) is on Payment settings under `/auction`.
-* The saved minimum is USD 0 minor units.
-
-**Test data:**
-
-| `<mapping>` | `<refusal>` |
-| --- | --- |
-| USD -1 minor unit | a negative amount |
-| USD 0, EUR 100 minor units | an unsupported currency |
-
-**Steps:**
-
-1. Submit `<mapping>`.
-2. Read the saved minimum.
-
-**Expected Results:**
-
-* The save is refused because `<refusal>`.
-* USD remains 0 minor units.
-
-<!-- trace:case id=g10adm.auction-payment-settings.TC-7de rev=2 covers=g10adm.auction-payment-settings.SC-erw,g10adm.auction-payment-settings.SC-veg,g10adm.auction-payment-settings.SC-ieg,g10adm.auction-payment-settings.SC-s8d -->
-### grade10-admin-auction-payment-settings-US1-TC4-2: An operator without payment processing is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-payment-settings-US-01
-
-**Pre-conditions:**
-
-* admin(operator whose roles are exactly `staff`).
-
-**Steps:**
-
-1. Request Payment settings.
-2. Attempt to save a mapping.
-
-**Expected Results:**
-
-* Both operations are refused.
-* The stored mapping is unchanged.
-
 <!-- trace:case id=g10adm.auction-payment-settings.TC-gof rev=2 -->
 ### grade10-admin-auction-payment-settings-US1-TC5-2: Finance saves the minimum in major units, zero included
 
@@ -161,7 +52,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-01
@@ -189,46 +79,6 @@ Runs once per row of **Test data**.
 * The save is accepted.
 * The tab reads `<read>`, stored as `<stored>` minor units.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-6sl rev=1 -->
-### grade10-admin-auction-payment-settings-US1-TC6-1: A premium minimum in HKD or JPY is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-payment-settings-US-01
-
-**Pre-conditions:**
-
-* The saved USD minimum is 100 minor units.
-* admin(operator with payment processing) is on Payment settings under `/auction`.
-
-**Test data:**
-
-| `<currency>` | Why this row |
-| --- | --- |
-| HKD | A retired minimum currency |
-| JPY | A retired minimum currency |
-
-**Steps:**
-
-1. Submit a premium minimum of 100 minor units in `<currency>`.
-2. Read the saved minimum.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads USD 100 minor units, unchanged.
-
 ---
 
 ## grade10-admin-auction-payment-settings-US2: Finance keeps the Stripe card fee rule
@@ -248,7 +98,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-02
@@ -281,7 +130,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-02
@@ -303,69 +151,6 @@ Runs once per row of **Test data**.
 * The example reads a fee of HKD 37.63 on a subtotal of HKD 1,000.00, in the console's money format.
 * The quote's computed fee reads 11225 and the total 323225 minor units in HKD, read-only with the HKD rule it came from.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-40o rev=1 covers=g10adm.auction-payment-settings.SC-pzf,g10adm.auction-payment-settings.SC-cac,g10adm.auction-payment-settings.SC-5h3,g10adm.auction-payment-settings.SC-su9,g10adm.auction-payment-settings.SC-lon,g10adm.auction-payment-settings.SC-g3v -->
-### grade10-admin-auction-payment-settings-US2-TC3-1: Half a rule or a percentage out of range is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-payment-settings-US-02
-
-**Pre-conditions:**
-
-* The HKD card rule is 3.4% and 235 minor units, and no other rule is stored.
-* admin(operator with payment processing).
-
-**Steps:**
-
-1. Save a USD rule of `4.4`% with no fixed amount.
-2. Save an HKD rule of `3.405`% and `2.35`.
-3. Save an HKD rule of `100`% and `0.00`.
-4. Read the rules.
-
-**Expected Results:**
-
-* Each save is refused.
-* The stored rules still hold only HKD 3.4% and 235 minor units.
-
-<!-- trace:case id=g10adm.auction-payment-settings.TC-ape rev=1 covers=g10adm.auction-payment-settings.SC-pzf,g10adm.auction-payment-settings.SC-cac,g10adm.auction-payment-settings.SC-5h3,g10adm.auction-payment-settings.SC-su9,g10adm.auction-payment-settings.SC-lon,g10adm.auction-payment-settings.SC-g3v -->
-### grade10-admin-auction-payment-settings-US2-TC4-1: Staff can neither read nor change the card rules
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-payment-settings-US-02
-
-**Pre-conditions:**
-
-* admin(operator whose roles are exactly `staff`).
-
-**Steps:**
-
-1. Request the card rules.
-2. Save a card rule.
-
-**Expected Results:**
-
-* Both are refused.
-* The stored rules are unchanged.
-
 <!-- trace:case id=g10adm.auction-payment-settings.TC-6it rev=1 covers=g10adm.auction-payment-settings.SC-qak -->
 ### grade10-admin-auction-payment-settings-US2-TC5-1: Saving a card rule offers card in that currency
 
@@ -377,7 +162,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-02
@@ -417,7 +201,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-03
@@ -448,7 +231,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-03
@@ -472,37 +254,6 @@ Runs once per row of **Test data**.
 * HKD reads 3.4% and HKD 2.35.
 * Neither rule overwrites the other.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-93a rev=1 -->
-### g10adm.auction-payment-settings.US3-TC3: A JPY card rule is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-payment-settings-US-03
-
-**Pre-conditions:**
-
-* The HKD card rule is 3.4% and 235 minor units, and no other rule is stored.
-* admin(operator with payment processing).
-
-**Steps:**
-
-1. Save a JPY rule of `3.4`% and `100`.
-2. Read the rules.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* The stored rules still hold only HKD 3.4% and 235 minor units.
-
 <!-- trace:case id=g10adm.auction-payment-settings.TC-c9t rev=1 -->
 ### g10adm.auction-payment-settings.US3-TC4: Clearing a currency's rule withdraws card there
 
@@ -514,7 +265,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-03
@@ -546,7 +296,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-03

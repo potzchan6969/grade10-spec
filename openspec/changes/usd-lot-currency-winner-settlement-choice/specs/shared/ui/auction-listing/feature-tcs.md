@@ -1,6 +1,6 @@
 # shared/ui/auction-listing Test Cases
 
-**Status:** pending-review · 0/14
+**Status:** pending-review · 0/11
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** shared-ui-auction-listing-SC-35, shared-ui-auction-listing-SC-36, shared-ui-auction-listing-SC-37, shared-ui-auction-listing-SC-52
 
@@ -11,121 +11,6 @@
 **As an** application composing the shared bid panel,
 **I want** the panel to never offer an amount the supplied currency ceiling refuses,
 **so that** the collector reads the limit instead of a broken raise form.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=4 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-q3n -->
-### g10.shared-auction-listing.US1-TC19: Draft at the USD ceiling is accepted
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Custom maximum ceiling
-
-**Pre-conditions:**
-
-* The bid panel receives a USD ceiling of `<ceiling>` and is rendered for an open lot in the row's mode.
-
-**Test data:**
-
-| Mode | `<ceiling>` |
-| --- | --- |
-| Set maximum | USD10,000,000 whole major units |
-| Raise maximum | USD10,000,000 whole major units |
-
-**Steps:**
-
-1. Enter `<ceiling>` in the custom maximum field.
-2. Read the field value and Place Bid state.
-3. Commit the maximum and read the callback amount.
-
-**Expected Results:**
-
-* The field retains `<ceiling>`.
-* Place Bid remains available.
-* The callback receives 1000000000 minor units in USD.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-ygd rev=3 covers=g10.shared-auction-listing.SC-8ym -->
-### g10.shared-auction-listing.US1-TC20: Typing past the USD ceiling keeps the draft at its limit
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Custom maximum ceiling
-
-**Pre-conditions:**
-
-* The custom maximum field uses the USD ceiling `<ceiling>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<ceiling>` | USD10,000,000 whole major units (fixed configured ceiling) |
-| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
-
-**Steps:**
-
-1. Type `<over ceiling>` into the custom maximum field.
-2. Read the field value and validation message.
-
-**Expected Results:**
-
-* The typed draft stops at `<ceiling>`.
-* No maximum or invalid amount message appears.
-
-<!-- trace:case id=g10.shared-auction-listing.TC-35i rev=3 covers=g10.shared-auction-listing.SC-wdd -->
-### g10.shared-auction-listing.US1-TC21: Pasting above the USD ceiling clamps the field
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Custom maximum ceiling
-
-**Pre-conditions:**
-
-* The custom maximum field is empty and uses the USD ceiling `<ceiling>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<ceiling>` | USD10,000,000 whole major units (fixed configured ceiling) |
-| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
-
-**Steps:**
-
-1. Paste `<over ceiling>` into the custom maximum field.
-2. Read the field value.
-
-**Expected Results:**
-
-* The field value becomes `<ceiling>`.
-* The field does not display HKD or JPY cap choices.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=3 covers=g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-qdv -->
 ### g10.shared-auction-listing.US1-TC22: Oversized replacement of a draft becomes the ceiling
@@ -140,7 +25,6 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
@@ -185,7 +69,6 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
@@ -227,7 +110,6 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
@@ -278,7 +160,6 @@ Runs once in set mode and once in raise mode.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
@@ -323,7 +204,6 @@ Runs once in set mode and once in raise mode.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
@@ -367,7 +247,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Quick bids
@@ -409,7 +288,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Quick bids
@@ -442,7 +320,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Raise floor
@@ -483,7 +360,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Raise floor
@@ -515,7 +391,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Bid enrollment
@@ -545,7 +420,6 @@ Runs once in set mode and once in raise mode.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
@@ -565,7 +439,6 @@ Runs once in set mode and once in raise mode.
 * Step 1: the displayed draft reads `10000000`, the USD ceiling.
 * Step 2: the displayed draft reads `10000000`, the previous draft.
 * No ceiling message appears in either step.
-
 
 ## Settled
 

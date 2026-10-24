@@ -351,6 +351,11 @@ artifacts:
       cross-cutting policy is exactly where a boundary, precision or timezone
       miss costs most, and exempting one from test design is how those ship.
 
+      A tool only the product's makers use - a test door, a docs reference, a
+      design-sync rail, the planning rails - writes `**Walked by:** makers
+      only - <who uses it, and why no product user does>` instead. It is no
+      product feature, so it gets no suite at all.
+
       Never invent an actor to fill the file. `pnpm check:manual` fails a
       capability with neither journeys nor the declaration, and a file holding
       both. It reads the declaration's first words alone, so the reason after
@@ -731,8 +736,8 @@ artifacts:
       nothing reads it and nothing fails when it goes stale.
 
       A scenario whose only anchor is a foreign journey is reached by no case in
-      this capability's suite. List it under the suite's `**Out of suite:**`
-      naming the suite that walks it, the way any other uncovered scenario is.
+      this capability's suite: the suite that owns that journey walks it. It is
+      not out of suite, which means QA tests it nowhere.
 
       **A group anchor is for a rule with no actor.** A rule somebody walks
       names the journey - here or elsewhere - because a group name says which
@@ -770,11 +775,11 @@ artifacts:
 
       ## A scenario no case reaches
 
-      Listed under the suite's `**Out of suite:**`, **naming where it is
-      verified instead** - a consuming repository's build and type check, a
-      database constraint, a design review, a higher-level suite - not merely
-      why it is excluded. A scenario that can name no such place is a hole, not
-      an exemption.
+      Every case is a GUI walk by a product user. A scenario a product user can
+      see on a screen, an email, a PDF or a notification owes a GUI case. One no
+      product user can see is listed under `**Out of suite (<category>):**` -
+      `api`, `unit`, `non-GUI` or `seo` - which means QA does not test it; it
+      names no verifier.
 
       ## A design state no requirement states
 
@@ -882,14 +887,19 @@ artifacts:
       Work an explicit test-design checklist rather than paraphrasing the
       journeys: boundary values, equivalence partitions, state transitions, CRUD
       completeness, empty / one / many, null and missing, permission matrix,
-      error taxonomy, SEO and indexability. Two readings that use the same
+      error taxonomy. Two readings that use the same
       method produce synonyms, and the reconciliation then finds nothing.
 
       Fewer, sharper cases: each names the risk it guards that no other case
       does; a path a domain case already walks is left to it and recorded as
       **Covered at domain**; a result seen on a run an existing case walks is
-      joined to that case. The rulebook's **One purpose, one case** and **A
-      Case That Already Exists Is Not Written Twice** hold the rules.
+      joined to that case. The rulebook's **Levels** and **A Case That
+      Already Exists Is Not Written Twice** hold the rules.
+
+      Every case is a GUI walk by a product user, checked on a screen, email,
+      PDF or notification, worded the same for web, mobile and any
+      environment. A Grade10 store capability writes no suite here: its cases
+      live only in `docs/prds/products/grade10-site/store/tests/`.
 
       ## Anchors
 
@@ -953,7 +963,8 @@ artifacts:
       beside the durable specs only.
 
       A capability whose journeys file says `**Walked by:** nobody` still gets
-      a suite, anchored on its feature set.
+      a suite, anchored on its feature set. One that says `**Walked by:**
+      makers only` gets none.
 
       `pnpm run tcs:validate` checks every suite in the store, and CI runs it
       on every push.

@@ -1,6 +1,6 @@
 # grade10-site/loyalty/programme Test Cases
 
-**Status:** pending-review · 0/30
+**Status:** pending-review · 0/20
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-loyalty-programme-US4: Member runs their membership from one surface
@@ -21,7 +21,6 @@ operating record behind it.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-loyalty-programme-US-04
@@ -48,7 +47,6 @@ A member who can join.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-04
@@ -75,7 +73,6 @@ A member with recorded activity but no join date.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-04
@@ -104,7 +101,6 @@ An operator has corrected this member's balance with a written reason.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-loyalty-programme-US-04
@@ -134,7 +130,6 @@ A member whose browser is not in Asia/Hong_Kong.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-04
@@ -170,7 +165,6 @@ A member whose browser is not in Asia/Hong_Kong.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-04
@@ -204,7 +198,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-04
@@ -242,7 +235,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-04
@@ -275,155 +267,6 @@ Runs once per row of **Test data**.
 **I want** to return a member's points and void their coupon while it is still unused,
 **so that** a reward we cannot honour costs the member nothing.
 
-<!-- trace:case id=g10.loyalty-programme.TC-pvr rev=1 covers=g10.loyalty-programme.SC-pkm,g10.loyalty-programme.SC-dd5,g10.loyalty-programme.SC-l3j,g10.loyalty-programme.SC-0nd,g10.loyalty-programme.SC-8ec,g10.loyalty-programme.SC-gby,g10.loyalty-programme.SC-m7u,g10.loyalty-programme.SC-jqk,g10.loyalty-programme.SC-t6q -->
-### grade10-site-loyalty-programme-US6-TC1-1: A reversal is refused while a sale claims the coupon
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-06
-
-**Pre-conditions:**
-
-* customer(member holding <coupon>) has <claiming sale> carrying <coupon>, unpaid.
-* admin(holds the permission to cancel a redemption) is signed in to the operator API.
-
-**Test data:**
-
-| <claiming sale> | State |
-| --- | --- |
-| A till sale at <shop A> | Planned with <coupon> under an hour ago, never tendered |
-| An online order | Submitted with <coupon>, its checkout open |
-| An online order | Expired, its checkout still able to collect |
-| A checkout that stopped before its order was written | Claimed 6 minutes ago, with no claim on <coupon> since |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member bought for <cost> points, unused, inside its validity, scoped to the whole order |
-| <cost> | 500 |
-
-**Steps:**
-
-1. Ask to reverse the redemption that issued <coupon>.
-2. Read the response.
-3. Read the member's balance and coupons.
-
-**Expected Results:**
-
-* Step 2 refuses the reversal, naming <claiming sale>.
-* The balance is unchanged.
-* <coupon> is still held, unused.
-
-<!-- trace:case id=g10.loyalty-programme.TC-3dp rev=1 covers=g10.loyalty-programme.SC-pkm,g10.loyalty-programme.SC-dd5,g10.loyalty-programme.SC-l3j,g10.loyalty-programme.SC-0nd,g10.loyalty-programme.SC-8ec,g10.loyalty-programme.SC-gby,g10.loyalty-programme.SC-m7u,g10.loyalty-programme.SC-jqk,g10.loyalty-programme.SC-t6q -->
-### grade10-site-loyalty-programme-US6-TC2-1: A reversal goes through once the sale gives the coupon back
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-06
-
-**Pre-conditions:**
-
-* customer(member holding <coupon>) had <coupon> claimed by a sale that has given it back, as the row says.
-* admin(holds the permission to cancel a redemption) is signed in to the operator API.
-
-**Test data:**
-
-| How the claim was given back |
-| --- |
-| A till sale at <shop A> planned with <coupon>, untendered, its last plan over an hour ago |
-| A till sale at <shop A> planned with <coupon>, retired by a newer till plan for the member at <shop B> that carries no coupon |
-| A till sale at <shop A> planned with <coupon>, retired by an online checkout the member submitted with <other coupon> |
-| An online order submitted with <coupon>, then cancelled |
-| A checkout that claimed <coupon> and stopped before its order was written, past <sweep horizon> |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member bought for <cost> points, unused, inside its validity, scoped to the whole order |
-| <other coupon> | A second reward coupon the member holds, unused, inside its validity, scoped to the whole order |
-| <cost> | 500 |
-| <sweep horizon> | 25 hours from the claim |
-
-**Steps:**
-
-1. Ask to reverse the redemption that issued <coupon>.
-2. Read the response.
-3. Read the member's balance and coupons.
-
-**Expected Results:**
-
-* Step 2 takes the reversal and names no sale.
-* The balance rises by <cost>.
-* <coupon> is void.
-
-<!-- trace:case id=g10.loyalty-programme.TC-h5h rev=1 covers=g10.loyalty-programme.SC-pkm,g10.loyalty-programme.SC-dd5,g10.loyalty-programme.SC-l3j,g10.loyalty-programme.SC-0nd,g10.loyalty-programme.SC-8ec,g10.loyalty-programme.SC-gby,g10.loyalty-programme.SC-m7u,g10.loyalty-programme.SC-jqk,g10.loyalty-programme.SC-t6q -->
-### grade10-site-loyalty-programme-US6-TC3-1: A claim outlasts the code minted for it
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-06
-
-**Pre-conditions:**
-
-* customer(member holding <coupon>) has <expired order> carrying <coupon>'s claim and its minted code.
-* The clock stands at the row's <check time>, and the programme's sweep has run since.
-* admin(holds the permission to cancel a redemption) is signed in to the operator API.
-
-**Test data:**
-
-| <check time> | The code | The reversal |
-| --- | --- | --- |
-| 23 hours after <expired order> was written | Live | Refused, naming <expired order> |
-| 24 hours and 30 minutes after <expired order> was written | No longer live | Refused, naming <expired order> |
-| 25 hours and 30 minutes after the claim | No longer live | Taken |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity |
-| <expired order> | An online order submitted with <coupon> that expired, its checkout still able to collect |
-
-**Steps:**
-
-1. Read <coupon>'s code at the shop.
-2. Ask to reverse the redemption that issued <coupon>.
-3. Read the response.
-
-**Expected Results:**
-
-* Step 1 reads the code as the row's second column says.
-* Step 3 answers as the row's third column says.
-
 ---
 
 ## grade10-site-loyalty-programme-US7: Member redeems any reward as one coupon
@@ -445,7 +288,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-07
@@ -505,7 +347,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -560,7 +401,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -615,7 +455,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -665,7 +504,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -720,7 +558,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -773,7 +610,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -809,47 +645,6 @@ Runs once per row of **Test data**.
 * None of them names <counter sale A>.
 * None of them shows the code minted for <coupon> on <counter sale A>.
 
-<!-- trace:case id=g10.loyalty-programme.TC-1jv rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
-### grade10-site-loyalty-programme-US11-TC7-1: Two sales collect one coupon, which is spent once and reported
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-11
-
-**Pre-conditions:**
-
-* customer(member holding <coupon>) whose <counter sale A> collected a deactivated code for <coupon>.
-* <later sale> carries <coupon>'s claim and collected its cut.
-* Neither sale has settled.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused and inside its validity, scoped to the whole order |
-| <counter sale A> | A till sale at <shop A> whose code for <coupon> was deactivated before it collected |
-| <later sale> | The online order that claimed <coupon> away from <counter sale A> |
-
-**Steps:**
-
-1. Settle <later sale>.
-2. Settle <counter sale A>.
-3. Read the coupons on <grade10 loyalty url>.
-
-**Expected Results:**
-
-* <coupon> reads used once, spent by <later sale>, the sale that settled first.
-* <counter sale A> is reported with the order on it, and spends <coupon> nowhere.
-
 <!-- trace:case id=g10.loyalty-programme.TC-y4l rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC8-1: A claim is refused where the earlier checkout cannot be closed
 
@@ -863,7 +658,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -912,7 +706,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -958,7 +751,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -990,183 +782,6 @@ Runs once per row of **Test data**.
 * Step 3 is not refused, and the checkout carries <coupon>'s cut.
 * After step 4, the code on <counter sale A> is no longer live.
 
-<!-- trace:case id=g10.loyalty-programme.TC-4wf rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
-### grade10-site-loyalty-programme-US11-TC11-1: A sale that gave no cut hands the coupon back
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-11
-
-**Pre-conditions:**
-
-* customer(member holding the row's reward) has <counter sale A> planned with that reward, tendered, not yet settled.
-* The paid order carries what the row's second column says, with the shop's discount allocations.
-
-**Test data:**
-
-| Reward | The paid order carries |
-| --- | --- |
-| <coupon> | No code and no cut for <coupon> |
-| <gift> | No line for <gift>'s product discounted to nothing |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward product coupon the member holds, unused, inside its validity, scoped to the whole order |
-| <gift> | A gift reward the member holds, unused, inside its validity |
-| <counter sale A> | A till sale at <shop A> planned with the row's reward |
-
-**Steps:**
-
-1. Settle <counter sale A>.
-2. Read the member's coupons on <grade10 loyalty url>.
-
-**Expected Results:**
-
-* The row's reward reads unused.
-* <counter sale A> records no use of the row's reward.
-
-<!-- trace:case id=g10.loyalty-programme.TC-flp rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
-### grade10-site-loyalty-programme-US11-TC12-1: A claim given back no longer answers its retry key
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-11
-
-**Pre-conditions:**
-
-* customer(member holding <coupon>) had <coupon> claimed for <sale A> under <key A>.
-* That claim is in the state the row names.
-
-**Test data:**
-
-| Claim under <key A> | Asking again under <key A> |
-| --- | --- |
-| Standing: <sale A> carries <coupon>'s cut | Answers with the same claim, recording nothing new |
-| Given back: <sale A>'s plan was refused after it claimed <coupon>, before any code was minted | Makes a new claim |
-| Collected: <sale A> was paid with <coupon>'s cut and has settled | Refused, as <coupon> is already used |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, inside its validity, scoped to the whole order |
-| <sale A> | A till sale at <shop A> planned with <coupon> |
-| <key A> | The retry key <sale A>'s claim was made under: its order id |
-
-**Steps:**
-
-1. Ask the programme to claim <coupon> for <sale A> under <key A>.
-2. Read the answer.
-3. Read the member's coupons.
-
-**Expected Results:**
-
-* Step 2 answers as the row's second column says.
-* <coupon> is used at most once.
-
-<!-- trace:case id=g10.loyalty-programme.TC-t7v rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
-### grade10-site-loyalty-programme-US11-TC13-1: A till sale whose plan was refused claims the coupon on its next plan
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-11
-
-**Pre-conditions:**
-
-* admin(shop staff) has a till session open for customer(member holding <coupon>) at <shop A>, on <sale A>.
-* <sale A>'s last plan named <coupon> and was refused after it claimed <coupon>, before any code was minted, so the claim was given back.
-* What refused that plan is cleared.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
-| <line_1> | One HK$780.00 product |
-| <sale A> | A till sale at <shop A> holding <line_1> |
-
-**Steps:**
-
-1. Choose <coupon> in the member's panel.
-2. Apply the sale.
-3. Read the discount codes on <sale A>.
-
-**Expected Results:**
-
-* Step 2 puts <coupon>'s cut on <sale A>.
-* <sale A> carries exactly one code for <coupon>.
-
-<!-- trace:case id=g10.loyalty-programme.TC-msl rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
-### grade10-site-loyalty-programme-US11-TC14-1: A coupon a cancelled order has not yet given back is taken at the till
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-11
-
-**Pre-conditions:**
-
-* customer(member holding <coupon>) had <cancelled order> carrying <coupon>, now cancelled.
-* The programme has not yet been told to give <coupon> back from <cancelled order>.
-* admin(shop staff) has a till session open for that member at <shop A>, with <line_1> rung up.
-* admin(holds the permission to cancel a redemption) is signed in to the operator API.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
-| <line_1> | One HK$780.00 product |
-| <cancelled order> | An online order the member submitted with <coupon>, then cancelled |
-
-**Steps:**
-
-1. Choose <coupon> in the member's panel.
-2. Apply the sale.
-3. Ask to reverse the redemption that issued <coupon>.
-
-**Expected Results:**
-
-* Step 2 puts <coupon>'s cut on the sale, and does not say <coupon> is unavailable.
-* Step 3 is refused, naming the till sale rather than <cancelled order>.
-
 <!-- trace:case id=g10.loyalty-programme.TC-kid rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC15-1: A claim moves the coupon off a tendered counter sale whose order has not arrived
 
@@ -1178,7 +793,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -1209,100 +823,6 @@ Runs once per row of **Test data**.
 * Step 3 is not refused, and the checkout carries <coupon>'s cut.
 * The code on <counter sale A> is no longer live.
 
-<!-- trace:case id=g10.loyalty-programme.TC-wd1 rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
-### grade10-site-loyalty-programme-US11-TC16-1: Two sales claiming one coupon at once leave one live claim
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-11
-
-**Pre-conditions:**
-
-* admin(shop staff) has till sessions open for customer(member holding <coupon>) at <shop A> and at <shop B>, with <line_1> rung up at each.
-* Neither sale carries <coupon>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
-| <line_1> | One HK$780.00 product |
-
-**Steps:**
-
-1. Apply both sales with <coupon> at the same moment.
-2. Read both answers.
-3. Read the codes minted for <coupon> at the shop.
-4. Read the member's coupons.
-
-**Expected Results:**
-
-* Neither answer says <coupon> is unavailable.
-* Step 3 finds exactly one live code for <coupon>.
-* <coupon> reads unused.
-
-<!-- trace:case id=g10.loyalty-programme.TC-zip rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
-### grade10-site-loyalty-programme-US11-TC17-1: A claim a stopped checkout left is taken back once it is five minutes old
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-11
-
-**Pre-conditions:**
-
-* customer(member holding <coupon>) has <coupon> claimed by <stopped checkout>, and the store holds no order for it.
-* The claim was made as long ago as the row's <claim age>.
-* The member is at the row's place, with <line_1> on the sale.
-
-**Test data:**
-
-| Place | How <coupon> is chosen | <claim age> | Step 2 answers | Step 4 names |
-| --- | --- | --- | --- | --- |
-| A till session at <shop A>, admin(shop staff) serving | Staff choose <coupon> in the member's panel and apply the sale | 6 minutes | Puts <coupon>'s cut on the sale | The till sale |
-| Signed in on <grade10 store url> | The member chooses <coupon> in the cart drawer and submits the checkout | 6 minutes | Puts <coupon>'s cut on the checkout | The new checkout's order |
-| A till session at <shop A>, admin(shop staff) serving | Staff choose <coupon> in the member's panel and apply the sale | 2 minutes | Refuses, saying an earlier sale stands | <stopped checkout>'s order |
-| Signed in on <grade10 store url> | The member chooses <coupon> in the cart drawer and submits the checkout | 2 minutes | Refuses, saying an earlier sale stands | <stopped checkout>'s order |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
-| <line_1> | One HK$780.00 product |
-| <stopped checkout> | A checkout the member started with <coupon>, stopped after the programme claimed <coupon> and before the store wrote its order |
-
-**Steps:**
-
-1. Choose <coupon> the row's way.
-2. Read the answer.
-3. Read <coupon> in the member's coupons.
-4. Read the order <coupon>'s claim names in the programme.
-
-**Expected Results:**
-
-* Step 2 answers as the row's fourth column says.
-* Step 2 does not say <coupon> is unavailable.
-* Step 3 lists <coupon> as unused.
-* Step 4 names the order the row's last column says.
-
 <!-- trace:case id=g10.loyalty-programme.TC-ixy rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
 ### grade10-site-loyalty-programme-US11-TC18-1: A coupon outlives the code an expired order let die
 
@@ -1314,7 +834,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-loyalty-programme-US-11
@@ -1352,56 +871,6 @@ Runs once per row of **Test data**.
 * Step 3 lists <coupon> as unused, not lapsed.
 * Step 4 counts no forfeit for <coupon>.
 * Step 8 is not refused, and the checkout carries <coupon>'s cut.
-
-<!-- trace:case id=g10.loyalty-programme.TC-hfo rev=1 covers=g10.loyalty-programme.SC-lbx,g10.loyalty-programme.SC-lfq,g10.loyalty-programme.SC-m19,g10.loyalty-programme.SC-hxh,g10.loyalty-programme.SC-avv,g10.loyalty-programme.SC-ail,g10.loyalty-programme.SC-fwa,g10.loyalty-programme.SC-oc6,g10.loyalty-programme.SC-pxx,g10.loyalty-programme.SC-h5a,g10.loyalty-programme.SC-f9s,g10.loyalty-programme.SC-6ok,g10.loyalty-programme.SC-4ph,g10.loyalty-programme.SC-11m,g10.loyalty-programme.SC-7xj,g10.loyalty-programme.SC-qhr,g10.loyalty-programme.SC-lft,g10.loyalty-programme.SC-br3,g10.loyalty-programme.SC-ef4,g10.loyalty-programme.SC-z6m,g10.loyalty-programme.SC-fhj,g10.loyalty-programme.SC-f9r,g10.loyalty-programme.SC-6jz,g10.loyalty-programme.SC-5v5 -->
-### grade10-site-loyalty-programme-US11-TC19-1: A sale whose order is written over a minute after its claim is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-loyalty-programme-US-11
-
-**Pre-conditions:**
-
-* customer(member holding <coupon>) is at the row's place, with <line_1> on the sale.
-* The store's write of the sale's order is held back the row's <write delay> past the programme's claim on <coupon>.
-
-**Test data:**
-
-| Place | How <coupon> is chosen | <write delay> | Step 2 answers |
-| --- | --- | --- | --- |
-| Signed in on <grade10 store url> | The member chooses <coupon> in the cart drawer and submits the checkout | 50 seconds | Goes through, the checkout carrying <coupon>'s cut |
-| Signed in on <grade10 store url> | The member chooses <coupon> in the cart drawer and submits the checkout | 70 seconds | Refused: "This checkout took too long. Submit it again." |
-| A till session at <shop A>, admin(shop staff) serving | Staff choose <coupon> in the member's panel and apply the sale | 70 seconds | Refused: 此單處理時間過長，請再套用一次。 |
-
-| Field | Value |
-| --- | --- |
-| <coupon> | A reward coupon the member holds, unused, inside its validity, scoped to <line_1>'s own variant |
-| <line_1> | One HK$780.00 product |
-
-**Steps:**
-
-1. Choose <coupon> the row's way.
-2. Read the answer.
-3. Read the member's orders.
-4. Read <coupon> in the member's coupons on <grade10 loyalty url>.
-
-**Expected Results:**
-
-* Step 2 answers as the row's last column says.
-* Step 2 does not say <coupon> is unavailable or that the rewards could not be read.
-* Step 3 shows an order for the sale only where step 2 went through.
-* Step 4 lists <coupon> as unused.
 
 ## Settled
 

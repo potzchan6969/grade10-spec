@@ -1,9 +1,7 @@
 # grade10-admin/auction/internal-bid Test Cases
 
-**Status:** pending-review · 0/69
+**Status:** pending-review · 0/59
 **Drafts styled:** 2026-10-08, tcs-rules r4
-
-**Out of suite:** grade10-admin-auction-internal-bid-SC-74 — the no-account-suspension assertion is covered by the backend expiry check; the UI case checks overdue status and absent order letters
 
 ## Background
 
@@ -38,7 +36,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -98,7 +95,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -152,7 +148,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -204,7 +199,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -239,55 +233,6 @@ Runs once per row of **Test data**.
 * Step 3: Highest bid reads `<starting price>`, the first maximum on the starting price.
 * Step 3: Recent bids holds customer A's row only.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-x4y rev=2 covers=g10adm.auction-internal-bid.SC-urt,g10adm.auction-internal-bid.SC-fti -->
-### grade10-admin-auction-internal-bid-US1-TC5-2: An internal bid is refused on a listing it cannot be set on
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-internal-bid-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_5>` is in the row's state, with no internal bid.
-* admin(holds auction:reserve) is signed in to the admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
-
-| Row | `<listing_5>` |
-| --- | --- |
-| Draft | A draft holding a starting price, a start an hour away and a close a day later, never created |
-| Closed | Closed Unsold after its close |
-| Canceled | Called off before its close |
-| Past its close | Published, past its scheduled close and in extended bidding after customer A bid in its last minute |
-
-**Steps:**
-
-1. Set an internal bid of `<house maximum>` on `<listing_5>`, with a commit time 10 minutes from now.
-2. Read the API response.
-3. Read `<listing_5>`'s internal bid.
-
-**Expected Results:**
-
-* Step 2 refuses the write as not editable.
-* Step 3: `<listing_5>` holds no internal bid.
-
 <!-- trace:case id=g10adm.auction-internal-bid.TC-88a rev=3 covers=none -->
 ### grade10-admin-auction-internal-bid-US1-TC6-3: An internal bid at the currency ceiling is committed
 
@@ -299,7 +244,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -345,7 +289,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -392,7 +335,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -438,7 +380,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -484,7 +425,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -524,54 +464,6 @@ Runs once per row of **Test data**.
 * Step 3 reads the row's internal bid.
 * Step 3: in a Cleared row, the section says the listing edit cleared the internal bid.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-qzd rev=2 covers=g10adm.auction-internal-bid.SC-i7f -->
-### grade10-admin-auction-internal-bid-US1-TC11-2: A second save edits the one internal bid
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-internal-bid-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_29>` is published and taking bids, with no bids and no internal bid.
-* admin(holds auction:reserve) is signed in to the admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_29>` | A published USD listing taking bids, scheduled close a day away |
-| `<first amount>` | 600000 minor units (US$6,000.00) |
-| `<first time>` | 10 minutes from now |
-| `<second amount>` | 700000 minor units (US$7,000.00) |
-| `<second time>` | 30 minutes from now |
-
-**Steps:**
-
-1. Set an internal bid of `<first amount>` at `<first time>` on `<listing_29>`.
-2. Set an internal bid of `<second amount>` at `<second time>` on `<listing_29>`.
-3. Read `<listing_29>`'s internal bid from the API.
-4. Wait until `<first time>` passes, and read Recent bids on the lot page as customer B.
-5. Wait until `<second time>` passes, and read Highest bid and Recent bids again.
-
-**Expected Results:**
-
-* Step 2 is accepted.
-* Step 3 reads one internal bid: `<second amount>` at `<second time>`.
-* Step 4: Recent bids holds no row.
-* Step 5: the house leads at `<starting price>`, one bid.
-
 <!-- trace:case id=g10adm.auction-internal-bid.TC-6a2 rev=3 covers=g10adm.auction-internal-bid.SC-rzl -->
 ### grade10-admin-auction-internal-bid-US1-TC12-3: One internal bidder serves internal bids on several listings
 
@@ -583,7 +475,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -640,7 +531,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-01
@@ -685,50 +575,6 @@ Runs once per row of **Test data**.
 * Step 5 reads the same Highest bid and Recent bids as step 1.
 * Step 6: the internal bid is Placed and the house's bid names `<bidder Q>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-h13 rev=2 covers=g10adm.auction-internal-bid.SC-1af -->
-### grade10-admin-auction-internal-bid-US1-TC14-2: A save naming a retired internal bidder is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-internal-bid-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_55>` is published and Upcoming, with no internal bid.
-* `<bidder R>` is a retired internal bidder profile.
-* admin(holds auction:reserve) is signed in to the admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_55>` | A published USD listing, scheduled start an hour away, scheduled close a day later |
-| `<bidder R>` | A retired internal bidder profile: name "QA House R", email label qa-house-r@internal.test |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
-| `<commit time>` | 30 minutes after the start |
-
-**Steps:**
-
-1. Set an internal bid of `<house maximum>` at `<commit time>` on `<listing_55>`, naming `<bidder R>` as its internal bidder.
-2. Read the API response.
-3. Read `<listing_55>`'s internal bid.
-
-**Expected Results:**
-
-* Step 2 refuses the write, saying the internal bidder is retired.
-* Step 3: `<listing_55>` holds no internal bid.
-
 ## grade10-admin-auction-internal-bid-US2: Admin changes an internal bid before its time
 
 **As an** auction admin,
@@ -746,7 +592,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-02
@@ -797,7 +642,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-02
@@ -845,7 +689,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-02
@@ -893,7 +736,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-02
@@ -944,7 +786,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
@@ -997,7 +838,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
@@ -1036,54 +876,6 @@ Runs once per row of **Test data**.
 * Step 3: Highest bid still reads `<current bid>`; Recent bids gains no row.
 * Step 5: the house still leads, at `<price after customer B>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-ben rev=2 covers=g10adm.auction-internal-bid.SC-6v8 -->
-### grade10-admin-auction-internal-bid-US3-TC3-2: A raise at or after the close is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-internal-bid-US-03
-
-**Pre-conditions:**
-
-* `<listing_13>` had its internal bid of `<house maximum>` committed, and customer A led it with maximum `<customer A maximum>`.
-* admin(holds auction:reserve) is signed in to the admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_13>` | A USD listing in extended bidding, its recorded close `<effective close>` |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
-| `<customer A maximum>` | 700000 minor units (US$7,000.00) |
-| `<raised maximum>` | 900000 minor units (US$9,000.00) |
-
-| Row | Raise sent at |
-| --- | --- |
-| At the close | Exactly `<effective close>` |
-| After the close | 1 minute after `<effective close>` |
-
-**Steps:**
-
-1. Raise `<listing_13>`'s internal bid to `<raised maximum>`, sent at the row's time.
-2. Read the API response.
-3. Read `<listing_13>`'s result and the internal bid.
-
-**Expected Results:**
-
-* Step 2 refuses the raise.
-* Step 3: customer A won `<listing_13>`, and the internal bid still reads `<house maximum>`.
-
 <!-- trace:case id=g10adm.auction-internal-bid.TC-t5b rev=2 covers=g10adm.auction-internal-bid.SC-xfi -->
 ### grade10-admin-auction-internal-bid-US3-TC4-2: The commit time is fixed once committed
 
@@ -1095,7 +887,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
@@ -1143,7 +934,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
@@ -1190,7 +980,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-03
@@ -1249,7 +1038,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-04
@@ -1304,7 +1092,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-04
@@ -1345,48 +1132,6 @@ Runs once per row of **Test data**.
 * Step 3 still shows `<house maximum>`.
 * Step 4: Highest bid still reads `<current bid>`; the leader and Recent bids are unchanged.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-79d rev=3 covers=g10adm.auction-internal-bid.SC-wmp -->
-### grade10-admin-auction-internal-bid-US4-TC3-3: A lower at or after the close is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-internal-bid-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-raise.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_17>` closed with the house leading at `<current bid>` under its internal bid of `<house maximum>`.
-* admin(holds auction:reserve) is signed in to the admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<house maximum>` | 700000 minor units (US$7,000.00) |
-| `<current bid>` | 600000 minor units |
-| `<lowered amount>` | 600000 minor units, equal to `<current bid>`, an amount a lower accepts while the lot is open |
-
-**Steps:**
-
-1. Lower `<listing_17>`'s internal bid to `<lowered amount>`.
-2. Read the API response.
-3. Read `<listing_17>`'s internal bid.
-
-**Expected Results:**
-
-* Step 2 refuses the lower.
-* Step 3 still reads `<house maximum>`.
-
 <!-- trace:case id=g10adm.auction-internal-bid.TC-0l0 rev=3 covers=g10adm.auction-internal-bid.SC-spg,g10adm.auction-internal-bid.SC-u2x -->
 ### grade10-admin-auction-internal-bid-US4-TC4-3: A lower behind another's lead is held only to the house's own bid
 
@@ -1398,7 +1143,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-04
@@ -1460,7 +1204,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
@@ -1511,7 +1254,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
@@ -1559,7 +1301,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
@@ -1604,7 +1345,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
@@ -1651,7 +1391,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
@@ -1698,7 +1437,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
@@ -1752,7 +1490,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
@@ -1812,7 +1549,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-05
@@ -1868,7 +1604,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-06
@@ -1919,7 +1654,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-06
@@ -1966,7 +1700,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-06
@@ -2015,7 +1748,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-06
@@ -2061,7 +1793,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-06
@@ -2108,7 +1839,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-internal-bid-US-06
@@ -2155,7 +1885,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-06
@@ -2220,7 +1949,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
@@ -2265,60 +1993,6 @@ Runs once per row of **Test data**.
 * Step 4: both listings read the same bidder count and the same bid count.
 * Step 5: auction admin offers no Internal bidders page.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-kku rev=2 covers=g10adm.auction-internal-bid.SC-w8v -->
-### grade10-admin-auction-internal-bid-US7-TC2-2: The API refuses every internal bid read and write without secret-floor access
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-internal-bid-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_22>` is published, with an internal bid of `<house maximum>` at a time still ahead.
-* `<listing_23>` is published, with no internal bid.
-* `<bidder Q>` is an active internal bidder profile, not `<listing_22>`'s.
-* admin(staff, holds auction:operate and auction:write, not auction:reserve) is signed in to the admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
-| `<bidder Q>` | An active internal bidder profile: name "QA House Q", email label qa-house-q@internal.test |
-
-| Row | Call |
-| --- | --- |
-| Read | Read the internal bid |
-| Set | Set an internal bid of 500000 minor units, its time an hour ahead, as `<internal bidder>` |
-| Change | Change the amount to 900000 minor units |
-| Change bidder | Change the internal bidder to `<bidder Q>` |
-| Remove | Remove the internal bid |
-
-**Steps:**
-
-1. Send the row's call for `<listing_22>`.
-2. Send the row's call for `<listing_23>`.
-3. Read both API responses.
-4. As admin(holds auction:reserve), read both listings' internal bids.
-
-**Expected Results:**
-
-* Step 3: both calls are refused for the missing access, with the same answer for both listings.
-* Step 4: `<listing_22>` still holds `<house maximum>` at its time, as `<internal bidder>`; `<listing_23>` holds none.
-
 <!-- trace:case id=g10adm.auction-internal-bid.TC-jjr rev=2 covers=g10adm.auction-internal-bid.SC-53a -->
 ### grade10-admin-auction-internal-bid-US7-TC3-2: The audit trail records each internal bid act, never its amount or time
 
@@ -2332,7 +2006,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
@@ -2387,7 +2060,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
@@ -2436,7 +2108,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
@@ -2487,7 +2158,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
@@ -2529,7 +2199,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
@@ -2573,59 +2242,6 @@ Runs once per row of **Test data**.
 * Step 2 shows no internal bid state, and no time beside a House bid's own Accepted At.
 * Step 3: the house's bids read under its listing pseudonym; nothing reads House or `<internal bidder>`'s name or email label.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-gnk rev=3 covers=g10adm.auction-internal-bid.SC-ftu,g10adm.auction-internal-bid.SC-27a -->
-### grade10-admin-auction-internal-bid-US7-TC8-3: The staff listing read names the house only once it bids
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-internal-bid-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_40>` is published and taking bids, with an internal bid in the row's state, as `<internal bidder>`.
-* `<listing_41>` is published and taking bids, with no internal bid, customer A leading it at 600000 with maximum `<customer A maximum>`.
-* admin(staff, holds auction:operate, not auction:reserve) is signed in to the admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_40>` | A published USD listing taking bids, scheduled close a day away, customer A's maximum `<customer A maximum>` |
-| `<listing_41>` | A published USD listing like `<listing_40>`, with no internal bid |
-| `<customer A maximum>` | 700000 minor units (US$7,000.00) |
-
-| Row | `<listing_40>`'s internal bid | Lead on `<listing_40>` |
-| --- | --- | --- |
-| Before its time | 800000 minor units, its time an hour ahead | customer A at 600000 |
-| Not placed | 550000 minor units, not placed at its time | customer A at 600000 |
-| Committed | 600000 minor units, committed | customer A at 650000: 600000 plus its 50000 increment, over the house's bid at 600000 |
-
-**Steps:**
-
-1. Read `<listing_40>` and its bids.
-2. Read `<listing_41>` and its bids.
-3. Read the API responses.
-
-**Expected Results:**
-
-* Step 3: `<listing_40>`'s read carries no internal bid amount, time, state or internal bidder; a House bid carries only its own Accepted At.
-* Step 3: in the Before its time and Not placed rows, no bid is labelled House, and both reads carry the same fields.
-* Step 3: in the Committed row, each house bid is labelled House, with no account and no maximum.
-* Step 3: no house bid carries the house's listing pseudonym, or `<internal bidder>`'s name or email label.
-
 <!-- trace:case id=g10adm.auction-internal-bid.TC-4b4 rev=3 covers=g10adm.auction-internal-bid.SC-fs2 -->
 ### grade10-admin-auction-internal-bid-US7-TC9-3: Staff see no row for a house raise or lower
 
@@ -2637,7 +2253,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
@@ -2686,7 +2301,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
@@ -2739,7 +2353,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-07
@@ -2776,57 +2389,6 @@ Runs once per row of **Test data**.
 * Step 2 matches `<listing_64>`.
 * Step 3 lists no row for `<internal bidder>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-81p rev=3 covers=g10adm.auction-internal-bid.SC-rrc,g10adm.auction-internal-bid.SC-u1p -->
-### grade10-admin-auction-internal-bid-US7-TC12-3: After the close only a reserve holder's reads carry the internal bidder and its win
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-internal-bid-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-staff.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_73>` closed with the house winning at 550000 under its internal bid of `<house maximum>` as `<internal bidder>`, over customer A; its order is open.
-* The row's admin is signed in to the admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_73>` | A USD listing in no campaign, closed with the house winning |
-| `<house maximum>` | 612300 minor units (US$6,123.00), an amount the lot's bids never reached |
-
-| Row | admin | `<listing_73>`'s read | The order's read |
-| --- | --- | --- | --- |
-| Reserve holder | admin(holds auction:reserve, auction:operate and auction:payment) | Flagged as won by its internal bidder, naming `<internal bidder>` | Flagged internal, buyer House, naming `<internal bidder>` |
-| Staff | admin(staff, holds auction:operate, not auction:reserve) | No internal-bidder win flag, no internal bidder | Flagged internal, buyer House, no internal bidder name, email label or id |
-
-**Steps:**
-
-1. Open `<listing_73>` in the admin.
-2. Open `<listing_73>`'s order from Orders.
-3. Read the API responses behind steps 1 and 2.
-4. Search Orders, with All selected, by `<internal bidder>`'s email label.
-
-**Expected Results:**
-
-* Step 3: the listing read carries the row's listing outcome.
-* Step 3: the order read carries the row's order outcome.
-* Step 3: in the Staff row, neither read carries `<house maximum>`, the commit time or the internal bid's state.
-* Step 4 finds no order in either row.
-
 ## grade10-admin-auction-internal-bid-US8: Admin learns a listing edit cleared the internal bid
 
 **As an** auction admin,
@@ -2846,7 +2408,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-08
@@ -2899,7 +2460,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-08
@@ -2948,11 +2508,9 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-08
-
 
 **Deprecated:** The USD-only listing contract refuses a non-USD update, so there is no currency change that can carry or clear an internal bid.
 **Pre-conditions:**
@@ -3001,7 +2559,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-08
@@ -3047,7 +2604,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-08
@@ -3083,56 +2639,6 @@ Runs once per row of **Test data**.
 * Step 5 shows `<new maximum>` committed at `<commit time>`, and no longer says a listing edit cleared it.
 * Step 6: the house leads at `<new starting price>`, one bid, under its listing pseudonym.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-v7q rev=2 covers=g10adm.auction-internal-bid.SC-wib,g10adm.auction-internal-bid.SC-qzx,g10adm.auction-internal-bid.SC-ps0 -->
-### grade10-admin-auction-internal-bid-US8-TC6-2: A non-USD listing update leaves its internal bid unchanged
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** manual
-* **Trace:** grade10-admin-auction-internal-bid-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bid-limits.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_51>` is created, not yet published, with a USD internal bid of `<house maximum>` at `<commit time>`.
-* admin(holds auction:reserve and auction:operate) can call the listing edit API.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_51>` | A created USD listing, start `<start>` a day away, scheduled close two days away |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
-| `<commit time>` | 2 hours after `<start>` |
-
-| Row | Currency in listing update |
-| --- | --- |
-| HKD | HKD |
-| JPY | JPY |
-| EUR | EUR |
-
-**Steps:**
-
-1. Send the row's currency in the listing edit API.
-2. Read the API response.
-3. Reload `<listing_51>` and read its currency and Internal bid section.
-
-**Expected Results:**
-
-* Step 2 refuses the non-USD currency update.
-* Step 3 shows `<listing_51>` remains USD, with `<house maximum>` at `<commit time>` still set.
-
 ## grade10-admin-auction-internal-bid-US9: Admin keeps the internal bidders an internal bid can bid as
 
 **As an** auction admin,
@@ -3150,7 +2656,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
@@ -3203,7 +2708,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
@@ -3258,7 +2762,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
@@ -3312,7 +2815,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
@@ -3367,7 +2869,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
@@ -3423,7 +2924,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
@@ -3459,57 +2959,6 @@ Runs once per row of **Test data**.
 * Step 2 shows `<bidder P>` active.
 * Step 3 shows the internal bid in the row's state, as `<bidder P>`.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-eo1 rev=2 covers=g10adm.auction-internal-bid.SC-d57 -->
-### grade10-admin-auction-internal-bid-US9-TC7-2: Internal bidders cannot be added, renamed or retired without secret-floor access
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-internal-bid-US-09
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
-
-**Pre-conditions:**
-
-* `<bidder P>` is an active internal bidder profile, named on no internal bid.
-* admin(staff, holds auction:operate and auction:write, not auction:reserve) is signed in to the admin.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<bidder P>` | An active internal bidder profile: name "QA House P", email label qa-house-p@internal.test |
-
-| Row | Call |
-| --- | --- |
-| List | Read the internal bidders list |
-| Add | Add an internal bidder named "QA House Staff", email label qa-house-staff@internal.test, with a complete Hong Kong billing address |
-| Rename | Change `<bidder P>`'s name to "QA House P Staff" |
-| Change label | Change `<bidder P>`'s email label to qa-house-p-staff@internal.test |
-| Change address | Change `<bidder P>`'s billing address to another complete Hong Kong address |
-| Retire | Retire `<bidder P>` |
-
-**Steps:**
-
-1. Send the row's call.
-2. Read the API response.
-3. As admin(holds auction:reserve), read the internal bidders list.
-
-**Expected Results:**
-
-* Step 2 refuses the call for the missing access.
-* Step 3 lists `<bidder P>` unchanged and active, and no "QA House Staff".
-
 <!-- trace:case id=g10adm.auction-internal-bid.TC-fnh rev=2 covers=g10adm.auction-internal-bid.SC-d6h -->
 ### grade10-admin-auction-internal-bid-US9-TC8-2: The audit trail records each internal bidder act, never a listing
 
@@ -3523,7 +2972,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
@@ -3578,7 +3026,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
@@ -3623,7 +3070,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
@@ -3692,8 +3138,6 @@ Runs once per row of **Test data**.
 - An Orders search by email never matches an internal bidder's email label, for any operator
 - A profile's billing address is required when it is added and may change at any time; a change is audited without the address and never rewrites an order already opened
 - After the cancel the lot returns as the durable cancel rules return any lot; no Relist rule is its own
-
-
 
 ## Reconciliation
 

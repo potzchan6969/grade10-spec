@@ -1,6 +1,6 @@
 # grade10-site/auction/bid-payment-method Test Cases
 
-**Status:** pending-review · 5/9
+**Status:** pending-review · 4/7
 **Reviewed:** 2026-10-05, tcs-rules r4, lapsed 2026-10-14
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
@@ -72,9 +72,7 @@
    - opens the provider's hosted Checkout for the winner order's invoice. g10.auction-bid-payment-method.US1-TC7
 18. Submit <other-card maximum> on <listing_10> with <the other card>.
 19. Read the API response.
-   - refuses the bid because the listing's card is locked. g10.auction-bid-payment-method.US1-TC9
 20. Read <listing_10>'s current bid, the leader and the collector's maximum.
-   - the current bid and leader are unchanged, and the collector's maximum stays <locked maximum> on <the successful Visa>. g10.auction-bid-payment-method.US1-TC9
 21. Enter <low maximum> in the custom maximum on the bid panel.
 22. Click the bid action.
 23. Read the bid form and the linked card on the bid panel.
@@ -103,7 +101,6 @@
 | USD | 20% of the winning bid |
 | USD | 20% of the winning bid |
 
-
 ### Route
 
 1. Enter <raised maximum> in the bid panel.
@@ -118,8 +115,6 @@
 6. Enter <next bid> in the bid panel without placing it.
    - no premium amount and no invoice total show. g10.auction-bid-payment-method.US4-TC1
 7. Render the premium disclosure for <currency>.
-   - It reads the row's disclosure. g10.auction-bid-payment-method.US4-TC2
-   - No currency amount appears in it. g10.auction-bid-payment-method.US4-TC2
 
 ## g10.auction-bid-payment-method.US1: Collector bids on the card already linked
 
@@ -137,7 +132,6 @@
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
@@ -180,7 +174,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
@@ -225,7 +218,6 @@ Runs once for the sole supported bid currency.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
@@ -271,7 +263,6 @@ Runs once for the sole supported bid currency.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
@@ -318,7 +309,6 @@ Runs once for the sole supported bid currency.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
@@ -362,7 +352,6 @@ Runs once for the sole supported bid currency.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
@@ -405,11 +394,9 @@ Runs once for the sole supported bid currency.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
-
 
 **Pre-conditions:**
 
@@ -447,7 +434,6 @@ Runs once for the sole supported bid currency.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
@@ -478,50 +464,6 @@ Runs once for the sole supported bid currency.
 * Step 4: Highest bid and the bid count are unchanged.
 * Step 5 shows no row for <listing_1>.
 
-<!-- trace:case id=g10.auction-bid-payment-method.TC-ilh rev=1 -->
-### g10.auction-bid-payment-method.US1-TC9: A bid on another card after the first accepted bid is refused as locked
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-payment-method-US-01
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/placeBid.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) placed the first accepted bid on <listing_10> with <the successful Visa>, and leads it at <locked maximum>.
-* customer has also linked <the other card>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <listing_10> | An open listing taking bids, led by this collector |
-| <the successful Visa> | 4242 4242 4242 4242, the card <listing_10> is locked to. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| <the other card> | 5555 5555 5555 4444. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| <locked maximum> | The collector's maximum on <listing_10> |
-| <other-card maximum> | A maximum above <locked maximum> |
-
-**Steps:**
-
-1. Submit <other-card maximum> on <listing_10> with <the other card>.
-2. Read the API response.
-3. Read <listing_10>'s current bid, the leader and the collector's maximum.
-
-**Expected Results:**
-
-* Step 2 refuses the bid because the listing's card is locked.
-* Step 3: the current bid and leader are unchanged, and the collector's maximum stays <locked maximum> on <the successful Visa>.
-
 <!-- trace:case id=g10.auction-bid-payment-method.TC-l7t rev=2 -->
 ### g10.auction-bid-payment-method.US1-TC10: A refused first bid leaves the card changeable
 
@@ -533,11 +475,9 @@ Runs once for the sole supported bid currency.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-01
-
 
 **Pre-conditions:**
 
@@ -579,7 +519,6 @@ Runs once for the sole supported bid currency.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-02
@@ -623,7 +562,6 @@ Runs once for the sole supported bid currency.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bid-payment-method-US-02
@@ -677,11 +615,9 @@ does not exist yet.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-payment-method-US-04
-
 
 **Pre-conditions:**
 
@@ -703,44 +639,6 @@ does not exist yet.
 
 * Step 1: the buyer's premium reads 20% of the winning bid, not behind a tooltip.
 * Step 2: no premium amount and no invoice total show.
-
-<!-- trace:case id=g10.auction-bid-payment-method.TC-nvs rev=2 covers=g10.auction-bid-payment-method.SC-oeb -->
-### g10.auction-bid-payment-method.US4-TC2: The rate reads 20% for the universal USD bid currency
-
-Runs once for the sole supported bid currency.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-payment-method-US-04
-
-
-**Pre-conditions:**
-
-* The bid panel's premium disclosure is rendered for an open listing in <currency>.
-
-**Test data:**
-
-| Currency | Disclosure |
-| --- | --- |
-| USD | 20% of the winning bid |
-
-**Steps:**
-
-1. Render the premium disclosure for <currency>.
-
-**Expected Results:**
-
-* It reads the row's disclosure.
-* No currency amount appears in it.
 
 ## Settled
 

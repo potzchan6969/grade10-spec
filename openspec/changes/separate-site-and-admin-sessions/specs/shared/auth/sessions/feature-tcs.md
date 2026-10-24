@@ -21,7 +21,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-02
@@ -67,7 +66,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-03
@@ -103,7 +101,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-03
@@ -138,7 +135,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-03
@@ -167,7 +163,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-03
@@ -210,7 +205,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-04
@@ -249,7 +243,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-04
@@ -298,7 +291,7 @@ Runs once per row of **Test data**.
 - **Raised, settled by the artifacts** - how a session held before release is listed, and whether the two surfaces share one closing bound (`shared-auth-session-SC-38`, `shared-auth-sessions-SC-09`). Both are in `## Settled`; none goes to `decisions.md`
 - **Raised, escalated** - none
 - **Left to the durable cases** - `shared-auth-sessions-SC-01` to `shared-auth-sessions-SC-03`, whose requirement only gained the surface in its wording: `US1-TC1-1` to `US1-TC3-1` still verify them; `shared-auth-sessions-SC-04` to `shared-auth-sessions-SC-09`: `US2-TC1-1` to `US2-TC6-1` still verify them, `US2-TC7-1` stays retired, and every `actual` one is left `actual` because the wording moved nothing they assert
-- **Covered at domain** - a revoke of one session leaving the device signed out is walked by `shared-auth-e2e-US4-TC1-1`, which still holds; ending both surfaces at once is walked by the draft domain case `shared-auth-e2e-US8-TC1-1` in this change's `domain-tcs.md`, step 7; a ban ending both stays with the capability's own cases
+- **Covered at domain** - a revoke of one session leaving the device signed out is walked by `shared.auth-dmn.US4-TC1`, which still holds; ending both surfaces at once is walked by the draft domain case `shared-auth-e2e-US8-TC1-1` in this change's `domain-tcs.md`, step 7; a ban ending both stays with the capability's own cases
 - **Contradicted** - none
 - **Uncovered anchors** - none: `shared-auth-sessions-US-03` has `US3-TC1-1` to `US3-TC4-1`; `shared-auth-sessions-US-04` has `US4-TC1-1` and `US4-TC2-1`; `shared-auth-sessions-US-02` has `US2-TC8-1` beside the durable `US2-TC1-1` to `US2-TC6-1`; every scenario from `shared-auth-sessions-SC-10` to `shared-auth-sessions-SC-14` is reached
 - **Trace markers** - the new scenarios and cases carry none yet; the trace CLI allocates them with the walk

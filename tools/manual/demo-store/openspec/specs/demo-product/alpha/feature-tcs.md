@@ -31,7 +31,6 @@
 - **Status:** draft
 - **Behaviour:** positive
 - **Type:** smoke
-- **Layer:** e2e
 - **Automation status:** manual
 - **Testability:** automation
 - **Trace:** alpha-SC-01
@@ -60,7 +59,6 @@
 - **Status:** draft
 - **Behaviour:** negative
 - **Type:** functional
-- **Layer:** api
 - **Automation status:** manual
 - **Testability:** manual, automation
 - **Trace:** alpha-SC-01, alpha-SC-02

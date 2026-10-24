@@ -1,6 +1,6 @@
 # shared/auth/session Test Cases
 
-**Status:** pending-review · 0/13
+**Status:** pending-review · 0/11
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## shared-auth-session-US2: Collector stays signed in across the brand
@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-02
@@ -47,7 +46,6 @@
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-02
@@ -86,7 +84,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -126,7 +123,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -166,7 +162,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -208,7 +203,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-07
@@ -245,7 +239,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-07
@@ -281,7 +274,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -319,7 +311,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07
@@ -348,80 +339,6 @@ Runs once per row of **Test data**.
 * Step 2 shows tab A showing <operator account> signed in on the console, unreloaded.
 * Step 3 shows tab C unchanged, still showing <operator account> signed in on the site.
 
-### shared-auth-session-US7-TC8-1: A site session that holds a role is refused for a console request
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-07
-
-**Pre-conditions:**
-
-* <operator account> holds a role that grants <operator action>.
-* <operator account> is signed in on the site and has no console session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<operator action>` | An operator action the role grants, whose target <target account> is read before and after |
-| `<target account>` | An account the action would change |
-
-**Steps:**
-
-1. Request <operator action> as the console, carrying only the site session's credentials.
-2. Present the site session's credentials to the console as the console's own, and ask who is calling.
-
-**Expected Results:**
-
-* Step 1 is refused as not signed in.
-* <target account> is unchanged.
-* Step 2 receives no person.
-
-### shared-auth-session-US7-TC9-1: A console session without the second factor refuses an operator action beside a site session
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-session-US-07
-
-**Pre-conditions:**
-
-* <operator account> has a second factor and holds a role that grants <operator action>.
-* <operator account> is signed in on the site and on the console, and has not proved the second factor on that console session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<operator action>` | An operator action the role grants, whose target <target account> is read before and after |
-| `<target account>` | An account the action would change |
-
-**Steps:**
-
-1. Request <operator action> on the console session.
-
-**Expected Results:**
-
-* Step 1 is refused and asks for the second factor.
-* <target account> is unchanged.
-
 ---
 
 ## shared-auth-session-US8: Operator signs in to the console once more after release
@@ -440,7 +357,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-08
@@ -479,7 +395,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-08
@@ -523,7 +438,7 @@ Runs once per row of **Test data**.
 - **Raised, settled by the artifacts** - the recent sign-in window and the action that asks for it (the platform's admin-access page and `shared-auth-session-SC-35`); whether a signed-out console shows its own sign-in page (the sign-out and release scenarios); whether the console asks for the sign-in or the second factor first at release (`shared-auth-session-SC-37`, the sign-in); what happens to an operator's pre-release shared session (decisions Q3 and `shared-auth-session-SC-38`: it stays a site session). Each is in `## Settled`; none goes to `decisions.md`
 - **Raised, settled by the artifacts** - how long the console's session lasts against the site's: the change moves no timing (decisions Non-Goals, `tech-design.md` Non-Goals) and gives the console instance the site's configuration with only the cookie prefix changed (D1), so the console's session lasts as long as the site's does today; the lifetime itself is an existing open line of the Session page (How Long It Lasts), outside this change. The cases name no lifetime, and no row goes to `decisions.md`
 - **Left to the durable cases** - `shared-auth-session-SC-01` and `shared-auth-session-SC-02`, which only gained the surface a read is made from: `US1-TC1-1` and `US1-TC2-1` still verify them and are left as they are, since the product they read from sits on one surface; `shared-auth-session-SC-11` to `shared-auth-session-SC-18`, `shared-auth-session-SC-22` and `shared-auth-session-SC-23`, which only name the surface in their wording: `US4-TC1-1` to `US4-TC7-1`, `US4-TC9-1` to `US4-TC11-1` and `US5-TC1-1` to `US5-TC5-1` still verify them, every `actual` one left `actual` because the wording moved nothing they assert, and `US7-TC4-1` adds the surface that runs out. `US4-TC11-1`'s tab B does not say which surface it signs in on; it holds on either and is left for the review to name. `shared-auth-session-SC-29` is left to the durable `US2-TC2-1`, which signs in on a Grade10 page and opens a ZZZ one
-- **Covered at domain** - `shared-auth-session-SC-41`'s site sign-in across pages is walked by `shared-auth-e2e-US2-TC1-1`, which still holds with the site as the surface; the console-against-site lifecycle across session, sign-in, sign-out and sessions is a draft domain case in this change's `domain-tcs.md` (`shared-auth-e2e-US8-TC1-1`), which walks the two sessions started, listed, signed out and ended together by an admin; a ban ending both and the console's release re-sign-in stay with the capabilities' own cases; `shared-auth-session-US-02`'s story is read as the site only, and the domain story `shared-auth-e2e-US2` no longer promises the console, since `shared-auth-e2e-US2-TC1-1` is a durable actual case this change does not touch
+- **Covered at domain** - `shared-auth-session-SC-41`'s site sign-in across pages is walked by `shared.auth-dmn.US2-TC1`, which still holds with the site as the surface; the console-against-site lifecycle across session, sign-in, sign-out and sessions is a draft domain case in this change's `domain-tcs.md` (`shared-auth-e2e-US8-TC1-1`), which walks the two sessions started, listed, signed out and ended together by an admin; a ban ending both and the console's release re-sign-in stay with the capabilities' own cases; `shared-auth-session-US-02`'s story is read as the site only, and the domain story `shared-auth-e2e-US2` no longer promises the console, since `shared.auth-dmn.US2-TC1` is a durable actual case this change does not touch
 - **Contradicted** - none
 - **Uncovered anchors** - none: `shared-auth-session-US-02` has `US2-TC1-2`, `US2-TC3-1` and the durable `US2-TC2-1`; `shared-auth-session-US-07` has `US7-TC1-1` to `US7-TC9-1`; `shared-auth-session-US-08` has `US8-TC1-1` and `US8-TC2-1`; every scenario from `shared-auth-session-SC-27` to `shared-auth-session-SC-41` is reached
 - **Trace markers** - the new scenarios and cases carry none yet; the trace CLI allocates them with the walk, and `US2-TC1-2` already carries its revised marker

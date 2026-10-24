@@ -27,7 +27,6 @@
 - **Status:** draft
 - **Behaviour:** positive
 - **Type:** functional
-- **Layer:** api
 - **Automation status:** automated
 - **Testability:** manual
 - **Trace:** alpha-SC-08

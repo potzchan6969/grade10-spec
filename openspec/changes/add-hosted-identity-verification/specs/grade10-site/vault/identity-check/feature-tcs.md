@@ -1,6 +1,6 @@
 # grade10-site/vault/identity-check Test Cases
 
-**Status:** pending-review · 0/16
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-09-04, tcs-rules r2
 
 ## grade10-site-vault-identity-check-US1: Operator opens a case for a collector who verified before arriving
@@ -22,7 +22,6 @@ whether a check is on file, still out, or refused.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-identity-check-US-01
@@ -62,7 +61,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-identity-check-US-01
@@ -100,7 +98,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-identity-check-US-01
@@ -138,7 +135,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-identity-check-US-01
@@ -175,7 +171,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-identity-check-US-01
@@ -203,188 +198,6 @@ Runs once per row of **Test data**.
 * The case shows the check as out, not as having no identity.
 * The case can be booked, valued and moved exactly as a case with no check out.
 
-<!-- trace:case id=g10.vault-identity-check.TC-yz5 rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
-### grade10-site-vault-identity-check-US1-TC6-1: Binding a verdict voids an outstanding packet
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-01
-
-**Pre-conditions:**
-
-* `<a verified case with a packet out>` has a signing packet still out, rendered from an earlier identity.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a verified case with a packet out>` | A pre-custody vault case bound to an earlier identity, its signing packet still out |
-
-**Steps:**
-
-1. Deliver an approved verdict that binds a new identity to that case.
-2. Read the outstanding packet.
-3. Try to sign from it.
-
-**Expected Results:**
-
-* The outstanding packet is void.
-* Nothing can be signed from it.
-
-<!-- trace:case id=g10.vault-identity-check.TC-6wi rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
-### grade10-site-vault-identity-check-US1-TC7-1: Preparing documents without an identity is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-01
-
-**Pre-conditions:**
-
-* `<a case with no check>` holds no verified identity.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a case with no check>` | A pre-custody vault case with no verified identity, nothing to reuse and no live check |
-
-**Steps:**
-
-1. Prepare the case's signing documents.
-2. Read the refusal.
-
-**Expected Results:**
-
-* The request is refused.
-* The refusal names the missing identity check.
-
-<!-- trace:case id=g10.vault-identity-check.TC-9me rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
-### grade10-site-vault-identity-check-US1-TC8-1: Prepared document carries the bound identity's name
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-01
-
-**Pre-conditions:**
-
-* `<a verified case with a typed name>` is bound to a verified identity whose legal name differs from the name an admin typed on the case.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a verified case with a typed name>` | A pre-custody vault case bound to a verified identity whose legal name differs from the name typed on the case |
-
-**Steps:**
-
-1. Prepare the case's signing documents.
-2. Read the name printed on them.
-
-**Expected Results:**
-
-* The name printed is the bound identity's.
-* Nothing typed on the case reaches the paper.
-
-<!-- trace:case id=g10.vault-identity-check.TC-f0y rev=1 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
-### grade10-site-vault-identity-check-US1-TC9-1: Packet whose identity moved cannot be sealed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-01
-
-**Pre-conditions:**
-
-* `<a verified case with a rendered packet>` holds a rendered packet that has not been sealed.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a verified case with a rendered packet>` | A pre-custody vault case bound to a verified identity, holding a rendered packet that is not sealed |
-
-**Steps:**
-
-1. Replace the case's identity.
-2. Seal the packet.
-
-**Expected Results:**
-
-* Sealing is refused.
-* The packet is not sealed.
-
-<!-- trace:case id=g10.vault-identity-check.TC-jwg rev=2 covers=g10.vault-identity-check.SC-m0i,g10.vault-identity-check.SC-ryc,g10.vault-identity-check.SC-9le,g10.vault-identity-check.SC-fp3,g10.vault-identity-check.SC-fai,g10.vault-identity-check.SC-t29,g10.vault-identity-check.SC-8g9,g10.vault-identity-check.SC-2ye,g10.vault-identity-check.SC-74a,g10.vault-identity-check.SC-ic9 -->
-### grade10-site-vault-identity-check-US1-TC10-2: Case identity state reads without the identity grant, its details do not
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-01
-
-**Pre-conditions:**
-
-* `<a verified case>` is bound to a verified identity.
-* The admin holds `vault:read` and not `kyc:read`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a verified case>` | A pre-custody vault case bound to an identity a provider verified |
-
-**Steps:**
-
-1. Request `<a verified case>` as that admin.
-2. Read every field the case returns.
-
-**Expected Results:**
-
-* The case shows that an identity is on file and who performed the check.
-* No name, birth date, masked number, document image, provider finding or refusal reason is returned.
-
 ---
 
 ## grade10-site-vault-identity-check-US2: Operator records a check at the counter
@@ -405,7 +218,6 @@ and a check that overrides a refusal says so on the case.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-identity-check-US-02
@@ -442,7 +254,6 @@ and a check that overrides a refusal says so on the case.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-identity-check-US-02
@@ -469,52 +280,6 @@ and a check that overrides a refusal says so on the case.
 * The case holds a verified identity.
 * The case can proceed to signing.
 
-<!-- trace:case id=g10.vault-identity-check.TC-7qk rev=2 covers=g10.vault-identity-check.SC-qcf,g10.vault-identity-check.SC-9xs,g10.vault-identity-check.SC-q5q,g10.vault-identity-check.SC-3wt -->
-### grade10-site-vault-identity-check-US2-TC3-2: Counter check is refused once the item is in custody
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-02
-
-**Pre-conditions:**
-
-* A vault case holds the status named by the row.
-* The admin holds `vault:operate`.
-
-**Test data:**
-
-| Case status | Outcome |
-| --- | --- |
-| `vaulted` | Refused; the case's identity is unchanged |
-| `active` | Refused; the case's identity is unchanged |
-| `repaid` | Refused; the case's identity is unchanged |
-| `released` | Refused; the case's identity is unchanged |
-| `declined` | Refused; the case's identity is unchanged |
-| `cancelled` | Refused; the case's identity is unchanged |
-| `expired` | Refused; the case's identity is unchanged |
-| `forfeited` | Refused; the case's identity is unchanged |
-
-**Steps:**
-
-1. Record an identity check for the case.
-2. Read the refusal.
-
-**Expected Results:**
-
-* Recording is refused.
-* The case's identity is unchanged.
-
 <!-- trace:case id=g10.vault-identity-check.TC-saw rev=2 covers=g10.vault-identity-check.SC-qcf,g10.vault-identity-check.SC-9xs,g10.vault-identity-check.SC-q5q,g10.vault-identity-check.SC-3wt -->
 ### grade10-site-vault-identity-check-US2-TC4-2: Override of a refused check carries a reason
 
@@ -526,7 +291,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-identity-check-US-02
@@ -564,86 +328,3 @@ Runs once per row of **Test data**.
 landed,
 **so that** nothing signed, vaulted or erased is disturbed by a check that
 finished too late.
-
-<!-- trace:case id=g10.vault-identity-check.TC-d8f rev=2 covers=g10.vault-identity-check.SC-30d,g10.vault-identity-check.SC-4l5,g10.vault-identity-check.SC-k3i,g10.vault-identity-check.SC-pcc,g10.vault-identity-check.SC-alf,g10.vault-identity-check.SC-zfm -->
-### grade10-site-vault-identity-check-US3-TC1-2: Verdict landing on a case that has moved is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-identity-check-US-03
-
-**Pre-conditions:**
-
-* A vault case is in the condition the row names.
-* A hosted check raised before the case moved is still out.
-
-**Test data:**
-
-| Landing condition | Outcome |
-| --- | --- |
-| Past recording — `vaulted`, `active`, `repaid`, `released`, `declined`, `cancelled`, `expired` or `forfeited` | The case keeps the identity it was vaulted under, and the admin is told |
-| A sealed signing packet on the case | The case keeps the identity that evidence was executed under |
-| The case's personal data erased | Nothing is bound, and the erasure is not undone |
-| An identity bound at the counter since the check was raised | The case keeps the identity the admin recorded, and no packet is voided |
-
-**Steps:**
-
-1. Deliver an approved verdict for that case.
-2. Read the case's identity.
-3. Read the identity the verdict created and its evidence.
-4. Read the check's state and what the admin was told.
-
-**Expected Results:**
-
-* The row's outcome holds.
-* The case's identity is the one it held before, and the identity the verdict created is purged with its evidence.
-* The check reads Declined with the reason recorded, and no identity is left bound to nothing.
-
-<!-- trace:case id=g10.vault-identity-check.TC-dny rev=1 covers=g10.vault-identity-check.SC-30d,g10.vault-identity-check.SC-4l5,g10.vault-identity-check.SC-k3i,g10.vault-identity-check.SC-pcc,g10.vault-identity-check.SC-alf,g10.vault-identity-check.SC-zfm -->
-### grade10-site-vault-identity-check-US3-TC5-1: Displaced identity is settled rather than left behind
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-identity-check-US-03
-
-**Pre-conditions:**
-
-* `<a verified case with a check out>` is bound to one identity and holds a hosted check that is still out.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<a verified case with a check out>` | A pre-custody vault case bound to one identity, its hosted check still out |
-
-**Steps:**
-
-1. Deliver an approved verdict that binds another identity to the case.
-2. Read the displaced identity before the vault settles it.
-3. Read it again once the new binding stands.
-
-**Expected Results:**
-
-* The displaced identity is on file until the vault settles it.
-* It is discarded once the new binding stands.
-* No image of a document is left behind unbound.

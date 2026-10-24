@@ -20,7 +20,6 @@ signed.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
@@ -51,7 +50,6 @@ signed.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
@@ -82,7 +80,6 @@ signed.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
@@ -115,7 +112,6 @@ signed.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
@@ -145,7 +141,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
@@ -188,7 +183,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
@@ -227,7 +221,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
@@ -273,7 +266,6 @@ exists.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-02
@@ -302,7 +294,6 @@ exists.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-02
@@ -334,7 +325,6 @@ exists.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-02
@@ -373,7 +363,6 @@ happens on a clock.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-03
@@ -404,7 +393,6 @@ happens on a clock.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-03
@@ -434,7 +422,6 @@ happens on a clock.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-03
@@ -473,7 +460,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -513,7 +499,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -542,7 +527,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -571,7 +555,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -600,7 +583,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -628,7 +610,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -655,7 +636,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -686,7 +666,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -716,7 +695,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -748,7 +726,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -778,7 +755,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -809,7 +785,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -839,7 +814,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -869,7 +843,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -900,7 +873,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -935,7 +907,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
@@ -967,7 +938,6 @@ stands, and where I ask to be forgotten,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05

@@ -2670,3 +2670,38 @@ test("an amendment passes when it restates a Feature set item another change rew
   const merged = amendFeatures(prior, durable, durable);
   assert.match(merged, /Named roles: user, admin, owner/);
 });
+
+// tcs-rules r7: the Grade10 store's cases live only in its PRD folder, so a
+// store delta owes no suite beside it; every other delta still does.
+test("a store delta needs no feature-tcs.md beside it; another delta still does", () => {
+  const { root } = sandbox();
+  const base = join(root, "openspec/changes/build-alpha/specs");
+  rmSync(join(base, "site/search/feature-tcs.md"));
+  assert.match(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /site\/search\/feature-tcs\.md is required before acceptance/,
+  );
+  mkdirSync(join(base, "grade10-site/store"), { recursive: true });
+  renameSync(
+    join(base, "site/search"),
+    join(base, "grade10-site/store/search"),
+  );
+  assert.doesNotMatch(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /feature-tcs\.md is required before acceptance/,
+  );
+});
+
+test("a makers-only delta needs no feature-tcs.md beside it", () => {
+  const { root } = sandbox();
+  const dir = join(root, "openspec/changes/build-alpha/specs/site/search");
+  rmSync(join(dir, "feature-tcs.md"));
+  writeFileSync(
+    join(dir, "user-journeys.md"),
+    "**Walked by:** makers only - a docs reference only the makers read\n",
+  );
+  assert.doesNotMatch(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /feature-tcs\.md is required before acceptance/,
+  );
+});

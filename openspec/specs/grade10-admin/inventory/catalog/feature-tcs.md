@@ -1,8 +1,11 @@
 # grade10-admin/inventory/catalog Test Cases
 
-**Status:** pending-review · 0/89
+**Status:** pending-review · 0/88
 **Drafts styled:** 2026-10-14, tcs-rules r5
-**Out of suite:** grade10-admin-inventory-catalog-SC-205 - the product service's update test, task 3.1 in `tasks.md`, and the editor test of task 5.1, because the editor names every translation it holds and the console has no route that omits them; grade10-admin-inventory-catalog-SC-206 - the product service's write test, task 3.1, which reads the grade, set and Cert ID before and after a translation write; grade10-admin-inventory-catalog-SC-217 - the product service's write test, task 3.1, added after the blind pass; grade10-admin-inventory-catalog-SC-215 and grade10-admin-inventory-catalog-SC-216 - the Details and search tests of tasks 5.1 and 3.2, kept as already folded; grade10-admin-inventory-catalog-SC-218 - the Details section test of task 5.1, added after the blind pass
+**Out of suite (api):**
+- `grade10-admin-inventory-catalog-SC-205` — the product service's update test, task 3.1 in `tasks.md`, and the editor test of task 5.1, because the editor names every translation it holds and the console has no route that omits them
+- `grade10-admin-inventory-catalog-SC-206` — the product service's write test, task 3.1, which reads the grade, set and Cert ID before and after a translation write
+- `grade10-admin-inventory-catalog-SC-217` — the product service's write test, task 3.1, added after the blind pass
 
 ## grade10-admin-inventory-catalog-US4: Reconstruct stock changes
 
@@ -21,7 +24,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-04
@@ -71,7 +73,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-04
@@ -127,7 +128,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-04
@@ -198,7 +198,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-09
@@ -250,7 +249,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-09
@@ -294,7 +292,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-09
@@ -335,7 +332,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-09
@@ -390,7 +386,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-09
@@ -450,7 +445,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-12
@@ -489,7 +483,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-12
@@ -521,7 +514,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-12
@@ -553,7 +545,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-12
@@ -587,7 +578,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-12
@@ -627,7 +617,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-12
@@ -657,7 +646,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-12
@@ -698,7 +686,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-13
@@ -764,7 +751,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-13
@@ -796,7 +782,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-13
@@ -837,7 +822,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-13
@@ -886,7 +870,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-14
@@ -944,7 +927,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-14
@@ -985,7 +967,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-14
@@ -1038,7 +1019,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-14
@@ -1082,7 +1062,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-14
@@ -1129,7 +1108,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-14
@@ -1173,7 +1151,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-14
@@ -1235,7 +1212,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-14
@@ -1289,7 +1265,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-14
@@ -1350,7 +1325,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1414,7 +1388,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1478,7 +1451,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1532,7 +1504,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1586,7 +1557,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1632,7 +1602,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1682,7 +1651,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1730,7 +1698,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1773,7 +1740,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1819,7 +1785,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-15
@@ -1879,7 +1844,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -1935,7 +1899,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -1996,7 +1959,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2045,7 +2007,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2090,7 +2051,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2144,7 +2104,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2200,7 +2159,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2257,7 +2215,6 @@ Every intake below has no Cert ID unless it names one.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2306,7 +2263,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2366,7 +2322,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2420,7 +2375,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2469,7 +2423,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2504,69 +2457,6 @@ Runs once per row of **Test data**.
 * Step 3: Remove physical unit is offered or not as the row's Remove physical unit says.
 * Step 3: on the Hold moved to another product row, Change Cert ID is not offered, and the record shows its Cert ID is fixed.
 
-<!-- trace:case id=g10adm.inventory-catalog.TC-78a rev=1 covers=g10adm.inventory-catalog.SC-lvy,g10adm.inventory-catalog.SC-zu3,g10adm.inventory-catalog.SC-8m1,g10adm.inventory-catalog.SC-x7l,g10adm.inventory-catalog.SC-7hq -->
-### grade10-admin-inventory-catalog-US16-TC13-1: A reversal sent outside the page is held to the same limits
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-16
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is signed in to the inventory console.
-* `<product_43>`'s regular stock was intaken by `<first intake>`, then `<earlier sale>`, then `<second intake>`, and no hold names it.
-* `<product_43>` holds `<cert_released>`, `<cert_sold>`, `<cert_moved>` and `<cert_unmoved>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<first intake>` | An intake of 3 units with no Cert ID |
-| `<earlier sale>` | 1 unit of regular stock sold outside any hold |
-| `<second intake>` | An intake of 4 units with no Cert ID |
-| `<reducible>` | 4 units: the units of `<second intake>` |
-| `<cert_released>` | `PSA-43000001`, its admin hold released, so it reads Available |
-| `<cert_sold>` | `PSA-43000002`, sold |
-| `<cert_moved>` | `PSA-43000003`, once named by an Auction hold since moved to another product, so it reads Available |
-| `<cert_unmoved>` | `PSA-43000004`, intaken with its Cert ID, never held, sold, withdrawn or vaulted |
-
-| Row | Request |
-| --- | --- |
-| One above the limit | A reduction of 5 units, `<reducible>` plus 1 |
-| Zero | A reduction of 0 units |
-| Not whole | A reduction of 1.5 units |
-| Moved Cert record, available | A removal of `<cert_released>` |
-| Sold Cert record | A removal of `<cert_sold>` |
-| Hold moved to another product | A removal of `<cert_moved>` |
-| Hold moved, Cert ID change | A Cert ID change of `<cert_moved>` to `PSA-43000009` |
-| Physical removal of an unmoved record | A Remove physical unit of `<cert_unmoved>` |
-| Empty remarks | A reduction of 1 unit with remarks of three spaces |
-
-**Steps:**
-
-1. Read `<product_43>`'s stock, withdrawn and the ledger.
-2. Send the row's Request under this admin's session, outside the page.
-3. Read the response.
-4. Read `<product_43>`'s stock, withdrawn and the ledger.
-5. Open `<product_43>`'s product history.
-
-**Expected Results:**
-
-* Step 3: the request is refused.
-* Step 4: every figure reads as in step 1.
-* Step 5: no entry was added.
-
 <!-- trace:case id=g10adm.inventory-catalog.TC-n7h rev=1 covers=g10adm.inventory-catalog.SC-gbg,g10adm.inventory-catalog.SC-y0i -->
 ### grade10-admin-inventory-catalog-US16-TC14-1: A move or reversal after the confirmation opened refuses the reversal
 
@@ -2580,7 +2470,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2634,7 +2523,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-16
@@ -2699,7 +2587,6 @@ unnumbered stock from entering inventory.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-69
@@ -2741,7 +2628,6 @@ unnumbered stock from entering inventory.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-69
@@ -2777,7 +2663,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-69
@@ -2832,7 +2717,6 @@ only the fields I choose.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-70
@@ -2870,7 +2754,6 @@ only the fields I choose.
 * **Behaviour:** negative
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-70
@@ -2916,7 +2799,6 @@ unit or only aggregate stock.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-71
@@ -2952,7 +2834,6 @@ unit or only aggregate stock.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-71
@@ -2997,7 +2878,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-72
@@ -3043,7 +2923,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-72
@@ -3084,7 +2963,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-72
@@ -3125,7 +3003,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-72
@@ -3169,7 +3046,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-72
@@ -3209,7 +3085,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-72
@@ -3254,7 +3129,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-72
@@ -3303,7 +3177,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-73
@@ -3345,7 +3218,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-73
@@ -3385,7 +3257,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-73
@@ -3418,7 +3289,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-73
@@ -3458,7 +3328,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-73
@@ -3497,7 +3366,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-73
@@ -3536,7 +3404,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-73
@@ -3583,7 +3450,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-74
@@ -3619,7 +3485,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-75
@@ -3669,7 +3534,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-75
@@ -3711,7 +3575,6 @@ product rows separately from stock, then mark valid products created,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-75
@@ -3752,7 +3615,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-75
@@ -3800,7 +3662,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-75
@@ -3848,7 +3709,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-75
@@ -3899,7 +3759,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-75
@@ -3945,7 +3804,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-75
@@ -3999,7 +3857,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-76
@@ -4050,7 +3907,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-76
@@ -4093,7 +3949,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-76
@@ -4138,7 +3993,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-76
@@ -4190,7 +4044,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-77
@@ -4234,7 +4087,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-77
@@ -4270,7 +4122,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-77
@@ -4313,7 +4164,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-77

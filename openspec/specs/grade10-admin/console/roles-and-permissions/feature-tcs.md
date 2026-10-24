@@ -1,6 +1,6 @@
 # grade10-admin/console/roles-and-permissions Test Cases
 
-**Status:** pending-review · 0/12
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-16, tcs-rules r6
 
 ## grade10-admin-console-roles-and-permissions-US1: Admin compares what roles can do
@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-roles-and-permissions-US-01
@@ -50,7 +49,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-roles-and-permissions-US-01
@@ -84,7 +82,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-roles-and-permissions-US-01
@@ -123,7 +120,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-roles-and-permissions-US-01
@@ -152,7 +148,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-roles-and-permissions-US-01
@@ -185,7 +180,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-roles-and-permissions-US-01
@@ -228,7 +222,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-roles-and-permissions-US-02
@@ -260,7 +253,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-roles-and-permissions-US-02
@@ -289,7 +281,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-roles-and-permissions-US-02
@@ -320,68 +311,6 @@ Runs once per row of **Test data**.
 * Step 3 restores every `store:` row.
 * Step 4 restores the full catalog.
 
-<!-- trace:case id=g10adm.console-roles-and-permissions.TC-gwl rev=1 covers=g10adm.console-roles-and-permissions.SC-hc3 -->
-### grade10-admin-console-roles-and-permissions-US2-TC4-1: A mapping change without a regenerated view fails the repository check
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-roles-and-permissions-US-02
-
-**Pre-conditions:**
-
-* A clean checkout of the application repository whose committed roles-and-permissions view matches the shipped mapping.
-
-**Steps:**
-
-1. Grant `staff` one permission it does not hold in the role-to-permission mapping, without regenerating the view.
-2. Run the repository's check.
-3. Regenerate the view.
-4. Run the check again.
-
-**Expected Results:**
-
-* Step 2 fails, naming the view as out of date.
-* Step 4 passes.
-
-<!-- trace:case id=g10adm.console-roles-and-permissions.TC-bkf rev=1 covers=g10adm.console-roles-and-permissions.SC-fgw -->
-### grade10-admin-console-roles-and-permissions-US2-TC5-1: Producing the view twice from one source gives identical bytes
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-roles-and-permissions-US-02
-
-**Pre-conditions:**
-
-* A clean checkout of the application repository.
-
-**Steps:**
-
-1. Produce the roles-and-permissions view.
-2. Produce it again without changing the mapping or the vocabulary.
-3. Compare the two outputs.
-
-**Expected Results:**
-
-* The two outputs are identical byte for byte.
-
 ---
 
 ## grade10-admin-console-roles-and-permissions-US3: Non-admin is refused the page
@@ -403,7 +332,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-roles-and-permissions-US-03

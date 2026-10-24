@@ -1,71 +1,72 @@
-<!-- One capability's suite, written as feature-tcs.md beside its spec.md.
-     The file name carries the level, and the same shape serves all four:
-     a path across the capabilities of one domain is domain-tcs.md beside
-     them, across a product's domains is <product>/product-tcs.md, and across
-     products is platform-tcs.md. Above feature level a case composes two or
-     more journeys and its **Trace:** names each of them, the heading id is
-     <app>.<domain>-dmn.US<n> (product: <app>-pdt.US<n>; platform:
-     platform.US<n>), and product and platform carry no coverage
-     obligation - they are smoke passes. Case headings use
-     <app>.<domain>-<capability>.US<n>-TC<m>,
-     <app>.<domain>-dmn.US<n>-TC<m>, <app>-pdt.US<n>-TC<m> or
-     platform.US<n>-TC<m>.
+<!-- The shape of every suite file. What a case is and claims is
+     docs/governance/specs-to-test-cases.md; how it reads is
+     docs/governance/tcs-conventions.md. This template is the only statement
+     of the format.
 
-     An INDEPENDENT reading of the user-journeys.md and feature set beside this
-     file, written without sight of the spec's ## Requirements — never derived
-     from the scenarios, because a suite derived from them cannot find what
-     they left out. The shape below is fixed by
-     docs/governance/specs-to-test-cases.md - follow that document rather than
-     this sketch where the two ever part. Generate draft cases in QA1 within
-     planning-dev, reconcile with QA2, and check with `pnpm run tcs:validate`.
-     Human QA uses tcs-review after implementation is deployed and available. -->
+     The same shape serves every level; the file name carries it:
+     feature-tcs.md beside the capability's spec.md; domain-tcs.md,
+     <product>/product-tcs.md and platform-tcs.md for composed paths, whose
+     headings are <app>.<domain>-dmn.US<n>, <app>-pdt.US<n> and
+     platform.US<n>, and whose **Trace:** names every journey walked.
 
-<!-- <scope> is the stable marker prefix, for example
-     g10.auction-account-record. The human-facing heading uses the journey and
-     case numbers: g10.auction-account-record.US1-TC2. The trace:case marker
-     above it keeps its own immutable machine id. -->
+     The Grade10 store differs: its files live only in
+     docs/prds/products/grade10-site/store/tests/, one per page, with a
+     **Capabilities:** header line, ## sections named for PRD sections, and
+     **Trace:** naming a PRD heading anchor such as order-detail#product-pictures.
+     New store case ids are g10.store-<page>.TC<n>. -->
 
 # <product>/<domain>/<capability> Test Cases
 
-**Status:** pending-review · 0/<number of draft cases>
+**Status:** pending-review · 0/<number of active cases>
 **Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>
+<!-- Computed lines, never chosen. **Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>
+     is added when the file reaches approved, and gains ", lapsed <YYYY-MM-DD>"
+     when it falls out. A store file adds **Capabilities:** <capability>, … -->
 
-<!-- Walks come first. A walk carries Starting state, optional Shared test data,
-     and Route. It references each case once or more; it never repeats a case
-     definition or creates an observation. A feature walk stays in this
-     capability. Higher-level routes belong in the parent suite. -->
+**Out of suite (api):** <scenario id>, <scenario id>
+<!-- Optional, one line per category: api, unit, non-GUI or seo. Only
+     scenarios no product user can reach from any screen. The ids may instead
+     be "- `<id>` - <note>" bullets beneath the label. -->
+
+## Background
+
+<!-- Optional. Only the conditions and test data every case shares. -->
 
 ## Walk 1: <title>
 
+<!-- Optional, for manual testers only. Walks come before cases. -->
+
 **Starting state:**
 
-- <state that places the actor at the route's entry point>
+- <the actor, the surface or address, and the seeded state>
 
 **Shared test data:**
 
 | Field | Value |
 | --- | --- |
-| `<fixture>` | <fixture or value> |
+| `<fixture>` | <value or the conditions a fixture meets> |
 
 ### Route
 
-1. <action that moves the tester to the next route point>.
-   - <observation to record> `g10.<domain>-<capability>.US1-TC1`
-2. <action that opens an alternative route>.
+1. <action>.
+   - <observation recorded here> `g10.<domain>-<capability>.US1-TC1`
+2. <action with alternative routes>.
    a. <condition and observation> `g10.<domain>-<capability>.US1-TC2`
    b. <condition and observation> `g10.<domain>-<capability>.US1-TC3`
 
-<!-- Cases referenced by a walk are printed once under their owning journey.
-     A case referenced only by a higher-level walk is printed under Ungrouped,
-     grouped by journey. -->
-
-## <app>.<domain>-<capability>.US<n>: <!-- journey title, copied from user-journeys.md -->
+## <app>.<domain>-<capability>.US<n>: <journey title, copied from user-journeys.md>
 
 **As a** <role>,
 **I want** <goal>,
 **so that** <reason>.
 
-### <app>.<domain>-<capability>.US<n>-TC<m>: <!-- clean descriptive title -->
+<!-- trace:case id=<scope>.TC-<xyz> rev=1 -->
+### <app>.<domain>-<capability>.US<n>-TC<m>: <title naming the behaviour>
+
+<!-- A platform requirement opens the title: [Mobile only] … or [Web only] … -->
+
+Runs once per row of **Test data**.
+<!-- Only on a case that runs the same steps for each row. -->
 
 **Classification:**
 
@@ -75,89 +76,70 @@
 * **Behaviour:** positive | negative | destructive
 * **Type:** functional | usability | security | performance | compatibility
 * **Suites:** acceptance | smoke | regression | health-check | prod | none
-* **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
 * **Trace:** <app>.<domain>-<capability>.US<n>
-<!-- or, for a capability whose journeys file says **Walked by:** nobody, a
-     ## Feature set root group name matched verbatim. Never a scenario id. -->
+<!-- Or, for a capability walked by nobody, a ## Feature set group name. -->
+
+**Decided by:** `grade10:<path to the test>`
+<!-- Only on an automated case; written by pnpm run tcs:automated. -->
 
 **Pre-conditions:**
 
-* <!-- from GIVEN — state, not actions. The actor is customer or admin, with
-     its state or grant in brackets: customer(gold member) is on the shopping
-     cart page. Or "None." -->
+* <state, not action; one condition per bullet; the actor as class(qualifier); or "None.">
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<name>` | <exact value, or its rule or range> |
+<!-- Omitted whole when the case takes no input. A per-row case has a column
+     per varying value and one for the outcome. -->
 
 **Steps:**
 
-1. <!-- from WHEN -->
+1. <one action, platform-neutral: select, enter, open>
+2. <the next action>
 
 **Expected Results:**
 
-* <!-- from THEN -->
+* <what the tester sees, naming the step where needed>
+* <a state a story draws ends: UI matching <story-id>>
 
-<!-- Repeat the journey sections in file order. After all walked cases, print
-     cases that belong to no walk at this level under the following groups. -->
+---
+
+## <app>.<domain>-<capability>.US<n+1>: <the next journey>
+
+<!-- Repeat journeys in file order, --- between them, deprecated cases last in
+     each. Cases no walk at this level references go here instead: -->
 
 ## Ungrouped
 
-### <app>.<domain>-<capability>.US<n>: <!-- journey title -->
+### <app>.<domain>-<capability>.US<n>: <journey title>
 
-#### <app>.<domain>-<capability>.US<n>-TC<m>: <!-- clean descriptive title -->
+#### <app>.<domain>-<capability>.US<n>-TC<m>: <title>
 
-**Classification:**
-
-* **Severity:** blocker | critical | major | minor | trivial
-* **Priority:** high | medium | low
-* **Status:** draft
-* **Behaviour:** positive | negative | destructive
-* **Type:** functional | usability | security | performance | compatibility
-* **Suites:** acceptance | smoke | regression | health-check | prod | none
-* **Layer:** e2e | api | unit
-* **Automation status:** manual
-* **Testability:** automation | manual | automation, manual
-* **Trace:** <app>.<domain>-<capability>.US<n>
-
-**Pre-conditions:**
-
-* <state>
-
-**Steps:**
-
-1. <step>
-
-**Expected Results:**
-
-* <result>
-
-<!-- The blind reading's raised questions are not a section here. They go to
-     the change's decisions.md, under its ## Raised table, one row per point the
-     isolated input did not settle, with the capability that raised it — the
-     file the author is already reading, where every row owes a landing before
-     the change merges. A ## Raised in this file is a list in the wrong place
-     and `pnpm run tcs:validate` says so. -->
+<!-- The same case shape, one heading level down. -->
 
 ## Settled
-<!-- Questions earlier runs raised and had answered, one line each, no scenario
-     ids. Carried into the durable suite at archive, and read by the next blind
-     pass on purpose: it says what has already been asked, which is not what
-     the scenarios say. Without it the same misreading is raised every run.
 
-     Every raised row that was escalated or deferred lands here or in
-     ## Reconciliation as well as in decisions.md, which archives with the
-     change and is folded nowhere. -->
+<!-- Questions earlier runs raised and had answered, one line each, no
+     scenario ids. Read by the next blind pass on purpose. -->
 
 ## Reconciliation
-<!-- Written by the run after both readings land, and the evidence that the
-     blind pass happened at all. One line per disposition:
-     **Raised, folded into spec**, **Raised, rejected** with the reason,
-     **Raised, escalated** with the PRD ❓ it became, **Raised, deferred** with
-     who must settle it, **Contradicted** where the two readings state opposite
-     things — which the run never settles on its own — and **Uncovered anchors**
-     with where each is verified instead. A finding is recorded here even when
-     the rule it becomes lands in another capability's spec; say where it went.
-     The Run line names the isolated input: what the pass read, and what it
-     was denied. Nothing verifies it, so it is a statement, not proof.
 
-     Scenario ids may appear here only while the change is open; archive fold
-     and tcs-review both strip them, leaving the dispositions and reasons. -->
+**Run:** <date and run>; read <the bundle>; denied <what it could not see>.
+
+<!-- QA2's dispositions, one line each: folded into spec, rejected with the
+     reason, escalated to a PRD ❓, deferred to who settles it, contradicted,
+     Covered at domain, uncovered. Scenario ids only while the change is
+     open. Raised questions are never a section here: they go to the
+     change's decisions.md ## Raised. -->
+
+### Manual
+
+<!-- Optional legend binding each named test to a path, then: -->
+
+| Manual | Why |
+| --- | --- |
+| `<case id>` | <the part a person walks, and any test that proves the rest> |

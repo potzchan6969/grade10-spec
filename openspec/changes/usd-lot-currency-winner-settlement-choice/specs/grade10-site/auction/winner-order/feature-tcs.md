@@ -1,201 +1,14 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/35
+**Status:** pending-review · 0/26
 **Drafts styled:** 2026-10-14, tcs-rules r5
-**Out of suite:** winner-order-SC-04, winner-order-SC-05, winner-order-SC-38, winner-order-SC-39, winner-order-SC-62, winner-order-SC-63, winner-order-SC-69, winner-order-SC-96, winner-order-SC-110, winner-order-SC-111, winner-order-SC-180, winner-order-SC-184, winner-order-SC-214, winner-order-SC-215, winner-order-SC-216, winner-order-SC-249, winner-order-SC-257, winner-order-SC-287, winner-order-SC-26, winner-order-SC-27, winner-order-SC-28
+**Out of suite (api):** winner-order-SC-27
 
 ## g10.auction-winner-order.US8: Winner pays an invoice with a policy premium
 
 **As a** winner of an auction lot,
 **I want** my invoice to calculate the stated buyer premium correctly using the current currency minimum,
 **so that** the amount I pay is explainable and collectible.
-
-<!-- trace:case id=g10.auction-winner-order.TC-n3p rev=3 covers=g10.auction-winner-order.SC-30s,g10.auction-winner-order.SC-ml2 -->
-### g10.auction-winner-order.US8-TC1: Invoice premium is 20 percent of the winning bid
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-08
-
-**Pre-conditions:**
-
-* A USD winner's sent invoice has no other lines.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Winning bid | USD minimum | Buyer's Premium | Final amount |
-| --- | --- | --- | --- |
-| USD2,400 (fixed fixture) | USD0 | USD480.00 | USD2,880.00 |
-| USD2,500 (fixed fixture) | USD200.00 | USD500.00 | USD3,000.00 |
-| USD1.01 (fixed boundary) | USD0 | USD0.20 | USD1.21 |
-
-**Steps:**
-
-1. Read the invoice winning bid, buyer's premium and final amount.
-
-**Expected Results:**
-
-* Each row's premium is the greater of 20% of its winning bid, rounded half up, or its USD minimum.
-* Each row's final amount includes the Buyer's Premium.
-* For the USD1.01 row, the premium is USD0.20, an integer count of USD minor units.
-
-<!-- trace:case id=g10.auction-winner-order.TC-zt4 rev=2 -->
-### g10.auction-winner-order.US8-TC2: One USD minimum applies below twenty percent
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-08
-
-**Pre-conditions:**
-
-* A USD winner's sent invoice has a winning bid whose 20% premium is below the minimum.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<winning bid>` | USD1 (range: >0 minor units) |
-| `<minimum premium>` | USD1 (fixed configured minimum) |
-
-**Steps:**
-
-1. Read the invoice winning bid and buyer's premium.
-
-**Expected Results:**
-
-* The premium equals `<minimum premium>` because 20% of `<winning bid>` is lower.
-
-<!-- trace:case id=g10.auction-winner-order.TC-dd3 rev=2 -->
-### g10.auction-winner-order.US8-TC3: With a zero minimum, 20% is rounded half up
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-08
-
-**Pre-conditions:**
-
-* The USD premium minimum is 0.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<winning bid>` | USD10.03 (fixed boundary: 20% is a half minor unit away from a whole one) |
-| `<premium>` | USD2.01: 20% is 200.6 minor units, rounded half up |
-
-**Steps:**
-
-1. Compute the premium for `<winning bid>`.
-
-**Expected Results:**
-
-* The premium is `<premium>`.
-
-<!-- trace:case id=g10.auction-winner-order.TC-i06 rev=2 covers=g10.auction-winner-order.SC-ip8 -->
-### g10.auction-winner-order.US8-TC4: A sent invoice keeps its premium when the minimum changes
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-08
-
-**Pre-conditions:**
-
-* `<order_2>`'s invoice was sent while the USD minimum was 0.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<order_2>` | A USD order won at USD7, invoice sent with premium `<sent premium>` |
-| `<sent premium>` | USD1.40: 20% of USD7 |
-| `<new minimum>` | USD20 (fixed configured value) |
-
-**Steps:**
-
-1. Set the USD premium minimum to `<new minimum>`.
-2. Read the API response for `<order_2>`'s sent invoice.
-3. Reissue `<order_2>`'s invoice.
-4. Read the API response for the reissued invoice.
-
-**Expected Results:**
-
-* Step 2: the premium is still `<sent premium>`.
-* Step 4: the premium is `<new minimum>`.
-
-<!-- trace:case id=g10.auction-winner-order.TC-xji rev=1 -->
-### g10.auction-winner-order.US8-TC5: HKD order converts the premium and minimum together
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-03
-
-**Pre-conditions:**
-
-* The invoice is for an HKD settlement and the USD premium rule has a non-zero minimum.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<winning bid>` | USD1 (range: >0 minor units) |
-| `<minimum premium>` | USD1 (fixed configured minimum) |
-| `<exchange rate>` | 7.85 HKD per USD |
-
-**Steps:**
-
-1. Read the invoice premium and converted lines.
-
-**Expected Results:**
-
-* The premium is the greater of 20% of `<winning bid>` or `<minimum premium>`.
-* HKD line amounts are each converted at the configured rate and rounded up before summing.
 
 ## g10.auction-winner-order.US9: Winner pays an invoice by bank transfer
 
@@ -214,7 +27,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -252,7 +64,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -294,7 +105,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -338,7 +148,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -383,7 +192,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-03
@@ -437,7 +245,6 @@ Runs once per row of **Test data**. The method can change until the winner confi
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -478,7 +285,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -528,7 +334,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -559,7 +364,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -587,74 +391,6 @@ Runs once per row of **Test data**.
 * The invoice shows the row's winning bid, premium and total in the row's currency, with no conversion for USD.
 * When the row is HKD, its converted lines use 7.85 and round up to whole HKD; no USD amount is printed.
 
-<!-- trace:case id=g10.auction-winner-order.TC-8ea rev=1 covers=g10.auction-winner-order.SC-k63 -->
-### g10.auction-winner-order.US24-TC3: Sent invoice locks the chosen currency
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-24
-
-**Pre-conditions:**
-
-* A winner chose HKD and an operator sent the invoice.
-
-**Steps:**
-
-1. Try to change the settlement currency to USD.
-2. Read the invoice and order currency.
-
-**Expected Results:**
-
-* The currency change is refused.
-* The sent invoice and order remain in HKD.
-
-<!-- trace:case id=g10.auction-winner-order.TC-a61 rev=1 covers=g10.auction-winner-order.SC-j1l -->
-### g10.auction-winner-order.US24-TC4: A confirmation with no currency is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-24
-
-**Pre-conditions:**
-
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<order_4>` in Awaiting Setup with a saved home address.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<order_4>` | An order won in USD, in Awaiting Setup |
-
-**Steps:**
-
-1. Choose the home address as the delivery address and as the billing address, and choose no settlement currency.
-2. Send Grade10 a setup confirmation carrying both addresses and no currency.
-3. Reload `<order_4>`.
-
-**Expected Results:**
-
-* Step 2 is refused.
-* Step 3 reads the order in Awaiting Setup, holding no delivery address, no currency and no method.
-
 <!-- trace:case id=g10.auction-winner-order.TC-x0r rev=1 covers=g10.auction-winner-order.SC-lq9 -->
 ### g10.auction-winner-order.US24-TC5: Confirming with HKD records HKD and the order reads Preparing Invoice
 
@@ -666,7 +402,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -707,7 +442,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -747,7 +481,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -796,7 +529,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -836,7 +568,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -866,7 +597,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -909,7 +639,6 @@ Runs once per row of **Test data**. Switching currency keeps a still-offered met
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -935,47 +664,6 @@ Runs once per row of **Test data**. Switching currency keeps a still-offered met
 
 * The row's method remains selected because HKD still offers it.
 
-<!-- trace:case id=g10.auction-winner-order.TC-2ac rev=1 covers=g10.auction-winner-order.SC-rge -->
-### g10.auction-winner-order.US25-TC5: A confirmation carrying a method the currency does not offer is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-25
-
-**Pre-conditions:**
-
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<order_8>` in Awaiting Setup with a saved home address.
-
-**Test data:**
-
-| Settlement currency | Rail sent | Why this row |
-| --- | --- | --- |
-| USD | FPS | FPS is offered in HKD only |
-| HKD | International via SWIFT | SWIFT is offered in USD only |
-
-**Steps:**
-
-1. Choose the home address and the row's settlement currency.
-2. Send Grade10 a setup confirmation carrying the home address and the row's rail.
-3. Reload `<order_8>`.
-
-**Expected Results:**
-
-* Step 2 is refused.
-* Step 3 reads the order in Awaiting Setup, holding no delivery address, no currency and no method.
-
 <!-- trace:case id=g10.auction-winner-order.TC-jfi rev=1 covers=g10.auction-winner-order.SC-8dl -->
 ### g10.auction-winner-order.US25-TC6: Each HKD method reads its fee wording and none is selected
 
@@ -987,7 +675,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -1027,7 +714,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -1067,7 +753,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -1114,7 +799,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -1173,7 +857,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -1202,7 +885,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -1238,7 +920,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -1274,7 +955,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -1303,44 +983,6 @@ Runs once per row of **Test data**.
 * The total is 106,973 minor units in HKD.
 * The USD rule is not applied.
 
-<!-- trace:case id=g10.auction-winner-order.TC-uz6 rev=2 -->
-### g10.auction-winner-order.US26-TC6: A USD amount converts to HKD rounded up to a whole HK$
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-26
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| `<usd amount>` | `<hkd amount>` | Why this row |
-| --- | --- | --- |
-| USD100.00 (fixed boundary) | HK$785 | Exact: 785.00, nothing to round |
-| USD100.01 (fixed boundary) | HK$786 | 785.0785 rounds up, not to nearest |
-| USD0.01 (fixed boundary) | HK$1 | 0.0785 rounds up to one whole HK$ |
-
-**Steps:**
-
-1. Convert `<usd amount>` to HKD.
-
-**Expected Results:**
-
-* The result is `<hkd amount>`.
-
 <!-- trace:case id=g10.auction-winner-order.TC-k5y rev=1 -->
 ### g10.auction-winner-order.US26-TC7: No page, invoice, receipt or letter names the conversion rate
 
@@ -1352,7 +994,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-26
@@ -1389,7 +1030,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -1437,7 +1077,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -1477,7 +1116,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -1506,7 +1144,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27

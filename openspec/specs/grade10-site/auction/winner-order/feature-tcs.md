@@ -1,8 +1,8 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/213
+**Status:** pending-review · 0/184
 **Drafts styled:** 2026-10-22, tcs-rules r5
-**Out of suite:** winner-order-SC-04, winner-order-SC-05, winner-order-SC-38, winner-order-SC-39, winner-order-SC-62, winner-order-SC-63, winner-order-SC-69, winner-order-SC-96, winner-order-SC-110, winner-order-SC-111, winner-order-SC-180, winner-order-SC-184, winner-order-SC-214, winner-order-SC-215, winner-order-SC-216, winner-order-SC-249, winner-order-SC-257, winner-order-SC-287, winner-order-SC-26, winner-order-SC-27, winner-order-SC-28
+**Out of suite (api):** winner-order-SC-27
 
 ## Walk 1: Winner settles a won listing — phase 1
 
@@ -200,19 +200,14 @@
    - No separate charge of `<difference>` is raised. `g10.auction-winner-order.US1-TC4`
 10. Wait for `<listing_5_1>` to close.
 11. Read customer A's authorizations and charges for `<listing_5_1>` at the card provider.
-   - Step 11 shows no authorization and no charge for `<listing_5_1>`. `g10.auction-winner-order.US1-TC5`
 12. Once the invoice for `<listing_5_1>` is sent, pay it by card through hosted Checkout with `<card>`.
-   - Step 12 opens hosted Checkout for the invoice total. `g10.auction-winner-order.US1-TC5`
 13. Read customer A's card transactions for `<listing_5_1>` again.
-   - Step 13 shows one charge, for the invoice total. `g10.auction-winner-order.US1-TC5`
 14. Pay with `<card_declining>`.
    - Step 14: the invoice stays unpaid and payable. `g10.auction-winner-order.US1-TC6`
 15. Pay with `<card_good>`.
    - Step 15: payment is accepted; the order reads paid. `g10.auction-winner-order.US1-TC6`
 16. Read the payment deadline on `<listing_7_1>`'s invoice.
-   - Step 16: the deadline is `<payment_deadline>` and the PDF shows it as `<pdf_deadline>`. `g10.auction-winner-order.US1-TC7`
 17. Open `<winner order url>` in a browser set to America/New_York.
-   - Step 17: Winner Order shows the same instant in the viewer's local zone as `<local_deadline>`. `g10.auction-winner-order.US1-TC7`
 18. Save `<address_home>` and `<address_work>` to the account address book.
    - Step 18: both addresses are in the address book, each under its name. `g10.auction-winner-order.US1-TC8`
 19. Navigate to `<winner order url>` for `<winner_order_8_1>`.
@@ -657,10 +652,7 @@
    - No Insurance row and no Insurance tooltip show. `g10.auction-winner-order.US1-TC28`
 10. Publish `<listing_26_2>`.
 11. Read `<listing_26_2>`'s listing code.
-   - Step 11: `<listing_26_2>` holds a code other than `<code_1>`, hashed again with a counter. `g10.auction-winner-order.US1-TC29`
-   - Step 11: `L` and 5 characters; no `0`, `O`, `1`, `I` or lower case. `g10.auction-winner-order.US1-TC29`
 12. Change the hash method, then read both listing codes.
-   - Step 12: both listings keep their codes. `g10.auction-winner-order.US1-TC29`
 13. Reload the order.
    - Step 13: the order shows `<address_work>` and bank transfer, still Preparing Invoice. `g10.auction-winner-order.US1-TC34`
 14. Look for address and payment-method controls.
@@ -688,8 +680,6 @@
    - Names that do not match (for example Australia) are not shown. `g10.auction-winner-order.US1-TC40`
 25. Open the Autocomplete.
 26. Type `<Typed query>`.
-   - The list shows only options whose labels match the query. `g10.auction-winner-order.US1-TC41`
-   - Non-matching options are not shown. `g10.auction-winner-order.US1-TC41`
 
 ## Walk 4: Winner settles a won listing — phase 4
 
@@ -886,8 +876,6 @@
 17. Add Tax of HKD70 (range: >0 minor units).
 18. Send the invoice.
 19. Read its Subtotal and payment processing fee inputs.
-   - The Subtotal is HKD3,350 (fixed derived value). `g10.auction-winner-order.US1-TC33`
-   - Grade10 computes the payment processing fee from that Subtotal. `g10.auction-winner-order.US1-TC33`
 20. Start setup, choose the home address and reach the payment method choice.
 21. Send Grade10 a setup confirmation carrying the home address and bank transfer.
 22. Reload the order.
@@ -1278,11 +1266,8 @@
    - Original Invoice Total `<total>`; Previous Payments 0. `g10.auction-winner-order.US2-TC9`
    - Current Payment Received `<total>`; Remaining Balance Due 0. `g10.auction-winner-order.US2-TC9`
 16. Retrieve `<winner_order_60_1>`'s documents from the archive.
-   - The replaced invoice, current invoice and receipt PDFs are all returned. `g10.auction-winner-order.US2-TC10`
 17. Deliver the same payment confirmation for `<winner_order_61_1>` again.
 18. Open the receipt on `<winner order url>` for `<winner_order_61_1>`.
-   - The receipt ID is still `<receipt id>`. `g10.auction-winner-order.US2-TC11`
-   - No second receipt ID or audit number exists for `<winner_order_61_1>`. `g10.auction-winner-order.US2-TC11`
 19. Read Order Progress.
 20. Open `<tracking number>`.
    - Order Progress shows `<tracking number>` as an external link with an arrow icon. `g10.auction-winner-order.US2-TC12`
@@ -1592,75 +1577,6 @@
 5. As the winner, open the order and read the address picker.
    - The picker does not offer the one-time address. `g10.auction-winner-order.US7-TC6`
 
-## Walk 11: Winner pays an invoice with a policy premium
-
-**Starting state:**
-
-**Steps 1–1 setup:**
-
-- A USD winner's sent invoice has winning bid `<winning bid>`, configured minimum `<premium minimum>` and no other lines.
-
-**Steps 2–2 setup:**
-
-- A USD winner's sent invoice has a winning bid whose 20% premium is below the minimum.
-
-**Steps 3–3 setup:**
-
-- The USD premium minimum is 0.
-
-**Steps 4–7 setup:**
-
-- `<winner_order_82_1>`'s invoice was sent while the USD minimum was 0.
-
-**Shared test data:**
-
-**Steps 1–1 data:**
-
-| `<winning bid>` | `<premium minimum>` | `<buyers premium>` | `<final amount>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| USD2,400 | USD0 | USD480.00 | USD2 | `<winning bid>`: (fixed fixture); `<final amount>`: 880.00 |
-| USD2,500 | USD200.00 | USD500.00 | USD3 | `<winning bid>`: (fixed fixture); `<final amount>`: 000.00 |
-| USD1.01 | USD0 | USD0.20 | USD1.21 | `<winning bid>`: (fixed boundary) |
-
-**Steps 2–2 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| winning bid | USD1 | (range: >0 minor units) |
-| minimum premium | USD1 | (fixed configured minimum) |
-
-**Steps 3–3 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| winning bid | USD10.03 | (fixed boundary: 20% is a half minor unit away from a whole one) |
-| premium | USD2.01 | 20% is 200.6 minor units, rounded half up |
-
-**Steps 4–7 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| winner_order_82_1 | A USD order won at USD7, invoice sent with premium `<sent premium>`; bind its identity only | · |
-| sent premium | USD1.40 | 20% of USD7 |
-| new minimum | USD20 | (fixed configured value) |
-
-### Route
-
-1. Read the invoice winning bid, buyer's premium and final amount.
-   - The premium `<buyers premium>` is the greater of 20% of `<winning bid>`, rounded half up, or `<premium minimum>`. `g10.auction-winner-order.US8-TC1`
-   - The final amount `<final amount>` includes `<buyers premium>`. `g10.auction-winner-order.US8-TC1`
-   - For the USD1.01 row, the premium is USD0.20, an integer count of USD minor units. `g10.auction-winner-order.US8-TC1`
-2. Read the invoice winning bid and buyer's premium.
-   - The premium equals `<minimum premium>` because 20% of `<winning bid>` is lower. `g10.auction-winner-order.US8-TC2`
-3. Compute the premium for `<winning bid>`.
-   - The premium is `<premium>`. `g10.auction-winner-order.US8-TC3`
-4. Set the USD premium minimum to `<new minimum>`.
-5. Read the API response for `<winner_order_82_1>`'s sent invoice.
-   - Step 5: the premium is still `<sent premium>`. `g10.auction-winner-order.US8-TC4`
-6. Reissue `<winner_order_82_1>`'s invoice.
-7. Read the API response for the reissued invoice.
-   - Step 7: the premium is `<new minimum>`. `g10.auction-winner-order.US8-TC4`
-
 ## Walk 12: Winner pays an invoice by bank transfer — phase 1
 
 **Starting state:**
@@ -1907,11 +1823,7 @@
    - Payment is the current step, its subtext naming no date. `g10.auction-winner-order.US9-TC8`
    - No payment deadline shows as running. `g10.auction-winner-order.US9-TC8`
 25. As customer A, send a second proof upload for `<winner_order_92_1>` through the API.
-   - The upload is refused. `g10.auction-winner-order.US9-TC9`
-   - The first proof set is unchanged. `g10.auction-winner-order.US9-TC9`
 26. As customer A, send a card payment for the order through the API.
-   - The payment is refused; no charge is made. `g10.auction-winner-order.US9-TC10`
-   - The order still reads the state `<order state>`. `g10.auction-winner-order.US9-TC10`
 27. Open the payment area.
    - No proof upload is offered. `g10.auction-winner-order.US9-TC11`
 
@@ -2078,8 +1990,6 @@
    - Step 2: the upload is refused; the order still reads Payment Overdue. `g10.auction-winner-order.US9-TC12`
 3. As customer B, send a proof upload for `<winner_order_96_1>` through the API.
 4. As customer B, request `<winner_order_96_1>`'s proof.
-   - Both requests are refused. `g10.auction-winner-order.US9-TC13`
-   - `<winner_order_96_1>` still reads Pending Payment. `g10.auction-winner-order.US9-TC13`
 5. Click Submit Payment Proof.
 6. Choose `<proof>` and submit.
 7. Let the connection drop during upload.
@@ -2089,20 +1999,14 @@
 8. Restore the connection and submit `<proof>` again.
    - Step 8: the upload is accepted. `g10.auction-winner-order.US9-TC14`
 9. Read `<winner_order_98_1>`'s bank reference.
-   - It reads `<reference>`. `g10.auction-winner-order.US9-TC15`
-   - 8 characters, capitals and digits only, no hyphen, space or symbol. `g10.auction-winner-order.US9-TC15`
-   - It fits one 35-character SWIFT remittance line. `g10.auction-winner-order.US9-TC15`
 10. Click Submit Payment Proof.
 11. Choose `<proof>`.
 12. Submit.
    - The whole upload is refused, naming the 5 MB limit. `g10.auction-winner-order.US9-TC16`
    - None of the three files is stored; the order still reads Pending Payment. `g10.auction-winner-order.US9-TC16`
 13. As customer A, send `<proof>` as a proof upload through the API.
-   - The whole upload is refused. `g10.auction-winner-order.US9-TC17`
-   - Nothing is stored; the order still reads Pending Payment. `g10.auction-winner-order.US9-TC17`
 14. Move the clock past the original payment deadline.
 15. Open `<winner order url>` for `<winner_order_101_1>` as its winner.
-   - The order still reads Payment Verifying, not Payment Overdue. `g10.auction-winner-order.US9-TC19`
 16. Start `<busy work>`.
 17. Use `<leave route>`.
    - Submit Payment Proof stays open. `g10.auction-winner-order.US9-TC30`
@@ -2348,13 +2252,11 @@
    - The deadline stops with the time then left. `g10.auction-winner-order.US10-TC3`
 5. Return the proof at `<return time>`.
 6. Read the API response for the new deadline.
-   - The deadline is `<return time>` plus `<time left>`. `g10.auction-winner-order.US10-TC4`
 7. Read the status and the payment area.
    - The order reads Payment Overdue. `g10.auction-winner-order.US10-TC5`
    - Proof upload is hidden; the overdue alert shows Contact Us. `g10.auction-winner-order.US10-TC5`
 8. Return the proof again at `<return time>`.
 9. Read the API response for the new deadline.
-   - The deadline is `<return time>` plus `<time left 2>`. `g10.auction-winner-order.US10-TC6`
 10. Read the order status and the alert.
    - Step 10: the order no longer reads Payment Verifying. `g10.auction-winner-order.US10-TC8`
    - Step 10: `<return reason>` is shown to the winner. `g10.auction-winner-order.US10-TC8`
@@ -2367,9 +2269,6 @@
    - No proof file or file name is shown. `g10.auction-winner-order.US10-TC9`
 13. Have an operator return the proof with `<return reason>`.
 14. Read the mail sent to the winner's registered email.
-   - One Proof not accepted letter carrying `<return reason>`. `g10.auction-winner-order.US10-TC10`
-   - Its Pay by equals the return time plus `<time left>`. `g10.auction-winner-order.US10-TC10`
-   - No payment reminder was sent while the proof was under check. `g10.auction-winner-order.US10-TC10`
 
 ## Walk 16: Winner bills a won listing to a different address
 
@@ -3340,8 +3239,6 @@
    - The payment reference remains `<payment reference>`. `g10.auction-winner-order.US21-TC2`
 5. Create the listing.
 6. Read the stored listing/payment reference.
-   - Allocation retries and stores a distinct valid code. `g10.auction-winner-order.US21-TC3`
-   - The code is not treated as collision-free merely because its source is a UUID or listing ID. `g10.auction-winner-order.US21-TC3`
 7. Change the allocator implementation.
 8. Read the listing and order references.
    - Both continue to use `<payment reference>`. `g10.auction-winner-order.US21-TC4`
@@ -3412,8 +3309,6 @@
    - The historical receipt ID remains `<historical receipt id>`. `g10.auction-winner-order.US22-TC3`
    - No receipt ID is created for the refund, reversal or void. `g10.auction-winner-order.US22-TC3`
 7. Read Stripe metadata and the winner-facing order and invoice.
-   - Stripe metadata carries the Grade10 payment reference. `g10.auction-winner-order.US22-TC4`
-   - The provider reference appears on no winner-facing surface. `g10.auction-winner-order.US22-TC4`
 
 ## Walk 25: Winner gets the address form back
 
@@ -3623,9 +3518,6 @@
    - The order reads Preparing Invoice. `g10.auction-winner-order.US23-TC4`
 7. Read the delivery address area for a reopen or extend control.
 8. Submit a reopen of the address form as the winner.
-   - No reopen or extend control is offered to the winner. `g10.auction-winner-order.US23-TC5`
-   - The reopen is refused. `g10.auction-winner-order.US23-TC5`
-   - The address deadline is unchanged. `g10.auction-winner-order.US23-TC5`
 9. Open each of the three auction orders.
 10. Read each order's address deadline.
 11. Confirm a different delivery address on each order.
@@ -4040,15 +3932,9 @@
 
 1. Wait until `<listing_50_1>`'s recorded close passes.
 2. Read the orders the API holds for `<listing_50_1>`.
-   - Step 2 holds exactly one order, the order described by `<order after close>`. `g10.auction-winner-order.US1-TC57`
 3. As customer A, read My Auctions' row for `<listing_50_1>` from the API.
-   - Step 3: in a House row, no order is linked to customer A; in the Collector row, customer A's row links that one order. `g10.auction-winner-order.US1-TC57`
 4. Filter the send log by `<listing_50_1>` and read the rows from the close.
-   - Step 4 reads `<auction won letters>`. `g10.auction-winner-order.US1-TC57`
-   - Step 4 holds no row addressed to `<internal bidder>`'s email label: no won, address or setup letter. `g10.auction-winner-order.US1-TC57`
 5. Read the invoice premium and converted lines.
-   - The premium is the greater of 20% of `<winning bid>` or `<minimum premium>`. `g10.auction-winner-order.US8-TC5`
-   - HKD line amounts are each converted at `<exchange rate>` and rounded up before summing. `g10.auction-winner-order.US8-TC5`
 6. Read the settlement currency and payment method choices.
    - USD and HKD are offered; neither is selected. `g10.auction-winner-order.US24-TC1`
    - No payment method is selected before a currency is chosen. `g10.auction-winner-order.US24-TC1`
@@ -4060,13 +3946,9 @@
    - When `<settlement currency>` is HKD, its converted lines use 7.85 and round up to whole HKD; no USD amount is printed. `g10.auction-winner-order.US24-TC2`
 11. Try to change the settlement currency to USD.
 12. Read the invoice and order currency.
-   - The currency change is refused. `g10.auction-winner-order.US24-TC3`
-   - The sent invoice and order remain in HKD. `g10.auction-winner-order.US24-TC3`
 13. Choose the home address as the delivery address and as the billing address, and choose no settlement currency.
 14. Send Grade10 a setup confirmation carrying both addresses and no currency.
-   - Step 14 is refused. `g10.auction-winner-order.US24-TC4`
 15. Reload `<winner_order_182_1>`.
-   - Step 15 reads the order in Awaiting Setup, holding no delivery address, no currency and no method. `g10.auction-winner-order.US24-TC4`
 16. Open `<winner order url>` for `<winner_order_183_1>`.
 17. Choose the home address, choose `<Currency>` and choose `<Method>`.
 18. Confirm the home address.
@@ -4110,9 +3992,7 @@
    - `<expected selection>` because HKD still offers `<selected method>`. `g10.auction-winner-order.US25-TC4`
 39. Choose the home address and `<settlement currency>`.
 40. Send Grade10 a setup confirmation carrying the home address and `<rail>`.
-   - Step 40 is refused. `g10.auction-winner-order.US25-TC5`
 41. Reload `<winner_order_190_1>`.
-   - Step 41 reads the order in Awaiting Setup, holding no delivery address, no currency and no method. `g10.auction-winner-order.US25-TC5`
 42. Choose the home address and HKD.
 43. Read each method in the payment method choice.
    - Card reads `Card fee about 3.4% + a fixed amount`. `g10.auction-winner-order.US25-TC6`
@@ -4159,7 +4039,6 @@
    - The total is 106,973 minor units in HKD. `g10.auction-winner-order.US26-TC5`
    - The USD rule is not applied. `g10.auction-winner-order.US26-TC5`
 60. Convert `<usd amount>` to HKD.
-   - The result is `<hkd amount>`. `g10.auction-winner-order.US26-TC6`
 61. Read the settlement currency choice before picking HKD on a new order.
 62. Read Order Summary on `<winner_order_200_1>`.
 63. Read its invoice.
@@ -4202,7 +4081,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4244,7 +4122,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4286,7 +4163,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4325,7 +4201,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4360,46 +4235,6 @@
 * Both `<total before>` and `<total after>` show before payment.
 * No separate charge of `<difference>` is raised.
 
-<!-- trace:case id=g10.auction-winner-order.TC-0p6 rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.US1-TC5: The winner's card holds nothing from bidding and one fresh charge settles
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** smoke, regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* customer A(card linked) leads `<listing_5_1>`, bidding on the card on file.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_5_1 | A listing taking bids, led by customer A, closing within a minute; bind its identity only |
-| card | The card provider's test card `4242 4242 4242 4242`, any future expiry, any CVC |
-
-**Steps:**
-
-1. Wait for `<listing_5_1>` to close.
-2. Read customer A's authorizations and charges for `<listing_5_1>` at the card provider.
-3. Once the invoice for `<listing_5_1>` is sent, pay it by card through hosted Checkout with `<card>`.
-4. Read customer A's card transactions for `<listing_5_1>` again.
-
-**Expected Results:**
-
-* Step 2 shows no authorization and no charge for `<listing_5_1>`.
-* Step 3 opens hosted Checkout for the invoice total.
-* Step 4 shows one charge, for the invoice total.
-
 <!-- trace:case id=g10.auction-winner-order.TC-5vo rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
 ### g10.auction-winner-order.US1-TC6: A declined card leaves the invoice payable
 
@@ -4411,7 +4246,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -4443,50 +4277,6 @@
 * Step 1: the invoice stays unpaid and payable.
 * Step 2: payment is accepted; the order reads paid.
 
-<!-- trace:case id=g10.auction-winner-order.TC-vxj rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.US1-TC7: The payment deadline is seven days from the recorded close
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* `<listing_7_1>` was extended twice and closed with a winner at `<recorded_close>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_7_1 | A listing whose close moved twice under extended bidding; bind its identity only |
-| recorded_close | 2026-09-03T12:00:00Z, the recorded (moved) close |
-| payment_deadline | 2026-09-10T12:00:00Z: `<recorded_close>` plus 604800s (7 days) |
-| pdf_deadline | 2026-09-10 20:00 GMT+8: `<payment_deadline>` in GMT+8 |
-| local_deadline | 2026-09-10 08:00 EDT: `<payment_deadline>` in America/New_York |
-
-| Field | Value |
-| --- | --- |
-| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
-
-**Steps:**
-
-1. Read the payment deadline on `<listing_7_1>`'s invoice.
-2. Open `<winner order url>` in a browser set to America/New_York.
-
-**Expected Results:**
-
-* Step 1: the deadline is `<payment_deadline>` and the PDF shows it as `<pdf_deadline>`.
-* Step 2: Winner Order shows the same instant in the viewer's local zone as `<local_deadline>`.
-
 <!-- trace:case id=g10.auction-winner-order.TC-h5e rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
 ### g10.auction-winner-order.US1-TC8: Two named saved addresses are both offered on an order
 
@@ -4498,7 +4288,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4541,7 +4330,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4583,7 +4371,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4625,7 +4412,6 @@
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4661,7 +4447,6 @@
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-01
@@ -4703,7 +4488,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-01
@@ -4743,7 +4527,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-01
@@ -4781,7 +4564,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4823,7 +4605,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-01
@@ -4867,7 +4648,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4913,7 +4693,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -4960,7 +4739,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-01
@@ -4997,7 +4775,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-01
@@ -5043,7 +4820,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5091,7 +4867,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5143,7 +4918,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5184,7 +4958,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5224,7 +4997,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5251,50 +5023,6 @@ Runs once per row of **Test data**.
 
 * No Insurance row and no Insurance tooltip show.
 
-<!-- trace:case id=g10.auction-winner-order.TC-u99 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.US1-TC29: A listing code already held is replaced before publish
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* `<listing_26_1>` holds listing code `<code_1>`.
-* `<listing_26_2>` is a draft whose internal id hashes to `<code_1>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| code_1 | A listing code in use |
-
-| Field | Value |
-| --- | --- |
-| listing_26_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
-| listing_26_2 | The listing prepared with the original state in the pre-conditions; bind its identity only |
-
-**Steps:**
-
-1. Publish `<listing_26_2>`.
-2. Read `<listing_26_2>`'s listing code.
-3. Change the hash method, then read both listing codes.
-
-**Expected Results:**
-
-* Step 2: `<listing_26_2>` holds a code other than `<code_1>`, hashed again with a counter.
-* Step 2: `L` and 5 characters; no `0`, `O`, `1`, `I` or lower case.
-* Step 3: both listings keep their codes.
-
 <!-- trace:case id=g10.auction-winner-order.TC-6vp rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
 ### g10.auction-winner-order.US1-TC34: The winner sees an operator's edit before send, and cannot change it
 
@@ -5306,7 +5034,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5348,7 +5075,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5389,7 +5115,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5428,7 +5153,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -5464,7 +5188,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -5502,7 +5225,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5540,7 +5262,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5572,42 +5293,6 @@ Runs once per row of **Test data**.
 * Step 2 shows only country or region names that match the query.
 * Names that do not match (for example Australia) are not shown.
 
-<!-- trace:case id=g10.auction-winner-order.TC-x35 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.US1-TC41: Autocomplete filter works in isolation on a long list
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* A design-system Autocomplete is rendered with a long option list taller than its capped popup height.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Typed query | uni |
-
-**Steps:**
-
-1. Open the Autocomplete.
-2. Type `<Typed query>`.
-
-**Expected Results:**
-
-* The list shows only options whose labels match the query.
-* Non-matching options are not shown.
-
 <!-- trace:case id=g10.auction-winner-order.TC-8bf rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
 ### g10.auction-winner-order.US1-TC42: A query with no match leaves the list empty
 
@@ -5619,7 +5304,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -5662,7 +5346,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -5705,7 +5388,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -5751,7 +5433,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -5790,7 +5471,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -5828,7 +5508,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5867,7 +5546,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -5911,7 +5589,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -5939,46 +5616,6 @@ Runs once per row of **Test data**.
 * No surface shows a Tax line.
 * Order Summary offers no Tax info tip.
 
-<!-- trace:case id=g10.auction-winner-order.TC-dvc rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
-### g10.auction-winner-order.US1-TC33: Card fee is grossed up on tax
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* admin(operator with payment-processing) is on a card order in Preparing Invoice, settled in HKD.
-* The order's USD lines before Tax total USD320 (fixed derived value).
-
-* The winner order under test is `<winner_order_43_1>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_43_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
-
-**Steps:**
-
-1. Add Tax of USD80 (fixed derived value).
-2. Send the invoice.
-3. Read its Subtotal and payment processing fee inputs.
-
-**Expected Results:**
-
-* The Subtotal is HKD3,140.00 (fixed derived value), the USD400 sum of the lines and Tax converted once at 7.85.
-* Grade10 computes the payment processing fee from that Subtotal.
-
 <!-- trace:case id=g10.auction-winner-order.TC-n0y rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
 ### g10.auction-winner-order.US1-TC48: A currency without bank details offers card only
 
@@ -5992,7 +5629,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -6036,7 +5672,6 @@ Runs once per row of **Test data**. The method can change until the winner confi
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -6081,7 +5716,6 @@ Runs once per row of **Test data**. The method can change until the winner confi
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -6122,7 +5756,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -6170,7 +5803,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -6211,7 +5843,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -6238,70 +5869,6 @@ Runs once per row of **Test data**.
 * The names read in Traditional Chinese.
 * The list narrows to `日本`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-srq rev=2 covers=g10.auction-winner-order.SC-los -->
-### g10.auction-winner-order.US1-TC57: A close with an internal bidder leading opens its order with its billing address and sends no letter
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-01
-
-**Pre-conditions:**
-
-* `<listing_50_1>` is prepared with this bidding state: `<bidding at close>`, its recorded close a few minutes away, and no further bid is coming.
-* `<listing_50_1>`'s internal bid of `<house maximum>` is committed as `<internal bidder>`, which holds `<house billing address>`.
-* customer A(signed in, holds a default shipping address, email alerts on) bid on `<listing_50_1>` as described by `<bidding at close>`.
-* admin(auction operator) is on `<grade10 auction send log url>`.
-
-* The winner order under test is `<winner_order_50_1>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_50_1 | A published HKD listing in no campaign, starting price 400000 minor units (HK$4,000.00); bind its identity only | · |
-| house maximum | 600000 minor units | (HK$6,000.00), the listing's committed internal bid |
-| internal bidder | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test | · |
-| house billing address | A Hong Kong address with every required field: name "Grade10 Stock Room", 1 Test Road, Central, Hong Kong | · |
-
-| Row | `<bidding at close>` | `<order after close>` | `<auction won letters>` |
-| --- | --- | --- | --- |
-| House over a collector | The house leads at 508000 under `<house maximum>`, over customer A's maximum of 500000 | One, `<internal bidder>`'s, flagged internal, winning bid 508000, delivery and billing address `<house billing address>`, bank transfer, Preparing Invoice | None |
-| House alone | The house leads at 400000 under `<house maximum>`, with no collector bid | One, `<internal bidder>`'s, flagged internal, winning bid 400000, delivery and billing address `<house billing address>`, bank transfer, Preparing Invoice | None |
-| Collector over the house | customer A leads at 608000 with maximum 700000, over `<house maximum>` | One, customer A's, not flagged internal, winning bid 608000, Awaiting Setup | One, to customer A |
-
-| Field | Value |
-| --- | --- |
-| winner_order_50_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
-
-| Field | Value |
-| --- | --- |
-| grade10 auction send log url | The URL of the winner order or listing used by this case; bind its URL only |
-
-**Steps:**
-
-1. Wait until `<listing_50_1>`'s recorded close passes.
-2. Read the orders the API holds for `<listing_50_1>`.
-3. As customer A, read My Auctions' row for `<listing_50_1>` from the API.
-4. Filter the send log by `<listing_50_1>` and read the rows from the close.
-
-**Expected Results:**
-
-* Step 2 holds exactly one order, the order described by `<order after close>`.
-* Step 3: in a House row, no order is linked to customer A; in the Collector row, customer A's row links that one order.
-* Step 4 reads `<auction won letters>`.
-* Step 4 holds no row addressed to `<internal bidder>`'s email label: no won, address or setup letter.
-
 ### g10.auction-winner-order.US1-TC15: A company address without Company Name is refused (folded into g10.auction-winner-order.US1-TC16)
 
 **Classification:**
@@ -6312,7 +5879,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -6357,7 +5923,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-01
@@ -6401,7 +5966,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-01
@@ -6439,7 +6003,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -6475,7 +6038,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-01
@@ -6516,7 +6078,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -6558,7 +6119,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -6598,7 +6158,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -6646,7 +6205,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -6689,7 +6247,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -6731,7 +6288,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -6777,7 +6333,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -6821,7 +6376,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-02
@@ -6864,7 +6418,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -6897,83 +6450,6 @@ Runs once per row of **Test data**.
 * Original Invoice Total `<total>`; Previous Payments 0.
 * Current Payment Received `<total>`; Remaining Balance Due 0.
 
-<!-- trace:case id=g10.auction-winner-order.TC-kq2 rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
-### g10.auction-winner-order.US2-TC10: Invoice and receipt PDFs outlive a deleted account
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-02
-
-**Pre-conditions:**
-
-* `<winner_order_60_1>` is paid, with a replaced invoice, a current invoice and a receipt.
-* Its winner deleted the account a year after payment.
-* The clock is 6 years after payment, inside the 7-year retention.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_60_1 | A paid order whose invoice was once reissued; bind its identity only |
-
-**Steps:**
-
-1. Retrieve `<winner_order_60_1>`'s documents from the archive.
-
-**Expected Results:**
-
-* The replaced invoice, current invoice and receipt PDFs are all returned.
-
-<!-- trace:case id=g10.auction-winner-order.TC-xx4 rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
-### g10.auction-winner-order.US2-TC11: A repeated payment confirmation keeps one receipt ID
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** winner-order-US-02
-
-**Pre-conditions:**
-
-* `<winner_order_61_1>` was paid by card; its receipt ID is `<receipt id>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_61_1 | A card-paid order; bind its identity only |
-| receipt id | `REC-202609-LK7P2Q-01-P1` |
-
-| Field | Value |
-| --- | --- |
-| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
-
-**Steps:**
-
-1. Deliver the same payment confirmation for `<winner_order_61_1>` again.
-2. Open the receipt on `<winner order url>` for `<winner_order_61_1>`.
-
-**Expected Results:**
-
-* The receipt ID is still `<receipt id>`.
-* No second receipt ID or audit number exists for `<winner_order_61_1>`.
-
 <!-- trace:case id=g10.auction-winner-order.TC-l0r rev=2 covers=g10.auction-winner-order.SC-k4r -->
 ### g10.auction-winner-order.US2-TC12: A shipped or delivered order keeps the carrier tracker
 
@@ -6987,7 +6463,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -7037,7 +6512,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -7080,7 +6554,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -7121,7 +6594,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -7163,7 +6635,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -7203,7 +6674,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-02
@@ -7237,7 +6707,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-02
@@ -7271,7 +6740,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-02
@@ -7307,7 +6775,7 @@ Runs once per row of **Test data**.
 **I want** the buyer's premium on my invoice to follow one published rule,
 **so that** I can check what I am charged on top of my winning bid.
 
-<!-- trace:case id=g10.auction-winner-order.TC-x85 rev=3 covers=g10.auction-winner-order.SC-zhu,g10.auction-winner-order.SC-b16,g10.auction-winner-order.SC-2mz -->
+<!-- trace:case id=g10.auction-winner-order.TC-x85 rev=3 covers=g10.auction-winner-order.SC-zhu,g10.auction-winner-order.SC-b16,g10.auction-winner-order.SC-2mz,g10.auction-winner-order.SC-30s,g10.auction-winner-order.SC-ml2 -->
 ### g10.auction-winner-order.US3-TC5: The invoice's Buyer's Premium follows the published rule
 
 Runs once per row of **Test data**.
@@ -7320,7 +6788,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-03
@@ -7339,6 +6806,7 @@ Runs once per row of **Test data**.
 | USD1,350 | USD0 | USD270.00 | USD1 | 20% of the winning bid | `<winning_bid>`: (range: 80000-399999 minor units); `<final_amount>`: 620.00 |
 | USD10.03 | USD0 | USD2.01 | USD12.04 | 20% is 200.6 minor units, rounded half up | `<winning_bid>`: (fixed boundary) |
 | USD10.02 | USD0 | USD2.00 | USD12.02 | 20% is 200.4 minor units, rounded half up | `<winning_bid>`: (fixed boundary) |
+| USD1.01 | USD0 | USD0.20 | USD1.21 | 20% is 20.2 minor units, rounded to a whole minor unit | `<winning_bid>`: (fixed boundary) |
 | USD50 | USD20 | USD20.00 | USD70.00 | The minimum, higher than 20% (USD10) | `<winning_bid>`: (fixed fixture); `<premium_minimum>`: (fixed configured value) |
 | USD2,500 | USD200.00 | USD500.00 | USD3 | 20% of the winning bid; operator does not enter it | `<winning_bid>`: (fixed scenario fixture); `<premium_minimum>`: (fixed configured value); `<final_amount>`: 000.00 |
 
@@ -7380,7 +6848,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-04
@@ -7424,7 +6891,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-04
@@ -7454,7 +6920,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-04
@@ -7499,7 +6964,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-04
@@ -7541,7 +7005,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-04
@@ -7583,7 +7046,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-04
@@ -7626,7 +7088,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-04
@@ -7678,7 +7139,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-05
@@ -7718,7 +7178,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-05
@@ -7765,7 +7224,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-07
@@ -7805,7 +7263,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-07
@@ -7845,7 +7302,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** winner-order-US-07
@@ -7879,193 +7335,6 @@ Runs once per row of **Test data**.
 **I want** my invoice to calculate the stated buyer premium correctly using the current currency minimum,
 **so that** the amount I pay is explainable and collectible.
 
-<!-- trace:case id=g10.auction-winner-order.TC-n3p rev=3 covers=g10.auction-winner-order.SC-30s,g10.auction-winner-order.SC-ml2 -->
-### g10.auction-winner-order.US8-TC1: Invoice premium is 20 percent of the winning bid
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-08
-
-**Pre-conditions:**
-
-* A USD winner's sent invoice has winning bid `<winning bid>`, configured minimum `<premium minimum>` and no other lines.
-
-**Test data:**
-
-| `<winning bid>` | `<premium minimum>` | `<buyers premium>` | `<final amount>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| USD2,400 | USD0 | USD480.00 | USD2 | `<winning bid>`: (fixed fixture); `<final amount>`: 880.00 |
-| USD2,500 | USD200.00 | USD500.00 | USD3 | `<winning bid>`: (fixed fixture); `<final amount>`: 000.00 |
-| USD1.01 | USD0 | USD0.20 | USD1.21 | `<winning bid>`: (fixed boundary) |
-
-**Steps:**
-
-1. Read the invoice winning bid, buyer's premium and final amount.
-
-**Expected Results:**
-
-* The premium `<buyers premium>` is the greater of 20% of `<winning bid>`, rounded half up, or `<premium minimum>`.
-* The final amount `<final amount>` includes `<buyers premium>`.
-* For the USD1.01 row, the premium is USD0.20, an integer count of USD minor units.
-
-<!-- trace:case id=g10.auction-winner-order.TC-zt4 rev=2 -->
-### g10.auction-winner-order.US8-TC2: One USD minimum applies below twenty percent
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-08
-
-**Pre-conditions:**
-
-* A USD winner's sent invoice has a winning bid whose 20% premium is below the minimum.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| winning bid | USD1 | (range: >0 minor units) |
-| minimum premium | USD1 | (fixed configured minimum) |
-
-**Steps:**
-
-1. Read the invoice winning bid and buyer's premium.
-
-**Expected Results:**
-
-* The premium equals `<minimum premium>` because 20% of `<winning bid>` is lower.
-
-<!-- trace:case id=g10.auction-winner-order.TC-dd3 rev=2 -->
-### g10.auction-winner-order.US8-TC3: With a zero minimum, 20% is rounded half up
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-08
-
-**Pre-conditions:**
-
-* The USD premium minimum is 0.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| winning bid | USD10.03 | (fixed boundary: 20% is a half minor unit away from a whole one) |
-| premium | USD2.01 | 20% is 200.6 minor units, rounded half up |
-
-**Steps:**
-
-1. Compute the premium for `<winning bid>`.
-
-**Expected Results:**
-
-* The premium is `<premium>`.
-
-<!-- trace:case id=g10.auction-winner-order.TC-i06 rev=2 covers=g10.auction-winner-order.SC-ip8 -->
-### g10.auction-winner-order.US8-TC4: A sent invoice keeps its premium when the minimum changes
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-08
-
-**Pre-conditions:**
-
-* `<winner_order_82_1>`'s invoice was sent while the USD minimum was 0.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| winner_order_82_1 | A USD order won at USD7, invoice sent with premium `<sent premium>`; bind its identity only | · |
-| sent premium | USD1.40 | 20% of USD7 |
-| new minimum | USD20 | (fixed configured value) |
-
-**Steps:**
-
-1. Set the USD premium minimum to `<new minimum>`.
-2. Read the API response for `<winner_order_82_1>`'s sent invoice.
-3. Reissue `<winner_order_82_1>`'s invoice.
-4. Read the API response for the reissued invoice.
-
-**Expected Results:**
-
-* Step 2: the premium is still `<sent premium>`.
-* Step 4: the premium is `<new minimum>`.
-
-<!-- trace:case id=g10.auction-winner-order.TC-xji rev=2 -->
-### g10.auction-winner-order.US8-TC5: HKD order converts the premium and minimum together
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-03
-
-**Pre-conditions:**
-
-* The invoice is for an HKD settlement and the USD premium rule has a non-zero minimum.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| winning bid | USD1 | (fixed fixture): 20% of it is below the minimum |
-| minimum premium | USD1 | (fixed configured minimum) |
-| exchange rate | 7.85 HKD per USD | · |
-| USD sum | USD2.00 | (fixed derived value): `<winning bid>` plus the premium |
-| Subtotal | HKD15.70 | (fixed derived value): `<USD sum>` times `<exchange rate>`, converted once |
-
-**Steps:**
-
-1. Read the invoice premium, its lines and its Subtotal.
-
-**Expected Results:**
-
-* The premium is the greater of 20% of `<winning bid>` or `<minimum premium>`, in USD.
-* The lines stay in USD and the Subtotal reads `<Subtotal>`, `<USD sum>` converted once at `<exchange rate>` and rounded up to the next cent, not each line converted on its own.
-
 ---
 
 ## g10.auction-winner-order.US9: Winner pays an invoice by bank transfer
@@ -8085,7 +7354,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8127,7 +7395,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8182,7 +7449,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8232,7 +7498,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8278,7 +7543,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-09
@@ -8322,7 +7586,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** winner-order-US-09
@@ -8369,7 +7632,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8420,7 +7682,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8448,87 +7709,6 @@ Runs once per row of **Test data**.
 * Payment is the current step, its subtext naming no date.
 * No payment deadline shows as running.
 
-<!-- trace:case id=g10.auction-winner-order.TC-1vz rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.US9-TC9: A second upload is refused while Payment Verifying
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* `<winner_order_92_1>` reads Payment Verifying for customer A.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_92_1 | customer A's order, proof uploaded, reading Payment Verifying; bind its identity only |
-
-**Steps:**
-
-1. As customer A, send a second proof upload for `<winner_order_92_1>` through the API.
-
-**Expected Results:**
-
-* The upload is refused.
-* The first proof set is unchanged.
-
-<!-- trace:case id=g10.auction-winner-order.TC-e6w rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.US9-TC10: Card payment is refused for an ineligible order
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* customer A's order is in the state `<order state>`.
-
-* The order is prepared as follows: `<fixture setup>`.
-
-* The winner order under test is `<winner_order_93_1>`.
-
-**Test data:**
-
-| `<order state>` | `<fixture setup>` |
-| --- | --- |
-| Payment Verifying | Proof uploaded, order reads Payment Verifying |
-| Pending Payment | Sent bank-transfer invoice, order reads Pending Payment |
-
-| Field | Value |
-| --- | --- |
-| winner_order_93_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
-
-**Steps:**
-
-1. As customer A, send a card payment for the order through the API.
-
-**Expected Results:**
-
-* The payment is refused; no charge is made.
-* The order still reads the state `<order state>`.
-
 <!-- trace:case id=g10.auction-winner-order.TC-3c9 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
 ### g10.auction-winner-order.US9-TC11: Proof upload is not offered where it does not apply
 
@@ -8542,7 +7722,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8588,7 +7767,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8617,43 +7795,6 @@ Runs once per row of **Test data**.
 * Step 1: no proof upload is offered; the overdue alert shows Contact Us.
 * Step 2: the upload is refused; the order still reads Payment Overdue.
 
-<!-- trace:case id=g10.auction-winner-order.TC-gl2 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.US9-TC13: Another collector can neither upload nor read the proof
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* `<winner_order_96_1>` belongs to customer A.
-* customer B is signed in, in a separate session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_96_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
-
-**Steps:**
-
-1. As customer B, send a proof upload for `<winner_order_96_1>` through the API.
-2. As customer B, request `<winner_order_96_1>`'s proof.
-
-**Expected Results:**
-
-* Both requests are refused.
-* `<winner_order_96_1>` still reads Pending Payment.
-
 <!-- trace:case id=g10.auction-winner-order.TC-q03 rev=2 covers=g10.auction-winner-order.SC-uxu -->
 ### g10.auction-winner-order.US9-TC14: An upload cut off part-way leaves the invoice pending
 
@@ -8665,7 +7806,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8706,44 +7846,6 @@ Runs once per row of **Test data**.
 * Step 3: the order reads Pending Payment; the deadline runs; nothing is stored.
 * Step 4: the upload is accepted.
 
-<!-- trace:case id=g10.auction-winner-order.TC-bxv rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.US9-TC15: The bank reference fits every way to pay
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* `<winner_order_98_1>`'s invoice is sent.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_98_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
-| listing code | LK7P2Q, the listing's code |
-| reference | LK7P2Q01: `<listing code>` then the two-digit invoice count |
-
-**Steps:**
-
-1. Read `<winner_order_98_1>`'s bank reference.
-
-**Expected Results:**
-
-* It reads `<reference>`.
-* 8 characters, capitals and digits only, no hyphen, space or symbol.
-* It fits one 35-character SWIFT remittance line.
-
 <!-- trace:case id=g10.auction-winner-order.TC-8vs rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
 ### g10.auction-winner-order.US9-TC16: A file over 5 MB refuses the whole upload
 
@@ -8755,7 +7857,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** winner-order-US-09
@@ -8786,83 +7887,6 @@ Runs once per row of **Test data**.
 * The whole upload is refused, naming the 5 MB limit.
 * None of the three files is stored; the order still reads Pending Payment.
 
-<!-- trace:case id=g10.auction-winner-order.TC-w24 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.US9-TC17: A file whose content is not its extension is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** winner-order-US-09
-
-**Blocked:** Engineering - is the file type checked by content or by extension?
-
-**Pre-conditions:**
-
-* customer A's `<winner_order_100_1>` reads Pending Payment.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_100_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
-| proof | An executable renamed to .pdf |
-
-**Steps:**
-
-1. As customer A, send `<proof>` as a proof upload through the API.
-
-**Expected Results:**
-
-* The whole upload is refused.
-* Nothing is stored; the order still reads Pending Payment.
-
-<!-- trace:case id=g10.auction-winner-order.TC-6bf rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.US9-TC19: The old deadline passing during the check expires nothing
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* `<winner_order_101_1>` reached Payment Verifying before its payment deadline.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_101_1 | An order reading Payment Verifying, no operator action yet; bind its identity only |
-
-| Field | Value |
-| --- | --- |
-| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
-
-**Steps:**
-
-1. Move the clock past the original payment deadline.
-2. Open `<winner order url>` for `<winner_order_101_1>` as its winner.
-
-**Expected Results:**
-
-* The order still reads Payment Verifying, not Payment Overdue.
-
 <!-- trace:case id=g10.auction-winner-order.TC-xl5 rev=2 covers=g10.auction-winner-order.SC-bb1 -->
 ### g10.auction-winner-order.US9-TC30: Busy proof form blocks every leave route
 
@@ -8876,7 +7900,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8925,7 +7948,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -8971,7 +7993,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -9011,7 +8032,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -9055,7 +8075,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -9098,7 +8117,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -9145,7 +8163,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -9174,41 +8191,6 @@ Runs once per row of **Test data**.
 * Amount due and transfer reference are not shown.
 * No FPS, HK Local or SWIFT tab is shown.
 
-<!-- trace:case id=g10.auction-winner-order.TC-mxq rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
-### g10.auction-winner-order.US9-TC18: A card payment on a bank-transfer invoice is refused (folded into g10.auction-winner-order.US9-TC10)
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-09
-
-**Pre-conditions:**
-
-* customer A's `<order_bt>` reads Pending Payment.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-
-**Steps:**
-
-1. As customer A, send a card payment for `<order_bt>` through the API.
-
-**Expected Results:**
-
-* The payment is refused; no charge is made.
-* The order still reads Pending Payment.
-
 <!-- trace:case id=g10.auction-winner-order.TC-ypl rev=2 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
 ### g10.auction-winner-order.US9-TC20: The reference copy control copies it exactly, on bank transfer only
 
@@ -9222,7 +8204,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
@@ -9274,7 +8255,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-10
@@ -9316,7 +8296,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-10
@@ -9346,52 +8325,6 @@ Runs once per row of **Test data**.
 * The order reads Payment Verifying again.
 * The deadline stops with the time then left.
 
-<!-- trace:case id=g10.auction-winner-order.TC-bgm rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.US10-TC4: Time left at the edges survives a return
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-10
-
-**Pre-conditions:**
-
-* `<winner_order_112_1>` reads Payment Verifying with `<time left>` kept.
-
-**Test data:**
-
-| `<time left>` | Fixture notes |
-| --- | --- |
-| 60s | `<time left>`: (1 minute) |
-| 604740s | `<time left>`: (6 days 23 hours 59 minutes) |
-
-| Field | Value |
-| --- | --- |
-| winner_order_112_1 | A bank-transfer order reading Payment Verifying; bind its identity only |
-
-| Field | Value |
-| --- | --- |
-| return time | The fixture timestamp when the operator returns the proof; bind its datetime only |
-
-**Steps:**
-
-1. Return the proof at `<return time>`.
-2. Read the API response for the new deadline.
-
-**Expected Results:**
-
-* The deadline is `<return time>` plus `<time left>`.
-
 <!-- trace:case id=g10.auction-winner-order.TC-zew rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
 ### g10.auction-winner-order.US10-TC5: A return adds no grace once the time left runs out
 
@@ -9403,7 +8336,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-10
@@ -9431,46 +8363,6 @@ Runs once per row of **Test data**.
 * The order reads Payment Overdue.
 * Proof upload is hidden; the overdue alert shows Contact Us.
 
-<!-- trace:case id=g10.auction-winner-order.TC-t06 rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.US10-TC6: A second return keeps the time left at the second upload
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** winner-order-US-10
-
-**Pre-conditions:**
-
-* `<winner_order_114_1>` was returned once, uploaded again with `<time left 2>` kept, and reads Payment Verifying.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_114_1 | A bank-transfer order on its second check; bind its identity only |
-| time left 2 | The time left at the second upload |
-
-| Field | Value |
-| --- | --- |
-| return time | The fixture timestamp when the operator returns the proof; bind its datetime only |
-
-**Steps:**
-
-1. Return the proof again at `<return time>`.
-2. Read the API response for the new deadline.
-
-**Expected Results:**
-
-* The deadline is `<return time>` plus `<time left 2>`.
-
 <!-- trace:case id=g10.auction-winner-order.TC-1ys rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
 ### g10.auction-winner-order.US10-TC8: Returned proof shows the reason and the deadline resumes
 
@@ -9482,7 +8374,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-10
@@ -9525,7 +8416,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-10
@@ -9554,45 +8444,6 @@ Runs once per row of **Test data**.
 * `<first reason>` is not shown.
 * No proof file or file name is shown.
 
-<!-- trace:case id=g10.auction-winner-order.TC-e3m rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
-### g10.auction-winner-order.US10-TC10: Returned proof sends Proof not accepted with the new Pay by
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** winner-order-US-10
-
-**Pre-conditions:**
-
-* customer(winner) uploaded proof for `<winner_order_117_1>`; no letter was sent on upload.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| winner_order_117_1 | An order paid by bank transfer, `<time left>` before its payment deadline at upload; bind its identity only | · |
-| time left | 2 days | (172800s) |
-| return reason | The reason text the operator enters for the winner | · |
-
-**Steps:**
-
-1. Have an operator return the proof with `<return reason>`.
-2. Read the mail sent to the winner's registered email.
-
-**Expected Results:**
-
-* One Proof not accepted letter carrying `<return reason>`.
-* Its Pay by equals the return time plus `<time left>`.
-* No payment reminder was sent while the proof was under check.
-
 ---
 
 ## g10.auction-winner-order.US11: Winner bills a won listing to a different address
@@ -9612,7 +8463,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-11
@@ -9651,7 +8501,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-11
@@ -9691,7 +8540,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-11
@@ -9736,7 +8584,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-11
@@ -9785,7 +8632,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-11
@@ -9824,7 +8670,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-11
@@ -9872,7 +8717,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-12
@@ -9912,7 +8756,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -9963,7 +8806,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -10011,7 +8853,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -10050,7 +8891,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -10094,7 +8934,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -10136,7 +8975,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -10179,7 +9017,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -10223,7 +9060,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -10267,7 +9103,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -10305,7 +9140,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-12
@@ -10348,7 +9182,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-12
@@ -10398,7 +9231,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-13
@@ -10443,7 +9275,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-14
@@ -10496,7 +9327,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-15
@@ -10547,7 +9377,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10586,7 +9415,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10625,7 +9453,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10665,7 +9492,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10705,7 +9531,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10748,7 +9573,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10789,7 +9613,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10829,7 +9652,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10869,7 +9691,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10912,7 +9733,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -10958,7 +9778,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -11002,7 +9821,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -11045,7 +9863,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -11087,7 +9904,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -11130,7 +9946,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -11170,7 +9985,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-16
@@ -11219,7 +10033,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-17
@@ -11269,7 +10082,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-19
@@ -11315,7 +10127,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-19
@@ -11346,7 +10157,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-19
@@ -11387,7 +10197,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-19
@@ -11437,7 +10246,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-19
@@ -11489,7 +10297,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-20
@@ -11534,7 +10341,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-21
@@ -11573,7 +10379,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-21
@@ -11600,36 +10405,6 @@ Runs once per row of **Test data**.
 * The new invoice ID is `<next invoice id>`.
 * The payment reference remains `<payment reference>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-ehf rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
-### g10.auction-winner-order.US21-TC3: Listing-code allocation retries a projection collision
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-21
-
-**Pre-conditions:**
-
-* A new listing's 5-character candidate collides with an active code or retained reservation.
-
-**Steps:**
-
-1. Create the listing.
-2. Read the stored listing/payment reference.
-
-**Expected Results:**
-
-* Allocation retries and stores a distinct valid code.
-* The code is not treated as collision-free merely because its source is a UUID or listing ID.
-
 <!-- trace:case id=g10.auction-winner-order.TC-wa2 rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
 ### g10.auction-winner-order.US21-TC4: A stored payment reference survives allocator changes
 
@@ -11641,7 +10416,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-21
@@ -11680,7 +10454,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-21
@@ -11723,7 +10496,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-22
@@ -11764,7 +10536,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-22
@@ -11803,7 +10574,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-22
@@ -11828,35 +10598,6 @@ Runs once per row of **Test data**.
 * The historical receipt ID remains `<historical receipt id>`.
 * No receipt ID is created for the refund, reversal or void.
 
-<!-- trace:case id=g10.auction-winner-order.TC-gs5 rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
-### g10.auction-winner-order.US22-TC4: Provider references stay internal
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-22
-
-**Pre-conditions:**
-
-* A card payment has a Grade10 payment reference and a provider reference.
-
-**Steps:**
-
-1. Read Stripe metadata and the winner-facing order and invoice.
-
-**Expected Results:**
-
-* Stripe metadata carries the Grade10 payment reference.
-* The provider reference appears on no winner-facing surface.
-
 ---
 
 ## g10.auction-winner-order.US23: Winner gets the address form back
@@ -11876,7 +10617,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Delivery address
@@ -11929,7 +10669,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-23
@@ -11979,7 +10718,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-23
@@ -12020,47 +10758,6 @@ Runs once per row of **Test data**.
 * The confirmation is accepted.
 * The order reads Preparing Invoice.
 
-<!-- trace:case id=g10.auction-winner-order.TC-bth rev=1 covers=g10.auction-winner-order.SC-6ax -->
-### g10.auction-winner-order.US23-TC5: Winner has no way to reopen the address form
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-23
-
-**Pre-conditions:**
-
-* `<listing_172_1>`'s order has no confirmed delivery address and its address deadline passed two hours ago.
-* customer(winner of `<listing_172_1>`) is signed in.
-
-* The winner order under test is `<winner_order_172_1>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_172_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
-| listing_172_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
-
-**Steps:**
-
-1. Read the delivery address area for a reopen or extend control.
-2. Submit a reopen of the address form as the winner.
-
-**Expected Results:**
-
-* No reopen or extend control is offered to the winner.
-* The reopen is refused.
-* The address deadline is unchanged.
-
 <!-- trace:case id=g10.auction-winner-order.TC-w21 rev=1 covers=g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-gqs -->
 ### g10.auction-winner-order.US23-TC6: Three won listings open three orders with their own address deadlines
 
@@ -12072,7 +10769,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Delivery address
@@ -12130,7 +10826,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Delivery address
@@ -12172,7 +10867,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Delivery address
@@ -12214,7 +10908,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Delivery address
@@ -12257,7 +10950,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-23
@@ -12294,7 +10986,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-23
@@ -12346,7 +11037,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -12379,7 +11069,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -12415,74 +11104,6 @@ Runs once per row of **Test data**.
 * The invoice shows the amounts `<invoice amounts>`, with no conversion for USD.
 * When `<settlement currency>` is HKD, the lines stay in USD and the Subtotal converts their sum once at 7.85, rounded up to the next cent; no HKD amount is printed for a line.
 
-<!-- trace:case id=g10.auction-winner-order.TC-8ea rev=1 covers=g10.auction-winner-order.SC-k63 -->
-### g10.auction-winner-order.US24-TC3: Sent invoice locks the chosen currency
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-24
-
-**Pre-conditions:**
-
-* A winner chose HKD and an operator sent the invoice.
-
-**Steps:**
-
-1. Try to change the settlement currency to USD.
-2. Read the invoice and order currency.
-
-**Expected Results:**
-
-* The currency change is refused.
-* The sent invoice and order remain in HKD.
-
-<!-- trace:case id=g10.auction-winner-order.TC-a61 rev=1 covers=g10.auction-winner-order.SC-j1l -->
-### g10.auction-winner-order.US24-TC4: A confirmation with no currency is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-24
-
-**Pre-conditions:**
-
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<winner_order_182_1>` in Awaiting Setup with a saved home address.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| winner_order_182_1 | An order won in USD, in Awaiting Setup; bind its identity only |
-
-**Steps:**
-
-1. Choose the home address as the delivery address and as the billing address, and choose no settlement currency.
-2. Send Grade10 a setup confirmation carrying both addresses and no currency.
-3. Reload `<winner_order_182_1>`.
-
-**Expected Results:**
-
-* Step 2 is refused.
-* Step 3 reads the order in Awaiting Setup, holding no delivery address, no currency and no method.
-
 <!-- trace:case id=g10.auction-winner-order.TC-x0r rev=1 covers=g10.auction-winner-order.SC-lq9 -->
 ### g10.auction-winner-order.US24-TC5: Confirming with HKD records HKD and the order reads Preparing Invoice
 
@@ -12494,7 +11115,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -12540,7 +11160,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -12585,7 +11204,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-24
@@ -12634,7 +11252,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -12678,7 +11295,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -12708,7 +11324,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -12751,7 +11366,6 @@ Runs once per row of **Test data**. Switching currency keeps a still-offered met
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -12777,51 +11391,6 @@ Runs once per row of **Test data**. Switching currency keeps a still-offered met
 
 * `<expected selection>` because HKD still offers `<selected method>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-2ac rev=1 covers=g10.auction-winner-order.SC-rge -->
-### g10.auction-winner-order.US25-TC5: A confirmation carrying a method the currency does not offer is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-25
-
-**Pre-conditions:**
-
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<winner_order_190_1>` in Awaiting Setup with a saved home address.
-
-**Test data:**
-
-| `<settlement currency>` | `<rail>` | Why this row |
-| --- | --- | --- |
-| USD | FPS | FPS is offered in HKD only |
-| HKD | International via SWIFT | SWIFT is offered in USD only |
-
-| Field | Value |
-| --- | --- |
-| winner_order_190_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
-
-**Steps:**
-
-1. Choose the home address and `<settlement currency>`.
-2. Send Grade10 a setup confirmation carrying the home address and `<rail>`.
-3. Reload `<winner_order_190_1>`.
-
-**Expected Results:**
-
-* Step 2 is refused.
-* Step 3 reads the order in Awaiting Setup, holding no delivery address, no currency and no method.
-
 <!-- trace:case id=g10.auction-winner-order.TC-jfi rev=2 covers=g10.auction-winner-order.SC-8dl -->
 ### g10.auction-winner-order.US25-TC6: Each HKD method reads its fee wording and card is selected
 
@@ -12833,7 +11402,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -12872,7 +11440,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -12919,7 +11486,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -12960,7 +11526,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-25
@@ -13012,7 +11577,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -13068,7 +11632,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -13122,7 +11685,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -13159,7 +11721,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -13199,7 +11760,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -13232,45 +11792,6 @@ Runs once per row of **Test data**.
 * The total is 106,869 minor units in HKD, the Subtotal plus the fee.
 * The USD rule is not applied.
 
-<!-- trace:case id=g10.auction-winner-order.TC-uz6 rev=3 -->
-### g10.auction-winner-order.US26-TC6: A USD sum converts to HKD once, rounded up to the next cent
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** winner-order-US-26
-
-**Pre-conditions:**
-
-* None.
-
-**Test data:**
-
-| `<usd sum>` | `<hkd subtotal>` | Why this row | Fixture notes |
-| --- | --- | --- | --- |
-| USD120.00 | HK$942.00 | Exact: 942.00, nothing to round | `<usd sum>`: (fixed boundary) |
-| USD131.21 | HK$1,030.00 | 1029.9985 rounds up to the next cent | `<usd sum>`: (fixed boundary) |
-| USD0.04 | HK$0.32 | 0.314 rounds up, not to nearest | `<usd sum>`: (fixed boundary) |
-| USD0.01 | HK$0.08 | 0.0785 rounds up to the next cent | `<usd sum>`: (fixed boundary) |
-
-**Steps:**
-
-1. Convert `<usd sum>` to HKD once.
-
-**Expected Results:**
-
-* The result is `<hkd subtotal>`.
-
 <!-- trace:case id=g10.auction-winner-order.TC-k5y rev=3 covers=g10.auction-winner-order.SC-ida,g10.auction-winner-order.SC-63n -->
 ### g10.auction-winner-order.US26-TC7: The note names the conversion rate on the Order Summary and the two PDFs, and nowhere else
 
@@ -13282,7 +11803,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-26
@@ -13324,7 +11844,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -13372,7 +11891,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -13428,7 +11946,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-26
@@ -13480,7 +11997,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-26
@@ -13545,7 +12061,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -13600,7 +12115,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -13629,7 +12143,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -13671,7 +12184,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -13724,7 +12236,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -13764,7 +12275,7 @@ Runs once per row of **Test data**.
 * Order Total reads `<total>`, `<subtotal_1>` plus `<bank_fee_hkd>`.
 * The amount due at step 4 reads `<total>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-oc2 rev=1 covers=g10.auction-winner-order.SC-8t1 -->
+<!-- trace:case id=g10.auction-winner-order.TC-oc2 rev=1 covers=g10.auction-winner-order.SC-8t1,g10.auction-winner-order.SC-16z -->
 ### g10.auction-winner-order.US27-TC8: Free shipping, absent Insurance and Tax, and a Free fee still show the Subtotal
 
 **Classification:**
@@ -13775,7 +12286,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -13823,7 +12333,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-27
@@ -13872,7 +12381,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** winner-order-US-27
@@ -13916,7 +12424,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-27
@@ -14282,7 +12789,7 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | SC-04, SC-287 | Out of suite, in the durable header |
 | SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-215, SC-278, SC-279, SC-280, SC-281, SC-282, SC-300 | Unchanged; they stay with the durable cases |
 
-**Out of suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15, g10.auction-winner-order.SC18, g10.auction-winner-order.SC19, g10.auction-winner-order.SC20
+**Verified outside this suite:** g10.auction-winner-order.SC3, g10.auction-winner-order.SC7, g10.auction-winner-order.SC15, g10.auction-winner-order.SC18, g10.auction-winner-order.SC19, g10.auction-winner-order.SC20
 
 SC3 quotes the lot row of the invoice PDF, with its Total column and a Free fee beside a non-zero shipping line, SC7 a USD order's documents staying in USD, and SC18 that a USD order's invoice and receipt PDFs carry no note and no gap under Subtotal. The block tests of tasks 3.1 and 3.4 to 3.6 in this store (`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/fixtures.test.ts`, `invoice-pdf.test.ts` and `receipt-pdf.test.ts`) and the PDF tests of tasks 7.1 and 7.5 in the application repository (`invoicePdf.test.ts`, `receiptPdf.test.ts`, which hold a USD invoice and receipt without a note) verify the three. No hand case opens a USD order's PDFs; the walk of task 11.1 reads an HKD order's. `US26-TC10` and `TC11` read the same documents by hand. SC15 is an invoice sent before USD facts were stored, which no tester can create now; the breakdown tests of task 6.1 (`invoicePricing.test.ts`, which drops the note when a line has no USD fact) verify it, and `US27-TC11` reads the sibling pre-layout case by hand.
 

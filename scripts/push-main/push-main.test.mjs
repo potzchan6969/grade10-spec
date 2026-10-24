@@ -84,6 +84,22 @@ test("every page, reference and governance doc owes the planning checks", () => 
   ]);
 });
 
+test("a test-case rule owes its owner check", () => {
+  assert.deepEqual(ids([".claude/skills/spec-to-tcs/SKILL.md"]), [
+    "biome",
+    "parity",
+    "rules-owner",
+  ]);
+  assert.deepEqual(ids(["docs/governance/specs-to-test-cases.md"]), [
+    "biome",
+    "changes",
+    "test-cases",
+    "manual",
+    "stories",
+    "rules-owner",
+  ]);
+});
+
 test("a story or a block owes the story check", () => {
   assert.deepEqual(
     ids(["apps/preview/src/pages/store/cart/cart.stories.tsx"]),

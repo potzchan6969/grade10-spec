@@ -10,7 +10,7 @@ import { readSpecs } from "../src/store/read-specs.mts";
 import { snapshotOf } from "./manual-fixture";
 import { writeStore } from "./tmp-store";
 
-/** `**Out of suite:**` is how a hole is closed deliberately. The reader parsed
+/** `**Out of suite (<category>):**` is how a hole is closed deliberately. The reader parsed
  * it and dropped it on the floor, so every screen counted a decision as a gap
  * and the number stopped being a task list. */
 
@@ -48,7 +48,7 @@ const cases = [
   "",
   "**Status:** pending-review",
   "",
-  "**Out of suite:** alpha-SC-03",
+  "**Out of suite (api):** alpha-SC-03",
   "",
   "## alpha-US-01: Someone does the thing",
   "",
@@ -79,7 +79,7 @@ describe("what the reader does with the list", () => {
     const root = writeStore({
       "openspec/specs/demo-product/alpha/spec.md": spec,
       "openspec/specs/demo-product/alpha/feature-tcs.md": cases.replace(
-        "**Out of suite:** alpha-SC-03\n\n",
+        "**Out of suite (api):** alpha-SC-03\n\n",
         "",
       ),
     });

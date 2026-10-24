@@ -47,6 +47,7 @@ const COMMANDS = {
   manual: () => ["node", ["tools/manual/check/check-manual.mjs"]],
   stories: () => ["node", ["scripts/storybook/check.mjs"]],
   parity: () => ["bash", ["scripts/agent-platform/check-parity.sh"]],
+  "rules-owner": () => ["node", ["scripts/openspec/tcs-rules-owner.mjs"]],
 };
 
 export function changedPaths(base, head) {

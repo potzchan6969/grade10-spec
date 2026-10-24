@@ -50,7 +50,8 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    product hit drafts that suite into the change. Then, in a fresh context,
    QA1 runs `spec-to-tcs` against only frozen anchors and the domain suite
    above, without requirements, scenarios, technical design, QA2 or archive
-   material. Keep `feature-tcs.md` draft.
+   material. Keep `feature-tcs.md` draft; a store capability writes none here,
+   as [Store](../../../docs/governance/specs-to-test-cases.md#store) says.
 2. **Dev** - Delivery draft. In another fresh context, Dev writes the
    technical design in `tech-design.md`, requirement scenarios in `spec.md`,
    then `tasks.md`. Dev does not read QA1 until this independent draft is
@@ -73,7 +74,10 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    links for the scenarios whose THEN is fully asserted by that case. One case
    may link multiple scenarios when one route, starting state and checking
    fully assert each. Record uncovered scenarios, over-claimed cases and
-   contradictions separately from anchor coverage. Put unresolved product
+   contradictions separately from anchor coverage. Group each new case into a
+   live one, or say why not, as
+   [A Case That Already Exists Is Not Written Twice](../../../docs/governance/specs-to-test-cases.md#a-case-that-already-exists-is-not-written-twice)
+   says. Put unresolved product
    questions in `decisions.md`'s `## Raised` table, each with its options and
    `recommended: <option>`. Close every row the
    [held test](../../../docs/governance/specs-to-test-cases.md#raised)
@@ -104,13 +108,12 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    - **Order** - The acceptance order
 
    Reconcile, do not merge: each change keeps its own scope, acceptance and
-   verdict, and a slow change never holds the others once ownership and order
-   are settled.
+   verdict.
 6. **Review** - Settle the source revision, gather the review packet and gate
    receipts, then dispatch an independent `accept-review` reader; a cluster
    is reviewed as one run. Accept only on its `Ready to accept` verdict. Batch
    findings by source owner for repair. Pass the prior ledger and repair diff
-   on a rerun; the owning skill decides when to expand its scope.
+   on a rerun.
 7. **Accept and Publish** - With the human's acceptance authorization, reuse
    the matching acceptance receipt or refresh it when inputs or baseline
    changed, then accept the reviewed plan:

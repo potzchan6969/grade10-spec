@@ -510,7 +510,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-01
@@ -547,7 +546,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-01
@@ -593,7 +591,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -633,7 +630,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -683,7 +679,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -723,7 +718,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -763,7 +757,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -818,7 +811,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -858,7 +850,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -900,7 +891,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -942,7 +932,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -979,7 +968,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -1017,7 +1005,6 @@ enrolled after my first accepted bid,
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -1057,7 +1044,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -1124,7 +1110,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -1181,7 +1166,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** exploratory
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -1238,7 +1222,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -1283,7 +1266,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
@@ -1342,7 +1324,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-03
@@ -1379,7 +1360,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-03
@@ -1422,7 +1402,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-03
@@ -1477,7 +1456,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-04
@@ -1514,7 +1492,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-04
@@ -1566,7 +1543,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-05

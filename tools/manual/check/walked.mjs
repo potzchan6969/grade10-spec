@@ -21,7 +21,11 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { readTextIfExists } from "../src/store/disk.mts";
-import { readJourneys, walkedByNobody } from "../src/store/read-specs.mts";
+import {
+  readJourneys,
+  walkedByMakersOnly,
+  walkedByNobody,
+} from "../src/store/read-specs.mts";
 import { journeysOf, message } from "./context.mjs";
 
 const DECLARATION = "`**Walked by:** nobody`";
@@ -40,7 +44,13 @@ export function checkWalked(ctx, shape, changes) {
       );
       continue;
     }
-    sayOneThing(ctx, file, spec.journeys.length, spec.unwalked === true);
+    sayOneThing(
+      ctx,
+      file,
+      spec.journeys.length,
+      spec.unwalked === true,
+      spec.makersOnly === true,
+    );
   }
 
   // A delta whose capability carries no journeys file at all: the file is
@@ -82,7 +92,13 @@ export function checkWalked(ctx, shape, changes) {
     // is still read, because a file no reader can parse is a finding wherever
     // it sits.
     if (durable?.journeys !== undefined || durable?.journeysError) continue;
-    sayOneThing(ctx, file, stories, walkedByNobody(text));
+    sayOneThing(
+      ctx,
+      file,
+      stories,
+      walkedByNobody(text),
+      walkedByMakersOnly(text),
+    );
   }
 }
 
@@ -94,15 +110,16 @@ function refusal(id, cause) {
 }
 
 /** A journeys file holds stories, or the declaration — never neither, and
- * never both. */
-function sayOneThing(ctx, file, stories, unwalked) {
+ * never both. `**Walked by:** makers only` may sit beside the stories of the
+ * makers who use the tool: it says no product user walks it (tcs-rules r7). */
+function sayOneThing(ctx, file, stories, unwalked, makersOnly = false) {
   if (stories === 0 && !unwalked) {
     ctx.add(
       "walked",
       file,
       `holds no story and does not say ${DECLARATION}: one or the other`,
     );
-  } else if (stories > 0 && unwalked) {
+  } else if (stories > 0 && unwalked && !makersOnly) {
     ctx.add(
       "walked",
       file,

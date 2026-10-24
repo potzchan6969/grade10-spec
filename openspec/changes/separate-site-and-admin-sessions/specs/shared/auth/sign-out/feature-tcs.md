@@ -19,7 +19,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sign-out-US-01
@@ -58,7 +57,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-out-US-03
@@ -100,7 +98,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-out-US-03
@@ -148,7 +145,7 @@
 - **Raised, settled by the artifacts** - whether a console sign-out empties the site's cart, and whether a site tab reacts to a console sign-out (the requirement's surface-owned cleanup, and decisions Q11). Both are in `## Settled`; none goes to `decisions.md`
 - **Raised, escalated** - none
 - **Left to the durable cases** - `shared-auth-sign-out-SC-02` and `shared-auth-sign-out-SC-03`, whose wording only gained the session of the surface it was made on: `US1-TC1-1` to `US1-TC3-1` still verify them and are left as they are; the refused sign-out of `US2-TC1-1` and `US2-TC2-1`, which the delta does not touch
-- **Covered at domain** - a site sign-out clearing the collector is walked by `shared-auth-e2e-US1-TC1-1`, which still holds; one surface signed out while the other stays signed in is walked by the draft domain case `shared-auth-e2e-US8-TC1-1` in this change's `domain-tcs.md`, step 5
+- **Covered at domain** - a site sign-out clearing the collector is walked by `shared.auth-dmn.US1-TC1`, which still holds; one surface signed out while the other stays signed in is walked by the draft domain case `shared-auth-e2e-US8-TC1-1` in this change's `domain-tcs.md`, step 5
 - **Contradicted** - none
 - **Uncovered anchors** - none: `shared-auth-sign-out-US-03` has `US3-TC1-1` and `US3-TC2-1`; `shared-auth-sign-out-US-01` has `US1-TC4-1` beside the durable `US1-TC1-1` to `US1-TC3-1`; `shared-auth-sign-out-SC-06` and `shared-auth-sign-out-SC-07` are reached
 - **Trace markers** - the new scenarios and cases carry none yet; the trace CLI allocates them with the walk

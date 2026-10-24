@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** pending-review · 0/14
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** grade10-admin-auction-listing-SC-01, grade10-admin-auction-listing-SC-02, grade10-admin-auction-listing-SC-04, grade10-admin-auction-listing-SC-05, grade10-admin-auction-listing-SC-07, grade10-admin-auction-listing-SC-08, grade10-admin-auction-listing-SC-09, grade10-admin-auction-listing-SC-10, grade10-admin-auction-listing-SC-11, grade10-admin-auction-listing-SC-12, grade10-admin-auction-listing-SC-25, grade10-admin-auction-listing-SC-26, grade10-admin-auction-listing-SC-27, grade10-admin-auction-listing-SC-27a, grade10-admin-auction-listing-SC-28, grade10-admin-auction-listing-SC-70, grade10-admin-auction-listing-SC-127, grade10-admin-auction-listing-SC-129, grade10-admin-auction-listing-SC-149, grade10-admin-auction-listing-SC-150, grade10-admin-auction-listing-SC-151, grade10-admin-auction-listing-SC-163
 
@@ -23,7 +23,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -65,7 +64,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
@@ -121,7 +119,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -162,7 +159,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -202,7 +198,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -227,47 +222,6 @@ Runs once per row of **Test data**.
 * Step 4 shows the listing as created.
 * Step 6 reads 0 minor units USD.
 
-<!-- trace:case id=g10adm.auction-listing.TC-fc7 rev=2 -->
-### grade10-admin-auction-listing-US3-TC22-2: API create refuses a negative or non-whole starting price
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_5>` is a draft in USD with every create requirement set and starting price 0 minor units.
-
-**Test data:**
-
-| Starting price sent with create |
-| --- |
-| -1 minor unit |
-| 0.5 minor units |
-
-**Steps:**
-
-1. Send create for `<listing_5>` with the row's starting price.
-2. Read the API response for `<listing_5>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads the listing as a draft.
-* Step 2 reads starting price 0 minor units USD.
-
 <!-- trace:case id=g10adm.auction-listing.TC-ebb rev=2 -->
 ### grade10-admin-auction-listing-US3-TC24-2: Operator lowers a created listing's starting price to 0
 
@@ -279,7 +233,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -310,45 +263,6 @@ Runs once per row of **Test data**.
 * Step 5 reads 0 minor units USD.
 * Step 5 reads the listing as created.
 
-<!-- trace:case id=g10adm.auction-listing.TC-g4v rev=2 covers=grade10-admin-auction-listing-SC-160 -->
-### grade10-admin-auction-listing-US3-TC25-2: API create with 0 and no currency creates as USD 0
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_10>` is a draft with every create requirement set except the starting price, and no currency chosen.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_10>` | A draft, currency not chosen, starting price empty, every other create requirement set |
-| Starting price | 0 minor units |
-
-**Steps:**
-
-1. Send create for `<listing_10>` with starting price 0 and no currency.
-2. Read the API response for `<listing_10>`.
-
-**Expected Results:**
-
-* Step 1 is accepted.
-* Step 2 reads the listing as created.
-* Step 2 reads starting price 0 minor units USD.
-
 <!-- trace:case id=g10adm.auction-listing.TC-m53 rev=2 -->
 ### grade10-admin-auction-listing-US3-TC26-2: Currency change reformats the same minor-unit price
 
@@ -360,7 +274,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
@@ -401,7 +314,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-09
@@ -466,7 +378,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-74
@@ -498,173 +409,9 @@ Runs once per row of **Test data**.
 * Step 4: the draft saves.
 * Step 6 reads 500 minor units USD.
 
-<!-- trace:case id=g10adm.auction-listing.TC-e4m rev=1 covers=grade10-admin-auction-listing-SC-164 -->
-### g10adm.auction-listing.US74-TC2: A draft refuses any currency other than USD
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-74
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_21>` is a draft in USD with starting price 100000 minor units.
-
-**Test data:**
-
-| Currency sent | Why this row |
-| --- | --- |
-| HKD | A retired listing currency |
-| JPY | A retired listing currency |
-| EUR | A currency the store never held, standing for any other |
-
-**Steps:**
-
-1. Send a draft save for `<listing_21>` with the row's currency.
-2. Read the API response for `<listing_21>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads currency USD and starting price 100000 minor units, unchanged.
-
-<!-- trace:case id=g10adm.auction-listing.TC-lej rev=2 covers=grade10-admin-auction-listing-SC-165,g10adm.auction-listing.SC-h88 -->
-### g10adm.auction-listing.US74-TC3: Create refuses any currency other than USD
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-74
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_22>` is a draft in USD with every create requirement set.
-
-**Test data:**
-
-| Currency sent | Why this row |
-| --- | --- |
-| HKD | A retired listing currency |
-| JPY | A retired listing currency |
-| EUR | A complete draft with an unsupported currency, as in the EUR create refusal |
-
-**Steps:**
-
-1. Send create for `<listing_22>` with the row's currency.
-2. Read the API response for `<listing_22>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads the listing as a draft in USD, not created.
-* For the EUR row, the API refuses create and the complete draft remains a draft.
-
-<!-- trace:case id=g10adm.auction-listing.TC-ctn rev=1 covers=grade10-admin-auction-listing-SC-161 -->
-### g10adm.auction-listing.US74-TC4: An update of a created listing refuses any currency other than USD
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-74
-
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_23>` is a created listing in USD with starting price 100000 minor units.
-
-**Test data:**
-
-| Currency sent | Why this row |
-| --- | --- |
-| HKD | A retired listing currency |
-| JPY | A retired listing currency |
-
-**Steps:**
-
-1. Send an update for `<listing_23>` with the row's currency.
-2. Read the API response for `<listing_23>`.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 2 reads currency USD, starting price 100000 minor units and the listing still created.
-
-<!-- trace:case id=g10adm.auction-listing.TC-mig rev=1 covers=grade10-admin-auction-listing-SC-162 -->
-### g10adm.auction-listing.US74-TC5: Earlier HKD and JPY listings keep their amounts and history when converted to USD
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-auction-listing-US-74
-
-**Pre-conditions:**
-
-* Before migration, `<listing_24>` has the row's currency, starting price, bid records and listing history shown in **Test data**.
-* The migration has run.
-* admin(holds the grant to read auction listings) holds an API session.
-
-**Test data:**
-
-| Original currency | Starting price before migration | Bid and history records before migration |
-| --- | --- | --- |
-| HKD | 400000 minor units | Bid A: 500000 minor units; history: created, published, bid A recorded |
-| JPY | 400000 minor units | Bid A: 500000 minor units; history: created, published, bid A recorded |
-
-**Steps:**
-
-1. Read `<listing_24>` and its price and history after migration.
-
-**Expected Results:**
-
-* The listing currency reads USD.
-* The starting price remains 400000 minor units, Bid A remains 500000 minor units, and the history still contains created, published and bid A recorded, with no amount conversion or other entry change.
-
 ## Settled
 
 - None this run. Every blind reading either folded into a scenario or went to `decisions.md` `## Raised`.
-
 
 ## Reconciliation
 

@@ -1,9 +1,47 @@
 # grade10-admin/console/daily-reminder Test Cases
 
-**Status:** pending-review · 0/101
+**Status:** pending-review · 0/69
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
-**Out of suite:** grade10-admin-console-daily-reminder-SC-07 - the backend list tests of task 2.4; grade10-admin-console-daily-reminder-SC-77 - the What's New read test of task 2.1; grade10-admin-console-daily-reminder-SC-78 - the Slack job test of task 3.1; grade10-admin-console-daily-reminder-SC-79 - the console storage tests of task 4.1; grade10-admin-console-daily-reminder-SC-80 - the Today page tests of task 4.1; grade10-admin-console-daily-reminder-SC-81 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-82 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-83 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-84 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-85 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-86 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-87 - the Slack message tests of task 5.2; grade10-admin-console-daily-reminder-SC-97 - the close-path Slack failure tests of task 2.1; grade10-admin-console-daily-reminder-SC-98 - the lifecycle not-configured tests of task 2.1 (both token and channel required)
+**Out of suite (api):**
+- `grade10-admin-console-daily-reminder-SC-07` — the backend list tests of task 2.4
+- `grade10-admin-console-daily-reminder-SC-77` — the What's New read test of task 2.1
+
+**Out of suite (unit):**
+- `grade10-admin-console-daily-reminder-SC-79` — the console storage tests of task 4.1
+
+**Out of suite (non-GUI):**
+- `grade10-admin-console-daily-reminder-SC-78` — the Slack job test of task 3.1
+- `grade10-admin-console-daily-reminder-SC-87` — the Slack message tests of task 5.2
+- `grade10-admin-console-daily-reminder-SC-97` — the close-path Slack failure tests of task 2.1
+- `grade10-admin-console-daily-reminder-SC-98` — the lifecycle not-configured tests of task 2.1 (both token and channel required)
+- `grade10-admin-console-daily-reminder-SC-45` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-46` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-47` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-48` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-49` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-73` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-50` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-51` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-52` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-53` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-74` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-75` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-102` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-54` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-56` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-57` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-59` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-60` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-88` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-89` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-90` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-91` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-92` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-93` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-94` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-95` — a Slack message, which is no GUI surface
+- `grade10-admin-console-daily-reminder-SC-96` — a Slack message, which is no GUI surface
 
 ## Walk 1: Flagged or still waiting in the dialog and on Today
 
@@ -64,16 +102,9 @@
 ### Route
 
 1. At 08:00 Hong Kong time, read `<slack channel>` for the daily message.
-   - The waiting list heading is Something wrong or waiting a while, needing your action, with a warning mark, and flagged rows lead. `g10adm.console-daily-reminder.US4-TC22`
 2. Drive `<listing_live>` through go-live, then soft-close `<listing_ext>`, then end `<listing_end>`, reading the channel after each move.
-   - One go-live message with start time and a console link. `g10adm.console-daily-reminder.US6-TC1`
-   - One extension message with how long and the new end time. `g10adm.console-daily-reminder.US6-TC2`
-   - One ended message with the end time. `g10adm.console-daily-reminder.US6-TC3`
 3. Drive `<order_od>` into Payment Overdue and flag `<order_fg>`, reading the channel after each transition.
-   - One overdue warning with the overdue status. `g10adm.console-daily-reminder.US7-TC1`
-   - One flagged warning with the flag reason. `g10adm.console-daily-reminder.US7-TC2`
 4. Leave `<order_od>` overdue and `<order_fg>` flagged without clearing, and wait past a further read window.
-   - No second overdue or flagged message. `g10adm.console-daily-reminder.US7-TC3`
 
 ## grade10-admin-console-daily-reminder-US1: Operator starts the day with what closed yesterday
 
@@ -92,7 +123,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -126,7 +156,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -159,7 +188,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -191,7 +219,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -221,7 +248,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -255,7 +281,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -294,7 +319,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -330,7 +354,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -367,7 +390,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -398,7 +420,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -429,7 +450,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -458,7 +478,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -489,7 +508,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -522,7 +540,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -556,7 +573,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -587,7 +603,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -617,7 +632,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -650,7 +664,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -682,7 +695,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -725,7 +737,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -763,7 +774,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -794,7 +804,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -834,7 +843,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -866,7 +874,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -900,7 +907,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -942,7 +948,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -972,7 +977,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1009,7 +1013,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1043,7 +1046,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1084,7 +1086,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1117,7 +1118,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-01
@@ -1138,36 +1138,6 @@ Runs once per row of **Test data**.
 * Step 1 opens the dialog with a row for `<order_2>`.
 * Step 2 shows no row for `<order_3>` in the open dialog.
 * Step 3 finds no such control.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-x5p rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-bz8,g10adm.console-daily-reminder.SC-xxl,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-b5m,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-n4k,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-2u2,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-74n,g10adm.console-daily-reminder.SC-pxi,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-wmh,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd,g10adm.console-daily-reminder.SC-gxz,g10adm.console-daily-reminder.SC-k4n -->
-### g10adm.console-daily-reminder.TC-x5p (US1-TC32): The What's New read refuses a caller with no auction access
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-01
-
-**Pre-conditions:**
-
-* `<caller>` holds no auction grant.
-* `<listing_1>` closed sold yesterday, Hong Kong time.
-
-**Steps:**
-
-1. Read the API response for the What's New list as `<caller>`.
-
-**Expected Results:**
-
-* The response is a refusal.
-* The response holds no row.
 
 ---
 
@@ -1190,7 +1160,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1230,7 +1199,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1260,7 +1228,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1290,7 +1257,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1323,7 +1289,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1355,7 +1320,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1388,7 +1352,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1427,7 +1390,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1467,7 +1429,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1508,7 +1469,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1544,7 +1504,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1573,36 +1532,6 @@ Runs once per row of **Test data**.
 
 * Flagged or still waiting holds `<rows>`.
 
-<!-- trace:case id=g10adm.console-daily-reminder.TC-xnm rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-xnm (US2-TC12): The Flagged or still waiting read leaves out rows the caller's grants do not allow
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-02
-
-**Pre-conditions:**
-
-* `<caller>` holds auction:read and auction:shipment.
-* `<order_i>` waited 49 hours in Preparing Invoice and `<order_s>` in Preparing Shipment.
-
-**Steps:**
-
-1. Read the API response for the Flagged or still waiting list as `<caller>`.
-
-**Expected Results:**
-
-* The response holds `<order_s>`.
-* The response holds no row for `<order_i>`.
-
 <!-- trace:case id=g10adm.console-daily-reminder.TC-n4g rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-n4g (US2-TC14): The console shows the exact wait, not whole days
 
@@ -1614,7 +1543,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1645,7 +1573,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1665,36 +1592,6 @@ Runs once per row of **Test data**.
 
 * The rows read `<order_z>`, `<order_x>`, `<order_y>` from top to bottom.
 
-<!-- trace:case id=g10adm.console-daily-reminder.TC-e5w rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-b5m,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-e5w (US2-TC16): The Flagged or still waiting read refuses a caller with no auction access
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-02
-
-**Pre-conditions:**
-
-* `<caller>` holds no auction grant.
-* `<order_w>` has waited 49 hours in Preparing Invoice.
-
-**Steps:**
-
-1. Read the API response for the Flagged or still waiting list as `<caller>`.
-
-**Expected Results:**
-
-* The response is a refusal.
-* The response holds no row.
-
 <!-- trace:case id=g10adm.console-daily-reminder.TC-tbl rev=1 covers=g10adm.console-daily-reminder.SC-a99 -->
 ### g10adm.console-daily-reminder.US2-TC17: Flagged rows lead above 48-hour waits
 
@@ -1706,7 +1603,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1747,7 +1643,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1788,7 +1683,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1827,7 +1721,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1861,7 +1754,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
@@ -1897,7 +1789,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -1929,7 +1820,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -1961,7 +1851,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -1991,7 +1880,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2023,7 +1911,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2062,7 +1949,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2090,7 +1976,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2124,7 +2009,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2155,7 +2039,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2188,7 +2071,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2219,7 +2101,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2255,7 +2136,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2295,7 +2175,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2326,7 +2205,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2357,7 +2235,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2392,7 +2269,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
@@ -2420,671 +2296,6 @@ Runs once per row of **Test data**.
 **I want** the day's new listings and Flagged or still waiting posted to our channel each morning, headed Something wrong or waiting a while, needing your action, with a warning mark, every row a link,
 **so that** the team sees what is wrong or waiting, and opens it, without first opening the console.
 
-<!-- trace:case id=g10adm.console-daily-reminder.TC-gqc rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-gqc (US4-TC1): Both lists post as one message at 08:00 Hong Kong time
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured for the environment with a channel and token.
-* `<listing_1>` closed sold and `<listing_2>` closed unsold yesterday, Hong Kong time; `<order_2>` has waited 49 hours in Preparing Invoice.
-
-**Steps:**
-
-1. Wait until 08:00 Hong Kong time.
-2. Read the channel `<slack channel>`.
-
-**Expected Results:**
-
-* One message arrives at 08:00 Hong Kong time.
-* The message holds a What's New list and a Flagged or still waiting list.
-* Rows for `<listing_1>`, `<listing_2>` and `<order_2>` show.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-ark rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-ark (US4-TC2): Every row links to its listing or order in the console
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Today's message is posted with rows for sold `<listing_1>`, unsold `<listing_2>` and waiting `<order_2>`.
-
-**Steps:**
-
-1. Click the link on the `<listing_1>` row.
-2. Click the link on the `<listing_2>` row.
-3. Click the link on the `<order_2>` row.
-
-**Expected Results:**
-
-* Step 1 opens the winner order of `<listing_1>` in the console.
-* Step 2 opens the page of `<listing_2>` in the console.
-* Step 3 opens the page of `<order_2>` in the console.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-wlt rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-wlt (US4-TC3): A row names the listing code, lot, outcome or action and whole days waited
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Today's message is posted with rows for sold `<listing_1>`, unsold `<listing_2>` and `<order_2>`, which has waited 49 hours in Preparing Invoice.
-
-**Steps:**
-
-1. Read the row for each of the three.
-
-**Expected Results:**
-
-* The `<listing_1>` row shows its listing code, lot and the outcome sold.
-* The `<listing_2>` row shows its listing code, lot and the outcome unsold.
-* The `<order_2>` row shows its listing code, lot, the action Send invoice and 2 days waited.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-x2r rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-x2r (US4-TC4): The message carries everyone's rows whatever an operator's grants
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* `<order_i>` waited 49 hours in Preparing Invoice and `<order_s>` in Preparing Shipment.
-* admin(holds auction:read only) sees neither row in the console.
-* Today's message is posted.
-
-**Steps:**
-
-1. Read the Flagged or still waiting list in the message.
-
-**Expected Results:**
-
-* The message holds a row for `<order_i>`.
-* The message holds a row for `<order_s>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-kgn rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-kgn (US4-TC5): Each list stops at 10 rows with a link to Today for the rest
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* `<count>` orders have waited past 48 hours in Preparing Invoice.
-* Today's message is posted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| count, rows, more (row 1) | 10, 10, no link to Today |
-| count, rows, more (row 2) | 11, 10, a link to Today saying 1 more |
-| count, rows, more (row 3) | 14, 10, a link to Today saying 4 more |
-
-**Steps:**
-
-1. Count the rows in Flagged or still waiting in the message.
-2. Read the end of the list.
-
-**Expected Results:**
-
-* The list holds `<rows>` rows.
-* The end of the list shows `<more>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-7zn rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-7zn (US4-TC6): The 10 rows are the longest waits and each list is counted alone
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Eleven orders waited past 48 hours, `<order_last>` the shortest wait.
-* Three listings closed yesterday.
-* Today's message is posted.
-
-**Steps:**
-
-1. Read both lists in the message.
-
-**Expected Results:**
-
-* Flagged or still waiting shows 10 rows without `<order_last>` and a link to Today saying 1 more.
-* What's New shows 3 rows and no link to Today.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-12f rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-12f (US4-TC7): A lot title over 60 characters is cut to 59 and an ellipsis
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* `<listing_t>` closed yesterday with a lot title of `<title length>`.
-* Today's message is posted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| title length, shown (row 1) | 59 characters, the whole title |
-| title length, shown (row 2) | 60 characters, the whole title |
-| title length, shown (row 3) | 61 characters, the first 59 characters and an ellipsis |
-
-**Steps:**
-
-1. Read the row for `<listing_t>`.
-
-**Expected Results:**
-
-* The row shows the listing code, then the lot title `<shown>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-31k rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-31k (US4-TC8): The post follows the Hong Kong day on every day of the week
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured; `<listing_y>` closed yesterday at 23:59:59 and `<listing_t>` closed today at 07:59:59, both Hong Kong time.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| day (row 1) | A Saturday |
-| day (row 2) | A Sunday |
-| day (row 3) | A Wednesday |
-
-**Steps:**
-
-1. Run the scheduled post on `<day>` at 08:00 Hong Kong time.
-2. Read the message.
-
-**Expected Results:**
-
-* One message posts for `<day>`.
-* It holds a row for `<listing_y>` and none for `<listing_t>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-5hn rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-5hn (US4-TC9): A list with no row is left out of a message that has rows
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured.
-* `<rows_in>` has a row; `<rows_out>` has none.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| rows_in, rows_out (row 1) | What's New, Flagged or still waiting |
-| rows_in, rows_out (row 2) | Flagged or still waiting, What's New |
-
-**Steps:**
-
-1. Wait until 08:05 Hong Kong time.
-2. Read the channel.
-
-**Expected Results:**
-
-* One message from today shows the rows of `<rows_in>`.
-* The message shows no heading and no none line for `<rows_out>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-swg rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-hb6 -->
-### g10adm.console-daily-reminder.TC-swg (US4-TC10): Each environment posts to its own channel
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Staging and production hold different Slack channels in their settings.
-* Rows exist for the day in staging.
-
-**Steps:**
-
-1. Wait until 08:00 Hong Kong time.
-2. Read the staging channel.
-3. Read the production channel.
-
-**Expected Results:**
-
-* The staging channel holds the message.
-* The production channel holds no message from staging.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-ne7 rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-ne7 (US4-TC11): The message carries no winner name, email or phone
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* `<listing_1>` closed sold yesterday to `<winner_1>`, with its own name, email and phone.
-* `<order_2>` has waited 49 hours; its winner is `<winner_2>`, with its own name, email and phone.
-* Today's message is posted.
-
-**Steps:**
-
-1. Read the whole message, including each link text.
-2. Search the message for each winner's name, email and phone.
-
-**Expected Results:**
-
-* No winner's name appears.
-* No winner's email appears.
-* No winner's phone appears.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-g54 rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-4mh,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-g54 (US4-TC12): Nothing posts when both lists are empty
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured.
-* No listing closed yesterday, Hong Kong time, and no order has waited 48 hours.
-
-**Steps:**
-
-1. Wait until 08:05 Hong Kong time.
-2. Read the channel.
-
-**Expected Results:**
-
-* The channel holds no message from today.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-7fe rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-6kr,g10adm.console-daily-reminder.SC-07a -->
-### g10adm.console-daily-reminder.TC-7fe (US4-TC16): A message that failed to send is not made up on a later day
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured; the Slack send fails on `<day_1>`.
-* On the next Hong Kong day `<day_2>` rows exist and sends succeed.
-
-**Steps:**
-
-1. Run the scheduled post on `<day_1>` at 08:00 Hong Kong time.
-2. Run the scheduled post on `<day_2>` at 08:00 Hong Kong time.
-3. Read the channel.
-
-**Expected Results:**
-
-* The channel holds no message for `<day_1>`.
-* The channel holds one message for `<day_2>` with the lists of `<day_2>`.
-* The log holds an error for `<day_1>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-7e7 rev=2 covers=g10adm.console-daily-reminder.SC-f3g -->
-### g10adm.console-daily-reminder.TC-7e7 (US4-TC17): Nothing posts without a channel or a token, and the log says it is not configured
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* `<missing>` is missing or empty for the environment.
-* Rows exist for the day.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| missing (row 1) | the Slack channel unset |
-| missing (row 2) | the Slack bot token unset |
-| missing (row 3) | both unset |
-| missing (row 4) | the Slack channel empty |
-| missing (row 5) | the Slack bot token empty |
-
-**Steps:**
-
-1. Run the scheduled post.
-2. Read the channel and the log.
-
-**Expected Results:**
-
-* No message posts.
-* The run does not post to any other channel.
-* The log says the reminder is not configured.
-* No error is raised into the scheduled run.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-g9s rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-6kr -->
-### g10adm.console-daily-reminder.TC-g9s (US4-TC18): A failed send is tried once, logged and not sent again
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured and a message is due for `<day>`.
-* The Slack send is made to fail.
-
-**Steps:**
-
-1. Run the scheduled post.
-2. Wait until the end of that Hong Kong day.
-3. Read the channel and the log.
-
-**Expected Results:**
-
-* The send is attempted once.
-* The log holds an error for the failed send.
-* The channel holds no message for `<day>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-y0m rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-y0m (US4-TC19): Days waited are whole days, rounded down
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* `<order_d>` is in Preparing Invoice and has waited `<waited>` at 08:00 Hong Kong time.
-* Today's message is posted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| waited, days (row 1) | 48 hours, 2 |
-| waited, days (row 2) | 71 hours 59 minutes, 2 |
-| waited, days (row 3) | 72 hours, 3 |
-
-**Steps:**
-
-1. Read the row for `<order_d>`.
-
-**Expected Results:**
-
-* The row shows `<days>` days waited.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-i4q rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-i4q (US4-TC20): The message shows no link previews
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Today's message is posted with rows for sold `<listing_1>`, unsold `<listing_2>` and waiting `<order_2>`.
-
-**Steps:**
-
-1. Read the message in the channel.
-
-**Expected Results:**
-
-* Every row shows its link.
-* No row shows a link preview.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-o8u rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
-### g10adm.console-daily-reminder.TC-o8u (US4-TC21): Equal waits fill the first 10 rows by listing code
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Eleven orders are in Preparing Invoice with their wait begun at the same moment; their listing codes are `<codes>`.
-* Today's message is posted.
-
-**Steps:**
-
-1. Read the codes of the rows in Flagged or still waiting.
-2. Read the end of the list.
-
-**Expected Results:**
-
-* The 10 rows hold the first 10 listing codes of `<codes>` in A to Z order.
-* The last code in A to Z order is not a row.
-* The end of the list shows a link to Today saying 1 more.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-kl7 rev=1 covers=g10adm.console-daily-reminder.SC-b02 -->
-### g10adm.console-daily-reminder.US4-TC22: Daily Slack waiting list uses the warning heading and leads with flagged rows
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-admin-console-daily-reminder-US-04
-
-**Pre-conditions:**
-
-* Slack is configured for the environment with a channel and token.
-* `<order_flag_fresh>` has an open payment flag raised 2 hours ago.
-* `<order_wait>` has waited 49 hours in Preparing Invoice with no open flag.
-* At least one What's New row exists so the daily message posts.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| order_flag_fresh | Flagged order, open flag 2 hours old |
-| order_wait | Unflagged Preparing Invoice order waited 49 hours |
-| slack channel | Auction daily reminder channel for the environment |
-
-**Steps:**
-
-1. Wait until 08:00 Hong Kong time.
-2. Read the channel `<slack channel>`.
-3. Read the Flagged or still waiting section of the daily message.
-
-**Expected Results:**
-
-* The section heading reads Something wrong or waiting a while, needing your action.
-* A warning mark stands beside that heading.
-* The flagged row for `<order_flag_fresh>` sits above the wait row for `<order_wait>`.
-
 ---
 
 ## grade10-admin-console-daily-reminder-US5: Operator sees a flagged order on the waiting list the same day
@@ -3104,7 +2315,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3146,7 +2356,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3185,7 +2394,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3224,7 +2432,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3262,7 +2469,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
@@ -3298,213 +2504,6 @@ Runs once per row of **Test data**.
 **I want** one message in our Auction channel when a listing goes live, when it ends, and when it is extended, each with the times that matter,
 **so that** the team can follow a live sale without watching the console.
 
-<!-- trace:case id=g10adm.console-daily-reminder.TC-7nw rev=2 covers=g10adm.console-daily-reminder.SC-a88 -->
-### g10adm.console-daily-reminder.US6-TC1: A listing going live posts once with its start time
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
-
-**Pre-conditions:**
-
-* Slack is configured for Auction with the daily reminder channel and token.
-* `<listing_live>` opens bidding by `<open_path>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| open_path (row 1) | Published listing reaches its scheduled start with bidding open |
-| open_path (row 2) | Publish opens bidding because the scheduled start is already due |
-| slack channel | Auction daily reminder channel for the environment |
-
-**Steps:**
-
-1. Drive `<listing_live>` through `<open_path>` so bidding is open.
-2. Read the channel `<slack channel>`.
-3. Click the listing link in the go-live message.
-
-**Expected Results:**
-
-* One message names `<listing_live>` with its start time.
-* Step 3 opens the listing in the console.
-* The message shows no winner name, email or phone.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-5pk rev=2 covers=g10adm.console-daily-reminder.SC-a90 -->
-### g10adm.console-daily-reminder.US6-TC2: Each soft-close extension posts once with length and new end time
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-admin-console-daily-reminder-US-06
-
-**Pre-conditions:**
-
-* Slack is configured for Auction with the daily reminder channel and token.
-* `<listing_ext>` is live.
-* Soft-close will move its end by `<extension_seconds>` seconds to `<new_end_time>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_ext | Live listing about to soft-close |
-| extension_seconds | 1800 |
-| extension_minutes_copy | 30 minutes |
-| new_end_time | The end time after this extension |
-| slack channel | Auction daily reminder channel for the environment |
-
-**Steps:**
-
-1. Drive the soft-close that extends `<listing_ext>` by `<extension_seconds>` seconds.
-2. Read the channel `<slack channel>`.
-
-**Expected Results:**
-
-* One message names `<listing_ext>`, `<extension_minutes_copy>` (whole minutes rounded down from `<extension_seconds>`) and `<new_end_time>`.
-* A second read before another extension shows no further extension message for that move.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-7cj rev=1 covers=g10adm.console-daily-reminder.SC-a89 -->
-### g10adm.console-daily-reminder.US6-TC3: A listing ending posts once with its end time including extensions
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
-
-**Pre-conditions:**
-
-* Slack is configured for Auction with the daily reminder channel and token.
-* `<listing_end>` reaches its end time `<end_time>`, including any prior extension.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_end | Listing ending at its final end time |
-| end_time | Final end time including any extension |
-| slack channel | Auction daily reminder channel for the environment |
-
-**Steps:**
-
-1. Wait until `<listing_end>` ends.
-2. Read the channel `<slack channel>`.
-
-**Expected Results:**
-
-* One message names `<listing_end>` with `<end_time>`.
-* Staying ended produces no further ended message.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-fka rev=1 covers=g10adm.console-daily-reminder.SC-a91 -->
-### g10adm.console-daily-reminder.US6-TC4: Lifecycle listing posts use the daily reminder channel and never name a customer
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
-
-**Pre-conditions:**
-
-* Slack is configured for Auction with one daily reminder channel and token.
-* A go-live, extension or ended lifecycle message for `<listing_any>` has just posted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_any | Any listing that just posted a lifecycle message |
-| slack channel | Auction daily reminder channel for the environment |
-
-**Steps:**
-
-1. Read the channel `<slack channel>` for the lifecycle message.
-2. Compare it with the channel that received today's daily reminder.
-
-**Expected Results:**
-
-* The lifecycle message is in the same channel as the daily reminder.
-* The message shows no winner name, email or phone.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-mhl rev=2 covers=g10adm.console-daily-reminder.SC-a96 -->
-### g10adm.console-daily-reminder.US6-TC5: A failed extension alert is logged once and does not refuse the bid
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-admin-console-daily-reminder-US-06
-
-**Pre-conditions:**
-
-* Auction Slack posting is forced to fail for the next lifecycle send.
-* `<listing_ext>` is live and a bid will earn soft-close.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_ext | Live listing about to soft-close |
-
-**Steps:**
-
-1. Place the bid that extends `<listing_ext>`.
-2. Confirm the bid stands and the end time has moved in the console.
-3. Read the operator logs for the failed Slack send.
-
-**Expected Results:**
-
-* The bid stands and the end time has moved before any Slack send starts.
-* The failure is logged naming the extension kind.
-* No retry posts the missed extension message later.
-
 ---
 
 ## grade10-admin-console-daily-reminder-US7: Operator is warned in Slack when an order becomes overdue or is flagged
@@ -3512,216 +2511,6 @@ Runs once per row of **Test data**.
 **As an** auction operator who works from Slack,
 **I want** one warning message when an order becomes Setup Overdue or Payment Overdue, and when it is flagged with its reason,
 **so that** money waiting on someone is noticed as soon as it happens.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-kf5 rev=1 covers=g10adm.console-daily-reminder.SC-a92,g10adm.console-daily-reminder.SC-a93,g10adm.console-daily-reminder.SC-a95 -->
-### g10adm.console-daily-reminder.US7-TC1: Becoming Setup Overdue or Payment Overdue posts one warning
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
-
-**Pre-conditions:**
-
-* Slack is configured for Auction with the daily reminder channel and token.
-* `<order_od>` is about to become `<status>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| status (row 1) | Setup Overdue |
-| status (row 2) | Payment Overdue |
-| slack channel | Auction daily reminder channel for the environment |
-
-**Steps:**
-
-1. Drive `<order_od>` into `<status>`.
-2. Read the channel `<slack channel>`.
-3. Click the order link in the warning message.
-
-**Expected Results:**
-
-* One warning message names `<order_od>` and `<status>`.
-* A warning mark stands on the message.
-* Step 3 opens the order in the console.
-* The message shows no winner name, email or phone.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-swi rev=1 covers=g10adm.console-daily-reminder.SC-a94 -->
-### g10adm.console-daily-reminder.US7-TC2: Flagging an order posts one warning with the flag reason
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
-
-**Pre-conditions:**
-
-* Slack is configured for Auction with the daily reminder channel and token.
-* `<order_fg>` is about to receive an open payment flag with reason `<flag_reason>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| order_fg | Order receiving an open payment flag |
-| flag_reason | Overpaid |
-| slack channel | Auction daily reminder channel for the environment |
-
-**Steps:**
-
-1. Raise the open payment flag on `<order_fg>` with `<flag_reason>`.
-2. Read the channel `<slack channel>`.
-
-**Expected Results:**
-
-* One warning message names `<order_fg>` and `<flag_reason>`.
-* A warning mark stands on the message.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-7k4 rev=1 -->
-### g10adm.console-daily-reminder.US7-TC3: Staying overdue or flagged does not post again
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
-
-**Pre-conditions:**
-
-* Slack is configured for Auction with the daily reminder channel and token.
-* `<order_stay>` has already produced its one `<kind>` lifecycle warning and remains in that state.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| kind (row 1) | Payment Overdue |
-| kind (row 2) | open payment flag |
-| slack channel | Auction daily reminder channel for the environment |
-
-**Steps:**
-
-1. Note the lifecycle warning already in `<slack channel>` for `<order_stay>`.
-2. Wait through a further interval while `<order_stay>` stays in that state.
-3. Read the channel `<slack channel>` again.
-
-**Expected Results:**
-
-* No second `<kind>` warning posts for `<order_stay>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-9a8 rev=1 -->
-### g10adm.console-daily-reminder.US7-TC4: A failed overdue or flag post is logged once and does not refuse the order move
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
-
-**Pre-conditions:**
-
-* Auction Slack posting is forced to fail for the next lifecycle send.
-* `<order_od>` is about to become Payment Overdue.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| order_od | Order about to become Payment Overdue |
-
-**Steps:**
-
-1. Drive `<order_od>` into Payment Overdue.
-2. Confirm the order shows Payment Overdue in the console.
-3. Read the operator logs for the failed Slack send.
-
-**Expected Results:**
-
-* The order is Payment Overdue.
-* The failure is logged.
-* No retry posts the missed overdue warning later.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-8w7 rev=1 covers=g10adm.console-daily-reminder.SC-a94 -->
-### g10adm.console-daily-reminder.US7-TC5: Clearing every flag then raising a new one posts again
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-admin-console-daily-reminder-US-07
-
-**Pre-conditions:**
-
-* Slack is configured for Auction with the daily reminder channel and token.
-* `<order_fg>` already produced one flagged lifecycle warning for an open payment flag that has since been cleared.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| order_fg | Order whose prior flag was cleared |
-| flag_reason | Overpaid |
-| slack channel | Auction daily reminder channel for the environment |
-
-**Steps:**
-
-1. Raise a new open payment flag on `<order_fg>` with `<flag_reason>`.
-2. Read the channel `<slack channel>`.
-
-**Expected Results:**
-
-* One new warning message names `<order_fg>` and `<flag_reason>`.
-* A warning mark stands on the message.
 
 ## Settled
 
@@ -3816,30 +2605,11 @@ Runs once per row of **Test data**.
 | `g10adm.console-daily-reminder.TC-v6b` (US3-TC12) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-40`. The scenario fails Still Waiting beside a What's New with rows; the case leaves the other list empty |
 | `g10adm.console-daily-reminder.TC-a7l` (US3-TC13) | US-03 | Folded in part: `grade10-admin-console-daily-reminder-SC-24`, `grade10-admin-console-daily-reminder-SC-39`. Together they give an operator who cannot open Auction three columns, empty and unfailed (Q25, Q35); no scenario names Today for that operator |
 | `g10adm.console-daily-reminder.TC-t2r` (US3-TC14) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-42` |
-| `g10adm.console-daily-reminder.TC-gqc` (US4-TC1) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-45`, `grade10-admin-console-daily-reminder-SC-47`. The case does not read the channel at 07:59:59 |
-| `g10adm.console-daily-reminder.TC-ark` (US4-TC2) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-46`. The case opens each link; the staging-not-production half is not asserted |
-| `g10adm.console-daily-reminder.TC-wlt` (US4-TC3) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-49`, `grade10-admin-console-daily-reminder-SC-73` |
-| `g10adm.console-daily-reminder.TC-x2r` (US4-TC4) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-47` |
-| `g10adm.console-daily-reminder.TC-kgn` (US4-TC5) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-51`, `grade10-admin-console-daily-reminder-SC-52` |
-| `g10adm.console-daily-reminder.TC-7zn` (US4-TC6) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-52` |
-| `g10adm.console-daily-reminder.TC-12f` (US4-TC7) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-50`. The 59-character row follows the scenario's 60-character whole |
-| `g10adm.console-daily-reminder.TC-31k` (US4-TC8) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-45`, `grade10-admin-console-daily-reminder-SC-02`. The Saturday row is the scenario; the Sunday and Wednesday rows and the window edges follow the daily rule |
-| `g10adm.console-daily-reminder.TC-5hn` (US4-TC9) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-74` |
-| `g10adm.console-daily-reminder.TC-swg` (US4-TC10) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-59` |
-| `g10adm.console-daily-reminder.TC-ne7` (US4-TC11) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-48` |
-| `g10adm.console-daily-reminder.TC-g54` (US4-TC12) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-53` |
-| `g10adm.console-daily-reminder.TC-7fe` (US4-TC16) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-57`, `grade10-admin-console-daily-reminder-SC-56` |
-| `g10adm.console-daily-reminder.TC-7e7` (US4-TC17) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-60`. The case does not read the log, which the scenario does |
-| `g10adm.console-daily-reminder.TC-g9s` (US4-TC18) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-54`, `grade10-admin-console-daily-reminder-SC-56` |
-| `g10adm.console-daily-reminder.TC-y0m` (US4-TC19) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-73` |
-| `g10adm.console-daily-reminder.TC-i4q` (US4-TC20) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-75` |
-| `g10adm.console-daily-reminder.TC-o8u` (US4-TC21) | US-04 | Folded in part: `grade10-admin-console-daily-reminder-SC-52`, `grade10-admin-console-daily-reminder-SC-64`. Equal waits by listing code is requirement step 3 and the console scenario; no Slack scenario cuts a list on equal waits (Q42) |
 
 - **Counts** - 72 folded, 8 folded in part, 0 raised, 0 uncovered, 0 rejected. No blind case was a misreading of the anchors.
 - **Anchor coverage** - US-01 to US-04 each have cases (32, 16, 14 and 18). Every root group of the Feature set is walked: What's New list by the US-01 cases on rows, order, edges and outcome, Still Waiting list by US-02, Row access by `g10adm.console-daily-reminder.TC-nb8`, `g10adm.console-daily-reminder.TC-atu`, `g10adm.console-daily-reminder.TC-b4k`, `g10adm.console-daily-reminder.TC-x5p`, `g10adm.console-daily-reminder.TC-kp9`, `g10adm.console-daily-reminder.TC-xnm`, `g10adm.console-daily-reminder.TC-e5w` and `g10adm.console-daily-reminder.TC-554`, Daily dialog by US-01, Today columns by US-03, Slack message by US-04. No anchor is uncovered
 - **Scenarios no case reaches** - `grade10-admin-console-daily-reminder-SC-07` (a test lot is listed like any other, Q27) and the scenarios added after the blind pass for Q42, Q44, Q45 and Q47: SC-77, SC-78, SC-79, SC-80 and SC-81, and SC-82 and SC-83 for Q48. No case was written from them: a case written from a scenario is not a blind reading. Each is listed under Out of suite with the automated test that verifies it; `/tcs-review` is asked whether to write a case for each
 - **Scenarios reached in part** - `grade10-admin-console-daily-reminder-SC-19` (no case posts the order to Slack and reads it back unmarked), `grade10-admin-console-daily-reminder-SC-45` (no case reads the channel at 07:59:59), `grade10-admin-console-daily-reminder-SC-46` (no case checks that a staging post links nowhere to production) and `grade10-admin-console-daily-reminder-SC-72` (no case leaves the tab and comes back with the dialog open)
-- **Cases no scenario states** - `g10adm.console-daily-reminder.TC-ogw` and `g10adm.console-daily-reminder.TC-tl6` (the console lists every row, Q23, `decisions.md:52`), the lower edge of `g10adm.console-daily-reminder.TC-5cx`, the tab return and page move of `g10adm.console-daily-reminder.TC-c8j` with no dialog open, rows 1 and 3 of `g10adm.console-daily-reminder.TC-to3`, the 25-hour row of `g10adm.console-daily-reminder.TC-t7x` (Q12), rows 1 and 3 of `g10adm.console-daily-reminder.TC-f6y`, the Today columns of an operator who cannot open Auction in `g10adm.console-daily-reminder.TC-a7l`, and the Slack cut on equal waits of `g10adm.console-daily-reminder.TC-o8u`. Each is a real behaviour with a decision or a requirement sentence behind it, so the fold is a scenario for each, not a rejection
 - **Decisions and page lines no scenario states** - none. Q23, Q42, Q44, Q45 and Q47 are stated by SC-76 to SC-81 and Q46 by SC-16; Q38 has no scenario by design: it accepts a repeat post and asserts nothing
 - **Q31 to Q48 against the scenarios** - Q31 `grade10-admin-console-daily-reminder-SC-16`, `grade10-admin-console-daily-reminder-SC-63`; Q32 `grade10-admin-console-daily-reminder-SC-25`, `grade10-admin-console-daily-reminder-SC-66`, `grade10-admin-console-daily-reminder-SC-67` and, for tab return and page moves, `grade10-admin-console-daily-reminder-SC-34`, `grade10-admin-console-daily-reminder-SC-72` in part; Q33 `grade10-admin-console-daily-reminder-SC-29`, `grade10-admin-console-daily-reminder-SC-32`, `grade10-admin-console-daily-reminder-SC-68`, `grade10-admin-console-daily-reminder-SC-69`, `grade10-admin-console-daily-reminder-SC-70`; Q34 `grade10-admin-console-daily-reminder-SC-61`, `grade10-admin-console-daily-reminder-SC-62`, `grade10-admin-console-daily-reminder-SC-23`, `grade10-admin-console-daily-reminder-SC-04`; Q35 `grade10-admin-console-daily-reminder-SC-35`, `grade10-admin-console-daily-reminder-SC-40`, `grade10-admin-console-daily-reminder-SC-65`, `grade10-admin-console-daily-reminder-SC-71`, `grade10-admin-console-daily-reminder-SC-24`; Q36 `grade10-admin-console-daily-reminder-SC-08`, `grade10-admin-console-daily-reminder-SC-11`, `grade10-admin-console-daily-reminder-SC-13`, `grade10-admin-console-daily-reminder-SC-49`, `grade10-admin-console-daily-reminder-SC-64`, `grade10-admin-console-daily-reminder-SC-73`; Q37 `grade10-admin-console-daily-reminder-SC-50`, `grade10-admin-console-daily-reminder-SC-60`, `grade10-admin-console-daily-reminder-SC-74`, `grade10-admin-console-daily-reminder-SC-75`; Q38 none; Q39 `grade10-admin-console-daily-reminder-SC-44`, `grade10-admin-console-daily-reminder-SC-72`; Q40 `grade10-admin-console-daily-reminder-SC-67`; Q41 `grade10-admin-console-daily-reminder-SC-37`, `grade10-admin-console-daily-reminder-SC-42`; Q42 `grade10-admin-console-daily-reminder-SC-77`, `grade10-admin-console-daily-reminder-SC-78`; Q43 `grade10-admin-console-daily-reminder-SC-08`, `grade10-admin-console-daily-reminder-SC-11`; Q44 `grade10-admin-console-daily-reminder-SC-79`; Q45 `grade10-admin-console-daily-reminder-SC-80`, `grade10-admin-console-daily-reminder-SC-37` in part; Q46 `grade10-admin-console-daily-reminder-SC-16`; Q47 `grade10-admin-console-daily-reminder-SC-81`; Q48 `grade10-admin-console-daily-reminder-SC-82`, `grade10-admin-console-daily-reminder-SC-83`
 - **Contradicted** - no case and scenario state opposite things, and no two scenarios do. The Saturday scenario's message carries only the list that has rows, as the requirement's step 2 says, and a whole-day wait reads `5d` (Q46)
@@ -3913,30 +2683,11 @@ Runs once per row of **Test data**.
 | `g10adm.console-daily-reminder.TC-v6b` (US3-TC12) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-40`. The scenario fails Still Waiting beside a What's New with rows; the case leaves the other list empty |
 | `g10adm.console-daily-reminder.TC-a7l` (US3-TC13) | US-03 | Folded in part: `grade10-admin-console-daily-reminder-SC-24`, `grade10-admin-console-daily-reminder-SC-39`. Together they give an operator who cannot open Auction three columns, empty and unfailed (Q25, Q35); no scenario names Today for that operator |
 | `g10adm.console-daily-reminder.TC-t2r` (US3-TC14) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-42` |
-| `g10adm.console-daily-reminder.TC-gqc` (US4-TC1) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-45`, `grade10-admin-console-daily-reminder-SC-47`. The case does not read the channel at 07:59:59 |
-| `g10adm.console-daily-reminder.TC-ark` (US4-TC2) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-46`. The case opens each link; the staging-not-production half is not asserted |
-| `g10adm.console-daily-reminder.TC-wlt` (US4-TC3) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-49`, `grade10-admin-console-daily-reminder-SC-73` |
-| `g10adm.console-daily-reminder.TC-x2r` (US4-TC4) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-47` |
-| `g10adm.console-daily-reminder.TC-kgn` (US4-TC5) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-51`, `grade10-admin-console-daily-reminder-SC-52` |
-| `g10adm.console-daily-reminder.TC-7zn` (US4-TC6) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-52` |
-| `g10adm.console-daily-reminder.TC-12f` (US4-TC7) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-50`. The 59-character row follows the scenario's 60-character whole |
-| `g10adm.console-daily-reminder.TC-31k` (US4-TC8) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-45`, `grade10-admin-console-daily-reminder-SC-02`. The Saturday row is the scenario; the Sunday and Wednesday rows and the window edges follow the daily rule |
-| `g10adm.console-daily-reminder.TC-5hn` (US4-TC9) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-74` |
-| `g10adm.console-daily-reminder.TC-swg` (US4-TC10) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-59` |
-| `g10adm.console-daily-reminder.TC-ne7` (US4-TC11) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-48` |
-| `g10adm.console-daily-reminder.TC-g54` (US4-TC12) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-53` |
-| `g10adm.console-daily-reminder.TC-7fe` (US4-TC16) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-57`, `grade10-admin-console-daily-reminder-SC-56` |
-| `g10adm.console-daily-reminder.TC-7e7` (US4-TC17) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-60`. The case does not read the log, which the scenario does |
-| `g10adm.console-daily-reminder.TC-g9s` (US4-TC18) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-54`, `grade10-admin-console-daily-reminder-SC-56` |
-| `g10adm.console-daily-reminder.TC-y0m` (US4-TC19) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-73` |
-| `g10adm.console-daily-reminder.TC-i4q` (US4-TC20) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-75` |
-| `g10adm.console-daily-reminder.TC-o8u` (US4-TC21) | US-04 | Folded in part: `grade10-admin-console-daily-reminder-SC-52`, `grade10-admin-console-daily-reminder-SC-64`. Equal waits by listing code is requirement step 3 and the console scenario; no Slack scenario cuts a list on equal waits (Q42) |
 
 - **Counts** - 72 folded, 8 folded in part, 0 raised, 0 uncovered, 0 rejected. No blind case was a misreading of the anchors.
 - **Anchor coverage** - US-01 to US-04 each have cases (32, 16, 14 and 18). Every root group of the Feature set is walked: What's New list by the US-01 cases on rows, order, edges and outcome, Still Waiting list by US-02, Row access by `g10adm.console-daily-reminder.TC-nb8`, `g10adm.console-daily-reminder.TC-atu`, `g10adm.console-daily-reminder.TC-b4k`, `g10adm.console-daily-reminder.TC-x5p`, `g10adm.console-daily-reminder.TC-kp9`, `g10adm.console-daily-reminder.TC-xnm`, `g10adm.console-daily-reminder.TC-e5w` and `g10adm.console-daily-reminder.TC-554`, Daily dialog by US-01, Today columns by US-03, Slack message by US-04. No anchor is uncovered
 - **Scenarios no case reaches** - `grade10-admin-console-daily-reminder-SC-07` (a test lot is listed like any other, Q27) and the scenarios added after the blind pass for Q42, Q44, Q45 and Q47: SC-77, SC-78, SC-79, SC-80 and SC-81, and SC-82 and SC-83 for Q48, and SC-84, SC-85 and SC-86 for Q49 and Q50 and SC-87 for Q51, added with the amendment after the first look. No case was written from them: a case written from a scenario is not a blind reading. Each is listed under Out of suite with the automated test that verifies it; `/tcs-review` is asked whether to write a case for each
 - **Scenarios reached in part** - `grade10-admin-console-daily-reminder-SC-19` (no case posts the order to Slack and reads it back unmarked), `grade10-admin-console-daily-reminder-SC-45` (no case reads the channel at 07:59:59), `grade10-admin-console-daily-reminder-SC-46` (no case checks that a staging post links nowhere to production) and `grade10-admin-console-daily-reminder-SC-72` (no case leaves the tab and comes back with the dialog open)
-- **Cases no scenario states** - `g10adm.console-daily-reminder.TC-ogw` and `g10adm.console-daily-reminder.TC-tl6` (the console lists every row, Q23, `decisions.md:52`), the lower edge of `g10adm.console-daily-reminder.TC-5cx`, the tab return and page move of `g10adm.console-daily-reminder.TC-c8j` with no dialog open, rows 1 and 3 of `g10adm.console-daily-reminder.TC-to3`, the 25-hour row of `g10adm.console-daily-reminder.TC-t7x` (Q12), rows 1 and 3 of `g10adm.console-daily-reminder.TC-f6y`, the Today columns of an operator who cannot open Auction in `g10adm.console-daily-reminder.TC-a7l`, and the Slack cut on equal waits of `g10adm.console-daily-reminder.TC-o8u`. Each is a real behaviour with a decision or a requirement sentence behind it, so the fold is a scenario for each, not a rejection
 - **Decisions and page lines no scenario states** - none. Q23, Q42, Q44, Q45 and Q47 are stated by SC-76 to SC-81 and Q46 by SC-16; Q38 has no scenario by design: it accepts a repeat post and asserts nothing
 - **Q31 to Q48 against the scenarios** - Q31 `grade10-admin-console-daily-reminder-SC-16`, `grade10-admin-console-daily-reminder-SC-63`; Q32 `grade10-admin-console-daily-reminder-SC-25`, `grade10-admin-console-daily-reminder-SC-66`, `grade10-admin-console-daily-reminder-SC-67` and, for tab return and page moves, `grade10-admin-console-daily-reminder-SC-34`, `grade10-admin-console-daily-reminder-SC-72` in part; Q33 `grade10-admin-console-daily-reminder-SC-29`, `grade10-admin-console-daily-reminder-SC-32`, `grade10-admin-console-daily-reminder-SC-68`, `grade10-admin-console-daily-reminder-SC-69`, `grade10-admin-console-daily-reminder-SC-70`; Q34 `grade10-admin-console-daily-reminder-SC-61`, `grade10-admin-console-daily-reminder-SC-62`, `grade10-admin-console-daily-reminder-SC-23`, `grade10-admin-console-daily-reminder-SC-04`; Q35 `grade10-admin-console-daily-reminder-SC-35`, `grade10-admin-console-daily-reminder-SC-40`, `grade10-admin-console-daily-reminder-SC-65`, `grade10-admin-console-daily-reminder-SC-71`, `grade10-admin-console-daily-reminder-SC-24`; Q36 `grade10-admin-console-daily-reminder-SC-08`, `grade10-admin-console-daily-reminder-SC-11`, `grade10-admin-console-daily-reminder-SC-13`, `grade10-admin-console-daily-reminder-SC-49`, `grade10-admin-console-daily-reminder-SC-64`, `grade10-admin-console-daily-reminder-SC-73`; Q37 `grade10-admin-console-daily-reminder-SC-50`, `grade10-admin-console-daily-reminder-SC-60`, `grade10-admin-console-daily-reminder-SC-74`, `grade10-admin-console-daily-reminder-SC-75`; Q38 none; Q39 `grade10-admin-console-daily-reminder-SC-44`, `grade10-admin-console-daily-reminder-SC-72`; Q40 `grade10-admin-console-daily-reminder-SC-67`; Q41 `grade10-admin-console-daily-reminder-SC-37`, `grade10-admin-console-daily-reminder-SC-42`; Q42 `grade10-admin-console-daily-reminder-SC-77`, `grade10-admin-console-daily-reminder-SC-78`; Q43 `grade10-admin-console-daily-reminder-SC-08`, `grade10-admin-console-daily-reminder-SC-11`; Q44 `grade10-admin-console-daily-reminder-SC-79`; Q45 `grade10-admin-console-daily-reminder-SC-80`, `grade10-admin-console-daily-reminder-SC-37` in part; Q46 `grade10-admin-console-daily-reminder-SC-16`; Q47 `grade10-admin-console-daily-reminder-SC-81`; Q48 `grade10-admin-console-daily-reminder-SC-82`, `grade10-admin-console-daily-reminder-SC-83`
 - **Contradicted** - no case and scenario state opposite things, and no two scenarios do. The Saturday scenario's message carries only the list that has rows, as the requirement's step 2 says, and a whole-day wait reads `5d` (Q46)
@@ -3957,8 +2708,6 @@ Runs once per row of **Test data**.
 | `g10adm.console-daily-reminder.TC-j8o` (US2-TC13) | US-02 | Deprecated; superseded by US2-TC17–20 and US5 cases |
 | `g10adm.console-daily-reminder.TC-orm` (US3-TC15) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-36`; rev 2 |
 | `g10adm.console-daily-reminder.TC-oyo` (US3-TC16) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-39`; rev 2 |
-| `g10adm.console-daily-reminder.TC-kl7` (US4-TC22) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-102` |
-| `g10adm.console-daily-reminder.TC-7e7` (US4-TC17) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-60`; empty-string rows and no-raise AND (Q15); rev 2; covers narrowed to SC-f3g |
 | `g10adm.console-daily-reminder.TC-jt5` (US5-TC1) | US-05 | Folded: `grade10-admin-console-daily-reminder-SC-16` |
 | `g10adm.console-daily-reminder.TC-lp9` (US5-TC2) | US-05 | Folded: clearing removes the flagged row when under 48 hours; requirement leaf, no separate scenario |
 | `g10adm.console-daily-reminder.TC-qof` (US5-TC3) | US-05 | Folded: `grade10-admin-console-daily-reminder-SC-103` (Q11); rev 2 |
@@ -3994,13 +2743,11 @@ Runs once per row of **Test data**.
 | `grade10-admin-console-daily-reminder-SC-95` | Covered by US7-TC1 |
 | `grade10-admin-console-daily-reminder-SC-96` | Covered by US6-TC5; THEN requires bid move before Slack starts (Q10) |
 | `grade10-admin-console-daily-reminder-SC-97` | Out of suite - task 2.1 close-path Slack failure tests |
-| `grade10-admin-console-daily-reminder-SC-60` | Covered by US4-TC17; GIVEN/THEN widened for empty and no-raise (Q15) |
 | `grade10-admin-console-daily-reminder-SC-98` | Out of suite - task 2.1 lifecycle not-configured tests; shares `reminderDeps` gate with SC-60 (Q15) |
 | `grade10-admin-console-daily-reminder-SC-16` | Covered by US5-TC1; one-row AND in part by US2-TC18 |
 | `grade10-admin-console-daily-reminder-SC-99` | Covered by US2-TC17 |
 | `grade10-admin-console-daily-reminder-SC-100` | Covered by US2-TC19 |
 | `grade10-admin-console-daily-reminder-SC-101` | Covered by US5-TC4 |
-| `grade10-admin-console-daily-reminder-SC-102` | Covered by US4-TC22 |
 | `grade10-admin-console-daily-reminder-SC-103` | Added for Q11; covered by US5-TC3 |
 | `grade10-admin-console-daily-reminder-SC-104` | Added for Q12; covered by US5-TC5 |
 
@@ -4029,5 +2776,4 @@ Runs once per row of **Test data**.
 - New/patched this run: 22 dispositions in the table above (20 QA1 drafts + US5-TC5 + US7-TC5; US2-TC13 deprecated)
 - Scenarios added: SC-103, SC-104
 - Scenarios patched: SC-60 (Q15 morning empty/no-raise), SC-88 (Q14), SC-90 (Q16), SC-96/SC-98 and best-effort requirement (Q10/Q15 both-env and last step); Feature set daily Bypass when unset and lifecycle Best effort, last step matched
-- Cases patched: US4-TC17 (Q15), US5-TC3 (Q11), US6-TC1 (Q14), US6-TC2 (Q16), US6-TC5 (align to SC-96 last-step)
 - Cases added: US5-TC5 (Q12), US7-TC5 (Q13)

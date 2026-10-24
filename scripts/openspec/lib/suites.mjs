@@ -71,7 +71,6 @@ export const PROPERTIES = [
     true,
     true,
   ],
-  ["Layer", ["e2e", "api", "unit"]],
   ["Automation status", ["manual", "automated"]],
   [
     "Testability",
@@ -357,7 +356,9 @@ export function readSpecIds(specPath) {
     // A capability nobody walks routes its anchors to the feature set. It is
     // not exempt from a suite: it carries one section, and its cases trace
     // groups rather than journeys.
-    unwalked: /^\*\*Walked by:\*\*\s+nobody\b/m.test(stories),
+    unwalked: /^\*\*Walked by:\*\*\s+(?:nobody|makers only)\b/m.test(stories),
+    // A tool only the product's makers use: no product feature, no suite.
+    makersOnly: /^\*\*Walked by:\*\*\s+makers only\b/m.test(stories),
     // A durable file writes `## User journeys` and a change's file writes the
     // delta sections; `journey-vocabulary.test.mjs` pins the set. Matching only
     // the durable heading read every change's journeys as no journeys at all.
@@ -586,7 +587,13 @@ export function parseWalks(text) {
     const line = lines[i];
     const heading = /^##\s+(Walk\b.*)$/i.exec(line);
     if (heading) {
-      current = { title: heading[1], line: i + 1, refs: [] };
+      current = {
+        title: heading[1],
+        line: i + 1,
+        refs: [],
+        steps: 0,
+        setupBlocks: 0,
+      };
       walks.push(current);
       continue;
     }
@@ -595,6 +602,10 @@ export function parseWalks(text) {
       continue;
     }
     if (!current) continue;
+    if (/^\d+\.\s/.test(line)) current.steps += 1;
+    // `**Steps 1–3 setup:**` - a second starting state inside the walk.
+    if (/^\*\*Steps?\s+\d+(?:\s*[–-]\s*\d+)?\s+(?:setup|data)\b/i.test(line))
+      current.setupBlocks += 1;
     DISPLAY_CASE_REFERENCE.lastIndex = 0;
     for (const match of line.matchAll(DISPLAY_CASE_REFERENCE)) {
       const fullId = match[1].toLowerCase();
@@ -884,9 +895,13 @@ export function parseSuite(text) {
           tc.propLine = i;
           if (line.startsWith("-"))
             suite.legacy.add("`-` property bullets (current format uses `*`)");
+        } else if (name === "Layer") {
+          // Removed in tcs-rules r7: every case is a GUI walk. Read so the
+          // validator can refuse it by name rather than skip it.
+          tc.layerLine = i;
         } else if (name === "Decided by") {
           // The line written as an eleventh classification bullet. It is not
-          // a property - the block is ten, and the line is its own - so it is
+          // a property - the block is nine, and the line is its own - so it is
           // read where it stands and reported as the older shape rather than
           // dropped, which is what a parse that only knew the ten did.
           readDecidedBy(tc, prop[2], i, { bullet: true });
@@ -1182,6 +1197,7 @@ export function caseIndex(root, paths) {
                 : null,
             traces: [],
             status: null,
+            layer: null,
           });
         continue;
       }
@@ -1191,6 +1207,11 @@ export function caseIndex(root, paths) {
       const st = line.match(/^\*\s+\*\*Status:\*\*\s*(\S+)\s*$/);
       if (st && id && index.has(id) && index.get(id).status === null)
         index.get(id).status = st[1].toLowerCase();
+      // Gone from live suites since tcs-rules r7; an archived suite still
+      // carries it, and an `api` or `unit` case there was deleted, not lost.
+      const ly = line.match(/^[*-]\s+\*\*Layer:\*\*\s*(\S+)\s*$/);
+      if (ly && id && index.has(id) && index.get(id).layer === null)
+        index.get(id).layer = ly[1].toLowerCase();
     }
   }
   return index;

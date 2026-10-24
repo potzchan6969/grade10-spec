@@ -22,7 +22,6 @@ authorization source or asking an engineer.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-user-directory-US-01
@@ -57,7 +56,6 @@ Signed in as admin(holds `user:list` and `user:set-role`). Directory holds <supp
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-user-directory-US-01
@@ -97,7 +95,6 @@ in the same place, and I never hunt for the person twice.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-user-directory-US-02
@@ -128,7 +125,6 @@ Signed in as admin(holds `user:list`). Directory holds <known account>.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-user-directory-US-02
@@ -168,7 +164,6 @@ from the whole platform.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-user-directory-US-03
@@ -207,7 +202,6 @@ is not suspended and not banned.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-user-directory-US-03
@@ -239,7 +233,6 @@ is not suspended.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-user-directory-US-03
@@ -270,7 +263,6 @@ account> is suspended for a missed payment deadline.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-admin-console-user-directory-US-03
@@ -309,7 +301,6 @@ leaving the access desk or using Override.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-user-directory-US-04
@@ -351,7 +342,6 @@ Signed in as admin(holds `user:list`, `user:create`, and `user:set-role`). No Au
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-user-directory-US-04
@@ -379,7 +369,6 @@ Signed in as admin(holds `user:list` and `user:set-role`, not `user:create`).
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-user-directory-US-04
@@ -417,7 +406,6 @@ Signed in as admin(holds `user:list`, `user:create`, and `user:set-role`). Auth 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-user-directory-US-04
@@ -458,7 +446,6 @@ Signed in as admin(holds `user:list` and `user:create`, not `user:set-role`). No
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-user-directory-US-04

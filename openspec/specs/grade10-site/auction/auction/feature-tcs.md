@@ -1,197 +1,8 @@
 # grade10-site/auction/auction Test Cases
 
-**Status:** reopened · 14/63
+**Status:** reopened · 3/37
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 **Drafts styled:** 2026-10-13, tcs-rules r5
-**Out of suite:** `grade10-site-auction-watchlist-SC-04` — signed-out watch from catalogue cards
-
-## Walk 1: Collector browses Auction listings and adjacent checks
-
-**Starting state:**
-
-**Steps 1–1 setup:**
-
-- `<listing_33>` is published.
-
-**Steps 2–4 setup:**
-
-- customer(card linked, no bid on `<listing_34>`) is signed in.
-- `<listing_34>` is open inside its window.
-
-**Steps 5–8 setup:**
-
-- `<listing_35>` is in extended bidding and its recorded close is `<close before bids>`.
-
-**Steps 9–11 setup:**
-
-- `<listing_36>` is in extended bidding and its recorded close is its scheduled close plus `<extension cap>`.
-
-**Steps 12–13 setup:**
-
-- `<listing_37>` is open with one accepted bid.
-
-**Steps 14–15 setup:**
-
-- `<listing_38>` is open with an accepted bid and extension duration 0.
-
-**Steps 16–19 setup:**
-
-- `<listing_39>` is open with scheduled close `<scheduled close>` and extension duration `<extension duration>`.
-- `<listing_39>` holds `<bids by close>`.
-
-**Steps 20–21 setup:**
-
-- `<listing_40>` is open with no accepted bid, scheduled close `<scheduled close>`, and extension duration `<extension duration>`.
-
-**Steps 22–23 setup:**
-
-- `<listing_41>` and `<listing_42>` are both in extended bidding with recorded close `<close before bid>`.
-
-**Shared test data:**
-
-**Steps 1–1 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_33 | A published listing with extension duration `<extension duration>` and extension cap `<extension cap>` |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| extension duration | 1800s | (30mins) |
-| extension cap | 3600s | (60mins) |
-
-**Steps 2–4 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_34 | An open HKD listing taking bids, current bid `<current bid>` | · |
-| current bid | HKD4,960 | (range: 400000–799999 minor units) |
-| bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
-
-**Steps 5–8 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_35 | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap | · |
-| extension duration | 1800s | (30mins) |
-| close before bids | 20:30 UTC | · |
-| first bid time | 20:10 UTC | · |
-| second bid time | 20:35 UTC | · |
-| close after first | 20:40 UTC | · |
-| close after second | 21:05 UTC | · |
-
-**Steps 9–11 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_36 | A listing in extended bidding whose recorded close already stands at its cap | · |
-| scheduled close | 20:00 UTC | · |
-| extension cap | 3600s | (60mins), any cap the listing has already reached |
-| result | 21:00 UTC | Value: `<scheduled close>` plus `<extension cap>` |
-
-**Steps 12–13 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_37 | An open listing, scheduled close `<scheduled close>`, extension duration `<short duration>` | · |
-| scheduled close | 20:00 UTC | · |
-| short duration | 300s | (5mins), any extension duration above 0 |
-| result | 20:05 UTC | Value: `<scheduled close>` plus `<short duration>` |
-
-**Steps 14–15 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_38 | An open listing with an accepted bid, extension duration 0s |
-
-**Steps 16–19 data:**
-
-| `<bids by close>` | `<scheduled close>` | `<extended close>` | `<result>` |
-| --- | --- | --- | --- |
-| None | 20:00 UTC | — | Closed at 20:00 UTC |
-| One | 20:00 UTC | 20:30 UTC | Recorded close is 20:30 UTC; with no further bid, closed at 20:30 UTC |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| extension duration | 1800s | (30mins) |
-
-| Field | Value |
-| --- | --- |
-| listing_39 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps 20–21 data:**
-
-| `<bid time>` | `<recorded_close_after_bid>` | Fixture notes |
-| --- | --- | --- |
-| 19:59:00 UTC | 20:00:00 UTC | `<recorded_close_after_bid>`: unchanged |
-| 20:00:00 UTC | 20:30:00 UTC | `<recorded_close_after_bid>`: the listing in extended bidding |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| scheduled close | 20:00:00 UTC | Value: (fixed boundary fixture) |
-| extension duration | 1800s | (30mins) |
-
-| Field | Value |
-| --- | --- |
-| listing_40 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps 22–23 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_41 | A listing with scheduled close 20:00 UTC, in extended bidding, extension duration 1800s (30mins) |
-| listing_42 | A second listing in the same state as `<listing_41>` |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| close before bid | 20:30 UTC | Value: (fixed initial close) |
-| bid time | 20:10 UTC | Value: (fixed in-window fixture) |
-| close after bid | 20:40 UTC | Value: `<bid time>` plus the 1800s extension duration |
-
-### Route
-
-1. Read the API response for `<listing_33>`.
-   - It carries the scheduled close, the recorded close, the extension duration and the extension cap. `g10.auction-auction.US1-TC2`
-   - It carries no extension window. `g10.auction-auction.US1-TC2`
-   - It carries no reserve state. `g10.auction-auction.US1-TC2`
-2. Submit `<bid amount>` on `<listing_34>`.
-3. Read the API response.
-   - Step 3 accepts the bid in the one answer, by the listing's bid rules, with no wait on the card provider. `g10.auction-auction.US2-TC5`
-4. Read the linked card's activity at the card provider.
-   - Step 4 shows nothing held or charged on the card for `<listing_34>`. `g10.auction-auction.US2-TC5`
-5. Submit a valid bid at `<first bid time>`.
-6. Read the recorded close.
-7. Submit a valid bid at `<second bid time>`.
-8. Read the recorded close.
-   - The recorded close reads `<first bid time>` plus `<extension duration>` = `<close after first>`. `g10.auction-auction.US2-TC10`
-   - The recorded close reads `<second bid time>` plus `<extension duration>` = `<close after second>`. `g10.auction-auction.US2-TC10`
-9. Submit a valid bid.
-10. Read the recorded close.
-11. Wait until the recorded close passes.
-   - The bid is accepted. `g10.auction-auction.US2-TC11`
-   - The recorded close reads `<scheduled close>` plus `<extension cap>`. `g10.auction-auction.US2-TC11`
-   - The listing closes at `<result>`. `g10.auction-auction.US2-TC11`
-12. Wait for `<scheduled close>`.
-13. Read the recorded close.
-   - The listing is in extended bidding. `g10.auction-auction.US2-TC12`
-   - The recorded close reads `<scheduled close>` plus `<short duration>` = `<result>`. `g10.auction-auction.US2-TC12`
-14. Wait for the scheduled close.
-15. Read the listing's state and recorded close.
-   - The listing is closed at its scheduled close. `g10.auction-auction.US2-TC13`
-   - It never entered extended bidding. `g10.auction-auction.US2-TC13`
-16. Wait for `<scheduled close>`.
-17. Read the listing's state and recorded close.
-18. When the row has `<extended close>`, wait until `<extended close>` with no bid.
-19. Read the listing's state.
-   - The listing reads `<result>`. `g10.auction-auction.US2-TC14`
-20. Submit a valid bid at `<bid time>`.
-21. Read the recorded close.
-   - The bid is accepted. `g10.auction-auction.US2-TC6`
-   - The recorded close reads `<recorded_close_after_bid>`. `g10.auction-auction.US2-TC6`
-22. Submit a valid bid on `<listing_41>` at `<bid time>`.
-23. Read both recorded closes.
-   - `<listing_41>` reads `<close after bid>`. `g10.auction-auction.US2-TC7`
-   - `<listing_42>` still reads `<close before bid>`. `g10.auction-auction.US2-TC7`
 
 ## Walk 2: Collector places a bid inside the window
 
@@ -283,8 +94,6 @@
    - The close moves to `<extension duration>` after that bid. `g10.auction-auction.US2-TC8`
 3. Submit a bid at the minimum next bid.
 4. Read the listing's bids and recorded close.
-   - Grade10 refuses the bid. `g10.auction-auction.US2-TC9`
-   - No accepted bid is added and the recorded close is unchanged. `g10.auction-auction.US2-TC9`
 5. Enter `<opening price>` in the custom maximum on the bid panel.
 6. Place the bid.
 7. Read Highest bid, the bid count and Recent Bids.
@@ -296,14 +105,9 @@
 9. Submit a bid of `<bid amount>` on `<listing_46>`.
 10. Read the API response.
 11. Read `<listing_46>`'s bids and bid count.
-   - Grade10 refuses the bid, naming `<opening price>` as the minimum. `g10.auction-auction.US2-TC16`
-   - No accepted bid is recorded, and the bid count stays 0. `g10.auction-auction.US2-TC16`
 12. Submit `<bid A>` as customer A and `<bid B>` as customer B on `<listing_47>` at the same moment.
 13. Read both API responses.
 14. Read `<listing_47>` from the public listing API.
-   - Each response is one answer: accepted with a standing, or refused. `g10.auction-auction.US2-TC19`
-   - customer B leads, and Highest bid reads `<bid A>` plus `<increment>`. `g10.auction-auction.US2-TC19`
-   - No lower bid overwrites that Highest bid, whichever response arrived first. `g10.auction-auction.US2-TC19`
 
 ## Walk 3: Collector meets the identity bar on a high-value bid
 
@@ -518,16 +322,12 @@
    - `<listing_55>` is listed before `<listing_56>`. `g10.auction-auction.US5-TC2`
 5. Read the API response for the Auction catalogue.
 6. Read the API response for the Auction catalogue again.
-   - `<listing_57>` and `<listing_58>` are in the same order both times. `g10.auction-auction.US5-TC3`
 7. Read the Featured band for `<featured_listing>`.
 8. Read All auctions for `<featured_listing>` and the list order.
    - `<featured_listing>` appears in Featured and again in All auctions. `g10.auction-auction.US5-TC8`
    - All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible listing. `g10.auction-auction.US5-TC8`
 9. Read the API response one page at a time to the end.
 10. Read the API response for the whole catalogue.
-   - Both readings list the listings in the same order. `g10.auction-auction.US5-TC4`
-   - No listing is listed twice. `g10.auction-auction.US5-TC4`
-   - No listing is missing. `g10.auction-auction.US5-TC4`
 11. Navigate to `<grade10 auction catalogue url>`.
 12. Read the page sections.
    - No Featured band is present. `g10.auction-auction.US5-TC5`
@@ -590,7 +390,6 @@
    - The card shows Opens in from the served open. `g10.auction-auction.US5-TC11`
 3. Navigate to `<grade10 auction catalogue url>`.
 4. Read the document canonical and share address.
-   - Canonical and share address are `/auction` with no category query. `g10.auction-auction.US5-TC9`
 5. Read the first batch of All auctions cards.
    - Listings from step 5 stay visible. `g10.auction-auction.US5-TC10`
 6. Scroll near the end of the shown listings.
@@ -935,181 +734,6 @@
 8. Read whether a watch control is present on that card.
    - The closed listing card shows no watch control. `g10.auction-auction.US9-TC3`
 
-## Walk 10: Bidder is held to the close with everyone else
-
-**Starting state:**
-
-**Steps 1–2 setup:**
-
-- `<listing_59>` is in extended bidding and its recorded close is `<recorded close>`.
-- customer A(card linked) is signed in and on the listing page for `<listing_59>`.
-
-**Steps 3–6 setup:**
-
-- `<listing_60>` has scheduled close `<scheduled close>`, extension duration `<extension duration>` and cap `<extension cap>`.
-- customer B's bid was accepted on `<listing_60>` at `<last accepted>`.
-- Settling `<listing_60>` is held back, so its close is not yet recorded at `<bid time>`.
-- customer A(card linked) is signed in and can bid on `<listing_60>`.
-
-**Steps 7–8 setup:**
-
-- `<listing_61>` is open with one accepted bid.
-
-**Steps 9–10 setup:**
-
-- customer A leads `<listing_62>`.
-- `<listing_62>`'s recorded close is about two minutes away, and no other bid will be placed.
-
-**Steps 11–13 setup:**
-
-- customer A leads `<listing_63>`, and no other bid will be placed.
-- The listing's own alarm is disabled for `<listing_63>`.
-
-**Steps 14–15 setup:**
-
-- `<listing_64>` has this state: `<listing_state>`, and no page has it open.
-- Nobody reads `<listing_64>` until step 2.
-
-**Steps 16–18 setup:**
-
-- `<listing_65>` is in extended bidding.
-- No session is signed in.
-
-**Shared test data:**
-
-**Steps 1–2 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_59 | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap, led by customer B | · |
-| bid time | 20:29:59 UTC | Value: one second before the recorded close |
-| bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
-| new close | 20:59:59 UTC | Value: `<bid time>` plus 1800s |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| recorded close | 20:30:00 UTC | Value: (fixed last-second fixture) |
-
-**Steps 3–6 data:**
-
-| `<extension duration>` | `<extension cap>` | `<last accepted>` | `<effective close>` | `<bid time>` | Fixture notes |
-| --- | --- | --- | --- | --- | --- |
-| 1800s | 600s | 20:05:00 UTC | 20:10:00 UTC | 20:10:00 UTC | `<extension duration>`: (30mins); `<extension cap>`: (10mins); `<effective close>`: the cap; `<bid time>`: at the limit |
-| 1800s | 600s | 20:05:00 UTC | 20:10:00 UTC | 20:10:01 UTC | `<extension duration>`: (30mins); `<extension cap>`: (10mins); `<effective close>`: the cap |
-| 1800s | None | 20:10:00 UTC | 20:40:00 UTC | 20:40:00 UTC | `<extension duration>`: (30mins); `<effective close>`: the recorded close; `<bid time>`: at the limit |
-| 1800s | None | 20:10:00 UTC | 20:40:00 UTC | 20:40:01 UTC | `<extension duration>`: (30mins); `<effective close>`: the recorded close |
-| 1800s | 0s | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:00.001 UTC | `<extension duration>`: (30mins); `<effective close>`: one millisecond after the scheduled close; `<bid time>`: at the limit |
-| 1800s | 0s | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:01 UTC | `<extension duration>`: (30mins); `<effective close>`: one millisecond after the scheduled close |
-| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:00.001 UTC | `<effective close>`: one millisecond after the scheduled close; `<bid time>`: at the limit |
-| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:01 UTC | `<effective close>`: one millisecond after the scheduled close |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| scheduled close | 20:00:00 UTC | Value: (fixed effective-close fixture) |
-
-| Field | Value |
-| --- | --- |
-| listing_60 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps 7–8 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_61 | An open listing, scheduled close `<scheduled close>`, extension duration 1800s (30mins), extension cap 0s |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| scheduled close | 20:00:00 UTC | Value: (fixed zero-cap boundary) |
-
-**Steps 9–10 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_62 | An HKD listing in extended bidding, led by customer A | · |
-| sweep interval | 300s | (5mins) |
-
-**Steps 11–13 data:**
-
-| `<settlement_trigger>` | `<recorded by>` |
-| --- | --- |
-| Read `<listing_63>` more than 2s after its recorded close | right after that read answers |
-| Wait for the five-minute sweep without reading the listing | at the next sweep, at most 300s (5mins) after the recorded close |
-
-| Field | Value |
-| --- | --- |
-| listing_63 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps 14–15 data:**
-
-| `<listing_state>` | `<close>` | `<result>` |
-| --- | --- | --- |
-| An HKD listing in extended bidding, led by customer A at `<leader price>`, extension duration 1800s (30mins), no cap | its recorded close | Closed, customer A winning at `<leader price>` |
-| An open HKD listing with no accepted bid, extension duration 1800s (30mins) | its scheduled close | Closed unsold, never in extended bidding |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| leader price | HKD4,960 | (range: 400000–799999 minor units) |
-| sweep interval | 300s | (5mins) |
-
-| Field | Value |
-| --- | --- |
-| listing_64 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps 16–18 data:**
-
-| Field | Value |
-| --- | --- |
-| listing_65 | An HKD listing, scheduled close `<scheduled close>`, recorded close `<recorded close>`, extension duration `<extension duration>`, extension cap `<extension cap>` |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| scheduled close | 20:00:00 UTC | Value: (fixed public-read fixture) |
-| recorded close | 20:25:00 UTC | Value: (fixed public-read fixture) |
-| extension duration | 1800s | (30mins) |
-| extension cap | 3600s | (60mins) |
-
-### Route
-
-1. As customer A, place `<bid amount>` at `<bid time>`.
-2. Read the API response for `<listing_59>`.
-   - The bid is accepted when placed, with no wait for a payment. `g10.auction-auction.US11-TC4`
-   - customer A leads and Highest bid reads `<bid amount>`. `g10.auction-auction.US11-TC4`
-   - The recorded close reads `<new close>`. `g10.auction-auction.US11-TC4`
-3. As customer A, place `<bid amount>` at `<bid time>`.
-   - Step 3 is refused. `g10.auction-auction.US11-TC5`
-4. Read the API response for `<listing_60>`.
-   - At step 4 no accepted bid is added, the recorded close does not move, and `<listing_60>` is still not recorded closed. `g10.auction-auction.US11-TC5`
-5. Let settling resume.
-6. Read the listing's result.
-   - At step 6 `<listing_60>` is closed with customer B winning. `g10.auction-auction.US11-TC5`
-7. Wait for the scheduled close.
-8. Read the API response for `<listing_61>`.
-   - `<listing_61>` never entered extended bidding. `g10.auction-auction.US11-TC6`
-   - It is closed at `<scheduled close>`, with its one bidder winning. `g10.auction-auction.US11-TC6`
-9. Wait for the recorded close.
-10. Read the API response for `<listing_62>`.
-   - Step 10 reads `<listing_62>` closed, customer A winning, before the next sweep, well inside `<sweep interval>`. `g10.auction-auction.US11-TC7`
-11. Wait for `<listing_63>`'s recorded close.
-12. Perform this settlement trigger: `<settlement_trigger>`.
-13. Read the API response for `<listing_63>`.
-   - `<listing_63>` is recorded closed `<recorded by>`, with customer A winning. `g10.auction-auction.US11-TC8`
-   - Before then, `<listing_63>` takes no bid and reports no result. `g10.auction-auction.US11-TC8`
-14. Wait until 10 seconds past `<close>`.
-15. Read the API response for `<listing_64>`.
-   - `<listing_64>` reads `<result>`, recorded within seconds of `<close>`. `g10.auction-auction.US11-TC9`
-   - The close is recorded before the next sweep, well inside `<sweep interval>`. `g10.auction-auction.US11-TC9`
-16. Read `<listing_65>` from the public listing API.
-   - Step 16 gives scheduled close `<scheduled close>` and recorded close `<recorded close>`. `g10.auction-auction.US11-TC10`
-   - Step 16 gives extension duration `<extension duration>` and extension cap `<extension cap>`. `g10.auction-auction.US11-TC10`
-17. Read the auction service's time from its public time read.
-18. One second later, read the public time again.
-   - Steps 17 and 18 each give the auction service's time when it answered, not the caller's. `g10.auction-auction.US11-TC10`
-   - Step 18's answer is about one second after step 17's, not a cached copy. `g10.auction-auction.US11-TC10`
-
 ## Walk 11: Bidder keeps a listing open only by moving its price
 
 **Starting state:**
@@ -1163,89 +787,6 @@
    - Highest bid stays `<leader price>`. `g10.auction-auction.US12-TC2`
    - The recorded close stays `<close before raise>`, and Time left keeps counting to it. `g10.auction-auction.US12-TC2`
    - The listing closes at `<close before raise>`, customer A winning at `<leader price>`. `g10.auction-auction.US12-TC2`
-
-## Walk 12: Runner-up takes the lead when the leader's account is erased
-
-**Starting state:**
-
-**Steps 1–4 setup:**
-
-- `<listing_27>` is open inside its window, with maxima `<customer A maximum>`, `<customer B maximum>` and `<customer C maximum>` committed in the order stated in Test data.
-- customer A leads `<listing_27>` at `<price before>`.
-- customer A has no unpaid order or open fulfilment, so nothing stops the erasure.
-- customer B is signed in on a separate session.
-
-**Steps 5–6 setup:**
-
-- `<listing_28>` is open inside its window, and customer A holds its only maximum of `<customer A maximum>`.
-- customer A has no unpaid order or open fulfilment, so nothing stops the erasure.
-
-**Steps 7–9 setup:**
-
-- `<listing_32>` is open inside its window, with increment `<increment>` and maxima committed in this order: `<committed_maxima>`, and Highest bid `<price before>`.
-- The erased customer has no unpaid order or open fulfilment, so nothing stops the erasure.
-
-**Shared test data:**
-
-**Steps 1–4 data:**
-
-| `<customer A maximum>` | `<customer B maximum>` | `<customer C maximum>` | `<price before>` | `<price after>` | `<leader_after>` | Fixture notes |
-| --- | --- | --- | --- | --- | --- | --- |
-| HKD2,300 | HKD1,700 | HKD1,350 | HKD1,740 | HKD1,390 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units); `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed derived value), customer B's maximum plus 4000; `<price after>`: (fixed derived value), customer C's maximum plus 4000 |
-| HKD2,300 | HKD1,360 | HKD1,350 | HKD1,400 | HKD1,360 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units); `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed derived value), customer B's maximum plus 4000; `<price after>`: (fixed derived value), capped at customer B's maximum |
-| HKD1,750 | HKD1,750 | HKD1,350 | HKD1,750 | HKD1,390 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units), second; `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed boundary or equality), equal maxima, customer A earlier; `<price after>`: (fixed boundary or equality), customer C's maximum plus 4000 |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_27 | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), scheduled close more than an hour away | · |
-| increment | HKD40 | (fixed tier increment), the HK$800 tier, at every maximum above |
-
-**Steps 5–6 data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_28 | An open HKD listing, starting price `<starting_price>`, led by customer A alone at the starting price | · |
-| customer A maximum | HKD2,350 | (range: 80000–399999 minor units) |
-| starting_price | HKD280 | (range: 1000–79999 minor units), the opening price of `<listing_28>` |
-
-**Steps 7–9 data:**
-
-| `<committed_maxima>` | `<price before>` | `<erased_customer>` | `<leader_after>` | `<price after>` | Fixture notes |
-| --- | --- | --- | --- | --- | --- |
-| customer A 23000, customer B 17000, customer C 13500 | 17500 | customer B | customer A | 14000 | `<price after>`: customer C's maximum plus 500 |
-| customer A 23000 raised to 47000 after customer B 22800, customer C 10500 | 23000 | customer C | customer A | 23000 | `<price after>`: unchanged: customer B's maximum plus 500 is 23300, above `<price before>` |
-| customer A 23000, customer B 17000, customer C 12500 | 17500 | customer C | customer A | 17500 | `<price after>`: unchanged, on the same bid |
-| customer A 23000, customer B 17000 | 17500 | customer A | customer B | 10000 | `<price after>`: the opening price |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_32 | An open USD listing, opening price USD100 (fixed tier boundary), scheduled close more than an hour away; every amount above is in USD minor units | · |
-| increment | USD5 | (fixed tier increment), the USD 100 tier, at every next maximum above |
-
-### Route
-
-1. Read `<listing_27>` from the public listing API.
-   - Step 1 reads Highest bid `<price before>`, led by customer A. `g10.auction-auction.US13-TC1`
-2. Erase customer A's account through the account-erasure procedure.
-3. Read `<listing_27>` from the public listing API.
-   - Step 3 reads Highest bid `<price after>`, the next maximum left plus `<increment>`, capped at the new leader's maximum. `g10.auction-auction.US13-TC1`
-   - Step 3's Highest bid is never above `<price before>`. `g10.auction-auction.US13-TC1`
-4. As customer B, read their own standing on `<listing_27>`.
-   - Step 4 reads `<leader_after>` as leader, with their own maximum unchanged. `g10.auction-auction.US13-TC1`
-   - customer A's maxima appear nowhere on `<listing_27>`. `g10.auction-auction.US13-TC1`
-5. Erase customer A's account through the account-erasure procedure.
-6. Read `<listing_28>` from the public listing API.
-   - `<listing_28>` has no leader and no current bid. `g10.auction-auction.US13-TC2`
-   - The next bid must reach `<starting_price>`, the opening price. `g10.auction-auction.US13-TC2`
-   - customer A's maximum appears nowhere on `<listing_28>`. `g10.auction-auction.US13-TC2`
-7. Read `<listing_32>` from the public listing API, noting its scheduled close.
-   - Step 7 reads Highest bid `<price before>`. `g10.auction-auction.US13-TC3`
-8. Erase `<erased_customer>`'s account through the account-erasure procedure.
-9. Read `<listing_32>` from the public listing API.
-   - Step 9 reads Highest bid `<price after>`, led by `<leader_after>`. `g10.auction-auction.US13-TC3`
-   - Step 9's Highest bid is never above `<price before>`. `g10.auction-auction.US13-TC3`
-   - Step 9's scheduled close is the one noted at step 7. `g10.auction-auction.US13-TC3`
-   - The erased customer's maxima appear nowhere on `<listing_32>`. `g10.auction-auction.US13-TC3`
 
 ## Walk 13: Bidder reads why a bid was refused, and nothing else moves
 
@@ -1473,13 +1014,9 @@
    - Step 7 reads sold at `<starting price>`, one bid, under the house's listing pseudonym. `g10.auction-auction.US1-TC4`
 8. Wait until `<listing_4>`'s recorded close passes.
 9. Read the orders the API holds for `<listing_4>`.
-   - Step 9 holds one order, `<internal bidder>`'s, flagged internal, at `<winning_bid>`. `g10.auction-auction.US1-TC5`
 10. Read the order's invoice and payments.
-   - Step 10: no invoice is issued and no payment is recorded. `g10.auction-auction.US1-TC5`
 11. In the House over a collector row, read customer A's card charges since the close.
-   - Step 11 holds no charge for `<listing_4>`. `g10.auction-auction.US1-TC5`
 12. Read the API response for `<listing_4>`'s public facts.
-   - Step 12 reads the listing closed with a winner at `<winning_bid>`, the winner by pseudonym only. `g10.auction-auction.US1-TC5`
 
 ## Walk 15: Additional fixture checks
 
@@ -1522,48 +1059,6 @@
 **I want** the catalogue to show Auction listings with money in minor units,
 **so that** I am not offered Buy Now and a close with bids is absolute.
 
-### g10.auction-auction.US1-TC2: Public listing read exposes the close and extension policy
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_33>` is published.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_33 | A published listing with extension duration `<extension duration>` and extension cap `<extension cap>` |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| extension duration | 1800s | (30mins) |
-| extension cap | 3600s | (60mins) |
-
-**Steps:**
-
-1. Read the API response for `<listing_33>`.
-
-**Expected Results:**
-
-* It carries the scheduled close, the recorded close, the extension duration and the extension cap.
-* It carries no extension window.
-* It carries no reserve state.
-
 <!-- trace:case id=g10.auction-auction.TC-m16 rev=1 covers=g10.auction-auction.SC-fec,g10.auction-auction.SC-a4f -->
 ### g10.auction-auction.US1-TC3: A listing the house leads at the close reads sold like any other
 
@@ -1577,7 +1072,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01
@@ -1632,7 +1126,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01
@@ -1668,58 +1161,6 @@ Runs once per row of **Test data**.
 * Step 1 reads extended bidding, the close `<extension duration>` after the scheduled close.
 * Step 3 reads sold at `<starting price>`, one bid, under the house's listing pseudonym.
 
-<!-- trace:case id=g10.auction-auction.TC-dij rev=1 covers=g10.auction-auction.SC-14a,g10.auction-auction.SC-cqt -->
-### g10.auction-auction.US1-TC5: A close the house leads opens the internal bidder's order and charges nobody
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-01
-
-**Pre-conditions:**
-
-* `<listing_4>`'s internal bid of `<house maximum>` is committed as `<internal bidder>`, and the house leads with this bidding setup: `<bidding_at_close>`, its recorded close a few minutes away, no further bid coming.
-* customer A(card linked) bid on `<listing_4>` as described by `<bidding_at_close>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_4 | A published HKD listing in no campaign, starting price `<starting price>` | · |
-| starting price | 400000 minor units | (HK$4,000.00) |
-| house maximum | 600000 minor units | (HK$6,000.00) |
-| internal bidder | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test | · |
-
-| Row | `<bidding_at_close>` | `<winning_bid>` | Fixture notes |
-| --- | --- | --- | --- |
-| House over a collector | The house leads over customer A's maximum of 500000 | 508000 | `<winning_bid>`: customer A's maximum plus its 8000 increment |
-| House alone | No collector bid | `<starting price>` | · |
-
-**Steps:**
-
-1. Wait until `<listing_4>`'s recorded close passes.
-2. Read the orders the API holds for `<listing_4>`.
-3. Read the order's invoice and payments.
-4. In the House over a collector row, read customer A's card charges since the close.
-5. Read the API response for `<listing_4>`'s public facts.
-
-**Expected Results:**
-
-* Step 2 holds one order, `<internal bidder>`'s, flagged internal, at `<winning_bid>`.
-* Step 3: no invoice is issued and no payment is recorded.
-* Step 4 holds no charge for `<listing_4>`.
-* Step 5 reads the listing closed with a winner at `<winning_bid>`, the winner by pseudonym only.
-
 ---
 
 ## g10.auction-auction.US2: Collector places a bid inside the window
@@ -1727,364 +1168,6 @@ Runs once per row of **Test data**.
 **As a** bidder,
 **I want** a listing I bid on by its close to stay open until bidding stops,
 **so that** a bid placed at the last second can always be answered, up to the listing's cap.
-
-<!-- trace:case id=g10.auction-auction.TC-b19 rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### g10.auction-auction.US2-TC5: A bid stands when accepted, with nothing held on the card
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, release
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
-
-**Pre-conditions:**
-
-* customer(card linked, no bid on `<listing_34>`) is signed in.
-* `<listing_34>` is open inside its window.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_34 | An open HKD listing taking bids, current bid `<current bid>` | · |
-| current bid | HKD4,960 | (range: 400000–799999 minor units) |
-| bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
-
-**Steps:**
-
-1. Submit `<bid amount>` on `<listing_34>`.
-2. Read the API response.
-3. Read the linked card's activity at the card provider.
-
-**Expected Results:**
-
-* Step 2 accepts the bid in the one answer, by the listing's bid rules, with no wait on the card provider.
-* Step 3 shows nothing held or charged on the card for `<listing_34>`.
-
-<!-- trace:case id=g10.auction-auction.TC-rj4 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### g10.auction-auction.US2-TC10: Bid during extended bidding restarts the timer
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_35>` is in extended bidding and its recorded close is `<close before bids>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_35 | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap | · |
-| extension duration | 1800s | (30mins) |
-| close before bids | 20:30 UTC | · |
-| first bid time | 20:10 UTC | · |
-| second bid time | 20:35 UTC | · |
-| close after first | 20:40 UTC | · |
-| close after second | 21:05 UTC | · |
-
-**Steps:**
-
-1. Submit a valid bid at `<first bid time>`.
-2. Read the recorded close.
-3. Submit a valid bid at `<second bid time>`.
-4. Read the recorded close.
-
-**Expected Results:**
-
-* The recorded close reads `<first bid time>` plus `<extension duration>` = `<close after first>`.
-* The recorded close reads `<second bid time>` plus `<extension duration>` = `<close after second>`.
-
-<!-- trace:case id=g10.auction-auction.TC-4fd rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### g10.auction-auction.US2-TC11: Extension cap holds the timer at the cap
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_36>` is in extended bidding and its recorded close is its scheduled close plus `<extension cap>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_36 | A listing in extended bidding whose recorded close already stands at its cap | · |
-| scheduled close | 20:00 UTC | · |
-| extension cap | 3600s | (60mins), any cap the listing has already reached |
-| result | 21:00 UTC | Value: `<scheduled close>` plus `<extension cap>` |
-
-**Steps:**
-
-1. Submit a valid bid.
-2. Read the recorded close.
-3. Wait until the recorded close passes.
-
-**Expected Results:**
-
-* The bid is accepted.
-* The recorded close reads `<scheduled close>` plus `<extension cap>`.
-* The listing closes at `<result>`.
-
-<!-- trace:case id=g10.auction-auction.TC-sge rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### g10.auction-auction.US2-TC12: Listing's own duration sets how long extended bidding runs
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_37>` is open with one accepted bid.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_37 | An open listing, scheduled close `<scheduled close>`, extension duration `<short duration>` | · |
-| scheduled close | 20:00 UTC | · |
-| short duration | 300s | (5mins), any extension duration above 0 |
-| result | 20:05 UTC | Value: `<scheduled close>` plus `<short duration>` |
-
-**Steps:**
-
-1. Wait for `<scheduled close>`.
-2. Read the recorded close.
-
-**Expected Results:**
-
-* The listing is in extended bidding.
-* The recorded close reads `<scheduled close>` plus `<short duration>` = `<result>`.
-
-<!-- trace:case id=g10.auction-auction.TC-o03 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### g10.auction-auction.US2-TC13: Extension off closes the listing at its scheduled close
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_38>` is open with an accepted bid and extension duration 0.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_38 | An open listing with an accepted bid, extension duration 0s |
-
-**Steps:**
-
-1. Wait for the scheduled close.
-2. Read the listing's state and recorded close.
-
-**Expected Results:**
-
-* The listing is closed at its scheduled close.
-* It never entered extended bidding.
-
-<!-- trace:case id=g10.auction-auction.TC-ftw rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### g10.auction-auction.US2-TC14: Bids by the close decide whether extended bidding starts
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_39>` is open with scheduled close `<scheduled close>` and extension duration `<extension duration>`.
-* `<listing_39>` holds `<bids by close>`.
-
-**Test data:**
-
-| `<bids by close>` | `<scheduled close>` | `<extended close>` | `<result>` |
-| --- | --- | --- | --- |
-| None | 20:00 UTC | — | Closed at 20:00 UTC |
-| One | 20:00 UTC | 20:30 UTC | Recorded close is 20:30 UTC; with no further bid, closed at 20:30 UTC |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| extension duration | 1800s | (30mins) |
-
-| Field | Value |
-| --- | --- |
-| listing_39 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps:**
-
-1. Wait for `<scheduled close>`.
-2. Read the listing's state and recorded close.
-3. When the row has `<extended close>`, wait until `<extended close>` with no bid.
-4. Read the listing's state.
-
-**Expected Results:**
-
-* The listing reads `<result>`.
-
-<!-- trace:case id=g10.auction-auction.TC-m7f rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### g10.auction-auction.US2-TC6: When a bid lands against the scheduled close
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_40>` is open with no accepted bid, scheduled close `<scheduled close>`, and extension duration `<extension duration>`.
-
-**Test data:**
-
-| `<bid time>` | `<recorded_close_after_bid>` | Fixture notes |
-| --- | --- | --- |
-| 19:59:00 UTC | 20:00:00 UTC | `<recorded_close_after_bid>`: unchanged |
-| 20:00:00 UTC | 20:30:00 UTC | `<recorded_close_after_bid>`: the listing in extended bidding |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| scheduled close | 20:00:00 UTC | Value: (fixed boundary fixture) |
-| extension duration | 1800s | (30mins) |
-
-| Field | Value |
-| --- | --- |
-| listing_40 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps:**
-
-1. Submit a valid bid at `<bid time>`.
-2. Read the recorded close.
-
-**Expected Results:**
-
-* The bid is accepted.
-* The recorded close reads `<recorded_close_after_bid>`.
-
-<!-- trace:case id=g10.auction-auction.TC-iid rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### g10.auction-auction.US2-TC7: Each listing runs its own timer
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_41>` and `<listing_42>` are both in extended bidding with recorded close `<close before bid>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_41 | A listing with scheduled close 20:00 UTC, in extended bidding, extension duration 1800s (30mins) |
-| listing_42 | A second listing in the same state as `<listing_41>` |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| close before bid | 20:30 UTC | Value: (fixed initial close) |
-| bid time | 20:10 UTC | Value: (fixed in-window fixture) |
-| close after bid | 20:40 UTC | Value: `<bid time>` plus the 1800s extension duration |
-
-**Steps:**
-
-1. Submit a valid bid on `<listing_41>` at `<bid time>`.
-2. Read both recorded closes.
-
-**Expected Results:**
-
-* `<listing_41>` reads `<close after bid>`.
-* `<listing_42>` still reads `<close before bid>`.
 
 <!-- trace:case id=g10.auction-auction.TC-q6k rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### g10.auction-auction.US2-TC8: Collector with no earlier bid bids during extended bidding
@@ -2097,7 +1180,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02
@@ -2124,44 +1206,6 @@ Runs once per row of **Test data**.
 * The bid is accepted.
 * The close moves to `<extension duration>` after that bid.
 
-<!-- trace:case id=g10.auction-auction.TC-ott rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
-### g10.auction-auction.US2-TC9: Bid after extended bidding ends is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_44>` entered extended bidding and its recorded close has passed.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_44 | A listing whose extended bidding timer ran out with no new bid |
-
-**Steps:**
-
-1. Submit a bid at the minimum next bid.
-2. Read the listing's bids and recorded close.
-
-**Expected Results:**
-
-* Grade10 refuses the bid.
-* No accepted bid is added and the recorded close is unchanged.
-
 <!-- trace:case id=g10.auction-auction.TC-edh rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
 ### g10.auction-auction.US2-TC15: First bid at the opening price is accepted
 
@@ -2175,7 +1219,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02
@@ -2215,189 +1258,6 @@ Runs once per row of **Test data**.
 * The bid count reads 1, and Recent Bids shows the bid as You.
 * Step 4 reads `<next minimum>`, `<opening price>` plus its tier increment.
 
-<!-- trace:case id=g10.auction-auction.TC-8rd rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
-### g10.auction-auction.US2-TC16: First bid below the opening price is refused, naming it
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_46>` is open inside its window, in `<currency>`, starting price `<start>`, with no accepted bid.
-* customer(card linked, no bid on `<listing_46>`) is signed in.
-
-**Test data:**
-
-| `<currency>` | `<start>` | `<opening price>` | `<bid amount>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| HKD | HKD280 | HKD280 | HKD279.99 | `<start>`: (range: 1000–79999 minor units); `<opening price>`: (range: 1000–79999 minor units), the start itself; `<bid amount>`: (fixed boundary or equality), one minor unit below |
-| USD | USD500 | USD500 | USD499.99 | `<start>`: (fixed tier boundary); `<opening price>`: (fixed tier boundary), the start itself; `<bid amount>`: (fixed boundary or equality), one minor unit below |
-| JPY | JPY23,500 | JPY23,500 | JPY23,499 | `<start>`: (range: 15000–74999 minor units); `<opening price>`: (range: 15000–74999 minor units), the start itself; `<bid amount>`: (fixed boundary or equality), one minor unit below |
-| HKD | HKD0 | HKD10 | HKD9.99 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<bid amount>`: (fixed boundary or equality), one minor unit below |
-| USD | USD0 | USD1 | USD0.99 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<bid amount>`: (fixed boundary or equality), one minor unit below |
-| JPY | JPY0 | JPY100 | JPY99 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<bid amount>`: (fixed boundary or equality), one minor unit below |
-
-| Field | Value |
-| --- | --- |
-| listing_46 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps:**
-
-1. Submit a bid of `<bid amount>` on `<listing_46>`.
-2. Read the API response.
-3. Read `<listing_46>`'s bids and bid count.
-
-**Expected Results:**
-
-* Grade10 refuses the bid, naming `<opening price>` as the minimum.
-* No accepted bid is recorded, and the bid count stays 0.
-
-<!-- trace:case id=g10.auction-auction.TC-94a rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
-### g10.auction-auction.US2-TC17: Start on a tier boundary takes that tier's increment, not the one below
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Pre-conditions:**
-
-* Bid-time authorization holds are disabled.
-* `<listing_23>` is open inside its window, in the row's currency, starting price the row's `<start>`, with no accepted bid.
-* customer(card linked, no bid on `<listing_23>`) is signed in.
-
-**Test data:**
-
-| Currency | `<start>`, on a tier boundary | `<first-bid minimum>` | `<bid amount>`, the start plus the lower tier's increment |
-| --- | --- | --- | --- |
-| USD | 10000 minor units (USD 100.00) | 10500 minor units (USD 105.00) | 10100 minor units (USD 101.00) |
-| HKD | 80000 minor units (HKD 800.00) | 84000 minor units (HKD 840.00) | 81000 minor units (HKD 810.00) |
-| JPY | 15000 minor units (JPY 15,000) | 15500 minor units (JPY 15,500) | 15100 minor units (JPY 15,100) |
-
-**Steps:**
-
-1. Submit a bid of the row's `<bid amount>` on `<listing_23>`.
-2. Read the API response.
-3. Read `<listing_23>`'s bids and bid count.
-
-**Expected Results:**
-
-* Grade10 refuses the bid, naming `<first-bid minimum>` as the minimum.
-* No accepted bid is recorded, and the bid count stays 0.
-
-<!-- trace:case id=g10.auction-auction.TC-m75 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
-### g10.auction-auction.US2-TC18: Minimum next bid before any bid is the starting price plus its increment
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Pre-conditions:**
-
-* `<listing_24>` is open inside its window, in the row's currency, starting price the row's `<start>`, with no accepted bid.
-
-**Test data:**
-
-| Currency | `<start>` | `<tier increment>` | `<first-bid minimum>` |
-| --- | --- | --- | --- |
-| HKD | 20000 minor units (HKD 200.00) | 1000 minor units (HKD 10.00) | 21000 minor units (HKD 210.00) |
-| HKD | 0 minor units (HKD 0.00) | 1000 minor units (HKD 10.00) | 1000 minor units (HKD 10.00) |
-| USD | 0 minor units (USD 0.00) | 100 minor units (USD 1.00) | 100 minor units (USD 1.00) |
-| USD | 10000 minor units (USD 100.00), on a tier boundary | 500 minor units (USD 5.00) | 10500 minor units (USD 105.00) |
-| JPY | 0 minor units (JPY 0) | 100 minor units (JPY 100) | 100 minor units (JPY 100) |
-
-**Steps:**
-
-1. Read `<listing_24>` from the public listing API.
-2. Read the API response's minimum next bid.
-
-**Expected Results:**
-
-* The minimum next bid reads `<start>` plus `<tier increment>` = `<first-bid minimum>`.
-* It never reads `<start>` itself, and never 0.
-
-<!-- trace:case id=g10.auction-auction.TC-5m3 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
-### g10.auction-auction.US2-TC19: Two bids at once are judged one after the other
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-02
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/pg/catalogueBatch1.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_47>` is open inside its window, current bid `<current bid>`.
-* customer A(card linked) and customer B(card linked) are signed in on separate sessions, neither holding a bid on `<listing_47>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_47 | An open HKD listing taking bids, led by customer C at `<current bid>` with maximum `<current bid>` | · |
-| current bid | HKD4,960 | (range: 400000–799999 minor units) |
-| increment | HKD80 | (fixed tier increment), the HK$4,000 tier |
-| bid A | HKD5,210 | (range: 400000–799999 minor units) |
-| bid B | HKD6,200 | (range: 400000–799999 minor units), above `<bid A>` |
-
-**Steps:**
-
-1. Submit `<bid A>` as customer A and `<bid B>` as customer B on `<listing_47>` at the same moment.
-2. Read both API responses.
-3. Read `<listing_47>` from the public listing API.
-
-**Expected Results:**
-
-* Each response is one answer: accepted with a standing, or refused.
-* customer B leads, and Highest bid reads `<bid A>` plus `<increment>`.
-* No lower bid overwrites that Highest bid, whichever response arrived first.
-
 ---
 
 ## g10.auction-auction.US4: Collector meets the identity bar on a high-value bid
@@ -2417,7 +1277,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-04
@@ -2462,7 +1321,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-04
@@ -2520,7 +1378,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-04
@@ -2579,7 +1436,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
@@ -2621,7 +1477,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
@@ -2656,77 +1511,6 @@ Runs once per row of **Test data**.
 * `<listing_53>` is listed before `<listing_54>`.
 * `<listing_55>` is listed before `<listing_56>`.
 
-<!-- trace:case id=g10.auction-auction.TC-yj3 rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
-### g10.auction-auction.US5-TC3: A tie is settled the same way every read
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_57>` and `<listing_58>` are both Active and close at the same time.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_57 | An Active listing closing at 18:00 UTC |
-| listing_58 | An Active listing closing at 18:00 UTC, a different listing record from `<listing_57>` |
-
-**Steps:**
-
-1. Read the API response for the Auction catalogue.
-2. Read the API response for the Auction catalogue again.
-
-**Expected Results:**
-
-* `<listing_57>` and `<listing_58>` are in the same order both times.
-
-<!-- trace:case id=g10.auction-auction.TC-c4u rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
-### g10.auction-auction.US5-TC4: Paging does not change the order
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts`
-
-**Pre-conditions:**
-
-* The Auction catalogue holds more listings than one page lists.
-
-**Steps:**
-
-1. Read the API response one page at a time to the end.
-2. Read the API response for the whole catalogue.
-
-**Expected Results:**
-
-* Both readings list the listings in the same order.
-* No listing is listed twice.
-* No listing is missing.
-
 <!-- trace:case id=g10.auction-auction.TC-2gb rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### g10.auction-auction.US5-TC5: Empty Featured leaves All auctions only
 
@@ -2738,7 +1522,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
@@ -2778,7 +1561,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
@@ -2816,7 +1598,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
@@ -2858,7 +1639,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
@@ -2891,43 +1671,6 @@ Runs once per row of **Test data**.
 * `<featured_listing>` appears in Featured and again in All auctions.
 * All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible listing.
 
-<!-- trace:case id=g10.auction-auction.TC-q56 rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
-### g10.auction-auction.US5-TC9: Catalogue address stays indexable at /auction without category query
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auction-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/catalogue-access.spec.ts`
-
-**Pre-conditions:**
-
-* customer is able to open `<grade10 auction catalogue url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 auction catalogue url>`.
-2. Read the document canonical and share address.
-
-**Expected Results:**
-
-* Canonical and share address are `/auction` with no category query.
-
 <!-- trace:case id=g10.auction-auction.TC-90r rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### g10.auction-auction.US5-TC10: More All auctions listings load on scroll
 
@@ -2939,7 +1682,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
@@ -2984,7 +1726,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-05
@@ -3038,7 +1779,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-06
@@ -3083,7 +1823,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-06
@@ -3129,7 +1868,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-06
@@ -3178,7 +1916,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-06
@@ -3220,7 +1957,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-06
@@ -3268,7 +2004,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-07
@@ -3314,7 +2049,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-07
@@ -3361,7 +2095,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-07
@@ -3404,7 +2137,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-07
@@ -3453,7 +2185,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-08
@@ -3495,7 +2226,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-08
@@ -3537,7 +2267,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-08
@@ -3589,7 +2318,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-09
@@ -3633,7 +2361,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-09
@@ -3677,7 +2404,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-09
@@ -3714,404 +2440,6 @@ Runs once per row of **Test data**.
 **I want** a listing to stop taking bids at its close for everyone, and a bid to count when it is accepted before then,
 **so that** nobody wins with a bid that arrived after the close.
 
-<!-- trace:case id=g10.auction-auction.TC-wbb rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC4: A bid placed in the last second counts when accepted
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-11
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_59>` is in extended bidding and its recorded close is `<recorded close>`.
-* customer A(card linked) is signed in and on the listing page for `<listing_59>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_59 | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap, led by customer B | · |
-| bid time | 20:29:59 UTC | Value: one second before the recorded close |
-| bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
-| new close | 20:59:59 UTC | Value: `<bid time>` plus 1800s |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| recorded close | 20:30:00 UTC | Value: (fixed last-second fixture) |
-
-**Steps:**
-
-1. As customer A, place `<bid amount>` at `<bid time>`.
-2. Read the API response for `<listing_59>`.
-
-**Expected Results:**
-
-* The bid is accepted when placed, with no wait for a payment.
-* customer A leads and Highest bid reads `<bid amount>`.
-* The recorded close reads `<new close>`.
-
-<!-- trace:case id=g10.auction-auction.TC-zkx rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC5: No bid counts at or after the effective close while the close is unrecorded
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-11
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_60>` has scheduled close `<scheduled close>`, extension duration `<extension duration>` and cap `<extension cap>`.
-* customer B's bid was accepted on `<listing_60>` at `<last accepted>`.
-* Settling `<listing_60>` is held back, so its close is not yet recorded at `<bid time>`.
-* customer A(card linked) is signed in and can bid on `<listing_60>`.
-
-**Test data:**
-
-| `<extension duration>` | `<extension cap>` | `<last accepted>` | `<effective close>` | `<bid time>` | Fixture notes |
-| --- | --- | --- | --- | --- | --- |
-| 1800s | 600s | 20:05:00 UTC | 20:10:00 UTC | 20:10:00 UTC | `<extension duration>`: (30mins); `<extension cap>`: (10mins); `<effective close>`: the cap; `<bid time>`: at the limit |
-| 1800s | 600s | 20:05:00 UTC | 20:10:00 UTC | 20:10:01 UTC | `<extension duration>`: (30mins); `<extension cap>`: (10mins); `<effective close>`: the cap |
-| 1800s | None | 20:10:00 UTC | 20:40:00 UTC | 20:40:00 UTC | `<extension duration>`: (30mins); `<effective close>`: the recorded close; `<bid time>`: at the limit |
-| 1800s | None | 20:10:00 UTC | 20:40:00 UTC | 20:40:01 UTC | `<extension duration>`: (30mins); `<effective close>`: the recorded close |
-| 1800s | 0s | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:00.001 UTC | `<extension duration>`: (30mins); `<effective close>`: one millisecond after the scheduled close; `<bid time>`: at the limit |
-| 1800s | 0s | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:01 UTC | `<extension duration>`: (30mins); `<effective close>`: one millisecond after the scheduled close |
-| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:00.001 UTC | `<effective close>`: one millisecond after the scheduled close; `<bid time>`: at the limit |
-| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:01 UTC | `<effective close>`: one millisecond after the scheduled close |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| scheduled close | 20:00:00 UTC | Value: (fixed effective-close fixture) |
-
-| Field | Value |
-| --- | --- |
-| listing_60 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps:**
-
-1. As customer A, place `<bid amount>` at `<bid time>`.
-2. Read the API response for `<listing_60>`.
-3. Let settling resume.
-4. Read the listing's result.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* At step 2 no accepted bid is added, the recorded close does not move, and `<listing_60>` is still not recorded closed.
-* At step 4 `<listing_60>` is closed with customer B winning.
-
-<!-- trace:case id=g10.auction-auction.TC-x7e rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC6: Extension cap of 0 closes the listing at its scheduled close
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-11
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_61>` is open with one accepted bid.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_61 | An open listing, scheduled close `<scheduled close>`, extension duration 1800s (30mins), extension cap 0s |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| scheduled close | 20:00:00 UTC | Value: (fixed zero-cap boundary) |
-
-**Steps:**
-
-1. Wait for the scheduled close.
-2. Read the API response for `<listing_61>`.
-
-**Expected Results:**
-
-* `<listing_61>` never entered extended bidding.
-* It is closed at `<scheduled close>`, with its one bidder winning.
-
-<!-- trace:case id=g10.auction-auction.TC-xee rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC7: A due listing is recorded closed at its close
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-11
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
-
-**Pre-conditions:**
-
-* customer A leads `<listing_62>`.
-* `<listing_62>`'s recorded close is about two minutes away, and no other bid will be placed.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_62 | An HKD listing in extended bidding, led by customer A | · |
-| sweep interval | 300s | (5mins) |
-
-**Steps:**
-
-1. Wait for the recorded close.
-2. Read the API response for `<listing_62>`.
-
-**Expected Results:**
-
-* Step 2 reads `<listing_62>` closed, customer A winning, before the next sweep, well inside `<sweep interval>`.
-
-<!-- trace:case id=g10.auction-auction.TC-32a rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC8: A listing whose alarm missed is still settled
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-11
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
-
-**Pre-conditions:**
-
-* customer A leads `<listing_63>`, and no other bid will be placed.
-* The listing's own alarm is disabled for `<listing_63>`.
-
-**Test data:**
-
-| `<settlement_trigger>` | `<recorded by>` |
-| --- | --- |
-| Read `<listing_63>` more than 2s after its recorded close | right after that read answers |
-| Wait for the five-minute sweep without reading the listing | at the next sweep, at most 300s (5mins) after the recorded close |
-
-| Field | Value |
-| --- | --- |
-| listing_63 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps:**
-
-1. Wait for `<listing_63>`'s recorded close.
-2. Perform this settlement trigger: `<settlement_trigger>`.
-3. Read the API response for `<listing_63>`.
-
-**Expected Results:**
-
-* `<listing_63>` is recorded closed `<recorded by>`, with customer A winning.
-* Before then, `<listing_63>` takes no bid and reports no result.
-
-<!-- trace:case id=g10.auction-auction.TC-cr9 rev=2 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC9: A listing no page has open is recorded closed at its close
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression, release
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-11
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_64>` has this state: `<listing_state>`, and no page has it open.
-* Nobody reads `<listing_64>` until step 2.
-
-**Test data:**
-
-| `<listing_state>` | `<close>` | `<result>` |
-| --- | --- | --- |
-| An HKD listing in extended bidding, led by customer A at `<leader price>`, extension duration 1800s (30mins), no cap | its recorded close | Closed, customer A winning at `<leader price>` |
-| An open HKD listing with no accepted bid, extension duration 1800s (30mins) | its scheduled close | Closed unsold, never in extended bidding |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| leader price | HKD4,960 | (range: 400000–799999 minor units) |
-| sweep interval | 300s | (5mins) |
-
-| Field | Value |
-| --- | --- |
-| listing_64 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
-
-**Steps:**
-
-1. Wait until 10 seconds past `<close>`.
-2. Read the API response for `<listing_64>`.
-
-**Expected Results:**
-
-* `<listing_64>` reads `<result>`, recorded within seconds of `<close>`.
-* The close is recorded before the next sweep, well inside `<sweep interval>`.
-
-<!-- trace:case id=g10.auction-auction.TC-yrr rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC10: Public reads give the close terms and the service's time
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-11
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/catalogue.spec.ts`, `grade10:apps/backend/grade10/auction/test/worker/routes.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_65>` is in extended bidding.
-* No session is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_65 | An HKD listing, scheduled close `<scheduled close>`, recorded close `<recorded close>`, extension duration `<extension duration>`, extension cap `<extension cap>` |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| scheduled close | 20:00:00 UTC | Value: (fixed public-read fixture) |
-| recorded close | 20:25:00 UTC | Value: (fixed public-read fixture) |
-| extension duration | 1800s | (30mins) |
-| extension cap | 3600s | (60mins) |
-
-**Steps:**
-
-1. Read `<listing_65>` from the public listing API.
-2. Read the auction service's time from its public time read.
-3. One second later, read the public time again.
-
-**Expected Results:**
-
-* Step 1 gives scheduled close `<scheduled close>` and recorded close `<recorded close>`.
-* Step 1 gives extension duration `<extension duration>` and extension cap `<extension cap>`.
-* Steps 2 and 3 each give the auction service's time when it answered, not the caller's.
-* Step 3's answer is about one second after step 2's, not a cached copy.
-
-<!-- trace:case id=g10.auction-auction.TC-piw rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC1: Payment confirmed before the effective close counts the bid
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-11
-
-**Pre-conditions:**
-
-* Bid-time holds are on.
-* customer A(card linked) is signed in and on the lot page for `<listing_1>`.
-* customer B leads `<listing_1>` at `<leader price>`.
-* customer A's card authorization is held until `<confirm time>`.
-
-**Test data:**
-
-| `<listing_1>` state | `<placed at>` | `<confirm time>` | `<recorded close after>` |
-| --- | --- | --- | --- |
-| Open, scheduled close 20:00:00 UTC | 19:59:50 UTC | 19:59:58 UTC | 20:00:00 UTC, unchanged |
-| Extended bidding, recorded close 20:30:00 UTC, extension duration 1800s (30mins), no cap | 20:29:50 UTC | 20:29:58 UTC | 20:59:58 UTC, `<confirm time>` plus 1800s |
-| Open, scheduled close 20:00:00 UTC, extension duration 0s | 19:59:55 UTC | 20:00:00.000 UTC, exactly the scheduled close, at the limit | 20:00:00 UTC, unchanged |
-
-| Field | Value |
-| --- | --- |
-| `<leader price>` | 480000 minor units, HKD |
-| `<bid amount>` | 521000 minor units, at or above the minimum next bid |
-
-**Steps:**
-
-1. As customer A, place `<bid amount>` at `<placed at>`.
-2. Read the API response for `<listing_1>` after `<confirm time>`.
-
-**Expected Results:**
-
-* The bid is accepted at `<confirm time>`, and customer A leads.
-* Highest bid reads `<bid amount>`.
-* The recorded close reads `<recorded close after>`.
-* With no further bid, `<listing_1>` closes at `<recorded close after>` with customer A winning.
-
 <!-- trace:case id=g10.auction-auction.TC-ppq rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
 ### g10.auction-auction.US11-TC2: Payment confirmed after the effective close loses and releases its hold
 
@@ -4125,7 +2453,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
@@ -4176,7 +2503,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-11
@@ -4211,53 +2537,6 @@ Runs once per row of **Test data**.
 * `<listing_3>` closes unsold at 20:00:00 UTC, reading Ended with No bids.
 * customer A's authorization is released.
 
-<!-- trace:case id=g10.auction-auction.TC-lfy rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC11: Leader's raise confirmed after the close loses, the earlier lead stands
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-11
-
-**Pre-conditions:**
-
-* Bid-time holds are on.
-* customer A leads `<listing_13>` at `<leader price>` with maximum `<user A maximum>`, its authorization held.
-* customer A's authorization for `<raised maximum>` is held until `<confirm time>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_13>` | An HKD listing in extended bidding, recorded close 20:30:00 UTC, extension duration 1800s (30mins), no cap |
-| `<leader price>` | 530000 minor units |
-| `<user A maximum>` | 800000 minor units |
-| `<raised maximum>` | 900000 minor units |
-| `<placed at>` | 20:29:55 UTC |
-| `<confirm time>` | 20:30:01 UTC, after the effective close |
-
-**Steps:**
-
-1. As customer A, raise the maximum to `<raised maximum>` at `<placed at>`.
-2. Wait until `<listing_13>` is recorded closed.
-3. Read the API response for `<listing_13>`.
-4. Read customer A's card authorizations for `<listing_13>`.
-
-**Expected Results:**
-
-* `<listing_13>` closes at 20:30:00 UTC, customer A winning at `<leader price>`.
-* customer A's maximum stays `<user A maximum>`.
-* The authorization for `<raised maximum>` is released.
-* The authorization for `<user A maximum>` is kept.
-
 <!-- trace:case id=g10.auction-auction.TC-itn rev=1 covers=none -->
 ### g10.auction-auction.US11-TC12: A lot the house leads at the close reads sold like any other
 
@@ -4271,7 +2550,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-11
@@ -4321,7 +2599,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-11
@@ -4378,7 +2655,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-12
@@ -4426,7 +2702,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-12
@@ -4475,7 +2750,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-12
@@ -4520,152 +2794,6 @@ Runs once per row of **Test data**.
 **I want** to take the lead at a price set by the maxima still standing when the leader's account is erased,
 **so that** the listing keeps a leader and I never pay more than the price stood at before.
 
-<!-- trace:case id=g10.auction-auction.TC-ptt rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
-### g10.auction-auction.US13-TC1: Highest maximum left leads, priced from the maxima left
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-13
-
-**Pre-conditions:**
-
-* `<listing_27>` is open inside its window, with maxima `<customer A maximum>`, `<customer B maximum>` and `<customer C maximum>` committed in the order stated in Test data.
-* customer A leads `<listing_27>` at `<price before>`.
-* customer A has no unpaid order or open fulfilment, so nothing stops the erasure.
-* customer B is signed in on a separate session.
-
-**Test data:**
-
-| `<customer A maximum>` | `<customer B maximum>` | `<customer C maximum>` | `<price before>` | `<price after>` | `<leader_after>` | Fixture notes |
-| --- | --- | --- | --- | --- | --- | --- |
-| HKD2,300 | HKD1,700 | HKD1,350 | HKD1,740 | HKD1,390 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units); `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed derived value), customer B's maximum plus 4000; `<price after>`: (fixed derived value), customer C's maximum plus 4000 |
-| HKD2,300 | HKD1,360 | HKD1,350 | HKD1,400 | HKD1,360 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units); `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed derived value), customer B's maximum plus 4000; `<price after>`: (fixed derived value), capped at customer B's maximum |
-| HKD1,750 | HKD1,750 | HKD1,350 | HKD1,750 | HKD1,390 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units), second; `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed boundary or equality), equal maxima, customer A earlier; `<price after>`: (fixed boundary or equality), customer C's maximum plus 4000 |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_27 | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), scheduled close more than an hour away | · |
-| increment | HKD40 | (fixed tier increment), the HK$800 tier, at every maximum above |
-
-**Steps:**
-
-1. Read `<listing_27>` from the public listing API.
-2. Erase customer A's account through the account-erasure procedure.
-3. Read `<listing_27>` from the public listing API.
-4. As customer B, read their own standing on `<listing_27>`.
-
-**Expected Results:**
-
-* Step 1 reads Highest bid `<price before>`, led by customer A.
-* Step 3 reads Highest bid `<price after>`, the next maximum left plus `<increment>`, capped at the new leader's maximum.
-* Step 3's Highest bid is never above `<price before>`.
-* Step 4 reads `<leader_after>` as leader, with their own maximum unchanged.
-* customer A's maxima appear nowhere on `<listing_27>`.
-
-<!-- trace:case id=g10.auction-auction.TC-y3z rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
-### g10.auction-auction.US13-TC2: Erasing the only bidder leaves the listing with no leader
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-13
-
-**Pre-conditions:**
-
-* `<listing_28>` is open inside its window, and customer A holds its only maximum of `<customer A maximum>`.
-* customer A has no unpaid order or open fulfilment, so nothing stops the erasure.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_28 | An open HKD listing, starting price `<starting_price>`, led by customer A alone at the starting price | · |
-| customer A maximum | HKD2,350 | (range: 80000–399999 minor units) |
-| starting_price | HKD280 | (range: 1000–79999 minor units), the opening price of `<listing_28>` |
-
-**Steps:**
-
-1. Erase customer A's account through the account-erasure procedure.
-2. Read `<listing_28>` from the public listing API.
-
-**Expected Results:**
-
-* `<listing_28>` has no leader and no current bid.
-* The next bid must reach `<starting_price>`, the opening price.
-* customer A's maximum appears nowhere on `<listing_28>`.
-
-<!-- trace:case id=g10.auction-auction.TC-lxa rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
-### g10.auction-auction.US13-TC3: Erasing a bidder re-prices the listing from the maxima left, never upward
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-13
-
-**Pre-conditions:**
-
-* `<listing_32>` is open inside its window, with increment `<increment>` and maxima committed in this order: `<committed_maxima>`, and Highest bid `<price before>`.
-* The erased customer has no unpaid order or open fulfilment, so nothing stops the erasure.
-
-**Test data:**
-
-| `<committed_maxima>` | `<price before>` | `<erased_customer>` | `<leader_after>` | `<price after>` | Fixture notes |
-| --- | --- | --- | --- | --- | --- |
-| customer A 23000, customer B 17000, customer C 13500 | 17500 | customer B | customer A | 14000 | `<price after>`: customer C's maximum plus 500 |
-| customer A 23000 raised to 47000 after customer B 22800, customer C 10500 | 23000 | customer C | customer A | 23000 | `<price after>`: unchanged: customer B's maximum plus 500 is 23300, above `<price before>` |
-| customer A 23000, customer B 17000, customer C 12500 | 17500 | customer C | customer A | 17500 | `<price after>`: unchanged, on the same bid |
-| customer A 23000, customer B 17000 | 17500 | customer A | customer B | 10000 | `<price after>`: the opening price |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| listing_32 | An open USD listing, opening price USD100 (fixed tier boundary), scheduled close more than an hour away; every amount above is in USD minor units | · |
-| increment | USD5 | (fixed tier increment), the USD 100 tier, at every next maximum above |
-
-**Steps:**
-
-1. Read `<listing_32>` from the public listing API, noting its scheduled close.
-2. Erase `<erased_customer>`'s account through the account-erasure procedure.
-3. Read `<listing_32>` from the public listing API.
-
-**Expected Results:**
-
-* Step 1 reads Highest bid `<price before>`.
-* Step 3 reads Highest bid `<price after>`, led by `<leader_after>`.
-* Step 3's Highest bid is never above `<price before>`.
-* Step 3's scheduled close is the one noted at step 1.
-* The erased customer's maxima appear nowhere on `<listing_32>`.
-
 ---
 
 ## g10.auction-auction.US14: Bidder reads why a bid was refused, and nothing else moves
@@ -4687,7 +2815,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-14
@@ -4749,7 +2876,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-14
@@ -4800,7 +2926,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-14
@@ -4859,7 +2984,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-14

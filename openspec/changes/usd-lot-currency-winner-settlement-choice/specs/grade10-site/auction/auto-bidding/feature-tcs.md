@@ -1,6 +1,6 @@
 # grade10-site/auction/auto-bidding Test Cases
 
-**Status:** reopened · 0/30
+**Status:** reopened · 0/24
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
 ## Walk 1: Collector commits a maximum on an open listing
@@ -85,16 +85,10 @@
    - The bid count reads 1, and Recent Bids shows one bid at the row's current bid after. g10.auction-auto-bidding.US1-TC5
    - Customer leads. g10.auction-auto-bidding.US1-TC5
 17. As customer B, submit the row's attempted maximum on the listing.
-   - Grade10 refuses the commitment, naming the row's minimum next bid. g10.auction-auto-bidding.US1-TC6
 18. Read the API response.
-   - No maximum is recorded for customer B. g10.auction-auto-bidding.US1-TC6
 19. Read the listing's current bid, leader and committed maxima.
-   - The current bid and the leader are as the row's standing gives them. g10.auction-auto-bidding.US1-TC6
 20. Wait until the scheduled close passes with no further commitment.
 21. Read the listing's state, winner and winning bid.
-   - The listing is closed. g10.auction-auto-bidding.US1-TC7
-   - Customer A wins. g10.auction-auto-bidding.US1-TC7
-   - The winning bid is 0 plus the currency's lowest increment, the row's winning bid, not 0. g10.auction-auto-bidding.US1-TC7
 22. As customer B, enter the row's `<user B maximum>` in the custom maximum on the bid panel.
 23. Confirm the commitment.
    - is the row's outcome. g10.auction-auto-bidding.US1-TC8
@@ -222,30 +216,21 @@
 ### Route
 
 1. Read the listing's bid count.
-   - The bid count includes that bid. g10.auction-auto-bidding.US5-TC5
 2. Read the listing's bid history.
-   - The history shows it as placed on that bidder's behalf, not as a manual bid. g10.auction-auto-bidding.US5-TC5
 3. Let time pass with no further commitment accepted.
-   - Grade10 places no further bid on either bidder's behalf. g10.auction-auto-bidding.US5-TC6
 4. Read the current bid and whether Grade10 placed any further bid.
-   - The current bid is unchanged. g10.auction-auto-bidding.US5-TC6
 5. As customer B, commit `<user B maximum>` on `<listing_3>`.
 6. Read the API response and `<listing_3>`'s bids.
-   - customer A leads at `<user B maximum>` plus `<increment>`, and that bid is recorded as placed on customer A's behalf. g10.auction-auto-bidding.US5-TC7
 7. As customer A, raise the maximum to `<user A raise>`.
 8. Read the API response.
-   - accepts the raise on the auction's rules alone, with no wait on the card provider, and Your maximum reads `<user A raise>`. g10.auction-auto-bidding.US5-TC7
 9. Read both customers' card activity at the card provider.
-   - nothing is held or charged on either card. g10.auction-auto-bidding.US5-TC7
 10. As customer B, commit a maximum of `<user B maximum>` at `<bid time>`.
 11. Read the current bid and Time left.
 12. Wait until the new close passes with no further commitment.
    - Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`. g10.auction-auto-bidding.US5-TC8
    - No further bid is placed on either maximum before the close. g10.auction-auto-bidding.US5-TC8
 13. Wait for 20:00 UTC.
-   - The listing is in extended bidding. g10.auction-auto-bidding.US5-TC9
 14. Read the listing's state and recorded close.
-   - The recorded close reads 20:30 UTC. g10.auction-auto-bidding.US5-TC9
 
 ## g10.auction-auto-bidding.US1: Collector commits a maximum on an open listing
 
@@ -265,7 +250,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
@@ -308,7 +292,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
@@ -351,7 +334,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
@@ -394,7 +376,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
@@ -436,7 +417,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
@@ -473,91 +453,6 @@ Runs once per row of **Test data**.
 * The bid count reads 1, and Recent Bids shows one bid at the row's current bid after.
 * Customer leads.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-65a rev=3 covers=g10.auction-auto-bidding.SC-arw -->
-### g10.auction-auto-bidding.US1-TC6: Maximum one minor unit below the minimum on a zero start is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-01
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
-
-**Pre-conditions:**
-
-* An open listing in the row's currency, starting price 0, in the row's standing.
-* customer B is signed in with a card linked.
-
-**Test data:**
-
-| Currency | Standing | Minimum next bid | Customer B's attempted maximum |
-| --- | --- | --- | --- |
-| USD | No maximum committed on a zero-start lot | USD1 (fixed boundary) | USD0.99 (range: 1–9999 minor units) |
-
-**Steps:**
-
-1. As customer B, submit the row's attempted maximum on the listing.
-2. Read the API response.
-3. Read the listing's current bid, leader and committed maxima.
-
-**Expected Results:**
-
-* Grade10 refuses the commitment, naming the row's minimum next bid.
-* No maximum is recorded for customer B.
-* The current bid and the leader are as the row's standing gives them.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-y4r rev=3 covers=g10.auction-auto-bidding.SC-9mj -->
-### g10.auction-auto-bidding.US1-TC7: Lone bidder wins a zero-start lot at the lowest increment
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-01
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
-
-**Pre-conditions:**
-
-* An open listing in the row's currency, starting price 0, extension duration 0, scheduled close 10 minutes ahead.
-* customer A committed the row's maximum before the scheduled close, the only maximum on the listing.
-
-**Test data:**
-
-| Currency | Lowest increment | Winning bid |
-| --- | --- | --- |
-| USD | USD1 (fixed boundary) | USD1 (fixed derived value) |
-
-**Steps:**
-
-1. Wait until the scheduled close passes with no further commitment.
-2. Read the listing's state, winner and winning bid.
-
-**Expected Results:**
-
-* The listing is closed.
-* Customer A wins.
-* The winning bid is 0 plus the currency's lowest increment, the row's winning bid, not 0.
-
 <!-- trace:case id=g10.auction-auto-bidding.TC-ic0 rev=3 covers=g10.auction-auto-bidding.SC-qbr -->
 ### g10.auction-auto-bidding.US1-TC8: Second maximum on a zero start must clear one increment above the opening price
 
@@ -571,7 +466,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
@@ -628,7 +522,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
@@ -667,7 +560,6 @@ customer(committed a maximum matching the row) is on a listing whose current bid
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
@@ -699,7 +591,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
@@ -740,7 +631,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
@@ -790,7 +680,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -833,7 +722,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -872,7 +760,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -911,7 +798,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -950,7 +836,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -989,7 +874,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -1030,7 +914,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -1078,7 +961,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -1123,7 +1005,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -1169,7 +1050,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auto-bidding-US-03
@@ -1226,7 +1106,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-04
@@ -1253,7 +1132,6 @@ admin(holds `auction:operate`) is on <grade10 auction admin listings url>. That 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-04
@@ -1298,7 +1176,6 @@ admin(holds `auction:operate`) is on <grade10 auction admin listings url>. That 
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-04
@@ -1342,237 +1219,6 @@ admin(holds `auction:operate`) is on <grade10 auction admin listings url>. That 
 **I want** every bid Grade10 places for me to count as a bid,
 **so that** my auto-bids keep a lot open during extended bidding as a manual bid would.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-dhr rev=2 -->
-### g10.auction-auto-bidding.US5-TC1: The hold is the maximum, not the current bid
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-05
-
-**Pre-conditions:**
-An open listing whose current bid matches the row.
-
-**Test data:**
-
-| Currency | Current bid | Committed maximum |
-| --- | --- | --- |
-| USD | 22500 minor units (USD 225.00) | 50000 minor units (USD 500.00) |
-| USD | 22500 minor units (USD 225.00) | 50000 minor units (USD 500.00) |
-| USD | 22500 minor units (USD 22,500) | 50000 minor units (USD 50,000) |
-
-**Steps:**
-
-1. Submit and accept the row's maximum for a bidder.
-2. Read the card authorization held for that bidder and listing.
-
-**Expected Results:**
-
-* Grade10 holds an authorization for the row's maximum.
-* Exactly one active authorization exists for that bidder and listing.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-5xp rev=2 -->
-### g10.auction-auto-bidding.US5-TC2: A raise that cannot be authorized changes nothing
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-05
-
-**Pre-conditions:**
-customer A(leads with a committed maximum matching the row). The card authorization for the row's attempted raise will fail.
-
-**Test data:**
-
-| Currency | Committed maximum | Attempted raise |
-| --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 80000 minor units (USD 800.00) |
-| USD | 50000 minor units (USD 500.00) | 80000 minor units (USD 800.00) |
-| USD | 50000 minor units (USD 50,000) | 80000 minor units (USD 80,000) |
-
-**Steps:**
-
-1. Raise customer A's maximum to the row's attempted raise.
-2. Read customer A's committed maximum, the leader, and the current bid.
-
-**Expected Results:**
-
-* Grade10 refuses the raise.
-* Customer A's committed maximum remains the row's committed maximum.
-* The leader and the current bid are unchanged.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-hqr rev=2 -->
-### g10.auction-auto-bidding.US5-TC3: An auto-bid step needs no new card check
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-05
-
-**Pre-conditions:**
-customer A(leads with an authorized maximum matching the row) while the current bid matches the row.
-
-**Test data:**
-
-| Currency | Customer A's maximum | Current bid | Challenger's maximum | Resolved current bid |
-| --- | --- | --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 25000 minor units (USD 250.00) | 30000 minor units (USD 300.00) | 32500 minor units (USD 325.00) |
-| USD | 50000 minor units (USD 500.00) | 25000 minor units (USD 250.00) | 30000 minor units (USD 300.00) | 32500 minor units (USD 325.00) |
-| USD | 50000 minor units (USD 50,000) | 25000 minor units (USD 25,000) | 30000 minor units (USD 30,000) | 32500 minor units (USD 32,500) |
-
-**Steps:**
-
-1. Commit the row's challenger maximum as a challenger.
-2. Read customer A's current bid on their behalf and their authorization amount.
-
-**Expected Results:**
-
-* Grade10 raises customer A's bid on their behalf without a further card authorization.
-* The current bid is the row's resolved current bid.
-* Customer A's authorization remains the row's maximum.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-rmo rev=2 -->
-### g10.auction-auto-bidding.US5-TC5: An auto bid is counted and recorded on the bidder's behalf
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-05
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
-
-**Pre-conditions:**
-Grade10 has raised a bidder's bid on their behalf.
-
-**Steps:**
-
-1. Read the listing's bid count.
-2. Read the listing's bid history.
-
-**Expected Results:**
-
-* The bid count includes that bid.
-* The history shows it as placed on that bidder's behalf, not as a manual bid.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-zjt rev=2 -->
-### g10.auction-auto-bidding.US5-TC6: Standing maxima do not keep bidding on their own
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-05
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
-
-**Pre-conditions:**
-Two bidders have committed maxima and the listing has been resolved to the two-maximum price.
-
-**Steps:**
-
-1. Let time pass with no further commitment accepted.
-2. Read the current bid and whether Grade10 placed any further bid.
-
-**Expected Results:**
-
-* Grade10 places no further bid on either bidder's behalf.
-* The current bid is unchanged.
-
-<!-- trace:case id=g10.auction-auto-bidding.TC-s4f rev=4 covers=g10.auction-auto-bidding.SC-0yu -->
-### g10.auction-auto-bidding.US5-TC7: Committing, auto-bidding and raising take nothing from the card
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, release
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auto-bidding-US-05
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
-
-**Pre-conditions:**
-
-* customer A(card linked) leads `<listing_3>` with a committed maximum of `<user A maximum>`, at `<leader price>`.
-* customer B(card linked, no bid on `<listing_3>`) is signed in on a separate session.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_3>` | An open USD listing taking bids, led by customer A |
-| `<leader price>` | USD280 (range: 10000–49999 minor units), the starting price |
-| `<user A maximum>` | USD560 (range: 50000–99999 minor units) |
-| `<user B maximum>` | USD340 (range: 10000–49999 minor units), below `<user A maximum>` |
-| `<increment>` | USD5 (fixed tier increment), the USD10,000 tier at `<user B maximum>` |
-| `<user A raise>` | USD920 (range: 50000–99999 minor units) |
-
-**Steps:**
-
-1. As customer B, commit `<user B maximum>` on `<listing_3>`.
-2. Read the API response and `<listing_3>`'s bids.
-3. As customer A, raise the maximum to `<user A raise>`.
-4. Read the API response.
-5. Read both customers' card activity at the card provider.
-
-**Expected Results:**
-
-* Step 2: customer A leads at `<user B maximum>` plus `<increment>`, and that bid is recorded as placed on customer A's behalf.
-* Step 4 accepts the raise on the auction's rules alone, with no wait on the card provider, and Your maximum reads `<user A raise>`.
-* Step 5: nothing is held or charged on either card.
-
 <!-- trace:case id=g10.auction-auto-bidding.TC-y3w rev=2 -->
 ### g10.auction-auto-bidding.US5-TC8: Auto bid during extended bidding restarts the timer once
 
@@ -1586,7 +1232,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-05
@@ -1620,53 +1265,12 @@ Runs once per row of **Test data**.
 * Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`.
 * No further bid is placed on either maximum before the close.
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-wqa rev=2 -->
-### g10.auction-auto-bidding.US5-TC9: Maximum committed before the close starts extended bidding
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-05
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/bidding/autoBidding.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_2>` is open, and its only bidder, customer A, committed a maximum before the scheduled close and leads at the starting price.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | An open listing, scheduled close 20:00 UTC, extension duration 1800 seconds |
-
-**Steps:**
-
-1. Wait for 20:00 UTC.
-2. Read the listing's state and recorded close.
-
-**Expected Results:**
-
-* The listing is in extended bidding.
-* The recorded close reads 20:30 UTC.
-
 ## Settled
 
 - A first maximum on a 0 start must reach 0 plus the currency's lowest increment; a first bid of 0 or of one minor unit is a non-goal, and no case asserts either.
 - Committing or raising a maximum takes nothing from the card, and a bid Grade10 places for a collector takes nothing either; no case reads a card authorization or a hold switch (decisions Q1, Q5).
 - A raise is accepted or refused on the auction's rules alone; a raise refused for a card reason no longer exists, and its case is deprecated.
 - An auto-bid step's price is US3's to assert; with no card check left to tell it apart, the US5 case that read it is deprecated.
-
 
 ## Reconciliation
 

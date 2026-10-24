@@ -37,7 +37,6 @@ const testCase = (
     ...(status === "" ? [] : [`* **Status:** ${status}`]),
     "* **Behaviour:** positive",
     "* **Type:** smoke",
-    "* **Layer:** e2e",
     ...(automation === "" ? [] : [`* **Automation status:** ${automation}`]),
     "* **Testability:** automation",
     `* **Trace:** ${trace}`,
@@ -184,7 +183,8 @@ describe("what a suite says about the spec beside it", () => {
         "",
         "**Status:** pending-review",
         "",
-        "**Out of suite:** alpha-SC-08, alpha-SC-09",
+        "**Out of suite (api):** alpha-SC-08",
+        "**Out of suite (seo):** alpha-SC-09",
         "",
         "## alpha-US1: Reader follows the thing end to end",
         "",
@@ -201,7 +201,7 @@ describe("what a suite says about the spec beside it", () => {
         "",
         "**Status:** pending-review",
         "",
-        "**Out of suite:**",
+        "**Out of suite (non-GUI):**",
         "",
         "- `alpha-SC-08` — nobody reaches it",
         "- `alpha-SC-09` — package contract",
@@ -212,6 +212,35 @@ describe("what a suite says about the spec beside it", () => {
       ].join("\n"),
     );
     expect(parsed.outOfSuite).toEqual(["alpha-SC-08", "alpha-SC-09"]);
+  });
+
+  it("names an out-of-suite label with no category, or an unknown one", () => {
+    const parsed = readTestCases(
+      [
+        "# demo-product/alpha Test Cases",
+        "",
+        "**Status:** pending-review",
+        "",
+        "**Out of suite:** alpha-SC-07",
+        "**Out of suite (backend):** alpha-SC-08",
+        "**Out of suite (unit):** alpha-SC-09",
+        "",
+        "**Out of suite:** none — nothing is left out",
+        "",
+        "## alpha-US1: Reader follows the thing end to end",
+        "",
+        testCase("alpha-US1-TC1-1", "It happens", "draft"),
+      ].join("\n"),
+    );
+    expect(parsed.outOfSuite).toEqual([
+      "alpha-SC-07",
+      "alpha-SC-08",
+      "alpha-SC-09",
+    ]);
+    expect(parsed.outOfSuiteMislabelled).toEqual([
+      "**Out of suite:**",
+      "**Out of suite (backend):**",
+    ]);
   });
 
   it("keeps a case's properties list out of it", () => {
@@ -366,7 +395,7 @@ describe("a suite that states no status", () => {
         ),
       ),
     ).toThrow(
-      /test case `alpha-US1-TC1-1` is issued twice, at line 11 and line 36 — an id names one thing forever/,
+      /test case `alpha-US1-TC1-1` is issued twice, at line 11 and line 35 — an id names one thing forever/,
     );
   });
 

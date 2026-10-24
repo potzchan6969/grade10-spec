@@ -63,6 +63,7 @@ Read the store at its `main`, never the pinned copy:
 - **The change** - `proposal.md`, `decisions.md`, `ui-design.md`,
   `tech-design.md`, `tasks.md`, `.openspec.yaml`, and every
   `specs/<capability>/` file: `spec.md`, `user-journeys.md`, `feature-tcs.md`
+  (none for a Grade10 store capability, whose cases are in its PRD folder)
 - **The pages** - each PRD page or chapter section the proposal links, and
   every page whose frontmatter `spec:` names a capability the change has a
   delta for

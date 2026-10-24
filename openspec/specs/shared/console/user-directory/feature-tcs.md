@@ -1,7 +1,8 @@
 # shared/console/user-directory Test Cases
 
-**Status:** pending-review · 0/19
+**Status:** pending-review · 0/14
 **Drafts styled:** 2026-10-06, tcs-rules r4
+**Out of suite (unit):** shared-console-user-directory-SC-30, shared-console-user-directory-SC-31, shared-console-user-directory-SC-32
 
 ## shared-console-user-directory-US1: Console renders auction standing on one account
 
@@ -11,94 +12,6 @@
 
 **Walked by:** nobody on their own - the admin Users panel composes this
 package contract.
-
-<!-- trace:case id=g10.shared-user-directory.TC-6g5 rev=1 covers=g10.shared-user-directory.SC-icf,g10.shared-user-directory.SC-x0r,g10.shared-user-directory.SC-mzm -->
-### shared-console-user-directory-US1-TC1-1: A consumer with both handlers gets one auction-standing move
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** One account open
-
-**Pre-conditions:**
-
-* customer is rendering `UserAccountPanel` with the supplied auction standing and handlers.
-
-**Steps:**
-
-1. Render an account panel with suspend and reinstate handlers.
-2. Render one account that is not suspended and one that is suspended.
-
-**Expected Results:**
-
-* The first panel offers suspend only.
-* The second panel offers reinstate only.
-
-<!-- trace:case id=g10.shared-user-directory.TC-ka4 rev=1 covers=g10.shared-user-directory.SC-icf,g10.shared-user-directory.SC-x0r,g10.shared-user-directory.SC-mzm -->
-### shared-console-user-directory-US1-TC2-1: A consumer missing a handler gets no auction-standing move
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** One account open
-
-**Pre-conditions:**
-
-* customer is rendering `UserAccountPanel` with only one auction-standing handler.
-
-**Steps:**
-
-1. Render a panel with only one auction-standing handler.
-
-**Expected Results:**
-
-* The panel offers neither suspend nor reinstate.
-
-<!-- trace:case id=g10.shared-user-directory.TC-pw0 rev=1 covers=g10.shared-user-directory.SC-icf,g10.shared-user-directory.SC-x0r,g10.shared-user-directory.SC-mzm -->
-### shared-console-user-directory-US1-TC3-1: The panel delegates confirmation to the consumer dialog
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** One account open
-
-**Pre-conditions:**
-
-* customer is rendering `UserAccountPanel` with a suspend handler and `UserModerationDialog` supplied by the consumer.
-
-**Steps:**
-
-1. Start suspend from an eligible panel.
-2. Confirm it in the consumer's moderation dialog.
-
-**Expected Results:**
-
-* The panel reports the requested move without confirming it.
-* The dialog receives the confirmation and its required reason.
 
 ---
 
@@ -118,7 +31,6 @@ package contract.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-console-user-directory-US-02
@@ -163,7 +75,6 @@ package contract.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-02
@@ -194,78 +105,6 @@ package contract.
 * Step 2 says the account holds no sessions.
 * Step 2 shows the control that ends every session as unavailable.
 
-### shared-console-user-directory-US2-TC8-1: Sessions dialog names sessions by identifier and shows no secret
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-console-user-directory-US-02
-
-**Pre-conditions:**
-
-* The console holds a secret for each of two sessions and supplies only their identifiers.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| first session secret | A secret the console holds for the first session and does not supply |
-| second session secret | A secret the console holds for the second session and does not supply |
-
-**Steps:**
-
-1. Render the sessions dialog with the two sessions.
-2. Read each session entry in the dialog.
-3. Search the dialog's text and markup for `<first session secret>` and `<second session secret>`.
-
-**Expected Results:**
-
-* Step 2 shows each session with its identifier, the two identifiers differing.
-* Step 3 finds neither secret.
-
-### shared-console-user-directory-US2-TC9-1: Dialog says an account has no sessions and offers nothing to end
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-console-user-directory-US-02
-
-**Pre-conditions:**
-
-* The console supplies no session for `<account with no sessions>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| account with no sessions | An account the console supplies no session for |
-
-**Steps:**
-
-1. Render the sessions dialog for `<account with no sessions>`.
-2. Read the dialog.
-
-**Expected Results:**
-
-* Step 2 says the account holds no sessions.
-* Step 2 shows the control that ends every session as unavailable.
-
 ---
 
 ## shared-console-user-directory-US4: Operator reads one account beside the directory
@@ -287,7 +126,6 @@ confirmations that never meet.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-04
@@ -325,7 +163,6 @@ Signed in as admin(holds `user:list`). Directory lists `<account with identity, 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-04
@@ -364,7 +201,6 @@ Signed in as admin(holds `user:list`). Directory lists `<banned account with rea
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-04
@@ -414,7 +250,6 @@ accident.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-05
@@ -449,7 +284,6 @@ Console renders the directory without a sessions handler and without a moderatio
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-05
@@ -501,7 +335,6 @@ without the components deciding what comes next.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-06
@@ -529,7 +362,6 @@ Signed in as admin(console renders the directory without a create handler).
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-06
@@ -573,7 +405,6 @@ Signed in as admin(console supplies a create handler and its role vocabulary). C
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-06
@@ -603,7 +434,6 @@ Signed in as admin(console supplies a create handler).
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-06
@@ -645,7 +475,6 @@ Signed in as admin(console supplies a create handler and an email lookup). An ac
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-06
@@ -687,7 +516,6 @@ Signed in as admin(console supplies a create handler and a non-empty list of all
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-06
@@ -731,7 +559,6 @@ Signed in as admin(console supplies a create handler, a locked-role list, and a 
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-user-directory-US-06

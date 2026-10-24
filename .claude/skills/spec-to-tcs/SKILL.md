@@ -5,22 +5,22 @@ description: Internal test-case generator for planning-dev's isolated QA1 pass a
 
 # Generate Test Cases
 
-This skill owns the workflow. The creation contract lives in [Specs to Test Cases](../../../docs/governance/specs-to-test-cases.md), the sole writing rules live in [TCS Conventions](../../../docs/governance/tcs-conventions.md), and case shape lives in the planning template. Read all three before writing.
+This skill is the workflow. What a case is and covers is [Specs to Test Cases](../../../docs/governance/specs-to-test-cases.md); how it reads is [TCS Conventions](../../../docs/governance/tcs-conventions.md). Read both before writing. The file's shape is the template the rules document links to.
 
-- **Scope** - Generate or update the named suite in the named tree. Planning-dev invokes this for QA1; an explicit suite refresh may invoke it directly. New cases remain `draft`; human classification belongs to [tcs-review](../tcs-review/SKILL.md), and execution belongs to [tcs-run-sheet](../tcs-run-sheet/SKILL.md).
-- **Isolation** - A feature QA1 run reads only the caller's bundle. Never read scenario text, technical design, QA2 material, archive or unpermitted durable specs to create or shape cases. Scenario comparison is a later QA2 action.
-- **Completion** - Deliver the suite, validation result, anchor coverage gaps, partition/grouping decisions, unresolved product questions and pending QA2 scenario-link work to the caller.
+- **Scope** - Write or update the named suite in the named tree. Planning-dev invokes this for QA1; an explicit refresh may invoke it directly. New cases stay `draft`; review belongs to [tcs-review](../tcs-review/SKILL.md), execution to [tcs-run-sheet](../tcs-run-sheet/SKILL.md).
+- **Isolation** - A feature QA1 run reads only the caller's bundle. Never read scenario text, technical design, QA2 material, archive or unpermitted durable specs to create or shape a case.
+- **Store** - A Grade10 store target writes only to `docs/prds/products/grade10-site/store/tests/`, from the PRD pages and Storybook; never a `*-tcs.md` under `openspec/`.
 
 ## Workflow
 
-1. **Resolve the target** - Determine level, active versus durable tree and the owning suite from the governance document. Archive is never a target. For multiple levels, work top down and finish each level's draft before deriving the next.
-2. **Read the inputs** - Use the isolated bundle for a feature run. For composed suites, read every permitted journey and PRD in scope. Read the existing suite for id continuity, settled decisions and duplicate detection, but not its reconciliation as a source of requirements.
-3. **Prepare the suite** - Show existing status, revision, journeys, cases and requested operation. Preserve reviewed and deprecated cases. Regenerate only the drafts allowed by the rules revision and regeneration guard. Add missing journeys only from permitted product context, never from scenario text.
-4. **Generate independently** - Group by observable outcome, starting state, route and checking. Use representative equivalence partitions, stated boundaries and only outcome-changing or risk-changing interactions. Put same-purpose values in test-data rows. Do not create Cartesian products. Trace each case formally to its anchor. New case markers may omit `covers`; QA2 adds scenario links later.
-5. **Plan walks** - After the cases exist, inspect their independent routes for shared setup, data and page transitions that would save a human tester repeated work. Add a feature-scoped `## Walk` only when it groups two or more existing cases without changing their assertions; keep unrelated routes separate and write no walk when no meaningful reuse exists. A walk references cases by their full human-facing ids, carries only starting state, shared data and route context, and never becomes a new coverage claim. Report `Walk added` or `No walk — <reason>`.
-6. **Write the suite** - Follow the governance contract, the conventions file and the template. New cases are `draft` and `manual`. Apply **Step 5: Classify the Case** for property-only edits and **A Case That Already Exists Is Not Written Twice** for verified-content changes; a classification edit alone does not reset review or automation status. Keep existing trace marker ids; preserve `rev` for purpose-preserving edits and bump it only when behaviour changes. Write the human-facing `<app>.<domain>-<capability>.US<n>-TC<m>` heading without a duplicate local reference. Print walks before case definitions. Do not write human review verdicts, `Reviewed`, reconciliation links or scenario-derived cases.
-7. **Record questions** - Put unresolved product choices in the change's `decisions.md` `## Raised` table, each with its options and `recommended: <option>` in the Raised cell; raise every unsettled point - QA2 closes what the held test does not hold. Report missing anchors, duplicate candidates, out-of-scope paths and cases that need a domain or higher-level owner. Do not turn a question into a test case.
-8. **Validate** - Run the suite validator. Fix only findings that are resolvable within the isolated input. Return scenario-dependent findings to QA2 without breaking blindness.
+1. **Resolve the target** - the level, the tree and the owning suite, from the rules document. Archive is never a target. For several levels, finish each level's drafts top down before the next.
+2. **Read the inputs** - the isolated bundle on a feature run; every permitted journey and PRD page for a composed suite. Read the existing suite to extend a live case before writing a new one, and for id continuity, settled questions and duplicates; never its reconciliation as a source.
+3. **Prepare the suite** - show its status, revision, journeys, cases and the requested operation. Keep reviewed and deprecated cases, except in a regeneration the person confirmed, which rewrites every case as the rules' **When a Suite Already Exists** says.
+4. **Write each case as a GUI walk** - a product user acting in the product, checked on a screen, email, PDF or notification. Add an observation or an edge value to a live case on the same route before writing a new case. A Common Rule from the conventions rides on a live case as a row; record it `Assumed`. List a scenario no product user can reach under `**Out of suite (<category>):**`. Wording is platform- and environment-neutral; tag a platform requirement `[Mobile only]` or `[Web only]`; end a result with `UI matching <story-id>` where a story draws the state. Group by outcome, starting state, route and checking; rows change the input, never the direction of the result; use representative partitions and stated boundaries; no Cartesian products. Trace each case to its anchor; a new marker carries `id` and `rev` only.
+5. **Draft walks where useful** - per the conventions; report `Walk added` or `No walk - <reason>`.
+6. **Write the suite** - new cases `draft` and `manual`, the template's shape, the conventions' wording. Keep marker ids; keep `rev` unless behaviour changed. Print walks before cases. Write no review verdict, `Reviewed` line, reconciliation link or scenario-derived case.
+7. **Record questions** - unsettled product choices go to the change's `decisions.md` `## Raised`, each with its options and `recommended: <option>`. Report missing anchors, duplicates and cases needing a higher-level owner. A question is never turned into a case.
+8. **Validate** - fix only what the isolated input can settle; return scenario-dependent findings to QA2.
 
 ```bash
 pnpm run tcs:validate
@@ -31,11 +31,12 @@ pnpm run validate:changes <change-name>
 
 Report:
 
-- suite paths, level and source tree
-- case counts, ids added or retained, grouped rows and partition decisions
-- walks added, or the reason no walk was useful
-- anchor coverage gaps, domain-level reuse and duplicate candidates
-- unresolved decisions and cases blocked on execution details
-- validator results and cases awaiting QA2 post-hoc scenario linking
+- suite paths, level and tree
+- cases added, kept and grouped, with partition decisions
+- observations added to live cases instead of new cases
+- walks drafted, or why none
+- anchor gaps, out-of-suite lists, domain reuse and duplicate candidates
+- unresolved decisions and cases blocked on execution detail
+- validator results and cases awaiting QA2 links
 
-Return the bundle and draft suite to [planning-dev](../planning-dev/SKILL.md). QA2 owns reconciliation, scenario comparison and `covers` links. Outside planning, route implementation-available suites to [tcs-review](../tcs-review/SKILL.md).
+Return the bundle and draft suite to [planning-dev](../planning-dev/SKILL.md). QA2 owns reconciliation and `covers` links. Outside planning, send deployed suites to [tcs-review](../tcs-review/SKILL.md).

@@ -1,385 +1,45 @@
 # shared/auth/audit Test Cases
 
-**Status:** reopened · 22/32
-**Reviewed:** 2026-10-07, tcs-rules r4, lapsed 2026-10-19
-**Drafts styled:** 2026-10-19, tcs-rules r6
+**Status:** pending-review · 0/11
+**Drafts styled:** 2026-10-24, tcs-rules r7
+**Reviewed:** 2026-10-23, tcs-rules r7, lapsed 2026-10-24
 
-## shared-auth-audit-US1: Operator's identity action is recorded
+## Background
+
+* `<g10url>` is the Grade10 site and `<console url>` the Grade10 console of the environment under test.
+* The trail is read on the console's identity audit trail page, filtered by subject or actor id from `<start time>`, the time just before the case's first step. Every entry names people by user id; no field of an expanded entry shows an email address, a token or a secret.
+* `<tester address>` is a fresh plus-tag of the collector; the staging test-endpoint workflow acts on it as `test-endpoint-workflow`.
+
+## Walk 1: An admin acts on an account and reads the trail
+
+**Starting state:**
+
+- admin(holds `user:list`, `user:ban`, `session:list`, `session:revoke` and `audit:read`) signed in on `<console url>`; `<subject account>` unbanned and signed in on one browser
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| `<subject account>` | an account holding `user` only |
+
+### Route
+
+1. Search the directory for `<subject account>`, read its sessions, then ban it with reason `Chargeback dispute open`.
+   - The ban is on the trail with its reason `shared.auth-audit.US1-TC1`
+   - The search and the session read are not `shared.auth-audit.US1-TC2`
+2. Run the trail's consistency check.
+   - It answers whether the chain holds, showing no hash `shared.auth-audit.US2-TC1`
+
+## shared.auth-audit.US1: Operator's identity action is recorded
 
 **As an** operator,
 **I want** a ban, unban, set-role, or revoke — including a refusal — on the identity trail,
 **so that** a dispute can name who did what, by user id, without secrets.
 
-<!-- trace:case id=g10.shared-audit.TC-63z rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
-### shared-auth-audit-US1-TC1-1: Successful ban is on the trail by user id
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-audit-US-01
-
-**Pre-conditions:**
-
-* admin(holds `user:ban`) is on `<grade10 admin users url>`.
-* `<subject account>` is unbanned.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject account | An unbanned account holding `user` only |
-| ban reason | Chargeback dispute open, any reason the operator states |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Paste `<subject account>`'s user id into the search.
-2. Choose Ban in the account's panel.
-3. Enter `<ban reason>` and confirm.
-4. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-5. Filter by subject id `<subject account>`.
-6. Expand the ban row.
-
-**Expected Results:**
-
-* Step 5 lists the ban, naming the operator and `<subject account>` by user id, not by email.
-* Step 6 shows `<ban reason>` and no secret.
-
-<!-- trace:case id=g10.shared-audit.TC-ccj rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
-### shared-auth-audit-US1-TC2-1: Refused ban is on the trail as unsuccessful
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-01
-
-**Pre-conditions:**
-
-* admin(does not hold `user:ban`) is signed in to the console.
-* `<subject account>` is unbanned.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject account | An unbanned account holding `user` only |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Send the users ban call, as `<grade10 admin api docs url>` lists it, for `<subject account>`.
-2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-3. Filter by subject id `<subject account>`.
-
-**Expected Results:**
-
-* Step 3 lists the ban attempt.
-* The attempt is marked as not succeeded.
-
-<!-- trace:case id=g10.shared-audit.TC-pss rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
-### shared-auth-audit-US1-TC3-1: Session revoke is on the trail
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-01
-
-**Pre-conditions:**
-
-* admin(holds `session:list` and `session:revoke`) is on `<grade10 admin users url>`.
-* `<subject account>` is signed in on one browser.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject account | An account signed in on one browser only |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Paste `<subject account>`'s user id into the search.
-2. Revoke the session in the account's panel.
-3. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-4. Filter by subject id `<subject account>`.
-
-**Expected Results:**
-
-* Step 4 lists the revoke, naming the operator and `<subject account>`.
-
-<!-- trace:case id=g10.shared-audit.TC-api rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
-### shared-auth-audit-US1-TC4-1: Directory and session lists write no trail entry
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-01
-
-**Pre-conditions:**
-
-* admin(holds `user:list` and `session:list`) is on `<grade10 admin users url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject account | An account signed in on one browser |
-| start time | The time just before step 1 |
-| operator id | The signed-in operator's user id |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Search the directory for `<subject account>`.
-2. Read the sessions in `<subject account>`'s panel.
-3. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-4. Filter by actor id `<operator id>`, from `<start time>`.
-
-**Expected Results:**
-
-* Step 4 lists no entry for the directory list.
-* Step 4 lists no entry for the session list.
-
-<!-- trace:case id=g10.shared-audit.TC-1g2 rev=1 covers=g10.shared-audit.SC-7ql,g10.shared-audit.SC-bks,g10.shared-audit.SC-hkt -->
-### shared-auth-audit-US1-TC5-1: Collector sign-in and sign-out write no trail entry
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Recorded actions
-
-**Pre-conditions:**
-
-* customer is not signed in on `<grade10 store url>`.
-* An unused, unexpired sign-in link has been emailed to `<collector email>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| collector email | An inbox the tester reads, with an account holding `user` only |
-| collector id | That account's user id |
-| start time | The time just before step 1 |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Follow the sign-in link emailed to `<collector email>`.
-2. Sign out on `<grade10 store url>`.
-3. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-4. Filter by subject id `<collector id>`, from `<start time>`.
-5. Filter by actor id `<collector id>`, from `<start time>`.
-
-**Expected Results:**
-
-* Step 4 lists no entry for the sign-in or the sign-out.
-* Step 5 lists no entry for the sign-in or the sign-out.
-
-<!-- trace:case id=g10.shared-audit.TC-6ic rev=1 covers=g10.shared-audit.SC-7ql,g10.shared-audit.SC-bks,g10.shared-audit.SC-hkt -->
-### shared-auth-audit-US1-TC6-1: A trusted-product account or session read writes no trail entry
+<!-- trace:case id=g10.shared-audit.TC-63z rev=2 -->
+### shared.auth-audit.US1-TC1: An operator's ban, unban, role change or revoke is on the trail, refused or not
 
 Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Recorded actions
-
-**Pre-conditions:**
-
-* `<subject account>` exists and is signed in on one browser.
-
-**Test data:**
-
-| `<read request>` | `<expected outcome>` |
-| --- | --- |
-| Whether an account exists for `<subject email>` | No trail entry |
-| The session of `<subject account>` | No trail entry |
-
-| Field | Value |
-| --- | --- |
-| subject account | An account holding `user` only |
-| subject email | That account's email |
-| start time | The time just before step 1 |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Send `<read request>` as a trusted product.
-2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-3. Filter to the identity product, from `<start time>`.
-
-**Expected Results:**
-
-* Step 3 lists this outcome: `<expected outcome>`.
-
-### shared-auth-audit-US1-TC7-1: Test-endpoint ban, grant and scoped role are on the trail under the caller's kind
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-01
-
-**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` rows are removed, because Q50 lets the token capture, expire and clear only. The case does not assert the subject's user id or the absence of an email or token, so it fully covers no scenario; see TC3.
-
-**QA2 covers:** none
-
-**Pre-conditions:**
-
-* The caller holds the test-endpoint kind `<caller kind>`.
-* `<tester address>` is a unique plus-tag of the collector whose account is not banned and holds no `<scope>` role.
-
-**Test data:**
-
-| Action | Caller kind |
-| --- | --- |
-| ban | test-endpoint-workflow |
-| grant | test-endpoint-workflow |
-| scoped role | test-endpoint-workflow |
-
-**Steps:**
-
-1. Note the number of entries on the identity trail.
-2. Call the test endpoint to `<action>` `<tester address>` as `<caller kind>`.
-3. Read the identity trail.
-
-**Expected Results:**
-
-* Step 2 succeeds.
-* The trail holds one more entry than in Step 1.
-* The new entry records `<action>`.
-* The new entry names `<caller kind>` in place of a user id.
-
-### shared-auth-audit-US1-TC8-1: Test-endpoint capture, expire and clear write no entry
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-01
-
-**QA2 disposition:** kept. The QA-token rows fully assert SC-39 and SC-45. The workflow rows rest on the requirement sentence that capture, expire and clear write no entry, and on Q45.
-
-**QA2 covers:** shared-auth-audit-SC-39, shared-auth-audit-SC-45
-
-**Pre-conditions:**
-
-* The caller is `<caller>`.
-* `<tester address>` is a tester address on staging.
-
-**Test data:**
-
-| Action | Caller |
-| --- | --- |
-| capture | the workflow |
-| capture | QA token |
-| expire | the workflow |
-| expire | QA token |
-| clear | the workflow |
-| clear | QA token |
-
-**Steps:**
-
-1. Note the number of entries on the identity trail.
-2. Call the test endpoint to `<action>` for `<tester address>` as `<caller>`.
-3. Read the number of entries on the identity trail.
-
-**Expected Results:**
-
-* Step 2 succeeds.
-* The trail holds the same number of entries as in Step 1.
-
-### shared-auth-audit-US1-TC9-1: Test-endpoint entries carry no token, address or email
 
 **Classification:**
 
@@ -388,42 +48,39 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** security
-* **Suites:** none
-* **Layer:** api
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** shared-auth-audit-US-01
-
-**QA2 disposition:** kept with a note. Repaired: the caller changes from `test-endpoint-qa-token` to `test-endpoint-workflow`, because Q50 refuses the token any ban or grant; the create step is removed, because Q47 gives the endpoint no create action; the entries are counted as two. The case asserts the no-token, no-address and no-email clauses of SC-38 and SC-40, not their naming or action clauses, so it fully covers no scenario.
-
-**QA2 covers:** none
 
 **Pre-conditions:**
 
-* The caller holds the test-endpoint kind `test-endpoint-workflow`.
-* `<tester address>` is a unique plus-tag of the collector whose account is not banned.
+* admin(holds `user:ban`, `user:set-role`, `session:revoke` and `audit:read`) is signed in on `<console url>`.
+* The row's account is in the row's state.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Tester address | `<tester address>` |
-| QA token | `<qa token>` |
+| Act, from the account's panel in the user directory | Account | Trail entry |
+| --- | --- | --- |
+| ban, reason `Chargeback dispute open` | unbanned, holding `user` only | a ban, showing the reason |
+| unban | banned, holding `user` only | an unban |
+| give the account `staff` | holding `user` only | a role change |
+| revoke its session | signed in on one browser | a revoke |
+| ban | another account holding `admin` | a ban, marked not succeeded; the account is not banned |
 
 **Steps:**
 
-1. Call the test endpoint to ban `<tester address>`.
-2. Call the test endpoint to grant `<scope>` to `<tester address>`.
-3. Read the two entries written by Steps 1 and 2.
+1. Do the row's act.
+2. On the audit trail page, filter by the account's user id and expand the entry.
 
 **Expected Results:**
 
-* Each of the two entries names `test-endpoint-workflow` in place of a user id.
-* No field of either entry holds the QA token.
-* No field of either entry holds the tester address.
-* No field of either entry holds an email address.
+* Step 2: the row's entry, naming the admin and the account by user id.
 
-### shared-auth-audit-US1-TC10-1: A refused test-endpoint ban is on the trail under the caller's kind
+<!-- trace:case id=g10.shared-audit.TC-api rev=2 -->
+### shared.auth-audit.US1-TC2: Reading accounts, signing in and out, and the test endpoint's reads write no entry
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -431,362 +88,149 @@ Runs once per row of **Test data**.
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
+* **Type:** security
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-01
-
-**QA2 disposition:** kept. A workflow ban on an address that is no tester is refused after the access check, so it is on the trail (Q46).
-
-**QA2 covers:** shared-auth-audit-SC-43
+* **Testability:** automation, manual
+* **Trace:** Recorded actions
 
 **Pre-conditions:**
 
-* The caller holds the test-endpoint kind `test-endpoint-workflow`.
-* `<other address>` is not a tester address of the environment and holds no account.
+* The row's person is in the row's place.
+* admin(holds `audit:read`) can open the audit trail page in another browser.
+
+**Test data:**
+
+| Person | Act | Filtered by |
+| --- | --- | --- |
+| admin(holds `user:list` and `session:list`) on `<console url>` | search the directory for an account and read its sessions | the admin's user id |
+| customer(holds an order), signed in on `<g10url>` | open `<g10url>/profile/orders`, open an order, then reload `<g10url>/profile` | the customer's user id |
+| customer, signed out on `<g10url>`, with an unused sign-in link in their inbox | follow the link, then sign out | the customer's user id, as subject and as actor |
+| the staging test-endpoint workflow | capture the collector's sign-in link, expire it, and clear the sign-in limits | the identity product |
+| the staging QA token alone | ban the collector | the identity product |
 
 **Steps:**
 
-1. Note the number of entries on the identity trail.
-2. Call the test endpoint to ban `<other address>` as `test-endpoint-workflow`.
-3. Read the identity trail.
+1. Do the row's act.
+2. On the audit trail page, filter as the row says.
 
 **Expected Results:**
 
-* Step 2 is refused.
-* The trail holds one more entry than in Step 1.
-* The new entry records a refused ban and names `test-endpoint-workflow` in place of a user id.
-* No field of the new entry holds `<other address>`.
+* Step 2 lists no entry for the act.
 
-### shared-auth-audit-US1-TC11-1: A ban the access check refuses writes no entry
+### shared.auth-audit.US1-TC3: The test endpoint's writes are one entry each, under the caller's kind
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** manual
 * **Trace:** shared-auth-audit-US-01
-
-**QA2 disposition:** kept. A QA-token ban is refused by the access check, which writes no entry.
-
-**QA2 covers:** shared-auth-audit-SC-46
 
 **Pre-conditions:**
 
-* The caller carries only the staging QA token.
-* `<tester address>` is a tester address on staging.
+* The staging test-endpoint workflow has run the row's act at `<action time>`.
+* admin(holds `audit:read`) is signed in on `<console url>`.
+
+**Test data:**
+
+| Act | Address | Trail entry |
+| --- | --- | --- |
+| ban | `<tester address>` | one ban |
+| grant `admin` | the admin-only tester | one grant |
+| grant the scoped role `staff` | `<tester address>` | one grant |
+| ban | an address that is no tester and holds no account | one ban, marked not succeeded |
 
 **Steps:**
 
-1. Note the number of entries on the identity trail.
-2. Call the test endpoint to ban `<tester address>` with only the QA token.
-3. Read the identity trail.
+1. On the audit trail page, filter to the identity product from `<action time>` and expand each entry.
 
 **Expected Results:**
 
-* Step 2 is refused.
-* The trail holds the same number of entries as in Step 1.
+* The row's entry, naming `test-endpoint-workflow` where a user id would stand, and no address or token.
 
 ---
 
-## shared-auth-audit-US2: Auditor reads the identity trail
+## shared.auth-audit.US2: Auditor reads the identity trail
 
 **As an** auditor,
 **I want** to read the trail and check it is consistent,
 **so that** I can answer whether the record holds without being shown the proof.
 
-<!-- trace:case id=g10.shared-audit.TC-etr rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
-### shared-auth-audit-US2-TC1-1: Auditor with the grant reads recorded identity actions
+<!-- trace:case id=g10.shared-audit.TC-etr rev=3 -->
+### shared.auth-audit.US2-TC1: An auditor reads the trail and checks it holds, without being shown the proof
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
+* **Type:** security
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-audit-US-02
 
 **Pre-conditions:**
 
-* admin(holds `audit:read` only) is signed in to the console.
-* At least one identity action is on the trail.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+* auditor(holds `audit:read` only) is signed in on `<console url>`.
+* The trail holds an operator's ban and a ban the test-endpoint workflow made.
 
 **Steps:**
 
-1. Navigate to `<grade10 admin audit url>`.
-2. Filter to the identity product.
+1. Open the audit trail page and filter to the identity product.
+2. Run the consistency check.
 
 **Expected Results:**
 
-* Step 2 lists the recorded identity actions.
+* Step 1 lists the recorded actions; the workflow's ban names `test-endpoint-workflow` where a user id would stand, with no name or email address.
+* Step 2 answers whether the chain is consistent, and shows no hash or other proof.
 
-<!-- trace:case id=g10.shared-audit.TC-afx rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
-### shared-auth-audit-US2-TC2-1: Consistency check reports without returning the proof
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-02
-
-**Pre-conditions:**
-
-* admin(holds `audit:read` only) is on `<grade10 admin audit url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Run the verification on the identity chain.
-
-**Expected Results:**
-
-* Step 1 answers whether the chain is internally consistent.
-* No proof of the check, such as a hash, is shown.
-
-<!-- trace:case id=g10.shared-audit.TC-u48 rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
-### shared-auth-audit-US2-TC3-1: Caller without audit read is refused
+<!-- trace:case id=g10.shared-audit.TC-u48 rev=2 -->
+### shared.auth-audit.US2-TC2: An operator without audit read is refused the trail
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** shared-auth-audit-US-02
 
 **Pre-conditions:**
 
-* admin(holds `user:list`, does not hold `audit:read`) is signed in to the console.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+* staff(holds `user:list`, not `audit:read`) is signed in on `<console url>`.
 
 **Steps:**
 
-1. Navigate to `<grade10 admin audit url>`.
-2. Send the identity trail check call, as `<grade10 admin api docs url>` lists it.
+1. Look for the audit trail in the navigation, then open its address.
 
 **Expected Results:**
 
-* Step 1 is refused.
-* Step 2 is refused.
-
-### shared-auth-audit-US2-TC4-1: An auditor reads test-endpoint entries and the consistency check passes
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** none
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-02
-
-**QA2 disposition:** over-claimed. The clause "The auditor sees no names" goes beyond Q52, which settles that the auditor sees user ids. The rest rests on the durable read and consistency scenarios and names the workflow's entry, which SC-38 states only in part.
-
-**QA2 covers:** none
-
-**Pre-conditions:**
-
-* The caller performs one test-endpoint ban of `<tester address>` as `test-endpoint-workflow`.
-* An auditor holds the audit read grant and nothing else.
-
-**Steps:**
-
-1. Sign in as the auditor.
-2. Open the identity trail.
-3. Read the entry for the ban in Pre-conditions.
-4. Run the consistency check on the identity trail.
-
-**Expected Results:**
-
-* The entry for the ban is listed and names `test-endpoint-workflow` in place of a user id.
-* The consistency check reports the trail as consistent.
-* The auditor sees no proof.
-* The auditor sees no names and no email addresses.
+* The navigation offers no audit trail; its address is refused, with no entry and no consistency check shown.
 
 ---
 
-## shared-auth-audit-US3: Operator cannot act off the trail
+## shared.auth-audit.US3: Operator cannot act off the trail
 
 **As an** operator,
 **I want** an action that cannot be recorded to be refused,
 **so that** the trail is not a best-effort log of what already happened.
 
-<!-- trace:case id=g10.shared-audit.TC-75a rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
-### shared-auth-audit-US3-TC1-1: Trail entry cannot be rewritten or removed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-03
-
-**Pre-conditions:**
-
-* An identity action, `<trail entry>`, is on the trail.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| trail entry | A recorded ban, any recorded identity action |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Send an edit of `<trail entry>` to the identity trail store.
-2. Send a removal of `<trail entry>` to the identity trail store.
-3. As admin(holds `audit:read`), read `<trail entry>` on `<grade10 admin audit url>`.
-
-**Expected Results:**
-
-* Step 3 shows `<trail entry>` unchanged.
-
-<!-- trace:case id=g10.shared-audit.TC-2d0 rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
-### shared-auth-audit-US3-TC2-1: Unrecorded ban does not take effect
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-03
-
-**Pre-conditions:**
-
-* admin(holds `user:ban`) is on `<grade10 admin users url>`.
-* `<subject account>` is unbanned.
-* The identity trail is mocked to refuse a new entry.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject account | An unbanned account holding `user` only |
-| ban reason | Chargeback dispute open, any reason the operator states |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Paste `<subject account>`'s user id into the search.
-2. Choose Ban in the account's panel.
-3. Enter `<ban reason>` and confirm.
-4. Reload the account's panel.
-
-**Expected Results:**
-
-* Step 4 shows `<subject account>` not banned.
-
-<!-- trace:case id=g10.shared-audit.TC-vfa rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
-### shared-auth-audit-US3-TC3-1: Unrecorded revoke does not take effect
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-03
-
-**Pre-conditions:**
-
-* admin(holds `session:list` and `session:revoke`) is on `<grade10 admin users url>`.
-* `<subject account>` is signed in on `<grade10 store url>` in `<subject browser>`.
-* The identity trail is mocked to refuse a new entry.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject account | An account signed in on one browser only |
-| subject browser | The browser holding that session |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Paste `<subject account>`'s user id into the search.
-2. Revoke the session in the account's panel.
-3. Wait 70 seconds.
-4. Reload `<grade10 store url>` in `<subject browser>`.
-
-**Expected Results:**
-
-* Step 4 shows `<subject account>` still signed in.
-
-### shared-auth-audit-US3-TC4-1: A test-endpoint action the trail cannot record does not run
+<!-- trace:case id=g10.shared-audit.TC-2d0 rev=2 -->
+### shared.auth-audit.US3-TC1: An act the trail cannot record does not take effect
 
 Runs once per row of **Test data**.
 
@@ -796,585 +240,124 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
+* **Type:** security
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-03
 
-**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` grant and account-create rows are removed (Q50 and Q47), and the account-create wording is removed from Steps 1 and 3. The ban and scoped-role rows rest on the requirement sentence that an action the trail cannot record does not run; no scenario states it.
-
-**QA2 covers:** none
-
 **Pre-conditions:**
 
-* The test environment makes the identity trail refuse its next write.
-* The caller holds the test-endpoint kind `<caller kind>`.
-* `<tester address>` is a unique plus-tag of the collector whose account is not banned and holds no `<scope>` role.
+* The identity trail is made to refuse its next entry.
+* admin(holds `user:ban`, `session:revoke`, `user:list` and `audit:read`) is signed in on `<console url>`.
 
 **Test data:**
 
-| Action | Caller kind |
+| Act | Afterwards |
 | --- | --- |
-| ban | test-endpoint-workflow |
-| scoped role | test-endpoint-workflow |
+| ban an unbanned account holding `user` only, from its panel | the panel, reloaded, shows it not banned |
+| revoke the session of an account signed in on one browser, then wait 70 seconds | the account is still signed in on that browser |
+| the test-endpoint workflow bans `<tester address>` | the account is not banned, and the trail lists no ban |
+| the test-endpoint workflow grants `<tester address>` the scoped role `staff` | the account holds no `staff` role, and the trail lists no grant |
 
 **Steps:**
 
-1. Read the state of `<tester address>`.
-2. Call the test endpoint to `<action>` for `<tester address>` as `<caller kind>`.
-3. Read the state of `<tester address>`, and read the identity trail.
+1. Do the row's act.
+2. Open the account in the user directory, and the audit trail page from `<start time>`.
 
 **Expected Results:**
 
-* Step 2 is refused.
-* The state read in Step 3 is the same as the state read in Step 1.
-* The identity trail holds no new entry.
-
-### shared-auth-audit-US3-TC5-1: A test-endpoint entry cannot be rewritten
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-03
-
-**QA2 disposition:** kept with a note. It rests on the durable append-only requirement, which the delta makes apply to test-endpoint entries as identity writes. No delta scenario states it.
-
-**QA2 covers:** none
-
-**Pre-conditions:**
-
-* The caller performs one test-endpoint ban of `<tester address>` as `test-endpoint-workflow`.
-
-**Steps:**
-
-1. Read the entry written by the ban in Pre-conditions and note its content.
-2. Attempt to change the entry's content through the identity trail's write interface.
-3. Attempt to delete the entry through the identity trail's write interface.
-4. Read the entry again.
-
-**Expected Results:**
-
-* Step 2 is refused.
-* Step 3 is refused.
-* The entry read in Step 4 has the same content as the entry read in Step 1.
+* Step 2: the row's outcome.
 
 ---
 
-## shared-auth-audit-US4: Auditor traces an account lifecycle write
+## shared.auth-audit.US4: Auditor traces an account lifecycle write
 
 **As an** auditor,
 **I want** a new user id, a verify that flips, and an account deletion on the identity trail,
 **so that** a dispute can name how that user id appeared or left, without the email.
 
-<!-- trace:case id=g10.shared-audit.TC-p7y rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
-### shared-auth-audit-US4-TC1-1: Trusted-product create is on the trail
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-audit-US-04
-
-**Pre-conditions:**
-
-* customer is not signed in on `<grade10 store url>`.
-* No account holds `<new email>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| new email | new.buyer+20261007@example.com | An inbox the tester reads, held by no account |
-| product | Any in-stock product on `<grade10 store url>` | · |
-| test card | The staging shop's test card that pays successfully | · |
-| start time | The time just before step 1 | · |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Add `<product>` to the cart on `<grade10 store url>`.
-2. Check out as a guest with `<new email>`.
-3. Pay with `<test card>`.
-4. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-5. Filter to the identity product, from `<start time>`.
-
-**Expected Results:**
-
-* Step 5 lists the write for a new user id, with outcome `created`.
-* The entry names the system as actor and the subject by user id, not by `<new email>`.
-
-<!-- trace:case id=g10.shared-audit.TC-2mz rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
-### shared-auth-audit-US4-TC2-1: Already-existed find is not on the trail
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-audit-US-04
-
-**Pre-conditions:**
-
-* customer is not signed in on `<grade10 store url>`.
-* An account holds `<existing email>`, with standing `<account standing>`, created through `<account origin>`.
-
-**Test data:**
-
-| `<account standing>` | `<account origin>` | `<expected outcome>` |
-| --- | --- | --- |
-| Unverified | An earlier paid guest checkout with `<existing email>` | No trail entry |
-| Verified | A sign-in with `<existing email>`, then a sign-out | No trail entry |
-
-| Field | Value |
-| --- | --- |
-| existing email | An inbox the tester reads, holding the account in `<account standing>` |
-| existing account id | That account's user id |
-| product | Any in-stock product on `<grade10 store url>` |
-| test card | The staging shop's test card that pays successfully |
-| start time | The time just before step 1 |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Add `<product>` to the cart on `<grade10 store url>`.
-2. Check out as a guest with `<existing email>`.
-3. Pay with `<test card>`.
-4. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-5. Filter by subject id `<existing account id>`, from `<start time>`.
-
-**Expected Results:**
-
-* Step 5 lists this outcome: `<expected outcome>`.
-
-<!-- trace:case id=g10.shared-audit.TC-8lh rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
-### shared-auth-audit-US4-TC3-1: Verify flip is on the trail
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-04
-
-**Pre-conditions:**
-
-* `<unverified email>` holds an unverified account.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| unverified email | unverified.buyer@example.com | an unverified account |
-| unverified account id | That account's user id | · |
-| start time | The time just before step 1 | · |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Send the trusted-product verify call for `<unverified email>`.
-2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-3. Filter by subject id `<unverified account id>`, from `<start time>`.
-
-**Expected Results:**
-
-* Step 3 lists the verify.
-
-<!-- trace:case id=g10.shared-audit.TC-wuf rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
-### shared-auth-audit-US4-TC4-1: Trusted-product verify of a new email is on the trail as created
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-04
-
-**Pre-conditions:**
-
-* No account holds `<new verified email>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| new verified email | verified.buyer@example.com | any address no account holds |
-| start time | The time just before step 1 | · |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Send the trusted-product verify call for `<new verified email>`.
-2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-3. Filter to the identity product, from `<start time>`.
-
-**Expected Results:**
-
-* Step 3 lists the write for the new user id, with outcome `created`.
-
-<!-- trace:case id=g10.shared-audit.TC-jo4 rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
-### shared-auth-audit-US4-TC5-1: Trusted-product verify of an already-verified account is not on the trail
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-04
-
-**Pre-conditions:**
-
-* A verified account holds `<existing email>`.
-
-**Test data:**
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| existing email | existing.buyer@example.com | a verified account |
-| existing account id | That account's user id | · |
-| start time | The time just before step 1 | · |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Send the trusted-product verify call for `<existing email>`.
-2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-3. Filter by subject id `<existing account id>`, from `<start time>`.
-
-**Expected Results:**
-
-* Step 3 lists no entry for the request.
-
-<!-- trace:case id=g10.shared-audit.TC-fvb rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
-### shared-auth-audit-US4-TC6-1: An unrecorded create, verify or delete does not land
+<!-- trace:case id=g10.shared-audit.TC-p7y rev=2 -->
+### shared.auth-audit.US4-TC1: An account's creation, verification and deletion are each on the trail
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-04
-
-**Pre-conditions:**
-
-* The directory is seeded as follows: `<starting account>`.
-* The identity trail is mocked to refuse a new entry.
-
-**Test data:**
-
-| `<starting account>` | `<write request>` | `<expected outcome>` |
-| --- | --- | --- |
-| None at `<fresh email>` | Trusted-product create for `<fresh email>` | No account holds `<fresh email>` |
-| Unverified at `<unverified email>` | Trusted-product verify for `<unverified email>` | The account at `<unverified email>` is still unverified |
-| `<account to delete>` | admin(holds `user:delete`) deletes `<account to delete>` | `<account to delete>` still exists |
-
-| Field | Value | Fixture notes |
-| --- | --- | --- |
-| fresh email | fresh.buyer@example.com | any address no account holds |
-| unverified email | unverified.buyer@example.com | an unverified account |
-| account to delete | An account holding `user` only | · |
-
-**Steps:**
-
-1. Send `<write request>`.
-2. Read the directory for `<starting account>`.
-
-**Expected Results:**
-
-* Step 2 answers with this outcome: `<expected outcome>`.
-
-<!-- trace:case id=g10.shared-audit.TC-36y rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
-### shared-auth-audit-US4-TC7-1: Deleting an account is on the trail
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-audit-US-04
-
-**Pre-conditions:**
-
-* admin(holds `user:delete`) is on `<grade10 admin users url>`.
-* An operator's erasure request for `<account to delete>` has passed its seven-day window, and every product reports holding nothing of it.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| account to delete | An account holding `user` only |
-| deleted account id | That account's user id |
-| start time | The time just before step 1 |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Paste `<deleted account id>` into the search.
-2. Open the erasure checklist in the account's panel.
-3. Click delete login and confirm.
-4. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
-5. Filter by subject id `<deleted account id>`, from `<start time>`.
-
-**Expected Results:**
-
-* Step 5 lists the deletion, naming the operator and `<deleted account id>`.
-
-### shared-auth-audit-US4-TC8-1: A ban that creates an account is one ban entry under the caller's kind
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
+* **Type:** security
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** manual
 * **Trace:** shared-auth-audit-US-04
-
-**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` row is removed (Q50). The create step is now a ban, because Q47 gives the endpoint no create action and Q20 has a ban create the account. The expected action is `ban`, not `created`, as Q53 settles. The case names no new user id, so it fully covers no scenario.
-
-**QA2 covers:** none
 
 **Pre-conditions:**
 
-* No account exists for `<tester address>`.
-* The caller holds the test-endpoint kind `<caller kind>`.
+* The row's starting account.
+* admin(holds `user:list` and `audit:read`) is signed in on `<console url>`.
 
 **Test data:**
 
-| Caller kind |
-| --- |
-| test-endpoint-workflow |
+| Starting account | Act | Trail entry |
+| --- | --- | --- |
+| none for `new.buyer+<run>@example.com` | a guest checkout on `<g10url>` with that address, paid with the staging shop's test card | `created`, the system as actor |
+| an unverified account, from an earlier paid guest checkout | the hosted identity verification (e-KYC) on `<g10url>` with its address | a verify, the system as actor |
+| an account holding `user` only, whose erasure window has passed and that every product reports holding nothing of | an operator holding `user:delete` selects delete login on its erasure checklist | a deletion, naming the operator |
+| none for `<tester address>` | the test-endpoint workflow bans `<tester address>` | one ban under `test-endpoint-workflow`; the directory finds the account, banned |
+| `<tester address>`'s account, from an earlier staging run | the next daily cleanup runs | one deletion under `test-endpoint-cleanup`; the directory finds no account |
 
 **Steps:**
 
-1. Note the number of entries on the identity trail.
-2. Call the test endpoint to ban `<tester address>` as `<caller kind>`, which creates its account.
-3. Read the newest entry on the identity trail.
+1. Do the row's act.
+2. On the audit trail page, filter by the account's user id, or to the identity product for a new account, from `<start time>`.
 
 **Expected Results:**
 
-* Step 2 creates an account for `<tester address>`.
-* The trail holds one more entry than in Step 1.
-* The new entry records `ban`.
-* The new entry names `<caller kind>` in place of a user id.
+* Step 2: the row's entry, naming the account by user id and never by its address.
 
-### shared-auth-audit-US4-TC9-1: The daily cleanup's removal of a plus-tag account is one deletion entry
+<!-- trace:case id=g10.shared-audit.TC-2mz rev=1 -->
+### shared.auth-audit.US4-TC2: Finding an account that already exists writes no entry
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
-* **Suites:** none
-* **Layer:** api
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-auth-audit-US-04
 
-**QA2 disposition:** kept.
-
-**QA2 covers:** shared-auth-audit-SC-47
-
 **Pre-conditions:**
 
-* A staging run generated `<tester address>`, a unique plus-tag of the collector, and banned it, so it has an account.
-
-**Steps:**
-
-1. Note `<tester address>`'s user id and the number of entries on the identity trail.
-2. Wait for the next daily cleanup to finish.
-3. Read the identity trail.
-
-**Expected Results:**
-
-* The trail holds one more entry than in Step 1.
-* The new entry records a deletion of the user id from Step 1 and names `test-endpoint-cleanup` in place of a user id.
-* No field of the new entry holds `<tester address>`.
-
----
-
-## shared-auth-audit-US5: Auditor traces a second-factor write
-
-**As an** auditor,
-**I want** enabling, disabling, or regenerating recovery codes on the identity trail,
-**so that** a takeover of the second factor is a recorded write, without the codes.
-
-<!-- trace:case id=g10.shared-audit.TC-kw1 rev=1 covers=g10.shared-audit.SC-nte,g10.shared-audit.SC-h1r,g10.shared-audit.SC-0sh,g10.shared-audit.SC-bgp,g10.shared-audit.SC-nr9,g10.shared-audit.SC-tl6,g10.shared-audit.SC-ccw,g10.shared-audit.SC-yjy,g10.shared-audit.SC-gkn -->
-### shared-auth-audit-US5-TC1-1: Enable, disable, and regenerate are on the trail
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-05
-
-**Pre-conditions:**
-
-* `<subject account>` has no second factor and can enroll one.
+* customer is signed out on `<g10url>`; the row's account holds `<existing email>`.
+* admin(holds `audit:read`) is signed in on `<console url>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| subject account | An admin account with no second factor |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+| Account |
+| --- |
+| unverified, from an earlier paid guest checkout with `<existing email>` |
+| verified, from a sign-in with `<existing email>` then a sign-out |
 
 **Steps:**
 
-1. Start second-factor enrollment for `<subject account>`, without completing it.
-2. Complete the enrollment, so the factor first becomes active.
-3. Regenerate the recovery codes.
-4. Remove the second factor.
-5. As admin(holds `audit:read`), filter `<grade10 admin audit url>` by subject id `<subject account>`.
+1. Check out as a guest on `<g10url>` with `<existing email>`, paying with the staging shop's test card.
+2. On the audit trail page, filter by the account's user id from `<start time>`.
 
 **Expected Results:**
 
-* Step 5 lists no enable entry for step 1.
-* Step 5 lists the enable, the regenerate and the disable, by user id.
-* The regenerate entry keeps no recovery code.
+* Step 2 lists no entry.
 
-<!-- trace:case id=g10.shared-audit.TC-e15 rev=1 covers=g10.shared-audit.SC-nte,g10.shared-audit.SC-h1r,g10.shared-audit.SC-0sh,g10.shared-audit.SC-bgp,g10.shared-audit.SC-nr9,g10.shared-audit.SC-tl6,g10.shared-audit.SC-ccw,g10.shared-audit.SC-yjy,g10.shared-audit.SC-gkn -->
-### shared-auth-audit-US5-TC2-1: Failed enable record leaves the factor; later proof writes the missing enable
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-05
-
-**Pre-conditions:**
-
-* `<subject account>`'s second factor is becoming active.
-* The identity trail is mocked to refuse a new entry.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| subject account | An admin account mid-enrollment |
-
-| Field | Value |
-| --- | --- |
-| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Complete the enrollment for `<subject account>`.
-2. Read `<subject account>`'s second-factor state.
-3. Restore the identity trail.
-4. Complete a later successful second-factor proof as `<subject account>`.
-5. As admin(holds `audit:read`), filter `<grade10 admin audit url>` by subject id `<subject account>`.
-
-**Expected Results:**
-
-* Step 1 does not succeed.
-* Step 2 shows the factor active.
-* Step 5 lists exactly one enable for that going live.
-
-<!-- trace:case id=g10.shared-audit.TC-g5c rev=1 covers=g10.shared-audit.SC-nte,g10.shared-audit.SC-h1r,g10.shared-audit.SC-0sh,g10.shared-audit.SC-bgp,g10.shared-audit.SC-nr9,g10.shared-audit.SC-tl6,g10.shared-audit.SC-ccw,g10.shared-audit.SC-yjy,g10.shared-audit.SC-gkn -->
-### shared-auth-audit-US5-TC3-1: An unrecorded regenerate or disable leaves the second factor as it was
+<!-- trace:case id=g10.shared-audit.TC-fvb rev=2 -->
+### shared.auth-audit.US4-TC3: A creation or deletion the trail cannot record does not land
 
 Runs once per row of **Test data**.
 
@@ -1382,40 +365,121 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
-* **Type:** functional
+* **Type:** security
 * **Suites:** regression
-* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-audit-US-04
+
+**Pre-conditions:**
+
+* The identity trail is made to refuse its next entry.
+* admin(holds `user:list`) is signed in on `<console url>`.
+
+**Test data:**
+
+| Act | Starting account | Afterwards |
+| --- | --- | --- |
+| a paid guest checkout on `<g10url>` with `<email>` | none holds `<email>` | still none holds `<email>` |
+| delete login from the erasure checklist | holds `<email>`, past its erasure window, every product reporting nothing of it | it still holds `<email>` |
+
+**Steps:**
+
+1. Do the row's act.
+2. Search the user directory for `<email>`.
+
+**Expected Results:**
+
+* Step 2: the row's outcome.
+
+---
+
+## shared.auth-audit.US5: Auditor traces a second-factor write
+
+**As an** auditor,
+**I want** enabling, disabling, or regenerating recovery codes on the identity trail,
+**so that** a takeover of the second factor is a recorded write, without the codes.
+
+<!-- trace:case id=g10.shared-audit.TC-kw1 rev=2 -->
+### shared.auth-audit.US5-TC1: Turning the second factor on, regenerating its codes and turning it off are on the trail
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-audit-US-05
+
+**Pre-conditions:**
+
+* admin(`<subject account>`) has no second factor and is signed in on `<console url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<subject account>` | an operator account with no second factor |
+| `<second-factor screen>` | ❓ the console screen where an operator enrols, regenerates and removes their second factor - the auth owner names it |
+
+**Steps:**
+
+1. On `<second-factor screen>`, start enrolment and stop before completing it.
+2. Complete the enrolment, regenerate the recovery codes, then remove the second factor.
+3. As admin(holds `audit:read`), filter the audit trail page by `<subject account>`'s user id from `<start time>`.
+
+**Expected Results:**
+
+* Step 3 lists an enable, a regenerate and a disable, and nothing for step 1.
+* The regenerate, expanded, shows no recovery code.
+
+<!-- trace:case id=g10.shared-audit.TC-e15 rev=2 -->
+### shared.auth-audit.US5-TC2: A second-factor change the trail cannot record leaves the factor as it was
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-05
 
 **Pre-conditions:**
 
-* `<subject account>` has an active second factor and recovery codes `<current codes>`.
-* The identity trail is mocked to refuse a new entry.
+* admin(`<subject account>`) is signed in on `<console url>`, with the row's factor before.
+* The identity trail is made to refuse its next entry.
 
 **Test data:**
 
-| `<act>` | `<expected outcome>` |
-| --- | --- |
-| Regenerate the recovery codes | The recovery codes are still `<current codes>` |
-| Remove the second factor | The second factor is still active |
-
-| Field | Value |
-| --- | --- |
-| subject account | An admin account with an active second factor |
-| current codes | The recovery codes on file before step 1 |
+| Factor before | Act | Factor afterwards |
+| --- | --- | --- |
+| enrolment started, not completed | complete the enrolment | active, with the enable not recorded |
+| active, recovery codes `<current codes>` | regenerate the recovery codes | active, codes still `<current codes>` |
+| active | remove the second factor | active |
 
 **Steps:**
 
-1. Send `<act>` for `<subject account>`.
-2. Read `<subject account>`'s second-factor state.
+1. On `<second-factor screen>`, do the row's act.
+2. Read the factor's state on `<second-factor screen>`.
+3. For the first row: restore the trail, prove the second factor once at sign-in, then filter the audit trail page by `<subject account>`'s user id.
 
 **Expected Results:**
 
-* Step 2 answers with this outcome: `<expected outcome>`.
+* Step 1 is refused.
+* Step 2: the row's factor afterwards.
+* Step 3 lists exactly one enable.
 
 ## Reconciliation
 
@@ -1425,9 +489,6 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | `shared-auth-audit-US4-TC1-1`, `shared-auth-audit-US4-TC2-1` | Joined | their scenarios; walked in review through a guest checkout, which reaches the trusted-product create |
 | `shared-auth-audit-US4-TC3-1` | Joined, then split | the blind case held the verify flip, the unrecorded writes and the delete; review split it into the verify flip, `shared-auth-audit-US4-TC6-1` for the unrecorded create, verify or delete, and `shared-auth-audit-US4-TC7-1` for the delete through the console erasure checklist |
-| `shared-auth-audit-US4-TC4-1`, `shared-auth-audit-US4-TC5-1` | Case added | the verify of a new email recorded as created, and the verify of an already-verified account left off the trail |
-| `shared-auth-audit-US5-TC1-1`, `shared-auth-audit-US5-TC2-1` | Joined | their scenarios |
-| `shared-auth-audit-US5-TC3-1` | Case added | an unrecorded regenerate or disable leaves the second factor as it was |
 | `shared-auth-audit-US1-TC5-1`, `shared-auth-audit-US1-TC6-1` | Case added in review | collector sign-in and sign-out, and trusted-product reads, stay off the trail. The run had left them out of suite on grade10's `identityTrail.spec`, which names no test for them |
 | Uncovered anchors | none | |
 | Contradicted readings | none | |

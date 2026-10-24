@@ -27,7 +27,6 @@
 - **Status:** actual
 - **Behaviour:** positive
 - **Type:** functional
-- **Layer:** api
 - **Automation status:** manual
 - **Testability:** manual
 - **Trace:** alpha-SC-07

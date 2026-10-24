@@ -1,6 +1,6 @@
 # grade10-site/auction/auction Test Cases
 
-**Status:** pending-review · 0/4
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
 ## g10.auction-auction.US1: Collector browses Auction listings
@@ -22,7 +22,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01
@@ -72,7 +71,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01
@@ -108,58 +106,6 @@ Runs once per row of **Test data**.
 * Step 1 reads extended bidding, the close `<extension duration>` after the scheduled close.
 * Step 3 reads sold at `<starting price>`, one bid, under the house's listing pseudonym.
 
-<!-- trace:case id=g10.auction-auction.TC-dij rev=1 covers=g10.auction-auction.SC-14a,g10.auction-auction.SC-cqt -->
-### g10.auction-auction.US1-TC5: A close the house leads opens the internal bidder's order and charges nobody
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auction-US-01
-
-**Pre-conditions:**
-
-* `<listing_4>`'s internal bid of `<house maximum>` is committed as `<internal bidder>`, and the house leads as the row states, its recorded close a few minutes away, no further bid coming.
-* customer A(card linked) bid on `<listing_4>` as the row states.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_4>` | A published HKD listing in no campaign, starting price `<starting price>` |
-| `<starting price>` | 400000 minor units (HK$4,000.00) |
-| `<house maximum>` | 600000 minor units (HK$6,000.00) |
-| `<internal bidder>` | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test |
-
-| Row | Bidding at the close | Winning bid |
-| --- | --- | --- |
-| House over a collector | The house leads over customer A's maximum of 500000 | 508000: customer A's maximum plus its 8000 increment |
-| House alone | No collector bid | `<starting price>` |
-
-**Steps:**
-
-1. Wait until `<listing_4>`'s recorded close passes.
-2. Read the orders the API holds for `<listing_4>`.
-3. Read the order's invoice and payments.
-4. In the House over a collector row, read customer A's card charges since the close.
-5. Read the API response for `<listing_4>`'s public facts.
-
-**Expected Results:**
-
-* Step 2 holds one order, `<internal bidder>`'s, flagged internal, at the row's winning bid.
-* Step 3: no invoice is issued and no payment is recorded.
-* Step 4 holds no charge for `<listing_4>`.
-* Step 5 reads the lot closed with a winner at the row's winning bid, the winner by pseudonym only.
-
 ---
 
 ## g10.auction-auction.US11: Bidder is held to the close with everyone else
@@ -181,7 +127,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-11
@@ -231,7 +176,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-11
@@ -288,7 +232,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-12

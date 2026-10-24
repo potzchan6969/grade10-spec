@@ -1,6 +1,6 @@
 # grade10-site/auction/lot-status Test Cases
 
-**Status:** pending-review · 3/7
+**Status:** reopened · 2/5
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
 ## Walk 1: Collector sees whether a listing can still be bid on
@@ -36,7 +36,6 @@
 ### Route
 
 1. Read the external status of `<listing_2>`.
-   - External listing status is Ended. `g10.auction-lot-status.US1-TC1`
 2. Navigate to `<my auctions url>`.
 3. Read the row for `<listing_4>`.
    - The listing status is Ended. `g10.auction-lot-status.US1-TC2`
@@ -144,8 +143,6 @@
    - `<listing_9>` is not in the list. `g10.auction-lot-status.US2-TC2`
    - `<listing_8>` is in the list, status Ended. `g10.auction-lot-status.US2-TC2`
 6. Read the API response for the public listing data.
-   - `<listing_11>` is not included. `g10.auction-lot-status.US2-TC3`
-   - `<listing_10>` is included, external listing status Ended. `g10.auction-lot-status.US2-TC3`
 7. Open the auction catalogue and read its listings.
    - Step 7 does not list the called-off original. `g10.auction-lot-status.US2-TC4`
 8. Search the catalogue for `<listing title>`.
@@ -178,41 +175,6 @@
 **I want** every listing to show whether it is Upcoming, Active or Ended,
 **so that** I can see at a glance whether I can still bid on it.
 
-<!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
-### g10.auction-lot-status.US1-TC1: Preparing Shipment maps to Ended
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-lot-status-US-01
-
-**Pre-conditions:**
-
-* The closed listing `<listing_2>` has a winner whose order `<winner_order_1>` derives as Preparing Shipment.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_2 | A closed listing with a winner whose order `<winner_order_1>` derives as Preparing Shipment; bind its identity only |
-| winner_order_1 | The winner order belonging to `<listing_2>`, deriving as Preparing Shipment; bind its identity only |
-
-**Steps:**
-
-1. Read the external status of `<listing_2>`.
-
-**Expected Results:**
-
-* External listing status is Ended.
-
 <!-- trace:case id=g10.auction-lot-status.TC-bfm rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
 ### g10.auction-lot-status.US1-TC2: Winner sees their order status separately
 
@@ -224,7 +186,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-lot-status-US-01
@@ -273,7 +234,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-lot-status-US-02
@@ -323,7 +283,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-lot-status-US-02
@@ -354,44 +313,6 @@ Runs once per row of **Test data**.
 
 <!-- trace:case id=g10.auction-lot-status.TC-k90 rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
 
-### g10.auction-lot-status.US2-TC3: Listing data leaves out called-off listings
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** actual
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-auction-lot-status-US-02
-
-**Decided by:** `grade10:apps/backend/grade10/auction/test/db/listings/publicSummaries.spec.ts`
-
-**Pre-conditions:**
-
-* `<listing_10>` ended with no winner, and a collector watches it.
-* `<listing_11>` was called off, and that collector watches it.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| listing_10 | A watched listing whose bidding ended with no winner; bind its identity only |
-| listing_11 | A watched listing an operator called off; bind its identity only |
-
-**Steps:**
-
-1. Read the API response for the public listing data.
-
-**Expected Results:**
-
-* `<listing_11>` is not included.
-* `<listing_10>` is included, external listing status Ended.
-
 <!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=1 covers=g10.auction-lot-status.SC-w9d -->
 
 <!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=4 covers=g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-w9d -->
@@ -407,7 +328,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-lot-status-US-02
@@ -474,7 +394,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-lot-status-US-03

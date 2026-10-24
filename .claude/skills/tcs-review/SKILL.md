@@ -6,7 +6,7 @@ description: Review or walk a feature-tcs.md, domain-tcs.md, product-tcs.md or p
 # Reviewing Test Cases With QA
 
 Follow `docs/governance/specs-to-test-cases.md` — **Review Contract** is the
-invariant rule book; **Step 5**, **The File Header** and **How a Case Reads** hold the
+invariant rule book; **Classifying the Case**, **The File Header** and **How a Case Reads** hold the
 properties, the statuses, and the house style
 (`docs/governance/tcs-conventions.md`); a bold name below is a heading there.
 
@@ -127,8 +127,8 @@ execution; a review classification is not a pass or fail result.
    **Executable without asking**: answer from the spec's flow, `ui-design.md`,
    the PRD and the conventions' `## Setup Recipes`, and offer the answer as
    an edit to the case — a Change verdict like any other. A doubt about the
-   journey itself is a finding for the spec's author under **Coverage and
-   findings**; never edit `user-journeys.md`.
+   journey itself is a finding for the spec's author under **Findings
+   without invention**; never edit `user-journeys.md`.
 
 9. **Add a case the reviewer asks for** only where the anchor it traces already
    carries the behaviour — otherwise it is a new requirement, routed to the
@@ -215,7 +215,7 @@ the verdict commits hold only the reviewer's decisions.
    one through the trace CLI, anchor-only where it carries no `covers`; one
    whose anchor cannot be resolved is a preparation blocker for the suite
    owner. Then, within every journey group, move each `deprecated` case to the
-   bottom, as **Deprecated cases come last** says. Migration and ordering are
+   bottom, as **Referenced once, printed once** says. Migration and ordering are
    one preparation commit.
 
 2. **Regenerate or restyle.** A suite whose `**Drafts styled:**` sits below
@@ -261,7 +261,7 @@ the verdict commits hold only the reviewer's decisions.
    Testability plans no `automation`. An `actual` case still `manual` is
    filled only on the reviewer's yes.
 
-7. **Propose test data.** Rows the rule implies, as **Rows may add what the
+7. **Propose test data.** Rows the rule implies, as **Rows add only what a
    rule implies** says, each with the rule it traces. The reviewer takes or
    refuses each row; a taken row is written in. A row added to an `actual`
    case changes what it verifies: `rev` bumped, back to `draft`.
@@ -294,6 +294,17 @@ When the verdicts are done, and before the pull request is marked ready:
   domain's vocabulary is scoped narrower, saying why, and then the reviewer is
   asked which scope. A refused line lands under `## Refused` with the
   reviewer's reason
+- **The gate, before a candidate is offered** — (1) it changes only how a case
+  is written: title, wording, step or result shape, pre-condition, placeholder,
+  test-data presentation, actor wording or layout; (2) it changes nothing
+  `specs-to-test-cases.md` owns — anchors, coverage, scenario links, ownership,
+  levels, lifecycle, export or validation — or it is a rules change, reported
+  instead; (3) it repeats no line in `tcs-conventions.md`, no narrower line and
+  no `## Refused` line; (4) a direct contradiction is reported with both rules
+  named, and the existing rule wins
+- **A duplicate leaves no line** — a candidate that repeats an existing rule,
+  in other words or as a narrower case of it, is stopped at the gate and not
+  recorded anywhere, not even under `## Refused`
 - **Never offered twice** — a candidate matching a `## Refused` line is not
   offered again; one that contradicts the rulebook is reported, not offered
 - **Applied at once** — apply a confirmed line to the reviewed suite's
@@ -301,7 +312,8 @@ When the verdicts are done, and before the pull request is marked ready:
   a separately listed style-only follow-up, preserving purpose, Expected
   Results, Trace, status, test-data meaning and automation links; a semantic
   change waits for that suite's review. The pull request's description lists
-  every propagated case
+  every propagated case. `automated` and `deprecated` cases are never
+  restyled to a convention
 - **Follow-up commits** — `docs(governance): conventions from the <target>
   review`, then `test(<domain>): apply conventions from the <target>
   review`, batched by purpose; committed only, pushed with the rest when the

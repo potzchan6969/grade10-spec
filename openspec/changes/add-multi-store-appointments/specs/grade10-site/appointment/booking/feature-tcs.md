@@ -1,6 +1,6 @@
 # grade10-site/appointment/booking Test Cases
 
-**Status:** pending-review · 0/24
+**Status:** pending-review · 0/19
 **Drafts styled:** 2026-09-05, tcs-rules r2
 
 ## grade10-site-appointment-booking-US1: Collector books a grading visit without an account
@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -68,7 +67,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -98,7 +96,6 @@
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -136,7 +133,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -177,7 +173,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -218,7 +213,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -253,7 +247,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -286,7 +279,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -325,7 +317,6 @@
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -353,38 +344,6 @@
 * The page says a visit is already booked and shows `<the first time>`.
 * No second booking exists for `<user email>`.
 
-<!-- trace:case id=g10.appointment-booking.TC-ak8 rev=1 covers=g10.appointment-booking.SC-gqn,g10.appointment-booking.SC-2v2,g10.appointment-booking.SC-ic4,g10.appointment-booking.SC-4vt,g10.appointment-booking.SC-tro,g10.appointment-booking.SC-6rg,g10.appointment-booking.SC-hh8,g10.appointment-booking.SC-wxd,g10.appointment-booking.SC-qnf,g10.appointment-booking.SC-uei,g10.appointment-booking.SC-gxp -->
-### grade10-site-appointment-booking-US1-TC10-1: Booking surface is served and listed per locale
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** compatibility
-* **Suites:** release
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-appointment-booking-US-01
-
-**Pre-conditions:**
-
-Client-side JavaScript execution is disabled in the browser settings.
-
-**Steps:**
-
-1. Navigate to `<grade10 booking url>`.
-2. Navigate to the same address under the `/tc` prefix, then under `/sc`.
-3. Read the document title and description of each.
-4. Navigate to `<grade10 sitemap url>`.
-
-**Expected Results:**
-
-* Each address answers 200 with the booking surface's title and description in its own language.
-* The sitemap lists all three addresses.
-
 ---
 
 <!-- trace:case id=g10.appointment-booking.TC-d38 rev=1 covers=g10.appointment-booking.SC-njr -->
@@ -398,7 +357,6 @@ Client-side JavaScript execution is disabled in the browser settings.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -431,7 +389,6 @@ Client-side JavaScript execution is disabled in the browser settings.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-01
@@ -468,7 +425,6 @@ Client-side JavaScript execution is disabled in the browser settings.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-02
@@ -504,7 +460,6 @@ Client-side JavaScript execution is disabled in the browser settings.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-02
@@ -543,7 +498,6 @@ Client-side JavaScript execution is disabled in the browser settings.
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-02
@@ -574,7 +528,6 @@ Client-side JavaScript execution is disabled in the browser settings.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-02
@@ -610,7 +563,6 @@ Client-side JavaScript execution is disabled in the browser settings.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-02
@@ -645,7 +597,6 @@ None.
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-02
@@ -676,7 +627,6 @@ None.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-02
@@ -708,7 +658,6 @@ None.
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** none
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-appointment-booking-US-02
@@ -726,37 +675,6 @@ The user has no session.
 * The page invites the user to sign in.
 * No visit is listed.
 
-<!-- trace:case id=g10.appointment-booking.TC-tm5 rev=1 covers=g10.appointment-booking.SC-zkm,g10.appointment-booking.SC-i84,g10.appointment-booking.SC-4nw,g10.appointment-booking.SC-qlj,g10.appointment-booking.SC-cps,g10.appointment-booking.SC-0h6,g10.appointment-booking.SC-tsn,g10.appointment-booking.SC-8pb,g10.appointment-booking.SC-msb -->
-### grade10-site-appointment-booking-US2-TC9-1: Private addresses are never listed or indexed
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** release
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-appointment-booking-US-02
-
-**Pre-conditions:**
-
-None.
-
-**Steps:**
-
-1. Navigate to `<grade10 sitemap url>` and search it for the manage and my-bookings addresses.
-2. Navigate to `<grade10 booking manage url>` and inspect the page source for its robots directive.
-3. Navigate to `<grade10 my bookings url>` and inspect the page source for its robots directive.
-
-**Expected Results:**
-
-* Neither address is in the sitemap.
-* Steps 2 and 3 each carry a directive not to index the page.
-
 ---
 
 ## grade10-site-appointment-booking-US3: A script tries to book the shop out
@@ -765,99 +683,3 @@ None.
 **I want** an anonymous booking attempt to pass a challenge and a per-address
 budget,
 **so that** a script cannot flood the diary or hold every seat for itself.
-
-<!-- trace:case id=g10.appointment-booking.TC-c1t rev=1 covers=g10.appointment-booking.SC-mb6,g10.appointment-booking.SC-zhe,g10.appointment-booking.SC-fg8 -->
-### grade10-site-appointment-booking-US3-TC1-1: Address that has spent its budget is refused at the limit
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** smoke
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-appointment-booking-US-03
-
-**Pre-conditions:**
-
-* `<address>` has made 10 booking attempts against `<shop>` in the last 24 hours.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<address>` | The network address the attempts are made from |
-| `<budget>` | 10 booking attempts per 24 hours |
-
-**Steps:**
-
-1. Submit an 11th booking attempt from `<address>`.
-2. Read the refusal's code and reason.
-
-**Expected Results:**
-
-* The attempt is refused `TOO_MANY_REQUESTS`.
-* The refusal carries the reason `budget`, so the site can word the wait itself.
-
-<!-- trace:case id=g10.appointment-booking.TC-a4n rev=1 covers=g10.appointment-booking.SC-mb6,g10.appointment-booking.SC-zhe,g10.appointment-booking.SC-fg8 -->
-### grade10-site-appointment-booking-US3-TC2-1: Request with no challenge token is refused where the secret is set
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-appointment-booking-US-03
-
-**Pre-conditions:**
-
-* The deployment under test has the challenge secret set.
-
-**Steps:**
-
-1. Submit a booking request carrying no challenge token.
-2. Read the refusal's code.
-
-**Expected Results:**
-
-* The request is refused `FORBIDDEN`.
-
-<!-- trace:case id=g10.appointment-booking.TC-wey rev=1 covers=g10.appointment-booking.SC-mb6,g10.appointment-booking.SC-zhe,g10.appointment-booking.SC-fg8 -->
-### grade10-site-appointment-booking-US3-TC3-1: Refused request holds no seat
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-appointment-booking-US-03
-
-**Pre-conditions:**
-
-* A booking request that fails the gate — over `<budget>`, or carrying no challenge token where the secret is set.
-
-**Steps:**
-
-1. Submit that request against `<slot>`.
-2. Read the booking rows and the hold on `<slot>`.
-
-**Expected Results:**
-
-* No booking row was written.
-* No slot was held.

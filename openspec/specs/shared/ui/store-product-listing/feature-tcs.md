@@ -1,6 +1,6 @@
 # shared/ui/store-product-listing Test Cases
 
-**Status:** pending-review · 0/17
+**Status:** pending-review · 0/15
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## g10.shared-store-product-listing.US1: What the listing surface holds
@@ -21,7 +21,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -53,7 +52,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Selling is opt-in
@@ -85,7 +83,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -121,7 +118,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -170,7 +166,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -210,7 +205,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** Tile contract
@@ -242,7 +236,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Accessibility
@@ -289,7 +282,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -341,7 +333,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -384,7 +375,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -431,7 +421,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -486,7 +475,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Accessibility
@@ -522,102 +510,6 @@ Runs once per row of **Test data**.
 
 * Steps 3 to 6 go as `<expected outcome>` says.
 
-<!-- trace:case id=g10.shared-store-product-listing.TC-d6j rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
-### g10.shared-store-product-listing.US1-TC15: Photo draws as supplied in an available, on-sale or in-cart tile
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Tile contract
-
-**Pre-conditions:**
-
-* Storybook renders `ProductCardImage` in story `<story>`.
-
-**Test data:**
-
-| `<tile status>` | `<story>` | Photo |
-| --- | --- | --- |
-| Available | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--default` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-| On sale | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--sale` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-| In cart | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--in-cart` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-
-| Field | Value |
-| --- | --- |
-| grade10 ui storybook url | The Grade10 UI Storybook URL in the test environment; bind its URL only |
-| white-fill photo url | The white-background product photo source selected in this fixture; bind its image URL only |
-
-**Steps:**
-
-1. Navigate to `<story>`.
-2. In the story's Controls panel, set the image source to `<white-fill photo url>`.
-3. Open `<white-fill photo url>` in a new tab.
-4. Compare the tile's photo with the file in that tab.
-5. Inspect the photo in the browser's developer tools.
-
-**Expected Results:**
-
-* Step 1 shows the tile in `<tile status>`, photo in its grey well.
-* Step 4: the photo's white fill reads white, as in the file.
-* Step 4: the photo's colours match the file, with no grey cast.
-* Step 5: the photo's computed blend mode is `normal`.
-
-<!-- trace:case id=g10.shared-store-product-listing.TC-ema rev=1 covers=g10.shared-store-product-listing.SC-ta3 -->
-### g10.shared-store-product-listing.US1-TC16: Sold-out photo draws as supplied under the sold-out treatment
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Layer:** unit
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Tile contract
-
-**Pre-conditions:**
-
-* Storybook renders `ProductCardImage` sold out, in story `<story>`.
-
-**Test data:**
-
-| Surface | `<story>` | Photo |
-| --- | --- | --- |
-| A surface that sells, where the tile stays inert | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--sold-out` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-| A surface that does not sell, where the tile opens | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--sold-out-with-handler` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-
-| Field | Value |
-| --- | --- |
-| grade10 ui storybook url | The Grade10 UI Storybook URL in the test environment; bind its URL only |
-| white-fill photo url | The white-background product photo source selected in this fixture; bind its image URL only |
-
-**Steps:**
-
-1. Navigate to `<story>`.
-2. In the story's Controls panel, set the image source to `<white-fill photo url>`.
-3. Inspect the photo in the browser's developer tools.
-
-**Expected Results:**
-
-* Step 1 shows the tile sold out, photo in its grey well.
-* Step 2: the sold-out treatment draws over the photo.
-* Step 3: the photo's computed blend mode is `normal`.
-
 <!-- trace:case id=g10.shared-store-product-listing.TC-5u0 rev=1 covers=g10.shared-store-product-listing.SC-ws9 -->
 ### g10.shared-store-product-listing.US1-TC17: Every store surface drawing the tile shows the photo as supplied
 
@@ -631,7 +523,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -681,7 +572,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -730,7 +620,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** Tile contract
@@ -779,7 +668,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression, release
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** Tile contract

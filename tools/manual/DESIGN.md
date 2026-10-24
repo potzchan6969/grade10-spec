@@ -628,7 +628,7 @@ family enforced nowhere. The rules:
   tracing a scenario the spec does not issue (fail), an `approved` suite
   holding a `draft` case (fail), a journey accepted by a scenario its
   own spec does not issue (fail); warnings for a suite no page shows,
-  scenarios no case traces minus the suite's `**Out of suite:**` list,
+  scenarios no case traces minus the suite's `**Out of suite (<category>):**` lists,
   and a `**Covers:**` quote the spec's heading has moved away from
 - `manual.yaml` validation covers `platform:` as well as products, and a
   malformed Storybook index is contained as a finding, never a crash

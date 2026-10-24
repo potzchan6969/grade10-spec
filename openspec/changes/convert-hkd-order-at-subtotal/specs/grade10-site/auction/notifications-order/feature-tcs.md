@@ -20,7 +20,6 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Post-close letters
@@ -59,7 +58,6 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Post-close letters
@@ -99,7 +97,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** manual
 * **Trace:** Post-close letters
@@ -150,7 +147,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Post-close letters
@@ -228,7 +224,7 @@ Walk text that repeats these results stays stale until `/tcs-review` refreshes t
 | `order-mail-SC-67` | `US1-TC59` |
 | `order-mail-SC-68` | `US1-TC58`, unchanged |
 
-**Out of suite:** g10.auction-notifications-order.SC1
+**Verified outside this suite:** g10.auction-notifications-order.SC1
 
 SC1 is a free charge in the Payment received letter: Shipping & Handling Free, no Insurance or Tax line and a Free fee. The letter preview test of task 4.2 in this store (`apps/emails/emails/auction/order/payment-received.test.mjs`) and the letter test of task 7.1 in the application repository (`emailPort.test.ts`) verify it.
 

@@ -22,20 +22,24 @@ export function readManualPages(
 ): { pages: PageEntry[]; asts: Map<string, PageAst> } {
   const root = roots.content;
   const asts = new Map<string, PageAst>();
-  const pages = walkFiles(root, join(root, roots.manual), ".md").map((path) => {
-    const source = readText(join(root, path));
-    try {
-      asts.set(path, parsePage(source));
-    } catch (cause) {
-      const where = cause instanceof GrammarError ? `:${cause.line}` : "";
-      const message = cause instanceof Error ? cause.message : String(cause);
-      throw new Error(`${path}${where}: ${message}`, { cause });
-    }
-    const entry: PageEntry = { path, source };
-    const lastCommit = git.commitOf(path);
-    if (lastCommit) entry.lastCommit = lastCommit;
-    return entry;
-  });
+  // A `*-tcs.md` under the manual is a suite of test cases, not a page: the
+  // Grade10 store keeps its cases beside its PRD (tcs-rules r7).
+  const pages = walkFiles(root, join(root, roots.manual), ".md")
+    .filter((path) => !path.endsWith("-tcs.md"))
+    .map((path) => {
+      const source = readText(join(root, path));
+      try {
+        asts.set(path, parsePage(source));
+      } catch (cause) {
+        const where = cause instanceof GrammarError ? `:${cause.line}` : "";
+        const message = cause instanceof Error ? cause.message : String(cause);
+        throw new Error(`${path}${where}: ${message}`, { cause });
+      }
+      const entry: PageEntry = { path, source };
+      const lastCommit = git.commitOf(path);
+      if (lastCommit) entry.lastCommit = lastCommit;
+      return entry;
+    });
   return { pages, asts };
 }
 

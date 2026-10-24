@@ -22,7 +22,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Checkout and identity
@@ -64,7 +63,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-commerce-US-06
@@ -105,7 +103,6 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-commerce-commerce-US-06
@@ -137,52 +134,6 @@ Runs once per row of **Test data**.
 * The checkout is refused, naming `<bar>` and the goods' value.
 * Step 4 opens `<grade10 account page url>`.
 * No order was made for the checkout — none appears at `<grade10 order history url>`.
-
-<!-- trace:case id=g10.commerce-commerce.TC-u8b rev=2 covers=none -->
-### g10.commerce-commerce.US1-TC4: Guest at the bar is asked to sign in and no order is made
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-commerce-commerce-US-06
-
-**Pre-conditions:**
-
-* No user is signed in.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<bar>` | 12000000 HKD minor units (HKD 120,000.00), the bar Grade10 sets on an order's goods |
-| `<basket at the bar>` | A basket whose goods are worth exactly `<bar>` |
-| `<a typed email>` | An email address belonging to no Grade10 account |
-
-| `<way>` |
-| --- |
-| as a guest, with the basket alone |
-| with `<a typed email>` |
-
-**Steps:**
-
-1. Request checkout for `<basket at the bar>` `<way>`, holding no session.
-2. Read the checkout outcome.
-3. Read the orders the store holds for that checkout.
-
-**Expected Results:**
-
-* The checkout is refused, and the buyer is asked to sign in.
-* No order is made.
 
 ## Settled
 
