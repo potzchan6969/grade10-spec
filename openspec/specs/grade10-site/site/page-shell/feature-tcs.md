@@ -1,6 +1,6 @@
 # grade10-site/site/page-shell Test Cases
 
-**Status:** pending-review · 0/52
+**Status:** pending-review · 0/54
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## grade10-site-site-page-shell-US1: Collector opens any surface inside the site shell
@@ -108,6 +108,71 @@ A viewport 375 CSS pixels wide.
 * Primary navigation and language are reachable from the drawer.
 * Account / Sign In remains in the bar, and the menu panel leaves a visible gutter.
 * No surface content or control is clipped.
+
+<!-- trace:case id=g10.site-page-shell.TC-6vf rev=1 -->
+### grade10-site-site-page-shell-US1-TC4-1: Every product area renders its text in the brand sans
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-site-page-shell-US-01
+
+**Pre-conditions:**
+
+* None.
+
+**Test data:**
+
+| `<page>` |
+| --- |
+| The Grade10 home page |
+| The store listing |
+| An open auction lot |
+| The loyalty page |
+
+**Steps:**
+
+1. Open `<page>` and compare a heading and a paragraph with the brand type in the design system.
+
+**Expected Results:**
+
+* Heading and body both render in the brand sans, Gibson, one family, never a default browser sans.
+
+<!-- trace:case id=g10.site-page-shell.TC-c0u rev=1 -->
+### grade10-site-site-page-shell-US1-TC5-1: A blocked brand font leaves the page whole in a fallback sans
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-site-page-shell-US-01
+
+**Pre-conditions:**
+
+* The browser blocks requests to `use.typekit.net`, as an ad blocker would.
+
+**Steps:**
+
+1. Open the Grade10 home page and let it finish loading.
+
+**Expected Results:**
+
+* The full content and layout show at once, in the browser's fallback sans, with no spinner, empty state or error about the font.
 
 ---
 

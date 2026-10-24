@@ -4,7 +4,7 @@ title: Store Cart Test Cases
 
 # grade10-site/store/cart Test Cases
 
-**Status:** pending-review · 0/46
+**Status:** pending-review · 0/47
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/discounts
 
@@ -1400,6 +1400,44 @@ Runs once per row of **Test data**.
 * Step 2 opens the same invoice, or asks to try again after about 6 seconds; never a second payable one.
 
 ---
+
+#### g10.store-cart.TC47: A checkout of any value asks nothing about who the buyer is
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cart#checkout
+
+**Pre-conditions:**
+
+* `<buyer>` has goods worth `<value>` in the cart.
+
+**Test data:**
+
+| `<buyer>` | `<value>` |
+| --- | --- |
+| A member whose identity is unverified | HKD4,800 |
+| A member whose identity is unverified | HKD125,000 |
+| A member whose verification has expired | HKD120,000 |
+| A member whose identity is verified | HKD125,000 |
+| A guest, signed out | HKD125,000 |
+
+**Steps:**
+
+1. Open Cart and proceed to checkout.
+
+**Expected Results:**
+
+* Shopify's checkout page opens as for any basket; no refusal, verification ask or sign-in ask names the value.
 
 ### checkout#guest-checkout: Guest Checkout
 
