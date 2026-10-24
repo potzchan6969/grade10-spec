@@ -1,6 +1,6 @@
 # grade10-site/auction/account-record Test Cases
 
-**Status:** pending-review · 0/33
+**Status:** pending-review · 0/23
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
 
@@ -32,9 +32,9 @@ Shared test data:
 3. On `<bid listing>`'s page, place the next valid bid; reload the page.
    - One alerts toast, then none on reload. `g10.auction-account-record.US6-TC1`
 4. Open My Auctions.
-   - `<bid listing>` reads Leading, with no Unwatch, above `<watched listing>`. `g10.auction-account-record.US6-TC2`
+   - `<bid listing>` reads Leading, with no Unwatch, above `<watched listing>`. `g10.auction-account-record.US6-TC1`
 5. As customer B, place the next valid bid on `<bid listing>`; as customer A, reload My Auctions.
-   - `<bid listing>` reads Outbid with the next valid bid, and Current bid reads customer B's bid. `g10.auction-account-record.US2-TC2`
+   - `<bid listing>` reads Outbid with the next valid bid, and Current bid reads customer B's bid. `g10.auction-account-record.US2-TC1`
 
 ## Walk 2: A winner follows the Won row to the order
 
@@ -52,7 +52,7 @@ Shared test data:
 ### Route
 
 1. Open My Auctions.
-   - `<won listing>` reads Won, Awaiting Setup, with View order and no helper line. `g10.auction-account-record.US8-TC3`
+   - `<won listing>` reads Won, Awaiting Setup, with View order and no helper line. `g10.auction-account-record.US8-TC1`
    - `<lost listing>` reads Didn't win, says the card was not charged, and offers no View order. `g10.auction-account-record.US8-TC2`
 2. Click Email alerts on `<lost listing>`.
    - It is disabled. `g10.auction-account-record.US7-TC4`
@@ -258,37 +258,6 @@ Runs once per row of **Test data**.
 
 * Status reads `<status>`, and Current bid reads `<listing_35>`'s current bid.
 
-<!-- trace:case id=g10.auction-account-record.TC-oi7 rev=2 -->
-### g10.auction-account-record.US2-TC2: Being outbid moves the row from Leading to Outbid
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
-
-**Pre-conditions:**
-
-* customer A(signed in) leads `<listing_34>` with no maximum above the current bid, and is on My Auctions.
-* customer B(signed in, card linked) is on `<listing_34>`'s page.
-
-**Steps:**
-
-1. As customer B, place the next valid bid.
-2. As customer A, reload My Auctions.
-
-**Expected Results:**
-
-* `<listing_34>` reads Outbid with the next valid bid, and Current bid reads customer B's bid.
-
 <!-- trace:case id=g10.auction-account-record.TC-nv4 rev=2 -->
 ### g10.auction-account-record.US2-TC3: A value that could not refresh is marked not current
 
@@ -354,71 +323,6 @@ Runs once per row of **Test data**.
 * Step 1 is refused on the bid panel, naming USD325.
 * Step 2 reads `<status>`, and Current bid USD300, never USD310.
 
-<!-- trace:case id=g10.auction-account-record.TC-na3 rev=3 -->
-### g10.auction-account-record.US2-TC5: A refused first bid adds no row
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-02
-
-**Pre-conditions:**
-
-* customer A(signed in, card linked) has neither watched nor bid on open `<listing_31>`; My Auctions' title count is noted.
-
-**Steps:**
-
-1. On `<listing_31>`'s page, enter one dollar below the next valid bid and confirm.
-2. Open My Auctions.
-
-**Expected Results:**
-
-* Step 1 is refused on the bid panel.
-* Step 2 lists no `<listing_31>`, and the title count matches the note.
-
-<!-- trace:case id=g10.auction-account-record.TC-8mz rev=3 -->
-### g10.auction-account-record.US2-TC6: An Outbid bidder's refused bid leaves their row Outbid and in place
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-02
-
-**Pre-conditions:**
-
-* customer A(signed in, card linked) bid on `<listing_29>` and `<listing_30>`, which closes first; customer B has since outbid customer A on `<listing_29>`; customer A is on `<listing_29>`'s page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<current bid>` | USD5,460 (range: 500000–799999 minor units) |
-| `<next minimum>` | USD5,960 (fixed derived: `<current bid>` plus the USD500 step) |
-
-**Steps:**
-
-1. Enter `<current bid>` in the custom maximum and confirm.
-2. Open My Auctions and find `<listing_29>`.
-
-**Expected Results:**
-
-* Step 1: the bid form says Minimum bid is `<next minimum>`.
-* Step 2: Outbid with the next valid bid `<next minimum>`, Current bid `<current bid>`, still below `<listing_30>`; no row reads Bid submitted or Bid not accepted.
-
 ---
 
 ## g10.auction-account-record.US3: Follow a listing I won through to delivery
@@ -428,7 +332,7 @@ Runs once per row of **Test data**.
 **so that** My Auctions matches Winner Order without implying the listing shipped.
 
 <!-- trace:case id=g10.auction-account-record.TC-83f rev=2 -->
-### g10.auction-account-record.US3-TC5: A Won row reads its order's status
+### g10.auction-account-record.US3-TC5: A Won row reads its order's status, from setup to shipped
 
 Runs once per row of **Test data**.
 
@@ -440,107 +344,35 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
-* customer(signed in) won `<listing_26>`, whose order is `<order state>`.
+* customer(signed in) won `<listing>`, whose order is `<order state>`.
 
 **Test data:**
 
 | `<order state>` | `<status>` |
 | --- | --- |
-| Not set up, inside the setup window | Won, Awaiting Setup |
-| Set up, invoice not yet issued | Won, Preparing Invoice |
-| Invoice issued, unpaid, inside the payment window | Won, Pending Payment |
-| Payment proof waiting for an operator | Won, Payment Verifying |
-| Collected in parts, balance outstanding | Won, Partially Paid |
+| not set up, inside the setup window | Won, Awaiting Setup |
+| set up, invoice not yet issued | Won, Preparing Invoice |
+| invoice issued, unpaid, inside the payment window | Won, Pending Payment |
+| payment proof waiting for an operator | Won, Payment Verifying |
+| payment proof returned by an operator | Won, Pending Payment |
+| collected in parts, balance outstanding | Won, Partially Paid |
+| paid, not dispatched (also after an operator confirmed a proof) | Won, Preparing Shipment |
+| paid and dispatched, delivery not confirmed | Won, Shipped |
 
 **Steps:**
 
-1. Open My Auctions and find `<listing_26>`.
+1. Open My Auctions and find `<listing>`.
 
 **Expected Results:**
 
-* Status reads `<status>`, and the row offers View order.
-
-<!-- trace:case id=g10.auction-account-record.TC-lvl rev=2 -->
-### g10.auction-account-record.US3-TC20: A paid Won row reads Preparing Shipment, then Shipped
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) won `<listing_24>`, whose order is paid and `<fulfilment>`.
-
-**Test data:**
-
-| `<fulfilment>` | `<status>` |
-| --- | --- |
-| Not dispatched | Preparing Shipment |
-| Dispatched, delivery not confirmed | Shipped |
-
-**Steps:**
-
-1. Open My Auctions and read `<listing_24>`'s Status.
-
-**Expected Results:**
-
-* Status reads `<status>` with the default badge.
-
-<!-- trace:case id=g10.auction-account-record.TC-hj7 rev=2 -->
-### g10.auction-account-record.US3-TC2: A Won row follows the proof check's outcome
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-03
-
-**Pre-conditions:**
-
-* customer(signed in) won `<listing_28>`, whose payment proof was under check; an operator then `<operator act>`.
-
-**Test data:**
-
-| `<operator act>` | `<status>` |
-| --- | --- |
-| Returned the proof | Won, Pending Payment |
-| Confirmed the payment | Won, Preparing Shipment |
-
-**Steps:**
-
-1. Open My Auctions and read `<listing_28>`'s row.
-
-**Expected Results:**
-
-* Status reads `<status>`.
+* Status reads `<status>` with the default badge, and the row offers View order.
 
 <!-- trace:case id=g10.auction-account-record.TC-wt4 rev=2 -->
 ### g10.auction-account-record.US3-TC4: Another collector never sees a Payment Verifying row
@@ -570,35 +402,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No `<listing_27>` row shows.
-
-<!-- trace:case id=g10.auction-account-record.TC-now rev=2 -->
-### g10.auction-account-record.US3-TC23: Shipped Won row keeps the default badge
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-auction-account-record-US-03
-
-**Retirement:** The Shipped row of `g10.auction-account-record.US3-TC20`.
-
-**Pre-conditions:**
-
-* customer won a lot whose order is dispatched.
-
-**Steps:**
-
-1. Read its Status on My Auctions.
-
-**Expected Results:**
-
-* Shipped, with the default badge.
 
 ---
 
@@ -655,7 +458,9 @@ Runs once per row of **Test data**.
 **so that** I can open My Auctions from the toast when I want to manage it.
 
 <!-- trace:case id=g10.auction-account-record.TC-7pb rev=2 -->
-### g10.auction-account-record.US5-TC1: Watching from the listing page lands on My Auctions as watch-only
+### g10.auction-account-record.US5-TC1: Watching from the listing page or a catalogue card lands on My Auctions as watch-only
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -673,48 +478,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) neither watches nor bid on open `<listing_22>` and is on its page.
+* customer(signed in) neither watches nor bid on open `<listing>`.
+
+**Test data:**
+
+| `<surface>` | `<then>` |
+| --- | --- |
+| `<listing>`'s page | select View My Auctions in the toast |
+| its catalogue card's watch control | open My Auctions |
 
 **Steps:**
 
-1. Click Watch.
-2. Click View My Auctions in the toast and find `<listing_22>`.
+1. Watch `<listing>` from `<surface>`, and `<then>`.
 
 **Expected Results:**
 
-* Step 1: a toast says email alerts are on, with View My Auctions.
-* Step 2: the title count includes `<listing_22>`, shown once with its image, title and close; Status `--`; Email alerts on; Unwatch offered.
-
-<!-- trace:case id=g10.auction-account-record.TC-tzp rev=2 -->
-### g10.auction-account-record.US5-TC2: Watching from the catalogue card lands on My Auctions
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) neither watches nor bid on open `<listing_22>` and is on the auction catalogue.
-
-**Steps:**
-
-1. Click the watch control at the bottom right of `<listing_22>`'s card image.
-2. Open My Auctions.
-
-**Expected Results:**
-
-* Step 1: the control reads Watching.
-* Step 2 lists `<listing_22>` once, Status `--`, email alerts on.
+* A toast or the card's control says watching, alerts on; My Auctions lists `<listing>` once, with its image, title and close, Status `--`, Email alerts on and Unwatch, the title count including it.
 
 <!-- trace:case id=g10.auction-account-record.TC-sse rev=2 -->
 ### g10.auction-account-record.US5-TC3: A watch is seen only by its owner
@@ -756,7 +535,9 @@ Runs once per row of **Test data**.
 **so that** I do not need a separate Watch and I am not reminded on every visit.
 
 <!-- trace:case id=g10.auction-account-record.TC-l63 rev=2 -->
-### g10.auction-account-record.US6-TC1: A first bid puts the listing on My Auctions without a Watch
+### g10.auction-account-record.US6-TC1: A first bid bookmarks the listing in one row, with alerts told once
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -774,48 +555,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked) neither watches nor bid on open `<listing_20>`, which has no bidder, and is on its page.
+* customer(signed in, card linked) has not bid on open `<listing>`, which has no bidder, `<watched>`; it also watches `<other listing>`, closing first, without bidding.
+
+**Test data:**
+
+| `<watched>` |
+| --- |
+| and does not watch it |
+| and watches it |
 
 **Steps:**
 
-1. Place the next valid bid.
-2. Reload the page.
-3. Open My Auctions.
-
-**Expected Results:**
-
-* Step 1 shows one toast saying email alerts are on; step 2 shows none.
-* Step 3 lists `<listing_20>` once, Leading, Email alerts on, with no Unwatch.
-
-<!-- trace:case id=g10.auction-account-record.TC-9rb rev=2 -->
-### g10.auction-account-record.US6-TC2: Bidding on a watched listing keeps one row
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-06
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in, card linked) watches `<listing_18>` and `<listing_19>`, which closes first, without bidding, and is on `<listing_18>`'s page.
-
-**Steps:**
-
-1. Place the next valid bid.
+1. On `<listing>`, place the next valid bid; reload the page.
 2. Open My Auctions.
 
 **Expected Results:**
 
-* `<listing_18>` shows once, Leading, with no Unwatch, above `<listing_19>`.
+* Step 1 shows one alerts toast when `<listing>` was not watched, and none on reload.
+* Step 2 lists `<listing>` once, Leading, Email alerts on, with no Unwatch, above `<other listing>`.
 
 <!-- trace:case id=g10.auction-account-record.TC-43z rev=3 -->
 ### g10.auction-account-record.US6-TC3: A refused first bid puts nothing on My Auctions
@@ -866,7 +623,7 @@ Runs once per row of **Test data**.
 **so that** I read my whole record in one place without switching tabs.
 
 <!-- trace:case id=g10.auction-account-record.TC-91p rev=3 -->
-### g10.auction-account-record.US7-TC1: Every listing sits in one list under the breadcrumb
+### g10.auction-account-record.US7-TC1: Every listing sits in one list under the breadcrumb, whatever its window
 
 **Classification:**
 
@@ -884,75 +641,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) watches `<listing_14>` (not yet open), `<listing_15>` (open) and `<listing_16>` (closed).
+* customer(signed in) watches `<listing 1>`, opening inside the test window, `<listing 2>`, open, and `<listing 3>`, closed.
 
 **Steps:**
 
 1. Open My Auctions.
+2. Wait until `<listing 1>` opens, and reload.
 
 **Expected Results:**
 
-* No Active, Upcoming or Ended tab; the breadcrumb sits above the container; the title badge shows 3; one list holds all three.
+* No Active, Upcoming or Ended tab and no empty state; the breadcrumb sits above the container; the title badge shows 3; one list holds all three, `<listing 1>` once at each step.
 * The column holding standings and order statuses is headed Status, never Your Standing.
-
-<!-- trace:case id=g10.auction-account-record.TC-z0b rev=3 -->
-### g10.auction-account-record.US7-TC2: A listing stays in the list when its window opens
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) watches `<listing_13>`, whose bidding opens inside the test window.
-
-**Steps:**
-
-1. Open My Auctions.
-2. Wait until `<listing_13>` opens and reload.
-
-**Expected Results:**
-
-* `<listing_13>` is listed once, and no tab is offered.
-
-<!-- trace:case id=g10.auction-account-record.TC-tbh rev=3 -->
-### g10.auction-account-record.US7-TC3: A record with lots shows no empty state
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-07
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) watches open listings.
-
-**Steps:**
-
-1. Open My Auctions.
-
-**Expected Results:**
-
-* No empty state and no error show.
 
 <!-- trace:case id=g10.auction-account-record.TC-tzc rev=3 -->
 ### g10.auction-account-record.US7-TC4: Email alerts cannot be changed on a closed row
@@ -1021,7 +720,9 @@ Runs once per row of **Test data**.
 **so that** I can return to the locked payment record.
 
 <!-- trace:case id=g10.auction-account-record.TC-hc2 rev=2 -->
-### g10.auction-account-record.US8-TC1: A partially paid Won row opens Winner Order
+### g10.auction-account-record.US8-TC1: A Won row opens its order, and carries no helper line, whatever the order's state
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1039,17 +740,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) won `<listing_10>`, whose order is Partially Paid.
+* customer(signed in) won `<listing>`, whose order reads `<order status>`.
+
+**Test data:**
+
+| `<order status>` |
+| --- |
+| Partially Paid |
+| Payment Overdue |
+| Awaiting Setup, inside the setup window |
 
 **Steps:**
 
-1. Open My Auctions and read `<listing_10>`'s row.
-2. Click View order.
+1. Open My Auctions and read `<listing>`'s row.
+2. Select View order.
 
 **Expected Results:**
 
-* Step 1 reads Partially Paid, with its warning treatment.
-* Step 2 opens the Partially Paid Winner Order.
+* Step 1 reads Won, `<order status>`, Partially Paid with its warning treatment, with no helper line or way to reach Grade10 on the row.
+* Step 2 opens that order on Winner Order.
 
 <!-- trace:case id=g10.auction-account-record.TC-flb rev=3 -->
 ### g10.auction-account-record.US8-TC2: A Didn't win row offers no View order
@@ -1079,73 +788,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Didn't win, saying the card was not charged, with no View order.
-
-<!-- trace:case id=g10.auction-account-record.TC-qo0 rev=2 -->
-### g10.auction-account-record.US8-TC3: A Won row carries no status-specific helper
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-08
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
-
-**Pre-conditions:**
-
-* customer(signed in) won `<listing_7>`, whose order reads `<order status>`.
-
-**Test data:**
-
-| `<order status>` |
-| --- |
-| Payment Overdue |
-| Awaiting Setup, inside the setup window |
-
-**Steps:**
-
-1. Open My Auctions and read `<listing_7>`'s row.
-
-**Expected Results:**
-
-* Won, `<order status>`, with View order, and no helper line or way to reach Grade10 on the row.
-
-<!-- trace:case id=g10.auction-account-record.TC-5uz rev=2 -->
-### g10.auction-account-record.US8-TC4: An Awaiting Setup row carries no confirm-address helper
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-auction-account-record-US-08
-
-**Retirement:** The Awaiting Setup row of `g10.auction-account-record.US8-TC3`.
-
-**Pre-conditions:**
-
-* customer won a lot whose order reads Awaiting Setup.
-
-**Steps:**
-
-1. Read its row on My Auctions.
-
-**Expected Results:**
-
-* No confirm-address helper shows.
 
 ---
 
@@ -1260,64 +902,6 @@ Runs once per row of **Test data**.
 
 * Step 1 reads Leading with no next valid bid, neither Won nor Didn't win.
 * Step 2 reads Won.
-
-<!-- trace:case id=g10.auction-account-record.TC-j99 rev=3 -->
-### g10.auction-account-record.US10-TC1: Ended row shows the final price and the recorded result
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-auction-account-record-US-10
-
-**Retirement:** `g10.auction-dmn.US12-TC1` walks the final price with Won and Didn't win.
-
-**Pre-conditions:**
-
-* A lot both customers bid on has closed.
-
-**Steps:**
-
-1. Read its row on My Auctions as each customer.
-
-**Expected Results:**
-
-* Both read the final price, with Won or Didn't win.
-
-<!-- trace:case id=g10.auction-account-record.TC-hgl rev=3 -->
-### g10.auction-account-record.US10-TC4: Lone first bid confirming after the close reads Didn't win on an unsold lot
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-auction-account-record-US-10
-
-**Retirement:** No bid takes a card hold that could confirm after the close.
-
-**Pre-conditions:**
-
-* A first bid's confirmation is held past the close.
-
-**Steps:**
-
-1. Read the row on My Auctions.
-
-**Expected Results:**
-
-* Didn't win, on an unsold lot.
 
 ---
 
