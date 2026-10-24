@@ -10,7 +10,11 @@ type OrderDetailsDeliveryStep = {
   label: ReactNode;
   /** Omit on upcoming steps and on steps that have not happened yet. */
   date?: ReactNode;
-  /** Set by `resolveDeliverySteps` from status; omit when passing into `OrderDetails`. */
+  /**
+   * Where the parcel stands at this step. Set it on every step to draw the
+   * steps as supplied; omit it on all of them and `OrderDetails` derives
+   * states from the order status.
+   */
   state?: OrderDetailsDeliveryStepState;
 };
 

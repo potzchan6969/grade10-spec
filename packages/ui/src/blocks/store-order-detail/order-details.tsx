@@ -85,8 +85,9 @@ function RevealGroup({
  *
  * Figma frame `Order Details` (`4835:1654`). Site chrome (Nav/Footer) stays
  * outside this compound. Delivery status is hidden when `delivery` is omitted
- * (offline in-store payment orders). Stepper states are derived from `status`
- * and `delivery.variant` so a future milestone is not shown as current.
+ * (offline in-store payment orders). Stepper states are drawn as supplied when
+ * every step carries one; otherwise they are derived from `status` and
+ * `delivery.variant` so a future milestone is not shown as current.
  *
  * First paint: header, delivery card (when present), table, and sidebar stagger
  * in (opacity + translateY). Settles immediately under reduced motion.
