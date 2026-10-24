@@ -1,6 +1,6 @@
 # grade10-admin/auction/payment-settings Test Cases
 
-**Status:** pending-review · 0/13
+**Status:** pending-review · 0/11
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
 
@@ -22,7 +22,7 @@ Starting state:
 1. Read the tab.
    - One USD premium minimum reading USD0.00, and empty USD and HKD card rules; no HKD or JPY minimum and no JPY rule. `g10adm.auction-payment-settings.US1-TC1`
 2. Type 5.00 as the USD minimum, Save and reload.
-   - The minimum reads USD5.00. `g10adm.auction-payment-settings.US1-TC5`
+   - The minimum reads USD5.00. `g10adm.auction-payment-settings.US1-TC2`
 3. Type an HKD rule of 3.4% and 2.35, and read the example.
    - The example reads a fee of HKD37.63 on HKD1,000.00. `g10adm.auction-payment-settings.US2-TC2`
 4. Type a USD rule of 4.4% and 0.30, Save and reload.
@@ -64,7 +64,9 @@ Starting state:
 * One USD minimum reads USD0.00; no HKD or JPY minimum shows.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-nzx rev=2 -->
-### g10adm.auction-payment-settings.US1-TC2: A saved USD minimum persists with who saved it
+### g10adm.auction-payment-settings.US1-TC2: A USD minimum saves in dollars, zero included, with who saved it
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -80,42 +82,13 @@ Starting state:
 
 **Pre-conditions:**
 
-* admin(finance) is on Payment settings.
-
-**Steps:**
-
-1. Set the USD minimum to 1.00 and Save.
-2. Reload the tab.
-
-**Expected Results:**
-
-* Step 2 reads USD1.00, with this operator and the time it was saved.
-
-<!-- trace:case id=g10adm.auction-payment-settings.TC-gof rev=2 -->
-### g10adm.auction-payment-settings.US1-TC5: Finance saves the minimum in dollars, zero included
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-payment-settings-US-01
-
-**Pre-conditions:**
-
 * The saved USD minimum is `<before>`; admin(finance) is on Payment settings.
 
 **Test data:**
 
-| `<before>` | `<typed>` | `<read>` |
+| `<before>` | `<typed>` | `<reads>` |
 | --- | --- | --- |
+| USD0.00 | 1.00 | USD1.00 |
 | USD0.00 | 5.00 | USD5.00 |
 | USD5.00 | 0 | USD0.00 |
 
@@ -126,7 +99,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 is accepted; step 2 reads `<read>`.
+* Step 1 is accepted; step 2 reads `<reads>`, with this operator and the time it was saved.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-s5q rev=2 -->
 ### g10adm.auction-payment-settings.US1-TC3: A negative minimum is refused and changes nothing
@@ -358,7 +331,9 @@ Runs once per row of **Test data**.
 * A USD rule and an HKD rule show, each empty; no JPY or other currency shows.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-xsy rev=1 -->
-### g10adm.auction-payment-settings.US3-TC2: The USD and HKD rules are kept apart
+### g10adm.auction-payment-settings.US3-TC2: The USD and HKD rules save apart, either without the other
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -376,41 +351,20 @@ Runs once per row of **Test data**.
 
 * No card rule has been saved; admin(finance) is on Payment settings.
 
-**Steps:**
+**Test data:**
 
-1. Set USD to 4.4% and 0.30, and HKD to 3.4% and 2.35.
-2. Save and reload.
-
-**Expected Results:**
-
-* USD reads 4.4% and USD0.30; HKD reads 3.4% and HKD2.35.
-
-<!-- trace:case id=g10adm.auction-payment-settings.TC-80l rev=1 -->
-### g10adm.auction-payment-settings.US3-TC5: A USD rule saves with HKD empty
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-payment-settings-US-03
-
-**Pre-conditions:**
-
-* No card rule has been saved; admin(finance) is on Payment settings.
+| `<usd>` | `<hkd>` |
+| --- | --- |
+| 4.4% and 0.30 | 3.4% and 2.35 |
+| 4.4% and 0.30 | empty |
 
 **Steps:**
 
-1. Set USD to 4.4% and 0.30, leave HKD empty, Save and reload.
+1. Set USD to `<usd>` and HKD to `<hkd>`, Save and reload.
 
 **Expected Results:**
 
-* USD reads 4.4% and USD0.30; HKD shows no rule.
+* USD reads `<usd>` in USD, and HKD reads `<hkd>` in HKD or no rule; neither overwrites the other.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-c9t rev=1 -->
 ### g10adm.auction-payment-settings.US3-TC4: Clearing a currency's rule withdraws card there
