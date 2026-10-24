@@ -57,6 +57,10 @@ export function parseTeamMap(text) {
       ...(email ? { email: email.toLowerCase() } : {}),
       ...(slack ? { slack } : {}),
       roles: roles(entry.roles, `handles.${handle}.roles`),
+      // What only this handle may change; absent for most, so it is left out.
+      ...(entry.owns === undefined || entry.owns === null
+        ? {}
+        : { owns: roles(entry.owns, `handles.${handle}.owns`) }),
     };
   }
 

@@ -8,6 +8,8 @@
  * story check, and the agent instructions owe parity.
  */
 
+import { isOwned } from "../openspec/lib/tcs-rules.mjs";
+
 /** Files a planning tool rewrites to record where a change stands. */
 const STATUS =
   /^openspec\/changes\/(?!archive\/)([^/]+)\/(tasks\.md|rounds\.md|implementation\.json|acceptance\.json|\.openspec\.yaml)$/;
@@ -40,6 +42,7 @@ export function classify(paths) {
   if (paths.some((path) => STORIES.test(path) && !STATUS.test(path)))
     checks.push({ id: "stories" });
   if (paths.some((path) => AGENT.test(path))) checks.push({ id: "parity" });
+  if (paths.some(isOwned)) checks.push({ id: "rules-owner" });
   return { checks };
 }
 

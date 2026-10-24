@@ -16,6 +16,9 @@
 # the person as Slack shows them, so an id can be checked against it. The
 # e-mail is the one the handle's own commits on `main` carry.
 #
+# `owns:` names what only that handle may change: `tcs-rules`, the test-case
+# rules `pnpm run tcs:rules-owner` holds to their owner.
+#
 # `docs/prds/products/shared/planning/change-stages.md` says what reads it.
 handles:
   jeffffej0909: # @Jeff on Slack
@@ -54,6 +57,7 @@ handles:
   chloe9gag: # @chloe on Slack
     email: chloe@9gag.com
     roles: [qa]
+    owns: [tcs-rules]
   brianchacha6969: # the owner
     email: brianchacha6969@proton.me
     roles: [pm]

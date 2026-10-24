@@ -19,6 +19,8 @@ export type TeamMember = {
   email?: string;
   slack?: string;
   roles: string[];
+  /** What only this handle may change, such as `tcs-rules`. */
+  owns?: string[];
 };
 
 /** Who the store knows, and where a role is posted to: one channel per role,
