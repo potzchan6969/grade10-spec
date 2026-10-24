@@ -1,15 +1,56 @@
 # grade10-site/auction/availability Test Cases
 
-**Status:** pending-review · 0/12
-**Drafts styled:** 2026-10-08, tcs-rules r4
+**Status:** pending-review · 0/13
+**Drafts styled:** 2026-10-24, tcs-rules r7
+**Regenerated:** 2026-10-24, tcs-rules r7
+**Out of suite (api):** grade10-site-auction-availability-SC-11a - a lot read or live channel opened by hand, with no screen that sends it
 
-## grade10-site-auction-availability-US1: Collector in a restricted region shops the store
+## Background
+
+* `<restricted region>` is a region where auctions are not offered: CU, IR, KP or SY. `<offered region>` is any other, such as HK. A tester changes region by connecting through that region.
+* The restriction page names that auctions are not available in the visitor's region and links to the store.
+
+## Walk 1: Collector in a restricted region meets the site
+
+Starting state:
+
+- customer(signed in) won `<won listing>` and has not paid its order; customer watches `<watched listing>`.
+- customer is connected from `<restricted region>`.
+
+Shared test data:
+
+| Field | Value |
+| --- | --- |
+| won listing | A closed USD listing customer won, order unpaid |
+| watched listing | An open USD listing customer watches and has not bid on |
+
+### Route
+
+1. Open the store home and read the primary navigation.
+   - No Auction item shows. `g10.auction-availability.US1-TC1`
+2. Open the account menu.
+   - No My Auctions, watchlist or auction order entry shows; the other entries do. `g10.auction-availability.US1-TC2`
+3. Open a product page and add it to the cart.
+   - The page and the cart work, with no watch control, bid panel or auction link. `g10.auction-availability.US1-TC3`
+4. Open `<g10url>/auction`.
+   - The restriction page shows, not the catalogue. `g10.auction-availability.US2-TC1`
+5. Open `<watched listing>`'s address.
+   - The restriction page shows, with no gallery, status or bid panel. `g10.auction-availability.US2-TC2`
+6. Open `<won listing>`'s order.
+   - The order shows with its address, payment and proof actions. `g10.auction-availability.US2-TC4`
+7. Connect from `<offered region>` and reload the store home.
+   - The Auction item is back. `g10.auction-availability.US1-TC4`
+
+## g10.auction-availability.US1: Collector in a restricted region shops the store
 
 **As a** collector in a region where auctions are not offered,
 **I want** the store and the rest of the site to work as usual,
 **so that** the restriction costs me only what I cannot legally have.
 
-### grade10-site-auction-availability-US1-TC1-1: Navigation shows no Auction item
+<!-- trace:case id=g10.auction-availability.TC-muj rev=1 -->
+### g10.auction-availability.US1-TC1: Navigation shows no Auction item in a restricted region
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -18,43 +59,48 @@
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
-* **Suites:** regression
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-availability-US-01
 
 **Pre-conditions:**
 
-* A request judged to come from a region where auctions are not offered.
+* The visitor is connected from `<restricted region>`.
+
+**Test data:**
+
+| `<viewport>` | `<navigation>` |
+| --- | --- |
+| Wide | The primary navigation |
+| Narrow | The menu drawer |
 
 **Steps:**
 
-1. Open any store page.
-2. Read the primary navigation on a wide viewport.
-3. Open the compact menu drawer on a narrow viewport.
+1. Open the store home at `<viewport>` and open `<navigation>`.
 
 **Expected Results:**
 
-* No Auction item renders in the primary navigation or the drawer.
-* Every non-auction navigation item renders unchanged.
+* `<navigation>` shows no Auction item, and every other item.
 
-### grade10-site-auction-availability-US1-TC2-1: Account menu shows no auction entries
+<!-- trace:case id=g10.auction-availability.TC-7u0 rev=1 -->
+### g10.auction-availability.US1-TC2: The account menu shows no auction entry in a restricted region
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-availability-US-01
 
 **Pre-conditions:**
 
-* A signed-in collector whose request is judged restricted.
+* customer(signed in) has bid on, watches and won lots, and is connected from `<restricted region>`.
 
 **Steps:**
 
@@ -62,10 +108,10 @@
 
 **Expected Results:**
 
-* No My Auctions, watchlist or auction order entry renders.
-* Every non-auction account entry renders unchanged.
+* No My Auctions, watchlist or auction order entry shows; every other entry does.
 
-### grade10-site-auction-availability-US1-TC3-1: Store and non-auction pages work unchanged
+<!-- trace:case id=g10.auction-availability.TC-q7w rev=1 -->
+### g10.auction-availability.US1-TC3: The store works unchanged and shows no auction control
 
 **Classification:**
 
@@ -74,32 +120,31 @@
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-availability-US-01
 
 **Pre-conditions:**
 
-* A request judged restricted.
+* customer(signed in) is connected from `<restricted region>`.
 
 **Steps:**
 
-1. Browse the store: home, listing, product detail, cart.
-2. Check any page for a watch control, bid panel or auction link.
+1. Open the store home, a product listing and a product page.
+2. Add the product to the cart and open the cart.
 
 **Expected Results:**
 
-* Each store page renders and works as it does for an unrestricted
-  collector.
-* No watch control, bid panel or auction call-to-action renders anywhere.
+* Each page works as it does from `<offered region>`, with no watch control, bid panel or auction link.
 
-### grade10-site-auction-availability-US1-TC4-1: Moving to an unrestricted region restores auctions
+<!-- trace:case id=g10.auction-availability.TC-aht rev=1 -->
+### g10.auction-availability.US1-TC4: Each visit is judged on its own region
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** major
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -110,54 +155,121 @@
 
 **Pre-conditions:**
 
-* A collector whose earlier request in the same session was judged
-  restricted, now requesting from an unrestricted region.
+* The visitor opened the store home from `<restricted region>`, in the same browser session.
 
 **Steps:**
 
-1. Load the store home from the unrestricted region.
+1. Connect from `<offered region>` and reload the store home.
+2. Connect from `<restricted region>` and reload it again.
 
 **Expected Results:**
 
-* The Auction navigation item and every auction surface return for the new
-  request; the earlier restricted verdict is not carried.
+* Step 1 shows the Auction item and every auction surface.
+* Step 2 hides them again.
 
-## grade10-site-auction-availability-US2: Collector in a restricted region opens an auction link
+---
+
+## g10.auction-availability.US2: Collector in a restricted region opens an auction link
 
 **As a** collector in a restricted region who followed an auction link,
 **I want** a page that says auctions are not available to me and points me at
 the store,
 **so that** a shared link or an email never lands me on a broken page.
 
-### grade10-site-auction-availability-US2-TC1-1: The catalogue address answers the restriction page
+<!-- trace:case id=g10.auction-availability.TC-gu2 rev=1 -->
+### g10.auction-availability.US2-TC1: The catalogue address answers the restriction page
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-availability-US-02
 
 **Pre-conditions:**
 
-* A request judged restricted.
+* The visitor is connected from `<restricted region>`.
 
 **Steps:**
 
-1. Enter the auction catalogue address directly.
+1. Open `<g10url>/auction`.
+2. Follow the page's store link.
 
 **Expected Results:**
 
-* The restriction page renders: it names that auctions are not available in
-  the collector's region and offers a link to the store.
-* It is not the not-found surface and not the catalogue.
+* Step 1 shows the restriction page, neither the catalogue nor Page not found.
+* Step 2 opens the store.
 
-### grade10-site-auction-availability-US2-TC2-1: A lot address answers the restriction page
+<!-- trace:case id=g10.auction-availability.TC-o6b rev=1 -->
+### g10.auction-availability.US2-TC2: A lot link answers the restriction page
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-availability-US-02
+
+**Pre-conditions:**
+
+* `<listing>` is open; the visitor is connected from `<restricted region>` and holds a link to it, as an email or a chat would carry.
+
+**Steps:**
+
+1. Open the link.
+
+**Expected Results:**
+
+* The restriction page shows, with no gallery, status or bid panel.
+
+<!-- trace:case id=g10.auction-availability.TC-e9z rev=1 -->
+### g10.auction-availability.US2-TC3: My Auctions and the Bids page answer the restriction page
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-availability-US-02
+
+**Pre-conditions:**
+
+* customer(signed in) has bids and is connected from `<restricted region>`.
+
+**Test data:**
+
+| `<page>` |
+| --- |
+| My Auctions |
+| `<g10url>/bids` |
+
+**Steps:**
+
+1. Open `<page>`'s address.
+
+**Expected Results:**
+
+* The restriction page shows, and none of the customer's lots or standings.
+
+<!-- trace:case id=g10.auction-availability.TC-xgz rev=1 -->
+### g10.auction-availability.US2-TC4: A winner settles their order from a restricted region
 
 **Classification:**
 
@@ -173,56 +285,30 @@ the store,
 
 **Pre-conditions:**
 
-* A request judged restricted; a live lot with a public address.
+* customer(signed in) won `<listing>`, its invoice is issued and unpaid, and customer is connected from `<restricted region>`.
 
 **Steps:**
 
-1. Enter the lot's address directly, as an email or shared link would.
+1. Open the order from its invoice email.
+2. Read the order's actions.
 
 **Expected Results:**
 
-* The restriction page renders rather than the lot — no gallery, status or
-  bid panel is served.
+* The order shows as it does for any winner, with its invoice and its address, payment and proof actions.
 
-### grade10-site-auction-availability-US2-TC3-1: Account auction addresses answer the restriction page
+---
 
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-auction-availability-US-02
-
-**Pre-conditions:**
-
-* A signed-in collector whose request is judged restricted, holding a won
-  lot whose order is unpaid.
-
-**Steps:**
-
-1. Enter the My Auctions address.
-2. Enter the bidding history address.
-3. Enter the won lot's winner-order address.
-
-**Expected Results:**
-
-* My Auctions and the bidding history answer the restriction page.
-* The winner order renders as it does for any winner, with its address,
-  payment and proof actions.
-
-## grade10-site-auction-availability-US3: Collector in a restricted region tries to act on an auction
+## g10.auction-availability.US3: Collector in a restricted region tries to act on an auction
 
 **As a** collector in a restricted region who sends a bid or a watch
 anyway,
 **I want** the action refused before it reaches the auction,
 **so that** no commitment is recorded that cannot be settled.
 
-### grade10-site-auction-availability-US3-TC1-1: A sent bid records nothing
+<!-- trace:case id=g10.auction-availability.TC-nlq rev=1 -->
+### g10.auction-availability.US3-TC1: A bid from a page opened before the move is refused
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -238,53 +324,32 @@ anyway,
 
 **Pre-conditions:**
 
-* A live lot; a bid sent from a restricted region by any client, not only
-  the site.
+* customer(signed in, `<card>`) opened open `<listing>`'s page from `<offered region>`; its price, leader and bid count are noted.
+* customer is now connected from `<restricted region>`, with the page still open.
+
+**Test data:**
+
+| `<card>` | `<action>` |
+| --- | --- |
+| card linked | Place a bid at the next minimum |
+| no card linked | Link a card from the bid panel |
 
 **Steps:**
 
-1. Send the bid against the lot.
+1. `<action>`.
+2. Connect from `<offered region>` and reload `<listing>`.
 
 **Expected Results:**
 
-* The bid is refused.
-* The lot's price, leader and maximums do not change; no bid, watch or
-  My Auctions row is recorded.
+* Step 1 shows the restriction page.
+* Step 2 matches the note; no bid or card is recorded for the customer.
 
-### grade10-site-auction-availability-US3-TC2-1: A sent watch or order action records nothing
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-auction-availability-US-03
-
-**Pre-conditions:**
-
-* A watch, an unwatch and an alert mute sent from a restricted region
-  against a lot the collector watches.
-
-**Steps:**
-
-1. Send the watch against an unwatched lot.
-2. Send the unwatch and the alert mute against the watched lot.
-
-**Expected Results:**
-
-* The watch is refused and no watch is recorded.
-* The unwatch and the alert mute are answered as for any collector.
-
-### grade10-site-auction-availability-US3-TC3-1: An auction read opened by hand returns nothing
+<!-- trace:case id=g10.auction-availability.TC-7q4 rev=1 -->
+### g10.auction-availability.US3-TC2: A watch from a page opened before the move is refused
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
@@ -296,24 +361,66 @@ anyway,
 
 **Pre-conditions:**
 
-* A request for auction data — a lot read, a standing read, a live-update
-  channel — from a restricted region.
+* customer(signed in) opened unwatched `<listing>`'s page from `<offered region>` and is now connected from `<restricted region>`, with the page still open.
 
 **Steps:**
 
-1. Request the read or open the channel directly.
+1. Select Watch.
+2. Connect from `<offered region>` and open the watchlist.
 
 **Expected Results:**
 
-* It is refused and no lot, standing or order data is returned.
+* Step 1 shows the restriction page.
+* Step 2 does not list `<listing>`.
 
-## grade10-site-auction-availability-US4: Collector in an unrestricted region uses auctions
+<!-- trace:case id=g10.auction-availability.TC-awy rev=1 -->
+### g10.auction-availability.US3-TC3: Unwatching and muting alerts still work from a restricted region
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-auction-availability-US-03
+
+**Pre-conditions:**
+
+* customer(signed in) watches `<listing>` and has an alert email for it; customer is connected from `<restricted region>`.
+
+**Test data:**
+
+| `<route>` | `<withdrawn>` |
+| --- | --- |
+| Select Unwatch on `<listing>`'s page, opened before the move | The watch |
+| Follow the alert email's mute link | The lot's alerts |
+
+**Steps:**
+
+1. `<route>`.
+2. Connect from `<offered region>` and open the watchlist.
+
+**Expected Results:**
+
+* Step 1 confirms, never the restriction page.
+* Step 2 shows `<withdrawn>` withdrawn.
+
+---
+
+## g10.auction-availability.US4: Collector in an unrestricted region uses auctions
 
 **As a** collector in a region where auctions are offered,
 **I want** every auction surface to work exactly as it does today,
 **so that** a rule meant for other regions never touches me.
 
-### grade10-site-auction-availability-US4-TC1-1: Unrestricted requests see every auction surface
+<!-- trace:case id=g10.auction-availability.TC-cj0 rev=1 -->
+### g10.auction-availability.US4-TC1: An offered region sees every auction surface
 
 **Classification:**
 
@@ -322,29 +429,29 @@ anyway,
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-availability-US-04
 
 **Pre-conditions:**
 
-* A request from a region where auctions are offered.
+* customer(signed in) is connected from `<offered region>`.
 
 **Steps:**
 
-1. Open the catalogue, a lot, and the account menu.
+1. Open the store home, its Auction item, an open lot and the account menu.
 
 **Expected Results:**
 
-* Every auction surface renders exactly as before the change; the
-  restriction page never appears.
+* The Auction item, catalogue, lot with its bid panel and watch control, and the account menu's auction entries all show; the restriction page never does.
 
-### grade10-site-auction-availability-US4-TC2-1: A missing region signal fails open
+<!-- trace:case id=g10.auction-availability.TC-mjk rev=1 -->
+### g10.auction-availability.US4-TC2: A visit whose region cannot be judged sees auctions
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -356,39 +463,18 @@ anyway,
 
 **Pre-conditions:**
 
-* A request whose region cannot be judged — no signal, or an unreadable one.
+* The visitor is connected through a network whose region cannot be judged.
 
 **Steps:**
 
-1. Open the auction catalogue.
+1. Open `<g10url>/auction`.
 
 **Expected Results:**
 
-* The catalogue renders normally: an unreadable signal never locks a
-  collector out.
+* The catalogue shows, never the restriction page.
+
+---
 
 ## Settled
 
-None yet — this is the suite's first run.
-
-## Reconciliation
-
-- **Raised** — whether an auction data read or live-update channel from a
-  restricted region is refused the way a mutation is: folded as
-  `grade10-site-auction-availability-SC-11a`, walked by
-  `grade10-site-auction-availability-US3-TC3-1`
-- **Raised** — whether the restriction page is indexable or emits `noindex`:
-  escalated, ❓ on the Auction Display page owed by Product
-- **Decided** — what a restricted signed-in collector with a standing bid,
-  watched lot or unpaid invoice still sees: the winner order and its
-  invoice, and unwatching and muting, stay open (decision Q8);
-  `grade10-site-auction-availability-US2-TC3-1` and `-US3-TC2-1` revised in
-  place to walk it
-- **Uncovered anchors** — none: every journey carries at least one case
-
-**Run:** Read only the isolated bundle — the capability's `## Purpose` and
-`## Feature set`, `user-journeys.md`, `decisions.md`, `ui-design.md`, the
-Auction Display and Bidding pages, and `openspec/config.yaml` context —
-plus `docs/governance/specs-to-test-cases.md` for shape; denied the
-capability's `## Requirements`, every other spec under `openspec/`, and
-`openspec/changes/archive/`.
+- A restricted winner keeps the order and invoice with its address, payment and proof actions, and may unwatch and mute alerts; My Auctions, the Bids page, standings and new bids are refused.
