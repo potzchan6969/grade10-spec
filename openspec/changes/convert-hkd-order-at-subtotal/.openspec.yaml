@@ -10,3 +10,5 @@ ui_waived: "@seankcw waived ui-design on 2026-10-22; the Order Summary is drawn
 hands:
   dev: "@htonyl"
   pm: "@htonyl"
+reviewed:
+  proposal: 8605f37e
