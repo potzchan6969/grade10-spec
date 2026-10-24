@@ -1054,9 +1054,24 @@ for (const p of suites) {
           cited.push({ rel, line: i + 1, id: m[1] });
       });
   }
+  // The index parses stories with TypeScript, which a zero-dependency run -
+  // the Test cases workflow installs nothing - does not have. The check is a
+  // warning, so such a run skips it rather than failing the whole validator.
+  let known = null;
   if (cited.length > 0) {
-    const { storyIndex } = await import("../storybook/story-index.mjs");
-    const known = new Set(Object.keys(storyIndex({ root: ROOT }).entries));
+    try {
+      const { storyIndex } = await import("../storybook/story-index.mjs");
+      known = new Set(Object.keys(storyIndex({ root: ROOT }).entries));
+    } catch (error) {
+      if (error?.code !== "MODULE_NOT_FOUND") throw error;
+      console.log(
+        dim(
+          "UI matching references not checked: the story index needs this store's dependencies (pnpm install)",
+        ),
+      );
+    }
+  }
+  if (known) {
     for (const one of cited)
       if (!known.has(one.id))
         record(
