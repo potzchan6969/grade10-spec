@@ -209,6 +209,7 @@
     "pending": "We are checking your post. The result shows here.",
     "submittedLink": "Your link",
     "granted": "It is yours. Collect it at the store.",
+    "held": "This gift is reserved for you. It will appear in your wallet once it is ready to collect at the store.",
     "grantedVoid": "This gift is no longer in your wallet.",
     "grantedUsed": "You have collected this gift.",
     "walletAction": "Open in your wallet",

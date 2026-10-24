@@ -209,6 +209,7 @@
     "pending": "我們正在審核你的貼文，結果會在此顯示。",
     "submittedLink": "你的連結",
     "granted": "禮物已屬於你，請到店領取。",
+    "held": "這份禮物已為你保留。可到店領取時，它會出現在你的錢包。",
     "grantedVoid": "此禮物已不在你的錢包中。",
     "grantedUsed": "你已領取此禮物。",
     "walletAction": "在錢包中查看",
