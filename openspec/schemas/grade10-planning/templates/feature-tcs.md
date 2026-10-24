@@ -94,7 +94,8 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<name>` | <exact value, or its rule or range> |
 <!-- Omitted whole when the case takes no input. A per-row case has a column
-     per varying value and one for the outcome. -->
+     per varying value and one for the outcome. No notes column, and no note
+     on how a run binds the value. -->
 
 **Steps:**
 
@@ -129,12 +130,19 @@ Runs once per row of **Test data**.
 ## Reconciliation
 
 **Run:** <date and run>; read <the bundle>; denied <what it could not see>.
+<!-- In a change only; acceptance drops it. -->
 
-<!-- QA2's dispositions, one line each: folded into spec, rejected with the
-     reason, escalated to a PRD ❓, deferred to who settles it, contradicted,
-     Covered at domain, uncovered. Scenario ids only while the change is
-     open. Raised questions are never a section here: they go to the
-     change's decisions.md ## Raised. -->
+- **Covered at domain** - <scenario> - `<domain case id>`
+- **Assumed** - <rule> (Common Rules)
+- **New, not an extension** - `<case id>` - <why no live case takes it>
+<!-- In a change, QA2's dispositions too, one line each: folded into spec,
+     rejected with the reason, escalated to a PRD ❓, deferred to who settles
+     it, contradicted, uncovered; a disposition with nothing in it is left
+     out. Scenario ids only while the change is open. Raised questions go to
+     the change's decisions.md ## Raised, never here.
+     A durable suite keeps only Covered at domain, Assumed and Manual. What a
+     run did - revised, joined, renumbered, carried, old→new ids - is its
+     commit message's. -->
 
 ### Manual
 

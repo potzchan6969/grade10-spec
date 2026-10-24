@@ -222,8 +222,10 @@ The PRD and Storybook are the store's only sources of truth. What a store spec s
 | Regenerate | writes the whole file again as if it were new, by the same steps as a new suite - the same inputs, the blind reading, QA2's reconciliation - on explicit confirmation |
 | Another target | leaves the suite alone |
 
-- **A regeneration overrides review** - on the person's explicit confirmation it rewrites `actual` cases and an `approved` file too: every case comes back `draft`, the file `pending-review`, and the run lists each `actual` case it replaced and each automated test that names one, for the person to update. A sweep, `/tcs-review` or a change's delta never does this
-- **A regeneration keeps only identity** - the old file is not a template: no case, test value or walk is copied, and every case is written and reconciled afresh. What carries over is the markers - a surviving case keeps its stable id - and the fold records. Headings take the form under **Naming** and may be renumbered to remove duplicate numbering, and walks are written afresh, so a legacy suite comes out with walks that reference it; a heading never overrides its marker
+- **A regeneration overrides review** - on the person's explicit confirmation it rewrites `actual` and `automated` cases and an `approved` file too. The file status follows **The File Header**, and a sweep, `/tcs-review` or a change's delta never does this
+- **An unchanged case keeps its standing** - a rewritten case that checks the same behaviour as the case it replaces - the same journey, the same outcomes, no assertion gained or lost, only its words changed - keeps its marker, `rev`, status, automation status and Decided-by line; the re-wording rows of the `rev` table do not apply. Any other case comes back `draft` and `manual` with no Decided-by line: one split, merged, or now checking something else. The commit lists each case kept, each case reset and each automated test that names a reset case, for the person to update
+- **A regeneration keeps only identity** - the old file is not a template: no case, test value or walk is copied, and every case is written and reconciled afresh. What carries over is the markers - a surviving case keeps its stable id - and the lines **What a Suite Holds** keeps. Headings take the form under **Naming** and may be renumbered to remove duplicate numbering, and walks are written afresh, so a legacy suite comes out with walks that reference it; a heading never overrides its marker
+- **A regeneration cleans as it writes** - whatever **What a Suite Holds** leaves out is dropped from the file, and its commit message carries what the run did
 - **Anything less is a partial update**, never called a regeneration - changing a few cases' numbers or words, adding or rewriting walks, renaming headings, re-applying draft or actual formatting, keeping old content and adding traces, or resolving a merge without re-reading the cases
 - **A delta that moves the ground under an `actual` case** - resolved in the same change: what it verifies changed → `rev` bumped, back to `draft`; behaviour removed → `rev` bumped, `deprecated`; untouched → left `actual`, and the run says so
 
@@ -314,6 +316,19 @@ Up to four kinds of line under the title, every one computed, never chosen: `**S
 - **Only approved suites export** - and only their `actual` cases
 - **Review activity lives in Git** - a `tcs-review/*` branch or pull request, never a file status
 
+## What a Suite Holds
+
+A suite holds what a tester runs and what a tool reads. What a run did is history, and history lives in Git: the commit message, and the archived change's own suite.
+
+| Holds | Never holds |
+| --- | --- |
+| the header lines; `**Out of suite (<category>):**`; `## Background`; walks; journeys and cases, deprecated cases with their `**Retirement:**`; `## Ungrouped`; `## Settled` | a run's narration once accepted - `**Run:**`, `**Rerun:**`, revised, joined, corrected, renumbered, carried, counts, review findings |
+| under `## Reconciliation` in a durable suite: `**Covered at domain**`, `**Assumed**` and `### Manual` | an old→new case map or a fold record; a disposition with nothing in it, such as `Contradicted - none` |
+| in a change, until acceptance: the `**Run:**` line, QA2's dispositions and `**New, not an extension**` | a notes column or a binding note in test data; a note on how a case or walk was written |
+
+- **The commit message carries the run** - the old→new case map, the cases kept and reset, the dispositions of a pass, and an unfinished test migration
+- **Acceptance keeps what the durable suite holds** - the fold drops the change's run and dispositions, which stay in the archived change
+
 ## How a Case Reads
 
 [`tcs-conventions.md`](tcs-conventions.md) is the one writing-rule file. `/spec-to-tcs` writes to it; `/tcs-review` restyles drafts to it and adds lines to it through its gate.
@@ -345,9 +360,9 @@ Up to four kinds of line under the title, every one computed, never chosen: `**S
 - **The rules have one owner** - this document, the suite template and the `spec-to-tcs` skill decide what every suite holds, and other teams' planning runs generate from them, so they change only by the hand of the [`team.yaml`](../prds/team.yaml) handle that `owns: [tcs-rules]`. Anyone else proposes the change to them. `pnpm run tcs:rules-owner` refuses another author's commit, in the push gate and in CI. [`tcs-conventions.md`](tcs-conventions.md) says only how a case reads and stays open to everyone
 - **A bump does not sweep** - a suite below it is regenerated when `/tcs-review` next prepares it, or when someone runs `/spec-to-tcs` on it from `pnpm run tcs:stale`
 - **Inside one journey a sweep may restructure; across journeys it may not** - merging or splitting a journey is the spec author's call, landed on the PRD as a ❓
-- **A reviewed claim never moves silently** - `pnpm run tcs:validate --capture-baseline=<file>` before and `--swept=<file>` after prove every `actual` and `deprecated` case kept its id, trace and status. A regeneration the person confirmed is the exception, and lists what it replaced
+- **A reviewed claim never moves silently** - `pnpm run tcs:validate --capture-baseline=<file>` before and `--swept=<file>` after prove every `actual` and `deprecated` case kept its id, trace and status. A regeneration the person confirmed is the exception, and lists what it kept and what it reset
 - **The sweep lands in its own commits**, before review starts
-- **What each revision changed** - r4: one integer, conventions split out, drafts regenerate. r5: anchor-first coverage, post-hoc scenario links, outcome-equivalent rows. r6: the classification vocabulary. r7: every case is a GUI walk; the Layer property and unit, API, SEO and injection cases are gone; out of suite means not tested by QA; platform and environment tags; live case first, and the blind pass reads the suite to extend it; suites are written for testers alone; the rules have one owner; one purpose per case; a change's new cases are grouped into live ones before they fold; Common Rules hold where the sources are silent; a confirmed regeneration overrides review and writes current ids and walks; walks are for manual testers; the store's cases live only in its PRD folder
+- **What each revision changed** - r4: one integer, conventions split out, drafts regenerate. r5: anchor-first coverage, post-hoc scenario links, outcome-equivalent rows. r6: the classification vocabulary. r7: every case is a GUI walk; the Layer property and unit, API, SEO and injection cases are gone; out of suite means not tested by QA; platform and environment tags; live case first, and the blind pass reads the suite to extend it; suites are written for testers alone; the rules have one owner; one purpose per case; a change's new cases are grouped into live ones before they fold; Common Rules hold where the sources are silent; a confirmed regeneration overrides review and writes current ids and walks, keeping the standing of a case whose behaviour is unchanged; a suite holds what a tester runs and a tool reads, and a run's history lives in Git; walks are for manual testers; the store's cases live only in its PRD folder
 
 ## The Tools
 
