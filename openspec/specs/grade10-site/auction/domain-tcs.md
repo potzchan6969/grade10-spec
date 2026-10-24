@@ -380,7 +380,7 @@ from my card until I win.
 catalogue and the listing page show,
 **so that** a collector shops the card I photographed rather than a placeholder.
 
-<!-- trace:case id=g10.auction-dmn.TC-5l7 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j,g10.auction-listing-media.SC-41j,g10.auction-listing-media.SC-j5f,g10.auction-listing-media.SC-1mk,g10.auction-listing-media.SC-su1,g10.auction-listing-media.SC-y9i,g10.auction-listing-media.SC-dva,g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
+<!-- trace:case id=g10.auction-dmn.TC-5l7 rev=2 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j,g10.auction-listing-media.SC-41j,g10.auction-listing-media.SC-j5f,g10.auction-listing-media.SC-1mk,g10.auction-listing-media.SC-su1,g10.auction-listing-media.SC-y9i,g10.auction-listing-media.SC-dva,g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
 #### g10.auction-dmn.US1-TC1: A confirmed gallery image reaches the catalogue card
 
 **Classification:**
@@ -411,15 +411,14 @@ catalogue and the listing page show,
 **Steps:**
 
 1. Open the media manager for `<listing_3>`.
-2. Select `<image file>` for a gallery slot.
-3. Confirm the upload and enter `<alt text>`.
+2. Drop `<image file>` into the gallery.
+3. Enter `<alt text>` for it.
 4. Publish `<listing_3>`.
 5. Open `<auction url>` and find `<listing_3>`.
 
 **Expected Results:**
 
-* Step 2 shows a preview of `<image file>` and stores nothing until step 3.
-* After step 3 `<image file>` is the gallery's first item, shown at card size in the media manager.
+* Step 2 stores `<image file>` as it lands, with no preview or confirm step, as the gallery's first item shown at card size.
 * Step 5: `<listing_3>`'s catalogue card shows `<image file>` at card size, with `<alt text>` as its accessible name.
 
 <!-- trace:case id=g10.auction-dmn.TC-acb rev=1 -->
