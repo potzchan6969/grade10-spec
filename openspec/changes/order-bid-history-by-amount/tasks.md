@@ -11,7 +11,7 @@ Depends on group 1's landing and the submodule bump.
 - [ ] 2.2 Change the ordering comparison in `combinedHistory.ts` so the history reads by bid amount, higher first, with the same-timestamp rule, before the cursor is cut; the admin Bids tab is left alone (`grade10-site-auction-bidding-history-SC-12`, `grade10-site-auction-bidding-history-SC-54`, `grade10-site-auction-bidding-history-SC-55`, `grade10-site-auction-bidding-history-SC-56`, `grade10-site-auction-bidding-history-SC-14`, `grade10-site-auction-bidding-history-SC-48`)
 - [ ] 2.3 Verify: focused unit tests, type check, lint
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @htonyl)
 
 Uses draft `feature-tcs.md` as its planning input, and group 2 landed.
 
