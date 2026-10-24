@@ -323,6 +323,10 @@ account's bids address; signed out, sign-in runs first.
 - **One listing's story** — every maximum set or raised, interleaved with the public movements that changed the
   collector's standing; they read as You and every rival by the lot's
   pseudonym, and no rival's maximum ever appears
+- 🚧 **Highest bid on top** — a listing's story follows bid amount, the higher
+  amount above the lower. When one bid and the automatic bid it set off share a
+  moment, the automatic response reads above the bid that caused it; a maximum
+  set or raised reads below the bid it causes
 - **Your bidding, on the lot** — two tabs, Bid placed, the bids Grade10 placed
   for them, then Your maximums; amount and time only, owner only
 - **Never edited** — nothing deletes or hides an entry, because the record is
@@ -539,6 +543,7 @@ surface.
 | Bid ceiling | Decided | USD 10,000,000 on every lot, refused above it. The custom field uses that same ceiling. | Product |
 | Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
 | If card holds return | Decided | The line stays at acceptance: a bid exists only once every precondition, a card authorization included, has succeeded and been judged under the lot's lock. The authorization is taken outside the lock, for the maximum, keyed to the attempt, and released if the attempt is refused; a later failure or expiry never revokes an accepted bid and is the winner's settlement at the close. Accepting first and revoking later moves the price down, swaps the leader and unwinds automatic bids, extensions and closes; eBay, Catawiki, Heritage, real-time bidding and exchanges all draw the line at acceptance. | Product and engineering |
+| Story order | 🚧 In flight | A listing's story on My bids follows bid amount, higher on top. Within one moment the challenger's bid is older than the leader's automatic response, so it reads below the response, and an owner's maximum set reads below the bid it causes. Chronology by clock (the challenger first) was ruled out: at one moment the clock cannot tell the two apart, and a collector reads the price ladder, not the order of arrival. The admin Bids tab keeps its own order. | Product (@htonyl) |
 | A refused bid is not a bid | Decided | No My Auctions row, no Bidding History entry and no standing moves. The form explains refusals except an amount above the USD ceiling, which shows no maximum-bid message. | Product |
 | Below the minimum on the page | Decided | The bid action stays disabled and the custom field says Min: the minimum; nothing is sent. The server's Minimum bid is refusal answers only a minimum that moved after the page showed it. Enabling the action to let the server refuse was ruled out: it costs a round trip for a bid the page already knows is too low ([#1007](https://github.com/9gag/grade10/issues/1007)). | Product |
 | Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the USD ceiling; never in the bidder's record. | Product and engineering |
