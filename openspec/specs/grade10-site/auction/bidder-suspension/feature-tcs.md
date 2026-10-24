@@ -1,6 +1,6 @@
 # grade10-site/auction/bidder-suspension Test Cases
 
-**Status:** pending-review · 0/10
+**Status:** pending-review · 0/9
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
 
@@ -116,7 +116,9 @@ Runs once per row of **Test data**.
 * Step 4 shows the suspension beside `<won listing>`'s order; any `<paid listing>` stays paid.
 
 <!-- trace:case id=g10.auction-bidder-suspension.TC-0fv rev=3 covers=g10.auction-bidder-suspension.SC-o11 -->
-### g10.auction-bidder-suspension.US1-TC2: Paying what is owed does not lift the suspension
+### g10.auction-bidder-suspension.US1-TC2: Paying what is owed, even on a reissued invoice, does not lift the suspension
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -132,52 +134,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) is suspended, holds a maximum of USD500 on open `<listing_7>`, has not bid on open `<listing_8>`, and has an issued, unpaid invoice within its deadline.
+* customer(signed in) is suspended by `<expired order>`'s missed deadline, holds a maximum of USD500 on open `<listing_7>`, and has not bid on open `<listing_8>`; `<invoice>`.
+
+**Test data:**
+
+| `<invoice>` | `<settle>` |
+| --- | --- |
+| another order's invoice is issued and within its deadline | pay that order's invoice in full |
+| admin(holds auction:moderate) can reissue `<expired order>`'s invoice | as admin, reissue it with a new deadline; as customer, pay it in full |
 
 **Steps:**
 
-1. Open that order and pay the invoice in full.
-2. Raise the maximum on `<listing_7>` to USD505.
-3. Place a bid on `<listing_8>`.
-4. Open My Auctions.
+1. `<settle>`.
+2. Raise the maximum on `<listing_7>` to USD505, then place a bid on `<listing_8>`.
+3. Open My Auctions.
 
 **Expected Results:**
 
 * Step 1: the order reads Paid.
-* Steps 2 and 3 are refused with the suspension line; `<listing_7>` keeps USD500.
-* Step 4 still shows the suspension.
-
-<!-- trace:case id=g10.auction-bidder-suspension.TC-3no rev=2 -->
-### g10.auction-bidder-suspension.US1-TC7: Reissuing the expired invoice does not lift the suspension
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** g10.auction-bidder-suspension.US1
-
-**Pre-conditions:**
-
-* customer is suspended by `<expired order>`'s missed deadline; admin(holds auction:moderate) can reissue its invoice; customer has not bid on open `<listing>`.
-
-**Steps:**
-
-1. As admin, reissue `<expired order>`'s invoice with a new deadline.
-2. As customer, open the order and pay it in full.
-3. Place a bid on `<listing>`.
-4. Open My Auctions.
-
-**Expected Results:**
-
-* Step 2: the order reads Paid.
-* Step 3 is refused with the suspension line.
-* Step 4 still shows the suspension.
+* Step 2: both are refused with the suspension line, and `<listing_7>` keeps USD500.
+* Step 3 still shows the suspension.
 
 <!-- trace:case id=g10.auction-bidder-suspension.TC-ixs rev=2 -->
 ### g10.auction-bidder-suspension.US1-TC8: A suspended account still signs in, shops and uses loyalty
@@ -235,93 +211,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * `<won listing>` reads Won, and its order offers Pay.
-
-<!-- trace:case id=g10.auction-bidder-suspension.TC-m3t rev=2 -->
-### g10.auction-bidder-suspension.US1-TC3: Standing maxima on open lots are retracted
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** g10.auction-bidder-suspension.US1
-
-**Retirement:** A suspension looks forward only; a standing maximum keeps bidding (`g10.auction-bidder-suspension.US2-TC1`).
-
-**Pre-conditions:**
-
-* A collector leads two open lots and holds a maximum on a third; an order's deadline is about to pass.
-
-**Steps:**
-
-1. Let the deadline pass and read each lot.
-
-**Expected Results:**
-
-* Each lot's leader and price are unchanged.
-
-<!-- trace:case id=g10.auction-bidder-suspension.TC-o67 rev=2 -->
-### g10.auction-bidder-suspension.US1-TC5: Paying does not lift the suspension
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** g10.auction-bidder-suspension.US1
-
-**Retirement:** Joined into `g10.auction-bidder-suspension.US1-TC2`.
-
-**Pre-conditions:**
-
-* customer is suspended with one outstanding invoice.
-
-**Steps:**
-
-1. Pay the invoice, then bid on an open lot.
-
-**Expected Results:**
-
-* The bid is refused.
-
-<!-- trace:case id=g10.auction-bidder-suspension.TC-80a rev=2 -->
-### g10.auction-bidder-suspension.US1-TC6: Suspended account cannot bid or raise its maximum
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** g10.auction-bidder-suspension.US1
-
-**Retirement:** Joined into `g10.auction-bidder-suspension.US1-TC1`.
-
-**Pre-conditions:**
-
-* customer is suspended and holds a maximum on an open lot.
-
-**Steps:**
-
-1. Raise the maximum, then bid on another lot.
-
-**Expected Results:**
-
-* Both are refused.
 
 ---
 
@@ -397,35 +286,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * `<listing_9>` reads Won, and its order has its own deadline.
-
-<!-- trace:case id=g10.auction-bidder-suspension.TC-bw8 rev=2 -->
-### g10.auction-bidder-suspension.US2-TC2: Standing maximum keeps bidding after suspension
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** g10.auction-bidder-suspension.US2
-
-**Retirement:** Joined into `g10.auction-bidder-suspension.US2-TC1`.
-
-**Pre-conditions:**
-
-* customer A is suspended and leads a lot with a higher maximum.
-
-**Steps:**
-
-1. As customer B, place a lower maximum.
-
-**Expected Results:**
-
-* customer A still leads.
 
 ---
 
