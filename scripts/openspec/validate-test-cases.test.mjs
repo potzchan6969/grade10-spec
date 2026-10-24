@@ -779,6 +779,22 @@ test("warns on an archived case the fold left behind, and not on one held, re-ve
     out,
     /1 case\(s\) archived with `2026-09-01-demo` were never folded here: `demo-alpha-US1-TC2-1` —/,
   );
+
+  // A regeneration since the change was archived settles every older id,
+  // with no fold record naming it; a change archived after it still warns.
+  const durable = join(root, "openspec/specs/demo/alpha/feature-tcs.md");
+  const regenerated = (date) =>
+    writeFileSync(
+      durable,
+      files["openspec/specs/demo/alpha/feature-tcs.md"].replace(
+        "# demo/alpha Test Cases\n",
+        `# demo/alpha Test Cases\n\n**Regenerated:** ${date}, tcs-rules r7\n`,
+      ),
+    );
+  regenerated("2026-09-01");
+  assert.doesNotMatch(run(root).stdout, /archived with `2026-09-01-demo`/);
+  regenerated("2026-08-31");
+  assert.match(run(root).stdout, /archived with `2026-09-01-demo`/);
 });
 
 // Legacy heading suffixes must not disagree with the marker's `rev` during

@@ -225,7 +225,7 @@ The PRD and Storybook are the store's only sources of truth. What a store spec s
 - **A regeneration overrides review** - on the person's explicit confirmation it rewrites `actual` and `automated` cases and an `approved` file too. The file status follows **The File Header**, and a sweep, `/tcs-review` or a change's delta never does this
 - **An unchanged case keeps its standing** - a rewritten case that checks the same behaviour as the case it replaces - the same journey, the same outcomes, no assertion gained or lost, only its words changed - keeps its marker, `rev`, status, automation status and Decided-by line; the re-wording rows of the `rev` table do not apply. Any other case comes back `draft` and `manual` with no Decided-by line: one split, merged, or now checking something else. The commit lists each case kept, each case reset and each automated test that names a reset case, for the person to update
 - **A regeneration keeps only identity** - the old file is not a template: no case, test value or walk is copied, and every case is written and reconciled afresh. What carries over is the markers - a surviving case keeps its stable id - and the lines **What a Suite Holds** keeps. Headings take the form under **Naming** and may be renumbered to remove duplicate numbering, and walks are written afresh, so a legacy suite comes out with walks that reference it; a heading never overrides its marker
-- **A regeneration cleans as it writes** - whatever **What a Suite Holds** leaves out is dropped from the file, and its commit message carries what the run did
+- **A regeneration cleans as it writes** - whatever **What a Suite Holds** leaves out is dropped from the file, the header gains `**Regenerated:**`, and its commit message carries what the run did
 - **Anything less is a partial update**, never called a regeneration - changing a few cases' numbers or words, adding or rewriting walks, renaming headings, re-applying draft or actual formatting, keeping old content and adding traces, or resolving a merge without re-reading the cases
 - **A delta that moves the ground under an `actual` case** - resolved in the same change: what it verifies changed → `rev` bumped, back to `draft`; behaviour removed → `rev` bumped, `deprecated`; untouched → left `actual`, and the run says so
 
@@ -300,7 +300,7 @@ Nine properties, in the template's order, on every case.
 
 ## The File Header
 
-Up to four kinds of line under the title, every one computed, never chosen: `**Status:**`, `**Drafts styled:**`, `**Reviewed:**` and `**Out of suite (<category>):**`. The store adds `**Capabilities:**`.
+Up to five kinds of line under the title, every one computed, never chosen: `**Status:**`, `**Drafts styled:**`, `**Regenerated:**`, `**Reviewed:**` and `**Out of suite (<category>):**`. The store adds `**Capabilities:**`.
 
 | Transition | Next `**Status:**` |
 | --- | --- |
@@ -312,6 +312,7 @@ Up to four kinds of line under the title, every one computed, never chosen: `**S
 
 - **A transition, never a claim** - the writer compares the old and new shares by exact cross multiplication; `/spec-to-tcs`, `/tcs-review` and the fold do this after every write, and `pnpm run tcs:validate` checks the ratio
 - **`**Drafts styled:**`** - the rules revision the file's drafts were last written to, present exactly while a draft exists
+- **`**Regenerated:**`** - `<YYYY-MM-DD>, tcs-rules r<n>`, the date and revision of the last confirmed full regeneration. Every change archived on or before it is settled: `pnpm run tcs:validate` no longer asks the suite to name that change's old case ids, which the regeneration's commit maps instead
 - **`**Reviewed:**`** - the date the file reached `approved`, and the revision. When it falls out of `approved` the line gains `, lapsed <date>`; a new approval writes it fresh
 - **Only approved suites export** - and only their `actual` cases
 - **Review activity lives in Git** - a `tcs-review/*` branch or pull request, never a file status

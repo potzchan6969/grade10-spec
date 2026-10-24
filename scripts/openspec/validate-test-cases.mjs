@@ -1419,7 +1419,8 @@ for (const p of suites) {
 // suite does not name anywhere, was most likely left behind at the fold -
 // the carry gate that now refuses it did not exist then. A human decides each
 // one; a case found to be replaced is named in the durable suite, one line,
-// and the warning stops. An archived `api` or `unit` case is not left behind:
+// and the warning stops. A suite regenerated since the change was archived
+// owes none of this: its `**Regenerated:**` date settles every older id. An archived `api` or `unit` case is not left behind:
 // tcs-rules r7 deleted every one, since every case is now a GUI walk.
 {
   const unversioned = (id) => id.replace(/(-TC\d+)-\d+$/, "$1");
@@ -1450,6 +1451,11 @@ for (const p of suites) {
     const rel = relative(ROOT, target);
     if (args.scope && !rel.includes(args.scope)) continue;
     const named = existsSync(target) ? readFileSync(target, "utf8") : "";
+    // A full regeneration re-read every anchor and wrote its cases afresh,
+    // so a change archived on or before it left nothing behind; its old ids
+    // are the regeneration commit's to map, not the suite's to name.
+    const regenerated = named && parseSuite(named).regenerated?.date;
+    if (regenerated && change.slice(0, 10) <= regenerated) continue;
     // Named as a whole id: `…-US1-TC1` is not named by `…-US1-TC10`.
     const namedHere = (id) =>
       new RegExp(

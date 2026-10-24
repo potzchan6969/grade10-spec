@@ -19,7 +19,8 @@
 
 **Status:** pending-review · 0/<number of active cases>
 **Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>
-<!-- Computed lines, never chosen. **Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>
+<!-- Computed lines, never chosen. **Regenerated:** <YYYY-MM-DD>, tcs-rules r<n>
+     is written by a confirmed full regeneration. **Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>
      is added when the file reaches approved, and gains ", lapsed <YYYY-MM-DD>"
      when it falls out. A store file adds **Capabilities:** <capability>, … -->
 

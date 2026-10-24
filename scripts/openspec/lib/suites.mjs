@@ -651,6 +651,7 @@ export function parseSuite(text) {
     statusLine: null,
     reviewProgress: null,
     draftsStyled: null,
+    regenerated: null,
     reviewed: null,
     reviewedLapsed: null,
     journeys: [],
@@ -746,6 +747,14 @@ export function parseSuite(text) {
           rev: Number(ds[2]),
           line: i + 1,
         };
+        continue;
+      }
+      // A confirmed full regeneration re-read every anchor on this date.
+      const rg = line.match(
+        /^\*\*Regenerated:\*\*\s*(\d{4}-\d{2}-\d{2}),\s*tcs-rules r(\d+)(?:\.(\d+))?\s*$/,
+      );
+      if (rg) {
+        suite.regenerated = { date: rg[1], rev: Number(rg[2]), line: i + 1 };
         continue;
       }
       const rv = line.match(
