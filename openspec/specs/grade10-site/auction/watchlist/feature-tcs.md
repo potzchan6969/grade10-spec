@@ -1,44 +1,40 @@
 # grade10-site/auction/watchlist Test Cases
 
-**Status:** pending-review · 0/13
+**Status:** pending-review · 0/9
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
 
 ## Background
 
-* `<auction url>` is the Grade10 auction catalogue and `<my auctions url>` the signed-in account's My Auctions page, whose Watching tab lists watched listings. `<zzz auction url>` is the ZZZ auction catalogue, selling the same listings. `<admin listings url>` is the Auction listings page of the Grade10 admin console.
+* A signed-in collector watches a listing from its page or its catalogue card; watching turns email alerts on for it, and unwatching turns them off. Watching is the collector's own: it bids, reserves and changes nothing.
+* The watched listings list on My Auctions' Watching view reads newest watch first; an operator reads the watch count on the listing's Stats in the admin console.
 
-## Walk 1: Watch, read, mute and unwatch from My Auctions
+## Walk 1: Watch, mute and unwatch
 
 Starting state:
 
-- customer(signed in) watches `<earlier listing>` and `<closed listing>`, and does not watch `<new listing>`.
-- customer is on `<new listing>`'s page.
+- customer(signed in) watches nothing; `<listing A>` and `<listing B>` are open, and `<listing C>` has closed unsold.
 
 Shared test data:
 
 | Field | Value |
 | --- | --- |
-| earlier listing | An open listing the customer watched yesterday, email alerts on |
-| closed listing | A listing the customer watched before it closed |
-| new listing | An open listing the customer does not watch |
+| listing A | An open USD listing |
+| listing B | An open USD listing closing after `<listing A>` |
+| listing C | A closed listing with no bid |
 
 ### Route
 
-1. Select Watch, then reload the page.
-   - The listing reads as watched, with email alerts on, and still does after the reload. `g10.auction-watchlist.US1-TC1`
-2. Open `<auction url>` and select Watch on `<new listing>`'s card if it is offered.
-   - The card already reads as watched. `g10.auction-watchlist.US1-TC2`
-3. Open `<my auctions url>` and select Watching.
-   - `<new listing>` reads before `<earlier listing>`, each row with its title, current bid and close. `g10.auction-watchlist.US3-TC1`
-   - `<new listing>` is listed once. `g10.auction-watchlist.US1-TC2`
-   - `<closed listing>` is still listed, shown as closed, not open. `g10.auction-watchlist.US3-TC3`
-4. Turn email alerts off for `<new listing>`.
-   - It stays in Watching with alerts off, and the confirmation says the watch stayed. `g10.auction-watchlist.US5-TC1`
-5. Unwatch `<earlier listing>` and `<closed listing>` from their rows.
-   - Each row leaves Watching, without its listing page being opened. `g10.auction-watchlist.US2-TC2`
-   - Email alerts for `<earlier listing>` are off. `g10.auction-watchlist.US2-TC2`
-   - The closed listing could be unwatched and is gone. `g10.auction-watchlist.US2-TC3`
+1. Open the Watching view.
+   - It explains that nothing is watched yet. `g10.auction-watchlist.US3-TC2`
+2. Watch `<listing C>`, then `<listing A>` from its card, then `<listing B>` from its page.
+   - One watch each, alerts on. `g10.auction-watchlist.US1-TC1`
+3. Open the Watching view.
+   - B, A, C: each with its image, title, current bid and close, C shown as closed. `g10.auction-watchlist.US3-TC1`
+4. Turn email alerts off for `<listing A>`.
+   - A stays watched, alerts off. `g10.auction-watchlist.US5-TC1`
+5. Unwatch `<listing C>` from the list.
+   - C leaves the list. `g10.auction-watchlist.US2-TC1`
 
 ## g10.auction-watchlist.US1: Collector watches a listing to come back to it
 
@@ -47,7 +43,7 @@ Shared test data:
 **so that** I can leave the page and find it again without searching.
 
 <!-- trace:case id=g10.auction-watchlist.TC-pvl rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
-### g10.auction-watchlist.US1-TC1: Watching from the listing page records one watch with alerts on
+### g10.auction-watchlist.US1-TC1: Watching records one watch with alerts on, however often it is asked
 
 **Classification:**
 
@@ -63,33 +59,28 @@ Shared test data:
 
 **Pre-conditions:**
 
-* customer(signed in) is on `<listing_1>`'s page and does not watch it.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | An open listing the customer does not watch |
+* customer(signed in) does not watch open `<listing>`, and has its page open in one tab and the catalogue in another.
 
 **Steps:**
 
-1. Select Watch.
-2. Reload the page.
+1. On the page, select Watch, and note the time.
+2. In the catalogue tab, without reloading, select Watch on `<listing>`'s card.
+3. Open the Watching view.
 
 **Expected Results:**
 
-* Step 1 shows `<listing_1>` as watched, with email alerts on.
-* After step 2 it still shows as watched.
+* Step 1 reads Watching, with a toast that email alerts are on.
+* Step 3 lists `<listing>` once, alerts on, watched at the time noted at step 1.
 
-<!-- trace:case id=g10.auction-watchlist.TC-iwb rev=1 -->
-### g10.auction-watchlist.US1-TC2: Watching again from another surface leaves one watch in its place
+<!-- trace:case id=g10.auction-watchlist.TC-jxa rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
+### g10.auction-watchlist.US1-TC3: A signed-out visitor is offered sign-in, not a watch
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -98,24 +89,44 @@ Shared test data:
 
 **Pre-conditions:**
 
-* customer(signed in) watched `<listing_2>` before `<listing_13>`, both open.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | An open listing the customer watched first |
-| `<listing_13>` | An open listing the customer watched after `<listing_2>` |
+* A signed-out visitor with an account is on open `<listing>`'s page.
 
 **Steps:**
 
-1. Open `<auction url>` and select Watch on `<listing_2>`'s card if it is offered.
-2. Open `<my auctions url>` and select Watching.
+1. Select Watch.
+2. Sign in from the offer.
 
 **Expected Results:**
 
-* Step 1's card already reads as watched.
-* Step 2 lists `<listing_2>` once, still after `<listing_13>`.
+* Step 1 offers sign-in and records nothing in this browser.
+* Step 2 returns to `<listing>`, its control reading Watch until selected.
+
+<!-- trace:case id=g10.auction-watchlist.TC-0gx rev=1 -->
+### g10.auction-watchlist.US1-TC4: A watch is the watcher's alone and changes nothing about the sale
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-watchlist-US-01
+
+**Pre-conditions:**
+
+* customer A watches open `<listing>`; its price, leader and bid count are noted; customer B(signed in) never watched it.
+
+**Steps:**
+
+1. As customer B, open `<listing>`'s page and the Watching view.
+
+**Expected Results:**
+
+* The control reads Watch, no watch count or watcher shows, the Watching view does not list it, and the price, leader and bid count match the note.
 
 ---
 
@@ -127,8 +138,10 @@ called off,
 **so that** my list only holds listings I still mean to follow, and email
 alerts for that listing stop with the watch.
 
-<!-- trace:case id=g10.auction-watchlist.TC-o95 rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
-### g10.auction-watchlist.US2-TC2: Unwatching from Watching needs no visit to the listing
+<!-- trace:case id=g10.auction-watchlist.TC-oxt rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
+### g10.auction-watchlist.US2-TC1: Unwatching from any surface clears the watch and its alerts, open or closed
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -138,62 +151,31 @@ alerts for that listing stop with the watch.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-watchlist-US-02
 
 **Pre-conditions:**
 
-* customer(signed in) watches `<listing_5>`, email alerts on, and is on `<my auctions url>`'s Watching tab.
+* customer(signed in) watches `<listing>`, which is `<state>`, without bidding.
 
 **Test data:**
 
-| Field | Value |
+| `<surface>` | `<state>` |
 | --- | --- |
-| `<listing_5>` | A listing the customer watches |
+| Its page | open |
+| Its catalogue card | open |
+| The Watching view | open |
+| The Watching view | closed unsold |
 
 **Steps:**
 
-1. Unwatch `<listing_5>` from its row.
+1. Unwatch `<listing>` from `<surface>`.
+2. Open the Watching view.
 
 **Expected Results:**
 
-* The row leaves Watching.
-* Email alerts for `<listing_5>` are off.
-* `<listing_5>`'s page was not opened.
-
-<!-- trace:case id=g10.auction-watchlist.TC-jf6 rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
-### g10.auction-watchlist.US2-TC3: A closed listing can still be unwatched
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-watchlist-US-02
-
-**Pre-conditions:**
-
-* customer(signed in) watched `<listing_6>` before it closed and is on `<my auctions url>`'s Watching tab.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_6>` | A closed listing the customer watches |
-
-**Steps:**
-
-1. Unwatch `<listing_6>`.
-
-**Expected Results:**
-
-* `<listing_6>` leaves Watching.
+* `<listing>` is no longer listed; an open listing's control reads Watch, and no alert for it reaches the inbox afterwards.
 
 ---
 
@@ -205,7 +187,7 @@ enough to decide whether to act,
 **so that** I can return to a listing from one place.
 
 <!-- trace:case id=g10.auction-watchlist.TC-5sc rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
-### g10.auction-watchlist.US3-TC1: Watches read newest first, each with its bid and close
+### g10.auction-watchlist.US3-TC1: The Watching view lists newest watch first, each with enough to act on
 
 **Classification:**
 
@@ -221,26 +203,18 @@ enough to decide whether to act,
 
 **Pre-conditions:**
 
-* customer(signed in) watched `<listing_7>`, then `<listing_8>` a day later; both are open.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_7>` | An open listing watched first |
-| `<listing_8>` | An open listing watched one day after `<listing_7>` (range: any later time) |
+* customer(signed in) watched closed-unsold `<listing C>`, then open `<listing A>`, then open `<listing B>`.
 
 **Steps:**
 
-1. Open `<my auctions url>`, select Watching and read the rows in order.
+1. Open the Watching view.
 
 **Expected Results:**
 
-* `<listing_8>` reads before `<listing_7>`.
-* Each row shows the listing's title and image, its current bid and its close.
+* It lists B, A, C; each shows its image, title, current bid and close, and C reads closed.
 
-<!-- trace:case id=g10.auction-watchlist.TC-a43 rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
-### g10.auction-watchlist.US3-TC3: A closed listing stays in Watching, shown as closed
+<!-- trace:case id=g10.auction-watchlist.TC-ady rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
+### g10.auction-watchlist.US3-TC2: Watching nothing shows an explained empty view
 
 **Classification:**
 
@@ -256,22 +230,44 @@ enough to decide whether to act,
 
 **Pre-conditions:**
 
-* customer(signed in) watched `<listing_9>` before it closed.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_9>` | A closed listing the customer watches |
+* customer(signed in) has never watched a listing.
 
 **Steps:**
 
-1. Open `<my auctions url>` and select Watching.
+1. Open the Watching view.
 
 **Expected Results:**
 
-* `<listing_9>` is still listed.
-* It is shown as closed, not open.
+* It says nothing is watched yet and how to watch, with no error.
+
+<!-- trace:case id=g10.auction-watchlist.TC-cfv rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
+### g10.auction-watchlist.US3-TC4: A called-off listing stays in the Watching view, shown as called off
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-watchlist-US-03
+
+**Blocked:** watchlist keeps a called-off listing in Watching until it is unwatched, while lot-status keeps a called-off listing out of the watchlist; the auction product manager settles which holds.
+
+**Pre-conditions:**
+
+* customer(signed in) watched `<listing>`, which an operator then called off.
+
+**Steps:**
+
+1. Open the Watching view.
+
+**Expected Results:**
+
+* `<listing>` is listed, reading called off, until customer unwatches it.
 
 ---
 
@@ -298,23 +294,16 @@ enough to decide whether to act,
 
 **Pre-conditions:**
 
-* customer(signed in) watches `<listing_12>` with email alerts on, and is on `<my auctions url>`'s Watching tab.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_12>` | A listing the customer watches, email alerts on |
+* customer(signed in) watches open `<listing>`, alerts on.
 
 **Steps:**
 
-1. Turn email alerts off for `<listing_12>`.
+1. In the Watching view, turn email alerts off for `<listing>`.
+2. Reload, and let `<listing>` reach 24 hours before its close.
 
 **Expected Results:**
 
-* `<listing_12>` stays in Watching.
-* Its email alerts read off.
-* The confirmation says the watch stayed.
+* Step 2 still lists `<listing>`, alerts off, and no closing letter for it reaches the inbox.
 
 ---
 
@@ -330,228 +319,24 @@ to buy.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** grade10-site-auction-watchlist-US-04
 
 **Pre-conditions:**
 
-* `<listing_11>` is open and watched by `<grade10 watchers>` customers on `<auction url>` and `<zzz watchers>` on `<zzz auction url>`, none of whom bid.
-* admin(holds auction:operate) is on `<admin listings url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_11>` | An open listing sold on both brands, with no bids |
-| `<grade10 watchers>` | 2 (range: 1–5) |
-| `<zzz watchers>` | 1 (range: 1–5) |
-| `<watch count>` | 3 (fixed derived): `<grade10 watchers>` plus `<zzz watchers>` |
+* 2 Grade10 collectors and 1 ZZZ collector watch `<listing>`, and nobody bid; admin(holds auction:read) is on Listings.
 
 **Steps:**
 
-1. Open `<listing_11>` and read its watch count and bids.
+1. Open Stats on `<listing>`'s row.
 
 **Expected Results:**
 
-* The watch count reads `<watch count>`.
-* The listing still reads no bids.
-
-## Ungrouped
-
-### g10.auction-watchlist.US1: Collector watches a listing to come back to it
-
-<!-- trace:case id=g10.auction-watchlist.TC-jxa rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
-#### g10.auction-watchlist.US1-TC3: A signed-out viewer is offered sign-in instead of a watch
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-watchlist-US-01
-
-**Pre-conditions:**
-
-* customer is signed out and on `<surface>`.
-
-**Test data:**
-
-| `<surface>` |
-| --- |
-| `<listing_3>`'s page |
-| `<listing_3>`'s card on `<auction url>` |
-
-| Field | Value |
-| --- | --- |
-| `<listing_3>` | An open listing |
-
-**Steps:**
-
-1. Select Watch for `<listing_3>`.
-2. Reload `<surface>`.
-
-**Expected Results:**
-
-* Step 1 offers sign-in.
-* Step 2 shows `<listing_3>` as not watched.
-
-<!-- trace:case id=g10.auction-watchlist.TC-0gx rev=1 -->
-#### g10.auction-watchlist.US1-TC4: A watch is the watcher's alone and places no bid
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-watchlist-US-01
-
-**Pre-conditions:**
-
-* customer A(signed in) watches `<listing_14>`; customer B(signed in, on a separate session) does not.
-* `<listing_14>` is open with `<bid count>` bids.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_14>` | An open listing with bids |
-| `<bid count>` | 3 (range: 0–20) |
-
-**Steps:**
-
-1. As customer B, open `<listing_14>`'s page and `<my auctions url>`.
-2. As customer A, open `<listing_14>`'s page and read the bid panel.
-
-**Expected Results:**
-
-* Step 1 shows `<listing_14>` as not watched and lists nothing of customer A's.
-* Step 2 still reads `<bid count>` bids, and customer A holds no standing on `<listing_14>`.
-
-### g10.auction-watchlist.US2: Collector unwatches a listing they no longer follow
-
-<!-- trace:case id=g10.auction-watchlist.TC-oxt rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
-#### g10.auction-watchlist.US2-TC1: Unwatching from the listing page or its card clears the watch and alerts
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-watchlist-US-02
-
-**Pre-conditions:**
-
-* customer(signed in) watches `<listing_4>` with email alerts on, and is on `<surface>`.
-
-**Test data:**
-
-| `<surface>` |
-| --- |
-| `<listing_4>`'s page |
-| `<listing_4>`'s card on `<auction url>` |
-
-| Field | Value |
-| --- | --- |
-| `<listing_4>` | An open listing the customer watches |
-
-**Steps:**
-
-1. Unwatch `<listing_4>` on `<surface>`.
-2. Open `<my auctions url>` and select Watching.
-
-**Expected Results:**
-
-* Step 1 shows `<listing_4>` as not watched, with its email alerts off.
-* Step 2 does not list `<listing_4>`.
-
-### g10.auction-watchlist.US3: Collector reads the listings they watch
-
-<!-- trace:case id=g10.auction-watchlist.TC-ady rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
-#### g10.auction-watchlist.US3-TC2: Watching nothing shows an explained empty state
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-watchlist-US-03
-
-**Pre-conditions:**
-
-* customer(signed in) watches no listing and holds no bid.
-
-**Steps:**
-
-1. Open `<my auctions url>`.
-
-**Expected Results:**
-
-* An explained empty state shows, not an error.
-* It offers a way to the catalogue.
-
-<!-- trace:case id=g10.auction-watchlist.TC-cfv rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
-#### g10.auction-watchlist.US3-TC4: A called-off listing stays in Watching, shown as called off
-
-**Blocked:** watchlist keeps a called-off listing in Watching until it is unwatched, while lot-status keeps a called-off listing out of the watchlist; the auction product manager settles which holds.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-watchlist-US-03
-
-**Pre-conditions:**
-
-* customer(signed in) watched `<listing_10>` before an operator called it off.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_10>` | A called-off listing the customer watches |
-
-**Steps:**
-
-1. Open `<my auctions url>` and select Watching.
-
-**Expected Results:**
-
-* `<listing_10>` is still listed.
-* It is shown as called off, not open.
+* The watch count reads 3, and the bid count 0.
