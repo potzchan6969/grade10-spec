@@ -1,6 +1,6 @@
 # grade10-site/auction/notifications Test Cases
 
-**Status:** pending-review · 0/31
+**Status:** pending-review · 0/33
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
 
@@ -384,6 +384,44 @@ Runs once per row of **Test data**.
 
 * No closing reminder for `<listing_5>` at the one-hour mark.
 
+<!-- trace:case id=g10.auction-notifications.TC-39a rev=1 -->
+### g10.auction-notifications.US2-TC14: A letter's close time reads Hong Kong time, GMT+8, for every reader
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-notifications-US-02
+
+**Pre-conditions:**
+
+* customer, account language `<language>`, watches `<listing>`, which closes at 2026-09-01T16:30:00Z; customer reads mail on a device set to `<reader zone>`.
+
+**Test data:**
+
+| `<reader zone>` | `<language>` |
+| --- | --- |
+| Asia/Hong_Kong | English |
+| America/New_York | English |
+| Pacific/Kiritimati | English |
+| Asia/Hong_Kong | Traditional Chinese |
+
+**Steps:**
+
+1. Move the clock to 24 hours before the close and read the Bidding closes in 24 hours letter.
+
+**Expected Results:**
+
+* The close time reads 2 Sep 2026, 00:30 GMT+8, the same text for every reader, never HKT.
+
 ---
 
 ## g10.auction-notifications.US3: Collector raises after being outbid
@@ -550,6 +588,42 @@ Runs once per row of **Test data**.
 
 * Step 1: customer B leads.
 * Step 2 holds no row addressed to the house.
+
+<!-- trace:case id=g10.auction-notifications.TC-4vh rev=1 -->
+### g10.auction-notifications.US3-TC6: A letter names the lot by its English title on a Chinese account
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-notifications-US-03
+
+**Pre-conditions:**
+
+* customer A, account language Traditional Chinese, bid on `<listing>`, titled Charizard PSA 10 in English and 寶可夢 噴火龍 PSA 10 in Traditional Chinese.
+
+**Test data:**
+
+| `<letter>` | `<event>` |
+| --- | --- |
+| You have been outbid | customer B places a higher maximum |
+| You did not win | the lot closes with customer B winning |
+
+**Steps:**
+
+1. Let `<event>` happen and read `<letter>`.
+
+**Expected Results:**
+
+* It names the lot Charizard PSA 10, never 寶可夢 噴火龍 PSA 10.
 
 ---
 
@@ -1066,6 +1140,11 @@ Runs once per row of **Test data**.
 * Only Lot watched, ended rows, one each to customer D and customer E; no You did not win and no Lot watched, sold.
 
 ---
+
+## Settled
+
+- Every sent message states its clock in Hong Kong time, named GMT+8, whatever the reader's zone or language; a calendar day with no clock names no zone.
+- A letter names a lot by its English title in every language.
 
 ## Reconciliation
 

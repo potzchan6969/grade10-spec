@@ -1,6 +1,6 @@
 # grade10-site/vault/case-lifecycle Test Cases
 
-**Status:** pending-review · 0/12
+**Status:** pending-review · 0/13
 **Drafts styled:** 2026-10-02, tcs-rules r4
 **Out of suite (api):**
 - `grade10-site-vault-case-lifecycle-SC-53` — the vault's transition tests, which see no due row raised by a corrected advance (task 7.1)
@@ -405,6 +405,33 @@ Runs once per row of **Test data**.
 the request was called off and by whom, the clock that ran out, or the
 figure the item settled with the dates of the notice,
 **so that** I know what happened and what, if anything, is still mine.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-7ic rev=1 -->
+### grade10-site-vault-case-lifecycle-US4-TC1-1: A case's timeline stamps read UTC, whatever the viewer's zone
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-04
+
+**Pre-conditions:**
+
+* customer owns `<case>`, kept at a Hong Kong shop, with a timeline entry recorded at 2026-10-07T01:30:00Z, and views it on a machine set to America/New_York.
+
+**Steps:**
+
+1. Open `<case>` and read that timeline entry's stamp.
+
+**Expected Results:**
+
+* It reads 01:30 on 7 Oct, UTC, never 09:30 (the shop's clock) or 21:30 on 6 Oct (the viewer's zone).
 
 ---
 

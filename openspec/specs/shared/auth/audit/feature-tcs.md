@@ -182,7 +182,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * auditor(holds `audit:read` only) is signed in on `<console url>`.
-* The trail holds an operator's ban and a ban the test-endpoint workflow made.
+* The trail holds an operator's ban, recorded at 2026-10-07T01:30:00Z, and a ban the test-endpoint workflow made; the auditor's machine is set to America/New_York.
 
 **Steps:**
 
@@ -192,6 +192,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 lists the recorded actions; the workflow's ban names `test-endpoint-workflow` where a user id would stand, with no name or email address.
+* The operator's ban reads 01:30 on 7 Oct, UTC, never 09:30 (Hong Kong) or 21:30 on 6 Oct (the machine's zone).
 * Step 2 answers whether the chain is consistent, and shows no hash or other proof.
 
 <!-- trace:case id=g10.shared-audit.TC-u48 rev=2 -->

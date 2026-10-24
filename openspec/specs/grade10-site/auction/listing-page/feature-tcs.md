@@ -1,6 +1,6 @@
 # grade10-site/auction/listing-page Test Cases
 
-**Status:** reopened · 0/58
+**Status:** reopened · 0/60
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
@@ -1481,6 +1481,43 @@ Runs once per row of **Test data**.
 
 * Time left never reads higher than it read the moment before.
 
+<!-- trace:case id=g10.auction-listing-page.TC-o30 rev=1 -->
+### g10.auction-listing-page.US13-TC5: The deadline names the viewer's zone
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-13
+
+**Pre-conditions:**
+
+* `<listing>` is open and closes at 2027-09-01T12:00:00Z; the browser is set to `<viewer zone>`.
+
+**Test data:**
+
+| `<viewer zone>` | `<deadline reads>` |
+| --- | --- |
+| Asia/Hong_Kong | 1 Sep 2027, 20:00 HKT |
+| America/New_York | 1 Sep 2027, 08:00 EDT |
+| Asia/Tokyo | 1 Sep 2027, 21:00 GMT+9 (fixed: no US English short name, so the offset) |
+
+**Steps:**
+
+1. Open `<listing>` and read the deadline beside the countdown.
+
+**Expected Results:**
+
+* It reads `<deadline reads>`: the date, a 24-hour clock and the zone's name in English, in every page language.
+
 ---
 
 ## g10.auction-listing-page.US14: Bidder waits on a closed listing for its result
@@ -1913,6 +1950,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The title reads `<title reads>` and the description `<description reads>`, with no text of another language.
+* The first gallery image's alt text, the lot's attribute values and its campaign's title read as written in English.
 
 <!-- trace:case id=g10.auction-listing-page.TC-k7m rev=1 -->
 ### g10.auction-listing-page.US16-TC8: The tab title and the link preview follow the page's language
@@ -2044,6 +2082,44 @@ Runs once per row of **Test data**.
 * Step 1 reads `<traditional title>` and `<traditional description>`.
 * Step 2 reads `<simplified title>` and `<simplified description>`, at the `/sc` address.
 * Step 3 reads `<english title>` and `<english description>`, at the unprefixed address.
+
+<!-- trace:case id=g10.auction-listing-page.TC-qnq rev=1 -->
+### g10.auction-listing-page.US16-TC14: Every surface but the lot page and its card names a lot by its English title
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-16
+
+**Pre-conditions:**
+
+* customer(signed in) browses in Traditional Chinese; `<listing>` has the English title Charizard PSA 10 and the Traditional Chinese title 寶可夢 噴火龍 PSA 10, and is in `<state>`.
+
+**Test data:**
+
+| `<surface>` | `<state>` |
+| --- | --- |
+| The Featured carousel | a Featured slide |
+| My Auctions | bid on by customer |
+| The watchlist | watched by customer |
+| Winner Order | won by customer |
+
+**Steps:**
+
+1. Open `<surface>` under `/tc` and find `<listing>`.
+
+**Expected Results:**
+
+* It is named Charizard PSA 10, never 寶可夢 噴火龍 PSA 10.
 
 ## Ungrouped
 
@@ -2402,6 +2478,7 @@ Runs once per row of **Test data**.
 
 * `<listing_1>`'s card title reads `<card title>`, and `<listing_2>`'s reads Charizard PSA 10.
 * Neither card shows a description.
+* The campaign cover's title and copy read as the operator wrote them, untranslated.
 
 <!-- trace:case id=g10.auction-listing-page.TC-cmf rev=1 covers=g10.auction-listing-page.SC-sbq -->
 #### g10.auction-listing-page.US16-TC3: A text left unwritten falls back to English on its own
@@ -2509,7 +2586,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 reads Charizard PSA 10 and 1999 Base Set, clean front.
+* Step 1 reads Charizard PSA 10 and 1999 Base Set, clean front., with no translation made at read time, while the rest of the page, the bid panel included, reads in Traditional Chinese.
 * Step 2 reads the same title and description.
 
 <!-- trace:case id=g10.auction-listing-page.TC-pda rev=1 -->
