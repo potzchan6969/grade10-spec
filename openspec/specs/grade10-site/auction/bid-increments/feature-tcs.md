@@ -1,15 +1,14 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** reopened · 2/23
-**Reviewed:** 2026-09-22, tcs-rules r3, lapsed 2026-10-02
+**Status:** reopened · 2/12
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
 
 ## Background
 
-* A listing's page on the Grade10 site of the environment under test shows Highest bid and, on its bid panel, Min, the minimum next bid. Every listing is priced and bid in USD.
-* The increment comes from the configured schedule in force, the table on the Bidding PRD page: a tier owns its lower bound, the last tier has none, and every bound and increment is whole dollars. In force today: +USD1 from USD0, +USD2 from USD10, +USD5 from USD50, +USD10 from USD100, +USD25 from USD200, +USD50 from USD500, +USD100 from USD1,000, +USD250 from USD2,500, +USD500 from USD5,000, up to +USD100,000 from USD1,500,000.
-* The bid ceiling is USD10,000,000.
+* A listing's page shows Highest bid and, on its bid panel, Min, the minimum next bid. Every listing is priced and bid in USD, whole dollars.
+* The step comes from the configured schedule in force, the table on the Bidding PRD page: a tier owns its lower bound and the last tier has none. In force today: +USD1 from USD0, +USD2 from USD10, +USD5 from USD50, +USD10 from USD100, +USD25 from USD200, +USD50 from USD500, +USD100 from USD1,000, +USD250 from USD2,500, +USD500 from USD5,000, up to +USD100,000 from USD1,500,000. The ceiling is USD10,000,000.
+* customer, customer A and customer B are signed in with a card linked, on separate sessions.
 
 ## g10.auction-bid-increments.US1: Collector places a bid across a price tier
 
@@ -18,7 +17,9 @@
 **so that** I can enter an affordable opening bid and a sensible later bid.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-2ed rev=2 covers=g10.auction-bid-increments.SC-vqb -->
-### g10.auction-bid-increments.US1-TC1: A priced start opens at the starting price
+### g10.auction-bid-increments.US1-TC1: Before any bid the minimum is the opening price, and a bid at it moves the minimum up one step
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -34,148 +35,29 @@
 
 **Pre-conditions:**
 
-* customer(card linked) is signed in on `<listing_1>`, which is live with no bids and starts at `<starting price>`.
+* customer is on `<listing>`, live with no bid, its starting price `<start>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | A live USD listing with no bids |
-| `<starting price>` | USD120 (range: any whole-dollar amount above 0) |
-
-**Steps:**
-
-1. Read Min.
-2. Enter `<starting price>` and select Place Bid.
-3. Reload and read Highest bid, the bid count and Recent Bids.
-
-**Expected Results:**
-
-* Step 1 reads Min `<starting price>`, with no increment added.
-* Step 2 accepts the bid.
-* Step 3 reads Highest bid `<starting price>`, bid count 1, and the bid as You.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-ujz rev=1 covers=g10.auction-bid-increments.SC-w8f -->
-### g10.auction-bid-increments.US1-TC9: A zero start opens at the lowest configured increment
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* customer(card linked) is signed in on `<listing_3>`, which is live with no bids and starts at USD0.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_3>` | A live USD listing with no bids, starting at USD0 (fixed boundary) |
-| `<lowest increment>` | The increment of the tier from USD0 in the schedule in force (USD1 today) |
-
-**Steps:**
-
-1. Read Min.
-2. Enter `<lowest increment>` and select Place Bid.
-3. Reload and read Highest bid and the bid count.
-
-**Expected Results:**
-
-* Step 1 reads Min `<lowest increment>`.
-* Step 2 accepts the bid.
-* Step 3 reads Highest bid `<lowest increment>` and bid count 1.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-0es rev=1 covers=g10.auction-bid-increments.SC-n5d -->
-### g10.auction-bid-increments.US1-TC19: A stored starting price with cents opens at the next whole dollar
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* customer(card linked) is signed in on `<listing_14>`, which is live with no bids and was stored, before the whole-dollar rule, with a starting price of `<stored price>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_14>` | A live USD listing with no bids, seeded with a starting price that has cents |
-| `<stored price>` | USD120.50 (fixed boundary: between two whole dollars) |
-| `<opening minimum>` | USD121 (fixed derived): the next whole dollar at or above `<stored price>` |
+| `<start>` | `<opening>` | `<next>` |
+| --- | --- | --- |
+| USD280 | USD280 | USD305 (USD280 plus the USD25 step) |
+| USD0 | USD1, the lowest step | USD2 |
+| USD7 (fixed boundary: under USD10) | USD7 | USD8 |
+| USD120.50, stored before the whole-dollar rule | USD121, the next whole dollar | USD131 (USD121 plus the USD10 step) |
 
 **Steps:**
 
 1. Read the starting price and Min.
-2. Enter `<opening minimum>` and select Place Bid.
-3. Reload and read the starting price, Highest bid and the bid count.
+2. Place `<opening>`, reload, and read Highest bid, the bid count, the starting price and Min.
 
 **Expected Results:**
 
-* Step 1 reads the starting price `<stored price>` and Min `<opening minimum>`.
-* Step 2 accepts the bid.
-* Step 3 reads Highest bid `<opening minimum>`, bid count 1, and the starting price still `<stored price>`.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-n6d rev=4 covers=g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t -->
-### g10.auction-bid-increments.US1-TC6: A first bid at the opening price moves the minimum up one step
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* customer(card linked) is on an open listing starting at `<starting price>`, with no accepted bid.
-
-**Test data:**
-
-| `<starting price>` | `<first bid>` | `<minimum next>` | `<higher bid>` |
-| --- | --- | --- | --- |
-| USD0 (fixed boundary) | USD1 | USD2, plus the USD1 step | USD3 |
-| USD100 (fixed boundary: the USD100 tier) | USD100 | USD110, plus the USD10 step | USD120 |
-
-**Steps:**
-
-1. Enter `<first bid>` and confirm it.
-2. Read Min.
-3. Enter `<higher bid>` and confirm it, then read Highest bid.
-
-**Expected Results:**
-
-* Step 1 accepts the bid.
-* Step 2 reads `<minimum next>`.
-* Step 3 accepts the bid, and Highest bid reads `<higher bid>`.
+* Step 1 reads the starting price `<start>` and Min `<opening>`.
+* Step 2 reads Highest bid `<opening>`, one bid, the starting price still `<start>`, and Min `<next>`.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-9do rev=5 covers=g10.auction-bid-increments.SC-b2w -->
 ### g10.auction-bid-increments.US1-TC7: A first bid below the opening price cannot be placed
-
-Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -191,72 +73,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(card linked) is on an open listing opening at `<opening price>`, with no accepted bid.
-
-**Test data:**
-
-| `<opening price>` | `<bid amount>` |
-| --- | --- |
-| USD100 (fixed boundary: a tier bound) | USD99 (fixed boundary: one dollar below) |
-| USD105 | USD104 (fixed boundary: one dollar below) |
+* customer is on `<listing>`, live with no bid, starting at USD280.
 
 **Steps:**
 
-1. Enter `<bid amount>` in the custom maximum and read the bid panel.
-2. Reload and read the bid panel.
+1. Enter USD279 and confirm.
+2. Reload and read Highest bid and the bid count.
 
 **Expected Results:**
 
-* Step 1 reads Min `<opening price>`, and the bid action stays disabled.
-* Step 2 shows no accepted bid and Min `<opening price>`.
+* Step 1 is refused, naming Minimum bid USD280.
+* Step 2 reads no bid.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-0lh rev=2 covers=g10.auction-bid-increments.SC-mn9 -->
-### g10.auction-bid-increments.US1-TC2: A price on a tier bound takes that tier's step
-
-Runs once per row of **Test data**, for every configured tier after the first.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* customer(card linked) holds no bid on `<listing_2>` and is on it; `<listing_2>` is live, its current bid `<current bid>`, placed by another customer.
-
-**Test data:**
-
-| `<current bid>` | `<step from>` | Example in the schedule in force |
-| --- | --- | --- |
-| The tier's lower bound (fixed boundary) | That tier | USD1,000, so Min reads USD1,100 |
-| One dollar below the tier's lower bound (fixed boundary) | The tier just below | USD999, so Min reads USD1,049 |
-
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | A live USD listing with bids from other customers |
-| `<minimum next>` | `<current bid>` plus `<step from>`'s increment |
-
-**Steps:**
-
-1. Read Min.
-2. Enter `<minimum next>` and select Place Bid.
-3. Reload and read Highest bid and the bid count.
-
-**Expected Results:**
-
-* Step 1 reads Min `<minimum next>`.
-* Step 2 accepts the bid.
-* Step 3 reads Highest bid `<minimum next>`, and the bid count rose by one.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-de8 rev=1 covers=g10.auction-bid-increments.SC-xjw -->
-### g10.auction-bid-increments.US1-TC10: The minimum adds the step of the tier holding the current bid
+### g10.auction-bid-increments.US1-TC2: The minimum adds the step of the tier holding the current bid
 
 Runs once per row of **Test data**.
 
@@ -274,33 +104,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(card linked) holds no bid on `<listing_4>` and is on it; `<listing_4>` is live, its current bid `<current bid>`, placed by another customer.
+* customer holds no bid on `<listing>`, live at a current bid of `<current>` placed by another customer.
 
 **Test data:**
 
-| `<current bid>` | Example in the schedule in force |
+| `<current>` | `<min>` |
 | --- | --- |
-| Inside the lowest tier, above 0 | USD6, so Min reads USD7 |
-| Inside a middle tier, away from both bounds | USD1,200, so Min reads USD1,300 |
-| Inside the unbounded last tier | USD2,000,000, so Min reads USD2,100,000 |
-
-| Field | Value |
-| --- | --- |
-| `<listing_4>` | A live USD listing with bids from other customers |
-| `<minimum next>` | `<current bid>` plus its tier's increment |
-| `<below minimum>` | One dollar below `<minimum next>` (fixed boundary) |
+| USD6, inside the lowest tier | USD7 |
+| USD999 (fixed boundary: one dollar below a tier's bound) | USD1,049 (the USD50 step) |
+| USD1,000 (fixed boundary: a tier's bound) | USD1,100 (the USD100 step) |
+| USD1,200, inside a middle tier | USD1,300 |
+| USD2,000,000, inside the unbounded last tier | USD2,100,000 |
 
 **Steps:**
 
-1. Read Min, then enter `<below minimum>` and read the bid form.
-2. Enter `<minimum next>` and select Place Bid.
-3. Reload and read Highest bid, the bid count and Recent Bids.
+1. Read Min.
+2. Place `<min>`, reload, and read Highest bid, the bid count and Recent bids.
 
 **Expected Results:**
 
-* Step 1 reads Min `<minimum next>`, and the form will not place `<below minimum>`.
-* Step 2 accepts the bid.
-* Step 3 reads Highest bid `<minimum next>`, the bid count one higher, and the bid as You.
+* Step 1 reads Min `<min>`.
+* Step 2 reads Highest bid `<min>`, the count one higher, and the bid as You.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-qui rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### g10.auction-bid-increments.US1-TC3: An amount above the minimum is accepted as entered
@@ -308,7 +132,7 @@ Runs once per row of **Test data**.
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
@@ -321,59 +145,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(card linked) is on an open USD listing whose minimum bid is `<minimum>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<minimum>` | USD105 (range: 10000–49999 minor units) |
-| `<bid amount>` | USD126 (range: above `<minimum>`, not on a step) |
+* customer holds no bid on `<listing>`, live at USD1,200 with Min USD1,300, and no other maximum.
 
 **Steps:**
 
-1. Enter `<bid amount>` and confirm the bid.
+1. Place USD1,457.
+2. Reload and read Highest bid.
 
 **Expected Results:**
 
-* The bid is accepted at `<bid amount>`, unrounded.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-5ez rev=2 covers=g10.auction-bid-increments.SC-b2w -->
-### g10.auction-bid-increments.US1-TC4: An amount below the minimum is refused, naming it
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* customer(card linked) is on an open USD listing whose minimum bid is `<minimum>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<minimum>` | USD105 (range: 10000–49999 minor units) |
-| `<bid amount>` | USD104 (fixed boundary: one dollar below `<minimum>`) |
-
-**Steps:**
-
-1. Enter `<bid amount>` and confirm the bid.
-
-**Expected Results:**
-
-* The bid is refused, naming `<minimum>` as the minimum.
+* Step 1 is accepted; step 2 reads Highest bid USD1,457.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-d1v rev=1 -->
-### g10.auction-bid-increments.US1-TC11: A beaten maximum is passed by its own tier's step
+### g10.auction-bid-increments.US1-TC11: A maximum answers by the step of the tier of the amount it beats
 
 Runs once per row of **Test data**.
 
@@ -391,139 +175,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A and customer B(each card linked) are on `<listing_5>` in separate sessions; it is live with no bids, starting at USD120.
+* customer A holds a maximum of `<leader maximum>` on `<listing>`, which is `<state>`; customer C is on its page.
 
 **Test data:**
 
-| `<customer B maximum>` | `<resolved price>` |
-| --- | --- |
-| USD1,200, inside the USD1,000 tier | USD1,300, plus that tier's USD100 |
-| USD2,500, on the USD2,500 tier's bound (fixed boundary) | USD2,750, plus that tier's USD250 |
-
-| Field | Value |
-| --- | --- |
-| `<listing_5>` | A live USD listing with no bids |
-| `<customer A maximum>` | USD6,000, in a tier with another step (USD500) |
+| `<leader maximum>` | `<state>` | `<challenge>` | `<price>` |
+| --- | --- | --- | --- |
+| USD6,000 | open, starting at USD120 | customer B sets a maximum of USD1,200 | USD1,300, customer A leading |
+| USD6,000 | open, starting at USD120 | customer B sets a maximum of USD2,500 (fixed boundary: a tier's bound) | USD2,750, customer A leading |
+| USD6,000 | open, at USD1,200 with no other bidder | customer B places USD1,200 | USD1,300, customer A leading |
+| USD1,250, leading at USD1,200 | open | an admin commits an internal bid of USD3,000 | USD1,350, the house leading |
+| USD1,250, leading at USD1,200 | in extended bidding | customer B places a maximum of USD3,000 | USD1,350, customer B leading |
 
 **Steps:**
 
-1. As customer A, set a maximum of `<customer A maximum>` and confirm.
-2. As customer B, set a maximum of `<customer B maximum>` and confirm.
-3. As customer A, reload and read Highest bid and Recent Bids.
+1. Make `<challenge>`.
+2. As customer C, read Highest bid, the leader and Recent bids.
 
 **Expected Results:**
 
-* After step 1 customer A leads at USD120; after step 2 customer A still leads.
-* Step 3 reads Highest bid `<resolved price>`, not `<customer B maximum>` plus USD500, with no bid recorded in between.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-fjl rev=1 -->
-### g10.auction-bid-increments.US1-TC12: A maximum answers a manual bid at that bid plus its tier's step
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* customer A and customer B(each card linked) are on `<listing_6>` in separate sessions; it is live with no bids, starting at `<starting price>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_6>` | A live USD listing with no bids |
-| `<starting price>` | USD1,200 (range: inside a tier above the lowest, away from its bounds) |
-| `<customer A maximum>` | USD6,000 (range: two tiers or more above `<starting price>`) |
-| `<resolved price>` | USD1,300 (fixed derived): `<starting price>` plus its tier's USD100 |
-
-**Steps:**
-
-1. As customer A, set a maximum of `<customer A maximum>` and confirm.
-2. As customer B, read Min, then enter `<starting price>` and select Place Bid.
-3. As customer A, reload and read Highest bid and Your maximum.
-
-**Expected Results:**
-
-* Step 2 reads Min `<starting price>`.
-* Step 3 reads Highest bid `<resolved price>`, customer A still leading with Your maximum `<customer A maximum>`.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-25k rev=1 -->
-### g10.auction-bid-increments.US1-TC20: The house's maximum and a bid in extended bidding read the same schedule
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* customer A leads `<listing_7>` at USD1,200 with a maximum of USD1,250, and `<listing_7>` is `<state>`.
-* customer C is on `<listing_7>`'s page.
-
-**Test data:**
-
-| `<state>` | `<bidder>` | `<move>` |
-| --- | --- | --- |
-| Open | admin(holds auction:reserve) | Set an internal bid of USD3,000, committing now |
-| In extended bidding | customer B(card linked) | Place a maximum of USD3,000 |
-
-| Field | Value |
-| --- | --- |
-| `<listing_7>` | A USD listing |
-| `<resolved price>` | USD1,350 (fixed derived): customer A's USD1,250 plus the USD100 step of its tier |
-
-**Steps:**
-
-1. As `<bidder>`, `<move>`.
-2. As customer C, read Highest bid and the leader.
-
-**Expected Results:**
-
-* Step 2 reads Highest bid `<resolved price>`, the new maximum leading.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=2 covers=g10.auction-bid-increments.SC-ijk -->
-### g10.auction-bid-increments.US1-TC5: A listing shows its minimum in USD
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-01
-
-**Pre-conditions:**
-
-* An open listing is published.
-
-**Steps:**
-
-1. Open the listing and read Min.
-
-**Expected Results:**
-
-* Min reads in USD, and no other currency shows.
+* Highest bid reads `<price>`, never the challenge plus the leader's own tier step, with no bid recorded in between.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-jbt rev=1 covers=g10.auction-bid-increments.SC-kc7 -->
 ### g10.auction-bid-increments.US1-TC17: A starting price with cents is refused in the editor
@@ -542,27 +213,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds auction:operate) is on `<listing_15>`'s editor; it is a draft with starting price `<starting price>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_15>` | A draft listing |
-| `<starting price>` | USD120 (range: any whole-dollar amount) |
-| `<price with cents>` | USD120.50 (fixed boundary) |
+* admin(holds auction:operate) is on draft `<listing>`'s editor, starting price USD120.
 
 **Steps:**
 
-1. Enter `<price with cents>` and save the draft, then read the field and its message.
-2. Reload the editor and read the starting price.
-3. Enter `<starting price>` and save.
+1. Enter USD120.50 and save.
+2. Reload, then enter USD121 and save.
 
 **Expected Results:**
 
-* Step 1 refuses the save, the message naming the whole-dollar rule.
-* Step 2 reads `<starting price>`.
-* Step 3 saves, so the refusal was for the cents.
+* Step 1 is refused, naming the whole-dollar rule.
+* Step 2 reads USD120 after the reload, and USD121 saves.
 
 ---
 
@@ -739,11 +400,13 @@ Runs once per row of **Test data**.
 **so that** I compare lots and place bids in one unit.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-y0l rev=1 -->
-### g10.auction-bid-increments.US3-TC1: Every open listing prices and bids in USD on one schedule
+### g10.auction-bid-increments.US3-TC1: Every listing bids in USD on one schedule, whatever it was created in
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -755,87 +418,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Two open listings stand at prices in different tiers of the schedule.
-
-**Steps:**
-
-1. Open each listing and read its amounts, Min and the bid field's currency.
-
-**Expected Results:**
-
-* Both show USD amounts and take USD bids, each Min following the one schedule.
-* No HKD or JPY amount or tier shows.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-sze rev=2 covers=g10.auction-bid-increments.SC-tke -->
-### g10.auction-bid-increments.US3-TC3: A listing once priced in HKD bids on the USD schedule
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-03
-
-**Pre-conditions:**
-
-* customer(card linked) is on `<listing_10>`, open in USD with an accepted bid of `<current bid>`.
+* `<listing X>` and `<listing Y>` are open at a current bid of USD8,000; `<listing X>` was `<created in>`.
 
 **Test data:**
 
-| `<listing_10>` |
+| `<created in>` |
 | --- |
-| A listing created in USD |
-| A listing created in HKD and overwritten to USD, its amounts unchanged |
-
-| Field | Value |
-| --- | --- |
-| `<current bid>` | USD8,000 (range: above 0) |
-| `<minimum next>` | USD8,500 (fixed derived): `<current bid>` plus the USD500 step |
+| USD |
+| HKD, and overwritten to USD with its amounts unchanged |
 
 **Steps:**
 
-1. Read Highest bid and Min.
+1. Read Highest bid and Min on both listings.
 
 **Expected Results:**
 
-* Highest bid reads `<current bid>` and Min `<minimum next>`, both in USD, with no HKD amount.
+* Both read Highest bid USD8,000 and Min USD8,500 (the USD500 step), in USD, with no HKD amount.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-pn8 rev=2 covers=g10.auction-bid-increments.SC-ws7 -->
-### g10.auction-bid-increments.US3-TC4: An open listing's amounts all read in USD
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-03
-
-**Pre-conditions:**
-
-* An open listing has a starting price, an accepted bid and a minimum next bid.
-
-**Steps:**
-
-1. Open the listing and read its starting price, Highest bid and Min.
-
-**Expected Results:**
-
-* Each reads in USD, and no other bid currency shows.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-hod rev=1 covers=g10.auction-bid-increments.SC-p50 -->
-### g10.auction-bid-increments.US3-TC5: Two listings at one price share one step
+### g10.auction-bid-increments.US3-TC4: A bid reads in USD from the field to the record
 
 **Classification:**
 
@@ -851,73 +452,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_11>` and `<listing_12>` are live in different categories, with different starting prices, each at a current bid of `<current bid>` placed by another customer.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<current bid>` | USD1,200 (range: inside a tier above the lowest, away from its bounds) |
-| `<minimum next>` | USD1,300 (fixed derived): plus the tier's USD100 |
+* customer is on `<listing>`, live at USD1,200.
 
 **Steps:**
 
-1. Open `<listing_11>`, then `<listing_12>`, and read Highest bid and Min on each.
+1. Read Highest bid, Min, the quick bids and the bid field's currency.
+2. Place USD1,300, reload, and read Highest bid and Recent bids.
 
 **Expected Results:**
 
-* Both read Highest bid `<current bid>` and Min `<minimum next>`.
+* Every amount and the field read USD, Min USD1,300; step 2 reads USD1,300 in USD everywhere.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-zdo rev=1 covers=g10.auction-bid-increments.SC-ijk -->
-### g10.auction-bid-increments.US3-TC6: A bid reads in USD from the field to the record
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-03
-
-**Pre-conditions:**
-
-* customer(card linked) is on `<listing_13>`, live in USD at a current bid of `<current bid>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<current bid>` | USD1,200 (range: inside a tier above the lowest) |
-| `<minimum next>` | USD1,300 (fixed derived): plus the tier's USD100 |
-
-**Steps:**
-
-1. Read Highest bid, Min and the bid field's currency.
-2. Enter `<minimum next>` and select Place Bid.
-3. Reload and read Highest bid and Recent Bids.
-
-**Expected Results:**
-
-* Step 1 reads USD throughout, and the field takes USD.
-* Step 2 accepts the bid.
-* Step 3 reads Highest bid `<minimum next>` in USD, and the bid in Recent Bids in USD.
+---
 
 ## Settled
 
-- Before any accepted bid the minimum is the opening price: the starting price, or the lowest configured increment on a 0 start; a stored starting price with cents opens at the next whole dollar while the page still shows the stored price. From the first accepted bid, the current bid plus its tier's increment applies.
-- A first bid of 0, or of one minor unit, is a non-goal; no case asserts either.
+- Before any accepted bid the minimum is the opening price: the starting price, or the lowest configured increment on a 0 start; a stored starting price with cents opens at the next whole dollar while the page still shows the stored price.
+- A first bid of 0, or of one cent, is a non-goal; no case asserts either.
 - Where a lone maximum above the opening price stands is the auto-bidding suite's; this suite asserts only the minimum.
-- An open page's Min refreshes on its next read or bid attempt, not live; a bid or a maximum below the minimum the server now holds is refused, names that minimum, and records nothing.
+- An open page's Min refreshes on its next read or bid attempt, not live; a bid below the minimum the server now holds is refused, names that minimum, and records nothing.
 - A standing maximum reads the schedule in force each time it answers a bid; it keeps its amount, and earlier resolutions stand.
-- A bid, a maximum, every tier bound and every increment are whole dollars; a bid with cents is refused, naming the rule, and nothing moves. One dollar below a bound is in the lower tier.
-- A starting price an operator or a consignment ask sets is whole dollars; one with cents is refused, naming the rule. A price already stored with cents is left as it is.
+- A bid, a maximum, every tier bound and every increment are whole dollars; one dollar below a bound is in the lower tier.
+- A starting price an operator or a consignment ask sets is whole dollars; a price already stored with cents is left as it is.
 - Every bid surface reads USD only; a USD fact becomes HKD only at settlement.
-- A house maximum and an extended-bidding bid read the same schedule as any bid.
-- The schedule's shape is held valid by a test in CI; no runtime check refuses a bad file, and no case drives one.
-- The custom field stops or corrects oversized entry at the ceiling; the service's ceiling refusal is unchanged.
-- A typed digit that passes the ceiling is dropped and keeps the draft; an oversized paste or replacement becomes the ceiling after whole-dollar cleaning; neither shows a maximum-bid or invalid-amount message, in Set maximum or Raise.
-- Quick bids step 1×, 2× and 4× the increment, from the committed maximum for a leader and from the current bid otherwise; a leader's typed floor is the maximum plus USD1 and is not chip 1.
+- The custom field stops or corrects oversized entry at the ceiling; a typed digit past the ceiling is dropped, and an oversized paste becomes the ceiling after whole-dollar cleaning, with no message.
+- Quick bids step 1×, 2× and 4× the increment, from the committed maximum for a leader and from the current bid otherwise.
+
+## Reconciliation
+
+- **Covered at domain** - `g10.auction-dmn.US3-TC2` walks an amount below the minimum refused, naming it, and recording nothing
