@@ -2675,6 +2675,13 @@ Runs once per row of **Test data**.
 - A bid refused past the close is not a bid: the bid form says "Your bid did not go through." and the listing's result is decided as if it was never sent.
 - A row tied on amount with a row above it carries the earlier-leads tip at any older tie lower down Recent bids, not only at the current price; the row above carries none.
 - Rows tied on amount are listed the leading or won row first, then the row of the bidder who set that maximum earlier, and keep that order once both are outbid; the tip goes on the row of the later maximum.
+- A lost standing on the bid card is the Did not win badge alone; that the card was not charged is said on My Auctions, never on the listing's card.
+- Winner is a primary crown after the amount on a closed sold listing, not a Winner badge.
+- Equal-maximum rows below the leader use the Info tip in the amount's tone, with earlier-leads copy; no new badge size or footnote under Recent bids.
+- A catalogue tile's Ends, Opens and Closed lines name the viewer's zone; the bid card carries a dated deadline beside its countdown, and its closed block names the viewer's zone after a close time with a clock; a close shown as a day alone names none.
+- An older bid row's time carries no zone name; activity time reads relative below seven days and as a local moment from seven days.
+- A zone name on a tile or a bid card is English in every language - US English short names, HKT for Hong Kong, an offset where US English has none - and the tile's Ends, Opens and Closed words stay English.
+- Magnification happens in place under a pointer-following lens; there is no magnifier button or zoom dialog, and a touch pointer raises nothing.
 
 ## Reconciliation
 

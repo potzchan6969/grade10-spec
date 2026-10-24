@@ -1,6 +1,6 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** reopened · 2/21
+**Status:** reopened · 2/23
 **Reviewed:** 2026-09-22, tcs-rules r3, lapsed 2026-10-02
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Regenerated:** 2026-10-24, tcs-rules r7
@@ -608,8 +608,10 @@ Runs once per row of **Test data**.
 
 * The bid is accepted at `<bid amount>`.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-d9d rev=3 covers=g10.auction-bid-increments.SC-hm3 -->
-### g10.auction-bid-increments.US2-TC2: A bid above the ceiling is refused and records nothing
+<!-- trace:case id=g10.auction-bid-increments.TC-d9d rev=4 covers=g10.auction-bid-increments.SC-hm3 -->
+### g10.auction-bid-increments.US2-TC2: An amount past the ceiling becomes the ceiling in the field, with no message
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -625,23 +627,108 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(card linked) is on a live USD listing whose minimum next bid is at or below the ceiling.
+* customer(card linked) is on an open USD listing's page in `<mode>`, whose minimum next bid is at or below USD60,500, with `<draft>` typed in the custom maximum.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<over ceiling>` | USD10,000,001 (fixed boundary: one dollar over the ceiling) |
+| `<mode>` | `<draft>` | `<entry>` |
+| --- | --- | --- |
+| Set maximum | 500 | Select the draft and paste 10000001 |
+| Set maximum | 500 | Select the draft and drop the dragged text 10000001 on it |
+| Raise | 500 | Select the draft and paste 10000001 |
+| Raise | 500 | Put the caret at the end and paste 10000001 without selecting |
+| Set maximum | 500 | Select the draft and paste 10000001.99 |
+| Set maximum | 500 | Select the draft and paste 999999999999999999999999999999.99 |
+| Raise | 500 | Select the draft and paste 10000000.99 |
+| Set maximum | 10000000 | Type 1 at the end |
+| Raise | 10000000 | Paste 1 at the end |
 
 **Steps:**
 
-1. Enter `<over ceiling>` as the custom maximum and confirm.
-2. Read Highest bid and the bid count, then the customer's My Auctions.
+1. Make `<entry>`, and read the field, the reviewed amount and the messages around it.
+2. Confirm, then read Your maximum, Highest bid and the bid count.
 
 **Expected Results:**
 
-* Step 1 is refused, naming USD10,000,000 as the maximum, or the field holds the ceiling instead.
-* Step 2 shows Highest bid and the bid count unchanged, and no row for the listing.
+* Step 1: the field and the reviewed amount read 10000000, cents dropped without rounding; no maximum-bid, invalid-amount or below-minimum message shows.
+* Step 2: Your maximum reads USD10,000,000, and no amount above it is recorded.
+
+<!-- trace:case id=g10.auction-bid-increments.TC-gti rev=1 -->
+### g10.auction-bid-increments.US2-TC3: Quick bids past the ceiling are offered once, at the ceiling
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-increments-US-02
+
+**Pre-conditions:**
+
+* customer(card linked) leads an open USD listing with a maximum of `<maximum>` and is on its page with Raise.
+
+**Test data:**
+
+| `<maximum>` | `<chips>` |
+| --- | --- |
+| USD9,750,000 | USD9,850,000; USD9,950,000; USD10,000,000 |
+| USD9,850,000 | USD9,950,000; USD10,000,000 (the 2× and 4× chips merged) |
+| USD9,950,000 | USD10,000,000 only (every step passes the ceiling) |
+
+**Steps:**
+
+1. Read each quick-bid chip's amount and caption.
+2. Select the chip at USD10,000,000, confirm, and read Your maximum.
+
+**Expected Results:**
+
+* Step 1 shows `<chips>`, none above USD10,000,000; the ceiling chip is captioned as the auction's limit, and every other chip keeps its step and caption.
+* Step 2 reads USD10,000,000.
+
+<!-- trace:case id=g10.auction-bid-increments.TC-dlw rev=1 -->
+### g10.auction-bid-increments.US2-TC4: With no amount left below the ceiling, the bid entry collapses
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-increments-US-02
+
+**Pre-conditions:**
+
+* customer is on an open USD listing's page, in `<standing>`.
+
+**Test data:**
+
+| `<standing>` | `<status row>` |
+| --- | --- |
+| Leading with a maximum of USD10,000,000 at a current bid of USD1,200, card linked | Max USD10,000,000 with its Info tip, and that the auction accepts no higher amount |
+| Leading with a maximum of USD9,999,950 at a current bid of USD9,999,950 (the next minimum, USD10,099,950, is past the ceiling), card linked | Max USD9,999,950 with its Info tip, and that the auction accepts no higher amount |
+| Holding no maximum, at a current bid of USD9,950,000, card linked | USD10,000,000, and that bidding has reached the highest amount the auction accepts |
+| Leading with a maximum of USD10,000,000, card on file since removed | Max USD10,000,000 with its Info tip, and that the auction accepts no higher amount |
+
+**Steps:**
+
+1. Read the bid panel's entry area.
+
+**Expected Results:**
+
+* No quick-bid chip, custom maximum field, bid action or link-card action shows; a status row reads `<status row>`, with no line on how to raise; the buyer-fee line still shows.
 
 ---
 
@@ -832,3 +919,5 @@ Runs once per row of **Test data**.
 - A house maximum and an extended-bidding bid read the same schedule as any bid.
 - The schedule's shape is held valid by a test in CI; no runtime check refuses a bad file, and no case drives one.
 - The custom field stops or corrects oversized entry at the ceiling; the service's ceiling refusal is unchanged.
+- A typed digit that passes the ceiling is dropped and keeps the draft; an oversized paste or replacement becomes the ceiling after whole-dollar cleaning; neither shows a maximum-bid or invalid-amount message, in Set maximum or Raise.
+- Quick bids step 1×, 2× and 4× the increment, from the committed maximum for a leader and from the current bid otherwise; a leader's typed floor is the maximum plus USD1 and is not chip 1.

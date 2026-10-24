@@ -893,6 +893,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No Active, Upcoming or Ended tab; the breadcrumb sits above the container; the title badge shows 3; one list holds all three.
+* The column holding standings and order statuses is headed Status, never Your Standing.
 
 <!-- trace:case id=g10.auction-account-record.TC-z0b rev=3 -->
 ### g10.auction-account-record.US7-TC2: A listing stays in the list when its window opens
