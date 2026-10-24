@@ -4,46 +4,39 @@ title: Store Product Details Test Cases
 
 # grade10-site/store/product-page Test Cases
 
-**Status:** pending-review · 0/18
-**Drafts styled:** 2026-10-22, tcs-rules r6
+**Status:** pending-review · 0/19
+**Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/product-page, grade10-site/store/cross-sell, grade10-site/store/discounts
 
-## Walk 1: Read and Buy One Product
+## Background
+
+* `<page url>` is `<g10url>/store/products/<page product handle>`.
+
+## Walk 1: Read and buy one product
 
 **Starting state:**
 
-- customer(signed out) is on `<product page url>`, with an empty cart in this browser.
-- `<page product>` is available, with a description longer than three lines and at least 3 for sale.
-- `<page product>` has 2 picks and shares its world with other cards for sale.
-
-**Shared test data:**
-
-| Field | Value |
-| --- | --- |
-| `product page url` | `<g10url>/store/products/<page product handle>` |
-| `page product` | An available card with images, badges, a long description, 2 picks, by the recipe "Choose picks on a staging-shop card". |
+- customer(signed out) on `<page url>`, with an empty cart in this browser; `<page product>` is for sale, has a description longer than three lines, at least 3 for sale, and 2 picks, by the recipe "Choose picks on a staging-shop card"
 
 ### Route
 
 1. Read the card from its name to the pick-up line.
-   - Record the name, images, price, badges and the one item to buy `g10.store-product-page.US1-TC1`
-2. Click the button under the description.
-   - Record the description shown in full on the same page `g10.store-product-page.US1-TC2`
-3. Read the shipping and pick-up lines, then click the store name.
-   - Record the plain shipping text and Store Locator opening `g10.store-product-page.US1-TC6`
-4. Press Back, set the quantity to 2 and click Add to cart.
-   - Record Adding…, the drawer opening and the reset quantity `g10.store-product-page.US2-TC1`
-5. Close the drawer, set the quantity to 1 and click Add to cart again.
-   - Record one line at quantity 3 `g10.store-product-page.US2-TC2`
-6. Close the drawer and read the rail under the card.
-   - Record the heading, the picks first and the card count `g10.store-product-page.US4-TC1`
-7. Click a rail card.
-   - Record its own page opening, with no cart control in the rail `g10.store-product-page.US4-TC2`
+   - The name, images, price, badges and one item to buy `g10.store-product-page.TC1`
+2. Select the button under the description.
+   - The whole description, on the same page `g10.store-product-page.TC2`
+3. Read the shipping and pick-up lines, then select the store name.
+   - Plain shipping text, and Store Locator opens `g10.store-product-page.TC9`
+4. Go back, set the quantity to 2 and select Add to cart; close the drawer, set 1 and add again.
+   - Adding…, the drawer, then one line at 3 `g10.store-product-page.TC6`
+5. Close the drawer and read the rail under the card.
+   - The heading, the picks first `g10.store-product-page.TC11`
+6. Select a rail card.
+   - Its own page opens, with no cart control in the rail `g10.store-product-page.TC12`
 
 ## product-page: Product Details
 
 <!-- trace:case id=g10.store-product-page.TC-xpc rev=1 -->
-### g10.store-product-page.US1-TC1: Product page shows the card and its one item to buy
+### g10.store-product-page.TC1: The page shows the card and its one item to buy
 
 Runs once per row of **Test data**.
 
@@ -54,37 +47,33 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** acceptance, smoke, regression
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** product-page
 
 **Pre-conditions:**
 
-* `<page product>` is available, with images and badges in the catalogue.
+* `<page product>` is for sale, with images and badges in the catalogue, and the row's variants.
 
 **Test data:**
 
-| Partition | `<page product>` |
-| --- | --- |
-| One variant | A card with 1 variant for sale. |
-| Several variants | A card with 3 variants in the shop, at least one for sale. |
+| Variants |
+| --- |
+| one, for sale |
+| three in the shop, at least one for sale |
 
 **Steps:**
 
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the card.
+1. Open `<page url>`.
 
 **Expected Results:**
 
-* Step 1's address is `/store/products/<page product handle>`.
-* Step 2 shows the name, description, images and one price.
-* Step 2 shows the catalogue's badges.
-* Step 2 offers no size, option or variant choice.
-* Step 2 shows no remaining count or scarcity cue.
+* The name, description, images, one price and the catalogue's badges, UI matching store-product-page-screens-product-detail--default.
+* No size, option or variant choice, and no remaining count or scarcity cue.
 
 <!-- trace:case id=g10.store-product-page.TC-vcs rev=1 -->
-### g10.store-product-page.US1-TC2: A long description opens in full on the same page
+### g10.store-product-page.TC2: A long description opens in full on the same page
 
 Runs once per row of **Test data**.
 
@@ -97,39 +86,36 @@ Runs once per row of **Test data**.
 * **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** product-page
 
 **Pre-conditions:**
 
-* `<page product>` has `<description>`.
+* `<page product>` has the row's description.
 
 **Test data:**
 
-| Partition | `<description>` | `<expected first view>` |
-| --- | --- | --- |
-| Long | More than three lines at the page's width. | Three lines and a button to read it in full. |
-| ❓ Short | One line. | The whole description, no button. |
+| Description | First shown |
+| --- | --- |
+| longer than three lines at the page's width | three lines, and a button to read it in full |
+| ❓ one line - design confirms | the whole description, no button, UI matching store-product-page-blocks-storeproductdescription--short |
 
 **Steps:**
 
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the description.
-3. Click the read-in-full button, where one shows.
-4. Read the description and the address bar.
+1. Open `<page url>` and read the description.
+2. Select the read-in-full button, where one shows.
 
 **Expected Results:**
 
-* Step 2 shows `<expected first view>`.
-* For the long row, step 4 shows the whole description.
-* Step 4's address is unchanged.
+* Step 1: the row's first view.
+* Step 2 shows the whole description, UI matching store-product-page-screens-product-detail--description-expanded, and the address is unchanged.
 
 ---
 
 ## product-page#free-pick-up: Free Pick-up
 
 <!-- trace:case id=g10.store-product-page.TC-e5z rev=1 -->
-### g10.store-product-page.US1-TC6: Shipping and pick-up lines; the store name opens Store Locator
+### g10.store-product-page.TC9: Every card reads the same shipping and pick-up lines, and the store name opens Store Locator
 
 Runs once per row of **Test data**.
 
@@ -142,7 +128,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** product-page#free-pick-up
 
 **Pre-conditions:**
@@ -151,33 +137,28 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Partition | `<lang>` |
-| --- | --- |
-| Default language | Nothing. |
-| Traditional Chinese | `/tc`. |
+| Language prefix |
+| --- |
+| none |
+| `/tc` |
 
 **Steps:**
 
-1. Navigate to `<lang>/store/products/<page product handle>`.
-2. Read the shipping and pick-up lines.
-3. Navigate to `<lang>/store/products/<other product handle>`.
-4. Read the shipping and pick-up lines.
-5. Click the store name in the pick-up line.
+1. Open `<prefix>/store/products/<page product handle>` and read the shipping and pick-up lines.
+2. Open `<prefix>/store/products/<other product handle>` and read them again.
+3. Select the store name in the pick-up line.
 
 **Expected Results:**
 
-* Step 2 says shipping is calculated at checkout.
-* Step 2 offers free pick-up at Hong Kong Grade10 Store.
-* The shipping fee is plain text, not a link.
-* Step 4 reads the same as step 2.
-* Step 5 opens Store Locator in the same tab, at `<lang>`.
+* Steps 1 and 2: shipping is calculated at checkout, and pick-up is free at Hong Kong Grade10 Store; Shipping fee is plain text, not a link.
+* Step 3 opens Store Locator in the same tab, in the row's language.
 
 ---
 
 ## product-page#buy: Buy
 
-<!-- trace:case id=g10.store-product-page.TC-mkn rev=1 -->
-### g10.store-product-page.US2-TC1: Add to cart shows Adding…, opens the drawer and resets quantity
+<!-- trace:case id=g10.store-product-page.TC-mkn rev=2 -->
+### g10.store-product-page.TC6: Add to cart shows Adding…, opens the drawer, and adding again keeps one line
 
 **Classification:**
 
@@ -186,69 +167,31 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** acceptance, smoke, regression
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** product-page#buy
 
 **Pre-conditions:**
 
-* customer(signed out) is on `/store/products/<page product handle>`, with an empty cart in this browser.
-* `<page product>` has at least 2 for sale.
+* customer(signed out) is on `<page url>`, with an empty cart in this browser; `<page product>` has at least 3 for sale.
 
 **Steps:**
 
-1. Set the quantity to 2.
-2. Click Add to cart.
-3. Read the purchase controls while the add is pending.
-4. Wait for the add to settle.
-5. Read the drawer, the quantity and the cart total.
+1. Set the quantity to 2 and select Add to cart.
+2. Close the drawer, set the quantity to 1 and select Add to cart.
 
 **Expected Results:**
 
-* Step 2 asks for no sign-in.
-* Step 3 shows Adding… on the controls.
-* Step 5 shows the cart drawer open, with `<page product>` at quantity 2.
-* Step 5 shows the page's quantity reset.
-* The cart total includes `<page product>` × 2.
-
-<!-- trace:case id=g10.store-product-page.TC-2w3 rev=1 -->
-### g10.store-product-page.US2-TC2: Adding the same product again keeps one line
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** product-page#buy
-
-**Pre-conditions:**
-
-* customer(signed out) is on `/store/products/<page product handle>`.
-* The cart holds `<page product>` at quantity 2; the shop has at least 3 for sale.
-
-**Steps:**
-
-1. Set the quantity to 1.
-2. Click Add to cart.
-3. Read the drawer's lines.
-
-**Expected Results:**
-
-* Step 3 shows one line for `<page product>`.
-* That line's quantity is 3 = 2 + 1.
+* Step 1 asks for no sign-in; the controls read Adding… while it is pending, UI matching store-product-page-screens-product-detail--add-quantity-pending-then-drawer-opens; then the drawer opens with `<page product>` at 2, the page's quantity resets, and the total includes it.
+* Step 2: one line for `<page product>`, at 3.
 
 ---
 
 ## cross-sell#rail: Rail
 
 <!-- trace:case id=g10.store-product-page.TC-19g rev=1 -->
-### g10.store-product-page.US4-TC1: The rail shows picks first, then similar cards, up to six
+### g10.store-product-page.TC11: The rail shows picks first, then similar cards, up to six
 
 Runs once per row of **Test data**.
 
@@ -259,37 +202,33 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** acceptance, regression
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** cross-sell#rail
 
 **Pre-conditions:**
 
-* `<page product>` has `<picks>`, by the recipe "Choose picks on a staging-shop card".
-* At least 6 other cards for sale share `<page product>`'s world.
+* `<page product>` has the row's picks, by the recipe "Choose picks on a staging-shop card"; at least 6 other cards for sale share its world.
 
 **Test data:**
 
-| Partition | `<picks>` | `<expected rail>` |
-| --- | --- | --- |
-| Some picks | 2 picks, in a known order. | The 2 picks in order, then 4 similar cards. |
-| Many picks | 8 picks, in a known order. | The first 6 picks in order. |
+| Picks | Rail |
+| --- | --- |
+| 2, in a known order | the 2 picks in order, then 4 similar cards |
+| 8, in a known order | the first 6 picks in order |
 
 **Steps:**
 
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the rail under the card.
+1. Open `<page url>` and read the rail under the card.
 
 **Expected Results:**
 
-* Step 2 is headed You may also like.
-* Step 2 shows `<expected rail>`.
-* No rail card is `<page product>` itself.
-* Nothing names a rail card as chosen or similar.
+* Headed You may also like, holding the row's cards, UI matching store-cross-sell-blocks-storeproductrelatedrail--picks-and-similar.
+* `<page product>` is not in it, and nothing names a card as chosen or similar.
 
 <!-- trace:case id=g10.store-product-page.TC-6cv rev=1 -->
-### g10.store-product-page.US4-TC2: A rail card opens its own page and offers no cart
+### g10.store-product-page.TC12: A rail card opens its own page and offers no cart
 
 **Classification:**
 
@@ -300,7 +239,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** cross-sell#rail
 
 **Pre-conditions:**
@@ -309,73 +248,22 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to `/store/products/<page product handle>`.
-2. Inspect every rail card for a cart control.
-3. Click the card for `<rail product>`.
+1. Open `<page url>` and look for a cart control in the rail.
+2. Select `<rail product>`'s card.
 
 **Expected Results:**
 
-* Step 2 finds no cart control in the rail.
-* Step 3 opens `/store/products/<rail product handle>`.
+* Step 1 finds none.
+* Step 2 opens `/store/products/<rail product handle>`.
 
 ---
 
 ## Ungrouped
 
-### discounts#where-each-shows: Where Each Shows
-
-<!-- trace:case id=g10.store-product-page.TC-hp9 rev=1 -->
-#### g10.store-product-page.US1-TC3: The page strikes sales and names the shop's discounts
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** discounts#where-each-shows
-
-**Pre-conditions:**
-
-* `<page product>` is for sale at HKD880 (range: any price above HKD100).
-* The shop holds only `<shop discount>` for `<page product>`, saved at least 1 minute ago.
-
-**Test data:**
-
-| Partition | `<shop discount>` | `<expected price>` | `<expected strike>` | `<expected badge>` |
-| --- | --- | --- | --- | --- |
-| Sale price | Compare-at HKD1,000. | HKD880 | HKD1,000 struck | None |
-| Product cut, no minimum | 10% off this product. | HKD792 = HKD880 × 0.9 | HKD880 struck | Its title |
-| Order cut, no minimum | 10% off each item in the order. | HKD792 = HKD880 × 0.9 | HKD880 struck | Its title |
-| Product cut with a minimum | 10% off after buying 2 units. | HKD880 | None | Its title |
-| Order cut with a minimum | Spend HKD1,000, save HKD100. | HKD880 | None | Its title |
-| Fixed amount once across the order | HKD100 off the order. | HKD880 | None | Its title |
-| Buy X get Y | Buy 2, get 1 free. | HKD880 | None | Its title |
-| Sale and a product cut | Compare-at HKD1,000 and 10% off this product. | HKD792 = HKD880 × 0.9 | HKD1,000 struck | Its title |
-
-**Steps:**
-
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the price and the badges.
-
-**Expected Results:**
-
-* Step 2 shows `<expected price>`.
-* Step 2 matches `<expected strike>`.
-* Step 2's badges include `<expected badge>`.
-
----
-
 ### product-page: Product Details
 
 <!-- trace:case id=g10.store-product-page.TC-p02 rev=1 -->
-#### g10.store-product-page.US1-TC4: A sold-out product says so, keeps its price, cannot be added
+#### g10.store-product-page.TC3: A sold-out product says so, keeps its price, and cannot be added
 
 **Classification:**
 
@@ -386,7 +274,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** product-page
 
 **Pre-conditions:**
@@ -395,23 +283,57 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to `/store/products/<sold-out product handle>`.
-2. Read the card and its purchase controls.
-3. Try to add `<sold-out product>` to the cart.
-4. Open Cart from the site header.
+1. Open `/store/products/<sold-out product handle>` and read the card and its purchase controls.
+2. Try to add it, then open Cart from the header.
 
 **Expected Results:**
 
-* Step 2 says `<sold-out product>` is sold out.
-* Step 2 shows its price.
-* Step 4 shows no line for `<sold-out product>`.
+* Step 1: sold out, with its price, UI matching store-product-page-screens-product-detail--sold-out.
+* Step 2: the cart holds no line for it.
+
+#### g10.store-product-page.TC4: A shared link to a card previews with its first picture
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** product-page
+
+**Pre-conditions:**
+
+* customer can paste a link into a chat app that shows link previews.
+
+**Test data:**
+
+| Card | Preview |
+| --- | --- |
+| pictured | the wide preview, with the card's first picture fitted whole and padded white |
+| with no picture in the catalogue | the small preview, with no picture |
+
+**Steps:**
+
+1. Paste the row's card's page address into the chat and read its preview.
+
+**Expected Results:**
+
+* The row's preview, naming the card.
 
 ---
 
 ### product-page#unknown-product-address: Unknown product address
 
-<!-- trace:case id=g10.store-product-page.TC-48a rev=1 -->
-#### g10.store-product-page.US1-TC5: An address that is not a card answers 404
+<!-- trace:case id=g10.store-product-page.TC-48a rev=2 -->
+#### g10.store-product-page.TC5: An address that is no card shows the store's own not-found state
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -422,188 +344,151 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** product-page#unknown-product-address
 
 **Pre-conditions:**
 
-* No product in the catalogue has the handle `<unknown handle>`.
+* No card has the handle `no-such-card-<today's date>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `unknown handle` | `no-such-card-<today's date>`. |
+| Address | Shown | Its action |
+| --- | --- | --- |
+| `/store/products/no-such-card-<today's date>` | the store's not-found state inside the store's frame, in the page's language, UI matching store-product-page-screens-product-detail--unknown-product-address | Browse the store opens the product listing in the same tab |
+| `/no-such-page-<today's date>`, outside any owned surface | the site's not-found page | Home |
 
 **Steps:**
 
-1. Navigate to `/store/products/<unknown handle>`.
-2. Inspect the document response in browser developer tools.
-3. Read the page.
+1. Open the row's address.
+2. Select the row's action.
 
 **Expected Results:**
 
-* Step 2's status is 404.
-* Step 3 shows the site's not-found page.
+* Step 1: the row's page. Step 2: the row's action works.
 
 ---
 
 ### product-page#buy: Buy
 
 <!-- trace:case id=g10.store-product-page.TC-xf6 rev=1 -->
-#### g10.store-product-page.US2-TC3: A quantity past the shop's stock is taken, then filled short
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** product-page#buy
-
-**Pre-conditions:**
-
-* customer(signed out) is on `/store/products/<short product handle>`, with an empty cart.
-* `<short product>` has `<stock>` for sale.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `stock` | 2 (fixed: one fewer than the ask). |
-| `ask` | 3 (fixed: `<stock>` + 1). |
-
-**Steps:**
-
-1. Set the quantity to `<ask>`.
-2. Click Add to cart.
-3. Wait for the drawer's read to finish.
-4. Read the line for `<short product>`.
-
-**Expected Results:**
-
-* Step 1 accepts `<ask>`, with no cap or stock message.
-* Step 4 shows `<stock>`.
-* Step 4 says the store changed the line.
-
-<!-- trace:case id=g10.store-product-page.TC-fft rev=1 -->
-#### g10.store-product-page.US2-TC4: A member's add writes the store-kept cart
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** product-page#buy
-
-**Pre-conditions:**
-
-* customer(signed-in member) is on `/store/products/<page product handle>`, with an empty cart.
-
-**Steps:**
-
-1. Click Add to cart.
-2. Sign in as the same member in another browser.
-3. Open Cart from the site header there.
-
-**Expected Results:**
-
-* Step 3 lists `<page product>` at quantity 1.
-
----
-
-### cross-sell#picks: Picks
-
-<!-- trace:case id=g10.store-product-page.TC-psw rev=1 -->
-#### g10.store-product-page.US4-TC3: Sold-out picks stay and open; sold-out similar cards are left out
+#### g10.store-product-page.TC7: A quantity past the shop's stock is taken, then filled short in the cart
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** cross-sell#picks
+* **Testability:** manual
+* **Trace:** product-page#buy
 
 **Pre-conditions:**
 
-* `<page product>` is sold out, by the recipe "Sell a card out".
-* `<sold-out pick>` is one of its picks and sold out.
-* `<sold-out similar>` shares its world, has no pick link and is sold out.
+* customer(signed out) is on `/store/products/<short product handle>`, with an empty cart; `<short product>` has 2 for sale.
 
 **Steps:**
 
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the rail.
-3. Click the card for `<sold-out pick>`.
+1. Set the quantity to 3, one more than the stock, and select Add to cart.
+2. Wait for the drawer, then read the line.
 
 **Expected Results:**
 
-* Step 2 shows a rail under the sold-out card.
-* Step 2 shows `<sold-out pick>`, saying it is sold out.
-* Step 2 leaves out `<sold-out similar>`.
-* Step 3 opens `/store/products/<sold-out pick handle>`.
+* Step 1 takes 3, with no cap or stock message, UI matching store-product-page-blocks-storeproductpurchasepanel--quantity-beyond-browse-count.
+* Step 2: the line holds 2, and says the store changed it.
 
-<!-- trace:case id=g10.store-product-page.TC-ait rev=1 -->
-#### g10.store-product-page.US4-TC6: A pick changed in Shopify reaches the rail within a minute
+<!-- trace:case id=g10.store-product-page.TC-fft rev=2 -->
+#### g10.store-product-page.TC8: An add reaches the member's own cart
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** minor
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** cross-sell#picks
+* **Testability:** manual
+* **Trace:** product-page#buy
 
 **Pre-conditions:**
 
-* `<page product>` has picks `<pick A>` and `<pick B>`, in that order.
-* admin is in the shop's admin.
+* customer, a member with an empty cart, is on `<page url>` as the row says.
 
 **Test data:**
 
-| Partition | `<pick change>` | `<expected picks>` |
-| --- | --- | --- |
-| Reorder | Put `<pick B>` before `<pick A>`. | `<pick B>`, then `<pick A>`. |
-| Pick deleted | Delete `<pick B>` from the catalogue. | `<pick A>` alone. |
-| Picks unreadable | Make the card's picks unreadable to the store. | No picks; similar cards fill the rail. |
+| Adds while | Then |
+| --- | --- |
+| signed in | signs in as the same member in another browser |
+| signed out | signs in as the member in this browser |
 
 **Steps:**
 
-1. Make `<pick change>` and save.
-2. Wait 60 seconds past the save.
-3. Navigate to `/store/products/<page product handle>`.
-4. Read the rail.
+1. Select Add to cart.
+2. Do the row's step, then open Cart from the header.
 
 **Expected Results:**
 
-* Step 4 starts with `<expected picks>`.
+* The cart lists `<page product>` at 1.
+
+---
+
+### discounts#where-each-shows: Where Each Shows
+
+<!-- trace:case id=g10.store-product-page.TC-hp9 rev=1 -->
+#### g10.store-product-page.TC10: The page strikes sales and names the shop's discounts
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** discounts#where-each-shows
+
+**Pre-conditions:**
+
+* `<page product>` is for sale at HKD880 (any price above HKD100); the shop holds only the row's discount for it, saved at least a minute ago.
+
+**Test data:**
+
+| Discount | Price | Struck | Badge |
+| --- | --- | --- | --- |
+| compare-at HKD1,000 | HKD880 | HKD1,000 | none |
+| 10% off this product | HKD792 = HKD880 × 0.9 | HKD880 | its title |
+| 10% off each item in the order | HKD792 = HKD880 × 0.9 | HKD880 | its title |
+| 10% off after buying 2 units | HKD880 | none | its title |
+| spend HKD1,000, save HKD100 | HKD880 | none | its title |
+| HKD100 off the order | HKD880 | none | its title |
+| buy 2, get 1 free | HKD880 | none | its title |
+| compare-at HKD1,000 and 10% off this product | HKD792 = HKD880 × 0.9 | HKD1,000 | its title |
+
+**Steps:**
+
+1. Open `<page url>` and read the price and badges.
+
+**Expected Results:**
+
+* The row's price, strike and badge.
 
 ---
 
 ### cross-sell#rail: Rail
 
 <!-- trace:case id=g10.store-product-page.TC-ygo rev=1 -->
-#### g10.store-product-page.US4-TC4: No rail and no empty space when nothing can show
+#### g10.store-product-page.TC13: When nothing can show, there is no rail and no space for one
 
 Runs once per row of **Test data**.
 
@@ -616,33 +501,31 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** manual
 * **Trace:** cross-sell#rail
 
 **Pre-conditions:**
 
-* `<page product>` is in the state `<rail state>` describes.
+* `<page product>` is in the row's state.
 
 **Test data:**
 
-| Partition | `<rail state>` |
-| --- | --- |
-| Nothing to show | No picks, and no other card shares its world, language or type, by the recipe "A card sharing nothing". |
-| Switched off | 2 picks; the rail is switched off for this brand and environment. |
-| Catalogue copy not to hand | 2 picks; the store's copy of the catalogue cannot be read. |
+| State |
+| --- |
+| no picks, and no other card shares its world, language or type, by the recipe "A card sharing nothing" |
+| 2 picks, and the rail switched off for this brand and environment |
+| 2 picks, and the store's copy of the catalogue cannot be read |
 
 **Steps:**
 
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the area under the card.
+1. Open `<page url>` and read the area under the card.
 
 **Expected Results:**
 
-* Step 2 shows no rail and no empty space for one.
-* The card shows whole.
+* No rail and no empty space for one; the card shows whole.
 
-<!-- trace:case id=g10.store-product-page.TC-qur rev=1 -->
-#### g10.store-product-page.US4-TC7: The rail is in the response and the card does not move
+<!-- trace:case id=g10.store-product-page.TC-qur rev=2 -->
+#### g10.store-product-page.TC14: The rail arrives with the card, and the card does not move
 
 **Classification:**
 
@@ -650,31 +533,28 @@ Runs once per row of **Test data**.
 * **Priority:** low
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** manual
 * **Trace:** cross-sell#rail
 
 **Pre-conditions:**
 
 * `<page product>` shows a rail.
-* customer uses a browser with page JavaScript disabled.
 
 **Steps:**
 
-1. Navigate to `/store/products/<page product handle>`.
-2. Inspect the document response in browser developer tools.
-3. Enable JavaScript and reload, recording layout shifts.
+1. With page scripts off, open `<page url>`.
+2. Turn scripts on and reload, watching the card as the page loads.
 
 **Expected Results:**
 
-* Step 2's response HTML holds the rail's cards.
-* Step 3 shows no placeholder where the rail goes.
-* Step 3 records no shift of the card.
+* Step 1 shows the rail's cards.
+* Step 2 shows no placeholder where the rail goes, and the card does not move.
 
 <!-- trace:case id=g10.store-product-page.TC-xb8 rev=1 -->
-#### g10.store-product-page.US4-TC8: On a narrow screen the rail is one row that scrolls
+#### g10.store-product-page.TC15: On a narrow screen the rail is one row that scrolls
 
 **Classification:**
 
@@ -682,60 +562,151 @@ Runs once per row of **Test data**.
 * **Priority:** low
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** compatibility
+* **Type:** usability
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** cross-sell#rail
 
 **Pre-conditions:**
 
-* `<page product>` shows a rail of 6 cards.
-* customer uses a browser emulating a phone.
+* `<page product>` shows a rail of 6 cards; customer uses a browser 375px wide.
 
 **Steps:**
 
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the rail.
-3. Scroll the rail sideways.
+1. Open `<page url>` and read the rail.
+2. Scroll the rail sideways.
 
 **Expected Results:**
 
-* Step 2 shows one row, part of the next card showing.
-* Step 3 reaches the sixth card.
+* Step 1: one row, part of the next card showing, UI matching store-cross-sell-blocks-storeproductrelatedrail--narrow.
+* Step 2 reaches the sixth card.
+
+#### g10.store-product-page.TC17: A sold-out similar card is left out of the rail
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cross-sell#rail
+
+**Pre-conditions:**
+
+* `<sold-out similar>` shares `<page product>`'s world, is no pick of it, and is sold out.
+
+**Steps:**
+
+1. Open `<page url>` and read the rail.
+
+**Expected Results:**
+
+* `<sold-out similar>` is not in it.
+
+---
+
+### cross-sell#picks: Picks
+
+<!-- trace:case id=g10.store-product-page.TC-psw rev=2 -->
+#### g10.store-product-page.TC16: A sold-out pick stays in the rail, says so and still opens
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cross-sell#picks
+
+**Pre-conditions:**
+
+* `<page product>` is sold out, by the recipe "Sell a card out"; `<sold-out pick>`, one of its picks, is sold out too.
+
+**Steps:**
+
+1. Open `<page url>` and read the rail.
+2. Select `<sold-out pick>`'s card.
+
+**Expected Results:**
+
+* Step 1: a rail under the sold-out card, holding `<sold-out pick>` marked sold out, UI matching store-cross-sell-blocks-storeproductrelatedrail--sold-out-pick-opens.
+* Step 2 opens `/store/products/<sold-out pick handle>`.
+
+<!-- trace:case id=g10.store-product-page.TC-ait rev=1 -->
+#### g10.store-product-page.TC18: A pick changed in Shopify reaches the rail within a minute
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cross-sell#picks
+
+**Pre-conditions:**
+
+* `<page product>` has picks `<pick A>` and `<pick B>`, in that order; admin is in the shop's admin.
+
+**Test data:**
+
+| Change | Rail starts with |
+| --- | --- |
+| put `<pick B>` before `<pick A>` | `<pick B>`, then `<pick A>` |
+| delete `<pick B>` from the catalogue | `<pick A>` alone |
+| make the card's picks unreadable to the store | no picks; similar cards fill it |
+
+**Steps:**
+
+1. Make the row's change and save.
+2. Wait 60 seconds, then open `<page url>` and read the rail.
+
+**Expected Results:**
+
+* The rail starts as the row says.
 
 ---
 
 ### cross-sell#similar-cards: Similar Cards
 
 <!-- trace:case id=g10.store-product-page.TC-2dx rev=1 -->
-#### g10.store-product-page.US4-TC5: Similar cards weigh world, then language, then type
+#### g10.store-product-page.TC19: Similar cards weigh the world, then the language, then the type
 
 **Classification:**
 
 * **Severity:** minor
-* **Priority:** low
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** manual
 * **Trace:** cross-sell#similar-cards
 
 **Pre-conditions:**
 
 * `<page product>` has no picks, by the recipe "A card with chosen facts, on the staging shop".
-* The catalogue holds `<same world>`, `<same language>` and `<same type>`, each sharing only that fact.
-* `<newer same world>` shares only the world and is newer than `<same world>`.
+* The catalogue holds `<same world>`, `<same language>` and `<same type>`, each sharing only that fact, and `<newer same world>`, sharing only the world and newer than `<same world>`.
 
 **Steps:**
 
-1. Navigate to `/store/products/<page product handle>`.
-2. Read the rail's cards in order.
+1. Open `<page url>` and read the rail's cards in order.
 
 **Expected Results:**
 
-* `<newer same world>` lists before `<same world>`.
-* `<same world>` lists before `<same language>`.
-* `<same language>` lists before `<same type>`.
+* `<newer same world>`, then `<same world>`, then `<same language>`, then `<same type>`.
