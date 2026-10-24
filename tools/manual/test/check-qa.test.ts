@@ -424,6 +424,27 @@ describe("a suite no page shows", () => {
   });
 });
 
+/** A capability nobody walks owes no suite of its own: the suites of the
+ * capabilities that reach it walk its rules (tcs-rules r7). */
+describe("a capability with no suite beside it", () => {
+  it("asks for one when it holds journeys", async () => {
+    const root = store({ journeys: journeysText([journey("alpha-US-01")]) });
+    expect(lines(await check(root), "derived")).toEqual([
+      `${CASES_FILE} — missing: \`demo-product/alpha\` holds journeys, so write the suite with \`/spec-to-tcs feature demo-product/alpha\``,
+    ]);
+  });
+
+  it("asks for none when nobody walks it", async () => {
+    const root = store({
+      spec: specText({
+        scenarios: [["alpha-SC-01", "it does the thing", "Doing things"]],
+      }),
+      journeys: nobodyWalksText,
+    });
+    expect(lines(await check(root), "derived")).toEqual([]);
+  });
+});
+
 /** A scenario names the anchor it serves; one resolving to neither a journey
  * nor a feature set group is a scenario standing under nothing. */
 describe("a scenario serving an anchor the spec does not offer", () => {

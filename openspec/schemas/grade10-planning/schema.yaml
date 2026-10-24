@@ -346,10 +346,12 @@ artifacts:
       capability's journeys reach it instead>`.
 
       This is a **routing declaration, not an exemption**: the capability's
-      anchors are its `## Feature set` root groups rather than its journeys, and
-      it still gets a suite. `Walked by: nobody` is not `Tested by: nobody` - a
-      cross-cutting policy is exactly where a boundary, precision or timezone
-      miss costs most, and exempting one from test design is how those ship.
+      anchors are its `## Feature set` root groups rather than its journeys,
+      and it owes no suite of its own - the suites of the capabilities its line
+      names walk its rules on their screens. `Walked by: nobody` is not
+      `Tested by: nobody`: a cross-cutting policy is exactly where a boundary,
+      precision or timezone miss costs most, so the boundary it states rides
+      as a row on the case that shows it.
 
       A tool only the product's makers use - a test door, a docs reference, a
       design-sync rail, the planning rails - writes `**Walked by:** makers
@@ -962,9 +964,9 @@ artifacts:
       pass writes it, folded at archive; `platform-tcs.md` is a smoke pass
       beside the durable specs only.
 
-      A capability whose journeys file says `**Walked by:** nobody` still gets
-      a suite, anchored on its feature set. One that says `**Walked by:**
-      makers only` gets none.
+      A capability whose journeys file says `**Walked by:** nobody` gets no
+      suite of its own; the suites of the capabilities that reach it walk its
+      rules. One that says `**Walked by:** makers only` gets none either.
 
       `pnpm run tcs:validate` checks every suite in the store, and CI runs it
       on every push.

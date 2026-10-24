@@ -103,24 +103,20 @@ function suiteOf(spec) {
   };
 }
 
-/** RULE `derived`: a capability with anchors pairs them with a suite.
- * `**Walked by:** nobody` is no longer an exemption — it routes the anchors to
- * the feature set instead of the journeys, and the capability still carries a
- * suite. Money amounts, dates and times and localization are where a boundary
- * or precision miss costs most, and they were exactly what the old exemption
- * excluded from test design. */
+/** RULE `derived`: a capability with journeys pairs them with a suite.
+ * One that says `**Walked by:** nobody` owes none of its own: the suites of
+ * the capabilities that reach it walk its rules on their own screens, a
+ * boundary it states riding as a row on the case that shows it (tcs-rules
+ * r7). */
 function checkDerived(ctx, spec, dir, present) {
   if (present || spec.journeysError) return;
   if (spec.journeys === undefined) return;
-  const anchors = anchorsOf(spec);
-  if (anchors.size === 0) return;
-  const how = spec.unwalked
-    ? "nobody walks it, so its anchors are its feature set groups"
-    : "it holds journeys";
+  if (spec.unwalked) return;
+  if (anchorsOf(spec).size === 0) return;
   ctx.add(
     "derived",
     `${dir}/feature-tcs.md`,
-    `missing: \`${spec.id}\` has anchors — ${how} — so write the suite with \`/spec-to-tcs feature ${spec.id}\``,
+    `missing: \`${spec.id}\` holds journeys, so write the suite with \`/spec-to-tcs feature ${spec.id}\``,
   );
 }
 

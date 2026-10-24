@@ -269,6 +269,11 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       1,
       "a suite beside a capability whose journeys say `**Walked by:** makers only` — a makers tool is no product feature and owes no test cases (tcs-rules r7); delete the suite",
     );
+  else if (level === "feature" && spec?.unwalked)
+    warn(
+      1,
+      "a suite beside a capability whose journeys say `**Walked by:** nobody` — it owes no suite of its own (tcs-rules r7); fold its cases into the suites of the capabilities that reach it at its next regeneration",
+    );
 
   // Walk references are intentionally checked separately from case parsing.
   // A compact ref resolves in this suite. A composed walk may use a full
