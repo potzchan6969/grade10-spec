@@ -121,6 +121,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | nothing | your maximum raised to 560, caused no bid; then your bid at 280; then your maximum set at 420, below the bid though the higher amount |
 | a maximum of 700 | customer B's bid at 585 marking You were outbid, as one step; then your maximum raised to 560; then your bid at 280; then your maximum set at 420 |
+| a maximum of 500 | your automatic response at 525 and customer B's bid at 500, as one step, both newer than the raise and so above it though lower; then your maximum raised to 560; then your bid at 280; then your maximum set at 420 |
 
 **Steps:**
 
@@ -173,4 +174,4 @@ Runs once per row of **Test data**.
 
 **Contradictions between the readings** - none.
 
-**Product page** - `docs/prds/products/grade10-site/auction/bidding.md`, the Bidding History line, is silent on the raise that causes no bid. Task 1.1 keeps that line in step; it owes one clause, owned by the product manager.
+**Product page** - `docs/prds/products/grade10-site/auction/bidding.md`, the Bidding History line, carries the raise clause: a raise that causes no bid reads by its time, newer above older.
