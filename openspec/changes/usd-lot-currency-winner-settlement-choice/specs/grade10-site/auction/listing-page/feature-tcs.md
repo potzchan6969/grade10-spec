@@ -737,9 +737,11 @@ answer with the site's not-found surface,
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 The catalogue publishes no lot for <a lot address naming no published lot>.
@@ -766,9 +768,11 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 The catalogue publishes <a published lot>.
@@ -2718,9 +2722,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-15
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 

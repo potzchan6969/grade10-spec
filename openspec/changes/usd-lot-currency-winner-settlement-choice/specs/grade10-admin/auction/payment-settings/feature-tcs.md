@@ -20,9 +20,11 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-payment-settings-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/payment-settings.spec.ts`
 
 **Pre-conditions:**
 

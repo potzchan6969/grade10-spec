@@ -2630,9 +2630,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-internal-bid-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/internal-bidders.spec.ts`
 
 **Pre-conditions:**
 

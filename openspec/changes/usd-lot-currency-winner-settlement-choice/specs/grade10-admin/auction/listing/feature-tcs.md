@@ -64,9 +64,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`, `grade10:apps/frontend/grade10/e2e/tests/auction/auction/opening-price.spec.ts`
 
 **Pre-conditions:**
 
@@ -119,9 +121,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -159,9 +163,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -198,9 +204,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression, release
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`, `grade10:apps/frontend/grade10/e2e/tests/auction/auction/opening-price.spec.ts`
 
 **Pre-conditions:**
 
@@ -233,9 +241,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
