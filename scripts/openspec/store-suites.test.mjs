@@ -185,9 +185,94 @@ test("a walk of one case, a catch-all or strung setups warns", () => {
   });
   const { text } = out(root);
   assert.match(text, /covers [01] cases? — a walk saves setup/);
-  assert.match(text, /strings 2 separate setups together/);
+  assert.match(text, /breaks its setup or data into 2 step-range blocks/);
   assert.match(text, /is a catch-all or a continuation/);
   assert.match(text, /UI matching demo-alpha--nothing-like-it` names no story/);
+});
+
+test("a walk cut into step ranges is refused under the current rules", () => {
+  const base = "openspec/specs/demo/alpha";
+  const suite = (styled) =>
+    [
+      "# demo/alpha Test Cases",
+      "",
+      "**Status:** pending-review · 0/2",
+      `**Drafts styled:** 2026-10-23, tcs-rules ${styled}`,
+      "",
+      "## Walk 1: Do the thing twice",
+      "",
+      "Starting state:",
+      "",
+      "- customer is on the page.",
+      "",
+      "Steps 2 to 2 data:",
+      "",
+      "| Field | Value |",
+      "| --- | --- |",
+      "| thing | One |",
+      "",
+      "### Route",
+      "",
+      "1. Open the page.",
+      "   - It shows. `demo-alpha-US1-TC1-1`",
+      "2. Open it again.",
+      "   - It shows again. `demo-alpha-US1-TC2-1`",
+      "",
+      "## demo-alpha-US1: Collector does the thing",
+      "",
+      "**As a** collector,",
+      "**I want** the thing,",
+      "**so that** it is done.",
+      "",
+      "### demo-alpha-US1-TC1-1: The thing happens",
+      "",
+      ...PROPS("demo-alpha-US-01"),
+      "### demo-alpha-US1-TC2-1: The thing happens again",
+      "",
+      ...PROPS("demo-alpha-US-01"),
+    ].join("\n");
+  const rules = {
+    "docs/governance/specs-to-test-cases.md": "---\ntcs_rules_rev: 7\n---\n",
+  };
+  const current = out(
+    store({
+      ...rules,
+      ...specFiles(base),
+      [`${base}/feature-tcs.md`]: suite("r7"),
+    }),
+  );
+  // The report prints errors before warnings, each under its count.
+  const errorsOf = (text) =>
+    /\d+ errors?\n([\s\S]*?)(?:\n\d+ warnings?\n|$)/.exec(text)?.[1] ?? "";
+  assert.match(
+    errorsOf(current.text),
+    /breaks its setup or data into 1 step-range block/,
+  );
+  assert.notEqual(current.status, 0, current.text);
+  const older = out(
+    store({
+      ...rules,
+      ...specFiles(base),
+      [`${base}/feature-tcs.md`]: suite("r5"),
+    }),
+  );
+  assert.match(older.text, /breaks its setup or data into 1 step-range block/);
+  assert.doesNotMatch(errorsOf(older.text), /step-range/);
+  // A change's suite is held to it when acceptance validates its fold.
+  const change = "openspec/changes/demo-change/specs/demo/alpha";
+  const inChange = out(
+    store({
+      ...rules,
+      ...specFiles(base),
+      ...specFiles(change),
+      [`${change}/feature-tcs.md`]: suite("r7"),
+    }),
+  );
+  assert.match(
+    inChange.text,
+    /breaks its setup or data into 1 step-range block/,
+  );
+  assert.doesNotMatch(errorsOf(inChange.text), /step-range/);
 });
 
 test("a suite beside a makers-only capability is refused", () => {

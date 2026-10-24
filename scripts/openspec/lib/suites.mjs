@@ -573,6 +573,9 @@ const WALK_CASE_REFERENCE =
 const DISPLAY_CASE_REFERENCE =
   /(?:^|[`\s])([a-z0-9][\w.-]*\.US-?(\d+)-TC-?(\d+))(?=[`\s.,;)]|$)/gi;
 
+const STEP_RANGE_BLOCK =
+  /^(?:\*\*)?(?:(?:setup|data|test data|starting state)\s+(?:for\s+)?)?steps?\s+\d+(?:\s*(?:[–-]|to)\s*\d+)?(?:\s+(?:setup|data|test data|starting state))?\s*:(?:\*\*)?$/i;
+
 /** Read only the executable references in `## Walk` sections. Walk prose is
  * deliberately not interpreted here: the validator can prove that a route
  * points at an existing case and local case reference, including a full stable
@@ -603,9 +606,9 @@ export function parseWalks(text) {
     }
     if (!current) continue;
     if (/^\d+\.\s/.test(line)) current.steps += 1;
-    // `**Steps 1–3 setup:**` - a second starting state inside the walk.
-    if (/^\*\*Steps?\s+\d+(?:\s*[–-]\s*\d+)?\s+(?:setup|data)\b/i.test(line))
-      current.setupBlocks += 1;
+    // `**Steps 1–3 setup:**`, `Steps 4 to 8 data:`, `**Setup for steps 9–11:**`
+    // - a label that cuts the walk's starting state or data by step range.
+    if (STEP_RANGE_BLOCK.test(line.trim())) current.setupBlocks += 1;
     DISPLAY_CASE_REFERENCE.lastIndex = 0;
     for (const match of line.matchAll(DISPLAY_CASE_REFERENCE)) {
       const fullId = match[1].toLowerCase();

@@ -307,8 +307,16 @@ function checkSuite(root, filePath, rulesRev, allCases) {
       }
       pendingMarker = null;
     }
+    // A durable suite whose drafts were written under the current rules owes
+    // the current walk shape; an older one is fixed at its next regeneration.
+    // A change's suite is held to it when acceptance validates its fold.
+    const current =
+      !rel.split(sep).join("/").startsWith("openspec/changes/") &&
+      suite.draftsStyled &&
+      rulesRev !== null &&
+      revCmp(suite.draftsStyled.rev, rulesRev) >= 0;
     for (const walk of parseWalks(text)) {
-      warnWalkShape(walk, warn);
+      warnWalkShape(walk, warn, current ? err : warn);
       for (const ref of walk.refs) {
         const localCase =
           ref.caseId &&
@@ -1148,7 +1156,9 @@ function warnUngroupedNewCases(root, rel, text, suite, warn) {
   }
 }
 
-function warnWalkShape(walk, warn) {
+/** `refuse` is `err` for a suite written under the current rules, so a new
+ *  walk cannot break its setup or data into step ranges again. */
+function warnWalkShape(walk, warn, refuse) {
   const catchAll =
     /additional fixture checks|execute every|[—-]\s*phase\s+\d+|and adjacent checks/i;
   const cases = new Set(walk.refs.map((ref) => ref.caseId ?? ref.id));
@@ -1162,10 +1172,10 @@ function warnWalkShape(walk, warn) {
       walk.line,
       `walk \`${walk.title}\` runs ${walk.steps} steps — split it at a new starting state so each walk stays within about 25`,
     );
-  if (walk.setupBlocks > 1)
-    warn(
+  if (walk.setupBlocks > 0)
+    refuse(
       walk.line,
-      `walk \`${walk.title}\` strings ${walk.setupBlocks} separate setups together — one walk has one starting state; start another walk for each setup`,
+      `walk \`${walk.title}\` breaks its setup or data into ${walk.setupBlocks} step-range ${walk.setupBlocks === 1 ? "block" : "blocks"} (\`**Steps 1–3 setup:**\`, \`**Steps 1–3 data:**\`) — one walk has one starting state and one shared test data table; name a branch's own record there, or start another walk`,
     );
   if (catchAll.test(walk.title))
     warn(

@@ -168,7 +168,7 @@ A walk is a route for a manual tester: it orders existing cases so one person re
 - **A walk invents nothing** - every observation on a route belongs to a referenced case. A higher-level walk may add a continuity check, such as the same listing id crossing from admin to site, with no case id and no result recorded in the suite
 - **Scope follows the file** - a feature walk stays in its capability, a domain walk in its domain, and so on. A route crossing the file's scope moves to the parent suite
 - **Referenced once, printed once** - a case is defined once, under its journey; a higher-level walk references a lower case without copying it. A case no walk at its level references sits under `## Ungrouped`. Deprecated cases come last in their group
-- **Checked** - `pnpm run tcs:validate` requires every walk reference to resolve to one case definition, and that a feature walk references no other suite. It warns on a walk of fewer than 2 cases, more than 27 steps, more than one starting state, or a catch-all title
+- **Checked** - `pnpm run tcs:validate` requires every walk reference to resolve to one case definition, and that a feature walk references no other suite. It refuses a walk whose starting state or test data is cut into step ranges, such as `Steps 1–3 setup:` or `Steps 4–8 data:`, in a durable suite whose drafts are styled to the current revision, and warns on one in an older suite or a change's; a change's walk is held to it when acceptance validates its fold. It warns on a walk of fewer than 2 cases, more than 27 steps, or a catch-all title
 
 ## Who the Actor Is
 
