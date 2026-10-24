@@ -17,8 +17,8 @@ and nothing else.
 | Badge | Reads as |
 | --- | --- |
 | Processing | Open and not yet fulfilled, or a combination nothing else claims |
-| Shipped | Fulfilled in part, or fulfilled and not yet paid in full |
-| Completed | Every item fulfilled and paid in full - not carrier-confirmed delivery |
+| Shipped | Fulfilled in part, fulfilled and not yet paid in full, or a parcel still with its carrier |
+| Completed | Every item fulfilled, paid in full, and every parcel delivered or picked up |
 | Canceled | The order was canceled, or its payment voided |
 | Refunded | Money has moved back to the collector, and the order is not on hold or scheduled |
 
@@ -27,6 +27,10 @@ and nothing else.
   or Completed
 - **Never blank** - every combination Shopify can report reads as one of the
   five
+- **Delivered** - a parcel arrives when its carrier says delivered or picked
+  up; one no carrier held - a till sale, a hand delivery, a fulfilment marked
+  done with no tracking - arrives as it is handed over. A canceled parcel or
+  voided label counts for nothing
 - **Till sales** - a sale at the counter reads through the same rules as a
   web order; where an order was sold never decides its badge
 - **Orders covered** - orders Shopify holds. Your Orders lists a web
@@ -79,8 +83,7 @@ facts, gives every surface the same answer.
 
 **Not in scope.** A pickup badge, until Shopify data tells a pickup order
 apart. Notifications: the notification centre is a later reader of this rule.
-Badges beyond the five, and thresholds a merchant sets. Delivery confirmed by
-a carrier.
+Badges beyond the five, and thresholds a merchant sets.
 
 **Measurement.**
 
@@ -92,7 +95,7 @@ a carrier.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Completed | Decided | Every item fulfilled and paid in full, which is what a collector reads as done. Not archived: the shop does not archive orders, so a rule waiting on it would never show Completed. Not delivery: the Store holds no carrier confirmation. | Product |
+| Completed | Decided | Every item fulfilled, paid in full and delivered, which is what a collector reads as done. Not archived: the shop does not archive orders, so a rule waiting on it would never show Completed. Waits for delivery since 2026-10-24: Completed beside a parcel still travelling contradicted the delivery steps. A parcel no carrier tracks arrives as it is handed over, so till sales and untracked fulfilments still complete. | Product |
 | Pickup | Decided | No pickup badge this delivery. The shared pill keeps its pickup rung, since pickup is a confirmed later phase and removing the rung means adding it back. | Product |
 | Refund before fulfilment | Decided | Money going back is reported ahead of shipping progress. A held or scheduled order stays Processing, since it is still being worked on. | Product |
 | Returns | Decided | Whether items came back can choose a note, never the badge. The refund already moves the badge; the return only explains it. | Product |

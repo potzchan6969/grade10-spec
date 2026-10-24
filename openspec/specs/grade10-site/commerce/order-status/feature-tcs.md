@@ -12,8 +12,8 @@ way, finished, canceled, or refunded,
 **so that** I am never shown a blank status and never shown a status the surface
 invented for a combination nobody defined.
 
-<!-- trace:case id=g10.commerce-order-status.TC-oa5 rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC1-1: Each badge reads from the facts that define it
+<!-- trace:case id=g10.commerce-order-status.TC-oa5 rev=2 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
+### grade10-site-commerce-order-status-US1-TC1-2: Each badge reads from the facts that define it
 
 Runs once per row of **Test data**.
 
@@ -32,7 +32,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(owns `<order_1>`) is signed in on the staging storefront.
-* `<order_1>` is a web order in the staging shop's admin, set to the row's payment, fulfilment and cancellation state.
+* `<order_1>` is a web order in the staging shop's admin, set to the row's payment, fulfilment and cancellation state, fulfilled with no tracking number.
 
 **Test data:**
 
@@ -141,8 +141,8 @@ Runs once per row of **Test data**.
 * Step 2: the badge reads the row's Badge, not a pickup badge.
 * Step 4: the badge reads the row's Badge, not a pickup badge.
 
-<!-- trace:case id=g10.commerce-order-status.TC-ydn rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
-### grade10-site-commerce-order-status-US1-TC9-1: Carrier-reported delivery neither gives nor withholds Completed
+<!-- trace:case id=g10.commerce-order-status.TC-ydn rev=2 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3 -->
+### grade10-site-commerce-order-status-US1-TC9-2: Completed waits for the carrier to deliver
 
 Runs once per row of **Test data**.
 
@@ -168,8 +168,9 @@ Runs once per row of **Test data**.
 
 | Order state | Carrier status | Badge |
 | --- | --- | --- |
-| Paid in full, every item fulfilled | In transit | Completed |
-| Paid in full, every item fulfilled | Out for delivery | Completed |
+| Paid in full, every item fulfilled | In transit | Shipped |
+| Paid in full, every item fulfilled | Out for delivery | Shipped |
+| Paid in full, every item fulfilled | Delivered | Completed |
 | Paid in part, every item fulfilled | Delivered | Shipped |
 | Paid in full, one of two items fulfilled | Delivered | Shipped |
 

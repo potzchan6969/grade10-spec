@@ -16,7 +16,7 @@ the same answer from the same facts.
 - Secondary note
   - Confirmed combinations only: Emit a note identifier for a clarified edge case, never display copy.
 - Status meaning
-  - Conclusion, not delivery: Completed reports an order fulfilled and paid in full, not carrier confirmation.
+  - Delivered, then Completed: Completed waits until every parcel a carrier holds is delivered or picked up.
   - Pickup withheld: Do not emit a pickup badge while the data model cannot support it.
 - Surface consistency
   - One mapping: Every surface showing order status derives it here.
@@ -122,7 +122,7 @@ evaluating these rules in order and taking the first that matches:
 | 1 | Order state is `canceled` | `canceled` |
 | 2 | Payment state is `voided` | `canceled` |
 | 3 | Payment state is `refunded` or `partially_refunded`, **and** fulfilment state is neither `on_hold` nor `scheduled` | `refunded` |
-| 4 | Fulfilment state is `fulfilled` **and** payment state is `paid` | `completed` |
+| 4 | Fulfilment state is `fulfilled` **and** payment state is `paid` **and** every parcel arrived | `completed` |
 | 5 | Fulfilment state is `fulfilled` or `partially_fulfilled` | `shipped` |
 | 6 | Otherwise | `processing` |
 
@@ -171,11 +171,12 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `processing`
 - **AND** the badge is not `refunded`
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-r3l rev=2 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-r3l rev=3 -->
 #### Scenario: grade10-site-commerce-order-status-SC-06 - A fulfilled order paid in full reports Completed
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, and payment state is `paid`
+- **AND** every parcel arrived
 - **WHEN** its order status is resolved
 - **THEN** the badge is `completed`
 - **AND** the badge is not `shipped`
@@ -329,32 +330,38 @@ one language or one brand.
 - **THEN** the badge is `processing`
 - **AND** the note identifier is `payment-expired`
 
-### Requirement: Completed reports a concluded order, not a delivery
+### Requirement: Completed waits for the parcels to arrive
 
-Completed says the order is concluded; no badge says a parcel arrived.
+Completed says everything reached the collector; Shipped covers the time in
+between.
 
-**Conclusion, not delivery** - The `completed` badge SHALL mean that every
-item of an order is fulfilled and the order is paid in full. It SHALL NOT be
-presented as, or derived from, carrier-confirmed delivery or Shopify archiving
-the order, and resolving it SHALL NOT require a delivery or archive fact.
+**Delivered, then Completed** - Rule 4's parcels SHALL be the order's
+fulfilments still standing: a fulfilment whose status is `cancelled`,
+`error` or `failure`, and a parcel whose display status is `canceled` or
+`label_voided`, SHALL count for nothing. A parcel SHALL have arrived when its
+display status is `delivered` or `picked_up`, or when it names no tracking
+number and no tracking link, since no carrier held it. A fulfilled order with
+no parcel recorded SHALL count as arrived.
 
-**No delivery claim** - No badge SHALL assert that a shipment reached the
-collector.
+**One delivered rule** - Every surface that says whether an order was
+delivered - the delivery steps, the badge, and the operator's order list -
+SHALL read this one rule.
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-hv0 rev=1 -->
-#### Scenario: grade10-site-commerce-order-status-SC-12 - Completed does not assert delivery
+<!-- trace:scenario id=g10.commerce-order-status.SC-hv0 rev=2 -->
+#### Scenario: grade10-site-commerce-order-status-SC-12 - A parcel still travelling holds Completed back
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
-- **GIVEN** an order that resolves to the `completed` badge
-- **WHEN** the order has no carrier delivery confirmation
-- **THEN** the badge still resolves to `completed`
-- **AND** no surface derives a delivered state from that badge
+- **GIVEN** an order whose fulfilment state is `fulfilled` and payment state is `paid`
+- **AND** a parcel a carrier tracks has not been delivered or picked up
+- **WHEN** its order status is resolved
+- **THEN** the badge is `shipped`
+- **AND** it becomes `completed` once every tracked parcel is delivered or picked up
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-5s3 rev=1 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-5s3 rev=2 -->
 #### Scenario: grade10-site-commerce-order-status-SC-31 - Archiving an order does not move the badge
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
-- **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, and payment state is `paid`
+- **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, and payment state is `paid`, and every parcel arrived
 - **AND** Shopify has archived the order
 - **WHEN** its order status is resolved
 - **THEN** the badge is `completed`
