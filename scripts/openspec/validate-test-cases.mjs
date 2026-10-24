@@ -263,6 +263,7 @@ function checkSuite(root, filePath, rulesRev, allCases) {
   const err = (line, msg) => record("error", rel, line, msg);
   const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
+  if (level === "feature") warnUngroupedNewCases(root, rel, text, suite, warn);
   if (level === "feature" && spec?.makersOnly)
     err(
       1,
@@ -1085,6 +1086,53 @@ for (const p of suites) {
 // tcs-rules r7: at least 2 cases, about 25 steps at most, one starting state
 // along one route, and never a catch-all. Warned, so a suite written before
 // the rule is fixed at its next regeneration rather than refused today.
+/** A change's new case on a journey the durable suite already holds live
+ *  cases for joins one of them, or its Reconciliation says why it stays new
+ *  (tcs-rules r7, "A change's new case is grouped before it folds"). Asked
+ *  only before acceptance: an accepted change's cases are already folded. A
+ *  warning, never a refusal - acceptance is a developer's step. */
+function warnUngroupedNewCases(root, rel, text, suite, warn) {
+  const at = /^openspec\/changes\/([^/]+)\/specs\/(.+\/feature-tcs\.md)$/.exec(
+    rel.split(sep).join("/"),
+  );
+  if (!at) return;
+  if (existsSync(join(root, "openspec", "changes", at[1], "acceptance.json")))
+    return;
+  const durablePath = join(root, "openspec", "specs", at[2]);
+  if (!existsSync(durablePath)) return;
+  const durable = parseSuite(readFileSync(durablePath, "utf8"));
+  const live = (tc) => tc.props.get("Status") !== "deprecated";
+  const ids = new Set();
+  const markers = new Set();
+  const liveJourneys = new Set();
+  for (const journey of durable.journeys)
+    for (const tc of journey.cases) {
+      ids.add(tc.id);
+      if (tc.markerId) markers.add(tc.markerId);
+      if (live(tc)) liveJourneys.add(journey.num);
+    }
+  const span = sectionSpan(text, "Reconciliation");
+  const kept = span
+    ? text
+        .split("\n")
+        .slice(span.from, span.until)
+        .filter((line) => /\*\*New, not an extension\*\*/.test(line))
+        .join("\n")
+    : "";
+  for (const journey of suite.journeys) {
+    if (!liveJourneys.has(journey.num)) continue;
+    for (const tc of journey.cases) {
+      if (!live(tc) || ids.has(tc.id)) continue;
+      if (tc.markerId && markers.has(tc.markerId)) continue;
+      if (kept.includes(tc.id)) continue;
+      warn(
+        tc.line,
+        `case \`${tc.id}\` is new on a journey whose durable suite already holds live cases — join it to one as a row or a revision, or say why not with \`- **New, not an extension** - ${tc.id} - <why>\` in \`## Reconciliation\``,
+      );
+    }
+  }
+}
+
 function warnWalkShape(walk, warn) {
   const catchAll =
     /additional fixture checks|execute every|[—-]\s*phase\s+\d+|and adjacent checks/i;

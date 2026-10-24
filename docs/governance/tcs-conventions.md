@@ -125,6 +125,19 @@ A walk exists to cut a tester's setup and running time. Its shape:
 - **A waiting point names its surface** - where the spec names none, mark it ❓
 - **No description** - setup, data and route only
 
+## Common Rules
+
+What a case may assume where the PRD and spec are silent: a published standard, or how comparable products handle it, named by at least two products or a recognised norm. An agent adds a line with its source and does not ask; people review the list over time. A PRD or spec line overrides a rule here. Past about 30 lines this section moves to its own file.
+
+| Rule | Source |
+| --- | --- |
+| An email address has one `@`, a domain containing a `.`, and at most 254 characters | RFC 5321 §4.5.3.1, RFC 5322 |
+| A required field left empty, or holding only spaces, is refused at the field | WCAG 3.3.1 |
+| Leading and trailing spaces in a typed email address are ignored | WHATWG HTML, `type=email` value sanitisation |
+| A date must exist on the calendar | ISO 8601 |
+| A number field refuses letters | WHATWG HTML, `type=number` |
+| After a successful submit, a field never keeps a value the submit made invalid - it is cleared or refreshed, as a bid field shows the new minimum. After a refused submit, what was typed stays | WCAG 3.3.1 and 3.3.3 for the refused submit; ❓ two comparable products for the successful one, QA to name |
+
 ## Setup Recipes
 
 How to reach a state a case needs, by hand, written once and named from pre-conditions. One `###` per recipe: the state it produces, the steps, and the environments it holds for.

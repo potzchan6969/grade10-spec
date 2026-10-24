@@ -126,6 +126,7 @@ A case has two coverage relationships, never collapsed into one.
 | What happened | `rev` | Status |
 | --- | --- | --- |
 | A `draft` is restyled or gains a row | unchanged | stays `draft` |
+| An `actual` case gains a row | bumped | back to `draft`, reviewed again |
 | A `manual` `actual` case is re-worded | unchanged | stays `actual` |
 | An `automated` `actual` case is re-worded | - | a behaviour change, or it does not happen |
 | What the case verifies changed | bumped | back to `draft`, reviewed again |
@@ -232,6 +233,7 @@ How each part reads is [`tcs-conventions.md`](tcs-conventions.md); the shape of 
 - **Positive first** - then refusals, empty and failure paths. A journey whose scenarios include refusals but whose cases are all positive is unfinished
 - **Clauses land** - GIVEN → pre-conditions or a test-data row; WHEN → a step; THEN and its ANDs → expected results
 - **Every case stands alone** - never relies on another case having run
+- **A Common Rule holds where the sources are silent** - a rule under `## Common Rules` in [`tcs-conventions.md`](tcs-conventions.md#common-rules), from a published standard or from how comparable products handle it, may be assumed with no PRD or spec line. It rides on a live case as a test-data row, is never raised, and is recorded `- **Assumed** - <rule> (Common Rules)` in `## Reconciliation`. A PRD or spec line overrides it; a product that disagrees with neither is a failure the tester raises
 - **Mechanism is yours, coverage is the spec's** - where the tester goes and what they select is the writer's; what must then be true is only what the anchors imply. A failure mode nobody stated is a gap, reported, not a case
 - **Executable without asking** - a tester who has never seen the product runs it to the end: every step names where and what. A state reached by hand says how, or names a setup recipe. A state only mock data or a manipulated environment produces plans `automation`, and `pnpm run tcs:validate` warns when it does not
 - **A result may sharpen, never move** - a result may be rewritten into what a tester sees and take a label the spec, `ui-design.md` or PRD gives; gaining or losing an assertion is a behaviour change
@@ -243,7 +245,7 @@ How each part reads is [`tcs-conventions.md`](tcs-conventions.md); the shape of 
 
 - **Every value is stated** - the tester never chooses one
 - **A value is the rule, or stands for it** - a value that is the rule (a constant, a threshold, a boundary, a configured value) never changes. A value that illustrates or only sets up the case may change within its class, and states its rule or range, so a changed fixture rewrites nothing. Unsure: it is the rule
-- **Rows add only what a rule implies** - another member of a partition, either side of a boundary, a locale or role the spec names. A value whose outcome no rule states is a gap, not a row
+- **Rows add only what a rule implies** - another member of a partition, either side of a boundary, a locale or role the spec names, or a Common Rule. A value whose outcome no rule states is a gap, not a row
 - **Runs per row** - same steps, different data: one case, a row each, with `Runs once per row of **Test data**.` under the title
 - **Name the data, then use the name** - `<listing_6>` in pre-conditions, steps and results; a derived value states its derivation, `<user B maximum> plus <increment>`, never a bare number. A name means one thing in the file
 - **Roles are not data** - `customer(gold member)` is a pre-condition, not a row
@@ -253,6 +255,9 @@ How each part reads is [`tcs-conventions.md`](tcs-conventions.md); the shape of 
 A duplicate is a defect. Read the suite, the domain suite and the live cases before adding anything.
 
 - **Live case first** - a new observation, or a new value at an edge (very long, non-Latin, zero, an optional field left empty), joins a live case whose route already shows it, as a result or a test-data row. A new case is written only when no live route shows it. One expectation never lives in two cases
+- **A change's new case is grouped before it folds** - QA2 checks each case a change adds to a journey that already has live cases: it joins one, as a row or a revision carrying that case's marker, or stays new with `- **New, not an extension** - <case id> - <why no live case takes it>` in `## Reconciliation`. `pnpm run tcs:validate` warns on a new case with neither; acceptance does not refuse it. An amendment's QA2 rerun groups again for the scope it touches
+- **Numbers after grouping** - the cases left new take the next unused numbers from `pnpm run spec:issue`, never a temporary id. Nothing is automated before acceptance, so no test's id moves
+- **Review catches the rest** - `/tcs-review` scans the durable suite for duplicates and merge candidates when it next prepares it
 - **A duplicate is identical claims** - the same outcomes on the same surface from the same starting state; a subset of another case's results by the same route; or the same steps with other data, which is one case with rows
 - **Distinct** - a different route where the spec states each outcome; a refusal beside the acceptance it mirrors
 - **Scan every active case** - review compares every non-deprecated case in scope, `actual` and `automated` included, within the suite and against the levels above and below
@@ -313,6 +318,7 @@ Up to four kinds of line under the title, every one computed, never chosen: `**S
 [`tcs-conventions.md`](tcs-conventions.md) is the one writing-rule file. `/spec-to-tcs` writes to it; `/tcs-review` restyles drafts to it and adds lines to it through its gate.
 
 - **It refines how, never what** - a convention cannot add coverage, invent a label or overrule this document; a contradicting line is reported and this document followed
+- **Common Rules are the exception** - this document lets a Common Rule add a test-data row
 - **A convention cannot become a contract by stealth** - a writing rule that changes coverage, ownership, traceability, lifecycle or validation is proposed here instead
 
 ## Review Contract
@@ -339,7 +345,7 @@ Up to four kinds of line under the title, every one computed, never chosen: `**S
 - **Inside one journey a sweep may restructure; across journeys it may not** - merging or splitting a journey is the spec author's call, landed on the PRD as a ❓
 - **A reviewed claim never moves silently** - `pnpm run tcs:validate --capture-baseline=<file>` before and `--swept=<file>` after prove every `actual` and `deprecated` case kept its id, trace and status. A regeneration the person confirmed is the exception, and lists what it replaced
 - **The sweep lands in its own commits**, before review starts
-- **What each revision changed** - r4: one integer, conventions split out, drafts regenerate. r5: anchor-first coverage, post-hoc scenario links, outcome-equivalent rows. r6: the classification vocabulary. r7: every case is a GUI walk; the Layer property and unit, API, SEO and injection cases are gone; out of suite means not tested by QA; platform and environment tags; live case first, and the blind pass reads the suite to extend it; one purpose per case; a confirmed regeneration overrides review and writes current ids and walks; walks are for manual testers; the store's cases live only in its PRD folder
+- **What each revision changed** - r4: one integer, conventions split out, drafts regenerate. r5: anchor-first coverage, post-hoc scenario links, outcome-equivalent rows. r6: the classification vocabulary. r7: every case is a GUI walk; the Layer property and unit, API, SEO and injection cases are gone; out of suite means not tested by QA; platform and environment tags; live case first, and the blind pass reads the suite to extend it; one purpose per case; a change's new cases are grouped into live ones before they fold; Common Rules hold where the sources are silent; a confirmed regeneration overrides review and writes current ids and walks; walks are for manual testers; the store's cases live only in its PRD folder
 
 ## The Tools
 

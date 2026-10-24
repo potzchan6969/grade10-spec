@@ -1024,3 +1024,33 @@ test("r6-styled drafts cannot introduce former classifications", () => {
   assert.notEqual(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout + result.stderr, /former \*\*Type:\*\*/);
 });
+
+test("a change's new case on a journey with live durable cases warns until it joins one or says why it stays new", () => {
+  const warned = (reconciliation = "", accepted = false) => {
+    const root = mkdtempSync(join(tmpdir(), "ungrouped-new-case-"));
+    const files = {
+      ...SPEC,
+      "openspec/specs/demo/alpha/feature-tcs.md": SUITE([])
+        .replace(CASE(2), "")
+        .replace(CASE(3), "")
+        .replace("0/3", "0/1"),
+      [`${CHANGE}/feature-tcs.md`]: SUITE(reconciliation ? [reconciliation] : []),
+      ...(accepted ? { "openspec/changes/demo/acceptance.json": "{}" } : {}),
+    };
+    for (const [name, content] of Object.entries(files)) {
+      const file = join(root, name);
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, content);
+    }
+    const out = run(root).stdout;
+    return ["TC1", "TC2", "TC3"].filter((n) =>
+      new RegExp(`demo-alpha-US1-${n}-1\` is new on a journey`).test(out),
+    );
+  };
+  assert.deepEqual(warned(), ["TC2", "TC3"]);
+  assert.deepEqual(
+    warned("- **New, not an extension** - demo-alpha-US1-TC2-1 - another route"),
+    ["TC3"],
+  );
+  assert.deepEqual(warned("", true), []);
+});
