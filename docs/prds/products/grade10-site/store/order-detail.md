@@ -27,14 +27,29 @@ address, payment and refund facts, and leaves each missing fact absent
 state and can follow a safe carrier address when one is supplied
 
 **Where the parcel is** — the delivery steps follow the parcels, not the
-status badge: Order Placed until a parcel leaves, Shipping while one is with
-the carrier, and Completed only once every item shipped and every parcel is
-delivered or picked up. Shipping names the carrier and number; until delivery,
-Completed carries the estimated delivery date, labelled as an estimate
+status badge: Order Placed until a parcel is labelled or handed over,
+Shipping from then on, and Completed once every item shipped and every
+parcel is delivered or picked up
+
+**Shipping and arrival** — Shipping names the carrier and number; until
+delivery, Completed carries the latest estimate among parcels still on their
+way, labelled as an estimate
+
+**Dropped parcels** — a canceled parcel or a voided label counts for
+nothing, Track Order included
 
 **An order that stops** — canceled, or refunded in full, before delivery: the
 steps end at Canceled or Refunded, after Shipping only when a parcel had
 already left
+
+❓ **How a stopped order looks** — the Canceled or Refunded step draws the
+same tick as a reached step, as the stepper's design has no ending of its
+own; Design confirms
+
+❓ **Badge beside the steps** — the badge reads Completed once every item is
+handed over and paid while the Completed step waits for delivery, and a
+carrier that never reports delivery leaves the steps on Shipping; Product
+confirms whether the badge waits too
 
 ❓ **Steps not reached** — a delivery step the order has not reached shows
 no date of its own, only Completed's labelled estimate; a just-placed order
