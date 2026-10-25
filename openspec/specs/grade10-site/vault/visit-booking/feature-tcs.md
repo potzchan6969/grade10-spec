@@ -1,94 +1,336 @@
 # grade10-site/vault/visit-booking Test Cases
 
-**Status:** pending-review · 0/1
-**Drafts styled:** 2026-10-02, tcs-rules r4
-**Out of suite (api):**
-- `grade10-site-vault-visit-booking-SC-23` — the owner guard on the visit's calendar file, walked in the vault backend's own route test
-- `grade10-site-vault-visit-booking-SC-05`
-- `grade10-site-vault-visit-booking-SC-08`
+**Status:** pending-review · 0/10
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
+**Out of suite (api):** grade10-site-vault-visit-booking-SC-09, grade10-site-vault-visit-booking-SC-23 - a read of the diary with none reachable, and a calendar file asked for by someone else, which no screen sends
 
-## grade10-site-vault-visit-booking-US1: Collector books the visit they hand the item over at
+## Background
+
+* `<case page>` is the collector's own vault case page on `<g10url>`; its visit section holds the picker, which offers a shop, then its free slots by day. The console's case page is the operator's, read by admin(holds `vault:operate`).
+* customer(collector) is signed in and owns the case a step names. A tester moves the environment's clock to reach a moment; a visit's slot is "missed" once it passed over 24 hours ago with no visit recorded.
+* Visit letters arrive in the collector's inbox; the calendar file is the .ics a step opens in a calendar app.
+
+## Walk 1: Book, move and keep a visit
+
+Starting state:
+
+- customer(collector) on `<case page>`, its case holding a live offer and no visit.
+
+Shared test data:
+
+| Field | Value |
+| --- | --- |
+| shop | a shop with free slots this week and next |
+
+### Route
+
+1. Pick `<shop>` and a free slot, and confirm.
+   - The confirmation names the shop and the slot; a booked letter arrives. `g10.vault-visit-booking.US1-TC1`
+2. Add the visit to the calendar.
+   - A day at the shop's address and the slot. `g10.vault-visit-booking.US4-TC2`
+3. Move the visit to another shop's free slot.
+   - The case names the new shop and slot; the calendar's day moves with it. `g10.vault-visit-booking.US3-TC1`
+4. Leave and reopen `<case page>`.
+   - The visit reads the same, with Add to calendar, Move and Cancel visit. `g10.vault-visit-booking.US4-TC1`
+
+## g10.vault-visit-booking.US1: Collector books the visit they hand the item over at
 
 **As a** collector,
 **I want** to pick a shop and a free slot for my case whenever I am ready,
 **so that** I can agree terms first and carry the item in afterwards.
 
-<!-- trace:case id=g10.vault-visit-booking.TC-xsa rev=1 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
-### grade10-site-vault-visit-booking-US1-TC3-1: Staff at the counter book the visit for the collector
+<!-- trace:case id=g10.vault-visit-booking.TC-lla rev=1 -->
+### g10.vault-visit-booking.US1-TC1: A collector books a free slot at a shop once the case holds an offer
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** regression
+* **Suites:** smoke, regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-visit-booking-US-01
 
 **Pre-conditions:**
 
-* `admin(holds vault:operate)` is on the case's console page, with the case at a live status and no live booking.
+* customer(collector) is on `<case page>`, its case holding a live offer and no visit.
 
 **Steps:**
 
-1. Open the visit section on the Case tab.
-2. Choose <a shop with a free slot> and a free time, then confirm.
+1. Open the picker, choose a shop, then a free slot, and confirm.
+2. Read the inbox and the case page.
 
 **Expected Results:**
 
-* The visit becomes the case's one live booking.
-* The collector is sent the booking confirmation, the same as if they had booked it themselves.
+* Step 1: the picker gives way to a confirmation naming the shop and the slot taken.
+* Step 2: a booked letter names the shop and the slot; the case names its visit.
 
 <!-- trace:case id=g10.vault-visit-booking.TC-lid rev=1 covers=g10.vault-visit-booking.SC-arc,g10.vault-visit-booking.SC-uos,g10.vault-visit-booking.SC-79y,g10.vault-visit-booking.SC-ui2,g10.vault-visit-booking.SC-jiy,g10.vault-visit-booking.SC-16x,g10.vault-visit-booking.SC-fdv -->
-### grade10-site-vault-visit-booking-US1-TC5-1: No booking picker is offered on a draft case
+### g10.vault-visit-booking.US1-TC5: A booking is refused for a draft, a passed slot, a slot taken meanwhile, or a window with nothing free
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
+* **Priority:** high
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-visit-booking-US-01
 
 **Pre-conditions:**
 
-* The collector is on <grade10 vault case url>, with their case at draft.
+* customer(collector) is on `<case page>`, `<case>`.
+
+**Test data:**
+
+| `<case>` | `<attempt>` | `<shown>` |
+| --- | --- | --- |
+| its request still a draft, not sent in | open the case page | no picker |
+| holding a live offer | choose a slot that passed while the picker was open, and confirm | refused, naming the slot as passed; no visit |
+| holding a live offer | read a free slot, have another collector take it, then confirm it | refused, naming the slot as taken; read again, it is gone |
+| holding a live offer | choose a shop's window that holds no free slot | that nothing is free, and the next window with a free slot |
 
 **Steps:**
 
-1. Open the case page.
+1. Do `<attempt>`.
 
 **Expected Results:**
 
-* No visit booking picker is offered.
+* It shows `<shown>`, and the case holds no visit.
+
+<!-- trace:case id=g10.vault-visit-booking.TC-ssx rev=1 -->
+### g10.vault-visit-booking.US1-TC2: One visit serves a collector's other case too
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-visit-booking-US-01
+
+**Pre-conditions:**
+
+* customer(collector) holds case A, with a booked visit, and case B, with a live offer and no visit; admin(holds `vault:operate`) is at the counter at that visit.
+
+**Steps:**
+
+1. As the collector, read both cases.
+2. At the visit, as admin, take both items into the vault; read case B.
+
+**Expected Results:**
+
+* Step 1: case A carries its visit, shop and slot; case B carries none and offers no picker of its own.
+* Step 2: both cases reach the vault; case B needed no booking.
 
 ---
 
-## grade10-site-vault-visit-booking-US3: Collector moves a visit they cannot make
+## g10.vault-visit-booking.US2: Borrower books the visit they repay and collect on
+
+**As a** borrower,
+**I want** to book a visit while my loan is running,
+**so that** I can pay the balance and take the item home in one appointment.
+
+<!-- trace:case id=g10.vault-visit-booking.TC-k7q rev=1 -->
+### g10.vault-visit-booking.US2-TC1: A borrower books a visit to repay and collect, and a missed one leaves the loan running
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-visit-booking-US-02
+
+**Pre-conditions:**
+
+* customer(collector) is on `<case page>`, its loan running.
+
+**Steps:**
+
+1. Book a free slot to repay and collect.
+2. Let the slot pass by 25 hours, with no visit recorded; read the case.
+3. Book another free slot.
+
+**Expected Results:**
+
+* Step 1 holds the visit; the case names it.
+* Step 2: the visit reads closed; the loan is still running.
+* Step 3 holds the new visit.
+
+<!-- trace:case id=g10.vault-visit-booking.TC-tlb rev=1 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
+### g10.vault-visit-booking.US2-TC3: A visit completes when the item is taken in from its start, and only then
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Missed and finished visits
+
+**Pre-conditions:**
+
+* The collector's case holds a visit at `<shop>` this Friday at 10:00; admin(holds `vault:operate`) is on its console case page.
+
+**Test data:**
+
+| `<at>` | `<act>` | `<visit reads>` |
+| --- | --- | --- |
+| Monday | start valuing from its photographs | open, for Friday |
+| Friday 09:59 | take the item into the vault | open |
+| Friday 10:00 | take the item into the vault | completed |
+| Friday 11:30 | take the item into the vault | completed |
+| the next week, the slot passed and the loan running late | forfeit the item | a no-show, not completed |
+
+**Steps:**
+
+1. At `<at>`, `<act>`.
+2. Read the visit on the console case page.
+
+**Expected Results:**
+
+* It reads `<visit reads>`.
+
+---
+
+## g10.vault-visit-booking.US3: Collector moves a visit they cannot make
 
 **As a** collector,
 **I want** to move or cancel my visit up to the slot, and to hear about it
 whether I moved it or the shop did,
 **so that** missing one day does not cost me the case.
 
+<!-- trace:case id=g10.vault-visit-booking.TC-5u2 rev=1 -->
+### g10.vault-visit-booking.US3-TC1: A visit moves to another day or shop, never offered its own slot, and the collector hears either way
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-visit-booking-US-03
+
+**Pre-conditions:**
+
+* The collector's case holds a booked visit at shop A.
+
+**Test data:**
+
+| `<mover>` | `<to>` |
+| --- | --- |
+| the collector, on `<case page>` | another free slot at shop A |
+| the collector, on `<case page>` | a free slot at shop B |
+| admin(holds `vault:operate`), in the console's appointments | another free slot at shop A |
+
+**Steps:**
+
+1. As `<mover>`, open Move and read the slots offered.
+2. Choose `<to>`, and confirm; book the same slot again from the page.
+3. Read the case and the collector's inbox.
+
+**Expected Results:**
+
+* Step 1 offers every free slot but the visit's own.
+* Step 3: the case holds one visit, at `<to>`; one moved letter arrives, carrying the calendar file.
+
+<!-- trace:case id=g10.vault-visit-booking.TC-k1q rev=1 -->
+### g10.vault-visit-booking.US3-TC2: Calling a visit off leaves the case standing, and it takes another booking
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-visit-booking-US-03
+
+**Pre-conditions:**
+
+* customer(collector) is on `<case page>`, its loan running and a visit booked.
+
+**Steps:**
+
+1. Select Cancel visit, and confirm.
+2. Read the case, the inbox, then book another free slot.
+
+**Expected Results:**
+
+* Step 2: the case keeps its status, item and loan, and holds no visit; a called-off letter arrives; the new booking is held.
+
+<!-- trace:case id=g10.vault-visit-booking.TC-8bc rev=1 -->
+### g10.vault-visit-booking.US3-TC3: A missed drop-off ends the request, and the collector is told
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-visit-booking-US-03
+
+**Pre-conditions:**
+
+* The collector's sent-in case holds a drop-off visit, no item taken in.
+
+**Steps:**
+
+1. Let the slot pass by 25 hours with no visit recorded.
+2. Read `<case page>` and the inbox.
+
+**Expected Results:**
+
+* The case reads expired; a letter says the visit was missed.
+
 ---
 
-## grade10-site-vault-visit-booking-US4: Collector puts the visit in their calendar
+## g10.vault-visit-booking.US4: Collector puts the visit in their calendar
 
 **As a** collector who has just booked,
 **I want** a confirmation naming the shop, the slot and what to bring, and
 the visit added to my phone's calendar,
 **so that** I turn up on the day, prepared.
 
-<!-- trace:case id=g10.vault-visit-booking.TC-tlb rev=1 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
-### grade10-site-vault-visit-booking-US4-TC9-1: Visit completion turns on the slot's start at the limit
+<!-- trace:case id=g10.vault-visit-booking.TC-l10 rev=1 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
+### g10.vault-visit-booking.US4-TC1: A booked visit reads its shop, slot and what comes next for the case's lane and identity
 
 Runs once per row of **Test data**.
 
@@ -101,127 +343,67 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-visit-booking-US-04
 
 **Pre-conditions:**
 
-* The collector has a live booking for <a shop> at <a free slot>.
+* customer(collector), `<identity>`, has just booked a visit on a `<lane>` case.
 
 **Test data:**
 
-| Counter act timing | Outcome |
-| --- | --- |
-| Before the slot's start time | Visit stays open |
-| Exactly at the slot's start time | Visit completes |
-| After the slot's start time | Visit completes |
+| `<lane>` | `<identity>` | `<case reads>` |
+| --- | --- | --- |
+| financed | verified | the visit, the amount asked for, and the identity verified |
+| storage | verified | the visit and no amount, the custody agreement named instead |
+| financed | not verified | the visit, the amount asked for, and the identity not verified with the check offered |
 
 **Steps:**
 
-1. Record a counter act on this case at <counter act timing>.
+1. Read the confirmation.
+2. Leave, and reopen `<case page>`.
 
 **Expected Results:**
 
-* The visit's state matches the row's outcome.
+* Step 1 names the shop, its address and the slot, and reads `<case reads>`.
+* Step 2 reads the same, offering Add to calendar, Move and Cancel visit.
 
-<!-- trace:case id=g10.vault-visit-booking.TC-l10 rev=1 covers=g10.vault-visit-booking.SC-hzh,g10.vault-visit-booking.SC-6qa,g10.vault-visit-booking.SC-4lt,g10.vault-visit-booking.SC-plm,g10.vault-visit-booking.SC-fnz,g10.vault-visit-booking.SC-02u,g10.vault-visit-booking.SC-ju4,g10.vault-visit-booking.SC-zqo,g10.vault-visit-booking.SC-qpx,g10.vault-visit-booking.SC-t70,g10.vault-visit-booking.SC-my4 -->
-### grade10-site-vault-visit-booking-US4-TC11-1: A standing visit reads the same when the case is opened
+<!-- trace:case id=g10.vault-visit-booking.TC-nje rev=1 -->
+### g10.vault-visit-booking.US4-TC2: The calendar file holds the visit, follows a move or a call-off, and rides on every visit letter
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-visit-booking-US-04
 
 **Pre-conditions:**
 
-* The collector has a live booking for <a shop> at <a free slot>, its slot still ahead.
+* customer(collector) is on `<case page>`, `<case>`.
+
+**Test data:**
+
+| `<case>` | `<then>` | `<calendar reads>` |
+| --- | --- | --- |
+| a booked visit | select Add to calendar | one day at the shop's address and the slot |
+| a booked visit already on the calendar | move it, then open the file again | the same day moved to the new slot, no second day |
+| a booked visit already on the calendar | call it off, then open the file again | the day taken off the calendar |
+| never booked | open the visit's calendar address | refused as not found; no file |
 
 **Steps:**
 
-1. Leave the booked-visit screen and open <grade10 vault case url> again.
+1. `<then>`.
+2. Read the booked, moved and called-off letters that arrived.
 
 **Expected Results:**
 
-* The shop, its address and the slot are named, the same as on the booked-visit screen.
-* Add to calendar, Move and Cancel visit are offered.
-
-## Settled
-
-- The console no longer books a visit for the collector: the booking is owned by the standalone appointments change (`add-multi-store-appointments`) and the product no longer books its own visits, so `grade10-site-vault-visit-booking-US1-TC3-1` is `deprecated` and its walk, `vault/visit.spec.ts`, is gone.
-- A case whose collector holds a live booking on another of their cases reads that visit, its shop and its slot, and offers no picker of its own.
-- A move opens the picker a first booking is taken from, so another shop is as open to it as another day and time.
-- **A case with no visit, or a cancelled one** - the calendar file is refused by name as not found for a case the diary never booked, and served as a cancellation for a called-off visit (Q23)
-
-## Reconciliation
-
-Run: 2026-09-22, blind pass over the isolated input — the outline (`## Purpose`
-and `## Feature set`), `user-journeys.md`, `proposal.md`, `decisions.md` with
-its `## Raised` table, `ui-design.md` with its state dispositions stripped, and
-the PRD pages the proposal links; denied every `## Requirements` section,
-`openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. Nothing
-verifies that list; it is the run's word.
-
-Nineteen cases were read against `grade10-site-vault-visit-booking-SC-15`
-through `grade10-site-vault-visit-booking-SC-26` and the durable scenarios
-`grade10-site-vault-visit-booking-SC-01` through
-`grade10-site-vault-visit-booking-SC-14`. No case was dropped as a misreading,
-the two readings contradicted each other nowhere, and the pass raised no
-question the rulings left open.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `grade10-site-vault-visit-booking-US1-TC1-1` | Covered | `grade10-site-vault-visit-booking-SC-01`, `grade10-site-vault-visit-booking-SC-03`; the table gained `repaid`, which the durable requirement names and the blind pass could not see |
-| `grade10-site-vault-visit-booking-US1-TC2-1` | Covered | `grade10-site-vault-visit-booking-SC-01` |
-| `grade10-site-vault-visit-booking-US1-TC3-1` | Covered | the durable requirement's counter clause, nearest scenario `grade10-site-vault-visit-booking-SC-06`; this change does not touch it |
-| `grade10-site-vault-visit-booking-US1-TC4-1` | Covered | `grade10-site-vault-visit-booking-SC-05` |
-| `grade10-site-vault-visit-booking-US1-TC5-1` | Covered | `grade10-site-vault-visit-booking-SC-03` |
-| `grade10-site-vault-visit-booking-US1-TC6-1` | Covered | `grade10-site-vault-visit-booking-SC-07` |
-| `grade10-site-vault-visit-booking-US1-TC7-1` | Folded | `grade10-site-vault-visit-booking-SC-28` — a window with no free slot reads the no-slot line and offers the next; the design's Nothing free row closes on it |
-| `grade10-site-vault-visit-booking-US1-TC8-1` | Folded | `grade10-site-vault-visit-booking-SC-29` — a slot taken between the read and the take is refused by name and the picker reads again; the design's Time taken row closes on it |
-| `grade10-site-vault-visit-booking-US1-TC9-1` | Covered | `grade10-site-vault-visit-booking-SC-21` |
-| `grade10-site-vault-visit-booking-US1-TC10-1` | Case added | walks `grade10-site-vault-visit-booking-SC-30`, the sibling case's page, which the first raised row settled |
-| `grade10-site-vault-visit-booking-US4-TC1-1` | Covered | `grade10-site-vault-visit-booking-SC-15`, `grade10-site-vault-visit-booking-SC-16`; the money-follows line was added to its results, which nothing asserted |
-| `grade10-site-vault-visit-booking-US4-TC2-1` | Covered | `grade10-site-vault-visit-booking-SC-22` |
-| `grade10-site-vault-visit-booking-US4-TC3-1` | Covered | `grade10-site-vault-visit-booking-SC-19` |
-| `grade10-site-vault-visit-booking-US4-TC4-1` | Covered | `grade10-site-vault-visit-booking-SC-18` |
-| `grade10-site-vault-visit-booking-US4-TC5-1` | Covered | `grade10-site-vault-visit-booking-SC-17` |
-| `grade10-site-vault-visit-booking-US4-TC6-1` | Covered | `grade10-site-vault-visit-booking-SC-24`, and `grade10-site-vault-visit-booking-SC-27` once its results asserted the move's own picker |
-| `grade10-site-vault-visit-booking-US4-TC7-1` | Covered | `grade10-site-vault-visit-booking-SC-21`, `grade10-site-vault-visit-booking-SC-25` |
-| `grade10-site-vault-visit-booking-US4-TC8-1` | Covered | `grade10-site-vault-visit-booking-SC-08` |
-| `grade10-site-vault-visit-booking-US4-TC9-1` | Covered | `grade10-site-vault-visit-booking-SC-12`, `grade10-site-vault-visit-booking-SC-13`; the row at the slot's own start is the durable requirement's after its slot has started |
-| `grade10-site-vault-visit-booking-US4-TC10-1` | Covered | `grade10-site-vault-visit-booking-SC-14` and the durable requirement's ended-case clause |
-| `grade10-site-vault-visit-booking-US4-TC11-1` | Case added | walks `grade10-site-vault-visit-booking-SC-20`, the standing visit read on the case, which no case reached |
-| `grade10-site-vault-visit-booking-US4-TC12-1` | Case added | walks `grade10-site-vault-visit-booking-SC-26`; `grade10-site/vault/collector-notifications`' suite carries no case for the file the visit's messages attach |
-| `grade10-site-vault-visit-booking-SC-23` | Out of suite | the `caseOwner` guard on `GET /api/cases/:caseId/visit.ics`, in the vault backend's route test; a case here traces a journey, and nobody walks a stranger's fetch |
-| Raised: does a sibling case offer a picker of its own? | Folded | `grade10-site-vault-visit-booking-SC-30`, landed as Q32 in `decisions.md` |
-| Raised: may a move pick a different shop? | Folded | `grade10-site-vault-visit-booking-SC-27`, landed as Q33 in `decisions.md` |
-| `grade10-site-vault-visit-booking-SC-31` | Case added, added after the run | `grade10-site-vault-visit-booking-US4-TC13-1`: a move never offers the visit's own current slot back, since the diary already counts it taken |
-
-**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/cases.ts` (`book`, `reschedule`, `cancelBooking`, `slots`, `detail`, `mine`) and `routes/visit.ts` with its test. It is a statement, not proof.
-
-- **Raised, folded into spec** - a case the diary never booked is refused the file, as `grade10-site-vault-visit-booking-SC-32` under the calendar requirement, cited in task 2.6
-- **Raised, escalated** - the file's answer with no visit, landed as Q23
-- **Rejected** - `US4-TC15-1`, a stranger's fetch of the file: `grade10-site-vault-visit-booking-SC-23` is out of suite in the durable header, decided by the route test, and stays so
-- **Re-versioned to the API** - every case whose behaviour the worker keeps and whose run walked the case page or the booked-visit screen: `grade10-site-vault-visit-booking-US1-TC1-2`, `grade10-site-vault-visit-booking-US1-TC2-2`, `grade10-site-vault-visit-booking-US1-TC4-2`, `grade10-site-vault-visit-booking-US1-TC6-2`, `grade10-site-vault-visit-booking-US1-TC7-2`, `grade10-site-vault-visit-booking-US1-TC8-2`, `grade10-site-vault-visit-booking-US1-TC9-2`, `grade10-site-vault-visit-booking-US1-TC10-2`, `grade10-site-vault-visit-booking-US4-TC1-2`, `grade10-site-vault-visit-booking-US4-TC2-2`, `grade10-site-vault-visit-booking-US4-TC3-2`, `grade10-site-vault-visit-booking-US4-TC4-2`, `grade10-site-vault-visit-booking-US4-TC5-2`, `grade10-site-vault-visit-booking-US4-TC6-2`, `grade10-site-vault-visit-booking-US4-TC7-2`, `grade10-site-vault-visit-booking-US4-TC8-2`, `grade10-site-vault-visit-booking-US4-TC10-2`, `grade10-site-vault-visit-booking-US4-TC12-2`, `grade10-site-vault-visit-booking-US4-TC13-2`; `grade10-site-vault-visit-booking-US1-TC3-1` books at the console and stays as it is
-- **Deprecated** - the cases whose subject is a removed screen: `grade10-site-vault-visit-booking-US1-TC5-1`, a picker withheld on a draft, whose refusal `grade10-site-vault-visit-booking-US1-TC1-2` holds; `grade10-site-vault-visit-booking-US4-TC11-1`, the case page agreeing with the booked-visit screen
-- **Carried into a bump** - QA1's new ids that re-covered an earlier case leave the delta: `US1-TC11-1` into `grade10-site-vault-visit-booking-US1-TC2-2`; `US1-TC12-1` into `grade10-site-vault-visit-booking-US1-TC8-2`; `US1-TC13-1` into `grade10-site-vault-visit-booking-US1-TC1-2`; `US1-TC14-1` into `grade10-site-vault-visit-booking-US1-TC7-2`; `US1-TC15-1` into `grade10-site-vault-visit-booking-US1-TC10-2`; `US3-TC2-1` into `grade10-site-vault-visit-booking-US1-TC9-2`; `US4-TC14-1` into `grade10-site-vault-visit-booking-US4-TC2-2`; `US4-TC16-1` into `grade10-site-vault-visit-booking-US4-TC1-2`, `grade10-site-vault-visit-booking-US4-TC3-2`, `grade10-site-vault-visit-booking-US4-TC4-2` and `grade10-site-vault-visit-booking-US4-TC5-2`
-- **New ids kept** - `grade10-site-vault-visit-booking-US3-TC1-1`, the move journey's only case; `grade10-site-vault-visit-booking-US4-TC17-1`, a case the diary never booked
-- **Joined** - `grade10-site-vault-visit-booking-SC-15` into `grade10-site-vault-visit-booking-US1-TC2-2`; `-SC-29` into `grade10-site-vault-visit-booking-US1-TC8-2`; `-SC-28` into `grade10-site-vault-visit-booking-US1-TC7-2`; `-SC-30` into `grade10-site-vault-visit-booking-US1-TC10-2`; `-SC-21` into `grade10-site-vault-visit-booking-US1-TC9-2`; `-SC-27`, `-SC-31` into `grade10-site-vault-visit-booking-US3-TC1-1`; `-SC-16` to `-SC-19` into `grade10-site-vault-visit-booking-US4-TC1-2` to `grade10-site-vault-visit-booking-US4-TC5-2`; `-SC-20`, `-SC-22` into `grade10-site-vault-visit-booking-US4-TC2-2`; `-SC-32` into `grade10-site-vault-visit-booking-US4-TC17-1`
-- **Contradicted** - none
-- **Uncovered anchors** - none
-- **Automated cases re-versioned** - `grade10-site-vault-visit-booking-US1-TC1-2`, `grade10-site-vault-visit-booking-US1-TC2-2`, `grade10-site-vault-visit-booking-US1-TC4-2`, `grade10-site-vault-visit-booking-US1-TC7-2`, `grade10-site-vault-visit-booking-US1-TC8-2`, `grade10-site-vault-visit-booking-US1-TC9-2`, `grade10-site-vault-visit-booking-US1-TC10-2`, `grade10-site-vault-visit-booking-US4-TC1-2`, `grade10-site-vault-visit-booking-US4-TC2-2`, `grade10-site-vault-visit-booking-US4-TC3-2`, `grade10-site-vault-visit-booking-US4-TC4-2`, `grade10-site-vault-visit-booking-US4-TC5-2`, `grade10-site-vault-visit-booking-US4-TC6-2`, `grade10-site-vault-visit-booking-US4-TC7-2`, `grade10-site-vault-visit-booking-US4-TC12-2`, `grade10-site-vault-visit-booking-US4-TC13-2` were decided by `visit.spec.ts` at `-1`; each is `manual` until task 4.4 retitles its API walk and flips it
-
-### Manual
-
-| Manual | Why |
-| --- | --- |
-| `grade10-site-vault-visit-booking-US4-TC2-1` | A test reads the served file's own bytes; that the collector's calendar opens it is the device's answer, not the site's |
-| `grade10-site-vault-visit-booking-US4-TC6-1` | One entry after a move is the calendar app's own merge on the file's id and revision, which only a device shows |
-| `grade10-site-vault-visit-booking-US4-TC7-1` | The same device read: the cancellation taking the day off the phone |
+* Step 1: the calendar reads `<calendar reads>`.
+* Step 2: each letter carries the visit's calendar file.
