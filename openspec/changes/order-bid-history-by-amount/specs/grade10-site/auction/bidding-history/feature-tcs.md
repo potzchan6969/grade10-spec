@@ -1,7 +1,7 @@
 # grade10-site/auction/bidding-history Test Cases
 
 **Status:** approved · 3/3
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Reviewed:** 2026-10-25, tcs-rules r7
 
 ## Background
 
