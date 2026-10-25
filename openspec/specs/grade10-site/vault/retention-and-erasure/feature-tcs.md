@@ -1,25 +1,177 @@
 # grade10-site/vault/retention-and-erasure Test Cases
 
-**Status:** pending-review · 0/7
-**Drafts styled:** 2026-10-02, tcs-rules r4
-**Out of suite (api):** grade10-site-vault-retention-and-erasure-SC-02, grade10-site-vault-retention-and-erasure-SC-03, grade10-site-vault-retention-and-erasure-SC-04, grade10-site-vault-retention-and-erasure-SC-05, grade10-site-vault-retention-and-erasure-SC-06, grade10-site-vault-retention-and-erasure-SC-07, grade10-site-vault-retention-and-erasure-SC-08, grade10-site-vault-retention-and-erasure-SC-09, grade10-site-vault-retention-and-erasure-SC-10, grade10-site-vault-retention-and-erasure-SC-44
-
-**Out of suite (non-GUI):** grade10-site-vault-retention-and-erasure-SC-01
+**Status:** pending-review · 0/16
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
+**Out of suite (non-GUI):** grade10-site-vault-retention-and-erasure-SC-01, grade10-site-vault-retention-and-erasure-SC-02, grade10-site-vault-retention-and-erasure-SC-03 - the retention review's report, which no screen shows
 
 ## Background
 
-Grade10 keeps agreements, photos and case records for 2,555 days (7 years) after a submission ends. `<grade10 vault your data url>` is `grade10.com/profile/data`, Your data, reached signed in. `<grade10 grading url>` is `grade10.com/grading`, where a collector plans a submission. `<grade10 admin erasure url>` is `admin.grade10.com/erasure`, the console's Account erasure page: a filed request opens its Checklist, one Erase button a product. Grading's dev seed (`/grading/dev/submissions/seed`) walks a submission to a named status through the desk's own acts, dated off the anchors it is given. The retention review runs on grading's slow sweep lane (`/grading/dev/sweep`, lane `slow`). No route moves a filed erasure request past its 7-day window; a case that runs the erasure ages the request in the stack's data.
+* Grade10 keeps agreements, photos and case records for 2,555 days after a case or submission ends. Your data is `<g10url>/profile/data`, read signed in.
+* The console's Account erasure page lists filed requests to be forgotten; a request's Checklist offers Erase per product, run by admin(holds `user:delete`) once the request's seven days have passed uncancelled. A test ages a request past its window in the stack's data.
+* A case or submission after an erasure is read on its console page by admin(holds `vault:operate`); grading's submissions are brought to a status through grading's own dev seed.
 
-## grade10-site-vault-retention-and-erasure-US1: Collector asks to be forgotten and the vault answers for its own data
+## Walk 1: Read Your data, ask, and be forgotten
+
+Starting state:
+
+- customer(collector) signed in, with one released vault case and nothing in flight.
+
+Shared test data:
+
+| Field | Value |
+| --- | --- |
+| released case | a case whose item went home after a signed agreement |
+
+### Route
+
+1. Open Your data.
+   - Each class with its window, the identity standing, and the signed documents under their case. `g10.vault-retention-and-erasure.US5-TC1`
+2. As admin, once the request is filed and its window passed, Erase beside Vault.
+   - It runs; the sealed documents and identity stay under a named hold; the contact details go. `g10.vault-retention-and-erasure.US1-TC1`
+3. Read `<released case>`'s history.
+   - Every entry stands; the collector's own name an erased collector. `g10.vault-retention-and-erasure.US1-TC2`
+
+## g10.vault-retention-and-erasure.US1: Collector asks to be forgotten and the vault answers for its own data
 
 **As a** collector who has closed their account,
 **I want** the vault to delete what it holds about me,
 **so that** nothing of mine is kept beyond the record of agreements I actually
 signed.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-aow rev=1 -->
+### g10.vault-retention-and-erasure.US1-TC1: The vault's erasure keeps a signed case's evidence under a hold and drops everything else of the person
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-01
+
+**Pre-conditions:**
+
+* The collector, `<holding>`, has a request filed with its window passed; admin(holds `user:delete`) has its Checklist open.
+
+**Test data:**
+
+| `<holding>` | `<afterwards>` |
+| --- | --- |
+| a case cancelled before anything was signed | its photographs and item text gone, its identity released, the case naming no person |
+| a released case with a signed agreement | its sealed documents, identity record and photograph kept under a hold named on it; the contact details gone |
+| a case carrying an owed message | the message deleted, never sent |
+| no vault case ever | nothing refuses the run, and the vault names nothing it holds of them |
+
+**Steps:**
+
+1. Select Erase beside Vault.
+2. Read the case on its console page, where there is one.
+
+**Expected Results:**
+
+* Step 1 runs; step 2 reads `<afterwards>`.
+
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-s4i rev=1 -->
+### g10.vault-retention-and-erasure.US1-TC2: After an erasure every history entry stands, and none names the person
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** What cannot be rewritten
+
+**Pre-conditions:**
+
+* The collector's released case has history entries naming them on their own moves and staff on theirs; their erasure has run.
+
+**Steps:**
+
+1. Read the case's history on its console page.
+
+**Expected Results:**
+
+* Every entry is still there; the collector's own name an erased collector, and staff entries are as they were.
+
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-rb3 rev=1 -->
+### g10.vault-retention-and-erasure.US1-TC3: The ask is withheld by name while the vault still holds something
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-01
+
+**Pre-conditions:**
+
+* customer(collector) is on Your data, with no request open, `<holding>`.
+
+**Test data:**
+
+| `<holding>` | `<named>` |
+| --- | --- |
+| an item in the vault | that case, as an item in the vault |
+| a running loan | that case, as a loan still running |
+| a request in flight | that case, as a request not yet ended |
+
+**Steps:**
+
+1. Read the ask's block, and try to ask to be forgotten.
+
+**Expected Results:**
+
+* The ask is refused, naming `<named>` by reference; no request is filed.
+
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-l68 rev=1 -->
+### g10.vault-retention-and-erasure.US1-TC4: A hold that arrives after the ask is named beside the open request
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-01
+
+**Pre-conditions:**
+
+* customer(collector) has a request filed, then puts an item in the vault.
+
+**Steps:**
+
+1. Open Your data.
+
+**Expected Results:**
+
+* The request still reads with the day it was filed, and beside it the hold, naming the case.
+
 ---
 
-## grade10-site-vault-retention-and-erasure-US2: Admin runs an erasure without touching a live case
+## g10.vault-retention-and-erasure.US2: Admin runs an erasure without touching a live case
 
 **As an** admin running a person's erasure,
 **I want** to be told which of their cases are still in flight rather than
@@ -27,110 +179,73 @@ having them erased,
 **so that** nobody's item or debt disappears from the record while it still
 exists.
 
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-km2 rev=1 -->
+### g10.vault-retention-and-erasure.US2-TC1: A running loan refuses the vault's erasure by name and touches no case
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-02
+
+**Pre-conditions:**
+
+* The collector holds one closed case and one running loan; a request was filed with its window passed; admin(holds `user:delete`) has its Checklist open.
+
+**Steps:**
+
+1. Select Erase beside Vault.
+2. Read both cases.
+
+**Expected Results:**
+
+* Step 1 is refused, naming the running case.
+* Step 2: neither case has changed.
+
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-f2t rev=1 -->
+### g10.vault-retention-and-erasure.US2-TC2: A removed walk-in is purged and keeps only staff's own history
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-02
+
+**Pre-conditions:**
+
+* Staff opened a walk-in draft for the collector, whose title the collector changed after signing in; admin(holds `vault:operate`) is on it.
+
+**Steps:**
+
+1. Cancel the draft.
+2. Read its history and what it holds.
+
+**Expected Results:**
+
+* Its photographs and item text are gone; its history names no collector, and staff's entries stand.
+
 ---
 
-## grade10-site-vault-retention-and-erasure-US3: Compliance officer sees what is being kept too long
-
-**As an** admin answerable for what we keep,
-**I want** a list of closed cases past the window for each class, and to be
-told which windows nobody has decided,
-**so that** deleting is a decision somebody makes rather than something that
-happens on a clock.
-
----
-
-## grade10-site-vault-retention-and-erasure-US4: Collector who graded cards is forgotten by the same request
+## g10.vault-retention-and-erasure.US4: Collector who graded cards is forgotten by the same request
 
 **As a** collector who has closed their account after grading cards,
 **I want** the one erasure request to reach my submissions as it reaches my vault cases, refused by name while a submission is between booked and ready, money is still due on one or ready cards are uncollected, and otherwise keeping only the sealed documents and the photographs in the vault's classes and the submission record in the vault's case records, each for the window the table names from the later of the day the submission ended and the day nothing is owed either way, and no identity record at all,
 **so that** grading keeps nothing of mine the vault would not keep, and I ask once.
 
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-ggi rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC1-1: Ended submission's documents, photographs and record survive erasure
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Pre-conditions:**
-
-* `<submission_1>` is seeded at `collected` through grading's dev seed, under the collector's email.
-* The account holds no open vault case.
-* The account's request to be forgotten is filed and its 7-day window has passed uncancelled.
-* admin(holds user:delete) is on `<grade10 admin erasure url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<submission_1>` | A submission collected with a signed submission agreement, intake receipt, hand-back receipt, hand-in and hand-back photograph pairs, and a submission record naming the collector's name, email, phone, postal address, the card list, the pickup code and the messages |
-
-**Steps:**
-
-1. Open the account's request and its Checklist.
-2. Click Erase beside Grading.
-3. Read what grading keeps of `<submission_1>`: its documents, photographs and submission record.
-
-**Expected Results:**
-
-* The agreement, the hand-back receipt and the hand-in and hand-back photographs are kept under a hold named on `<submission_1>`.
-* The collector's contact details, postal address and the person named to collect are gone.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-50v rev=2 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC3-2: Submission cancelled before hand-in is purged with the account
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Pre-conditions:**
-
-* `<submission_3>` was cancelled while `planned`, before any drop-off: planned by the collector on `<grade10 grading url>` and cancelled from its own page.
-* The account holds no open vault case.
-* customer(collector) holds a session on <grade10 site url> and acts through the vault's API, with no site page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<submission_3>` | A submission cancelled from `planned`, before hand-in, with no submission agreement, receipt or photograph ever created, carrying a submission record |
-
-**Steps:**
-
-1. Read `<submission_3>`'s retained data and the window its record stands under.
-2. As the collector, file the ask to be forgotten under their own account through the vault's API.
-3. Age the request past its 7-day window, uncancelled.
-4. As admin(holds user:delete), open the request's Checklist on `<grade10 admin erasure url>`.
-5. Click Erase beside Grading.
-6. Read `<submission_3>` again.
-
-**Expected Results:**
-
-* No submission agreement, receipt or photograph is held for `<submission_3>` at any point.
-* Before the erasure its submission record stands as its own case-records class, 2,555 days from the cancellation date.
-* `<submission_3>` refuses nothing: the erasure runs.
-* After the erasure nothing of `<submission_3>` names the collector.
-* No signing ceremony's personal data remains for `<submission_3>`.
-* No identity record exists for `<submission_3>` at any point.
-
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-lzf rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC4-1: Live grading submission refuses the erasure ask by name
+### g10.vault-retention-and-erasure.US4-TC4: A live submission, money due, or cards waiting refuse grading's erasure by name
 
 Runs once per row of **Test data**.
 
@@ -142,125 +257,130 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
-
 **Pre-conditions:**
 
-* The account holds `<submission_4>` and no open vault case.
-* The account's request to be forgotten was filed before `<submission_4>` went live, and its 7-day window has passed uncancelled.
-* `<submission_4>` is seeded at the row's status through grading's dev seed, under the account's email and user id.
-* admin(holds user:delete) is on `<grade10 admin erasure url>`.
+* The collector holds `<submission>` and no open vault case; a request was filed with its window passed; admin(holds `user:delete`) has its Checklist open.
 
 **Test data:**
 
-| `<submission_4>` | Grading answers |
+| `<submission>` | `<refusal names>` |
 | --- | --- |
-| `checked_in`, between booked and ready | Refused, naming `<submission_4>` and cards with the grader |
-| `ready`, with an unsettled upcharge | Refused, naming `<submission_4>` and the money unsettled |
-| `ready`, with cards uncollected | Refused, naming `<submission_4>` and the cards waiting to be collected |
+| checked in, between booked and ready | the submission, and cards with the grader |
+| ready, an upcharge unsettled | the submission, and the money unsettled |
+| ready, its cards uncollected | the submission, and the cards waiting to be collected |
+| collected, a card found and its payout reversed, the repayment unpaid | the submission, and the money unsettled |
 
 **Steps:**
 
-1. Open the account's request and its Checklist.
-2. Click Erase beside Grading.
-3. Read Grading's answer on the Checklist.
+1. Select Erase beside Grading.
 
 **Expected Results:**
 
-* Grade10 answers as the row states.
-* `<submission_4>` is not touched.
+* It is refused, naming `<refusal names>`; the submission is not touched.
 
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-56f rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC7-1: Ended submissions and a never-booked one refuse nothing
+### g10.vault-retention-and-erasure.US4-TC7: Submissions that have all ended, or were never booked, refuse nothing
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-04
+
+**Pre-conditions:**
+
+* The collector holds `<submission>` alone, nothing due, no open vault case; a request was filed with its window passed; admin(holds `user:delete`) has its Checklist open.
+
+**Test data:**
+
+| `<submission>` | `<afterwards>` |
+| --- | --- |
+| planned, never booked | purged, nothing of it naming the collector |
+| collected | kept as US4-TC1 reads |
+| cancelled after its agreement was sealed | kept as US4-TC1 reads |
+| expired, never handed in | nothing of it naming the collector |
+| collected, its last card paid out | kept as US4-TC1 reads |
+
+**Steps:**
+
+1. Select Erase beside Grading, and read the submission.
+
+**Expected Results:**
+
+* It runs; the submission reads `<afterwards>`.
+
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-ggi rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
+### g10.vault-retention-and-erasure.US4-TC1: A collected submission keeps its papers, photographs and record, and loses the person
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-04
+
+**Pre-conditions:**
+
+* The collector's submission is collected against a sealed agreement, an intake and a hand-back receipt, and hand-in and hand-back photographs; a request was filed with its window passed; admin(holds `user:delete`) has its Checklist open.
+
+**Steps:**
+
+1. Select Erase beside Grading.
+2. Read the submission on its console page.
+
+**Expected Results:**
+
+* The agreement, the hand-back receipt and the photographs are kept under a hold named on it.
+* The collector's contact details, postal address and the person named to collect are gone; no identity record is held.
+
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-50v rev=2 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
+### g10.vault-retention-and-erasure.US4-TC3: A submission cancelled before anyone signed keeps nothing of the person
+
+**Classification:**
+
 * **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
-
-**Pre-conditions:**
-
-* The account holds `<submission_7>` alone, with no money due on it, and no open vault case.
-* `<submission_7>` is brought to the row's state: seeded at that status through grading's dev seed, or, for the paid-out row, its last card's payout recorded from the Money tab of the console's One submission page.
-* The account's request to be forgotten is filed and its 7-day window has passed uncancelled.
-* admin(holds user:delete) is on `<grade10 admin erasure url>`.
-
-**Test data:**
-
-| `<submission_7>` | What the run leaves |
-| --- | --- |
-| `planned`, never booked | Nothing of it names the collector |
-| `collected`, its cards gone with the collector | — |
-| `cancelled` after the agreement was sealed | — |
-| `expired`, never handed in | — |
-| Its last card paid out | — |
-
-**Steps:**
-
-1. Open the account's request and its Checklist.
-2. Click Erase beside Grading.
-3. Read what is left of `<submission_7>`.
-
-**Expected Results:**
-
-* `<submission_7>` refuses nothing: the erasure runs on every row.
-* On the `planned` row, Grade10 leaves `<submission_7>` as the row states.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-1f0 rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC8-1: The ask is withheld in the collector's own words while cards are with the grader
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
 
 **Pre-conditions:**
 
-* customer is signed in and on `<grade10 vault your data url>`.
-* The account holds `<submission_8>` and no open vault case.
-* `<submission_8>` is seeded at `sent` through grading's dev seed, under the account's email and user id.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<submission_8>` | A submission `sent`, its cards with the grader |
+* The collector planned a submission on `<g10url>/grading` and cancelled it before drop-off; a request was filed with its window passed; admin(holds `user:delete`) has its Checklist open.
 
 **Steps:**
 
-1. Scroll to the ask to be forgotten on Your data.
-2. Read the ask's block.
+1. Read the submission on its console page.
+2. Select Erase beside Grading, and read it again.
 
 **Expected Results:**
 
-* The ask is withheld, in the collector's own words: cards of theirs are with the grader.
-* The words name the cards, never a status word and never an internal hold.
-* The block offers no control to file the ask, and the page files nothing while it reads this way.
+* Step 1 shows no agreement, receipt, photograph or identity record, its record held 2,555 days from the cancellation.
+* Step 2: the run is not refused; nothing of the submission names the collector, and no signing data remains.
 
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-kwk rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC9-1: Owed mail goes with the erasure and the history keeps its entries
+### g10.vault-retention-and-erasure.US4-TC9: Owed grading mail goes, and the history keeps its entries without the person
 
 **Classification:**
 
@@ -271,139 +391,54 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
 
 **Pre-conditions:**
 
-* `<submission_9>` reached `collected`.
-* The account's request to be forgotten is filed and its 7-day window has passed uncancelled.
-* admin(holds user:delete) is on `<grade10 admin erasure url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<submission_9>` | A collected submission carrying one message still owed and history entries naming the collector on their own moves |
+* The collector's collected submission carries one owed message and history entries naming them on their own moves; a request was filed with its window passed.
 
 **Steps:**
 
-1. Open the account's request and its Checklist.
-2. Click Erase beside Grading.
-3. Read `<submission_9>`'s owed messages and its history.
+1. As admin(holds `user:delete`), select Erase beside Grading.
+2. Read the submission's messages and history.
 
 **Expected Results:**
 
-* The owed message is deleted and nothing is sent for it.
-* Every history entry stands, none deleted and none rewritten beyond its actor.
-* The entries that named the collector name an erased collector.
+* The owed message is deleted, never sent; every history entry stands, the collector's own naming an erased collector.
 
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-lhm rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC10-1: The ask stays held while grading cannot say what stands in its way
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-
-* customer(closed account) is signed in and on `<grade10 vault your data url>`.
-* The account holds no open vault case and no open erasure request.
-* Grading does not answer what stands in the way of the account's erasure.
-
-**Steps:**
-
-1. Open Your data.
-2. Read the erasure block.
-
-**Expected Results:**
-
-* The page names that grading's holds could not be read.
-* The ask is not offered, and nothing is filed.
-* What the vault keeps stays on screen.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-trp rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC12-1: A transfer not yet received holds the window
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Pre-conditions:**
-
-* Grading's slow sweep lane is run as the Background says.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <submission_12> | a submission whose last card was paid out by transfer 2,600 days ago and marked received 2,550 days ago |
-
-**Steps:**
-
-1. Run the retention review.
-2. Read the classes the review reports `<submission_12>` under.
-
-**Expected Results:**
-
-* Step 2: `<submission_12>` is reported under no class, its windows measured from the day the transfer was marked received.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-8kc rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
-### grade10-site-vault-retention-and-erasure-US4-TC13-1: A repayment due on a collected submission refuses the erasure
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-1f0 rev=1 covers=g10.vault-retention-and-erasure.SC-4zz,g10.vault-retention-and-erasure.SC-1ly -->
+### g10.vault-retention-and-erasure.US4-TC8: The ask is filed while cards are with the grader, and Your data names them as its hold
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
 
 **Pre-conditions:**
 
-* admin(holds the erasure grant) is on `<grade10 admin erasure url>` with the collector's request filed and aged past its window.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <submission_13> | the collector's only submission, collected, a card on it found and its payout reversed, the repayment unpaid |
+* customer(collector) is on Your data, with no vault case and a submission sent to the grader.
 
 **Steps:**
 
-1. Click Erase on grading.
+1. Ask to be forgotten, and confirm.
+2. Read Your data.
 
 **Expected Results:**
 
-* Step 1: refused, naming `<submission_13>` and the money unsettled.
+* Step 1 files the request.
+* Step 2 reads the request with its days, and beside it that cards of theirs are with the grader, in the collector's words, with no status word or internal hold.
 
 ---
 
-## grade10-site-vault-retention-and-erasure-US5: Collector reads what the vault keeps about them
+## g10.vault-retention-and-erasure.US5: Collector reads what the vault keeps about them
 
 **As a** collector,
 **I want** one page that says what is kept, for how long, where my identity
@@ -411,335 +446,151 @@ stands, and where I ask to be forgotten,
 **so that** I know what I am asking for before I ask.
 
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-pb2 rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
-### grade10-site-vault-retention-and-erasure-US5-TC2-1: Your data states that review deletes nothing by itself
+### g10.vault-retention-and-erasure.US5-TC1: Your data names each class with its window, the cases it applies to, and every signed document once
 
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-05
-
-**Pre-conditions:**
-
-* The collector is signed in on <vault your data url>, and one of their
-  cases is already past its retention window.
-
-**Steps:**
-
-1. Navigate to <vault your data url>.
-
-**Expected Results:**
-
-* The reviewed-not-deleted line shows beside the retention table.
-* The case past its window still lists its class and window unchanged.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-fpf rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
-### grade10-site-vault-retention-and-erasure-US5-TC4-1: Standing reads no identity on file yet
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-
-* The collector's account has never had an identity check asked for.
-
-**Steps:**
-
-1. Navigate to <vault your data url>.
-
-**Expected Results:**
-
-* Standing reads no identity on file, verified at the next visit.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-8gu rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
-### grade10-site-vault-retention-and-erasure-US5-TC5-1: Standing reads a check is out since the date
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-05
-
-**Pre-conditions:**
-
-* A hosted identity check on the collector's account is submitted and the
-  provider has not decided.
-
-**Steps:**
-
-1. Navigate to <vault your data url>.
-
-**Expected Results:**
-
-* Standing reads a check is out since the date it was submitted.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-4ub rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
-### grade10-site-vault-retention-and-erasure-US5-TC6-1: Standing reads the last check expired on the date
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-05
-
-**Pre-conditions:**
-
-* The collector's last hosted identity check expired or was withdrawn.
-
-**Steps:**
-
-1. Navigate to <vault your data url>.
-
-**Expected Results:**
-
-* Standing reads the last check expired on the date.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-0xv rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
-### grade10-site-vault-retention-and-erasure-US5-TC7-1: Your data shows loading cards before data arrives
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-
-* The collector is signed in, and Your data has not yet returned its
-  response.
-
-**Steps:**
-
-1. Navigate to <vault your data url>.
-
-**Expected Results:**
-
-* Skeleton cards show in place of the retention table, standing and
-  download cards.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-2ih rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
-### grade10-site-vault-retention-and-erasure-US5-TC9-1: Your data keeps its cards after a failed load
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-retention-and-erasure-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
-
-**Pre-conditions:**
-
-* The collector is signed in on <vault your data url>, and the page's data
-  request is made to fail.
-
-**Steps:**
-
-1. Navigate to <vault your data url>.
-
-**Expected Results:**
-
-* The error message shows.
-* Any cards that already rendered stay in place.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-c1m rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
-### grade10-site-vault-retention-and-erasure-US5-TC14-1: A check left undecided long enough still reads that a check is out
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-05
-
-**Pre-conditions:**
-
-* A check on the collector's account was started, is undecided, and has been
-  out long enough to stand as stalled.
-
-**Steps:**
-
-1. Navigate to <vault your data url>.
-
-**Expected Results:**
-
-* Standing reads that a check is out, with the day it was started.
-* It does not read as no identity on file.
-* It names no reason and no stage of the check.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-e5n rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
-### grade10-site-vault-retention-and-erasure-US5-TC15-1: A refused check reads as not accepted and names no reason
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** positive
-* **Type:** security
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
 
 **Pre-conditions:**
 
-* The collector's last check was decided as not accepted.
+* customer(collector) is signed in, with `<cases>`; `<windows>`.
+
+**Test data:**
+
+| `<cases>` | `<windows>` | `<page reads>` |
+| --- | --- | --- |
+| two released cases with sealed documents, one past its window | every class has a window | each class with its window in days after a case ends; a line that review deletes nothing by itself; the case past its window unchanged; every sealed document under its case, offered once |
+| one released case | no window set for identity records | identity records reading that the window is being decided, never zero or forever |
+| one running loan | every class has a window | the running case carries no class or window |
 
 **Steps:**
 
-1. Navigate to <vault your data url>.
+1. Open Your data, then each case named.
 
 **Expected Results:**
 
-* Standing reads that the last check was not accepted, with the day it was
-  decided.
-* No reason for the refusal shows.
-* No legal name, date of birth, document type, document number, expiry or
-  photograph shows anywhere on the page.
+* It reads `<page reads>`; an ended case's own page carries the same classes and windows.
+
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-fpf rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
+### g10.vault-retention-and-erasure.US5-TC2: The identity standing reads in the collector's words and never names them or their document
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Pre-conditions:**
+
+* customer(collector) is signed in, their identity `<state>`.
+
+**Test data:**
+
+| `<state>` | `<standing reads>` |
+| --- | --- |
+| bound, expiring on a later day | verified until that day, with how and when it was checked |
+| a check started, undecided | a check out, since the day it started |
+| a check started long enough ago to stand as stalled | a check out, since the day it started |
+| the last check expired | lapsed, on the day it expired |
+| never asked for | none on file, to be verified at the next visit |
+| the last check refused | not accepted, on the day decided, with no reason |
+
+**Steps:**
+
+1. Open Your data, and read the standing.
+
+**Expected Results:**
+
+* It reads `<standing reads>`; no legal name, date of birth, document type or number, expiry or photograph shows anywhere on the page.
+
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-2ih rev=1 covers=g10.vault-retention-and-erasure.SC-j8k,g10.vault-retention-and-erasure.SC-4vv,g10.vault-retention-and-erasure.SC-1hs,g10.vault-retention-and-erasure.SC-sxi,g10.vault-retention-and-erasure.SC-4ye,g10.vault-retention-and-erasure.SC-ry3,g10.vault-retention-and-erasure.SC-9u2,g10.vault-retention-and-erasure.SC-zcq,g10.vault-retention-and-erasure.SC-avy,g10.vault-retention-and-erasure.SC-1jf,g10.vault-retention-and-erasure.SC-8wl -->
+### g10.vault-retention-and-erasure.US5-TC5: A part of Your data that cannot load leaves the rest standing
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Pre-conditions:**
+
+* customer(collector) is signed in, with no request open; `<failure>`.
+
+**Test data:**
+
+| `<failure>` | `<page shows>` |
+| --- | --- |
+| the response has not yet arrived | skeleton cards in place of the table, standing and documents |
+| the identity standing cannot be answered | the standing named as failed; what is kept, the documents, the holds and the ask still shown |
+| grading cannot say what stands in the way | that grading's holds could not be read; the ask not offered; what is kept still shown |
+| the page's request fails after some cards rendered | the error message; the rendered cards still in place |
+
+**Steps:**
+
+1. Open Your data.
+
+**Expected Results:**
+
+* It shows `<page shows>`, and files nothing.
+
+<!-- trace:case id=g10.vault-retention-and-erasure.TC-whu rev=1 -->
+### g10.vault-retention-and-erasure.US5-TC4: Your data opens only to its account holder
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Pre-conditions:**
+
+* Nobody is signed in on `<g10url>`.
+
+**Steps:**
+
+1. Open Your data's address.
+
+**Expected Results:**
+
+* It asks for sign-in, and shows nothing of any account.
 
 ## Settled
 
-- A retention class whose window nobody has set shows in the same table as every other, its window reading that it is being decided — never hidden, never zero days, never kept forever.
-- The page names all six standings the identity record holds, in the collector's words: a stalled check reads that a check is out, a refused one that the last check was not accepted, and neither names a reason.
-- The download is the one `grade10-site/vault/documents-and-signing` defines. This page lists what the collector has signed and offers that download; the bound it covers, and the page a collector who has signed nothing reads, are that capability's and are walked in its suite.
-- **Filing the ask while the vault holds something** - refused by name by the vault before anything is filed with auth, naming each case by reference and hold: a request in flight, an item in the vault or a running loan (Q16)
-- **Filing the ask while a grading submission is live** - no new guard: the worker accepts the filing, and grading's erasure refuses when an admin runs it (Q15)
-
-## Reconciliation
-
-Run: 2026-09-22, blind pass over the isolated input — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the pages the proposal links; denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. Reconciled the same day against the scenario pass's `grade10-site-vault-retention-and-erasure-SC-12` to `grade10-site-vault-retention-and-erasure-SC-27` and the durable scenarios the change does not touch. The blind pass read US1 and US5 only; this is the capability's first suite, so US2 and US3 — the journeys the durable spec already serves — were walked here and given cases.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `grade10-site-vault-retention-and-erasure-US1-TC5-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-26` |
-| `grade10-site-vault-retention-and-erasure-US1-TC6-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-23` |
-| `grade10-site-vault-retention-and-erasure-US1-TC7-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-04` and `grade10-site-vault-retention-and-erasure-SC-26` — a case that closed does not clear the hold another case stands |
-| `grade10-site-vault-retention-and-erasure-US5-TC1-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-16` |
-| `grade10-site-vault-retention-and-erasure-US5-TC2-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-16` — the reviewed-not-deleted line is that scenario's second outcome |
-| `grade10-site-vault-retention-and-erasure-US5-TC3-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-19` and `grade10-site-vault-retention-and-erasure-SC-22` |
-| `grade10-site-vault-retention-and-erasure-US5-TC4-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-40` |
-| `grade10-site-vault-retention-and-erasure-US5-TC5-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-20` |
-| `grade10-site-vault-retention-and-erasure-US5-TC6-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-21` |
-| `grade10-site-vault-retention-and-erasure-US5-TC7-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-15` — the page stands while a block has not been answered. The design's Loading row closes on the same scenario; the skeleton itself is a drawing and no requirement states it |
-| `grade10-site-vault-retention-and-erasure-US5-TC8-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-12` |
-| `grade10-site-vault-retention-and-erasure-US5-TC9-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-15` |
-| Raised: does an unset window show as undecided, or not show at all? | Answered by the scenario pass | `grade10-site-vault-retention-and-erasure-SC-17` already reads an unset window as undecided, and the class shows either way. Landed as Q34 in the change's `decisions.md`; `grade10-site-vault-retention-and-erasure-US5-TC12-1` walks it |
-| Raised: four standings on the page against six on the console's panel | Answered by the scenario pass | The requirement tables all six in the collector's words — stalled reads that a check is out, refused that it was not accepted, neither naming a reason. Landed as Q18; `grade10-site-vault-retention-and-erasure-SC-20` and `grade10-site-vault-retention-and-erasure-SC-22` state them, and `grade10-site-vault-retention-and-erasure-US5-TC14-1` and `grade10-site-vault-retention-and-erasure-US5-TC15-1` walk them |
-| `grade10-site-vault-retention-and-erasure-SC-13` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC10-1`, the one case walking the foreign `grade10-site/vault/documents-and-signing` US-05 anchor `grade10-site-vault-retention-and-erasure-SC-13` carries; it traces this capability's own journey, which is the only anchor a trace beside this spec takes. The blind pass read the download as that capability's, which is where the bound and the page a collector who has signed nothing reads now stand; this page lists what was signed and offers the download |
-| `grade10-site-vault-retention-and-erasure-SC-17` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC12-1` — the blind pass raised the question instead of writing the case |
-| `grade10-site-vault-retention-and-erasure-SC-18` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC13-1` |
-| `grade10-site-vault-retention-and-erasure-SC-39` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC14-1`. The stalled standing was the second triple under `grade10-site-vault-retention-and-erasure-SC-20` before the split and now carries its own id; `grade10-site-vault-retention-and-erasure-US5-TC5-1` walks the check that is out |
-| `grade10-site-vault-retention-and-erasure-SC-22`, the refused standing | Half reached | Case added: `grade10-site-vault-retention-and-erasure-US5-TC15-1`; `grade10-site-vault-retention-and-erasure-US5-TC3-1` walks a verified standing naming no document |
-| `grade10-site-vault-retention-and-erasure-SC-24` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC16-1`. Every ask case the blind pass wrote is a refusal or a hold; none files one |
-| `grade10-site-vault-retention-and-erasure-SC-25` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC17-1` |
-| `grade10-site-vault-retention-and-erasure-SC-27` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC18-1` |
-| `grade10-site-vault-retention-and-erasure-SC-04`, `grade10-site-vault-retention-and-erasure-SC-05` and `grade10-site-vault-retention-and-erasure-SC-10` | No case reached them | US2 had no section: `grade10-site-vault-retention-and-erasure-US2-TC1-1`, `grade10-site-vault-retention-and-erasure-US2-TC2-1` and `grade10-site-vault-retention-and-erasure-US2-TC3-1` |
-| `grade10-site-vault-retention-and-erasure-SC-01`, `grade10-site-vault-retention-and-erasure-SC-02` and `grade10-site-vault-retention-and-erasure-SC-03` | No case reached them | US3 had no section: `grade10-site-vault-retention-and-erasure-US3-TC2-1`, `grade10-site-vault-retention-and-erasure-US3-TC1-1` and `grade10-site-vault-retention-and-erasure-US3-TC3-1` |
-| `grade10-site-vault-retention-and-erasure-SC-11` | Covered | `grade10-site-vault-retention-and-erasure-US1-TC3-1` reads the history keeping its entries and losing the person |
-
-Run: 2026-09-22, blind pass over the isolated input — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the pages the proposal links; denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. Reconciled the same day against the scenario pass's `grade10-site-vault-retention-and-erasure-SC-28` to `grade10-site-vault-retention-and-erasure-SC-37`. The change adds one journey, `grade10-site-vault-retention-and-erasure-US-04`, so the blind pass wrote under US4 alone; the journeys the durable spec already serves keep the suite they have.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `grade10-site-vault-retention-and-erasure-US4-TC1-1` | Covered, corrected | `grade10-site-vault-retention-and-erasure-SC-28` and `grade10-site-vault-retention-and-erasure-SC-35`. The draft read the erasure as leaving the submission record whole: it expected the collector's name, email, phone and postal address still on the record after the run. The erasure takes contact and address off every submission whichever class it falls in — the vault has held that since its own erasure requirement, and the compliance page the blind pass read states it — so the expectation now keeps the card list and the pickup code and loses the person. The record's window is the figure `grade10-site-vault-retention-and-erasure-SC-28` reads, 2,555 days |
-| `grade10-site-vault-retention-and-erasure-US4-TC3-1` | Covered, corrected | `grade10-site-vault-retention-and-erasure-SC-36`, with the record's window from `grade10-site-vault-retention-and-erasure-SC-28`. The draft kept the submission record after the erasure of a submission nobody signed; the author's ruling on the raised `planned` question says it is purged with the account like any unsigned record. The case now reads the record and its 2,555-day window before the run and the purge after it |
-| `grade10-site-vault-retention-and-erasure-US4-TC4-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-31` — the `checked_in` row; `grade10-site-vault-retention-and-erasure-SC-32` — the unsettled upcharge and the uncollected cards |
-| `grade10-site-vault-retention-and-erasure-US4-TC5-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-31` — one live submission refuses the whole ask and the closed vault case beside it is untouched |
-| Raised: does a submission still `planned` block or take part in the erasure? | Answered by the author | A `planned` submission was never booked, so it holds nothing and blocks nothing, and it is purged with the account like any unsigned record. Landed as Q67 in the change's `decisions.md`; `grade10-site-vault-retention-and-erasure-SC-38` states it and `grade10-site-vault-retention-and-erasure-US4-TC7-1` walks it |
-| Raised: what day count does the submission record's own class carry? | Answered by the scenario pass | The submission record is the vault's case-records class, 2,555 days under Grade10, which the requirement's class table already states and `grade10-site-vault-retention-and-erasure-SC-28` reads. Landed as Q68; the day count is on the vault's compliance page as a 🚧 row, and `grade10-site-vault-retention-and-erasure-US4-TC1-1` and `grade10-site-vault-retention-and-erasure-US4-TC3-1` carry the figure the blind pass left as a placeholder |
-| `grade10-site-vault-retention-and-erasure-SC-30` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US4-TC6-1`. Every retention case the blind pass wrote reads a submission that has ended; none reads one still with the grader |
-| `grade10-site-vault-retention-and-erasure-SC-33` | Half reached | Case added: `grade10-site-vault-retention-and-erasure-US4-TC8-1`. `grade10-site-vault-retention-and-erasure-US4-TC4-1` files the ask and reads the refusal; the withheld words, and that nothing is filed at all, are this case's |
-| `grade10-site-vault-retention-and-erasure-SC-34` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US4-TC7-1`, a row per end event. The blind pass ran the erasure in its pre-conditions and never read the non-refusal as an outcome |
-| `grade10-site-vault-retention-and-erasure-SC-37` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US4-TC9-1` — owed mail and the history the erasure leaves standing |
-| `grade10-site-vault-retention-and-erasure-SC-38` | Written on the ruling | `grade10-site-vault-retention-and-erasure-US4-TC7-1`'s first row |
-| `grade10-site-vault-retention-and-erasure-US4-TC10-1` | Case added | The vault's end-to-end walk found the erasure block reading grading's holds with no case to walk when grading cannot answer. The rule is `grade10-site-vault-retention-and-erasure-SC-15` in `complete-vault-collector-flow`'s delta on this capability: a block that cannot be answered names what failed and leaves the answered blocks standing, so the ask block stays unanswered and offers nothing to file, as `grade10-site-vault-retention-and-erasure-SC-33` withholds it while cards are out |
-| Design row `Erasure refused` | Closed | `ui-design.md`'s Your data table, the vault's Your data block, reads `grade10-site-vault-retention-and-erasure-SC-33` |
-| `grade10-site-vault-retention-and-erasure-SC-42` | Case added at the acceptance review | `grade10-site-vault-retention-and-erasure-US4-TC12-1`: the window waits for nothing owed either way, Q20's own reading |
-| `grade10-site-vault-retention-and-erasure-SC-43` | Case added at the acceptance review | `grade10-site-vault-retention-and-erasure-US4-TC13-1`: a reversed payout's repayment is money unsettled on a collected submission, decided by the product owner, 2026-10-01 |
-
-**Run:** written at the acceptance review of 2026-10-01, which found that the walk-in's removal reuses the unsigned-case purge (Q23) and that the actor rewrite reaches a case through its owner, which the removal clears. No blind pass ran for this capability.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `grade10-site-vault-retention-and-erasure-SC-44` | Case added | `grade10-site-vault-retention-and-erasure-US2-TC4-1` |
-
-**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/cases.ts` (`yourData`, `requestErasure`, `cancelErasure`), `collectorHolds`, `cases/yourData.ts` and `retention.ts`. It is a statement, not proof.
-
-- **Raised, folded into spec** - none
-- **Raised, escalated** - the refusal on filing, landed as Q16; a live grading submission, landed as Q15: the filing is accepted and grading's erasure refuses the run, as `add-card-grading`'s requirement holds
-- **Raised, rejected** - none
-- **Re-versioned to the API** - every case whose behaviour the worker keeps and whose run walked Your data or the case page: `grade10-site-vault-retention-and-erasure-US1-TC5-2`, `grade10-site-vault-retention-and-erasure-US1-TC6-2`, `grade10-site-vault-retention-and-erasure-US1-TC7-2`, `grade10-site-vault-retention-and-erasure-US4-TC3-2`, `grade10-site-vault-retention-and-erasure-US4-TC5-2`, `grade10-site-vault-retention-and-erasure-US5-TC1-2`, `grade10-site-vault-retention-and-erasure-US5-TC3-2`, `grade10-site-vault-retention-and-erasure-US5-TC8-2`, `grade10-site-vault-retention-and-erasure-US5-TC10-2`, `grade10-site-vault-retention-and-erasure-US5-TC12-2`, `grade10-site-vault-retention-and-erasure-US5-TC13-2`, `grade10-site-vault-retention-and-erasure-US5-TC16-2`, `grade10-site-vault-retention-and-erasure-US5-TC17-2`, `grade10-site-vault-retention-and-erasure-US5-TC18-2`; `grade10-site-vault-retention-and-erasure-US4-TC3-2` and `grade10-site-vault-retention-and-erasure-US4-TC5-2` are `add-card-grading`'s cases, filing the ask through the API with the admin's run unchanged
-- **Deprecated** - the cases whose subject is a removed screen: `grade10-site-vault-retention-and-erasure-US4-TC8-1` and `grade10-site-vault-retention-and-erasure-US4-TC10-1`, Your data withholding the ask, which the worker never did (Q15); `grade10-site-vault-retention-and-erasure-US5-TC2-1`, the reviewed-not-deleted line; `grade10-site-vault-retention-and-erasure-US5-TC7-1` and `grade10-site-vault-retention-and-erasure-US5-TC9-1`, the page's loading and failed cards
-- **Deprecated as duplicates** - `grade10-site-vault-retention-and-erasure-US5-TC4-1`, `grade10-site-vault-retention-and-erasure-US5-TC5-1`, `grade10-site-vault-retention-and-erasure-US5-TC6-1`, `grade10-site-vault-retention-and-erasure-US5-TC14-1`, `grade10-site-vault-retention-and-erasure-US5-TC15-1`: each is one row of `grade10-site-vault-retention-and-erasure-US5-TC3-2`, the same read with another standing
-- **Carried into a bump** - QA1's new ids that re-covered an earlier case leave the delta: `US1-TC8-1` into `grade10-site-vault-retention-and-erasure-US1-TC6-2` and `grade10-site-vault-retention-and-erasure-US1-TC7-2`; `US1-TC9-1` into `grade10-site-vault-retention-and-erasure-US1-TC5-2`; `US5-TC19-1` into `grade10-site-vault-retention-and-erasure-US5-TC1-2` and `grade10-site-vault-retention-and-erasure-US5-TC10-2`; `US5-TC20-1` into `grade10-site-vault-retention-and-erasure-US5-TC3-2`; `US5-TC21-1` into `grade10-site-vault-retention-and-erasure-US5-TC8-2`; `US5-TC22-1` into `grade10-site-vault-retention-and-erasure-US5-TC16-2`; `US5-TC23-1` into `grade10-site-vault-retention-and-erasure-US5-TC17-2`; `US5-TC24-1` into `grade10-site-vault-retention-and-erasure-US5-TC18-2`; `US5-TC25-1` into `grade10-site-vault-retention-and-erasure-US5-TC12-2`; `US5-TC26-1` into `grade10-site-vault-retention-and-erasure-US5-TC13-2`
-- **New ids kept** - `grade10-site-vault-retention-and-erasure-US5-TC27-1`, an identity standing that cannot be answered
-- **Joined** - `grade10-site-vault-retention-and-erasure-SC-23`, `-SC-26` into `grade10-site-vault-retention-and-erasure-US1-TC6-2`, `grade10-site-vault-retention-and-erasure-US1-TC7-2` and `grade10-site-vault-retention-and-erasure-US1-TC5-2`; `-SC-12`, `-SC-13`, `-SC-16` into `grade10-site-vault-retention-and-erasure-US5-TC1-2` and `grade10-site-vault-retention-and-erasure-US5-TC10-2`; `-SC-19` to `-SC-22`, `-SC-39`, `-SC-40` into `grade10-site-vault-retention-and-erasure-US5-TC3-2`; `-SC-24`, `-SC-25`, `-SC-27` into `grade10-site-vault-retention-and-erasure-US5-TC16-2` to `grade10-site-vault-retention-and-erasure-US5-TC18-2`; `-SC-17` into `grade10-site-vault-retention-and-erasure-US5-TC12-2`; `-SC-18` into `grade10-site-vault-retention-and-erasure-US5-TC13-2`; `-SC-15` into `grade10-site-vault-retention-and-erasure-US5-TC27-1`
-- **Contradicted** - none
-- **Uncovered anchors** - none
-- **Automated cases re-versioned** - `grade10-site-vault-retention-and-erasure-US1-TC5-2`, `grade10-site-vault-retention-and-erasure-US1-TC6-2`, `grade10-site-vault-retention-and-erasure-US1-TC7-2`, `grade10-site-vault-retention-and-erasure-US5-TC1-2`, `grade10-site-vault-retention-and-erasure-US5-TC8-2`, `grade10-site-vault-retention-and-erasure-US5-TC13-2`, `grade10-site-vault-retention-and-erasure-US5-TC16-2`, `grade10-site-vault-retention-and-erasure-US5-TC17-2` were decided by `your-data.spec.ts`, and `grade10-site-vault-retention-and-erasure-US4-TC5-2` by `grading/uncollected.spec.ts`, at `-1`; each is `manual` until task 4.4 retitles its API walk and flips it
-
-### Manual
-
-| Manual | Why |
-| --- | --- |
-| `grade10-site-vault-retention-and-erasure-US1-TC5-1` | A person reads the hold and the erasure-waits line as words beside the filed request; an API test decides the hold, never the wording |
-| `grade10-site-vault-retention-and-erasure-US1-TC6-1` | The same words before anything is filed, with the control withheld rather than refused on press |
-| `grade10-site-vault-retention-and-erasure-US1-TC7-1` | A person reads both cases on one page and checks the closed one does not read as having cleared the hold |
-| `grade10-site-vault-retention-and-erasure-US5-TC1-1` | The windows are read per class in the collector's words, which no assertion on a number decides |
-| `grade10-site-vault-retention-and-erasure-US5-TC3-1` | A person sweeps the whole page for a name or a document rather than the standing block alone |
-| `grade10-site-vault-retention-and-erasure-US5-TC9-1` | The error and the blocks that stayed are read together, which a failed request's assertion does not settle |
-| `grade10-site-vault-retention-and-erasure-US5-TC10-1` | A person opens the downloaded file and counts what is in it against the list |
-| `grade10-site-vault-retention-and-erasure-US5-TC16-1` | The confirmation's window and its cancel line are read before the ask is sent |
-| `grade10-site-vault-retention-and-erasure-US5-TC17-1` | The page after the cancel is read back to the ask it started from |
-| `grade10-site-vault-retention-and-erasure-US4-TC4-1` | A person reads the refusal as words on Your data — which submission it names and which hold it names — where an API test decides only that the ask was refused |
-| `grade10-site-vault-retention-and-erasure-US4-TC5-1` | A person reads one refusal over two products on one page and checks the vault case beside it is not offered as erasable |
-| `grade10-site-vault-retention-and-erasure-US4-TC8-1` | Nothing is filed, so no request exists for a test to assert on: the whole case is the words in the block and the control that is withheld rather than refused on press |
+- A class whose window nobody set shows in the same table, its window reading that it is being decided.
+- All six identity standings read in the collector's words; a stalled check reads as out, a refused one as not accepted, neither with a reason.
+- The signed-document download is `grade10-site/vault/documents-and-signing`'s; this page lists the documents and offers it.
+- Filing the ask while the vault holds something is refused by name before anything is filed, naming each case and hold (Q16). A live grading submission does not stop the filing; grading's erasure refuses when an admin runs it (Q15).
+- Filing the ask, cancelling it inside the window, and the cancel refused once the window passed are `shared/auth/users`' and walked there on Your data.
