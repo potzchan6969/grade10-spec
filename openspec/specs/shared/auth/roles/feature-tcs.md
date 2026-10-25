@@ -43,6 +43,7 @@ Runs once per row of **Test data**.
 | finance | Store and Vault | a vault case's address |
 | treasurer | Inventory | an item's address |
 | auditor | Store, Vault, Inventory and Users | an account's address in Users |
+| staff, without `audit:read` | Audit | Audit's address |
 
 **Steps:**
 

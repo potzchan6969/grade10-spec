@@ -7,7 +7,7 @@
 ## Background
 
 * Users is `<users>` on the admin console: a directory of accounts with search, Type, role and status narrowing and pages, an account opening in a panel beside the list. Each case names the grants the operator's roles hold.
-* `<g10url>` is the Grade10 site. A change to an account's standing, roles or sessions reaches the person's next page within 70 seconds; a tab is read by opening a page in it.
+* Audit is the console's audit trail, read by an auditor holding `audit:read`, filtered by user id; it names people by user id. `<g10url>` is the Grade10 site. A change to an account's standing, roles or sessions reaches the person's next page within 70 seconds; a tab is read by opening a page in it.
 
 ## g10adm.console-user-directory.US1: Admin reviews who holds elevated grants
 
@@ -126,12 +126,14 @@ Runs once per row of **Test data**.
 1. Read the list's Joined column; open `<account>`'s roles from its row, and read the roles offered.
 2. Select `<roles saved>`, save, and reopen the roles.
 3. Within 70 seconds, open another page in tab A.
+4. As an auditor, filter Audit by the account's user id.
 
 **Expected Results:**
 
 * Step 1: each joined date reads as Grade10 writes it; the dialog offers each Grade10 role with its label and permission summary, and no other.
 * Step 2 saves with no confirmation; the account holds `<holds>`.
 * Step 3's navigation shows `<tab A shows>`.
+* Step 4 lists one role change for the save, naming the admin and the account by user id.
 
 <!-- trace:case id=g10adm.console-user-directory.TC-wex rev=1 -->
 ### g10adm.console-user-directory.US1-TC4: A role change the operator may not make is refused
@@ -287,10 +289,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Read the Type, Roles, Status and Email options, the Status filter with a screen reader; apply `<asked>`.
+2. As an auditor, filter Audit by the operator's user id.
 
 **Expected Results:**
 
 * The options are Grade10's labels and no other, the Status filter announced as one choice with its selected option; the list shows `<listed>`.
+* Step 2 lists no entry for the search.
 
 <!-- trace:case id=g10adm.console-user-directory.TC-xz2 rev=1 -->
 ### g10adm.console-user-directory.US2-TC4: A row opens the account whole beside the list
@@ -366,12 +370,14 @@ Runs once per row of **Test data**.
 1. Start `<move>` from the row or the panel.
 2. After 70 seconds, in the other browsers, start checkout and sign in as `<account>`.
 3. Start the opposite move, and cancel its dialog.
+4. As an auditor, filter Audit by `<account>`'s user id, and expand the entry.
 
 **Expected Results:**
 
 * A dialog the page renders opens: `<dialog>`; the browser's own confirm box never appears.
 * The account is `<afterwards>`.
 * Step 3 changes nothing.
+* Step 4 lists one entry for the move, with its reason where one was typed, naming the admin and the account by user id, never by address; nothing for the cancel.
 
 <!-- trace:case id=g10adm.console-user-directory.TC-tfk rev=1 -->
 ### g10adm.console-user-directory.US2-TC6: A ban, unban or erasure filing the operator may not make is refused
@@ -408,10 +414,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open `<account>`, and do `<act>`.
+2. As an auditor, filter Audit by `<account>`'s user id.
 
 **Expected Results:**
 
 * It is refused, naming the open request where there is one; the standing and any request are as they were, and the holder signs in exactly as before.
+* Step 2 lists the act marked not succeeded, naming the operator.
 
 <!-- trace:case id=g10adm.console-user-directory.TC-muq rev=1 -->
 ### g10adm.console-user-directory.US2-TC7: An operator's erasure filing bans the account, taking over a request its holder filed
@@ -544,11 +552,13 @@ Runs once per row of **Test data**.
 
 1. Open `<account>`, and read its sessions area.
 2. Search the panel for each session's secret, read in the browser that holds it.
+3. As an auditor, filter Audit by the admin's user id.
 
 **Expected Results:**
 
 * Step 1 lists `<listed>`, each by a different identifier, named as the site's or the console's, with where it was raised and when it ends.
 * Step 2 finds no secret.
+* Step 3 lists no entry for reading the sessions.
 
 <!-- trace:case id=g10adm.console-user-directory.TC-tio rev=1 -->
 ### g10adm.console-user-directory.US2-TC11: Ending a session signs that one out within 70 seconds, and ending every session signs out both surfaces
@@ -585,10 +595,12 @@ Runs once per row of **Test data**.
 
 1. Open the account, and end `<ended>` in its sessions area.
 2. After 70 seconds, open a page in each tab.
+3. As an auditor, filter Audit by the account's user id.
 
 **Expected Results:**
 
 * Step 2 shows `<afterwards>`.
+* Step 3 lists one revoke for each ending, naming the admin, and no secret.
 
 <!-- trace:case id=g10adm.console-user-directory.TC-wwl rev=1 -->
 ### g10adm.console-user-directory.US2-TC12: An operator whose grant does not cover an account sees no session to list or end

@@ -129,7 +129,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<reader>` is on Audit; the trail holds a write on a directory person and one whose actor is `system`.
+* `<reader>` is on Audit, on a machine set to America/New_York; the trail holds a ban of a directory person at 2026-10-07T01:30:00Z and a write whose actor is `system`.
 
 **Test data:**
 
@@ -146,7 +146,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 names the subject's user id and a readable action, with the recorded action kept beside it; expanded, it shows roles and details, and no email or hash.
+* Step 1 names the subject's user id and a readable action, with the recorded action kept beside it, reading 01:30 on 7 Oct, UTC, never 09:30 or 21:30 on 6 Oct; expanded, it shows roles and details, and no email, token or hash.
 * Step 2 copies each id.
 * Step 3 and step 1 show `<links>`.
 
@@ -218,7 +218,7 @@ Runs once per row of **Test data**.
 
 | `<chains>` | `<strip shows>` |
 | --- | --- |
-| every chain reads and is consistent | one line under the description and above the filters, naming no product |
+| every chain reads and is consistent | one line under the description and above the filters, naming no product and showing no hash |
 | one chain is broken | a notice naming that product, and no product that answers |
 
 **Steps:**
