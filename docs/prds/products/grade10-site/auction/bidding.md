@@ -40,7 +40,7 @@ Auction bids use USD. Winners choose USD or HKD for settlement.
 | Chosen by | Fixed for every lot | The winner, once, at [Order Setup](/p/grade10-site/auction/post-bidding#order-setup) |
 | What it is for | The unit of every lot, bid and maximum | What the invoice, order total, fees and letters are paid in |
 
-- 🚧 **One unit for every lot** — a bid, a maximum, a quick bid, the ceiling
+- **One unit for every lot** — a bid, a maximum, a quick bid, the ceiling
   and the increment are all USD; no lot is priced in another currency
 - **Settlement currency** — a USD fact becomes an HKD fact only at
   settlement, at one fixed rate — [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
@@ -168,11 +168,11 @@ $10, where Goldin names none.
 | A bidder offers more | $100 | $110 | $120 is accepted as $120; nothing rounds it to a multiple |
 | Lot at the ceiling | $10,000,000 | — | Every further bid is refused |
 
-- 🚧 **One configured schedule** — the USD tiers above apply to every lot, to
+- **One configured schedule** — the USD tiers above apply to every lot, to
   the house's maximum and to a bid in extended bidding as to any other, and a
   change to their values reaches the next bid on every lot, open ones
   included; a bid already standing keeps its amount
-- 🚧 **Whole dollars only** — a bid, a maximum, a starting price, every tier
+- **Whole dollars only** — a bid, a maximum, a starting price, every tier
   bound and every increment are whole dollars; a bid with cents is refused and
   nothing moves, and a starting price an operator or a consignment sets with
   cents is not saved. A price already stored with cents is left as it is
@@ -183,7 +183,7 @@ $10, where Goldin names none.
 - **Opening price** — the first bid must reach the starting price, or the
   lowest increment when the lot starts at 0, and a lone bidder stands there;
   one increment above the current bid applies from the second bid
-- 🚧 **Opening price of a stored price with cents** - a listing already stored
+- **Opening price of a stored price with cents** - a listing already stored
   with a starting price that has cents opens at the next whole dollar at or
   above it; the page still shows the starting price
 
@@ -540,7 +540,7 @@ surface.
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; every row tied on amount with a row above it shows an Info tip in the amount tone (when maximums match, the earlier one leads), at the current price and at any older tie lower down. Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Public Recent bids avatar | Decided | Each public Recent Bids avatar shows one letter from the bidder email local part (first A-Z or 0-9, uppercased; `B` when none or the email is erased). Readable label stays Bidder N. Full email and name stay private. Separate public field from the label. | Product (@mason5991) |
 | Hidden cap, raise only | Decided | A leading maximum is not public; a collector's can go up but never down. | Product |
-| Increments | 🚧 In flight | One USD schedule for every lot, selected from the amount being beaten; a threshold includes its lower bound. The values are configuration in `packages/grade10-auction/contracts/src/bidIncrementSchedule.ts`, retuned by pull request and shown in the manual table. Bids, maximums, starting prices, tier bounds and increments are whole dollars, and a bid may exceed the minimum. No listing-level override; collectors see the next minimum, not the schedule. A stored price with cents is left alone and opens at the next whole dollar. Replaces "need not be a multiple". Decided by the product manager. | Product (@htonyl) |
+| Increments | Decided | One USD schedule for every lot, selected from the amount being beaten; a threshold includes its lower bound. The values are configuration in `packages/grade10-auction/contracts/src/bidIncrementSchedule.ts`, retuned by pull request and shown in the manual table. Bids, maximums, starting prices, tier bounds and increments are whole dollars, and a bid may exceed the minimum. No listing-level override; collectors see the next minimum, not the schedule. A stored price with cents is left alone and opens at the next whole dollar. Replaces "need not be a multiple". Decided by the product manager. | Product (@htonyl) |
 | Bid ceiling | Decided | USD 10,000,000 on every lot, refused above it. The custom field uses that same ceiling. | Product |
 | Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
 | If card holds return | Decided | The line stays at acceptance: a bid exists only once every precondition, a card authorization included, has succeeded and been judged under the lot's lock. The authorization is taken outside the lock, for the maximum, keyed to the attempt, and released if the attempt is refused; a later failure or expiry never revokes an accepted bid and is the winner's settlement at the close. Accepting first and revoking later moves the price down, swaps the leader and unwinds automatic bids, extensions and closes; eBay, Catawiki, Heritage, real-time bidding and exchanges all draw the line at acceptance. | Product and engineering |

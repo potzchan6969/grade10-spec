@@ -174,7 +174,7 @@ the card is in the winner's hands. The collector's half is
 - **Watchers** — opening Stats on a listing shows how many collectors watch
   that lot, across both brands; interest, not a count of expected bidders; the
   Listings table does not show the count
-- 🚧 **Refused** — a currency other than USD, or a starting price that is not
+- **Refused** — a currency other than USD, or a starting price that is not
   a whole-dollar amount of 0 or more, on a draft save, a create or an update; a slug of the wrong shape, or one another listing
   holds; two categories from one taxonomy, or a published or canceled
   campaign; a close not after the start, a Publish at after the start, a
