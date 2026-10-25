@@ -1,6 +1,6 @@
 # grade10-site/grading/submission-plan Test Cases
 
-**Status:** pending-review · 0/42
+**Status:** pending-review · 0/43
 **Drafts styled:** 2026-10-25, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
@@ -477,13 +477,11 @@ Runs once per row of **Test data**.
 * It says Bulk is the only level open at the next step, at HKD 180.00 a card, cards up to HKD 1,500.00, about 10 weeks back, up to 100 cards, and names the longer drop-off.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-6co rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
-### g10.grading-submission-plan.US4-TC2: Twenty cards leave every level open, and the twenty-first leaves Bulk alone
-
-Runs once per row of **Test data**.
+### g10.grading-submission-plan.US4-TC2: Twenty cards leave every level open
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -497,20 +495,40 @@ Runs once per row of **Test data**.
 
 * A collector has the paste sheet open, an email given.
 
-**Test data:**
-
-| `<cards>` | `<levels read>` |
-| --- | --- |
-| 20 | Value, Regular, Express, Super Express and Bulk all open, each naming its ceiling and fee |
-| 21 | Value, Regular, Express and Super Express closed, naming the count; Bulk open |
-
 **Steps:**
 
-1. Paste `<cards>` lines, Homebrew Card 01, 1000 onward, add them, and continue to Service.
+1. Paste 20 lines, Homebrew Card 01, 1000 to Homebrew Card 20, 1000, add them, and continue to Service.
 
 **Expected Results:**
 
-* PSA's levels read `<levels read>`.
+* Value, Regular, Express, Super Express and Bulk are all open, each naming its ceiling and fee.
+
+<!-- trace:case id=g10.grading-submission-plan.TC-41m rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
+### g10.grading-submission-plan.US4-TC3: The twenty-first card leaves Bulk the only level open
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-04
+
+**Pre-conditions:**
+
+* A collector has the paste sheet open, an email given.
+
+**Steps:**
+
+1. Paste 21 lines, Homebrew Card 01, 1000 to Homebrew Card 21, 1000, add them, and continue to Service.
+
+**Expected Results:**
+
+* Value, Regular, Express and Super Express are closed, naming the count; Bulk is open.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-3nj rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
 ### g10.grading-submission-plan.US4-TC4: A card above Bulk's ceiling is named for a second submission, not refused

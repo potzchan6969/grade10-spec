@@ -84,7 +84,7 @@ Runs once per row of **Test data**.
 | `<diary>` | `<day picker reads>` |
 | --- | --- |
 | every day of the horizon closed for the shop in the diary console | each day saying it has nothing free, with no time offered |
-| free slots on the horizon's last day | that day pickable with its times, and the day after it disabled |
+| free slots up to the horizon's last day | the day after that last day disabled |
 | the read of shops and slots failing | the failure in the page's error tone, no day free |
 
 **Steps:**

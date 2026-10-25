@@ -1,6 +1,6 @@
 # grade10-site/grading/counter-documents Test Cases
 
-**Status:** pending-review · 0/23
+**Status:** pending-review · 0/24
 **Drafts styled:** 2026-10-25, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
@@ -180,8 +180,6 @@ Runs once per row of **Test data**.
 <!-- trace:case id=g10.grading-counter-documents.TC-ajv rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### g10.grading-counter-documents.US1-TC6: A sign link is refused past its 30 minutes, and staff can show it again
 
-Runs once per row of **Test data**.
-
 **Classification:**
 
 * **Severity:** major
@@ -196,14 +194,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The agreement's link was minted `<age>` ago and never opened.
-
-**Test data:**
-
-| `<age>` | `<opens>` |
-| --- | --- |
-| 29 minutes | the agreement, ready to sign |
-| 31 minutes | a refusal by name, saying to ask staff for a new link |
+* The agreement's link was minted 31 minutes ago and never opened.
 
 **Steps:**
 
@@ -212,8 +203,35 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 opens `<opens>`.
+* Step 1 is refused by name, saying to ask staff for a new link.
 * Step 2's new link opens the same agreement.
+
+<!-- trace:case id=g10.grading-counter-documents.TC-1uq rev=1 -->
+### g10.grading-counter-documents.US1-TC12: A sign link opens inside its 30 minutes
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-counter-documents-US-01
+
+**Pre-conditions:**
+
+* The agreement's link was minted 29 minutes ago and never opened.
+
+**Steps:**
+
+1. Open the link on the iPad.
+
+**Expected Results:**
+
+* The agreement opens, ready to sign.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-3mz rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
 ### g10.grading-counter-documents.US1-TC9: The agreement seals with no identity record asked for or kept

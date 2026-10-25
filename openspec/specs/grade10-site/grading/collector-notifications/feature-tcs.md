@@ -1,6 +1,6 @@
 # grade10-site/grading/collector-notifications Test Cases
 
-**Status:** pending-review · 0/17
+**Status:** pending-review · 0/18
 **Drafts styled:** 2026-10-25, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
@@ -198,8 +198,6 @@ Runs once per row of **Test data**.
 <!-- trace:case id=g10.grading-collector-notifications.TC-fxc rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### g10.grading-collector-notifications.US1-TC12: The daily sweep sends a plan with no visit its link once
 
-Runs once per row of **Test data**.
-
 **Classification:**
 
 * **Severity:** major
@@ -218,11 +216,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<plan>` | `<first sweep sends>` |
-| --- | --- |
-| with no drop-off booked | the list-saved email with its link |
-| booked and then cancelled before the sweep | the list-saved email with its link |
-| booked since, the visit standing | nothing |
+| `<plan>` |
+| --- |
+| with no drop-off booked |
+| booked and then cancelled before the sweep |
 
 **Steps:**
 
@@ -231,8 +228,35 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 sends `<first sweep sends>`.
+* Step 1 sends the list-saved email with its link.
 * Step 2 sends nothing further.
+
+<!-- trace:case id=g10.grading-collector-notifications.TC-eds rev=1 -->
+### g10.grading-collector-notifications.US1-TC17: The daily sweep sends nothing to a plan whose visit stands
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* A plan was kept yesterday and booked since, its visit standing.
+
+**Steps:**
+
+1. Run the daily sweep, and again the next day.
+
+**Expected Results:**
+
+* Neither sends the list-saved email.
 
 <!-- trace:case id=g10.grading-collector-notifications.TC-c3n rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
 ### g10.grading-collector-notifications.US1-TC13: A plan with no visit names the brand's main shop, its hours and its phone
