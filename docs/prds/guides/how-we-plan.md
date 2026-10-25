@@ -24,9 +24,7 @@ changes touch one capability without any of them silently reverting another.
 
 **Tasks** are a checklist inside the change, and a task is done when its box is
 ticked in git. There is no board. It is also why this manual can be honest
-about progress without anybody updating it: a PRD shows the changes
-whose deltas touch its spec, with tasks done over total, read straight out of
-the store.
+about progress without anybody updating it: a PRD carries its 🚧 lines, and the store records the rest.
 
 A change is archived only once it has actually shipped — its delta folded into
 the durable specs, the change filed under the archive. Merging a pull request

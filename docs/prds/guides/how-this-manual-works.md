@@ -7,9 +7,7 @@ order: 1
 This site is a reading surface over the spec store — a git repository where
 every product spec, in-flight change, and page of prose lives as a file. A
 page states the shape we want in plain words and pictures; the evidence
-around it is live. Work in flight shows up on the pages it touches with
-tasks done over total, journeys and test cases are embedded from the spec
-named in the page's frontmatter, and visuals come straight from Figma and
+around it is live. Work in flight shows up as 🚧 lines on the pages it touches, and visuals come straight from Figma and
 the deployed Storybook.
 
 ## How it is organized
@@ -36,9 +34,7 @@ it to keep in step.
 Every capability has a page, whatever state its contract is in, and the pip
 beside it says which: **planned** (the page states an intended shape nothing
 carries yet), **incubating** (a change in flight is writing the spec),
-**changing** (a change touches a durable spec), or no pip at all — stable. A
-page whose spec is moving carries the change in its in-flight ribbon; the
-delta itself, requirement by requirement, is read on the change's own page.
+**changing** (a change touches a durable spec), or no pip at all — stable. The delta itself, requirement by requirement, lives in the change folder.
 How we work lives under Guides, and [Start here](/guides/start-here) lays a
 first hour's path for each job.
 
@@ -53,22 +49,20 @@ hand.
 ## Propose it in the store
 A proposal is a change folder the product manager writes in the store.
 ## An agent drafts the change
-Someone points an agent at the proposal — the card names the command to
-paste, `/planning-pm <change>`. The agent writes
+Someone points an agent at the proposal — run the agent with `/planning-pm <change>`. The agent writes
 the change: the reasoning, and a delta against each spec it touches — never a
 rewritten copy of the file. People discuss the delta, because the delta is
 what there is to decide.
 ## The work ticks in git
 A full change carries a task list, and a task is done when its box is ticked
-in a commit. PRDs show the count the moment it moves. There is no
+in a commit. PRDs carry the 🚧 marks as the work moves. There is no
 board to update.
 ## The archive folds it in
 Once the code is live, archiving folds the delta into the durable specs and
 files the change away. The spec now says in present tense what it used to
 promise.
 ## The manual already knows
-Every page names its spec, so its acceptance shelf and its ribbon show the
-new truth on the next build.
+Every page names its spec, and its 🚧 and ❓ lines show the new truth on the next build.
 :::
 
 ## Working with an agent

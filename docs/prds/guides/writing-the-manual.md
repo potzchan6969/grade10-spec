@@ -68,15 +68,14 @@ The structure is what the tools read. Top to bottom:
 - **Nothing recaps the change** — no today's gap, no note that a spec is
   still being written, no scenario id. A confirmed plan reads as the product
   does, in the present tense, marked 🚧 until the outcome is verified; the
-  in-flight cards beneath say what has not shipped, and a page with no
+  🚧 lines say what has not shipped, and a page with no
   `spec` wears the planned pip
 - **The page is the roadmap** — a change starts here, one 🚧 line per
   outcome the reader can see, and its deltas derive from those lines; a delta
   promising what no line marks is the delta's error, not the page's. The
   scenarios that prove an outcome are the delta's, however many: a 🚧 inside
   a flow step, a sub-step or mid-sentence is a scenario wearing a mark. The
-  proposal links each section it marked, and the manual shows the change
-  under that heading
+  proposal links each section it marked, and the change is read against that heading
 - **The page is the essence** — every line is one the reader would act
   differently without: a value, a set they meet, an outcome they see, a
   decision. A case that only proves a rule is the suite's, a state that only

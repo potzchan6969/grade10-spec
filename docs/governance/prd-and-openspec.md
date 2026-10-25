@@ -4,7 +4,7 @@ A capability's PRD under `docs/prds/` is written first, and it moves first: whoe
 
 ## The rule
 
-A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. A domain may instead fold its capabilities into chapter pages, each capability a `##` section of the chapter the reader meets it in; the section is then what a proposal links, and the chapter shows the capability's suite under it with `::cases`. Its prose states the shape of the product in the reader's words and pictures, and never restates a requirement. Three kinds of line sit on it:
+A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. A domain may instead fold its capabilities into chapter pages, each capability a `##` section of the chapter the reader meets it in; the section is then what a proposal links, and the chapter links the capability's suite under it. Its prose states the shape of the product in the reader's words and pictures, and never restates a requirement. Three kinds of line sit on it:
 
 - **Unmarked** — the product contract in the reader's words. The spec holds its checkable form.
 - **🚧** — confirmed and being built. The mark is the whole record: nothing else says the outcome is in progress, so no change has to deliver it. It comes off when the outcome is verified, and it does not say the outcome is available in a deployed application.
@@ -37,7 +37,7 @@ The PRD moves first, whoever learns the detail — and a detail is a line the re
 | --- | --- | --- |
 | Product manager | One 🚧 line per outcome the reader can see, in the section it belongs to; a ❓ line or decisions row for what is open | The scenarios that prove an outcome, however many — the delta's. A 🚧 inside a flow step, a sub-step or mid-sentence is a scenario wearing a mark |
 | Designer | A state or a variant that changes an outcome the reader meets — what they can do, see counted, or are refused — as one 🚧 line that replaces the line it supersedes | A breakpoint, a token, a label rule, an empty, loading or error treatment — `ui-design.md`'s States table and a `::story` card on the page |
-| QA | A rule the reader would act on that no spec states, as one ❓ line stating the rule | A case, an edge, a boundary value, a precondition that only tests a stated rule — `feature-tcs.md`; the page shows the suite with `::cases`, never as prose |
+| QA | A rule the reader would act on that no spec states, as one ❓ line stating the rule | A case, an edge, a boundary value, a precondition that only tests a stated rule — `feature-tcs.md`; the page links the suite, never as prose |
 | Engineer | A constraint that changes an outcome, as a 🚧 or ❓ line | A mechanism, a key, a lock, a metric, a sweep, what was tried and dropped — the application repository's architecture doc, which the page's engineer block links as a code map |
 
 A page over the budget is the expansion, not the essence: `pnpm check:manual` warns (`dense`) past 120 lines of prose outside its examples and details, on a section opening on more than six sentences, on an engineer block holding a paragraph, and on a 🚧 inside a flow step or mid-line. The warning asks for the cut and never blocks acceptance.
