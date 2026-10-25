@@ -1,6 +1,6 @@
 # shared/auth/session Test Cases
 
-**Status:** pending-review · 0/14
+**Status:** pending-review · 0/13
 **Drafts styled:** 2026-10-25, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 **Out of suite (api):** shared-auth-session-SC-34
@@ -9,6 +9,7 @@
 ## Background
 
 * `<g10url>` is the Grade10 site, `<zzz url>` the ZZZ site and `<console url>` the Grade10 console of the environment under test.
+* Who the site names on its pages is walked in the page shell's suite; these cases hold the session's own flows across tabs, devices, brands and the console.
 * Every tab a case names is open in one browser on one device unless the case names another. A tab is returned to as it was left, never reloaded unless a step says so, and raises no toast or message about the session.
 * `<collector A>` and `<collector B>` hold `user` only; `<operator account>` holds console access, with an authenticator for its second factor.
 
@@ -51,51 +52,6 @@ Shared test data:
    - Still the console's sign-in page. `shared.auth-session.US7-TC1`
 2. In tab B, sign in with the second factor; return to tab A.
    - Tab A unchanged, signed in on the site. `shared.auth-session.US7-TC1`
-
-## shared.auth-session.US1: Collector is named on every surface they use
-
-**As a** collector,
-**I want** a signed-in read to report my id, email, name, and roles, and a signed-out read to report nobody,
-**so that** every surface of this brand knows it is me, or that I have not signed in.
-
-<!-- trace:case id=g10.shared-session.TC-yh6 rev=2 -->
-### shared.auth-session.US1-TC1: A signed-in collector is named on every page of the brand, and nobody else is
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-session-US-01
-
-**Pre-conditions:**
-
-* customer is signed in on `<g10url>` as `<collector A>`.
-
-**Test data:**
-
-| `<page>` | `<shows>` |
-| --- | --- |
-| `<g10url>/profile` | `<collector A>`'s name and email |
-| the store's header | `<collector A>` signed in |
-| the auction's header | `<collector A>` signed in |
-
-**Steps:**
-
-1. Open `<page>`.
-
-**Expected Results:**
-
-* It shows `<shows>`, and no other person.
-
----
 
 ## shared.auth-session.US2: Collector stays signed in across the brand
 

@@ -240,10 +240,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click the account control, and read the menu.
+2. Open the store, then an auction listing, then Profile where offered, and read the account control on each.
 
 **Expected Results:**
 
 * A small initial avatar sits above the sign-in email, both above `<items>`, in that order and nothing else: no KYC, no Membership, nothing opening My Auction orders; the last reads Sign Out, in Title Case.
+* Step 2 names the same collector on every page, Profile with their name and email, and no other person.
 
 <!-- trace:case id=g10.site-page-shell.TC-asx rev=1 covers=g10.site-page-shell.SC-70a,g10.site-page-shell.SC-lcs,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-04a -->
 ### g10.site-page-shell.US3-TC4: Each account menu item opens its destination
