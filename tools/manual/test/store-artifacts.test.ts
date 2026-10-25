@@ -12,8 +12,6 @@ const HOME = "---\ntitle: Demo\n---\n\nA demo store.\n";
 const LANDING =
   "---\ntitle: Demo product\nicon: storefront\n---\n\nThe one product.\n";
 
-/** A capability page that names its spec but never shows the suite behind
- * it — the gap the `suite` rule warns about. */
 const ALPHA_PAGE =
   "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha is a demo capability.\n";
 
@@ -157,28 +155,8 @@ describe("the run sheet the snapshot carries", () => {
 });
 
 describe("the warnings the snapshot carries", () => {
-  it("ships the checker's own warnings, page warnings pointing at their page", async () => {
-    const warnings = (await snapshotOfStore(writeStore(BASE))).warnings;
-
-    expect(warnings).toEqual([
-      {
-        rule: "suite",
-        message:
-          "openspec/specs/demo-product/alpha/feature-tcs.md: holds 1 test case and no page shows them",
-      },
-    ]);
-  });
-
-  it("carries nothing a failure would have stopped the deploy for", async () => {
-    const root = writeStore({
-      ...BASE,
-      "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE.replace(
-        "Alpha is a demo capability.",
-        '::cases{id="demo-product/alpha"}',
-      ),
-    });
-
-    expect((await snapshotOfStore(root)).warnings).toEqual([]);
+  it("carries no warnings for a store the checker finds clean", async () => {
+    expect((await snapshotOfStore(writeStore(BASE))).warnings).toEqual([]);
   });
 });
 

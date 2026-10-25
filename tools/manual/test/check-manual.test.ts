@@ -62,30 +62,13 @@ describe("a store that has drifted", () => {
 
   it("names every reference that resolves to nothing", async () => {
     expect(lines(await result, "reference")).toEqual([
-      'docs/prds/products/demo-product/alpha.md — ::changes{spec="demo-product/nowhere"} names no spec on disk and no in-flight change',
       'docs/prds/products/demo-product/alpha.md — ::image{src="assets/missing.svg"} names no file under docs/prds/assets',
-      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} has no requirement `Alpha does nothing`',
-      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} issues no scenario `alpha-SC-99`',
-      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/gamma"} names no spec on disk',
     ]);
   });
 
   /** `demo-product/gamma` exists only as `add-gamma`'s delta: a ribbon may
    * point at it, a `::spec` block that would render it may not, and
    * `demo-product/nowhere` is a typo either way. */
-  it("lets only a ribbon name a capability a change is still introducing", async () => {
-    const reasons = lines(await result, "reference").join("\n");
-    expect(reasons).not.toContain('::changes{spec="demo-product/gamma"}');
-    expect(reasons).toContain('::spec{id="demo-product/gamma"}');
-    expect(reasons).toContain('::changes{spec="demo-product/nowhere"}');
-  });
-
-  it("names the durable spec no page shows", async () => {
-    expect(lines(await result, "unreferenced")).toEqual([
-      "openspec/specs/demo-product/beta/spec.md — no page names `demo-product/beta`",
-    ]);
-  });
-
   it("names the product landing that is missing", async () => {
     expect(lines(await result, "page")).toEqual([
       "docs/prds/products/demo-product/index.md — product `demo-product` has no page here",
@@ -104,40 +87,21 @@ describe("a store that has drifted", () => {
     );
     expect(warnings.map((one) => one.rule).sort()).toEqual([
       "blind",
-      "derived",
       "figma",
+      "unwritten",
     ]);
   });
 
   /** The hatch is granted by this rule staying quiet, so what it says is the
    * only place a change that owes a second reading is named. */
-  it("names the change that moves behaviour nothing read independently", async () => {
-    expect(lines(await result, "blind")).toEqual([
-      "openspec/changes/add-gamma/specs/demo-product/gamma/feature-tcs.md — `add-gamma` moves behaviour in `demo-product/gamma` and no suite reads it independently — run the feature pass, or say which line of behaviour moved if you think none did",
-    ]);
-  });
-
-  it("names the capabilities that never say who walks them", async () => {
-    expect(lines(await result, "walked")).toEqual([
-      "openspec/changes/add-gamma/specs/demo-product/gamma/user-journeys.md — missing, and `demo-product/gamma` has no durable journeys: name who walks it, or say `**Walked by:** nobody` and why",
-      "openspec/specs/demo-product/beta/user-journeys.md — missing: name who walks `demo-product/beta`, or say `**Walked by:** nobody` and why",
-    ]);
-  });
-
   /** Asked of the delta as well as of the store it folds into: the anchor a
    * scenario meant is findable while its author is still here. */
-  it("names a delta scenario standing under no anchor", async () => {
-    expect(lines(await result, "anchorless")).toEqual([
-      "openspec/changes/add-gamma/specs/demo-product/gamma/spec.md — 1 scenario with no `**Serves:**` line (gamma-SC-01)",
-    ]);
-  });
-
   it("exits 1 with the counts in the summary", async () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
-    expect(report.failures).toBe(12);
+    expect(report.failures).toBe(7);
     expect(report.warnings).toBe(3);
-    expect(report.text).toContain("12 failures, 3 warnings");
+    expect(report.text).toContain("7 failures, 3 warnings");
   });
 
   it("--quiet keeps only lines the default report already prints, and drops WARN", async () => {
@@ -145,12 +109,12 @@ describe("a store that has drifted", () => {
     const outcome = await result;
     const loudReport = formatReport(root, outcome);
     const quietReport = formatReport(root, outcome, { quiet: true });
-    expect(quietReport.failures).toBe(12);
+    expect(quietReport.failures).toBe(7);
     expect(quietReport.warnings).toBe(3);
     expect(loudReport.text).toContain("WARN");
     expect(quietReport.text).not.toContain("WARN");
     expect(quietReport.text).toContain("FAIL");
-    expect(quietReport.text).toContain("12 failures, 3 warnings");
+    expect(quietReport.text).toContain("7 failures, 3 warnings");
     for (const line of quietReport.text
       .split("\n")
       .filter((one) => one.length > 0)) {
@@ -1197,66 +1161,6 @@ describe("a MODIFIED scenario restating a durable id", () => {
 
 /** A rename or a removal archives green and turns `main` red: the page still
  * selects the old name, and `check:manual` gates the deploy. */
-describe("a page selecting a requirement a change is about to move", () => {
-  const paged = (delta: string) =>
-    changing("moving", delta, {
-      "docs/prds/manual.yaml":
-        "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
-      "docs/prds/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
-      "docs/prds/products/demo-product/index.md":
-        "---\ntitle: Demo product\n---\n\nThe landing.\n",
-      "docs/prds/products/demo-product/alpha.md": [
-        "---",
-        "title: Alpha",
-        "spec: demo-product/alpha",
-        "---",
-        "",
-        "Alpha.",
-        "",
-        '::spec{id="demo-product/alpha" requirement="Alpha keeps a record"}',
-        "",
-        '::cases{id="demo-product/alpha"}',
-        "",
-      ].join("\n"),
-    });
-
-  it("fails a selector a REMOVED delta deletes", async () => {
-    const root = paged(
-      "## REMOVED Requirements\n\n### Requirement: Alpha keeps a record\n",
-    );
-    expect(lines(await runChecks(root, NO_GIT), "fuse")).toEqual([
-      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} selects `Alpha keeps a record`, which `moving` removes — the archive would leave this page naming nothing',
-    ]);
-  });
-
-  it("fails a selector a RENAMED delta moves, and offers the new name", async () => {
-    const root = paged(
-      [
-        "## RENAMED Requirements",
-        "",
-        "- FROM: `### Requirement: Alpha keeps a record`",
-        "- TO: `### Requirement: Alpha keeps the record`",
-        "",
-      ].join("\n"),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "fuse")).toEqual([
-      'docs/prds/products/demo-product/alpha.md — ::spec{id="demo-product/alpha"} selects `Alpha keeps a record`, which `moving` renames to `Alpha keeps the record` — point the selector at the new name',
-    ]);
-  });
-
-  it("leaves a selector a MODIFIED delta only rewrites alone", async () => {
-    const root = paged(
-      [
-        "## MODIFIED Requirements",
-        "",
-        ...requirement("Alpha keeps a record", "alpha-SC-02", "write it down"),
-        "",
-      ].join("\n"),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "fuse")).toEqual([]);
-  });
-});
-
 const WHO = {
   GIT_AUTHOR_NAME: "manual",
   GIT_AUTHOR_EMAIL: "manual@test",

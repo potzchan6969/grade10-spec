@@ -136,17 +136,6 @@ describe("what the forms refuse", () => {
     ]);
   });
 
-  it("marks a missing required attribute", () => {
-    const block = newDraftBlock("spec") as DraftLeaf;
-    const built = buildPage(pageOf([block]));
-
-    expect(built.ok).toBe(false);
-    if (built.ok) return;
-    expect(built.problems.get(block.id)).toEqual([
-      { attr: "id", message: "id is required" },
-    ]);
-  });
-
   it("marks a choice outside the set", () => {
     const block = newDraftBlock("callout") as DraftLeaf;
     block.attrs = { kind: "shout" };
@@ -169,23 +158,6 @@ describe("what the forms refuse", () => {
     expect(built.problems.get(block.id)?.[0].attr).toBe("height");
   });
 
-  it("marks the spec block using two selectors at once", () => {
-    const block = newDraftBlock("spec") as DraftLeaf;
-    block.attrs = {
-      id: "a/b",
-      requirement: "R",
-      scenario: "b-SC-01",
-      story: "",
-    };
-    const built = buildPage(pageOf([block]));
-
-    expect(built.ok).toBe(false);
-    if (built.ok) return;
-    expect(built.problems.get(block.id)?.[0].message).toContain(
-      "use only one of",
-    );
-  });
-
   it("refuses a title-less page", () => {
     const built = buildPage({
       frontmatter: {
@@ -203,10 +175,10 @@ describe("what the forms refuse", () => {
   });
 
   it("catches prose that would parse as a directive", () => {
-    expect(proseProblem('::spec{id="a/b"}')).toContain("directive");
+    expect(proseProblem('::wheel{id="a/b"}')).toContain("directive");
     expect(proseProblem(":::")).not.toBe(null);
     expect(proseProblem("Plain words.")).toBe(null);
-    expect(proseProblem('```\n::spec{id="a/b"}\n```')).toBe(null);
+    expect(proseProblem('```\n::wheel{id="a/b"}\n```')).toBe(null);
   });
 
   it("drops an empty prose block instead of writing whitespace", () => {
@@ -235,18 +207,6 @@ describe("what the forms keep", () => {
     const again = draftFromSource(built.source);
     expect((again.blocks[0] as DraftLeaf).attrs.caption).toBe(" — ");
     expect(buildPage(again)).toMatchObject({ source: built.source });
-  });
-
-  it("still calls a field of nothing but spaces empty", () => {
-    const block = newDraftBlock("spec") as DraftLeaf;
-    block.attrs = { ...block.attrs, id: "   " };
-    const built = buildPage(pageOf([block]));
-
-    expect(built.ok).toBe(false);
-    if (built.ok) return;
-    expect(built.problems.get(block.id)).toEqual([
-      { attr: "id", message: "id is required" },
-    ]);
   });
 });
 

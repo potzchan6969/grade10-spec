@@ -45,17 +45,17 @@ describe("a manual over a store it does not own", () => {
       satellite({
         "docs/prds/manual.yaml": CONFIG,
         "docs/prds/index.md":
-          '---\ntitle: Handbook\n---\n\n::spec{id="demo-product/alpha"}\n\n::spec{id="demo-product/gone"}\n',
+          "---\ntitle: Handbook\n---\n\n[[demo-product/gone]]\n",
       }),
       NO_GIT,
     );
-    // The good embed of the store's spec passes; the rotten one still fails.
+    // A ref naming nothing on disk is flagged, though a ref in prose is only a warning.
     expect(findings).toEqual([
       {
-        rule: "reference",
-        level: "fail",
+        rule: "ref",
+        level: "warn",
         path: "docs/prds/index.md",
-        reason: '::spec{id="demo-product/gone"} names no spec on disk',
+        reason: "`[[demo-product/gone]]`: nothing named `demo-product/gone`",
       },
     ]);
   });

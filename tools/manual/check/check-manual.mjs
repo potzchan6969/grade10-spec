@@ -76,7 +76,6 @@ import { checkDense } from "./dense.mjs";
 import { checkMarkInProse } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkPlanned, checkWalkLast } from "./planned.mjs";
-import { checkAcceptance } from "./qa.mjs";
 import {
   checkArchived,
   checkAwaiting,
@@ -89,7 +88,6 @@ import { checkRole } from "./role.mjs";
 import { checkRounds } from "./rounds.mjs";
 import { checkSections } from "./sections.mjs";
 import {
-  checkCoverage,
   checkDependencies,
   checkSpecMap,
   checkSpecShape,
@@ -210,9 +208,7 @@ export async function runChecks(
       "store rules not run — page rules only, the deploy's gate; lint runs the rest",
     );
   } else if (roots.own) {
-    checkCoverage(ctx, shape);
     checkUnwritten(ctx, changes, shape);
-    checkAcceptance(ctx, shape);
     await checkCited(roots.store, add, mainReader(roots.store, index));
     checkWalked(ctx, shape, changes);
     checkRole(ctx, shape);

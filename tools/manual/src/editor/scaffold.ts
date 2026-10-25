@@ -29,13 +29,11 @@ export type NewPage = {
 export function newPageSource({ title, capability, spec }: NewPage): string {
   const ast: PageAst = {
     frontmatter: spec ? { title, spec } : { title },
-    blocks: capability ? shelf(spec) : [],
+    blocks: capability ? shelf() : [],
   };
   return serializePage(ast);
 }
 
-function shelf(spec: string | undefined): Block[] {
-  const opening: Block = { type: "prose", markdown: OPENING };
-  if (!spec) return [opening];
-  return [opening, { type: "spec", id: spec }, { type: "cases", id: spec }];
+function shelf(): Block[] {
+  return [{ type: "prose", markdown: OPENING }];
 }

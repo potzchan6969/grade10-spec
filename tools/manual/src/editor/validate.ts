@@ -75,22 +75,6 @@ function blockProblems(index: ManualIndex, leaf: DraftLeaf): BlockProblem[] {
       }
       break;
     }
-    case "cases": {
-      if (!index.specById.has(value("id"))) {
-        said("id", `no spec \`${value("id")}\` in the store`);
-      }
-      break;
-    }
-    case "changes":
-    case "next": {
-      // Either may point at a capability an in-flight change is still
-      // introducing, so a delta resolves it as well as a durable spec.
-      const spec = value("spec");
-      if (!index.specById.has(spec) && !index.changesBySpec.has(spec)) {
-        said("spec", `no spec \`${spec}\` and no in-flight change touching it`);
-      }
-      break;
-    }
     case "image": {
       // A snapshot built before assets were listed proves nothing about
       // them; an empty list is silence, not an empty directory.
@@ -141,9 +125,6 @@ function referencesOf(ast: PageAst | null): Set<string> {
   const found = new Set<string>();
   if (!ast) return found;
   if (ast.frontmatter.spec) found.add(ast.frontmatter.spec);
-  for (const block of ast.blocks) {
-    if (block.type === "spec") found.add(block.id);
-  }
   return found;
 }
 

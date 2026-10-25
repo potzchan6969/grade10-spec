@@ -6,7 +6,7 @@ import { newPageSource } from "../src/editor/scaffold";
  * to be canonical before anyone has typed a word into it. */
 
 describe("newPageSource", () => {
-  it("lays a capability page out in shelf order", () => {
+  it("lays a capability page out with its opening prose only", () => {
     const source = newPageSource({
       title: "Loyalty",
       capability: true,
@@ -18,11 +18,7 @@ describe("newPageSource", () => {
       title: "Loyalty",
       spec: "grade10-store/loyalty",
     });
-    expect(ast.blocks.map((block) => block.type)).toEqual([
-      "prose",
-      "spec",
-      "cases",
-    ]);
+    expect(ast.blocks.map((block) => block.type)).toEqual(["prose"]);
     // The ribbon and the timeline come from the frontmatter, never a block.
     expect(source).not.toContain("::changes");
   });

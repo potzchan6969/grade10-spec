@@ -25,19 +25,6 @@ export type Frontmatter = {
 };
 
 export type ProseBlock = { type: "prose"; markdown: string };
-export type SpecBlock = {
-  type: "spec";
-  id: string;
-  requirement?: string;
-  scenario?: string;
-  story?: string;
-};
-export type CasesBlock = { type: "cases"; id: string };
-export type ChangesBlock = { type: "changes"; spec: string };
-/** What the changes about a capability said it would lead to. Aggregated out
- * of every proposal's `## Follow-on changes`, attributed to the change that
- * wrote it, because intent read without its date is a promise nobody made. */
-export type NextBlock = { type: "next"; spec: string };
 export type FigmaBlock = {
   type: "figma";
   url: string;
@@ -61,15 +48,7 @@ export type ImageBlock = {
 };
 export type ChildrenBlock = { type: "children" };
 
-export type LeafBlock =
-  | SpecBlock
-  | CasesBlock
-  | ChangesBlock
-  | NextBlock
-  | FigmaBlock
-  | StoryBlock
-  | ImageBlock
-  | ChildrenBlock;
+export type LeafBlock = FigmaBlock | StoryBlock | ImageBlock | ChildrenBlock;
 
 export type BodyItem = ProseBlock | LeafBlock;
 
@@ -156,26 +135,6 @@ type BlockSpec = {
 
 /** Attribute order here is the canonical order. */
 export const BLOCK_SPECS: Record<string, BlockSpec> = {
-  spec: {
-    container: false,
-    attrs: [
-      { name: "id", required: true },
-      { name: "requirement" },
-      { name: "scenario" },
-      { name: "story" },
-    ],
-    check: (a) => {
-      const selectors = ["requirement", "scenario", "story"].filter(
-        (s) => a[s] !== undefined,
-      );
-      return selectors.length > 1
-        ? `use only one of requirement, scenario, story`
-        : null;
-    },
-  },
-  cases: { container: false, attrs: [{ name: "id", required: true }] },
-  changes: { container: false, attrs: [{ name: "spec", required: true }] },
-  next: { container: false, attrs: [{ name: "spec", required: true }] },
   figma: {
     container: false,
     attrs: [

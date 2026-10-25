@@ -48,7 +48,7 @@
     },
     {
       "path": "docs/prds/products/demo-product/index.md",
-      "source": "---\ntitle: Demo product\nsummary: The product the fixture spec belongs to.\nspec: demo-product/alpha\nicon: storefront\norder: 1\n---\n\nWhat the product is for, in a person's words.\n\n::spec{id=\"demo-product/alpha\"}\n\n## Refunds\n\nRefunds follow one rule the store already draws elsewhere.\n\n- 🚧 **Window** — refunds close after 30 days\n\n## Discounts\n\nA cap keeps a discount from swallowing the whole order.\n\n- 🚧 **Cap** — a customer discount never exceeds 50%\n"
+      "source": "---\ntitle: Demo product\nsummary: The product the fixture spec belongs to.\nspec: demo-product/alpha\nicon: storefront\norder: 1\n---\n\nWhat the product is for, in a person's words.\n\n## Refunds\n\nRefunds follow one rule the store already draws elsewhere.\n\n- 🚧 **Window** — refunds close after 30 days\n\n## Discounts\n\nA cap keeps a discount from swallowing the whole order.\n\n- 🚧 **Cap** — a customer discount never exceeds 50%\n"
     }
   ],
   "specs": [

@@ -21,7 +21,7 @@ const canonical: { name: string; text: string }[] = [
   },
   {
     name: "leaf directives",
-    text: `${fm}\n::spec{id="grade10-store/loyalty"}\n\n::spec{id="grade10-store/loyalty" scenario="loyalty-SC-04"}\n\n::cases{id="grade10-store/loyalty"}\n\n::changes{spec="grade10-store/loyalty"}\n\n::next{spec="grade10-store/loyalty"}\n\n::figma{url="https://www.figma.com/design/x?node-id=1-2" title="Checkout"}\n\n::story{id="blocks-store-cart--default"}\n\n::story{id="blocks-store-cart--default" title="Cart" height="640"}\n\n::image{src="assets/till.png" alt="The till screen" caption="Till"}\n\n::children\n`,
+    text: `${fm}\n::figma{url="https://www.figma.com/design/x?node-id=1-2" title="Checkout"}\n\n::story{id="blocks-store-cart--default"}\n\n::story{id="blocks-store-cart--default" title="Cart" height="640"}\n\n::image{src="assets/till.png" alt="The till screen" caption="Till"}\n\n::children\n`,
   },
   {
     name: "containers with markdown and leaves",
@@ -152,7 +152,7 @@ const errors: { name: string; input: string; message: RegExp }[] = [
   },
   {
     name: "leaf written as container",
-    input: `${fm}\n:::spec{id="a/b"}\n:::\n`,
+    input: `${fm}\n:::story{id="a/b"}\n:::\n`,
     message: /must be written as/,
   },
   {
@@ -167,7 +167,7 @@ const errors: { name: string; input: string; message: RegExp }[] = [
   },
   {
     name: "missing required attribute",
-    input: `${fm}\n::spec\n`,
+    input: `${fm}\n::story\n`,
     message: /needs `id`/,
   },
   {
@@ -177,13 +177,8 @@ const errors: { name: string; input: string; message: RegExp }[] = [
   },
   {
     name: "duplicate attribute",
-    input: `${fm}\n::spec{id="a/b" id="a/b"}\n`,
+    input: `${fm}\n::story{id="a/b" id="a/b"}\n`,
     message: /duplicate/,
-  },
-  {
-    name: "two spec selectors",
-    input: `${fm}\n::spec{id="a/b" requirement="R" scenario="b-SC-01"}\n`,
-    message: /only one of/,
   },
   {
     name: "empty image alt",

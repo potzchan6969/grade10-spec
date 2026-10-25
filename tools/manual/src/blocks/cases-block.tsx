@@ -9,49 +9,9 @@ import type {
   TestCaseStatus,
   TestSuiteStatus,
 } from "../api/types";
-import type { CasesBlock } from "../content/grammar";
 import { AnchorLink } from "./anchor";
-import { useBlockScope } from "./block-scope";
-import { BrokenCard, MissingCard } from "./broken-card";
 import { findScenario } from "./spec-block";
 
-export function CasesBlockView({ block }: { block: CasesBlock }) {
-  const { index } = useBlockScope();
-  const spec = index.specById.get(block.id);
-
-  if (!spec) {
-    return (
-      <MissingCard
-        title={`No spec \`${block.id}\` in this snapshot`}
-        tone="error"
-      >
-        Test cases were asked for from a spec the store did not hand over.
-      </MissingCard>
-    );
-  }
-  if (spec.error) {
-    return <BrokenCard error={spec.error} what={`Spec ${spec.id}`} />;
-  }
-  // The suite's break belongs to the suite. It is loud here and nowhere else
-  // — the requirements and journeys beside it keep rendering.
-  if (spec.testCasesError) {
-    return (
-      <BrokenCard
-        error={spec.testCasesError}
-        what={`Test cases for ${spec.id}`}
-      />
-    );
-  }
-
-  return <SuiteView spec={spec} />;
-}
-
-/**
- * A suite against the scenarios it traces. `spec` is whatever holds the
- * cases and the scenarios they name: a durable capability, or a delta read
- * as the spec it will become, with the durable rows behind it so a trace to
- * an unchanged scenario still resolves.
- */
 export function SuiteView({ spec }: { spec: SpecEntry }) {
   const cases = spec.testCases ?? [];
   if (cases.length === 0) {
