@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { askedIdsOf, roundlessGroupsOf } from "../src/api/rounds";
-import { suiteTotalsOf } from "../src/api/suites";
-import type { ChangeSuite, RoundRow, TaskGroup } from "../src/api/types";
+import type { RoundRow, TaskGroup } from "../src/api/types";
 import { roundArtifactOf } from "../src/store/read-rounds.mts";
 
 /**
@@ -80,56 +79,5 @@ describe("roundlessGroupsOf", () => {
         (one) => one.num,
       ),
     ).toEqual(["1"]);
-  });
-});
-
-/** The Delivery row's automated count against the total is summed over every
- * suite the change carries, and a change specifying two capabilities carries
- * two. Nothing summed more than one before this. */
-describe("suiteTotalsOf", () => {
-  const suite = (
-    capability: string,
-    cases: ChangeSuite["cases"],
-  ): ChangeSuite => ({
-    capability,
-    status: "pending-review",
-    cases,
-  });
-
-  it("sums the cases of two suites", () => {
-    const totals = suiteTotalsOf([
-      suite("shared/planning/agent-rounds", {
-        total: 5,
-        draft: 1,
-        actual: 4,
-        deprecated: 0,
-        automated: 2,
-      }),
-      suite("shared/planning/change-stages", {
-        total: 3,
-        draft: 0,
-        actual: 2,
-        deprecated: 1,
-        automated: 1,
-      }),
-    ]);
-
-    expect(totals).toEqual({
-      total: 8,
-      draft: 1,
-      actual: 6,
-      deprecated: 1,
-      automated: 3,
-    });
-  });
-
-  it("sums no suite as zero, so the row says 0 of 0 rather than nothing", () => {
-    expect(suiteTotalsOf([])).toEqual({
-      total: 0,
-      draft: 0,
-      actual: 0,
-      deprecated: 0,
-      automated: 0,
-    });
   });
 });

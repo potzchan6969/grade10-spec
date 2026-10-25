@@ -2,7 +2,6 @@ import { createHash, randomUUID } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
-  mkdtempSync,
   readdirSync,
   readFileSync,
   renameSync,
@@ -13,28 +12,9 @@ import {
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { basename, dirname, extname, join, sep } from "node:path";
 import type { Plugin, ViteDevServer } from "vite";
-import {
-  openRecord,
-  setEntry,
-} from "../../../../scripts/openspec/lib/record.mjs";
-import {
-  handleOf,
-  isHandle,
-  memberOf,
-  readTeamMap,
-  TEAM_MAP,
-} from "../../../../scripts/openspec/lib/team.mjs";
 import { STORE_CHANGED } from "../api/live.ts";
-import { ROLES, type Role } from "../api/types.ts";
 import { GrammarError, parsePage, serializePage } from "../content/grammar.ts";
-import {
-  allowedProposal,
-  MANIFEST,
-  type ProposalFile,
-  slugProblem,
-  withdrawProblem,
-} from "../editor/propose.ts";
-import { changeFile, confine, storePath } from "./disk.mts";
+import { confine, storePath } from "./disk.mts";
 import { git } from "./git.mts";
 import { liveBodies, type OriginMain, originMain } from "./main-moved.mts";
 import { type Roots, resolveRoots } from "./roots.mts";
@@ -282,9 +262,6 @@ async function route(
   const body = await req.json();
   if (path === "/api/page") return writePage(roots, body);
   if (path === "/api/asset") return writeAsset(roots, body);
-  if (path === "/api/propose") return propose(roots.store, body);
-  if (path === "/api/withdraw") return withdraw(roots.store, body);
-  if (path === "/api/hands") return assignHand(roots.store, body);
   return reply(404, { error: `no such endpoint: ${path}` });
 }
 
@@ -435,143 +412,6 @@ function writeAsset(roots: Roots, body: unknown): Reply {
     return reply(400, { error: "`base64` is not valid base64" });
   }
   return save(file, bytes, fields.baseVersion ?? null, false);
-}
-
-/**
- * The one write that leaves the manual, and it leaves it for exactly one new
- * change directory: the same allowlist the browser holds, applied again here,
- * because this endpoint writes straight to the working tree.
- *
- * The directory is built beside the changes tree and moved into place in one
- * rename, so a reader — the snapshot walk, the checker, git — sees a change
- * with both its files or no change at all.
- */
-function propose(root: string, body: unknown): Reply {
-  const files = proposalFiles(body);
-  if (!Array.isArray(files)) return reply(400, files);
-
-  const allowed = allowedProposal(files);
-  if ("error" in allowed) return reply(400, { error: allowed.error });
-  const { slug } = allowed;
-
-  const dir = changeFile(root, slug);
-  if (typeof dir !== "string") return reply(400, dir);
-  const targets: { name: string; content: string }[] = [];
-  for (const file of files) {
-    const name = file.path.split("/")[3];
-    const target = changeFile(root, slug, name);
-    if (typeof target !== "string") return reply(400, target);
-    targets.push({ name, content: file.content });
-  }
-  if (existsSync(dir)) {
-    return reply(409, { error: `a change \`${slug}\` already exists` });
-  }
-
-  mkdirSync(dirname(dir), { recursive: true });
-  const staging = mkdtempSync(join(dirname(dir), `.${slug}.`));
-  try {
-    for (const target of targets) {
-      writeFileSync(join(staging, target.name), target.content, "utf8");
-    }
-    renameSync(staging, dir);
-  } catch (cause) {
-    rmSync(staging, { recursive: true, force: true });
-    throw cause;
-  }
-  return reply(200, { id: slug });
-}
-
-/** Dev only: a proposal goes back out whole, and only while it is still just a
- * proposal. Anything else in the directory means it has become a real change. */
-function withdraw(root: string, body: unknown): Reply {
-  const id = ((body ?? {}) as Record<string, unknown>).id;
-  if (typeof id !== "string" || id === "") {
-    return reply(400, { error: "`id` is required" });
-  }
-  const shape = slugProblem(id);
-  if (shape) return reply(400, { error: shape });
-
-  const dir = changeFile(root, id);
-  if (typeof dir !== "string") return reply(400, dir);
-  if (!existsSync(dir)) return reply(404, { error: `no change \`${id}\`` });
-
-  const problem = withdrawProblem(id, readdirSync(dir));
-  if (problem) return reply(409, { error: problem });
-
-  rmSync(dir, { recursive: true });
-  return reply(200, { withdrawn: true });
-}
-
-/**
- * Assign, on the locally run manual only: `record.mjs`'s own reader, so a
- * change with no record and a record the `yaml` package cannot parse are the
- * same two problems the round already knows how to report, and `setEntry`
- * writes the mapping the way it would create one for `reviewed:`. One field
- * is touched — every other key the file carries, comments included, rides
- * through untouched — so the write is one atomic rename, the way `save`
- * below writes a page.
- *
- * Refuses before the write what `checkHands` would refuse on the push: a
- * handle that is not one token, or one `docs/prds/team.yaml` does not carry —
- * the same two conditions, in the rule's own words, so a mistake here is
- * never a commit the check then has to catch.
- */
-function assignHand(root: string, body: unknown): Reply {
-  const fields = (body ?? {}) as Record<string, unknown>;
-  const { change, role, handle } = fields;
-  if (typeof change !== "string" || change === "") {
-    return reply(400, { error: "`change` is required" });
-  }
-  const shape = slugProblem(change);
-  if (shape) return reply(400, { error: shape });
-  if (
-    typeof role !== "string" ||
-    !(ROLES as readonly string[]).includes(role)
-  ) {
-    return reply(400, { error: `\`role\` is one of ${ROLES.join(", ")}` });
-  }
-  const written = typeof handle === "string" ? handleOf(handle) : "";
-  if (written === "") return reply(400, { error: "`handle` is required" });
-  if (!isHandle(written)) {
-    return reply(400, {
-      error: `\`hands.${role}: ${written}\` is not one handle`,
-    });
-  }
-  if (!memberOf(readTeamMap(root), written)) {
-    return reply(400, {
-      error: `\`hands.${role}\` names \`${written}\`, which \`${TEAM_MAP}\` does not know`,
-    });
-  }
-
-  const dir = changeFile(root, change);
-  if (typeof dir !== "string") return reply(400, dir);
-  if (!existsSync(join(dir, MANIFEST))) {
-    return reply(404, { error: `no change \`${change}\`` });
-  }
-
-  let record: ReturnType<typeof openRecord>;
-  try {
-    record = openRecord(root, change);
-  } catch (cause) {
-    return reply(400, { error: describe(cause) });
-  }
-  setEntry(record.doc, "hands", role, written);
-  writeAtomically(record.file, Buffer.from(record.doc.toString(), "utf8"));
-  return reply(200, { role: role as Role, handle: written });
-}
-
-function proposalFiles(body: unknown): ProposalFile[] | { error: string } {
-  const sent = ((body ?? {}) as Record<string, unknown>).files;
-  if (!Array.isArray(sent)) return { error: "`files` is required" };
-  const files: ProposalFile[] = [];
-  for (const entry of sent) {
-    const file = (entry ?? {}) as Record<string, unknown>;
-    if (typeof file.path !== "string" || typeof file.content !== "string") {
-      return { error: "every file is a `path` and its `content`" };
-    }
-    files.push({ path: file.path, content: file.content });
-  }
-  return files;
 }
 
 /** Optimistic concurrency: `version` is the content hash the editor read, so

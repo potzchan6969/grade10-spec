@@ -188,18 +188,7 @@ describe("what the index now holds", () => {
       ],
     }),
   );
-  const docs = buildDocs(index);
   const engine = buildSearchIndex(index);
-
-  it("indexes a delta requirement as its own hit into the board", () => {
-    const found = docs.find(
-      (doc) => doc.title === "A gift card is bought at a listed denomination",
-    );
-
-    expect(found?.kind).toBe("change");
-    expect(found?.to).toBe("/in-flight/add-gift-cards");
-    expect(found?.body).toContain("500 and 1000");
-  });
 
   it("finds a test case by its id and by its words, on the page's shelf", () => {
     for (const query of ["alpha-TC-04", "redeems a voucher"]) {

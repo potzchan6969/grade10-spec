@@ -37,20 +37,11 @@ const SAFE_PROTOCOL = /^(https?:|mailto:)/i;
 const ANY_PROTOCOL = /^[a-z][a-z0-9+.-]*:/i;
 /** Store files the manual never renders: read them where they live. */
 const FILED_UNDER = ["docs/governance/", "docs/references/"];
-const CHANGE_FILE = /^openspec\/changes\/([^/]+)\/(.+)$/;
 const SPEC_FILE = /^openspec\/specs\/(.+)\/(?:spec|feature-tcs)\.md$/;
 const REFERENCE_FILE = /^docs\/references\/(.+)\.md$/;
 /** The routes that are the app's own rather than a page's. Prose may link to
  * any of them, and a route the app does not serve still reads as dead. */
-const APP_ROUTES = new Set([
-  "/",
-  "/in-flight",
-  "/pending",
-  "/my-turn",
-  "/qa",
-  "/design",
-  REFERENCES_ROUTE,
-]);
+const APP_ROUTES = new Set(["/", "/design", REFERENCES_ROUTE]);
 
 export function classifyHref(
   href: string,
@@ -111,17 +102,6 @@ function routeForStoreFile(
   resolved: string,
   index: ManualIndex,
 ): string | null {
-  const change = CHANGE_FILE.exec(resolved);
-  if (change) {
-    const [, id, rest] = change;
-    if (!index.changeById.has(id)) return null;
-    const tab = rest.startsWith("specs/")
-      ? "specs"
-      : rest.endsWith(".md") && !rest.includes("/")
-        ? rest.slice(0, -3)
-        : null;
-    return tab === null ? null : `/in-flight/${id}?tab=${tab}`;
-  }
   const spec = SPEC_FILE.exec(resolved);
   if (spec) return index.routeBySpec.get(spec[1]) ?? null;
   const reference = REFERENCE_FILE.exec(resolved);

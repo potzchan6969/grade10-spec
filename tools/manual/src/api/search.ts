@@ -1,6 +1,5 @@
 import MiniSearch, { type SearchResult } from "minisearch";
 import type { Block, BodyItem, PageAst } from "../content/grammar";
-import { plainInline } from "../content/inline";
 import { requirementAnchor, scenarioAnchor } from "./anchors";
 import { type ManualIndex, routeForSpec } from "./derive";
 
@@ -130,39 +129,6 @@ export function buildDocs(index: ManualIndex): SearchDoc[] {
         body: `${testCase.id} ${testCase.traces.join(" ")}`,
         to: `${route}#${testCase.id}`,
       });
-    }
-  }
-
-  // A delta is where the words a change is about actually live: 157 of the
-  // in-flight requirements are ADDED, so nothing durable carries their text and
-  // searching for what somebody is building would find the change by its title
-  // or not at all.
-  for (const change of index.snapshot.changes) {
-    const title = plainInline(change.title);
-    docs.push({
-      id: `change:${change.id}`,
-      kind: "change",
-      title,
-      subtitle: `${change.id} · ${change.status}`,
-      body: [
-        change.id,
-        plainText(change.why),
-        ...change.deltas.map((delta) => delta.spec),
-      ].join(" "),
-      to: `/in-flight/${change.id}`,
-    });
-
-    for (const delta of change.deltas) {
-      for (const requirement of delta.requirements) {
-        docs.push({
-          id: `change:${change.id}#${delta.spec}#${requirement.kind}#${requirement.name}`,
-          kind: "change",
-          title: requirement.name,
-          subtitle: `${title} · ${requirement.kind} ${delta.spec}`,
-          body: plainText(requirement.text ?? requirement.to ?? ""),
-          to: `/in-flight/${change.id}`,
-        });
-      }
     }
   }
 

@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { createContext, createReport } from "../check/context.mjs";
 import { checkAwaiting } from "../check/record.mjs";
-import { behindLabelOf } from "../src/api/stage-view.ts";
 import { behindOf } from "../src/api/stages.ts";
 import type {
   ChangeEntry,
@@ -445,36 +444,6 @@ describe("whether an artifact is behind", () => {
     expect(
       behindOf({ ...entry, reviewed: reviewedOf(entry) }, artifacts(root)),
     ).toEqual([]);
-  });
-});
-
-describe("what the row names", () => {
-  it("names what moved and that a major move holds", () => {
-    expect(
-      behindLabelOf({
-        artifact: "specs",
-        changed: ["decisions"],
-        moved: [{ item: "decisions", key: "Q3", major: true }],
-        holds: true,
-      }),
-    ).toBe("decisions moved — holds the next landing");
-  });
-
-  it("names a small move as holding only the fold", () => {
-    expect(
-      behindLabelOf({
-        artifact: "specs",
-        changed: ["proposal"],
-        moved: [{ item: "proposal", key: "## Why", major: false }],
-        holds: false,
-      }),
-    ).toBe("proposal moved — small, holds only the fold");
-  });
-
-  it("names everything before it where what moved could not be recovered", () => {
-    expect(
-      behindLabelOf(wholeOf("specs", [`${PAGE}#points`, "decisions"])),
-    ).toBe(`read again against ${PAGE}#points, decisions`);
   });
 });
 

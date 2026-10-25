@@ -52,22 +52,18 @@ describe("a history ref as a chip", () => {
     });
   });
 
-  it("sends a change in flight to its card on the board", () => {
+  it("names a change in flight without a link: the board is gone", () => {
     expect(feedRef(index, { kind: "change", id: "add-beta" })).toEqual({
       key: "change:add-beta",
       label: "Change add-beta",
-      to: "/in-flight/add-beta",
       kind: "change",
     });
   });
 
-  /** An archived change has no card to anchor to, so the board itself is all
-   * there is to point at. */
-  it("sends an archived change to the board plainly", () => {
+  it("names an archived change plainly, with no link", () => {
     expect(feedRef(index, { kind: "archived", id: "add-alpha" })).toEqual({
       key: "archived:add-alpha",
       label: "add-alpha",
-      to: "/in-flight",
       kind: "archived",
     });
   });

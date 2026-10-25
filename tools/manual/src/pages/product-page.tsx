@@ -1,17 +1,9 @@
-import { Text } from "@grade10/design-system/components/display/text";
-import {
-  byLastMoved,
-  changesForOwner,
-  type ManualIndex,
-  productTitle,
-} from "../api/derive";
+import { type ManualIndex, productTitle } from "../api/derive";
 import { pagePath } from "../api/paths";
 import { useManualIndex } from "../api/use-manual-index";
-import { ChangeChip } from "../blocks/change-views";
 import { ChildCards } from "../blocks/children-block";
 import { PageHeading } from "./page-heading";
 import { PageView } from "./page-view";
-import { ProductPendingSpec } from "./product-pending";
 import { useDocumentTitle } from "./use-document-title";
 
 export function ProductPage({ product }: { product: string }) {
@@ -26,8 +18,6 @@ export function ProductPage({ product }: { product: string }) {
   return (
     <PageView eyebrow="Product" index={index} path={`${dir}/index.md`}>
       {authored ? null : <ChildCards dir={dir} index={index} />}
-      <ProductChanges id={product} index={index} />
-      <ProductPendingSpec id={product} index={index} />
     </PageView>
   );
 }
@@ -54,29 +44,6 @@ function ProductWithoutLanding({
         dir={pagePath(index.manualDir, "products", id)}
         index={index}
       />
-      <ProductChanges id={id} index={index} />
-      <ProductPendingSpec id={id} index={index} />
     </>
-  );
-}
-
-function ProductChanges({ index, id }: { index: ManualIndex; id: string }) {
-  const changes = [...changesForOwner(index, id)].sort(byLastMoved);
-  if (changes.length === 0) return null;
-
-  return (
-    <section className="mt-10">
-      <h2 className="mb-1 font-heading font-bold text-lg" id="in-flight">
-        In flight
-      </h2>
-      <Text as="p" className="mb-3" size="sm" tone="secondary">
-        Changes whose deltas touch a {id} spec.
-      </Text>
-      <div className="grid gap-3 sm:grid-cols-2">
-        {changes.map((change) => (
-          <ChangeChip change={change} key={change.id} />
-        ))}
-      </div>
-    </section>
   );
 }

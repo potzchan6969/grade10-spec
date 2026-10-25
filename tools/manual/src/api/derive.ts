@@ -968,15 +968,11 @@ function linked(
       ...(route ? { to: route } : {}),
     };
   }
-  // A change that is no longer in flight has archived: it has no card left to
-  // anchor to, so the board itself is all there is to point at.
   if (ref.kind === "change") {
     const change = index.changeById.get(ref.id);
-    return change
-      ? { label: change.title, to: `/in-flight/${ref.id}` }
-      : { label: ref.id, to: "/in-flight" };
+    return { label: change ? change.title : ref.id };
   }
-  if (ref.kind === "archived") return { label: ref.id, to: "/in-flight" };
+  if (ref.kind === "archived") return { label: ref.id };
   return { label: ref.path };
 }
 
