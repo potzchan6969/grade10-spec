@@ -1,6 +1,6 @@
 ## 1. Bidding Rules page (grade10-spec) (owner: @htonyl)
 
-- [ ] 1.1 Keep the Bidding History line and the "Story order" decision row on the Bidding Rules page in step with the accepted delta (`grade10-site-auction-bidding-history-SC-12`, `grade10-site-auction-bidding-history-SC-54`, `grade10-site-auction-bidding-history-SC-55`, `grade10-site-auction-bidding-history-SC-56`)
+- [ ] 1.1 Keep the Bidding History line and the "Story order" decision row on the Bidding Rules page in step with the accepted delta - the page task proves no scenario, so it names none; the grade10 tests of group 2 cite them. Dated 2026-10-25 at @htonyl's direction
 - [ ] 1.2 Verify: `pnpm check:manual`, `pnpm run validate:changes`
 
 ## 2. Bid-amount order in the combined history (grade10) (owner: @htonyl)
