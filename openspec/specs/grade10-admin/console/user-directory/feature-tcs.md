@@ -286,11 +286,11 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the Type, Roles, Status and Email options; apply `<asked>`.
+1. Read the Type, Roles, Status and Email options, the Status filter with a screen reader; apply `<asked>`.
 
 **Expected Results:**
 
-* The options are Grade10's labels and no other; the list shows `<listed>`.
+* The options are Grade10's labels and no other, the Status filter announced as one choice with its selected option; the list shows `<listed>`.
 
 <!-- trace:case id=g10adm.console-user-directory.TC-xz2 rev=1 -->
 ### g10adm.console-user-directory.US2-TC4: A row opens the account whole beside the list

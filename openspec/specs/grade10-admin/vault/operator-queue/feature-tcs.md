@@ -1,6 +1,6 @@
 # grade10-admin/vault/operator-queue Test Cases
 
-**Status:** pending-review · 26/87
+**Status:** pending-review · 26/89
 **Drafts styled:** 2026-10-25, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
@@ -856,7 +856,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Each Load more adds the next 50, none seen twice or skipped, the counts shown updating.
+* The first page offers Load more, not only a note that more exist; each Load more adds the next 50, none seen twice or skipped, the counts shown updating.
 
 <!-- trace:case id=g10adm.vault-operator-queue.TC-0vr rev=1 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
 ### g10adm.vault-operator-queue.US6-TC6: A full page is not taken for more to come
@@ -884,6 +884,33 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * It says nothing more remains, offering no Load more.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-u1t rev=1 -->
+### g10adm.vault-operator-queue.US6-TC8: A queue whose read fails says it failed, never empty
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-06
+
+**Pre-conditions:**
+
+* Cases wait on staff; the vault queue's read is refused, its service unreachable.
+
+**Steps:**
+
+1. Open the vault section.
+
+**Expected Results:**
+
+* Needs staff says its read failed, in the error tone; nothing says the view holds no case.
 
 ---
 
@@ -1221,8 +1248,6 @@ Runs once per row of **Test data**.
 <!-- trace:case id=g10adm.vault-operator-queue.TC-5vm rev=1 covers=g10adm.vault-operator-queue.SC-xz7,g10adm.vault-operator-queue.SC-rz1,g10adm.vault-operator-queue.SC-fw0,g10adm.vault-operator-queue.SC-3z5,g10adm.vault-operator-queue.SC-k4s -->
 ### g10adm.vault-operator-queue.US9-TC3: The identity photograph opens only with the identity read
 
-Runs once per row of **Test data**.
-
 **Classification:**
 
 * **Severity:** critical
@@ -1237,13 +1262,41 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
+* A case carries a verified check with its photograph; admin(holds `vault:operate`, not `kyc:read`) opens it.
+
+**Steps:**
+
+1. Look for View photograph; open its address.
+
+**Expected Results:**
+
+* It is not offered, and the address is refused, naming the grant.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-4v8 rev=1 -->
+### g10adm.vault-operator-queue.US9-TC7: A treasurer or a reader without the identity read sees neither the photograph nor the signed document
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-09
+
+**Pre-conditions:**
+
 * A case carries a verified check with its photograph and a signed document; `<operator>`, not holding `kyc:read`, opens it.
 
 **Test data:**
 
 | `<operator>` |
 | --- |
-| admin holding `vault:operate` |
 | treasurer |
 | admin holding `vault:read` alone |
 

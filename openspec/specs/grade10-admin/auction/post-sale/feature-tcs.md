@@ -2032,7 +2032,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A Delivered order paid HKD3,120.00; admin(roles exactly `staff`, holding refund processing and not payment processing) opens Refund.
+* A Delivered order paid HKD3,120.00; admin(operator with refund processing) opens Refund.
 
 **Steps:**
 
