@@ -54,5 +54,23 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-25T04:23:19.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite was regenerated under tcs-rules r7 and folded into the feature: 172 cases became 62, unit and API cases were deleted or moved to the out-of-suite list, and statuses and revs moved. The cents refusal cases US1-TC7 and US3-TC31 (SC-221, SC-222) were merged into g10adm.auction-listing.TC-qk8 rev 3. No requirement of the admin listing contract changed; spec.md is unchanged in scope."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite was regenerated from scratch under tcs-rules r7: 31 cases became 12, API, unit and schedule-change cases were removed or listed out of suite, case ids were reissued, and the cases for the whole-dollar USD schedule were restyled. The requirements stay in spec.md, whose scoped anchors have no difference. The kept cases (TC-2ed, TC-9do, TC-0lh, TC-qui, TC-d1v, TC-jbt, TC-xdy, TC-d9d, TC-gti, TC-dlw, TC-y0l, TC-pn8) test the same bid-increment behaviour."
+      }
+    ]
+  }
 }
