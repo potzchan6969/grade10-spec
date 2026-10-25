@@ -616,7 +616,7 @@ Runs once per row of **Test data**.
 **As a** collector who asked for a loan the shop is not lending against yet,
 **I want** custody terms agreed against the valuation instead,
 **so that** the item is taken in on the same paper rather than my request being
-turned away.
+declined or cancelled for want of a lender.
 
 <!-- trace:case id=g10.vault-valuation-and-offer.TC-9ik rev=1 -->
 ### g10.vault-valuation-and-offer.US4-TC1: A financed case with no offer is taken into custody on the custody agreement alone

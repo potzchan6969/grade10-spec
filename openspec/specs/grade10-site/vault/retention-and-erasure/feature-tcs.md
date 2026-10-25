@@ -238,6 +238,16 @@ exists.
 
 ---
 
+## g10.vault-retention-and-erasure.US3: Compliance officer sees what is being kept too long
+
+**As an** admin answerable for what we keep,
+**I want** a list of closed cases past the window for each class, and to be
+told which windows nobody has decided,
+**so that** deleting is a decision somebody makes rather than something that
+happens on a clock.
+
+---
+
 ## g10.vault-retention-and-erasure.US4: Collector who graded cards is forgotten by the same request
 
 **As a** collector who has closed their account after grading cards,
