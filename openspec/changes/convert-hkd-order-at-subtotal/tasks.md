@@ -77,7 +77,7 @@ Needs groups 1 to 5 landed and the `external/grade10-spec` pin bumped, since `hk
 - [x] 10.2 Update the Send invoice step of `apps/frontend/grade10/e2e/tests/admin/auction/internal-bid.spec.ts` (`US6-TC5-4`) to read the preview's HKD Subtotal and total for the house order, and find the USD bid line without matching it twice, since the preview now lists the bid as a line beside the sentence that names it (`grade10-admin-auction-internal-bid-SC-73`)
 - [x] 10.3 Verify: `pnpm --dir apps/frontend/grade10 run e2e` on the specs named, `pnpm run typecheck`
 
-## 11. The walk (grade10) (owner: @seankcw)
+## 11. The walk (grade10) (owner: @htonyl)
 
 Uses draft `feature-tcs.md` as its planning input, and groups 1 to 10 landed.
 
