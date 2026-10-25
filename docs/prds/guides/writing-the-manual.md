@@ -35,8 +35,8 @@ order: 1
 `spec` may name a capability an in-flight change is still writing — that is
 how an incubating capability gets its page before it lands, and the check
 warns while any delta-introduced capability has none. A page with no `spec` at
-all wears the **planned** pip: it states an intended shape, and the propose
-action on it is where the requirements start.
+all wears the **planned** pip: it states an intended shape, and a change to it
+is where the requirements start.
 
 Everything between directives is prose — GitHub markdown, headings starting at
 `##`, no raw HTML. Directives sit at column 0: two colons open a leaf, three

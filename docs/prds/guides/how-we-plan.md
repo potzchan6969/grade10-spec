@@ -51,5 +51,3 @@ change's thread — [Agent Rounds](/p/shared/planning/agent-rounds).
   — running several changes at once without them colliding.
 - [An agent workflow, end to end](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
   — the whole loop worked through once.
-
-[Board](/in-flight) is the live view of all of it.
