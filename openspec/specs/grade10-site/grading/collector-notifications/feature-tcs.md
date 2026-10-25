@@ -1,17 +1,23 @@
 # grade10-site/grading/collector-notifications Test Cases
 
-**Status:** reopened · 0/21
-**Drafts styled:** 2026-10-01, tcs-rules r4
-**Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-01
+**Status:** pending-review · 0/17
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
-## grade10-site-grading-collector-notifications-US1: Collector hears about everything that happens to the submission
+## Background
+
+* A submission's page is `<submission page>` on the Grade10 site; it opens from any message's link with no account. Staff work it at `<console submission>` on the admin console, and the grading queue is `<console queue>`.
+* `<collector inbox>` is a mailbox the tester reads, used by no other run. Grading's daily sweep and reminder sweep can be run by hand on a local stack; the shop's clock is Hong Kong's.
+* Staff is admin(holds `grading:operate`), unless a case says otherwise.
+
+## g10.grading-collector-notifications.US1: Collector hears about everything that happens to the submission
 
 **As a** collector,
 **I want** one email for each thing that happens to my submission, the drop-off's booked, moved, cancelled, missed and day-before messages among them, in English, with a link straight to the page that needs no account,
 **so that** I never have to ask the shop what stage my cards are at.
 
 <!-- trace:case id=g10.grading-collector-notifications.TC-66y rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC1-1: Drop-off booked email comes from grading, not the diary
+### g10.grading-collector-notifications.US1-TC1: The drop-off booked email comes from grading, not the diary
 
 **Classification:**
 
@@ -20,620 +26,177 @@
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-collector-notifications-US-01
 
 **Pre-conditions:**
 
-* On staging, customer(collector) holds a plan kept under <collector inbox>, listing cards, with a level picked and no drop-off booked.
-* The collector is on <grade10 grading submission page url> for that plan, the drop-off picker open.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <collector inbox> | An email inbox the tester reads, used by no other run |
-| <visit> | Any free day and time the picker offers |
+* A collector holds a plan kept under `<collector inbox>`, a level picked and no drop-off booked, its page's drop-off picker open.
 
 **Steps:**
 
-1. Pick the shop, then the day and the time of <visit> in the drop-off picker.
-2. Click Book <day, time>.
-3. Open <collector inbox>.
+1. Pick a shop, a day and a time, and click Book.
+2. Open `<collector inbox>`.
 
 **Expected Results:**
 
-* One drop-off booked email arrives, sent by grading.
-* No separate booking confirmation arrives from the diary.
+* One drop-off booked email arrives, sent by grading; no booking confirmation arrives from the diary.
 
 <!-- trace:case id=g10.grading-collector-notifications.TC-hs8 rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC2-1: Every message sends by email only, in English
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** compatibility
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Pre-conditions:**
-
-* On staging, customer(collector) reads the site in Traditional Chinese (`<lang>` is `/tc`) and planned the submission there, under <collector inbox> and <collector phone>.
-* The submission is Drop-off booked, every card checked on the hand-in runbook, the agreement sealed and the fee paid.
-* admin(holds grading:operate) is on the submission's hand-in runbook at <grade10 admin grading submission url>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <collector inbox> | An email inbox the tester reads, used by no other run |
-| <collector phone> | A phone the tester holds, receiving SMS and WhatsApp |
-
-**Steps:**
-
-1. Click Print n labels and check in on the runbook.
-2. Open <collector inbox>.
-3. Open the handed-in email.
-4. Check <collector phone> for any SMS or WhatsApp message about the submission.
-
-**Expected Results:**
-
-* Step 2: the handed-in message arrives by email.
-* Step 3: the message reads entirely in English.
-* Step 4: no SMS or WhatsApp message arrives.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-x5j rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC3-1: The message link opens the submission with no account
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Pre-conditions:**
-
-* customer(collector)'s submission is Drop-off booked, and the drop-off booked email has arrived in <collector inbox>.
-* The browser used holds no signed-in session: a private window.
-
-**Steps:**
-
-1. Open the drop-off booked email in <collector inbox>.
-2. Click Open your submission, into the private window.
-
-**Expected Results:**
-
-* The submission's own page opens directly, at its own address.
-* No sign-in or account creation is asked for.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-ovq rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC4-1: A message with a document attaches it
+### g10.grading-collector-notifications.US1-TC2: The handed-in email arrives in English with its papers, its footer and a link needing no account
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
-* customer(collector)'s submission at the row's level is Handed in under <collector email>, the agreement sealed and the intake receipt issued.
-* On the local stack this is a submission seeded at Handed in at the row's level, whose hand-in sends the handed-in email to the grading outbox for <collector email>.
+* A collector who reads the site in Traditional Chinese planned a submission at `<level>` under `<collector inbox>` and a phone the tester holds; every footer fact is set.
+* The submission is drop-off booked, every card checked on the hand-in runbook, the agreement sealed and the fee paid.
 
 **Test data:**
 
-| Level | What was paid names |
+| `<level>` | `<paid names>` |
 | --- | --- |
 | PSA Regular | the fee alone |
 | PSA Express | the cover beside the fee |
 
 **Steps:**
 
-1. Open the latest grading email to <collector email>: the handed-in email.
+1. As staff, click Print labels and check in.
+2. Open the handed-in email, and check the phone for any SMS or WhatsApp message.
+3. Click Open your submission in a private window.
 
 **Expected Results:**
 
-* The email states what was paid and the cards taken in.
-* What was paid names what the row's What was paid names.
-* The signed agreement and the intake receipt are attached.
+* Step 2's email reads entirely in English, states what was paid, naming `<paid names>`, and the cards taken in, with the intake receipt and the signed agreement attached; no SMS or WhatsApp message arrives.
+* Directly above its footer it names the submission id, the cards, the grader and the level; the footer names the custodian's registered name trading as Grade10, the shop, its address, its weekly hours, its phone and the complaints contact, and says its times are Hong Kong's, as every time in it is.
+* Step 3 opens the submission at its own address, asking for no sign-in or account.
 
 <!-- trace:case id=g10.grading-collector-notifications.TC-ofx rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC5-1: A message with no document carries no attachment
+### g10.grading-collector-notifications.US1-TC5: A message with no document carries no attachment
 
 **Classification:**
 
 * **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* customer(collector)'s submission is With the grader under <collector email>: its batch has shipped.
-* On the local stack this is a submission seeded at With the grader, whose ship sends the on-their-way email to the grading outbox for <collector email>.
-
-**Steps:**
-
-1. Open the latest grading email to <collector email>: the on-their-way email.
-
-**Expected Results:**
-
-* The on-their-way email arrives.
-* No document is attached.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-st9 rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC6-1: The footer prints the shop's real facts in production
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Pre-conditions:**
-
-* On production, every footer fact is set: <grade10 admin grading settings url> reads no fact as not set.
-* customer(collector) has received a grading email about a submission in <collector inbox>.
-
-**Steps:**
-
-1. Open the latest grading email in <collector inbox>.
-2. Read the line directly above the footer.
-3. Read the footer.
-
-**Expected Results:**
-
-* Step 2: the line names the submission id and its summary: the cards, the grader and the level.
-* Step 3: the footer names the custodian's registered name trading as Grade10, the shop and its address, and the complaints contact.
-* Every date and time in the message reads Hong Kong time, and the footer says so.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-twi rev=1 covers=g10.grading-collector-notifications.SC-r9o,g10.grading-collector-notifications.SC-0qd -->
-### grade10-site-grading-collector-notifications-US1-TC7-1: The footer marks an unset fact outside production
-
-**Classification:**
-
-* **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** `The footer`
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* On the local stack, the complaints contact reads not set on <grade10 admin grading settings url>, and every other footer fact is set.
-* customer(collector)'s submission sends a grading email to <collector email>: on the local stack, a submission seeded at Handed in.
-
-**Steps:**
-
-1. Open the latest grading email to <collector email>.
-2. Read its footer.
-
-**Expected Results:**
-
-* The unset fact prints inside brackets, marked.
-* Every other footer fact prints unmarked.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-ygx rev=1 covers=g10.vault-collector-notifications.SC-r3s,g10.grading-collector-notifications.SC-8jz -->
-### grade10-site-grading-collector-notifications-US1-TC8-1: A cancelled visit reads the same whoever cancelled it
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** `What is sent`
-
-**Pre-conditions:**
-
-* customer A and customer B each hold a submission booked for a drop-off from its page's drop-off picker, under <collector A email> and <collector B email>.
-* customer A is on <grade10 grading submission page url> for their submission.
-* admin(holds grading:operate) is on <grade10 admin grading submission url> for customer B's submission.
-
-**Steps:**
-
-1. On customer A's page, click Cancel visit on the visit card.
-2. Confirm the cancel.
-3. On the console, click Cancel visit on customer B's drop-off block.
-4. Confirm the cancel.
-5. Open the latest grading email to <collector A email>.
-6. Open the latest grading email to <collector B email>.
-
-**Expected Results:**
-
-* Steps 5 and 6: both collectors receive the drop-off cancelled email.
-* The two emails carry the same wording.
-* Neither names who cancelled the visit.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-cg3 rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC9-1: The grades email leaves out what this submission does not owe
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Pre-conditions:**
-
-* customer(collector)'s submission is Grades are in under <collector email>, with no card moved up a level and no card returned ungraded.
-* On the local stack this is a submission seeded at Grades are in, whose grades send the grades email to the grading outbox for <collector email>.
-
-**Steps:**
-
-1. Open the latest grading email to <collector email>: the grades email.
-
-**Expected Results:**
-
-* Each card's grade is named.
-* No paragraph about settling appears.
-* No paragraph about an ungraded card appears.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-c3c rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC10-1: The reminder arrives the day before the visit
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Pre-conditions:**
-
-* On the local stack, after 09:00 on the shop's clock, customer(collector) holds a plan kept under <collector email> with a level picked and no drop-off booked.
-* The collector is on <grade10 grading submission page url> for that plan, the drop-off picker open.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <visit> | Tomorrow, any free time the picker offers |
-
-**Steps:**
-
-1. Book <visit> from the drop-off picker.
-2. Run grading's reminder sweep once, standing in for the day before the visit.
-3. Open the latest grading email to <collector email>.
-
-**Expected Results:**
-
-* One reminder email arrives.
-* It names the visit's day, time and shop, and what to bring.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-i98 rev=1 covers=g10.grading-collector-notifications.SC-1tw -->
-### grade10-site-grading-collector-notifications-US1-TC11-1: A rung already told is not told again
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** `Reminders and the notice`
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* On the local stack, after 09:00 on the shop's clock, customer(collector)'s submission is Ready to collect under <collector email>, its ready day 30 days back.
-* Grading's reminder sweep has run once today and sent the 30-day reminder.
-
-**Steps:**
-
-1. Run grading's reminder sweep again the same day.
-2. Open the collector's grading emails for <collector email>.
-
-**Expected Results:**
-
-* No second reminder arrives.
-* The inbox holds the one reminder sent earlier.
-
----
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-fxc rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC12-1: The daily sweep sends a plan left unbooked its link once
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* <unbooked plan> and <booked plan> were kept yesterday.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <unbooked plan> | a plan kept with no drop-off booked |
-| <booked plan> | a plan kept and booked since |
-
-**Steps:**
-
-1. Let the daily sweep run.
-2. Let it run again the next day.
-
-**Expected Results:**
-
-* Step 1: <unbooked plan>'s collector receives the list-saved message with its link; <booked plan>'s receives none.
-* Step 2: nothing further is sent to either.
-
----
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-c3n rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC13-1: A plan with no visit names the brand's main shop, its hours and its phone
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Pre-conditions:**
-
-* <unbooked plan> is due its list-saved message.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <unbooked plan> | a plan kept with no drop-off booked |
-
-**Steps:**
-
-1. Read the list-saved message's footer.
-
-**Expected Results:**
-
-* Step 1: it names the brand's main shop, its address, its weekly hours from the diary and its phone.
-
----
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-25a rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC14-1: A plan whose visit was cancelled before the sweep is sent its link
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* A plan kept yesterday by <collector>, booked and then cancelled before the sweep.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <collector> | an email only this run uses |
-
-**Steps:**
-
-1. Run the daily sweep.
-2. Read the letter to <collector>.
-3. Run the sweep again the next day.
-
-**Expected Results:**
-
-* Step 2: the list-saved message with its link.
-* Step 3: nothing further is sent.
-
----
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-o0b rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC15-1: A collector whose cards travel in two shipments is told both
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* <their submission> shipped in two shipments.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <their submission> | a submission of two cards, each in its own shipment with its own tracking |
-
-**Steps:**
-
-1. Read the on-its-way letter to its collector.
-
-**Expected Results:**
-
-* Step 1: it names both shipments, each with its tracking and its card.
-
----
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-1lh rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
-### grade10-site-grading-collector-notifications-US1-TC16-1: A sweep letter waits for an unset value in production
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-collector-notifications-US-01
 
 **Pre-conditions:**
 
-* A stack read as production with no complaints contact set, and <their submission> at its 30-day reminder.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <their submission> | a ready submission uncollected 30 days |
+* A collector's submission is with the grader, its batch shipped.
 
 **Steps:**
 
-1. Run the daily sweep.
-2. Set the complaints contact, then run the sweep again.
+1. Open the on-their-way email.
 
 **Expected Results:**
 
-* Step 1: no reminder is sent, and `grading.sweep.repair` names the complaints contact.
-* Step 2: the reminder is sent.
+* No document is attached.
 
----
-
-## grade10-site-grading-collector-notifications-US2: Collector is not emailed about what the counter already told them
-
-**As a** collector who was refused a card at the counter or who named someone to collect on the page,
-**I want** no email about it, the receipt and History carrying it instead,
-**so that** my inbox holds only what I could not already see.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-d0s rev=1 covers=g10.grading-collector-notifications.SC-pte,g10.grading-collector-notifications.SC-95a -->
-### grade10-site-grading-collector-notifications-US2-TC1-1: A refused card sends no email while hand-in proceeds
+<!-- trace:case id=g10.grading-collector-notifications.TC-cg3 rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
+### g10.grading-collector-notifications.US1-TC9: The grades email leaves out what this submission does not owe
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-02
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-01
 
 **Pre-conditions:**
 
-* customer(collector)'s submission of three cards is Drop-off booked under <collector email>, booked from its page's drop-off picker; the booked email is the latest grading email to that address.
-* admin(holds grading:operate) is on the submission's hand-in runbook at <grade10 admin grading submission url>, the visit started at the desk, no card checked yet.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <refused card> | The first card on the list: one the grader would not take |
-| <reason> | Any of the three reasons the Refuse dialog offers |
-| <collector's words> | Crease across the front |
+* A collector's submission has its grades in, no card moved up a level and none returned ungraded.
 
 **Steps:**
 
-1. Click Refuse on <refused card>'s row.
-2. Pick <reason>, type <collector's words>, and click Refuse this card.
-3. Open the latest grading email to <collector email>.
-4. Tick Present on each of the other two cards.
-5. Seal the agreement on the iPad and take payment, as the runbook's steps offer.
-6. Click Print 2 labels and check in.
-7. Open the latest grading email to <collector email>: the handed-in email.
-8. Open <grade10 grading submission page url> for the submission.
+1. Open the grades email.
 
 **Expected Results:**
 
-* Step 3: no email names the refusal; the latest email is still the booked one.
-* Step 7: the handed-in email still arrives, naming only the accepted cards.
-* Steps 7 and 8: the intake receipt and the submission page carry the refused card's badge and reason.
+* Each card's grade is named; no paragraph about settling or about an ungraded card appears.
 
-<!-- trace:case id=g10.grading-collector-notifications.TC-1to rev=1 covers=g10.grading-collector-notifications.SC-pte,g10.grading-collector-notifications.SC-95a -->
-### grade10-site-grading-collector-notifications-US2-TC2-1: Naming, changing or removing a collector sends no email
+<!-- trace:case id=g10.grading-collector-notifications.TC-o0b rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
+### g10.grading-collector-notifications.US1-TC15: A collector whose cards travel in two shipments is told both
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* A submission of two cards shipped in two shipments, each with its own tracking.
+
+**Steps:**
+
+1. Open the on-their-way email.
+
+**Expected Results:**
+
+* It names both shipments, each with its tracking and its card.
+
+<!-- trace:case id=g10.grading-collector-notifications.TC-ygx rev=1 covers=g10.vault-collector-notifications.SC-r3s,g10.grading-collector-notifications.SC-8jz -->
+### g10.grading-collector-notifications.US1-TC8: A cancelled visit reads the same whoever cancelled it
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** What is sent
+
+**Pre-conditions:**
+
+* Collectors A and B each hold a submission with a drop-off booked; A is on their submission page, and staff on B's.
+
+**Steps:**
+
+1. As A, click Cancel visit and confirm.
+2. As staff, click Cancel visit on B's drop-off block and confirm.
+3. Open the latest grading email to each.
+
+**Expected Results:**
+
+* Both receive the drop-off cancelled email, in the same words, neither naming who cancelled.
+
+<!-- trace:case id=g10.grading-collector-notifications.TC-fxc rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
+### g10.grading-collector-notifications.US1-TC12: The daily sweep sends a plan with no visit its link once
 
 Runs once per row of **Test data**.
 
@@ -645,280 +208,338 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-02
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-01
 
 **Pre-conditions:**
 
-* customer(collector)'s submission is Ready to collect under <collector email>, and the latest grading email to that address is the ready email.
-* The collector is on <grade10 grading submission page url> for the submission, with the person the row's Before names.
+* A plan was kept yesterday, `<plan>`.
 
 **Test data:**
 
-| Action | Before | On the naming card |
-| --- | --- | --- |
-| Name a collector | Nobody named | Type Chan Tai Man in Their name, click Save |
-| Change the named person | Chan Tai Man named | Click Change, type Wong Siu Ming in Their name, click Save |
-| Remove the named person | Chan Tai Man named | Click Remove |
+| `<plan>` | `<first sweep sends>` |
+| --- | --- |
+| with no drop-off booked | the list-saved email with its link |
+| booked and then cancelled before the sweep | the list-saved email with its link |
+| booked since, the visit standing | nothing |
 
 **Steps:**
 
-1. Do the row's On the naming card.
-2. Open the latest grading email to <collector email>.
-3. Read History on the submission page.
+1. Run the daily sweep.
+2. Run it again the next day.
 
 **Expected Results:**
 
-* Step 2: no email sends for <Action>; the latest email is still the ready email.
-* Step 3: History logs <Action> with when it happened.
+* Step 1 sends `<first sweep sends>`.
+* Step 2 sends nothing further.
 
----
-
-## grade10-site-grading-collector-notifications-US3: Operator picks up a message that never went
-
-**As a** member of shop staff,
-**I want** a submission to be flagged when a message to its collector ran out of attempts, and to be able to send it again,
-**so that** a provider outage costs a delay rather than a collector who was never told.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-msu rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
-### grade10-site-grading-collector-notifications-US3-TC1-1: A submission is flagged when a message runs out
+<!-- trace:case id=g10.grading-collector-notifications.TC-c3n rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
+### g10.grading-collector-notifications.US1-TC13: A plan with no visit names the brand's main shop, its hours and its phone
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
-
-**Pre-conditions:**
-
-* A submission's message to its collector has run out of send attempts: the mail provider refused every send until the retry ladder was spent.
-* admin(holds grading:operate) is signed in to the console.
-
-**Steps:**
-
-1. Navigate to <grade10 admin grading queue url>.
-2. Find the submission's row.
-3. Click Open on the row.
-
-**Expected Results:**
-
-* Step 2: the queue row carries the Message not sent badge.
-* Step 3: the submission names the failed letter and its reason.
-* Step 3: Send again is offered.
-* No further attempt is made to send the letter.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-wi1 rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
-### grade10-site-grading-collector-notifications-US3-TC2-1: Staff resend a parked message from the submission
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-03
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-01
 
 **Pre-conditions:**
 
-* A submission's message to its collector has run out of send attempts, and the mail provider now accepts sends.
-* admin(holds grading:operate) is on <grade10 admin grading submission url> for that submission, the failed letter named in its header.
+* A plan kept with no drop-off booked is sent its list-saved email.
 
 **Steps:**
 
-1. Click Send again beside the failed letter.
+1. Read the email's footer.
 
 **Expected Results:**
 
-* The message resends to the collector.
+* It names the brand's main shop, its address, its weekly hours from the diary and its phone.
 
-<!-- trace:case id=g10.grading-collector-notifications.TC-doy rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
-### grade10-site-grading-collector-notifications-US3-TC3-1: A failed send never blocks the event it reports
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
-
-**Pre-conditions:**
-
-* The mail provider refuses every send.
-* admin(holds grading:operate) is on <grade10 admin grading submission url> for a submission With the grader.
-
-**Steps:**
-
-1. Record the stage that puts the grades in on the batch.
-2. Open the submission's Timeline tab.
-
-**Expected Results:**
-
-* The grades-posted event is recorded on the timeline as it happened.
-* The submission's status still reflects the event, unaffected by the failed send.
-* The failed send is recorded as still owed.
-
-<!-- trace:case id=g10.grading-collector-notifications.TC-iy5 rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
-### grade10-site-grading-collector-notifications-US3-TC4-1: The queue shows no flag when every message sent
+<!-- trace:case id=g10.grading-collector-notifications.TC-twi rev=1 covers=g10.grading-collector-notifications.SC-r9o,g10.grading-collector-notifications.SC-0qd -->
+### g10.grading-collector-notifications.US1-TC7: Outside production, a footer fact not set prints marked in brackets
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`
+* **Testability:** automation, manual
+* **Trace:** The footer
 
 **Pre-conditions:**
 
-* On the local stack, every submission's messages have sent: the mail provider has refused none.
-* admin(holds grading:operate) is signed in to the console.
+* On a stack that is not production, the complaints contact reads not set in the grading settings, every other footer fact set.
 
 **Steps:**
 
-1. Navigate to <grade10 admin grading queue url>.
-2. Read the badges on every row of every view.
+1. Hand in a submission, and read the handed-in email's footer.
 
 **Expected Results:**
 
-* No row carries the Message not sent badge.
+* The email is sent; the complaints contact prints as a marked placeholder in brackets, every other fact unmarked.
 
-<!-- trace:case id=g10.grading-collector-notifications.TC-6jb rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
-### grade10-site-grading-collector-notifications-US3-TC5-1: A read-only grant cannot resend a parked message
+<!-- trace:case id=g10.grading-collector-notifications.TC-1lh rev=1 covers=g10.grading-collector-notifications.SC-6ja,g10.grading-collector-notifications.SC-1h7,g10.grading-collector-notifications.SC-cti,g10.grading-collector-notifications.SC-c2o,g10.grading-collector-notifications.SC-sgg,g10.grading-collector-notifications.SC-f1b,g10.grading-collector-notifications.SC-v4r,g10.grading-collector-notifications.SC-mi6,g10.grading-collector-notifications.SC-faz,g10.grading-collector-notifications.SC-asi,g10.grading-collector-notifications.SC-6cs,g10.grading-collector-notifications.SC-esj,g10.grading-collector-notifications.SC-ey2 -->
+### g10.grading-collector-notifications.US1-TC16: In production, a sweep letter waits for a value not set
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** negative
-* **Type:** security
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-03
+* **Testability:** automation, manual
+* **Trace:** The footer
 
 **Pre-conditions:**
 
-* A submission's message to its collector has run out of send attempts.
-* admin(holds grading:read and no other grading grant) is on <grade10 admin grading submission url> for that submission.
+* In production, no complaints contact is set; a ready submission has gone 30 days uncollected.
 
 **Steps:**
 
-1. Read the submission's header, where the failed letter is named.
+1. Run the daily sweep.
+2. Set the complaints contact, and run the sweep again.
 
 **Expected Results:**
 
-* The failed letter and its reason still show.
-* No Send again action is offered.
+* Step 1 sends no reminder; the alert `grading.sweep.repair` names the complaints contact.
+* Step 2 sends the reminder.
 
-<!-- trace:case id=g10.grading-collector-notifications.TC-g6j rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
-### grade10-site-grading-collector-notifications-US3-TC6-1: The flag clears when the channel accepts the resend
+<!-- trace:case id=g10.grading-collector-notifications.TC-i98 rev=1 covers=g10.grading-collector-notifications.SC-1tw -->
+### g10.grading-collector-notifications.US1-TC11: A reminder already sent is not sent again
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** Reminders and the notice
+
+**Pre-conditions:**
+
+* A submission ready to collect for 30 days was sent its 30-day reminder by today's sweep.
+
+**Steps:**
+
+1. Run the reminder sweep again the same day, and read the collector's grading emails.
+
+**Expected Results:**
+
+* No second reminder arrives; the inbox holds the one sent earlier.
+
+---
+
+## g10.grading-collector-notifications.US2: Collector is not emailed about what the counter already told them
+
+**As a** collector who was refused a card at the counter or who named someone to collect on the page,
+**I want** no email about it, the receipt and History carrying it instead,
+**so that** my inbox holds only what I could not already see.
+
+<!-- trace:case id=g10.grading-collector-notifications.TC-d0s rev=1 covers=g10.grading-collector-notifications.SC-pte,g10.grading-collector-notifications.SC-95a -->
+### g10.grading-collector-notifications.US2-TC1: A card refused at the counter sends no email, and the hand-in goes on
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-02
+
+**Pre-conditions:**
+
+* A collector's three-card submission is drop-off booked, the booked email the latest to `<collector inbox>`; staff has the hand-in runbook open, the visit started.
+
+**Steps:**
+
+1. Click Refuse on the first card, pick a reason, type Crease across the front, and click Refuse this card.
+2. Open the latest grading email.
+3. Tick Present on the other two, seal the agreement, take payment, and click Print 2 labels and check in.
+4. Open the handed-in email and the submission page.
+
+**Expected Results:**
+
+* Step 2's latest email is still the booked one; none names the refusal.
+* Step 4's email names only the two accepted cards; the intake receipt and the page carry the refused card's badge and Crease across the front.
+
+<!-- trace:case id=g10.grading-collector-notifications.TC-1to rev=1 covers=g10.grading-collector-notifications.SC-pte,g10.grading-collector-notifications.SC-95a -->
+### g10.grading-collector-notifications.US2-TC2: Naming, changing or removing who collects sends no email, and History logs it
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-02
+
+**Pre-conditions:**
+
+* A collector's submission is ready to collect, the ready email the latest to `<collector inbox>`; `<before>` is named to collect.
+
+**Test data:**
+
+| `<act>` | `<before>` | `<on the naming card>` |
+| --- | --- | --- |
+| naming a collector | nobody | type Chan Tai Man, and click Save |
+| changing the named person | Chan Tai Man | click Change, type Wong Siu Ming, and click Save |
+| removing the named person | Chan Tai Man | click Remove |
+
+**Steps:**
+
+1. On the submission page, `<on the naming card>`.
+2. Open the latest grading email, and read History.
+
+**Expected Results:**
+
+* The latest email is still the ready email; History logs `<act>` with when it happened.
+
+---
+
+## g10.grading-collector-notifications.US3: Operator picks up a message that never went
+
+**As a** member of shop staff,
+**I want** a submission to be flagged when a message to its collector ran out of attempts, and to be able to send it again,
+**so that** a provider outage costs a delay rather than a collector who was never told.
+
+<!-- trace:case id=g10.grading-collector-notifications.TC-doy rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
+### g10.grading-collector-notifications.US3-TC3: A failed send never blocks the event it reports
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-collector-notifications-US-03
 
 **Pre-conditions:**
 
-* A submission's message to its collector has run out of send attempts, and the mail provider now accepts sends.
-* admin(holds grading:operate) is on <grade10 admin grading submission url> for that submission, the failed letter named in its header.
+* The mail provider refuses every send; staff is on a submission with the grader.
+
+**Steps:**
+
+1. Record the stage that puts the grades in on its batch, and open the Timeline tab.
+
+**Expected Results:**
+
+* The grades are posted on the timeline as they happened, the status follows them, and the message stands owed.
+
+<!-- trace:case id=g10.grading-collector-notifications.TC-msu rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
+### g10.grading-collector-notifications.US3-TC1: A message the retries run out on flags its submission
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-03
+
+**Pre-conditions:**
+
+* The mail provider refused a submission's message until its retries ran out.
+
+**Steps:**
+
+1. Find the submission's row on `<console queue>`, and open it.
+
+**Expected Results:**
+
+* The row carries Message not sent; the submission names the failed letter and its reason and offers Send again; no further attempt is made.
+
+<!-- trace:case id=g10.grading-collector-notifications.TC-iy5 rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
+### g10.grading-collector-notifications.US3-TC4: The queue flags nothing while every message has gone
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-03
+
+**Pre-conditions:**
+
+* The mail provider has refused no send.
+
+**Steps:**
+
+1. Read every row of every view on `<console queue>`.
+
+**Expected Results:**
+
+* No row carries Message not sent.
+
+<!-- trace:case id=g10.grading-collector-notifications.TC-g6j rev=1 covers=g10.grading-collector-notifications.SC-fse,g10.grading-collector-notifications.SC-5mn,g10.grading-collector-notifications.SC-57m,g10.grading-collector-notifications.SC-pgt -->
+### g10.grading-collector-notifications.US3-TC6: Sending a parked message again clears the flag once the channel takes it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-collector-notifications-US-03
+
+**Pre-conditions:**
+
+* A submission carries a parked message; the mail provider now accepts sends.
 
 **Steps:**
 
 1. Click Send again beside the failed letter.
-2. Navigate to <grade10 admin grading queue url>.
-3. Find the submission's row.
-4. Click Open on the row.
+2. Find the submission's row on `<console queue>`, and open it.
 
 **Expected Results:**
 
-* Step 1: the message leaves the parked list once the channel accepts it.
-* Step 1: the letter reaches the collector.
-* Step 3: the submission's row carries no Message not sent badge.
-* Step 4: the submission's page shows no failed letter.
+* Step 1's letter reaches the collector once the channel accepts it.
+* Step 2's row carries no Message not sent, and the page names no failed letter.
 
 ## Settled
 
-- The drop-off reminder is not booked through grading: the booking is owned by the standalone appointments change (`add-multi-store-appointments`) and the product no longer books its own visits, so `grade10-site-grading-collector-notifications-US1-TC10-1` is `deprecated` and its walk, `grading/dropoff.spec.ts`, is gone.
-- A read-grant holder offered no Send again is not this capability's rule: it is `grade10-admin/grading/counter`'s grant rule (the console shows only what the operator may do), walked in the counter suite; this spec states only that the operate grant sends a parked message again
-- The on-their-way letter's courier, order number and estimate are not this capability's to state: they are `grade10-admin/grading/batches`' facts; this spec states only that a letter with no document attaches nothing
-
-## Reconciliation
-
-**Run:** Blind suite reading 2026-09-22 for change `add-card-grading`, capability `grade10-site/grading/collector-notifications`. Read the isolated bundle under `bundles/add-card-grading/`: `_change/proposal.md`, `_change/decisions.md` with its `## Raised` table, `_change/ui-design.md` with the state dispositions stripped, the linked manual pages under `_change/pages/`, and this capability's `spec-outline.md` (`## Purpose` and `## Feature set`) and `user-journeys.md`. Denied: every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/`, `tech-design.md`, and the scenario pass's draft. Scenario ids stripped at review, 2026-09-29.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `grade10-site-grading-collector-notifications-US1-TC1-1` booked email comes from grading, not the diary | Covered | The booked message sent once, from the submission; its anchor is `grade10-site/grading/dropoff-booking`'s journey, so it is listed out of suite here, and the case still walks the send |
-| `grade10-site-grading-collector-notifications-US1-TC2-1` email only, English, whatever the pages read in | Folded | Decided in `decisions.md` Q13 and stated as a rule, with no scenario reaching it; folded as a scenario, one channel and one language |
-| `grade10-site-grading-collector-notifications-US1-TC3-1` the link opens the submission with no account | Covered | The link opening the submission with no account |
-| `grade10-site-grading-collector-notifications-US1-TC4-1` a message with a document attaches it | Covered | The handed-in message carrying the papers, and the cover beside the fee; its `estimated back` dropped from the case at review |
-| `grade10-site-grading-collector-notifications-US1-TC5-1` a message with no document carries no attachment | Folded | The closed list of three attaching messages had no scenario proving the negative; folded as a scenario. The letter's own facts — courier, order number, estimate — are `grade10-admin/grading/batches`' to state, dropped from the case at review |
-| `grade10-site-grading-collector-notifications-US1-TC6-1` the footer prints the shop's real facts in production | Covered | The footer naming the submission and who is writing, and every date on the shop's clock |
-| `grade10-site-grading-collector-notifications-US1-TC7-1` the footer marks an unset fact outside production | Covered | A value Legal has not set printing in brackets outside production. Retraced to `The footer`, the group that rule serves; the footer's other two rules stay with `grade10-site-grading-collector-notifications-US1-TC6-1` |
-| `grade10-site-grading-collector-notifications-US2-TC1-1` a refused card sends no email while hand-in proceeds | Covered | A refused card told at the counter and not by email, and the handed-in message for the rest |
-| `grade10-site-grading-collector-notifications-US2-TC2-1` naming, changing or removing a collector sends no email | Covered | Naming somebody to collect sends nothing. The removal row is a change of the named person under the requirement's "naming the person who may collect, or changing them"; no third event is claimed |
-| `grade10-site-grading-collector-notifications-US3-TC1-1` a submission is flagged when a message runs out | Covered | The retries spent, the message parked and the submission flagged |
-| `grade10-site-grading-collector-notifications-US3-TC2-1` staff resend a parked message from the submission | Retired at review, `deprecated` | A duplicate: `grade10-site-grading-collector-notifications-US3-TC6-1` walks the same resend from the same state, and took its result |
-| `grade10-site-grading-collector-notifications-US3-TC3-1` a failed send never blocks the event it reports | Covered | The act standing though the mail failed, read on the grades-posted message rather than the hand-in |
-| `grade10-site-grading-collector-notifications-US3-TC4-1` the queue shows no flag when every message sent | Covered | The flag's condition is the parked message; a submission with none is the other half of it |
-| `grade10-site-grading-collector-notifications-US3-TC5-1` a read grant cannot resend a parked message | Retired at review, `deprecated` | The read grant is `grade10-admin/grading/counter`'s grant rule, walked in the counter suite; this spec states only that the operate grant sends a parked message again (`decisions.md` Q61) |
-| Blind pass raised: does the flag clear on the resend, or on a later delivery check? | Answered, folded | Landed as `decisions.md` Q60: the flag clears when the channel accepts the resend and the parked row closes; folded as a scenario, and walked by `grade10-site-grading-collector-notifications-US3-TC6-1` |
-| Blind pass raised: which grant may Send again? | Answered: `decisions.md` Q61 | The operate grant, as the scenario for an operator sending a parked message again already stated; no new scenario |
-| Blind pass raised: does production refuse a send whose footer fact is unset? | Answered: `decisions.md` Q62 | It refuses the act by name and commits nothing, as the requirement and its production scenario state; no new scenario |
-| Every event decided | Out of suite: grade10's type check — `NOTIFY_FOR_EVENT` is exhaustive over every submission event kind, `null` written for each silence (`tech-design.md`) | Listed in the header's out of suite at review |
-| The same event telling the same message | Case added | `grade10-site-grading-collector-notifications-US1-TC8-1`, tracing `What is sent`, the group the rule serves |
-| A message saying only what is true of this submission | Case added | `grade10-site-grading-collector-notifications-US1-TC9-1` |
-| The reminder the day before | Case added | `grade10-site-grading-collector-notifications-US1-TC10-1` |
-| A rung told twice told once | Case added | `grade10-site-grading-collector-notifications-US1-TC11-1`, tracing `Reminders and the notice`; automation-only, since the local outbox keeps only the last letter |
-| The booked message and the missed message | Out of suite: `grade10-site/grading/dropoff-booking`'s suite | Their only anchor is that capability's journey |
-| The reminders, the storage message, the notice and nothing after it | Out of suite: `grade10-site/grading/submission-lifecycle`'s suite | The uncollected ladder is walked there, by that suite's `US8` cases |
-| Production refusing the act rather than send a blank | Out of suite: `grade10-admin/grading/counter`'s suite | The operator handing a list in meets the refusal there |
-| The plan's link sent by the sweep | Case added, added after the run | `grade10-site-grading-collector-notifications-US1-TC12-1`: decided by the product owner after the run (Q134), stated by `grade10-site-grading-collector-notifications-SC-26` |
-| The footer's shop, hours and phone | Case added, added after the run | `grade10-site-grading-collector-notifications-US1-TC13-1`: decided by the product owner after the run (Q135, Q136), stated by `grade10-site-grading-collector-notifications-SC-27` |
-
-**Uncovered anchors:** none. Every journey of this capability — `grade10-site-grading-collector-notifications-US-01`, `grade10-site-grading-collector-notifications-US-02`, `grade10-site-grading-collector-notifications-US-03` — and every feature set group a scenario serves is walked by a living case.
-| `grade10-site-grading-collector-notifications-SC-28` | Case added at the acceptance review | `grade10-site-grading-collector-notifications-US1-TC14-1`: the sweep reads the plan as it stands, decided by the product owner, 2026-10-01 |
-| `grade10-site-grading-collector-notifications-SC-29` | Case added at the acceptance review | `grade10-site-grading-collector-notifications-US1-TC15-1`: one submission's cards may travel in two shipments (Q128) |
-| `grade10-site-grading-collector-notifications-SC-30` | Case added at the acceptance review | `grade10-site-grading-collector-notifications-US1-TC16-1`: a sweep letter has no act to refuse, so it waits and raises the repair alert |
-
-### Manual
-
-| Manual | Why |
-| --- | --- |
-| `grade10-site-grading-collector-notifications-US1-TC6-1` | Production only: the custodian's registered name, the shop address and the complaints contact are set in production, and no other environment prints them |
-| `grade10-site-grading-collector-notifications-US1-TC2-1` | A person reads the collector's phone for the channels nothing was sent on; the worker's tests prove only what it does send |
+- A read-grant holder offered no Send again is `grade10-admin/grading/counter`'s grant rule, walked in the counter suite; this spec states only that the operate grant sends a parked message again.
+- The on-their-way letter's courier, order number and estimate are `grade10-admin/grading/batches`' facts; this spec states only that a letter with no document attaches nothing.
