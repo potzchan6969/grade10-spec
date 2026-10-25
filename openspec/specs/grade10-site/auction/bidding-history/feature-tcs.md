@@ -994,7 +994,7 @@ Runs once per row of **Test data**.
 | `<email>` | `<letter>` |
 | --- | --- |
 | ada@example.com | A |
-| 123@example.com | B (fixed: no letter in the email) |
+| _@example.com | B (fixed: no letter or digit in the email) |
 | Erased by customer B's account deletion | B (fixed: no email) |
 
 **Steps:**
