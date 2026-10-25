@@ -369,17 +369,9 @@ Two transports, one client code path:
 - Static build: `build-snapshot.mts` writes the artifacts — one file per
   change under `api/change/`, one per reference under `api/reference/`; the
   hosted site is static files only.
-- The OpenSpec viewer rides along under `dist/openspec/`, written by
-  `scripts/openspec-viewer/snapshot.sh` from the pinned submodule after the
-  manual's own build: the same page `pnpm spec:view` serves, with every
-  answer it would give filed as JSON where the page will ask for it, and its
-  search run in the browser over the text it ships. It is the viewer's page,
-  not the manual's — its own bundle, its own design system — reached from the
-  header's `OpenSpec viewer` link and nothing else. The dev server mounts it
-  live at the same address (`store/viewer-mount.mts`): the viewer's own
-  handler serves its built page and answers the snapshot's paths from the
-  working copy per request, so a saved spec shows on the next reload rather
-  than on the next build.
+- The manual no longer ships or mounts the OpenSpec viewer, and its change
+  views were removed. The build still reads the OpenSpec store for change and
+  capability data; the next step removes that read.
 
 ## Editing
 
@@ -562,7 +554,7 @@ against any manual; the store families — coverage, suites, deltas, the fold
 — run only where the manual and the store share a repository, because a
 manual mounted elsewhere can neither cause nor fix a hole in the store.
 
-The deploy runs `--pages`, the page families alone (`check:manual:pages`).
+The deploy runs `check:manual`, the same check lint runs on the pull request.
 Error containment says a break in a spec or a change is somebody else's file
 the manual mirrors: it renders as a loud broken card and the deployed site
 stays up and points at it. A gate that refused to publish over one would say

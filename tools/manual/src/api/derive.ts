@@ -7,7 +7,6 @@ import type {
 } from "../content/grammar";
 import { type PageAst, parsePage } from "../content/grammar";
 import type { PageIcon } from "../content/icons";
-import { resolveRef } from "../content/refs";
 import { type OpenMark, openMarksOfPage } from "./open-marks";
 import {
   dirOf,
@@ -15,7 +14,6 @@ import {
   ownerOfSpec,
   pagePath,
   routeForPagePath,
-  slugify,
   specTitle,
 } from "./paths";
 import { findRequirement } from "./requirements";
@@ -23,7 +21,6 @@ import { laneOfStage } from "./stages.ts";
 import type {
   ChangeEntry,
   ChangeLane,
-  ChangeSuite,
   DeltaKind,
   DeltaRequirement,
   HistoryRef,
@@ -900,35 +897,6 @@ export function specsOfProduct(
  * yet, and saying so is better than dropping the line. */
 export type CiteTarget = { id: string; label: string; to?: string };
 
-/**
- * Where a proposal's `## References` id points. The `[[ref]]` resolver answers
- * for spec ids and permanent ids; a requirement heading is the third thing a
- * propose dialog writes, and it resolves by name against the row it came from.
- */
-export function citeTarget(index: ManualIndex, id: string): CiteTarget {
-  const resolved = resolveRef(id, index.snapshot);
-  if (resolved.ok) {
-    const { target } = resolved;
-    const route = routeForSpec(index, target.spec);
-    return {
-      id,
-      label: target.title,
-      to: target.kind === "spec" ? route : `${route}#${target.id}`,
-    };
-  }
-
-  for (const spec of index.snapshot.specs) {
-    const requirement = findRequirement(spec.requirements, id);
-    if (!requirement) continue;
-    return {
-      id,
-      label: requirement.name,
-      to: `${routeForSpec(index, spec.id)}#req-${slugify(requirement.name)}`,
-    };
-  }
-  return { id, label: id };
-}
-
 /** What a commit touched, as a chip: a stable key, what to call it, and where
  * it leads when it still leads anywhere. */
 export type FeedRef = {
@@ -1065,25 +1033,6 @@ export function tracedBy(
       .filter((one) => one.status !== "deprecated")
       .flatMap((one) => one.traces)
       .flatMap((trace) => served.get(trace) ?? [trace]),
-  );
-}
-
-/** A suite riding an in-flight change, beside the change that carries it — the
- * work `/qa`'s capability rows cannot see, because the capability may not
- * exist durably yet. Drafts first: they are what a reviewer is here for. */
-export type ChangeSuiteRow = { change: ChangeEntry; suite: ChangeSuite };
-
-export function changeSuiteRows(index: ManualIndex): ChangeSuiteRow[] {
-  const rows: ChangeSuiteRow[] = [];
-  for (const change of index.snapshot.changes) {
-    for (const suite of change.suites ?? []) rows.push({ change, suite });
-  }
-  return rows.sort(
-    (a, b) =>
-      Number(Boolean(b.suite.error)) - Number(Boolean(a.suite.error)) ||
-      b.suite.cases.draft - a.suite.cases.draft ||
-      a.change.id.localeCompare(b.change.id) ||
-      a.suite.spec.localeCompare(b.suite.spec),
   );
 }
 

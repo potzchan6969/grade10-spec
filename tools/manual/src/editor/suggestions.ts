@@ -52,12 +52,6 @@ export function suggestionsForAttr(
   type: string,
   attr: string,
 ): string[] {
-  if (attr === "id" && (type === "spec" || type === "cases")) {
-    return suggestions.specIds;
-  }
-  if ((type === "changes" || type === "next") && attr === "spec") {
-    return suggestions.specIds;
-  }
   if (type === "story" && attr === "id") return suggestions.storyIds;
   if (type === "image" && attr === "src") return suggestions.assets;
   if (type === "flow" && attr === "diagram") return suggestions.assets;

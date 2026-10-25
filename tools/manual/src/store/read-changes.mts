@@ -12,7 +12,6 @@ import type {
   Delta,
   DeltaKind,
   DeltaRequirement,
-  IdleClaim,
   OpenQuestion,
   PageSectionRef,
   RoundRow,
@@ -31,7 +30,6 @@ import {
   toItemError,
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
-import { readIdleClaims } from "./idle.mts";
 import {
   deltaSections,
   leadingTitle,
@@ -332,21 +330,14 @@ function readChange(
     const state = mainStateOf(main, id);
     if (state) entry.mainState = state;
   }
-  const { text: tasks, commit } = planOf(dir, id, main);
+  const { text: tasks } = planOf(dir, id, main);
   if (tasks !== undefined) {
     const tagged = matchAll(tasks, OWNER)
       .map((one) => one.toLowerCase())
       .filter((one) => one !== UNASSIGNED);
     entry.owners = [...new Set([...declared, ...tagged])];
     try {
-      entry.taskGroups = readTaskGroups(
-        tasks,
-        detailed,
-        // Only for work still in flight: an archived change is finished, and
-        // its groups are the record of who did it rather than a claim anyone
-        // could still be sitting on.
-        detailed ? readIdleClaims(root, id, tasks, commit) : new Map(),
-      );
+      entry.taskGroups = readTaskGroups(tasks, detailed);
     } catch (cause) {
       fail(`${rel}/tasks.md`, cause);
     }
@@ -587,7 +578,7 @@ export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
  * reading no rule downstream could tell from a typo. What the line says is not
  * judged here — an unknown role, an artifact id the schema does not issue and a
  * value that is not one handle all survive the read, because the rules in
- * `check/record.mjs` are what name them, and a reader that dropped them would
+ * the record rules are what name them, and a reader that dropped them would
  * leave those rules nothing to refuse.
  */
 function readIdMap(
@@ -890,11 +881,7 @@ export const isWalkGroup = (title: string): boolean =>
 /** `detailed` carries the checkbox lines themselves, so "5 of 6" can say which
  * one is open. In-flight only: the archive shares this type and its board
  * payload has no reader for the lines. */
-function readTaskGroups(
-  text: string,
-  detailed: boolean,
-  idle: Map<string, IdleClaim>,
-): TaskGroup[] {
+function readTaskGroups(text: string, detailed: boolean): TaskGroup[] {
   const groups: TaskGroup[] = [];
   const visit = (sections: Section[]): void => {
     for (const section of sections) {
@@ -904,13 +891,11 @@ function readTaskGroups(
         continue;
       }
       const tasks = readTaskLines(section.raw);
-      const claim = idle.get(heading.num);
       groups.push({
         ...heading,
         done: tasks.filter((task) => task.done).length,
         total: tasks.length,
         ...(detailed ? { tasks } : {}),
-        ...(claim ? { idle: claim } : {}),
       });
     }
   };

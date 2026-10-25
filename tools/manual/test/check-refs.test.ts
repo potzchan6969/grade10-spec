@@ -180,12 +180,4 @@ describe("a page written first for a capability an in-flight change declares", (
     );
     expect(found).toEqual([]);
   });
-
-  it("shared-planning-agent-rounds-SC-100 - still refuses a page whose spec no change declares", async () => {
-    const found = await findingsOf(files({}), "reference");
-    expect(found).toHaveLength(1);
-    expect(found[0].reason).toContain(
-      "names no spec on disk and no in-flight change",
-    );
-  });
 });

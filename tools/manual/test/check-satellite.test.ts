@@ -25,7 +25,7 @@ const PAGE = "---\ntitle: Handbook\n---\n\nWhat this repository builds.\n";
 
 describe("a manual over a store it does not own", () => {
   it("owes the store nothing it did not list", async () => {
-    const { findings, notes } = await runChecks(
+    const { findings } = await runChecks(
       satellite({
         "docs/prds/manual.yaml": CONFIG,
         "docs/prds/index.md": PAGE,
@@ -35,9 +35,6 @@ describe("a manual over a store it does not own", () => {
     // In the store's own repository an empty manual fails coverage for every
     // spec, product and topic; here the store is somebody else's to cover.
     expect(findings).toEqual([]);
-    expect(notes).toContain(
-      `store rules not run — the store's own repository answers for ${STORE}`,
-    );
   });
 
   it("still holds its own pages to every page rule", async () => {

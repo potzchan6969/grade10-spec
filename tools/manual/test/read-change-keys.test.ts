@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { runChecks } from "../check/check-manual.mjs";
 import { waivedOf } from "../src/api/waivers";
 import { NO_GIT } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
@@ -392,69 +391,5 @@ describe("what a record waives", () => {
     expect([
       ...waivedOf(schemaArtifacts(root, "demo-planning") ?? [], entry),
     ]).toEqual(["ui-design", "tech-design"]);
-  });
-});
-
-/** The checker over a store that waives an artifact and writes a wait on it. */
-type Finding = { rule: string; level: string; path: string; reason: string };
-
-async function findings(record: string): Promise<Finding[]> {
-  const root = writeStore({
-    "docs/prds/manual.yaml":
-      "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
-    "docs/prds/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
-    "docs/prds/products/demo-product/index.md":
-      "---\ntitle: Demo product\n---\n\nThe landing.\n",
-    "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
-    [`${CHANGE}/.openspec.yaml`]: `schema: demo-planning\ncreated: 2026-09-18\n${record}`,
-    [`${CHANGE}/proposal.md`]: PROPOSAL,
-  });
-  const result: { findings: Finding[] } = await runChecks(root, NO_GIT);
-  return result.findings.filter((one) => one.rule === "awaiting");
-}
-
-describe("a waiver beside a wait", () => {
-  it("is refused, naming the artifact both lines are about", async () => {
-    const [found] = await findings(
-      [
-        'ui_waived: "nothing a reader sees moves"',
-        "awaiting:",
-        "  ui-design: a designer has not looked at it",
-        "",
-      ].join("\n"),
-    );
-
-    expect(found?.path).toBe(`${CHANGE}/.openspec.yaml`);
-    expect(found?.reason).toContain("ui-design");
-    expect(found?.reason).toMatch(/waives/);
-  });
-
-  it("names the line that waived it, `skip_specs` among them", async () => {
-    // One rule for all four waivers: the wait and the waiver contradict each
-    // other whichever line stood for the artifact.
-    const [found] = await findings(
-      [
-        "skip_specs: true",
-        "skip_specs_why: a lint sweep moves no behaviour",
-        "awaiting:",
-        "  specs: the second pass is QA's",
-        "",
-      ].join("\n"),
-    );
-
-    expect(found?.reason).toContain("waives `specs` with `skip_specs`");
-  });
-
-  it("says nothing about a wait on an artifact nothing waives", async () => {
-    expect(
-      await findings(
-        [
-          'ui_waived: "nothing a reader sees moves"',
-          "awaiting:",
-          "  tech-design: engineer pick-up",
-          "",
-        ].join("\n"),
-      ),
-    ).toEqual([]);
   });
 });

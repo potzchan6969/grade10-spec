@@ -174,29 +174,6 @@ export type TaskLine = {
   owner?: string;
 };
 
-/**
- * How long a claimed, unfinished group has sat without progress — the later of
- * when the current owner's unbroken hold began and the newest commit that
- * raised its checked count.
- *
- * Derived from the history of one `tasks.md` on the store's main — HEAD for a
- * change only the checkout has — by `openspec-viewer`'s published `lib/store`,
- * at build time. Absent wherever there is no honest number: an unclaimed
- * group, a finished one, a history that cannot account for the current owner,
- * a store that is not a git checkout, or a checkout with no viewer submodule.
- * An age invented from missing history would aim the nudge at the wrong
- * person.
- */
-export type IdleClaim = {
-  /** ISO date the clock started from. */
-  since: string;
-  /** Whole days from `since` to the build. */
-  days: number;
-  /** Which of the two dates won — a claim nobody has moved, or the last
-   * checkmark against it. */
-  source: "claim" | "progress";
-};
-
 export type TaskGroup = {
   /** The integer its `## <n>. <title>` heading carries. The convention makes
    * this the group's address: an owner is recorded against it, and a task id
@@ -211,7 +188,6 @@ export type TaskGroup = {
   total: number;
   tasks?: TaskLine[];
   /** In-flight only, and only where git can date it. */
-  idle?: IdleClaim;
 };
 
 export type DeltaKind = "added" | "modified" | "removed" | "renamed";

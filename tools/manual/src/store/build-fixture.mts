@@ -156,15 +156,7 @@ function dated(change: ChangeEntry): ChangeEntry {
   delete datedChange.lastLanded;
   const landedOn = FIXTURE_DATES[change.id]?.landed;
   if (landedOn) datedChange.lastLanded = landedOn;
-  if (!change.taskGroups.some((group) => group.idle)) return datedChange;
-  return {
-    ...datedChange,
-    taskGroups: change.taskGroups.map((group) => {
-      const undatedGroup = { ...group };
-      delete undatedGroup.idle;
-      return undatedGroup;
-    }),
-  };
+  return datedChange;
 }
 
 /**

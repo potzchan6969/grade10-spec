@@ -29,7 +29,7 @@ import type { ChangeEntry, SchemaArtifact } from "./types.ts";
  *
  * Its own module because three readers need it and no two of them can reach
  * each other: the worklists and the stage ladder derive from it, and
- * `check/record.mjs` refuses a wait on what it names — and the store's reader,
+ * the record rules refuse a wait on what it names — and the store's reader,
  * which parses the lines, is a Node module the app cannot import.
  */
 export function waivedOf(

@@ -2,8 +2,6 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { createContext, createReport } from "../check/context.mjs";
-import { checkAwaiting } from "../check/record.mjs";
 import { behindOf } from "../src/api/stages.ts";
 import type {
   ChangeEntry,
@@ -23,7 +21,6 @@ import {
 } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
-import { rootsOf } from "../src/store/roots.mts";
 import { upstreamOf } from "../src/store/upstream.mts";
 import { gitStore } from "./git-store";
 import { writeStore } from "./tmp-store";
@@ -619,24 +616,5 @@ describe("behind holds no tick, claim or wait", () => {
     ]);
     // The change is still behind: no line says anything was read again.
     expect(behindOf(entry, artifacts(root)).length).toBeGreaterThan(0);
-  });
-
-  it("accepts the wait itself: the record's own rule raises nothing on it", () => {
-    const files = filesOf("awaiting:\n  tech-design: waiting on the vendor\n");
-    files[`${CHANGE}/tasks.md`] = TASKS;
-    const root = writeStore(files);
-    const entry = read(root);
-
-    const report = createReport();
-    const ctx = createContext(rootsOf(root), report, {
-      specs: new Map(),
-      changes: [entry],
-      stories: null,
-    });
-    checkAwaiting(ctx, [entry]);
-
-    expect(report.findings.filter((one) => one.rule === "awaiting")).toEqual(
-      [],
-    );
   });
 });

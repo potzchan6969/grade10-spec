@@ -1,4 +1,3 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { cn } from "@grade10/design-system/lib/utils";
 import { BookOpenText, CaretDown, CaretRight } from "@phosphor-icons/react";
@@ -136,8 +135,6 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
          * reader's landmark list two entries a reader could not tell apart.
          * The divider is the second list's own top border. */}
         <nav aria-label="Manual">
-          <ul className="space-y-0.5"></ul>
-
           {index === null ? (
             <Text as="p" className="px-4 pt-5" size="xs" tone="secondary">
               Navigation appears once the snapshot is in hand.
@@ -322,11 +319,6 @@ function ProductBranch({
           <PageIcon name={product.icon} />
         </span>
         <span className="min-w-0 flex-1 truncate">{product.title}</span>
-        {product.changeCount > 0 ? (
-          <Badge className="tabular-nums" size="sm" variant="outline">
-            {product.changeCount}
-          </Badge>
-        ) : null}
         {expandable ? (
           <span className="flex size-4 shrink-0 items-center justify-center text-secondary-foreground">
             {expanded ? (

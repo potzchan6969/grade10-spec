@@ -1,11 +1,5 @@
 import { execFileSync } from "node:child_process";
-import {
-  cpSync,
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  writeFileSync,
-} from "node:fs";
+import { cpSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -22,12 +16,8 @@ const CLEAN = fileURLToPath(new URL("./fixtures/check/clean", import.meta.url));
 const SCHEMAS = fileURLToPath(
   new URL("../../../openspec/schemas", import.meta.url),
 );
-const VIEWER = fileURLToPath(
-  new URL("../../openspec-viewer/lib/store.mjs", import.meta.url),
-);
 const DAY = 86_400_000;
 const PROPOSAL = "# Build it\n\n## Why\n\nNobody has.\n";
-
 const tasksMd = (owner: string, done: number) =>
   [
     `## 1. Build it (grade10-spec)${owner ? ` (owner: @${owner})` : ""}`,
@@ -98,18 +88,6 @@ describe("the plan the board reads", () => {
     // Only tasks.md is older here, and every claim moves it.
     expect(change?.mainState).toBeUndefined();
   });
-
-  it.skipIf(!existsSync(VIEWER))(
-    "dates the claim from main's history",
-    async () => {
-      const change = await changeOf(behindMain(), "build-it");
-
-      expect(change?.taskGroups[0].idle).toMatchObject({
-        days: 4,
-        source: "progress",
-      });
-    },
-  );
 
   it("keeps the task list of a change only this checkout has", async () => {
     const { root, git, write, commit } = checkout();

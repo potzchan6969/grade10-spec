@@ -7,7 +7,7 @@ import { createHash } from "node:crypto";
  * One hasher, read here and written by the round, so the reader and the writer
  * can never disagree about whether anything moved. Each text has its
  * whitespace collapsed and trimmed and nothing else touched — a link target
- * and a scenario id are text, and normalising them the way `stale.mjs` does
+ * and a scenario id are text, and normalising them the way the record rules do
  * would hash two different upstreams alike. The texts are joined by a NUL, so
  * no two of them can run together into one, and eight hexadecimal characters
  * is short enough to read in a record and long enough that no two upstreams

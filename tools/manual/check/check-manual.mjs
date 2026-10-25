@@ -1,52 +1,25 @@
 #!/usr/bin/env node
 /*
- * CHECK: the manual against the store it describes.
+ * CHECK: the manual against the pages it renders.
  *
- *   pnpm check:manual [store-root] [--pages] [--quiet]
+ *   pnpm check:manual [store-root] [--quiet]
  *
- * The manual restates nothing — it points at specs, changes, images and
- * stories. Every one of those pointers can rot without anyone noticing, so
- * this walks them all and says so out loud.
+ * The manual reads only docs/prds/: its pages, their images, and the
+ * workbench Storybook index. Nothing here reads a change or a test case.
  *
- * FAIL = a page lies about the store: it does not parse, it is not the
- *        canonical text the editor would write back, a reference names
- *        nothing on disk, two of its details anchor alike, a durable spec has
- *        no page, a product or topic has
- *        no landing page, or a store file the readers could not parse. One
- *        family is about acceptance: a case tracing a scenario the spec does
- *        not issue, an approved suite holding a draft, a journey accepted by
- *        a scenario its own spec never issued, a capability whose journeys
- *        file neither holds a story nor says nobody walks it. One is aimed at
- *        `openspec archive` rather than at a page: a durable spec carrying a
- *        heading the fold would absorb, and every way an in-flight delta
- *        breaks the fold — a heading it cannot carry, a heading no durable
- *        requirement answers to, one requirement two changes both fold, an
- *        id issued twice, a page selector a fold is about to move out from
- *        under. One is about the join the store writes in prose: an id cited
- *        in backticks that nothing issues. Exits 1.
- * WARN = hygiene with no broken pointer behind it: a page committed before
- *        the specs it embeds, named requirement by requirement, a `[[ref]]`
- *        in prose that names nothing, a `::figma` link off figma.com, a spec
- *        whose test cases no page shows, a scenario no case traces, a suite
- *        quoting wording the spec has since moved, a delta section the fold
- *        discards, a delta-introduced capability no page documents, a domain
- *        with no icon for its rail row. Exits 0.
+ * FAIL = a page does not parse, is not the canonical text the editor would
+ *        write back, points at an image or reference that does not exist, or
+ *        a product or topic has no landing page. Exits 1.
+ * WARN = hygiene with no broken pointer behind it: a `[[ref]]` in prose that
+ *        names nothing, a `::figma` link off figma.com, a page past the
+ *        budget in docs/prds/guides/writing-the-manual.md, a mark read as words.
+ *        Exits 0.
  *
- * `--pages` keeps the page families and drops the store ones. It is the
- * deploy's gate: a requirement two changes both fold is a break in files the
- * manual mirrors, and the site's job there is to stay up and point at it, not
- * to refuse to publish. Lint runs the whole check on the same push, so every
- * store family still fails the pull request that wrote it.
- *
- * The readers in ../src are the only parser — this script never
- * grows a second one, so the check and the app can never disagree.
- *
- * One rule family per module in this directory; this file reads the
- * store once and hands the same context to each of them.
+ * The readers in ../src are the only parser — this script never grows a second
+ * one, so the check and the app can never disagree.
  */
 import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { storeMain } from "../../../scripts/openspec/store-main.mjs";
 import { walkFiles } from "../src/store/disk.mts";
 import {
   mergeGitIndexes,
@@ -54,14 +27,9 @@ import {
   readGitIndex,
   STORE_DIRS,
 } from "../src/store/git.mts";
-import {
-  readArchivedChanges,
-  readChanges,
-} from "../src/store/read-changes.mts";
 import { readManualConfig } from "../src/store/read-manual.mts";
 import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
 import { resolveRoots, rootsOf } from "../src/store/roots.mts";
-import { checkCited } from "./cited.mjs";
 import {
   createContext,
   createReport,
@@ -71,32 +39,10 @@ import {
   RULES,
   readStoryIndex,
 } from "./context.mjs";
-import { checkDeltas } from "./deltas.mjs";
 import { checkDense } from "./dense.mjs";
 import { checkMarkInProse } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
-import { checkPlanned, checkWalkLast } from "./planned.mjs";
-import {
-  checkArchived,
-  checkAwaiting,
-  checkDecided,
-  checkDesign,
-  checkHands,
-  checkLandedBy,
-} from "./record.mjs";
-import { checkRole } from "./role.mjs";
-import { checkRounds } from "./rounds.mjs";
-import { checkSections } from "./sections.mjs";
-import {
-  checkDependencies,
-  checkSpecMap,
-  checkSpecShape,
-  checkStoreErrors,
-  checkTaxonomy,
-  checkUnwritten,
-} from "./shape.mjs";
-import { checkStale } from "./stale.mjs";
-import { checkWalked } from "./walked.mjs";
+import { checkTaxonomy } from "./shape.mjs";
 
 const EMPTY_CONFIG = {
   storybookBase: "",
@@ -123,31 +69,7 @@ const EMPTY_CONFIG = {
  * point at it. Lint runs the whole check on the same push, so the family
  * still fails the pull request that wrote it.
  */
-/** Store files as `main` carries them, read in one git call: what `cited`
- * holds a rounds record's kept rows against. Nothing where the store has no
- * `main`. */
-function mainReader(store, index) {
-  return async (paths) => {
-    const main = storeMain(store, { fetch: false });
-    if (!main || paths.length === 0) return new Map();
-    const refs = paths.map((path) => `${main.commit}:${path}`);
-    const blobs = await index.readBlobs(refs);
-    const texts = new Map();
-    paths.forEach((path, at) => {
-      const text = blobs.get(refs[at]);
-      if (text !== undefined) texts.set(path, text);
-    });
-    return texts;
-  };
-}
-
-export async function runChecks(
-  target,
-  git,
-  // `roundsSince`: the day the `round` rule holds every change from, in place
-  // of `ROUND_RECORD_SINCE`; a test sets it, the CLI never does.
-  { pages: pagesOnly = false, roundsSince } = {},
-) {
+export async function runChecks(target, git) {
   const roots = typeof target === "string" ? rootsOf(target) : target;
   const index = git ?? (await gitIndex(roots));
   const report = createReport();
@@ -166,8 +88,6 @@ export async function runChecks(
   const specs = new Map(
     readSpecs(roots.store, index).map((spec) => [spec.id, spec]),
   );
-  // The branch's own task lists: a check judges the files a pull request changes.
-  const changes = readChanges(roots.store, index, null);
 
   const paths = walkFiles(
     roots.content,
@@ -178,18 +98,10 @@ export async function runChecks(
 
   const ctx = createContext(roots, report, {
     specs,
-    changes,
     stories: readStoryIndex(roots.store, add),
   });
 
   checkPages(ctx, pages);
-  if (roots.own) {
-    checkSections(ctx, changes, pages);
-  } else {
-    notes.push(
-      "change section links not run — the store's own repository answers for the mounted store",
-    );
-  }
   checkMarkInProse(ctx, pages);
   checkDense(ctx, pages);
 
@@ -201,36 +113,6 @@ export async function runChecks(
 
   checkTaxonomy(ctx.roots, config, shape, paths, add);
   checkIcons(ctx, pages);
-  await checkStale(roots.store, pages, specs, shape.dirs, index, add);
-
-  if (roots.own && pagesOnly) {
-    notes.push(
-      "store rules not run — page rules only, the deploy's gate; lint runs the rest",
-    );
-  } else if (roots.own) {
-    checkUnwritten(ctx, changes, shape);
-    await checkCited(roots.store, add, mainReader(roots.store, index));
-    checkWalked(ctx, shape, changes);
-    checkRole(ctx, shape);
-    const folded = checkSpecShape(roots.store, shape, add);
-    checkSpecMap(roots.store, shape, add);
-    checkDeltas(ctx, { changes, shape, pages });
-    checkStoreErrors(specs, changes, folded, add);
-    checkDependencies(roots.store, changes, add);
-    checkDesign(ctx, changes);
-    checkDecided(ctx, changes);
-    checkPlanned(ctx, changes);
-    checkRounds(ctx, changes, roundsSince);
-    checkAwaiting(ctx, changes);
-    checkWalkLast(ctx, changes);
-    checkHands(ctx, changes);
-    checkLandedBy(ctx, changes);
-    checkArchived(ctx, readArchivedChanges(roots.store, index), roundsSince);
-  } else {
-    notes.push(
-      `store rules not run — the store's own repository answers for ${roots.store}`,
-    );
-  }
 
   return { findings, notes };
 }
@@ -287,13 +169,12 @@ async function gitIndex(roots) {
 
 if (import.meta.main) {
   const args = process.argv.slice(2);
-  const pages = args.includes("--pages");
   const quiet = args.includes("--quiet");
   const where = args.find((one) => !one.startsWith("--"));
   const roots = where ? rootsOf(resolve(where)) : resolveRoots();
   const { text, failures } = formatReport(
     roots,
-    await runChecks(roots, undefined, { pages }),
+    await runChecks(roots, undefined),
     { quiet },
   );
   console.log(text);
