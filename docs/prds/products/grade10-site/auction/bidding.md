@@ -290,8 +290,6 @@ On the same card, locked by the first accepted bid.
 
 ::story{id="auction-bidding-blocks-listingauctionbidcard--outbid" title="The bid panel after being outbid"}
 
-::changes{spec="shared/ui/auction-listing"}
-
 ### Enrolment Flow
 
 - **Link before amount** — with no linked card the chips and the custom field
@@ -307,8 +305,6 @@ On the same card, locked by the first accepted bid.
   on My Auctions and turns its email alerts on
 
 ::story{id="auction-bidding-screens-bid-panel-dialogs--setup-modal" title="Setup modal"}
-
-::changes{spec="grade10-site/auction/bid-payment-method"}
 
 ### Bidding History
 
@@ -387,8 +383,6 @@ the same facts sit in the five-column table.
   says so and can be retried; a close or a bid that could not be refreshed is
   shown as not current
 
-::changes{spec="grade10-site/auction/account-record"}
-
 ### Watchlist
 
 A watch is one action on a lot that says come back to this, and it costs
@@ -416,8 +410,6 @@ watches.
 - **Private** — no public fact carries a watch count or a watcher's identity;
   operators see how many collectors watch a lot, across both brands and never
   a name
-
-::changes{spec="grade10-site/auction/watchlist"}
 
 ### Notifications
 
@@ -474,21 +466,21 @@ the account's registered address, and the letters about a won lot are
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/auction/auction"}
+[Test cases · grade10-site/auction/auction](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/auction)
 
-::cases{id="grade10-site/auction/auto-bidding"}
+[Test cases · grade10-site/auction/auto-bidding](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/auto-bidding)
 
-::cases{id="grade10-site/auction/bid-increments"}
+[Test cases · grade10-site/auction/bid-increments](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/bid-increments)
 
-::cases{id="grade10-site/auction/bid-panel-enrollment"}
+[Test cases · grade10-site/auction/bid-panel-enrollment](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/bid-panel-enrollment)
 
-::cases{id="grade10-site/auction/bid-payment-method"}
+[Test cases · grade10-site/auction/bid-payment-method](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/bid-payment-method)
 
-::cases{id="grade10-site/auction/bidding-history"}
+[Test cases · grade10-site/auction/bidding-history](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/bidding-history)
 
-::cases{id="grade10-site/auction/account-record"}
+[Test cases · grade10-site/auction/account-record](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/account-record)
 
-::cases{id="grade10-site/auction/notifications"}
+[Test cases · grade10-site/auction/notifications](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/notifications)
 :::
 
 :::detail{title="Product decisions" for="pm"}

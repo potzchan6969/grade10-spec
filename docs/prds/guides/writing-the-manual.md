@@ -98,47 +98,20 @@ The page itself carries the shape we want — plain prose and the visuals below.
 Requirement text stays in the store: a page states the rule in its own
 words and links the capability, and never embeds the contract.
 
-What a page does embed is acceptance: the spec's test-case suite, out of the
-spec named in the frontmatter. The block renders the suite's index — each
-case, its status, and the journey it traces — so a page never lists a case
-in prose; the check warns on a suite no page shows.
-
-```md
-::cases{id="grade10-site/loyalty/programme"}
-```
+A page links out to its acceptance and its requirements rather than
+embedding them. The test-case suite and the spec sit in the spec store, and a
+page that wants to point at them writes a plain link beside the prose, such as
+`[Test cases · grade10-site/loyalty/programme](…)`. Nothing on a page lists
+in-flight changes or follow-ons: the page's own 🚧 lines say what is being
+built, and its ❓ lines say what is open.
 
 A chapter — one page whose `##` sections are the capabilities a reader meets
-in order, the way the auction's pages are cut — names the first capability in
-its frontmatter and shows every other one's suite with its own `cases` block,
-or its `changes` block while the capability is still being introduced. The
-check counts each as the page naming that capability, so none of them needs a
-page of its own; a proposal links the `##` section that holds the capability.
+in order — names the first capability in its frontmatter. Each later section
+is a capability in its own right; a proposal links the `##` section that holds
+it.
 
-User journeys are derivative of the page's own content and stay in the
-capability's `user-journeys.md` — a page never embeds them.
-
-A page that names a spec in its frontmatter already shows that spec's in-flight
-changes. Author this block only to show a *different* spec's:
-
-```md
-::changes{spec="grade10-site/loyalty/programme"}
-```
-
-What the changes about a capability said would come next — the
-`## Follow-on changes` bullets of every proposal whose delta touches that spec
-or whose `## References` cite it, in flight and shipped alike:
-
-```md
-::next{spec="grade10-site/loyalty/programme"}
-```
-
-Every bullet stays under the change that wrote it, dated by that change, and
-the block says so out loud — a follow-on is one author's intent on one day, and
-pooling them into a bare list turns it into a promise nobody made. Nothing else
-on the page may repeat them: the prose above still describes the product as it
-is, in the present tense. The product page pools the same reading over every
-capability it owns, after every ❓ and `TBC` its pages carry, as its pending
-spec.
+User journeys stay in the capability's `user-journeys.md` and are never
+shown on a page.
 
 Visuals. Figma URLs and Storybook ids are never invented — take them from the
 design record or the workbench, and the check now holds you to it: a url naming

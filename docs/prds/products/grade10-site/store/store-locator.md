@@ -65,7 +65,7 @@ claim opens Store Locator in the same tab, in the page's language -
 ::story{id="store-store-locator-screens-store-locator--narrow" title="Store Locator - narrow"}
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/store/store-locator"}
+[Test cases · grade10-site/store/store-locator](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/store-locator)
 :::
 
 :::detail{title="Product decisions" for="pm"}

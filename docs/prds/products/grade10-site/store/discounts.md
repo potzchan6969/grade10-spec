@@ -49,7 +49,7 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 - **A code joins** - the shop keeps the combination that takes the most off,
   so a product discount not set to combine can leave the cart above the card
 
-::cases{id="grade10-site/store/site-discounts"}
+[Test cases · grade10-site/store/site-discounts](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/site-discounts)
 
 ## Order of Application
 

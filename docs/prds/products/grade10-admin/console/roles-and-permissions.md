@@ -61,5 +61,5 @@ Non-goals:
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-admin/console/roles-and-permissions"}
+[Test cases · grade10-admin/console/roles-and-permissions](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/console/roles-and-permissions)
 :::

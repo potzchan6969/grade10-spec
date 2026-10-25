@@ -67,7 +67,7 @@ A link works once. A link that does not work creates no session.
 - 🚧 **Console failures show on the sign-in page** — an expired, used, banned or different-account link lands on the console's sign-in page, and the message shows there, since the console has no toasts. Switch and Stay sit on the page too
 
 :::detail{title="Sign-in test cases" for="qa"}
-::cases{id="shared/auth/sign-in"}
+[Test cases · shared/auth/sign-in](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/auth/sign-in)
 :::
 
 ## Session
@@ -103,7 +103,7 @@ A session belongs to the browser, not to one tab. Every tab of the same site or 
 - **Analytics** — a signed-in event names the person by user id. An anonymous event names the device. Signing in links the device to the person, so one visit does not look like two strangers. Each product decides which events it records
 
 :::detail{title="Session test cases" for="qa"}
-::cases{id="shared/auth/session"}
+[Test cases · shared/auth/session](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/auth/session)
 :::
 
 ## Sign-Out
@@ -126,7 +126,7 @@ A session belongs to the browser, not to one tab. Every tab of the same site or 
 The control's place, and what a surface clears afterwards, belong to the surface. On the grade10 site, the profile offers sign-out. So does the header account menu, when a collector is signed in — [Page Shell](/p/grade10-site/site/page-shell).
 
 :::detail{title="Sign-out test cases" for="qa"}
-::cases{id="shared/auth/sign-out"}
+[Test cases · shared/auth/sign-out](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/auth/sign-out)
 :::
 
 ## Screens
@@ -148,8 +148,6 @@ The dialogs and messages above, as the design system draws them.
 ## Staging Tests
 
 QA walks sign-in on the hosted stacks through a gated endpoint. Collectors never see it.
-
-::changes{spec="shared/auth/test-sign-in"}
 
 ### Who May Call
 

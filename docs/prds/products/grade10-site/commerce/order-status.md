@@ -63,7 +63,7 @@ not yet tell a pickup order from a shipped one. The shared status pill keeps
 its pickup rung for when it does.
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/commerce/order-status"}
+[Test cases · grade10-site/commerce/order-status](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/commerce/order-status)
 :::
 
 :::detail{title="Product decisions" for="pm"}

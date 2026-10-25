@@ -102,5 +102,5 @@ coupon codes, and pass serials.
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/analytics/analytics"}
+[Test cases · grade10-site/analytics/analytics](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/analytics/analytics)
 :::

@@ -37,8 +37,6 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 - **On its own** — the gallery renders without the bid panel, so a lot can
   be shown before it can be bid on
 
-::changes{spec="shared/ui/auction-listing"}
-
 ## Bid History
 
 - **Accepted instants** — each row keeps the accepted time as data

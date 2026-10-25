@@ -60,7 +60,7 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
   or the time
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-admin/auction/internal-bid"}
+[Test cases · grade10-admin/auction/internal-bid](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/auction/internal-bid)
 :::
 
 :::detail{title="Product decisions" for="pm"}

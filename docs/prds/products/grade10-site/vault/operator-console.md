@@ -185,9 +185,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 
 ## Specs and journeys
 
-::spec{id="grade10-admin/vault/operator-queue"}
+[Requirements · grade10-admin/vault/operator-queue](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/vault/operator-queue/spec.md)
 
-::spec{id="grade10-admin/vault/money-book"}
+[Requirements · grade10-admin/vault/money-book](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/vault/money-book/spec.md)
 
 :::detail{title="Code map" for="engineer"}
 - **Grants** — `packages/vault/contracts/src/permissions.ts` maps every admin

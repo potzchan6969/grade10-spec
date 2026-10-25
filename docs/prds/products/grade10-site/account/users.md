@@ -70,7 +70,7 @@ Auction bidder bans are a separate thing with a separate switch. The auction ser
 - **Standing waits for the request** — while an erasure request is open, a ban or an unban of that account is refused by name. The request closing, cancelled or completed is what changes standing
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/auth/users"}
+[Test cases · shared/auth/users](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/auth/users)
 :::
 
 :::detail{title="Product decisions" for="pm"}

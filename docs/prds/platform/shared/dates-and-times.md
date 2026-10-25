@@ -70,8 +70,6 @@ zone the platform does not recognise, stops the render.
 A calendar day an operator types into a filter becomes the instants that day
 opens and closes on the surface's own clock.
 
-::changes{spec="shared/dates-and-times"}
-
 :::detail{title="Product decisions" for="pm"}
 A collector in Seoul and one in Hong Kong were reading different suffixes for
 the same instant - UTC on a tile, HKT on My Auctions - and a document, a mail

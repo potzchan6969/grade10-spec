@@ -145,7 +145,7 @@ listed apart from the ones that can, muted with its reason and no Apply.
 ::story{id="store-cart-blocks-cartdrawer--loading-with-lines" title="The skeleton state while the drawer re-reads prices"}
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/ui/store-cart"}
+[Test cases · shared/ui/store-cart](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/ui/store-cart)
 :::
 
 :::detail{title="Product decisions" for="pm"}

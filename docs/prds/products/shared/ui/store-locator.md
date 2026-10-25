@@ -23,5 +23,5 @@ one hours row; the block invents none of them
 🚧 **Agreed look** - the Storybook assembly; no design frame is drawn for it.
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/ui/store-locator"}
+[Test cases · shared/ui/store-locator](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/ui/store-locator)
 :::
