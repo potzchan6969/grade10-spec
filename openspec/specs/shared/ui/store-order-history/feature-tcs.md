@@ -1,9 +1,14 @@
 # shared/ui/store-order-history Test Cases
 
-**Status:** pending-review · 0/7
-**Drafts styled:** 2026-10-06, tcs-rules r4
+**Status:** pending-review · 0/6
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
-## shared-ui-store-order-history-US1: Collector reviews active and past orders
+## Background
+
+* `<storybook>` is the shared UI Storybook, served by `pnpm storybook:ui`; the stories sit under Store/Order History. A story's Controls panel changes the props it passes; its Actions panel records each callback called.
+
+## shared.ui-store-order-history.US1: Collector reviews active and past orders
 
 **As a** signed-in collector,
 **I want** my active and past orders on one page, with status, lines, and track
@@ -12,7 +17,9 @@ when a shipment is underway,
 surface inventing which orders belong where.
 
 <!-- trace:case id=g10.shared-store-order-history.TC-szj rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
-### shared-ui-store-order-history-US1-TC1-1: Active and past sections both render when non-empty
+### shared.ui-store-order-history.US1-TC1: Each order list that holds orders shows as its own section
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -21,54 +28,32 @@ surface inventing which orders belong where.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-order-history-US-01
 
 **Pre-conditions:**
-The consumer supplies a non-empty active list and a non-empty past list.
+
+* `<story>` supplies `<lists>`.
+
+**Test data:**
+
+| `<story>` | `<lists>` | `<sections>` |
+| --- | --- | --- |
+| OrderHistory Filled | active and past orders | Active Orders and Past Orders |
+| OrderHistory Active Only | active orders, no past order | Active Orders alone, no Past Orders heading |
 
 **Steps:**
 
-1. Render `OrderHistory` with those lists.
-2. Check the page sections and cards.
+1. Open the story on `<storybook>`; read the headings and cards.
 
 **Expected Results:**
 
-* Both section headings and their order cards appear.
-* The empty state does not appear.
-
-<!-- trace:case id=g10.shared-store-order-history.TC-zix rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
-### shared-ui-store-order-history-US1-TC2-1: Empty section is omitted
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-ui-store-order-history-US-01
-
-**Pre-conditions:**
-The consumer supplies a non-empty active list and an empty past list.
-
-**Steps:**
-
-1. Render `OrderHistory` with those lists.
-2. Check the section headings.
-
-**Expected Results:**
-
-* Only the Active Orders section appears.
-* The Past Orders heading does not appear.
-* The empty state does not appear.
+* It shows `<sections>`, each with its order cards; no empty state.
 
 <!-- trace:case id=g10.shared-store-order-history.TC-tu9 rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
-### shared-ui-store-order-history-US1-TC3-1: Track order appears only when enabled
+### shared.ui-store-order-history.US1-TC3: Track Order shows on a header told to show it
 
 **Classification:**
 
@@ -77,25 +62,25 @@ The consumer supplies a non-empty active list and an empty past list.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-order-history-US-01
 
 **Pre-conditions:**
-A card header is supplied with `trackOrder` true and Track copy.
+
+* The OrderHistoryCardHeader With Track Order story supplies Track copy.
 
 **Steps:**
 
-1. Render the card header.
-2. Activate the Track Order control.
+1. Read the header; click Track Order, and read the Actions panel.
 
 **Expected Results:**
 
-* The Track Order control appears.
-* Activating it reports through the Track callback.
+* Track Order shows, recording one track.
 
 <!-- trace:case id=g10.shared-store-order-history.TC-z7g rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
-### shared-ui-store-order-history-US1-TC4-1: Track order is hidden when disabled
+### shared.ui-store-order-history.US1-TC4: A header told not to track shows no Track Order, keeping View Details
 
 **Classification:**
 
@@ -104,53 +89,25 @@ A card header is supplied with `trackOrder` true and Track copy.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-ui-store-order-history-US-01
-
-**Pre-conditions:**
-A card header is supplied with `trackOrder` false and a View Details handler.
-
-**Steps:**
-
-1. Render the card header.
-
-**Expected Results:**
-
-* No Track Order control appears.
-* View Details still appears.
-
-<!-- trace:case id=g10.shared-store-order-history.TC-yqj rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
-### shared-ui-store-order-history-US1-TC5-1: Card lists supplied lines with status labels
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-order-history-US-01
 
 **Pre-conditions:**
-An order card is supplied with header props, a status label, and one or more line items that include image, product text, and total.
+
+* The OrderHistoryCardHeader Without Track Order story supplies a View Details handler.
 
 **Steps:**
 
-1. Render `OrderHistoryCard` with those children.
-2. Check the header, status, and each line.
+1. Read the header.
 
 **Expected Results:**
 
-* The header and each child line item appear.
-* The body uses horizontal overflow with scroll-fade styling.
-* Each status displays the supplied label.
-* Each line shows image, product text, and total.
+* No Track Order shows; View Details does.
 
-<!-- trace:case id=g10.shared-store-order-history.TC-ar2 rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
-### shared-ui-store-order-history-US1-TC7-1: Status badge shows the consumer's variant and label
+<!-- trace:case id=g10.shared-store-order-history.TC-yqj rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
+### shared.ui-store-order-history.US1-TC5: A card lists its lines, each with picture, text and total
 
 Runs once per row of **Test data**.
 
@@ -168,78 +125,96 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The shared UI Storybook is running (`pnpm run storybook:ui`), on the Store Order History/OrderHistoryStatus Shipped story.
+* `<story>` supplies `<lines>`.
 
 **Test data:**
 
-| `<variant>` | `<label>` |
+| `<story>` | `<lines>` |
 | --- | --- |
-| processing | `Preparing` |
-| shipped | `On its way` |
-| completed | `Done` |
-| canceled | `Called off` |
-| refunded | `Money back` |
-| pickup | `Collect in store` |
-| completed | `All done` |
+| OrderHistoryCard Shipped With Lines | a header, a status label and lines |
+| OrderHistoryCard Overflowing Lines | more lines than fit across the card |
+| OrderHistoryLineItem Default, alone | one line |
 
 **Steps:**
 
-1. In the Controls panel, set `status` to `<variant>`.
-2. In the Controls panel, set `children` to `<label>`.
-3. Read the badge.
+1. Open the story; read the header, the status and each line; scroll the card's lines across.
 
 **Expected Results:**
 
-* Step 3: the badge shows `<label>`, in `<variant>` style.
-* Step 3: the badge shows no words besides the supplied label.
+* The header and each line show, each line with its picture, product text and total; the lines scroll across with an edge fade where they overflow.
+
+<!-- trace:case id=g10.shared-store-order-history.TC-ar2 rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
+### shared.ui-store-order-history.US1-TC7: The status badge shows the label it is given, in its status's style
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-ui-store-order-history-US-01
+
+**Pre-conditions:**
+
+* The OrderHistoryStatus Shipped story is open.
+
+**Test data:**
+
+| `<status>` | `<label>` |
+| --- | --- |
+| processing | Preparing |
+| shipped | On its way |
+| completed | Done |
+| completed | All done |
+| canceled | Called off |
+| refunded | Money back |
+| pickup | Collect in store |
+
+**Steps:**
+
+1. In Controls, set status to `<status>` and the label to `<label>`; read the badge.
+
+**Expected Results:**
+
+* The badge shows `<label>` alone, in `<status>`'s style.
 
 ---
 
-## shared-ui-store-order-history-US2: Collector starts shopping when there are no orders
+## shared.ui-store-order-history.US2: Collector starts shopping when there are no orders
 
 **As a** signed-in collector with no orders,
 **I want** an empty state that sends me to the store,
 **so that** I know where my first order will appear and can browse.
 
 <!-- trace:case id=g10.shared-store-order-history.TC-47f rev=1 covers=g10.shared-store-order-history.SC-g56 -->
-### shared-ui-store-order-history-US2-TC1-1: Zero orders shows empty state with shop now
+### shared.ui-store-order-history.US2-TC1: No orders shows the empty state, which sends the collector shopping
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-order-history-US-02
 
 **Pre-conditions:**
-The consumer supplies empty active and past lists, empty-state copy, and a Shop Now handler.
+
+* The OrderHistory Empty story supplies no orders, empty-state copy and a Shop Now handler.
 
 **Steps:**
 
-1. Render `OrderHistory` with those lists.
-2. Activate Shop Now.
+1. Read the page; click Shop Now, and read the Actions panel.
 
 **Expected Results:**
 
-* The empty state appears with the supplied title, description, and Shop Now action.
-* Neither Active nor Past section headings appear.
-* Activating Shop Now reports through its callback.
-
-## Reconciliation
-
-**Run:** QA2 on 2026-10-06. Joined the 2 blind cases and the one scenario on journey US-01 and the Feature set's status badge. Kept both ids and versions. Relabelled one row of `US1-TC7-1` from `Delivered` to `All done`: the row proves a second label on one variant, and `Delivered` is the claim Order Status forbids a Store badge to make. Rerun in a fresh context after each accept review, and on 2026-10-07 after QA1's second pass on Order Status: no change. The delta leaves journey US-02 untouched, so this suite holds no US2 section and the durable `US2-TC1-1` stands.
-
-| Finding | Disposition |
-| --- | --- |
-| `shared-ui-store-order-history-SC-08` | Covered by `US1-TC7-1`, and by the durable `US1-TC5-1` |
-| The consumer chooses the status and the badge gives it no meaning | Covered by `US1-TC7-1`, which shows every supplied label and no other words |
-| `pickup` stays an accepted status | Covered by the `pickup` row of `US1-TC7-1` |
-| No status outside the six | Covered by `US1-TC8-1`, decided by the consuming application's type check |
-| Raised | none |
-| Rejected cases | none |
-| Contradicted readings | none |
-| Uncovered anchors | none |
+* The empty state shows its title, description and Shop Now, with no Active or Past heading; Shop Now records one action.
