@@ -4,7 +4,7 @@ title: Store Cart Test Cases
 
 # grade10-site/store/cart Test Cases
 
-**Status:** pending-review · 0/47
+**Status:** pending-review · 0/51
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/discounts
 
@@ -65,24 +65,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on the row's page, with `<product A>` in the cart.
+* customer is on the row's page, with the row's cart.
 
 **Test data:**
 
-| Page |
-| --- |
-| `<listing url>` |
-| the auction listings page |
+| Page | Cart | Lines |
+| --- | --- | --- |
+| `<listing url>` | `<product A>` | one, fitting the drawer, no edge fade |
+| the auction listings page | `<product A>` | one, fitting the drawer, no edge fade |
+| `<listing url>` | six products, one of them at 3 | six, the count beside the title reading 6; the list scrolls, faded at the edge it continues past |
 
 **Steps:**
 
 1. Select Cart in the site header.
-2. Read the drawer while its read is pending, then once it finishes.
+2. Read the drawer while its read is pending, then once it finishes; scroll the lines to the end.
 
 **Expected Results:**
 
 * Step 1 opens the drawer over the row's page.
-* While pending, the lines, totals and checkout wait; then `<product A>` at the shop's current price, with Subtotal, Shipping as calculated at checkout, and Estimated Total.
+* While pending, the lines, the count beside the title and the totals show as placeholders, never the empty cart, and checkout waits; then the row's lines at the shop's current prices, with Subtotal, Shipping as calculated at checkout, and Estimated Total, and no notice.
 
 ---
 
@@ -260,12 +261,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Select Proceed to Checkout and read Shopify's page.
+1. Select Proceed to Checkout, read the button, then Shopify's page.
 2. Return to the store without paying, and open Cart.
 
 **Expected Results:**
 
-* Step 1 opens under `checkout.grade10.com`, listing `<product A>`, `<member code>` and the 100-point deduction, and adds shipping.
+* Step 1: the button says it is redirecting until Shopify's page opens under `checkout.grade10.com`, listing `<product A>`, `<member code>` and the 100-point deduction, and adds shipping.
 * Step 2 still holds `<product A>`, the code and the points.
 
 ---
@@ -301,18 +302,21 @@ Runs once per row of **Test data**.
 | --- | --- |
 | the read on open | the close button |
 | a quantity change | a click on the backdrop |
+| a points change, the code list open | Back on the code list, then Escape |
 | Proceed to Checkout | Escape |
 
 **Steps:**
 
 1. Open Cart and start the row's operation.
-2. Try to change a quantity, a code, the points and a product link.
+2. By click, Enter and Space, try to change a quantity, remove a line, type or pick a code, apply or remove points, follow a product link and select Proceed to Checkout or Sign in; read the lines and scroll them.
 3. Close the drawer the row's way.
+4. Reopen Cart once the operation has answered, and change a quantity.
 
 **Expected Results:**
 
-* Step 2 changes nothing.
-* Step 3 closes the drawer.
+* Step 2 changes nothing and opens nothing; the lines stay readable and scroll.
+* Step 3 closes an open code list first, leaving the drawer open, then closes the drawer.
+* Step 4 changes the quantity; nothing tried in step 2 has happened.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-1mg rev=1 -->
 #### g10.store-cart.TC3: Changing a quantity or removing a line changes the cart and its total
@@ -337,12 +341,12 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Edit | Subtotal |
-| --- | --- |
-| increase `<product A>` to 3 | HKD3,060 = 880 × 3 + 420 |
-| decrease `<product A>` to 1 | HKD1,300 = 880 + 420 |
-| remove `<product B>` | HKD1,760 = 880 × 2 |
-| remove both lines | none; the drawer shows an empty cart |
+| Edit | Subtotal | Count beside the title |
+| --- | --- | --- |
+| increase `<product A>` to 3 | HKD3,060 = 880 × 3 + 420 | 2 |
+| decrease `<product A>` to 1 | HKD1,300 = 880 + 420 | 2 |
+| remove `<product B>` | HKD1,760 = 880 × 2 | 1 |
+| remove both lines | none; the drawer stays open on an empty cart | none |
 
 **Steps:**
 
@@ -351,11 +355,13 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the row's subtotal.
+* Step 1: the row's subtotal and count, one per line whatever its quantity.
 * Step 2: the same lines as step 1.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-gcg rev=1 -->
 #### g10.store-cart.TC4: Each line shows the product's current first picture
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -371,15 +377,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<product A>` is in the cart; admin has since changed its first image in the shop's admin, and a minute has passed.
+* `<product A>` is in the cart; admin has since changed its images in the shop's admin as the row says, and a minute has passed.
+
+**Test data:**
+
+| Shop's change | Line |
+| --- | --- |
+| a new first image | the new image, in the line's picture frame |
+| a new first image with no alt text | the new image, its alt text the product's name |
+| every image removed | the picture frame's placeholder, the name, quantity and price unchanged |
 
 **Steps:**
 
-1. Open Cart, wait for the read, and read `<product A>`'s line.
+1. Open Cart, wait for the read, and read `<product A>`'s line and its picture's alt text.
 
 **Expected Results:**
 
-* The new first image.
+* The row's line.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-c56 rev=2 -->
 #### g10.store-cart.TC5: A shop answer within 2.5 seconds brings the site discount into the total
@@ -626,7 +640,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: `<sold-out product>` marked Sold out, and Proceed to Checkout unavailable.
+* Step 1: `<sold-out product>` marked Sold out, keeping its picture, and Proceed to Checkout unavailable; the count beside the title reads 1 and the Subtotal leaves it out.
 * Step 2: Proceed to Checkout available.
 
 <!-- trace:case id=g10.store-product-listing.TC-2fl rev=1 -->
@@ -648,14 +662,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out) has the row's lines and `<product A>` in the cart; admin has taken the row's lines away, and a minute has passed.
+* customer(signed out) has the row's cart; admin has taken the row's lines away, and a minute has passed.
 
 **Test data:**
 
-| Taken away |
-| --- |
-| `<product B>`, unpublished from the store's channel |
-| `<product B>` unpublished, and `<product C>`'s variant deleted |
+| Cart | Taken away | Left |
+| --- | --- | --- |
+| `<product A>` and `<product B>` | `<product B>`, unpublished from the store's channel | `<product A>`, the count reading 1 |
+| `<product A>`, `<product B>` and `<product C>` | `<product B>` unpublished, and `<product C>`'s variant deleted | `<product A>`, the count reading 1 |
+| `<product B>` and `<product C>` | both unpublished | the empty cart, with no footer or count |
+| `<product B>` and `<sold-out product>`, sold out by the recipe "Sell a card out" | `<product B>` unpublished | `<sold-out product>` marked Sold out, the footer shown, no count, never the empty cart |
 
 **Steps:**
 
@@ -663,7 +679,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No line of the row's is listed; one notice names them all; the remaining line stays.
+* No taken line is listed, not even as sold out; one notice names them all; the drawer reads the row's Left.
 
 <!-- trace:case id=g10.store-product-listing.TC-j18 rev=1 -->
 #### g10.store-cart.TC14: A read that cannot finish shows unchecked lines and Retry
@@ -730,14 +746,102 @@ Runs once per row of **Test data**.
 | --- |
 | signed out |
 | signed-in member |
+| signed-in member, the shop's price check failing |
 
 **Steps:**
 
-1. Open Cart and read the drawer.
+1. Open Cart and read the drawer while its read is pending, then once it finishes.
 
 **Expected Results:**
 
-* It says the cart is empty, with no lines, footer, item count or Proceed to Checkout.
+* While pending, no empty cart shows.
+* Then it says the cart is empty - a cart icon, the empty-cart title and the line under it, no button - with no lines, footer, item count or Proceed to Checkout; the close control stays.
+
+#### g10.store-cart.TC48: A cart of only sold-out lines lists them, never the empty cart
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cart#reviewing-the-cart
+
+**Pre-conditions:**
+
+* customer(signed out) has `<sold-out product>` and a second product in the cart; both have since sold out, by the recipe "Sell a card out".
+
+**Steps:**
+
+1. Open Cart, wait for the read, and read the lines, the title and the footer.
+
+**Expected Results:**
+
+* Both lines are listed, each marked Sold out; no empty cart and no count beside the title; the footer shows, with Proceed to Checkout unavailable.
+
+#### g10.store-cart.TC49: A line stops at the last unit the shop has
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cart#reviewing-the-cart
+
+**Pre-conditions:**
+
+* customer(signed out) has `<product A>` at 2 in the cart; the shop has exactly 2 for sale.
+
+**Steps:**
+
+1. Open Cart, wait for the read, and read the line.
+2. Select its increase control, and read the line and the subtotal.
+3. Select its decrease control, and read them again.
+
+**Expected Results:**
+
+* Step 1: ❓ the line says 2 are left - product confirms.
+* Step 2: the increase control is unavailable and announced so; the quantity stays 2 and the subtotal HKD1,760.
+* Step 3: the quantity reads 1 and the subtotal HKD880.
+
+#### g10.store-cart.TC50: The store's change note on a line quiets once the collector edits it
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cart#reviewing-the-cart
+
+**Pre-conditions:**
+
+* customer(signed out) has `<product A>` at 3 in the cart; admin has since left 2 for sale, and a minute has passed.
+
+**Steps:**
+
+1. Open Cart, wait for the read, and read the line.
+2. Decrease it to 1, and read the line.
+3. Admin leaves 0 then 1 for sale; reopen Cart after a minute, and read the line.
+
+**Expected Results:**
+
+* Step 1: quantity 2, saying the store changed it.
+* Step 2: ❓ quantity 1, with no note - product confirms.
+* Step 3: ❓ the note shows again - product confirms.
 
 ---
 
@@ -780,6 +884,43 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The row's line and footer.
+
+#### g10.store-cart.TC51: A code beside a sale line keeps or takes the line's cut, and Remove gives the sale back
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** discounts#struck-price-on-a-cart-line
+
+**Pre-conditions:**
+
+* customer(signed-in member) has `<product A>` × 1 in the cart; the shop holds 10% off `<product A>`, saved at least a minute ago, and no other discount; the member holds the row's code.
+
+**Test data:**
+
+| Code | Line with the code | Footer with the code |
+| --- | --- | --- |
+| `<member code>`, combining with product discounts | HKD792, HKD880 struck | Subtotal HKD792; `Discount (<member code>)` −HKD50; Estimated Total HKD742 = 792 − 50 |
+| `<order code>` HKD150 off, not combining with product discounts | HKD880, nothing struck | Subtotal HKD880; `Discount (<order code>)` −HKD150; Estimated Total HKD730 = 880 − 150 |
+
+**Steps:**
+
+1. Open Cart, wait for the read, apply the row's code, and read the line and the footer.
+2. Select Remove on the code's row, and read them again.
+
+**Expected Results:**
+
+* Step 1: the row's line and footer; no row names the sale.
+* Step 2: the line reads HKD792 with HKD880 struck; no code row; Estimated Total HKD792.
 
 ---
 
@@ -941,7 +1082,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* `<product code>` is apart, with the shop's reason; the total is unchanged by it.
+* `<product code>` is apart, muted, with the shop's reason and no Apply, and Tab never reaches an Apply on it; the total is unchanged by it.
 
 <!-- trace:case id=g10.store-cart-checkout.TC-zqw rev=1 -->
 #### g10.store-cart.TC24: Removing a code, or an edit it no longer fits, puts it back in the list
@@ -1073,12 +1214,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open Cart, wait for the read, and apply `<order code>`.
+1. Open Cart, wait for the read, and apply `<order code>`, typed, then again picked from the code list.
 2. Read the footer and the code's field, then open the code list.
 
 **Expected Results:**
 
-* The row's rows and total.
+* The row's rows and total, the same typed or picked.
 * Where the site discount applies, the list still offers `<order code>`.
 
 ---
@@ -1467,7 +1608,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the primary button is Check out as guest, with a Sign in link under it.
+* Step 1: the primary button is Check out as guest, with a Sign in link under it; no points block and no member codes.
 * Step 2: Shopify's page asks for an email, with no sign-in.
 
 #### g10.store-cart.TC41: Signing in from the cart brings the guest cart into the member's
