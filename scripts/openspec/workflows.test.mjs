@@ -94,7 +94,7 @@ const workflows = () =>
     ]);
 
 /** A workflow one of whose steps runs a gate that reads a change's plan:
- * `check:manual` — never `check:manual:pages`, which reads the pages alone —
+ * `check:manual` —
  * or `validate-changes`, by its script or its `validate:changes` alias. */
 const readsThePlan = (workflow) =>
   Object.values(workflow.jobs ?? {}).some((job) =>
