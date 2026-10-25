@@ -33,14 +33,14 @@
 
 1. Read the sidebar, and click Roles & Permissions.
 2. Read the matrix's columns, their marks and the text around it.
-3. Read the `store:read` row under `staff`, and the `user:set-role` row under `support` and `admin`.
+3. Read the `store:read` row under `staff`, the `user:set-role` row under `support` and `admin`, the `vault:approve` and `vault:payout` rows under `staff` and `treasurer`, the `auction:refund` and `auction:payment` rows under `staff`, and the `admin` column.
 4. Look for a way to create or edit a role on either tab, and click a cell.
 
 **Expected Results:**
 
 * Step 1 lists Roles & Permissions directly under Users, opening on its own address at the Roles tab.
 * Step 2 names every closed role a column, `user` included, every one but `user` marked elevated, one row per permission grouped by resource; the page says several roles combine as the union of their grants.
-* Step 3 reads Allowed, Not allowed and Allowed.
+* Step 3 reads Allowed; Not allowed and Allowed; `vault:approve` Allowed for `staff`, `vault:payout` Not allowed for `staff` and Allowed for `treasurer`; `auction:refund` Allowed and `auction:payment` Not allowed for `staff`; every row Allowed under `admin`.
 * Step 4 finds nothing to create or edit a role or its grants, and the cell changes nothing.
 
 <!-- trace:case id=g10adm.console-roles-and-permissions.TC-acq rev=1 covers=g10adm.console-roles-and-permissions.SC-7mf -->

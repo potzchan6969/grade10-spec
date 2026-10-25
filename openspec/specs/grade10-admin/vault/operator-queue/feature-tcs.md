@@ -1,6 +1,6 @@
 # grade10-admin/vault/operator-queue Test Cases
 
-**Status:** pending-review · 26/86
+**Status:** pending-review · 26/87
 **Drafts styled:** 2026-10-25, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
@@ -373,6 +373,8 @@ Runs once per row of **Test data**.
 | --- | --- |
 | admin holding `vault:read` alone | an act needing `vault:operate`, through its address |
 | staff, without `vault:payout` | Record a repayment, through its address |
+| staff, without `vault:payout` | the Payouts tab and the vault's Money tab |
+| treasurer, without `vault:operate` | Start the valuation and Make an offer, through their addresses |
 
 **Steps:**
 
@@ -473,6 +475,36 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * It reads `<reads>`.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-x7l rev=1 -->
+### g10adm.vault-operator-queue.US3-TC9: A treasurer records the payout, and nobody pays out an offer they made
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-03
+
+**Pre-conditions:**
+
+* An admin holding `staff` and `treasurer` opens a financed case with a recorded valuation and no offer; a second operator holds `treasurer` alone.
+
+**Steps:**
+
+1. As the admin, make and send an offer; have the customer accept it on their vault case page.
+2. As the admin, select Record the payout on the Payouts tab, and confirm.
+3. As the second operator, record the payout.
+
+**Expected Results:**
+
+* Step 2: the dialog reads Two people unmet, naming the admin as the one who priced it; confirming is refused and no payout shows.
+* Step 3: the dialog reads Two people met, and the case shows the payout.
 
 ---
 
@@ -1189,6 +1221,8 @@ Runs once per row of **Test data**.
 <!-- trace:case id=g10adm.vault-operator-queue.TC-5vm rev=1 covers=g10adm.vault-operator-queue.SC-xz7,g10adm.vault-operator-queue.SC-rz1,g10adm.vault-operator-queue.SC-fw0,g10adm.vault-operator-queue.SC-3z5,g10adm.vault-operator-queue.SC-k4s -->
 ### g10adm.vault-operator-queue.US9-TC3: The identity photograph opens only with the identity read
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** critical
@@ -1203,15 +1237,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A case carries a verified check with its photograph; admin(holds `vault:operate`, not `kyc:read`) opens it.
+* A case carries a verified check with its photograph and a signed document; `<operator>`, not holding `kyc:read`, opens it.
+
+**Test data:**
+
+| `<operator>` |
+| --- |
+| admin holding `vault:operate` |
+| treasurer |
+| admin holding `vault:read` alone |
 
 **Steps:**
 
-1. Look for View photograph; open its address.
+1. Look for View photograph and the signed document's Download; open their addresses.
 
 **Expected Results:**
 
-* It is not offered, and the address is refused, naming the grant.
+* The case reads; neither is offered, and each address is refused, naming the grant.
 
 ---
 

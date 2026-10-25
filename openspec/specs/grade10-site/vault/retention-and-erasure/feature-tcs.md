@@ -170,7 +170,7 @@ Runs once per row of **Test data**.
 * The request still reads with the day it was filed, and beside it the hold, naming the case.
 
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-epq rev=1 -->
-### g10.vault-retention-and-erasure.US1-TC5: Asking to be forgotten opens one seven-day window and leaves sign-in working
+### g10.vault-retention-and-erasure.US1-TC10: Asking to be forgotten opens one seven-day window and leaves sign-in working
 
 Runs once per row of **Test data**.
 
@@ -209,7 +209,7 @@ Runs once per row of **Test data**.
 * Step 2 shows one open request, filed today, maturing in seven days; sign-in works, the request not blocking it.
 
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-zwr rev=1 -->
-### g10.vault-retention-and-erasure.US1-TC6: The holder cancels their request inside the window, once however often they ask
+### g10.vault-retention-and-erasure.US1-TC11: The holder cancels their request inside the window, once however often they ask
 
 Runs once per row of **Test data**.
 
@@ -245,7 +245,7 @@ Runs once per row of **Test data**.
 * No request shows open, nothing else changed, and Ask to be forgotten is offered again.
 
 <!-- trace:case id=g10.vault-retention-and-erasure.TC-s7n rev=1 -->
-### g10.vault-retention-and-erasure.US1-TC7: The holder cannot cancel once the window has passed or an operator took the request over
+### g10.vault-retention-and-erasure.US1-TC12: The holder cannot cancel once the window has passed or an operator took the request over
 
 Runs once per row of **Test data**.
 

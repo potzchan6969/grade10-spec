@@ -81,6 +81,8 @@ Runs once per row of **Test data**.
 | support holding `user:list` and `user:ban`, not `user:set-role`, `user:delete`, `session:list` or `user:create` | an account with an erasure filed | ban or unban | the erasure shown as requested |
 | staff holding `user:list` alone | a banned customer | ban, unban, changing roles, erasure, sessions or Create | reading the account |
 | staff without `user:list` | none: Users is opened | any account; the list is refused | nothing |
+| auditor | a customer | ban, unban, changing roles, erasure, sessions or Create | reading the account |
+| a collector whose stored roles are `user` and `intern`, set outside the console | none: Users is opened | any account; the list is refused, a ban sent directly refused | nothing |
 
 **Steps:**
 
@@ -319,6 +321,7 @@ Runs once per row of **Test data**.
 | holding no grants | that it holds no grants, naming none |
 | banned with reason Chargeback dispute open | banned with that reason; the joined milestone and a banned milestone with no invented time |
 | banned with no reason | banned, with no reason |
+| stored roles `user` and `intern`, set outside the console | `user` alone, `intern` nowhere |
 
 **Steps:**
 
@@ -828,7 +831,7 @@ Runs once per row of **Test data**.
 * Step 2 opens the existing account's panel; no second account holds the email.
 
 <!-- trace:case id=g10adm.console-user-directory.TC-xnp rev=1 -->
-### g10adm.console-user-directory.US4-TC4: A create the form or the operator's grants refuse keeps what was typed
+### g10adm.console-user-directory.US4-TC6: A create the form or the operator's grants refuse keeps what was typed
 
 Runs once per row of **Test data**.
 
