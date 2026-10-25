@@ -752,8 +752,8 @@ and a lot the house wins under `grade10-site/auction/auction` SHALL count as
 a lot that closes with a winner who is not the recipient:
 
 - **Bid activity** - a collector the house outbids SHALL get the outbid
-  letter, and other enrolled bidders the new-bid letter, as for a collector's
-  bid.
+  letter and no other letter for that bid: the New bid letter is retired, the
+  outbid letter covers the actionable case.
 - **Close** - enrolled bidders SHALL get the did-not-win letter and enrolled
   watch-only collectors the watched sold letter, each naming the winning bid
   when it is supplied.
@@ -811,15 +811,15 @@ No letter SHALL say or imply that a bid, a lead or a win was the house's.
 - **THEN** no letter is addressed to the house
 - **AND** no auction-won or setup letter is sent for the lot
 
-<!-- trace:scenario id=g10.auction-notifications.SC-mma rev=1 -->
-#### Scenario: grade10-site-auction-notifications-SC-53 - A bidder hears the new-bid letter when the house bids
-**Serves:** grade10-site-auction-notifications-US-04 - a collector who bid hears the lot moved, whoever moved it
+<!-- trace:scenario id=g10.auction-notifications.SC-mma rev=2 -->
+#### Scenario: grade10-site-auction-notifications-SC-53 - A bidder outbid earlier gets no new-bid letter when the house bids
+**Serves:** House participation - the retired New bid letter is not sent for a house bid
 
 - **GIVEN** a lot where collector A leads and collector B, outbid earlier,
   has email alerts on
 - **WHEN** the house's committed maximum places a bid on the lot
-- **THEN** Grade10 sends B the new-bid letter it sends when a collector bids
-- **AND** the letter does not say the bid is the house's
+- **THEN** Grade10 sends B no new-bid letter
+- **AND** no letter in the letter list holds wording naming the house or a reserve
 
 <!-- trace:scenario id=g10.auction-notifications.SC-mnu rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-54 - A house lower or a house maximum not placed mails nobody

@@ -515,8 +515,8 @@ Runs once per row of **Test data**.
 **I want** to be emailed when someone else bids on a listing I already bid on,
 **so that** I know the listing moved without being mailed on every increment.
 
-<!-- trace:case id=g10.auction-notifications.TC-qvy rev=1 covers=g10.auction-notifications.SC-rk1,g10.auction-notifications.SC-ktw,g10.auction-notifications.SC-xzz,g10.auction-notifications.SC-gn8 -->
-### g10.auction-notifications.US4-TC1: Other bidders hear of a price-moving bid, the house's included; watchers and the bidder do not
+<!-- trace:case id=g10.auction-notifications.TC-qvy rev=2 covers=g10.auction-notifications.SC-rk1,g10.auction-notifications.SC-ktw,g10.auction-notifications.SC-xzz,g10.auction-notifications.SC-gn8 -->
+### g10.auction-notifications.US4-TC1: Other bidders hear of a collector's price-moving bid, a house change mails the leader no New bid; watchers and the bidder do not
 
 Runs once per row of **Test data**.
 
@@ -541,7 +541,7 @@ Runs once per row of **Test data**.
 | `<setup>` | `<move>` | `<customer A reads>` |
 | --- | --- | --- |
 | customer B leads, customer A outbid | customer C places a bid above customer B's maximum | one New bid naming customer C's bid |
-| customer A leads at USD4,000 with a maximum of USD7,000 | an internal bid of USD6,000 reaches its time | one New bid at USD6,500, and no outbid letter, naming no house |
+| customer A leads at USD4,000 with a maximum of USD7,000 | an internal bid of USD6,000 reaches its time | no New bid letter and no outbid letter, naming no house or reserve |
 
 **Steps:**
 
