@@ -1,6 +1,6 @@
 # grade10-admin/vault/operator-queue Test Cases
 
-**Status:** pending-review · 24/80
+**Status:** pending-review · 26/86
 **Drafts styled:** 2026-10-25, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
@@ -104,9 +104,7 @@ Runs once per row of **Test data**.
 * Every status appears in exactly one view; none is called Today; today's case sits in its status's view.
 
 <!-- trace:case id=g10adm.vault-operator-queue.TC-gfo rev=1 covers=g10adm.vault-operator-queue.SC-77a,g10adm.vault-operator-queue.SC-90m,g10adm.vault-operator-queue.SC-9ub,g10adm.vault-operator-queue.SC-uo6,g10adm.vault-operator-queue.SC-bd3,g10adm.vault-operator-queue.SC-6lc -->
-### g10adm.vault-operator-queue.US1-TC4: A valuation untouched past a week is badged stalled, and not before
-
-Runs once per row of **Test data**.
+### g10adm.vault-operator-queue.US1-TC4: A valuation untouched past a week is badged stalled
 
 **Classification:**
 
@@ -114,6 +112,33 @@ Runs once per row of **Test data**.
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-01
+
+**Pre-conditions:**
+
+* A case under valuation was last touched 8 days ago.
+
+**Steps:**
+
+1. Read its row on `<queue>`.
+
+**Expected Results:**
+
+* It carries a stalled valuation badge.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ryy rev=1 -->
+### g10adm.vault-operator-queue.US1-TC5: A valuation touched within the week carries no stalled badge
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -126,11 +151,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<ago>` | `<badge>` |
-| --- | --- |
-| 8 days ago | a stalled valuation |
-| exactly 7 days ago | none |
-| 2 days ago | none |
+| `<ago>` |
+| --- |
+| exactly 7 days ago |
+| 2 days ago |
 
 **Steps:**
 
@@ -138,7 +162,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* It carries `<badge>`.
+* It carries no stalled badge.
 
 ---
 
@@ -507,7 +531,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* 60 items are held across shops A and B, 25 of them under a live loan; shop C holds nothing.
+* 60 items are held across shops A and B, 25 of them under a live loan.
 
 **Test data:**
 
@@ -515,7 +539,6 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | every shop | every item, each naming its shop, over two pages | 60 held, 25 carrying a live loan, and how many per shop |
 | shop A | shop A's items alone | shop A's alone |
-| shop C | that nothing is held | none |
 
 **Steps:**
 
@@ -524,6 +547,33 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * It lists `<lists>`; the figures read `<figures read>`, the same on every page.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-48j rev=1 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
+### g10adm.vault-operator-queue.US4-TC5: A shop holding nothing says so
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-04
+
+**Pre-conditions:**
+
+* Shop C holds no item.
+
+**Steps:**
+
+1. Open Held items narrowed to shop C.
+
+**Expected Results:**
+
+* It says nothing is held, and its figures read none.
 
 <!-- trace:case id=g10adm.vault-operator-queue.TC-y6r rev=2 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
 ### g10adm.vault-operator-queue.US4-TC8: A held row says what the item is carrying
@@ -696,9 +746,7 @@ Runs once per row of **Test data**.
 **so that** I know the day's load before I open a case.
 
 <!-- trace:case id=g10adm.vault-operator-queue.TC-alu rev=2 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
-### g10adm.vault-operator-queue.US6-TC1: The section opens on Needs staff, every view counting what it holds and an empty one saying so
-
-Runs once per row of **Test data**.
+### g10adm.vault-operator-queue.US6-TC1: The section opens on Needs staff, every view counting what it holds
 
 **Classification:**
 
@@ -714,14 +762,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<cases>`.
-
-**Test data:**
-
-| `<cases>` | `<reads>` |
-| --- | --- |
-| 60 cases waiting on staff, none agreeing, one accepted | Needs staff open, counting 60 and its page showing how many it holds; Agreeing counting none; the accepted case not in Needs staff |
-| no case waiting on staff | Needs staff open, saying it holds no case, its count none |
+* 60 cases wait on staff, none agreeing, one accepted.
 
 **Steps:**
 
@@ -729,12 +770,37 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* It reads `<reads>`.
+* Needs staff is open, counting 60, its page showing how many it holds; Agreeing counts none; the accepted case is not in Needs staff.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-tf0 rev=2 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
+### g10adm.vault-operator-queue.US6-TC4: A view with no case says so
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-06
+
+**Pre-conditions:**
+
+* No case waits on staff.
+
+**Steps:**
+
+1. Open the vault section.
+
+**Expected Results:**
+
+* Needs staff is open, saying it holds no case, its count none.
 
 <!-- trace:case id=g10adm.vault-operator-queue.TC-jpr rev=1 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
-### g10adm.vault-operator-queue.US6-TC5: Load more pages on from the last row, and offers nothing once the view is whole
-
-Runs once per row of **Test data**.
+### g10adm.vault-operator-queue.US6-TC5: Load more pages on from the last row
 
 **Classification:**
 
@@ -746,26 +812,46 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-06
+
+**Pre-conditions:**
+
+* A view holds 120 cases.
+
+**Steps:**
+
+1. Read the first page, and click Load more while offered.
+
+**Expected Results:**
+
+* Each Load more adds the next 50, none seen twice or skipped, the counts shown updating.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-0vr rev=1 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
+### g10adm.vault-operator-queue.US6-TC6: A full page is not taken for more to come
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** The queue
 
 **Pre-conditions:**
 
-* A view holds `<held>`.
-
-**Test data:**
-
-| `<held>` | `<after the first page>` |
-| --- | --- |
-| 120 cases | Load more adds the next 50, none seen twice or skipped, the counts shown updating |
-| exactly 50 cases | that nothing more remains, no Load more |
+* A view holds exactly 50 cases.
 
 **Steps:**
 
-1. Read the first page, and page on while offered.
+1. Read its first page.
 
 **Expected Results:**
 
-* It reads `<after the first page>`.
+* It says nothing more remains, offering no Load more.
 
 ---
 
@@ -1341,9 +1427,34 @@ and the draft waits for them to send it.
 * The form keeps what was typed; no draft opens, no second account exists for the address, and nothing is emailed to it.
 
 <!-- trace:case id=g10adm.vault-operator-queue.TC-qht rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
-### g10adm.vault-operator-queue.US10-TC7: A walk-in counts against the account's three unsent drafts
+### g10adm.vault-operator-queue.US10-TC7: A walk-in past the account's three unsent drafts is refused with the cap's own refusal
 
-Runs once per row of **Test data**.
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Pre-conditions:**
+
+* The account for `<walk-in email>`, which nobody has signed in to, holds three drafts staff opened.
+
+**Steps:**
+
+1. Open a walk-in for `<walk-in email>` with one photograph.
+
+**Expected Results:**
+
+* It is refused with the draft cap's own refusal, not a walk-in refusal of its own; no draft opens.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-hxe rev=1 -->
+### g10adm.vault-operator-queue.US10-TC20: A walk-in opens under an account holding two unsent drafts
 
 **Classification:**
 
@@ -1359,14 +1470,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The account for `<walk-in email>`, which nobody has signed in to, holds `<held>`.
-
-**Test data:**
-
-| `<held>` | `<outcome>` |
-| --- | --- |
-| two drafts staff opened | the draft opens; the account now holds three |
-| three drafts staff opened | the draft cap's own refusal, no draft opening |
+* The account for `<walk-in email>`, which nobody has signed in to, holds two drafts staff opened.
 
 **Steps:**
 
@@ -1374,7 +1478,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* It reads `<outcome>`.
+* The draft opens; the account now holds three.
 
 <!-- trace:case id=g10adm.vault-operator-queue.TC-srd rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### g10adm.vault-operator-queue.US10-TC8: Opening a walk-in emails nothing
@@ -1500,7 +1604,7 @@ Runs once per row of **Test data**.
 * Step 2 lists one draft for `<walk-in email>`.
 
 <!-- trace:case id=g10adm.vault-operator-queue.TC-vgy rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
-### g10adm.vault-operator-queue.US10-TC12: Only an operate holder can open a walk-in
+### g10adm.vault-operator-queue.US10-TC12: A walk-in is refused to anyone without the operate grant
 
 Runs once per row of **Test data**.
 
@@ -1522,13 +1626,11 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<actor>` | `<offered>` | `<direct open>` |
+| `<actor>` | `<offered>` | `<refused>` |
 | --- | --- | --- |
-| admin(holds `vault:operate`) | Open a walk-in | opens the draft |
-| admin(admin) | Open a walk-in | opens the draft |
-| admin(holds `vault:read` and `vault:payout`) | no Open a walk-in | refused, naming the grant |
-| a signed-in collector | no console | refused |
-| signed out | the console's sign-in | refused |
+| admin(holds `vault:read` and `vault:payout`) | no Open a walk-in | naming the grant |
+| a signed-in collector | no console | outright |
+| signed out | the console's sign-in | outright |
 
 **Steps:**
 
@@ -1538,7 +1640,43 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 shows `<offered>`.
-* Step 2 is `<direct open>`; a refusal opens no draft and creates no account.
+* Step 2 is refused, `<refused>`; no draft opens and no account is created.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-fju rev=1 -->
+### g10adm.vault-operator-queue.US10-TC21: An operate holder is offered the walk-in and opens it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-10
+
+**Pre-conditions:**
+
+* `<actor>` is on `<queue>`.
+
+**Test data:**
+
+| `<actor>` |
+| --- |
+| admin(holds `vault:operate`) |
+| admin(admin) |
+
+**Steps:**
+
+1. Read the queue's header.
+2. Click Open a walk-in, and open one for a fresh address with one photograph.
+
+**Expected Results:**
+
+* Step 1 offers Open a walk-in.
+* Step 2 opens the draft.
 
 <!-- trace:case id=g10adm.vault-operator-queue.TC-50a rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### g10adm.vault-operator-queue.US10-TC13: A walk-in opens with no photograph, and its send still needs one
