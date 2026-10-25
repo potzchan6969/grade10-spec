@@ -1,9 +1,15 @@
 # zzz-site/site/navigation Test Cases
 
-**Status:** pending-review · 0/20
-**Drafts styled:** 2026-09-02, tcs-rules r1
+**Status:** pending-review · 0/11
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
-## zzz-site-site-navigation-US1: Collector opens a ZZZ address directly
+## Background
+
+* The ZZZ site answers at `<zzz home url>`, with sign-in at `<zzz sign-in url>` and the profile at `<zzz profile url>`; `<unknown address>` is an address under no surface the site answers.
+* A full document load shows in the browser's network log as a new document request.
+
+## zzz.site-navigation.US1: Collector opens a ZZZ address directly
 
 **As a** collector,
 **I want** sign-in and the profile to answer at addresses of their own, and an
@@ -14,35 +20,9 @@ than at home, and when none answers I know I am still on the site and can
 leave for home.
 
 <!-- trace:case id=zzz.site-navigation.TC-wbf rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76 -->
-### zzz-site-site-navigation-US1-TC1-1: Sign-in and profile answer at their own addresses
+### zzz.site-navigation.US1-TC1: A surface's own address opens that surface, by link or refresh
 
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** zzz-site-site-navigation-US-01
-
-**Pre-conditions:**
-None.
-
-**Steps:**
-
-1. Navigate to <zzz sign-in url> by link or by refresh.
-2. Navigate to <zzz profile url> while signed in, by link or by refresh.
-
-**Expected Results:**
-
-* Sign-in renders at the sign-in address.
-* The profile renders at the profile address.
-
-<!-- trace:case id=zzz.site-navigation.TC-eqp rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76 -->
-### zzz-site-site-navigation-US1-TC2-1: Refresh keeps the collector on sign-in
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -51,25 +31,34 @@ None.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-01
 
 **Pre-conditions:**
-A collector who moved from home to sign-in.
+
+* A collector, `<session>`.
+
+**Test data:**
+
+| `<session>` | `<reach>` | `<surface>` |
+| --- | --- | --- |
+| signed out | following a link to `<zzz sign-in url>` | sign-in |
+| signed out | moving from home to sign-in, then refreshing | sign-in |
+| signed in | following a link to `<zzz profile url>` | the profile |
+| signed in | opening `<zzz profile url>`, then refreshing | the profile |
 
 **Steps:**
 
-1. Navigate to <zzz home url>.
-2. Move to sign-in.
-3. Refresh.
+1. Reach the page by `<reach>`; read the surface and the address.
 
 **Expected Results:**
 
-* Sign-in renders, not home.
+* `<surface>` renders at its own address, never home.
 
-<!-- trace:case id=zzz.site-navigation.TC-c5s rev=2 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76 -->
-### zzz-site-site-navigation-US1-TC3-2: Unknown address resolves to not-found, never home, never naming it
+<!-- trace:case id=zzz.site-navigation.TC-c5s rev=2 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
+### zzz.site-navigation.US1-TC3: An unknown address shows not-found in fixed words, and stays
 
 **Classification:**
 
@@ -84,107 +73,49 @@ A collector who moved from home to sign-in.
 * **Trace:** zzz-site-site-navigation-US-01
 
 **Pre-conditions:**
-None.
+
+* None.
 
 **Steps:**
 
-1. Navigate to <an address under no surface the zzz site answers>.
-2. Check the rendered surface.
+1. Open `<unknown address>`; read the title and the description.
+2. Wait without clicking; read the address bar and the surface.
 
 **Expected Results:**
 
-* The not-found surface renders, not <zzz home url>.
-* The failed address does not appear anywhere on the page.
-
-<!-- trace:case id=zzz.site-navigation.TC-xmz rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
-### zzz-site-site-navigation-US1-TC4-1: Not-found shows only the shared catalog's static words
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** zzz-site-site-navigation-US-01
-
-**Pre-conditions:**
-None.
-
-**Steps:**
-
-1. Navigate to <an address under no surface the zzz site answers>.
-2. Read the rendered title and description.
-
-**Expected Results:**
-
-* The title reads exactly "Nothing is here".
-* The description reads exactly "The link may be wrong, or the page may have moved."
-* Neither string contains any part of the address navigated to in step 1.
+* Step 1 renders not-found, never home: the title reads Nothing is here, the description The link may be wrong, or the page may have moved., and no part of the address shows on the page.
+* Step 2 still shows not-found at the address opened.
 
 <!-- trace:case id=zzz.site-navigation.TC-04e rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
-### zzz-site-site-navigation-US1-TC6-1: Back to Home leaves not-found for the ZZZ home
+### zzz.site-navigation.US1-TC6: Back to Home leaves not-found for home
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-01
 
 **Pre-conditions:**
-A collector is on the not-found surface after navigating to <an address under
-no surface the zzz site answers>.
+
+* A collector is on not-found after opening `<unknown address>`.
 
 **Steps:**
 
-1. Click "Back to Home".
+1. Click Back to Home.
 
 **Expected Results:**
 
-* <zzz home url> renders.
-
-<!-- trace:case id=zzz.site-navigation.TC-7f7 rev=1 covers=zzz.site-navigation.SC-lm3,zzz.site-navigation.SC-epz,zzz.site-navigation.SC-h76,zzz.site-navigation.SC-gbj -->
-### zzz-site-site-navigation-US1-TC7-1: Not-found does not correct itself to home on its own
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** zzz-site-site-navigation-US-01
-
-**Pre-conditions:**
-A collector has navigated to <an address under no surface the zzz site
-answers>.
-
-**Steps:**
-
-1. Wait, without clicking anything.
-2. Read the address bar and the rendered surface.
-
-**Expected Results:**
-
-* The not-found surface is still rendered.
-* <zzz home url> has not been reached.
-* The address bar still shows the address navigated to.
+* Home renders at `<zzz home url>`.
 
 ---
 
-## zzz-site-site-navigation-US2: Collector asks for a session-decided address
+## zzz.site-navigation.US2: Collector asks for a session-decided address
 
 **As a** collector,
 **I want** home and sign-in to answer with what my session allows, replacing
@@ -193,7 +124,9 @@ the entry they correct,
 bounces me forward again.
 
 <!-- trace:case id=zzz.site-navigation.TC-wvn rev=1 covers=zzz.site-navigation.SC-wwn,zzz.site-navigation.SC-i43,zzz.site-navigation.SC-q5b,zzz.site-navigation.SC-zrz -->
-### zzz-site-site-navigation-US2-TC1-1: Signed-in collector landing on home is sent to the profile
+### zzz.site-navigation.US2-TC1: A signed-in collector asking for home or sign-in lands on the profile, and Back skips the correction
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -202,111 +135,62 @@ bounces me forward again.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-02
 
 **Pre-conditions:**
-Signed in as a collector on ZZZ.
+
+* A signed-in collector is on a page outside the site.
+
+**Test data:**
+
+| `<asked for>` |
+| --- |
+| `<zzz home url>` |
+| `<zzz sign-in url>` |
 
 **Steps:**
 
-1. Navigate to <zzz home url>.
-2. Check the surface and the address.
+1. Open `<asked for>`; read the surface and the address.
+2. Press the browser's Back.
 
 **Expected Results:**
 
-* Their profile renders.
-* The address reads as the profile.
-
-<!-- trace:case id=zzz.site-navigation.TC-i9g rev=1 covers=zzz.site-navigation.SC-wwn,zzz.site-navigation.SC-i43,zzz.site-navigation.SC-q5b,zzz.site-navigation.SC-zrz -->
-### zzz-site-site-navigation-US2-TC2-1: Signed-in collector asking for sign-in is sent to the profile
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** zzz-site-site-navigation-US-02
-
-**Pre-conditions:**
-Signed in as a collector on ZZZ.
-
-**Steps:**
-
-1. Navigate to <zzz sign-in url>.
-2. Check the surface and the address.
-
-**Expected Results:**
-
-* Their profile renders.
-* The address reads as the profile.
-
-<!-- trace:case id=zzz.site-navigation.TC-lr1 rev=1 covers=zzz.site-navigation.SC-wwn,zzz.site-navigation.SC-i43,zzz.site-navigation.SC-q5b,zzz.site-navigation.SC-zrz -->
-### zzz-site-site-navigation-US2-TC3-1: Back never returns to a corrected address
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** zzz-site-site-navigation-US-02
-
-**Pre-conditions:**
-Signed in as a collector on ZZZ, on the profile after following a link there
-from <zzz home url> before it corrected.
-
-**Steps:**
-
-1. Navigate to <zzz home url>.
-2. Wait for the correction to the profile.
-3. Go back.
-
-**Expected Results:**
-
-* They arrive where they were before opening home, never at home again.
+* Step 1 renders their profile, the address reading as the profile.
+* Step 2 returns to the page outside the site, never to `<asked for>`.
 
 <!-- trace:case id=zzz.site-navigation.TC-l1w rev=1 covers=zzz.site-navigation.SC-wwn,zzz.site-navigation.SC-i43,zzz.site-navigation.SC-q5b,zzz.site-navigation.SC-zrz -->
-### zzz-site-site-navigation-US2-TC4-1: Not-found does not wait for the session
+### zzz.site-navigation.US2-TC4: Not-found renders before the session is known
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-02
 
 **Pre-conditions:**
-The session has not yet resolved.
+
+* The session's check is made slow to answer.
 
 **Steps:**
 
-1. Navigate to <an address under no surface the zzz site answers> before the session resolves.
-2. Check which surface renders.
+1. Open `<unknown address>`; read the surface before the check answers.
 
 **Expected Results:**
 
-* The not-found surface renders without waiting for the session.
+* Not-found renders without waiting for the session.
 
 ---
 
-## zzz-site-site-navigation-US3: Collector moves between surfaces without a page load
+## zzz.site-navigation.US3: Collector moves between surfaces without a page load
 
 **As a** collector,
 **I want** movement between the site's surfaces to stay in the page, with
@@ -315,7 +199,7 @@ history stepping back through it and my own click modifiers left alone,
 browser behavior I asked for.
 
 <!-- trace:case id=zzz.site-navigation.TC-ox6 rev=1 covers=zzz.site-navigation.SC-guq,zzz.site-navigation.SC-9ws,zzz.site-navigation.SC-mbz,zzz.site-navigation.SC-e3y -->
-### zzz-site-site-navigation-US3-TC1-1: Sign-in opens in place from home
+### zzz.site-navigation.US3-TC1: Moving to sign-in and back stays in the page
 
 **Classification:**
 
@@ -324,51 +208,29 @@ browser behavior I asked for.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-03
 
 **Pre-conditions:**
-A collector is on home.
+
+* A signed-out collector is on home, the network log open.
 
 **Steps:**
 
-1. Navigate to <zzz home url>.
-2. Choose to sign in.
+1. Choose to sign in; read the surface, the address and the network log.
+2. Press the browser's Back; read them again.
 
 **Expected Results:**
 
-* The sign-in surface renders at its address without a full document load.
-
-<!-- trace:case id=zzz.site-navigation.TC-d18 rev=1 covers=zzz.site-navigation.SC-guq,zzz.site-navigation.SC-9ws,zzz.site-navigation.SC-mbz,zzz.site-navigation.SC-e3y -->
-### zzz-site-site-navigation-US3-TC2-1: Back steps back into the site without a page load
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** zzz-site-site-navigation-US-03
-
-**Pre-conditions:**
-A collector who moved from home to sign-in.
-
-**Steps:**
-
-1. Navigate to <zzz home url>.
-2. Move to sign-in.
-3. Go back.
-
-**Expected Results:**
-
-* Home renders, still without a full document load.
+* Step 1 renders sign-in at its own address with no full document load.
+* Step 2 renders home, still with no full document load.
 
 <!-- trace:case id=zzz.site-navigation.TC-dkp rev=1 covers=zzz.site-navigation.SC-guq,zzz.site-navigation.SC-9ws,zzz.site-navigation.SC-mbz,zzz.site-navigation.SC-e3y -->
-### zzz-site-site-navigation-US3-TC3-1: Modified click stays the browser's
+### zzz.site-navigation.US3-TC3: A modified click or a link to another site does what the browser does
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -377,51 +239,33 @@ A collector who moved from home to sign-in.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** zzz-site-site-navigation-US-03
-
-**Pre-conditions:**
-None.
-
-**Steps:**
-
-1. Navigate to <zzz home url>.
-2. Click an in-app link with a modifier held that opens a new tab.
-
-**Expected Results:**
-
-* The browser's own behavior happens, unaltered.
-
-<!-- trace:case id=zzz.site-navigation.TC-11a rev=1 covers=zzz.site-navigation.SC-guq,zzz.site-navigation.SC-9ws,zzz.site-navigation.SC-mbz,zzz.site-navigation.SC-e3y -->
-### zzz-site-site-navigation-US3-TC4-1: Other-origin link is a normal page load
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-03
 
 **Pre-conditions:**
-A surface shows a link to another origin.
+
+* A collector is on a surface showing `<link>`.
+
+**Test data:**
+
+| `<link>` | `<click>` | `<outcome>` |
+| --- | --- | --- |
+| an in-site link | with the new-tab modifier held | the link opens in a new tab, this one unmoved |
+| a link to another origin | plainly | the other site loads as a normal page load |
 
 **Steps:**
 
-1. Navigate to that surface.
-2. Click the other-origin link.
+1. Click `<link>` `<click>`.
 
 **Expected Results:**
 
-* The browser follows it as a normal page load.
+* `<outcome>`.
 
 ---
 
-## zzz-site-site-navigation-US4: Collector resumes a surface where they left it
+## zzz.site-navigation.US4: Collector resumes a surface where they left it
 
 **As a** collector,
 **I want** back and forward to return me to the scroll position I left an
@@ -430,7 +274,7 @@ entry at, and a new entry to start at the top,
 from the beginning.
 
 <!-- trace:case id=zzz.site-navigation.TC-gan rev=1 covers=zzz.site-navigation.SC-2ks,zzz.site-navigation.SC-kt9 -->
-### zzz-site-site-navigation-US4-TC1-1: Back returns to the left scroll position
+### zzz.site-navigation.US4-TC1: A new surface opens at the top, and Back returns to where the collector left
 
 **Classification:**
 
@@ -439,52 +283,28 @@ from the beginning.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-04
 
 **Pre-conditions:**
-A collector who scrolled partway down a surface and navigated from there.
+
+* A collector is on home, scrolled partway down.
 
 **Steps:**
 
-1. Navigate to <zzz home url> and scroll partway down.
-2. Navigate to another surface.
-3. Go back.
+1. Move to another surface; read where it is scrolled.
+2. Press the browser's Back; read where home is scrolled.
 
 **Expected Results:**
 
-* The surface is scrolled to where they left it.
-
-<!-- trace:case id=zzz.site-navigation.TC-93k rev=1 covers=zzz.site-navigation.SC-2ks,zzz.site-navigation.SC-kt9 -->
-### zzz-site-site-navigation-US4-TC2-1: New surface starts at the top
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** zzz-site-site-navigation-US-04
-
-**Pre-conditions:**
-A collector scrolled partway down a surface.
-
-**Steps:**
-
-1. Navigate to <zzz home url> and scroll partway down.
-2. Navigate to another surface.
-
-**Expected Results:**
-
-* The destination renders scrolled to the top.
+* Step 1 opens at the top.
+* Step 2 returns to home where it was left.
 
 ---
 
-## zzz-site-site-navigation-US5: Collector downloads only the surface they open
+## zzz.site-navigation.US5: Collector downloads only the surface they open
 
 **As a** collector,
 **I want** a surface to cost only its own page code, loaded when I move to it,
@@ -492,62 +312,37 @@ A collector scrolled partway down a surface.
 open.
 
 <!-- trace:case id=zzz.site-navigation.TC-qpt rev=1 covers=zzz.site-navigation.SC-ghb,zzz.site-navigation.SC-hgk -->
-### zzz-site-site-navigation-US5-TC1-1: Cold home visit downloads no profile or sign-in page code
+### zzz.site-navigation.US5-TC1: Home loads no other surface's page code until the collector moves there
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** performance
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-05
 
 **Pre-conditions:**
-A cold browser with an empty cache.
+
+* A browser with an empty cache, the network log open.
 
 **Steps:**
 
-1. Open the network log.
-2. Navigate to <zzz home url>.
-3. Check downloaded scripts.
+1. Open `<zzz home url>`; read the scripts loaded.
+2. Move to sign-in; read the scripts loaded and the surface.
 
 **Expected Results:**
 
-* No script containing the profile's or sign-in's page code is downloaded.
-
-<!-- trace:case id=zzz.site-navigation.TC-cyz rev=1 covers=zzz.site-navigation.SC-ghb,zzz.site-navigation.SC-hgk -->
-### zzz-site-site-navigation-US5-TC2-1: Sign-in page code loads on arrival
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** performance
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** zzz-site-site-navigation-US-05
-
-**Pre-conditions:**
-A collector is on home.
-
-**Steps:**
-
-1. Navigate to <zzz home url>.
-2. Move to sign-in.
-3. Check downloaded scripts and the rendered surface.
-
-**Expected Results:**
-
-* Sign-in's page code loads and sign-in renders.
+* Step 1 loads no script holding sign-in's or the profile's page code.
+* Step 2 loads sign-in's page code, and sign-in renders.
 
 ---
 
-## zzz-site-site-navigation-US6: Collector opens the profile with no session
+## zzz.site-navigation.US6: Collector opens the profile with no session
 
 **As a** collector without a session,
 **I want** the profile's own address to stay put while I sign in, and to be
@@ -556,7 +351,7 @@ sent home if I leave without one,
 leaving puts me somewhere I can read instead of on a blank page.
 
 <!-- trace:case id=zzz.site-navigation.TC-w65 rev=1 covers=zzz.site-navigation.SC-wjt,zzz.site-navigation.SC-q90,zzz.site-navigation.SC-pan -->
-### zzz-site-site-navigation-US6-TC1-1: The profile's address stays put while it asks
+### zzz.site-navigation.US6-TC1: The profile's address stays put while it asks for sign-in, and renders once signed in
 
 **Classification:**
 
@@ -564,30 +359,28 @@ leaving puts me somewhere I can read instead of on a blank page.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-06
 
 **Pre-conditions:**
-The collector is not signed in.
+
+* The collector is not signed in.
 
 **Steps:**
 
-1. Navigate to <zzz profile url>.
-2. Check the surface and the address.
-3. Complete sign-in in the dialog.
+1. Open `<zzz profile url>`; read the surface and the address.
+2. Complete sign-in in the dialog; read the surface and the address.
 
 **Expected Results:**
 
-* The sign-in dialog opens over a blank profile.
-* Step 2 shows the profile's own address, uncorrected.
-* The dialog closes and the profile renders at that same address, with no
-  navigation in between.
+* Step 1 opens the sign-in dialog over a blank profile, the address the profile's own.
+* Step 2 closes the dialog and renders the profile at that same address, with no navigation between.
 
 <!-- trace:case id=zzz.site-navigation.TC-9tc rev=1 covers=zzz.site-navigation.SC-wjt,zzz.site-navigation.SC-q90,zzz.site-navigation.SC-pan -->
-### zzz-site-site-navigation-US6-TC2-1: Leaving the ask at the profile's address goes home
+### zzz.site-navigation.US6-TC2: Leaving the ask at the profile's address goes home
 
 **Classification:**
 
@@ -595,26 +388,27 @@ The collector is not signed in.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** smoke, regression
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** zzz-site-site-navigation-US-06
 
 **Pre-conditions:**
-The collector is not signed in and has opened <zzz profile url>.
+
+* The collector is not signed in, and has opened `<zzz profile url>` from a page outside the site.
 
 **Steps:**
 
-1. Dismiss the sign-in dialog.
-2. Read the address bar.
-3. Press the browser's Back.
+1. Dismiss the sign-in dialog; read the surface and the address.
+2. Press the browser's Back.
 
 **Expected Results:**
 
-* <zzz home url> renders.
-* Step 2 shows home's address, not the profile's.
-* Step 3 leaves the site rather than returning to the profile.
+* Step 1 renders home, the address reading as home.
+* Step 2 returns to the page outside the site, never to the profile.
+
+---
 
 ## Settled
 

@@ -1,78 +1,17 @@
 # grade10-admin/console/roles-and-permissions Test Cases
 
-**Status:** pending-review · 0/10
-**Drafts styled:** 2026-10-16, tcs-rules r6
+**Status:** pending-review · 0/5
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
-## grade10-admin-console-roles-and-permissions-US1: Admin compares what roles can do
+## g10adm.console-roles-and-permissions.US1: Admin compares what roles can do
 
 **As an** admin,
 **I want** to open Roles & Permissions and read one grants matrix,
 **so that** I can see which permissions each closed role is allowed and refused without reading authorization source.
 
-<!-- trace:case id=g10adm.console-roles-and-permissions.TC-61b rev=1 covers=g10adm.console-roles-and-permissions.SC-n42 -->
-### grade10-admin-console-roles-and-permissions-US1-TC1-1: Roles & Permissions sits directly under Users and opens for an admin
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-roles-and-permissions-US-01
-
-**Pre-conditions:**
-
-* admin(admin) is signed in to <grade10 admin url>.
-
-**Steps:**
-
-1. Read the sidebar.
-2. Click Roles & Permissions.
-
-**Expected Results:**
-
-* Step 1 lists Roles & Permissions directly under Users.
-* Step 2 opens the page on its own address, showing the Roles tab.
-
-<!-- trace:case id=g10adm.console-roles-and-permissions.TC-wmn rev=1 covers=g10adm.console-roles-and-permissions.SC-dk1,g10adm.console-roles-and-permissions.SC-rth -->
-### grade10-admin-console-roles-and-permissions-US1-TC2-1: The Roles tab names every closed role as a column and marks the elevated ones
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-roles-and-permissions-US-01
-
-**Pre-conditions:**
-
-* admin(admin) is signed in to <grade10 admin url>.
-* The page is open on the Roles tab.
-
-**Steps:**
-
-1. Read the matrix's column headers.
-2. Read the mark on the `staff` and `user` columns.
-
-**Expected Results:**
-
-* Step 1 names every role in the closed set, `user` included, one column each.
-* `staff` is marked elevated; `user` is not.
-* Every column other than `user` is marked elevated.
-
-<!-- trace:case id=g10adm.console-roles-and-permissions.TC-gyp rev=1 covers=g10adm.console-roles-and-permissions.SC-gev,g10adm.console-roles-and-permissions.SC-kbi -->
-### grade10-admin-console-roles-and-permissions-US1-TC3-1: A cell reads Allowed or Not allowed from the shipped mapping
-
-Runs once per row of **Test data**.
+<!-- trace:case id=g10adm.console-roles-and-permissions.TC-61b rev=1 covers=g10adm.console-roles-and-permissions.SC-n42,g10adm.console-roles-and-permissions.SC-dk1,g10adm.console-roles-and-permissions.SC-rth,g10adm.console-roles-and-permissions.SC-gev,g10adm.console-roles-and-permissions.SC-kbi,g10adm.console-roles-and-permissions.SC-xau,g10adm.console-roles-and-permissions.SC-ama -->
+### g10adm.console-roles-and-permissions.US1-TC1: The Roles tab reads one grants matrix, every closed role a column, with nothing to edit
 
 **Classification:**
 
@@ -80,97 +19,34 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-roles-and-permissions-US-01
-
-**Pre-conditions:**
-
-* admin(admin) is signed in to <grade10 admin url>.
-* The page is open on the Roles tab.
-
-**Test data:**
-
-| Row | Column | The cell reads |
-| --- | --- | --- |
-| `store:read` | `staff` | Allowed |
-| `user:set-role` | `support` | Not allowed |
-| `user:set-role` | `admin` | Allowed |
-
-**Steps:**
-
-1. Find the row's permission in the matrix.
-2. Read the cell under the row's column.
-
-**Expected Results:**
-
-* Step 2 reads as the row states.
-* The matrix carries one row per permission, grouped by resource, and no View, Create, Edit, Delete or Manage columns.
-
-<!-- trace:case id=g10adm.console-roles-and-permissions.TC-lp9 rev=1 covers=g10adm.console-roles-and-permissions.SC-xau -->
-### grade10-admin-console-roles-and-permissions-US1-TC4-1: The page says several roles combine as the union of their grants
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-admin-console-roles-and-permissions-US-01
-
-**Pre-conditions:**
-
-* admin(admin) is signed in to <grade10 admin url>.
-* The page is open on the Roles tab.
-
-**Steps:**
-
-1. Read the text around the matrix.
-
-**Expected Results:**
-
-* The page states that a person holding several roles receives the union of those roles' grants.
-
-<!-- trace:case id=g10adm.console-roles-and-permissions.TC-c0q rev=1 covers=g10adm.console-roles-and-permissions.SC-ama -->
-### grade10-admin-console-roles-and-permissions-US1-TC5-1: The page offers no way to create or edit a role
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-roles-and-permissions-US-01
 
 **Pre-conditions:**
 
-* admin(admin) is signed in to <grade10 admin url>.
-* The page is open.
+* An admin is signed in to the admin console.
 
 **Steps:**
 
-1. Read the Roles tab, its columns and cells.
-2. Open the Permissions tab and read its rows.
+1. Read the sidebar, and click Roles & Permissions.
+2. Read the matrix's columns, their marks and the text around it.
+3. Read the `store:read` row under `staff`, the `user:set-role` row under `support` and `admin`, the `vault:approve` and `vault:payout` rows under `staff` and `treasurer`, the `auction:refund` and `auction:payment` rows under `staff`, and the `admin` column.
+4. Look for a way to create or edit a role on either tab, and click a cell.
+5. With a screen reader, move to the Roles and Permissions switch, and switch to Permissions.
 
 **Expected Results:**
 
-* Neither tab offers a control that creates a role, edits a role, or changes what a role grants.
-* Clicking a cell changes nothing it shows.
+* Step 1 lists Roles & Permissions directly under Users, opening on its own address at the Roles tab.
+* Step 2 names every closed role a column, `user` included, every one but `user` marked elevated, one row per permission grouped by resource; the page says several roles combine as the union of their grants.
+* Step 3 reads Allowed; Not allowed and Allowed; `vault:approve` Allowed for `staff`, `vault:payout` Not allowed for `staff` and Allowed for `treasurer`; `auction:refund` Allowed and `auction:payment` Not allowed for `staff`; every row Allowed under `admin`.
+* Step 4 finds nothing to create or edit a role or its grants, and the cell changes nothing.
+* Step 5 announces the switch as tabs, the visible tab selected, then Permissions selected.
 
 <!-- trace:case id=g10adm.console-roles-and-permissions.TC-acq rev=1 covers=g10adm.console-roles-and-permissions.SC-7mf -->
-### grade10-admin-console-roles-and-permissions-US1-TC6-1: A link naming a role opens the Roles tab with its column highlighted
-
-Runs once per row of **Test data**.
+### g10adm.console-roles-and-permissions.US1-TC6: A link naming a role opens the Roles tab with its column highlighted
 
 **Classification:**
 
@@ -181,146 +57,100 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-roles-and-permissions-US-01
 
 **Pre-conditions:**
 
-* admin(admin) is signed in to <grade10 admin url>.
-
-**Test data:**
-
-| The address names | The page opens |
-| --- | --- |
-| `staff` | On the Roles tab, the `staff` column highlighted |
-| `not-a-role` | On the Roles tab, no column highlighted and no column added |
+* An admin is signed in to the admin console.
 
 **Steps:**
 
-1. Open Roles & Permissions on the address naming the row's role.
+1. Open Roles & Permissions on the address naming `staff`.
+2. Open it on the address naming `not-a-role`.
 
 **Expected Results:**
 
-* Step 1 opens as the row states.
+* Step 1 opens the Roles tab with the `staff` column highlighted.
+* Step 2 opens it with no column highlighted and none added.
 
 ---
 
-## grade10-admin-console-roles-and-permissions-US2: Admin reads the permission catalog
+## g10adm.console-roles-and-permissions.US2: Admin reads the permission catalog
 
 **As an** admin,
 **I want** to open the Permissions tab,
 **so that** I can see every permission's id, meaning, which roles hold it, and which elevated APIs ask for it when designing or reviewing access boundaries.
 
-<!-- trace:case id=g10adm.console-roles-and-permissions.TC-66a rev=1 covers=g10adm.console-roles-and-permissions.SC-d44 -->
-### grade10-admin-console-roles-and-permissions-US2-TC1-1: Every permission appears once with its id, meaning, roles and APIs
+<!-- trace:case id=g10adm.console-roles-and-permissions.TC-66a rev=1 covers=g10adm.console-roles-and-permissions.SC-d44,g10adm.console-roles-and-permissions.SC-hou -->
+### g10adm.console-roles-and-permissions.US2-TC1: Every permission appears once with its id, meaning, roles and APIs
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-roles-and-permissions-US-02
 
 **Pre-conditions:**
 
-* admin(admin) is signed in to <grade10 admin url>.
-* The page is open on the Permissions tab.
+* An admin has the Permissions tab open.
 
 **Steps:**
 
-1. Read every row of the catalog.
-2. Compare the rows with the shipped permission vocabulary.
+1. Read every row against the shipped permission vocabulary, and the `audit:read` row.
 
 **Expected Results:**
 
-* Every permission in the vocabulary appears exactly once.
-* Each row shows the `resource:action` id, a description, the roles that hold it, and the APIs that ask for it; an empty mark stands where none do.
-* No row splits the id into separate Resource and Action columns.
-
-<!-- trace:case id=g10adm.console-roles-and-permissions.TC-rof rev=1 covers=g10adm.console-roles-and-permissions.SC-hou -->
-### grade10-admin-console-roles-and-permissions-US2-TC2-1: The auditor's only grant names an elevated API that asks for it
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-console-roles-and-permissions-US-02
-
-**Pre-conditions:**
-
-* admin(admin) is signed in to <grade10 admin url>.
-* The page is open on the Permissions tab.
-
-**Steps:**
-
-1. Find the `audit:read` row.
-
-**Expected Results:**
-
-* The row carries its description, `auditor` among its roles, and at least one elevated API that requires `audit:read`.
+* Every permission appears exactly once, its `resource:action` id whole, with a description, the roles that hold it and the APIs that ask for it, an empty mark where none do.
+* `audit:read` carries its description, `auditor` among its roles, and at least one elevated API that requires it.
 
 <!-- trace:case id=g10adm.console-roles-and-permissions.TC-37o rev=1 covers=g10adm.console-roles-and-permissions.SC-rj6 -->
-### grade10-admin-console-roles-and-permissions-US2-TC3-1: The resource and API filters narrow the catalog and clear back to it
+### g10adm.console-roles-and-permissions.US2-TC3: The resource and API filters narrow the catalog and clear back to it
 
 **Classification:**
 
-* **Severity:** minor
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-roles-and-permissions-US-02
 
 **Pre-conditions:**
 
-* admin(admin) is signed in to <grade10 admin url>.
-* The page is open on the Permissions tab.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Resource | `store` |
-| API prefix | `<api prefix>`, the opening of an API path one `store` permission's row lists |
+* An admin has the Permissions tab open.
 
 **Steps:**
 
-1. Filter by the resource from **Test data**.
-2. Filter APIs by the prefix from **Test data**.
-3. Clear the API filter.
-4. Clear the resource filter.
+1. Filter to the `store` resource.
+2. Filter APIs by the opening of an API path one `store` row lists.
+3. Clear the API filter, then the resource filter.
 
 **Expected Results:**
 
 * Step 1 leaves only `store:` permissions.
-* Step 2 leaves only rows whose APIs match the prefix, with the matched span highlighted on each matching API label.
-* Step 3 restores every `store:` row.
-* Step 4 restores the full catalog.
+* Step 2 leaves only rows whose APIs match, the matched span highlighted.
+* Step 3 restores every `store:` row, then the full catalog.
 
 ---
 
-## grade10-admin-console-roles-and-permissions-US3: Non-admin is refused the page
+## g10adm.console-roles-and-permissions.US3: Non-admin is refused the page
 
 **As a** person who is not `admin` (including a plain `user`),
 **I want** the console to refuse Roles & Permissions,
 **so that** the grant map stays an admin surface.
 
 <!-- trace:case id=g10adm.console-roles-and-permissions.TC-i3a rev=1 covers=g10adm.console-roles-and-permissions.SC-gmv -->
-### grade10-admin-console-roles-and-permissions-US3-TC1-1: A session without the set-role grant is refused the page and does not see it listed
+### g10adm.console-roles-and-permissions.US3-TC1: A session without the set-role grant is refused the page and does not see it listed
 
 Runs once per row of **Test data**.
 
@@ -333,21 +163,21 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-roles-and-permissions-US-03
 
 **Pre-conditions:**
 
-* admin(`<role>`) is signed in to <grade10 admin url>, or customer(user) for the `user` row.
+* `<role>` is signed in.
 
 **Test data:**
 
 | `<role>` |
 | --- |
-| `staff` |
-| `support` |
-| `auditor` |
-| `user` |
+| admin(staff) |
+| admin(support) |
+| admin(auditor) |
+| customer(user) |
 
 **Steps:**
 
@@ -356,5 +186,5 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 does not list Roles & Permissions.
-* Step 2 is refused the way the console refuses any surface the session cannot open; no role or permission content is shown.
+* Step 1 does not list it.
+* Step 2 is refused as the console refuses any surface the session cannot open, showing no role or permission.

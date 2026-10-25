@@ -1,12 +1,14 @@
 # shared/auth Cross-Feature E2E Test Cases
 
 **Status:** pending-review · 0/8
-**Drafts styled:** 2026-10-24, tcs-rules r7
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
 ## Background
 
-* `<g10url>` is the Grade10 site, `<zzz url>` the ZZZ site, and `<console url>` the Grade10 console of the environment under test.
-* The audit trail is the console's identity audit trail page; every entry names people by user id.
+* `<g10url>` is the Grade10 site, `<zzz url>` the ZZZ site and `<console url>` the Grade10 console of the environment under test.
+* The audit trail is the console's identity audit trail page; every entry names people by user id. A revoke or ban reaches the person's next page within 70 seconds.
+* `<collector account>` holds `user` only, and its inbox is one the tester reads.
 
 ## shared.auth-dmn.US1: Collector signs in by link and every surface names them until they sign out
 
@@ -15,7 +17,7 @@
 **so that** one sign-in carries me through the brand and one sign-out ends it.
 
 <!-- trace:case id=g10.auth-domain.TC-abj rev=2 -->
-### shared.auth-dmn.US1-TC1: A link sign-in names the collector until they sign out
+### shared.auth-dmn.US1-TC1: A link sign-in names the collector on every page until they sign out
 
 **Classification:**
 
@@ -31,25 +33,19 @@
 
 **Pre-conditions:**
 
-* customer is signed out on `<g10url>`, with an unused sign-in link in `<collector email>`'s inbox.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<collector email>` | an inbox the tester reads, with an account |
+* customer is signed out on `<g10url>`, with an unused sign-in link for `<collector account>` in its inbox.
 
 **Steps:**
 
 1. Follow the link.
 2. Open `<g10url>/profile`.
-3. Select sign out and wait for it to finish.
+3. Select sign out and wait for it to finish; reload.
 
 **Expected Results:**
 
 * Step 1 signs the collector in.
 * Step 2 shows the account's name and email.
-* Step 3 leaves the signed-in page, and the name shows nowhere.
+* Step 3 leaves the signed-in page, and the name shows nowhere, before and after the reload.
 
 ---
 
@@ -60,7 +56,7 @@
 **so that** I sign in once here and am never delivered somewhere I did not ask for.
 
 <!-- trace:case id=g10.auth-domain.TC-64p rev=2 -->
-### shared.auth-dmn.US2-TC1: One sign-in covers the brand's site and no other brand
+### shared.auth-dmn.US2-TC1: A sign-in on the store covers the auction and reaches no other brand
 
 **Classification:**
 
@@ -76,18 +72,17 @@
 
 **Pre-conditions:**
 
-* customer is signed out on every brand, with an unused sign-in link in `<collector email>`'s inbox, asked for on the store.
+* customer is signed out on every brand, with an unused sign-in link for `<collector account>`, asked for on the store.
 
 **Steps:**
 
-1. Follow the link.
-2. Open the auction on `<g10url>`.
-3. Open `<zzz url>`.
+1. Follow the link, then open the auction on `<g10url>`.
+2. Open `<zzz url>`.
 
 **Expected Results:**
 
-* Step 2 shows the collector's name and email, with no new sign-in.
-* Step 3 shows nobody signed in.
+* Step 1 shows the collector's name and email on the auction, with no second sign-in.
+* Step 2 shows nobody signed in.
 
 ---
 
@@ -109,33 +104,25 @@
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02, shared-auth-sign-in-US-01, shared-auth-audit-US-01
 
 **Pre-conditions:**
 
-* admin(holds `user:ban` and `audit:read`) is signed in on `<console url>`.
-* `<collector account>` is unbanned, with an unused sign-in link in its inbox.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<collector account>` | an account holding `user` only, whose inbox the tester reads |
+* admin(holds `user:ban` and `audit:read`) is signed in on `<console url>`; `<collector account>` is unbanned, with an unused sign-in link in its inbox.
 
 **Steps:**
 
-1. Open `<collector account>` in the user directory and ban it with reason `Chargeback dispute open`.
+1. Ban `<collector account>` from the user directory, reason Chargeback dispute open.
 2. In another browser, follow the link.
-3. Open the audit trail and filter by `<collector account>`'s user id.
-4. Unban `<collector account>`.
-5. In the other browser, ask for a new link on `<g10url>` and follow it.
+3. Filter the audit trail by `<collector account>`'s user id.
+4. Unban it; in the other browser, ask for a new link on `<g10url>` and follow it.
 
 **Expected Results:**
 
-* Step 2 does not sign the person in.
-* Step 3 lists the ban, naming the admin and `<collector account>` by user id, with its reason.
-* Step 5 signs the person in.
+* Step 2 does not sign the person in, and the link says the account cannot sign in.
+* Step 3 lists the ban with its reason, naming the admin and the account by user id.
+* Step 4 signs the person in.
 
 ---
 
@@ -146,7 +133,7 @@
 **so that** a stolen device is out, and a revoke that cannot be recorded does not happen at all.
 
 <!-- trace:case id=g10.auth-domain.TC-3wq rev=2 -->
-### shared.auth-dmn.US4-TC1: A revoked session stops being the person, and the revoke is on the trail
+### shared.auth-dmn.US4-TC1: A revoked session stops being the person within 70 seconds, and only the revoke is on the trail
 
 **Classification:**
 
@@ -157,27 +144,24 @@
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sessions-US-01, shared-auth-sessions-US-02, shared-auth-session-US-01, shared-auth-audit-US-01
 
 **Pre-conditions:**
 
-* admin(holds `session:list`, `session:revoke` and `audit:read`) is signed in on `<console url>`.
-* `<collector account>` is signed in on `<g10url>` in one other browser only.
+* admin(holds `session:list`, `session:revoke` and `audit:read`) is signed in on `<console url>`; `<collector account>` is signed in on `<g10url>` in one other browser only.
 
 **Steps:**
 
-1. Open `<collector account>`'s Sessions page.
-2. Open the audit trail, filtered by the admin's user id.
-3. Revoke the session, wait 70 seconds, then open a page in the other browser.
-4. Open the audit trail again, filtered by `<collector account>`'s user id.
+1. Open `<collector account>`'s Sessions page; filter the trail by the admin's user id.
+2. Revoke the session, wait 70 seconds, and open a page in the other browser.
+3. Filter the trail by `<collector account>`'s user id.
 
 **Expected Results:**
 
-* Step 1 lists the session, with no secret shown.
-* Step 2 shows no entry for the listing.
-* Step 3 shows nobody signed in.
-* Step 4 lists the revoke, naming the admin and `<collector account>`.
+* Step 1 lists the session with no secret, and the trail holds no entry for the listing.
+* Step 2 shows nobody signed in.
+* Step 3 lists the revoke, naming the admin and the account.
 
 ---
 
@@ -199,27 +183,23 @@
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03, shared-auth-roles-US-02, shared-auth-audit-US-01
 
 **Pre-conditions:**
 
-* admin(holds `user:set-role` and `audit:read`) is signed in on `<console url>`.
-* `<operator account>` holds `user` only, and is signed in on `<console url>` in another browser.
+* admin(holds `user:set-role` and `audit:read`) is signed in on `<console url>`; `<operator account>` holds `user` only and is signed in on `<console url>` in another browser.
 
 **Steps:**
 
-1. Open `<operator account>` in the user directory, give it `staff` and save.
-2. As `<operator account>`, open the auction catalogue and operate it.
-3. As `<operator account>`, open the user directory and try to ban an account.
-4. As the admin, open the audit trail and filter by `<operator account>`'s user id.
+1. Give `<operator account>` `staff` in the user directory, and save.
+2. As `<operator account>`, operate the auction catalogue, then open the user directory and try to ban an account.
+3. As the admin, filter the trail by `<operator account>`'s user id.
 
 **Expected Results:**
 
-* Step 1: `<operator account>` holds `staff`.
-* Step 2: the change is saved.
-* Step 3: no accounts are listed, and the ban is refused.
-* Step 4 lists the role change, naming the admin and `<operator account>` by user id.
+* Step 2 saves the catalogue change; the directory lists no accounts and the ban is refused.
+* Step 3 lists the role change, naming the admin and `<operator account>` by user id.
 
 ---
 
@@ -230,7 +210,7 @@
 **so that** a narrower role cannot be widened by picking a different screen.
 
 <!-- trace:case id=g10.auth-domain.TC-rub rev=2 -->
-### shared.auth-dmn.US6-TC1: Support is refused on an admin's account and on roles, and the refusal is kept
+### shared.auth-dmn.US6-TC1: Support is refused on an admin's account and on roles, and the refused ban is kept
 
 **Classification:**
 
@@ -241,27 +221,24 @@
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-roles-US-02, shared-auth-users-US-02, shared-auth-sessions-US-01, shared-auth-audit-US-01
 
 **Pre-conditions:**
 
-* support is signed in on `<console url>`.
-* `<admin account>` holds `admin`, is unbanned and has one session; `<collector account>` holds `user` only.
+* support is signed in on `<console url>`; `<admin account>` holds `admin`, unbanned, with one session; `<collector account>` holds `user` only.
 
 **Steps:**
 
-1. Open `<admin account>`'s Sessions page.
-2. Try to ban `<admin account>`.
-3. Try to change `<collector account>`'s roles.
-4. As admin(holds `audit:read`), open the audit trail, filtered by `<admin account>`'s user id.
+1. Open `<admin account>`'s Sessions page, then try to ban it.
+2. Try to change `<collector account>`'s roles.
+3. As admin(holds `audit:read`), filter the trail by `<admin account>`'s user id.
 
 **Expected Results:**
 
-* Step 1 lists no session.
-* Step 2 is refused, and `<admin account>` stays unbanned.
-* Step 3 is refused, and the roles are as they were.
-* Step 4 lists the ban, marked not succeeded.
+* Step 1 lists no session, and the ban is refused; `<admin account>` stays unbanned.
+* Step 2 is refused; the roles are as they were.
+* Step 3 lists the ban, marked not succeeded.
 
 ---
 
@@ -288,18 +265,17 @@
 
 **Pre-conditions:**
 
-* customer is signed out; tab A was refused the orders list and asked for a link for `<collector email>`; tab C is open on `<g10url>`.
+* customer is signed out; tab A was refused the orders list and asked for a link for `<collector account>`; tab C is open on `<g10url>`.
 
 **Steps:**
 
 1. In tab B, follow the link.
-2. Return to tab A.
-3. Switch to tab C without reloading it.
+2. Return to tab A, then to tab C, without reloading either.
 
 **Expected Results:**
 
-* Step 2: no sign-in dialog; tab A names the collector and is on the orders list, without opening it again.
-* Step 3: tab C names the collector.
+* Tab A shows no sign-in dialog; it names the collector and is on the orders list, without opening it again.
+* Tab C names the collector.
 
 ---
 
@@ -309,42 +285,37 @@
 **I want** my console session and my site session to start, show and end separately, and to end together only when an admin ends every session of my account,
 **so that** signing in or out on one never changes the other.
 
+<!-- trace:case id=g10.auth-dmn.TC-0cx rev=1 -->
 ### shared.auth-dmn.US8-TC1: An operator's console and site sessions start, end and are listed apart, and end together only when every session is ended
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** security
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-07, shared-auth-sign-in-US-12, shared-auth-sign-out-US-03, shared-auth-sessions-US-03, shared-auth-sessions-US-04
 
 **Pre-conditions:**
 
-* `<operator account>` holds console access and is signed out of `<g10url>` and `<console url>`.
-* admin(holds `session:list` and `session:revoke`) is signed in on `<console url>` in another browser.
+* `<operator account>` holds console access and is signed out of `<g10url>` and `<console url>`; admin(holds `session:list` and `session:revoke`) is signed in on `<console url>` in another browser.
 
 **Steps:**
 
-1. Follow a sign-in link asked for on `<g10url>`.
-2. Open `<console url>`.
-3. Follow a sign-in link asked for on `<console url>`, then enter the current second-factor code.
-4. As the admin, open `<operator account>`'s Sessions page.
-5. Sign out on `<g10url>`, then open `<console url>`.
-6. As the admin, revoke every session of `<operator account>`; wait 70 seconds, then open `<console url>` and `<g10url>`.
+1. Follow a sign-in link asked for on `<g10url>`, then open `<console url>`.
+2. Follow a link asked for on `<console url>` and enter the current second-factor code.
+3. As the admin, open `<operator account>`'s Sessions page.
+4. Sign out on `<g10url>`, then open `<console url>`.
+5. As the admin, revoke every session of `<operator account>`; after 70 seconds open `<console url>` and `<g10url>`.
 
 **Expected Results:**
 
-* Step 1 signs the operator in on the site; step 2 shows the console's sign-in page.
-* Step 3 opens the console, and the site stays signed in.
-* Step 4 lists one site session and one console session, each naming its surface.
-* Step 5 signs out the site only; the console is still signed in.
-* Step 6 shows nobody signed in on either.
-
-## Settled
-
-None.
+* Step 1 signs in the site; the console shows its sign-in page.
+* Step 2 opens the console; the site stays signed in.
+* Step 3 lists one site session and one console session, each naming its surface.
+* Step 4 signs out the site only; the console is still signed in.
+* Step 5 shows nobody signed in on either.

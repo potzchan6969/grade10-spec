@@ -1,9 +1,40 @@
 # grade10-site/vault/collector-notifications Test Cases
 
-**Status:** pending-review · 2/28
-**Drafts styled:** 2026-10-01, tcs-rules r4
+**Status:** pending-review · 2/23
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
+**Out of suite (api):** grade10-site-vault-collector-notifications-SC-12 - a mail provider that accepts a send and never answers, which no screen can set up
 
-## grade10-site-vault-collector-notifications-US1: Borrower is warned before the due date and while it runs late
+## Background
+
+* Vault letters reach the collector's account email, read in an inbox the tester reads; nothing is sent to a phone. A tester moves the environment's clock and runs the vault's sweeps to reach a moment; the brand's clock is Hong Kong's.
+* What the collector was told, and a parked message, read on the console case page's Custody tab by admin(holds `vault:operate`). The environment's mail provider can be set to refuse sends.
+* A borrower's loan is HKD39,000.00 advanced, due on `<due date>`, unless a case says otherwise.
+
+## Walk 1: A borrower hears about the loan from advance to notice
+
+Starting state:
+
+- customer(collector) with an accepted offer; treasurer at the counter.
+
+Shared test data:
+
+| Field | Value |
+| --- | --- |
+| due date | 30 days from the advance |
+
+### Route
+
+1. Record the advance.
+   - The advance letter tables the amount, `<due date>`, the total, a late day's cost, how to pay, and the reminder dates. `g10.vault-collector-notifications.US5-TC8`
+2. Move the clock to 7 days before `<due date>`, after 09:00, and sweep.
+   - One due-soon reminder tabling what is owed. `g10.vault-collector-notifications.US1-TC1`
+3. Move the clock to 14 days past `<due date>` and sweep.
+   - One overdue reminder, its late interest apart. `g10.vault-collector-notifications.US1-TC2`
+4. Send the forfeiture notice; sweep again a week later.
+   - The notice names its clause and date; no reminder follows. `g10.vault-collector-notifications.US5-TC4`
+
+## g10.vault-collector-notifications.US1: Borrower is warned before the due date and while it runs late
 
 **As a** borrower,
 **I want** a message a week and a day before my loan is due, and one every
@@ -12,111 +43,137 @@ week it stays late,
 taken.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-ti5 rev=1 covers=g10.vault-collector-notifications.SC-jys,g10.vault-collector-notifications.SC-vqz,g10.vault-collector-notifications.SC-gdg,g10.vault-collector-notifications.SC-3f7,g10.vault-collector-notifications.SC-tgx,g10.vault-collector-notifications.SC-3ke,g10.vault-collector-notifications.SC-0ul,g10.vault-collector-notifications.SC-k1j -->
-### grade10-site-vault-collector-notifications-US1-TC1-1: Reminder is sent before the due date at both scheduled points
+### g10.vault-collector-notifications.US1-TC1: Reminders come a week and a day before the due date, in the morning, tabling what is owed
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-collector-notifications-US-01
 
 **Pre-conditions:**
 
-* customer(borrower with a live loan) has a case whose due date is <the due date>.
+* The borrower's loan is running, due on `<due date>`, nothing repaid.
 
 **Test data:**
 
-| Reminder | Timing |
+| `<sweep at>` | `<inbox>` |
 | --- | --- |
-| Due-date warning | 7 days before <the due date> |
-| Final warning | 1 day before <the due date> |
+| 00:30 on the day 7 days before `<due date>` | nothing yet |
+| 09:05 on that day | one due-soon reminder |
+| 09:05 on the day before `<due date>` | a second due-soon reminder |
 
 **Steps:**
 
-1. The reminder sweep runs at <Timing>.
+1. Run the reminder sweep at `<sweep at>`.
+2. Read the inbox.
 
 **Expected Results:**
 
-* The borrower receives a reminder email.
-* The email names the amount owed and <the due date>.
+* It holds `<inbox>`; a reminder tables what is owed at that reading, `<due date>`, and what each day from the day after adds, with how to pay.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-qos rev=1 covers=g10.vault-collector-notifications.SC-jys,g10.vault-collector-notifications.SC-vqz,g10.vault-collector-notifications.SC-gdg,g10.vault-collector-notifications.SC-3f7,g10.vault-collector-notifications.SC-tgx,g10.vault-collector-notifications.SC-3ke,g10.vault-collector-notifications.SC-0ul,g10.vault-collector-notifications.SC-k1j -->
-### grade10-site-vault-collector-notifications-US1-TC2-1: Reminder is sent every seven days while the loan is overdue
+### g10.vault-collector-notifications.US1-TC2: A late loan is reminded once a week, once however long it went untold, with its late interest apart
 
 Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* The borrower's loan was due on `<due date>`, nothing repaid, `<history>`.
+
+**Test data:**
+
+| `<history>` | `<sweep at>` | `<inbox>` |
+| --- | --- | --- |
+| no overdue reminder yet | 7 days past `<due date>` | one overdue reminder |
+| a reminder at 7 days | 14 days past `<due date>` | a second overdue reminder |
+| no reminder sent, 90 days late | 90 days past `<due date>` | one overdue reminder, not one per week missed |
+
+**Steps:**
+
+1. Run the reminder sweep at `<sweep at>`, and read the inbox.
+
+**Expected Results:**
+
+* It holds `<inbox>`; each tables what is owed, the date it was due, how much of it is late interest, and what each further day adds.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-1kf rev=1 covers=g10.vault-collector-notifications.SC-jys,g10.vault-collector-notifications.SC-vqz,g10.vault-collector-notifications.SC-gdg,g10.vault-collector-notifications.SC-3f7,g10.vault-collector-notifications.SC-tgx,g10.vault-collector-notifications.SC-3ke,g10.vault-collector-notifications.SC-0ul,g10.vault-collector-notifications.SC-k1j -->
+### g10.vault-collector-notifications.US1-TC3: A forfeiture notice stops the reminders
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* The borrower's late loan carries a forfeiture notice; its next weekly reminder falls today.
+
+**Steps:**
+
+1. Run the reminder sweep, and read the inbox.
+
+**Expected Results:**
+
+* No reminder arrives; the notice is still the last letter.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-kba rev=1 -->
+### g10.vault-collector-notifications.US1-TC4: A reminder sweep run twice in a day sends once
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-01
+* **Trace:** Reminders
 
 **Pre-conditions:**
 
-* customer(borrower with a live loan) has a case whose due date is <the due date> and has passed with nothing repaid.
-
-**Test data:**
-
-| Rung | Days overdue |
-| --- | --- |
-| First overdue reminder | 7 |
-| Second overdue reminder | 14 |
+* The borrower's 7-day reminder was sent this morning.
 
 **Steps:**
 
-1. The reminder sweep runs at <Days overdue> days after <the due date>.
+1. Run the reminder sweep again the same day, and read the inbox.
 
 **Expected Results:**
 
-* The borrower receives an overdue reminder email.
-* The email names the outstanding balance and that interest keeps accruing at the same daily rate.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-1kf rev=1 covers=g10.vault-collector-notifications.SC-jys,g10.vault-collector-notifications.SC-vqz,g10.vault-collector-notifications.SC-gdg,g10.vault-collector-notifications.SC-3f7,g10.vault-collector-notifications.SC-tgx,g10.vault-collector-notifications.SC-3ke,g10.vault-collector-notifications.SC-0ul,g10.vault-collector-notifications.SC-k1j -->
-### grade10-site-vault-collector-notifications-US1-TC3-1: The reminder ladder stops once a forfeiture notice is sent
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-01
-
-**Pre-conditions:**
-
-* customer(borrower with a live loan) has a case whose forfeiture notice has already been sent.
-* The case reaches the day its next overdue reminder would otherwise fire.
-
-**Steps:**
-
-1. The reminder sweep runs on that day.
-
-**Expected Results:**
-
-* No further reminder email is sent.
-* The forfeiture notice remains the last message the borrower was sent.
+* Nothing further arrives.
 
 ---
 
-## grade10-site-vault-collector-notifications-US2: Collector hears about everything that happens to their case
+## g10.vault-collector-notifications.US2: Collector hears about everything that happens to their case
 
 **As a** collector,
 **I want** a message for each thing that happens to my case, with a link
@@ -124,41 +181,14 @@ straight to it,
 **so that** I never have to ask the shop what stage my item is at.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-v95 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC1-1: A message's link opens the case at its own address
+### g10.vault-collector-notifications.US2-TC1: Every letter names its case and item above the footer, links to the case, and is signed by the right party
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* customer(collector) has a case that has already sent at least one message.
-
-**Steps:**
-
-1. Open the email the collector received.
-2. Click the message's link to the case.
-
-**Expected Results:**
-
-* The browser opens the case's own address.
-* The case shown is the one the message was about.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-lky rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC2-1: An event decided silent sends no message to the collector
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -169,20 +199,29 @@ straight to it,
 
 **Pre-conditions:**
 
-* customer(collector) has a case that reaches an event kind the notification map decides silent.
+* The collector's case has just sent `<letter>`.
+
+**Test data:**
+
+| `<letter>` | `<footer names>` |
+| --- | --- |
+| the item-vaulted letter | the custodian, under its registered name, with the complaints contact; no lender or licence line |
+| the offer letter | the lender, under its registered name, with the complaints contact and the licence line |
 
 **Steps:**
 
-1. The event occurs on the case.
-2. admin(holds vault:operate) opens the case's Custody tab on <grade10 vault admin case url> and reads what the collector was told.
+1. Read the letter above its footer, and the footer.
+2. Select its action link.
 
 **Expected Results:**
 
-* No entry appears for the event.
-* No email is queued for it.
+* Step 1: the case reference and the item's title sit directly above a footer naming `<footer names>`.
+* Step 2 opens that case at its own address.
 
-<!-- trace:case id=g10.vault-collector-notifications.TC-ipr rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC3-1: A parked message is handed back to the queue and sent
+<!-- trace:case id=g10.vault-collector-notifications.TC-4a2 rev=1 -->
+### g10.vault-collector-notifications.US2-TC2: Each way a request runs out is told in its own words
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -198,21 +237,98 @@ straight to it,
 
 **Pre-conditions:**
 
-* A message on the case is parked, badged for staff, with its reason recorded.
-* admin(holds vault:operate) is on <grade10 vault admin case url>.
+* The collector opened a request themselves, which then `<ending>`.
+
+**Test data:**
+
+| `<ending>` | `<letter says>` |
+| --- | --- |
+| was left an untouched draft for 8 days | the request was never sent in |
+| was sent in, and nobody booked a visit in time | no visit was booked |
+| was sent in, and its drop-off visit was missed | the visit was missed |
 
 **Steps:**
 
-1. Click Send again beside the parked message.
-2. The retry sweep runs.
+1. Let the sweeps run past the ending, and read the inbox.
 
 **Expected Results:**
 
-* The message no longer shows as parked.
-* The collector receives the message.
+* One letter says `<letter says>`, and not the others' words.
 
-<!-- trace:case id=g10.vault-collector-notifications.TC-c1h rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC4-1: The signed document set is delivered once per packet
+<!-- trace:case id=g10.vault-collector-notifications.TC-blx rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
+### g10.vault-collector-notifications.US2-TC14: Cancelling a draft staff opened sends nothing, and a sent one is told as any case
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-02
+
+**Pre-conditions:**
+
+* `<case>` is a walk-in staff opened for an address the tester reads, `<state>`; admin(holds `vault:operate`) is on its page.
+
+**Test data:**
+
+| `<state>` | `<letter>` |
+| --- | --- |
+| an unsent draft | none |
+| sent by its collector, now submitted | the cancelled letter, linking the case |
+
+**Steps:**
+
+1. Cancel the case and confirm; wait 5 minutes and read the inbox.
+
+**Expected Results:**
+
+* The inbox holds `<letter>`.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-qm8 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
+### g10.vault-collector-notifications.US2-TC15: A draft staff opened expires with no untouched letter
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** What is sent
+
+**Pre-conditions:**
+
+* `<draft>` has gone untouched for 8 days; its address is one the tester reads.
+
+**Test data:**
+
+| `<draft>` | `<letter>` |
+| --- | --- |
+| a draft staff opened at the counter | none |
+| a draft the collector opened themselves | the untouched letter |
+
+**Steps:**
+
+1. Let the draft sweep run; wait 5 minutes and read the inbox.
+
+**Expected Results:**
+
+* The draft ends as expired; the inbox holds `<letter>`.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-vz9 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
+### g10.vault-collector-notifications.US2-TC12: A money record taken back reaches the borrower without naming who took it back
 
 **Classification:**
 
@@ -228,52 +344,22 @@ straight to it,
 
 **Pre-conditions:**
 
-* The case's signed packet has already been mailed to its signer.
+* The borrower's case carries a recorded repayment; admin(holds `vault:operate`) is on its console page.
 
 **Steps:**
 
-1. The notification sweep runs again over the same packet.
+1. Take the repayment back, and read the borrower's inbox.
 
 **Expected Results:**
 
-* No second copy of the signed set is sent.
-* The packet's delivery claim still names its first successful send.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-9an rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC5-1: A message still sends when its documents cannot attach
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* The case's signed-set message is being sent.
-* The documents cannot be attached.
-
-**Steps:**
-
-1. The send attempt runs.
-
-**Expected Results:**
-
-* The message still sends.
-* The message links to the case's own address instead of carrying the documents.
+* A letter names the amount taken back and what the case owes now, and names nobody who recorded it or took it back.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-syo rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC6-1: A message reads the case as it stands when sent
+### g10.vault-collector-notifications.US2-TC6: A letter reads the case as it stands when it goes, not when it was queued
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
@@ -285,321 +371,61 @@ straight to it,
 
 **Pre-conditions:**
 
-* The case's item title changed after a message was queued for it but before it sent.
+* A letter was queued for the case while the mail provider refused sends; staff then changed the item's title.
 
 **Steps:**
 
-1. The send attempt runs after the change.
+1. Let the provider accept again and the retry go; read the letter.
 
 **Expected Results:**
 
-* The message's address, item title and currency match the case as it now stands, not as it stood when queued.
+* It carries the new title, and the case's address and currency as they stand now.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-vxt rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC7-1: WhatsApp opens only when staff press its link
+### g10.vault-collector-notifications.US2-TC7: WhatsApp opens only when staff select its link, and the vault sends nothing itself
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** minor
 * **Priority:** low
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* The case has a WhatsApp number on file.
-* admin(holds vault:operate) is on <grade10 vault admin case url>.
-
-**Steps:**
-
-1. Click the case header's WhatsApp click-to-chat link.
-2. Choose one of the six templates.
-
-**Expected Results:**
-
-* The chat app opens pre-filled with the chosen template, addressed to the collector's WhatsApp number.
-* No message is queued or sent by the vault's own notification system.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-0cu rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC8-1: A failed send retries on the five-attempt ladder
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-collector-notifications-US-02
 
 **Pre-conditions:**
 
-* A message the vault owes on the case fails to send on its first attempt.
-
-**Test data:**
-
-| Attempt | Spacing |
-| --- | --- |
-| 1 | 5 minutes after the failure |
-| 5 | up to 6 hours after the failure |
+* The case has a WhatsApp number; admin(holds `vault:operate`) is on its console page.
 
 **Steps:**
 
-1. The retry sweep reaches <Attempt> at <Spacing>.
+1. Select the header's WhatsApp link, and choose one of the six templates.
+2. Read the Custody tab and the collector's inbox.
 
 **Expected Results:**
 
-* The message is attempted again.
-* The message remains owed rather than closed off.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-fys rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC9-1: A message exhausting the ladder is parked and badged
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* A message the vault owes on the case has failed on all 5 rungs of the ladder.
-
-**Steps:**
-
-1. The fifth attempt fails.
-
-**Expected Results:**
-
-* The message is parked with the reason it failed.
-* The case badges for staff.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-we6 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC10-1: A hanging send gives up at ten seconds
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* A message the vault owes on the case is sent to a provider that never responds.
-
-**Steps:**
-
-1. The send attempt passes 10 seconds with no response.
-
-**Expected Results:**
-
-* The attempt is treated as failed.
-* The message re-enters the retry ladder.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-8zc rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC11-1: A case with no address is counted, not mailed
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* The case has no email address on file.
-* An event that would send a message occurs on the case.
-
-**Steps:**
-
-1. The event occurs.
-
-**Expected Results:**
-
-* No email is attempted.
-* The event is counted as one the vault could not tell the collector, rather than as a send.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-vz9 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC12-1: A money record taken back reaches the borrower without naming who took it back
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* customer(borrower with a live loan) has a case carrying a recorded repayment.
-* admin(holds vault:operate) is on <grade10 vault admin case url>.
-
-**Steps:**
-
-1. Take the recorded repayment back.
-
-**Expected Results:**
-
-* The borrower receives a message naming the amount taken back and what the case owes after it.
-* The message names nobody who recorded or took back the money.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-1wp rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC13-1: A message with no money in it names the custodian, not the lender
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* customer(collector) has a case whose item has just been put in the vault.
-
-**Steps:**
-
-1. Open the item-vaulted message the collector receives.
-
-**Expected Results:**
-
-* The footer names the custodian under its registered name, with the complaints contact.
-* The footer names no lender and no licence line.
+* Step 1 opens the chat app with that template, addressed to the number.
+* Step 2: the vault queued and sent nothing.
 
 ---
 
-<!-- trace:case id=g10.vault-collector-notifications.TC-blx rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC14-1: Cancelling a draft staff opened sends nothing, and a sent one is told as any case
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* `<case_1>` is a walk-in staff opened for `<walk-in email>`, a mailbox the tester reads, in the row's state.
-* admin(staff, holds vault:operate) is on `<case_1>`'s page.
-* `<mail delivery window>` is 5 minutes (assumed; any wait past the first send attempt).
-
-**Test data:**
-
-| `<case_1>` state | Message to `<walk-in email>` |
-| --- | --- |
-| an unsent draft | none |
-| sent by its collector, now submitted | the cancelled email, linking `<case_1>` |
-
-**Steps:**
-
-1. Cancel `<case_1>` and confirm.
-2. Wait <mail delivery window>.
-3. Read `<walk-in email>`'s inbox.
-
-**Expected Results:**
-
-* The message matches the row.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-qm8 rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
-### grade10-site-vault-collector-notifications-US2-TC15-1: A draft staff opened expires with no untouched email
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-collector-notifications-US-02
-
-**Pre-conditions:**
-
-* The row's draft has gone untouched for 8 days, and its address is a mailbox the tester reads.
-* `<mail delivery window>` is 5 minutes (assumed; any wait past the first send attempt).
-
-**Test data:**
-
-| Draft | Message on expiry |
-| --- | --- |
-| a draft staff opened at the counter | none |
-| a draft the collector opened themselves | the untouched email |
-
-**Steps:**
-
-1. Let the draft clock's sweep run.
-2. Wait <mail delivery window>.
-3. Read the address's inbox.
-
-**Expected Results:**
-
-* The draft ends as expired.
-* The message matches the row.
-
----
-
-## grade10-site-vault-collector-notifications-US3: Signer leaves with the documents they signed
+## g10.vault-collector-notifications.US3: Signer leaves with the documents they signed
 
 **As a** person who has just signed at the counter,
 **I want** the sealed set mailed to me once, with the documents attached,
 **so that** I hold my own copy without asking for one.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-1xt rev=1 covers=g10.vault-collector-notifications.SC-r2t,g10.vault-collector-notifications.SC-lmz,g10.vault-collector-notifications.SC-4ig -->
-### grade10-site-vault-collector-notifications-US3-TC1-1: A retried delivery reads the documents from the packet again
+### g10.vault-collector-notifications.US3-TC1: The signer is mailed the sealed set once, its documents read from the packet each time it goes
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -611,20 +437,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A sealed packet's first delivery to its signer has failed and is owed.
+* A packet has just been sealed at the counter; `<delivery>`.
+
+**Test data:**
+
+| `<delivery>` | `<signer receives>` |
+| --- | --- |
+| the delivery sweep runs twice at once | one letter, the sealed documents attached |
+| the first send failed; the retry runs hours later | one letter, the documents as the packet holds them sealed |
+| the sealed set is over the mail's size cap | one letter, no attachments, linking to the case |
 
 **Steps:**
 
-1. The retry runs hours later.
+1. Let the delivery go as `<delivery>` says, and read the signer's inbox.
 
 **Expected Results:**
 
-* The documents attached are read again from the packet rather than from the queue.
-* The signer receives the set with the packet's current sealed documents attached.
+* It holds `<signer receives>`.
 
 ---
 
-## grade10-site-vault-collector-notifications-US4: Operator picks up a message that never went
+## g10.vault-collector-notifications.US4: Operator picks up a message that never went
 
 **As a** member of shop staff,
 **I want** a case to be flagged when a message to its collector ran out of
@@ -633,7 +466,7 @@ attempts, and to be able to send it again,
 never told.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-fvw rev=1 covers=g10.vault-collector-notifications.SC-6iy,g10.vault-collector-notifications.SC-qld,g10.vault-collector-notifications.SC-lzl,g10.vault-collector-notifications.SC-xyv -->
-### grade10-site-vault-collector-notifications-US4-TC1-1: The vaulting act stands even though the message failed
+### g10.vault-collector-notifications.US4-TC1: The item is vaulted though its letter could not go, and the letter is owed
 
 **Classification:**
 
@@ -649,20 +482,112 @@ never told.
 
 **Pre-conditions:**
 
-* A mail provider refuses every send attempted against the case.
+* The mail provider refuses every send; admin(holds `vault:operate`) takes an item into the vault.
 
 **Steps:**
 
-1. An item is taken into the vault on the case.
+1. Read the case and its Custody tab.
 
 **Expected Results:**
 
-* The case's custody record shows the item as vaulted.
-* The notification for the event is owed rather than lost.
+* The item reads vaulted; the item-vaulted letter shows as owed.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-fys rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
+### g10.vault-collector-notifications.US4-TC2: An owed letter is tried five times, then parked with its reason and the case flagged
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-04
+
+**Pre-conditions:**
+
+* A letter on the case is owed, the provider refusing every send.
+
+**Steps:**
+
+1. Run the retry sweep from 5 minutes after the failure to 6 hours after it, reading the Custody tab after each attempt.
+2. Run it once more after the fifth attempt fails.
+
+**Expected Results:**
+
+* Step 1 shows each of five attempts, the letter still owed until the fifth fails; then it is parked with the provider's reason, and the case is flagged for staff.
+* Step 2 makes no further attempt.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-ipr rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
+### g10.vault-collector-notifications.US4-TC3: Send again puts a parked letter back on the queue, to the address as it now stands
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-04
+
+**Pre-conditions:**
+
+* A letter on the case is parked and the case flagged; the provider accepts sends again; `<address>`.
+
+**Test data:**
+
+| `<address>` | `<goes to>` |
+| --- | --- |
+| unchanged | the collector's address |
+| corrected by the collector since | the corrected address |
+
+**Steps:**
+
+1. As admin(holds `vault:operate`), select Send again beside it; run the retry sweep.
+2. Read the Custody tab and the inbox.
+
+**Expected Results:**
+
+* The letter arrives at `<goes to>`; it no longer reads parked, and the flag clears.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-8zc rev=1 covers=g10.vault-collector-notifications.SC-fp2,g10.vault-collector-notifications.SC-03a,g10.vault-collector-notifications.SC-nte,g10.vault-collector-notifications.SC-2ff,g10.vault-collector-notifications.SC-ayk,g10.vault-collector-notifications.SC-3bq -->
+### g10.vault-collector-notifications.US4-TC4: A case with no address left is never mailed, and its letter is counted unreachable
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** The reader
+
+**Pre-conditions:**
+
+* The collector's contact has been erased; an event on the case would send a letter.
+
+**Steps:**
+
+1. Let the event happen, and read the Custody tab.
+
+**Expected Results:**
+
+* Nothing is sent, by mail or any other way; the letter reads unreachable, not owed.
 
 ---
 
-## grade10-site-vault-collector-notifications-US5: Borrower reads the figures in the message itself
+## g10.vault-collector-notifications.US5: Borrower reads the figures in the message itself
 
 **As a** borrower,
 **I want** every money message to table the amount, the date, what a late day
@@ -671,7 +596,100 @@ and that a person decides,
 **so that** the message is a record I can act on without opening the page.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-p0d rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
-### grade10-site-vault-collector-notifications-US5-TC1-1: A money message tables its figures instead of prose
+### g10.vault-collector-notifications.US5-TC1: A money letter tables its figures and carries the case page's own how-to-pay
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-05
+
+**Pre-conditions:**
+
+* The borrower's loan is running; a money letter has arrived.
+
+**Steps:**
+
+1. Read the letter's figures and how-to-pay block.
+2. Compare the block with the case page's.
+
+**Expected Results:**
+
+* The amount, the due date and a late day's cost are a table, not repeated in a sentence.
+* Both blocks name the same FPS id, bank account, and the case reference as the transfer reference.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-ht8 rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
+### g10.vault-collector-notifications.US5-TC8: The offer and advance letters table their terms, and the advance names the reminder dates
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-05
+
+**Pre-conditions:**
+
+* The collector's case has just `<act>`.
+
+**Test data:**
+
+| `<act>` | `<letter tables>` |
+| --- | --- |
+| been made an offer of HKD40,000.00 over 90 days | the loan, the term, the interest for it, the total to repay, a late day's cost and the day the offer is open until |
+| had HKD39,000.00 advanced | the amount sent, the due date, the total to repay and what each day after the due date adds, with how to pay; then the dates of the next reminders, saying a reminder adds nothing to what is owed |
+
+**Steps:**
+
+1. Read the letter.
+
+**Expected Results:**
+
+* It tables `<letter tables>`; no figure is readable only in a sentence.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-w3y rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
+### g10.vault-collector-notifications.US5-TC4: The forfeiture notice names its clause, the date to pay by, and that a person decides
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-05
+
+**Pre-conditions:**
+
+* The borrower's late loan has just been sent its forfeiture notice.
+
+**Steps:**
+
+1. Read the notice.
+
+**Expected Results:**
+
+* It opens on the loan agreement's clause it acts under, tables the date to pay in full by, what is owed and what each further day adds, and names when the item lapses.
+* It says taking the item is a person's decision, and that no further reminder follows.
+
+<!-- trace:case id=g10.vault-collector-notifications.TC-pfx rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
+### g10.vault-collector-notifications.US5-TC5: A money letter carries the case line and the lender's footer with its licence line
 
 **Classification:**
 
@@ -680,90 +698,29 @@ and that a person decides,
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
-
-**Pre-conditions:**
-
-* customer(borrower with a live loan) has a case whose loan is active.
-
-**Steps:**
-
-1. Open a money message the borrower receives on the case.
-
-**Expected Results:**
-
-* The amount, the due date and what a late day costs appear as a table.
-* The figures do not also appear written into a sentence elsewhere in the message.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-zt1 rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
-### grade10-site-vault-collector-notifications-US5-TC2-1: A money message carries the loan's own how-to-pay block
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-collector-notifications-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
-
 **Pre-conditions:**
 
-* customer(borrower with a live loan) has a case whose loan is active.
+* The borrower's loan is running; a money letter has arrived.
 
 **Steps:**
 
-1. Open a money message the borrower receives on the case.
-2. Compare its how-to-pay block with the block shown on the case's own address.
+1. Read the letter.
 
 **Expected Results:**
 
-* Both blocks name the same FPS id, bank account and the case reference as the transfer reference.
+* It carries the case reference and the item; the footer names the lender under its registered name, the complaints contact and the licence line.
 
-<!-- trace:case id=g10.vault-collector-notifications.TC-meg rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
-### grade10-site-vault-collector-notifications-US5-TC3-1: A reminder states its own schedule and that it is free
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-05
-
-**Pre-conditions:**
-
-* customer(borrower with a live loan) has a case that receives a reminder.
-
-**Steps:**
-
-1. Open the reminder email the borrower receives.
-
-**Expected Results:**
-
-* The email states when the borrower will hear from the vault next.
-* The email states that a reminder costs nothing.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-w3y rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
-### grade10-site-vault-collector-notifications-US5-TC4-1: The forfeiture notice names its clause, date and consequence
+<!-- trace:case id=g10.vault-collector-notifications.TC-zxh rev=1 -->
+### g10.vault-collector-notifications.US5-TC9: A recorded repayment's letter tables what was paid and what is left
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -775,54 +732,22 @@ and that a person decides,
 
 **Pre-conditions:**
 
-* customer(borrower with a live loan) has a case whose forfeiture notice has been sent.
+* The borrower owes HKD39,800.00; treasurer records a repayment of HKD20,000.00.
 
 **Steps:**
 
-1. Open the forfeiture notice email the borrower receives.
+1. Read the repayment letter.
 
 **Expected Results:**
 
-* The email names the clause it acts under and the date to pay by.
-* The email states what each further day adds and the condition the item lapses on.
-* The email states that taking the item is a person's decision, and that no further reminder follows.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-pfx rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
-### grade10-site-vault-collector-notifications-US5-TC5-1: Every message carries the case line and lender footer
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
-
-**Pre-conditions:**
-
-* customer(borrower with a live loan) has a case that receives a message.
-
-**Steps:**
-
-1. Open a message the borrower receives on the case.
-
-**Expected Results:**
-
-* The message carries the case reference and the item.
-* The footer names the sending party under its registered name and the complaints contact, with the lender's licence line on a money message.
+* It tables HKD20,000.00 recorded and HKD19,800.00 left, with how to pay while anything is outstanding.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-bh4 rev=1 covers=g10.vault-collector-notifications.SC-tz5 -->
-### grade10-site-vault-collector-notifications-US5-TC6-1: An unset value prints as a marked placeholder outside production
+### g10.vault-collector-notifications.US5-TC6: Outside production an unset value prints as a marked placeholder, and the letter still goes
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
@@ -830,24 +755,22 @@ and that a person decides,
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** `What a message carries`
+* **Trace:** What a message carries
 
 **Pre-conditions:**
 
-* The environment is outside production.
-* A value a message would print is unset.
+* Outside production, the lender has no bank account set.
 
 **Steps:**
 
-1. The message renders.
+1. Record an advance, and read its letter.
 
 **Expected Results:**
 
-* The unset value prints as a bracketed, marked placeholder.
-* The message still sends.
+* The letter arrives, printing a bracketed placeholder naming the unset value where the bank account belongs.
 
 <!-- trace:case id=g10.vault-collector-notifications.TC-qu7 rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
-### grade10-site-vault-collector-notifications-US5-TC7-1: Production refuses a message that would print an unset value
+### g10.vault-collector-notifications.US5-TC7: In production an act whose letter would print an unset value is refused
 
 **Classification:**
 
@@ -856,35 +779,6 @@ and that a person decides,
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
-* **Suites:** regression, release
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-05
-
-**Pre-conditions:**
-
-* The environment is production.
-* A value a money message or the forfeiture notice would print is unset.
-
-**Steps:**
-
-1. The send attempt for the message runs.
-
-**Expected Results:**
-
-* The act is refused before anything is written or sent.
-* No message carrying the unset value reaches the borrower.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-ht8 rev=1 covers=g10.vault-collector-notifications.SC-o0k,g10.vault-collector-notifications.SC-a2c,g10.vault-collector-notifications.SC-sar -->
-### grade10-site-vault-collector-notifications-US5-TC8-1: The offer's message tables the term, the interest and the day it is open until
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -892,90 +786,18 @@ and that a person decides,
 
 **Pre-conditions:**
 
-* customer(collector) has a case carrying an offer of 4,000,000 HKD minor units over 90 days.
+* In production, the lender has no FPS id set; treasurer is on an accepted financed case.
 
 **Steps:**
 
-1. Open the offer message the collector receives.
+1. Record the advance; read the case and the borrower's inbox.
 
 **Expected Results:**
 
-* The message tables the loan, the term, the interest for the term, the total to repay, what a late day costs and the day the offer is open until.
-* None of those six figures is readable only inside a sentence.
-
----
+* The advance is refused, naming the FPS id; nothing is recorded or sent.
 
 ## Settled
 
-- What a tester observes on a retried send is that the attachment equals the packet's sealed copy at send time: the documents are read from the packet at each attempt, never from the queue.
-- The panel's Send again on a check still out is `grade10-admin/vault/operator-queue`'s, read from this suite rather than restated in it.
-- The repayment message this capability carries is walked by `grade10-site/vault/loan-and-settlement`'s suite, which reads every money email on the case; it is listed out of suite here.
-- The unset-value rule is whole here — bracketed outside production, the act refused in production, and the message rendered before the record commits — and `grade10-site/vault/loan-and-settlement` names it rather than restating it.
-
-## Reconciliation
-
-**Run:** the blind pass read the bundle — `spec.md`'s `## Purpose` and
-`## Feature set`, this capability's `user-journeys.md`, the change's
-`proposal.md` and `decisions.md` (`## Raised` included), `ui-design.md` with its
-state dispositions stripped, and the linked sections of
-`docs/prds/products/grade10-site/vault/collector-pages.md`. It was denied every
-`## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and
-`tech-design.md`. It wrote 25 cases over US1, US2, US5 and US6 and raised one
-question. The scenario pass issued
-`grade10-site-vault-collector-notifications-SC-20` to
-`grade10-site-vault-collector-notifications-SC-33`, carrying the durable
-`grade10-site-vault-collector-notifications-SC-03` and
-`grade10-site-vault-collector-notifications-SC-04` in its MODIFIED block; this
-reconciliation folded one more,
-`grade10-site-vault-collector-notifications-SC-34`.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `US1-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-05` for the two offsets, `grade10-site-vault-collector-notifications-SC-25` for what the due-soon message tables |
-| `US1-TC2-1` | Covered | `grade10-site-vault-collector-notifications-SC-07` for one message however many offsets have passed, `grade10-site-vault-collector-notifications-SC-26` for the overdue figures |
-| `US1-TC3-1` | Covered | `grade10-site-vault-collector-notifications-SC-08` |
-| `US2-TC1-1` | Folded | `grade10-site-vault-collector-notifications-SC-34` — the requirement states the action link and no scenario reached it; the change opens that requirement, so the scenario lands in its MODIFIED block |
-| `US2-TC2-1` | Covered | `grade10-site-vault-collector-notifications-SC-01` |
-| `US2-TC3-1` | Covered | `grade10-site-vault-collector-notifications-SC-11` |
-| `US2-TC4-1` | Covered | `grade10-site-vault-collector-notifications-SC-13` |
-| `US2-TC5-1` | Covered | `grade10-site-vault-collector-notifications-SC-15` |
-| `US2-TC6-1` | Covered | `grade10-site-vault-collector-notifications-SC-16` for the address; the item's title and the currency are the durable *The reader is read at the attempt* requirement's own sentence, which this change does not open |
-| `US2-TC7-1` | Covered | `grade10-site-vault-collector-notifications-SC-18` |
-| `US2-TC8-1` | Covered | `grade10-site-vault-collector-notifications-SC-09`, `grade10-site-vault-collector-notifications-SC-10` |
-| `US2-TC9-1` | Covered | `grade10-site-vault-collector-notifications-SC-10` |
-| `US2-TC10-1` | Covered | `grade10-site-vault-collector-notifications-SC-12` |
-| `US2-TC11-1` | Covered | `grade10-site-vault-collector-notifications-SC-17` |
-| `US5-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-23`, `grade10-site-vault-collector-notifications-SC-24`, `grade10-site-vault-collector-notifications-SC-25`, `grade10-site-vault-collector-notifications-SC-26` — the case reads one money message, the four scenarios read one kind each |
-| `US5-TC2-1` | Covered | `grade10-site-vault-collector-notifications-SC-24` for the block on the advance, `grade10-site-vault-collector-notifications-SC-25` for it under the due-soon figures |
-| `US5-TC3-1` | Covered | `grade10-site-vault-collector-notifications-SC-28` |
-| `US5-TC4-1` | Covered | `grade10-site-vault-collector-notifications-SC-29`, `grade10-site-vault-collector-notifications-SC-30` |
-| `US5-TC5-1` | Covered | `grade10-site-vault-collector-notifications-SC-21` for the case line; the case reads the footer without saying which party it names, which `US2-TC13-1` now does |
-| `US5-TC6-1` | Covered | `grade10-site-vault-collector-notifications-SC-32` |
-| `US5-TC7-1` | Covered | `grade10-site-vault-collector-notifications-SC-33` |
-| `US3-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-14` — no case traced `US-03` on its own until this pass; the requirement was denied to the blind reading, so this case answers the Raised row below rather than being re-derived blind |
-| `US4-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-09` — no case traced `US-04` on its own; `US2-TC8-1` traces `US-02` and asserts the retry cadence on a message already failed once, never that the act itself stands despite the failed send |
-| `grade10-site-vault-collector-notifications-SC-04` | Case added | `US2-TC12-1` — no blind case took a money record back, and nothing reached "never with who recorded it" |
-| `grade10-site-vault-collector-notifications-SC-22` | Case added | `US2-TC13-1` — `US5-TC5-1` reads the footer without deciding which party it names, which is the rule this change adds |
-| `grade10-site-vault-collector-notifications-SC-23` | Case added | `US5-TC8-1` — `US5-TC1-1` reads a money message with a due date, which the offer does not have; its six rows were reached by nothing |
-| `grade10-site-vault-collector-notifications-SC-27` | Out of suite | Its only anchor is `grade10-site/vault/loan-and-settlement`'s US-05, and that suite's `grade10-site-vault-loan-and-settlement-US5-TC2-1` walks every money email on the case, `repayment_recorded` among them; listed under the header |
-| Raised — what a tester observes when a retried send reads the documents from the packet rather than the queue | Raised, settled | Landed in the change's `decisions.md` `## Raised`. The rule stands as the durable *The signed set is delivered once, and its documents are read at the attempt* requirement states it, and `grade10-site-vault-collector-notifications-SC-14` is the scenario: what differs between attempts is a packet re-sealed or an attachment regenerated, so the assertion is that the attachment equals the packet's sealed copy at send time. The blind pass was denied that requirement; `US3-TC1-1`, written once the two readings were reconciled, is the case |
-
-**Run:** the blind pass read only its bundle: the spec-to-tcs skill and the rulebook, the change's `proposal.md`, `decisions.md` with its `## Raised` table empty, `ui-design.md`, `openspec/config.yaml`'s context, the PRD pages Operator Console, Collector Page, Collector Pages, Case Lifecycle and Compliance and Readiness, and for each of the five capabilities its `## Purpose` and `## Feature set`, the change's `user-journeys.md` and, where one exists, the durable purpose, journeys and suite with its `## Settled` and without its `## Reconciliation`. It was denied every `## Requirements` section, `openspec/specs/` beyond the bundle, `openspec/changes/archive/`, `tech-design.md`, `tasks.md` and the store's `tcs-conventions.md`, so the house style was taken from the existing suites. It wrote two cases under one journey and raised no question for this capability; the scenario pass issued `grade10-site-vault-collector-notifications-SC-35` and `grade10-site-vault-collector-notifications-SC-36` and carried `grade10-site-vault-collector-notifications-SC-01` and `grade10-site-vault-collector-notifications-SC-02` in its MODIFIED block.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `grade10-site-vault-collector-notifications-US2-TC14-1` | Joined | `grade10-site-vault-collector-notifications-SC-36` for the unsent draft; the sent one is `grade10-site-vault-case-lifecycle-SC-45`, told as any cancelled case. The collector's own cancel of an unsent one is walked, silent, by `grade10-site-vault-case-lifecycle-US1-TC4-1` |
-| `grade10-site-vault-collector-notifications-US2-TC15-1` | Joined | `grade10-site-vault-collector-notifications-SC-35`; the collector's own draft keeps the untouched email `grade10-site-vault-collector-notifications-SC-02` names |
-
-### Manual
-
-| Manual | Why |
-| --- | --- |
-| `US2-TC7-1` | The chat app opens outside the product; a person reads the pre-filled template and confirms the vault queued nothing of its own |
-| `US2-TC13-1` | A person reads the custodian's registered name off the message and sees no licence line; no assertion restates the name without keeping a second copy of it |
-| `US3-TC1-1` | Needs a first delivery already failed and retried hours later; a person drives the retry in the provider sandbox |
-| `US5-TC1-1` | The automated walk proves the table's rows; a person reads the whole message to confirm no figure is also written into a sentence |
-| `US5-TC5-1` | A person reads the footer against the party the message is from, which is the one thing the walk cannot decide for every kind of message at once |
-| `US5-TC8-1` | The walk proves the offer's six rows; a person confirms the prose around them repeats none of them |
-| `grade10-site-vault-collector-notifications-US2-TC14-1` | A person cancels both rows and reads the mailbox; the vault worker's walk-ins test decides nothing is owed for the unsent one |
-| `grade10-site-vault-collector-notifications-US2-TC15-1` | The draft runs out seven days from its last touch; a person moves the clock or waits, and reads the mailbox |
+- A retried send's attachments are the packet's sealed copy at that moment, read from the packet each attempt.
+- The panel's Send again on a check still out is `grade10-admin/vault/operator-queue`'s.
+- The unset-value rule is whole here — bracketed outside production, refused in production, the letter rendered before the record commits — and `grade10-site/vault/loan-and-settlement` names it rather than restating it.

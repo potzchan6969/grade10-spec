@@ -1,66 +1,76 @@
 # grade10-site/vault/case-intake Test Cases
 
-**Status:** retired
-**Out of suite (api):** grade10-site-vault-case-intake-SC-20, grade10-site-vault-case-intake-SC-21, grade10-site-vault-case-intake-SC-30
+**Status:** pending-review · 0/29
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
 ## Background
 
-`customer(collector)` is signed in and `<grade10 vault url>` is reachable in
-every case below unless a pre-condition states otherwise. Every amount is
-entered in the brand's own currency; Grade10's is HKD.
+* customer(collector) is signed in on `<g10url>`; the request wizard opens from the vault page and runs Describe, Photographs and Review; their own cases are listed on the vault page. Grade10's currency is HKD.
+* Photographs are JPEG, PNG or HEIC, at most ten per request and 20,971,520 bytes each. A collector holds at most three unsent requests.
+* A walk-in draft is one staff opened at the counter under the collector's account, read on the console case page by admin(holds `vault:operate`).
 
-## grade10-site-vault-case-intake-US1: Collector sends in a card they want cash against
+## Walk 1: Send in a card for a loan
+
+Starting state:
+
+- customer(collector) on the vault page, holding no unsent request.
+
+Shared test data:
+
+| Field | Value |
+| --- | --- |
+| card | Charizard 1999 Base Set, a trading card, HKD50,000.00 asked for |
+
+### Route
+
+1. Start a request, describe `<card>`, and add one photograph.
+   - An unsent request, already carrying its six-character reference. `g10.vault-case-intake.US5-TC1`
+2. Leave, and reopen it from the vault page.
+   - Listed unsent, still taking an edit and a photograph. `g10.vault-case-intake.US1-TC15`
+3. On Review, read it back, tick the collection statement, and send.
+   - Read back as it will be sent; it goes submitted, keeping the statement's version, and a visit may be booked. `g10.vault-case-intake.US4-TC1`
+4. Try to change its title.
+   - Refused; the title stays as sent. `g10.vault-case-intake.US4-TC11`
+
+## g10.vault-case-intake.US1: Collector sends in a card they want cash against
 
 **As a** collector,
 **I want** to describe and photograph one card and say how much I want to
 borrow against it,
 **so that** the shop can value it and offer me terms before I carry it in.
 
-<!-- trace:case id=g10.vault-case-intake.TC-tr4 rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
-### grade10-site-vault-case-intake-US1-TC22-1: The wizard offers the register's ten categories in each language
-
-Runs once per row of **Test data**.
+<!-- trace:case id=g10.vault-case-intake.TC-hwu rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US1-TC1: A request asking for a loan opens on the financed lane and, sent with a photograph, can book a visit
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** positive
-* **Type:** compatibility
-* **Suites:** regression
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-01
 
 **Pre-conditions:**
 
-* customer(collector) is signed in on <grade10 vault url> in the language of the row, with no unsent draft.
-
-**Test data:**
-
-| Language |
-| --- |
-| English |
-| Traditional Chinese |
-| Simplified Chinese |
-| Korean |
+* customer(collector) is on the vault page.
 
 **Steps:**
 
-1. Start a new request.
-2. Open the category choice on the Describe step.
-3. Choose comic and fill in a title and a description.
-4. Click Continue.
+1. Start a request, describe a trading card, ask for HKD50,000.00, and add one photograph.
+2. Tick the statement on Review, and send.
+3. Read the case.
 
 **Expected Results:**
 
-* Step 2 offers ten categories: trading card, comic, coin, banknote, stamp, bullion, watch, jewellery, memorabilia and other.
-* Every category reads in the row's language, none as a raw key.
-* Step 4 moves to the Photograph step with comic kept as the category.
+* Step 3 reads submitted, on the financed lane, the amount asked for shown, with a visit to book.
 
-<!-- trace:case id=g10.vault-case-intake.TC-8xk rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
-### grade10-site-vault-case-intake-US1-TC25-1: A loan of zero is refused on the Describe step
+<!-- trace:case id=g10.vault-case-intake.TC-5ym rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US1-TC3: The wizard offers the register's ten categories in the site's language, and takes a title and description at their caps
 
 Runs once per row of **Test data**.
 
@@ -68,7 +78,46 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** deprecated
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* customer(collector) reads the site in `<language>` and starts a request.
+
+**Test data:**
+
+| `<language>` | `<category>` | `<title>` | `<description>` |
+| --- | --- | --- | --- |
+| English | comic | 200 characters | 2,000 characters |
+| Korean | trading card | a short title | none |
+
+**Steps:**
+
+1. Read the categories offered.
+2. Choose `<category>`, enter `<title>` and `<description>`, and add a photograph.
+3. Read the request back.
+
+**Expected Results:**
+
+* Step 1 offers trading card, comic, coin, banknote, stamp, bullion, watch, jewellery, memorabilia and other, in `<language>`.
+* Step 3 carries the category, title and description as written.
+
+<!-- trace:case id=g10.vault-case-intake.TC-9wo rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US1-TC4: A request is refused for a title, description, number or amount outside its rule
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -78,174 +127,709 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Describe step of a new request, `<grade10 vault url>`.
+* customer(collector) is on the wizard's Describe step.
 
 **Test data:**
 
-| `<zero amount>` |
-| --- |
-| `0` |
-| `0.00` |
-
-| Field | Value |
+| `<entered>` | `<refusal names>` |
 | --- | --- |
-| Category | Trading card |
-| Title | Charizard 1st Edition |
-| Description | Near-mint, unopened sleeve since grading. |
+| a title of 201 characters | the title's length |
+| a description of 2,001 characters | the description's length |
+| the contact number 123-abc | the number |
+| a loan of HKD0.00 | the amount, which must be more than zero |
 
 **Steps:**
 
-1. Fill in the category, title and description from **Test data**.
-2. Choose a loan at the lane question.
-3. Type `<zero amount>` into the loan field.
-4. Click Continue.
-5. Choose storage only at the lane question.
-6. Click Continue.
+1. Enter `<entered>`, every other field valid, and continue.
 
 **Expected Results:**
 
-* Step 3 leaves the loan field empty, no amount read back under it.
-* Step 4 shows the refusal asking how much, or for storage only.
-* After step 4 the Describe step stays open, and nothing is sent.
-* The category, title and description keep what was typed.
-* Step 6 moves on to the Photograph step.
+* It is refused, naming `<refusal names>`; no request is opened.
+
+<!-- trace:case id=g10.vault-case-intake.TC-olr rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US1-TC15: A request left unsent is listed as unsent and still takes an edit and a photograph
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* customer(collector) has started a request with one photograph and left the wizard.
+
+**Steps:**
+
+1. Read the vault page.
+2. Open the request, change its title, and add a second photograph.
+
+**Expected Results:**
+
+* Step 1 lists it as an unsent request.
+* Step 2 saves both.
+
+<!-- trace:case id=g10.vault-case-intake.TC-puf rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US1-TC5: Ten photographs at the size cap all attach
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* customer(collector) has an unsent request with no photograph.
+
+**Steps:**
+
+1. Add ten different JPEGs of exactly 20,971,520 bytes each.
+
+**Expected Results:**
+
+* All ten are stored on the request.
+
+<!-- trace:case id=g10.vault-case-intake.TC-9dx rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US1-TC10: A request with no photograph cannot be sent
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* customer(collector) has an unsent request with no photograph, on Review.
+
+**Steps:**
+
+1. Tick the statement, and send.
+
+**Expected Results:**
+
+* It is refused, naming the missing photograph; the request stays unsent.
+
+<!-- trace:case id=g10.vault-case-intake.TC-y87 rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US1-TC13: Opening a photograph is recorded before it is shown
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* customer(collector)'s case carries a photograph.
+
+**Steps:**
+
+1. Open the photograph on the case.
+2. As admin(holds `vault:operate`), read the case's read trail.
+
+**Expected Results:**
+
+* Step 1 shows it; step 2 names the collector and the moment it was opened.
+
+<!-- trace:case id=g10.vault-case-intake.TC-pjg rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US1-TC23: A walk-in draft for a slab the register knows reads the register's facts and takes only photographs and a description
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* Staff opened a walk-in draft for a slab the register holds under this collector as a trading card titled Charizard 1999 Base Set, PSA 10.
+
+**Steps:**
+
+1. As the collector, open the draft on a phone.
+2. Add a photograph and change the description, and save.
+
+**Expected Results:**
+
+* Step 1 reads the category, title, grader and grade as the register holds them, offering no edit to them.
+* Step 2 saves both.
+
+<!-- trace:case id=g10.vault-case-intake.TC-yxv rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US1-TC24: An edit to the register's facts on a walk-in draft is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-01
+
+**Pre-conditions:**
+
+* The collector has a walk-in draft for a slab the register holds, open in two tabs.
+
+**Steps:**
+
+1. In the tab opened before the slab was linked, change the category and title, and save.
+
+**Expected Results:**
+
+* It is refused, naming the register's facts; the draft keeps them.
 
 ---
 
-## grade10-site-vault-case-intake-US4: Collector checks the request before sending it
+## g10.vault-case-intake.US2: Collector sends in a card they only want kept safe
+
+**As a** collector,
+**I want** to send in a card without asking for a loan,
+**so that** it is kept in a vault and I owe nothing for keeping it there.
+
+<!-- trace:case id=g10.vault-case-intake.TC-pfx rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US2-TC1: A request asking for no loan opens on the storage lane, and no offer is ever made on it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-02
+
+**Pre-conditions:**
+
+* customer(collector) is on the vault page.
+
+**Steps:**
+
+1. Start a request, describe a coin, ask for no loan, add a photograph, and send it.
+2. Read the case; as admin(holds `vault:approve`), open its console page.
+
+**Expected Results:**
+
+* Step 2: the case is submitted on the storage lane with no amount asked for, a visit may be booked, and the console offers no Make an offer.
+
+---
+
+## g10.vault-case-intake.US3: Collector photographs the item from their phone
+
+**As a** collector,
+**I want** to add photographs of the item from my phone and see anything the
+vault will not take refused before I spend the upload,
+**so that** the shop can prepare around what it can see and my photographs
+carry nothing about where I live.
+
+<!-- trace:case id=g10.vault-case-intake.TC-3vw rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US3-TC1: A photograph that is one too many, too large, empty or not an image is refused before upload
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-03
+
+**Pre-conditions:**
+
+* customer(collector) has an unsent request carrying `<carrying>`.
+
+**Test data:**
+
+| `<carrying>` | `<offered>` | `<refusal names>` |
+| --- | --- | --- |
+| ten photographs | an eleventh JPEG | the limit of ten |
+| one photograph | a JPEG of 20,971,521 bytes | the size cap |
+| one photograph | an empty file | the file being empty |
+| one photograph | a PDF | the three image types |
+
+**Steps:**
+
+1. Add `<offered>`.
+
+**Expected Results:**
+
+* It is refused, naming `<refusal names>`; nothing is stored, and the request keeps what it carried.
+
+<!-- trace:case id=g10.vault-case-intake.TC-qdr rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US3-TC2: A photograph is stored once, and without its location
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-03
+
+**Pre-conditions:**
+
+* customer(collector) has an unsent request with no photograph.
+
+**Test data:**
+
+| `<offered>` | `<request carries>` |
+| --- | --- |
+| a phone photograph carrying GPS coordinates | one photograph; downloaded, it carries no location |
+| the same photograph, added twice | one photograph |
+
+**Steps:**
+
+1. Add `<offered>`, and read the request's photographs.
+
+**Expected Results:**
+
+* It carries `<request carries>`.
+
+<!-- trace:case id=g10.vault-case-intake.TC-pj7 rev=1 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US3-TC3: A photograph on another collector's case is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-03
+
+**Pre-conditions:**
+
+* Collector A is signed in; collector B's case carries a photograph whose address A has.
+
+**Steps:**
+
+1. As A, open that address.
+
+**Expected Results:**
+
+* It is refused, naming the case as not theirs; nothing is shown.
+
+---
+
+## g10.vault-case-intake.US4: Collector checks the request before sending it
 
 **As a** collector on the last step of the wizard,
 **I want** to read my request back, see what happens next, and tick that I
 have read the collection statement,
 **so that** I send what I meant and know what I agreed to.
 
-<!-- trace:case id=g10.vault-case-intake.TC-5j6 rev=1 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
-### grade10-site-vault-case-intake-US4-TC3-1: The review step names what happens next
+<!-- trace:case id=g10.vault-case-intake.TC-xwe rev=2 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
+### g10.vault-case-intake.US4-TC2: Review reads the request back whole, and each fact can change until it is sent
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-04
+
+**Pre-conditions:**
+
+* customer(collector) has a request with its facts and one photograph, on Review.
+
+**Steps:**
+
+1. Read Review.
+2. Go back, change the title, and return to Review.
+
+**Expected Results:**
+
+* Step 1 reads the item facts, the amount asked for, the photograph and what happens next, as the send will carry them.
+* Step 2 reads the new title.
+
+<!-- trace:case id=g10.vault-case-intake.TC-yjd rev=2 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
+### g10.vault-case-intake.US4-TC1: The send carries the collector's tick on the statement and keeps that version
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-04
+
+**Pre-conditions:**
+
+* customer(collector) is on Review, a collection statement in force.
+
+**Steps:**
+
+1. Read the statement, tick it, and send.
+2. As admin(holds `vault:operate`), read the case.
+
+**Expected Results:**
+
+* Step 1 submits the case; step 2 shows the statement's version kept with the send.
+
+<!-- trace:case id=g10.vault-case-intake.TC-0my rev=2 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
+### g10.vault-case-intake.US4-TC4: A send without the tick on the statement in force is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-04
+
+**Pre-conditions:**
+
+* customer(collector) is on Review, `<statement>`.
+
+**Test data:**
+
+| `<statement>` |
+| --- |
+| not ticked |
+| ticked on a version since replaced, the page not reloaded |
+
+**Steps:**
+
+1. Send.
+
+**Expected Results:**
+
+* It is refused, naming the statement; the request stays unsent.
+
+<!-- trace:case id=g10.vault-case-intake.TC-wet rev=1 -->
+### g10.vault-case-intake.US4-TC5: Outside production a statement not yet written reads as being prepared and does not hold the send
 
 **Classification:**
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** grade10-site-vault-case-intake-US-04
-
-**Pre-conditions:**
-
-* `customer(collector)` is on the Review step of a draft with its item facts and one photograph complete.
-
-**Steps:**
-
-1. Read the What happens next block.
-
-**Expected Results:**
-
-* Three items are listed, naming what the shop does with the request.
-
-<!-- trace:case id=g10.vault-case-intake.TC-ye6 rev=1 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
-### grade10-site-vault-case-intake-US4-TC5-1: The statement reads "Being prepared" outside production
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-04
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Review step outside production, Legal's statement text not yet supplied.
+* Outside production, the brand has no collection statement wording; customer(collector) is on Review.
 
 **Steps:**
 
-1. Click the statement link.
-2. Return, tick the statement, and click Send it in.
+1. Read the statement, tick it, and send.
 
 **Expected Results:**
 
-* The linked page reads "Being prepared".
-* The request still sends.
+* The statement reads as being prepared, with no words; the send is taken, keeping its version.
 
-<!-- trace:case id=g10.vault-case-intake.TC-ue8 rev=1 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
-### grade10-site-vault-case-intake-US4-TC7-1: Finish later from the review step saves without sending
+<!-- trace:case id=g10.vault-case-intake.TC-k5u rev=2 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
+### g10.vault-case-intake.US4-TC6: In production a send is refused while the statement has no wording
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
-* `customer(collector)` is on the Review step of a draft with its item facts and one photograph complete, statement ticked.
+* In production, the brand has no collection statement wording; customer(collector) is on Review.
 
 **Steps:**
 
-1. Click Finish later.
+1. Tick, and send.
 
 **Expected Results:**
 
-* The request is not sent.
-* It is listed as an unsent request on the collector's own list.
+* It is refused, naming the statement; the request stays unsent.
+
+<!-- trace:case id=g10.vault-case-intake.TC-y3j rev=1 covers=g10.vault-case-intake.SC-v7o,g10.vault-case-intake.SC-lmj,g10.vault-case-intake.SC-cda,g10.vault-case-intake.SC-fei,g10.vault-case-intake.SC-mzh,g10.vault-case-intake.SC-slr -->
+### g10.vault-case-intake.US4-TC11: A sent request takes no change to its facts and no second send
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-04
+
+**Pre-conditions:**
+
+* customer(collector) sent a request, open in a second tab not reloaded since.
+
+**Test data:**
+
+| `<attempt>` |
+| --- |
+| change its title, and save |
+| send it again |
+
+**Steps:**
+
+1. In the second tab, `<attempt>`.
+
+**Expected Results:**
+
+* It is refused, naming the sent request; it keeps what it was sent with.
+
+<!-- trace:case id=g10.vault-case-intake.TC-csj rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US4-TC21: A request is refused past three unsent, a walk-in counting, and a sent one takes no new photograph
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Opening a request
+
+**Pre-conditions:**
+
+* customer(collector) holds `<holding>`.
+
+**Test data:**
+
+| `<holding>` | `<attempt>` | `<refusal names>` |
+| --- | --- | --- |
+| three unsent requests of their own | start another | the limit of three unsent |
+| two unsent of their own and one walk-in draft | start another | the limit of three unsent |
+| a sent request, open in a tab not reloaded | add a photograph to it | the sent request |
+
+**Steps:**
+
+1. `<attempt>`.
+
+**Expected Results:**
+
+* It is refused, naming `<refusal names>`; nothing is opened or stored.
+
+<!-- trace:case id=g10.vault-case-intake.TC-o9n rev=2 covers=g10.vault-case-intake.SC-gfr,g10.vault-case-intake.SC-fyh,g10.vault-case-intake.SC-6s8,g10.vault-case-intake.SC-u3j,g10.vault-case-intake.SC-jdq,g10.vault-case-intake.SC-jgo,g10.vault-case-intake.SC-9u2,g10.vault-case-intake.SC-a99,g10.vault-case-intake.SC-y95,g10.vault-case-intake.SC-64e,g10.vault-case-intake.SC-vq4,g10.vault-case-intake.SC-nui,g10.vault-case-intake.SC-c2q -->
+### g10.vault-case-intake.US4-TC17: A contact number is stored one way however it is typed, and may be left out
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Describing the item
+
+**Pre-conditions:**
+
+* customer(collector) starts a request.
+
+**Test data:**
+
+| `<typed>` | `<stored>` |
+| --- | --- |
+| +852 9123 4567 | +85291234567 |
+| 9123-4567 | +85291234567 |
+| left empty | none |
+
+**Steps:**
+
+1. Enter `<typed>`, finish the request, and read it back; as admin(holds `vault:operate`), read the case.
+
+**Expected Results:**
+
+* The request opens; both read `<stored>`.
 
 ---
 
-## grade10-site-vault-case-intake-US5: Collector gets a reference they can say and type
+## g10.vault-case-intake.US5: Collector gets a reference they can say and type
 
 **As a** collector,
 **I want** a short reference for my case,
 **so that** I can read it out at the counter and type it as the transfer
 reference at my bank.
 
-<!-- trace:case id=g10.vault-case-intake.TC-zqt rev=1 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
-### grade10-site-vault-case-intake-US5-TC7-1: Not now opens the case that was just sent
+<!-- trace:case id=g10.vault-case-intake.TC-xis rev=2 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
+### g10.vault-case-intake.US5-TC1: A request carries its six-character reference from the start, and every read names the same one
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** minor
-* **Priority:** low
-* **Status:** deprecated
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
 * **Behaviour:** positive
-* **Type:** usability
+* **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
-* `customer(collector)` has just sent a request and is on the Sent step.
+* `<opened by>` opens a request for the collector.
+
+**Test data:**
+
+| `<opened by>` |
+| --- |
+| the collector, on the wizard |
+| staff, at the counter |
 
 **Steps:**
 
-1. Click Not now.
+1. Read the reference on the unsent request.
+2. Send it; read the vault page, the case, and the send's answer.
 
 **Expected Results:**
 
-* The case opens at its own address instead of starting a visit booking.
+* Step 1 shows six characters from the reference alphabet.
+* Step 2 names the same reference everywhere.
+
+<!-- trace:case id=g10.vault-case-intake.TC-yga rev=2 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
+### g10.vault-case-intake.US5-TC5: The send's letter names the reference and links to the case by its address
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** The case reference
+
+**Pre-conditions:**
+
+* customer(collector) has just sent a request.
+
+**Steps:**
+
+1. Read the letter, and select its link.
+
+**Expected Results:**
+
+* It names the case's reference; the link opens the case at its own address, which carries the case's id and not the reference.
+
+<!-- trace:case id=g10.vault-case-intake.TC-d4v rev=2 covers=g10.vault-case-intake.SC-93o,g10.vault-case-intake.SC-u8f,g10.vault-case-intake.SC-3h1 -->
+### g10.vault-case-intake.US5-TC6: A second item is a second request with its own reference
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-05
+
+**Pre-conditions:**
+
+* customer(collector) has just sent a request.
+
+**Steps:**
+
+1. Start a request for another item, and read both.
+
+**Expected Results:**
+
+* The new request has a reference of its own; the sent one keeps its reference and status.
 
 ---
 
-## grade10-site-vault-case-intake-US6: Collector sends a request staff opened for them at the counter
+## g10.vault-case-intake.US6: Collector sends a request staff opened for them at the counter
 
 **As a** collector whose request staff opened at the counter,
 **I want** to sign in on my own phone, read the request and the photos back,
@@ -253,135 +837,150 @@ and tick that I have read the collection statement before I send it,
 **so that** nothing happens to my item on a request I have not seen, and a
 request typed under the wrong address is never emailed.
 
----
+<!-- trace:case id=g10.vault-case-intake.TC-69j rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
+### g10.vault-case-intake.US6-TC1: The collector finds a walk-in draft among their cases, changes it like their own, and sends it
 
-## Settled
+**Classification:**
 
-- The Photograph step's empty refusal catches a zero-byte file, refused the way anything that is not a JPEG, PNG or WebP is refused.
-- The 20 MB cap bounds each photograph; nothing bounds the ten together but the count of ten.
-- The conflict on Send it in is the case-lifecycle guard — the draft moved between the session reading it and the send landing — so the send is refused by name and no second case opens.
-- Whether the Describe step's amount field names the brand's currency is the product manager's to confirm; the recommendation is that it does, and the refusal of any other currency stands either way.
-- Which typed forms of a number are one is decided on `docs/prds/products/grade10-site/vault/collector-pages.md`: spacing, `+852` or `00852`, the bare local number, full-width digits and `852` before a local number store as one.
-- Taken at landing: a send is refused in production while no collection statement wording is set; outside production it goes through.
-- A financing amount is an integer count of minor units, more than zero; storage is asked for by leaving the amount out, never by an amount of zero.
-- The collector's wizard keeps its own refusal words, in the collector's four languages; they already name both ways on, an amount or storage only.
-- An amount finer than the currency's smallest unit is never rounded to zero: the wizard's loan field does not take it, as it does not take a zero.
-- **A stale statement version** - a send naming a version other than the one in force is refused by name and stays unsent (Q17)
-- **A walk-in draft with no screen to send it** - it waits on its own clock and ends silently until the request screen ships (Q14)
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-06
 
-## Reconciliation
+**Pre-conditions:**
 
-**Run:** 2026-09-22, change `complete-vault-collector-flow`, capability
-`grade10-site/vault/case-intake`. The blind pass read an isolated bundle: this
-capability's `## Purpose` and `## Feature set` outline, its `user-journeys.md`,
-the change's `proposal.md` and `decisions.md` — `## Raised` included — its
-`ui-design.md` with the state dispositions stripped, and the PRD pages the
-proposal links. Denied: every `## Requirements` section, `openspec/specs/`
-beyond the two outline sections, `openspec/changes/archive/`, and
-`tech-design.md`. The scenario pass read the same anchors and the durable
-requirements, and neither pass saw the other's file before this join.
+* Staff opened a walk-in draft under the collector's account with two photographs.
 
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `US1-TC1-1`, `US1-TC2-1` | Covered | `grade10-site-vault-case-intake-SC-05`, `grade10-site-vault-case-intake-SC-06`, `grade10-site-vault-case-intake-SC-13`, `grade10-site-vault-case-intake-SC-14`, `grade10-site-vault-case-intake-SC-15`, `grade10-site-vault-case-intake-SC-17` — the two lanes walked end to end |
-| `US1-TC3-1`, `US1-TC4-1` | Folded | `grade10-site-vault-case-intake-SC-24` and `grade10-site-vault-case-intake-SC-25`. The durable requirement `A request states one item, in the brand's own currency` tables the 200 and 2,000 character caps and no scenario stated them; the change now opens that requirement in a MODIFIED block and the two scenarios land there |
-| `US1-TC5-1`, `US1-TC7-1` | Folded; question landed | `grade10-site-vault-case-intake-SC-28` and `grade10-site-vault-case-intake-SC-29`, in a MODIFIED block on the photograph requirement, which now names the cap in bytes, 20,971,520, so the bound cannot move with a rounded megabyte. Whether the cap also bounds the ten together landed as Q57 — it does not |
-| `US1-TC6-1` | Covered | `grade10-site-vault-case-intake-SC-08` |
-| `US1-TC8-1` | Covered | `grade10-site-vault-case-intake-SC-09` |
-| `US1-TC9-1` | Covered; question landed | A zero-byte JPEG is not one of the three image types, so `grade10-site-vault-case-intake-SC-09` refuses it by name; the blind pass's question about what the empty refusal catches landed as Q57 |
-| `US1-TC10-1` | Covered | `grade10-site-vault-case-intake-SC-13` |
-| `US1-TC11-1` | Covered | `grade10-site-vault-case-intake-SC-11` |
-| `US1-TC12-1` | Covered | `grade10-site-vault-case-intake-SC-12` |
-| `US1-TC13-1` | Folded | `grade10-site-vault-case-intake-SC-30`, in a MODIFIED block on `A photograph is stored without its location and read under a trail`, which states the ledger and had no scenario for a recorded read |
-| `US1-TC14-1` | Covered | `grade10-site-vault-case-intake-SC-07` |
-| `US1-TC15-1` | Covered | `grade10-site-vault-case-intake-SC-01` |
-| `US1-TC16-1` | Covered by another capability | `grade10-site-vault-case-lifecycle-SC-04` — a case that moved under the caller is refused by name; the blind pass's question about what produces `request.caseConflict` landed as Q58, and the design's Moved on state closes on that same scenario |
-| `US1-TC17-1`, `US1-TC19-1` | Covered; question escalated | `grade10-site-vault-case-intake-SC-04` stores one canonical number however it was typed, and the number is optional by the requirement's table; which typed forms count as one person is decided on `collector-pages.md` |
-| `US1-TC18-1` | Folded | `grade10-site-vault-case-intake-SC-26`. The requirement now says a number the brand's plan cannot read is refused by name, as the worker already refuses it; which typed forms count as one person is decided on `collector-pages.md` |
-| `US1-TC20-1` | Covered; question landed | `grade10-site-vault-case-intake-SC-03`; whether the amount field shows the brand's currency to the collector landed as Q56 |
-| `US4-TC1-1`, `US4-TC2-1`, `US4-TC3-1` | Covered | `grade10-site-vault-case-intake-SC-15`, `grade10-site-vault-case-intake-SC-17` |
-| `US4-TC4-1` | Covered | `grade10-site-vault-case-intake-SC-16` |
-| `US4-TC5-1` | Covered | `grade10-site-vault-case-intake-SC-18`, now outside production alone |
-| `US4-TC6-1` | Covered; restored to `draft`, id kept | `grade10-site-vault-case-intake-SC-31`. Deprecated at the round as a misreading of Q8 and Q17; at landing the owner took the production refusal, so `decisions.md` Q8 now reads as this case does and the case comes back unchanged |
-| `US4-TC7-1` | Covered, trimmed | `grade10-site-vault-case-intake-SC-01` — a request left unsent is listed unsent on the collector's own list. The draft also claimed the tick survives the save, which nothing states; `grade10-site-vault-case-intake-SC-17` records the version at the send, so that result left the case |
-| `US5-TC1-1` | Covered | `grade10-site-vault-case-intake-SC-19`, `grade10-site-vault-case-intake-SC-23`; the reference is drawn when the request is opened, so what the case reads at the send is the reference the draft already carried. The letter that carries it is `grade10-site/vault/collector-notifications`', and its suite walks it |
-| `US5-TC2-1`, `US5-TC4-1`, `US5-TC5-1` | Covered, retraced | `grade10-site-vault-case-intake-SC-20`, `grade10-site-vault-case-intake-SC-21`, `grade10-site-vault-case-intake-SC-22`; each case now traces `The case reference`, the group those scenarios serve, in place of the journey — one anchor per case, and US-05 keeps its own cases |
-| `US5-TC3-1` | Retired; `deprecated`, id kept | Its within-brand half is `US5-TC2-1` on `grade10-site-vault-case-intake-SC-20`. Its cross-brand half cannot be walked: Grade10 alone runs a vault, and each brand's vault is its own database, so no second brand's reference exists to clash with |
-| `US5-TC6-1` | Folded | `grade10-site-vault-case-intake-SC-27`. One request per item is the durable requirement's last line and no scenario stated it; the several-items block on the Sent step is the design's |
-| `US5-TC7-1` | Covered | `grade10-site-vault-case-intake-SC-22` — Not now opens the case at its id-based address |
-| `grade10-site-vault-case-intake-SC-02` | Case added | `US1-TC21-1`, tracing `Opening a request`, the group the scenario serves |
-| `grade10-site-vault-case-intake-SC-19` | Case added | `US5-TC8-1` — no case read the reference before the request was sent |
+**Steps:**
 
-**Uncovered anchors:** none.
+1. As the collector, sign in and read the vault page.
+2. Open the draft, change its title, remove one of staff's photographs, and add one of their own.
+3. On Review, tick the statement in force, and send.
 
-**Run:** the blind pass read only its bundle: the spec-to-tcs skill and the rulebook, the change's `proposal.md`, `decisions.md` with its `## Raised` table empty, `ui-design.md`, `openspec/config.yaml`'s context, the PRD pages Operator Console, Collector Page, Collector Pages, Case Lifecycle and Compliance and Readiness, and for each of the five capabilities its `## Purpose` and `## Feature set`, the change's `user-journeys.md` and, where one exists, the durable purpose, journeys and suite with its `## Settled` and without its `## Reconciliation`. It was denied every `## Requirements` section, `openspec/specs/` beyond the bundle, `openspec/changes/archive/`, `tech-design.md`, `tasks.md` and the store's `tcs-conventions.md`, so the house style was taken from the existing suites. It wrote five cases over one journey and raised no question for this capability; the scenario pass issued `grade10-site-vault-case-intake-SC-32` to `grade10-site-vault-case-intake-SC-36` and carried `grade10-site-vault-case-intake-SC-07` in its MODIFIED block. One case was added here.
+**Expected Results:**
 
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `grade10-site-vault-case-intake-US6-TC1-1` | Joined | `grade10-site-vault-case-intake-SC-32` and `grade10-site-vault-case-intake-SC-34` |
-| `grade10-site-vault-case-intake-US6-TC2-1` | Joined | `grade10-site-vault-case-intake-SC-33`, and `grade10-site-vault-case-intake-SC-35` for nothing emailed before the send |
-| `grade10-site-vault-case-intake-US6-TC3-1` | Joined | the durable statement rule the send keeps; `grade10-site-vault-case-intake-SC-34` sends only with the collector's tick, and the counter's version stands in for none |
-| `grade10-site-vault-case-intake-US6-TC4-1` | Joined | `grade10-site-vault-case-intake-SC-36` and `grade10-site-vault-case-intake-SC-07` |
-| `grade10-site-vault-case-intake-US6-TC5-1` | Joined | the durable rules this change leaves as they stand: another collector's case reads not found, and a photograph is served to its owner and staff alone |
-| `grade10-site-vault-case-intake-SC-35` | Case added | `grade10-site-vault-case-intake-US6-TC6-1` |
-| `grade10-site-vault-case-intake-SC-37` | Case added | `grade10-site-vault-case-intake-US6-TC7-1`, Q19 and Q53: removal on any unsent draft of the collector's own |
-| `grade10-site-vault-case-intake-SC-38` | Case added | `grade10-site-vault-case-intake-US6-TC7-1`'s fourth step |
+* Step 1 lists it as unsent, marked opened at the counter, with staff's two photographs.
+* Step 2 saves the title and those two photographs.
+* Step 3 submits it, keeping the statement's version, with a visit to book.
 
-**Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journey, the proposal, `decisions.md` with its empty `## Raised`, `ui-design.md` with its anchors stripped, the Collector Pages and Items PRD pages, and the durable case-intake suite for id continuity with its Reconciliation stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite and questions, the delta spec, `tech-design.md`, `tasks.md` and the operator-queue delta. It is a statement, not proof.
+<!-- trace:case id=g10.vault-case-intake.TC-9fk rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
+### g10.vault-case-intake.US6-TC3: A statement shown at the counter does not stand for the collector's tick
 
-- **Folded** - `grade10-site-vault-case-intake-US1-TC22-1` into `grade10-site-vault-case-intake-SC-39`; `grade10-site-vault-case-intake-US1-TC23-1` into `grade10-site-vault-case-intake-SC-40`, gaining the register's description left unchanged as Q47
-- **Patched, not re-run** - `grade10-site-vault-case-intake-US1-TC23-1` tried the grader, grade and cert on the collector's Describe step, which carries no such field; it now tries the category and the title, the two `grade10-site-vault-case-intake-SC-40` reads from the register
-- **Added by QA2** - `grade10-site-vault-case-intake-US1-TC24-1` for `grade10-site-vault-case-intake-SC-41`, the worker's refusal, which the blind case reached only through the interface
-- **Raised, answered by the round** - the customer's description edit on a linked draft changes the request alone (Q47, `grade10-site-vault-case-intake-SC-40`)
-- **Raised, escalated** - none
-- **Round 4** - `grade10-site-vault-case-intake-SC-40` and `grade10-site-vault-case-intake-SC-41` hold only for a slab the register holds under the customer at the counter, the one the walk-in form fills; `grade10-site-vault-case-intake-US1-TC23-1` and `grade10-site-vault-case-intake-US1-TC24-1` now say so
-- **Rejected** - none
-- **Contradicted** - none
-- **Uncovered anchors** - none: US-01 has a case for each of the three scenarios; the modified requirement's other scenarios keep their durable cases
+**Classification:**
 
-**Run:** QA2, 2026-10-02. QA1's blind pass read only the capability's `## Purpose` and `## Feature set` with the change's leaf, the US-01 journey, `proposal.md`, `decisions.md` with Q1 to Q7, the Collector Pages and Operator Console manual pages, and the durable suite's US1 section and `## Settled`; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md`, the code and `openspec/changes/archive/`. It wrote `grade10-site-vault-case-intake-US1-TC25-1` and `grade10-site-vault-case-intake-US1-TC26-1`, and raised one question with the operator queue, landed as Q10. After it ran, Q11 moved the rule from the facts table to the lane requirement, where `grade10-site-vault-case-intake-SC-42` sits; these are non-anchor clarifications. QA2 read QA1's suites, both delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites of both capabilities, and grade10's `RequestWizard.tsx`, `refusalOfDetails` in `details.ts`, `requestModule.test.ts`, `intakeInputSchema` and `positiveMinorAmount` in `packages/vault/contracts/src/schemas.ts`, `schemas.test.ts`, the cases router's `create` and `request.spec.ts`. It is a statement, not proof.
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-06
 
-- **Raised, answered** - Q10, raised with the operator queue: an amount finer than the currency's smallest unit is never rounded to zero. Q10 decides the console's money field; the wizard's loan field does not take such an amount at all, as it takes no zero, and `## Settled` carries that for this suite. The operator queue's suite records the console's rows
-- **Raised, escalated** - none
-- **Raised, rejected** - none
-- **Revised** - none
-- **Joined** - `grade10-site-vault-case-intake-SC-42`, the lane requirement's more-than-zero rule and the Feature set's A loan of more than zero leaf into `grade10-site-vault-case-intake-US1-TC25-1` on the wizard and `grade10-site-vault-case-intake-US1-TC26-1` at the worker
-- **Corrected** - `grade10-site-vault-case-intake-US1-TC25-1` typed a zero the wizard's loan field never takes: the field stays empty, and Continue is refused because a loan is chosen with no amount, in the words of `financingNotPositive`. Step 3 now reads the empty field. Its result said the refusal names both ways on, a phrase the conventions keep out of a case; it reads the refusal asking how much, or for storage only. No draft on the collector's list needed a step to look; it reads the Describe step held and nothing sent. `grade10-site-vault-case-intake-US1-TC26-1` read only that the amount is refused; `grade10-site-vault-case-intake-SC-42` refuses by name, so step 2 reads the bad-request answer naming the financing amount
-- **Added by QA2** - `grade10-site-vault-case-intake-US1-TC25-1` steps 5 and 6: storage only from the refused step moves on, as the refusal says and the leaf states, storage asked for by leaving the amount out
-- **Contradicted** - none: both QA1 cases agree with the lane requirement and the worker's `positiveMinorAmount`
-- **Uncovered anchors** - none: `grade10-site-vault-case-intake-SC-42` by `grade10-site-vault-case-intake-US1-TC25-1` and `grade10-site-vault-case-intake-US1-TC26-1`; the Feature set's new leaf by the same two and, for storage asked for by leaving the amount out, the durable `grade10-site-vault-case-intake-US1-TC2-1`. `grade10-site-vault-case-intake-SC-05` and `grade10-site-vault-case-intake-SC-06` stand unchanged under the rewritten requirement, by the durable `grade10-site-vault-case-intake-US1-TC1-1` and `grade10-site-vault-case-intake-US1-TC2-1`
+**Pre-conditions:**
 
-**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/cases.ts`, `cases/intake.ts`, `legalCopy.ts` and the intake tests. It is a statement, not proof.
+* Staff showed the collector the statement at the counter while opening a walk-in draft.
 
-- **Raised, folded into spec** - a sent request takes no edit to its facts, from `grade10-site-vault-case-intake-US4-TC11-1`, as `grade10-site-vault-case-intake-SC-43` under the request requirement, cited in task 2.2
-- **Raised, escalated** - a send naming a stale statement version, landed as Q17, refused by name
-- **Raised, rejected** - none
-- **Re-versioned to the API** - every case whose behaviour the worker keeps and whose run walked the wizard, the case list or the case page: `grade10-site-vault-case-intake-US1-TC1-2`, `grade10-site-vault-case-intake-US1-TC2-2`, `grade10-site-vault-case-intake-US1-TC3-2`, `grade10-site-vault-case-intake-US1-TC4-2`, `grade10-site-vault-case-intake-US1-TC5-2`, `grade10-site-vault-case-intake-US1-TC6-2`, `grade10-site-vault-case-intake-US1-TC7-2`, `grade10-site-vault-case-intake-US1-TC8-2`, `grade10-site-vault-case-intake-US1-TC9-2`, `grade10-site-vault-case-intake-US1-TC10-2`, `grade10-site-vault-case-intake-US1-TC11-2`, `grade10-site-vault-case-intake-US1-TC14-2`, `grade10-site-vault-case-intake-US1-TC15-2`, `grade10-site-vault-case-intake-US1-TC16-2`, `grade10-site-vault-case-intake-US1-TC17-2`, `grade10-site-vault-case-intake-US1-TC18-2`, `grade10-site-vault-case-intake-US1-TC19-2`, `grade10-site-vault-case-intake-US4-TC1-2`, `grade10-site-vault-case-intake-US4-TC2-2`, `grade10-site-vault-case-intake-US4-TC4-2`, `grade10-site-vault-case-intake-US4-TC6-2`, `grade10-site-vault-case-intake-US5-TC1-2`, `grade10-site-vault-case-intake-US5-TC5-2`, `grade10-site-vault-case-intake-US5-TC6-2`, `grade10-site-vault-case-intake-US5-TC8-2`, `grade10-site-vault-case-intake-US6-TC1-2`, `grade10-site-vault-case-intake-US6-TC2-2`, `grade10-site-vault-case-intake-US6-TC3-2`, `grade10-site-vault-case-intake-US6-TC4-2`, `grade10-site-vault-case-intake-US6-TC5-2`, `grade10-site-vault-case-intake-US6-TC6-2`, `grade10-site-vault-case-intake-US6-TC7-2`; `grade10-site-vault-case-intake-US1-TC23-2` drops the try-a-change step a screen held and reads the register in the console
-- **Deprecated** - the cases whose subject is a removed screen: `grade10-site-vault-case-intake-US1-TC22-1`, `grade10-site-vault-case-intake-US1-TC25-1`, `grade10-site-vault-case-intake-US4-TC3-1`, `grade10-site-vault-case-intake-US4-TC5-1`, `grade10-site-vault-case-intake-US4-TC7-1`, `grade10-site-vault-case-intake-US5-TC7-1`; the worker's refusal of a zero loan stays with `grade10-site-vault-case-intake-US1-TC26-1`, and an unsent request with `grade10-site-vault-case-intake-US1-TC15-2`
-- **Carried into a bump** - QA1's new ids that re-covered an earlier case leave the delta: `US1-TC27-1` into `grade10-site-vault-case-intake-US1-TC3-2`; `US1-TC28-1` into `grade10-site-vault-case-intake-US1-TC4-2` and `grade10-site-vault-case-intake-US1-TC18-2`; `US1-TC29-1` into `grade10-site-vault-case-intake-US1-TC15-2`; `US4-TC8-1` into `grade10-site-vault-case-intake-US4-TC2-2`; `US4-TC9-1` into `grade10-site-vault-case-intake-US4-TC1-2`; `US4-TC10-1` into `grade10-site-vault-case-intake-US4-TC4-2`; `US4-TC12-1` into `grade10-site-vault-case-intake-US4-TC6-2`; `US5-TC9-1` into `grade10-site-vault-case-intake-US5-TC1-2` and `grade10-site-vault-case-intake-US5-TC5-2`; `US5-TC10-1` into `grade10-site-vault-case-intake-US5-TC6-2`; `US6-TC8-1` into `grade10-site-vault-case-intake-US6-TC2-2`; `US6-TC9-1` into `grade10-site-vault-case-intake-US6-TC1-2`; `US6-TC10-1` into `grade10-site-vault-case-intake-US6-TC3-2`; `US6-TC11-1` into `grade10-site-vault-case-intake-US6-TC5-2`
-- **Joined** - `grade10-site-vault-case-intake-SC-15` into `grade10-site-vault-case-intake-US4-TC2-2`; `grade10-site-vault-case-intake-SC-16`, `-SC-17`, `-SC-18` into `grade10-site-vault-case-intake-US4-TC1-2` and `grade10-site-vault-case-intake-US4-TC4-2`; `grade10-site-vault-case-intake-SC-31` into `grade10-site-vault-case-intake-US4-TC6-2`; `grade10-site-vault-case-intake-SC-19` to `-SC-23` into `grade10-site-vault-case-intake-US5-TC1-2` and `grade10-site-vault-case-intake-US5-TC5-2`; `grade10-site-vault-case-intake-SC-24` into `grade10-site-vault-case-intake-US1-TC3-2`; `grade10-site-vault-case-intake-SC-25`, `-SC-26` into `grade10-site-vault-case-intake-US1-TC4-2` and `grade10-site-vault-case-intake-US1-TC18-2`; `grade10-site-vault-case-intake-SC-27` into `grade10-site-vault-case-intake-US5-TC6-2`; `grade10-site-vault-case-intake-SC-01` into `grade10-site-vault-case-intake-US1-TC15-2`; `grade10-site-vault-case-intake-SC-32` to `-SC-35` into `grade10-site-vault-case-intake-US6-TC1-2` to `grade10-site-vault-case-intake-US6-TC7-2`
-- **Contradicted** - none
-- **Uncovered anchors** - none: every journey this delta serves has a case; `grade10-site-vault-case-intake-SC-39` is the contracts' schema test (task 2.2)
-- **Automated cases re-versioned** - `grade10-site-vault-case-intake-US1-TC1-2`, `grade10-site-vault-case-intake-US1-TC2-2`, `grade10-site-vault-case-intake-US1-TC6-2`, `grade10-site-vault-case-intake-US1-TC7-2`, `grade10-site-vault-case-intake-US1-TC8-2`, `grade10-site-vault-case-intake-US1-TC9-2`, `grade10-site-vault-case-intake-US1-TC14-2`, `grade10-site-vault-case-intake-US1-TC16-2`, `grade10-site-vault-case-intake-US4-TC1-2`, `grade10-site-vault-case-intake-US5-TC8-2`, `grade10-site-vault-case-intake-US6-TC1-2`, `grade10-site-vault-case-intake-US6-TC3-2`, `grade10-site-vault-case-intake-US6-TC4-2`, `grade10-site-vault-case-intake-US6-TC5-2`, `grade10-site-vault-case-intake-US6-TC6-2` were decided by `request.spec.ts` or `walk-in.spec.ts` at `-1`; each is `manual` until task 4.4 retitles its API walk and flips it
+**Steps:**
 
-**Run:** QA2, 2026-10-07, for change `print-case-reference-on-vault-paper`. QA1's blind pass read the Feature set, US-05, the proposal, `decisions.md` through Q7 and the durable suite with its Reconciliation stripped; it was denied every requirement. QA2 read this suite, the delta and `tech-design.md`. It is a statement, not proof.
+1. As the collector, open the draft's Review.
 
-- **Covered** - `grade10-site-vault-case-intake-US5-TC9-1` by `grade10-site-vault-case-intake-SC-19`: the requirement's *Issued with the case* names no opener, so a draft staff opened is one more case opened, and the case adds no rule
-- **Carried unchanged** - `grade10-site-vault-case-intake-SC-19` to `grade10-site-vault-case-intake-SC-23` keep their durable cases under US5; the modified *Where it is read* names the signed paper, whose outcome is `grade10-site/vault/documents-and-signing`'s and is walked there and by `grade10-site-vault-e2e-US1-TC1-1`
-- **Rejected** - none
-- **Contradicted** - none
-- **Uncovered anchors** - none
+**Expected Results:**
 
-### Manual
+* The statement is not ticked; the send waits for the collector's own tick.
 
-| Manual | Why |
+<!-- trace:case id=g10.vault-case-intake.TC-nxn rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
+### g10.vault-case-intake.US6-TC6: Nothing is valued, booked or mailed on a walk-in draft until the collector sends it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-06
+
+**Pre-conditions:**
+
+* A walk-in draft is unsent.
+
+**Steps:**
+
+1. As admin(holds `vault:approve`), read its case; as the collector, read it and the inbox.
+
+**Expected Results:**
+
+* No valuation or offer is offered, no visit can be booked, and no letter has gone about it.
+
+<!-- trace:case id=g10.vault-case-intake.TC-x77 rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
+### g10.vault-case-intake.US6-TC5: A walk-in draft shows on no other collector's account
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-intake-US-06
+
+**Pre-conditions:**
+
+* Staff opened a walk-in draft under collector A's account.
+
+**Steps:**
+
+1. As collector B, read the vault page and open the draft's address.
+
+**Expected Results:**
+
+* It is not listed, and its address is refused as not theirs.
+
+<!-- trace:case id=g10.vault-case-intake.TC-clw rev=2 covers=g10.vault-case-intake.SC-5hl,g10.vault-case-intake.SC-v4u,g10.vault-case-intake.SC-y75,g10.vault-case-intake.SC-yz2,g10.vault-case-intake.SC-myj -->
+### g10.vault-case-intake.US6-TC7: A photograph can be removed before the send, and none after
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Photographs
+
+**Pre-conditions:**
+
+* customer(collector)'s request carries three photographs, `<state>`.
+
+**Test data:**
+
+| `<state>` | `<afterwards>` |
 | --- | --- |
-| `US1-TC1-1` | The financed walk is driven once on a phone, because the photograph step is a camera and a file picker before it is a request |
-| `US4-TC1-1` | Whether the step reads the request back as the collector wrote it is a person's reading, not an assertion |
-| `US4-TC2-1` | Edit per block and the way back is walked, so the rest of the request is seen to survive it |
-| `US4-TC3-1` | The What happens next wording is read for what it promises the shop will do |
-| `US4-TC5-1` | The statement page is opened outside production to read the being-prepared wording |
-| `US5-TC1-1` | The reference is read aloud from the Sent step and the card — legibility is the point of the alphabet |
-| `US5-TC6-1` | Start another request is walked to see the case just sent left where it was |
-| `grade10-site-vault-case-intake-US6-TC2-1` | A person changes staff's facts and photographs before the send; the walk-in walk sends them as staff typed them |
-| `grade10-site-vault-case-intake-US6-TC7-1` | The walk proves the removal and that a sent request keeps its photographs; a person reads the refusal's words |
+| unsent | two photographs; the removed one's address no longer opens |
+| sent, the page not reloaded | refused, naming the sent request; all three stay |
+
+**Steps:**
+
+1. Remove one photograph.
+
+**Expected Results:**
+
+* It reads `<afterwards>`.

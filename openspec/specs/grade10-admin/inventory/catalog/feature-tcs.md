@@ -1,20 +1,201 @@
 # grade10-admin/inventory/catalog Test Cases
 
-**Status:** pending-review · 0/88
-**Drafts styled:** 2026-10-14, tcs-rules r5
-**Out of suite (api):**
-- `grade10-admin-inventory-catalog-SC-205` — the product service's update test, task 3.1 in `tasks.md`, and the editor test of task 5.1, because the editor names every translation it holds and the console has no route that omits them
-- `grade10-admin-inventory-catalog-SC-206` — the product service's write test, task 3.1, which reads the grade, set and Cert ID before and after a translation write
-- `grade10-admin-inventory-catalog-SC-217` — the product service's write test, task 3.1, added after the blind pass
+**Status:** pending-review · 0/81
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
-## grade10-admin-inventory-catalog-US4: Reconstruct stock changes
+## Background
+
+* An inventory admin holds the inventory catalogue grant with write authority, unless a case says otherwise; a product's page is on Inventory, opening its history and View Cert IDs (Cert ID details). An Admin hold is reserved from the product page.
+* Regular stock is stock with no Cert ID, read as the No Cert ID rows. A Cert record is one numbered unit. Amounts are HKD.
+
+## g10adm.inventory-catalog.US1: Record received stock
+
+**As an** inventory admin,
+**I want** to create a product and intake quantity into its inventory,
+**so that** the snapshot and derived lifetime ledger reflect what Grade10 accepted.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-5kk rev=1 -->
+### g10adm.inventory-catalog.US1-TC1: An inventory admin creates a product and intakes stock into its one inventory
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-01
+
+**Pre-conditions:**
+
+* An inventory admin opens Inventory, no product existing.
+
+**Steps:**
+
+1. Read the products table, and create a product named Card A.
+2. Intake 2 units, then 3, on its page.
+3. Return to the products list, and read Card A's row; open its history.
+
+**Expected Results:**
+
+* Step 1 shows the table's empty state, then lands on the new product's page in draft, its inventory empty.
+* Step 2 rises stock to 2, then 5, in one inventory, the ledger with it; reserved, vaulted, sold and withdrawn stay 0.
+* Step 3's row reads draft with every count; the history holds two intake entries of 2 and 3, each with its before and after.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-5en rev=1 -->
+### g10adm.inventory-catalog.US1-TC2: A product or an intake the rules forbid is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Product stock
+
+**Pre-conditions:**
+
+* An inventory admin is on Inventory; product 1, created, holds stock 2.
+
+**Test data:**
+
+| `<tried>` | `<refused>` |
+| --- | --- |
+| creating a product with an empty name | the create; no product or inventory added |
+| intaking 0 units on product 1 | the intake; inventory and history unchanged |
+| intaking 501 units on product 1 | the intake; inventory and history unchanged |
+| setting product 1 back to draft | the change; it stays created |
+
+**Steps:**
+
+1. Try `<tried>`.
+
+**Expected Results:**
+
+* It refuses `<refused>`.
+
+---
+
+## g10adm.inventory-catalog.US2: Oversee holds and settle them from holder apps
+
+**As an** inventory admin,
+**I want** to see Auction and Vault holds with remaining quantity on the product page, reserve house stock under `admin` holds, release those admin holds when done, while adjust, release for Auction/Vault, sell-from-reservation, change-product, and vault-from-reservation run from the owning listing or Vault console,
+**so that** house stock is not over-promised and settlement stays with the application that owns the hold.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-nzk rev=1 -->
+### g10adm.inventory-catalog.US2-TC1: The product page oversees every hold, and reserves and releases house stock under Admin
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-02
+
+**Pre-conditions:**
+
+* A created product holds stock 5 and an Auction hold for listing 1, labelled with its code and title, and a Vault hold under reference vault-7 with no label.
+
+**Steps:**
+
+1. Open the product page, and read the counts and the holds.
+2. Reserve 2 under an Admin hold.
+3. Release the Admin hold whole.
+
+**Expected Results:**
+
+* Step 1 reads every count; the holds list Auction with listing 1's label, Vault with vault-7, each with its remaining quantity, only Admin rows ever offering Release.
+* Step 2 lists an active Admin hold of 2 under a minted reference, available falling by 2.
+* Step 3 closes it, remaining 0, available back up by 2.
+
+---
+
+## g10adm.inventory-catalog.US3: Auction operator holds stock the vault cannot touch
+
+**As an** auction operator reserving house stock against a listing,
+**I want** to reserve, adjust, partially sell, and release only Auction's own hold, with the vault's holds on that product invisible to me and mine to it,
+**so that** both draw on one product's stock without either spending what the other reserved. Auction sells; Vault vaults.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-jxp rev=1 -->
+### g10adm.inventory-catalog.US3-TC1: The listing's product choice offers only created products in stock, at their available count
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-03
+
+**Pre-conditions:**
+
+* A draft product with stock; a created product with stock 10 and 3 held; a created product with none available.
+
+**Steps:**
+
+1. In an Auction listing's editor, open the product choice.
+
+**Expected Results:**
+
+* It offers only the created product in stock, reading 7 available.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-jdh rev=1 -->
+### g10adm.inventory-catalog.US3-TC2: A listing asking more than is available reserves nothing
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-03
+
+**Pre-conditions:**
+
+* A created product has 1 available; an auction operator edits a listing of it.
+
+**Steps:**
+
+1. Set the listing's quantity to 2, and save.
+2. Read the product page.
+
+**Expected Results:**
+
+* Step 1 is refused for insufficient stock.
+* Step 2 shows no new hold, count or history entry.
+
+---
+## g10adm.inventory-catalog.US4: Reconstruct stock changes
 
 **As an** inventory admin,
 **I want** every stock and reservation transition recorded,
 **so that** I can explain how the latest snapshot was reached.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-p4i rev=2 covers=g10adm.inventory-catalog.SC-l3a,g10adm.inventory-catalog.SC-y6f,g10adm.inventory-catalog.SC-1i4,g10adm.inventory-catalog.SC-k0a,g10adm.inventory-catalog.SC-vgc,g10adm.inventory-catalog.SC-cyf,g10adm.inventory-catalog.SC-ses,g10adm.inventory-catalog.SC-7oz,g10adm.inventory-catalog.SC-txu,g10adm.inventory-catalog.SC-pgg,g10adm.inventory-catalog.SC-6lr,g10adm.inventory-catalog.SC-pi4,g10adm.inventory-catalog.SC-tbn,g10adm.inventory-catalog.SC-6zh,g10adm.inventory-catalog.SC-k28,g10adm.inventory-catalog.SC-76r,g10adm.inventory-catalog.SC-z64,g10adm.inventory-catalog.SC-59i,g10adm.inventory-catalog.SC-kdh -->
-### grade10-admin-inventory-catalog-US4-TC1-2: Cert ID changes leave the ledger totals unmoved
+### g10adm.inventory-catalog.US4-TC1: Cert ID changes leave the ledger totals unmoved, and the history names both Cert IDs
 
 **Classification:**
 
@@ -30,40 +211,21 @@
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_1>`.
-* `<product_1>` holds `<cert_a>`, an available Cert record no hold, active or closed, has ever named.
-* `<product_1>` holds `<regular available>` units of available regular stock outside every hold.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-10000001`, a Cert record of `<product_1>` |
-| `<cert_b>` | `PSA-10000002`, unused on `<product_1>` |
-| `<cert_c>` | `PSA-10000003`, unused on `<product_1>` |
-| `<regular available>` | 3 units (any count of at least 1) |
+* Product 1 holds PSA-10000001, an available Cert record no hold has ever named, and 3 units of available regular stock outside every hold.
 
 **Steps:**
 
 1. Read stock, reserved, sold, withdrawn, vaulted and available.
-2. Click View Cert IDs.
-3. Change `<cert_a>` to `<cert_b>`.
-4. Assign `<cert_c>` to one unit of the `No Cert ID` available row.
-5. Close Cert ID details.
-6. Read stock, reserved, sold, withdrawn, vaulted and available.
-7. Open the product history.
+2. Click View Cert IDs; change PSA-10000001 to PSA-10000002, and assign PSA-10000003 to one unit of the No Cert ID available row.
+3. Close Cert ID details, read the figures again, and open the product history.
 
 **Expected Results:**
 
-* Step 6: every figure reads as in step 1.
-* Step 7: two new `Cert ID change` entries, quantity one each.
-* Step 7: one Action reads `Cert ID change · <cert_a> → <cert_b>`.
-* Step 7: the other Action reads `Cert ID change · No Cert ID → <cert_c>`.
-* Step 7: each of the two reads Holder `—` and Remarks `—`.
-* Step 7: no intake or withdrawal entry was added.
+* Every figure reads as in step 1.
+* The history holds two new Cert ID change entries of one unit each, reading Cert ID change · PSA-10000001 → PSA-10000002 and Cert ID change · No Cert ID → PSA-10000003, each with Holder — and Remarks —; no intake or withdrawal entry was added.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-wx1 rev=1 covers=g10adm.inventory-catalog.SC-68f,g10adm.inventory-catalog.SC-s46,g10adm.inventory-catalog.SC-mci -->
-### grade10-admin-inventory-catalog-US4-TC2-1: Reversals lower the ledger and keep every earlier entry
+### g10adm.inventory-catalog.US4-TC2: Reversals lower the ledger and keep every earlier entry
 
 **Classification:**
 
@@ -79,51 +241,28 @@
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_20>`.
-* `<product_20>`'s regular stock was intaken by `<regular intake>` and has never moved.
-* `<product_20>` holds `<cert_a>`, intaken by `<cert intake>`, and never held, sold, withdrawn or vaulted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<regular intake>` | An intake of 6 units with no Cert ID |
-| `<cert_a>` | `PSA-20000001` |
-| `<cert intake>` | An intake of one unit with Cert ID `<cert_a>` |
-| `<reduce by>` | 2 units (any whole number from 1 to 6) |
-| `<fall>` | 3 units: `<reduce by>` plus the one Cert record |
+* Product 20's regular stock was intaken as 6 units and never moved; PSA-20000001 was intaken as one unit and never moved.
 
 **Steps:**
 
 1. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
-2. Click View Cert IDs.
-3. Click `Reduce quantity` on the available `No Cert ID` row.
-4. Enter `<reduce by>` as the number of units.
-5. Click Confirm.
-6. Click `Remove` on `<cert_a>`'s row.
-7. Click Confirm.
-8. Close Cert ID details.
-9. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
-10. Open the product history.
+2. In View Cert IDs, click Reduce quantity on the available No Cert ID row, enter 2 and confirm; click Remove on PSA-20000001 and confirm.
+3. Close Cert ID details, read the figures, and open the product history.
 
 **Expected Results:**
 
-* Step 9: stock, available and the ledger each read `<fall>` lower than in step 1.
-* Step 9: reserved, sold, withdrawn and vaulted read as in step 1.
-* Step 10: one new `Intake reversal · No Cert ID` entry, quantity `<reduce by>`.
-* Step 10: one new `Intake reversal · <cert_a>` entry, quantity one.
-* Step 10: the entries for `<regular intake>` and `<cert intake>` still show.
-* Step 10: no intake or withdrawal entry was added.
+* Stock, available and the ledger each read 3 lower; reserved, sold, withdrawn and vaulted are unchanged.
+* The history adds Intake reversal · No Cert ID of 2 and Intake reversal · PSA-20000001 of 1, the two intakes still showing, and no intake or withdrawal added.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-3o0 rev=1 covers=g10adm.inventory-catalog.SC-68f,g10adm.inventory-catalog.SC-s46,g10adm.inventory-catalog.SC-mci -->
-### grade10-admin-inventory-catalog-US4-TC3-1: Each reversal shows in the history of the unit it took out
+### g10adm.inventory-catalog.US4-TC3: Each reversal shows in the history of the unit it took out
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -134,61 +273,346 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_21>`.
-* `<product_21>`'s regular stock was intaken by `<first intake>`, then `<admin hold>` reserved 2 units, then `<second intake>` arrived.
-* `<product_21>` holds `<cert_a>`, intaken after `<admin hold>` and never moved.
-* One unit of `<second intake>` was given `<cert_g>` by Assign Cert ID, and `<cert_g>` has not moved since.
+* Product 21's regular stock was intaken as 4 units, then an admin hold took 2, then 4 more arrived; PSA-21000001 was intaken after the hold, and PSA-21000002 was given by Assign Cert ID to a unit of the second intake; neither has moved.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<first intake>` | An intake of 4 units with no Cert ID |
-| `<admin hold>` | An admin hold of 2 units of regular stock, active |
-| `<second intake>` | An intake of 4 units with no Cert ID |
-| `<cert_a>` | `PSA-21000001`, intaken with its Cert ID |
-| `<cert_g>` | `PSA-21000002`, given by Assign Cert ID |
-| `<reduce by>` | 1 unit (any whole number from 1 to the 3 units intaken since `<admin hold>` and not numbered) |
-| `<reversal time>` | The date and time step 3 is confirmed |
-
-| Row | Action taken | Entry Action | Quantity | In the `No Cert ID` history |
-| --- | --- | --- | --- | --- |
-| Reduction | `Reduce quantity` on the available `No Cert ID` row, `<reduce by>` units | `Intake reversal · No Cert ID` | `<reduce by>` | yes |
-| Intaken Cert record | `Remove` on `<cert_a>`'s row | `Intake reversal · <cert_a>` | 1 | no |
-| Numbered Cert record | `Remove` on `<cert_g>`'s row | `Intake reversal · <cert_g>` | 1 | no |
+| `<taken out>` | `<entry>` | `<in the No Cert ID history>` |
+| --- | --- | --- |
+| Reduce quantity on the available No Cert ID row, 1 unit | Intake reversal · No Cert ID, 1 | yes |
+| Remove on PSA-21000001 | Intake reversal · PSA-21000001, 1 | no |
+| Remove on PSA-21000002 | Intake reversal · PSA-21000002, 1 | no |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Take the row's Action taken, keeping the prefilled remarks.
-3. Click Confirm.
-4. Close Cert ID details.
-5. Open the product history.
-6. Read the newest entry.
-7. Click View Cert IDs.
-8. Click the available `No Cert ID` row.
-9. Read its history.
-10. Click the `No Cert ID` row for `<admin hold>`.
-11. Read its history.
+1. In View Cert IDs, take `<taken out>` keeping the prefilled remarks, and confirm.
+2. Read the history's newest entry.
+3. Read the history of the available No Cert ID row, and of the admin hold's No Cert ID row.
 
 **Expected Results:**
 
-* Step 6: Action reads the row's Entry Action; quantity reads the row's Quantity.
-* Step 6: When reads `<reversal time>`; the admin is the actor; Remarks read `Entered by mistake`.
-* Step 9: the entry shows where the row's In the `No Cert ID` history says yes, and not where it says no.
-* Step 9: on the Numbered Cert record row, the `Cert ID change` from `No Cert ID` to `<cert_g>` still shows.
-* Step 11: reads the same entries as step 9.
+* Step 2 reads `<entry>`, when it was confirmed, the admin as actor, and Remarks Entered by mistake.
+* Step 3 shows the entry `<in the No Cert ID history>`, both rows alike; PSA-21000002's Cert ID change from No Cert ID still shows.
+
+---
+## g10adm.inventory-catalog.US5: Inventory admin configures a localized product schema
+
+**As an** inventory admin,
+**I want** to define reusable fields and assign them to an exact IP, Item, and Category,
+**so that** each product type has clear labels, structured values, and rules.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-93e rev=1 -->
+### g10adm.inventory-catalog.US5-TC1: An inventory admin defines a localized reusable field and configures a product schema from it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-05
+
+**Pre-conditions:**
+
+* An inventory admin is on the product schemas.
+
+**Steps:**
+
+1. Define card_number as a text field with English, Traditional Chinese and Simplified Chinese labels and a text pattern.
+2. Configure the Pokémon, Single card, TCG schema with language, card number, card set, grading and PSA population, and publish it.
+
+**Expected Results:**
+
+* Step 1 saves the field with its three labels and pattern, reusable by any schema.
+* Step 2 publishes the schema for that exact tuple, its fields in the order chosen.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-3s4 rev=1 -->
+### g10adm.inventory-catalog.US5-TC2: A field definition or a schema the rules forbid is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-05
+
+**Pre-conditions:**
+
+* An inventory admin is on the product schemas; a schema is published for Pokémon, Single card, TCG.
+
+**Test data:**
+
+| `<tried>` |
+| --- |
+| a field of an unsupported data type |
+| a field with an invalid validation rule |
+| a field whose key another field holds |
+| a select option with no English label |
+| publishing a second schema for Pokémon, Single card, TCG |
+
+**Steps:**
+
+1. Try `<tried>`.
+
+**Expected Results:**
+
+* It is refused by name, and nothing is saved or published.
 
 ---
 
-## grade10-admin-inventory-catalog-US9: Inventory admin sees unsold auction stock come back
+## g10adm.inventory-catalog.US6: Inventory admin enters a validated product
+
+**As an** inventory admin,
+**I want** to save localized structured values and complete a product only when they are valid,
+**so that** Auction receives products with trustworthy facts.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-km4 rev=1 -->
+### g10adm.inventory-catalog.US6-TC1: An inventory admin saves localized values and marks the product created
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-06
+
+**Pre-conditions:**
+
+* A draft product's tuple has the published Pokémon, Single card, TCG schema, PSA population optional.
+
+**Steps:**
+
+1. Save its language, card number, card set and grading, each with its translations, leaving PSA population empty.
+2. Mark it created.
+3. Click its grading attribute.
+
+**Expected Results:**
+
+* Step 1 saves every value with its translations.
+* Step 2 marks it created, the empty optional value valid.
+* Step 3 opens the product filter on that attribute.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-swl rev=1 -->
+### g10adm.inventory-catalog.US6-TC2: A product is not marked created on invalid or missing values, or without a schema
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-06
+
+**Pre-conditions:**
+
+* `<product>`.
+
+**Test data:**
+
+| `<product>` | `<tried>` | `<refused>` |
+| --- | --- | --- |
+| a product with the published schema | saving a card number failing its pattern | the value, by name |
+| a draft with the published schema and no grading value | marking it created | the change, naming grading |
+| a draft whose tuple has no published schema | marking it created | the change; it stays draft |
+
+**Steps:**
+
+1. Try `<tried>`.
+
+**Expected Results:**
+
+* It refuses `<refused>`, and nothing changes.
+
+---
+
+## g10adm.inventory-catalog.US7: Collector finds and reads a card through Auction fields
+
+**As a** collector,
+**I want** to search, filter, and read card facts in my active locale,
+**so that** I can find the right product and understand its identifying details.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-64a rev=1 -->
+### g10adm.inventory-catalog.US7-TC1: A collector filters by universal and structured fields, and reads a card's facts in their locale
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-07
+
+**Pre-conditions:**
+
+* Auction lists products of different IPs, categories, languages and grades, one with a PSA population and one without; listing 1's schema puts language before card number with Traditional Chinese translations; listing 2 carries a PSA cert number with an English label and value only.
+
+**Steps:**
+
+1. On the Auction site, filter by an IP, then by a grade attribute, then by both; then by a PSA population.
+2. Open listing 1 in Traditional Chinese, and listing 2 in Simplified Chinese.
+
+**Expected Results:**
+
+* Step 1 lists only the products matching each filter, the one without a PSA population not matching that filter.
+* Step 2 reads listing 1's labels and values in Traditional Chinese, language before card number, and listing 2's cert number in English.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-0uq rev=1 -->
+### g10adm.inventory-catalog.US7-TC2: A listing attribute is not a search or filter criterion
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-07
+
+**Pre-conditions:**
+
+* An Auction listing carries a vaulted listing attribute.
+
+**Steps:**
+
+1. Open Auction's search and filter controls.
+
+**Expected Results:**
+
+* Vaulted is not offered.
+
+---
+
+## g10adm.inventory-catalog.US8: Inventory admin publishes a safe product-schema configuration
+
+**As an** inventory admin,
+**I want** to review the impact of a product-schema change before publishing it,
+**so that** the active Auction catalogue never knowingly uses invalid product data.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-r9g rev=1 -->
+### g10adm.inventory-catalog.US8-TC1: A schema change publishes only once every product it touches is valid
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-08
+
+**Pre-conditions:**
+
+* A schema draft makes grading required; one existing product of its tuple lacks grading; a reusable field has no Simplified Chinese label.
+
+**Steps:**
+
+1. Publish the draft.
+2. Review the incompatible products, and correct the product's grading.
+3. Publish again.
+
+**Expected Results:**
+
+* Step 1 is refused, naming the product without grading; the missing Simplified Chinese label is reported without blocking.
+* Step 2 lists that product with its missing value, and saves the correction.
+* Step 3 publishes the whole schema at once.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-dwd rev=1 -->
+### g10adm.inventory-catalog.US8-TC2: A product with no matching schema stays visible and unavailable to Auction
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-08
+
+**Pre-conditions:**
+
+* A created product predates product schemas, and its tuple has none published.
+
+**Steps:**
+
+1. Read it on Inventory, and look for it in an Auction listing's product choice.
+
+**Expected Results:**
+
+* Inventory shows it; Auction does not offer it.
+
+---
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-hzq rev=1 -->
+### g10adm.inventory-catalog.US8-TC3: An admin without inventory grants is offered no Inventory
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Admin console
+
+**Pre-conditions:**
+
+* An admin holds no inventory grant.
+
+**Steps:**
+
+1. Open the admin console, and the Inventory products address.
+
+**Expected Results:**
+
+* No Inventory section is offered, and the address is refused.
+## g10adm.inventory-catalog.US9: Inventory admin sees unsold auction stock come back
 
 **As an** inventory admin,
 **I want** the stock of an auction that closed with no winner to show as available, with the hold closed and the listing named on the product page and in the history,
 **so that** I can trust the count and see why it moved.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-bzc rev=2 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
-### grade10-admin-inventory-catalog-US9-TC1-2: Unsold close returns the hold and names the listing
+### g10adm.inventory-catalog.US9-TC1: A listing's close settles its hold, and the history names the listing
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -196,57 +620,6 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-09
-
-**Pre-conditions:**
-
-* admin(holds the inventory catalogue grant, no Auction grant) is on <inventory product url> of `<product_1>`.
-* `<product_1>` has stored stock `<stock>` and no hold but `<listing_1>`'s.
-* `<listing_1>` holds `<held quantity>` units and has just closed with no winner.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | An Auction listing of `<product_1>`, code `<code_1>`, title `<title_1>`, quantity `<held quantity>`, no bids |
-| `<stock>` | 10 units (any count of at least `<held quantity>`) |
-| `<held quantity>` | 4 units (any quantity from 1 to 500; more than 1, so a rise of one unit is told apart) |
-| `<available before>` | 6 units: `<stock>` minus `<held quantity>` |
-| `<available after>` | 10 units: `<available before>` plus `<held quantity>` |
-| `<close time>` | The date and time `<listing_1>`'s close passed |
-
-**Steps:**
-
-1. Read stock, reserved and available.
-2. Read `<listing_1>`'s Auction hold.
-3. Open the product history.
-4. Read the newest entry.
-
-**Expected Results:**
-
-* Step 1: available reads `<available after>`, up by `<held quantity>`; reserved reads 0.
-* Step 2: the hold reads closed and released, remaining 0.
-* Step 2: the hold names `<code_1>` and `<title_1>`.
-* Step 4: one release entry of `<held quantity>` units.
-* Step 4: When reads the date and time, at `<close time>`.
-* Step 4: it shows its action, quantity and an actor.
-* Step 4: Holder reads `<code_1>` and `<title_1>`.
-* Step 4: Remarks read `Released by unsold listing`.
-* Step 4: no admin step appears between the close and the entry.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-8k0 rev=2 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
-### grade10-admin-inventory-catalog-US9-TC2-2: Sold close moves the hold to sold, not available
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -255,80 +628,66 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds the inventory catalogue grant) is on <inventory product url> of `<product_2>`.
-* `<product_2>` has stored stock `<stock>` and an Auction hold of `<held quantity>` for `<listing_2>`, which closed with a winner whose sale is recorded.
+* An admin holding the inventory catalogue grant and no Auction grant is on product 1's page; product 1 holds 10 units, 4 of them held by listing 1, code `<code 1>`, title `<title 1>`, which has just `<closed>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | An Auction listing of `<product_2>`, code `<code_2>`, title `<title_2>`, closed sold |
-| `<stock>` | 10 units (any count of at least `<held quantity>`) |
-| `<held quantity>` | 3 units (any quantity from 1 to 500) |
-| `<expected available>` | 7 units: `<stock>` minus `<held quantity>`, unchanged by the close |
+| `<closed>` | `<figures>` | `<hold reads>` | `<entry>` |
+| --- | --- | --- | --- |
+| closed with no bid | available up to 10, reserved 0 | closed and released, remaining 0 | a release of 4 at the close, Remarks Released by unsold listing |
+| closed with a winner, the sale recorded | available 6, sold up by 4 | sold, not released | the sale, and no Released by unsold listing |
+| been called off before its close | available up to 10 | released, remaining 0 | a release of 4, Remarks — |
 
 **Steps:**
 
-1. Read stock, sold and available.
-2. Read `<listing_2>`'s Auction hold.
-3. Open the product history.
-4. Read the entries for `<listing_2>`.
+1. Read the figures and listing 1's hold.
+2. Open the product history, and read listing 1's entries.
 
 **Expected Results:**
 
-* Step 1: available reads `<expected available>`; sold is up by `<held quantity>`.
-* Step 2: the hold reads sold, not released.
-* Step 4: the sale entry's Holder reads `<code_2>` and `<title_2>`.
-* Step 4: no entry reads `Released by unsold listing`.
+* Step 1 reads `<figures>`; the hold reads `<hold reads>`, naming `<code 1>` and `<title 1>`.
+* Step 2 reads `<entry>`, with its action, quantity, actor and Holder `<code 1>` and `<title 1>`, no admin step between the close and the entry.
 
-<!-- trace:case id=g10adm.inventory-catalog.TC-iit rev=2 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
-### grade10-admin-inventory-catalog-US9-TC3-2: Called-off release carries no remarks
+<!-- trace:case id=g10adm.inventory-catalog.TC-2wi rev=2 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
+### g10adm.inventory-catalog.US9-TC4: The clean-up releases the Unsold holds left behind, and reads as the clean-up's
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-09
+
+**Pre-conditions:**
+
+* Before this change shipped, listings 4, 5 and 6 closed Unsold holding 5, 1 and 2 units of their products; listing 7 is still live holding 1 unit; the clean-up has not run.
+
+**Steps:**
+
+1. Run the one-off clean-up of held Unsold stock.
+2. On each of products 4, 5 and 6, read available, the listing's hold and the newest history entry.
+3. On product 7, read listing 7's hold.
+
+**Expected Results:**
+
+* Step 2: available rose by the held units; each hold reads closed and released, naming its listing's code and title; the entry is a release of the held units at the clean-up's time, Holder the listing, Remarks Released by unsold listing (clean-up).
+* Step 3: listing 7's hold is unchanged and active.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-izt rev=1 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
+### g10adm.inventory-catalog.US9-TC5: Every history entry shows its holder and remarks
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-09
-
-**Pre-conditions:**
-
-* admin(holds the inventory catalogue grant) is on <inventory product url> of `<product_3>`.
-* `<product_3>` had an Auction hold of `<held quantity>` for `<listing_3>`, which an operator called off before its close.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_3>` | An Auction listing of `<product_3>`, code `<code_3>`, title `<title_3>`, called off |
-| `<held quantity>` | 2 units (any quantity from 1 to 500) |
-
-**Steps:**
-
-1. Read `<listing_3>`'s Auction hold.
-2. Open the product history.
-3. Read the release entries for `<listing_3>`.
-
-**Expected Results:**
-
-* Step 1: the hold reads released, remaining 0.
-* Step 3: one release entry of `<held quantity>` units.
-* Step 3: its Holder reads `<code_3>` and `<title_3>`.
-* Step 3: its Remarks read `—`.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-2wi rev=2 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
-### grade10-admin-inventory-catalog-US9-TC4-2: Clean-up release reads as the clean-up's
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -338,94 +697,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Seeded before this change shipped: `<listing_4>`, `<listing_5>` and `<listing_6>` closed Unsold, each still holding its stock of its own product.
-* `<product_7>`'s Auction hold belongs to `<listing_7>`, which is live.
-* The one-time clean-up has not yet run.
-* admin(holds the inventory catalogue grant) is signed in to the inventory console.
+* Product 8's history holds `<entry>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_4>` | Closed Unsold, code `<code_4>`, title `<title_4>`, holding 5 units of `<product_4>` |
-| `<listing_5>` | Closed Unsold, code `<code_5>`, title `<title_5>`, holding 1 unit of `<product_5>` |
-| `<listing_6>` | Closed Unsold, code `<code_6>`, title `<title_6>`, holding 2 units of `<product_6>` |
-| `<listing_7>` | Published, its close still ahead, holding 1 unit of `<product_7>` |
-| `<clean-up time>` | The date and time the clean-up runs |
+| `<entry>` | `<holder>` | `<remarks>` |
+| --- | --- | --- |
+| listing 8 reserving 1 unit, its label `<code 8> · <title 8>`, then adjusting it to 2 with a new label | Auction and listing 8's latest label | not asserted |
+| an admin reserving 1 unit, typing Held for a trade show | Admin and the reference the reserve minted | — |
+| Vault reserving 1 unit | Vault and its reference | not asserted |
+| an admin renaming product 8 | — | — |
 
 **Steps:**
 
-1. Run the one-off clean-up of held Unsold stock.
-2. Navigate to <inventory product url> of `<product_4>`.
-3. Read available and `<listing_4>`'s hold.
-4. Open the product history.
-5. Read the newest entry.
-6. Repeat steps 2 to 5 for `<product_5>` and `<product_6>`.
-7. Navigate to <inventory product url> of `<product_7>`.
-8. Read `<listing_7>`'s hold.
+1. Open the product history, and read the entry.
 
 **Expected Results:**
 
-* Step 3: available rose by the listing's held units; the hold reads closed and released and names the listing's code and title.
-* Step 5: one release entry of the held units, When at `<clean-up time>`.
-* Step 5: Holder reads the listing's code and title.
-* Step 5: Remarks read `Released by unsold listing (clean-up)`.
-* Step 6 finds the same for `<listing_5>` and `<listing_6>`.
-* Step 8: `<listing_7>`'s hold is unchanged, still active.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-izt rev=1 covers=g10adm.inventory-catalog.SC-fac,g10adm.inventory-catalog.SC-74t,g10adm.inventory-catalog.SC-h6i,g10adm.inventory-catalog.SC-evn,g10adm.inventory-catalog.SC-j3i -->
-### grade10-admin-inventory-catalog-US9-TC5-1: Every history entry shows its holder and remarks
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-09
-
-**Pre-conditions:**
-
-* admin(holds the inventory catalogue grant) is on <inventory product url> of `<product_8>`.
-* `<product_8>`'s history holds the row's entry.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_8>` | An Auction listing of `<product_8>`, code `<code_8>`, title `<title_8>` |
-| `<admin reference>` | The holder reference an admin reserve on `<product_8>` minted |
-| `<vault reference>` | The holder reference of a Vault hold on `<product_8>` |
-| `<admin remarks>` | `Held for a trade show` (any remarks the admin typed) |
-
-| Row | Entry | Holder | Remarks |
-| --- | --- | --- | --- |
-| Auction hold | `<listing_8>` reserves 1 unit | `Auction`, `<code_8>` and `<title_8>` | Not asserted |
-| Admin hold | An admin reserves 1 unit, typing `<admin remarks>` | `Admin` and `<admin reference>` | `—` |
-| Vault hold | Vault reserves 1 unit | `Vault` and `<vault reference>` | Not asserted |
-| Product edit | An admin renames `<product_8>` | `—` | `—` |
-
-**Steps:**
-
-1. Open the product history.
-2. Read the row's entry.
-
-**Expected Results:**
-
-* Step 2: When reads a date and a time.
-* Step 2: the entry shows its action, quantity and actor.
-* Step 2: Holder reads the row's holder.
-* Step 2: Remarks read the row's remarks, where the row asserts them.
+* It reads its date and time, action, quantity and actor; Holder reads `<holder>`, and Remarks `<remarks>` where asserted.
 
 ---
 
-## grade10-admin-inventory-catalog-US12: Operator classifies source media for one copy
+## g10adm.inventory-catalog.US12: Operator classifies source media for one copy
 
 **As an** Inventory operator,
 **I want** to tag, untag, or retag saved product media for one Cert record,
@@ -433,384 +726,152 @@ Runs once per row of **Test data**.
 that document it while shared product media stays available to every copy.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-9q6 rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
-### grade10-admin-inventory-catalog-US12-TC1-1: Tag saved media to one Cert record
+### g10adm.inventory-catalog.US12-TC1: Source media is tagged to one Cert record, retagged only by hand, and untagged for the whole product
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-12
 
 **Pre-conditions:**
 
-* admin(holds existing Inventory media-management authority) is on <grade10 admin inventory media manager url>.
-* One saved, untagged <media type> belongs to <inventory product>.
-* One Cert record with a printed Cert ID belongs to <inventory product>.
+* An admin holding media-management authority is on the media manager; a saved, untagged `<media>` belongs to the product, which holds Cert records A and B with printed Cert IDs.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Media type | Product image |
-| Media type | Product video |
+| `<media>` |
+| --- |
+| product image |
+| product video |
 
 **Steps:**
 
-1. Open the saved <media type> for <inventory product>.
-2. Select the Cert record for <inventory product>.
-3. Save the tag.
+1. Open the `<media>`, select Cert record A, and save.
+2. Retag it from A to B, and save.
+3. Tag it to A again, clear its tag, and save.
 
 **Expected Results:**
 
-* The source media item is tagged to the selected Cert record of the same product.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-7fg rev=2 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
-### grade10-admin-inventory-catalog-US12-TC2-2: Media for a Cert record without a printed ID stays shared
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-12
-
-**Pre-conditions:**
-
-* admin(holds existing Inventory media-management authority) is on <grade10 admin inventory media manager url>.
-* One saved, untagged source media item belongs to <inventory product>.
-* One Cert record belongs to <inventory product> and has no printed Cert ID.
-
-**Steps:**
-
-1. Open the saved source media item for <inventory product>.
-2. Attempt to tag the media to the Cert record without a printed Cert ID.
-
-**Expected Results:**
-
-* Grade10 refuses the tag write.
-* The source media remains untagged and shared at product level.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-tzo rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
-### grade10-admin-inventory-catalog-US12-TC3-1: Untag saved media for product-level sharing
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-12
-
-**Pre-conditions:**
-
-* admin(holds existing Inventory media-management authority) is on <grade10 admin inventory media manager url>.
-* One saved source media item for <inventory product> is tagged to a Cert record of that product with a printed Cert ID.
-
-**Steps:**
-
-1. Open the tagged source media item for <inventory product>.
-2. Clear its Cert tag.
-3. Save the tag change.
-
-**Expected Results:**
-
-* The source media item has no Cert tag.
-* The uploaded media remains available as product-level media.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-hik rev=2 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
-### grade10-admin-inventory-catalog-US12-TC4-2: Retagging leaves the original media item untagged
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-12
-
-**Pre-conditions:**
-
-* admin(holds existing Inventory media-management authority) is on <grade10 admin inventory media manager url>.
-* One saved source media item for <inventory product> is tagged to <source cert record>.
-* <target cert record> belongs to <inventory product>, has a printed Cert ID, and differs from <source cert record>.
-
-**Steps:**
-
-1. Open the tagged source media item for <inventory product>.
-2. Retag the item from <source cert record> to <target cert record>.
-3. Save the tag change.
-
-**Expected Results:**
-
-* The source media item remains on <inventory product> with no Cert tag and is shared at product level.
-* Grade10 does not automatically transfer the existing source media item to <target cert record>.
-* A later tag assignment to <target cert record> is a separate explicit action.
+* Step 1 tags it to A, on the same product.
+* Step 2 leaves it on the product with no Cert tag, shared at product level; it is not moved to B, a tag to B being a separate act.
+* Step 3 leaves it untagged, still available as product-level media.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-p5b rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
-### grade10-admin-inventory-catalog-US12-TC5-1: Invalid retag targets preserve the current tag
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-12
-
-**Pre-conditions:**
-
-* admin(holds existing Inventory media-management authority) is on <grade10 admin inventory media manager url>.
-* One saved source media item for <inventory product> is tagged to <current cert record>.
+### g10adm.inventory-catalog.US12-TC5: A tag write the rules forbid is refused, the current tag kept
 
 Runs once per row of **Test data**.
 
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-12
+
+**Pre-conditions:**
+
+* A saved source media item of the product is tagged to a Cert record; `<operator>` acts.
+
 **Test data:**
 
-| Target | Value |
+| `<operator>` | `<tried>` |
 | --- | --- |
-| Record target | Missing Cert record |
-| Record target | Cert record owned by another product |
+| an admin holding media-management authority | a retag to a missing Cert record |
+| an admin holding media-management authority | a retag to a Cert record of another product |
+| an admin without media-management authority | any change of its tag |
 
 **Steps:**
 
-1. Open the tagged source media item for <inventory product>.
-2. Attempt to retag it to <record target>.
+1. Try `<tried>`.
 
 **Expected Results:**
 
-* Grade10 refuses the tag write.
-* The source media item's current tag and media remain unchanged.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-odt rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
-### grade10-admin-inventory-catalog-US12-TC6-1: Unauthorized tag changes are refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-12
-
-**Pre-conditions:**
-
-* admin(without existing Inventory media-management authority) is on <grade10 admin inventory media manager url>.
-* One saved source media item for <inventory product> has a Cert tag.
-
-**Steps:**
-
-1. Attempt to change the source media item's Cert tag.
-
-**Expected Results:**
-
-* Grade10 refuses the write under existing Inventory authorization.
-* The tag and source media remain unchanged.
+* It is refused; the tag and the media are unchanged.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-j5n rev=1 covers=g10adm.inventory-catalog.SC-sbt,g10adm.inventory-catalog.SC-hcz,g10adm.inventory-catalog.SC-ec6,g10adm.inventory-catalog.SC-6tq,g10adm.inventory-catalog.SC-fbv,g10adm.inventory-catalog.SC-hhf -->
-### grade10-admin-inventory-catalog-US12-TC7-1: Regular stock is not a Cert media tag target
+### g10adm.inventory-catalog.US12-TC7: Regular stock is not a tag target
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** high
+* **Severity:** minor
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-12
 
 **Pre-conditions:**
 
-* admin(holds existing Inventory media-management authority) is on <grade10 admin inventory media manager url>.
-* <inventory product> has regular stock without a Cert record and one Cert record with a Cert ID.
-* One saved, untagged source media item belongs to <inventory product>.
+* The product holds regular stock with no Cert record and one Cert record with a Cert ID; a saved untagged item belongs to it.
 
 **Steps:**
 
-1. Open the saved source media item for <inventory product>.
-2. Inspect the Cert tag choices.
+1. Open the item, and read the tag choices.
 
 **Expected Results:**
 
-* The Cert record with a Cert ID is offered as a tag target.
-* Regular stock without a Cert record is not offered as a tag target.
-* The source media item remains untagged and available as product-level media.
+* The Cert record is offered and regular stock is not; the item stays untagged and shared.
 
 ---
 
-## grade10-admin-inventory-catalog-US13: Operator removes an available copy and its source media
+## g10adm.inventory-catalog.US13: Operator removes an available copy and its source media
 
 **As an** Inventory operator,
 **I want** to remove an available physical unit and its Cert record together,
 **so that** the unit is withdrawn and its Cert-scoped source media cannot be reused.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-x83 rev=3 covers=g10adm.inventory-catalog.SC-gpb,g10adm.inventory-catalog.SC-lvy -->
-### grade10-admin-inventory-catalog-US13-TC1-3: Physical removal withdraws the unit and deletes its tagged media
+### g10adm.inventory-catalog.US13-TC1: Removing a physical unit withdraws it and deletes only its tagged media
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** destructive
+* **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-13
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_22>`.
-* `<cert_a>` belongs to `<product_22>`, reads Available, and no active hold names it.
-* `<admin hold>` named `<cert_a>` and was released.
-* `<tagged image>` is tagged to `<cert_a>`; `<shared image>` is untagged; `<other image>` is tagged to `<cert_b>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-22000001` |
-| `<cert_b>` | `PSA-22000002`, another available Cert record of `<product_22>` |
-| `<admin hold>` | An admin hold of `<cert_a>`, released whole |
-| `<tagged image>` | One product image tagged to `<cert_a>` |
-| `<shared image>` | One product image with no Cert tag |
-| `<other image>` | One product image tagged to `<cert_b>` |
-| `<reason>` | `Damaged in storage` (any non-empty withdrawal reason) |
+* Product 22's PSA-22000001 reads Available, an admin hold having named it and released it whole; one image is tagged to it, one is untagged, and one is tagged to PSA-22000002.
 
 **Steps:**
 
-1. Read stock, withdrawn and the ledger.
-2. Click View Cert IDs.
-3. Select `<cert_a>`'s row.
-4. Read its actions.
-5. Click Remove physical unit.
-6. Read the confirmation.
-7. Click Cancel.
-8. Read the rows.
-9. Click Remove physical unit.
-10. Enter `<reason>`.
-11. Click Confirm.
-12. Read the rows.
-13. Close Cert ID details.
-14. Read stock, withdrawn and the ledger.
-15. Open the product history.
-16. Open the product's media.
+1. Read stock, withdrawn and the ledger; in View Cert IDs, select PSA-22000001 and read its actions.
+2. Click Remove physical unit, read the confirmation, and Cancel.
+3. Click Remove physical unit again, enter Damaged in storage, and confirm.
+4. Close Cert ID details; read the figures, the history and the product's media.
 
 **Expected Results:**
 
-* Step 4: Remove physical unit is offered; `Remove` is not.
-* Step 6: a confirmation names `<cert_a>` and asks for a reason; Confirm is unavailable.
-* Step 8: `<cert_a>` is still listed, Available.
-* Step 10: Confirm is available.
-* Step 12: `<cert_a>` is no longer listed.
-* Step 14: stock is one lower; withdrawn is one higher; the ledger reads as in step 1.
-* Step 15: one withdrawal entry records `<reason>`; no `Intake reversal` entry was added.
-* Step 16: `<tagged image>` is deleted.
-* Step 16: `<shared image>` and `<other image>` remain with their tags.
+* Step 1 offers Remove physical unit and not Remove.
+* Step 2's confirmation names PSA-22000001 and asks for a reason, Confirm unavailable until one is entered; cancelling leaves it listed, Available.
+* Step 3 removes it from the rows.
+* Step 4: stock is one lower and withdrawn one higher, the ledger as before; one withdrawal entry records the reason and no Intake reversal; the tagged image is deleted, the other two kept with their tags.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-ktu rev=1 covers=g10adm.inventory-catalog.SC-gpb,g10adm.inventory-catalog.SC-k3v -->
-### grade10-admin-inventory-catalog-US13-TC2-1: An actively reserved Cert unit cannot be removed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-13
-
-**Pre-conditions:**
-
-* admin(holds existing Inventory write authority) is on <grade10 admin inventory record url>.
-* <cert record> has an active reservation and one source media item is tagged to it.
-
-**Steps:**
-
-1. Attempt to remove the physical unit for <cert record>.
-
-**Expected Results:**
-
-* Grade10 refuses the removal while the active reservation exists.
-* The reservation, stock, withdrawn count, inventory ledger, Cert record, and tagged source media remain unchanged.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-f95 rev=1 covers=g10adm.inventory-catalog.SC-gpb,g10adm.inventory-catalog.SC-k3v -->
-### grade10-admin-inventory-catalog-US13-TC3-1: A non-available Cert unit cannot be removed
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-13
-
-**Pre-conditions:**
-
-* admin(holds existing Inventory write authority) is on <grade10 admin inventory record url>.
-* <cert record> has no active reservation and has a status other than available.
-* One source media item is tagged to <cert record>.
-
-**Test data:**
-
-| Status | Value |
-| --- | --- |
-| Cert status | Sold |
-| Cert status | Withdrawn |
-| Cert status | Vaulted |
-
-**Steps:**
-
-1. Attempt to remove the physical unit for <cert record>.
-
-**Expected Results:**
-
-* Grade10 refuses removal because <cert record> is not available.
-* Stock, withdrawn count, inventory ledger, Cert record, and tagged source media remain unchanged.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-dd3 rev=1 covers=g10adm.inventory-catalog.SC-k3v,g10adm.inventory-catalog.SC-lvy -->
-### grade10-admin-inventory-catalog-US13-TC4-1: A Cert record that has only been intaken offers Remove, not Remove physical unit
+### g10adm.inventory-catalog.US13-TC2: A Cert unit held or no longer available cannot be removed
 
 Runs once per row of **Test data**.
 
@@ -828,47 +889,80 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_23>`.
-* `<product_23>` holds the row's Cert record, and no hold, active or closed, has ever named it.
+* A Cert record `<state>`, one source media item tagged to it.
 
 **Test data:**
 
-| Row | Cert record |
-| --- | --- |
-| Intaken | `PSA-23000001`, intaken with its Cert ID |
-| Numbered from regular stock | `PSA-23000002`, given by Assign Cert ID to an available unit of regular stock |
-| Corrected | `PSA-23000003`, corrected from `PSA-23000009` after intake |
-| Beside moved regular stock | `PSA-23000004`, intaken with its Cert ID; `<product_23>`'s regular stock has since been sold and held |
+| `<state>` |
+| --- |
+| held by an active reservation |
+| sold |
+| withdrawn |
+| vaulted |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Select the row's Cert record.
-3. Read its actions.
+1. Try to remove its physical unit.
 
 **Expected Results:**
 
-* Step 3: `Remove` is offered.
-* Step 3: Remove physical unit is not offered.
+* It is refused; the reservation, stock, withdrawn, the ledger, the record and its media are unchanged.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-dd3 rev=1 covers=g10adm.inventory-catalog.SC-k3v,g10adm.inventory-catalog.SC-lvy -->
+### g10adm.inventory-catalog.US13-TC4: A Cert record that has only been intaken offers Remove, not Remove physical unit
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-13
+
+**Pre-conditions:**
+
+* Product 23 holds `<record>`, which no hold has ever named.
+
+**Test data:**
+
+| `<record>` |
+| --- |
+| PSA-23000001, intaken with its Cert ID |
+| PSA-23000002, given by Assign Cert ID |
+| PSA-23000003, corrected from PSA-23000009 after intake |
+| PSA-23000004, intaken, the product's regular stock since sold and held |
+
+**Steps:**
+
+1. In View Cert IDs, select it and read its actions.
+
+**Expected Results:**
+
+* Remove is offered, and Remove physical unit is not.
 
 ---
-
-## grade10-admin-inventory-catalog-US14: Inventory admin accounts for every unit in Cert ID details
+## g10adm.inventory-catalog.US14: Inventory admin accounts for every unit in Cert ID details
 
 **As an** inventory admin,
 **I want** Cert ID details to list the regular stock without a Cert ID beside the Cert records, by state and holder,
 **so that** I can see where every unit of the product is without adding up the counts myself.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-ebs rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
-### grade10-admin-inventory-catalog-US14-TC1-1: Cert ID details lists every tracked unit by state and holder
+### g10adm.inventory-catalog.US14-TC1: Cert ID details lists every unit on hand by state and holder, adding up to stock
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
+* **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -876,52 +970,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_3>`.
-* `<product_3>` holds the Cert records and regular stock in **Test data**, and no other unit.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cert_avail>` | `PSA-30000001`, available, no active hold |
-| `<cert_held>` | `PSA-30000002`, held by `<listing_1>` |
-| `<cert_sold>` | `PSA-30000003`, sold |
-| `<regular available>` | 500 units of regular stock outside every hold (any count of at least 2; a bulk count still reads one row) |
-| `<listing_1>` | An Auction listing of `<product_3>`, code `<code_1>`, title `<title_1>` |
-| `<admin hold>` | An admin hold on regular stock, 2 units, active |
-| `<auction hold>` | `<listing_2>`'s hold on regular stock, 3 units, 1 sold from it, so 2 remaining |
-| `<released hold>` | An admin hold on regular stock, released, 0 remaining |
-| `<regular sold>` | 4 units of regular stock sold outside any hold |
-| `<regular withdrawn>` | 1 unit of regular stock withdrawn |
+* Product 3 holds only: PSA-30000001 available; PSA-30000002 held by listing 1; PSA-30000003 sold; 500 units of regular stock outside every hold; an admin hold of 2 regular units; listing 2's hold of 3 regular units with 1 sold from it; a released admin hold; 4 regular units sold and 1 withdrawn.
 
 **Steps:**
 
-1. Read the product's stock.
-2. Click View Cert IDs.
-3. Read the Cert record rows.
-4. Read the `No Cert ID` rows.
-5. Read the order of the rows.
-6. Add up the quantities of the Available and Reserved rows.
+1. Read the stock, and click View Cert IDs.
+2. Read the rows, their order, and add up the Available and Reserved rows.
 
 **Expected Results:**
 
-* Step 2: Cert ID details opens.
-* Step 3: one row each for `<cert_avail>`, `<cert_held>` and `<cert_sold>`, each with its state.
-* Step 3: `<cert_held>`'s row names `<listing_1>` as its holder.
-* Step 3: no row shows a Grade Issuer, Grade, Autograph Grade or Serial.
-* Step 4: one available `No Cert ID` row reads `<regular available>`.
-* Step 4: one Reserved row for `<admin hold>`: Admin, its reference and 2.
-* Step 4: one Reserved row for `<auction hold>`: Auction, `<listing_2>` and 2.
-* Step 4: no row for `<released hold>`, `<regular sold>` or `<regular withdrawn>`.
-* Step 5: the Cert record rows come first, by Cert ID, then the available `No Cert ID` row, then the hold rows.
-* Step 6: the sum equals the stock read in step 1.
+* One row each for the three Cert records with its state, PSA-30000002 naming listing 1, none showing Grade Issuer, Grade, Autograph Grade or Serial.
+* One available No Cert ID row of 500; a Reserved row for the admin hold, Admin, its reference and 2; one for listing 2's hold, Auction, listing 2 and 2; no row for the released hold, the sold or the withdrawn.
+* Cert records come first by Cert ID, then the available No Cert ID row, then the hold rows; the sum equals the stock.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-b0u rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
-### grade10-admin-inventory-catalog-US14-TC2-1: A product without Cert records lists its regular stock
+### g10adm.inventory-catalog.US14-TC2: A product lists only what its stock has held
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
@@ -933,36 +1002,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_4>`.
-* `<product_4>` has no Cert record.
-* `<product_4>` holds `<regular available>` units of available regular stock outside every hold.
+* A created product holds only `<held>`.
 
 **Test data:**
 
-| Field | Value |
+| `<held>` | `<rows>` |
 | --- | --- |
-| `<regular available>` | 6 units (any count of at least 1) |
+| 6 units of available regular stock, no Cert record | one No Cert ID row, available, 6 |
+| one unit intaken with PSA-17000001, no regular stock ever | PSA-17000001 alone, no No Cert ID row |
+| nothing, never intaken | none, one line saying no unit is on hand |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Read the rows.
+1. Click View Cert IDs, and read the rows.
 
 **Expected Results:**
 
-* Step 1: Cert ID details opens.
-* Step 2: one `No Cert ID` row reads available and `<regular available>`.
-* Step 2: no other row is listed.
+* It lists `<rows>`.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-ei7 rev=2 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
-### grade10-admin-inventory-catalog-US14-TC3-2: Selecting a No Cert ID row shows the regular stock's history
+### g10adm.inventory-catalog.US14-TC3: A No Cert ID row shows the regular stock's history, and not a Cert record's
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** major
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -973,50 +1039,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_5>`.
-* `<product_5>`'s regular stock was intaken by `<regular intake>`, and `<admin hold>` reserved part of it.
-* `<product_5>` holds `<cert_a>`, whose Cert ID was corrected from `<cert_x>`, and `<cert hold>` now holds it.
-* One unit of `<product_5>`'s regular stock was given `<cert_g>`.
+* Product 5's regular stock was intaken as 5 units; an admin hold took 2; PSA-50000002, corrected from PSA-50000001, is held by an admin hold; a regular unit was given PSA-50000003.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<regular intake>` | An intake of 5 units with no Cert ID |
-| `<admin hold>` | An admin hold of 2 units of regular stock, active |
-| `<cert_x>` | `PSA-50000001` |
-| `<cert_a>` | `PSA-50000002` |
-| `<cert hold>` | An admin hold of `<cert_a>`, active |
-| `<cert_g>` | `PSA-50000003`, given by Assign Cert ID |
-
-| Row | `No Cert ID` row selected |
-| --- | --- |
-| Available | The available row, 2 units |
-| Held | The row for `<admin hold>`, 2 remaining |
+| `<row>` |
+| --- |
+| the available No Cert ID row, 2 units |
+| the admin hold's No Cert ID row, 2 remaining |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Click the `No Cert ID` row the row names.
-3. Read its history.
+1. In View Cert IDs, click `<row>`, and read its history.
 
 **Expected Results:**
 
-* Step 3: the entry for `<regular intake>` shows.
-* Step 3: the reserve entry for `<admin hold>` shows.
-* Step 3: the `Cert ID change` from `No Cert ID` to `<cert_g>` shows.
-* Step 3: the `Cert ID change` from `<cert_x>` to `<cert_a>` does not show.
-* Step 3: the reserve entry for `<cert hold>` does not show.
+* It shows the intake, the admin hold's reserve and the Cert ID change from No Cert ID to PSA-50000003; not the change from PSA-50000001, nor PSA-50000002's hold.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-9ow rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
-### grade10-admin-inventory-catalog-US14-TC4-1: Regular stock that is all held reads Available 0
+### g10adm.inventory-catalog.US14-TC4: Regular stock that is all held reads Available 0, and offers no Cert ID
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -1025,38 +1073,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_14>`.
-* `<product_14>` has no Cert record.
-* `<product_14>` has `<regular sold>` and `<regular withdrawn>`, and `<auction hold>` holds every unit on hand.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<regular sold>` | 3 units of regular stock sold outside any hold |
-| `<regular withdrawn>` | 1 unit of regular stock withdrawn |
-| `<listing_14>` | An Auction listing of `<product_14>`, code `<code_14>`, title `<title_14>` |
-| `<auction hold>` | `<listing_14>`'s hold on regular stock, 2 units, active |
+* Product 14 has no Cert record; 3 regular units sold, 1 withdrawn, and listing 14 holds the 2 on hand.
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Read the rows.
-3. Read each row's actions.
+1. Click View Cert IDs, and read the rows and their actions.
 
 **Expected Results:**
 
-* Step 2: two rows, in order: `No Cert ID`, Available, `—`, 0; then `No Cert ID`, Reserved, Auction, `<code_14> · <title_14>`, 2.
-* Step 2: no row lists `<regular sold>` or `<regular withdrawn>`.
-* Step 3: neither row offers the assign action.
-* Step 3: the rows say no free unit of regular stock can take a Cert ID.
+* Two rows, in order: No Cert ID, Available, —, 0; and No Cert ID, Reserved, Auction, listing 14's code and title, 2; none for the sold or withdrawn.
+* Neither offers the assign action; the rows say no free regular unit can take a Cert ID.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-v6a rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
-### grade10-admin-inventory-catalog-US14-TC5-1: A released hold's units return to the available row
+### g10adm.inventory-catalog.US14-TC5: A released hold's units return to the available row
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
@@ -1068,85 +1101,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_15>`.
-* `<product_15>` holds `<regular available>` units of available regular stock outside every hold.
-* `<admin hold>` holds regular stock of `<product_15>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<regular available>` | 1 unit |
-| `<admin hold>` | An admin hold of 2 units of regular stock, active |
-| `<count after>` | 3 units: `<regular available>` plus `<admin hold>`'s 2 |
+* Product 15 holds 1 available regular unit, and an admin hold of 2 regular units.
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Read the `No Cert ID` rows.
-3. Close Cert ID details.
-4. Release `<admin hold>` whole from the product page.
-5. Click View Cert IDs.
-6. Read the `No Cert ID` rows.
+1. Read the No Cert ID rows in View Cert IDs.
+2. Release the admin hold whole from the product page, and read them again.
 
 **Expected Results:**
 
-* Step 2: the available row reads `<regular available>`; the row for `<admin hold>` reads 2.
-* Step 6: the available row reads `<count after>`.
-* Step 6: no row for `<admin hold>` is listed.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-6o7 rev=1 covers=g10adm.inventory-catalog.SC-4o8,g10adm.inventory-catalog.SC-2h0,g10adm.inventory-catalog.SC-nf2,g10adm.inventory-catalog.SC-ji2,g10adm.inventory-catalog.SC-ekd,g10adm.inventory-catalog.SC-pwt -->
-### grade10-admin-inventory-catalog-US14-TC6-1: A product whose regular stock has no history lists no No Cert ID row
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-14
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of the row's product.
-* The row's product is created and holds only what the row names.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-17000001` |
-
-| Row | Product | Rows listed |
-| --- | --- | --- |
-| Cert records only | `<product_17>`, which intook one unit with Cert ID `<cert_a>` and no regular stock | `<cert_a>` alone |
-| Nothing intaken | `<product_18>`, which never intook stock | none, and one line saying no unit is on hand |
-
-**Steps:**
-
-1. Click View Cert IDs.
-2. Read the rows.
-
-**Expected Results:**
-
-* Step 2: the rows read as the row's Rows listed.
-* Step 2: no `No Cert ID` row is listed.
+* Step 1 reads 1 available and 2 held.
+* Step 2 reads 3 available, and no row for the hold.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-56a rev=1 covers=g10adm.inventory-catalog.SC-oth -->
-### grade10-admin-inventory-catalog-US14-TC7-1: A reduction lowers the available row and the rows still add up to stock
+### g10adm.inventory-catalog.US14-TC7: A reversal lowers the rows, which still add up to stock
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -1157,105 +1132,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_24>`.
-* `<product_24>`'s regular stock was intaken by `<first intake>`, then `<admin hold>` reserved all of it, then `<second intake>` arrived.
-* `<product_24>` holds `<cert_a>`, available.
+* `<product>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<first intake>` | An intake of 2 units with no Cert ID |
-| `<admin hold>` | An admin hold of 2 units of regular stock, active |
-| `<second intake>` | An intake of 5 units with no Cert ID |
-| `<cert_a>` | `PSA-24000001` |
-
-| Row | Units reduced | Available row after |
+| `<product>` | `<reversed>` | `<rows after>` |
 | --- | --- | --- |
-| Part | 2 | 3: 5 minus 2 |
-| All | 5 | 0 |
+| product 24: 2 regular units intaken and all held, then 5 more intaken; PSA-24000001 available | Reduce quantity, 2 units | the available No Cert ID row 3, the hold 2, PSA-24000001 Available |
+| the same | Reduce quantity, 5 units | the available No Cert ID row 0, the hold 2, PSA-24000001 Available |
+| product 25: PSA-25000001 unmoved, PSA-25000002 available, 3 regular units available | Remove PSA-25000001 | PSA-25000002, then the available No Cert ID row 3 |
+| product 26: 3 regular units intaken, one given PSA-25000003, unmoved since | Remove PSA-25000003 | the available No Cert ID row 2 |
+| product 27: PSA-25000001 alone | Remove PSA-25000001 | none, one line saying no unit is on hand |
 
 **Steps:**
 
-1. Read the product's stock.
-2. Click View Cert IDs.
-3. Click `Reduce quantity` on the available `No Cert ID` row.
-4. Enter the row's Units reduced.
-5. Click Confirm.
-6. Read the rows.
-7. Click the available `No Cert ID` row.
-8. Read its history.
-9. Close Cert ID details.
-10. Read the product's stock.
-11. Click View Cert IDs.
-12. Add up the quantities of the Available and Reserved rows.
+1. Read the stock; in View Cert IDs take `<reversed>`, and confirm.
+2. Read the rows, and the available No Cert ID row's history where one is listed.
+3. Read the stock again.
 
 **Expected Results:**
 
-* Step 6: the available `No Cert ID` row is still listed and reads the row's Available row after.
-* Step 6: the row for `<admin hold>` still reads 2; `<cert_a>` still reads Available.
-* Step 8: the newest entry reads `Intake reversal · No Cert ID`, quantity the row's Units reduced.
-* Step 8: the entries for `<first intake>` and `<second intake>` still show.
-* Step 10: stock is the row's Units reduced lower than in step 1.
-* Step 12: the sum equals the stock read in step 10.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-a6u rev=1 covers=g10adm.inventory-catalog.SC-oth -->
-### grade10-admin-inventory-catalog-US14-TC8-1: A removed Cert record leaves Cert ID details and the rows still add up
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-14
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of the row's product.
-* The row's product holds only what the row names.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-25000001`, intaken with its Cert ID, never moved |
-| `<cert_b>` | `PSA-25000002`, available |
-| `<cert_g>` | `PSA-25000003`, given by Assign Cert ID, never moved since |
-
-| Row | Product | Removed | Rows listed after |
-| --- | --- | --- | --- |
-| Beside other units | `<product_25>`: `<cert_a>`, `<cert_b>` and 3 units of available regular stock | `<cert_a>` | `<cert_b>`, then the available `No Cert ID` row reading 3 |
-| Numbered from regular stock | `<product_26>`: 3 units of regular stock intaken, one of them given `<cert_g>` | `<cert_g>` | the available `No Cert ID` row reading 2 |
-| Its only unit | `<product_27>`: `<cert_a>` alone, no regular stock ever intaken | `<cert_a>` | none, and one line saying no unit is on hand |
-
-**Steps:**
-
-1. Click View Cert IDs.
-2. Click `Remove` on the row's Removed record.
-3. Click Confirm.
-4. Read the rows.
-5. Where an available `No Cert ID` row is listed, click it.
-6. Read its history.
-7. Close Cert ID details.
-8. Read the product's stock.
-
-**Expected Results:**
-
-* Step 4: the rows read as the row's Rows listed after.
-* Step 4: no row reads the Removed record's Cert ID.
-* Step 6: no `Intake reversal` entry for the Removed record shows.
-* Step 6: on the Numbered from regular stock row, the `Cert ID change` from `No Cert ID` to `<cert_g>` still shows.
-* Step 8: stock equals the sum of the quantities listed in step 4.
+* Step 2 reads `<rows after>`, no row reading a removed Cert ID; a reduction's history newest reads Intake reversal · No Cert ID with its units, the intakes still showing; a removal leaves no entry there, a numbered record's Cert ID change still showing.
+* Step 3 equals the rows' sum.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-dok rev=1 covers=g10adm.inventory-catalog.SC-4lh -->
-### grade10-admin-inventory-catalog-US14-TC9-1: An admin without write authority reads but cannot reduce or remove
+### g10adm.inventory-catalog.US14-TC9: A reader without the write grant cannot reverse an intake
 
 **Classification:**
 
@@ -1271,49 +1172,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(reads Inventory, no Inventory write authority) is on <inventory product url> of `<product_42>`.
-* `<product_42>`'s regular stock was intaken by `<first intake>` and has never moved, and an earlier `<reduction>` took one unit out.
-* `<product_42>` holds `<cert_a>`, intaken and never held, sold, withdrawn or vaulted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<first intake>` | An intake of 4 units with no Cert ID |
-| `<reduction>` | A reduction of 1 unit by an admin with write authority |
-| `<cert_a>` | `PSA-42000001` |
+* An admin reads Inventory without write authority; product 42's 4 regular units, never moved, had 1 taken out by an earlier reduction; PSA-42000001 is unmoved.
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Read the rows and their actions.
-3. Click the available `No Cert ID` row.
-4. Read its history.
-5. Send a reduction of 1 unit under this admin's session, outside the page.
-6. Send a removal of `<cert_a>` under this admin's session, outside the page.
-7. Read Cert ID details again.
-8. Open the product history.
+1. In View Cert IDs, read the rows, their actions, and the available row's history.
+2. Send a reduction of 1, and a removal of PSA-42000001, outside the page; read the rows and the history again.
 
 **Expected Results:**
 
-* Step 2: the available `No Cert ID` row reads 3; `<cert_a>` is listed.
-* Step 2: no `Reduce quantity` or `Remove` is offered.
-* Step 4: the `Intake reversal · No Cert ID` entry for `<reduction>` shows.
-* Step 5: the request is refused.
-* Step 6: the request is refused.
-* Step 7: the rows read as in step 2.
-* Step 8: no `Intake reversal` entry was added after `<reduction>`'s.
+* Step 1 reads the available row as 3 with PSA-42000001 listed, offering no Reduce quantity or Remove; the earlier reduction shows.
+* Step 2 refuses both; the rows read as before, and no new Intake reversal was added.
 
 ---
 
-## grade10-admin-inventory-catalog-US15: Inventory admin corrects or assigns a unit's Cert ID
+## g10adm.inventory-catalog.US15: Inventory admin corrects or assigns a unit's Cert ID
 
 **As an** inventory admin,
 **I want** to change a wrong Cert ID on an available unit, or give an available unit of regular stock its Cert ID, from Cert ID details,
 **so that** the record matches the card on the shelf without removing the unit and losing its history.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-77a rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC1-1: Correcting a Cert ID keeps the record and records the change
+### g10adm.inventory-catalog.US15-TC1: Correcting a Cert ID keeps the record, its history and its media
 
 Runs once per row of **Test data**.
 
@@ -1323,60 +1203,36 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_6>`.
-* `<product_6>` holds `<cert_a>`, an available Cert record no hold, active or closed, has ever named.
-* `<product_6>` holds `<cert_sold>`.
-* `<tagged image>` is tagged to `<cert_a>`.
+* Product 6 holds PSA-60000001, available and never named by a hold, with one image tagged to it, and PSA-60000004, sold; another product holds PSA-60000003.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-60000001` |
-| `<cert_sold>` | `PSA-60000004`, a sold Cert record of `<product_6>` |
-| `<tagged image>` | One product image tagged to `<cert_a>` |
-| `<other product>` | Another product holding a Cert record `PSA-60000003` |
-| `<change time>` | The date and time step 4 is saved |
-
-| Row | New Cert ID | Remarks typed | Remarks read |
-| --- | --- | --- | --- |
-| Unused anywhere | `PSA-60000002` | `Digit misread at intake` | `Digit misread at intake` |
-| Used on `<other product>` only | `PSA-60000003` | none | `—` |
-| `<cert_sold>` in lower case | `psa-60000004` | none | `—` |
+| `<new>` | `<remarks typed>` | `<remarks read>` |
+| --- | --- | --- |
+| PSA-60000002, unused anywhere | Digit misread at intake | Digit misread at intake |
+| PSA-60000003, used on another product only | none | — |
+| psa-60000004, the sold record in lower case | none | — |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Open the correct action on `<cert_a>`'s row.
-3. Enter the row's new Cert ID and remarks.
-4. Save.
-5. Read the Cert record rows.
-6. Click the new Cert ID's row.
-7. Read its history.
-8. Open the product history.
-9. Open the product's media and read `<tagged image>`'s Cert tag.
+1. In View Cert IDs, open the correct action on PSA-60000001, enter `<new>` and `<remarks typed>`, and save.
+2. Read the rows, then the new Cert ID's history, the product history and the image's tag.
 
 **Expected Results:**
 
-* Step 5: the row reads the new Cert ID exactly as entered; no row reads `<cert_a>`.
-* Step 5: it is still available.
-* Step 5: `<cert_sold>` still reads `PSA-60000004`, Sold.
-* Step 7: the `<cert_a>` intake entry still shows, below the `Cert ID change`.
-* Step 7: a `Cert ID change` entry, quantity one, `<cert_a>` before, the new Cert ID after.
-* Step 7: it shows `<change time>`, the admin as actor and the row's remarks read.
-* Step 8: the same entry shows in the product history.
-* Step 9: `<tagged image>` is tagged to the new Cert ID.
+* The row reads `<new>` exactly as entered, still available; none reads PSA-60000001; PSA-60000004 still reads Sold.
+* Its history shows the intake below a Cert ID change of one, PSA-60000001 before and `<new>` after, at the save, the admin as actor and `<remarks read>`, the same entry in the product history; the image is tagged to `<new>`.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-ytb rev=2 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC2-2: Assigning a Cert ID alone turns one regular unit into a Cert record
+### g10adm.inventory-catalog.US15-TC2: Assigning a Cert ID alone turns one regular unit into a Cert record
 
 Runs once per row of **Test data**.
 
@@ -1386,7 +1242,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1394,52 +1250,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_7>`.
-* `<product_7>` holds `<regular available>` units of available regular stock outside every hold.
-* `<admin hold>` holds regular stock of `<product_7>`.
-* No Cert record of `<product_7>` reads `<new cert>`.
+* Product 7 holds 4 available regular units and an admin hold of 1; nothing reads CGC-70000001.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<regular available>` | 4 units (any count of at least 1) |
-| `<admin hold>` | An admin hold of 1 unit of regular stock, active |
-| `<count after>` | 3 units: `<regular available>` minus 1 |
-| `<new cert>` | `CGC-70000001` |
-| `<change time>` | The date and time step 5 is saved |
-
-| Row | Cert ID entered | Remarks typed | Remarks read |
-| --- | --- | --- | --- |
-| With remarks | `CGC-70000001` | `Numbered after grading returned` | `Numbered after grading returned` |
-| No remarks | `CGC-70000001` | none | `—` |
-| Padded | ` CGC-70000001 `, a space either side | none | `—` |
+| `<entered>` | `<remarks typed>` | `<remarks read>` |
+| --- | --- | --- |
+| CGC-70000001 | Numbered after grading returned | Numbered after grading returned |
+| CGC-70000001 | none | — |
+| ` CGC-70000001 ` | none | — |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Open the assign action on the available `No Cert ID` row.
-3. Read the form's fields.
-4. Enter the row's Cert ID and remarks.
-5. Save.
-6. Read the rows.
-7. Click `<new cert>`'s row.
-8. Read its history.
+1. In View Cert IDs, open the assign action on the available No Cert ID row, and read its fields.
+2. Enter `<entered>` and `<remarks typed>`, and save; read the rows and CGC-70000001's history.
 
 **Expected Results:**
 
-* Step 3: the form asks for the Cert ID and remarks only.
-* Step 3: no Grade Issuer, Grade, Autograph Grade or Serial field shows.
-* Step 5: the assignment is saved.
-* Step 6: the available `No Cert ID` row reads `<count after>`.
-* Step 6: the row for `<admin hold>` still reads 1.
-* Step 6: a new row reads `<new cert>`, Available, `—`, 1.
-* Step 8: one entry only: `Cert ID change`, quantity one.
-* Step 8: it reads `No Cert ID` before and `<new cert>` after.
-* Step 8: it shows `<change time>`, the admin as actor and the row's remarks read.
+* Step 1 asks for the Cert ID and remarks only, no grade or serial field.
+* Step 2 reads the available row 3, the hold still 1, and a new row CGC-70000001, Available, —, 1; its history holds one Cert ID change of one, No Cert ID before and CGC-70000001 after, at the save, the admin as actor and `<remarks read>`.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-l2h rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC3-1: An unusable new Cert ID leaves the record unchanged
+### g10adm.inventory-catalog.US15-TC3: An unusable Cert ID is refused, on a correction or an assignment
 
 Runs once per row of **Test data**.
 
@@ -1457,95 +1289,73 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_8>`.
-* `<product_8>` holds `<cert_a>`, an available Cert record no hold, active or closed, has ever named, and `<cert_b>`.
+* Product 8 holds PSA-80000001, available and never named by a hold, PSA-80000002 sold, and 2 available regular units.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-80000001` |
-| `<cert_b>` | `PSA-80000002`, a sold Cert record of `<product_8>` |
-
-| Row | New Cert ID entered | Refusal names |
+| `<action>` | `<entered>` | `<refusal names>` |
 | --- | --- | --- |
-| Empty | nothing | no unit |
-| Spaces only | three spaces | no unit |
-| `No Cert ID` in lower case | `no cert id` | no unit |
-| Used on the product | `PSA-80000002` | `<cert_b>`, Sold |
-| Used on the product, padded | ` PSA-80000002 `, a space either side | `<cert_b>`, Sold |
-| Its own Cert ID | `PSA-80000001` | `<cert_a>`, Available |
+| correct PSA-80000001 | nothing | no unit |
+| correct PSA-80000001 | three spaces | no unit |
+| correct PSA-80000001 | no cert id | no unit |
+| correct PSA-80000001 | ` PSA-80000002 ` | PSA-80000002, Sold |
+| correct PSA-80000001 | PSA-80000001 | PSA-80000001, Available |
+| assign the No Cert ID row | NO CERT ID | no unit |
+| assign the No Cert ID row | PSA-80000002 | PSA-80000002, Sold |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Open the correct action on `<cert_a>`'s row.
-3. Enter the row's new Cert ID.
-4. Save.
-5. Read the Cert record rows and the product history.
+1. In View Cert IDs, open `<action>`, enter `<entered>`, and save.
+2. Read the rows and the product history.
 
 **Expected Results:**
 
-* Step 4: the change is refused.
-* Step 4: where the row's Refusal names a unit, the refusal names its Cert ID and status.
-* Step 5: `<cert_a>` and `<cert_b>` read as before.
-* Step 5: no `Cert ID change` entry was added.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-73h rev=2 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC4-2: An unusable Cert ID leaves the regular stock unchanged
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-15
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_9>`.
-* `<product_9>` holds `<regular available>` units of available regular stock outside every hold.
-* `<product_9>` holds the Cert record `<cert_b>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<regular available>` | 2 units (any count of at least 1) |
-| `<cert_b>` | `BGS-90000002`, a sold Cert record of `<product_9>` |
-
-| Row | Cert ID entered | Refusal names |
-| --- | --- | --- |
-| Cert ID missing | nothing | no unit |
-| Spaces only | three spaces | no unit |
-| `No Cert ID` in upper case | `NO CERT ID` | no unit |
-| Cert ID used on the product | `BGS-90000002` | `<cert_b>`, Sold |
-
-**Steps:**
-
-1. Click View Cert IDs.
-2. Open the assign action on the available `No Cert ID` row.
-3. Enter the row's Cert ID.
-4. Save.
-5. Read the rows and the product history.
-
-**Expected Results:**
-
-* Step 4: the assignment is refused.
-* Step 4: where the row's Refusal names a unit, the refusal names its Cert ID and status.
-* Step 5: the available `No Cert ID` row still reads `<regular available>`.
-* Step 5: no new Cert record row is listed.
-* Step 5: no `Cert ID change` entry was added.
+* Step 1 is refused, naming `<refusal names>` where it names a unit.
+* Step 2 reads every row as before, no new record, and no Cert ID change added.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-d3n rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC5-1: A unit that is held or has moved offers no Cert ID change
+### g10adm.inventory-catalog.US15-TC5: A unit that is held or has moved offers no Cert ID change
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-15
+
+**Pre-conditions:**
+
+* Product 10 holds `<unit>`.
+
+**Test data:**
+
+| `<unit>` |
+| --- |
+| PSA-10100001, held by a listing's active hold |
+| PSA-10100002, held by an active admin hold |
+| PSA-10100003, sold |
+| PSA-10100004, withdrawn |
+| PSA-10100005, vaulted |
+| PSA-10100006, released by a listing that closed Unsold, reading Available |
+| the No Cert ID row of an active admin hold |
+
+**Steps:**
+
+1. In View Cert IDs, find it and read its actions.
+
+**Expected Results:**
+
+* No correct or assign action is offered; the row says why its Cert ID cannot change.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-p63 rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
+### g10adm.inventory-catalog.US15-TC6: A unit held after the form opened is refused at save
 
 Runs once per row of **Test data**.
 
@@ -1559,89 +1369,31 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-15
+* **Trace:** Cert ID details
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_10>`.
-* `<product_10>` holds every unit in the rows below.
+* Product 11 holds PSA-11000001, never named by a hold, and exactly 1 available regular unit; admin A and admin B each have it open.
 
 **Test data:**
 
-| Row | Unit |
+| `<admin A opens>` | `<admin B, before A saves>` |
 | --- | --- |
-| Reserved Cert record | `PSA-10100001`, held by an Auction listing's active hold |
-| Admin-held Cert record | `PSA-10100002`, held by an active admin hold |
-| Sold Cert record | `PSA-10100003`, sold |
-| Withdrawn Cert record | `PSA-10100004`, withdrawn |
-| Vaulted Cert record | `PSA-10100005`, vaulted |
-| Released Cert record | `PSA-10100006`, held by an Auction listing that closed with no winner, its hold released, so it reads Available |
-| Held regular stock | The `No Cert ID` row of an active admin hold on regular stock |
+| the correct action on PSA-11000001 | reserves PSA-11000001 under an admin hold |
+| the assign action on the No Cert ID row | reserves the last regular unit under an admin hold |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Find the row's unit.
-3. Read its actions.
+1. As admin A, open `<admin A opens>`, and enter PSA-11000002.
+2. As admin B, `<admin B, before A saves>`.
+3. As admin A, save; read Cert ID details and the product history.
 
 **Expected Results:**
 
-* Step 3: no correct or assign action is offered on it.
-* Step 3: the row says why its Cert ID cannot change.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-p63 rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC6-1: A unit held after the form opened is refused at save
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-15
-
-**Pre-conditions:**
-
-* admin A(holds Inventory write authority) is on <inventory product url> of `<product_11>`.
-* admin B(holds Inventory write authority) acts on `<product_11>` in a separate session.
-* `<product_11>` holds `<cert_a>`, an available Cert record no hold, active or closed, has ever named, and exactly 1 unit of available regular stock outside every hold.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-11000001` |
-| `<new cert>` | `PSA-11000002`, unused on `<product_11>` |
-
-| Row | Admin A opens | Admin B, before admin A saves |
-| --- | --- | --- |
-| Correction | The correct action on `<cert_a>`'s row | Reserves `<cert_a>` under an admin hold |
-| Assignment | The assign action on the available `No Cert ID` row | Reserves the last regular unit, `No Cert ID`, under an admin hold |
-
-**Steps:**
-
-1. As admin A, click View Cert IDs.
-2. As admin A, open the row's action.
-3. As admin A, enter `<new cert>`.
-4. As admin B, take the row's step.
-5. As admin A, save.
-6. Read Cert ID details and the product history.
-
-**Expected Results:**
-
-* Step 5: the change is refused.
-* Step 6: no row reads `<new cert>`; `<cert_a>` is unchanged.
-* Step 6: admin B's hold is listed and intact.
-* Step 6: no `Cert ID change` entry was added.
+* The save is refused; nothing reads PSA-11000002, PSA-11000001 is unchanged, admin B's hold stands, and no Cert ID change was added.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-qwg rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC7-1: An admin without write authority reads but cannot change
+### g10adm.inventory-catalog.US15-TC7: A reader without the write grant cannot change a Cert ID
 
 **Classification:**
 
@@ -1657,85 +1409,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(reads Inventory, no Inventory write authority) is on <inventory product url> of `<product_12>`.
-* `<product_12>` holds `<cert_a>`, an available Cert record no hold, active or closed, has ever named, and available regular stock outside every hold.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-12000001` |
-| `<new cert>` | `PSA-12000002`, unused on `<product_12>` |
+* An admin reads Inventory without write authority; product 12 holds PSA-12000001, never named by a hold, and available regular stock.
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Read the rows and their actions.
-3. Click `<cert_a>`'s row.
-4. Read its history.
-5. Send a Cert ID change of `<cert_a>` to `<new cert>` under this admin's session, outside the page.
-6. Send an assignment of `<new cert>` under this admin's session, outside the page.
-7. Read Cert ID details again.
+1. In View Cert IDs, read the rows, their actions and PSA-12000001's history.
+2. Send a change of PSA-12000001, and an assignment of PSA-12000002, outside the page; read the rows again.
 
 **Expected Results:**
 
-* Step 2: the Cert record and `No Cert ID` rows are listed.
-* Step 2: no correct or assign action is offered.
-* Step 4: the history shows.
-* Step 5: the request is refused.
-* Step 6: the request is refused.
-* Step 7: `<cert_a>` is unchanged; no row reads `<new cert>`.
-* Step 7: the available `No Cert ID` row reads as in step 2.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-ej3 rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC8-1: An ended Unsold listing shows the corrected Cert ID
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-15
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_13>`.
-* `<listing_13>` held `<cert_a>` of `<product_13>` and closed Unsold.
-* `<cert_a>`'s hold was released; it reads available with no active hold.
-* `<product_13>`'s displayed fields show Cert ID on Auction.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_13>` | An Auction listing of `<product_13>`, code `<code_13>`, title `<title_13>`, closed Unsold |
-| `<cert_a>` | `PSA-13000001` |
-| `<cert_b>` | `PSA-13000002`, unused on `<product_13>` |
-
-**Steps:**
-
-1. Click View Cert IDs.
-2. Change `<cert_a>` to `<cert_b>`.
-3. Navigate to <auction admin listing url> of `<listing_13>`.
-4. Read its Cert ID.
-
-**Expected Results:**
-
-* Step 2: the change is saved.
-* Step 4: the listing reads `<cert_b>`, not `<cert_a>`.
+* Step 1 lists every row with its history, offering no correct or assign action.
+* Step 2 refuses both; nothing reads PSA-12000002 and the rows are as before.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-ouv rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC9-1: An assigned unit can be held by its new Cert ID
+### g10adm.inventory-catalog.US15-TC9: An assigned unit can be held by its new Cert ID
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -1746,95 +1438,66 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_16>`.
-* `<product_16>` holds `<regular available>` units of available regular stock outside every hold.
-* A unit of `<product_16>`'s regular stock was given `<new cert>`, which reads available with no active hold.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<regular available>` | 2 units (any count of at least 1) |
-| `<new cert>` | `BGS-16000001`, given by Assign Cert ID |
+* Product 16 holds 2 available regular units; another unit was given BGS-16000001, available with no hold.
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Read the available `No Cert ID` row.
-3. Close Cert ID details.
-4. Reserve quantity one under an admin hold, choosing `<new cert>`.
-5. Click View Cert IDs.
-6. Read the rows.
+1. Read the available No Cert ID row.
+2. Reserve one under an admin hold, choosing BGS-16000001; read the rows again.
 
 **Expected Results:**
 
-* Step 4: the hold is saved with quantity one, naming `<new cert>`.
-* Step 6: `<new cert>`'s row reads Reserved, with Admin and the hold's reference.
-* Step 6: the available `No Cert ID` row reads as in step 2.
+* The hold is saved, one unit, naming BGS-16000001; its row reads Reserved with Admin and the hold's reference, the No Cert ID row as before.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-twb rev=1 covers=g10adm.inventory-catalog.SC-u13,g10adm.inventory-catalog.SC-9io,g10adm.inventory-catalog.SC-auy,g10adm.inventory-catalog.SC-blo,g10adm.inventory-catalog.SC-d8o,g10adm.inventory-catalog.SC-sky,g10adm.inventory-catalog.SC-tl1,g10adm.inventory-catalog.SC-e5t,g10adm.inventory-catalog.SC-nlh,g10adm.inventory-catalog.SC-myo,g10adm.inventory-catalog.SC-sbe,g10adm.inventory-catalog.SC-zu9 -->
-### grade10-admin-inventory-catalog-US15-TC10-1: Copy facts sent with an assignment are ignored
+### g10adm.inventory-catalog.US15-TC10: Copy facts sent with an assignment are ignored
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-15
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_19>`.
-* `<product_19>` holds `<regular available>` units of available regular stock outside every hold.
-* No Cert record of `<product_19>` reads `<new cert>`.
+* Product 19 holds 2 available regular units; nothing reads CGC-19000001.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<regular available>` | 2 units (any count of at least 1) |
-| `<count after>` | 1 unit: `<regular available>` minus 1 |
-| `<new cert>` | `CGC-19000001` |
-
-| Row | Grade Issuer | Grade | Autograph Grade | Serial |
-| --- | --- | --- | --- | --- |
-| Every fact | `CGC` | `9.8` | `10` | `12/50` |
-| Grade Issuer `RAW` | `RAW` | none | none | none |
-| Facts not checked | none | 300 characters of `9` | none | the number `50`, not text |
+| `<facts>` |
+| --- |
+| CGC, 9.8, autograph 10 and serial 12/50 |
+| RAW, and nothing else |
+| 300 characters of 9 as the grade, and the number 50 as the serial |
 
 **Steps:**
 
-1. Send an assignment of `<new cert>` with the row's facts under this admin's session, outside the page.
-2. Read the response.
-3. Click View Cert IDs.
-4. Read the rows.
-5. Click `<new cert>`'s row.
-6. Read its history.
+1. Send an assignment of CGC-19000001 with `<facts>` outside the page.
+2. Read the rows and CGC-19000001's history.
 
 **Expected Results:**
 
-* Step 2: the assignment is saved.
-* Step 4: the available `No Cert ID` row reads `<count after>`.
-* Step 4: a new row reads `<new cert>`, Available, `—`, 1.
-* Step 6: one `Cert ID change` entry, `No Cert ID` before and `<new cert>` after.
+* It is saved: the available row reads 1, a new row CGC-19000001, Available, —, 1, with one Cert ID change from No Cert ID.
 
 ---
-
-## grade10-admin-inventory-catalog-US16: Inventory admin takes out units intaken by mistake
+## g10adm.inventory-catalog.US16: Inventory admin takes out units intaken by mistake
 
 **As an** inventory admin,
 **I want** to take out regular stock or a Cert record that was intaken by mistake and has never moved, from Cert ID details,
 **so that** the stock and the ledger count only the units the shop received.
 
-<!-- trace:case id=g10adm.inventory-catalog.TC-tcu rev=1 covers=g10adm.inventory-catalog.SC-w4o,g10adm.inventory-catalog.SC-9lp -->
-### grade10-admin-inventory-catalog-US16-TC1-1: Reducing over-intaken regular stock lowers stock and the ledger
+<!-- trace:case id=g10adm.inventory-catalog.TC-tcu rev=1 covers=g10adm.inventory-catalog.SC-w4o,g10adm.inventory-catalog.SC-9lp,g10adm.inventory-catalog.SC-cbm,g10adm.inventory-catalog.SC-8rx -->
+### g10adm.inventory-catalog.US16-TC1: Units intaken by mistake are taken out, stock and the ledger falling with them
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1842,7 +1505,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
+* **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -1850,152 +1513,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_30>`.
-* `<product_30>`'s regular stock was intaken by `<first intake>`, then `<earlier sale>`, then `<over-intake>`.
-* No hold names `<product_30>`'s regular stock.
+* `<product>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<first intake>` | An intake of 5 units with no Cert ID |
-| `<earlier sale>` | 2 units of regular stock sold outside any hold |
-| `<over-intake>` | An intake of 10 units with no Cert ID, where 1 was received |
-| `<reduce by>` | 9 units (any whole number from 1 to the 10 of `<over-intake>`) |
-| `<available after>` | 4 units: 13 available minus `<reduce by>` |
-| `<reversal time>` | The date and time step 5 is confirmed |
+| `<product>` | `<taken out>` | `<fall>` | `<entry>` |
+| --- | --- | --- | --- |
+| product 30: 5 regular units intaken, 2 sold outside any hold, then 10 intaken where 1 was received | Reduce quantity on the available No Cert ID row, 9 units, the row then reading 4 | 9 | Intake reversal · No Cert ID, 9 |
+| product 31: PSA-31000001 intaken, never moved; PSA-31000002 available; 3 regular units; one image tagged to PSA-31000001, one untagged, one tagged to PSA-31000002 | Remove on PSA-31000001 | 1 | Intake reversal · PSA-31000001, 1 |
+| product 31 as above, PSA-31000003 given by Assign Cert ID in PSA-31000001's place | Remove on PSA-31000003 | 1 | Intake reversal · PSA-31000003, 1 |
 
 **Steps:**
 
 1. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
-2. Click View Cert IDs.
-3. Click `Reduce quantity` on the available `No Cert ID` row.
-4. Enter `<reduce by>` as the number of units.
-5. Click Confirm.
-6. Read the available `No Cert ID` row.
-7. Click the available `No Cert ID` row.
-8. Read its newest history entry.
-9. Close Cert ID details.
-10. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
+2. In View Cert IDs, take `<taken out>`, and confirm.
+3. Read the rows; close; read the figures, the newest history entry, and the product's media.
 
 **Expected Results:**
 
-* Step 6: the row reads `<available after>`.
-* Step 8: Action reads `Intake reversal · No Cert ID`; quantity reads `<reduce by>`.
-* Step 8: When reads `<reversal time>`; the admin is the actor; Remarks read `Entered by mistake`.
-* Step 10: stock, available and the ledger each read `<reduce by>` lower than in step 1.
-* Step 10: reserved, sold, withdrawn and vaulted read as in step 1.
+* Stock, available and the ledger each fall by `<fall>`; reserved, sold, withdrawn and vaulted are unchanged; no removed Cert ID is listed, the other rows as before.
+* The newest entry reads `<entry>`, when confirmed, the admin as actor, Remarks Entered by mistake; a removed record's tagged image is deleted, the others kept with their tags.
 
-<!-- trace:case id=g10adm.inventory-catalog.TC-ltn rev=1 covers=g10adm.inventory-catalog.SC-cbm,g10adm.inventory-catalog.SC-8rx -->
-### grade10-admin-inventory-catalog-US16-TC2-1: Removing a Cert record intaken by mistake deletes it and its tagged media
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-16
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_31>`.
-* `<product_31>` holds the row's `<cert_a>`, never held, sold, withdrawn or vaulted since it took its Cert ID.
-* `<product_31>` holds `<cert_b>`, available, and `<regular available>` units of available regular stock.
-* `<tagged image>` is tagged to `<cert_a>`; `<shared image>` is untagged; `<other image>` is tagged to `<cert_b>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cert_b>` | `PSA-31000002` |
-| `<regular available>` | 3 units (any count of at least 1) |
-| `<tagged image>` | One product image tagged to `<cert_a>` |
-| `<shared image>` | One product image with no Cert tag |
-| `<other image>` | One product image tagged to `<cert_b>` |
-| `<reversal time>` | The date and time step 4 is confirmed |
-
-| Row | `<cert_a>` |
-| --- | --- |
-| Intaken | `PSA-31000001`, intaken with its Cert ID |
-| Numbered from regular stock | `PSA-31000003`, given by Assign Cert ID to a unit of regular stock |
-
-**Steps:**
-
-1. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
-2. Click View Cert IDs.
-3. Click `Remove` on `<cert_a>`'s row.
-4. Click Confirm.
-5. Read the rows.
-6. Close Cert ID details.
-7. Read stock, reserved, sold, withdrawn, vaulted, available and the ledger.
-8. Open the product history.
-9. Read the newest entry.
-10. Open the product's media.
-
-**Expected Results:**
-
-* Step 5: no row reads `<cert_a>`; `<cert_b>` and the available `No Cert ID` row read as before.
-* Step 7: stock, available and the ledger each read one lower than in step 1.
-* Step 7: reserved, sold, withdrawn and vaulted read as in step 1.
-* Step 9: Action reads `Intake reversal · <cert_a>`, quantity one, When `<reversal time>`, the admin as actor, Remarks `Entered by mistake`.
-* Step 10: `<tagged image>` is deleted.
-* Step 10: `<shared image>` stays untagged; `<other image>` stays tagged to `<cert_b>`.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-7el rev=1 covers=g10adm.inventory-catalog.SC-4jy,g10adm.inventory-catalog.SC-grz -->
-### grade10-admin-inventory-catalog-US16-TC3-1: Reduce quantity's confirmation opens empty and states the reducible count
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** usability
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-16
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_32>`.
-* `<product_32>`'s regular stock was intaken by `<first intake>` and has never moved.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<first intake>` | An intake of 7 units with no Cert ID |
-| `<reducible>` | 7 units: every unit of `<first intake>` |
-| `<reduce by>` | 3 units (any whole number from 1 to `<reducible>`) |
-
-**Steps:**
-
-1. Click View Cert IDs.
-2. Hover over `Reduce quantity` on the available `No Cert ID` row.
-3. Click `Reduce quantity`.
-4. Read the confirmation.
-5. Enter `<reduce by>` as the number of units.
-6. Read the confirmation.
-
-**Expected Results:**
-
-* Step 2: a tooltip says the action takes out units intaken by mistake as if never received, and withdrawn does not move.
-* Step 4: the number of units is empty; Confirm is unavailable.
-* Step 4: it states `<reducible>` as the most units that can be taken out.
-* Step 4: Remarks read `Entered by mistake`.
-* Step 6: it says stock and the ledger fall by `<reduce by>`.
-* Step 6: Confirm is available.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-tre rev=1 covers=g10adm.inventory-catalog.SC-9iv,g10adm.inventory-catalog.SC-grz -->
-### grade10-admin-inventory-catalog-US16-TC4-1: Remove's confirmation names the Cert ID and says its tagged media go
+<!-- trace:case id=g10adm.inventory-catalog.TC-7el rev=1 covers=g10adm.inventory-catalog.SC-4jy,g10adm.inventory-catalog.SC-grz,g10adm.inventory-catalog.SC-9iv -->
+### g10adm.inventory-catalog.US16-TC3: Each reversal's confirmation says what it takes out
 
 Runs once per row of **Test data**.
 
@@ -2005,7 +1545,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** usability
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -2013,39 +1553,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_33>`.
-* `<product_33>` holds the row's Cert record, intaken and never held, sold, withdrawn or vaulted.
+* `<product>`.
 
 **Test data:**
 
-| Row | Cert record | Media tagged to it |
+| `<product>` | `<action>` | `<confirmation reads>` |
 | --- | --- | --- |
-| With tagged media | `PSA-33000001` | one product image and one product video |
-| No tagged media | `PSA-33000002` | none |
+| product 32: 7 regular units intaken, never moved | Reduce quantity on the available No Cert ID row | the number empty, Confirm unavailable, 7 as the most that can be taken; entering 3, stock and the ledger falling by 3, Confirm available |
+| product 33: PSA-33000001 intaken, an image and a video tagged to it | Remove on PSA-33000001 | its Cert ID, stock and the ledger falling by one, its tagged media deleted, Confirm available |
+| product 33: PSA-33000002 intaken, nothing tagged to it | Remove on PSA-33000002 | its Cert ID, stock and the ledger falling by one, its tagged media deleted, Confirm available |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Hover over `Remove` on the row's Cert record.
-3. Click `Remove`.
-4. Read the confirmation.
+1. In View Cert IDs, hover over `<action>`, then click it and read the confirmation.
 
 **Expected Results:**
 
-* Step 2: a tooltip says the action takes out units intaken by mistake as if never received, and withdrawn does not move.
-* Step 4: it names the row's Cert record.
-* Step 4: it says stock and the ledger fall by one.
-* Step 4: it says the record's tagged media are deleted, on both rows.
-* Step 4: Remarks read `Entered by mistake`; Confirm is available.
+* The hover says it takes out units intaken by mistake as if never received, withdrawn not moving.
+* The confirmation reads `<confirmation reads>`, Remarks prefilled Entered by mistake.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-te3 rev=1 covers=g10adm.inventory-catalog.SC-4jy -->
-### grade10-admin-inventory-catalog-US16-TC5-1: Edited remarks are recorded on the reversal
+### g10adm.inventory-catalog.US16-TC5: Edited remarks are recorded on the reversal
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
@@ -2057,48 +1591,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_34>`.
-* `<product_34>`'s regular stock was intaken by `<first intake>` and has never moved.
-* `<product_34>` holds `<cert_a>`, intaken and never held, sold, withdrawn or vaulted.
+* Product 34's 4 regular units never moved; PSA-34000001 is unmoved.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<first intake>` | An intake of 4 units with no Cert ID |
-| `<cert_a>` | `PSA-34000001` |
-
-| Row | Action | Units | Remarks typed | Remarks read |
-| --- | --- | --- | --- | --- |
-| Reduction | `Reduce quantity` on the available `No Cert ID` row | 1 | `Counted twice at intake` | `Counted twice at intake` |
-| Removal | `Remove` on `<cert_a>`'s row | none | `Received, then returned before listing` | `Received, then returned before listing` |
-| Padded | `Remove` on `<cert_a>`'s row | none | ` Card never arrived `, a space either side | `Card never arrived` |
+| `<action>` | `<typed>` | `<read>` |
+| --- | --- | --- |
+| Reduce quantity, 1 unit | Counted twice at intake | Counted twice at intake |
+| Remove on PSA-34000001 | Received, then returned before listing | Received, then returned before listing |
+| Remove on PSA-34000001 | ` Card never arrived ` | Card never arrived |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Click the row's Action.
-3. Where the row names Units, enter them as the number of units.
-4. Clear the remarks.
-5. Type the row's Remarks typed.
-6. Click Confirm.
-7. Close Cert ID details.
-8. Open the product history.
-9. Read the newest entry.
+1. In View Cert IDs, take `<action>`, replace the remarks with `<typed>`, and confirm.
+2. Read the history's newest entry.
 
 **Expected Results:**
 
-* Step 6: the reversal is saved.
-* Step 9: an `Intake reversal` entry whose Remarks read the row's Remarks read.
+* An Intake reversal entry reads Remarks `<read>`.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-xzl rev=1 covers=g10adm.inventory-catalog.SC-w4o,g10adm.inventory-catalog.SC-9lp -->
-### grade10-admin-inventory-catalog-US16-TC6-1: A reduction at 1 and at the reducible count is accepted
+### g10adm.inventory-catalog.US16-TC6: A reduction of one unit, and of the reducible count, is taken
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -2110,44 +1629,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_35>`.
-* `<product_35>`'s regular stock was intaken by `<first intake>`, then `<earlier sale>`, then `<second intake>`.
-* No hold names `<product_35>`'s regular stock.
+* Product 35: 3 regular units intaken, 1 sold outside any hold, then 4 intaken; 6 available, 4 reducible.
 
 **Test data:**
 
-| Field | Value |
+| `<units>` | `<available after>` |
 | --- | --- |
-| `<first intake>` | An intake of 3 units with no Cert ID |
-| `<earlier sale>` | 1 unit of regular stock sold outside any hold |
-| `<second intake>` | An intake of 4 units with no Cert ID |
-| `<available>` | 6 units: 3 minus 1 plus 4 |
-| `<reducible>` | 4 units: the units of `<second intake>` |
-
-| Row | Units entered | Available row after |
-| --- | --- | --- |
-| One unit | 1 | 5: `<available>` minus 1 |
-| At the limit | 4, `<reducible>` | 2: `<available>` minus `<reducible>` |
+| 1 | 5 |
+| 4 | 2, Reduce quantity no longer offered, the row saying its units were intaken before regular stock last moved |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Click `Reduce quantity` on the available `No Cert ID` row.
-3. Enter the row's Units entered.
-4. Click Confirm.
-5. Read the available `No Cert ID` row.
-6. Click the available `No Cert ID` row.
-7. Read its newest history entry.
+1. Reduce the available No Cert ID row by `<units>`, and read the row and its newest entry.
 
 **Expected Results:**
 
-* Step 4: the reduction is saved.
-* Step 5: the row reads the row's Available row after.
-* Step 5: on the At the limit row, `Reduce quantity` is not offered, and the row says its units were intaken before regular stock last moved.
-* Step 7: one `Intake reversal · No Cert ID` entry, quantity the row's Units entered.
+* It is saved; the row reads `<available after>`; one Intake reversal · No Cert ID of `<units>`.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-y4w rev=1 covers=g10adm.inventory-catalog.SC-zoe,g10adm.inventory-catalog.SC-srm,g10adm.inventory-catalog.SC-9lp,g10adm.inventory-catalog.SC-sm9,g10adm.inventory-catalog.SC-c7i -->
-### grade10-admin-inventory-catalog-US16-TC7-1: The reducible count starts after regular stock's latest move
+### g10adm.inventory-catalog.US16-TC7: The reducible count starts after regular stock's latest move
 
 Runs once per row of **Test data**.
 
@@ -2165,47 +1665,35 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of the row's product.
-* The row's product's stock went through the row's history, in order, and nothing else.
+* The product's stock went through `<history>` and nothing else, every intake with no Cert ID unless named.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-36000001`, a Cert record intaken with its Cert ID |
-| `<cert_g>` | `PSA-36000002`, given by Assign Cert ID |
-
-Every intake below has no Cert ID unless it names one.
-
-| Row | History | Available row | Reducible count |
-| --- | --- | --- | --- |
-| Never moved | intake 5, intake 3 | 8 | 8 |
-| Assigned, never moved | intake 5, one unit given `<cert_g>` | 4 | 4 |
-| Sold since | intake 5, 2 sold outside any hold, intake 10 | 13 | 10 |
-| Withdrawn since | intake 5, 1 withdrawn, intake 2 | 6 | 2 |
-| Held, hold active | intake 5, admin hold of 2, intake 4 | 7 | 4 |
-| Hold released | intake 5, admin hold of 2 released whole, intake 3 | 8 | 3 |
-| Sold from a hold | intake 5, Auction hold of 2, 1 sold from it, intake 3 | 6 | 3 |
-| Vaulted | intake 5, Vault hold of 1 vaulted, intake 2 | 6 | 2 |
-| Assigned since the move | intake 5, 1 sold outside any hold, intake 4, one unit given `<cert_g>` | 7 | 3 |
-| Reduced since the move | intake 5, 1 sold outside any hold, intake 4, a reduction of 1 | 7 | 3 |
-| Cert record sold | intake 5, intake of `<cert_a>`, `<cert_a>` sold | 5 | 5 |
-| Numbered record held | intake 5, one unit given `<cert_g>`, `<cert_g>` under an active admin hold | 4 | 4 |
+| `<history>` | `<available>` | `<reducible>` |
+| --- | --- | --- |
+| intake 5, intake 3 | 8 | 8 |
+| intake 5, one unit given PSA-36000002 | 4 | 4 |
+| intake 5, 2 sold outside any hold, intake 10 | 13 | 10 |
+| intake 5, 1 withdrawn, intake 2 | 6 | 2 |
+| intake 5, admin hold of 2 active, intake 4 | 7 | 4 |
+| intake 5, admin hold of 2 released whole, intake 3 | 8 | 3 |
+| intake 5, Auction hold of 2 with 1 sold from it, intake 3 | 6 | 3 |
+| intake 5, Vault hold of 1 vaulted, intake 2 | 6 | 2 |
+| intake 5, 1 sold, intake 4, one unit given PSA-36000002 | 7 | 3 |
+| intake 5, 1 sold, intake 4, a reduction of 1 | 7 | 3 |
+| intake 5, PSA-36000001 intaken and sold | 5 | 5 |
+| intake 5, one unit given PSA-36000002, held by an active admin hold | 4 | 4 |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Read the available `No Cert ID` row.
-3. Click `Reduce quantity` on it.
-4. Read the most units the confirmation says can be taken out.
+1. In View Cert IDs, read the available No Cert ID row, click Reduce quantity, and read the most it can take.
 
 **Expected Results:**
 
-* Step 2: the row reads the row's Available row.
-* Step 4: the confirmation states the row's Reducible count.
+* The row reads `<available>`; the confirmation states `<reducible>`.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-12l rev=1 covers=g10adm.inventory-catalog.SC-i1t -->
-### grade10-admin-inventory-catalog-US16-TC8-1: A removed Cert ID can be intaken again as a new record
+### g10adm.inventory-catalog.US16-TC8: A removed Cert ID can be intaken again as a new record
 
 **Classification:**
 
@@ -2221,43 +1709,25 @@ Every intake below has no Cert ID unless it names one.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_37>`.
-* `<product_37>` holds `<cert_a>`, intaken and never held, sold, withdrawn or vaulted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<cert_a>` | `PSA-37000001` |
-| `<intake time>` | The date and time step 6 is saved |
+* Product 37 holds PSA-37000001, intaken and never moved.
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Click `Remove` on `<cert_a>`'s row.
-3. Click Confirm.
-4. Close Cert ID details.
-5. Open intake on `<product_37>`.
-6. Intake one unit with Cert ID `<cert_a>`.
-7. Click View Cert IDs.
-8. Click `<cert_a>`'s row.
-9. Read its history.
+1. Remove PSA-37000001 and confirm.
+2. Intake one unit with Cert ID PSA-37000001; read its row and history.
 
 **Expected Results:**
 
-* Step 6: the intake is saved.
-* Step 7: one row reads `<cert_a>`, Available, 1.
-* Step 9: one entry only, the intake at `<intake time>`.
-* Step 9: no `Intake reversal` entry shows.
+* Step 2 is saved: one row reads PSA-37000001, Available, 1, its history the new intake alone, with no Intake reversal.
 
-<!-- trace:case id=g10adm.inventory-catalog.TC-3ae rev=1 covers=g10adm.inventory-catalog.SC-zu3,g10adm.inventory-catalog.SC-4jy -->
-### grade10-admin-inventory-catalog-US16-TC9-1: A number of units outside 1 to the reducible count keeps Confirm unavailable
+<!-- trace:case id=g10adm.inventory-catalog.TC-3ae rev=1 covers=g10adm.inventory-catalog.SC-zu3,g10adm.inventory-catalog.SC-4jy,g10adm.inventory-catalog.SC-7hq -->
+### g10adm.inventory-catalog.US16-TC9: A number outside one to the reducible count, or empty remarks, keeps Confirm unavailable
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
@@ -2269,258 +1739,43 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_38>`.
-* `<product_38>`'s regular stock was intaken by `<first intake>`, then `<earlier sale>`, then `<second intake>`.
-* No hold names `<product_38>`'s regular stock.
+* Product 38: 3 regular units intaken, 1 sold, 4 intaken, so 6 available and 4 reducible; PSA-39000001 unmoved.
 
 **Test data:**
 
-| Field | Value |
+| `<action>` | `<filled>` |
 | --- | --- |
-| `<first intake>` | An intake of 3 units with no Cert ID |
-| `<earlier sale>` | 1 unit of regular stock sold outside any hold |
-| `<second intake>` | An intake of 4 units with no Cert ID |
-| `<available>` | 6 units: 3 minus 1 plus 4 |
-| `<reducible>` | 4 units: the units of `<second intake>` |
-
-| Row | Units entered |
-| --- | --- |
-| Empty | nothing |
-| Zero | 0 |
-| One above the limit | 5, `<reducible>` plus 1 |
-| Every available unit | 6, `<available>` |
-| Not whole | 2.5 |
-| Below zero | -1 |
+| Reduce quantity | nothing as the number |
+| Reduce quantity | 0 |
+| Reduce quantity | 5, one past the reducible count |
+| Reduce quantity | 6, every available unit |
+| Reduce quantity | 2.5 |
+| Reduce quantity | -1 |
+| Reduce quantity, 1 unit | the remarks cleared |
+| Reduce quantity, 1 unit | three spaces as the remarks |
+| Remove on PSA-39000001 | the remarks cleared |
+| Remove on PSA-39000001 | three spaces as the remarks |
 
 **Steps:**
 
-1. Click View Cert IDs.
-2. Click `Reduce quantity` on the available `No Cert ID` row.
-3. Enter the row's Units entered.
-4. Read Confirm.
-5. Cancel the confirmation.
-6. Read the available `No Cert ID` row.
-7. Click the available `No Cert ID` row.
-8. Read its history.
+1. Open `<action>`, fill `<filled>`, and read Confirm.
+2. Cancel, and read the rows and the available row's history.
 
 **Expected Results:**
 
-* Step 4: Confirm is unavailable.
-* Step 6: the row reads `<available>`.
-* Step 8: no `Intake reversal` entry shows.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-r48 rev=1 covers=g10adm.inventory-catalog.SC-7hq -->
-### grade10-admin-inventory-catalog-US16-TC10-1: Empty remarks keep Confirm unavailable
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-16
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_39>`.
-* `<product_39>`'s regular stock was intaken by `<first intake>` and has never moved.
-* `<product_39>` holds `<cert_a>`, intaken and never held, sold, withdrawn or vaulted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<first intake>` | An intake of 3 units with no Cert ID |
-| `<cert_a>` | `PSA-39000001` |
-
-| Row | Action | Units | Remarks left |
-| --- | --- | --- | --- |
-| Reduction, cleared | `Reduce quantity` on the available `No Cert ID` row | 1 | nothing |
-| Reduction, spaces only | `Reduce quantity` on the available `No Cert ID` row | 1 | three spaces |
-| Removal, cleared | `Remove` on `<cert_a>`'s row | none | nothing |
-| Removal, spaces only | `Remove` on `<cert_a>`'s row | none | three spaces |
-
-**Steps:**
-
-1. Click View Cert IDs.
-2. Click the row's Action.
-3. Where the row names Units, enter them as the number of units.
-4. Clear the remarks.
-5. Type the row's Remarks left.
-6. Read Confirm.
-7. Cancel the confirmation.
-8. Read the rows.
-
-**Expected Results:**
-
-* Step 6: Confirm is unavailable.
-* Step 8: the available `No Cert ID` row reads 3; `<cert_a>` is still listed.
+* Confirm is unavailable; the rows read as before, and no Intake reversal shows.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-zld rev=1 covers=g10adm.inventory-catalog.SC-nnc -->
-### grade10-admin-inventory-catalog-US16-TC11-1: Regular stock with no reducible unit offers no Reduce quantity
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-16
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of the row's product.
-* The row's product's regular stock went through the row's history, in order, and nothing else.
-
-**Test data:**
-
-Every intake below has no Cert ID.
-
-| Row | History | Available row |
-| --- | --- | --- |
-| All held | intake 3, Auction hold of 3, active | 0 |
-| All intaken before the latest move | intake 5, 1 sold outside any hold | 4 |
-| Hold released | intake 3, admin hold of 1 released whole | 3 |
-| Withdrawn | intake 3, 1 withdrawn outside any hold | 2 |
-| Hold moved to another product | intake 3, Auction hold of 1 moved to another product | 2 |
-| All reduced | intake 3, a reduction of 3 | 0 |
-| All numbered | intake 1, the unit given `PSA-40000001` | 0 |
-
-**Steps:**
-
-1. Click View Cert IDs.
-2. Read the available `No Cert ID` row.
-3. Read its actions.
-
-**Expected Results:**
-
-* Step 2: the row is listed and reads the row's Available row.
-* Step 2: where the row reads at least 1, it says its units were intaken before regular stock last moved.
-* Step 3: `Reduce quantity` is not offered.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-ipi rev=1 covers=g10adm.inventory-catalog.SC-lvy,g10adm.inventory-catalog.SC-8m1,g10adm.inventory-catalog.SC-x7l -->
-### grade10-admin-inventory-catalog-US16-TC12-1: A Cert record that has moved offers no Remove
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-16
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_41>`.
-* `<product_41>` holds the row's Cert record.
-
-**Test data:**
-
-| Row | Cert record | Remove physical unit |
-| --- | --- | --- |
-| Admin hold, active | `PSA-41000001`, held by an active admin hold | not offered |
-| Auction hold, active | `PSA-41000002`, held by a live Auction listing's hold | not offered |
-| Admin hold released | `PSA-41000003`, its admin hold released, so it reads Available | offered |
-| Unsold listing released | `PSA-41000004`, held by an Auction listing that closed with no winner, its hold released, so it reads Available | offered |
-| Hold moved to another product | `PSA-41000005`, once named by an Auction hold since moved to another product, so it reads Available | offered |
-| Sold | `PSA-41000006`, sold | not offered |
-| Withdrawn | `PSA-41000007`, withdrawn | not offered |
-| Vaulted | `PSA-41000008`, vaulted | not offered |
-
-**Steps:**
-
-1. Click View Cert IDs.
-2. Select the row's Cert record.
-3. Read its actions.
-
-**Expected Results:**
-
-* Step 3: `Remove` is not offered.
-* Step 3: Remove physical unit is offered or not as the row's Remove physical unit says.
-* Step 3: on the Hold moved to another product row, Change Cert ID is not offered, and the record shows its Cert ID is fixed.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-n7h rev=1 covers=g10adm.inventory-catalog.SC-gbg,g10adm.inventory-catalog.SC-y0i -->
-### grade10-admin-inventory-catalog-US16-TC14-1: A move or reversal after the confirmation opened refuses the reversal
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-inventory-catalog-US-16
-
-**Pre-conditions:**
-
-* admin A(holds Inventory write authority) is on <inventory product url> of `<product_44>`.
-* admin B(holds Inventory write authority) acts on `<product_44>` in a separate session.
-* `<product_44>`'s regular stock was intaken by `<first intake>` and has never moved.
-* `<product_44>` holds `<cert_a>`, intaken and never held, sold, withdrawn or vaulted.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<first intake>` | An intake of 3 units with no Cert ID |
-| `<cert_a>` | `PSA-44000001` |
-
-| Row | Admin A opens and fills | Admin B, before admin A confirms |
-| --- | --- | --- |
-| Regular stock held | `Reduce quantity` on the available `No Cert ID` row, 3 units | Reserves 1 unit, `No Cert ID`, under an admin hold |
-| Regular stock reduced | `Reduce quantity` on the available `No Cert ID` row, 3 units | Reduces 1 unit |
-| Cert record held | `Remove` on `<cert_a>`'s row | Reserves `<cert_a>` under an admin hold |
-| Cert record removed | `Remove` on `<cert_a>`'s row | Removes `<cert_a>` |
-
-**Steps:**
-
-1. As admin A, click View Cert IDs.
-2. As admin A, open the row's action and fill it as the row says.
-3. As admin B, take the row's step.
-4. As admin A, click Confirm.
-5. Read Cert ID details.
-6. Open the product history.
-
-**Expected Results:**
-
-* Step 4: admin A's reversal is refused.
-* Step 5: the rows read as admin B's step left them; admin B's hold, where there is one, is listed and intact.
-* Step 6: only admin B's step added an entry; none is admin A's.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-0ut rev=1 covers=g10adm.inventory-catalog.SC-9iv -->
-### grade10-admin-inventory-catalog-US16-TC15-1: Cancelling a confirmation changes nothing
+### g10adm.inventory-catalog.US16-TC11: Regular stock with no unit intaken since its latest move offers no Reduce quantity
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
-* **Behaviour:** destructive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -2529,47 +1784,150 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_45>`.
-* `<product_45>`'s regular stock was intaken by `<first intake>` and has never moved.
-* `<product_45>` holds `<cert_a>`, intaken and never held, sold, withdrawn or vaulted.
-* `<tagged image>` is tagged to `<cert_a>`.
+* The product's regular stock went through `<history>` and nothing else.
 
 **Test data:**
 
-| Field | Value |
+| `<history>` | `<available>` |
 | --- | --- |
-| `<first intake>` | An intake of 3 units with no Cert ID |
-| `<cert_a>` | `PSA-45000001` |
-| `<tagged image>` | One product image tagged to `<cert_a>` |
+| intake 3, an Auction hold of 3 active | 0 |
+| intake 5, 1 sold outside any hold | 4 |
+| intake 3, an admin hold of 1 released whole | 3 |
+| intake 3, 1 withdrawn outside any hold | 2 |
+| intake 3, an Auction hold of 1 moved to another product | 2 |
+| intake 3, a reduction of 3 | 0 |
+| intake 1, the unit given PSA-40000001 | 0 |
 
-| Row | Action | Filled before cancelling |
-| --- | --- | --- |
-| Reduction | `Reduce quantity` on the available `No Cert ID` row | 2 units, remarks `Counted twice` |
-| Removal | `Remove` on `<cert_a>`'s row | remarks left as prefilled |
+**Steps:**
+
+1. In View Cert IDs, read the available No Cert ID row and its actions.
+
+**Expected Results:**
+
+* The row reads `<available>`, saying where it reads 1 or more that its units were intaken before regular stock last moved; Reduce quantity is not offered.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-ipi rev=1 covers=g10adm.inventory-catalog.SC-lvy,g10adm.inventory-catalog.SC-8m1,g10adm.inventory-catalog.SC-x7l -->
+### g10adm.inventory-catalog.US16-TC12: A Cert record that has moved offers no Remove
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-16
+
+**Pre-conditions:**
+
+* Product 41 holds `<record>`.
+
+**Test data:**
+
+| `<record>` | `<remove physical unit>` |
+| --- | --- |
+| PSA-41000001, held by an active admin hold | not offered |
+| PSA-41000002, held by a live listing | not offered |
+| PSA-41000003, its admin hold released | offered |
+| PSA-41000004, released by a listing that closed Unsold | offered |
+| PSA-41000005, once held by a hold since moved to another product | offered, and Change Cert ID not, its Cert ID shown as fixed |
+| PSA-41000006, sold | not offered |
+| PSA-41000007, withdrawn | not offered |
+| PSA-41000008, vaulted | not offered |
+
+**Steps:**
+
+1. In View Cert IDs, select it and read its actions.
+
+**Expected Results:**
+
+* Remove is not offered; Remove physical unit is `<remove physical unit>`.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-n7h rev=1 covers=g10adm.inventory-catalog.SC-gbg,g10adm.inventory-catalog.SC-y0i -->
+### g10adm.inventory-catalog.US16-TC14: A move or reversal after the confirmation opened refuses the reversal
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-16
+
+**Pre-conditions:**
+
+* Product 44's 3 regular units never moved; PSA-44000001 is unmoved; admin A and admin B each have it open.
+
+**Test data:**
+
+| `<admin A fills>` | `<admin B, before A confirms>` |
+| --- | --- |
+| Reduce quantity, 3 units | reserves 1 regular unit under an admin hold |
+| Reduce quantity, 3 units | reduces 1 unit |
+| Remove on PSA-44000001 | reserves PSA-44000001 under an admin hold |
+| Remove on PSA-44000001 | removes PSA-44000001 |
+
+**Steps:**
+
+1. As admin A, open and fill `<admin A fills>`.
+2. As admin B, `<admin B, before A confirms>`.
+3. As admin A, confirm; read Cert ID details and the history.
+
+**Expected Results:**
+
+* Admin A's reversal is refused; the rows read as admin B left them, any hold of B's intact, and only B's step added an entry.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-0ut rev=1 covers=g10adm.inventory-catalog.SC-9iv -->
+### g10adm.inventory-catalog.US16-TC15: Cancelling a confirmation changes nothing
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-16
+
+**Pre-conditions:**
+
+* Product 45's 3 regular units never moved; PSA-45000001 is unmoved, an image tagged to it.
+
+**Test data:**
+
+| `<action>` | `<filled>` |
+| --- | --- |
+| Reduce quantity | 2 units, remarks Counted twice |
+| Remove on PSA-45000001 | the remarks left prefilled |
 
 **Steps:**
 
 1. Read stock, available, withdrawn and the ledger.
-2. Click View Cert IDs.
-3. Click the row's Action.
-4. Fill the confirmation as the row's Filled before cancelling says.
-5. Cancel the confirmation.
-6. Read the rows.
-7. Close Cert ID details.
-8. Read stock, available, withdrawn and the ledger.
-9. Open the product history.
-10. Open the product's media.
+2. Open `<action>`, fill `<filled>`, and cancel.
+3. Read the rows, the figures, the history and the media.
 
 **Expected Results:**
 
-* Step 6: the available `No Cert ID` row reads 3; `<cert_a>` is still listed.
-* Step 8: every figure reads as in step 1.
-* Step 9: no `Intake reversal` entry was added.
-* Step 10: `<tagged image>` is still tagged to `<cert_a>`.
+* The available row reads 3 and PSA-45000001 is listed; every figure is as before; no Intake reversal was added; the image is still tagged to PSA-45000001.
 
 ---
-
-## grade10-admin-inventory-catalog-US69: Operator records a received graded unit
+## g10adm.inventory-catalog.US69: Operator records a received graded unit
 
 **As an** inventory admin,
 **I want** to record optional Cert IDs when I intake stock,
@@ -2577,7 +1935,7 @@ Runs once per row of **Test data**.
 unnumbered stock from entering inventory.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-50a rev=1 covers=g10adm.inventory-catalog.SC-fq8,g10adm.inventory-catalog.SC-irv,g10adm.inventory-catalog.SC-a57,g10adm.inventory-catalog.SC-skp,g10adm.inventory-catalog.SC-ah9,g10adm.inventory-catalog.SC-0ac -->
-### grade10-admin-inventory-catalog-US69-TC1-1: Intake records numbered and unnumbered stock
+### g10adm.inventory-catalog.US69-TC1: An intake records numbered and unnumbered stock
 
 **Classification:**
 
@@ -2585,40 +1943,31 @@ unnumbered stock from entering inventory.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-69
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* A created product has an inventory with stock two.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<numbered intake>` | Quantity two with `PSA-123` and `BGS-456` |
-| `<unnumbered intake>` | Quantity three with no Cert IDs |
+* A created product's inventory holds stock 2.
 
 **Steps:**
 
-1. Navigate to <inventory product url>.
-2. Intake <numbered intake>.
-3. Intake <unnumbered intake>.
-4. Read the product inventory and its history.
+1. On the product page, intake 2 units with PSA-123 and BGS-456.
+2. Intake 3 units with no Cert ID.
+3. Read the inventory, Cert ID details and the history.
 
 **Expected Results:**
 
-* Stock increases by five.
-* `PSA-123` and `BGS-456` are owned by the product inventory.
-* The unnumbered intake creates no Cert ID record.
-* One intake history entry records the numbered identifiers.
+* Stock rose by 5; PSA-123 and BGS-456 are records of the product, and the unnumbered intake made none.
+* One intake entry records the two Cert IDs.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-gvc rev=1 covers=g10adm.inventory-catalog.SC-fq8,g10adm.inventory-catalog.SC-irv,g10adm.inventory-catalog.SC-a57,g10adm.inventory-catalog.SC-skp,g10adm.inventory-catalog.SC-ah9,g10adm.inventory-catalog.SC-0ac -->
-### grade10-admin-inventory-catalog-US69-TC2-1: Invalid Cert ID intake preserves inventory
+### g10adm.inventory-catalog.US69-TC2: An intake naming a Cert ID the product holds, or too many, is refused
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -2634,71 +1983,28 @@ unnumbered stock from entering inventory.
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* The product inventory already owns `PSA-123` and stock is two.
-
-**Steps:**
-
-1. Navigate to <inventory product url>.
-2. Try to intake quantity one with duplicate `PSA-123`.
-3. Try to intake quantity one with two Cert IDs.
-4. Read the inventory and its history.
-
-**Expected Results:**
-
-* Both intakes are refused.
-* Stock and Cert ID records are unchanged.
-* No refused intake adds a history entry.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-if9 rev=1 covers=g10adm.inventory-catalog.SC-fq8,g10adm.inventory-catalog.SC-irv,g10adm.inventory-catalog.SC-a57,g10adm.inventory-catalog.SC-skp,g10adm.inventory-catalog.SC-ah9,g10adm.inventory-catalog.SC-0ac -->
-### grade10-admin-inventory-catalog-US69-TC3-1: Intake refuses a Cert ID a change already gave
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-69
-
-**Pre-conditions:**
-
-* admin(holds Inventory write authority) is on <inventory product url> of `<product_2>`.
-* `<product_2>` holds `<given cert>`, given by the row's Cert ID change.
+* The product holds `<holds>`, stock 2.
 
 **Test data:**
 
-| Field | Value |
+| `<holds>` | `<intake>` |
 | --- | --- |
-| `<cert_a>` | `PSA-20000001` |
-| `<cert_b>` | `PSA-20000002` |
-
-| Row | Cert ID change | `<given cert>` |
-| --- | --- | --- |
-| Correction | `<cert_a>` changed to `<cert_b>` | `<cert_b>` |
-| Assignment | A unit of regular stock assigned `<cert_b>` | `<cert_b>` |
+| PSA-123, intaken | 1 unit with PSA-123 |
+| PSA-123, intaken | 1 unit with two Cert IDs |
+| PSA-20000002, given by correcting PSA-20000001 | 1 unit with PSA-20000002 |
+| PSA-20000002, given by Assign Cert ID | 1 unit with PSA-20000002 |
 
 **Steps:**
 
-1. Read stock and Cert ID details.
-2. Intake quantity one with Cert ID `<given cert>`.
-3. Read stock, Cert ID details and the product history.
+1. Try the `<intake>`, and read the inventory, Cert ID details and the history.
 
 **Expected Results:**
 
-* Step 2: the intake is refused.
-* Step 3: stock and the Cert records read as in step 1.
-* Step 3: the refused intake added no history entry.
+* It is refused; stock and the records are unchanged, and no entry was added.
 
 ---
 
-## grade10-admin-inventory-catalog-US70: Operator configures the product identity and display
+## g10adm.inventory-catalog.US70: Operator configures the product identity and display
 
 **As an** inventory admin,
 **I want** products to use IP, Category, and Item while choosing whether Cert
@@ -2707,89 +2013,48 @@ ID appears in displayed attributes,
 only the fields I choose.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-tzz rev=1 covers=g10adm.inventory-catalog.SC-sls,g10adm.inventory-catalog.SC-ux1,g10adm.inventory-catalog.SC-q36,g10adm.inventory-catalog.SC-u9i,g10adm.inventory-catalog.SC-6vy,g10adm.inventory-catalog.SC-rn5 -->
-### grade10-admin-inventory-catalog-US70-TC1-1: Product display offers the hierarchy and Cert ID field
+### g10adm.inventory-catalog.US70-TC1: The product form offers the hierarchy, and Cert ID is shown or hidden among the displayed fields
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** usability
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-70
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/catalog.spec.ts`
-
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* A product schema exists for one IP, Category, and Item tuple.
+* A published product schema for one IP, Category and Item tuple displays two typed attributes; listing A of its product selects PSA-123, listing B No Cert ID.
 
 **Steps:**
 
-1. Navigate to <inventory product url>.
-2. Inspect the product identity fields.
-3. Navigate to <inventory product schemas url>.
-4. Add Cert ID to the displayed fields and place it first.
-5. Read a listing for a product with Cert ID `PSA-123`.
+1. Open a product's form, and read its identity fields.
+2. On the product schemas, add Cert ID to the displayed fields, first; read listing A.
+3. Remove Cert ID from the displayed fields; read the schema and listing B.
 
 **Expected Results:**
 
-* The product form shows IP, Category, and Item.
-* Collectible type and product metadata are absent.
-* Cert ID is available without creating an ordinary attribute key.
-* The listing shows `PSA-123` first in its configured product fields.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-peb rev=1 covers=g10adm.inventory-catalog.SC-sls,g10adm.inventory-catalog.SC-ux1,g10adm.inventory-catalog.SC-q36,g10adm.inventory-catalog.SC-u9i,g10adm.inventory-catalog.SC-6vy,g10adm.inventory-catalog.SC-rn5 -->
-### grade10-admin-inventory-catalog-US70-TC2-1: Hiding Cert ID preserves typed attributes
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** compatibility
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-70
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/catalog.spec.ts`
-
-**Pre-conditions:**
-
-* An admin holds the inventory catalogue grant.
-* A published schema displays Cert ID and two typed attributes.
-* A listing explicitly selected `No Cert ID`.
-
-**Steps:**
-
-1. Navigate to <inventory product schemas url>.
-2. Remove Cert ID from the displayed fields.
-3. Read the schema and the listing.
-
-**Expected Results:**
-
-* The two typed attributes remain in their prior order.
-* Cert ID is not returned as a displayed field.
-* The listing shows no Cert ID row and no product metadata fallback.
+* Step 1 shows IP, Category and Item, with no collectible type or product metadata.
+* Step 2 needs no ordinary attribute key; listing A shows PSA-123 first among its product fields.
+* Step 3 keeps the two attributes in their order, Cert ID no longer displayed; listing B shows no Cert ID row and no metadata fallback.
 
 ---
 
-## grade10-admin-inventory-catalog-US71: Holder reserves a specific inventory unit
+## g10adm.inventory-catalog.US71: Holder reserves a specific inventory unit
 
-**As an** inventory holder,
+**As an** inventory admin,
 **I want** to choose a specific Cert ID or explicitly choose `No Cert ID` when
 I reserve stock,
 **so that** every reservation identifies whether it owns a physical numbered
 unit or only aggregate stock.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-q7e rev=1 covers=g10adm.inventory-catalog.SC-bck,g10adm.inventory-catalog.SC-63a,g10adm.inventory-catalog.SC-ol8 -->
-### grade10-admin-inventory-catalog-US71-TC1-1: Reservation records the selected unit
+### g10adm.inventory-catalog.US71-TC1: A hold records the Cert ID chosen
 
 **Classification:**
 
@@ -2797,70 +2062,57 @@ unit or only aggregate stock.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Automation status:** automated
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-71
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/catalog.spec.ts`
-
-**Pre-conditions:**
-
-* An authorized holder can reserve inventory.
-* A created product has available Cert IDs `PSA-123` and `BGS-456`.
-
-**Steps:**
-
-1. Open the holder reservation flow for the product.
-2. Select Cert ID `PSA-123`.
-3. Save the reservation.
-4. Inspect the reservation and available unit choices.
-
-**Expected Results:**
-
-* The reservation stores the selected opaque Cert ID record.
-* The reservation quantity is one.
-* `PSA-123` is unavailable to another active reservation.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-tq8 rev=1 covers=g10adm.inventory-catalog.SC-bck,g10adm.inventory-catalog.SC-63a,g10adm.inventory-catalog.SC-ol8 -->
-### grade10-admin-inventory-catalog-US71-TC2-1: Reservation requires an explicit unit choice
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-71
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/inventory/catalog.spec.ts`
-
 **Pre-conditions:**
 
-* An authorized holder can reserve inventory.
-* A created product has available stock and no intended numbered unit.
+* A created product holds available PSA-123 and BGS-456; a holder may reserve it.
 
 **Steps:**
 
-1. Open the holder reservation flow for the product.
-2. Try to save without choosing a Cert ID or `No Cert ID`.
-3. Choose `No Cert ID` and quantity three.
-4. Save and inspect the reservation.
+1. In the holder's reservation flow, choose PSA-123 and save.
+2. Read the hold, and the unit choices again.
 
 **Expected Results:**
 
-* The missing-choice request is refused without changing inventory.
-* The explicit `No Cert ID` request succeeds through product-level quantity.
-* No Cert ID record is allocated.
+* The hold stores PSA-123, quantity one; PSA-123 is no longer offered to another hold.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-tq8 rev=1 covers=g10adm.inventory-catalog.SC-bck,g10adm.inventory-catalog.SC-63a,g10adm.inventory-catalog.SC-ol8 -->
+### g10adm.inventory-catalog.US71-TC2: A hold needs an explicit unit choice, No Cert ID taking regular stock
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-71
+
+**Pre-conditions:**
+
+* A created product holds available stock and no intended numbered unit.
+
+**Steps:**
+
+1. In the reservation flow, try to save with neither a Cert ID nor No Cert ID chosen.
+2. Choose No Cert ID and quantity 3, and save.
+
+**Expected Results:**
+
+* Step 1 is refused, the inventory unchanged.
+* Step 2 holds 3 by product-level quantity, allocating no Cert record.
 
 ---
 
-## grade10-admin-inventory-catalog-US72: Operator configures card schemas and imports products
+## g10adm.inventory-catalog.US72: Operator configures card schemas and imports products
 
 **As an** inventory admin,
 **I want** to define card schemas from one shared template and upload
@@ -2868,15 +2120,15 @@ product rows separately from stock, then mark valid products created,
 **so that** every product has a mapped identity and valid structured facts before inventory is added.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-lzo rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
-### grade10-admin-inventory-catalog-US72-TC1-2: Card schema uses one shared template
+### g10adm.inventory-catalog.US72-TC1: A card schema comes from one shared template, mapped onto existing tags
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -2884,36 +2136,21 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* Existing IP, Item, and Category tags are available for selection.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<source rows>` | Rows with broad Category `TCG` and Set values `Pokémon`, `Lorcana`, and `One Piece` |
-| `<product name>` | The workbook Item cell |
-| `<card schema>` | Required Year number, Set text, Subject text; optional Card Number and Variety text |
+* Rows with the broad Category TCG carry Set values Pokémon, Lorcana and One Piece; existing IP, Item and Category tags stand.
 
 **Steps:**
 
-1. Navigate to <inventory product schemas url>.
-2. Map each sufficiently specific source key, including Category and Set, to one existing IP, Item, and Category tuple.
-3. Try to map Category `TCG` alone to those multiple tuples.
-4. Create a product schema from `<card schema>`.
-5. Inspect the schema fields and product identity mapping.
+1. On the product schemas, map each source key, Category with Set, to one existing tuple.
+2. Try to map Category TCG alone onto those tuples.
+3. Create a schema from the card template, and read its fields and mapping.
 
 **Expected Results:**
 
-* Year is a required number; Set and Subject are required text.
-* Card Number and Variety are optional text.
-* `<product name>` is the product name, not the Grade10 Item tag.
-* Serial, Cert ID, Grade Issuer, Grade, and Autograph Grade are not product attributes.
-* The Category-only `TCG` mapping is refused because its source rows resolve to multiple tuples.
-* The mapping uses existing tags and creates no taxonomy values.
+* Step 2 is refused, its rows resolving to several tuples.
+* Year is a required number, Set and Subject required text, Card Number and Variety optional text; the workbook Item cell is the product name, not the Item tag; no Serial, Cert ID, Grade Issuer, Grade or Autograph Grade is an attribute; no tag was created.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-7vt rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
-### grade10-admin-inventory-catalog-US72-TC2-2: Manifest import creates drafts only
+### g10adm.inventory-catalog.US72-TC2: A schema manifest imports as drafts, the published schema staying active
 
 **Classification:**
 
@@ -2921,7 +2158,7 @@ product rows separately from stock, then mark valid products created,
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -2929,31 +2166,19 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* A published product schema exists for the selected existing IP, Item, and Category tuple.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<schema manifest>` | Valid attribute definitions from the shared card template |
-| `<source classification key>` | A sufficiently specific key, such as Category `TCG` plus Set `Pokémon`, mapped to the selected tuple |
+* A published schema stands for an existing tuple; the manifest holds valid definitions from the card template.
 
 **Steps:**
 
-1. Navigate to <inventory product schemas url>.
-2. Upload `<schema manifest>` and map `<source classification key>` to the existing tuple.
-3. Review the preview and import the manifest.
-4. Read the schema revisions and active schema.
+1. Upload the manifest, mapping Category TCG with Set Pokémon to the tuple; preview and import it.
+2. Read the schema's revisions and the active one.
 
 **Expected Results:**
 
-* The imported schema revision is a draft.
-* The current published schema remains active.
-* The imported revision is not published until the admin uses the publish flow.
+* The imported revision is a draft, unpublished until the publish flow; the published schema stays active.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-01d rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
-### grade10-admin-inventory-catalog-US72-TC3-2: Invalid manifest leaves schemas unchanged
+### g10adm.inventory-catalog.US72-TC3: An invalid schema manifest creates no revision
 
 **Classification:**
 
@@ -2969,31 +2194,21 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* One broad Category-only mapping is ambiguous because its rows target multiple tuples.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<schema manifest>` | One valid schema row and one row with an invalid attribute definition |
-| `<source classification key>` | A broad `TCG` Category-only key that maps to multiple tuples |
+* The manifest holds one valid row and one with an invalid attribute definition; the Category-only TCG key, ambiguous, is unmapped.
 
 **Steps:**
 
-1. Navigate to <inventory product schemas url>.
-2. Upload `<schema manifest>` with the ambiguous Category-only key unmapped.
-3. Review validation and attempt to import the manifest.
-4. Read the affected schema revisions and published schemas.
+1. Upload it, read the validation, and try to import.
+2. Read the schema's revisions.
 
 **Expected Results:**
 
-* Validation identifies the affected rows and reasons.
-* No schema revision from the manifest is created.
-* Existing published schemas remain active.
+* Validation names the rows and their reasons; no revision is created and the published schemas stay active.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-arw rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
-### grade10-admin-inventory-catalog-US72-TC4-2: Product upload separates products from stock
+### g10adm.inventory-catalog.US72-TC4: A product upload makes one draft per card identity, and no stock
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -3001,42 +2216,34 @@ product rows separately from stock, then mark valid products created,
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-72
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* A published product schema exists for the mapped tuple.
+* A published card schema stands for the mapped tuple; `<workbook>`.
 
 **Test data:**
 
-| Field | Value |
+| `<workbook>` | `<products>` |
 | --- | --- |
-| `<product workbook>` | Two sheets with repeated identical product rows and one different identity |
-| `<source classification mapping>` | Category plus a distinguishing source field mapped to one existing IP, Item, and Category tuple |
+| two sheets of repeated identical rows and one different identity | two, the repeated rows resolving to one |
+| rows sharing a name and tuple, one pair differing by Card Number and another by Set | one per distinct Card Number and Set, the shared name neither merging nor blocking them |
 
 **Steps:**
 
-1. Navigate to <inventory products url>.
-2. Upload `<product workbook>` and apply `<source classification mapping>`.
-3. Review the product matches and row validation.
-4. Confirm the product upload and read the created draft products.
-5. Mark each valid imported draft `created` through the existing product status flow.
-6. Read the product status and inventories.
+1. Upload the workbook on the products page, mapping Category with a distinguishing field to one tuple; review and confirm.
+2. Mark each valid draft created; read the products and their inventories.
 
 **Expected Results:**
 
-* Each distinct product name, exact tuple, and schema-value set has one product.
-* Repeated identical rows resolve to one product.
-* Newly created products use draft status until the admin marks each valid product `created`.
-* No inventory quantity, unit record, or Cert ID is created.
+* It makes `<products>`, each a draft until marked created; no stock, unit record or Cert ID is created.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-ii9 rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
-### grade10-admin-inventory-catalog-US72-TC5-2: Incomplete product rows block every create
+### g10adm.inventory-catalog.US72-TC5: A product upload with an incomplete row creates nothing
 
 **Classification:**
 
@@ -3052,82 +2259,26 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* A published product schema exists for one target tuple.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<product workbook>` | One valid row and one row with a missing required value or invalid value |
-| `<source classification mapping>` | A broad `TCG` Category-only key with no tuple mapping |
+* A published schema stands for one tuple; the workbook holds a valid row and one missing a required value; the Category-only TCG key is unmapped.
 
 **Steps:**
 
-1. Navigate to <inventory products url>.
-2. Upload `<product workbook>` without applying `<source classification mapping>`.
-3. Review row validation and attempt to commit.
-4. Read the product list.
+1. Upload it, read the validation, and try to commit; read the product list.
 
 **Expected Results:**
 
-* Validation identifies the unmapped label and invalid product row.
-* No product from the upload is created or changed.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-bdu rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
-### grade10-admin-inventory-catalog-US72-TC6-2: Same product name keeps distinct card identities
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-72
-
-**Pre-conditions:**
-
-* An admin holds the inventory catalogue grant.
-* A published card schema exists for the mapped tuple.
-* No product matches the uploaded rows' schema values.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<product rows>` | Same Item display name and exact tuple; one pair differs by Card Number, and another pair differs by Set |
-| `<source classification mapping>` | Category plus a distinguishing source field mapped to one existing IP, Item, and Category tuple |
-
-**Steps:**
-
-1. Navigate to <inventory products url>.
-2. Upload `<product rows>` and apply `<source classification mapping>`.
-3. Review the product matches and confirm the upload.
-4. Read the created products and their schema values.
-
-**Expected Results:**
-
-* Products with the same display name and tuple but different Card Number or Set remain separate.
-* Each distinct schema-value set creates one draft product.
-* Product name alone neither merges rows nor blocks the upload.
-* No inventory quantity, unit record, or Cert ID is created.
-
----
+* Validation names the unmapped label and the invalid row; no product is created or changed.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-vud rev=1 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
-### grade10-admin-inventory-catalog-US72-TC7-1: Mapped values trim and omit blank placeholders
+### g10adm.inventory-catalog.US72-TC7: Mapped values are trimmed and blank placeholders read as absent
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** high
+* **Severity:** minor
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -3135,39 +2286,26 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* A published card schema exists for the mapped tuple.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<product workbook>` | One row with padded Year, Set, and Subject values, optional Card Number `-`, and blank Variety; a second row with required Set `-` |
-| `<source classification mapping>` | A sufficiently specific key mapped to one existing IP, Item, and Category tuple |
+* A published card schema stands; one row pads Year, Set and Subject, with Card Number - and Variety blank; another has Set -.
 
 **Steps:**
 
-1. Navigate to <inventory products url>.
-2. Upload `<product workbook>` and apply `<source classification mapping>`.
-3. Review the normalized preview and source workbook.
+1. Upload the workbook, map it, and read the preview and the source workbook.
 
 **Expected Results:**
 
-* Surrounding whitespace is removed from the mapped Year, Set, and Subject values.
-* Blank and standalone `-` optional values are shown as absent; the required Set `-` is reported as missing.
-* The upload is not committed while the required value is missing.
-* The uploaded workbook remains unchanged.
+* The padded values are trimmed; the blank and - optional values read absent, and the required Set - is reported missing, holding the commit; the workbook is unchanged.
 
 ---
 
-## grade10-admin-inventory-catalog-US73: Operator bulk imports matched inventory units
+## g10adm.inventory-catalog.US73: Operator bulk imports matched inventory units
 
 **As an** inventory admin,
 **I want** to upload physical copy rows against existing products,
 **so that** inventory counts and copy-level facts are recorded together after I review the matches.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-4u2 rev=2 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
-### grade10-admin-inventory-catalog-US73-TC1-2: Inventory preview shows matched copy facts
+### g10adm.inventory-catalog.US73-TC1: An inventory upload previews each copy against its product, and commits together
 
 **Classification:**
 
@@ -3175,40 +2313,27 @@ product rows separately from stock, then mark valid products created,
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-73
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* Each uploaded row matches one existing `created` product.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<inventory workbook>` | One row per physical copy with Cert ID, Grade Issuer, Grade, Autograph Grade, and Serial columns |
-| `<source classification mapping>` | Each sufficiently specific source key maps to one existing IP, Item, and Category tuple |
+* Each row of the workbook, one per copy with Cert ID, Grade Issuer, Grade, Autograph Grade and Serial, matches one created product.
 
 **Steps:**
 
-1. Navigate to <inventory bulk upload url>.
-2. Upload `<inventory workbook>` and apply `<source classification mapping>`.
-3. Review the resolved products and copy-level facts.
-4. Confirm the upload and read inventory counts, unit records, and history.
+1. On the inventory bulk upload, upload and map it, and review the matches and copy facts.
+2. Confirm, and read the counts, unit records and history.
 
 **Expected Results:**
 
-* Each row resolves to one existing product and one physical unit.
-* Cert ID, Grade Issuer, Grade, Autograph Grade, and Serial are stored on the unit.
-* Inventory counts increase by the number of included rows.
-* The batch's inventory changes and history are committed together.
+* Each row resolves to one product and one unit, its copy facts stored on the unit; counts rise by the rows included, the batch committed together.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-i75 rev=2 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
-### grade10-admin-inventory-catalog-US73-TC2-2: Blank status choices apply per row
+### g10adm.inventory-catalog.US73-TC2: Each row of blank status asks its own choice
 
 **Classification:**
 
@@ -3216,7 +2341,7 @@ product rows separately from stock, then mark valid products created,
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -3224,30 +2349,22 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* Created products match both blank-status rows.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<inventory workbook>` | Two blank Item Status rows: one `RAW` row without Cert ID and one graded row with Cert ID |
+* Two rows have a blank Item Status: a RAW row without Cert ID, and a graded row with one.
 
 **Steps:**
 
-1. Navigate to <inventory bulk upload url>.
-2. Upload `<inventory workbook>` and try to continue without choosing how to handle blank Item Status rows.
-3. Choose to include the RAW row and exclude the graded row.
-4. Confirm the import and read inventory counts and unit records.
+1. Upload it, and try to continue without choosing.
+2. Include the RAW row and exclude the graded one; confirm, and read the counts and units.
 
 **Expected Results:**
 
-* Grade10 requires a separate include or exclude choice for each blank-status row; there is no batch-wide default.
-* The included RAW unit is accepted without Cert ID.
-* The excluded graded unit adds no unit or stock.
+* Step 1 asks a choice per row, with no batch-wide default.
+* Step 2 accepts the RAW unit without Cert ID; the excluded row adds nothing.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-rr6 rev=2 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
-### grade10-admin-inventory-catalog-US73-TC3-2: Unmatched products block inventory import
+### g10adm.inventory-catalog.US73-TC3: One invalid row blocks the whole inventory upload
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -3263,145 +2380,34 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* The product catalogue has no match for one uploaded row and multiple matches for another.
-
-**Steps:**
-
-1. Navigate to <inventory bulk upload url>.
-2. Upload rows for the unmatched and ambiguous products.
-3. Review matches and attempt to commit the batch.
-4. Read inventory counts, unit records, and history.
-
-**Expected Results:**
-
-* Validation identifies both the unmatched and ambiguous rows.
-* No inventory, unit, or history change from the upload is committed.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-9ou rev=1 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
-### grade10-admin-inventory-catalog-US73-TC4-1: Duplicate Cert IDs block every unit
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-73
-
-**Pre-conditions:**
-
-* An admin holds the inventory catalogue grant.
-* A created product inventory already owns Cert ID `PSA-123`.
+* The workbook holds a valid row and `<invalid>`.
 
 **Test data:**
 
-| Field | Value |
+| `<invalid>` | `<validation names>` |
 | --- | --- |
-| `<inventory workbook>` | One valid row and one row with Cert ID ` PSA-123 ` |
+| a row matching no product, and one matching two | both rows |
+| a row with Cert ID ` PSA-123 `, which the product already holds | the duplicate PSA-123, trimmed |
+| a row whose Year is not a number | the Year |
+| a RAW row with Cert ID RAW-001, and a graded PSA row with none | both, by grading status |
 
 **Steps:**
 
-1. Navigate to <inventory bulk upload url>.
-2. Upload `<inventory workbook>`.
-3. Review validation and attempt to commit.
-4. Read inventory counts, unit records, and history.
+1. Upload it, read the validation, and try to commit; read the counts, units and history.
 
 **Expected Results:**
 
-* Grade10 trims surrounding whitespace and reports the duplicate Cert ID.
-* The valid row is not committed with the duplicate row.
-* Inventory counts, unit records, and history remain unchanged.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-5r1 rev=1 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
-### grade10-admin-inventory-catalog-US73-TC5-1: Invalid inventory values block the batch
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-73
-
-**Pre-conditions:**
-
-* An admin holds the inventory catalogue grant.
-* A created product has the required card schema.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<inventory workbook>` | One valid row and one row whose Year value is not a number |
-
-**Steps:**
-
-1. Navigate to <inventory bulk upload url>.
-2. Upload `<inventory workbook>` and apply a sufficiently specific source classification mapping.
-3. Review validation and attempt to commit.
-4. Read inventory counts, unit records, and history.
-
-**Expected Results:**
-
-* Validation identifies the invalid Year value.
-* No row from the upload changes inventory counts, unit facts, or history.
+* Validation names `<validation names>`; nothing from the upload is committed.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-4v4 rev=1 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
-### grade10-admin-inventory-catalog-US73-TC6-1: Inventory import normalizes copy facts
+### g10adm.inventory-catalog.US73-TC6: Copy facts are trimmed and blank placeholders read as absent
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** high
+* **Severity:** minor
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-73
-
-**Pre-conditions:**
-
-* An admin holds the inventory catalogue grant.
-* A created product matches the uploaded `RAW` row.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<inventory workbook>` | One `RAW` row with blank Cert ID, Grade `-`, Autograph Grade `-`, and Serial `-` |
-
-**Steps:**
-
-1. Navigate to <inventory bulk upload url>.
-2. Upload `<inventory workbook>` and review the copy facts.
-3. Confirm the upload and inspect the unit record and source workbook.
-
-**Expected Results:**
-
-* Blank Cert ID remains absent for the `RAW` unit.
-* Blank and standalone `-` optional copy facts are absent rather than stored as text.
-* One unit is committed and the uploaded workbook remains unchanged.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-wz7 rev=1 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
-### grade10-admin-inventory-catalog-US73-TC7-1: Cert ID requirements follow grading status
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -3410,42 +2416,33 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* An admin holds the inventory catalogue grant.
-* Created products match both uploaded rows.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<inventory workbook>` | One `RAW` row with Cert ID `RAW-001` and one graded row with issuer `PSA` and no Cert ID |
+* A RAW row has a blank Cert ID and Grade, Autograph Grade and Serial of -.
 
 **Steps:**
 
-1. Navigate to <inventory bulk upload url>.
-2. Upload `<inventory workbook>` and review row validation.
-3. Attempt to confirm the upload and inspect inventory counts, unit records, and history.
+1. Upload it, review the copy facts, confirm, and read the unit and the workbook.
 
 **Expected Results:**
 
-* Validation rejects the RAW row because it has a Cert ID.
-* Validation rejects the graded row because it has no Cert ID.
-* Neither row changes inventory counts, unit facts, or history.
+* The Cert ID stays absent, and the - facts are absent rather than text; one unit is committed and the workbook is unchanged.
 
 ---
 
-## grade10-admin-inventory-catalog-US74: Inventory admin prepares reusable product media
+## g10adm.inventory-catalog.US74: Inventory admin prepares reusable product media
 
 **As an** inventory admin,
-**I want** to attach, order, replace, and remove photographs and video on a catalogue product,
-**so that** Auction operators can begin a listing with prepared material.
+**I want** to attach, order, replace, and remove photographs and video on a
+catalogue product,
+**so that** Auction operators can begin a listing with material already
+prepared for that product.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-tf3 rev=1 covers=g10adm.inventory-catalog.SC-nmq,g10adm.inventory-catalog.SC-w9x,g10adm.inventory-catalog.SC-hwk,g10adm.inventory-catalog.SC-vz9,g10adm.inventory-catalog.SC-qs1 -->
-### grade10-admin-inventory-catalog-US74-TC1-1: Product accepts an ordered reusable gallery
+### g10adm.inventory-catalog.US74-TC1: A product keeps an ordered gallery
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -3456,18 +2453,17 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* An admin(inventory admin) is editing a product with no media.
+* An inventory admin is editing a product with no media.
 
 **Steps:**
 
-1. Add supported assets, reorder them, and save the product.
+1. Add supported assets, reorder them, and save.
 
 **Expected Results:**
 
-* The product retains the selected order and exposes the assets to Auction.
+* The product keeps the chosen order and offers the assets to Auction.
 
 ---
-
 ## g10adm.inventory-catalog.US75: Inventory admin writes a product's name and description in each language
 
 **As an** inventory admin,
@@ -3475,7 +2471,7 @@ product rows separately from stock, then mark valid products created,
 **so that** the product reads in the collector's language wherever it is shown.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-pdl rev=1 covers=g10adm.inventory-catalog.SC-99k -->
-### g10adm.inventory-catalog.US75-TC1: Inventory admin writes all three languages on a product and reads them back
+### g10adm.inventory-catalog.US75-TC1: An inventory admin writes all three languages on a product and reads them back
 
 **Classification:**
 
@@ -3484,51 +2480,30 @@ product rows separately from stock, then mark valid products created,
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-75
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_1>` is a product with an English name only.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| product_1 | A product named `<english name>` with no description and no translations |
-| english name | Charizard Holo |
-| english description | Base Set holographic card. |
-| traditional name | 噴火龍 閃卡 |
-| traditional description | 基本系列閃卡。 |
-| simplified name | 喷火龙 闪卡 |
-| simplified description | 基本系列闪卡。 |
+* Product 1 is named Charizard Holo, with no description and no translation.
 
 **Steps:**
 
-1. Open the editor of `<product_1>`.
-2. Enter `<english description>` as the English description.
-3. Enter `<traditional name>` and `<traditional description>` as the Traditional Chinese name and description.
-4. Enter `<simplified name>` and `<simplified description>` as the Simplified Chinese name and description.
-5. Click Save.
-6. Reload the editor of `<product_1>`.
-7. Read the name and description of each language.
+1. Open its editor; enter the English description Base Set holographic card., the Traditional Chinese 噴火龍 閃卡 and 基本系列閃卡。, and the Simplified Chinese 喷火龙 闪卡 and 基本系列闪卡。; save.
+2. Reload the editor, and read each language.
 
 **Expected Results:**
 
-* Step 5 saves the product.
-* Step 7 shows the English name and description as entered.
-* Step 7 shows the Traditional Chinese name and description as entered.
-* Step 7 shows the Simplified Chinese name and description as entered.
+* Step 1 saves; step 2 shows each name and description as entered.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-6mu rev=1 covers=g10adm.inventory-catalog.SC-v1f -->
-### g10adm.inventory-catalog.US75-TC2: English name alone is enough, and the English description may stay empty
+### g10adm.inventory-catalog.US75-TC2: The English name alone makes a product
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -3540,76 +2515,25 @@ product rows separately from stock, then mark valid products created,
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| english name | Charizard Holo |
+* An inventory admin is on the products list.
 
 **Steps:**
 
-1. Open the product editor to add a product.
-2. Enter `<english name>` as the English name and nothing else in the texts.
-3. Fill the other fields a product needs.
-4. Click Save.
-5. Reload the editor of the new product.
-6. Read the name and description of each language.
+1. Add a product with the English name Charizard Holo and no other text, filling the other fields it needs; save.
+2. Reload its editor, and read each language.
 
 **Expected Results:**
 
-* Step 4 saves the product.
-* Step 6 shows the English name as entered.
-* Step 6 shows the English description empty.
-* Step 6 shows the Traditional and Simplified Chinese name and description empty.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-of2 rev=1 covers=g10adm.inventory-catalog.SC-ia2 -->
-### g10adm.inventory-catalog.US75-TC3: A Chinese name does not stand in for the missing English name
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-75
-
-**Pre-conditions:**
-
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| traditional name | 噴火龍 閃卡 |
-
-**Steps:**
-
-1. Open the product editor to add a product.
-2. Leave the English name empty.
-3. Enter `<traditional name>` as the Traditional Chinese name.
-4. Fill the other fields a product needs.
-5. Click Save.
-
-**Expected Results:**
-
-* Step 5 refuses the save and names the English name.
-* No product is added.
+* It saves; the English name reads as entered, every other text empty.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-xu1 rev=1 -->
-### g10adm.inventory-catalog.US75-TC4: Translated name at the length limits is accepted
+### g10adm.inventory-catalog.US75-TC4: A translated name at its limits is kept whole
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
@@ -3621,43 +2545,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_1>` is a product named `<english name>`.
+* Product 1 is named Charizard Holo, with no translation.
 
 **Test data:**
 
-| Field | Value |
+| `<language>` | `<name>` |
 | --- | --- |
-| english name | Charizard Holo |
-| product_1 | A product named `<english name>` with no translations |
-
-| language | name text |
-| --- | --- |
-| Traditional Chinese | 200 Chinese characters (the name limit) |
-| Simplified Chinese | 1 Chinese character (the lower bound) |
+| Traditional Chinese | 200 Chinese characters |
+| Simplified Chinese | 1 Chinese character |
 
 **Steps:**
 
-1. Open the editor of `<product_1>`.
-2. Enter `<name text>` as the `<language>` name.
-3. Click Save.
-4. Reload the editor of `<product_1>`.
-5. Read the `<language>` name.
+1. Enter `<name>` as the `<language>` name, save, reload and read it.
 
 **Expected Results:**
 
-* Step 3 saves the product.
-* Step 5 shows `<name text>` with every character kept.
+* It saves, every character kept.
 
-<!-- trace:case id=g10adm.inventory-catalog.TC-r0k rev=1 -->
-### g10adm.inventory-catalog.US75-TC5: Translated name beyond the length limit is refused
+<!-- trace:case id=g10adm.inventory-catalog.TC-of2 rev=1 covers=g10adm.inventory-catalog.SC-ia2 -->
+### g10adm.inventory-catalog.US75-TC3: A translation is refused without the English name, or past the English text's limits
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -3668,42 +2581,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_1>` is a product named `<english name>` with no translations.
+* An inventory admin `<on>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| english name | Charizard Holo |
-| product_1 | A product named `<english name>` with no translations |
-
-| language | name text | why refused |
+| `<on>` | `<entered>` | `<refusal names>` |
 | --- | --- | --- |
-| Traditional Chinese | 201 Chinese characters | One above the 200 limit |
-| Simplified Chinese | 201 Chinese characters | One above the 200 limit |
+| adds a product | the Traditional Chinese name 噴火龍 閃卡 and no English name | the English name, no product added |
+| edits product 1 | a Traditional Chinese name of 201 characters | the name field |
+| edits product 1 | a Simplified Chinese name of 201 characters | the name field |
+| edits product 1 | a Traditional Chinese description of 2,001 characters | the description field |
 
 **Steps:**
 
-1. Open the editor of `<product_1>`.
-2. Enter `<name text>` as the `<language>` name.
-3. Click Save.
-4. Reload the editor of `<product_1>`.
-5. Read the `<language>` name.
+1. Enter `<entered>`, save, then reload.
 
 **Expected Results:**
 
-* Step 3 refuses the save and names the name field.
-* Step 5 shows the `<language>` name empty.
+* The save is refused, naming `<refusal names>`; nothing of it is kept.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-piz rev=1 covers=g10adm.inventory-catalog.SC-v7f -->
-### g10adm.inventory-catalog.US75-TC6: Blank translation counts as not written
+### g10adm.inventory-catalog.US75-TC6: A blank translation counts as not written
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
@@ -3715,86 +2619,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_2>` has a written Traditional Chinese name and description.
+* Product 2 holds the English and the Traditional Chinese name and description.
 
 **Test data:**
 
-| Field | Value |
+| `<field>` | `<input>` |
 | --- | --- |
-| english name | Charizard Holo |
-| english description | Base Set holographic card. |
-| traditional name | 噴火龍 閃卡 |
-| traditional description | 基本系列閃卡。 |
-| product_2 | A product with `<english name>`, `<english description>`, `<traditional name>` and `<traditional description>` |
-
-| field | input |
-| --- | --- |
-| Traditional Chinese name | Cleared to empty |
-| Traditional Chinese name | 3 spaces |
-| Traditional Chinese description | 3 spaces |
+| the Traditional Chinese name | cleared |
+| the Traditional Chinese name | 3 spaces |
+| the Traditional Chinese description | 3 spaces |
 
 **Steps:**
 
-1. Open the editor of `<product_2>`.
-2. Set `<field>` to `<input>`.
-3. Click Save.
-4. Reload the editor of `<product_2>`.
-5. Open the Details section on the product page and choose Traditional Chinese.
+1. Set `<field>` to `<input>`, save, and choose Traditional Chinese in the product page's Details.
 
 **Expected Results:**
 
-* Step 3 saves the product.
-* Step 5 shows the English text for `<field>`, marked as the fallback.
-* Step 5 shows the other Traditional Chinese text as written, not marked.
+* It saves; `<field>` shows the English text marked as the fallback, the other text as written.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-8ef rev=1 -->
-### g10adm.inventory-catalog.US75-TC7: Translations survive a catalogue upload that matches the product
+### g10adm.inventory-catalog.US75-TC7: A catalogue upload and a save without translations leave them alone
 
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-75
-
-**Pre-conditions:**
-
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_2>` has all three languages written.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| product_2 | A product named `<english name>` with all three languages written |
-| product import file | A catalogue upload with one row matching `<product_2>` and no translated text |
-| english name | Charizard Holo |
-| english description | Base Set holographic card. |
-| traditional name | 噴火龍 閃卡 |
-| traditional description | 基本系列閃卡。 |
-| simplified name | 喷火龙 闪卡 |
-| simplified description | 基本系列闪卡。 |
-
-**Steps:**
-
-1. Upload `<product import file>`, whose one row has the English name, taxonomy and typed values of `<product_2>`.
-2. Read the upload result.
-3. Open the editor of `<product_2>`.
-4. Read the name and description of each language.
-
-**Expected Results:**
-
-* Step 2 shows the row resolved to `<product_2>`, with no second product added.
-* Step 4 shows every translation still as written.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-d8p rev=1 -->
-### g10adm.inventory-catalog.US75-TC8: Lists, history and holds keep the English name once translations exist
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -3806,37 +2652,53 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-75
+* **Trace:** What staff and imports keep
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_2>` has all three languages written, and holds stock for a listing.
+* Product 2, created, holds all three languages, a grade, a set and a Cert ID.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| product_2 | A product with all three languages written and a stock hold taken by a draft listing |
-| english name | Charizard Holo |
-| english description | Base Set holographic card. |
-| traditional name | 噴火龍 閃卡 |
-| traditional description | 基本系列閃卡。 |
-| simplified name | 喷火龙 闪卡 |
-| simplified description | 基本系列闪卡。 |
+| `<then>` |
+| --- |
+| a catalogue upload with one row matching it and no translated text |
+| a save of its remarks naming no translation |
 
 **Steps:**
 
-1. Open the product list.
-2. Read the row of `<product_2>`.
-3. Open the stock history of `<product_2>`.
-4. Read the entry that names the hold.
+1. Make `<then>`, and read the result and the editor.
 
 **Expected Results:**
 
-* Step 2 reads `<english name>`.
-* Step 4 names `<english name>`.
-* Neither shows `<traditional name>` or `<simplified name>`.
+* No second product is added; every translation reads as written, and the grade, set and Cert ID are unchanged.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-d8p rev=1 -->
+### g10adm.inventory-catalog.US75-TC8: Lists, history and holds keep the English name
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** What staff and imports keep
+
+**Pre-conditions:**
+
+* Product 2 holds all three languages and a hold taken by a draft listing.
+
+**Steps:**
+
+1. Read its row in the product list, and the history entry naming the hold.
+
+**Expected Results:**
+
+* Both read Charizard Holo, showing neither Chinese name.
 
 ---
 
@@ -3847,7 +2709,7 @@ Runs once per row of **Test data**.
 **so that** I can check each language and fill the gaps.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-qkd rev=1 covers=g10adm.inventory-catalog.SC-4vd -->
-### g10adm.inventory-catalog.US76-TC1: Details section switches name and description together and opens in English again
+### g10adm.inventory-catalog.US76-TC1: One choice switches the name and the description together, opening in English again
 
 **Classification:**
 
@@ -3856,49 +2718,67 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-inventory-catalog-US-76
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_2>` has all three languages written.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| product_2 | A product with all three languages written |
-| english name | Charizard Holo |
-| english description | Base Set holographic card. |
-| traditional name | 噴火龍 閃卡 |
-| traditional description | 基本系列閃卡。 |
-| simplified name | 喷火龙 闪卡 |
-| simplified description | 基本系列闪卡。 |
+* Product 2 holds all three languages.
 
 **Steps:**
 
-1. Open the product page of `<product_2>`.
-2. Read the name and description in the Details section.
-3. Choose Traditional Chinese in the Details section's language choice.
-4. Read the name and description.
-5. Choose Simplified Chinese.
-6. Read the name and description.
-7. Reload the product page.
-8. Read the language the Details section shows.
+1. Open its page, and read Details; choose Traditional Chinese, then Simplified Chinese, reading each.
+2. Reload, and read Details' language.
 
 **Expected Results:**
 
-* Step 2 shows the English name and description, with no fallback mark.
-* Step 4 shows the Traditional Chinese name and description together, with no fallback mark.
-* Step 6 shows the Simplified Chinese name and description together, with no fallback mark.
-* Step 8 shows the Details section in English again.
+* Each choice shows that language's name and description together, none marked as a fallback.
+* Step 2 opens in English again.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-tb5 rev=1 covers=g10adm.inventory-catalog.SC-lj3 -->
 ### g10adm.inventory-catalog.US76-TC2: A language missing one text marks only that text as the fallback
 
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-76
+
+**Pre-conditions:**
+
+* Product 3 holds `<held>`.
+
+**Test data:**
+
+| `<held>` | `<choice>` | `<reads>` |
+| --- | --- | --- |
+| the English texts and a Traditional Chinese name | Traditional Chinese | 噴火龍 閃卡 unmarked; the English description marked as the fallback |
+| a Traditional Chinese description and an empty English description | Traditional Chinese | the Traditional Chinese description; for the name, the English, marked |
+| a Traditional Chinese description and an empty English description, no Simplified Chinese | Simplified Chinese | an empty description, the English name marked |
+
+**Steps:**
+
+1. Open its page, and choose `<choice>` in Details.
+
+**Expected Results:**
+
+* It reads `<reads>`.
+
+<!-- trace:case id=g10adm.inventory-catalog.TC-bbu rev=1 covers=g10adm.inventory-catalog.SC-70a -->
+### g10adm.inventory-catalog.US76-TC3: A Chinese choice with no text reads the English, never the other Chinese
+
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** major
@@ -3913,115 +2793,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_3>` has a Traditional Chinese name and no Traditional Chinese description.
+* Product `<product>`.
 
 **Test data:**
 
-| Field | Value |
+| `<product>` | `<choice>` |
 | --- | --- |
-| product_3 | A product with `<english name>`, `<english description>` and `<traditional name>`; no Traditional Chinese description |
-| english name | Charizard Holo |
-| english description | Base Set holographic card. |
-| traditional name | 噴火龍 閃卡 |
-| traditional description | 基本系列閃卡。 |
+| 4 holds English texts only | Traditional Chinese |
+| 4 holds English texts only | Simplified Chinese |
+| 3 holds English and Traditional Chinese texts, no Simplified Chinese | Simplified Chinese |
 
 **Steps:**
 
-1. Open the product page of `<product_3>`.
-2. Choose Traditional Chinese in the Details section's language choice.
-3. Read the name.
-4. Read the description.
+1. Open its page, choose `<choice>` in Details, then English.
 
 **Expected Results:**
 
-* Step 3 shows `<traditional name>`, not marked as the fallback.
-* Step 4 shows `<english description>`, marked as the fallback.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-bbu rev=1 -->
-### g10adm.inventory-catalog.US76-TC3: A product with no translations reads English in each Chinese choice
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-76
-
-**Pre-conditions:**
-
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_4>` is a product created before translations existed, with an English name and description only.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| product_4 | A product with `<english name>` and `<english description>` only |
-| english name | Charizard Holo |
-| english description | Base Set holographic card. |
-
-**Steps:**
-
-1. Open the product page of `<product_4>`.
-2. Choose Traditional Chinese in the Details section's language choice.
-3. Read the name and description.
-4. Choose Simplified Chinese.
-5. Read the name and description.
-6. Choose English.
-7. Read the name and description.
-
-**Expected Results:**
-
-* Step 3 shows `<english name>` and `<english description>`, both marked as the fallback.
-* Step 5 shows `<english name>` and `<english description>`, both marked as the fallback.
-* Step 7 shows the same two texts, not marked.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-rfp rev=1 covers=g10adm.inventory-catalog.SC-70a -->
-### g10adm.inventory-catalog.US76-TC4: Traditional Chinese text is never shown as the Simplified Chinese fallback
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-76
-
-**Pre-conditions:**
-
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_3>` has Traditional Chinese text and no Simplified Chinese text.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| product_3 | A product with `<english name>`, `<english description>`, `<traditional name>` and `<traditional description>`; no Simplified Chinese text |
-| english name | Charizard Holo |
-| english description | Base Set holographic card. |
-| traditional name | 噴火龍 閃卡 |
-| traditional description | 基本系列閃卡。 |
-
-**Steps:**
-
-1. Open the product page of `<product_3>`.
-2. Choose Simplified Chinese in the Details section's language choice.
-3. Read the name and description.
-
-**Expected Results:**
-
-* Step 3 shows `<english name>` and `<english description>`, both marked as the fallback.
-* Step 3 shows no Traditional Chinese character.
+* `<choice>` shows the English name and description, both marked as the fallback, with no Traditional Chinese character; English shows them unmarked.
 
 ---
 
@@ -4032,7 +2820,7 @@ Runs once per row of **Test data**.
 **so that** I find the product from whichever name a colleague quotes.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-29r rev=1 covers=g10adm.inventory-catalog.SC-j29,g10adm.inventory-catalog.SC-7lv -->
-### g10adm.inventory-catalog.US77-TC1: Product search finds a product by a part of its name in any language
+### g10adm.inventory-catalog.US77-TC1: A part of a name in any language finds the product, listed once
 
 Runs once per row of **Test data**.
 
@@ -4043,49 +2831,6 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-inventory-catalog-US-77
-
-**Pre-conditions:**
-
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_5>` has an English, a Traditional Chinese and a Simplified Chinese name, and no other product's names contain the fragment.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| product_5 | A product with English name `Charizard Holo`, Traditional Chinese name `噴火龍 Pokémon 閃卡` and Simplified Chinese name `喷火龙 闪卡` |
-
-| language typed | fragment | why this row |
-| --- | --- | --- |
-| English | harizard | Part of an English name |
-| Traditional Chinese | 噴火龍 | Part of a Traditional Chinese name |
-| Simplified Chinese | 喷火龙 | Part of a Simplified Chinese name |
-| Latin letters in a translated name | pokémon (lower case) | Matches any case |
-
-**Steps:**
-
-1. Type `<fragment>` in the product search.
-2. Read the rows.
-
-**Expected Results:**
-
-* Step 2 lists `<product_5>` once.
-* Step 2 shows its row under the English name.
-
-<!-- trace:case id=g10adm.inventory-catalog.TC-b4r rev=1 -->
-### g10adm.inventory-catalog.US77-TC2: A product matching in two languages is listed once
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -4093,31 +2838,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_6>` has English name `Charizard Holo` and Traditional Chinese name `Charizard 噴火龍`.
+* Product 5 is named Charizard Holo, 噴火龍 Pokémon 閃卡 and 喷火龙 闪卡; product 6 Charizard Holo and Charizard 噴火龍; no other product holds the fragments.
 
 **Test data:**
 
-| Field | Value |
+| `<fragment>` | `<lists>` |
 | --- | --- |
-| product_6 | A product whose English and Traditional Chinese names both contain `Charizard` |
+| harizard | products 5 and 6 |
+| 噴火龍 | products 5 and 6 |
+| 喷火龙 | product 5 |
+| pokémon | product 5 |
+| Charizard | product 6 among them, once |
 
 **Steps:**
 
-1. Type `Charizard` in the product search.
-2. Read the rows.
+1. Search `<fragment>`.
 
 **Expected Results:**
 
-* Step 2 lists `<product_6>` exactly once.
+* It lists `<lists>`, each once, under its English name.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-s9o rev=1 -->
-### g10adm.inventory-catalog.US77-TC3: Product search does not fold Traditional and Simplified Chinese
+### g10adm.inventory-catalog.US77-TC3: Search does not fold Traditional and Simplified Chinese, nor read a description
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -4128,33 +2875,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_7>` has a Traditional Chinese name and no Simplified Chinese name.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| product_7 | A product with English name `<english name>` and Traditional Chinese name `<traditional name>`; no Simplified Chinese name |
-| english name | Charizard Holo |
-| traditional name | 噴火龍 閃卡 |
-| traditional fragment | 噴火龍 |
-| simplified fragment | 喷火龙 |
+* Product 7 is named Charizard Holo and 噴火龍 閃卡, no Simplified Chinese name; its Traditional Chinese description holds 首版.
 
 **Steps:**
 
-1. Type `<simplified fragment>` in the product search.
-2. Read the rows.
-3. Type `<traditional fragment>` in the product search.
-4. Read the rows.
+1. Search 喷火龙, then 首版, then 噴火龍.
 
 **Expected Results:**
 
-* Step 2 does not list `<product_7>`.
-* Step 4 lists `<product_7>`.
+* The first two do not list product 7; the third does.
 
 <!-- trace:case id=g10adm.inventory-catalog.TC-idw rev=1 -->
-### g10adm.inventory-catalog.US77-TC4: Editing or clearing a translated name moves what the search finds
+### g10adm.inventory-catalog.US77-TC4: An edit or a clear moves what the search finds
 
 **Classification:**
 
@@ -4170,33 +2902,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(inventory admin) is on `<grade10 admin inventory products url>`.
-* `<product_8>` has Traditional Chinese name `<traditional name>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| product_8 | A product with English name `<english name>` and Traditional Chinese name `<traditional name>` |
-| english name | Charizard Holo |
-| traditional name | 噴火龍 初版 |
-| new traditional name | 水箭龜 初版 |
-| old fragment | 噴火龍 |
-| new fragment | 水箭龜 |
+* Product 8's Traditional Chinese name is 噴火龍 初版.
 
 **Steps:**
 
-1. Replace the Traditional Chinese name of `<product_8>` with `<new traditional name>` and click Save.
-2. Type `<old fragment>` in the product search and read the rows.
-3. Type `<new fragment>` in the product search and read the rows.
-4. Clear the Traditional Chinese name of `<product_8>` and click Save.
-5. Type `<new fragment>` in the product search and read the rows.
+1. Change it to 水箭龜 初版 and save; search 噴火龍, then 水箭龜.
+2. Clear it and save; search 水箭龜.
 
 **Expected Results:**
 
-* Step 2 does not list `<product_8>`.
-* Step 3 lists `<product_8>`.
-* Step 5 does not list `<product_8>`.
+* Step 1 finds it by 水箭龜 and not 噴火龍.
+* Step 2 does not find it.
 
 ## Settled
 
@@ -4237,76 +2953,3 @@ Runs once per row of **Test data**.
 - **An intake reversal's Quantity and Holder** — Quantity reads the units taken out as a positive number, one for a Cert record; Holder reads `—`, since a reversal names no hold (the history fields; the product history's columns)
 - **A hold of regular stock moved to another product** — a move of regular stock on both products: the one it left, where it named no Cert record, and the one it joined, where it names none (the reduction requirement's moves)
 
-## Reconciliation
-
-**Run:** Blind pass read the inventory outline, journey, decisions, and marked PRD; it was denied requirements and scenarios.
-
-- **Raised, folded into spec:** CRUD, bounds, validation, reuse, and access for product assets are covered.
-
-**Run:** QA2, 2026-09-30, after the anchors moved on Q10, Q13 and Q14. QA1's blind pass read the Feature set, the journeys, `decisions.md`, the proposal, the linked PRD sections, the durable suite and the domain suite with their Reconciliation stripped, and the two rulebooks; it was denied every `## Requirements` section, `openspec/specs/` beyond those, and the archive. QA2 read both suites, both deltas, `tech-design.md` and `tasks.md`. It is a statement, not proof.
-
-- **Raised, folded into spec** - the holder label on each Auction write, as `grade10-admin-inventory-catalog-SC-140`; the Holder and Remarks columns, as `grade10-admin-inventory-catalog-SC-141`, `grade10-admin-inventory-catalog-SC-142` and `grade10-admin-inventory-catalog-SC-143`; the two remarks texts, as `grade10-admin-inventory-catalog-SC-136` and `grade10-admin-inventory-catalog-SC-137`
-- **Raised, escalated** - whether Remarks shows an admin hold's typed remarks on its reserve entry (see Contradicted), and how the holder kind reads in the Holder column, landed as Q17 and Q16
-- **Raised, rejected** - none this run
-- **Joined** - `grade10-admin-inventory-catalog-SC-136`, `grade10-admin-inventory-catalog-SC-139` and `grade10-admin-inventory-catalog-SC-141` into `grade10-admin-inventory-catalog-US9-TC1-2`; `grade10-admin-inventory-catalog-SC-137` into `grade10-admin-inventory-catalog-US9-TC4-2`; `grade10-admin-inventory-catalog-SC-138` into `grade10-admin-inventory-catalog-US9-TC3-2`; `grade10-admin-inventory-catalog-SC-142` into `grade10-admin-inventory-catalog-US9-TC5-1` as its Product edit row, added by QA2; `grade10-admin-inventory-catalog-SC-143`'s history Holder into `grade10-admin-inventory-catalog-US9-TC5-1`'s Vault row
-- **Out of suite** - `grade10-admin-inventory-catalog-SC-140`, a label replaced by a later write and kept by one that sends none: decided by the inventory service tests in grade10 (task 2.1); `grade10-admin-inventory-catalog-SC-143`'s Reference cell reading the holder reference: decided by the product page's component tests in grade10 (task 6.1)
-- **Patched, not re-run** - `grade10-admin-inventory-catalog-US9-TC2-2` now records the sale, since a hold stays active after a winning close until the sale moves it to sold; `grade10-admin-inventory-catalog-US9-TC3-2` reads Remarks as `—`, the value the Remarks column shows for an entry with none; `grade10-admin-inventory-catalog-US9-TC4-2` says "before this change shipped" where it said "before the release". All keep `<v>`
-- **Settled by the artifacts, not raised** - what Holder reads on an entry with no hold (`—`, the Holder column's rule); the When of a retried release (the successful release, since an entry's time is the server time of the mutation that succeeded)
-- **Trimmed by the simpler reading** - cases that repeat another case or a durable rule
-- **Contradicted** - `grade10-admin-inventory-catalog-US9-TC5-1`'s Admin hold row expects the admin's typed remarks in the reserve entry's Remarks; the Change history fields requirement makes Remarks the entry's reason, which is null on a reserve, so the column would read `—`. settled by Q17: Remarks is the entry's own reason, so the row now reads `—`
-- **Uncovered anchors** - none: `grade10-admin-inventory-catalog-US-09` has five cases; the group anchor `Unsold auction stock` is walked by the same cases
-
-**Run:** QA2 rerun, 2026-10-02, in a fresh context, after the product manager answered Q13 to Q17, revised Q6 and retired Q10, and Dev revised the scenarios. QA1's blind pass read the Feature set, `user-journeys.md`, `proposal.md`, `decisions.md` with its `## Raised` table empty, the Products and Stock page, the store context and the durable suite with its `## Settled` and without its `## Reconciliation`; it was denied every `## Requirements` section, `openspec/specs/` beyond those, `openspec/changes/archive/`, `tech-design.md` and `tasks.md`. Inventory has no domain suite. QA2 read both readings, `decisions.md` with its answers, `tech-design.md`, `tasks.md`, the durable spec and the Products and Stock page. It is a statement, not proof. No case has been accepted or published, so every rewritten draft keeps `<v>` 1.
-
-- **Agreed** - `grade10-admin-inventory-catalog-US4-TC1-1` with `grade10-admin-inventory-catalog-SC-144`, `grade10-admin-inventory-catalog-SC-145` and `grade10-admin-inventory-catalog-SC-146`, and the unchanged totals of `grade10-admin-inventory-catalog-SC-154` and `grade10-admin-inventory-catalog-SC-159`; `grade10-admin-inventory-catalog-US69-TC3-1` with the durable refusal of a Cert ID the product already owns at intake, `grade10-admin-inventory-catalog-SC-97`, guarding that intake reads the Cert ID a change wrote; `grade10-admin-inventory-catalog-US14-TC2-1` with the requirement's row table, a product with no Cert record whose regular stock has history; `grade10-admin-inventory-catalog-US14-TC3-1` with `grade10-admin-inventory-catalog-SC-152`; `grade10-admin-inventory-catalog-US14-TC5-1` with `grade10-admin-inventory-catalog-SC-149`; `grade10-admin-inventory-catalog-US15-TC6-1` with `grade10-admin-inventory-catalog-SC-165`, its assignment row with the refusal at 0 available regular stock under the lands-whole requirement; `grade10-admin-inventory-catalog-US15-TC7-1` with `grade10-admin-inventory-catalog-SC-164`; `grade10-admin-inventory-catalog-US15-TC9-1` with `grade10-admin-inventory-catalog-SC-163`
-- **Rewritten, by QA2** - `grade10-admin-inventory-catalog-US14-TC4-1` for `grade10-admin-inventory-catalog-SC-148`: the available `No Cert ID` row now reads 0 above the hold row where the case read no available row (Q14), and it takes the Cert ID details half of `grade10-admin-inventory-catalog-SC-160`, no assign action and the reason on both rows; `grade10-admin-inventory-catalog-US15-TC1-1` for `grade10-admin-inventory-catalog-SC-154`, `grade10-admin-inventory-catalog-SC-150`, `grade10-admin-inventory-catalog-SC-144` and `grade10-admin-inventory-catalog-SC-146`: an unmoved record in its pre-conditions, the copy facts read at step 5 dropped (Q17), the tagged image read on the product's media, and a row for `grade10-admin-inventory-catalog-SC-169`, a sold record's Cert ID in lower case taken as a different Cert ID (Q13); `grade10-admin-inventory-catalog-US15-TC2-1` for `grade10-admin-inventory-catalog-SC-159`, `grade10-admin-inventory-catalog-SC-151` and `grade10-admin-inventory-catalog-SC-145`: the copy facts read at step 5 dropped (Q17), the new row read as Cert ID, status, holder and quantity, and an Admin hold on regular stock left at 1; `grade10-admin-inventory-catalog-US15-TC3-1` for `grade10-admin-inventory-catalog-SC-155` and `grade10-admin-inventory-catalog-SC-157`: `<cert_b>` sold, the refusal naming the holding unit and its status (Q16), and a `no cert id` row for `grade10-admin-inventory-catalog-SC-168` (Q15); `grade10-admin-inventory-catalog-US15-TC4-1` for the Grade Issuer refusal, since retired, and `grade10-admin-inventory-catalog-SC-162`: `<cert_b>` sold, the refusal naming it and Sold (Q16), and a `NO CERT ID` row for `grade10-admin-inventory-catalog-SC-168` (Q15); `grade10-admin-inventory-catalog-US15-TC5-1` for the Cert ID details halves of `grade10-admin-inventory-catalog-SC-156` and `grade10-admin-inventory-catalog-SC-160`: retitled, and a Released Cert record row for `grade10-admin-inventory-catalog-SC-167` (Q6 as revised); `grade10-admin-inventory-catalog-US14-TC1-1` for `grade10-admin-inventory-catalog-SC-147` and the unlisted sold and withdrawn units of `grade10-admin-inventory-catalog-SC-148`: no copy facts on any row (Q17), and the Available and Reserved rows adding up to stock; the pre-conditions of `grade10-admin-inventory-catalog-US4-TC1-1`, `grade10-admin-inventory-catalog-US15-TC6-1` and `grade10-admin-inventory-catalog-US15-TC7-1` now name an unmoved record (Q6 as revised)
-- **Added, by QA2** - `grade10-admin-inventory-catalog-US14-TC6-1` for `grade10-admin-inventory-catalog-SC-170`: a product with Cert records and no regular stock history lists no `No Cert ID` row, and one that never intook stock shows the line saying no unit is on hand (Q14)
-- **Deprecated** - `grade10-admin-inventory-catalog-US15-TC8-1`: an ended Unsold listing showing a corrected Cert ID; the rule is gone, since a record once listed or reserved can no longer change (Q6 as revised, Q10 retired), and its released-record set-up is now the Released Cert record row of `grade10-admin-inventory-catalog-US15-TC5-1`
-- **Raised, folded into spec** - none: every case reads behaviour a scenario or a requirement table states
-- **Raised, rejected** - none
-- **Raised, escalated** - the five rows in `decisions.md`'s `## Raised`, each now landed by the product manager: letter case (Q13), the available row at 0 and a product with nothing on hand (Q14), `No Cert ID` as a Cert ID (Q15), a Cert ID a sold, withdrawn or vaulted record holds (Q16), and copy facts in Cert ID details (Q17); each answer is in `## Settled` and in the cases above. No new question
-- **Settled by the artifacts, not raised** - the lines in `## Settled` that name no Q
-- **Partly out of suite** - the request sent anyway in `grade10-admin-inventory-catalog-SC-156`, `grade10-admin-inventory-catalog-SC-160` and `grade10-admin-inventory-catalog-SC-167`, for a held, sold, released or wholly held unit: decided by the inventory service tests in grade10 (tasks 3.1 and 4.1); a reader's refusal sent outside the page is walked by `grade10-admin-inventory-catalog-US15-TC7-1`. The before and after snapshots of `grade10-admin-inventory-catalog-SC-144` and `grade10-admin-inventory-catalog-SC-145`, and the copy facts a correction keeps in `grade10-admin-inventory-catalog-SC-154` and an assignment sets in `grade10-admin-inventory-catalog-SC-159`: decided by the same tests, which read them in the entry's snapshot; a person sees the Action text and the new row
-- **Out of suite** - `grade10-admin-inventory-catalog-SC-153` and `grade10-admin-inventory-catalog-SC-166`, as listed under the title
-- **Contradicted** - none
-- **Uncovered anchors** - none: `grade10-admin-inventory-catalog-US-04` has one case, `grade10-admin-inventory-catalog-US-69` one, `grade10-admin-inventory-catalog-US-14` six and `grade10-admin-inventory-catalog-US-15` eight live and one deprecated; every scenario from `grade10-admin-inventory-catalog-SC-144` to `grade10-admin-inventory-catalog-SC-170` is reached by a case or listed out of suite; the group `Cert ID details` is walked by every `grade10-admin-inventory-catalog-US-14` and `grade10-admin-inventory-catalog-US-15` case; `Auction presentation`, which `grade10-admin-inventory-catalog-US15-TC8-1` walked, is no longer reached, since no listing shows a changed Cert ID
-
-**Run:** 2026-09-24; the blind inventory suite was reconciled with the independent requirement reading. The suite pass read the outline, journey, proposal, then-current decisions and Raised table, linked Intake PRD, config context, and prior suite for ID continuity. It was denied requirements, durable specs, archive, tech-design, and the other reading's draft. Q10 was settled after the original blind read and is applied here without rerunning it.
-
-| Diff | Disposition |
-| --- | --- |
-| The original TC2 and its predecessor assumed a Cert record could lack an ID. | Q10 settles that only certified units create Cert records and every Cert has an ID. TC2-2 is deprecated; TC7-1 and SC-129 cover regular stock not being offered as a Cert tag target. |
-| The blind pass asked whether a cross-product Cert target is refused or merely hidden. | Q2 limits a tag to a same-product Cert record. SC-130 and TC5 cover refusal and preservation of the current tag; no product question remains. |
-| The requirements add an explicit existing-authority refusal and distinguish missing targets from valid retags. | TC5 and TC6 cover the invalid-target and authorization scenarios SC-130 and SC-133. |
-| Physical-unit removal is part of the Cert lifecycle. | TC1 v2 covers SC-134's guarded withdrawal and tagged-media deletion; TC2 covers the active-reservation refusal in SC-135. |
-
-**Run:** QA2, 2026-10-05, in a fresh context, on the restarted planning run; it replaces the first run's reconciliation. QA1's fresh blind pass read the anchors and the scope - the Feature set, `user-journeys.md`, `proposal.md`, `decisions.md`, the Products and Stock page and the first run's `## Settled` - and was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Inventory has no domain suite. QA2 read both readings, QA1's four raised questions, `decisions.md`, `tech-design.md`, `tasks.md`, the delta and durable specs, the durable suite and the Products and Stock page, and the grade10 implementation only to learn which history action the inventory workbook import writes (`intake`). It is a statement, not proof. No case of this change has been accepted or published, so every draft keeps its `<v>`. QA2 reran on 2026-10-05, in a fresh context, after the acceptance review's fixes: Q8 now reads the reducible count, Q19 gives Remove physical unit its own confirmation, the Cert record requirement and `grade10-admin-inventory-catalog-SC-175` gained that confirmation, and `grade10-admin-inventory-catalog-SC-191` to `grade10-admin-inventory-catalog-SC-193` now serve `grade10-admin-inventory-catalog-US-16`. The rerun read the diff of the delta, `decisions.md`, `tech-design.md` and the Products and Stock page, and the suite; every disposition below stands except where it says the rerun.
-
-- **Agreed** - `grade10-admin-inventory-catalog-US4-TC2-1` with `grade10-admin-inventory-catalog-SC-172`, `grade10-admin-inventory-catalog-SC-173` and `grade10-admin-inventory-catalog-SC-174`; `grade10-admin-inventory-catalog-US4-TC3-1` with `grade10-admin-inventory-catalog-SC-174` and the regular stock history table, its Numbered Cert record row with `grade10-admin-inventory-catalog-SC-184`; `grade10-admin-inventory-catalog-US14-TC9-1` with `grade10-admin-inventory-catalog-SC-190`; `grade10-admin-inventory-catalog-US16-TC1-1` with `grade10-admin-inventory-catalog-SC-177` and `grade10-admin-inventory-catalog-SC-194`; `grade10-admin-inventory-catalog-US16-TC3-1` with `grade10-admin-inventory-catalog-SC-188` and `grade10-admin-inventory-catalog-SC-197`; `grade10-admin-inventory-catalog-US16-TC4-1` with `grade10-admin-inventory-catalog-SC-187` and `grade10-admin-inventory-catalog-SC-197`; `grade10-admin-inventory-catalog-US16-TC5-1` with `grade10-admin-inventory-catalog-SC-188` and the confirmation requirement's trimmed reason, which its Padded row reads; `grade10-admin-inventory-catalog-US16-TC7-1` with `grade10-admin-inventory-catalog-SC-178`, `grade10-admin-inventory-catalog-SC-180`, `grade10-admin-inventory-catalog-SC-194`, `grade10-admin-inventory-catalog-SC-195` and `grade10-admin-inventory-catalog-SC-196`, every row's count checked against the reduction requirement's moves and reducible count; `grade10-admin-inventory-catalog-US16-TC8-1` with `grade10-admin-inventory-catalog-SC-183`; `grade10-admin-inventory-catalog-US16-TC9-1` with `grade10-admin-inventory-catalog-SC-181` and `grade10-admin-inventory-catalog-SC-188`; `grade10-admin-inventory-catalog-US16-TC10-1` with `grade10-admin-inventory-catalog-SC-189`; `grade10-admin-inventory-catalog-US16-TC14-1` with `grade10-admin-inventory-catalog-SC-191`, `grade10-admin-inventory-catalog-SC-192` and the lands-whole requirement, its Cert record removed row with the refusal of a record that does not exist; `grade10-admin-inventory-catalog-US16-TC15-1` with `grade10-admin-inventory-catalog-SC-187` and the confirmation requirement's cancel on either row
-- **Adjusted, by QA2** - `grade10-admin-inventory-catalog-US14-TC7-1` reads the `No Cert ID` history after the reduction, for `grade10-admin-inventory-catalog-SC-176`; `grade10-admin-inventory-catalog-US14-TC8-1` reads it after the removal, for the removal `grade10-admin-inventory-catalog-SC-176` leaves out; `grade10-admin-inventory-catalog-US13-TC1-3` and `grade10-admin-inventory-catalog-US13-TC4-1` read Remove physical unit in Cert ID details, where `grade10-admin-inventory-catalog-SC-175` and the Cert record requirement offer it, in place of a record page the blind reading assumed; on the rerun `grade10-admin-inventory-catalog-US13-TC1-3` reads the confirmation Remove physical unit opens, naming the Cert ID and asking for a reason with Confirm unavailable until one is entered, for `grade10-admin-inventory-catalog-SC-175`, a new assertion on the same run, so the draft keeps its `<v>`; `grade10-admin-inventory-catalog-US13-TC1-3` keeps the durable `grade10-admin-inventory-catalog-US13-TC1-2`'s title, so the fold reads it as that case's revision, for `grade10-admin-inventory-catalog-SC-134`; `grade10-admin-inventory-catalog-US16-TC2-1` runs per row and adds a record numbered from regular stock, for `grade10-admin-inventory-catalog-SC-184`; `grade10-admin-inventory-catalog-US16-TC6-1` reads the line on the row at the limit, for the last result of `grade10-admin-inventory-catalog-SC-194`; `grade10-admin-inventory-catalog-US16-TC11-1` adds a released hold, a withdrawal and a hold moved to another product, and reads the line where the row reads at least 1, for `grade10-admin-inventory-catalog-SC-179`, and drops its "no Cert record" pre-condition, which its All numbered row broke; `grade10-admin-inventory-catalog-US16-TC12-1` reads its Hold moved to another product row as offering Remove physical unit and no Change Cert ID, with its Cert ID fixed, where it asserted nothing, for `grade10-admin-inventory-catalog-SC-186`; `grade10-admin-inventory-catalog-US16-TC13-1` adds a quantity of 1.5, a removal and a Cert ID change of a record whose hold moved to another product, and Remove physical unit of a record that has only been intaken, for `grade10-admin-inventory-catalog-SC-181`, `grade10-admin-inventory-catalog-SC-186`, `grade10-admin-inventory-catalog-SC-175` and `grade10-admin-inventory-catalog-SC-135`, and reads no entry added on each
-- **Moved, by QA2** - QA1's `grade10-admin-inventory-catalog-US16-TC13-1` is `grade10-admin-inventory-catalog-US14-TC9-1`, since `grade10-admin-inventory-catalog-SC-190` serves `grade10-admin-inventory-catalog-US-14`; QA1's `US16-TC14-1`, `US16-TC15-1` and `US16-TC16-1` take `grade10-admin-inventory-catalog-US16-TC13-1`, `grade10-admin-inventory-catalog-US16-TC14-1` and `grade10-admin-inventory-catalog-US16-TC15-1`. None was ever published
-- **Raised, folded into spec** - none: every case reads behaviour a scenario or a requirement states
-- **Raised, rejected** - none
-- **Raised, settled by the artifacts** - QA1's four questions: the inventory workbook import, settled by the history's Action list and the reduction requirement's moves, and the implementation writes it as `intake`; Remove physical unit sent for a record that has only been intaken, settled by `grade10-admin-inventory-catalog-SC-175` and `grade10-admin-inventory-catalog-SC-135`, now a row of `grade10-admin-inventory-catalog-US16-TC13-1`; an intake reversal's Quantity and Holder, settled by the history fields table and `grade10-admin-inventory-catalog-SC-174`; whose regular stock a moved hold moves, settled by the reduction requirement's moves, now a row of `grade10-admin-inventory-catalog-US16-TC11-1`. Each is in `## Settled`; none goes to `decisions.md`
-- **Raised, escalated** - none in this run; the first run's four rows in `decisions.md`'s `## Raised` (Q12 to Q15) stand, each in `## Settled`
-- **Partly out of suite** - the before and after snapshots, changed entity and empty reservation of `grade10-admin-inventory-catalog-SC-172` and `grade10-admin-inventory-catalog-SC-173`: decided by the inventory service tests in grade10 (tasks 4.1 and 5.1); a person reads the Action, quantity and remarks. The counts after the reduction in `grade10-admin-inventory-catalog-SC-180`: task 4.1; `grade10-admin-inventory-catalog-US16-TC7-1` walks the count it offers. The reduction sent anyway on a product with nothing intaken since its move in `grade10-admin-inventory-catalog-SC-179`, and the 10 units sent past 9 in `grade10-admin-inventory-catalog-SC-195`: task 4.1; `grade10-admin-inventory-catalog-US16-TC13-1` walks a quantity above the reducible count
-- **Out of suite** - `grade10-admin-inventory-catalog-SC-193`, as listed under the title
-- **Cancel of Remove physical unit** - `grade10-admin-inventory-catalog-SC-175` gained a cancel step after QA2's rerun found the requirement's cancel unstated; `grade10-admin-inventory-catalog-US13-TC1-3` cancels once before it confirms, at the same `<v>`
-- **Contradicted** - none
-- **Uncovered anchors** - none: `grade10-admin-inventory-catalog-US-04` has two cases, `grade10-admin-inventory-catalog-US-14` three, `grade10-admin-inventory-catalog-US-13` two and `grade10-admin-inventory-catalog-US-16` fifteen; every scenario from `grade10-admin-inventory-catalog-SC-172` to `grade10-admin-inventory-catalog-SC-197`, and amended `grade10-admin-inventory-catalog-SC-134` and `grade10-admin-inventory-catalog-SC-135`, is reached by a case or listed out of suite; the durable `grade10-admin-inventory-catalog-US13-TC2-1` and `grade10-admin-inventory-catalog-US13-TC3-1` stand for the reserved and not-available records of `grade10-admin-inventory-catalog-SC-135`. `grade10-admin-inventory-catalog-SC-191`, `grade10-admin-inventory-catalog-SC-192` and `grade10-admin-inventory-catalog-SC-193` serve `grade10-admin-inventory-catalog-US-16`; `grade10-admin-inventory-catalog-US16-TC14-1` walks the first two and names them in its marker's `covers`
-- **Trace markers** - a `trace:scenario` marker on every scenario a case covers, and a `trace:case` marker on every case, its `covers` naming the scenarios of its own journey that it reaches; `grade10-admin-inventory-catalog-US13-TC1-3` takes a new marker at `rev=3`, since the durable `grade10-admin-inventory-catalog-US13-TC1-2` carries none to move
-
-**Run:** 2026-10-14, QA2 in a fresh context, after QA1's blind pass (16 draft cases from the frozen anchors, `proposal.md` and `decisions.md`) and Dev's independent delta. It read this suite, the delta's `spec.md` and `user-journeys.md`, `decisions.md` with `## Raised`, `tech-design.md`, `tasks.md`, the [Products and Stock](/p/grade10-admin/inventory/catalog#product-identity) page, and the shipped code in grade10 (`productService.ts`, `repositories/products.ts`, `contracts/src/admin.ts`, `packages/utils/src/schema.ts`, the Auction `productSearch` procedure). No case was written or reworded from a scenario, and every case stays `draft`. QA1's own bundle line is not in the draft; the planning run adds it.
-
-- **Linked** - `g10adm.inventory-catalog.US75-TC1` asserts `grade10-admin-inventory-catalog-SC-200`; `US75-TC2` asserts `grade10-admin-inventory-catalog-SC-201`; `US75-TC3` asserts `grade10-admin-inventory-catalog-SC-202`; `US75-TC6` asserts `grade10-admin-inventory-catalog-SC-204`; `US76-TC1` asserts `grade10-admin-inventory-catalog-SC-207`; `US76-TC2` asserts `grade10-admin-inventory-catalog-SC-208`; `US76-TC4` asserts `grade10-admin-inventory-catalog-SC-209`; `US77-TC1` asserts `grade10-admin-inventory-catalog-SC-212` and `grade10-admin-inventory-catalog-SC-213`, one row each, on one route and one fixture
-- **Jointly asserted, not linked** - `grade10-admin-inventory-catalog-SC-203` is split between `US75-TC4` (a name at 200 and at 1 accepted) and `US75-TC5` (201 refused). No single case asserts it
-- **Partly asserted, not linked** - `grade10-admin-inventory-catalog-SC-210` by `US75-TC8`: the list and the history entry that names the hold are read, and the holds view is not. `grade10-admin-inventory-catalog-SC-211` by `US75-TC7`: the matching row leaves translations alone, and the second clause, that a product the upload creates has none, is unread. `grade10-admin-inventory-catalog-SC-214` by `US77-TC3`: the unfolded scripts are asserted, and no case searches a description fragment
-- **Out of suite** - `grade10-admin-inventory-catalog-SC-205` and `grade10-admin-inventory-catalog-SC-206`: the editor names every translation it holds and the console has no route that omits them, and the grade, set and Cert ID are read before and after in the service test; tasks 3.1 and 5.1 are the verifiers
-- **Carried** - `grade10-admin-inventory-catalog-SC-13` and `grade10-admin-inventory-catalog-SC-57` are unchanged scenarios; the durable suite holds their cases
-- **Cases with no scenario** - `US76-TC3` (an untranslated product in each Chinese choice): the requirement's per-text fallback states it; fold one scenario or keep the case on the requirement. `US77-TC2` (matching in two languages is listed once) and `US77-TC4` (an edit or a clear moves what the search finds): real and unstated, and `tech-design.md` D8 makes a repeat structurally impossible; fold the second, and keep or drop the first
-- **Over-claimed** - none. `US75-TC2` expects an empty English description, and the requirement states it
-- **Contradicted** - none between a case and a scenario. Between artifacts: `tech-design.md` D3 says the wire checks the product name limit on the raw string before the trim, while the shipped name codec is `label`, which trims and then counts (`packages/utils/src/schema.ts`), so the English name counts after trimming today and a translated name that reuses it would too; the spec says only "a name is trimmed on save". `tech-design.md` D9, task 3.4 and the Raised row call Auction's `productSearch` "collector-facing": it is a `publicProcedure` (`packages/grade10-auction/backend/src/trpc/routers/public.ts`) that returns the English `products.name`, no frontend in grade10 calls it, and no decision settles it. Decision 29 names "the inventory product search", which is `matching` behind the admin list's `q`; decision 30 (only name and description translate) does not reach it. Leaving it on the English name is the safe reading, because a hit on a translated name it does not show would be unexplained, and it matches the Follow-on that the store pages come later; the wording and the follow-on line belong to Dev and the human (Raised, below)
-- **Raised, settled** - every row this pass raised is landed in `decisions.md` (Q7 to Q40, the human's defaults); the open PM confirmations are Q43 and Q49 in `decisions.md`; no case waits on a row
-- **Anchors** - `grade10-admin-inventory-catalog-US-75`, `grade10-admin-inventory-catalog-US-76` and `grade10-admin-inventory-catalog-US-77` each hold cases. The context journey `grade10-admin-inventory-catalog-US-06` holds none here; the durable suite keeps its cases
-- **Levels** - `grade10-admin/inventory` has no domain suite, and the change touches one capability in it, so there is no domain impact; `grade10-admin/product-tcs.md` traces `grade10-admin-inventory-catalog-US-12` and `grade10-admin-inventory-catalog-US-13`, which this change leaves alone
-- **After the human's reply (2026-10-14)** - Dev folded `US76-TC3` as `grade10-admin-inventory-catalog-SC-215` and `US77-TC4` as `grade10-admin-inventory-catalog-SC-216`; `US77-TC2` is dropped as a guard D8 makes structural. The description half of `grade10-admin-inventory-catalog-SC-214` is verified by task 3.2. Rows settled in `decisions.md` 36 to 40
