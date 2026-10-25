@@ -1,17 +1,23 @@
 # grade10-site/grading/counter-documents Test Cases
 
-**Status:** reopened · 0/33
-**Drafts styled:** 2026-09-29, tcs-rules r4
-**Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
+**Status:** pending-review · 0/23
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
-## grade10-site-grading-counter-documents-US1: Collector signs the submission agreement at the counter
+## Background
+
+* Staff is admin(holds `grading:operate`) on the submission's hand-in or hand-back runbook on the admin console. Its Sign step prepares the document and offers Show on iPad and Copy link; the link it mints, `<sign link>`, opens the document on the shop iPad for 30 minutes.
+* The collector's submission page is `<submission page>` on the Grade10 site, listing each sealed document with its fingerprint and a download. `<collector inbox>` is a mailbox the tester reads.
+* Signing takes the signer's typed name, and for the agreement one line of postal address, then a drawn signature and Sign, once the document is turned to its last page.
+
+## g10.grading-counter-documents.US1: Collector signs the submission agreement at the counter
 
 **As a** collector at the shop counter with every card checked,
 **I want** to read the agreement on the iPad with the schedule of cards as checked and the figures I was quoted, type my name as on the booking with no ID asked for, give one line of postal address kept only for the written notice, and sign once,
 **so that** I know exactly what I signed and the fee is only taken after it.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-ib5 rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC1-1: Collector reads the agreement to the end and signs it
+### g10.grading-counter-documents.US1-TC1: The collector reads the agreement to its end, signs it, and the fee follows the seal
 
 **Classification:**
 
@@ -20,42 +26,56 @@
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
 **Pre-conditions:**
 
-* customer(collector)'s submission is Drop-off booked under <the name on the booking>, booked from its page's drop-off picker, and its agreement is not yet signed.
-* admin(holds grading:operate) has started the visit at the desk on the submission's hand-in runbook at <grade10 admin grading submission url>, ticked Present on every card, and clicked Copy link on the Sign step.
-* The collector has <grade10 grading sign link> open on the shop iPad, inside its 30 minutes.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Name typed | <the name on the booking> |
-| Postal address | <a one-line postal address> |
+* A collector's submission is drop-off booked under the name on the booking; staff started the visit, ticked Present on every card and copied the Sign step's link, which is open on the iPad.
 
 **Steps:**
 
-1. Scroll the agreement through to its last page.
-2. Type <the name on the booking> as the signer's name.
-3. Enter <a one-line postal address>.
-4. Draw a signature and tap Sign.
-5. On the runbook, read Take payment.
+1. Turn the agreement to its last page.
+2. Type the name on the booking and a one-line postal address, draw a signature and tap Sign.
+3. On the runbook, read Take payment.
 
 **Expected Results:**
 
-* Step 1: the agreement prints the submission, the collector, the grader and level, the cards as a schedule with each declared value, the total declared value, the fee, the estimated return as a number of weeks from the day the batch leaves, said to be an estimate and not a promise, the date, and the complaints contact.
-* Step 4: the document seals, showing the sealed outcome and a download of the signed PDF.
-* Step 5: the fee is charged at the till only after the seal.
+* Step 1's agreement prints the submission, the collector, the grader and level, the cards as a schedule with each declared value and their total, the fee, the estimated return as weeks from the day the batch leaves, said to be an estimate and not a promise, and the date.
+* Step 2 seals it, showing the sealed outcome and a download of the signed PDF.
+* Step 3 takes the fee only now, after the seal.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-05a rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC2-1: Cover schedule prints for a level that carries cover
+### g10.grading-counter-documents.US1-TC2: A level that carries cover prints a cover line per card and the cover in total
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-counter-documents-US-01
+
+**Pre-conditions:**
+
+* A collector's submission is drop-off booked at PSA Express, a level whose fee sheet row carries a cover rate; every card is ticked Present and the link is open on the iPad.
+
+**Steps:**
+
+1. Turn the agreement to its last page, and sign it.
+
+**Expected Results:**
+
+* The schedule shows a cover beside each card's declared value, and the cover in total beside the total declared value.
+
+<!-- trace:case id=g10.grading-counter-documents.TC-78m rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
+### g10.grading-counter-documents.US1-TC11: A Bulk list of a hundred cards runs on and is signed once, on the last page
 
 **Classification:**
 
@@ -69,75 +89,22 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
 **Pre-conditions:**
 
-* customer(collector)'s submission is Drop-off booked at <cover level>, booked from its page's drop-off picker, and its agreement is not yet signed.
-* admin(holds grading:operate) has ticked Present on every card on its hand-in runbook at <grade10 admin grading submission url> and clicked Copy link on the Sign step.
-* The collector has <grade10 grading sign link> open on the shop iPad, inside its 30 minutes.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <cover level> | A level whose fee sheet row carries a cover rate: PSA Express or Super Express as seeded |
-| Name typed | <the name on the booking> |
-| Postal address | <a one-line postal address> |
+* A Bulk submission of 100 cards, each named as the dealer listed it, is drop-off booked; all 100 are ticked Present and the link is open on the iPad.
 
 **Steps:**
 
-1. Scroll the agreement through to its last page.
-2. Type <the name on the booking> as the signer's name.
-3. Enter <a one-line postal address>.
-4. Draw a signature and tap Sign.
+1. Turn the agreement through every page to its last, and sign it.
 
 **Expected Results:**
 
-* The schedule shows a cover column beside each card's declared value.
-* The schedule totals the cover across every card, beside the total declared value.
+* The agreement runs past its first page, its schedule listing all 100 cards; the signature block is on the last page alone, and the sealed agreement carries one signature there.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-uiu rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC3-1: Sign stays disabled while the postal address is empty
+### g10.grading-counter-documents.US1-TC3: The agreement takes no signature until it is read to its end and holds a postal address
 
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* customer(collector) has no account, or one with no postal address saved, so the address line is empty when the agreement opens.
-* Every card is ticked Present on the submission's hand-in runbook, and the collector has <grade10 grading sign link> for the agreement open on the shop iPad, inside its 30 minutes.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Name typed | <the name on the booking> |
-| Postal address | (left empty) |
-
-**Steps:**
-
-1. Scroll the agreement through to its last page.
-2. Type <the name on the booking> as the signer's name, leaving the postal address line empty.
-3. Read Sign.
-
-**Expected Results:**
-
-* Sign is disabled, naming the empty postal address line as the reason.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-ier rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC4-1: Signing is refused before the document is fully read
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -148,35 +115,34 @@
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
-* Every card is ticked Present on the submission's hand-in runbook at <grade10 admin grading submission url>, and the collector has <grade10 grading sign link> for the agreement open on the shop iPad, on its first page, inside its 30 minutes.
+* Every card is ticked Present; the agreement's link is open on the iPad.
 
 **Test data:**
 
-| Field | Value |
+| `<left>` | `<refused, naming>` |
 | --- | --- |
-| Name typed | <the name on the booking> |
-| Postal address | <a one-line postal address> |
+| the agreement on its first page, name and address typed | that the document must be read to its end |
+| the postal address empty, the agreement turned to its end and the name typed | the empty postal address line, Sign disabled |
 
 **Steps:**
 
-1. Type <the name on the booking> and <a one-line postal address> without scrolling past the agreement's first page.
-2. Draw a signature and tap Sign.
-3. On the runbook, read the Sign step and Take payment.
+1. With `<left>`, draw a signature and try Sign.
+2. On the runbook, read the Sign step and Take payment.
 
 **Expected Results:**
 
-* Step 2: signing is refused by name, stating the document must be read to its end.
-* Step 3: nothing is sealed and nothing is paid.
+* Step 1 is refused, naming `<refused, naming>`.
+* Step 2 shows nothing sealed and nothing paid.
 
-<!-- trace:case id=g10.grading-counter-documents.TC-bwc rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC5-1: Signing is refused when the typed name mismatches the booking
+<!-- trace:case id=g10.grading-counter-documents.TC-bwc rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif,g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
+### g10.grading-counter-documents.US1-TC5: A name that is not the booking's is refused, on the agreement and on the receipt
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -187,72 +153,130 @@
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-01
 
 **Pre-conditions:**
 
-* Every card is ticked Present on the submission's hand-in runbook at <grade10 admin grading submission url>, and the collector has <grade10 grading sign link> for the agreement open on the shop iPad, scrolled to its end, inside its 30 minutes.
+* `<document>`'s link is open on the iPad, turned to its end; nobody is named to collect.
 
 **Test data:**
 
-| Field | Value |
+| `<document>` | `<nothing>` |
 | --- | --- |
-| Name typed | <a name that does not match the name on the booking> |
-| Postal address | <a one-line postal address> |
+| the agreement, every card ticked Present | sealed and nothing paid |
+| the hand-back receipt, the balance settled and every item ticked Handed over | sealed and nothing handed back |
 
 **Steps:**
 
-1. Type <a name that does not match the name on the booking> and <a one-line postal address>.
-2. Draw a signature and tap Sign.
-3. On the runbook, read the Sign step and Take payment.
+1. Type a name that is not the booking's, draw a signature and tap Sign.
+2. On the runbook, read the Sign step.
 
 **Expected Results:**
 
-* Step 2: signing is refused by name, against the booking's name.
-* Step 3: nothing is sealed and nothing is paid.
+* Step 1 is refused by name, against the booking's name.
+* Step 2 shows nothing `<nothing>`.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-ajv rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC6-1: The sign link is refused past its 30 minutes, at the limit
+### g10.grading-counter-documents.US1-TC6: A sign link is refused past its 30 minutes, and staff can show it again
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-01
 
 **Pre-conditions:**
 
-* The agreement's <grade10 grading sign link> was shown on the iPad or copied from the console the row's Link age ago, and it was never opened.
-* admin(holds grading:operate) is on the submission's hand-in runbook at <grade10 admin grading submission url>.
+* The agreement's link was minted `<age>` ago and never opened.
 
 **Test data:**
 
-| Link age | Step 1 |
+| `<age>` | `<opens>` |
 | --- | --- |
-| 29 minutes | the agreement opens, ready to sign |
-| 31 minutes | signing is refused by name, naming that staff must issue a new link |
+| 29 minutes | the agreement, ready to sign |
+| 31 minutes | a refusal by name, saying to ask staff for a new link |
 
 **Steps:**
 
-1. Open <grade10 grading sign link> on the shop iPad.
+1. Open the link on the iPad.
 2. On the runbook, click Show on iPad on the Sign step.
 
 **Expected Results:**
 
-* Step 1: as the row's Step 1 says.
-* Step 2: a new link opens the same agreement.
+* Step 1 opens `<opens>`.
+* Step 2's new link opens the same agreement.
+
+<!-- trace:case id=g10.grading-counter-documents.TC-3mz rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
+### g10.grading-counter-documents.US1-TC9: The agreement seals with no identity record asked for or kept
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-counter-documents-US-01
+
+**Pre-conditions:**
+
+* Grading holds no identity check for the collector; every card is ticked Present and the link is open on the iPad.
+
+**Steps:**
+
+1. Turn the agreement to its end, and sign it.
+2. Open the sealed PDF's signing certificate.
+3. On the console, read the submission's collector block.
+
+**Expected Results:**
+
+* Step 1 seals with no identity check asked for.
+* Step 2's certificate says the document was signed without an identity check.
+* Step 3 holds no identity record.
+
+<!-- trace:case id=g10.grading-counter-documents.TC-z1y rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
+### g10.grading-counter-documents.US1-TC10: A storage fee raised after the seal leaves the signed agreement as it was
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-counter-documents-US-01
+
+**Pre-conditions:**
+
+* An agreement sealed with storage at 3000 HKD minor units a card a month; the setting was then raised to 5000, approved by a second `grading:approve` holder; the submission has been ready to collect for 100 days.
+
+**Steps:**
+
+1. Open the sealed agreement from `<submission page>`.
+2. On the hand-back runbook, read the money due.
+
+**Expected Results:**
+
+* Step 1 still prints 3000 HKD minor units a card a month.
+* Step 2 works out what is due at the pinned 3000, not 5000.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-4dj rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC7-1: Sealing is refused in production with a fact unset
+### g10.grading-counter-documents.US1-TC7: In production, an agreement naming a fact not set is refused before anything renders
 
 **Classification:**
 
@@ -263,14 +287,12 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-01
+* **Testability:** automation, manual
+* **Trace:** Pinned figures and placeholders
 
 **Pre-conditions:**
 
-* The environment is production.
-* A fact the agreement prints, such as the complaints contact, is unset for the brand: <grade10 admin grading settings url> reads it as not set.
-* The submission is Drop-off booked, and admin(holds grading:operate) has ticked Present on every card on its hand-in runbook at <grade10 admin grading submission url>.
+* In production, the custodian's registered name reads not set in the grading settings; staff ticked Present on every card.
 
 **Steps:**
 
@@ -278,88 +300,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Preparing is refused, naming the unset fact.
-* Nothing is rendered, no sign link is minted, and nothing is sealed.
+* Preparing is refused, naming the unset fact; nothing is rendered, no link is minted and nothing is sealed.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-ala rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC8-1: An unset fact prints as a placeholder outside production
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* The environment is staging or the local stack.
-* A fact the agreement prints, such as the complaints contact, is unset: <grade10 admin grading settings url> reads it as not set.
-* The collector has <grade10 grading sign link> for the agreement open on the shop iPad, scrolled to its end, name and postal address entered.
-
-**Steps:**
-
-1. Draw a signature and tap Sign.
-2. Tap the download and open the sealed PDF.
-
-**Expected Results:**
-
-* Step 1: the document seals.
-* Step 2: the agreement prints the unset fact as a marked bracket placeholder.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-3mz rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC9-1: Agreement seals with no identity record asked for or kept
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* Grading holds no identity check for customer(collector), and none is asked for at the counter.
-* Every card is ticked Present on the submission's hand-in runbook at <grade10 admin grading submission url>, and the collector has <grade10 grading sign link> for the agreement open on the shop iPad, inside its 30 minutes.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Name typed | <the name on the booking> |
-| Postal address | <a one-line postal address> |
-
-**Steps:**
-
-1. Scroll the agreement through to its last page.
-2. Type <the name on the booking> as the signer's name.
-3. Enter <a one-line postal address>.
-4. Draw a signature and tap Sign.
-5. Tap the download and open the sealed PDF's signing certificate.
-6. On the console, open the submission's record and read the collector block.
-
-**Expected Results:**
-
-* Step 4: the seal is not refused for want of an identity check.
-* Steps 1 to 4 and step 6: no identity check is read, asked for or kept against the submission.
-* Step 5: the signing certificate says the document was signed without an identity check.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-z1y rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC10-1: A storage fee raised after the seal leaves the signed agreement as it was
+### g10.grading-counter-documents.US1-TC8: Outside production, a fact not set prints as a marked bracket
 
 **Classification:**
 
@@ -370,198 +314,106 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
+* **Testability:** automation, manual
+* **Trace:** Pinned figures and placeholders
 
 **Pre-conditions:**
 
-* The agreement sealed with the storage fee at 3000 HKD minor units a card a month.
-* The storage fee setting is then changed to 5000 HKD minor units a card a month on <grade10 admin grading settings url>, by one `grading:approve` holder and approved by a second.
-* The submission is Ready to collect with storage accrued: on the local stack, seeded Ready to collect with its ready day 100 days back before the setting changed.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Storage fee at signing | 3000 HKD minor units |
-| Storage fee after the change | 5000 HKD minor units |
+* On staging, the complaints contact reads not set; the agreement's link is open on the iPad, turned to its end, name and address typed.
 
 **Steps:**
 
-1. Open the sealed agreement from the documents on <grade10 grading submission page url>.
-2. On <grade10 admin grading submission url>, open the hand-back runbook and read the money due.
+1. Sign, and open the sealed PDF.
 
 **Expected Results:**
 
-* Step 1: the sealed agreement still prints 3000 HKD minor units a card a month.
-* Step 2: what is due on that submission is worked out at the pinned 3000, not the new 5000.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-78m rev=1 covers=g10.grading-counter-documents.SC-ofs,g10.grading-counter-documents.SC-bkh,g10.grading-counter-documents.SC-azu,g10.grading-counter-documents.SC-7ub,g10.grading-counter-documents.SC-0d4,g10.grading-counter-documents.SC-8hi,g10.grading-counter-documents.SC-0qe,g10.grading-counter-documents.SC-y94,g10.grading-counter-documents.SC-uif -->
-### grade10-site-grading-counter-documents-US1-TC11-1: A Bulk list of a hundred cards runs on and is signed once, on the last page
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* customer(collector)'s submission is Drop-off booked at Bulk with 100 cards, planned from a pasted list of 100 lines, and its agreement is not yet signed.
-* admin(holds grading:operate) has ticked Present on all 100 cards on its hand-in runbook at <grade10 admin grading submission url> and clicked Copy link on the Sign step.
-* The collector has <grade10 grading sign link> open on the shop iPad, inside its 30 minutes.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Cards | 100, each named as the dealer listed it |
-| Name typed | <the name on the booking> |
-| Postal address | <a one-line postal address> |
-
-**Steps:**
-
-1. Scroll the agreement through every page to its last.
-2. Type <the name on the booking> as the signer's name.
-3. Enter <a one-line postal address>.
-4. Draw a signature and tap Sign.
-
-**Expected Results:**
-
-* Step 1: the agreement runs past the first page, and its schedule lists all 100 cards.
-* Step 4: the signature block is on the last page alone, and the sealed agreement carries one signature there.
+* The agreement seals, printing the complaints contact as a bracket marked as a placeholder.
 
 ---
 
-## grade10-site-grading-counter-documents-US2: Collector declines to sign
+## g10.grading-counter-documents.US2: Collector declines to sign
 
 **As a** collector who would rather not sign on a screen,
 **I want** to decline on the spot and have nothing paid and nothing signed in my name,
 **so that** the member of staff with me takes it from there with nothing half-done.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-l1u rev=1 covers=g10.grading-counter-documents.SC-ub5,g10.grading-counter-documents.SC-shr -->
-### grade10-site-grading-counter-documents-US2-TC1-1: Declining the agreement withdraws it with nothing paid
+### g10.grading-counter-documents.US2-TC1: Declining withdraws the document with nothing paid or handed back
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** destructive
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
-* Every card is ticked Present on the submission's hand-in runbook at <grade10 admin grading submission url>, and the collector has <grade10 grading sign link> for the agreement open on the shop iPad, not yet signed, inside its 30 minutes.
+* `<document>`'s link is open on the iPad, unsigned.
+
+**Test data:**
+
+| `<document>` | `<nothing>` | `<still reads>` |
+| --- | --- | --- |
+| the agreement, every card ticked Present | paid | Drop-off booked |
+| the hand-back receipt, the balance settled and every item ticked Handed over | handed back | Ready to collect |
 
 **Steps:**
 
-1. Open the agreement to any page.
-2. Tap Decline.
-3. On the console, open the submission's Timeline tab.
-4. On the runbook, read the Sign step and Take payment.
+1. Tap Decline.
+2. On the console, read the Timeline tab and the runbook.
 
 **Expected Results:**
 
-* Steps 2 and 3: the agreement is withdrawn, and the decline is itself recorded on the submission.
-* Step 4: nothing is paid, and nothing is signed in the collector's name.
-* Step 4: the submission still reads Drop-off booked.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-v48 rev=1 covers=g10.grading-counter-documents.SC-ub5,g10.grading-counter-documents.SC-shr -->
-### grade10-site-grading-counter-documents-US2-TC2-1: Declining the receipt withdraws it with nothing handed back
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** destructive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
-
-**Pre-conditions:**
-
-* The submission is Ready to collect; on its hand-back runbook at <grade10 admin grading submission url> admin(holds grading:operate) has entered the pickup code and the collector's name, settled the balance, ticked Handed over on every item, and clicked Copy link on the Sign step.
-* The collector has <grade10 grading sign link> for the receipt open on the shop iPad, not yet signed, inside its 30 minutes.
-
-**Steps:**
-
-1. Open the receipt to any page.
-2. Tap Decline.
-3. On the console, open the submission's Timeline tab.
-4. On the runbook, read the Sign step and Hand over.
-
-**Expected Results:**
-
-* Steps 2 and 3: the receipt is withdrawn, and the decline is itself recorded on the submission.
-* Step 4: nothing is handed back, and nothing is signed in the collector's name.
-* Step 4: the submission still reads Ready to collect.
+* The document is withdrawn and the decline is recorded on the submission.
+* Nothing is `<nothing>`, nothing is signed in the collector's name, and the submission still reads `<still reads>`.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-e18 rev=1 covers=g10.grading-counter-documents.SC-ub5,g10.grading-counter-documents.SC-shr -->
-### grade10-site-grading-counter-documents-US2-TC3-1: The desk reads a declined receipt back and can prepare it again
+### g10.grading-counter-documents.US2-TC3: The desk reads a declined receipt back and can prepare it again
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** destructive
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-02
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
 
 **Pre-conditions:**
 
-* The submission is Ready to collect, and the collector declined its hand-back receipt on <grade10 grading sign link> on the shop iPad.
-* admin(holds grading:operate) is on the submission's hand-back runbook at <grade10 admin grading submission url>.
+* The collector declined a ready submission's hand-back receipt; staff is on its hand-back runbook.
 
 **Steps:**
 
-1. Read the Sign step.
-2. Read the Hand over step.
-3. Click Show on iPad on the Sign step.
+1. Read the Sign and Hand over steps.
+2. Click Show on iPad on the Sign step.
 
 **Expected Results:**
 
-* Step 1: the step shows the decline.
-* Step 2: nothing is handed over; the submission still reads Ready to collect.
-* Step 3: minting again is offered, and a new link opens the receipt.
+* Step 1 shows the decline, nothing handed over, the submission still Ready to collect.
+* Step 2's new link opens the receipt.
 
 ---
 
-## grade10-site-grading-counter-documents-US3: Collector signs the hand-back receipt and leaves with the slabs
+## g10.grading-counter-documents.US3: Collector signs the hand-back receipt and leaves with the slabs
 
 **As a** collector collecting my cards,
 **I want** the receipt to list every cert and raw card I inspected, what was paid and paid out and how, and who collected, and to be signable only once nothing is due and every item is ticked,
 **so that** the slabs are mine the moment it is sealed and the submission closes.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-n81 rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC1-1: Collector signs the receipt and the slabs become theirs
+### g10.grading-counter-documents.US3-TC1: The collector signs the receipt and the slabs become theirs
 
 **Classification:**
 
@@ -570,183 +422,30 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
 **Pre-conditions:**
 
-* customer(collector)'s submission is Ready to collect with nothing due: on the local stack, seeded Ready to collect, which prints its pickup code.
-* On the hand-back runbook at <grade10 admin grading submission url>, admin(holds grading:operate) has entered the pickup code and the collector's name, ticked Handed over on every item, and clicked Copy link on the Sign step.
-* The collector has <grade10 grading sign link> for the receipt open on the shop iPad, not yet signed.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Name typed | <the collector's name as on the booking> |
+* A collector's submission is ready to collect with nothing due; staff entered the pickup code and the collector's name, ticked Handed over on every item and copied the link, open on the iPad.
 
 **Steps:**
 
-1. Scroll the receipt through to its last page.
-2. Type <the collector's name as on the booking>.
-3. Draw a signature and tap Sign.
-4. On the runbook, click Hand over.
-5. Open <grade10 grading submission page url> for the submission.
+1. Turn the receipt to its last page.
+2. Type the collector's name, and sign.
+3. On the runbook, click Hand over, and open `<submission page>`.
 
 **Expected Results:**
 
-* Step 1: the receipt lists every encapsulated card with its cert and any card returned ungraded with its code, what was paid, and what was paid out and how.
-* Step 1: the receipt names the collector as who collected.
-* Steps 3 to 5: the receipt seals; the slabs are the collector's from that moment and the submission closes.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-00a rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC2-1: Receipt names the ID glance above the declared threshold
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* The submission's total declared value is above the ID-glance threshold, and it is Ready to collect with the balance settled.
-* On the hand-back runbook at <grade10 admin grading submission url>, admin(holds grading:operate) has entered the pickup code and the collector's name, glanced at an ID matching that name and kept nothing, ticked Handed over on every item, and clicked Copy link on the Sign step.
-* The collector has <grade10 grading sign link> for the receipt open on the shop iPad.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Total declared | 1200000 HKD minor units (HKD 12,000.00), or any total above 1000000 |
-
-**Steps:**
-
-1. Scroll the receipt through to its last page.
-2. Type the collector's name.
-3. Draw a signature and tap Sign.
-
-**Expected Results:**
-
-* Collected by names that an ID was matched to the name and that nothing was kept.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-moq rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC3-1: Receipt names a card still held by the grader
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* One card on the submission was recorded Held by the grader on its batch's Receive page before Finish receiving, and the submission is Ready to collect.
-* On the hand-back runbook at <grade10 admin grading submission url>, the balance on the rest is settled, every other item is ticked Handed over, and Copy link was clicked on the Sign step.
-* The collector has <grade10 grading sign link> for the receipt open on the shop iPad.
-
-**Steps:**
-
-1. Scroll the receipt through to its last page.
-2. Type the collector's name.
-3. Draw a signature and tap Sign.
-4. Open <grade10 grading submission page url> for the submission.
-
-**Expected Results:**
-
-* Step 1: the receipt names the card still held by the grader.
-* Step 4: the submission stays ready for the held card, pending a second hand-back to close it.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-str rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC4-1: Receipt says a slab went to the vault instead
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* The submission is Ready to collect with the balance settled.
-* On its hand-back runbook at <grade10 admin grading submission url>, one slab was placed into a vault case with Vault instead, every other item is ticked Handed over, and Copy link was clicked on the Sign step.
-* The collector has <grade10 grading sign link> for the receipt open on the shop iPad.
-
-**Steps:**
-
-1. Scroll the receipt through to its last page.
-2. Type the collector's name.
-3. Draw a signature and tap Sign.
-
-**Expected Results:**
-
-* The receipt says that card went to the vault rather than to the collector.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-v41 rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC5-1: Receipt prints what was paid, refunded and paid out, and how
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* One card was withdrawn before its batch closed, its fee refunded at the till.
-* One card was recorded moved up a level on its batch, and that upcharge was settled at the till on the hand-back runbook at <grade10 admin grading submission url>.
-* One card was recorded Not returned or Damaged on its batch's Receive page, and paid out at its declared value from the submission's Money tab, approved by a second `grading:approve` holder.
-* The submission is Ready to collect; on its hand-back runbook every other item is ticked Handed over, and Copy link was clicked on the Sign step.
-* The collector has <grade10 grading sign link> for the receipt open on the shop iPad.
-
-**Steps:**
-
-1. Scroll the receipt through to its last page.
-2. Type the collector's name.
-3. Draw a signature and tap Sign.
-
-**Expected Results:**
-
-* The receipt prints what was paid, what was refunded and what was paid out, each with how it moved.
+* Step 1's receipt lists every encapsulated card with its cert and any card returned ungraded with its code, what was paid and paid out and how, and names the collector as who collected.
+* Step 2 seals it; step 3 closes the submission, the slabs the collector's.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-akt rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC6-1: Receipt cannot be prepared while a balance is due
+### g10.grading-counter-documents.US3-TC6: The receipt cannot be prepared while a balance is due or an item is unticked
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -757,176 +456,148 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* The submission is Ready to collect with an upcharge still due: a card recorded moved up a level on its batch's Receive page.
-* On its hand-back runbook at <grade10 admin grading submission url>, admin(holds grading:operate) has entered the pickup code and the name and ticked Handed over on every item, and has not taken payment.
-
-**Steps:**
-
-1. Read the Sign step.
-2. Look for Show on iPad and Copy link on it.
-
-**Expected Results:**
-
-* Preparing is refused by name, naming the balance still due.
-* No sign link is minted and nothing is handed back.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-ke5 rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC7-1: Receipt cannot be prepared while an item is unticked
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* The submission is Ready to collect with the balance settled.
-* On its hand-back runbook at <grade10 admin grading submission url>, admin(holds grading:operate) has entered the pickup code and the name, and left one item not ticked Handed over.
-
-**Steps:**
-
-1. Read the Sign step.
-2. Look for Show on iPad and Copy link on it.
-
-**Expected Results:**
-
-* Preparing is refused by name, naming the item still unticked.
-* No sign link is minted and nothing is handed back.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-gew rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC8-1: Receipt refuses a name the submission does not hold
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-03
 
 **Pre-conditions:**
 
-* The submission is Ready to collect with nobody named to collect; the balance is settled and every item is ticked Handed over on its hand-back runbook.
-* The signer has <grade10 grading sign link> for the receipt open on the shop iPad, scrolled to its end.
+* A submission is ready to collect; staff entered the pickup code and the name, `<held>`.
 
 **Test data:**
 
-| Field | Value |
+| `<held>` | `<naming>` |
 | --- | --- |
-| Name typed | <a name that is neither the booking's nor a named person's> |
+| an upcharge still due, every item ticked Handed over | the balance due |
+| the balance settled, one item not ticked | the item unticked |
 
 **Steps:**
 
-1. Type <a name that is neither the booking's nor a named person's>.
-2. Draw a signature and tap Sign.
-3. On the runbook, read the Sign step and Hand over.
+1. Read the Sign step.
 
 **Expected Results:**
 
-* Step 2: signing is refused by name, against the booking's name.
-* Step 3: nothing is sealed and nothing is handed back.
+* Preparing is refused, naming `<naming>`; no Show on iPad or Copy link is offered, and nothing is handed back.
+
+<!-- trace:case id=g10.grading-counter-documents.TC-00a rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
+### g10.grading-counter-documents.US3-TC2: Above the declared threshold, the receipt names the ID glanced at and that nothing was kept
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-counter-documents-US-03
+
+**Pre-conditions:**
+
+* A ready submission declares HKD 12,000.00 in total, above the ID-glance threshold of HKD 10,000.00; staff glanced at an ID matching the collector's name and kept nothing, and the receipt's link is open.
+
+**Steps:**
+
+1. Turn the receipt to its end, and sign it.
+
+**Expected Results:**
+
+* Collected by names that an ID was matched to the name, and that nothing was kept from it.
+
+<!-- trace:case id=g10.grading-counter-documents.TC-v41 rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
+### g10.grading-counter-documents.US3-TC5: The receipt prints what was paid, refunded and paid out, and how
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-counter-documents-US-03
+
+**Pre-conditions:**
+
+* On one submission, a card withdrawn before its batch closed was refunded at the till, a card moved up a level was settled at the till, and a card not returned was paid out at its declared value, approved by a second holder; the receipt's link is open.
+
+**Steps:**
+
+1. Turn the receipt to its end, and sign it.
+
+**Expected Results:**
+
+* It prints what was paid, what was refunded and what was paid out, each with how it moved.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-0ot rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC9-1: Two exceptions on one hand-back print one receipt with a line per card
+### g10.grading-counter-documents.US3-TC9: Two exceptions on one hand-back print one receipt with a line per card
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
-* A Ready to collect submission of four cards: one recorded Held by the grader on its batch's Receive page, one placed into a vault case with Vault instead on the hand-back runbook, and the other two ticked Handed over.
-* The balance is settled, and admin(holds grading:operate) is on the hand-back runbook at <grade10 admin grading submission url>.
+* A ready submission of four cards: one held by the grader, one placed into a vault case with Vault instead, two ticked Handed over; the balance settled.
 
 **Steps:**
 
-1. Click Copy link on the Sign step.
-2. Open <grade10 grading sign link> on the shop iPad.
-3. Scroll the receipt through to its last page.
-4. Type the collector's name.
-5. Draw a signature and tap Sign.
+1. Click Copy link on the Sign step, open it on the iPad, turn the receipt to its end and sign it.
 
 **Expected Results:**
 
-* Step 1: one receipt is prepared for the hand-back, not one per exception.
-* Step 3: it carries a line per card stating that card's outcome: the two handed back, the one still held by the grader, and the one that went to the vault.
+* One receipt is prepared, not one per exception, carrying a line per card: the two handed back, the one still held by the grader, and the one that went to the vault rather than to the collector.
 
-<!-- trace:case id=g10.grading-counter-documents.TC-87a rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
-### grade10-site-grading-counter-documents-US3-TC10-1: The second receipt prints the late card alone and names the first
+<!-- trace:case id=g10.grading-counter-documents.TC-moq rev=1 covers=g10.grading-counter-documents.SC-rfe,g10.grading-counter-documents.SC-e21,g10.grading-counter-documents.SC-fbo,g10.grading-counter-documents.SC-6eh,g10.grading-counter-documents.SC-8w2,g10.grading-counter-documents.SC-djb,g10.grading-counter-documents.SC-rtd -->
+### g10.grading-counter-documents.US3-TC3: A card the grader held keeps the submission open, and a second receipt closes it
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
-* A submission of four cards whose other three were handed back on a sealed first receipt, with one card held by the grader; that card has since come back and the submission is Ready to collect.
-* On the second hand-back's runbook at <grade10 admin grading submission url>, admin(holds grading:operate) has entered the pickup code and the name, ticked Handed over on the one item, and clicked Copy link on the Sign step.
-* The collector has <grade10 grading sign link> for the second receipt open on the shop iPad.
+* A ready submission of four cards, one recorded Held by the grader; the other three are ticked Handed over, the balance settled.
 
 **Steps:**
 
-1. Scroll the second receipt through to its last page.
-2. Type the collector's name.
-3. Draw a signature and tap Sign.
-4. On the runbook, click Hand over.
-5. Open <grade10 grading submission page url> for the submission.
+1. Sign the receipt for the three, and open `<submission page>`.
+2. When the held card is back and ready, sign its second receipt, and click Hand over.
 
 **Expected Results:**
 
-* Step 1: the second receipt prints the card handed back late alone, and names the first receipt by its date and fingerprint.
-* Step 5: the submission is closed by the second receipt: it reads Back with you.
+* Step 1's receipt names the card still held, and the submission stays ready.
+* Step 2's receipt prints that card alone, naming the first receipt by its date and fingerprint, and the submission reads Back with you.
 
 ---
 
-## grade10-site-grading-counter-documents-US4: Named person signs the receipt in the collector's place
+## g10.grading-counter-documents.US4: Named person signs the receipt in the collector's place
 
 **As a** person the collector named to collect,
 **I want** the iPad to prefill my name as named on the submission page and the receipt to record that I collected,
 **so that** the collector's record says who took the cards.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-idw rev=1 covers=g10.grading-counter-documents.SC-n5f,g10.grading-counter-documents.SC-vje -->
-### grade10-site-grading-counter-documents-US4-TC1-1: Named person's iPad prefills their name and the receipt records them
+### g10.grading-counter-documents.US4-TC1: The named person's name is prefilled, takes no edit, and the receipt records them
 
 **Classification:**
 
@@ -940,339 +611,160 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
 **Pre-conditions:**
 
-* The collector named <named person> in Their name on <grade10 grading submission page url> while the submission was Ready to collect.
-* On the hand-back runbook at <grade10 admin grading submission url>, admin(holds grading:operate) has entered the pickup code and <named person>, settled the balance, ticked Handed over on every item, and clicked Copy link on the Sign step.
-* The named person has <grade10 grading sign link> for the receipt open on the shop iPad.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <named person> | Chan Tai Man |
+* The collector named Chan Tai Man on `<submission page>`; staff entered the pickup code and Chan Tai Man, settled the balance, ticked every item and copied the link, open on the iPad.
 
 **Steps:**
 
-1. Read the name field on the sign screen.
-2. Scroll the receipt through to its last page.
-3. Draw a signature and tap Sign.
+1. Read the name field, and try to retype it as another name.
+2. Turn the receipt to its end, and sign it.
 
 **Expected Results:**
 
-* Step 1: the signer's name is prefilled as the person named on the submission page, with a hint that it was prefilled.
-* Step 3: the receipt records the named person, not the collector, as who collected.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-y1s rev=1 covers=g10.grading-counter-documents.SC-n5f,g10.grading-counter-documents.SC-vje -->
-### grade10-site-grading-counter-documents-US4-TC2-1: The named person's prefilled name does not take an edit
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* The collector named <the person named on the submission page> in Their name on <grade10 grading submission page url> while the submission was Ready to collect.
-* On the hand-back runbook at <grade10 admin grading submission url>, the balance is settled, every item is ticked Handed over, and Copy link was clicked on the Sign step.
-* The named person has <grade10 grading sign link> for the receipt open on the shop iPad.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Name prefilled | <the person named on the submission page> |
-| Name retyped | <any other name> |
-
-**Steps:**
-
-1. Attempt to retype the prefilled name as <any other name>.
-2. Scroll the receipt through to its last page.
-3. Draw a signature and tap Sign.
-
-**Expected Results:**
-
-* Step 1: the name line does not take the edit.
-* Step 3: the receipt seals under the name the submission page holds, and records that person as who collected.
+* Step 1 shows Chan Tai Man prefilled, with a hint that it was, and the line takes no edit.
+* Step 2 seals under Chan Tai Man, recording that they collected in the customer's place.
 
 ---
 
-## grade10-site-grading-counter-documents-US5: Signer keeps a copy of every document
+## g10.grading-counter-documents.US5: Signer keeps a copy of every document
 
-**As a** signer who has just signed at the counter,
+**As a** person who has just signed at the counter,
 **I want** a download after the seal, an email with the signed PDF attached, and each document on the submission page with its fingerprint,
 **so that** I hold my own copy without asking for one.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-eoe rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
-### grade10-site-grading-counter-documents-US5-TC1-1: Signer downloads the signed PDF right after the seal
+### g10.grading-counter-documents.US5-TC1: A sealed document downloads there and then, and arrives attached to its step's email
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
 
 **Pre-conditions:**
 
-* A document has just sealed on <grade10 grading sign link> on the shop iPad, and the sealed screen shows.
+* `<document>` has just sealed on the iPad.
+
+**Test data:**
+
+| `<document>` | `<email>` | `<attached>` |
+| --- | --- | --- |
+| the agreement, the cards then handed in | the handed-in email | the signed agreement, with the intake receipt beside it |
+| the hand-back receipt, the cards then handed over | the collection email | the signed hand-back receipt |
 
 **Steps:**
 
-1. Read the sealed screen.
-2. Tap the download.
+1. Tap the download on the sealed screen.
+2. Open `<email>` in `<collector inbox>`.
 
 **Expected Results:**
 
-* The signed PDF downloads to the device.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-ztb rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
-### grade10-site-grading-counter-documents-US5-TC2-1: Sealed agreement's email attaches the agreement and intake receipt
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* The submission agreement sealed and the cards were handed in under <collector email>: on the local stack, a submission seeded at Handed in, whose hand-in sends the handed-in email to the grading outbox for that address.
-
-**Steps:**
-
-1. Open the latest grading email to <collector email>: the handed-in email sent for the seal.
-
-**Expected Results:**
-
-* The email carries the signed agreement as an attached PDF, with the intake receipt attached beside it.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-9va rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
-### grade10-site-grading-counter-documents-US5-TC3-1: Sealed receipt's email attaches the signed hand-back receipt
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* The hand-back receipt sealed and the cards were handed over under <collector email>: on the local stack, a submission seeded at Back with you, whose hand-back sends the collection email to the grading outbox for that address.
-
-**Steps:**
-
-1. Open the latest grading email to <collector email>: the collection email sent for the seal.
-
-**Expected Results:**
-
-* The email carries the signed hand-back receipt as an attached PDF.
+* Step 1 downloads the signed PDF.
+* Step 2 carries `<attached>` as PDFs.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-zpe rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
-### grade10-site-grading-counter-documents-US5-TC4-1: Submission page lists each document with its fingerprint
+### g10.grading-counter-documents.US5-TC4: The submission page lists each document grading issued with its fingerprint
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** major
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-05
 
 **Pre-conditions:**
 
-* At least one document has sealed on the submission: on the local stack, a submission seeded at Handed in.
+* `<document>`.
+
+**Test data:**
+
+| `<document>` | `<listed>` |
+| --- | --- |
+| the agreement sealed and the cards handed in | the sealed agreement and the intake receipt |
+| a card of two withdrawn from a handed-in submission before its batch closed, its fee of HKD 150.00 refunded | the withdrawal receipt, naming that card alone and the HKD 150.00 refunded, issued with nobody asked to sign it |
 
 **Steps:**
 
-1. Open <grade10 grading submission page url> for the submission.
-2. Read its documents list.
+1. Open `<submission page>`, and read its documents list.
+2. Check a listed fingerprint at grading's public digest check.
 
 **Expected Results:**
 
-* Each sealed document is listed with a fingerprint that tells the signed copy apart from an unsigned one.
+* Step 1 lists `<listed>`, each with its fingerprint and a download.
+* Step 2 answers as a document grading issued.
 
 <!-- trace:case id=g10.grading-counter-documents.TC-gtz rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
-### grade10-site-grading-counter-documents-US5-TC5-1: Reopening a signed link shows the sealed copy instead
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
-
-**Pre-conditions:**
-
-* A document on the submission has already sealed on <grade10 grading sign link>, on the shop iPad.
-
-**Steps:**
-
-1. Open the same <grade10 grading sign link> again on the shop iPad.
-
-**Expected Results:**
-
-* Signing is refused by name, naming that the document is already signed.
-* The sealed copy is shown on the page.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-0hw rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
-### grade10-site-grading-counter-documents-US5-TC6-1: A declined document reaches none of the three ways to a copy
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-counter-documents-US-05
-
-**Pre-conditions:**
-
-* The collector declined the submission agreement on <grade10 grading sign link> at the counter, and it was withdrawn.
-
-**Steps:**
-
-1. Open <grade10 grading submission page url> for the submission.
-2. Look for the declined agreement in the documents list.
-3. Open the latest grading email to <collector email>.
-
-**Expected Results:**
-
-* Step 2: the declined document is not listed and no download is offered for it.
-* Step 3: no email carries it as an attachment.
-
-<!-- trace:case id=g10.grading-counter-documents.TC-8gm rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
-### grade10-site-grading-counter-documents-US5-TC8-1: A withdrawn card's receipt is issued and listed with its fingerprint
+### g10.grading-counter-documents.US5-TC5: Reopening a signed link shows the sealed copy instead
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-counter-documents-US-05
 
 **Pre-conditions:**
 
-* A Handed in submission of two cards, each with its fee paid, its batch not yet closed: handed in through its hand-in runbook before the week's cut-off. A submission seeded at Handed in will not do: the seed closes its batch at the hand-in.
-* admin(holds grading:operate) is on the submission's Cards tab at <grade10 admin grading submission url>.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Fee refunded | 15000 minor units (HKD 150.00) |
+* A document has sealed on its link.
 
 **Steps:**
 
-1. Click Withdraw a card on the first card, and confirm the refund and the receipt.
-2. Open <grade10 grading submission page url> for the submission.
-3. Check the listed fingerprint of the withdrawal receipt against grading's public digest check.
+1. Open the same link again on the iPad.
 
 **Expected Results:**
 
-* Step 1 issues a receipt naming the withdrawn card alone and the fee of 15000 minor units refunded for it, with nobody asked to sign it and no signing link minted.
-* Step 2 lists the withdrawal receipt with its fingerprint and a download, and the withdrawal email carries it attached.
-* Step 3 answers as a document grading issued.
+* Signing is refused, naming that the document is already signed; the sealed copy is shown.
 
----
+<!-- trace:case id=g10.grading-counter-documents.TC-0hw rev=1 covers=g10.grading-counter-documents.SC-nke,g10.grading-counter-documents.SC-haq,g10.grading-counter-documents.SC-7c2,g10.grading-counter-documents.SC-orn -->
+### g10.grading-counter-documents.US5-TC6: A declined document reaches none of the three ways to a copy
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-counter-documents-US-05
+
+**Pre-conditions:**
+
+* The collector declined the agreement at the counter.
+
+**Steps:**
+
+1. Open `<submission page>`, and look for the agreement.
+2. Open the latest grading email.
+
+**Expected Results:**
+
+* Step 1 neither lists it nor offers a download.
+* Step 2 carries no attachment of it.
 
 ## Settled
 
-- A document refused for an unset fact, a balance still due or an item unticked is not refused at the sign link: the rules refuse when the document is prepared, before anything is rendered or a link minted, so a case reaches that refusal by preparing the document
-
-## Reconciliation
-
-**Run:** the blind pass read the isolated bundle — this capability's `## Purpose`
-and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and
-`decisions.md` with its `## Raised` table, `ui-design.md` with the state
-dispositions stripped, and the PRD pages the proposal links. It was denied every
-`## Requirements` section, `openspec/specs/` beyond the two included sections,
-`openspec/changes/archive/` and `tech-design.md`. Nothing verifies that line; it
-is the run's own statement. The scenario pass wrote its scenarios over
-eight ADDED requirements; the blind suite wrote 23 cases over `US1` to `US5`.
-Scenario ids stripped at review, 2026-09-29.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| Raised: does the receipt's signing block refuse a name mismatch the way the agreement's does? | Raised, folded | It does, against the booking's name or the named person's. Folded as a scenario and a line on the ceremony requirement's `**The name**` rule; landed as Q57. Case `grade10-site-grading-counter-documents-US3-TC8-1` added |
-| Raised: is the named person's prefilled name editable? | Raised, folded | It is fixed — the collector named them and the counter's ID glance checks it. Folded as a scenario and a `**The named person**` rule on the hand-back receipt; landed as Q58. Case `grade10-site-grading-counter-documents-US4-TC2-1` added |
-| Raised: do two receipt-worthy exceptions on one submission print one receipt or two? | Raised, folded | One receipt per hand-back, with a line per card stating that card's outcome. Folded as a scenario and a `**Several outcomes at once**` rule; landed as Q59. Case `grade10-site-grading-counter-documents-US3-TC9-1` added |
-| `grade10-site-grading-counter-documents-US1-TC1-1` — "the fee is charged at the till only after the seal" | Kept, stated elsewhere | Grading's money is the counter's and the lifecycle's, not this capability's paper; Q4 decides it and no scenario is folded here |
-| `grade10-site-grading-counter-documents-US1-TC3-1` — Sign *disabled* rather than refused | Kept, no change | The same rule as the agreement taking no signature without the postal address; the disabled control is that refusal's presentation, and the `Postal address empty` design row carries it |
-| `grade10-site-grading-counter-documents-US1-TC7-1`, `…-US3-TC6-1`, `…-US3-TC7-1` — refusal fired at the sign link | Amended | The rules refuse at preparation, before anything is rendered (production refusing paper that names no company; the hand-back receipt waiting for the balance and every tick), so the three cases could not be reached as written. Steps moved to preparing the document; no behaviour claimed beyond the scenarios |
-| `grade10-site-grading-counter-documents-US4-TC1-1` — "with a hint that it was prefilled" | Kept, presentation | Not behaviour: the hint is the `Receipt, named person` design row, and the case keeps it as an observation |
-| Signed with no identity record | Case added | `grade10-site-grading-counter-documents-US1-TC9-1` |
-| A storage fee raised after signing | Case added | `grade10-site-grading-counter-documents-US1-TC10-1` |
-| A declined document on none of the three | Case added | `grade10-site-grading-counter-documents-US5-TC6-1` |
-| A digest grading never issued | Case added | `grade10-site-grading-counter-documents-US5-TC7-1` |
-| A Bulk list of a hundred cards runs on | Case added | `grade10-site-grading-counter-documents-US1-TC11-1`; the paper ran to one page when the suite was drawn, and a Bulk list of 100 could not be printed on it (Q112) |
-| The agreement waiting for every card to be checked | Out of suite: `grade10-admin/grading/counter`'s suite | Its only anchor is that capability's `grade10-admin-grading-counter-US-11`; staff at the desk walk it, nobody here |
-| The intake receipt issued rather than signed | Out of suite: `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-02`; no signer ever meets the intake receipt on a link |
-| A card refused at the check off the schedule | Out of suite: `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-03`, the refusal staff make |
-| The intake receipt naming every intake id | Out of suite: `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-02`; `grade10-site-grading-counter-documents-US5-TC2-1` walks the attachment alone |
-| A withdrawn card with a receipt of its own | Case added | `grade10-site-grading-counter-documents-US5-TC8-1`. It was routed out of suite, serving `grade10-site-grading-submission-lifecycle-US-02`, while the document table named no such document. The table now lists the withdrawal receipt as issued, so the scenario serves `grade10-site-grading-counter-documents-US-05`, the copy the collector keeps |
-| The second receipt | Case added at review | The second receipt prints only its own cards and names the first. `grade10-site-grading-counter-documents-US3-TC3-1` stops at the first receipt; `grade10-site-grading-counter-documents-US3-TC10-1` walks the second, and `grade10-admin-grading-counter-US4-TC10-1` the second hand-back's close |
-| The desk reading a declined document back | Case added at review | `grade10-admin/grading/counter` routes its rule for a declined signature leaving nothing handed over to this suite; `grade10-site-grading-counter-documents-US2-TC3-1` walks it |
-| The receipt printing what was paid, refunded and paid out | Aligned at review | Its refund is now a withdrawn card's fee, the author's fix to agree with the fee table; `grade10-site-grading-counter-documents-US3-TC5-1` follows it |
-
-### Manual
-
-| Manual | Why |
-| --- | --- |
-| `grade10-site-grading-counter-documents-US1-TC1-1` | An automated test decides the rendered agreement and the seal; a person reads the printed page on the iPad and watches the fee reach the till only after it |
-| `grade10-site-grading-counter-documents-US3-TC1-1` | The cards are on the desk and the balance settles at the POS; no automated test decides that the slabs left with the collector |
-| `grade10-site-grading-counter-documents-US3-TC2-1` | The ID glance is staff's act at the counter; the receipt's line is all software sees, so a person confirms the glance happened and nothing was kept |
+- A document refused for an unset fact, a balance still due or an item unticked is not refused at the sign link: the rules refuse when the document is prepared, before anything is rendered or a link minted, so a case reaches that refusal by preparing the document.
