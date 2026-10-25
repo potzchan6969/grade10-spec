@@ -15,6 +15,6 @@ Depends on group 1's landing and the submodule bump.
 
 Uses draft `feature-tcs.md` as its planning input, and group 2 landed.
 
-- [ ] 3.1 Walk `grade10-site-auction-bidding-history-US-03` end to end on `/bids` in `apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`, kept as the change's end-to-end suite
-- [ ] 3.2 Flip the cases the walk decides with `pnpm run tcs:automated <case…> --decided-by grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts` in the walk's own commit; the cases that stay manual are named in the walk's `rounds.md` row
-- [ ] 3.3 Verify: the focused end-to-end pass
+- [x] 3.1 Walk `grade10-site-auction-bidding-history-US-03` end to end on `/bids` in `apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`, kept as the change's end-to-end suite
+- [x] 3.2 Flip the cases the walk decides with `pnpm run tcs:automated <case…> --decided-by grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts` in the walk's own commit; the cases that stay manual are named in the walk's `rounds.md` row
+- [x] 3.3 Verify: the focused end-to-end pass
