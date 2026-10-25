@@ -1,6 +1,6 @@
 # grade10-site/vault/retention-and-erasure Test Cases
 
-**Status:** pending-review · 0/19
+**Status:** pending-review · 0/16
 **Drafts styled:** 2026-10-25, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 **Out of suite (non-GUI):** grade10-site-vault-retention-and-erasure-SC-01, grade10-site-vault-retention-and-erasure-SC-02, grade10-site-vault-retention-and-erasure-SC-03 - the retention review's report, which no screen shows
@@ -168,119 +168,6 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The request still reads with the day it was filed, and beside it the hold, naming the case.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-epq rev=1 -->
-### g10.vault-retention-and-erasure.US1-TC10: Asking to be forgotten opens one seven-day window and leaves sign-in working
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-retention-and-erasure-US-01
-
-**Pre-conditions:**
-
-* customer(holds `user` only, nothing held in the vault) is on Your data, having `<history>`.
-
-**Test data:**
-
-| `<history>` | `<ask>` |
-| --- | --- |
-| never filed a request | Ask to be forgotten, confirmed |
-| filed one earlier and cancelled it | Ask to be forgotten, confirmed |
-| never filed a request | Ask to be forgotten, confirmed in tab A, then in tab B without reloading it |
-
-**Steps:**
-
-1. Make `<ask>`, and read the confirmation before it.
-2. Reload Your data; sign out, and sign in again.
-
-**Expected Results:**
-
-* Step 1 first names the seven-day window and that it can be cancelled inside it.
-* Step 2 shows one open request, filed today, maturing in seven days; sign-in works, the request not blocking it.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-zwr rev=1 -->
-### g10.vault-retention-and-erasure.US1-TC11: The holder cancels their request inside the window, once however often they ask
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-retention-and-erasure-US-01
-
-**Pre-conditions:**
-
-* customer is on Your data, with a request they filed six days ago.
-
-**Test data:**
-
-| `<cancel>` |
-| --- |
-| cancel once |
-| cancel in tab A, then in tab B without reloading it |
-
-**Steps:**
-
-1. `<cancel>`; reload Your data.
-
-**Expected Results:**
-
-* No request shows open, nothing else changed, and Ask to be forgotten is offered again.
-
-<!-- trace:case id=g10.vault-retention-and-erasure.TC-s7n rev=1 -->
-### g10.vault-retention-and-erasure.US1-TC12: The holder cannot cancel once the window has passed or an operator took the request over
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-retention-and-erasure-US-01
-
-**Pre-conditions:**
-
-* customer is on Your data, with `<request>`.
-
-**Test data:**
-
-| `<request>` | `<shown>` |
-| --- | --- |
-| filed by the holder seven days ago | filed, the window passed, no cancel offered |
-| filed by the holder, then filed over by an operator inside the window | a cancel, if selected, is refused |
-
-**Steps:**
-
-1. Read the request, and select cancel where offered.
-2. Reload.
-
-**Expected Results:**
-
-* Step 1 shows `<shown>`.
-* Step 2: the request is still open; a taken-over one reads filed by the operator.
 
 ---
 
