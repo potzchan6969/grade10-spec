@@ -7,7 +7,7 @@ A capability's PRD under `docs/prds/` is written first, and it moves first: whoe
 A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. A domain may instead fold its capabilities into chapter pages, each capability a `##` section of the chapter the reader meets it in; the section is then what a proposal links, and the chapter shows the capability's suite under it with `::cases`. Its prose states the shape of the product in the reader's words and pictures, and never restates a requirement. Three kinds of line sit on it:
 
 - **Unmarked** — the product contract in the reader's words. The spec holds its checkable form.
-- **🚧** — confirmed and accepted for implementation. An accepted change delivers it; the mark comes off when implementation is verified. It does not say the outcome is available in a deployed application.
+- **🚧** — confirmed and being built. The mark is the whole record: nothing else says the outcome is in progress, so no change has to deliver it. It comes off when the outcome is verified, and it does not say the outcome is available in a deployed application.
 - **❓**, or `TBC` — what nobody has confirmed. Nothing is built from it. A long draft behind it lives under `docs/references/`, and the line cites it.
 
 What a requirement cannot carry — who it is for, what was deliberately excluded, what will be measured, the decisions made and why, the risks — sits on the same page in a `:::detail{title="Product decisions" for="pm"}` block: collapsed under the prose, never hidden from search or a deep link. The page names its spec in its frontmatter, so the requirements sit beside the record rather than duplicated into it.
@@ -207,7 +207,7 @@ After implementation is verified, whether or not it is deployed yet:
 
 ```text
 Is it what the product should be, in the reader's words?
-├─ Yes → the PRD — 🚧 where a change delivers it, ❓ where nobody has confirmed it.
+├─ Yes → the PRD — 🚧 where it is being built, ❓ where nobody has confirmed it.
 └─ No  → Is the statement testable — could a test or a manual pass decide it?
          ├─ Yes → the delta in openspec/changes/, published into
          │        openspec/specs/<product>/<domain>/<capability>/spec.md at acceptance.
