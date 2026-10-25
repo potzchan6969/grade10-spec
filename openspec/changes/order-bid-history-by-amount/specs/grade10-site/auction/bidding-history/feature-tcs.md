@@ -1,6 +1,6 @@
 # grade10-site/auction/bidding-history Test Cases
 
-**Status:** pending-review · 0/3
+**Status:** approved · 3/3
 **Drafts styled:** 2026-10-24, tcs-rules r7
 
 ## Background
@@ -24,7 +24,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -63,7 +63,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -107,7 +107,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
