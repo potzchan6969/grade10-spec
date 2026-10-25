@@ -12,9 +12,7 @@ import {
   ROLES,
   TEAM_MAP,
 } from "../../../scripts/openspec/lib/team.mjs";
-import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
 import { waiverLineOf } from "../src/api/waivers.ts";
-import { productPages } from "./context.mjs";
 import { heldToRounds, ROUND_RECORD_SINCE } from "./rounds.mjs";
 
 /** The day after `decisions.md` became required. The four changes opened on
@@ -25,75 +23,6 @@ export const DECISIONS_SINCE = "2026-09-17";
 const STORE_GROUP = "grade10-spec";
 
 const fileOf = (change, name) => `${change.dir}/${name}`;
-
-/**
- * A change carrying deltas says on a capability's PRD what it is building,
- * and links that section from its proposal. The link is the binding: a rule
- * keyed on the page's `spec:` would let a change pass on a 🚧 line another
- * change put there. Linking a section for context is allowed — one marked
- * linked section is enough.
- */
-export function checkUnmarked(ctx, changes, pages) {
-  const products = productPages(ctx.roots);
-  const marked = new Set(
-    pages
-      .filter((page) => page.path.startsWith(products))
-      .flatMap((page) =>
-        marksOfPage(page, BUILDING)
-          .filter((mark) => mark.section !== undefined)
-          .map((mark) => `${page.path}#${mark.section}`),
-      ),
-  );
-
-  for (const change of changes) {
-    if (change.status !== "in-flight") continue;
-    // RULE `hatch`: `skip_specs` says this change alters no product behaviour.
-    // A 🚧 line says a reader will see something new. An author claiming both
-    // is contradicting themselves, and `skip_specs` is the switch that turns
-    // every other check in this workflow off, so the contradiction is the one
-    // guard it has.
-    if (change.skipSpecs !== undefined) {
-      const claims = (change.sections ?? []).filter(
-        (one) =>
-          one.page.startsWith(products) &&
-          marked.has(`${one.page}#${one.slug}`),
-      );
-      if (claims.length > 0) {
-        ctx.add(
-          "hatch",
-          fileOf(change, ".openspec.yaml"),
-          `claims \`skip_specs\` and marks 🚧 under ${claims[0].page}#${claims[0].slug} — a 🚧 line is an outcome a reader can see, so the change alters behaviour after all`,
-        );
-      }
-      if (change.skipSpecs === "") {
-        ctx.add(
-          "hatch",
-          fileOf(change, ".openspec.yaml"),
-          "`skip_specs` gives no reason — add `skip_specs_why` with the line that says why no behaviour moves",
-        );
-      }
-    }
-    // A change waiting on its requirements has no delta yet, and is still
-    // about an outcome somebody confirmed — so it marks its pages like any
-    // other. Without this it could sit for months, counted on Pending and
-    // invisible on every PRD.
-    if (change.deltas.length === 0 && !waitsOnSpecs(change)) continue;
-    if (change.pageWaived) continue;
-    const linked = (change.sections ?? []).filter((one) =>
-      one.page.startsWith(products),
-    );
-    if (linked.some((one) => marked.has(`${one.page}#${one.slug}`))) continue;
-    const missing =
-      linked.length === 0
-        ? "links no section of a PRD"
-        : "no 🚧 line sits under a section it links";
-    ctx.add(
-      "unmarked",
-      fileOf(change, "proposal.md"),
-      `${missing} — mark what this change delivers, or say why in \`page_waived\``,
-    );
-  }
-}
 
 /** The product directories under `openspec/specs/` — the names a group tag
  * most often carries by mistake, since a group is usually about one of them. */
@@ -188,9 +117,6 @@ export function checkArchived(ctx, archived, since = ROUND_RECORD_SINCE) {
     }
   }
 }
-
-const waitsOnSpecs = (change) =>
-  (change.awaiting ?? []).some((one) => one.artifact === "specs");
 
 /**
  * A wait names an artifact of the change's own schema and ends only when its

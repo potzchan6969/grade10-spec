@@ -53,10 +53,10 @@ export const OPEN = new RegExp(`${LEADS}(?:❓|\\bTBC\\b)`);
 export const MARKED = /❓|\bTBC\b/;
 export const BUILDING = /🚧/;
 
-/** Both marks a change delivers, counted: a 🚧 line, which the pips read
+/** Both open marks, counted: a 🚧 line, which the reader sees
  * unanchored, and a ❓ or `TBC` leading its line the way `openMarksOfPage`
  * counts one. `MARKED` is not in it — a mark further into a sentence is a
- * page writing about the grammar, and a change delivers no such line. */
+ * page writing about the grammar, and it is not an open item. */
 export const DELIVERED = new RegExp(`${BUILDING.source}|${OPEN.source}`);
 const HEADING = /^(#{2,4})\s+(.+?)\s*$/;
 const FENCE = /^(`{3,}|~{3,})/;

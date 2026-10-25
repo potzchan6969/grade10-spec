@@ -73,7 +73,7 @@ import {
 } from "./context.mjs";
 import { checkDeltas } from "./deltas.mjs";
 import { checkDense } from "./dense.mjs";
-import { checkMarkInProse, checkMarks } from "./marks.mjs";
+import { checkMarkInProse } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkPlanned, checkWalkLast } from "./planned.mjs";
 import { checkAcceptance } from "./qa.mjs";
@@ -84,7 +84,6 @@ import {
   checkDesign,
   checkHands,
   checkLandedBy,
-  checkUnmarked,
 } from "./record.mjs";
 import { checkRole } from "./role.mjs";
 import { checkRounds } from "./rounds.mjs";
@@ -193,7 +192,6 @@ export async function runChecks(
       "change section links not run — the store's own repository answers for the mounted store",
     );
   }
-  checkMarks(ctx, changes, pages);
   checkMarkInProse(ctx, pages);
   checkDense(ctx, pages);
 
@@ -223,7 +221,6 @@ export async function runChecks(
     checkDeltas(ctx, { changes, shape, pages });
     checkStoreErrors(specs, changes, folded, add);
     checkDependencies(roots.store, changes, add);
-    checkUnmarked(ctx, changes, pages);
     checkDesign(ctx, changes);
     checkDecided(ctx, changes);
     checkPlanned(ctx, changes);

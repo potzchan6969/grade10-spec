@@ -1,13 +1,5 @@
 import { ArrowSquareOut } from "@phosphor-icons/react";
-import {
-  Children,
-  type ComponentProps,
-  cloneElement,
-  isValidElement,
-  type ReactElement,
-  type ReactNode,
-  useMemo,
-} from "react";
+import { type ComponentProps, type ReactNode, useMemo } from "react";
 import Markdown, { type Components } from "react-markdown";
 import { Link as RouterLink } from "react-router";
 import remarkGfm from "remark-gfm";
@@ -24,11 +16,6 @@ import {
   slugify,
   specTitle,
 } from "../api/paths";
-import {
-  MARK_SECTION_PROPERTY,
-  markSections,
-  type SectionSeed,
-} from "../content/mark-pips";
 import { REF_PATTERN, resolveRef } from "../content/refs";
 import {
   columnCount,
@@ -37,8 +24,6 @@ import {
   equalWidthTables,
 } from "../content/table-layout";
 import { AnchorLink } from "./anchor";
-import { SectionChanges } from "./section-changes";
-import { StagePip } from "./stage-pip";
 
 /** Where a markdown href actually points, once the store layout is applied. */
 type Target =
@@ -282,14 +267,6 @@ type MarkdownViewProps = {
   refs?: boolean;
   /** The page's own `spec:` — the scope a bare id resolves inside. */
   pageSpec?: string;
-  /** Page prose only: a 🚧 line gets the pip of its enclosing `## ` section's
-   * furthest in-flight change. Off elsewhere `anchors` is off — a spec's or a
-   * delta's own text names no page section to read a pip from. */
-  pips?: boolean;
-  /** The section this text's own 🚧 lines inherit, from `ProseBlockView`'s
-   * `sectionSeedOf` — the page's whole parse is what knows it, not this one
-   * block's own markdown. Ignored where `pips` is off. */
-  pipSeed?: SectionSeed;
   className?: string;
 };
 
@@ -305,8 +282,6 @@ export function MarkdownView({
   anchorPrefix,
   refs = false,
   pageSpec,
-  pips = false,
-  pipSeed,
   className,
 }: MarkdownViewProps) {
   const components = useMemo<Components>(
@@ -397,54 +372,13 @@ export function MarkdownView({
           src={typeof src === "string" ? src : ""}
         />
       ),
-      // `markSection` is the plugin's own property on the element, read from
-      // `node` by the pip. It is dropped from what reaches the DOM: React
-      // knows no such attribute and says so on every marked line otherwise.
-      ...(pips
-        ? {
-            p: ({
-              children,
-              node,
-              markSection: _section,
-              ...rest
-            }: Marked<"p">) => (
-              <p {...rest}>
-                {children}
-                <MarkPip node={node} />
-              </p>
-            ),
-            li: ({
-              children,
-              node,
-              markSection: _section,
-              ...rest
-            }: Marked<"li">) => (
-              <li {...rest}>
-                {children}
-                <MarkPip node={node} />
-              </li>
-            ),
-            tr: ({
-              children,
-              node,
-              markSection: _section,
-              ...rest
-            }: Marked<"tr">) => <tr {...rest}>{withRowPip(children, node)}</tr>,
-          }
-        : {}),
     }),
-    [anchors, anchorPrefix, baseDir, index, pageSpec, pips],
+    [anchors, anchorPrefix, baseDir, index, pageSpec],
   );
 
   const remarkPlugins = useMemo<
     ComponentProps<typeof Markdown>["remarkPlugins"]
-  >(
-    () =>
-      pips
-        ? [remarkGfm, equalWidthTables, [markSections, pipSeed]]
-        : [remarkGfm, equalWidthTables],
-    [pips, pipSeed],
-  );
+  >(() => [remarkGfm, equalWidthTables], []);
 
   return (
     <div className={className ?? "manual-prose"}>
@@ -457,43 +391,6 @@ export function MarkdownView({
       </Markdown>
     </div>
   );
-}
-
-/** What react-markdown hands one of the three elements the plugin tags: the
- * element's own props, the hast node the pip reads its section from, and
- * `markSection` itself, which the plugin set as a property of the element and
- * which no DOM attribute answers. */
-type Marked<Tag extends "p" | "li" | "tr"> = ComponentProps<Tag> & {
-  node?: HastNode;
-  markSection?: string;
-};
-
-/** The pip a `p` or `li` renders beside it, where the plugin above tagged it
- * with the section it sits in — nothing where the line carries no 🚧. */
-function MarkPip({ node }: { node?: HastNode }) {
-  const slug = node?.properties?.[MARK_SECTION_PROPERTY];
-  return typeof slug === "string" ? <StagePip slug={slug} /> : null;
-}
-
-/** A marked table row's own cells, the pip appended inside the last one — a
- * row carries no node of its own react-markdown renders text into, the way a
- * paragraph or a list item does, so the plugin tags the row and this is where
- * that becomes visible. Nothing where the row carries no 🚧. */
-function withRowPip(children: ReactNode, node?: HastNode): ReactNode {
-  const slug = node?.properties?.[MARK_SECTION_PROPERTY];
-  if (typeof slug !== "string") return children;
-  const cells = Children.toArray(children);
-  const last = cells.at(-1);
-  if (!isValidElement(last)) return children;
-  const withPip = cloneElement(
-    last as ReactElement<{ children?: ReactNode }>,
-    {},
-    <>
-      {(last.props as { children?: ReactNode }).children}
-      <StagePip slug={slug} />
-    </>,
-  );
-  return [...cells.slice(0, -1), withPip];
 }
 
 function Heading({
@@ -511,15 +408,9 @@ function Heading({
   const id = slug && prefix ? `${prefix}-${slug}` : slug;
   const Tag = level === 2 ? "h2" : "h3";
   return (
-    <>
-      <Tag
-        className="group/anchor flex scroll-mt-24 items-center gap-1"
-        id={id}
-      >
-        <span>{children}</span>
-        {id ? <AnchorLink id={id} label="Copy link to this heading" /> : null}
-      </Tag>
-      {slug && !prefix && level === 2 ? <SectionChanges slug={slug} /> : null}
-    </>
+    <Tag className="group/anchor flex scroll-mt-24 items-center gap-1" id={id}>
+      <span>{children}</span>
+      {id ? <AnchorLink id={id} label="Copy link to this heading" /> : null}
+    </Tag>
   );
 }
