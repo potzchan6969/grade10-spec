@@ -1,23 +1,37 @@
 # grade10-site/vault/valuation-and-offer Test Cases
 
-**Status:** pending-review · 0/16
-**Drafts styled:** 2026-10-02, tcs-rules r4
-**Out of suite (api):** grade10-site-vault-valuation-and-offer-SC-24, grade10-site-vault-valuation-and-offer-SC-27
+**Status:** pending-review · 0/22
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
 ## Background
 
-* The brand is Grade10, whose currency is HKD; its lending policy: loan to
-  value 40%, rate 150 to 250 basis points per 30 days, term presets 30, 60,
-  90 and 120 days, offer validity 7 days, grace none, accrual ceiling 100%
-  of the principal, forfeiture notice 14 days; its registered name is on
-  file.
-* `<valuation_1>` — a recorded valuation of 2,500,000 minor units (HKD
-  25,000.00).
-* `<offer_1>` — a live offer against `<valuation_1>` of 1,000,000 minor
-  units (HKD 10,000.00) principal, 200 basis points per 30 days, a term of
-  30 days, open for 7 days from when it was made.
+* Grade10 lends in HKD under its policy: loan to value 40%, a rate of 150 to 250 basis points per 30 days, terms of 30, 60, 90 or 120 days, an offer open 7 days, its lender's registered name, licence number and FPS id on file, unless a case says otherwise.
+* `<valuation_1>` is a recorded valuation of HKD25,000.00; `<offer_1>` a live offer against it of HKD10,000.00 at 200 basis points per 30 days over 30 days, open 7 days.
+* Offers are made on the console case page by admin(holds `vault:approve`); the collector answers on their own vault case page on `<g10url>`.
 
-## grade10-site-vault-valuation-and-offer-US1: Operator prices a loan against an item they have valued
+## Walk 1: Value, offer, and the collector accepts
+
+Starting state:
+
+- admin(holds `vault:approve`) on a financed case under valuation; customer(collector) owns it.
+
+Shared test data:
+
+| Field | Value |
+| --- | --- |
+| valuation_1 | as in the Background |
+
+### Route
+
+1. Record `<valuation_1>`, then make `<offer_1>`.
+   - The dialog reads the interest, the total and the late-day figure; the case reads offer made. `g10.vault-valuation-and-offer.US1-TC1`
+2. As the collector, open the case.
+   - The offer's terms beside the valuation, and the day to answer by. `g10.vault-valuation-and-offer.US2-TC1`
+3. Select Accept this offer, then Yes, accept.
+   - The case reads accepted, the collector its actor. `g10.vault-valuation-and-offer.US2-TC2`
+
+## g10.vault-valuation-and-offer.US1: Operator prices a loan against an item they have valued
 
 **As a** member of shop staff,
 **I want** to record what the item is worth and write terms the brand's own
@@ -26,7 +40,7 @@ bounds allow,
 what the business lends.
 
 <!-- trace:case id=g10.vault-valuation-and-offer.TC-fwb rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC1-1: Offer is made when every lending bound is met
+### g10.vault-valuation-and-offer.US1-TC1: An offer inside every bound is made, its dialog reading what it will cost
 
 **Classification:**
 
@@ -37,173 +51,25 @@ what the business lends.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a financed-lane case in `under_valuation` carrying `<valuation_1>`.
-
-**Steps:**
-
-1. Open the make-offer dialog and enter a principal of 1,000,000 minor units
-   (HKD 10,000.00), a rate of 200 basis points per 30 days, a term of 30
-   days and an expiry 7 days out.
-2. Send the offer.
-
-**Expected Results:**
-
-* The dialog reads the interest for the term, the total to repay and the
-  late-day figure it derives from what was entered.
-* The case moves to `offer_made` carrying the one offer just sent.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-w1x rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC2-1: A counter-offer supersedes the case's live offer
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `offer_made` carrying `<offer_1>`.
-
-**Steps:**
-
-1. Enter a counter-offer of 900,000 minor units (HKD 9,000.00), a term of
-   30 days and an expiry 7 days out.
-2. Send the counter-offer.
-3. Read the case's offers.
-
-**Expected Results:**
-
-* `<offer_1>` reads closed, superseded by the counter-offer.
-* The counter-offer is the case's one live offer.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-kwy rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC3-1: Storage-lane terms are agreed with no offer written
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a storage-lane case in `under_valuation` carrying a recorded
-  valuation of 500,000 minor units (HKD 5,000.00).
-
-**Steps:**
-
-1. Agree the custody terms.
-
-**Expected Results:**
-
-* The case moves to `accepted` with no offer written.
-* The custody terms are recorded against the valuation alone.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-1n7 rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC4-1: Every lending bound unset outside production allows the offer
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
 
 **Pre-conditions:**
 
-* The environment is not production.
-* Every one of the brand's lending bounds is unset.
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `under_valuation` carrying `<valuation_1>`.
+* admin(holds `vault:approve`) is on a financed case under valuation carrying `<valuation_1>`.
 
 **Steps:**
 
-1. Enter a principal of 2,500,000 minor units (HKD 25,000.00), a rate of
-   500 basis points per 30 days, a term of 45 days and an expiry 30 days
-   out.
-2. Send the offer.
+1. Open Make an offer, and enter HKD10,000.00, 200 basis points per 30 days, 30 days, expiring in 7 days.
+2. Send it.
 
 **Expected Results:**
 
-* The dialog reads every gate as not set before the act.
-* The offer is made despite values no brand bound would otherwise allow.
+* Step 1 reads the interest for the term, the total to repay and the late-day figure.
+* Step 2 moves the case to offer made, carrying that one offer.
 
 <!-- trace:case id=g10.vault-valuation-and-offer.TC-cxv rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC5-1: Offer principal is judged against the loan-to-value cap
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `under_valuation` carrying `<valuation_1>`.
-
-**Test data:**
-
-| Principal | Result |
-| --- | --- |
-| 1,000,000 minor units (HKD 10,000.00) | Made |
-| 1,000,001 minor units (HKD 10,000.01) | Refused |
-
-**Steps:**
-
-1. Enter the row's principal, with a rate, term and expiry each inside
-   every other bound.
-2. Send the offer.
-
-**Expected Results:**
-
-* Step 2 returns the row's result.
-* The refused row names the loan-to-value cap as the reason.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-too rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC6-1: Offer principal is judged against the valuation alone
+### g10.vault-valuation-and-offer.US1-TC5: An offer at each bound is made, the rate judged per 30 days whatever the term
 
 Runs once per row of **Test data**.
 
@@ -216,35 +82,33 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
 
 **Pre-conditions:**
 
-* The environment is not production.
-* Every lending bound but the valuation itself is unset for the brand.
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `under_valuation` carrying `<valuation_1>`.
+* admin(holds `vault:approve`) is on a case under valuation carrying `<valuation_1>`.
 
 **Test data:**
 
-| Principal | Result |
-| --- | --- |
-| 2,500,000 minor units (HKD 25,000.00) | Made |
-| 2,500,001 minor units (HKD 25,000.01) | Refused |
+| `<at the bound>` |
+| --- |
+| HKD10,000.00, 40% of the valuation |
+| 150 basis points per 30 days |
+| 250 basis points per 30 days |
+| 500 basis points over 60 days, which is 250 per 30 |
+| expiring in exactly 7 days |
 
 **Steps:**
 
-1. Enter the row's principal, with any rate, term and expiry.
-2. Send the offer.
+1. Make an offer at `<at the bound>`, every other term inside its bound.
 
 **Expected Results:**
 
-* Step 2 returns the row's result.
-* The refused row names the valuation as the reason.
+* The offer is made.
 
 <!-- trace:case id=g10.vault-valuation-and-offer.TC-0p9 rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC7-1: Offer rate is judged against the brand's rate band
+### g10.vault-valuation-and-offer.US1-TC7: An offer one step past a bound, or above the valuation, is refused naming it
 
 Runs once per row of **Test data**.
 
@@ -253,119 +117,71 @@ Runs once per row of **Test data**.
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `under_valuation` carrying `<valuation_1>`.
-
-**Test data:**
-
-| Rate per 30 days | Result |
-| --- | --- |
-| 150 basis points | Made |
-| 149 basis points | Refused |
-| 250 basis points | Made |
-| 251 basis points | Refused |
-
-**Steps:**
-
-1. Enter the row's rate, with a principal, term and expiry each inside
-   every other bound.
-2. Send the offer.
-
-**Expected Results:**
-
-* Step 2 returns the row's result.
-* A refused row names the rate band as the reason.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-8g9 rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC8-1: Offer expiry is judged against the validity window and the present
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
-
-**Pre-conditions:**
-
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `under_valuation` carrying `<valuation_1>`.
-
-**Test data:**
-
-| Expiry | Result |
-| --- | --- |
-| 7 days from now | Made |
-| 8 days from now | Refused |
-| now | Refused |
-
-**Steps:**
-
-1. Enter the row's expiry, with a principal, rate and term each inside
-   every other bound.
-2. Send the offer.
-
-**Expected Results:**
-
-* Step 2 returns the row's result.
-* The 8-days-from-now row names the offer-validity window as the reason.
-* The now row names that the expiry must be after now.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-29t rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC9-1: Offer term outside every brand preset is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
 
 **Pre-conditions:**
 
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `under_valuation` carrying `<valuation_1>`.
+* admin(holds `vault:approve`) is on a case under valuation carrying `<valuation>`.
+
+**Test data:**
+
+| `<valuation>` | `<past the bound>` | `<refusal names>` |
+| --- | --- | --- |
+| `<valuation_1>` | HKD10,000.01 | the loan-to-value cap |
+| `<valuation_1>` | 149 basis points per 30 days | the rate band |
+| `<valuation_1>` | 251 basis points per 30 days | the rate band |
+| `<valuation_1>` | 600 basis points over 60 days, 300 per 30 | the rate band |
+| `<valuation_1>` | expiring in 8 days | the offer's validity window |
+| `<valuation_1>` | expiring now | that the expiry must be after now |
+| `<valuation_1>` | a term of 45 days | the brand's term presets |
+| HKD100,000.00, with no loan-to-value cap outside production | HKD110,000.00 | the valuation |
 
 **Steps:**
 
-1. Enter a principal, rate and expiry each inside every other bound, and a
-   term of 45 days.
-2. Send the offer.
+1. Make an offer at `<past the bound>`, every other term inside its bound.
 
 **Expected Results:**
 
-* The offer is refused.
-* The dialog names the brand's term presets as the reason.
+* It is refused, naming `<refusal names>`; the case carries no new offer.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-1n7 rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
+### g10.vault-valuation-and-offer.US1-TC4: Outside production, unset bounds leave only the valuation as a limit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-01
+
+**Pre-conditions:**
+
+* Outside production, every lending bound is unset; admin(holds `vault:approve`) is on a case under valuation carrying `<valuation_1>`.
+
+**Steps:**
+
+1. Open Make an offer, and read it.
+2. Send HKD25,000.00 at 500 basis points per 30 days, over 45 days, expiring in 30 days.
+
+**Expected Results:**
+
+* Step 1 reads every bound as not set.
+* Step 2 is made.
 
 <!-- trace:case id=g10.vault-valuation-and-offer.TC-uy5 rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC10-1: A lending bound unset in production refuses the offer
+### g10.vault-valuation-and-offer.US1-TC10: In production an offer is refused while a bound, the lender's name, licence or FPS id is unset
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -376,92 +192,117 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
+* **Testability:** automation, manual
+* **Trace:** What the brand lends under
 
 **Pre-conditions:**
 
-* The environment is production.
-* The brand's loan-to-value cap is unset; every other lending bound is set
-  and the lender's registered name is on file.
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `under_valuation` carrying `<valuation_1>`.
+* In production, every lending bound and lender detail is set except `<unset>`; admin(holds `vault:approve`) is on a case under valuation carrying `<valuation_1>`.
+
+**Test data:**
+
+| `<unset>` |
+| --- |
+| the loan-to-value cap |
+| the lender's registered name |
+| the licence number |
+| the FPS id |
 
 **Steps:**
 
-1. Open the make-offer dialog.
-2. Send an offer inside every other bound.
+1. Open Make an offer, and read it.
+2. Send an offer inside every set bound.
 
 **Expected Results:**
 
-* The dialog names the unset loan-to-value cap before step 2.
-* Step 2 is refused, naming the same unset cap.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-31i rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC11-1: The lender's unset registered name refuses the offer in production
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Pre-conditions:**
-
-* The environment is production.
-* Every lending bound is set; the lender's registered name is unset.
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `under_valuation` carrying `<valuation_1>`.
-
-**Steps:**
-
-1. Open the make-offer dialog.
-2. Send an offer inside every lending bound.
-
-**Expected Results:**
-
-* The dialog names the unset registered name before step 2.
-* Step 2 is refused, naming the same reason.
+* Step 1 names `<unset>` before the act; step 2 is refused, naming it.
 
 <!-- trace:case id=g10.vault-valuation-and-offer.TC-6mn rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC12-1: A valuation below a standing offer is refused
+### g10.vault-valuation-and-offer.US1-TC12: A valuation below a standing offer is refused
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-01
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
+* **Testability:** automation, manual
+* **Trace:** The valuation
 
 **Pre-conditions:**
 
-* admin(holds `vault:approve`) is on <grade10 admin vault case page url>
-  for a case in `offer_made` carrying `<offer_1>`.
+* admin(holds `vault:approve`) is on a case at offer made, carrying `<offer_1>`.
 
 **Steps:**
 
-1. Record a new valuation of 900,000 minor units (HKD 9,000.00).
+1. Record a valuation of HKD9,000.00.
 
 **Expected Results:**
 
-* The valuation is refused.
-* The refusal names `<offer_1>` as the standing offer it would fall below.
+* It is refused, naming `<offer_1>` as the offer it would fall below; no valuation is written.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-6u4 rev=1 -->
+### g10.vault-valuation-and-offer.US1-TC14: A re-valuation is added beside the first, and offers are judged against the latest
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-01
+
+**Pre-conditions:**
+
+* admin(holds `vault:approve`) is on a case under valuation, valued at HKD100,000.00, with no offer.
+
+**Steps:**
+
+1. Record a valuation of HKD80,000.00, and read the case.
+2. Make an offer of HKD32,000.01.
+
+**Expected Results:**
+
+* Step 1 shows both figures, the later one current.
+* Step 2 is refused, naming the loan-to-value cap of the latest valuation.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-w1x rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
+### g10.vault-valuation-and-offer.US1-TC2: A counter-offer replaces the case's live offer
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-01
+
+**Pre-conditions:**
+
+* admin(holds `vault:approve`) is on a case at offer made, carrying `<offer_1>`.
+
+**Steps:**
+
+1. Send a counter-offer of HKD9,000.00 over 30 days, expiring in 7 days.
+2. Read the case's offers.
+
+**Expected Results:**
+
+* `<offer_1>` reads closed, superseded by the counter-offer, which is the case's one live offer.
 
 <!-- trace:case id=g10.vault-valuation-and-offer.TC-p9q rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
-### grade10-site-vault-valuation-and-offer-US1-TC13-1: Staff without the approve grant cannot make an offer
+### g10.vault-valuation-and-offer.US1-TC13: Staff without the approve grant cannot make an offer
 
 **Classification:**
 
@@ -472,130 +313,61 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-01
 
 **Pre-conditions:**
 
-* admin(holds `vault:operate`, not `vault:approve`) is on <grade10 admin
-  vault case page url> for a case in `under_valuation` carrying
-  `<valuation_1>`.
+* admin(holds `vault:operate`, not `vault:approve`) is on a case under valuation carrying `<valuation_1>`.
 
 **Steps:**
 
-1. Attempt to make an offer inside every lending bound.
+1. Try to make an offer inside every bound.
 
 **Expected Results:**
 
-* The attempt is refused for want of `vault:approve`.
-* The case carries no offer.
+* It is refused for want of `vault:approve`; the case carries no offer.
 
 ---
 
-## grade10-site-vault-valuation-and-offer-US2: Collector answers an offer from their own phone
+## g10.vault-valuation-and-offer.US2: Collector answers an offer from their own phone
 
 **As a** collector,
 **I want** to accept or decline the offer on my case wherever I am reading it,
 **so that** I can say yes before I come in, or say no and still be offered
 something else.
 
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-tnl rev=1 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
-### grade10-site-vault-valuation-and-offer-US2-TC8-1: Going back from a confirmation leaves the offer live
-
-Runs once per row of **Test data**.
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-krd rev=1 -->
+### g10.vault-valuation-and-offer.US2-TC1: The offer reads with its terms, its valuation and the day to answer by, and says when it ran out
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Status:** deprecated
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-valuation-and-offer-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
-
 **Pre-conditions:**
 
-* The collector is signed in and viewing <grade10 vault case page url> for
-  their own case carrying `<offer_1>`.
-
-**Test data:**
-
-| Pressed | Confirmation |
-| --- | --- |
-| Accept this offer | Yes, accept |
-| Decline this offer | Yes, decline |
+* customer(collector) owns a case valued at HKD100,000.00 holding a live offer of HKD40,000.00 over 60 days, HKD1,600.00 interest, expiring on a stated day.
 
 **Steps:**
 
-1. Press the row's button.
-2. Press Go back.
+1. Open the case, and their cases list.
+2. After the offer lapses, open both again.
 
 **Expected Results:**
 
-* The confirmation closes and the row's answer is not sent.
-* `<offer_1>` is still live, with Accept this offer and Decline this offer
-  on it.
+* Step 1 reads the principal, rate, term, interest, total to repay and the valuation, with the day to answer by on both.
+* Step 2 reads an offer that ran out, and no day to answer by.
 
----
-
-## grade10-site-vault-valuation-and-offer-US5: Collector reads and answers an offer that replaced the last
-
-**As a** collector whose offer was replaced by a new one,
-**I want** the page to say the old offer is gone and show the new one's terms
-with Accept and Decline on it,
-**so that** I answer the offer that stands and never the one that was
-withdrawn.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-htu rev=1 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
-### grade10-site-vault-valuation-and-offer-US5-TC4-1: A twice-superseded case reads only the most recent close
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** grade10-site-vault-valuation-and-offer-US-05
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts`
-
-**Pre-conditions:**
-
-* The collector's case has had two counter-offers: `<offer_1>` and a second
-  offer are both closed, superseded in turn, and a third offer is the one
-  live offer.
-
-**Steps:**
-
-1. Open the case page.
-
-**Expected Results:**
-
-* The page names only the second offer as the one `<offer_1>` was
-  superseded by, and that second offer as closed in turn.
-* Accept and Decline sit on the third offer, the only one that stands.
-
----
-
-## grade10-site-vault-valuation-and-offer-US6: Operator values a slab by its grader, grade and cert
-
-**As a** member of shop staff valuing a graded item,
-**I want** the item's grader, grade and cert beside the valuation, read from
-the item register and corrected there when the slab in my hand says otherwise,
-**so that** the figure I record is for the slab in front of me, not one typed
-from memory.
-
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-qt8 rev=1 covers=g10.vault-valuation-and-offer.SC-1yc,g10.vault-valuation-and-offer.SC-e0k,g10.vault-valuation-and-offer.SC-s2f -->
-### grade10-site-vault-valuation-and-offer-US6-TC1-1: The valuation dialog reads the slab from the register
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-j5c rev=1 -->
+### g10.vault-valuation-and-offer.US2-TC2: Accepting is confirmed first, lands once, keeps the visit, and costs nothing until the money is advanced
 
 **Classification:**
 
@@ -607,27 +379,352 @@ from memory.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-vault-valuation-and-offer-US-06
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
 
 **Pre-conditions:**
 
-* admin(staff) is on <grade10 admin vault case page url> for `<case_1>`, under valuation.
-* `<case_1>`'s item `<item_1>` carries PSA, grade 10 and `AB12345` in the register.
+* customer(collector) is on their case, holding `<offer_1>` and a booked visit; a second tab shows the same case.
 
 **Steps:**
 
-1. Open the record-valuation dialog on the Case tab.
-2. Read the line above the valued-at field.
-3. Record a valuation of HKD 25,000.00.
+1. Select Accept this offer, then Yes, accept.
+2. In the second tab, without reloading, accept again.
+3. A week later, as treasurer, record the advance; read the loan.
 
 **Expected Results:**
 
-* Step 2 reads PSA, grade 10 and `AB12345`, as text no field edits.
-* The valuation is recorded at HKD 25,000.00.
-* `<item_1>` still carries PSA, grade 10 and `AB12345`.
+* Step 1: the case reads accepted, the collector its actor; the visit stands.
+* Step 2 is refused, naming that the offer was already answered; nothing changes.
+* Step 3: the 30-day term runs from the advance; the week before costs nothing.
 
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-b8l rev=1 covers=g10.vault-valuation-and-offer.SC-1yc,g10.vault-valuation-and-offer.SC-e0k,g10.vault-valuation-and-offer.SC-s2f -->
-### grade10-site-vault-valuation-and-offer-US6-TC2-1: A correction on the Case tab reaches the valuation dialog
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-3c3 rev=1 -->
+### g10.vault-valuation-and-offer.US2-TC3: Declining is confirmed first, puts the case back under valuation, and keeps the visit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* customer(collector) is on their case, holding `<offer_1>` and a booked visit.
+
+**Steps:**
+
+1. Select Decline this offer, then Yes, decline.
+2. As admin(holds `vault:approve`), make a new offer.
+
+**Expected Results:**
+
+* Step 1: the offer reads declined by the collector; the case is under valuation again; the visit stands.
+* Step 2 is made.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-tnl rev=1 covers=g10.vault-valuation-and-offer.SC-pc4,g10.vault-valuation-and-offer.SC-08z,g10.vault-valuation-and-offer.SC-sin,g10.vault-valuation-and-offer.SC-w4b,g10.vault-valuation-and-offer.SC-0ka,g10.vault-valuation-and-offer.SC-22e,g10.vault-valuation-and-offer.SC-gvt,g10.vault-valuation-and-offer.SC-cxs,g10.vault-valuation-and-offer.SC-df1,g10.vault-valuation-and-offer.SC-k5k,g10.vault-valuation-and-offer.SC-rua -->
+### g10.vault-valuation-and-offer.US2-TC8: Going back from a confirmation leaves the offer live
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* customer(collector) is on their case, holding `<offer_1>`.
+
+**Test data:**
+
+| `<pressed>` | `<confirmation>` |
+| --- | --- |
+| Accept this offer | Yes, accept |
+| Decline this offer | Yes, decline |
+
+**Steps:**
+
+1. Select `<pressed>`, then Go back on `<confirmation>`.
+
+**Expected Results:**
+
+* Nothing is sent; `<offer_1>` is still live, offering Accept this offer and Decline this offer.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-lgj rev=1 -->
+### g10.vault-valuation-and-offer.US2-TC4: An acceptance is refused for an offer that ran out or a case that moved meanwhile
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* customer(collector) has their case open, holding `<offer_1>`; then `<meanwhile>`.
+
+**Test data:**
+
+| `<meanwhile>` | `<refusal names>` |
+| --- | --- |
+| the offer expired an hour ago | an offer that ran out |
+| the offer expired while the page was open | an offer that ran out |
+| the counter accepted the offer a moment later | a case that moved under the answer |
+
+**Steps:**
+
+1. Accept the offer, and confirm.
+2. Reload.
+
+**Expected Results:**
+
+* Step 1 is refused, naming `<refusal names>`; step 2 reads the case as it now stands.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-knq rev=1 -->
+### g10.vault-valuation-and-offer.US2-TC9: A lapsed offer is closed, the collector told, and the case still awaits terms
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Answering the offer
+
+**Pre-conditions:**
+
+* The collector's case holds an offer whose expiry has just passed.
+
+**Steps:**
+
+1. Let the lapsed offers be swept.
+2. Read the case, as the collector and on the console, and the collector's inbox.
+
+**Expected Results:**
+
+* The offer reads closed; a letter tells the collector it lapsed; the case awaits terms and a new offer may be made.
+
+---
+
+## g10.vault-valuation-and-offer.US3: Collector who only wants storage agrees terms
+
+**As a** collector who asked for no loan,
+**I want** custody terms agreed against the recorded valuation,
+**so that** the item can be taken in without anybody writing a loan I did not
+ask for.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-kwy rev=1 covers=g10.vault-valuation-and-offer.SC-x56,g10.vault-valuation-and-offer.SC-jsc,g10.vault-valuation-and-offer.SC-sgl,g10.vault-valuation-and-offer.SC-lyt,g10.vault-valuation-and-offer.SC-4yo,g10.vault-valuation-and-offer.SC-p9g,g10.vault-valuation-and-offer.SC-fyi,g10.vault-valuation-and-offer.SC-r51 -->
+### g10.vault-valuation-and-offer.US3-TC1: Storage terms are agreed against the valuation alone, even with no lending bound set
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-03
+
+**Pre-conditions:**
+
+* admin(holds `vault:approve`) is on a storage case under valuation, valued at HKD5,000.00, `<environment>`.
+
+**Test data:**
+
+| `<environment>` |
+| --- |
+| outside production, every bound set |
+| in production, no loan-to-value cap and no lender name set |
+
+**Steps:**
+
+1. Agree the custody terms, and take the item through to the vault.
+
+**Expected Results:**
+
+* The case reads accepted with no offer written, then reaches the vault; nothing refuses it.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-mac rev=1 -->
+### g10.vault-valuation-and-offer.US3-TC2: Terms are refused on a case nobody has valued
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-03
+
+**Pre-conditions:**
+
+* admin(holds `vault:approve`) is on `<case>`, under valuation, with no valuation.
+
+**Test data:**
+
+| `<case>` | `<try>` |
+| --- | --- |
+| a storage case | agree the custody terms |
+| a financed case | make an offer |
+
+**Steps:**
+
+1. `<try>`.
+
+**Expected Results:**
+
+* It is refused, naming the missing valuation.
+
+---
+
+## g10.vault-valuation-and-offer.US4: Collector whose loan request the shop cannot yet price still gets the item stored
+
+**As a** collector who asked for a loan the shop is not lending against yet,
+**I want** custody terms agreed against the valuation instead,
+**so that** the item is taken in on the same paper rather than my request being
+turned away.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-9ik rev=1 -->
+### g10.vault-valuation-and-offer.US4-TC1: A financed case with no offer is taken into custody on the custody agreement alone
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-04
+
+**Pre-conditions:**
+
+* admin(holds `vault:approve`) is on a valued financed case with no offer.
+
+**Steps:**
+
+1. Agree the custody terms, and prepare the signing packet.
+
+**Expected Results:**
+
+* The case reads accepted with no offer; the packet holds the custody agreement alone, and no loan is written.
+
+---
+
+## g10.vault-valuation-and-offer.US5: Collector reads and answers an offer that replaced the last
+
+**As a** collector whose offer was replaced by a new one,
+**I want** the page to say the old offer is gone and show the new one's terms
+with Accept and Decline on it,
+**so that** I answer the offer that stands and never the one that was
+withdrawn.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-htu rev=1 covers=g10.vault-valuation-and-offer.SC-44j,g10.vault-valuation-and-offer.SC-l0m -->
+### g10.vault-valuation-and-offer.US5-TC4: A replaced offer reads closed beside the one that stands, and only that one takes an answer
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-05
+
+**Pre-conditions:**
+
+* The collector's case had two counter-offers: `<offer_1>` and a second are closed, superseded in turn, and a third is live.
+
+**Steps:**
+
+1. Open the case page.
+
+**Expected Results:**
+
+* It names only the second offer as the one `<offer_1>` was superseded by, and that second as closed in turn; Accept and Decline sit on the third alone.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-y05 rev=1 -->
+### g10.vault-valuation-and-offer.US5-TC5: An answer sent from a page still showing a replaced offer is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-valuation-and-offer-US-05
+
+**Pre-conditions:**
+
+* customer(collector) has their case open on `<offer_1>`; staff then replace it with a counter-offer.
+
+**Steps:**
+
+1. Without reloading, accept `<offer_1>` and confirm.
+2. Reload.
+
+**Expected Results:**
+
+* Step 1 is refused, naming the replaced offer.
+* Step 2 shows the counter-offer live and unanswered.
+
+---
+
+## g10.vault-valuation-and-offer.US6: Operator values a slab by its grader, grade and cert
+
+**As a** member of shop staff valuing a graded item,
+**I want** the item's grader, grade and cert beside the valuation, read from
+the item register and corrected there when the slab in my hand says otherwise,
+**so that** the figure I record is for the slab in front of me, not one typed
+from memory.
+
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-qt8 rev=1 covers=g10.vault-valuation-and-offer.SC-1yc,g10.vault-valuation-and-offer.SC-e0k,g10.vault-valuation-and-offer.SC-s2f -->
+### g10.vault-valuation-and-offer.US6-TC1: Record a valuation reads the slab's grader, grade and cert from the register, or nothing for an ungraded item
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -643,26 +740,30 @@ from memory.
 
 **Pre-conditions:**
 
-* admin(staff) is on <grade10 admin vault case page url> for `<case_1>`, under valuation.
-* `<case_1>`'s item `<item_1>` carries PSA, grade 9 and `AB12345`; the slab in hand reads grade 10.
+* admin(holds `vault:operate`) is on a case under valuation whose item the register holds as `<item>`.
+
+**Test data:**
+
+| `<item>` | `<line reads>` |
+| --- | --- |
+| PSA, grade 10, cert AB12345 | PSA, 10 and AB12345, as text no field edits |
+| an item with no grader | no line |
 
 **Steps:**
 
-1. Click Edit in the item's facts on the Case tab.
-2. Change the grade to 10 and save.
-3. Open the record-valuation dialog.
+1. Open Record a valuation, read above the amount, and record HKD25,000.00.
 
 **Expected Results:**
 
-* Step 3's line reads PSA, grade 10 and `AB12345`.
+* It shows `<line reads>`; the valuation is recorded, and the register is unchanged.
 
-<!-- trace:case id=g10.vault-valuation-and-offer.TC-49b rev=1 covers=g10.vault-valuation-and-offer.SC-1yc,g10.vault-valuation-and-offer.SC-e0k,g10.vault-valuation-and-offer.SC-s2f -->
-### grade10-site-vault-valuation-and-offer-US6-TC3-1: An item with no grader shows no slab line
+<!-- trace:case id=g10.vault-valuation-and-offer.TC-b8l rev=1 covers=g10.vault-valuation-and-offer.SC-1yc,g10.vault-valuation-and-offer.SC-e0k,g10.vault-valuation-and-offer.SC-s2f -->
+### g10.vault-valuation-and-offer.US6-TC2: A correction made on the register reaches the valuation dialog
 
 **Classification:**
 
-* **Severity:** minor
-* **Priority:** low
+* **Severity:** major
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -673,99 +774,19 @@ from memory.
 
 **Pre-conditions:**
 
-* admin(staff) is on <grade10 admin vault case page url> for `<case_2>`, under valuation.
-* `<case_2>`'s item carries no grader.
+* admin(holds `vault:operate`) is on a case under valuation whose item the register holds as PSA, grade 9, AB12345; the slab in hand reads 10.
 
 **Steps:**
 
-1. Open the record-valuation dialog on the Case tab.
+1. Select Edit in the item's facts on the Case tab, change the grade to 10, and save.
+2. Open Record a valuation.
 
 **Expected Results:**
 
-* The dialog shows no grader, grade or cert line; valued-at is offered as usual.
+* Its line reads PSA, 10 and AB12345, and offers no edit of its own.
 
 ## Settled
 
-- An offer cannot be made before a valuation is recorded: a case nobody has valued refuses the offer by name, as it refuses custody terms, and the durable capability already states it.
-- An acceptance is final whichever side gave it. An answer sent on a case the counter has accepted is refused, naming that the case moved; what is left before signing is the case's own call-off, which `grade10-site/vault/case-lifecycle` holds.
-- **A decline after the offer ran out** - the decline carries no expiry check: before the expiry sweep runs it is taken, the offer closing as `declined_by_customer` and the case going back to valuation; once the sweep has run it is refused `NO_OPEN_OFFER` (Q22)
-
-## Reconciliation
-
-**Run:** 2026-09-22 · the blind pass read this capability's `## Purpose` and
-`## Feature set`, its `user-journeys.md`, the change's `proposal.md` and
-`decisions.md`, its `ui-design.md` with the state dispositions stripped, the
-PRD pages the proposal links, and this suite for id continuity. It was denied
-every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/`
-and `tech-design.md`. The scenario pass issued
-`grade10-site-vault-valuation-and-offer-SC-21` to
-`grade10-site-vault-valuation-and-offer-SC-29`; the two readings were joined on
-the anchors after both landed.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| US1-TC1-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-07` makes the offer inside every bound; the dialog's derived figures are `grade10-site-vault-loan-and-settlement-SC-40` |
-| US1-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-13` |
-| US1-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-19` |
-| US1-TC4-1 | Covered | `grade10-site-vault-loan-and-settlement-SC-45` — a bound nobody set passes outside production |
-| US1-TC5-1 | Folded | `grade10-site-vault-valuation-and-offer-SC-30`. The loan-to-value row of the policy table in `Every offer is judged against the brand's lending policy` had no scenario at its bound; the change now opens that requirement in a MODIFIED block and the scenario lands there, at the case's own figures |
-| US1-TC6-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-04` |
-| US1-TC7-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-06` above the band, `grade10-site-vault-valuation-and-offer-SC-07` at it |
-| US1-TC8-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-09` past the window, `grade10-site-vault-valuation-and-offer-SC-05` an expiry already gone |
-| US1-TC9-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-08` |
-| US1-TC10-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-10`; the dialog naming the bound before the act is `grade10-site-vault-loan-and-settlement-SC-45` |
-| US1-TC11-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-11` |
-| US1-TC12-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-02` |
-| US1-TC13-1 | Covered elsewhere | `grade10-admin-vault-operator-queue-SC-12` — making an offer sits behind the vault approve grant |
-| US1-TC14-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-31` for the licence line, `grade10-site-vault-valuation-and-offer-SC-32` for where to pay; written with the owner's approval of M1 at acceptance |
-| US2-TC1-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-22` for the confirmation, `grade10-site-vault-valuation-and-offer-SC-16` for the case accepted |
-| US2-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-23` for the confirmation, `grade10-site-vault-valuation-and-offer-SC-14` for the request staying open |
-| US2-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-16` and `grade10-site-vault-valuation-and-offer-SC-17` — the expiry is judged when the acceptance lands; the shop's clock is how the page reads that instant, not a second rule |
-| US2-TC4-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-17`, with the closed offer taking no answer under `Only the offer that stands takes an answer` |
-| US2-TC5-1 | Raised, answered | Q47 — acceptance is final whichever side gave it: `grade10-site-vault-valuation-and-offer-SC-16` stands and `grade10-site-vault-valuation-and-offer-SC-29` refuses the collector's answer by name. What is left before signing is the case's own call-off, in `grade10-site/vault/case-lifecycle` |
-| US2-TC6-1 | Covered | the owner-only acceptance in `The collector or the counter accepts, and an expired offer cannot be accepted`, walked by `grade10-site-vault-valuation-and-offer-SC-16`; a case that is not the reader's is refused as its photographs are, `grade10-site-vault-case-intake-SC-12` |
-| US2-TC7-1 | Case added | `grade10-site-vault-valuation-and-offer-SC-21` was reached by no case: the offer's terms, its valuation and the books-no-visit line |
-| US2-TC8-1 | Case added | the Go back branch of `grade10-site-vault-valuation-and-offer-SC-22` and `grade10-site-vault-valuation-and-offer-SC-23` was reached by no case |
-| US2-TC9-1 | Case added | `grade10-site-vault-valuation-and-offer-SC-24` was reached by no case |
-| US2-TC10-1 | Case added | `grade10-site-vault-valuation-and-offer-SC-25` was reached by no case |
-| US2-TC11-1 | Case added | `grade10-site-vault-valuation-and-offer-SC-28` was reached by no case; US2-TC4-1 reads an offer that had already lapsed, not one that ran out under the reader |
-| US5-TC1-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-26` |
-| US5-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-26` and `grade10-site-vault-valuation-and-offer-SC-22` |
-| US5-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-27` |
-| US5-TC4-1 | Covered | the closed-offer rule in `Only the offer that stands takes an answer`, walked by `grade10-site-vault-valuation-and-offer-SC-26` |
-| An offer made before any valuation is recorded | Raised, answered | Q46 — the durable spec already refuses it by name, `grade10-site-vault-valuation-and-offer-SC-03`; no scenario was written |
-| An acceptance given at the counter, re-answered before signing | Raised, answered | Q47 — it is not re-answered; see US2-TC5-1 |
-| Folded into `spec.md` | none | the blind pass carried no behaviour the scenarios and the durable spec leave unstated |
-| Dropped as a misreading | none | — |
-| Uncovered anchors | none | every scenario from `grade10-site-vault-valuation-and-offer-SC-21` to `grade10-site-vault-valuation-and-offer-SC-29` is walked by a case |
-| Contradicted readings | none | — |
-
-**Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journeys, the proposal, `decisions.md` with its empty `## Raised`, `ui-design.md` with its anchors stripped, the Operator Console and Items PRD pages, and the durable valuation-and-offer suite for id continuity with its Reconciliation stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite, the delta spec, `tech-design.md`, `tasks.md` and the operator-queue delta. It is a statement, not proof.
-
-- **Folded** - `grade10-site-vault-valuation-and-offer-US1-TC15-1` into `grade10-site-vault-valuation-and-offer-SC-35`: a valuation keeps no grader, grade or cert of its own, so one sent with them leaves the register as it was; `grade10-site-vault-valuation-and-offer-US6-TC1-1` into `grade10-site-vault-valuation-and-offer-SC-33`; `grade10-site-vault-valuation-and-offer-US6-TC2-1` into `grade10-site-vault-valuation-and-offer-SC-35`; `grade10-site-vault-valuation-and-offer-US6-TC3-1` into `grade10-site-vault-valuation-and-offer-SC-34`
-- **Added by QA2** - none
-- **Raised** - none from this suite
-- **Rejected** - none
-- **Contradicted** - none
-- **Uncovered anchors** - none: US-06 has a case for each scenario, and US-01 gains one
-
-**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/cases.ts` (`accept`, `decline`, `detail`, `mine`) and `valuation/offers.ts`. It is a statement, not proof.
-
-- **Raised, folded into spec** - none
-- **Raised, escalated** - a decline after expiry, landed as Q22; `grade10-site-vault-valuation-and-offer-US2-TC4-2`'s decline rows read the worker as it stands
-- **Raised, rejected** - none
-- **Re-versioned to the API** - every case whose behaviour the worker keeps and whose run walked the case page or the case list: `grade10-site-vault-valuation-and-offer-US2-TC1-2`, `grade10-site-vault-valuation-and-offer-US2-TC2-2`, `grade10-site-vault-valuation-and-offer-US2-TC3-2`, `grade10-site-vault-valuation-and-offer-US2-TC4-2`, `grade10-site-vault-valuation-and-offer-US2-TC5-2`, `grade10-site-vault-valuation-and-offer-US2-TC6-2`, `grade10-site-vault-valuation-and-offer-US2-TC7-2`, `grade10-site-vault-valuation-and-offer-US2-TC9-2`, `grade10-site-vault-valuation-and-offer-US2-TC10-2`, `grade10-site-vault-valuation-and-offer-US2-TC11-2`, `grade10-site-vault-valuation-and-offer-US5-TC1-2`, `grade10-site-vault-valuation-and-offer-US5-TC2-2`, `grade10-site-vault-valuation-and-offer-US5-TC3-2`
-- **Deprecated** - the cases whose subject is a removed screen: `grade10-site-vault-valuation-and-offer-US2-TC8-1`, going back from a confirmation; `grade10-site-vault-valuation-and-offer-US5-TC4-1`, the page naming only the latest close where the read carries every offer
-- **Carried into a bump** - QA1's new ids that re-covered an earlier case leave the delta: `US2-TC12-1` into `grade10-site-vault-valuation-and-offer-US2-TC1-2` and `grade10-site-vault-valuation-and-offer-US2-TC7-2`; `US2-TC13-1` into `grade10-site-vault-valuation-and-offer-US2-TC2-2`; `US2-TC14-1` into `grade10-site-vault-valuation-and-offer-US2-TC3-2` and `grade10-site-vault-valuation-and-offer-US2-TC4-2`; `US2-TC15-1` into `grade10-site-vault-valuation-and-offer-US2-TC5-2`; `US2-TC16-1` into `grade10-site-vault-valuation-and-offer-US2-TC6-2`; `US2-TC17-1` into `grade10-site-vault-valuation-and-offer-US2-TC9-2`; `US2-TC18-1` into `grade10-site-vault-valuation-and-offer-US2-TC10-2`; `US5-TC5-1` into `grade10-site-vault-valuation-and-offer-US5-TC1-2`; `US5-TC6-1` into `grade10-site-vault-valuation-and-offer-US5-TC2-2` and `grade10-site-vault-valuation-and-offer-US5-TC3-2`
-- **Joined** - `grade10-site-vault-valuation-and-offer-SC-21` into `grade10-site-vault-valuation-and-offer-US2-TC7-2`; `-SC-22` into `grade10-site-vault-valuation-and-offer-US2-TC1-2`; `-SC-23` into `grade10-site-vault-valuation-and-offer-US2-TC2-2`; `-SC-24` into `grade10-site-vault-valuation-and-offer-US2-TC9-2`; `-SC-25` into `grade10-site-vault-valuation-and-offer-US2-TC10-2`; `-SC-28` into `grade10-site-vault-valuation-and-offer-US2-TC11-2` and `grade10-site-vault-valuation-and-offer-US2-TC4-2`; `-SC-29` into `grade10-site-vault-valuation-and-offer-US2-TC5-2`; `-SC-26` into `grade10-site-vault-valuation-and-offer-US5-TC1-2`; `-SC-27` into `grade10-site-vault-valuation-and-offer-US5-TC3-2`
-- **Contradicted** - none
-- **Uncovered anchors** - none
-- **Automated cases re-versioned** - `grade10-site-vault-valuation-and-offer-US2-TC1-2`, `grade10-site-vault-valuation-and-offer-US2-TC2-2`, `grade10-site-vault-valuation-and-offer-US2-TC4-2`, `grade10-site-vault-valuation-and-offer-US2-TC5-2`, `grade10-site-vault-valuation-and-offer-US2-TC6-2`, `grade10-site-vault-valuation-and-offer-US2-TC7-2`, `grade10-site-vault-valuation-and-offer-US2-TC9-2`, `grade10-site-vault-valuation-and-offer-US2-TC10-2`, `grade10-site-vault-valuation-and-offer-US2-TC11-2`, `grade10-site-vault-valuation-and-offer-US5-TC1-2`, `grade10-site-vault-valuation-and-offer-US5-TC2-2`, `grade10-site-vault-valuation-and-offer-US5-TC3-2` were decided by `offer.spec.ts` at `-1`; each is `manual` until task 4.4 retitles its API walk and flips it
-
-### Manual
-
-| Manual | Why |
-| --- | --- |
-| US1-TC10-1 | The refusal outside production is proved by US1-TC4-1. What a person walks is the brand's production configuration before the shop lends: no run is made against production |
-| US1-TC11-1 | Same reading, for the lender's registered name |
-| US1-TC14-1 | Same reading, for the licence number and the FPS id |
+- A case nobody has valued refuses an offer by name, as it refuses custody terms.
+- An acceptance is final whichever side gave it; an answer sent on a case the counter has accepted is refused as a case that moved. What is left before signing is the case's own call-off, held by `grade10-site/vault/case-lifecycle`.
+- A decline carries no expiry check: before the expiry sweep it is taken and the case goes back to valuation; once the sweep has run it is refused (Q22).
