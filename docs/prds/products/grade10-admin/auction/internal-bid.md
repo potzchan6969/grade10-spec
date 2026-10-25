@@ -28,18 +28,18 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
   recipient in each billing address, never the profile's name
 - **Kept by a bid** - a Placed or Not placed bid keeps its profile and
   commit time, even if the profile is retired
-- 🚧 **Before its time** - a reserve holder may change the amount or commit
+- **Before its time** - a reserve holder may change the amount or commit
   time, or remove the whole internal bid. The house has not bid before its
   commit time
-- 🚧 **At its time** - Grade10 commits it once. An amount below the minimum
+- **At its time** - Grade10 commits it once. An amount below the minimum
   next bid, or a listing still Created, leaves it Not placed; publishing a
   Created listing later does not place it
-- 🚧 **Not placed** - until the effective close, a reserve holder may remove
+- **Not placed** - until the effective close, a reserve holder may remove
   it or save it again with the same profile and commit time. A save while the
   listing is still Created keeps it Not placed. Once bidding opens, a save at
   or above the minimum next bid places it; a lower amount below that minimum
   stays Not placed, while a raise or unchanged amount below it is refused
-- 🚧 **After it bids** - the time is fixed; the amount goes up whenever the
+- **After it bids** - the time is fixed; the amount goes up whenever the
   lot takes a bid, or down only where the leader and the current bid stay the
   same and never below a bid already placed for the house
 - **Listing edits** - a window or starting-price change on a Created
@@ -54,7 +54,7 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
   winner setup or invoice at close. The operator sends the invoice, lets it
   expire after 7 days and cancels the order by hand; no order letter is sent to
   any recipient
-- 🚧 **House order total** - the quote of an internal bidder's order reads like
+- **House order total** - the quote of an internal bidder's order reads like
   any HKD quote: the USD lines, then one HKD Subtotal and total
 - **Audit** - each set, change and removal is recorded without the amount
   or the time
@@ -70,7 +70,7 @@ the change's `decisions.md`.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Undisclosed | 🚧 In flight | The house bids under a listing pseudonym and nothing tells collectors it may bid; Legal confirms the terms before release. Disclosure was ruled out because it tells a collector when to stop. | Product (@htonyl) |
+| Undisclosed | ❓ Legal confirms the terms | The house bids under a listing pseudonym and nothing tells collectors it may bid; Legal confirms the terms before release. Disclosure was ruled out because it tells a collector when to stop. | Product (@htonyl) |
 | Set time | Decided | Committed at a time the admin sets, not from the start, so early bids meet no floor. | Product (@htonyl) |
 | Staff see House | Decided | Other operators read public house bids as House, with each placed amount and Accepted At; they see no account, profile or maximum, and no row or commit time before the first house bid. A placeholder account was ruled out because it shows staff a made-up account. | Product (@htonyl) |
 :::
