@@ -1,52 +1,24 @@
 # shared/console/visual-standard Test Cases
 
-**Status:** pending-review · 0/5
-**Drafts styled:** 2026-09-02, tcs-rules r1
+**Status:** pending-review · 0/3
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
-## shared-console-visual-standard-US1: Operator moves between consoles in one shift
+## Background
+
+* `<console url>` is the Grade10 console and `<zzz console url>` the ZZZ console of the environment under test; one operator can open both.
+* A console's refused, empty and loading reads, its tabs, filters and confirmation dialogs are walked in the console's own suites; these cases compare consoles side by side.
+
+## shared.console-visual-standard.US1: Operator moves between consoles in one shift
 
 **As an** operator,
 **I want** every console I open to arrange the same kinds of fact the same way,
 **so that** moving between nine of them costs me no re-reading.
 
 <!-- trace:case id=g10.shared-visual-standard.TC-3h8 rev=1 covers=g10.shared-visual-standard.SC-f6s,g10.shared-visual-standard.SC-04e,g10.shared-visual-standard.SC-cm9 -->
-### shared-console-visual-standard-US1-TC1-1: Two consoles render the same control the same way
+### shared.console-visual-standard.US1-TC1: Two consoles arrange the same kind of control the same way
 
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-console-visual-standard-US-01
-
-**Pre-conditions:**
-Signed in as an operator who can open `<grade10 admin console url>` and `<a second admin console url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a second admin console url | The other application admin console URL used for the shared-control comparison in the test environment; bind its URL only |
-| a shared control kind | The same shared control kind rendered in both admin consoles for this comparison; bind its component export only |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 admin console url>` and note how `<a shared control kind>` is arranged.
-2. Navigate to `<a second admin console url>` and check the same kind of control.
-
-**Expected Results:**
-
-* Both consoles render that control from the same vocabulary.
-* No admin surface mixes a second vocabulary for it.
-
-<!-- trace:case id=g10.shared-visual-standard.TC-a78 rev=1 covers=g10.shared-visual-standard.SC-f6s,g10.shared-visual-standard.SC-04e,g10.shared-visual-standard.SC-cm9 -->
-### shared-console-visual-standard-US1-TC2-1: Shared customer component matches the console around it
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -55,108 +27,68 @@ Signed in as an operator who can open `<grade10 admin console url>` and `<a seco
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-visual-standard-US-01
 
 **Pre-conditions:**
-An admin console renders a component that customer surfaces also render.
+
+* An operator is signed in on `<console url>` and `<zzz console url>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| a shared customer component | The shared customer component also shown in this admin console; bind its component export only |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| `<control>` |
+| --- |
+| a queue's filter and its rows |
+| an account panel beside a list |
+| a confirmation dialog |
 
 **Steps:**
 
-1. Navigate to `<grade10 admin console url>` on a surface that shows `<a shared customer component>`.
-2. Check that component against the console around it.
+1. Read `<control>` on `<console url>`, then on `<zzz console url>`.
 
 **Expected Results:**
 
-* One definition serves the admin and customer surfaces.
-* The admin rendering is not visibly foreign to the console around it.
+* Both arrange it the same way, in the same parts and order; no surface of either shows it in a second style.
 
-<!-- trace:case id=g10.shared-visual-standard.TC-kmm rev=1 covers=g10.shared-visual-standard.SC-f6s,g10.shared-visual-standard.SC-04e,g10.shared-visual-standard.SC-cm9 -->
-### shared-console-visual-standard-US1-TC3-1: Refused read stays distinguishable after the swap
+<!-- trace:case id=g10.shared-visual-standard.TC-a78 rev=1 covers=g10.shared-visual-standard.SC-f6s,g10.shared-visual-standard.SC-04e,g10.shared-visual-standard.SC-cm9 -->
+### shared.console-visual-standard.US1-TC2: A component the site also shows looks native in the console
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** high
+* **Severity:** minor
+* **Priority:** low
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-console-visual-standard-US-01
 
 **Pre-conditions:**
-`<The console read endpoint>` is mocked to refuse the request.
 
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| The console read endpoint | The console read endpoint used by this surface in the test environment; bind its endpoint URL only |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+* An operator opens a `<console url>` page showing a component the Grade10 site also shows.
 
 **Steps:**
 
-1. Navigate to `<grade10 admin console url>` on a surface that reads that endpoint.
-2. Check the loading, refused, and empty presentations.
+1. Read the component beside the console around it, then the same component on the site.
 
 **Expected Results:**
 
-* The refused read renders in the error tone, distinct from empty.
-* Loading, refused, and empty remain three distinguishable answers.
+* It reads as the same component on both, and does not look foreign to the console around it.
 
 ---
 
-## shared-console-visual-standard-US2: Operator recognises which brand they are administering
+## shared.console-visual-standard.US2: Operator recognises which brand they are administering
 
 **As an** operator who administers both brands,
 **I want** each console to look like the brand it belongs to,
 **so that** I never act on one brand's data believing it is the other's.
 
 <!-- trace:case id=g10.shared-visual-standard.TC-fsv rev=1 covers=g10.shared-visual-standard.SC-aro,g10.shared-visual-standard.SC-uk3 -->
-### shared-console-visual-standard-US2-TC1-1: Two brands differ only by the brand mechanism
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-console-visual-standard-US-02
-
-**Pre-conditions:**
-Signed in as an operator who can open both brands' admin consoles.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
-| zzz admin console url | The ZZZ admin console URL, on a different brand from Grade10 in the test environment; bind its URL only |
-
-**Steps:**
-
-1. Navigate to `<grade10 admin console url>` and note visual identity.
-2. Navigate to `<zzz admin console url>` on the same console surface and note visual identity.
-
-**Expected Results:**
-
-* Every visual difference between the two comes from the brand mechanism.
-* Neither rendering carries a brand value written into a block.
-
-<!-- trace:case id=g10.shared-visual-standard.TC-nhz rev=1 covers=g10.shared-visual-standard.SC-aro,g10.shared-visual-standard.SC-uk3 -->
-### shared-console-visual-standard-US2-TC2-1: A brand visual value has one source
+### shared.console-visual-standard.US2-TC1: The two brands' consoles differ only in their brand
 
 **Classification:**
 
@@ -165,26 +97,19 @@ Signed in as an operator who can open both brands' admin consoles.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** shared-console-visual-standard-US-02
 
 **Pre-conditions:**
-Signed in as an operator on `<grade10 admin console url>`.
 
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| a brand visual value | The brand-owned visual value changed for the comparison; bind its configured value only |
-| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+* An operator is signed in on `<console url>` and `<zzz console url>`.
 
 **Steps:**
 
-1. Navigate to `<grade10 admin console url>`.
-2. Check which mechanism sets `<a brand visual value>`.
+1. Open the same page on both consoles, and compare them.
 
 **Expected Results:**
 
-* Exactly one mechanism sets that value.
-* No second mechanism sets the same value to a different result.
+* Each reads as its own brand; every difference is the brand's colour, type or mark, never a part's layout or wording.
