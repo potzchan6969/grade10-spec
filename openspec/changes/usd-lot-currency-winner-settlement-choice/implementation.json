@@ -331,5 +331,550 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-25T04:32:59.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set line that restates the requirement recorded at its own entry (an internal bidder's quote reads like any HKD quote); it adds no behaviour of its own."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+        "anchors": [
+          "Requirement: An internal bidder wins a lot the house leads at its close"
+        ],
+        "classification": "semantic",
+        "reason": "The quote of an internal bidder's order now reads as any HKD quote: the USD lines, then one conversion into the HKD total (SC-73 now reads 103000 minor units, not 103100). This change's internal-order close and invoice still hold: FPS on HKD, no setup step, no letter.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/admin/auction/internal-bid.spec.ts - whole file passed 2026-10-25 (10 passed: TC-rzs, TC-dqh, TC-kgs, TC-2d2)",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set lines that restate the requirements recorded at their own entries (whole-dollar starting price) and add the text, relist and search lines of other changes; they change nothing this change's USD listing relies on."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": [
+          "Purpose"
+        ],
+        "classification": "editorial",
+        "reason": "Purpose paragraph gained one sentence about listing texts in each language, which belongs to another change."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": [
+          "Requirement: Prices and window are writable before publish"
+        ],
+        "classification": "semantic",
+        "reason": "A starting price must be a whole-dollar amount in USD and one with cents is refused on the form and the API; a stored price with cents is not rewritten. This change's USD listings and walks use whole-dollar prices, and the refusal does not touch the single-currency rule.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/admin/auction/usd-listing.spec.ts - whole file passed 2026-10-25 (10 passed), with card-rules.spec.ts (5 passed) and payment-settings.spec.ts (6 passed, 5 skipped by design)",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Three stories for listing texts in each language were added; no existing story changed."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/payment-settings/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set lines that restate the quote and send requirements recorded at their own entries (the HKD preview, the USD quote)."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: An operator edits the address or method before send"
+        ],
+        "classification": "semantic",
+        "reason": "A confirmed historical bank order with no recorded rail reads as unknown, and an edit before send must supply an offered rail. New confirmations still carry the rail the winner picked, as this change builds them.",
+        "evidence": [
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts",
+          "apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts - whole file passed 2026-10-25 (20 passed: TC-u4w, TC-70n, TC-r3c, TC-9yj, TC-qz7, TC-jru and the quote, reissue and telephone-setup rows)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: An operator quotes and sends the invoice"
+        ],
+        "classification": "semantic",
+        "reason": "Quote and send: the order shows its USD lines and an HKD order a converted Subtotal; a historical order with no rail needs an offered rail before its first send; the totals follow the converted Subtotal (SC-48 reads 105190, not 105300). This change's quote in USD and send in the settlement currency are unchanged in shape.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts - whole file passed 2026-10-25 (20 passed: TC-u4w, TC-70n, TC-r3c, TC-9yj, TC-qz7, TC-jru and the quote, reissue and telephone-setup rows)",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: An operator reissues a sent invoice"
+        ],
+        "classification": "semantic",
+        "reason": "Reissue: the preview shows the same lines as a first send with the previous total beside the new one; a historical order with no rail needs an offered rail; the figures follow the converted Subtotal. A reissue still changes currency or rail and keeps the replaced invoice's amounts.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts - whole file passed 2026-10-25 (20 passed: TC-u4w, TC-70n, TC-r3c, TC-9yj, TC-qz7, TC-jru and the quote, reissue and telephone-setup rows)",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: An operator reopens the address form"
+        ],
+        "classification": "semantic",
+        "reason": "A recorded setup of a bank transfer must carry a supported rail; the unknown-rail state applies to historical rows only and does not relax the internal HKD and FPS rule. The telephone setup with a currency of this change still records currency, method and rail.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts - whole file passed 2026-10-25 (20 passed: TC-u4w, TC-70n, TC-r3c, TC-9yj, TC-qz7, TC-jru and the quote, reissue and telephone-setup rows)",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: The payment processing fee follows the invoice's payment method"
+        ],
+        "classification": "semantic",
+        "reason": "The card fee is computed on the converted HKD Subtotal and a bank transfer fee converts alone, below the Subtotal. This change prices the fee in the settlement currency and still does.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts - whole file passed 2026-10-25 (20 passed: TC-u4w, TC-70n, TC-r3c, TC-9yj, TC-qz7, TC-jru and the quote, reissue and telephone-setup rows)",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts - whole file passed 2026-10-25 (36 passed, 1 skipped by design): TC-52z, TC-vwm, TC-7qs, the Order Summary and View Bank Details rows"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Requirement: The quote is typed in USD and read in the settlement currency"
+        ],
+        "classification": "semantic",
+        "reason": "The quote reads the USD lines, then the HKD Subtotal, fee and total, with no rate and no HKD amount beside a line, in operator money shape. This change's quote typed in USD and read in the settlement currency holds.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts - whole file passed 2026-10-25 (20 passed: TC-u4w, TC-70n, TC-r3c, TC-9yj, TC-qz7, TC-jru and the quote, reissue and telephone-setup rows)",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "One story (post-sale-US-21, the HKD preview) was added; no existing story changed."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set line that restates the requirement recorded at the next entry (first offered currency and method preselected)."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+        "anchors": [
+          "Requirement: An operator makes a test winner in one step"
+        ],
+        "classification": "semantic",
+        "reason": "A test winner's order setup now preselects the first offered currency and its first offered method instead of preselecting nothing. This change's setup offers USD or HKD; the preselection is the accepted refinement of task 11.9.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts - whole file passed on the E2E stack on 2026-10-25 (21 passed: TC-ayp, TC-wq7, TC-pes, TC-a8g, TC-rwy, TC-7j7 and the rail rows)",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/test-winners/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "One word in a 'Walked by' note changed; no story changed."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+        "anchors": [
+          "Requirement: An open listing reads Leading or Outbid"
+        ],
+        "classification": "editorial",
+        "reason": "Wording only: the 'Active tab' of My Auctions became 'an open row' because another change removed the tabs. The row rules (open status, Leading, no minimum next bid) are unchanged, and this change touches no My Auctions surface."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Story US-07 reads My Auctions as one list instead of three tabs; the tab removal belongs to remove-my-auction-orders, and this change touches no My Auctions surface."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set lines that restate the requirement recorded at the next entry (the identity bar and the account's requests)."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+        "anchors": [
+          "Requirement: A bid at or above the identity bar needs a verified bidder"
+        ],
+        "classification": "semantic",
+        "reason": "The requirement is renamed and widened: a bid needs the bar (US$15,000, USD, no conversion) and every subject the account's requests name; an unmet request holds a new or raised maximum. The US$15,000 bar, its comparison with no conversion and the unchanged route below it hold as this change built them.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts - whole file passed 2026-10-25 (24 passed, 1 skipped by design): TC-zsd and TC-5gi at US$15,000, TC-49i below the bar",
+          "apps/backend/grade10/store/test/db/identity.spec.ts passed 2026-10-25 (46 passed), the bar at 1500000 and 1499900"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set lines that restate the bid-increment requirements recorded at their own entries (configured schedule, whole-dollar bids, USD only)."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+        "anchors": [
+          "Purpose"
+        ],
+        "classification": "editorial",
+        "reason": "Purpose paragraph says the schedule is configuration; it adds no behaviour."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+        "anchors": [
+          "Requirement: Every lot is bid in USD and no other currency stays"
+        ],
+        "classification": "semantic",
+        "reason": "SC-13's minimum now reads the current bid plus the configured increment instead of a fixed figure. The overwritten HKD listing still bids on the one USD schedule.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts - whole file passed 2026-10-25 (24 passed: TC-0lh, TC-qui, TC-5ez, TC-9do, TC-kyx, TC-pn8, TC-sze row 1, TC-y0l, TC-d9d)",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+        "anchors": [
+          "Requirement: Grade10 owns the supported-currency schedules"
+        ],
+        "classification": "semantic",
+        "reason": "The USD schedule is configuration with whole-dollar tiers that apply to every lot at the next bid; no requirement states a tier amount. This change's single USD schedule for every lot is unchanged.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts - whole file passed 2026-10-25 (24 passed: TC-0lh, TC-qui, TC-5ez, TC-9do, TC-kyx, TC-pn8, TC-sze row 1, TC-y0l, TC-d9d)",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+        "anchors": [
+          "Requirement: The minimum uses the amount being beaten"
+        ],
+        "classification": "semantic",
+        "reason": "The minimum reads the configured schedule; a bid, a maximum and a starting price are whole-dollar amounts and a stored price with cents opens at the next whole dollar. This change's USD bids and its boundary rows hold.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts - whole file passed 2026-10-25 (24 passed: TC-0lh, TC-qui, TC-5ez, TC-9do, TC-kyx, TC-pn8, TC-sze row 1, TC-y0l, TC-d9d)",
+          "apps/frontend/grade10/e2e/tests/auction/auction/auction.spec.ts - whole file passed 2026-10-25 (24 passed, 1 skipped by design): TC-zsd and TC-5gi at US$15,000, TC-49i below the bar",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-payment-method/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bidder-suspension/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "A story for listing texts in each language was added; no existing story changed."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set lines that restate the letter requirement recorded at the next entry."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+        "anchors": [
+          "Requirement: Order letters read the currency the winner pays in"
+        ],
+        "classification": "semantic",
+        "reason": "After the winner picks, a letter that names only a total reads the Order Total, and the payment-received letter lists the USD lines then the HKD Subtotal, fee and total; the won-lot letter still names the USD winning bid alone. This change's letters in the settlement currency hold.",
+        "evidence": [
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts",
+          "packages/grade10-auction/backend test/email/emailPort.test.ts and test/services/auctions/invoicePdf.test.ts passed 2026-10-25 (78 passed)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set lines that restate the winner-order requirements recorded at their own entries (preselection, convert once, Subtotal and note, historical rail)."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: A bank transfer invoice shows how to pay"
+        ],
+        "classification": "semantic",
+        "reason": "A historical confirmed bank order with no recorded rail reads bank transfer with an unknown rail; a newly confirmed or issued invoice still shows only the rail the winner picked, as this change builds it.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts - whole file passed 2026-10-25 (36 passed, 1 skipped by design): TC-52z, TC-vwm, TC-7qs, the Order Summary and View Bank Details rows",
+          "apps/backend/grade10/auction pglite suites passed 2026-10-25 (8 files, 113 tests): test/db/orders/quote.spec.ts, orders/setup.spec.ts, sweeps/orderLetterTimeline.spec.ts, listings/startingPriceWholeDollar.spec.ts, bidding/configuredIncrements.spec.ts, bidding/openingPrice.spec.ts, trpc/testWinners.spec.ts, internalBids/internalOrder.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: An HKD invoice, receipt and letter carry HKD only"
+        ],
+        "classification": "semantic",
+        "reason": "The requirement 'An HKD invoice, receipt and letter carry HKD only' is withdrawn: the documents now list the USD lines and end in an HKD Subtotal, fee and total. The invoice and receipt still settle in HKD for an HKD order.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/usd-settlement-pay.spec.ts - whole file passed 2026-10-25 (3 passed: HKD with FPS, USD with SWIFT, USD by card, each through the sent invoice and payment)",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts - whole file passed 2026-10-25 (36 passed, 1 skipped by design): TC-52z, TC-vwm, TC-7qs, the Order Summary and View Bank Details rows",
+          "packages/grade10-auction/backend test/email/emailPort.test.ts and test/services/auctions/invoicePdf.test.ts passed 2026-10-25 (78 passed)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: An HKD order converts each USD line at a fixed rate and rounds it up"
+        ],
+        "classification": "semantic",
+        "reason": "An HKD order converts the sum of its USD lines once and rounds it up to the cent, and a bank transfer fee converts alone. This change's HKD order priced in HKD from USD amounts holds, and the totals follow the converted Subtotal.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts - whole file passed 2026-10-25 (20 passed: TC-u4w, TC-70n, TC-r3c, TC-9yj, TC-qz7, TC-jru and the quote, reissue and telephone-setup rows)",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/usd-settlement-pay.spec.ts - whole file passed 2026-10-25 (3 passed: HKD with FPS, USD with SWIFT, USD by card, each through the sent invoice and payment)",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts - whole file passed 2026-10-25 (36 passed, 1 skipped by design): TC-52z, TC-vwm, TC-7qs, the Order Summary and View Bank Details rows"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: Invoice fields"
+        ],
+        "classification": "semantic",
+        "reason": "Invoice fields: under HKD the lines keep their USD amounts, the Subtotal is the converted sum, the fee follows it, and an invoice carries one supported rail. This change's settlement currency and rail fields on the invoice hold.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/usd-settlement-pay.spec.ts - whole file passed 2026-10-25 (3 passed: HKD with FPS, USD with SWIFT, USD by card, each through the sent invoice and payment)",
+          "apps/frontend/grade10/e2e/tests/admin/auction/post-sale/usd-quote.spec.ts - whole file passed 2026-10-25 (20 passed: TC-u4w, TC-70n, TC-r3c, TC-9yj, TC-qz7, TC-jru and the quote, reissue and telephone-setup rows)",
+          "packages/grade10-auction/backend test/email/emailPort.test.ts and test/services/auctions/invoicePdf.test.ts passed 2026-10-25 (78 passed)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: The Order Summary keeps USD lines and splits its total under HKD"
+        ],
+        "classification": "semantic",
+        "reason": "The Order Summary requirement is replaced by one that lists the USD lines and an HKD Subtotal, fee and Order Total with a conversion note. This change's USD summary with one total and its HKD summary hold.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts - whole file passed 2026-10-25 (36 passed, 1 skipped by design): TC-52z, TC-vwm, TC-7qs, the Order Summary and View Bank Details rows",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/usd-settlement-pay.spec.ts - whole file passed 2026-10-25 (3 passed: HKD with FPS, USD with SWIFT, USD by card, each through the sent invoice and payment)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: The winner chooses a payment method with the address"
+        ],
+        "classification": "semantic",
+        "reason": "The payment step preselects the first method the currency offers; bank rails read no fee line; a historical confirmed bank order is a distinct legacy state. This change's per-currency choices, unavailable methods and refusal of a confirmation naming one hold.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts - whole file passed on the E2E stack on 2026-10-25 (21 passed: TC-ayp, TC-wq7, TC-pes, TC-a8g, TC-rwy, TC-7j7 and the rail rows)",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts - whole file passed 2026-10-25 (36 passed, 1 skipped by design): TC-52z, TC-vwm, TC-7qs, the Order Summary and View Bank Details rows"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Requirement: The winner chooses a settlement currency at order setup"
+        ],
+        "classification": "semantic",
+        "reason": "The settlement choice opens with the first offered currency selected and a single offered currency is the selection; a confirmation with no currency is still refused. This is the accepted refinement of task 11.9.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts - whole file passed on the E2E stack on 2026-10-25 (21 passed: TC-ayp, TC-wq7, TC-pes, TC-a8g, TC-rwy, TC-7j7 and the rail rows)"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Stories US-26 and US-27 are rewritten to the USD-lines-and-HKD-total reading recorded at the requirement entries above; no story is added or removed."
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set lines for the gallery magnifier, which belongs to another change."
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Line wrapping of a 'Walked by' note."
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite is a derived reading of the spec: cases were regenerated, re-numbered, re-revised and had their automation status flipped by other changes. It states no requirement, and this change's cases are covered by the walks, which pass."
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "editorial",
+        "reason": "Feature-set lines that restate the winner-order component requirements recorded at the next entries."
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/spec.md",
+        "anchors": [
+          "Requirement: The winner order takes the settlement choice, payment choices, two totals and one rail's bank details"
+        ],
+        "classification": "semantic",
+        "reason": "The component contract no longer takes the settlement choice or payment choices; the application owns setup, and the component renders the Subtotal and fee rows. This change's winner order surface offers its setup choice in the application's setup dialog, which the walks cover.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts - whole file passed on the E2E stack on 2026-10-25 (21 passed: TC-ayp, TC-wq7, TC-pes, TC-a8g, TC-rwy, TC-7j7 and the rail rows)",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts - whole file passed 2026-10-25 (36 passed, 1 skipped by design): TC-52z, TC-vwm, TC-7qs, the Order Summary and View Bank Details rows"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/spec.md",
+        "anchors": [
+          "Requirement: The winner-order surface exports"
+        ],
+        "classification": "semantic",
+        "reason": "The exports list drops the settlement and payment-choice types and states that the panel offers no choice, matching the previous entry.",
+        "evidence": [
+          "apps/frontend/grade10/e2e/tests/auction/usd-settlement-choice.spec.ts - whole file passed on the E2E stack on 2026-10-25 (21 passed: TC-ayp, TC-wq7, TC-pes, TC-a8g, TC-rwy, TC-7j7 and the rail rows)",
+          "apps/frontend/grade10/e2e/tests/auction/winner-order/keep-us1.spec.ts - whole file passed 2026-10-25 (36 passed, 1 skipped by design): TC-52z, TC-vwm, TC-7qs, the Order Summary and View Bank Details rows"
+        ]
+      }
+    ]
+  }
 }
