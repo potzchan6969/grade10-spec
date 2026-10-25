@@ -33,5 +33,17 @@
         "auction-service"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-25T06:00:00.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/auction/bidding-history/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "US9-TC1's fallback row named 123@example.com, which the avatar requirement's derivation (first A-Z or 0-9) reads as 1; the row now names _@example.com, an email with no letter or digit, so it tests the B fallback it meant to. No requirement changes."
+      }
+    ]
+  }
 }
