@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "925987f258a0ad4acfc68ecd964d5ecd38dd8a3148d0229bd9ff7185070d4f91"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "1e9a62ba75bb99e79b65d9055a9f97c20b2423a3",
+    "capturedAt": "2026-10-26T13:08:03.503Z",
+    "targets": [
+      {
+        "path": "openspec/changes/listing-search-suggestions/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+        "anchors": [
+          "Requirement: Free text offers suggestions and commits as a narrowing"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A search suggestion carries display fields",
+          "Requirement: The listing search field offers supplied suggestions",
+          "Requirement: The listing surface exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
