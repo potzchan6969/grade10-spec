@@ -5,7 +5,7 @@
 - One discount code or coupon per order
   - Transport: a typed discount code, an order coupon, a product coupon and a
     loyalty reward's own coupon each ride as one Shopify Discount code; a gift
-    does too online, and at the till is its own line discounted to nothing
+    is handed over at the till alone, as its own line discounted to nothing
   - At most one applies per order; a checkout eligible for more than one has
     the collector pick
   - A site discount the shop applies in place of the code keeps the sale;
@@ -94,15 +94,20 @@ allocations.
 
 ### Requirement: A coupon reaches the order as its own ephemeral Shopify Discount code
 
-A product coupon, a gift, and a loyalty reward's own coupon SHALL each reach
-the order as their own single-use Shopify Discount code. Grade10 SHALL NOT
-weld a custom discount onto the draft order's lines for any of them.
+A product coupon and a loyalty reward's own coupon SHALL each reach the order
+as their own single-use Shopify Discount code. Grade10 SHALL NOT weld a custom
+discount onto the draft order's lines for any of them.
 
-At the POS till, a gift SHALL instead reach the sale as its own line,
+A gift - a reward's or one the store mints - SHALL be handed over at the POS
+till alone, whatever channels its definition names: online SHALL refuse it as
+the wrong channel, and the loyalty console SHALL lock a gift reward's channel
+to In store. At the till a gift SHALL reach the sale as its own line,
 discounted to nothing, and SHALL carry no code: a code as well would ask the
 shop for the same benefit twice and spend the order's one discount-code slot
 on a line already at nothing. Settlement SHALL read a till gift by that line,
-as it reads a code.
+as it reads a code. A sale rung below the gift's minimum spend after it was
+applied SHALL take the gift's line back off and return the coupon to the
+member, and staff SHALL be told.
 
 Every such code SHALL be minted when an order claims the coupon, and SHALL be
 scoped to the member's paired Shopify customer. A member with no paired
@@ -117,14 +122,14 @@ code that is not scoped to its member is a bearer string anyone may spend.
 - **WHEN** the checkout is submitted
 - **THEN** the draft order carries the coupon's own single-use Shopify Discount code, not a welded line discount
 
-<!-- trace:scenario id=g10.store-discounts.SC-o8t rev=1 -->
-#### Scenario: grade10-site-store-discounts-SC-02 - A gift settles by its own Shopify Discount code
+<!-- trace:scenario id=g10.store-discounts.SC-o8t rev=2 -->
+#### Scenario: grade10-site-store-discounts-SC-02 - A gift is refused online
 **Serves:** grade10-site-store-discounts-US-01 - Collector redeems a coupon at checkout
 
-- **GIVEN** a member holding a gift whose basket clears its threshold
-- **WHEN** the checkout is submitted
-- **THEN** the draft order carries the gift product at a full cut through the gift's own single-use Shopify Discount code
-- **AND** the gift's line carries no discount of its own, so the benefit is taken exactly once
+- **GIVEN** a member holding a gift, a reward's or a store coupon, whose basket clears its threshold
+- **WHEN** they apply it to an online checkout
+- **THEN** it is refused as the wrong channel
+- **AND** no Shopify Discount code is minted for it
 
 <!-- trace:scenario id=g10.store-discounts.SC-s75 rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-08 - A reward coupon settles by its own Shopify Discount code
@@ -143,6 +148,15 @@ code that is not scoped to its member is a bearer string anyone may spend.
 - **WHEN** staff apply it and the sale is paid
 - **THEN** the gift reaches the sale as its own line discounted to nothing, and no code is minted for it
 - **AND** the sale settles the gift by that line
+
+<!-- trace:scenario id=g10.store-discounts.SC-xbh rev=1 -->
+#### Scenario: grade10-site-store-discounts-SC-33 - A gift comes back off a sale rung below its minimum
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's reward coupon at the till
+
+- **GIVEN** a gift applied to a counter sale that cleared its minimum spend
+- **WHEN** staff ring the sale below the gift's minimum spend
+- **THEN** the gift's line comes back off the sale and the coupon returns to the member
+- **AND** staff are told why
 
 <!-- trace:scenario id=g10.store-discounts.SC-2qg rev=1 -->
 #### Scenario: grade10-site-store-discounts-SC-12 - A member with no paired Shopify customer is refused
