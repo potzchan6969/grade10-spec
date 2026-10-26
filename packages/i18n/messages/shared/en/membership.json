@@ -132,9 +132,9 @@
   "present": {
     "action": "Use at the counter",
     "heading": "Show this at the counter",
-    "qrAlt": "Promo code for this sale, as a scannable square",
+    "qrAlt": "This coupon, as a scannable square",
     "code": "Or read this out",
-    "instruction": "Staff scan this to put the coupon on the sale. It is for this sale only.",
+    "instruction": "Staff scan this to put the coupon on your sale. It works once.",
     "done": "Done",
     "noCounter": "No counter has your card open right now.",
     "notAttached": "Ask staff to add you to the sale first.",

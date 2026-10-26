@@ -136,8 +136,9 @@ carrying the definition it was bought under.
   unchanged
 - **Applied at the counter** — for a scope the till can match, inside the
   till session: staff apply it from the member's panel, or the member opens
-  it on their phone and the till scans it; a product coupon's code is minted
-  when chosen, for that sale alone, and a gift
+  it on their phone and the till scans it - before a sale, that one scan also
+  identifies the member and opens the session; a product coupon's code is
+  minted when applied, for that sale alone, and a gift
   goes on as its own line, discounted to nothing, with no code -
   [Reward Types](#reward-types)
 - **Used by the paid order** — the paid order is what marks the coupon
