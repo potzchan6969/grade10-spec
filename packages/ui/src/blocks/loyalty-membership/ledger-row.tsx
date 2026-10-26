@@ -63,8 +63,10 @@ function LedgerRow({
           aria-hidden
           data-slot="point-history-icon"
           className={cn(
-            "grid size-10 shrink-0 place-items-center rounded-full text-foreground",
-            entry.pending ? "bg-primary-muted" : "bg-muted",
+            "grid size-10 shrink-0 place-items-center rounded-full",
+            entry.pending
+              ? "bg-primary-muted text-primary"
+              : "bg-muted text-foreground",
           )}
         >
           <Icon size={16} />

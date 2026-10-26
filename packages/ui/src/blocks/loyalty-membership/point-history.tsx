@@ -122,7 +122,7 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
               <PointHistoryCard
                 entries={pending}
                 header={{
-                  title: `${copy.pending.title} ${pending.reduce((sum, entry) => sum + entry.delta, 0)}${copy.pending.points}`,
+                  title: `${copy.pending.title} ${pending.reduce((sum, entry) => sum + entry.delta, 0)} ${copy.pending.points}`,
                   description: copy.pending.body,
                 }}
                 label={copy.label}

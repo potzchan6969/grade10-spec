@@ -31,7 +31,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("440 pts")).toBeInTheDocument();
     expect(canvas.getByText("820 pts")).toBeInTheDocument();
-    expect(canvas.getByText("Pending 128pts")).toBeInTheDocument();
+    expect(canvas.getByText("Pending 128 pts")).toBeInTheDocument();
     expect(canvas.getByText("Order #10511")).toBeInTheDocument();
     expect(canvas.getByText("Redeemed HK$50 off")).toBeInTheDocument();
     expect(canvas.getByText("October 2026")).toBeInTheDocument();

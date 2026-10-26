@@ -217,7 +217,7 @@ const POINT_HISTORY_COPY: PointHistoryCopy = {
   filters: { all: "All", earned: "Earned", used: "Used", pending: "Pending" },
   pending: {
     title: "Pending",
-    body: "Points land when each order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till.",
+    body: "Points land when order completes.",
     points: "pts",
   },
 };

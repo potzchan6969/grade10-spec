@@ -60,14 +60,14 @@ export const Pending: Story = {
   args: {
     entries: PENDING,
     header: {
-      title: `Pending ${PENDING.reduce((sum, entry) => sum + entry.delta, 0)}pts`,
+      title: `Pending ${PENDING.reduce((sum, entry) => sum + entry.delta, 0)} pts`,
       description: POINT_HISTORY_COPY.pending.body,
     },
     month: undefined,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Pending 128pts")).toBeInTheDocument();
+    expect(canvas.getByText("Pending 128 pts")).toBeInTheDocument();
     expect(canvas.getByText("Online purchase")).toBeInTheDocument();
     expect(canvas.queryByText(/Lands/)).not.toBeInTheDocument();
   },
