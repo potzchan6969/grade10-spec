@@ -35,8 +35,8 @@ order: 1
 `spec` may name a capability an in-flight change is still writing — that is
 how an incubating capability gets its page before it lands, and the check
 warns while any delta-introduced capability has none. A page with no `spec` at
-all wears the **planned** pip: it states an intended shape, and a change to it
-is where the requirements start.
+all wears no pip: its 🚧 and ❓ lines state the intended shape, and a change to
+it is where the requirements start.
 
 Everything between directives is prose — GitHub markdown, headings starting at
 `##`, no raw HTML. Directives sit at column 0: two colons open a leaf, three
@@ -68,8 +68,7 @@ The structure is what the tools read. Top to bottom:
 - **Nothing recaps the change** — no today's gap, no note that a spec is
   still being written, no scenario id. A confirmed plan reads as the product
   does, in the present tense, marked 🚧 until the outcome is verified; the
-  🚧 lines say what has not shipped, and a page with no
-  `spec` wears the planned pip
+  🚧 lines say what has not shipped
 - **The page is the roadmap** — a change starts here, one 🚧 line per
   outcome the reader can see, and its deltas derive from those lines; a delta
   promising what no line marks is the delta's error, not the page's. The

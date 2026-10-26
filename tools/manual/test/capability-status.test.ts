@@ -48,16 +48,16 @@ describe("the status a capability is in", () => {
     expect(capabilityStatus(index, DELTA_ONLY)).toBe("incubating");
   });
 
-  it("is planned for a page that names no spec at all", () => {
+  it("has no status for a page that names no spec at all", () => {
     const index = indexOf({ specs: [specEntry(DURABLE, ["A rule"])] });
 
-    expect(capabilityStatus(index, undefined)).toBe("planned");
+    expect(capabilityStatus(index, undefined)).toBeUndefined();
   });
 
-  it("is planned when nothing durable or in flight carries the spec", () => {
+  it("has no status when nothing durable or in flight carries the spec", () => {
     const index = indexOf({ specs: [specEntry(DURABLE, ["A rule"])] });
 
-    expect(capabilityStatus(index, "demo-product/refunds")).toBe("planned");
+    expect(capabilityStatus(index, "demo-product/refunds")).toBeUndefined();
   });
 });
 
@@ -99,7 +99,7 @@ describe("where the status is carried", () => {
       ]),
     ).toEqual([
       ["loyalty", "changing"],
-      ["gift-cards", "planned"],
+      ["gift-cards", undefined],
     ]);
   });
 

@@ -12,7 +12,7 @@ type Mark = {
 
 /** `stable` says nothing anywhere — a page wearing it on every entry is noise,
  * so absence is the signal and only the others are drawn. */
-const MARK: Record<CapabilityStatus, Mark | null> = {
+const MARK: Partial<Record<CapabilityStatus, Mark>> = {
   changing: {
     word: "changing",
     title: "Changing — a change in flight touches this spec",
@@ -24,19 +24,11 @@ const MARK: Record<CapabilityStatus, Mark | null> = {
     title: "Incubating — a change in flight is writing this spec",
     badge: "default",
   },
-  planned: {
-    word: "planned",
-    title:
-      "Planned — no spec or change carries this yet; the page states the intended shape",
-    pip: "border border-border-strong bg-transparent",
-    badge: "outline",
-  },
-  stable: null,
 };
 
 /** The nav's quietest possible marker: a pip, named for screen readers. */
 export function CapabilityPip({ status }: { status?: CapabilityStatus }) {
-  const mark = status ? MARK[status] : null;
+  const mark = status ? MARK[status] : undefined;
   if (!mark) return null;
 
   return (
@@ -54,10 +46,10 @@ export function CapabilityWord({
   status,
   className,
 }: {
-  status: CapabilityStatus;
+  status?: CapabilityStatus;
   className?: string;
 }) {
-  const mark = MARK[status];
+  const mark = status ? MARK[status] : undefined;
   if (!mark) return null;
 
   return (

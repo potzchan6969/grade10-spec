@@ -32,9 +32,9 @@ requirements, so there is one place to read a capability and nothing beside
 it to keep in step.
 
 Every capability has a page, whatever state its contract is in, and the pip
-beside it says which: **planned** (the page states an intended shape nothing
-carries yet), **incubating** (a change in flight is writing the spec),
-**changing** (a change touches a durable spec), or no pip at all — stable. The delta itself, requirement by requirement, lives in the change folder.
+beside it says which: **incubating** (a change in flight is writing the spec),
+**changing** (a change touches a durable spec), or no pip at all — stable, or
+not yet in the store, where the page's 🚧 and ❓ lines say what is planned. The delta itself, requirement by requirement, lives in the change folder.
 How we work lives under Guides, and [Start here](/guides/start-here) lays a
 first hour's path for each job.
 

@@ -45,7 +45,7 @@ export type ParsedPage = {
 };
 
 /** Derived from the store, never stored: what shape a capability is in. */
-export type CapabilityStatus = "changing" | "incubating" | "planned" | "stable";
+export type CapabilityStatus = "changing" | "incubating" | "stable";
 
 export type NavItem = {
   id: string;
@@ -532,19 +532,19 @@ function deltaRequirement(
 
 /**
  * A capability's status. A durable spec is stable or changing; a spec that
- * lives only as a delta is incubating — being written right now. Everything
- * else is planned: the page describes an intended shape that neither the
- * durable store nor any change carries yet.
+ * lives only as a delta is incubating — being written right now. A page the
+ * store and the changes know nothing of has no status: its 🚧 and ❓ lines
+ * carry what is planned.
  */
 export function capabilityStatus(
   index: ManualIndex,
   specId: string | undefined,
-): CapabilityStatus {
+): CapabilityStatus | undefined {
   if (specId && index.specById.has(specId)) {
     return changesForSpec(index, specId).length > 0 ? "changing" : "stable";
   }
   if (specId && changesForSpec(index, specId).length > 0) return "incubating";
-  return "planned";
+  return undefined;
 }
 
 /**
