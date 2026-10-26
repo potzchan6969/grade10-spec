@@ -60,14 +60,9 @@ function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
         <div className="flex w-full max-w-4xl flex-col gap-6 px-4 py-10 sm:px-8">
-          <header className="flex flex-col gap-2">
-            <h1 className="text-3xl font-semibold text-foreground">
-              {COUPONS_PAGE_COPY.title}
-            </h1>
-            <p className="text-sm text-secondary-foreground">
-              {COUPONS_PAGE_COPY.subtitle}
-            </p>
-          </header>
+          <h1 className="text-3xl font-semibold text-foreground">
+            {COUPONS_PAGE_COPY.title}
+          </h1>
           {coupons.length === 0 ? (
             /* Nothing to part — the wallet's own empty state stands for the
              * whole page, no tab bar. */
