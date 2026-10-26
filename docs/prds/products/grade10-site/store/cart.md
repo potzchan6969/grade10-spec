@@ -37,7 +37,7 @@ back to that page.
   member's cart
 - ❓ **A product in both carts** — signing in combines the two lines into
   one, its quantity the sum of both. Product confirms it runs
-- 🚧 **When the session ends** - an open drawer closes by itself, with no
+- **When the session ends** - an open drawer closes by itself, with no
   message, when the member signs out in another tab of this site or the
   session expires. A guest's drawer stays open, and so does a member's
   through a session read that is still pending or fails. A member who
