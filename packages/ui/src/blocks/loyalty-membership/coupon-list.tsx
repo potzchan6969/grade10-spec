@@ -80,7 +80,9 @@ const STATUS_LABEL: Record<
 };
 
 /** The coupon whose scan card is open, and the region id its ticket's Use
- * now control points at. Stays set through the surface's exit transition. */
+ * now control points at. Stays set through the surface's exit transition.
+ * Held by id and read from the list on every render, so a token the consumer
+ * mints on Use now, or renews while the card is held out, reaches the card. */
 type ScanTarget = { item: CouponItem; regionId: string };
 
 function CouponTicket({
@@ -234,8 +236,13 @@ function CouponList({
   className,
 }: CouponListProps) {
   const smUp = useSmUp();
-  const [scan, setScan] = useState<ScanTarget | null>(null);
+  const [held, setHeld] = useState<ScanTarget | null>(null);
   const [scanOpen, setScanOpen] = useState(false);
+  const live =
+    held && state.status === "ready"
+      ? state.data.find((item) => item.id === held.item.id)
+      : undefined;
+  const scan = held && live ? { ...held, item: live } : null;
 
   return (
     <VStack className={className} data-slot="coupon-list" gap="sm">
@@ -282,7 +289,7 @@ function CouponList({
               key={item.id}
               onScanToggle={(target) => {
                 const next = target ?? scan;
-                setScan(next);
+                setHeld(next);
                 setScanOpen(target != null);
                 if (next) onScanOpenChange?.(target != null, next.item);
               }}
