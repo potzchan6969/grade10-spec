@@ -5,4 +5,5 @@ ui_waived: "no new screen or state: an open cart drawer closes through its
 hands:
   dev: "@seankcw"
   pm: "@seankcw"
+  design: "@seankcw"
 tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 4.1, 4.2"
