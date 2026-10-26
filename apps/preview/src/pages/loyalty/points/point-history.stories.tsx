@@ -53,7 +53,7 @@ function PointHistoryPage({ view }: { view: PointHistoryView }) {
             <BreadcrumbSeparator />
             <BreadcrumbItem current>{PAGE_COPY.title}</BreadcrumbItem>
           </Breadcrumbs>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-3xl font-semibold text-foreground">
             {PAGE_COPY.title}
           </h1>
           <PointHistory

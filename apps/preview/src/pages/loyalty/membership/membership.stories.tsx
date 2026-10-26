@@ -172,7 +172,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
               {MEMBERSHIP_PAGE_COPY.title}
             </BreadcrumbItem>
           </Breadcrumbs>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-3xl font-semibold text-foreground">
             {MEMBERSHIP_PAGE_COPY.title}
           </h1>
 

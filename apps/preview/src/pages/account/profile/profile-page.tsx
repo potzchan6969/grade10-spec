@@ -162,7 +162,7 @@ function ProfilePage({
             <BreadcrumbSeparator />
             <BreadcrumbItem current>{PROFILE_COPY.title}</BreadcrumbItem>
           </Breadcrumbs>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-3xl font-semibold text-foreground">
             {PROFILE_COPY.title}
           </h1>
           <ProfileCard copy={PROFILE_CARD_COPY} state={card} />
