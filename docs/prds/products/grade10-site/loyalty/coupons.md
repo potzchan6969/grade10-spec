@@ -54,7 +54,9 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
   or the return refresh covers it, is unconfirmed — Engineering
 - **The scan token's life** — each Use now mints a fresh presentation of
   the member card naming the coupon: it lives ten minutes, one scan consumes
-  it, and it does not rotate while held out. Once the member is on a sale, a
+  it, and while held out it renews itself a minute before it runs out and
+  when the screen wakes, so whatever is on screen scans; a coupon that can
+  no longer be shown puts the square away. Once the member is on a sale, a
   coupon other than a gift shows that sale's code instead; the store decides
   which when the member presses
 - ❓ **Page or section** — whether the wallet stays its own Coupons page or

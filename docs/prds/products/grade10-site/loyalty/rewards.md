@@ -82,7 +82,7 @@ Stock reads as a yes or no, never a count.
   the same way
 - 🚧 **The redeemed state stays in the surface** - the ticket the
   redemption issued: every redemption mints a member-readable code —
-  good or discount alike — and the scan QR is generated from that code.
+  good or discount alike — and the scan QR names that redemption.
   A discount coupon's ticket carries the code, a good's names the
   collection in its place. A ticket
   spendable or collectable at the till carries a Use now control, and the
@@ -93,11 +93,13 @@ Stock reads as a yes or no, never a count.
   online-only ticket carries none. A spent coupon's ticket mutes, names
   it used, and drops the scan control, and a spent coupon leaves the coupons
   section
-- 🚧 **The scan QR is the code, drawn** - generated from the
-  redemption's member-readable code, so it is fixed for that redemption
-  rather than rotating like the member pass's
-- ❓ **What the till reads** - the QR carries the redemption's code;
-  whether staff additionally scan the member pass for identity is open
+- **The scan QR presents the member, naming the redemption** - the
+  redemption's code is its fixed reference, read or typed, never the till
+  credential; the QR is a short-lived, single-use presentation of the
+  member card that names the redemption, renewed silently while shown, so
+  a screenshot or a code read aloud cannot spend it
+- **What the till reads** - one scan: it finds the member and puts the
+  coupon on the sale, so staff never scan the member pass as well
 - 🚧 **Apply belongs to the cart** - nothing on the shop, the redeemed
   ticket or the coupons page offers to apply a coupon; the cart's
   apply-rewards flow is the only place it happens
@@ -130,7 +132,7 @@ carrying the definition it was bought under.
   lines
 - 🚧 **The member reads a code of their own** — every redemption mints
   one member-readable code, unique to that redemption and bound to the
-  member, and the scan QR is generated from it; a good's ticket shows the
+  member, and the scan QR names it; a good's ticket shows the
   collection in its place, by display choice. The code is good online and at
   the till; the per-sale discount code a claim mints is a different code,
   unchanged
