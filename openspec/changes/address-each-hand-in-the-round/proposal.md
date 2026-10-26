@@ -57,10 +57,8 @@ spends per read, from 20 to 30 in the walkthrough to under 10.
   frame; two in-flight deltas that fold one requirement are named to each
   other however each is headed; a suite's Manual table is refused where it is
   written when it sits outside the reconciliation.
-- **The walk's ids are checked at the tick** — in the application repository,
-  a walk's bracketed case id of the ticking change whose case is not yet
-  actual is refused by the tick, in the pass that already looks for a task's
-  scenario ids; another change's id is that change's to sign.
+- **The tick does not wait on QA** — in the application repository, a walk
+  may cite a `draft` case, and `pnpm plan done` reads no case status.
 
 ## Non-Goals
 
@@ -103,7 +101,8 @@ See [Non-Goals](decisions.md#non-goals).
 - `docs/governance/round-summary.md` and the planning pages and guides — each
   role's page carries the new rules once; the governance page keeps the
   procedure and points at the requirements.
-- `grade10` — `pnpm plan done` reads a walk's bracketed case ids.
+- `grade10` — `pnpm plan done` reads no walk case status, and `tcs-to-e2e`
+  writes a draft case's test.
 
 ## References
 
