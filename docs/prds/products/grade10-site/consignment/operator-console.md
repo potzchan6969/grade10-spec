@@ -19,7 +19,9 @@ the settings the schedule runs on.
 | To list | signed and not yet on sale |
 | On sale | in the shop or at auction; ending soon badged |
 | Sold | sold and inside the return window |
-| Payout due | past the window and not yet paid |
+| Payout requests | asked for and not yet paid, by state |
+| Before payout | consignors with a balance and no verified identity |
+| Debts | consignors whose balance is below zero |
 | Ended unsold | the term ended and the consignor has not chosen |
 | Returning | going back to the consignor |
 | Closed | paid out, or back with the consignor |
@@ -68,14 +70,26 @@ the settings the schedule runs on.
 | Amount differs | a sale recorded by hand differs from the one the channel reported | `consignment:approve` |
 | Refund in part | the store refunded part of a sale | `consignment:approve` |
 
+## Consignors
+
+- 🚧 **One page per consignor** - their account facts, approved-partner
+  flag, identity and ID sighted, payout account masked, the balance, what is
+  pending in return windows, any debt, every ledger entry, their documents
+  and their consignments
+- 🚧 **Reveal** - finance reveals one masked number at a time, and each
+  reveal is recorded with who and when
+
 ## Payouts
 
-- **Due list** - every payout past its window, oldest first, with what it is
-  made of
-- **Record a payout** - the amount, the bank reference and the day the money
-  left; the statement goes to the consignor
-- **A correction** - taken back with a reason by a second holder of the
-  payout grant, never the one who recorded it
+- 🚧 **Requests** - every payout asked for, oldest first, with the reason any
+  is refused: no verified identity, a debt, or no account in the consignor's
+  name
+- 🚧 **Approve** - by finance, never the staff member who asked for it
+- 🚧 **Batch** - approved requests gathered into one FPS or bank batch and
+  exported as the bank's file; each request is marked paid with its bank
+  reference, or failed, which puts the amount back on the balance
+- 🚧 **Statements** - each month's settlement statements and commission
+  invoices, numbered in their series
 - **Export** - a CSV of a period's payouts, on the audit chain
 
 ## Settings
@@ -86,14 +100,16 @@ pinned to a consignment when its agreement is prepared.
 | Setting | Default | Choices |
 | --- | --- | --- |
 | Commission, for each channel and price band | unset; intended **10–12%** | a share of the price |
-| Incentive, on the estimated value | intended **5%**, paid at consignment | a share of the estimated value |
+| Incentive, on the estimated value | **5%**, credited at signing | a share of the estimated value |
+| Incentive paid as | a credit to the payout balance | on the spot, by cash or FPS |
 | Minimum commission | none | an amount per item |
 | Fees: listing, return, early take-back | none | an amount each |
-| Term on sale | **90** days | any number of days |
+| Contract period | **90** days | any number of days |
 | Return window | **14** days after a store sale is delivered; **7** after an auction lot is delivered or collected | any number of days, per channel |
-| When a consignor is paid | after the return window | at the sale; one monthly statement |
-| A refund after payout | set against the next payout | asked back from the consignor |
-| Identity before signing | always verified | above a sale price; never |
+| When proceeds are credited | after the return window | at the sale |
+| Statement period | monthly | monthly |
+| Identity before signing | never; verified before the first payout | above a sale price; always |
+| Auction rate | unset | the HKD to one USD, exactly |
 | Ending soon | **7** days before the term ends | any number of days |
 
 - ❓ Product - **The intended figures** - the consignment fee is intended
@@ -113,7 +129,8 @@ pinned to a consignment when its agreement is prepared.
 | `consignment:read` | staff, treasurer, admin | the queue and every consignment |
 | `consignment:operate` | staff, admin | receive, terms within the schedule, the agreement, list, price within the floor, take off sale, return, retry a channel, dismiss a flag |
 | `consignment:approve` | staff, admin | a commission outside the schedule; a price below the floor on the consignor's yes; dismiss an amount that differs or a refund in part |
-| `consignment:payout` | treasurer, admin | record a payout, correct one, the due list and the export |
+| `consignment:payout` | treasurer, admin | ask for a payout for a consignor, the requests and the export |
+| `consignment:finance` | treasurer, admin | approve and batch payouts, mark them paid or failed, reveal a masked number, record a debt repaid |
 | `consignment:display` | admin | name a consignor on the store and the lot, where they agreed |
 | `consignment:settings` | admin | change a setting |
 
@@ -131,7 +148,7 @@ pinned to a consignment when its agreement is prepared.
 | Payouts on the vault's rule | Decided | Recorded after the bank transfer by a treasurer; a correction takes a second holder of the grant - decided under the owner's delegation, 2026-10-08 | Finance |
 | Seller display is an admin act | Decided | The owner names the admin as the one who sets it - decided by the owner, 2026-10-08 | Product |
 | Every figure a setting | Decided | The schedule, the term, the windows, fees, identity and when a consignor is paid are settings admins change in the console, each starting on the recommended default - decided by the owner, 2026-10-08 | Product |
-| One payout per consignment | ❓ Open | Proposed: every sale of a consignment past its window is paid as one payout, and a sale still inside its window waits for its own day | Finance |
+| A balance, not a payout per consignment | Decided | Proceeds reach one balance per consignor and payouts are asked for against it - decided by the owner, 2026-10-26 | Finance |
 | A schedule version per save | ❓ Open | Proposed: each settings save that moves a figure is the next schedule version, the one an agreement prepared after it pins | Product |
 | The channel and the details at intake | Decided | the receive act records where the consignment was taken, its channel - the store or the auction - and each item's market value and the consignment rates applying to it - decided under the owner's delegation, 2026-10-16 | Product |
 :::
