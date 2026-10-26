@@ -33,7 +33,7 @@ Needs group 2's row.
 - [ ] 4.1 Take the 🚧 off the delivered outcomes on `docs/prds/products/grade10-site/store/store-locator.md`, the Free Pick-up section of `docs/prds/products/grade10-site/store/product-page.md`, `docs/prds/products/grade10-site/site/carried-surfaces.md`, the Store Locator line of `docs/prds/products/grade10-site/site/page-shell.md` and `docs/prds/products/shared/ui/store-locator.md`, whose Designs section gains the block's `::story` cards; restate no requirement — blocked: waits on the walk (group 5); the 🚧 is off every outcome the code delivers, and stays on Narrow screens and the Agreed look
 - [ ] 4.2 Verify: `pnpm run tcs:validate`, `pnpm check:manual` — blocked: with 4.1
 
-## 5. The walk (grade10)
+## 5. The walk (grade10) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its planning input, with groups 1 to 3 landed. The walks live in
 `apps/frontend/grade10/e2e/tests/store/store-locator.spec.ts`; the isolated
