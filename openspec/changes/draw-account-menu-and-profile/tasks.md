@@ -13,7 +13,7 @@
 
 ## 3. The manual (grade10-spec)
 
-- [x] 3.1 Take the 🚧 off the menu avatar on the Site Header and Footer page, and state it on Page Shell; the two ADDED requirements fold into the durable specs when the change archives
+- [x] 3.1 Take the 🚧 off the menu avatar on the Site Header and Footer page, and state it on Page Shell; the two MODIFIED requirements fold into the durable specs when the change archives
 
 ## 4. The walk
 

@@ -35,10 +35,13 @@ primary Sign In button (not the account icon) and SHALL invoke the supplied
 sign-in handler when that button is activated.
 
 **Signed in** - When `session` is `"signed-in"`, `SiteHeader` SHALL render the
-account icon and SHALL open a menu that shows a small (`xs`) initial avatar
-above `accountEmail`, both above the items. When `accountEmail` is not
-supplied, the menu SHALL show `copy.accountMenuLabel` in its place and no
-avatar. The items SHALL include at minimum Sign Out. The
+account icon and SHALL open a menu that shows a small (`xs`) avatar above
+`accountEmail`, both above the items. When `accountEmail` is supplied, the
+avatar SHALL show `accountAvatarSrc` where it is supplied, and the initial of
+the part of `accountEmail` before the `@` where it is not supplied or fails to
+load; a failed image SHALL leave no broken image in the menu. When
+`accountEmail` is not supplied, the menu SHALL show `copy.accountMenuLabel` in
+its place and no avatar. The items SHALL include at minimum Sign Out. The
 menu SHALL NOT include KYC. Activating each item SHALL invoke the matching
 supplied handler.
 
@@ -167,7 +170,8 @@ or label for a second orders item.
 #### Scenario: shared-ui-site-chrome-SC-34 - Account menu shows accountEmail with its avatar
 **Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
 
-- **GIVEN** `session` is `"signed-in"` and `accountEmail` is supplied
+- **GIVEN** `session` is `"signed-in"`, `accountEmail` is supplied, and
+  `accountAvatarSrc` is not supplied
 - **WHEN** the collector activates the account control
 - **THEN** the menu shows a small (`xs`) initial avatar above `accountEmail`,
   both above the items
@@ -239,6 +243,7 @@ or label for a second orders item.
 - **WHEN** it passes `onOrders`, or `orders` in `copy`
 - **THEN** its type check refuses each
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-q8d rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-44 - Signed in with no My Auctions handler
 **Serves:** Header controls - the account menu omits My Auctions until its own handler is supplied
 
@@ -292,3 +297,23 @@ or label for a second orders item.
 - **GIVEN** `session` is `"pending"`
 - **WHEN** assistive technology reads the header
 - **THEN** the placeholder exposes no role, name, or busy state
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-zpd rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-49 - Account menu avatar shows the profile image
+**Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
+
+- **GIVEN** `session` is `"signed-in"`, `accountEmail` is supplied, and
+  `accountAvatarSrc` is supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu's avatar shows that image in place of the initial
+- **AND** when the image fails to load, the avatar shows the initial of the
+  part of `accountEmail` before the `@`, and no broken image
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-kar rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-50 - Account menu without an email shows no avatar
+**Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
+
+- **GIVEN** `session` is `"signed-in"` and `accountEmail` is not supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu shows `copy.accountMenuLabel` and no avatar
+- **AND** a supplied `accountAvatarSrc` does not draw one

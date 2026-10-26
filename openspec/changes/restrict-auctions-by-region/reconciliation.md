@@ -13,6 +13,10 @@ entry*. Each keeps its own scope, acceptance and verdict.
   the requirement on top of whatever durable holds when it archives, and keeps
   the other change's clauses.
 
+- **`restrict-auctions-by-region`'s block restates the avatar clause and scenarios
+  SC-49 and SC-50 as well**, so the store's delta check holds whichever of the
+  two archives first; its other text is unchanged.
+
 ## Decisions
 
 - Decided by @seankcw: `restrict-auctions-by-region` is the owner and archives

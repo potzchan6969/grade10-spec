@@ -4,8 +4,6 @@ depends_on:
   - restrict-auctions-by-region
 hands:
   pm: "@ecchochan"
-awaiting:
-  specs: 2026-10-08, requirement deltas for the menu avatar, from /planning-dev - @ecchochan
 reviewed:
   proposal: 51a20e9d
   decisions: a336a539
