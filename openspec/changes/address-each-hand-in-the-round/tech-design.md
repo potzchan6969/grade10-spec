@@ -139,7 +139,7 @@ names a file nobody checked).
 naming the path and the id. `validate-test-cases.mjs` calls it over every
 Manual row's named test where the path is this store's, for the row's case
 id, and refuses a miss; a path the store does not hold is skipped, since the
-walk lives in the application repository and its ids are checked at the tick.
+walk lives in the application repository.
 Rejected: a substring (`SC-1` in `SC-12`), a warning beside a refusal,
 crediting a Manual row for scenario ids it does not carry.
 
@@ -172,16 +172,13 @@ alone, and a tick is never held (SC-38).
   rows. Rejected: `decidedByOwed` (a different fence), the header line (owed
   by coverage already), the scenario id as a reason (allowed while open).
 
-### The tick reads the walk's ids
+### The tick reads no case status
 
-`Q14`. `grade10`'s `plan.mjs` `done` extends its scenario-id pass: for each
-end-to-end file the group's tree holds, every `[<capability>-US<n>-TC<m>-<v>]`
-in a test title is looked up in the store clone's suites, and one the ticking
-change's suite holds short of `actual`, or at an older revision, or one no
-live suite issues, refuses the tick naming the id and its status; another
-change's id is that change's to sign. `tcs-to-e2e`
-and `docs/architecture/e2e.md` point at the rule. Rejected: a `check-walk`
-command, a Playwright reporter, reading the submodule.
+`Q14`, superseded 2026-10-26. `grade10`'s `plan.mjs` `done` reads no case
+status: a walk may cite a `draft` case, and the tick never waits on
+`/tcs-review`. `tcs-to-e2e` and `docs/architecture/e2e.md` say so. Rejected:
+the earlier refusal of a walk id short of `actual`, which made QA's review a
+walk dependency against this change's goal.
 
 ## Service Interfaces
 
@@ -192,7 +189,7 @@ command, a Playwright reporter, reading the submodule.
 | `citesId(text, id)` (`lib/cites.mjs`) | a file's text, an id | whether the id appears with no digit after it |
 | `plan:land … --tests "<sc>: <path>" [--app-root <dir>] [--unrun "<why>"]` | the cell, the application root | the row; refuses a path its clone does not hold or that carries no such id |
 | `relay-post.mjs --row <Q>` | a held row's id | one reply in the thread mentioning the row's hand, once per change, round and row |
-| `pnpm plan done <change> <group>` (grade10) | the group | the tick, or the scenario id no test cites, or the change's own case id not yet actual |
+| `pnpm plan done <change> <group>` (grade10) | the group | the tick, or the scenario id no test cites |
 
 ## Risks / Trade-offs
 

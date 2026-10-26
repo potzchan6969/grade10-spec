@@ -48,13 +48,13 @@ Prose alone: read by the reader of words, QA and the simpler thing.
 - [x] 5.2 `docs/prds/guides/working-a-change.md` and `docs/prds/guides/how-we-plan.md` carry what each hand now reads: one message that is theirs, the held row's reply, the page question, the short interview, the fallback and the killed dispatch, the record's paths, written not run; `docs/prds/products/shared/planning/agent-rounds.md` and `change-stages.md` mark the lines groups 1 to 4 deliver 🚧; the fold takes the marks off at archive
 - [x] 5.3 Verify: `pnpm run agent:check-parity`, `pnpm run test:openspec`, `pnpm check:manual`, `pnpm run lint`
 
-## 6. The tick reads the case ids (grade10)
+## 6. The tick reads no case status (grade10)
 
-Needs the store's groups 1 to 5 landed and `external/grade10-spec` bumped. The check stands on its own: `run-a-round-on-every-artifact`'s task 6.2 - the tick's scenario-id pass, `shared-planning-agent-rounds-SC-63` - is not built yet, and nothing here waits on it. Nothing here imports this store at runtime: `pnpm plan` reads the store clone the machine registry names.
+Superseded 2026-10-26 by Q14: the walk-id check built here is removed, and a walk may cite a `draft` case. Needs `external/grade10-spec` bumped past this change's groups 1 to 5. Nothing here imports this store at runtime.
 
-- [x] 6.1 The tests this group's scenarios name, in their own commit before its code, ticked last: `scripts/openspec/plan.test.mjs` for a walk titled with a draft case id refused at the tick, a deprecated and an unissued one refused, and the same walk passing once the case is `actual` - `shared-planning-agent-rounds-SC-104`
-- [x] 6.2 Make `shared-planning-agent-rounds-SC-104` pass: `done` in `scripts/openspec/plan.mjs` reads every bracketed case id in the working tree's end-to-end files, looks each up in the store clone's suites for the capabilities the ticked group's tasks cite - the change's own suite, or the durable one where the change holds none - and refuses the tick for one whose case is not `actual`, naming the id and its status; `.claude/skills/tcs-to-e2e/SKILL.md` and `docs/architecture/e2e.md` point at the rule
-- [x] 6.3 Verify: `node scripts/openspec/plan.test.mjs`, `pnpm run lint`
+- [ ] 6.1 Remove the walk-id check from `done` in `scripts/openspec/plan.mjs` and its tests in `scripts/openspec/plan.test.mjs`; one test proves a walk citing a `draft` case ticks
+- [ ] 6.2 `.claude/skills/tcs-to-e2e/SKILL.md`, `.claude/skills/dev-help/SKILL.md` and `docs/architecture/e2e.md` say a draft case gets its test and the tick does not wait on `/tcs-review`
+- [ ] 6.3 Verify: `node --test scripts/openspec/plan.test.mjs`, `pnpm run lint`
 
 ## 7. The walk (grade10-spec)
 
