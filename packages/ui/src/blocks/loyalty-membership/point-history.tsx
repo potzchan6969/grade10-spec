@@ -1,6 +1,7 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
+import { Text } from "@grade10/design-system/components/display/text";
 import {
   Tabs,
   TabsList,
@@ -35,6 +36,8 @@ type PointHistoryCopy = {
   summary: PointHistorySummaryCopy;
   /** The filter tabs' labels, keyed the way `PointHistoryFilter` is. */
   filters: Record<PointHistoryFilter, string>;
+  /** The line a filter shows when it matches nothing, keyed the same way. */
+  filteredEmpty: Record<PointHistoryFilter, string>;
   /** The pending card's words — its title, the rule it states, and the
    *  unit its total reads. */
   pending: { title: string; body: string; points: string };
@@ -181,6 +184,12 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
                 points={copy.pending.points}
               />
             ))}
+
+            {!showPending && groups.length === 0 ? (
+              <Text size="sm" tone="secondary">
+                {copy.filteredEmpty[filter]}
+              </Text>
+            ) : null}
           </div>
         </Tabs>
       ) : null}

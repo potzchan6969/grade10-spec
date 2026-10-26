@@ -92,6 +92,12 @@ const POINT_HISTORY_COPY: PointHistoryCopy = {
   label: "Point history",
   summary: { earned: "Earned", used: "Used", pending: "Pending", points: "pts" },
   filters: { all: "All", earned: "Earned", used: "Used", pending: "Pending" },
+  filteredEmpty: {
+    all: "No entries yet.",
+    earned: "Nothing earned yet.",
+    used: "Nothing used yet.",
+    pending: "Nothing on the way.",
+  },
   pending: {
     title: "Pending",
     body: "Points land when order completes.",
