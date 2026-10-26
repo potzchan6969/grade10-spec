@@ -127,15 +127,17 @@ pinned to a consignment when its agreement is prepared.
 | Grant | Roles | Opens |
 | --- | --- | --- |
 | `consignment:read` | staff, treasurer, admin | the queue and every consignment |
-| `consignment:operate` | staff, admin | receive, terms within the schedule, the agreement, list, price within the floor, take off sale, return, retry a channel, dismiss a flag |
-| `consignment:approve` | staff, admin | a commission outside the schedule; a price below the floor on the consignor's yes; dismiss an amount that differs or a refund in part |
+| `consignment:operate` | staff, admin | receive, terms within the schedule, the agreement, list, a price with its evidence link - below the floor on the consignor's signed yes - take off sale, return, retry a channel, dismiss a flag |
+| `consignment:approve` | staff, admin | a commission outside the schedule, an item's own commission, minimum or incentive; dismiss an amount that differs or a refund in part |
 | `consignment:payout` | treasurer, admin | ask for a payout for a consignor, the requests and the export |
 | `consignment:finance` | treasurer, admin | approve and batch payouts, mark them paid or failed, reveal a masked number, record a debt repaid |
 | `consignment:display` | admin | name a consignor on the store and the lot, where they agreed |
 | `consignment:settings` | admin | change a setting |
 
-- **Two people for money** - staff and treasurer share no money grant; the
-  person who set a commission outside the schedule does not pay it out
+- **Two people for money** - staff and treasurer share no money grant, and a
+  payout is approved by someone other than whoever asked for it
+- ❓ Product - **Who set the rate never pays it** - whether the person who set
+  a commission outside the schedule is also kept from paying it out
 - **Second factor and audit** - as the vault's: required in production, and
   every act filed under its consignment -
   [Operator Console](/p/grade10-site/vault/operator-console#permissions)
