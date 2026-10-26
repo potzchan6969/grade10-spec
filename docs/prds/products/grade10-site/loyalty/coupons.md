@@ -56,9 +56,9 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
   the member card naming the coupon: it lives ten minutes, one scan consumes
   it, and while held out it renews itself a minute before it runs out and
   when the screen wakes, so whatever is on screen scans; a coupon that can
-  no longer be shown puts the square away. Once the member is on a sale, a
-  coupon other than a gift shows that sale's code instead; the store decides
-  which when the member presses
+  no longer be shown puts the square away. It is the same on a sale: a scan
+  over the member's own sale opens a new session that keeps the sale and its
+  points, and chooses the coupon for staff to apply
 - ❓ **Page or section** — whether the wallet stays its own Coupons page or
   folds into the Membership page as a section; UI forthcoming — Design
 

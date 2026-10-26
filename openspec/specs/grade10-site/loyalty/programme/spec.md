@@ -1882,13 +1882,12 @@ A coupon SHALL be usable in the online store, applied to the order without
 the member typing anything. At the counter, a coupon SHALL reach the sale
 inside a till session, one of two ways: staff apply it from the member's
 open coupons in the panel, or the member presents it from their own phone and
-the till scans it. Presented before the member is on a sale, the coupon's QR
-SHALL be a single-use presentation of the member card naming the coupon, so
-that one scan identifies the member and chooses the coupon for staff to
-apply; once the member is on a sale, a coupon other than a gift SHALL be
-shown as a code minted for that sale instead, decided by the store when the
-member presents it. Either way a product coupon's code SHALL be minted
-against that session's sale when it is applied, and SHALL be reused for
+the till scans it. The coupon's QR SHALL be a single-use presentation of the
+member card naming the coupon, so that one scan identifies the member and
+chooses the coupon for staff to apply, whether or not the member is already
+on a sale; a scan over the member's own sale SHALL keep that sale and the
+points already on it. A product coupon's code SHALL be minted against that
+session's sale when it is applied, and SHALL be reused for
 every later plan of the same sale; a gift SHALL reach the sale as its own
 line and carry no code, as `grade10-site/store/discounts` requires. Staff's
 way SHALL be offered only once the member is attached to the sale. A coupon SHALL NOT
@@ -1902,9 +1901,8 @@ a sale nobody paid SHALL never have been spent, whatever became of that sale.
 A member SHALL be able to read the coupons they hold — what each is for, its
 validity period, and whether it has been used — and to present one for a
 counter sale. A coupon's code SHALL NOT be shown as the coupon's identity or
-offered for the member to keep: what the member presents is either a
-single-use presentation of their card naming the coupon, or, once they are on
-a sale, the code minted for that sale alone. A coupon the till cannot take
+offered for the member to keep: what the member presents is a single-use
+presentation of their card naming the coupon. A coupon the till cannot take
 SHALL offer no way to present it.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-gmp rev=1 -->
@@ -1916,16 +1914,16 @@ SHALL offer no way to present it.
   own variant
 - **AND** no separate collection record is created
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-wks rev=2 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-wks rev=3 -->
 #### Scenario: grade10-site-loyalty-programme-SC-166 - A coupon reaches the counter by the member presenting it
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a member holding a product coupon, identified at a till and
   attached to the sale
-- **WHEN** they present that coupon from their own session and the till
-  scans it
-- **THEN** the sale carries the coupon's cut
-- **AND** the code was minted when the member chose the coupon, not before
+- **WHEN** they present that coupon from their own phone and the till scans it
+- **THEN** the coupon is chosen on the same sale, with the points already on it
+- **AND** once staff apply, the sale carries the coupon's cut, its code minted
+  at that apply
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-z32 rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-172 - Staff apply a member's coupon from the till session
