@@ -41,6 +41,8 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 
 - **Ordered for the next spend** — Available reads nearest expiry first;
   Used & Expired reads newest first
+- 🚧 **Running out reads louder** — an available coupon inside its last
+  14 days draws its Use by line emphasised
 - 🚧 **Online-only is never a QR** — a coupon the till cannot match names
   its scope and carries no Use now, so no member holds out a code the sale
   refuses

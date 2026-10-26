@@ -59,6 +59,25 @@ export const Selected: Story = {
   },
 };
 
+/** A code running out — the consumer flags it, the ticket counts nothing —
+ * reads its Use by line emphasised. */
+export const ExpiringSoon: Story = {
+  args: {
+    code: {
+      ...applicable,
+      detailLabel: "Use by 8 Nov 2026",
+      detailEmphasis: true,
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Use by 8 Nov 2026")).toHaveClass(
+      "text-accent-foreground",
+      "font-medium",
+    );
+  },
+};
+
 /** Inapplicable — muted, reason in the footer, no action. */
 export const NotApplicable: Story = {
   args: {

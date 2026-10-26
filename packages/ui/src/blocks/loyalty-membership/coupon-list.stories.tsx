@@ -54,6 +54,32 @@ export const Default: Story = {
   },
 };
 
+/** An open coupon inside its last 14 days — the consumer's flag, the list
+ * does no counting — reads its Use by line emphasised. */
+export const ExpiringSoon: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: [
+        {
+          id: "coupon-expiring",
+          amount: "HK$50",
+          code: "GRD-50-7Q2M",
+          description: "HK$50 off any order",
+          expiry: "Use by 8 Nov 2026",
+          status: "open",
+          expiringSoon: true,
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const line = canvas.getByText("Use by 8 Nov 2026");
+    expect(line).toHaveClass("text-accent-foreground", "font-medium");
+  },
+};
+
 /** The open coupon's Use now opens its scan card — a dialog from 640px up —
  * over the list, and closing hands the member back to it. */
 export const ScanCoupon: Story = {

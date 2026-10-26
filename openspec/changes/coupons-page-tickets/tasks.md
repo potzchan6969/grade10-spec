@@ -19,6 +19,10 @@
       gains `description`
 - [x] 1.5 Export `PromoTicketQr`, `PromoTicketSkeleton` and the changed
       types through `packages/ui/src/index.ts`
+- [x] 1.6 `CouponItem` gains `expiringSoon` and `HeldPromoCode`
+      `detailEmphasis`; the ticket and the scan surface's ticket read a
+      flagged open coupon's expiry emphasised
+      `grade10-site-loyalty-programme-SC-275`
 
 ## 2. The stories and the preview (grade10-spec)
 
@@ -31,6 +35,9 @@
 - [x] 2.3 `loyalty/coupons.md` — ordering, refresh-on-return, online-only
       and the ❓ rows for the close signal, the QR's rotation and
       page-vs-section
+- [x] 2.4 `ExpiringSoon` stories on `CouponList` and `PromoTicket`; the
+      Coupons screen's Available tab shows a flagged coupon
+      `grade10-site-loyalty-programme-SC-275`
 
 ## 3. Follow-up (app devs)
 

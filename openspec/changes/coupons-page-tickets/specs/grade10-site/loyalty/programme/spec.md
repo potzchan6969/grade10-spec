@@ -26,6 +26,10 @@ one, else the amount. A spent or void coupon SHALL mute and name its
 state; an expired coupon SHALL read its expiry, which already says so.
 None of them SHALL draw a scan or an action.
 
+An open coupon the consumer flags `expiringSoon` — at Grade10, inside its
+last 14 days — SHALL read its expiry line emphasised; the list SHALL NOT
+count days itself, and SHALL NOT read the flag on a closed coupon.
+
 A coupon whose scope the till cannot match SHALL carry a `scopeLabel`
 naming where it is spendable and SHALL draw no Use now and no scan,
 whatever `qrCode` it is passed, so a member never holds out a code the
@@ -72,3 +76,12 @@ describes one, and offer the consumer's action where one is given.
 - **THEN** each mutes and names its state — the spent and void coupons
   their one line, the expired one its expiry — and none draws a scan
   control or an action
+
+#### Scenario: grade10-site-loyalty-programme-SC-275 - A coupon running out reads its expiry emphasised
+
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** an open coupon the consumer flags expiring soon
+- **WHEN** `CouponList` renders it
+- **THEN** its expiry line is rendered emphasised, where a coupon the
+  consumer does not flag renders it plainly

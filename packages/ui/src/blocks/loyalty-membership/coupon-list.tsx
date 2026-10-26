@@ -103,6 +103,9 @@ function CouponTicket({
     item.status === "spent" || item.status === "void"
       ? (item.statusLabel ?? copy[STATUS_LABEL[item.status]])
       : item.scopeLabel;
+  /* An open coupon the consumer flags as running out reads its Use by line
+   * emphasised; a closed coupon's flag is never read. */
+  const detailEmphasis = open && item.expiringSoon;
 
   return (
     <ListItem
@@ -119,6 +122,7 @@ function CouponTicket({
           title: item.description ?? item.amount,
           detailLabel:
             open || item.status === "expired" ? item.expiry : undefined,
+          detailEmphasis,
           inapplicableReason: statusLabel,
           label: item.code ?? item.amount,
         }}
@@ -168,6 +172,7 @@ function CouponScanSurface({
           id: item.id,
           title,
           detailLabel: item.expiry,
+          detailEmphasis: item.expiringSoon,
           label: item.code ?? item.amount,
         }}
       />

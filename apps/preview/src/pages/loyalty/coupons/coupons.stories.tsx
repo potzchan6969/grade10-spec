@@ -119,6 +119,15 @@ export const Default: Story = {
       canvas.getByRole("heading", { level: 1, name: "Coupons" }),
     ).toBeInTheDocument();
     expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
+    /* Inside its last 14 days the Use by line reads emphasised; an
+     * unflagged coupon's reads plainly. */
+    expect(canvas.getByText(/Use by 8 Nov 2026/)).toHaveClass(
+      "text-accent-foreground",
+      "font-medium",
+    );
+    expect(canvas.getByText(/Use by 15 Jan 2027/)).toHaveClass(
+      "text-secondary-foreground",
+    );
     expect(canvas.queryByText(/Used on/)).not.toBeInTheDocument();
     await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
     expect(await canvas.findByText(/Used on/)).toBeInTheDocument();
