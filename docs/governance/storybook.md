@@ -87,6 +87,14 @@ Storybook holds it.
   to footer, and declares `parameters: { layout: "fullscreen" }`. The page
   owns its state and callbacks; packages only receive props
 - **Narrow** — a `Narrow` story sets `globals: { viewport: { value: "mobile1" } }`
+- **Interaction test** — every state story carries a `play` that asserts what
+  the State's Shows cell says, with `expect` on what a reader sees: roles,
+  names and text, not class names. A state the reader reaches by acting —
+  validation, busy, success, an action's error, keyboard and focus — starts
+  from the default and reaches it in `play` with `userEvent` clicks, typing
+  and keys, so `pnpm test:stories` fails when the interaction breaks. The
+  usability categories a screen walks are in the `ui-design` schema
+  instruction
 
 ## Journeys
 

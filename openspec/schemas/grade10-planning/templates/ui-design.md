@@ -1,3 +1,7 @@
+<!-- Screens, Components and States - no other section. Words live in
+     packages/i18n or the feature's *-content.ts and flows in click-through
+     stories, so a Copy or Flows section here would be a second copy. -->
+
 ## Screens
 
 <!-- One subsection per user-facing surface. Link the Figma frame - never describe a screen in prose -->
@@ -24,6 +28,13 @@
      issues it. NEVER a scenario id here — this file is written before the
      scenarios exist, and `pnpm check:manual` refuses an id the store issues
      nowhere.
+
+     Walk the usability categories for every screen — default, loading,
+     empty, error, validation, busy, success, not allowed, partial, boundary
+     content, narrow, keyboard and focus — and write a row for each one the
+     screen can reach. Every row is a story named with its State words, whose
+     `play` interaction test asserts what Shows says; a state reached by
+     acting is reached by that `play`, from the default.
 
      The requirements' second pass closes every row on the row itself: replace
      Anchor with the scenario id it became, in backticks, or

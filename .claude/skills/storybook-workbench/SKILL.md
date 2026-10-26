@@ -41,6 +41,9 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    data in the feature's `*-content.ts`; screens fullscreen; a journey's
    buttons open the next screen's story through `workbench-story-nav.ts`,
    with `parameters: { journeys: [...] }` naming the journey ids it walks.
+   Every state story gets a `play` interaction test that asserts what its
+   Shows cell says, and reaches a state the reader gets to by acting with
+   `userEvent` from the default (`docs/governance/storybook.md#states`).
    Where the outcome turns on what staging is set to, add the Screen's
    Scenario, as `docs/governance/storybook.md#scenarios` says: one `Scenario`
    story whose settings reach every case, and each case a unit-test row. A

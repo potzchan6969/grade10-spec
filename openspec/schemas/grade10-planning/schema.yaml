@@ -423,7 +423,13 @@ artifacts:
       design drawn later still lands on this same change.
 
 
-      Sections:
+      Sections - these three and no other. Words and flows are not specified
+      here: the words are written once where the component reads them, in
+      `packages/i18n` or the feature's draft `*-content.ts` in
+      `apps/preview`, and reviewed on the story; a flow is a click-through
+      story whose `play` walks it, naming the journeys it walks. A `## Copy`,
+      `## Flows` or `## Flags` section would be a second copy that drifts
+      from the one the component renders.
 
       - **Screens**: One subsection per surface. Link the Figma frame - the
       frame is the layout's source of truth, so never describe a screen in
@@ -447,6 +453,27 @@ artifacts:
       from the capability's path, and outside backticks nothing reads the
       citation. Never a scenario id: the scenarios are written after this file,
       and `pnpm check:manual` refuses an id the store issues nowhere.
+
+
+      **Walk the usability categories for every screen** and write a row for
+      each one the screen can reach: default (populated); loading (first load
+      and refresh); empty (nothing yet, or filtered to nothing); error (load
+      failed, action failed, offline), with its recovery control; validation
+      (a field refused, and its message); busy (an action in flight, a second
+      activation ignored); success (the confirmation); not allowed (disabled,
+      read-only, signed out, no access); partial (some data missing or
+      stale); boundary content (long text, large numbers, many items, no
+      picture); narrow (375px); keyboard and focus (focus order, Escape,
+      where focus returns). A category the screen cannot reach writes no row.
+
+
+      **Every row is bound by a Storybook interaction test.** Each state is a
+      story named with the State column's words, and its `play` asserts what
+      Shows says. A state the reader reaches by acting - validation, busy,
+      success, an action's error, keyboard and focus - gets a `play` that
+      starts from the default and does the clicks, typing and keys that reach
+      it, so `pnpm test:stories` keeps the interaction working -
+      [Storybook · States](docs/governance/storybook.md#states).
 
 
       **One state per row is what makes the table countable.** The
