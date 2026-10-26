@@ -196,17 +196,17 @@ any maximum.
 | Refused when | What the bid form says |
 | --- | --- |
 | Below the next minimum the page shows | Nothing is sent: the custom field says `auctionListing.minAmount` ("Min: {amount}"), and the bid action stays disabled |
-| Below a next minimum that moved after the page showed it | `auctionListing.minimumBidIs` ("Minimum bid is {amount}.") |
+| Below a next minimum that moved after the page showed it | `auctionListing.minimumBidIs` ("Minimum bid is…") |
 | Above the USD ceiling | No maximum-bid message; custom entry already stops or corrects the amount at the ceiling |
-| Not above the bidder's own maximum | `auctionListing.maximumNotRaised` ("Your new maximum must be higher than your current one.") |
-| At or above the bar without a verified identity | `auctionListing.identityRequired` ("Bids this high need a verified identity. Verify from your account, then bid again.") and a `auctionListing.verifyAction` ("Verify") link |
-| Grade10 asked the account to verify, and it has not | `auctionListing.identityRequested` ("We asked you to verify before you bid again.") and a `auctionListing.verifyAction` ("Verify") link |
+| Not above the bidder's own maximum | `auctionListing.maximumNotRaised` ("Your new maximum…") |
+| At or above the bar without a verified identity | `auctionListing.identityRequired` ("Bids this high…") and a `auctionListing.verifyAction` ("Verify") link |
+| Grade10 asked the account to verify, and it has not | `auctionListing.identityRequested` ("We asked you…") and a `auctionListing.verifyAction` ("Verify") link |
 | No linked card | `auctionListing.linkACardToBid` ("Link a card to bid") |
-| Another card after the first accepted bid on the lot | `auctionListing.enrollmentLocked` ("This listing's card is locked after the first accepted bid.") |
-| Bidding suspended on the account | `auctionListing.bidderSuspended` ("Bidding is suspended on this account. Contact Us to resolve it.") |
+| Another card after the first accepted bid on the lot | `auctionListing.enrollmentLocked` ("This listing's card…") |
+| Bidding suspended on the account | `auctionListing.bidderSuspended` ("Bidding is suspended…") |
 | Account banned from bidding | `auctionListing.bidderBanned` ("This account cannot bid.") |
 | A typed amount that is not valid, caught before the bid is sent | `auctionListing.invalidAmount` ("Enter a valid amount.") |
-| Before the start, after the close, or any other refusal | `auctionListing.bidDidNotGoThrough` ("Your bid did not go through.") |
+| Before the start, after the close, or any other refusal | `auctionListing.bidDidNotGoThrough` ("Your bid did…") |
 
 - **Kept for operators** — each refusal is one operational log line naming the
   lot and the reason; the bidder's record never shows it
