@@ -12,7 +12,7 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
 ## Feature set
 
 - Membership and ledger
-  - Member record: one per user identity, created by the first activity
+  - Member record: one per user identity, created by the first pointHistory
     recorded, holding no personal data
   - Point ledger: dated entries that are never edited, so a balance is always
     derived rather than stored
@@ -92,7 +92,7 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
 - Member surface
   - Membership home: tier, balance, tier progress, the tier period and the one
     date the balance expires on, in one place
-  - Private activity: a member's own history without operator reasons, retry
+  - Private pointHistory: a member's own history without operator reasons, retry
     keys or the pricing behind an entry
   - Deletion: deleting the account ends the membership at once
   - Coupon wallet: a coupon a sale claims reads as it would unclaimed, and
@@ -100,18 +100,18 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
 
 ## Requirements
 
-### Requirement: One member record per user, created on first activity
+### Requirement: One member record per user, created on first pointHistory
 
 The programme SHALL hold exactly one member record per user identity, created
 the first time anything is recorded for that user, and SHALL treat joining as a
-separate act from having activity recorded.
+separate act from having pointHistory recorded.
 
 The member record SHALL hold no personal data beyond the user identity. Names,
 email addresses and every other identity attribute stay in the identity system.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-jku rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-01 - Activity precedes joining
-**Serves:** Membership and ledger - activity precedes joining
+**Serves:** Membership and ledger - pointHistory precedes joining
 
 - **WHEN** points are recorded for a user who has never joined
 - **THEN** a member record exists and holds those points
@@ -152,7 +152,7 @@ asking the ledger, never stored as running totals.
 
 - **WHEN** any debit is recorded
 - **THEN** it draws only on credits that have points remaining
-- **AND** no sequence of recorded activity can drive a member below zero
+- **AND** no sequence of recorded pointHistory can drive a member below zero
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-xep rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-05 - Every debit is fully accounted
@@ -219,22 +219,22 @@ A member's whole redeemable balance SHALL expire once the programme's inactivity
 window has passed with no earning and no redemption. Any qualifying spend and
 any redemption SHALL reset that window for the whole balance, whatever the age
 of the points in it — including a spend too small to earn a whole point, which
-is activity even when it credits nothing.
+is pointHistory even when it credits nothing.
 
 The window SHALL be counted in calendar months on the programme's clock — the
 same day of the month and time of day, the programme's months on — and a day
 the target month does not have SHALL land on that month's last day. It is never
 a count of days.
 
-Resetting SHALL only ever push the window out. An activity dated in the past
-SHALL NOT pull a member's expiry earlier than an activity already recorded, so a
+Resetting SHALL only ever push the window out. An pointHistory dated in the past
+SHALL NOT pull a member's expiry earlier than an pointHistory already recorded, so a
 late-arriving record can shorten no balance.
 
 The balance SHALL stop counting at the instant the window passes, without
 waiting for any scheduled process. A refund, a claw-back, or a reward an
 operator hands over outright SHALL NOT reset the window, and neither SHALL an
 operator correction or a campaign grant while the member holds a point that is
-still live. Points already expired SHALL NOT be revived by later activity.
+still live. Points already expired SHALL NOT be revived by later pointHistory.
 
 A member who holds any redeemable points SHALL have exactly one date on which
 all of them expire. A grant or a correction an operator records SHALL take the
@@ -266,7 +266,7 @@ whole amount it removed.
 #### Scenario: grade10-site-loyalty-programme-SC-94 - Buying keeps the whole balance alive
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** a member earns points eleven months after their previous activity
+- **WHEN** a member earns points eleven months after their previous pointHistory
 - **THEN** the whole balance, oldest points included, expires an inactivity window after this earning
 - **AND** not an inactivity window after the earning that produced those older points
 
@@ -274,7 +274,7 @@ whole amount it removed.
 #### Scenario: grade10-site-loyalty-programme-SC-95 - Redeeming also resets the window
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** a member redeems and records no other activity
+- **WHEN** a member redeems and records no other pointHistory
 - **THEN** the remaining balance expires an inactivity window after that redemption
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-jff rev=1 -->
@@ -309,7 +309,7 @@ whole amount it removed.
 - **AND** the granted points expire with the rest of the balance, on the date that window already names
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-vif rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-100 - A spend too small to earn still counts as activity
+#### Scenario: grade10-site-loyalty-programme-SC-100 - A spend too small to earn still counts as pointHistory
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member's qualifying spend is below the price of one point
@@ -320,17 +320,17 @@ whole amount it removed.
 #### Scenario: grade10-site-loyalty-programme-SC-101 - A late record cannot shorten the balance's life
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** a purchase dated before the member's most recent activity is recorded
-- **THEN** the balance's expiry is left where the later activity put it
+- **WHEN** a purchase dated before the member's most recent pointHistory is recorded
+- **THEN** the balance's expiry is left where the later pointHistory put it
 - **AND** it is never pulled back toward the older date
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-q5t rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-150 - The window is calendar months, not a day count
 **Serves:** Earning and expiry - the window is calendar months, not a day count
 
-- **WHEN** a member's last activity is 3 January at 10:00 in the programme's zone
+- **WHEN** a member's last pointHistory is 3 January at 10:00 in the programme's zone
 - **THEN** the balance lapses on 3 January the next year at 10:00, whether that is 365 or 366 days on
-- **AND** an activity on 29 February lapses on 28 February the next year
+- **AND** an pointHistory on 29 February lapses on 28 February the next year
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-9w1 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-151 - A record older than the window is written already lapsed
@@ -366,7 +366,7 @@ whole amount it removed.
 - **AND** the member's inactivity window is unchanged
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-pft rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-182 - Handing over a reward is not the member's activity
+#### Scenario: grade10-site-loyalty-programme-SC-182 - Handing over a reward is not the member's pointHistory
 **Serves:** grade10-site-loyalty-programme-US-05 - a reward handed over is the operator's act, not the member's
 
 - **WHEN** an operator gives a member a reward outright, without the member spending points for it
@@ -861,7 +861,7 @@ expire on, so an operator adding points to a balance about to lapse sees it.
 ### Requirement: An operator runs the programme from one console
 
 An operator SHALL be able, subject to their own permissions, to: find a member
-and read their loyalty state and activity; correct a balance and grant campaign
+and read their loyalty state and pointHistory; correct a balance and grant campaign
 points; restart a member's expiry window; grant and revoke an invitation-only
 tier and list live grants; remove a tier a member holds; create, edit and
 archive rewards and see archived and scheduled ones; find a redemption and
@@ -962,10 +962,10 @@ by whom, and how many.
 What a member reads about themselves SHALL carry their tier, when that
 tier's validity period ends, their progress toward retaining it, their
 progress to the next earned tier, their redeemable balance, and the one date
-that balance expires on. Their own activity list SHALL NOT disclose operator
+that balance expires on. Their own pointHistory list SHALL NOT disclose operator
 reasons, retry keys, or the internal pricing of an entry.
 
-Each activity entry SHALL name what it was for, and which channel it came
+Each pointHistory entry SHALL name what it was for, and which channel it came
 from, in terms the member can read.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-qmv rev=1 -->
@@ -987,7 +987,7 @@ from, in terms the member can read.
 #### Scenario: grade10-site-loyalty-programme-SC-60 - Retry keys and internal pricing stay out of a member's view
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** a member reads their activity
+- **WHEN** a member reads their pointHistory
 - **THEN** no entry carries a retry key, a request record, or the tier and
   money arithmetic the entry was priced from
 
@@ -995,23 +995,23 @@ from, in terms the member can read.
 #### Scenario: grade10-site-loyalty-programme-SC-61 - A retired reward is still readable in history
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** a member reads an activity entry for a reward that has since been
+- **WHEN** a member reads an pointHistory entry for a reward that has since been
   archived
 - **THEN** the entry still names that reward
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-um9 rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-165 - An activity entry names its channel
+#### Scenario: grade10-site-loyalty-programme-SC-165 - An pointHistory entry names its channel
 **Serves:** grade10-site-loyalty-programme-US-08 - Member sees what a channel does to their points, before and after
 
-- **WHEN** a member reads an activity entry
-- **THEN** it names the channel that activity came from, in terms the
+- **WHEN** a member reads an pointHistory entry
+- **THEN** it names the channel that pointHistory came from, in terms the
   member can read
 
 ### Requirement: A member runs their own membership from one surface
 
 A signed-in member SHALL be able to see their tier and when it lapses, their
 progress toward retaining it and toward the next earned tier, their redeemable
-balance and when it expires; join if they have not; read their activity; browse
+balance and when it expires; join if they have not; read their pointHistory; browse
 the reward menu; redeem; and see the coupons they hold, each with its state and
 validity period.
 
@@ -1022,7 +1022,7 @@ reloads between attempts.
 #### Scenario: grade10-site-loyalty-programme-SC-62 - A member who never joined is invited to
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** a member with recorded activity but no join date opens the surface
+- **WHEN** a member with recorded pointHistory but no join date opens the surface
 - **THEN** they are shown how to join, and their existing points
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-yh1 rev=1 -->
@@ -1287,7 +1287,7 @@ as qualifying SHALL NOT be qualifying spend.
 Paying with a gift card or with store credit SHALL NOT change what a purchase
 earns: qualifying goods bought with either earn as any other purchase does.
 
-Every ledger entry SHALL record the channel the activity came from, valued
+Every ledger entry SHALL record the channel the pointHistory came from, valued
 from one closed set: the channels that sell, and one non-sale value for a
 row no channel sold — a correction, an expiry, a campaign grant. Nothing
 defaults: a writer that names no channel is refused.
@@ -1369,7 +1369,7 @@ and a purchase there SHALL complete regardless.
 A member SHALL be able to pay part of a qualifying purchase with redeemable
 points, converted at the programme's exchange rate, on any channel that
 sells. Paying with points SHALL reduce the redeemable balance alone, SHALL
-count as activity for the inactivity window, and SHALL NOT earn: qualifying
+count as pointHistory for the inactivity window, and SHALL NOT earn: qualifying
 spend counts only what the member paid in money.
 
 How a channel carries that payment is the channel's own concern — a
@@ -1478,7 +1478,7 @@ invalid rather than converted.
 - **AND** no ledger entry is written
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-jea rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-118 - Backdated activity keeps its own date
+#### Scenario: grade10-site-loyalty-programme-SC-118 - Backdated pointHistory keeps its own date
 **Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a spend carries a date in the past
@@ -1487,7 +1487,7 @@ invalid rather than converted.
 - **AND** the multiplier applied is the tier the member held immediately before it is priced
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-bwq rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-119 - Future-dated activity is refused
+#### Scenario: grade10-site-loyalty-programme-SC-119 - Future-dated pointHistory is refused
 **Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a spend carries a date more than five minutes ahead of now
@@ -1543,7 +1543,7 @@ never silent.
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the membership surface — `MembershipSummary`, `RewardMenu`,
-`CouponList`, and `ActivityList` — and the props and copy type of each.
+`CouponList`, and `PointHistory` — and the props and copy type of each.
 
 `MembershipSummary` SHALL render the two counts as two counts, never one
 total, alongside the tier held, the date its validity ends, and progress
@@ -1559,7 +1559,7 @@ where it is good at only one. `CouponList` SHALL carry each issued
 coupon - what it is for, its own expiry, and whether it is spent, void or
 expired - and a code only where the consumer passes one; a reward coupon
 carries none.
-`ActivityList` SHALL name entries in terms a member reads, name the channel
+`PointHistory` SHALL name entries in terms a member reads, name the channel
 each came from, and SHALL NOT carry an operator reason, a retry key, or
 internal pricing.
 
@@ -1580,11 +1580,11 @@ SHALL require no export of its own.
 - **AND** no single combined total is rendered
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-y9e rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-124 - A member's activity carries nothing operator-facing
+#### Scenario: grade10-site-loyalty-programme-SC-124 - A member's pointHistory carries nothing operator-facing
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** an entry was written by an operator correction
-- **THEN** the member's activity names the entry in member-readable terms
+- **THEN** the member's pointHistory names the entry in member-readable terms
 - **AND** it carries no operator reason, retry key or internal pricing
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-lig rev=1 -->
@@ -2089,7 +2089,7 @@ earning or redeeming. The restart SHALL NOT name a day the operator chooses: it
 lands an inactivity window from that day, on the programme's clock.
 
 The restart SHALL carry a reason, SHALL be recorded in the operator log, and
-SHALL NOT move points, so nothing about it reaches the member's activity. It
+SHALL NOT move points, so nothing about it reaches the member's pointHistory. It
 SHALL settle whatever has already lapsed before it moves the date, and SHALL
 leave a window already further out where it stands. It SHALL require the same
 permission as moving points.
@@ -2123,7 +2123,7 @@ permission as moving points.
 
 - **WHEN** an operator restarts a member's expiry window
 - **THEN** the balance is unchanged
-- **AND** nothing appears in the member's activity
+- **AND** nothing appears in the member's pointHistory
 
 ### Requirement: A coupon is held by nothing, and the newest claim is the only live one
 
