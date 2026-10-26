@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T06:49:07.203Z",
+  "generatedAt": "2026-10-26T08:02:34.571Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -66,8 +66,8 @@
     "PaginationNext": "ok",
     "PaginationPrevious": "ok",
     "Point History Record": "warn",
-    "Point History Summary": "warn",
-    "Points History Section": "warn",
+    "Point History Summary": "skipped",
+    "Points History Card": "warn",
     "Product / Cart / Cart Drawer": "warn",
     "Product / Cart / Cart Drawer Body": "warn",
     "Product / Cart / Cart Drawer Footer": "warn",
@@ -1049,11 +1049,15 @@
     "7443-2726": "Point History Summary",
     "7443-2741": "Point History Record",
     "7443-2742": "Point History Record",
-    "7443-2815": "Points History Section",
-    "7443-2816": "Points History Section",
-    "7443-2817": "Points History Section",
+    "7443-2815": "Points History Card",
+    "7443-2816": "Points History Card",
+    "7443-2817": "Points History Card",
     "7443-2875": "Point History Record",
     "7443-2953": "Point History Record",
+    "7443-3021": "Point History Record",
+    "7443-3032": "Point History Record",
+    "7443-3042": "Point History Record",
+    "7443-4182": "Point History Record",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1179,11 +1183,8 @@
     "Point History Record": [
       "Point History Record: no code component (looked for src/components/**/pointhistoryrecord.tsx or pointhistoryrecord.tsx)"
     ],
-    "Point History Summary": [
-      "Point History Summary: no code component (looked for src/components/**/pointhistorysummary.tsx or pointhistorysummary.tsx)"
-    ],
-    "Points History Section": [
-      "Points History Section: no code component (looked for src/components/**/pointshistorysection.tsx or pointshistorysection.tsx)"
+    "Points History Card": [
+      "Points History Card: no code component (looked for src/components/**/pointshistorycard.tsx or pointshistorycard.tsx)"
     ],
     "Product / Cart / Cart Drawer": [
       "Product / Cart / Cart Drawer: description \"A right-anchored drawer overlay for the shopping cart.\" is not in packages/ui/src/blocks/store-cart/cart-drawer.tsx — carry it into the JSDoc, or fix the description in Figma"
