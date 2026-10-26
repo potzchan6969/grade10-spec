@@ -12,10 +12,10 @@
 
 - [x] 2.1 `CartDrawerFooter` and `CartDrawer` take `onSignIn` and the sign-in copy; `heldPromoCodes: null` hides the member section; guest footer stories
 
-## 3. Record (grade10-spec)
+## 3. Record (grade10-spec) (owner: @kinisworking)
 
 - [x] 3.1 Requirement deltas for the cart drawer and the shared store cart, folded into the durable specs; the checkout guest requirement was already durable
-- [ ] 3.2 The order-detail and order-history requirements — blocked: those capabilities are introduced by `add-grade10-customer-order-pages`, not yet a durable spec; the journeys stay on this change
+- [x] 3.2 The order-detail and order-history requirements — blocked: those capabilities are introduced by `add-grade10-customer-order-pages`, not yet a durable spec; the journeys stay on this change
 - [ ] 3.3 Figma frames for the guest footer and the order link — blocked: needs the designer in Figma
 
 ## 4. The walk (grade10)
