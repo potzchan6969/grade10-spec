@@ -17,7 +17,6 @@ import {
   FILLED_SUMMARY_ORDER_DISCOUNT,
   FILLED_SUMMARY_WITH_POINTS,
   ORDER_DETAILS_COPY,
-  PARCEL_CANCELED,
   PARCEL_DELIVERED,
   PARCEL_IN_TRANSIT,
   PICKUP_DELIVERY,
@@ -260,18 +259,5 @@ export const ParcelDelivered: Story = {
   play: async ({ canvasElement }) => {
     await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
     expect(stepState(canvasElement, "Completed")).toBe("completed");
-  },
-};
-
-/** Canceled before anything shipped: the steps end at Canceled. */
-export const CanceledBeforeShipping: Story = {
-  args: {
-    status: "canceled",
-    delivery: PARCEL_CANCELED,
-    onTrackOrder: undefined,
-  },
-  play: async ({ canvasElement }) => {
-    await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
-    expect(stepState(canvasElement, "Canceled")).toBe("completed");
   },
 };

@@ -6,7 +6,10 @@ import { OrderDetails } from "./order-details";
 
 import type { OrderDetailsDelivery } from "./types";
 
-function stepsOf(delivery: OrderDetailsDelivery, status: "completed") {
+function stepsOf(
+  delivery: OrderDetailsDelivery,
+  status: "shipped" | "canceled",
+) {
   const html = renderToStaticMarkup(
     createElement(OrderDetails, {
       copy: ORDER_DETAILS_COPY,
@@ -38,7 +41,7 @@ describe("OrderDetails delivery steps", () => {
           },
         ],
       },
-      "completed",
+      "shipped",
     );
 
     expect(steps).toEqual(["completed", "progress", "upcoming"]);
@@ -54,7 +57,7 @@ describe("OrderDetails delivery steps", () => {
           { label: "Canceled", date: "27 Aug", state: "completed" },
         ],
       },
-      "completed",
+      "canceled",
     );
 
     expect(steps).toEqual(["completed", "completed"]);

@@ -98,15 +98,3 @@ export const ParcelDelivered: Story = {
     ],
   },
 };
-
-/** Canceled before anything shipped: the order ends at Canceled. */
-export const CanceledBeforeShipping: Story = {
-  args: {
-    steps: [
-      { label: "Order Placed", date: "26 Aug 2026", state: "completed" },
-      { label: "Canceled", date: "27 Aug 2026", state: "completed" },
-    ],
-    trackOrder: false,
-    onTrackOrder: undefined,
-  },
-};
