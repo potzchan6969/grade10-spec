@@ -23,7 +23,7 @@ never read (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx:593`,
 - [x] 2.2 Make the host hold `loading` until the basket is read: `loading = !basket.hasData || (!reviewUnchecked && (isOpening || !review.hasData))` in `CartDrawerHost.tsx`, so a failed review over a read basket still shows its lines unchecked, or the empty state when it has none; the host passes catalog `emptyTitle` and `emptyDescription` and the reviewed lines only (`shared-ui-store-cart-SC-23`, `shared-ui-store-cart-SC-24`, `shared-ui-store-cart-SC-25`, `shared-ui-store-cart-SC-48`, `shared-ui-store-cart-SC-51`)
 - [ ] 2.3 Verify: the focused `CartDrawer.test.tsx` run, `pnpm run typecheck` and `pnpm run lint`; do not run `pnpm run test:backend`, since the group adds no backend files — blocked: the focused CartDrawer.test.tsx run (90 tests) and biome pass; the Grade10 frontend tsc was killed by the shared machine's memory limit, so its typecheck is left to the coordinator's integrated sweep
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @kinisworking)
 
 Uses draft `feature-tcs.md` as its planning input after groups 1 and 2 land. It walks the journeys this
 change's scenarios serve; the drawer's other journeys keep their own walks.
