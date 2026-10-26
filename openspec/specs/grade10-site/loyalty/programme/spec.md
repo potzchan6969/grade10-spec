@@ -1561,7 +1561,15 @@ expired - and a code only where the consumer passes one; a reward coupon
 carries none.
 `PointHistory` SHALL name entries in terms a member reads, name the channel
 each came from, and SHALL NOT carry an operator reason, a retry key, or
-internal pricing.
+internal pricing. It SHALL render the earned, used and pending totals the
+consumer passes it, offer a filter for each of those kinds alongside an
+unfiltered view, and count the entries each filter answers on its trigger. A
+filter that answers no entries SHALL NOT draw a trigger, and a ledger with
+no entries at all SHALL draw the empty state the consumer supplies — message,
+second line, and action if any. Pending entries SHALL group under their own
+card ahead of the months; settled entries SHALL group by month and year. The
+day on an entry is the day its points landed, so a pending entry carries no
+date.
 
 Each of those components SHALL take the words it renders in a single `copy`
 prop of its own copy type, and SHALL receive every count, date and state
