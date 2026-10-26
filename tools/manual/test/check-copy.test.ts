@@ -82,6 +82,22 @@ describe("a message key cited with its words", () => {
     ]);
   });
 
+  it("passes a message's opening words and an ellipsis", () => {
+    expect(
+      found('`auctionListing.minimumBidIs` ("Minimum bid is…")\n'),
+    ).toEqual([]);
+  });
+
+  it("fails opening words the message does not open with", () => {
+    expect(found('`auctionListing.minimumBidIs` ("Minimum is…")\n')).toEqual([
+      `${SPEC} — line 1: \`auctionListing.minimumBidIs\` reads "Minimum bid is {amount}." in the English catalogs, not "Minimum is…" — \`pnpm check:manual --fix\` rewrites it`,
+    ]);
+  });
+
+  it("fails an ellipsis with no words before it", () => {
+    expect(found('`auctionListing.verifyAction` ("…")\n')).toHaveLength(1);
+  });
+
   it("fails a key no catalog holds", () => {
     expect(found('`auctionListing.verifyLink` ("Verify")\n')).toEqual([
       `${SPEC} — line 1: \`auctionListing.verifyLink\` names no message in the English catalogs`,
@@ -158,6 +174,17 @@ describe("--fix", () => {
     expect(rewritten).toBe(2);
     expect(readFileSync(join(root, SPEC), "utf8")).toBe(
       'A `auctionListing.verifyAction` ("Verify") link and `auctionListing.minimumBidIs` ("Minimum bid is {amount}.").\n',
+    );
+  });
+
+  it("keeps a shortened citation as short as it was written", () => {
+    const { root, rewritten } = run(
+      { [SPEC]: '`auctionListing.minimumBidIs` ("Minimum is…")\n' },
+      true,
+    );
+    expect(rewritten).toBe(1);
+    expect(readFileSync(join(root, SPEC), "utf8")).toBe(
+      '`auctionListing.minimumBidIs` ("Minimum bid…")\n',
     );
   });
 

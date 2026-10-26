@@ -378,7 +378,8 @@ button, a tab or a page by its label. Two forms, and nothing between them:
   nothing
 - **The key and its words** — where the words are the claim: a refusal the
   reader must see, a legal line. Cite the message key in backticks and its
-  English words in brackets after it
+  English words in brackets after it; a long message needs only its opening
+  words and an ellipsis, as in ("Bids this high…")
 
 ```md
 A refusal ends in a `auctionListing.verifyAction` ("Verify") link.

@@ -12,7 +12,9 @@
  *   `auctionListing.verifyAction` ("Verify")
  *
  * The key is the join; the words are for the reader, and this rule holds them
- * to the catalog. Where only a place is meant, the store names the control by
+ * to the catalog. A long message may be cited by its opening words and an
+ * ellipsis — `auctionListing.identityRequired` ("Bids this high need…") — and
+ * those words must open what the catalog holds. Where only a place is meant, the store names the control by
  * role and region instead and cites nothing.
  *
  * Only a key followed by its quoted words is a citation. A bare dotted name in
@@ -35,6 +37,7 @@ import { readText, walkFiles } from "../src/store/disk.mts";
 const MESSAGES = "packages/i18n/messages";
 const LOCALE = "en";
 const ARCHIVE = "openspec/changes/archive/";
+const ELLIPSIS = "…";
 
 const CITATION =
   /`([a-z][A-Za-z0-9]*)\.([A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)*)`\s+\("((?:[^"\\\n]|\\.)*)"\)/g;
@@ -132,11 +135,14 @@ export function checkCopy(root, dirs, add, { fix = false } = {}) {
           return whole;
         }
         const held = [...words].map(quoted);
-        if (held.includes(written)) return whole;
+        if (held.some((one) => says(one, written))) return whole;
 
         if (fix && held.length === 1) {
           fixedHere++;
-          return whole.replace(`("${written}")`, () => `("${held[0]}")`);
+          return whole.replace(
+            `("${written}")`,
+            () => `("${shortenLike(held[0], written)}")`,
+          );
         }
         add(
           "copy",
@@ -156,6 +162,26 @@ export function checkCopy(root, dirs, add, { fix = false } = {}) {
     }
   }
   return rewritten;
+}
+
+/** Whether the written words say the held message: all of it, or its opening
+ * words and an ellipsis. An ellipsis with nothing before it says nothing. */
+function says(held, written) {
+  if (held === written) return true;
+  if (!written.endsWith(ELLIPSIS)) return false;
+  const opening = written.slice(0, -ELLIPSIS.length).trimEnd();
+  return opening !== "" && held.startsWith(opening);
+}
+
+/** The held message cut to as many words as the drifted citation wrote, so a
+ * rewrite keeps the citation as short as its writer made it. */
+function shortenLike(held, written) {
+  if (!written.endsWith(ELLIPSIS)) return held;
+  const count = written.slice(0, -ELLIPSIS.length).trim().split(/\s+/).length;
+  const words = held.split(" ");
+  return words.length <= count
+    ? held
+    : `${words.slice(0, count).join(" ")}${ELLIPSIS}`;
 }
 
 function lineOf(text, offset) {
