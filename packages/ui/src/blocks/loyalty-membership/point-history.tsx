@@ -137,7 +137,7 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
         >
           <TabsList
             aria-label={copy.label}
-            className="w-full border-b border-border"
+            className="w-full justify-start border-b border-border"
             variant="list"
           >
             {FILTERS.map((name) => (
