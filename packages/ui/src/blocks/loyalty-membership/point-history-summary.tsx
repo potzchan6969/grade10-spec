@@ -41,8 +41,18 @@ function PointHistorySummary({
           [copy.pending, totals.pending, "secondary"],
         ] as const
       ).map(([label, value, tone]) => (
-        <VStack align="center" className="px-1 py-3 sm:px-2" gap="xs" key={label}>
-          <Text className="uppercase" size="xs" tone="secondary" weight="medium">
+        <VStack
+          align="center"
+          className="px-1 py-3 sm:px-2"
+          gap="xs"
+          key={label}
+        >
+          <Text
+            className="uppercase"
+            size="xs"
+            tone="secondary"
+            weight="medium"
+          >
             {label}
           </Text>
           <Text className="font-semibold" size="xl" tone={tone}>

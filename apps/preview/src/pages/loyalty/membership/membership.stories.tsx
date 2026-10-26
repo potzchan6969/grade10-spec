@@ -7,9 +7,9 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
-  PointHistory,
   CouponList,
   MemberPass,
+  PointHistory,
   RewardCheckout,
   RewardMenu,
   type RewardMenuItem,
@@ -25,7 +25,6 @@ import { expect, userEvent, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { storyHref } from "../../workbench-story-nav";
 import {
-  POINT_HISTORY_COPY,
   APPLE_HELD,
   APPLE_OFFERED,
   COUPON_LIST_COPY,
@@ -39,6 +38,7 @@ import {
   MEMBERSHIP_STATE_VIEWS,
   MEMBERSHIP_VIEW,
   type MembershipView,
+  POINT_HISTORY_COPY,
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,
   SOLD_OUT_COPY,
@@ -386,11 +386,7 @@ export const NoPoints: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getAllByText("0").length).toBeGreaterThan(0);
-    expect(
-      canvas.getByText(
-        "No points yet",
-      ),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("No points yet")).toBeInTheDocument();
     for (const card of canvasElement.querySelectorAll(
       '[data-slot="reward-menu-item"]',
     )) {

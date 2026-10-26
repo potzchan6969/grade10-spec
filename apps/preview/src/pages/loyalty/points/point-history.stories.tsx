@@ -1,9 +1,9 @@
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import {
-  PointHistory,
-  type LedgerEntry,
-  type PointsTotals,
   type AsyncState,
+  type LedgerEntry,
+  PointHistory,
+  type PointsTotals,
   SiteHeader,
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -56,7 +56,10 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: {
-    view: { ledger: { status: "ready", data: LEDGER_ENTRIES }, summary: POINTS_TOTALS },
+    view: {
+      ledger: { status: "ready", data: LEDGER_ENTRIES },
+      summary: POINTS_TOTALS,
+    },
   },
 } satisfies Meta<typeof PointHistoryPage>;
 
@@ -106,10 +109,6 @@ export const Empty: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText(
-        "No points yet",
-      ),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("No points yet")).toBeInTheDocument();
   },
 };

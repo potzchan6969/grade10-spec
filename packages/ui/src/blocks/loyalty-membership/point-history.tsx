@@ -1,14 +1,14 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
-import { Text } from "@grade10/design-system/components/display/text";
 import {
   Tabs,
   TabsList,
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { ShoppingBag } from "@phosphor-icons/react";
 import { useEffect, useRef, useState } from "react";
@@ -239,5 +239,5 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
   );
 }
 
-export type { PointHistoryFilter, PointHistoryCopy, PointHistoryProps };
+export type { PointHistoryCopy, PointHistoryFilter, PointHistoryProps };
 export { PointHistory };

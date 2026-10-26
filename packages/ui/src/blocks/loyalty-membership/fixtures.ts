@@ -5,8 +5,12 @@ import {
   FIXTURE_LOYALTY_REDEEM_AT_MS,
 } from "../../lib/datetime-fixtures";
 import type { PointHistoryCopy } from "./point-history";
-import type { PointsTotals } from "./types";
-import type { LedgerEntry, CouponItem, RewardMenuItem } from "./types";
+import type {
+  CouponItem,
+  LedgerEntry,
+  PointsTotals,
+  RewardMenuItem,
+} from "./types";
 
 /* Grade10's own programme content, for the examples only. A consumer supplies
  * its own; nothing here is a default. */
@@ -213,7 +217,12 @@ const POINTS_TOTALS: PointsTotals = {
 
 const POINT_HISTORY_COPY: PointHistoryCopy = {
   label: "Point history",
-  summary: { earned: "Earned", used: "Used", pending: "Pending", points: "pts" },
+  summary: {
+    earned: "Earned",
+    used: "Used",
+    pending: "Pending",
+    points: "pts",
+  },
   filters: { all: "All", earned: "Earned", used: "Used", pending: "Pending" },
   filteredEmpty: {
     all: "No entries yet.",
@@ -232,11 +241,11 @@ const POINT_HISTORY_COPY: PointHistoryCopy = {
 const MEMBER_TOKEN = "g10m.eyJrIjoiZml4dHVyZSJ9.5f2a9c";
 
 export {
-  LEDGER_ENTRIES,
-  POINT_HISTORY_COPY,
-  POINTS_TOTALS,
   BALANCE,
   COUPONS,
+  LEDGER_ENTRIES,
   MEMBER_TOKEN,
+  POINT_HISTORY_COPY,
+  POINTS_TOTALS,
   REWARDS,
 };

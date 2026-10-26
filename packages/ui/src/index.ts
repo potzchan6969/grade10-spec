@@ -423,13 +423,6 @@ export {
   type ConsignmentSellerLineCopy,
   type ConsignmentSellerLineProps,
 } from "./blocks/consignment-mine/consignment-seller-line";
-// shared-ui/loyalty-membership
-export {
-  PointHistory,
-  type PointHistoryFilter,
-  type PointHistoryCopy,
-  type PointHistoryProps,
-} from "./blocks/loyalty-membership/point-history";
 export {
   CouponList,
   type CouponListCopy,
@@ -447,6 +440,13 @@ export {
   type MemberPassState,
   type MemberPassVariant,
 } from "./blocks/loyalty-membership/member-pass";
+// shared-ui/loyalty-membership
+export {
+  PointHistory,
+  type PointHistoryCopy,
+  type PointHistoryFilter,
+  type PointHistoryProps,
+} from "./blocks/loyalty-membership/point-history";
 export {
   RewardCheckout,
   type RewardCheckoutCopy,
@@ -478,11 +478,11 @@ export {
   type TierLadderRung,
 } from "./blocks/loyalty-membership/tier-ladder";
 export type {
+  CouponItem,
+  CouponStatus,
   LedgerEntry,
   LedgerIcon,
   PointsTotals,
-  CouponItem,
-  CouponStatus,
   RewardCheckoutReward,
   RewardImage,
   RewardKind,

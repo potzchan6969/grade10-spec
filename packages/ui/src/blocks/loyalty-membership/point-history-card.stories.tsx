@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { PointHistoryCard } from "./point-history-card";
 import { LEDGER_ENTRIES, POINT_HISTORY_COPY } from "./fixtures";
+import { PointHistoryCard } from "./point-history-card";
 
 const SETTLED = LEDGER_ENTRIES.filter((entry) => !entry.pending);
 const PENDING = LEDGER_ENTRIES.filter((entry) => entry.pending);
@@ -48,8 +48,7 @@ export const Icons: Story = {
   },
   play: async ({ canvasElement }) => {
     expect(
-      canvasElement.querySelectorAll('[data-slot="point-history-icon"]')
-        .length,
+      canvasElement.querySelectorAll('[data-slot="point-history-icon"]').length,
     ).toBe(7);
   },
 };

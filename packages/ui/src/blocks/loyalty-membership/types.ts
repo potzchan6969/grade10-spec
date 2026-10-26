@@ -145,11 +145,11 @@ type PointsTotals = {
 };
 
 export type {
+  CouponItem,
+  CouponStatus,
   LedgerEntry,
   LedgerIcon,
   PointsTotals,
-  CouponItem,
-  CouponStatus,
   RewardCheckoutReward,
   RewardImage,
   RewardKind,

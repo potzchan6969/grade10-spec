@@ -1,13 +1,13 @@
 import { formatDay, formatMonthName } from "@grade10/date";
 import type {
-  LedgerEntry,
-  PointHistoryCopy,
-  PointsTotals,
   AsyncState,
   CartItemSummary,
   CouponItem,
   CouponListCopy,
+  LedgerEntry,
   MemberPassCopy,
+  PointHistoryCopy,
+  PointsTotals,
   RewardCheckoutCopy,
   RewardMenuCopy,
   RewardMenuItem,
@@ -90,7 +90,12 @@ const COUPON_ACTION_COPY = {
 
 const POINT_HISTORY_COPY: PointHistoryCopy = {
   label: "Point history",
-  summary: { earned: "Earned", used: "Used", pending: "Pending", points: "pts" },
+  summary: {
+    earned: "Earned",
+    used: "Used",
+    pending: "Pending",
+    points: "pts",
+  },
   filters: { all: "All", earned: "Earned", used: "Used", pending: "Pending" },
   filteredEmpty: {
     all: "No entries yet.",
@@ -601,9 +606,6 @@ const POINTS_BALANCE_LABEL = "You’ve 1,250 pts.";
 
 export type { HowPointsWorkRow, MembershipView, TierBenefitsRow };
 export {
-  LEDGER_ENTRIES,
-  POINT_HISTORY_COPY,
-  POINTS_TOTALS,
   APPLE_HELD,
   APPLE_OFFERED,
   APPLE_PASS_URL,
@@ -622,6 +624,7 @@ export {
   GOOGLE_SAVE_URL,
   HOW_POINTS_WORK,
   ISSUED_COUPON,
+  LEDGER_ENTRIES,
   LOYALTY_PAY_PART_OF_BASKET_HREF,
   LOYALTY_PAY_PART_OF_BASKET_STORY_ID,
   MEMBER,
@@ -629,7 +632,9 @@ export {
   MEMBERSHIP_PAGE_COPY,
   MEMBERSHIP_STATE_VIEWS,
   MEMBERSHIP_VIEW,
+  POINT_HISTORY_COPY,
   POINTS_BALANCE_LABEL,
+  POINTS_TOTALS,
   RETRY_COPY,
   REWARD_CHECKOUT_COPY,
   REWARD_MENU_COPY,

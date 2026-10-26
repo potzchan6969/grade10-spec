@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { PointHistorySummary } from "./point-history-summary";
 import { POINT_HISTORY_COPY, POINTS_TOTALS } from "./fixtures";
+import { PointHistorySummary } from "./point-history-summary";
 
 const meta = {
   title: "Loyalty/Points/Blocks/PointHistorySummary",
