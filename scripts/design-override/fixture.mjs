@@ -51,6 +51,7 @@ export function fixture({ team = TEAM, gitConfig } = {}) {
     });
   copy("scripts/openspec/lib/team-parse.mjs");
   copy("scripts/openspec/lib/handle.mjs");
+  copy("scripts/openspec/lib/tcs-rules.mjs");
   copy(".githooks");
   symlinkSync(MODULES, join(dir, "node_modules"));
   if (team !== undefined) write(dir, "docs/prds/team.yaml", team);
