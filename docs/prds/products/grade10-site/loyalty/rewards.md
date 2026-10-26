@@ -12,6 +12,10 @@ reviewed: 2026-10-06
 | Product coupon | A fixed amount, or a percentage with an optional maximum discount | Named products or variants, a filter over the catalog's worlds and types, or the whole order | Optional | $50 off Pokémon |
 | Gift | A free line added to the order, the variant it names | — | Required, above zero, so a gift always rides on a purchase | A free booster pack over $500 |
 
+**A gift is handed over at the till alone** - whatever channels a gift's
+definition names, online refuses it as the wrong channel; the console locks
+its channel to In store
+
 Both are coupons, Grade10's own instrument, and a reward that takes money
 off the whole order is a product coupon whose scope is the whole order —
 [Coupons](/p/grade10-site/loyalty/coupons). The store's own promotions use
@@ -126,7 +130,7 @@ carrying the definition it was bought under.
 
 - **Made instantly** — the coupon is idle in the member's own list the
   instant the points are spent
-- **Applied online** — on the store's own checkout page, before Shopify's
+- **Applied online** — a product coupon, on the store's own checkout page, before Shopify's
   checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
   lines

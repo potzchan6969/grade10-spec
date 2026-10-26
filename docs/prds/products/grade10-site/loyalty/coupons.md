@@ -24,7 +24,7 @@ so redefining the reward never rewrites a coupon a member already holds —
 | What it takes off | What that definition says |
 | Uses | **One** |
 | Who | The member who redeemed it |
-| Channels | The selling channels the definition names, or online alone for a scope the till cannot match, whatever channels it names - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) |
+| Channels | The selling channels the definition names, online alone for a scope the till cannot match, and the till alone for a gift, whatever channels it names - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) |
 | Runs from | The redemption, for the whole days the reward states |
 | Expiry | Read off the clock, never written down |
 
@@ -69,7 +69,7 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 
 | Channel | How it lands |
 | --- | --- |
-| Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
+| Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it. Never a gift |
 | At the till | For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it - before a sale, that one scan also identifies the member; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
 
 - **Answered before chosen** — the drawer answers every coupon against the
@@ -79,6 +79,17 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
   [Discounts](/p/grade10-site/store/discounts)
 - **The newest claim is the only live one** — choosing a coupon again takes
   it off every earlier sale first
+- **A gift keeps its minimum to the end** — staff ringing the sale below a
+  gift's minimum spend after Apply take its line back off, the coupon goes
+  back to the wallet and staff are told
+- ❓ **A gift on a sale locked for tender** — whether staff are told to
+  cancel the tender and remove a gift whose sale fell below its minimum
+  while locked, or the sale is let through, is unconfirmed — Product
+- ❓ **A gift with no membership to reach** — whether a sale rung while the
+  till cannot reach membership refuses the gift so the member comes back,
+  or staff may key it by hand, is unconfirmed — Product
+- ❓ **A returned sale's gift** — whether returning the goods takes the gift
+  back, or the member keeps it, is unconfirmed — Product
 - **A sale that ends gives it back** — a counter sale nobody paid releases
   its coupon when a newer promise retires it, or an hour after its last plan,
   not the next day
@@ -224,6 +235,9 @@ the store's instrument, not the programme's.
   one member it belongs to — [Discounts](/p/grade10-site/store/discounts)
 - **Listed for its member** — with their reward coupons in the cart drawer
   and at `/checkout`, answered against the cart before it is picked
+- **A store gift is the till's too** — a gift the store mints is refused
+  online as the wrong channel, as a reward's is, and goes on at the counter
+  from the member's panel or a typed code
 - **Never a reward** — no reward defines an order coupon; those are the
   store's to mint — [Discounts](/p/grade10-site/store/discounts)
 
