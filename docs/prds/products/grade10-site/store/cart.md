@@ -74,6 +74,10 @@ read against the cart as it stands and held nowhere.
   members alike; a member-only code typed by a guest gets the same refusal
   as a code nobody minted —
   [Discounts](/p/grade10-site/store/discounts#public-codes)
+- 🚧 **Running out reads louder** — in the cart picker, a live promo code
+  whose expiry is within its last 14 days keeps its discount title and its
+  expiry/conditions detail slot; only the “Use by” detail is emphasised. The
+  picker does not change the text or replace the title with the expiry.
 - **Set aside for a site discount** — where the code and a site discount
   cannot both apply and the site discount takes more, the drawer says so and
   the total shows the site discount, the answer the shop's checkout gives;
@@ -196,6 +200,7 @@ and tax before the invoice. A second code on one cart.
 | One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
 | Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. Promo editing stays: typed, picked and removed codes cut the total. Display-only promo is not this drawer. | Product |
 | Held list | Decided | The member's own store codes and reward coupons, plus public codes, answered before they are picked; a guest's list holds the public codes only. | Product |
+| Expiring promo detail | Decided | The cart picker emphasises only the “Use by” detail for a live promo within its last 14 days; the discount title and detail copy remain separate. Confirmed by the designer and PM, 2026-10-27. | Product |
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
 | Shipping | Decided | Unknown until the invoice; the estimated total is the goods after the site discounts and this store's own tender. | Product |
