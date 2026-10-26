@@ -93,7 +93,7 @@ function LedgerRow({
         ) : null}
       </VStack>
       <Text
-        className={cn("shrink-0", entry.pending && "text-primary")}
+        className={cn("shrink-0 whitespace-nowrap", entry.pending && "text-primary")}
         data-slot="point-history-delta"
         tone={entry.pending ? undefined : entry.delta > 0 ? "success" : "primary"}
         weight="medium"
