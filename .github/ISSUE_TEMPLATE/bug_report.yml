@@ -10,9 +10,6 @@ body:
         report asks for something nobody has decided yet, it is a change:
         start it on the planning line instead. `docs/governance/bug-fixes.md`
         tells the two apart.
-
-        Once someone confirms it reads as a bug, the `agent-fix` label runs
-        the fix rounds on it and posts each round here.
   - type: textarea
     id: what-happened
     attributes:

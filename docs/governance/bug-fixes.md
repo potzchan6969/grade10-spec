@@ -68,12 +68,11 @@ Commit: fix(<domain>): <outcome>
 | `fixed` | A draft pull request, `fix(<domain>): <outcome>`, labelled `bug`, that closes the report. A person reviews and merges it |
 | `change` | The report goes to planning, per Turning Into a Change |
 | `moved` | The report is filed in the repository the diagnosis names |
-| `asks`, `unsettled` | A person answers the question or the standing findings, then labels the report again |
+| `asks`, `unsettled` | A person answers the question or the standing findings, then runs the rounds again |
 | `no-red`, `no-green`, `unverified`, `unreadable`, `agent-failed` | A person reads the posted rounds; the run left nothing on `main` |
 
 ## Running It
 
-- **From a report** - the `agent-fix` label, added by whoever confirms it reads as a bug, runs `scripts/bug-fix/run.mjs` in the repository's `Bug fix` workflow and posts each round
 - **In a session** - `/fix-bug` runs the same rounds and the same gates, dispatching each reader itself
 - **By hand** - `node scripts/bug-fix/run.mjs --report <file> --agent scripts/bug-fix/claude-agent.sh --out <dir>`, or `cursor-agent.sh`: the agent is any command called as `<cmd> <read|write> <prompt-file>`
 
