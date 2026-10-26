@@ -11,7 +11,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { ShoppingBag } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
 import { PointHistoryCard } from "./point-history-card";
@@ -88,12 +88,44 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
       });
   }
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  const ready = state.status === "ready";
+
+  /* Enter: the sections and cards rise in, staggered — spatial consistency,
+   * not decoration. Reduced motion drops the rise, keeps the fade. */
+  useEffect(() => {
+    if (!ready || !rootRef.current) return;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const panel = rootRef.current.querySelector("#point-history-panel");
+    const targets = [
+      ...rootRef.current.children,
+      ...(panel ? [...panel.children] : []),
+    ];
+    for (const [i, el] of targets.entries()) {
+      el.animate(
+        [
+          { opacity: 0, transform: reduce ? "none" : "translateY(8px)" },
+          { opacity: 1, transform: "none" },
+        ],
+        {
+          delay: i * 50,
+          duration: 220,
+          easing: "cubic-bezier(0.23, 1, 0.32, 1)",
+          fill: "backwards",
+        },
+      );
+    }
+  }, [ready]);
+
   return (
     <VStack
       className={cn("gap-8", className)}
       data-slot="point-history"
       gap="none"
     >
+      <div className="contents" ref={rootRef}>
       {summary ? <PointHistorySummary copy={copy.summary} totals={summary} /> : null}
 
       {state.status === "loading" ? (
@@ -193,6 +225,7 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
           </div>
         </Tabs>
       ) : null}
+      </div>
     </VStack>
   );
 }
