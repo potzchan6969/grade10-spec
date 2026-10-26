@@ -2,6 +2,7 @@ import { Card } from "@grade10/design-system/components/display/card";
 import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import { LedgerRow } from "./ledger-row";
 import type { LedgerEntry } from "./types";
 
@@ -14,8 +15,12 @@ type PointHistoryCardHeader = {
 type PointHistoryCardProps = {
   /** The card's entries, newest first. */
   entries: readonly LedgerEntry[];
+  /** The pending variant: the card wears the brand tint. */
+  pending?: boolean;
   /** A header inside the card — the pending card's title and rule. */
   header?: PointHistoryCardHeader;
+  /** The unit after each delta — "pts". */
+  points?: string;
   /** The group's label, already formatted — "October 2026". Absent, no
    * heading draws and `label` names the list. */
   month?: string;
@@ -28,7 +33,9 @@ type PointHistoryCardProps = {
  * the way under its own header on the pending variant. */
 function PointHistoryCard({
   entries,
+  pending = false,
   header,
+  points,
   month,
   label,
   className,
@@ -40,7 +47,10 @@ function PointHistoryCard({
           {month}
         </Text>
       ) : null}
-      <Card className="gap-0" padding={false}>
+      <Card
+        className={cn("gap-0", pending && "border-transparent bg-primary-muted")}
+        padding={false}
+      >
         {header ? (
           <div className="flex flex-col gap-0 px-(--card-spacing) py-2 [--card-spacing:--spacing(4)]">
             <Text weight="medium">{header.title}</Text>
@@ -61,7 +71,7 @@ function PointHistoryCard({
               divider={index < entries.length - 1}
               key={entry.id}
             >
-              <LedgerRow entry={entry} />
+              <LedgerRow entry={entry} points={points} />
             </ListItem>
           ))}
         </List>

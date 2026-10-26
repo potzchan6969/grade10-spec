@@ -126,6 +126,8 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
                   description: copy.pending.body,
                 }}
                 label={copy.label}
+                pending
+                points={copy.pending.points}
               />
             ) : null}
 
@@ -135,6 +137,7 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
                 key={`${group.key}-${index}`}
                 label={copy.label}
                 month={group.month}
+                points={copy.pending.points}
               />
             ))}
           </div>
