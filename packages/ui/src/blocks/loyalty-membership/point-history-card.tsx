@@ -48,7 +48,7 @@ function PointHistoryCard({
         </Text>
       ) : null}
       <Card
-        className={cn("gap-0", pending && "border-transparent bg-primary/5")}
+        className={cn("gap-0", pending && "border-primary/20 bg-primary/5")}
         padding={false}
       >
         {header ? (
