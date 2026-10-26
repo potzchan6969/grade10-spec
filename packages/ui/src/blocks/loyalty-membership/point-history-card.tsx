@@ -67,7 +67,7 @@ function PointHistoryCard({
         >
           {entries.map((entry, index) => (
             <ListItem
-              className="gap-4 px-0 py-2"
+              className="gap-4 px-0 py-3"
               divider={index < entries.length - 1}
               key={entry.id}
             >
