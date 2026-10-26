@@ -26,9 +26,33 @@ address, payment and refund facts, and leaves each missing fact absent
 **Progress and tracking** — a collector sees the Store-supplied fulfilment
 state and can follow a safe carrier address when one is supplied
 
+**Where the parcel is** — the delivery steps follow the parcels, not the
+status badge: Order Placed until a parcel is labelled or handed over,
+Shipping from then on, and Completed once every item shipped and every
+parcel arrived, as [Order Status](/p/grade10-site/commerce/order-status)
+counts arrival
+
+**Shipping and arrival** — Shipping names the carrier and number; until
+delivery, Completed carries the latest estimate among parcels still on their
+way, labelled as an estimate
+
+**Dropped parcels** — a canceled parcel or a voided label counts for
+nothing, Track Order included
+
+**An order that stops** — canceled, or refunded in full, before delivery: the
+steps end at Canceled or Refunded, after Shipping only when a parcel had
+already left
+
+❓ **How a stopped order looks** — the Canceled or Refunded step draws the
+same tick as a reached step, as the stepper's design has no ending of its
+own; Design confirms
+
+**Badge beside the steps** — the badge reads Completed only once the
+Completed step is reached
+
 ❓ **Steps not reached** — a delivery step the order has not reached shows
-with no date; a just-placed order has only Order Placed reached. Design
-confirms
+no date of its own, only Completed's labelled estimate; a just-placed order
+has only Order Placed reached. Design confirms
 
 ❓ **A full refund** — the summary keeps the paid total and shows the whole
 amount as its Refund row. Design confirms
@@ -148,4 +172,5 @@ except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
 | Another email | Decided | Only a sign-in that proves the order's email adds it — a magic link to that email or a Google account under it; a Google account under another email signs the buyer in and adds nothing, and the toast offers a magic link to the order's email. Decided 2026-10-13. | Product |
 | Points section | Decided | An order that will earn shows Points to Earn before completion and Points Earned after; an order that will not earn — canceled or fully refunded, or a guest order, joined or not — shows no points section at all. Decided 2026-10-13; a joined guest order earns nothing from 2026-10-14. | Product |
 | Shipping step label | Decided | The delivery step reads Shipping (in progress), matching winner orders; the status badge keeps the status name Shipped. Decided 2026-10-13. | Product |
+| Delivery steps follow the parcel | Decided | The steps read each parcel's carrier state rather than the order status badge. The badge reads Completed once every item is handed over and paid, so a stepper driven by it ticked Completed while the parcel was still travelling, ticked every step on a refund before shipping, and drew a canceled order as still on its way. A parcel whose carrier never reports delivery stays on Shipping until staff mark the order delivered - [Order Status](/p/grade10-site/commerce/order-status). Decided 2026-10-24. | Product |
 :::

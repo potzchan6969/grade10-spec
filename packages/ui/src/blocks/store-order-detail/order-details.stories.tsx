@@ -17,6 +17,8 @@ import {
   FILLED_SUMMARY_ORDER_DISCOUNT,
   FILLED_SUMMARY_WITH_POINTS,
   ORDER_DETAILS_COPY,
+  PARCEL_DELIVERED,
+  PARCEL_IN_TRANSIT,
   PICKUP_DELIVERY,
 } from "./fixtures";
 import { OrderDetails } from "./order-details";
@@ -229,5 +231,33 @@ export const PaidTotalWithoutSubtotal: Story = {
     expect(sidebarCanvas.getByText("HK$1,654.50")).toBeVisible();
     expect(sidebarCanvas.queryByText("Subtotal")).not.toBeInTheDocument();
     expect(sidebarCanvas.queryByText("Payment Method")).not.toBeInTheDocument();
+  },
+};
+
+const stepState = (canvasElement: HTMLElement, label: string) =>
+  [
+    ...within(canvasElement)
+      .getByRole("list", { name: "Delivery Status" })
+      .querySelectorAll<HTMLElement>('[data-slot="step"]'),
+  ]
+    .find((step) => step.textContent?.includes(label))
+    ?.getAttribute("data-state");
+
+/** Handed to the carrier, not yet delivered: Shipped, with Shipping current. */
+export const ParcelInTransit: Story = {
+  args: { status: "shipped", delivery: PARCEL_IN_TRANSIT },
+  play: async ({ canvasElement }) => {
+    await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
+    expect(stepState(canvasElement, "Shipping")).toBe("progress");
+    expect(stepState(canvasElement, "Completed")).toBe("upcoming");
+  },
+};
+
+/** Every parcel delivered: Completed, with every step reached. */
+export const ParcelDelivered: Story = {
+  args: { status: "completed", delivery: PARCEL_DELIVERED },
+  play: async ({ canvasElement }) => {
+    await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
+    expect(stepState(canvasElement, "Completed")).toBe("completed");
   },
 };
