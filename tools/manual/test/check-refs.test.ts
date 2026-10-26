@@ -75,14 +75,14 @@ describe("a reference the store cannot answer", () => {
     ]);
   });
 
-  it("says how to qualify an id two specs answer to", async () => {
+  it("names every capability an item id belongs to", async () => {
     const root = store({
       "docs/prds/guides/writing.md":
         "---\ntitle: Writing\n---\n\nCite it as [[navigation-SC-01]].\n",
     });
 
     expect(refs(await runChecks(root, NO_GIT))).toEqual([
-      "docs/prds/guides/writing.md — `[[navigation-SC-01]]`: `navigation-SC-01` lives in `demo-product/alpha` and `demo-product/beta` — qualify it as `[[<spec>#navigation-SC-01]]`",
+      "docs/prds/guides/writing.md — `[[navigation-SC-01]]`: `navigation-SC-01` is an item of `demo-product/alpha` and `demo-product/beta`; link its capability as `[[<capability>]]`",
     ]);
   });
 
@@ -97,13 +97,15 @@ describe("a reference the store cannot answer", () => {
     ]);
   });
 
-  it("says nothing about an id the page's own spec issues", async () => {
+  it("refuses an item id even on the page whose spec issues it", async () => {
     const result: Result = await runChecks(
-      alpha("Alpha cites [[navigation-SC-01]] and [[alpha-SC-01]]."),
+      alpha("Alpha cites [[alpha-SC-01]]."),
       NO_GIT,
     );
 
-    expect(refs(result)).toEqual([]);
+    expect(refs(result)).toEqual([
+      "docs/prds/products/demo-product/alpha.md — `[[alpha-SC-01]]`: `alpha-SC-01` is an item of `demo-product/alpha`; link its capability as `[[<capability>]]`",
+    ]);
   });
 });
 

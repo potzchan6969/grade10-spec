@@ -193,16 +193,8 @@ function refTokens(value: string): HastNode[] {
  * never orphan the prose that cites it. One that resolves to nothing, or to
  * two things, gets the dead-link treatment with the resolver's own words.
  */
-function InlineRef({
-  index,
-  pageSpec,
-  raw,
-}: {
-  index: ManualIndex;
-  pageSpec?: string;
-  raw: string;
-}) {
-  const resolved = resolveRef(raw, index.snapshot, pageSpec);
+function InlineRef({ index, raw }: { index: ManualIndex; raw: string }) {
+  const resolved = resolveRef(raw, index.snapshot);
   if (!resolved.ok) {
     return (
       <span
@@ -214,16 +206,12 @@ function InlineRef({
     );
   }
 
-  const { target } = resolved;
-  const route = routeForSpec(index, target.spec);
   return (
     <RouterLink
       className="decoration-dotted"
-      to={target.kind === "spec" ? route : `${route}#${target.id}`}
+      to={routeForSpec(index, resolved.spec)}
     >
-      {target.kind === "spec"
-        ? specTitle({ id: target.spec, title: target.title })
-        : target.title}
+      {specTitle({ id: resolved.spec, title: resolved.title })}
     </RouterLink>
   );
 }
@@ -245,8 +233,6 @@ type MarkdownViewProps = {
   /** Manual-page prose only. Spec text mirrored from the store is quoted, not
    * authored here, so its brackets stay brackets. */
   refs?: boolean;
-  /** The page's own `spec:` — the scope a bare id resolves inside. */
-  pageSpec?: string;
   className?: string;
 };
 
@@ -261,7 +247,6 @@ export function MarkdownView({
   anchors = false,
   anchorPrefix,
   refs = false,
-  pageSpec,
   className,
 }: MarkdownViewProps) {
   const components = useMemo<Components>(
@@ -269,7 +254,7 @@ export function MarkdownView({
       span: ({ children, node, ...rest }: SpanProps) => {
         const raw = node?.properties?.[REF_PROPERTY];
         if (typeof raw !== "string") return <span {...rest}>{children}</span>;
-        return <InlineRef index={index} pageSpec={pageSpec} raw={raw} />;
+        return <InlineRef index={index} raw={raw} />;
       },
       a: ({ href, children }: ComponentProps<"a">) => {
         const target = classifyHref(href ?? "", baseDir, index);
@@ -353,7 +338,7 @@ export function MarkdownView({
         />
       ),
     }),
-    [anchors, anchorPrefix, baseDir, index, pageSpec],
+    [anchors, anchorPrefix, baseDir, index],
   );
 
   const remarkPlugins = useMemo<

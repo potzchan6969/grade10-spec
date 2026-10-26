@@ -111,15 +111,14 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 
 Unknown directives are a parse error, not a silent pass-through.
 
-Prose may carry inline references: `[[grade10-site-loyalty-programme-SC-23]]` renders the current
-title of the scenario, story, or test case it names as a deep link, so a
-renamed heading can never orphan the prose that cites it. A bare id
-resolves inside the page's own `spec:`; one that could mean two things
-must qualify as `[[spec-id#item-id]]`; `[[product/capability]]` links the
-capability page. The grammar never sees these — prose stays verbatim —
+Prose may carry inline references: `[[grade10-site/loyalty/programme]]` renders the
+current title of the capability it names as a deep link, so a renamed
+capability can never orphan the prose that cites it. An item id (scenario,
+journey, test case) is never a reference target — it renders as a dead link
+naming its capability. The grammar never sees these — prose stays verbatim —
 and `src/content/refs.ts` is the one resolver render and check share. An
-unresolvable or ambiguous reference renders as a marked dead link and
-draws a check warning, the same rule every other prose pointer has. The
+unresolvable reference renders as a marked dead link and draws a check
+warning, the same rule every other prose pointer has. The
 check scans prose with the grammar's fence tracking and skips inline
 code; the editor's picker inserts ids so nobody hand-types them.
 
@@ -609,9 +608,9 @@ family enforced nowhere. The rules:
   at the page's commit versus head, one `git cat-file --batch` pass); a
   spec moved since that commit is reported as moved, never as an
   everything-changed diff; a page with no commit yet is skipped
-- warning: a `[[ref]]` in prose that resolves to nothing or to more than
-  one thing, scanned with the grammar's fence tracking, inline code
-  skipped
+- warning: a `[[ref]]` in prose that resolves to nothing or names an item
+  rather than a capability, scanned with the grammar's fence tracking,
+  inline code skipped
 - warning: a page's own prose drawing a ledger — a table headed exactly
   `Step | Event | Points | Balance`, or `When | …` — outside an
   `example`, where nothing holds its balances to their arithmetic; the

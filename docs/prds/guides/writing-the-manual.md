@@ -319,25 +319,19 @@ What it is worth.
 
 ## Citing the Spec
 
-Prose can cite the store by id, and the reference stays honest when the
+Prose links a capability by its spec id, and the link stays honest when the
 store moves. Write the id in double brackets:
 
 ```md
-Expiry is exact — [[grade10-site-loyalty-programme-SC-96]] — and a balance is never negative
-([[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]).
+Points expire on a fixed date — the rules are in [[grade10-site/loyalty/programme]].
 ```
 
-**A page never cites a scenario.** `…-SC-32` says nothing to the person
-reading the page, so a rule is stated in the page's own words and the
-capability is linked whole. The scenario form below is for the specs and the
-guides that quote them.
-
-A reference renders the target's current title as a link, so a renamed
-scenario can never orphan the prose that cites it. On a page with a `spec`
-in its frontmatter, a bare id resolves inside that spec; anywhere else —
-this guide, say — qualify it as `spec-id#item-id`, like
-[[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]. A reference that resolves to
-nothing renders as a marked dead link and draws a check warning.
+**A page never cites an item.** A scenario, journey or test-case id such as
+`…-SC-32` says nothing to the person reading the page, so a rule is stated in
+the page's own words and the capability is linked whole. A reference renders
+the capability's current title as a link, so a renamed capability can never
+orphan the prose that cites it. One that names nothing, or an item, renders as
+a marked dead link and draws a check warning.
 
 ## Canonical Form
 

@@ -37,9 +37,3 @@ export function useBlockScopeMaybe(): BlockScope | null {
 export function usePageDir(): string {
   return dirOf(useBlockScope().pagePath);
 }
-
-/** The spec a page's own bare `[[ids]]` resolve inside, from its frontmatter. */
-export function usePageSpec(): string | undefined {
-  const { index, pagePath } = useBlockScope();
-  return index.pageByPath.get(pagePath)?.ast?.frontmatter.spec;
-}
