@@ -88,6 +88,7 @@ the settings the schedule runs on.
 - 🚧 **Batch** - approved requests gathered into one FPS or bank batch and
   exported as the bank's file; each request is marked paid with its bank
   reference, or failed, which puts the amount back on the balance
+- **A paid payout sent back** - stays paid; finance settles it by hand
 - 🚧 **Statements** - each month's settlement statements and commission
   invoices, numbered in their series
 - **Export** - a CSV of a period's payouts, on the audit chain
@@ -136,8 +137,8 @@ pinned to a consignment when its agreement is prepared.
 
 - **Two people for money** - staff and treasurer share no money grant, and a
   payout is approved by someone other than whoever asked for it
-- ❓ Product - **Who set the rate never pays it** - whether the person who set
-  a commission outside the schedule is also kept from paying it out
+- 🚧 **Who set the rate never pays it** - whoever set a consignor's
+  commission outside the schedule does not approve that consignor's payouts
 - **Second factor and audit** - as the vault's: required in production, and
   every act filed under its consignment -
   [Operator Console](/p/grade10-site/vault/operator-console#permissions)
@@ -151,6 +152,8 @@ pinned to a consignment when its agreement is prepared.
 | Seller display is an admin act | Decided | The owner names the admin as the one who sets it - decided by the owner, 2026-10-08 | Product |
 | Every figure a setting | Decided | The schedule, the term, the windows, fees, identity and when a consignor is paid are settings admins change in the console, each starting on the recommended default - decided by the owner, 2026-10-08 | Product |
 | A balance, not a payout per consignment | Decided | Proceeds reach one balance per consignor and payouts are asked for against it - decided by the owner, 2026-10-26 | Finance |
+| Who set the rate never pays it | Decided | Whoever set a commission outside the schedule is refused when approving a payout from that consignor's balance, since the balance pools every consignment - decided by Product, 2026-10-26 | Finance |
+| A paid payout sent back | Decided | Not reopened in the console for now; finance handles a bank's return of a paid payout by hand - decided by Product, 2026-10-26 | Finance |
 | A schedule version per save | ❓ Open | Proposed: each settings save that moves a figure is the next schedule version, the one an agreement prepared after it pins | Product |
 | The channel and the details at intake | Decided | the receive act records where the consignment was taken, its channel - the store or the auction - and each item's market value and the consignment rates applying to it - decided under the owner's delegation, 2026-10-16 | Product |
 :::
