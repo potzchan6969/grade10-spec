@@ -298,8 +298,8 @@ function MembershipPage({ view }: { view: MembershipView }) {
             </h2>
             <PointHistory
               copy={POINT_HISTORY_COPY}
-              state={view.pointHistory}
-              summary={view.pointHistorySummary}
+              state={view.ledger}
+              summary={view.ledgerTotals}
             />
           </section>
         </div>
@@ -338,7 +338,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Tier, both counts, rewards, coupons and pointHistory, on one page. */
+/** Tier, both counts, rewards, coupons and activity, on one page. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -388,7 +388,7 @@ export const NoPoints: Story = {
     expect(canvas.getAllByText("0").length).toBeGreaterThan(0);
     expect(
       canvas.getByText(
-        "No pointHistory yet. Purchases appear here once they are recorded.",
+        "No activity yet. Purchases appear here once they are recorded.",
       ),
     ).toBeInTheDocument();
     for (const card of canvasElement.querySelectorAll(

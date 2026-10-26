@@ -15,9 +15,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import {
-  POINT_HISTORY,
+  LEDGER_ENTRIES,
   POINT_HISTORY_COPY,
-  POINT_HISTORY_SUMMARY,
+  POINTS_TOTALS,
 } from "../loyalty-content";
 
 const PAGE_COPY = {
@@ -27,7 +27,7 @@ const PAGE_COPY = {
 };
 
 type PointHistoryView = {
-  pointHistory: AsyncState<readonly LedgerEntry[]>;
+  ledger: AsyncState<readonly LedgerEntry[]>;
   summary: PointsTotals;
 };
 
@@ -58,7 +58,7 @@ function PointHistoryPage({ view }: { view: PointHistoryView }) {
           </h1>
           <PointHistory
             copy={POINT_HISTORY_COPY}
-            state={view.pointHistory}
+            state={view.ledger}
             summary={view.summary}
           />
         </div>
@@ -74,7 +74,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: {
-    view: { pointHistory: { status: "ready", data: POINT_HISTORY }, summary: POINT_HISTORY_SUMMARY },
+    view: { ledger: { status: "ready", data: LEDGER_ENTRIES }, summary: POINTS_TOTALS },
   },
 } satisfies Meta<typeof PointHistoryPage>;
 
@@ -100,9 +100,9 @@ export const Default: Story = {
 export const Empty: Story = {
   args: {
     view: {
-      pointHistory: {
+      ledger: {
         status: "empty",
-        message: "No pointHistory yet. Purchases appear here once they are recorded.",
+        message: "No activity yet. Purchases appear here once they are recorded.",
       },
       summary: { earned: 0, used: 0, pending: 0 },
     },
@@ -111,7 +111,7 @@ export const Empty: Story = {
     const canvas = within(canvasElement);
     expect(
       canvas.getByText(
-        "No pointHistory yet. Purchases appear here once they are recorded.",
+        "No activity yet. Purchases appear here once they are recorded.",
       ),
     ).toBeInTheDocument();
   },
