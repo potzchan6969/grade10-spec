@@ -388,7 +388,7 @@ export const NoPoints: Story = {
     expect(canvas.getAllByText("0").length).toBeGreaterThan(0);
     expect(
       canvas.getByText(
-        "No activity yet. Purchases appear here once they are recorded.",
+        "No points yet",
       ),
     ).toBeInTheDocument();
     for (const card of canvasElement.querySelectorAll(

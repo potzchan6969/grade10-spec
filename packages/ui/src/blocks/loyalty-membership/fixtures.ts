@@ -137,7 +137,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
   },
   {
     id: "entry-sleeves",
-    kind: "Redeemed Reward",
+    kind: "Redeemed reward",
     track: "used",
     icon: "reward",
     delta: -120,
@@ -176,7 +176,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
   },
   {
     id: "entry-redeem",
-    kind: "Redeemed Reward",
+    kind: "Redeemed reward",
     track: "used",
     icon: "reward",
     delta: -500,

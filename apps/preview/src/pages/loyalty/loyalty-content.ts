@@ -403,7 +403,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
   },
   {
     id: "entry-sleeves",
-    kind: "Redeemed Reward",
+    kind: "Redeemed reward",
     track: "used",
     icon: "reward",
     delta: -120,
@@ -423,7 +423,7 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
   },
   {
     id: "entry-redeem",
-    kind: "Redeemed Reward",
+    kind: "Redeemed reward",
     track: "used",
     icon: "reward",
     delta: -500,
@@ -547,7 +547,9 @@ const MEMBERSHIP_STATE_VIEWS = {
     },
     ledger: {
       status: "empty",
-      message: "No activity yet. Purchases appear here once they are recorded.",
+      message: "No points yet",
+      description: "Earn points with every purchase — online or at the till.",
+      action: { label: "Start shopping", onAction: () => {} },
     },
     ledgerTotals: { earned: 0, used: 0, pending: 0 },
   },

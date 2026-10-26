@@ -99,7 +99,9 @@ export const Empty: Story = {
     view: {
       ledger: {
         status: "empty",
-        message: "No activity yet. Purchases appear here once they are recorded.",
+        message: "No points yet",
+        description: "Earn points with every purchase — online or at the till.",
+        action: { label: "Start shopping", onAction: () => {} },
       },
       summary: { earned: 0, used: 0, pending: 0 },
     },
@@ -108,7 +110,7 @@ export const Empty: Story = {
     const canvas = within(canvasElement);
     expect(
       canvas.getByText(
-        "No activity yet. Purchases appear here once they are recorded.",
+        "No points yet",
       ),
     ).toBeInTheDocument();
   },
