@@ -21,7 +21,7 @@
 ### grade10-site-store-discounts-US-04: Shop staff spends a member's reward coupon at the till
 
 **As a** member of shop staff,
-**I want** a member's reward coupon, a product coupon or a gift, to settle at the till as surely as it does online,
+**I want** a member's reward coupon or product coupon to settle at the till as surely as it does online, and a gift, which only the till hands over, to settle there too,
 **so that** I can ring it up with the same confidence either channel gives me.
 
 ### g10.store-discounts.US5: Collector finds a code open to everyone
