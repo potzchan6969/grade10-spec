@@ -81,7 +81,10 @@ function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
             />
           ) : (
             <Tabs defaultValue="available">
-              <TabsList>
+              <TabsList
+                className="w-full justify-start border-b border-border"
+                variant="list"
+              >
                 <TabsTrigger value="available">
                   {COUPONS_PAGE_COPY.availableTab}
                 </TabsTrigger>
