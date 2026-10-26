@@ -1,4 +1,4 @@
-## 1. Shared UI contract tests (grade10-spec)
+## 1. Shared UI contract tests (grade10-spec) (owner: @kinisworking)
 
 Add the shared boundary coverage before changing or repinning any consumer.
 
