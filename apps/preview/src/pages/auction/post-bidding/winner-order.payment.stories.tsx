@@ -284,7 +284,7 @@ export const SubmitBankPaymentProof: Story = {
       canvas.queryByRole("button", { name: "View Bank Details" }),
     ).not.toBeInTheDocument();
     const verificationAlert = canvas.getByRole("alert");
-    expect(verificationAlert).toBeVisible();
+    await waitFor(() => expect(verificationAlert).toBeVisible());
     expect(
       within(verificationAlert).getByText(/We’re verifying your transfer/),
     ).toBeVisible();
