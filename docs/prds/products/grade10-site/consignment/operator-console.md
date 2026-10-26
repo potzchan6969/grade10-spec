@@ -19,9 +19,6 @@ the settings the schedule runs on.
 | To list | signed and not yet on sale |
 | On sale | in the shop or at auction; ending soon badged |
 | Sold | sold and inside the return window |
-| Payout requests | asked for and not yet paid, by state |
-| Before payout | consignors with a balance and no verified identity |
-| Debts | consignors whose balance is below zero |
 | Ended unsold | the term ended and the consignor has not chosen |
 | Returning | going back to the consignor |
 | Closed | paid out, or back with the consignor |
@@ -29,6 +26,9 @@ the settings the schedule runs on.
 - **Rows** - the consignor, each item with its label code, the channel, the
   price, days on sale and a badge naming why it waits
 - **Counts** - each view carries its count, and every view adds up to all
+- 🚧 **Payouts are the balance's** - payout requests, consignors before
+  payout and debts are queued on the balance -
+  [Balance Console](/p/grade10-site/account/balance-console#queue)
 
 ## One Consignment
 
@@ -73,25 +73,20 @@ the settings the schedule runs on.
 ## Consignors
 
 - 🚧 **One page per consignor** - their account facts, approved-partner
-  flag, identity and ID sighted, payout account masked, the balance, what is
-  pending in return windows, any debt, every ledger entry, their documents
-  and their consignments
-- 🚧 **Reveal** - finance reveals one masked number at a time, and each
-  reveal is recorded with who and when
+  flag, identity and ID sighted, what is pending in return windows, their
+  documents and their consignments, with a link to their balance
+- 🚧 **Reveal** - finance reveals one masked ID or registration number at a
+  time, and each reveal is recorded with who and when
 
-## Payouts
+## Statements
 
-- 🚧 **Requests** - every payout asked for, oldest first, with the reason any
-  is refused: no verified identity, a debt, or no account in the consignor's
-  name
-- 🚧 **Approve** - by finance, never the staff member who asked for it
-- 🚧 **Batch** - approved requests gathered into one FPS or bank batch and
-  exported as the bank's file; each request is marked paid with its bank
-  reference, or failed, which puts the amount back on the balance
-- **A paid payout sent back** - stays paid; finance settles it by hand
+- 🚧 **Payouts are the balance's** - requests, approval, batches and the
+  bank's file are worked from the balance's own desk -
+  [Balance Console](/p/grade10-site/account/balance-console#acts)
 - 🚧 **Statements** - each month's settlement statements and commission
   invoices, numbered in their series
-- **Export** - a CSV of a period's payouts, on the audit chain
+- **Export** - a CSV of a period's sales, commission and credits to the
+  balance, on the audit chain
 
 ## Settings
 
@@ -102,7 +97,7 @@ pinned to a consignment when its agreement is prepared.
 | --- | --- | --- |
 | Commission, for each channel and price band | unset; intended **10–12%** | a share of the price |
 | Incentive, on the estimated value | **5%**, credited at signing | a share of the estimated value |
-| Incentive paid as | a credit to the payout balance | on the spot, by cash or FPS |
+| Incentive paid as | a credit to the consignor's balance | on the spot, by cash or FPS |
 | Minimum commission | none | an amount per item |
 | Fees: listing, return, early take-back | none | an amount each |
 | Contract period | **90** days | any number of days |
@@ -130,15 +125,16 @@ pinned to a consignment when its agreement is prepared.
 | `consignment:read` | staff, treasurer, admin | the queue and every consignment |
 | `consignment:operate` | staff, admin | receive, terms within the schedule, the agreement, list, a price with its evidence link - below the floor on the consignor's signed yes - take off sale, return, retry a channel, dismiss a flag |
 | `consignment:approve` | staff, admin | a commission outside the schedule, an item's own commission, minimum or incentive; dismiss an amount that differs or a refund in part |
-| `consignment:payout` | treasurer, admin | ask for a payout for a consignor, the requests and the export |
-| `consignment:finance` | treasurer, admin | approve and batch payouts, mark them paid or failed, reveal a masked number, record a debt repaid |
+| `consignment:finance` | treasurer, admin | statements and invoices, the export, reveal a masked ID or registration number |
 | `consignment:display` | admin | name a consignor on the store and the lot, where they agreed |
 | `consignment:settings` | admin | change a setting |
 
-- **Two people for money** - staff and treasurer share no money grant, and a
-  payout is approved by someone other than whoever asked for it
+- **Two people for money** - staff and treasurer share no money grant; a
+  payout is the balance's, approved by someone other than whoever asked -
+  [Balance Console](/p/grade10-site/account/balance-console#grants)
 - 🚧 **Who set the rate never pays it** - whoever set a consignor's
   commission outside the schedule does not approve that consignor's payouts
+  on the balance
 - **Second factor and audit** - as the vault's: required in production, and
   every act filed under its consignment -
   [Operator Console](/p/grade10-site/vault/operator-console#permissions)
@@ -151,7 +147,7 @@ pinned to a consignment when its agreement is prepared.
 | Payouts on the vault's rule | Decided | Recorded after the bank transfer by a treasurer; a correction takes a second holder of the grant - decided under the owner's delegation, 2026-10-08 | Finance |
 | Seller display is an admin act | Decided | The owner names the admin as the one who sets it - decided by the owner, 2026-10-08 | Product |
 | Every figure a setting | Decided | The schedule, the term, the windows, fees, identity and when a consignor is paid are settings admins change in the console, each starting on the recommended default - decided by the owner, 2026-10-08 | Product |
-| A balance, not a payout per consignment | Decided | Proceeds reach one balance per consignor and payouts are asked for against it - decided by the owner, 2026-10-26 | Finance |
+| A balance, not a payout per consignment | Decided | Proceeds reach one balance per consignor and payouts are asked for against it - decided by the owner, 2026-10-26. The balance and its payout desk are the account's, shared with the vault's yield - on the owner's direction, 2026-10-26 | Finance |
 | Who set the rate never pays it | Decided | Whoever set a commission outside the schedule is refused when approving a payout from that consignor's balance, since the balance pools every consignment - decided by Product, 2026-10-26 | Finance |
 | A paid payout sent back | Decided | Not reopened in the console for now; finance handles a bank's return of a paid payout by hand - decided by Product, 2026-10-26 | Finance |
 | A schedule version per save | ❓ Open | Proposed: each settings save that moves a figure is the next schedule version, the one an agreement prepared after it pins | Product |

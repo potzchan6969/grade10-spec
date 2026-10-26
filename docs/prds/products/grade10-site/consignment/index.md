@@ -19,11 +19,11 @@ the value below is the default it starts on -
 | Auction commission | a share of the hammer price, prefilled per item the same way; the buyer's premium stays the house's |
 | Minimum commission | per item; none |
 | Fees | listing, return and early take-back; none, and never taken from the payout |
-| Incentive | **5%** of each item's estimated value, per item, credited to the consignor's payout balance at signing |
+| Incentive | **5%** of each item's estimated value, per item, credited to the consignor's balance at signing |
 | Contract period | **90** days per consignment, from signing |
 | Return window | **14** days after a store sale is delivered; **7** days after an auction lot is delivered or collected |
-| When proceeds are credited | to the payout balance, after the return window |
-| A refund after the window | debited from the payout balance |
+| When proceeds are credited | to the consignor's balance, after the return window |
+| A refund after the window | debited from the consignor's balance |
 | Statements | one settlement statement and one commission invoice per consignor each month |
 | Identity before signing | not asked; an ID is sighted at the counter |
 | Ending soon | **7** days before the term ends |
@@ -46,9 +46,9 @@ the value below is the default it starts on -
   **10–12%** of the sale price at sale; the bands are unset
 - ❓ Product - **The term's figure** - the running default is **90**
   days; **30** or **60** are asked for; the figure is unset
-- ❓ Product - **How the incentive is paid** - credited to the payout balance
-  by default; paying it on the spot by cash or FPS is a setting until the
-  owner decides
+- ❓ Product - **How the incentive is paid** - credited to the balance by
+  default; paying it on the spot by cash or FPS is a setting until the owner
+  decides
 - **Never set against the payout** - the incentive is a bonus; the payout is
   the sale less commission
 
@@ -74,7 +74,7 @@ The item is listed in the shop and online and goes to a display case; the consig
 At the till or online; the item comes off sale everywhere at once.
 
 ## *Consignor* - **Is paid**
-After the return window, the listed price less commission reaches their payout balance; they ask for a payout and finance pays it by FPS or bank transfer.
+After the return window, the listed price less commission reaches their balance, which they cash out - [Balance](/p/grade10-site/account/balance#cash-out).
 :::
 
 :::flow{title="One consignment" case="At auction"}
@@ -97,7 +97,7 @@ The lot comes to auction admin as a draft made from the item, its photographs an
 The winner's order runs as for any lot; the winner may collect at a shop instead, then keep the card in a vault case of their own.
 
 ## *Consignor* - **Is paid**
-Once the lot is delivered or collected and the window has passed, the hammer price less commission, back in HKD at the pinned rate, reaches their payout balance.
+Once the lot is delivered or collected and the window has passed, the hammer price less commission, back in HKD at the pinned rate, reaches their balance.
 :::
 
 - **One item, one channel** - an item is on sale in the shop or at auction,
@@ -110,8 +110,19 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   sale, delivery and refund; staff record one by hand only when a channel
   did not report it
 - **The first sale wins** - a second sale of the same item is refunded
-- **A card in a vault case** - refused until its vault case is released;
-  the item can be consigned in the same visit
+- 🚧 **Held in the vault** - every item a Grade10 account consigns is held
+  in a storage vault case of its own, opened when the agreement is signed
+  and closed when the item leaves to its buyer or goes back; consignment
+  sells it and the vault keeps it -
+  [Yield](/p/grade10-site/vault/yield#consigned-items)
+- ❓ Product - **A partner's items** - a vault case names a Grade10 account,
+  so a partner's consigned items are not held in vault cases and earn no
+  yield until a partner can hold one
+- 🚧 **Yield is the vault's** - an admin picks at intake whether each item
+  earns the vault's yield while it waits to sell; consignment pays none
+- 🚧 **A card already in the vault** - consigned from its storage vault case
+  without a release; a card securing a loan is refused until the loan is
+  repaid
 - 🚧 **Recorded at intake** - where the consignment was taken - the shop's
   counter or an event such as a card show - and its channel, the store or
   the auction
@@ -131,9 +142,6 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   the online store or the auction - its agreed list price, the commission
   rate and the consignor's estimated net payout, and counts down the days
   left on its term
-- ❓ Product - **Selling from the vault** - whether the consignor releases
-  the vault case first, or the case passes to the buyer -
-  [Services and Hand-offs](/p/grade10-admin/inventory/services#marks-that-share-an-item)
 - ❓ **Asking online, not built** - only staff open a consignment; the site
   has no request page until its form and rules are designed
 
@@ -165,20 +173,15 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - **Outside the schedule** - a commission a partner negotiates is set by
   someone who may approve it -
   [Consignment Console](/p/grade10-site/consignment/operator-console#grants)
-- 🚧 **One balance per consignor** - every consignment of a consignor pays
-  into one payout balance, which can only be withdrawn, never spent - decided
-  by the owner, 2026-10-26
+- 🚧 **The account's balance** - every consignment pays into the
+  consignor's one balance, which the vault's yield reaches too and which can
+  only be withdrawn, never spent - [Balance](/p/grade10-site/account/balance)
 - 🚧 **What reaches the balance** - the incentive at signing; each sale's
   listed price, or hammer price, less commission once its return window
   closes; a refund or chargeback after the window comes off it
-- 🚧 **A payout is asked for** - the consignor, or staff for them, asks for
-  any amount up to the balance; finance approves it, pays it in a batch by
-  FPS or bank transfer, and records the bank's reference; a failed payout
-  goes back on the balance
-- 🚧 **What stops a payout** - no verified identity, a balance below zero,
-  or no payout account in the consignor's own name
-- 🚧 **A debt** - a refund that takes the balance below zero issues a debit
-  note, and nothing is paid out until it is cleared
+- 🚧 **Cash-out and debts** - asked for, approved and paid, and a balance
+  below zero cleared, on the balance's own rules -
+  [Balance](/p/grade10-site/account/balance#cash-out)
 - **What is paid** - the listed price less commission; at auction, the
   hammer price less commission, the buyer's premium being the house's
 - 🚧 **The month's paper** - each month a consignor with movement gets one
@@ -207,24 +210,26 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 | Price changed | staff changed the price within the floor |
 | Sold | the sale price, and the payout day once the buyer has the item |
 | Credit date set | the buyer has the item: the proceeds and the day they reach the balance |
-| Credited | the sale's proceeds reached the payout balance |
-| Paid | the payout requested, with its bank reference |
-| Debt | the balance went below zero, with the debit note |
+| Credited | the sale's proceeds reached the balance |
 | Ending soon | seven days before the term ends, with the choices |
 | Ended unsold | the term ended, with the choices |
 | Returned | the item was collected or delivered back |
 
 - **By email** - in the consignor's language, from the brand's catalogue
+- **Payouts and debts** - told by the balance -
+  [Balance](/p/grade10-site/account/balance#what-the-holder-hears)
 
 ## When It Ends
 
 - ❓ Product - **What an unsold item does** - unset; the proposed actions
-  a consignor may take at term's end: reduce the listed price, save it to
-  the vault for long-term custody, or book an appointment to collect it
-  at the shop
+  a consignor may take at term's end: reduce the listed price, keep it in
+  its vault case, or book an appointment to collect it at the shop
 - **Taken back early** - the consignor may take an item back before it
   sells, for the early take-back fee where an admin set one; a lot live at
   auction only once the auction calls it off or it closes
+- 🚧 **Inside the yield's minimum term** - an item earning the vault's yield
+  that is taken back inside its minimum term owes the vault's early take-out
+  fee - [Yield](/p/grade10-site/vault/yield#taking-it-out)
 - 🚧 **A return is tracked and signed for** - an item going back to the
   consignor travels under its tracking, and the return closes on a signed
   return receipt
@@ -236,9 +241,9 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - 🚧 **Sighted at the counter** - staff look at the consignor's photo ID at
   intake and record its type and last four characters; the agreement does
   not wait for an online check
-- 🚧 **Verified before the first payout** - the identity check the vault
-  binds, or a counter check, before any payout; a company also passes its
-  business check - decided by the owner, 2026-10-26
+- 🚧 **Verified before the first payout** - on the balance's rule: the
+  identity check the vault binds, or a counter check; a company also passes
+  its business check - [Balance](/p/grade10-site/account/balance#identity-and-details)
 - ❓ Legal - **Identity at payout, not at signing** - that a sighted ID at
   intake and a verified check before payout meet the house's obligations
 - **Other choices** - an admin may still ask for the check before signing,
@@ -260,8 +265,9 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   linked account; there is no paper signing - decided by the owner,
   2026-10-26
 - 🚧 **One consignor per account** - a consignor is one Grade10 account,
-  holding their facts, identity, payout account and balance once for every
-  consignment; a walk-in with no account is given a light one and an invite
+  holding their facts and identity once for every consignment, with the
+  payout account and balance the account's own; a walk-in with no account
+  is given a light one and an invite
 
 ## Documents
 
@@ -273,19 +279,19 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 | Settlement statement | each month | receives |
 | Commission invoice | with each statement | receives |
 | Credit note | a refund reverses an invoiced commission | receives |
-| Debit note | the balance goes below zero | receives |
 | Return receipt | an item is handed back | signs |
 
 - 🚧 **Confirm is a tap** - a receipt is confirmed with one tap on the
   counter's iPad, or from a link with a one-time code sent to the
   consignor's own contact
-- 🚧 **Numbered, never edited** - the statement, the invoice, the credit
-  note and the debit note each carry the next number of their series; a
-  correction issues a new version, and nothing is deleted
-- 🚧 **Sensitive details** - ID and bank account numbers are stored
-  encrypted, shown masked to everyone, and revealed one at a time to finance,
-  each reveal recorded; they are kept seven years after the consignor's last
-  transaction, and an erasure request in that time restricts them instead
+- 🚧 **Numbered, never edited** - the statement, the invoice and the credit
+  note each carry the next number of their series; a correction issues a new
+  version, and nothing is deleted
+- 🚧 **Sensitive details** - ID numbers are stored encrypted, shown masked
+  to everyone, and revealed one at a time to finance, each reveal recorded;
+  they are kept seven years after the consignor's last transaction, and an
+  erasure request in that time restricts them instead; payout account
+  numbers are the balance's
 - ❓ Finance - **The wording** - the statement, invoice, credit note and
   debit note wording, the house's business registration details, and the
   bank's bulk-payment file
@@ -341,8 +347,8 @@ payouts made on their due day.
 | Checked before it lists | Decided | an item passes intake inspection and photography before it is published - decided under the owner's delegation, 2026-10-16 | Product |
 | Shown while it sells | Decided | each item names its channel - the shop, the online store or the auction - its agreed list price, the commission rate and the consignor's estimated net payout, and counts down the days left on its term - decided under the owner's delegation, 2026-10-16 | Product |
 | Anything taken | Decided | Raw cards, graded slabs and sealed product are all taken, one record each - decided by the owner, 2026-10-26 | Product |
-| A balance | Decided | One payout balance per consignor, fed by incentives and proceeds and drawn by payouts the consignor asks for; a negative balance is a debt that blocks payouts - decided by the owner, 2026-10-26 | Product |
-| One consignor per account | Decided | The consignor's facts, identity, payout account and balance live once on their Grade10 account, not on each consignment - decided by the owner, 2026-10-26 | Product |
+| A balance | Decided | Incentives and proceeds reach the consignor's balance and payouts are asked for against it; a negative balance is a debt that blocks payouts - decided by the owner, 2026-10-26. The balance is the account's, shared with the vault's yield, not consignment's - on the owner's direction, 2026-10-26 | Product |
+| One consignor per account | Decided | The consignor's facts and identity live once on their Grade10 account, not on each consignment - decided by the owner, 2026-10-26; the payout account and the balance are the account's - 2026-10-26 | Product |
 | Identity before payout | Decided | An ID is sighted at intake; a verified check is required before the first payout, not before signing - decided by the owner, 2026-10-26, Legal to confirm | Product |
 | Prices with evidence | Decided | Every price carries a reference link and an audit trail; below the floor needs the link and the consignor's confirmation - decided by the owner, 2026-10-26 | Product |
 | Online and auction | Decided | A consigned item sells in the shop and online, or at auction - decided by the owner, 2026-10-26 | Product |
@@ -350,13 +356,16 @@ payouts made on their due day.
 | Per item commercials | Decided | Commission share, minimum and incentive share are set per item, prefilled from the settings; one contract period per consignment - decided by the owner, 2026-10-26 | Product |
 | Fees off the payout | Decided | Listing, return and take-back fees stay settings at none and are never taken from the payout - decided by the owner, 2026-10-26 | Product |
 | The auction's rate | Decided | The auction sells in USD; an admin sets the HKD per USD rate exactly, pinned on an item when it goes to auction - decided by the owner, 2026-10-26 | Product |
-| Sensitive details | Decided | ID and bank numbers encrypted, masked, revealed to finance one at a time on the record, kept seven years after the last transaction - decided by the owner, 2026-10-26 | Product |
+| Sensitive details | Decided | ID and bank numbers encrypted, masked, revealed to finance one at a time on the record, kept seven years after the last transaction - decided by the owner, 2026-10-26; bank numbers are kept by the balance | Product |
 | The commission figures | ❓ Open | Proposed: a consignment fee of **10–12%** of the sale price at sale; the bands are unset | Product |
 | How the incentive is paid | ❓ Open | Credited to the balance by default; paid on the spot by cash or FPS as a setting | Product |
 | A consignor's own page | ❓ Open | The service answers a signed-in consignor with each consignment, its items - an auction-bound one showing once checked in, before its lot lists - their prices, sales and payouts, the terms pinned to it, the payouts made, its documents and the emails sent; the screen itself is still to be drawn, and a buyer's seller line waits for a store product that names its item - owner, 2026-10-12, brief 2026-10-16. The designer proposes it under a Consignments and Sales section - one of three signed-in sections by what the items mean, with vault pages for held assets and submissions for items in service - designer, 2026-10-16 | Product |
 | Nobody collects | ❓ Open | Reminders, then a written notice, as grading's ladder runs | Legal |
 | Delivery never reported | ❓ Open | When an online sale's return window starts if its delivery is never reported; until decided, it waits for a reported delivery or staff recording one | Product |
-| Selling from the vault | ❓ Open | Whether the consignor releases the vault case first, or the case passes to the buyer; until decided, a card in a vault case is refused until it is released | Product |
+| Held in the vault | Decided | Every consigned item is held in a storage vault case, so consignment sells and the vault keeps; a card already in a storage case is consigned without a release, the sale closes the consignor's case, and a buyer who keeps the card opens a case of their own - on the owner's direction, 2026-10-26 | Product |
+| Yield is the vault's | Decided | An admin picks at intake whether a consigned item earns the vault's yield; consignment never pays it - on the owner's direction, 2026-10-26 | Product |
+| Incentive and yield | ❓ Open | Whether an item earning the vault's yield still takes the **5%** incentive at signing; proposed that both stay settings, the incentive's own and the yield's per item | Owner |
+| Two early fees | ❓ Open | Whether consignment's early take-back fee and the vault's early take-out fee may both fall on one item; proposed that the vault's alone applies, consignment's staying at none | Owner |
 | Points and discounts | ❓ Open | Whether points, coupons and the shop's discounts reach a consigned card; the consignor is paid on the listed price either way | Product |
 | The term's figure | ❓ Open | The running default is **90** days; **30** or **60** are asked for; the figure is unset | Product |
 | An unsold item at term's end | ❓ Open | Proposed actions a consignor may take: reduce the listed price, save it to the vault for long-term custody, or book an appointment to collect it at the shop | Product |

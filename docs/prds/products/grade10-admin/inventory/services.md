@@ -7,7 +7,7 @@ order: 6
 
 | Service | Its mark | Opens | Closes |
 | --- | --- | --- | --- |
-| Vault | a vault case | when the valuation starts | at release, unwind or forfeit |
+| Vault | a vault case | when the valuation starts, or when a consignment agreement is signed | at release, unwind or forfeit, or when a consigned item leaves to its buyer |
 | Grading | a grading card on a submission | at hand-in | at hand-back, or a hand-off |
 | Consignment | a consignment | when its agreement is signed | when the item is sold and paid out, or goes back |
 | Auction | a lot | when the listing takes the item | when the lot is unsold or called off, or its buyer takes the item |
@@ -20,11 +20,10 @@ other mark stands alone.
 
 - **A consignment with its sale** - a consignment and its auction lot, or a
   consignment and its store listing
-- **A card in a vault case** - consignment refuses it until its vault case
-  is released
-- ❓ Product - **Selling from the vault** - whether the consignor releases
-  the vault case first, or the case stays under the sale and passes to the
-  buyer
+- 🚧 **A consignment in a vault case** - an item a Grade10 account consigns
+  is held in its owner's storage vault case, under the consignment and its
+  sale; the sale closes the case when the item leaves to its buyer -
+  [Yield](/p/grade10-site/vault/yield#consigned-items)
 - **One sale at a time** - an auction lot or a store listing, never both
 - **Someone else's item sells under a consignment** - an auction lot or a
   store listing on an item the house does not own needs the owner's live
@@ -69,7 +68,8 @@ new intake and no new label.
 | Auction, won and paid | The winner's vault case | the winner picks keep in the vault at setup |
 | Auction, unsold or cancelled | Consignment to the store, or the vault | the consignor picks |
 | Store, ended unsold | Consignment to the auction, or the vault | the consignor picks |
-| Vault, storage lane | The store, or grading | the owner asks; the vault case ends |
+| Vault, storage lane | Grading | the owner asks; the vault case ends |
+| Vault, storage lane | Consignment to the store or the auction | the owner asks; the case stays, and the consignment marks the item inside it |
 
 - **Keep in the vault** - the winner passes the identity check and signs the
   custody agreement on their own phone; the auction's mark holds the item
@@ -116,13 +116,13 @@ zero; marks refused by name; hand-offs completed in one visit.
 | --- | --- | --- | --- |
 | Every service marks | Decided | Grading, consignment, the auction and the store mark the items they act on, as the vault does; the store sells a consigned item under the consignment's mark - decided under the owner's delegation, 2026-10-08 | Product |
 | Ask before marking | Decided | A service asks before it marks and is refused by name; what it then does under its mark is mirrored and never refused - decided under the owner's delegation, 2026-10-08 | Engineering |
-| Which marks share an item | Decided | A consignment with its sale; one sale at a time - decided under the owner's delegation, 2026-10-08. A storage-lane vault case under a sale waits on Selling from the vault, below | Product |
+| Which marks share an item | Decided | A consignment with its sale; one sale at a time - decided under the owner's delegation, 2026-10-08. A storage vault case under a consignment and its sale - on the owner's direction, 2026-10-26 | Product |
 | A hand-off is one act | Decided | Paper first, the owner decides, and the item never leaves custody - decided under the owner's delegation, 2026-10-08 | Product |
 | A sale settles itself | Decided | The selling service moves the owner and closes its mark; a sale is recorded by hand only when the channel did not report it - decided under the owner's delegation, 2026-10-08 | Product |
-| Selling from the vault | ❓ Open | Whether the consignor releases the vault case first, or a storage-lane item sells from the vault and its case passes to the buyer, as decided by the owner on 2026-10-08; no case can pass to a buyer yet, so until decided consignment refuses a card in a vault case until it is released | Product |
+| Selling from the vault | Decided | A storage-lane item sells from the vault: every consigned item is held in its owner's vault case, the sale closes that case when the item leaves to its buyer, and a buyer who keeps it in the vault opens a case of their own rather than taking over the seller's - on the owner's direction, 2026-10-26 | Product |
 | A live loan and a sale | Decided | A setting, by default no sale until the loan is repaid; the other choice lets the proceeds repay it first - decided by the owner, 2026-10-08. A financed case blocks a sale until it is released, since the vault tells inventory nothing on a payout or a repayment - decided by the owner, 2026-10-11 | Product |
 | The vault takes an item over | Decided | A slab at grading and a won lot pass into the vault case in one act once its custody agreement is executed; grading reads the case from the item rather than a typed reference, which stays only for a card handed in before cards were items - decided under the owner's delegation, 2026-10-10 | Product |
-| Consignment takes an item over | Decided | Adding an item another service holds - grading's card, a lot or a listing ended unsold, a storage vault case - names that mark, and the hand-off runs when the consignment agreement is sealed - decided under the owner's delegation, 2026-10-10 | Product |
+| Consignment takes an item over | Decided | Adding an item another service holds - grading's card, a lot or a listing ended unsold - names that mark, and the hand-off runs when the consignment agreement is sealed - decided under the owner's delegation, 2026-10-10. A storage vault case is no longer handed off: it stays, and the consignment marks the item inside it - 2026-10-26 | Product |
 | A lot of an item | Decided | A lot whose product links one item asks before it is published; its mark opens when it goes live and closes sold when its order is paid, moving the owner to the winner, or unsold when nobody won or the order is cancelled, or withdrawn when the lot is called off - decided under the owner's delegation, 2026-10-10 | Product |
 | A consigned lot | Decided | Closes sold when its buyer takes the item, delivered or collected, and moves no owner; consignment moves it - decided under the owner's delegation, 2026-10-11 | Product |
 | When a house lot's owner moves | ❓ Open | Whether a house lot moves its owner when the winner takes the item, as a consigned lot does, or when its order is paid, as the row above says | Product |
