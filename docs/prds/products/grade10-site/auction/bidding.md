@@ -201,7 +201,7 @@ any maximum.
 | Not above the bidder's own maximum | `auctionListing.maximumNotRaised` ("Your new maximum must be higher than your current one.") |
 | At or above the bar without a verified identity | `auctionListing.identityRequired` ("Bids this high need a verified identity. Verify from your account, then bid again.") and a `auctionListing.verifyAction` ("Verify") link |
 | Grade10 asked the account to verify, and it has not | `auctionListing.identityRequested` ("We asked you to verify before you bid again.") and a `auctionListing.verifyAction` ("Verify") link |
-| No linked card | **Link a card to bid.** |
+| No linked card | `auctionListing.linkACardToBid` ("Link a card to bid") |
 | Another card after the first accepted bid on the lot | `auctionListing.enrollmentLocked` ("This listing's card is locked after the first accepted bid.") |
 | Bidding suspended on the account | `auctionListing.bidderSuspended` ("Bidding is suspended on this account. Contact Us to resolve it.") |
 | Account banned from bidding | `auctionListing.bidderBanned` ("This account cannot bid.") |
