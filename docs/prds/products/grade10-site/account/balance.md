@@ -73,7 +73,7 @@ vault's early take-out fee, or a debt.
   processor's hosted page; or at the counter, recorded by finance
 - 🚧 **FPS is confirmed by a person** - the holder may upload the bank's
   receipt, and finance marks the bill paid against the bank; a receipt sent
-  back says why
+  back says why, and the same file sent again is refused with that reason
 - 🚧 **Card is confirmed by the processor** - the bill is paid when the
   processor reports it, never when the holder comes back to the page
 - 🚧 **Paid once** - a second payment for a paid bill is recorded and

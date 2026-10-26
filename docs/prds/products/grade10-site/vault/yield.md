@@ -108,6 +108,9 @@ the vault.
   [Balance](/p/grade10-site/account/balance#paying-grade10)
 - 🚧 **A sale is not a take-out** - an item sold under its consignment owes
   no fee
+- 🚧 **A fee not owed comes back** - a fee paid on an ask goes back to the
+  balance when the item leaves after its minimum term, or is sold or written
+  off instead; the bill stays paid and says when it came back
 - 🚧 **Plain storage** - an item earning no yield owes no fee unless an admin
   turns the fee on for storage too; it is off by default
 
@@ -135,6 +138,7 @@ the vault.
 | Yield starts | an item is enrolled: the start, the lock's end, the minimum term's end and the fee |
 | Price set | an admin set or changed the item's price or its factor, and the day it applies from |
 | Early take-out fee | the item was asked for back inside its minimum term: the fee, the day it stops applying, and how to pay |
+| Fee back on the balance | a paid fee turned out not to be owed: the amount and the bill's reference |
 | Yield ends | the item's yield stopped: the day and what it earned |
 
 - **What it earned** - each credit is a line on the balance, and the month's
