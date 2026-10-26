@@ -1,4 +1,4 @@
-## 1. Searching state on the listing search field (grade10-spec) (owner: @sean)
+## 1. Searching state on the listing search field (grade10-spec) (owner: @seankcw)
 
 - [x] 1.1 Give `ProductFilter` a pending indication and `ProductFilterCopy` its searching copy, rendering the design-system `AutocompleteLoading` row and inventing no suggestion row, so `shared-ui-store-product-listing-SC-74` passes; stand a `Store/Product Listing/Blocks/ProductFilter/Search` → `Pending` story behind it.
 - [x] 1.2 Pass the pending indication through `FilterPanel` and `ProductBrowse` and hold the public entry to the export and type set `shared-ui-store-product-listing-SC-01` names, adding nothing beside it.
@@ -6,7 +6,7 @@
 - [x] 1.4 Carry the search stories into the Product Listing page's Designs block — the browse commit and the filter pick — so the manual shows what `grade10-site-store-product-listing-SC-32` and `-SC-34` deliver; make `pnpm check:manual` pass.
 - [x] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:stories:ui`, `pnpm check:manual`.
 
-## 2. Suggestion hits from the catalogue (grade10) (owner: @sean)
+## 2. Suggestion hits from the catalogue (grade10) (owner: @seankcw)
 
 This group touches only the catalog feature in `@grade10/store-frontend` and
 needs nothing from group 1. It adds no endpoint: both hits come from reads the
@@ -16,7 +16,7 @@ catalogue already answers.
 - [x] 2.2 Add a suggestions read to the catalog feature's presentation layer composing `listProducts` with the draft as `search`, `pageSize: 5` and no facets, and the unnarrowed `listFilters` taxonomy through 2.1 — reporting the two groups and whether hits are still resolving, so `grade10-site-store-product-listing-SC-31`, `-SC-37` and `-SC-38` have their data. Export it from the feature's public entry; the DI module is unchanged.
 - [x] 2.3 Verify: focused catalog feature tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
 
-## 3. The listing search field on the page (grade10) (owner: @sean)
+## 3. The listing search field on the page (grade10) (owner: @seankcw)
 
 This group needs group 1 landed for the pending prop and group 2 for the
 suggestion read.
