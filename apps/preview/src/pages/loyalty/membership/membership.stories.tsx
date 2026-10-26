@@ -296,7 +296,11 @@ function MembershipPage({ view }: { view: MembershipView }) {
             >
               {MEMBERSHIP_PAGE_COPY.activityHeading}
             </h2>
-            <ActivityList copy={ACTIVITY_LIST_COPY} state={view.activity} />
+            <ActivityList
+              copy={ACTIVITY_LIST_COPY}
+              state={view.activity}
+              summary={view.activitySummary}
+            />
           </section>
         </div>
       </main>
@@ -346,7 +350,7 @@ export const Default: Story = {
       "Rewards",
       "Your coupons",
       "Spend on your basket",
-      "Activity",
+      "Point History",
     ]) {
       expect(
         canvas.getByRole("heading", { level: 2, name }),
@@ -381,7 +385,7 @@ export const NoPoints: Story = {
   args: { view: MEMBERSHIP_STATE_VIEWS.noPoints },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("0")).toBeInTheDocument();
+    expect(canvas.getAllByText("0").length).toBeGreaterThan(0);
     expect(
       canvas.getByText(
         "No activity yet. Purchases appear here once they are recorded.",

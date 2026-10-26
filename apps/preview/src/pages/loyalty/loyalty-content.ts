@@ -1,7 +1,8 @@
-import { formatDay } from "@grade10/date";
+import { formatDay, formatMonthName } from "@grade10/date";
 import type {
   ActivityEntry,
   ActivityListCopy,
+  ActivityTotals,
   AsyncState,
   CartItemSummary,
   CouponItem,
@@ -88,7 +89,15 @@ const COUPON_ACTION_COPY = {
 };
 
 const ACTIVITY_LIST_COPY: ActivityListCopy = {
-  label: "Activity",
+  label: "Point history",
+  summary: { earned: "Earned", used: "Used", pending: "Pending" },
+  filters: { all: "All", earned: "Earned", used: "Used", pending: "Pending" },
+  pending: {
+    title: "Pending",
+    body: "Points land when each order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till.",
+    badge: "Pending",
+    points: "pts",
+  },
 };
 
 const WALLET_PASS_COPY: WalletPassLinksCopy = {
@@ -209,7 +218,7 @@ const MEMBERSHIP_PAGE_COPY = {
   spendBody:
     "Points come off your bill at checkout. No code is needed, and nothing is held until you pay.",
   spendAction: "Go to checkout",
-  activityHeading: "Activity",
+  activityHeading: "Point History",
 };
 
 /** Stand-in product art for the item rewards. */
@@ -378,29 +387,70 @@ const ISSUED_COUPON: CouponItem = {
 
 const ACTIVITY: ActivityEntry[] = [
   {
-    id: "entry-purchase",
-    kind: "Purchase",
-    delta: 105,
-    date: formatDay(Date.UTC(2026, 8, 20)),
-    channel: "In store",
-    context: "Order #10482",
+    id: "entry-pending-online",
+    kind: "Online order",
+    track: "earned",
+    pending: true,
+    delta: 86,
+    date: "Lands 25 Oct",
+    context: "Order #10511",
   },
   {
-    id: "entry-redeem",
-    kind: "Redeemed HK$50 off",
-    delta: -500,
-    date: formatDay(Date.UTC(2026, 9, 2)),
-    channel: "Online store",
-    context: "Balance: 1250",
+    id: "entry-pending-store",
+    kind: "In-store purchase",
+    track: "earned",
+    pending: true,
+    delta: 42,
+    date: "Lands 27 Oct",
+    context: "Order #10514",
+  },
+  {
+    id: "entry-sleeves",
+    kind: "Redeemed Grade10 card sleeves",
+    track: "used",
+    icon: "reward",
+    delta: -120,
+    date: formatDay(Date.UTC(2026, 9, 14)),
+    month: formatMonthName(Date.UTC(2026, 9, 14)),
+    context: "Rewards",
   },
   {
     id: "entry-adjustment",
     kind: "Points adjusted",
+    track: "earned",
+    icon: "adjustment",
     delta: 120,
     date: formatDay(Date.UTC(2026, 9, 9)),
-    channel: "Membership programme",
+    month: formatMonthName(Date.UTC(2026, 9, 9)),
+    context: "Goodwill credit",
+  },
+  {
+    id: "entry-redeem",
+    kind: "Redeemed HK$50 off",
+    track: "used",
+    icon: "reward",
+    delta: -500,
+    date: formatDay(Date.UTC(2026, 9, 2)),
+    month: formatMonthName(Date.UTC(2026, 9, 2)),
+    context: "Rewards",
+  },
+  {
+    id: "entry-purchase",
+    kind: "In-store purchase",
+    track: "earned",
+    icon: "order",
+    delta: 105,
+    date: formatDay(Date.UTC(2026, 8, 20)),
+    month: formatMonthName(Date.UTC(2026, 8, 20)),
+    context: "Order #10482",
   },
 ];
+
+const ACTIVITY_SUMMARY: ActivityTotals = {
+  earned: 440,
+  used: -820,
+  pending: 128,
+};
 
 const GOOGLE_SAVE_URL = "https://pay.google.com/gp/v/save/example";
 const APPLE_PASS_URL = "https://example.com/passes/grade10.pkpass";
@@ -443,6 +493,7 @@ type MembershipView = {
   rewards: AsyncState<readonly RewardMenuItem[]>;
   coupons: AsyncState<readonly CouponItem[]>;
   activity: AsyncState<readonly ActivityEntry[]>;
+  activitySummary: ActivityTotals;
   /** The wallets the member already carries a pass in. */
   heldWallets: readonly string[];
 };
@@ -459,6 +510,7 @@ const MEMBERSHIP_VIEW: MembershipView = {
   rewards: { status: "ready", data: REWARDS },
   coupons: { status: "ready", data: COUPONS },
   activity: { status: "ready", data: ACTIVITY },
+  activitySummary: ACTIVITY_SUMMARY,
   heldWallets: [],
 };
 
@@ -481,6 +533,7 @@ const MEMBERSHIP_STATE_VIEWS = {
       status: "empty",
       message: "No activity yet. Purchases appear here once they are recorded.",
     },
+    activitySummary: { earned: 0, used: 0, pending: 0 },
   },
   thresholdReached: {
     ...MEMBERSHIP_VIEW,
@@ -526,6 +579,7 @@ export type { HowPointsWorkRow, MembershipView, TierBenefitsRow };
 export {
   ACTIVITY,
   ACTIVITY_LIST_COPY,
+  ACTIVITY_SUMMARY,
   APPLE_HELD,
   APPLE_OFFERED,
   APPLE_PASS_URL,
