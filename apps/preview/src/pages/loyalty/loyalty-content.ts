@@ -192,6 +192,13 @@ const COUPONS_PAGE_COPY = {
   noCouponsDescription: "Coupons you earn or get from the shop appear here.",
 };
 
+/** The upsell under the Available tab — points still buy more. */
+const COUPON_PROMO_COPY = {
+  title: "Want more coupons?",
+  description: "Turn your points into coupons in Rewards.",
+  cta: "Browse Rewards",
+};
+
 const MEMBERSHIP_PAGE_COPY = {
   breadcrumbAccount: "Account",
   title: "Membership",
@@ -527,6 +534,7 @@ export {
   CART_SUBTOTAL,
   COUPON_ACTION_COPY,
   COUPON_LIST_COPY,
+  COUPON_PROMO_COPY,
   COUPONS,
   COUPONS_PAGE_COPY,
   DROPPED_BALANCE,

@@ -14,6 +14,9 @@
     spent — nearest expiry first — and what is spent, void or expired —
     newest first; refresh on the member's return is the settled way a
     spent coupon moves halves
+  - Upsell: a consumer-owned promo can sit under a resolved wallet — the
+    Rewards nudge on the Coupons surface — never drawn over loading, empty
+    or error
 
 ## ADDED Requirements
 
@@ -45,7 +48,17 @@ refresh the wallet on return.
 
 While the wallet resolves it SHALL draw skeletons in a ticket's shape;
 its empty rung SHALL name the wallet, explain it where the consumer
-describes one, and offer the consumer's action where one is given.
+describes one, and offer the consumer's action where one is given. Where
+the consumer supplies a `promo`, the list SHALL draw it under a resolved
+list and nowhere else — loading, empty and error keep their own surfaces.
+
+#### Scenario: grade10-site-loyalty-programme-SC-275 - The wallet's upsell shows only under a resolved list
+
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a `CouponList` whose consumer supplies a promo
+- **WHEN** the list is loading, empty, or in error
+- **THEN** no promo is drawn
 
 #### Scenario: grade10-site-loyalty-programme-SC-272 - Presenting a coupon opens its scan card unfolded
 

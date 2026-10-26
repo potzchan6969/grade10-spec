@@ -6,7 +6,8 @@
 
 **Run:** no blind pass — a surface change over settled rules: `CouponList`
 draws tickets, gains the scan surface `rewards-shop-surface` parked, and a
-scoped coupon never offers a scan.
+scoped coupon never offers a scan; a consumer-owned promo sits under a
+resolved wallet only.
 
 - **Staying** — `grade10-site-loyalty-programme-SC-123`, `-SC-124`,
   `-SC-125`, `-SC-185`, `-SC-186`, `-SC-243`, restated unchanged.
