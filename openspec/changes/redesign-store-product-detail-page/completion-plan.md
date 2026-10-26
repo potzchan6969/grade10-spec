@@ -20,7 +20,7 @@
 - **PDP facts evidence** — `Product` carries images, badges and variants but no shipping guidance or pickup location; v1 fulfilment guidance is approved locale-catalogue copy rendered for every product
 - **PDP disclosure evidence** — `descriptionOverflows` estimates lines with a 55-character budget; actual wrapping depends on width and glyphs, so a short character count can leave more than three visible lines uncollapsed
 - **Order copy evidence** — `OrderDetailsPage` supplies literal English Discount, Shipping and Tax while the shared catalogs already define their localized keys
-- **Status dependency** — both order pages call the local `customerOrderStatus` adapter; `add-store-order-status` has no tasks yet. Its owner must settle and deliver the canonical contract before frontend migration can be planned precisely; retain the adapter and report this acceptance limitation until then
+- **Status dependency** — both order pages read `orderStatus` from `@grade10/store-contracts/order-status`, the contract the durable spec `grade10-site/commerce/order-status` sets
 
 ## Delivery order
 
