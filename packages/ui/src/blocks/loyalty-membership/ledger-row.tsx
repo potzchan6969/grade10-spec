@@ -63,16 +63,14 @@ function LedgerRow({
           aria-hidden
           data-slot="point-history-icon"
           className={cn(
-            "grid size-9 shrink-0 place-items-center rounded-full",
-            entry.pending
-              ? "bg-primary-muted text-primary"
-              : "bg-muted text-muted-foreground",
+            "grid size-10 shrink-0 place-items-center rounded-full text-foreground",
+            entry.pending ? "bg-primary-muted" : "bg-muted",
           )}
         >
           <Icon size={16} />
         </span>
       ) : null}
-      <VStack className="min-w-0 flex-1" gap="xs">
+      <VStack className="min-w-0 flex-1" gap="none">
         <Text weight="medium">{entry.kind}</Text>
         {entry.date || detail ? (
           <Text size="sm" tone="secondary">
