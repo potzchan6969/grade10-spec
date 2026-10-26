@@ -60,14 +60,9 @@ function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
         <div className="flex w-full max-w-4xl flex-col gap-6 px-4 py-10 sm:px-8">
-          <header className="flex flex-col gap-2">
-            <h1 className="text-3xl font-semibold text-foreground">
-              {COUPONS_PAGE_COPY.title}
-            </h1>
-            <p className="text-sm text-secondary-foreground">
-              {COUPONS_PAGE_COPY.subtitle}
-            </p>
-          </header>
+          <h1 className="text-3xl font-semibold text-foreground">
+            {COUPONS_PAGE_COPY.title}
+          </h1>
           {coupons.length === 0 ? (
             /* Nothing to part — the wallet's own empty state stands for the
              * whole page, no tab bar. */
@@ -81,7 +76,10 @@ function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
             />
           ) : (
             <Tabs defaultValue="available">
-              <TabsList>
+              <TabsList
+                className="w-full justify-start border-b border-border"
+                variant="list"
+              >
                 <TabsTrigger value="available">
                   {COUPONS_PAGE_COPY.availableTab}
                 </TabsTrigger>
@@ -195,6 +193,39 @@ export const NoCoupons: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("tab")).not.toBeInTheDocument();
     expect(canvas.getByText("No coupons yet")).toBeInTheDocument();
+  },
+};
+
+/** Everything spendable is spent or lapsed: Available falls back to its
+ * own empty line — and still carries the upsell — while the history tab
+ * holds the record. */
+export const AvailableEmpty: Story = {
+  args: { coupons: COUPONS.filter((coupon) => !isOpen(coupon)) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Nothing to use yet")).toBeInTheDocument();
+    expect(canvas.getByText("Want more coupons?")).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
+    expect(await canvas.findByText(/Used on/)).toBeInTheDocument();
+    expect(
+      canvas.queryByText("No used or expired coupons"),
+    ).not.toBeInTheDocument();
+  },
+};
+
+/** A fresh wallet with only live coupons: Used & Expired is offered and
+ * answers with its own empty line. */
+export const HistoryEmpty: Story = {
+  args: { coupons: COUPONS.filter(isOpen) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
+    expect(
+      await canvas.findByText("No used or expired coupons"),
+    ).toBeInTheDocument();
+    /* The promo stays with Available, not with history's empty line. */
+    expect(canvas.queryByText("Want more coupons?")).not.toBeInTheDocument();
   },
 };
 

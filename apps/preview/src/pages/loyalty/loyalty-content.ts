@@ -198,15 +198,13 @@ const TIER_BENEFITS: readonly TierBenefitsRow[] = [
 
 const COUPONS_PAGE_COPY = {
   title: "Coupons",
-  subtitle:
-    "Coupons your rewards and the shop have left you. Present one at the till, or apply it at checkout.",
   availableTab: "Available",
   historyTab: "Used & Expired",
   noAvailable: "Nothing to use yet",
-  noAvailableDescription: "Coupons you earn or get from the shop appear here.",
+  noAvailableDescription: "New coupons land here, ready to scan.",
   noHistory: "No used or expired coupons",
   noHistoryDescription:
-    "Coupons you've spent, or that have lapsed, appear here.",
+    "Coupons you’ve spent or that have lapsed show up here.",
   noCoupons: "No coupons yet",
   noCouponsDescription: "Coupons you earn or get from the shop appear here.",
 };
