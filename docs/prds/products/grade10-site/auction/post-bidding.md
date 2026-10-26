@@ -70,13 +70,6 @@ winner of three lots has three orders, each with its own deadlines.
   cancelled, delivered and partial-payment letters use the same subject and
   body; Copy Message shows no confirmation beyond the control's own state
 
-### My Auction Orders
-
-Retired — there is no separate orders list. My Auctions lists the won lots and
-each Won row opens its own Winner Order.
-
-::changes{spec="grade10-site/auction/auction-orders"}
-
 ## Order Status
 
 An auction order has one status, derived from its invoice, address,
@@ -690,8 +683,6 @@ a second payment provider, and changes to the bid-time rules.
 | Delivered content | Decided | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
 | Cancelled content | Decided | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
 | Cancelling a paid order | Decided | An order with money counting toward its balance cannot be cancelled; it is refunded instead. Only unpaid orders are cancelled, so the cancelled letter names no payment. Chosen over cancelling a paid order, which would leave money with no order to return it against. | Product (@jeffffej0909) |
-| A separate orders page | Decided | None — My Auctions lists the won lots and each Won row opens its own Winner Order; `grade10-site/auction/auction-orders` is retired. Reverses the earlier decision to follow won lots on My Auction Orders: the list duplicated My Auctions' Won rows and nothing on the site reached it. | Product (@tangconst) |
-| Opening My Auction Orders | Decided | Moot — the page is removed, so the deferred My Auctions link is never built. | Product (@tangconst) |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
 | Billing address on setup | Decided | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
 | Country or region on delivery setup | Decided | On Winner Order delivery Add Address, country or region lists every country and region A–Z in a searchable field; typing filters matching names. **BREAKING** vs letter typeahead on Select (`full-winner-order-country-region-list` non-goal reversed). Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set and over letter-jump Select. | Product (@tangconst) |

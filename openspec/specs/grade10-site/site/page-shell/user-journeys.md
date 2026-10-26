@@ -24,8 +24,7 @@ menu that shows my sign-in email with its small initial avatar above My
 Auctions and Sign Out on auction launch, with Profile first wherever the
 account page is carried and My Orders ahead of My Auctions once Store
 answers, and no item whose page the site withholds,
-**so that** one place in the header takes me where I can go for this launch,
-without a second auction-orders link.
+**so that** one place in the header takes me where I can go for this launch.
 
 ### grade10-site-site-page-shell-US-04: Collector follows only links the site answers
 

@@ -178,8 +178,7 @@ menu that shows my sign-in email with its small initial avatar above My
 Auctions and Sign Out on auction launch, with Profile first wherever the
 account page is carried and My Orders ahead of My Auctions once Store
 answers, and no item whose page the site withholds,
-**so that** one place in the header takes me where I can go for this launch,
-without a second auction-orders link.
+**so that** one place in the header takes me where I can go for this launch.
 
 <!-- trace:case id=g10.site-page-shell.TC-eek rev=1 covers=g10.site-page-shell.SC-0ao -->
 ### g10.site-page-shell.US3-TC1: A signed-out collector gets Sign In
@@ -244,7 +243,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* A small initial avatar sits above the sign-in email, both above `<items>`, in that order and nothing else: no KYC, no Membership, nothing opening My Auction orders; the last reads Sign Out, in Title Case.
+* A small initial avatar sits above the sign-in email, both above `<items>`, in that order and nothing else: no KYC, no Membership; the last reads Sign Out, in Title Case.
 * Step 2 names the same collector on every page, Profile with their name and email, and no other person.
 
 <!-- trace:case id=g10.site-page-shell.TC-asx rev=1 covers=g10.site-page-shell.SC-70a,g10.site-page-shell.SC-lcs,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-04a -->
