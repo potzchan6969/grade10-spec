@@ -43,10 +43,11 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 | --- | --- | --- |
 | Commerce | store, auction, loyalty, appointment, inventory, consignment, documents, grading | Grade10; ZZZ holds the store only |
 | Auth | sign-in identity | Grade10, ZZZ |
-| Vault | cases, custody and their money | Grade10 |
+| Vault | cases, custody and their money, and every account's balance, payout accounts and bills | Grade10 |
 | KYC service | the verified record of every customer of every brand | Grade10 only, serving every brand |
 
 - Finance gets a wall of its own when it lands
+- 🚧 The account balance sits in the vault's wall, served by the vault's worker: it is money, and a fifth wall would not fit the database's connections at its smallest size
 - The KYC service is the widest wall: it holds the legal name, the birth date and the document photograph of every customer of every product, so nothing else shares a role with it
 - A wall stops a compromised or buggy worker. It does not stop CI, ops and deploy credentials or Neon console users, which reach every wall
 - Walls share what one database shares: every role can read the names of other walls' tables and functions, and the walls share one compute, one point-in-time history and one nightly offsite dump

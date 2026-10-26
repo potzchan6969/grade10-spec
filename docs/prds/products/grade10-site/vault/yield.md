@@ -118,8 +118,9 @@ the vault.
   stays in its case while it is on sale
 - 🚧 **Yield, not an incentive** - an admin picks at intake whether each
   consigned item earns the yield; consignment pays no incentive of its own
-- 🚧 **Sold** - the yield stops the day the item sells, the case closes when
-  the item leaves to its buyer, and no fee is owed
+- 🚧 **Sold** - the yield stops the day the item sells, or the day after the
+  last day already credited if the sale reaches the vault late; the case
+  closes when the item leaves to its buyer, and no fee is owed
 - 🚧 **Taken back** - a consigned item taken back inside its minimum term
   owes the fee as any item does
 - 🚧 **Unsold at the term's end** - the item stays in its case, still earning
