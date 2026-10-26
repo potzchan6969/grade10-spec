@@ -50,14 +50,14 @@ Uses the landed group 4 catalogs and completes the frontend copy boundary on the
 - [x] 6.1 Replace the literal Discount, Shipping and Tax summary labels in `OrderDetailsPage` with the existing `orderDetail.money` catalog keys, preserving zero and absent rows from `grade10-site-store-order-detail-SC-14`; cover `en`, `zh-Hant`, and `zh-Hans` with typed fixtures
 - [x] 6.2 Verify focused order projection, page and locale tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:submodules`
 
-## 7. Product picture records (grade10-spec)
+## 7. Product picture records (grade10-spec) (owner: @kinisworking)
 
 This documentation group adds no component behavior. It uses existing checks;
 new application tests belong to groups 8-10.
 
-- [ ] 7.1 Run focused strict change and product-record link checks before reconciling the picture handoff; confirm the existing shared line props already accept optional pictures and no component change is owed.
-- [ ] 7.2 Reconcile `docs/prds/products/grade10-site/store/order-history.md` and `docs/prds/products/grade10-site/store/order-detail.md` with the selected current-picture policy, earlier purchases, readable fallback and retained private-link restrictions. Keep the in-flight marks until archive.
-- [ ] 7.3 Verify the two product-record links and focused strict change validation; record any unrelated manual baseline failures separately.
+- [x] 7.1 Run focused strict change and product-record link checks before reconciling the picture handoff; confirm the existing shared line props already accept optional pictures and no component change is owed.
+- [x] 7.2 Reconcile `docs/prds/products/grade10-site/store/order-history.md` and `docs/prds/products/grade10-site/store/order-detail.md` with the selected current-picture policy, earlier purchases, readable fallback and retained private-link restrictions. Keep the in-flight marks until archive.
+- [x] 7.3 Verify the two product-record links and focused strict change validation; record any unrelated manual baseline failures separately.
 
 ## 8. Optional order picture contracts (grade10) (owner: @kinisworking)
 
