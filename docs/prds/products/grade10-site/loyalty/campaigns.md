@@ -63,6 +63,15 @@ and reviews submissions.
   lock it: archiving or retemplating it changes what the held gifts become,
   and an archived gift stops issuing until another is attached
 
+## Design
+
+❓ **Not yet designed** — the membership banner and the campaign page run on
+two prototype blocks, the card's own look standing in: the designer draws the
+banner, the page's hero and the way-of-taking-part card in each state it
+holds. Design's call.
+
+::story{id="loyalty-campaigns-prototypes-campaign-page--default" title="The campaign page, prototype" height="900"}
+
 :::detail{title="Product decisions" for="pm"}
 Catch Me If You Can, the pre-store launch campaign, is the first to run on
 it: the first fifty signups and the members who find the car win a card pack.
@@ -73,5 +82,6 @@ it: the first fifty signups and the members who find the car win a card pack.
 | Revoking a win | Decided | Not before launch. Voiding the coupon takes the gift back; the operator raises the quota to free a slot. | Product |
 | Quota during a campaign | Decided | An operator may change it while the campaign runs, never below the wins already taken. | Product |
 | Protecting a named reward | Decided | No lock: the operator owns the reward a campaign names. | Product |
+| The look | ❓ Open | Prototype blocks stand in until the banner and the page are designed. | Design |
 | A gift's point cost | Decided | Optional on a grant-only reward; the card-pack reward is created with none. | Product |
 :::
