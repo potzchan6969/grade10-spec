@@ -140,7 +140,7 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
               Navigation appears once the snapshot is in hand.
             </Text>
           ) : (
-            <div className="mt-5 flex flex-col gap-5 border-border-subtle border-t pt-4">
+            <div className="flex flex-col gap-5 pt-4">
               {index.groups.map((group) => (
                 <GroupSection
                   group={group}
