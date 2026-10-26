@@ -17,6 +17,8 @@ and how sign-in and sign-out work, the same way across every brand.
   erased, and the hosted check's states ([KYC Service](/p/grade10-site/account/kyc-service))
 - **Delivery addresses** — the ones a collector keeps and confirms onto
   an auction order ([Delivery Addresses](/p/grade10-site/auction/account#delivery-address-management))
+- 🚧 **Balance** - what the house owes the account from every product, its
+  payouts, and the bills it pays ([Balance](/p/grade10-site/account/balance))
 
 Verification has its own page, `grade10.com/verification`: the identity card,
 the business card and any request from Grade10.
