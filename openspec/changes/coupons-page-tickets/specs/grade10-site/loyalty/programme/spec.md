@@ -52,7 +52,7 @@ describes one, and offer the consumer's action where one is given. Where
 the consumer supplies a `promo`, the list SHALL draw it under a resolved
 list and nowhere else — loading, empty and error keep their own surfaces.
 
-#### Scenario: grade10-site-loyalty-programme-SC-275 - The wallet's upsell shows only under a resolved list
+#### Scenario: grade10-site-loyalty-programme-SC-282 - The wallet's upsell shows only under a resolved list
 
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
@@ -90,7 +90,7 @@ list and nowhere else — loading, empty and error keep their own surfaces.
   their one line, the expired one its expiry — and none draws a scan
   control or an action
 
-#### Scenario: grade10-site-loyalty-programme-SC-275 - A coupon running out reads its expiry emphasised
+#### Scenario: grade10-site-loyalty-programme-SC-283 - A coupon running out reads its expiry emphasised
 
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 

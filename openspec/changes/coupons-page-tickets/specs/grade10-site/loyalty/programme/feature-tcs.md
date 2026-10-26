@@ -11,10 +11,11 @@ resolved wallet only.
 
 - **Staying** — `grade10-site-loyalty-programme-SC-123`, `-SC-124`,
   `-SC-125`, `-SC-185`, `-SC-186`, `-SC-243`, restated unchanged.
-- **Arriving** — `grade10-site-loyalty-programme-SC-272` (Use now opens the
+- **Arriving** — `grade10-site-loyalty-programme-SC-282` (the wallet's upsell
+  appears only under a resolved list), `-SC-272` (Use now opens the
   ticket above an unfolded card), `-SC-273` (a scoped coupon names its
   scope, no scan), `-SC-274` (closed coupons name their state, no scan or
-  action), `-SC-275` (a flagged expiring coupon reads its expiry
+  action), `-SC-283` (a flagged expiring coupon reads its expiry
   emphasised, an unflagged one plainly).
 - **Unconfirmed** — the scan surface's `onScanOpenChange` callback and the
   QR's rotation stay ❓ on the coupons PRD page; no case asserts them.
