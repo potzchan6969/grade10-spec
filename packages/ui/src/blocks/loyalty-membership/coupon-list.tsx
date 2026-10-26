@@ -8,7 +8,6 @@ import {
   Dialog,
   DialogBody,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import {
@@ -17,6 +16,7 @@ import {
   DrawerContent,
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
+import { cn } from "@grade10/design-system/lib/utils";
 import { Ticket } from "@phosphor-icons/react";
 import { useEffect, useId, useState } from "react";
 import type { AsyncState } from "../shared/async";
@@ -133,8 +133,8 @@ function CouponTicket({
  * it up — the member holds it out where the till reads it. The coupon's own
  * ticket sits above the unfolded card, as the redeemed phase lays it out,
  * and carries no scan control of its own — the surface is already the
- * answer to Use now. The dialog names the coupon in its header; the sheet
- * names it for assistive tech alone — the ticket is its heading already. */
+ * answer to Use now. The coupon names the surface for assistive tech alone;
+ * a visible heading would only repeat the ticket. */
 function CouponScanSurface({
   target,
   open,
@@ -153,8 +153,14 @@ function CouponScanSurface({
   const title = item.description ?? item.amount;
 
   const body = (
-    <VStack className="w-full" gap="md">
-      {!smUp ? <DrawerTitle className="sr-only">{title}</DrawerTitle> : null}
+    /* The dialog's close control floats at its top corner — the ticket starts
+     * low enough to clear it. */
+    <VStack className={cn("w-full", smUp && "pt-10")} gap="md">
+      {smUp ? (
+        <DialogTitle className="sr-only">{title}</DialogTitle>
+      ) : (
+        <DrawerTitle className="sr-only">{title}</DrawerTitle>
+      )}
       <PromoTicket
         className="w-full"
         code={{
@@ -177,11 +183,7 @@ function CouponScanSurface({
 
   return smUp ? (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="max-w-(--container-md) gap-4">
-        {/* The header owns the close control — title and X share its row. */}
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-        </DialogHeader>
+      <DialogContent className="max-w-(--container-md) gap-4" showCloseButton>
         <DialogBody className="gap-4">{body}</DialogBody>
       </DialogContent>
     </Dialog>
