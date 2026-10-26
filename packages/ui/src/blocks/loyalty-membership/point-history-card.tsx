@@ -52,7 +52,7 @@ function PointHistoryCard({
         padding={false}
       >
         {header ? (
-          <div className="flex flex-col gap-0 px-(--card-spacing) py-2 [--card-spacing:--spacing(4)]">
+          <div className="flex flex-col gap-0 px-(--card-spacing) pb-2 pt-4 [--card-spacing:--spacing(4)]">
             <Text weight="medium">{header.title}</Text>
             {header.description ? (
               <Text size="sm" tone="secondary">
