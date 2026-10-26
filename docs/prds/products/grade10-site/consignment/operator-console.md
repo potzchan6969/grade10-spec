@@ -96,8 +96,6 @@ pinned to a consignment when its agreement is prepared.
 | Setting | Default | Choices |
 | --- | --- | --- |
 | Commission, for each channel and price band | unset; intended **10–12%** | a share of the price |
-| Incentive, on the estimated value | **5%**, credited at signing | a share of the estimated value |
-| Incentive paid as | a credit to the consignor's balance | on the spot, by cash or FPS |
 | Minimum commission | none | an amount per item |
 | Fees: listing, return, early take-back | none | an amount each |
 | Contract period | **90** days | any number of days |
@@ -109,8 +107,7 @@ pinned to a consignment when its agreement is prepared.
 | Ending soon | **7** days before the term ends | any number of days |
 
 - ❓ Product - **The intended figures** - the consignment fee is intended
-  at **10–12%** of the price at sale and the incentive at **5%** of the
-  estimated value; the exact figures are unset
+  at **10–12%** of the price at sale; the exact figures are unset
 - **Pinned to the agreement** - a change reaches the next agreement
   prepared; one waiting for a signature keeps the schedule it was prepared on
 - **Unset refuses** - an agreement is not prepared while a figure it prints
@@ -124,7 +121,7 @@ pinned to a consignment when its agreement is prepared.
 | --- | --- | --- |
 | `consignment:read` | staff, treasurer, admin | the queue and every consignment |
 | `consignment:operate` | staff, admin | receive, terms within the schedule, the agreement, list, a price with its evidence link - below the floor on the consignor's signed yes - take off sale, return, retry a channel, dismiss a flag |
-| `consignment:approve` | staff, admin | a commission outside the schedule, an item's own commission, minimum or incentive; dismiss an amount that differs or a refund in part |
+| `consignment:approve` | staff, admin | a commission outside the schedule, an item's own commission or minimum; dismiss an amount that differs or a refund in part |
 | `consignment:finance` | treasurer, admin | statements and invoices, the export, reveal a masked ID or registration number |
 | `consignment:display` | admin | name a consignor on the store and the lot, where they agreed |
 | `consignment:settings` | admin | change a setting |

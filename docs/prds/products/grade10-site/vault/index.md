@@ -16,8 +16,8 @@ made.
 - 🚧 **Yield** — the other attachment: an item an admin enrols on the
   storage lane earns its owner a daily yield on its market value, credited
   to the owner's balance ([Yield](/p/grade10-site/vault/yield))
-- 🚧 **Consigned items** — every item a Grade10 account consigns is held in
-  a storage case of its own, so consignment sells and the vault keeps
+- 🚧 **Consigned items** — every consigned item is held in a storage case of
+  its owner's, so consignment sells and the vault keeps
 - **Two entities** — the custodian holds the item and the lender lends
   against it; each prints on its own paper, and only the lender's carries a
   licence

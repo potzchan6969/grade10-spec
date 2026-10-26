@@ -20,9 +20,9 @@ other mark stands alone.
 
 - **A consignment with its sale** - a consignment and its auction lot, or a
   consignment and its store listing
-- 🚧 **A consignment in a vault case** - an item a Grade10 account consigns
-  is held in its owner's storage vault case, under the consignment and its
-  sale; the sale closes the case when the item leaves to its buyer -
+- 🚧 **A consignment in a vault case** - a consigned item is held in its
+  owner's storage vault case, under the consignment and its sale; the sale
+  closes the case when the item leaves to its buyer -
   [Yield](/p/grade10-site/vault/yield#consigned-items)
 - **One sale at a time** - an auction lot or a store listing, never both
 - **Someone else's item sells under a consignment** - an auction lot or a
