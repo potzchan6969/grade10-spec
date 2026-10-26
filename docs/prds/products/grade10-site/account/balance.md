@@ -7,7 +7,7 @@ order: 5
 | --- | --- |
 | Currency | the brand's; HKD for Grade10 |
 | Payout | by FPS or bank transfer, to an account in the holder's own name |
-| Minimum payout | ❓ **HKD 800**, about USD 100 at the peg - the owner confirms the figure |
+| Minimum payout | **HKD 800**, about USD 100 at the peg, on every payout |
 | Yield lock | **30** days from the day an item's yield starts - [Yield](/p/grade10-site/vault/yield) |
 | Paying Grade10 | from the balance, by FPS, by card, or at the counter |
 | Statement | monthly, to a holder whose balance moved |
@@ -16,9 +16,9 @@ order: 5
 
 What the house owes one Grade10 account, whichever product owes it.
 
-- 🚧 **One per account** - consignment's incentives and proceeds and the
-  vault's yield all land in the account's one balance; a partner the house
-  deals with holds one of its own
+- 🚧 **One per account** - consignment's proceeds and the vault's yield land
+  in the account's one balance; a partner's is the company account an admin
+  opens for it
 - **Withdrawn, never spent** - the balance pays out to the holder's own
   account; it buys nothing in the store or at auction
 - 🚧 **A credit says when it can be withdrawn** - yield from **30** days
@@ -39,7 +39,6 @@ What the house owes one Grade10 account, whichever product owes it.
 
 | Line | Comes from | Withdrawable |
 | --- | --- | --- |
-| Incentive | consignment, when the agreement is signed | at once |
 | Proceeds | consignment, when a sale's return window closes | at once |
 | Refund or chargeback | consignment, after the window | a debit |
 | Yield | the vault, for each day an item earned | **30** days after its yield started |
@@ -61,8 +60,8 @@ What the house owes one Grade10 account, whichever product owes it.
   gathered into an FPS or bank batch, exported as the bank's file, and marked
   paid with the bank's reference or failed
 - **A paid payout sent back** - stays paid; finance settles it by hand
-- ❓ Owner - **Below the minimum** - whether a request that empties the
-  balance of a holder with nothing still earning may go below the minimum
+- 🚧 **No payout below the minimum** - every payout asks for at least
+  **HKD 800**, emptying the balance or not
 
 ## Paying Grade10
 
@@ -139,8 +138,8 @@ paid by each method; balances held by age.
 | Products tell, the balance keeps | Decided | Consignment and the vault tell the balance each credit once, keyed by its fact; payouts, payout accounts, the identity gate and reveals live with the balance and nowhere else - 2026-10-26 | Engineering |
 | A lock is a date on a line | Decided | Rules that differ by product are when each credit becomes withdrawable, never a second balance - 2026-10-26 | Product |
 | Bills are paid like the auction's orders | Decided | FPS by a code and a person's confirmation, card by the processor's hosted page, both as the auction takes them; the balance and the counter as two more ways - on the owner's direction, 2026-10-26 | Product |
-| A partner holds a balance | ❓ Open | Proposed: a partner registered in inventory holds a balance without a Grade10 account; otherwise every partner opens a company account | Product |
-| The minimum payout | ❓ Open | Asked for as about USD 100; HKD 800 holds that at the peg. Whether it binds every payout or only one holding yield | Owner |
+| Every balance is an account's | Decided | A partner holds its balance on a company account an admin opens for it, so no balance stands without an account - decided by the owner, 2026-10-26 | Owner |
+| The minimum payout | Decided | **HKD 800**, about USD 100 at the peg, on every payout - decided by the owner, 2026-10-26 | Owner |
 | Set-off of a fee | ❓ Open | Paying the house's fee from the balance | Legal |
 | Two entities, one balance | ❓ Open | Whether the custodian's yield and the house's proceeds share a balance | Legal |
 :::

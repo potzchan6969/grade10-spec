@@ -25,9 +25,9 @@ bills it confirms, and every holder's lines.
 
 ## One Holder
 
-- 🚧 **The page** - the account or partner, the identity standing, the
-  payout account masked, the four figures, every line with the product and
-  the fact behind it, the bills, the payouts and the statements
+- 🚧 **The page** - the account, a person's or a company's, the identity
+  standing, the payout account masked, the four figures, every line with the
+  product and the fact behind it, the bills, the payouts and the statements
 - 🚧 **Reveal** - finance reveals one masked number at a time, and each
   reveal is recorded with who and when
 - 🚧 **Locked lines** - each yield line shows the day it becomes
@@ -51,7 +51,7 @@ bills it confirms, and every holder's lines.
 
 | Setting | Default | Choices |
 | --- | --- | --- |
-| Minimum payout | ❓ **HKD 800** | any amount |
+| Minimum payout | **HKD 800** | any amount |
 | Statement period | monthly | monthly |
 | Payee for FPS bills | the entity's FPS identifier and bank account, as the vault's loan prints them | per entity |
 | Card on bills | on | on or off |
