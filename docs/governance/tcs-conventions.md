@@ -43,7 +43,7 @@ The state the case starts from, one condition per bullet: seeded data (`At least
 - **Then look, then act** - `Scroll to the collections section`, `Select the incomplete collection tile`
 - **Platform-neutral verbs** - `select`, `enter`, `open`, `choose`, `scroll to`; never `click`, `tap` or `hover`, except in a case tagged for one platform
 - **Name a control by role and region** - `the bid action in the bid panel`, `the shop button in the hero`; never by colour, position or exact label, so a small UI change rewrites nothing
-- **Quote interface text only when the words are the claim** - an expected result does not quote product copy otherwise, because the spec's sentence is not assumed to match the product's words
+- **Quote interface text only when the words are the claim** - an expected result does not quote product copy otherwise, because the spec's sentence is not assumed to match the product's words; where a catalog holds the words, cite them as a spec does, `` `namespace.key` ("words") ``, which `check:manual` holds to the English catalog - [Naming a Control](../prds/guides/writing-the-manual.md#naming-a-control)
 - **Results are checkable by looking** - the thing that worked and, where the spec states it, what survived beside it (`Both buttons still work`); none is a step in disguise
 - **A state a story draws** - end the result with `UI matching <story-id>`: `The cart drawer shows its empty state, UI matching store-cart-blocks-cartdrawer--empty`
 - **Where the screen states the rule before the act** - the result reads what it states, met or unmet, beside the act's outcome

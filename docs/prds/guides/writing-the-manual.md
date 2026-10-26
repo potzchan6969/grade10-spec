@@ -368,6 +368,31 @@ this guide, say — qualify it as `spec-id#item-id`, like
 [[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]. A reference that resolves to
 nothing renders as a marked dead link and draws a check warning.
 
+## Naming a Control
+
+Copy changes without the store, so a page, a spec or a change never finds a
+button, a tab or a page by its label. Two forms, and nothing between them:
+
+- **Role and region** — where only the place is meant: the bid action in the
+  bid panel, the listings tab of the Test panel. A copy change rewrites
+  nothing
+- **The key and its words** — where the words are the claim: a refusal the
+  reader must see, a legal line. Cite the message key in backticks and its
+  English words in brackets after it; a long message needs only its opening
+  words and an ellipsis, as in ("Bids this high…")
+
+```md
+A refusal ends in a `auctionListing.verifyAction` ("Verify") link.
+```
+
+The key is the join and the words are for the reader. `check:manual` fails a
+key the English catalogs in `packages/i18n/messages` do not hold, and words
+that are not what they hold; `pnpm check:manual --fix` rewrites drifted
+words. A bare dotted name in backticks is not read as a key, so an event or a
+setting that shares a namespace's name is left alone. Words that are not ours
+— a vendor's button, an admin screen with no catalog — are quoted as they
+are.
+
 ## Canonical Form
 
 There is exactly one correct text for any page, and committed pages are already
