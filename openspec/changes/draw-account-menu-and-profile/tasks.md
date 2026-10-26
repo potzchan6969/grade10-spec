@@ -2,8 +2,8 @@
 
 ## 1. The menu avatar (grade10-spec)
 
-- [x] 1.1 `SiteHeader` takes `accountAvatarSrc` and shows it in the account menu's `xs` avatar, falling back to the initial of the address before the `@` when it is absent or fails to load; the label alone, with no avatar, when no email is supplied (`shared-ui-site-chrome-SC-49`)
-- [x] 1.2 Stories under Auction & Store / Account menu: with a profile image, and with one that fails to load, each with a play test
+- [x] 1.1 `SiteHeader` takes `accountAvatarSrc` and shows it in the account menu's `xs` avatar, falling back to the initial of the address before the `@` when it is absent or fails to load; the label alone, with no avatar, when no email is supplied (`grade10-site-site-page-shell-SC-79`; the `SiteHeader` contract scenarios move to the site-chrome follow-up change)
+- [x] 1.2 Stories under Auction & Store / Account menu: with a profile image, and with one that fails to load, each with a play test (`grade10-site-site-page-shell-SC-79`; the contract scenarios move to the follow-up)
 - [x] 1.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`
 
 ## 2. The site passes the profile's image (grade10)
@@ -13,7 +13,7 @@
 
 ## 3. The manual (grade10-spec)
 
-- [x] 3.1 Take the 🚧 off the menu avatar on the Site Header and Footer page, and state it on Page Shell; the two MODIFIED requirements fold into the durable specs when the change archives
+- [x] 3.1 Take the 🚧 off the menu avatar on the Site Header and Footer page, and state it on Page Shell; the MODIFIED requirement folds into the durable spec when the change archives
 
 ## 4. The walk
 

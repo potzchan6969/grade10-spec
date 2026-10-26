@@ -26,7 +26,7 @@ currency.
 
 **`SiteHeader`** - a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
-account icon and a menu when signed in, with an initial avatar above the
+account icon and a menu when signed in, with an avatar above the
 sign-in email, then My Auctions and Sign Out
 
 **Pending session** - while the application says the session has not answered,
@@ -43,11 +43,13 @@ press and nothing read aloud
 🚧 **No other item** - the menu offers nothing beyond these, KYC and a second
 orders item included
 
-**Profile image** - the menu's avatar shows the profile's image where the
-collector has one, and the initial where they do not
+🚧 **Profile image** - the menu's avatar shows the profile's image where the
+collector has one, and the initial where they do not - built; its contract
+is specified by the follow-up site-chrome change, written after
+`restrict-auctions-by-region` lands
 
-**Image that fails to load** - the avatar shows the initial and no broken
-image
+🚧 **Image that fails to load** - the avatar shows the initial and no broken
+image - the same follow-up
 
 **Avatar without an email** - when `accountEmail` is not supplied, the menu
 shows `copy.accountMenuLabel` and no avatar

@@ -31,13 +31,16 @@ None.
 
 ### Modified Capabilities
 
-- `shared/ui/site-chrome`: the account menu takes an avatar image
-- `grade10-site/site/page-shell`: the site supplies the profile's image to the
-  menu
+- `grade10-site/site/page-shell`: the account menu shows the profile's image
+  where the site carries the account page
+
+The `SiteHeader` contract that takes the image (`shared/ui/site-chrome`) is
+specified by a follow-up change, written after `restrict-auctions-by-region`
+lands, because both change the same requirement.
 
 ## Impact
 
-- **`packages/ui`** - the site header's account menu
+- **`packages/ui`** - the site header's account menu (built; its contract is the follow-up's)
 - **`apps/frontend/grade10`** - reads the profile's image for the header
 - **Feature changes** - omit-profile-account-menu and add-account-profile ship
   as built and do not wait on this change

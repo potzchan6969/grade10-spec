@@ -1,8 +1,9 @@
 # Design: Account menu avatar follows the profile
 
-Capability deltas:
-[`shared/ui/site-chrome`](specs/shared/ui/site-chrome/spec.md),
+Capability delta:
 [`grade10-site/site/page-shell`](specs/grade10-site/site/page-shell/spec.md).
+The `SiteHeader` contract in `shared/ui/site-chrome` is specified by a
+follow-up change, written after `restrict-auctions-by-region` lands.
 Motivation: [proposal.md](proposal.md) - Why. Decisions:
 [decisions.md](decisions.md).
 
@@ -15,7 +16,7 @@ it in `SiteShell` (`apps/frontend/grade10/src/chrome/SiteShell.tsx`), which
 (`@grade10/store-frontend/profile`) already answers the collector's image as
 `profile.avatarUrl` through `useProfile`.
 
-Both halves are built. This design records the contract between them.
+Both halves are built. This design records how they are built and the contract between them; only the site's half is specified by this change.
 
 ## Contracts
 
