@@ -13,6 +13,11 @@ made.
   attachment, decided at intake by whether the collector asked for a loan;
   storage is free. The financed lane is Grade10 Finance
   ([Finance](/p/grade10-site/finance))
+- 🚧 **Yield** — the other attachment: an item an admin enrols on the
+  storage lane earns its owner a daily yield on its market value, credited
+  to the owner's balance ([Yield](/p/grade10-site/vault/yield))
+- 🚧 **Consigned items** — every item a Grade10 account consigns is held in
+  a storage case of its own, so consignment sells and the vault keeps
 - **Two entities** — the custodian holds the item and the lender lends
   against it; each prints on its own paper, and only the lender's carries a
   licence
@@ -41,6 +46,7 @@ made.
 | [Portfolio](/p/grade10-site/vault/portfolio) | What a collector holds in the vault, and the acts on one item |
 | [Case Lifecycle](/p/grade10-site/vault/case-lifecycle) | The fourteen statuses, the two lanes, the timers, the exits |
 | [Loan and Money](/p/grade10-site/vault/loan-and-money) | The arithmetic, the policy the brand lends under, the money records and corrections, the ledger |
+| [Yield](/p/grade10-site/vault/yield) | What an enrolled item earns its owner each day, the lock and the minimum term, and the early take-out fee |
 | [Documents and Signing](/p/grade10-site/vault/documents-and-signing) | The three documents, the ceremony, consent, copies, verification |
 | [Operator Console](/p/grade10-site/vault/operator-console) | The queue and its views, one case's tabs, grants, the physical vault |
 | [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness) | Identity, retention, evidence, the checklist before the first production case, what counsel supplies |
@@ -56,13 +62,14 @@ reaches —
 
 - **Collectors** — open a request, photograph the item, book the visit,
   accept or decline the offer, sign on the shop's iPad, watch the case, ask
-  for the item back, cancel before the item is in custody
+  for the item back, cancel before the item is in custody, earn yield on an
+  enrolled item
 - **Shop staff** — work the queue at the counter: value, offer, record that
   the terms were explained, record or reuse the identity check, prepare and
   hand over documents, vault, move, release, cancel, send the forfeiture
   notice and forfeit
 - **Treasurers** — record money and nothing else: the payout, each
-  repayment, and with an approver's grant a correction
+  repayment, and with an approver's grant a correction; read the yield book
 - **Admins** — everything, including both sides of the money split
 
 :::detail{title="Design record" for="engineer"}
@@ -110,6 +117,8 @@ fees; multi-item cases; renewing a live loan.
 | A payout takes two people; a correction takes a second one | Decided | Staff and treasurer share no money grant, and nobody may take back a row they recorded | Product |
 | Entity, retention and lending policy are data | Decided | Three per-brand tables on one mechanism, every undecided field null and named by the checks with its owner and its cost. A set bound refuses; a null one allows outside production and, where a loan cannot be written without it, refuses the offer in production; a field marked blocking refuses a production deploy | Engineering |
 | Storage is free | Decided | The obligations seam is where a fee schedule lands | Owner |
+| Yield is an attachment on custody | Decided | An admin enrols a storage-lane item; it earns its owner a daily yield credited to the account's balance, and an early take-out fee lands on the obligations seam - on the owner's direction, 2026-10-26 | Owner |
+| Consigned items are held in the vault | Decided | Consignment opens a storage case on each item it takes, so custody and yield stay the vault's and consignment only sells - on the owner's direction, 2026-10-26 | Owner |
 | Grade10 Finance is the vault's financed lane | Decided | The owner's notes describe the vault's flow step for step, so the loan runs on the case that holds the collateral rather than on a second product | Owner |
 | Two legal identities, one table | Decided | The custodian holds and the lender lends; the custodian's name blocks a production deploy and the lender's refuses an offer, so custody opens while the lender is still being registered | Legal |
 | Lending policy is seeded from the owner's numbers | Decided | Loan to value, the rate band per 30 days, term presets and offer validity in one per-brand table; in production a null bound refuses the offer, never the deploy | Owner |

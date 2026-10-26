@@ -81,3 +81,11 @@ it, for `add-store-order-status`'s task 1.1 to check.
 [`store-process-cost.md`](store-process-cost.md) is what one accepted
 amendment cost in store commands, and six proposals to cut it; QA accepted
 all six, which become one change.
+
+[`vault-yield-liquidity.md`](vault-yield-liquidity.md) is an advisor's
+working for the vault's yield: the weekly market value from SNKRDUNK sales,
+the liquidity factor, staleness, how the owner's band table and formula
+compose, a set price's factor, the exact daily arithmetic, worked examples
+and test vectors; [Yield](../prds/products/grade10-site/vault/yield.md) and
+[Market Prices](../prds/products/grade10-admin/inventory/market-prices.md)
+carry what it decided.

@@ -22,6 +22,10 @@ decided at intake by one question: does the collector want a loan against it.
   overdue (a computation against the clock)
 - **One case, one item** — a unique index; a collector with three items
   sends three requests and books one visit on the first
+- 🚧 **Opened by a consignment** — signing a consignment agreement opens a
+  storage case on each item not already in one, straight into `vaulted`:
+  the consignment's intake and signature stand for the visit and the
+  custody agreement - [Yield](/p/grade10-site/vault/yield#consigned-items)
 
 :::flow{title="Intake to release"}
 # Intake
@@ -159,6 +163,12 @@ released`, guarded on nothing outstanding and no packet open.
   cancel and the clock remove it
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
+- 🚧 **Sold under a consignment** — `vaulted → released` when the item
+  leaves to its buyer, delivered or collected; the sale is the record, and
+  no release packet or early take-out fee is owed
+- 🚧 **Taken out early** — an item earning yield and released inside its
+  minimum term owes the early take-out fee first; it is outstanding until
+  paid - [Yield](/p/grade10-site/vault/yield#taking-it-out)
 - **Every ending reads on the case** — in the collector's words: the
   reason staff gave, that the request was called off and by whom, the clock
   that ended it, or the figure the item settled with the notice date and the

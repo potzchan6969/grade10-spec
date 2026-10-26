@@ -148,8 +148,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | --- | --- | --- |
 | `vault:read` | staff, treasurer, admin | cases, the contact, items, documents, what one case owes, held items, overdue loans, search |
 | `vault:operate` | staff, admin | start valuation, accept, record or reuse identity, record terms explained, prepare, mint, vault, move, release, unwind, cancel, the visit, hand a parked message back to the queue |
-| `vault:approve` | staff, admin | record valuation, make or withdraw an offer, decline, send the forfeiture notice, forfeit |
-| `vault:payout` | treasurer, admin | payout, repayment, taking a row back, and the book: the ledger and the position |
+| `vault:approve` | staff, admin | record valuation, make or withdraw an offer, decline, send the forfeiture notice, forfeit; enrol an item in yield or end it, attach its market page, set its price |
+| `vault:payout` | treasurer, admin | payout, repayment, taking a row back, and the book: the ledger and the position; the yield book and what the yield owes |
+| `vault:settings` | admin | the yield's schedule, its factor and its fee, each change from the next day |
 | `kyc:read` | staff, admin | the identity photograph, each download on the audit chain |
 
 - **Walk-ins and names** — `vault:operate` also opens a walk-in;
@@ -170,6 +171,20 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - **Every case action is filed under its case** on the audit chain
 - **Staff hear nothing** — no email or push to staff; the queue's badges and
   the Today and Overdue views are the signal
+
+## Yield
+
+- 🚧 **On the case** - whether the item earns, from which day, its market
+  page or set price, the week's value and factor, each day's credit, and
+  the days its lock and minimum term end - [Yield](/p/grade10-site/vault/yield)
+- 🚧 **To review** - an item whose price has gone unobserved past the
+  staleness window, whose factor fell to nothing, or whose set price is due
+  for review, badged on the queue
+- 🚧 **The yield book** - every day's credits by item and by day, what the
+  yield owes a year at the week's values, and the days still waiting on a
+  price
+- 🚧 **Who sets a price never approves it alone** - every set price takes a
+  second `vault:approve` holder
 
 ## Physical vault
 

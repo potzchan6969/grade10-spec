@@ -19,6 +19,10 @@ collector's own pages.
   documents; graded and raw items read differently
 - 🚧 **Acts on an item** — list it for auction or for sale, submit a raw item
   for grading, or ask for it back
+- 🚧 **Yield** — an enrolled item shows what it earns a year at the week's
+  value, what it has earned, and the days its lock and its minimum term end;
+  asking for it back first shows any early take-out fee -
+  [Yield](/p/grade10-site/vault/yield)
 - **Verify at the source** — a graded item's certificate opens the grading
   institute's own record in a new tab
 - **Documents** — each document on the item opens or downloads

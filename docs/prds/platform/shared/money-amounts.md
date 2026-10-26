@@ -44,6 +44,8 @@ names those currencies and does not decide them.
 | Vault | HKD, USD, one per case | [Loan and Money](/p/grade10-site/vault/loan-and-money) |
 | Auction | USD, HKD, JPY, one per lot | [Bidding](/p/grade10-site/auction/bidding) |
 | Grading | HKD | [Grading](/p/grade10-site/grading) |
+| Account balance | the brand's, HKD for Grade10; one per balance | [Balance](/p/grade10-site/account/balance) |
+| Vault yield | HKD credits; a market price in JPY is valued in HKD at an admin's rate | [Yield](/p/grade10-site/vault/yield) |
 
 A spend or payment in another currency is refused, not converted.
 

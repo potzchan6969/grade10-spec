@@ -30,6 +30,7 @@ has.
 | [Transit](/p/grade10-admin/inventory/transit) | Moves between places, shipments and what arrives |
 | [Intake and Release](/p/grade10-admin/inventory/intake) | How items come into custody and how they leave |
 | [Services and Hand-offs](/p/grade10-admin/inventory/services) | Which service acts on an item, and passing it to the next |
+| [Market Prices](/p/grade10-admin/inventory/market-prices) | What an item is on the market, a kept snapshot of its price each week, and the exchange rate |
 | [Inventory Console](/p/grade10-admin/inventory/console) | The item page, scanning, receiving, the transit board and counts |
 
 ## Product Assets
