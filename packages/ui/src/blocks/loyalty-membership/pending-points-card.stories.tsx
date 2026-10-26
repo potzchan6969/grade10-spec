@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { PendingPointsCard } from "./pending-points-card";
-import { POINT_HISTORY, POINT_HISTORY_COPY } from "./fixtures";
+import { LEDGER_ENTRIES, POINT_HISTORY_COPY } from "./fixtures";
 
-const PENDING = POINT_HISTORY.filter((entry) => entry.pending);
+const PENDING = LEDGER_ENTRIES.filter((entry) => entry.pending);
 
 const meta = {
   title: "Loyalty/Points/Blocks/PendingPointsCard",

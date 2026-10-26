@@ -118,7 +118,7 @@ const COUPONS: CouponItem[] = [
   },
 ];
 
-const POINT_HISTORY: LedgerEntry[] = [
+const LEDGER_ENTRIES: LedgerEntry[] = [
   {
     id: "entry-pending-online",
     kind: "Online order",
@@ -188,7 +188,7 @@ const POINT_HISTORY: LedgerEntry[] = [
   },
 ];
 
-const POINT_HISTORY_SUMMARY: PointsTotals = {
+const POINTS_TOTALS: PointsTotals = {
   earned: 440,
   used: -820,
   pending: 128,
@@ -210,9 +210,9 @@ const POINT_HISTORY_COPY: PointHistoryCopy = {
 const MEMBER_TOKEN = "g10m.eyJrIjoiZml4dHVyZSJ9.5f2a9c";
 
 export {
-  POINT_HISTORY,
+  LEDGER_ENTRIES,
   POINT_HISTORY_COPY,
-  POINT_HISTORY_SUMMARY,
+  POINTS_TOTALS,
   BALANCE,
   COUPONS,
   MEMBER_TOKEN,

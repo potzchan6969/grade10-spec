@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { PointsMonthCard } from "./points-month-card";
-import { POINT_HISTORY, POINT_HISTORY_COPY } from "./fixtures";
+import { LEDGER_ENTRIES, POINT_HISTORY_COPY } from "./fixtures";
 
-const OCTOBER = POINT_HISTORY.filter((entry) => entry.month === "October 2026");
+const OCTOBER = LEDGER_ENTRIES.filter((entry) => entry.month === "October 2026");
 
 const meta = {
   title: "Loyalty/Points/Blocks/PointsMonthCard",
@@ -42,7 +42,7 @@ export const Default: Story = {
  * adjustment's sparkle, an expiry's hourglass. */
 export const Icons: Story = {
   args: {
-    entries: POINT_HISTORY.filter((entry) => !entry.pending && entry.icon),
+    entries: LEDGER_ENTRIES.filter((entry) => !entry.pending && entry.icon),
     month: "August 2026",
   },
   play: async ({ canvasElement }) => {

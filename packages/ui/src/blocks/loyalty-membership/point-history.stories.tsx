@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { PointHistory } from "./point-history";
-import { POINT_HISTORY, POINT_HISTORY_COPY, POINT_HISTORY_SUMMARY } from "./fixtures";
+import { LEDGER_ENTRIES, POINT_HISTORY_COPY, POINTS_TOTALS } from "./fixtures";
 
 const meta = {
   title: "Loyalty/Points/Blocks/PointHistory",
@@ -17,8 +17,8 @@ const meta = {
   ],
   args: {
     copy: POINT_HISTORY_COPY,
-    state: { status: "ready", data: POINT_HISTORY },
-    summary: POINT_HISTORY_SUMMARY,
+    state: { status: "ready", data: LEDGER_ENTRIES },
+    summary: POINTS_TOTALS,
   },
 } satisfies Meta<typeof PointHistory>;
 

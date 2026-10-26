@@ -28,7 +28,7 @@ function signed(delta: number) {
 
 /**
  * One ledger line — the icon tile, the member-readable name over its date,
- * channel and context, and the signed delta. Internal to the pointHistory
+ * channel and context, and the signed delta. Internal to the ledger
  * blocks; `pendingBadge` is the tag a pending entry reads under its delta.
  */
 function LedgerRow({
