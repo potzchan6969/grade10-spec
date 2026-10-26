@@ -119,7 +119,7 @@ type Story = StoryObj<typeof meta>;
 
 function orderHistoryRevealed(canvasElement: HTMLElement): boolean {
   const root = canvasElement.querySelector('[data-slot="order-history"]');
-  if (root?.getAttribute("data-revealed") !== "true") return false;
+  if (!root) return false;
 
   const empty = canvasElement.querySelector(
     '[data-slot="order-history-empty"]',

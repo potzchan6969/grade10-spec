@@ -120,15 +120,18 @@ async function myAuctionsSettled(canvasElement: HTMLElement) {
   const { waitFor } = await import("storybook/test");
   await waitFor(() => {
     expect(
-      canvasElement
-        .querySelector('[data-slot="auction-record"]')
-        ?.getAttribute("data-revealed"),
-    ).toBe("true");
+      canvasElement.querySelector('[data-slot="auction-record"]'),
+    ).not.toBeNull();
   });
   await Promise.all(
     canvasElement
       .getAnimations({ subtree: true })
-      .filter((animation) => animation instanceof CSSTransition)
+      .filter(
+        (animation) =>
+          animation instanceof CSSTransition ||
+          (animation instanceof CSSAnimation &&
+            animation.animationName === "enter"),
+      )
       .map((animation) => animation.finished.catch(() => undefined)),
   );
 }
