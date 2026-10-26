@@ -50,9 +50,6 @@ type CouponListCopy = {
   spent: string;
   /** Names a void coupon. */
   void: string;
-  /** The scan surface's heading — "Use Coupon" — never the coupon's own
-   * name, which the ticket inside already says. */
-  scanTitle: string;
 };
 
 type CouponListProps = {
@@ -136,17 +133,14 @@ function CouponTicket({
  * it up — the member holds it out where the till reads it. The coupon's own
  * ticket sits above the unfolded card, as the redeemed phase lays it out,
  * and carries no scan control of its own — the surface is already the
- * answer to Use now. The dialog's header says the copy's scanTitle — the
- * ticket inside already names the coupon; the sheet names it for assistive
- * tech alone — the ticket is its heading already. */
+ * answer to Use now. The dialog names the coupon in its header; the sheet
+ * names it for assistive tech alone — the ticket is its heading already. */
 function CouponScanSurface({
-  copy,
   target,
   open,
   onOpenChange,
   smUp,
 }: {
-  copy: CouponListCopy;
   target: ScanTarget;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -186,7 +180,7 @@ function CouponScanSurface({
       <DialogContent className="max-w-(--container-md) gap-4">
         {/* The header owns the close control — title and X share its row. */}
         <DialogHeader>
-          <DialogTitle>{copy.scanTitle}</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <DialogBody className="gap-4">{body}</DialogBody>
       </DialogContent>
@@ -283,7 +277,6 @@ function CouponList({
       ) : null}
       {scan ? (
         <CouponScanSurface
-          copy={copy}
           onOpenChange={(next) => {
             if (!next) {
               setScanOpen(false);

@@ -78,7 +78,6 @@ const COUPON_LIST_COPY: CouponListCopy = {
   label: "Your coupons",
   spent: "Spent",
   void: "Void",
-  scanTitle: "Use Coupon",
 };
 
 /** The controls a surface hangs on an open coupon. */

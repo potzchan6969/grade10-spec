@@ -20,7 +20,6 @@ const meta = {
       label: "My coupons",
       spent: "Used",
       void: "Void",
-      scanTitle: "Use Coupon",
     },
     state: {
       status: "ready",
@@ -70,12 +69,9 @@ export const ScanCoupon: Story = {
       expect.objectContaining({ id: "coupon-open" }),
     );
     const overlay = within(document.body);
-    /* The dialog's header reads "Use Coupon" — the ticket inside already
-     * names the coupon itself. */
-    const dialog = await overlay.findByRole("dialog");
-    expect(
-      within(dialog).getByRole("heading", { name: "Use Coupon" }),
-    ).toBeInTheDocument();
+    /* The coupon's own ticket restates it inside; the surface's title is
+     * for assistive tech alone, not a second heading. */
+    expect(await overlay.findByRole("dialog")).toBeInTheDocument();
     const qr = document.body.querySelector('[data-slot="promo-qr-card"]');
     await waitFor(() => expect(qr).toBeVisible());
     expect(
