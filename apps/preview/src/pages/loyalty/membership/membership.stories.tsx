@@ -7,7 +7,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
-  ActivityList,
+  PointHistory,
   CouponList,
   MemberPass,
   RewardCheckout,
@@ -25,7 +25,7 @@ import { expect, userEvent, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { storyHref } from "../../workbench-story-nav";
 import {
-  ACTIVITY_LIST_COPY,
+  POINT_HISTORY_COPY,
   APPLE_HELD,
   APPLE_OFFERED,
   COUPON_LIST_COPY,
@@ -287,19 +287,19 @@ function MembershipPage({ view }: { view: MembershipView }) {
           </section>
 
           <section
-            aria-labelledby="membership-activity-heading"
+            aria-labelledby="membership-point-history-heading"
             className="flex flex-col gap-4"
           >
             <h2
               className="text-xl font-semibold text-foreground"
-              id="membership-activity-heading"
+              id="membership-point-history-heading"
             >
-              {MEMBERSHIP_PAGE_COPY.activityHeading}
+              {MEMBERSHIP_PAGE_COPY.pointHistoryHeading}
             </h2>
-            <ActivityList
-              copy={ACTIVITY_LIST_COPY}
-              state={view.activity}
-              summary={view.activitySummary}
+            <PointHistory
+              copy={POINT_HISTORY_COPY}
+              state={view.pointHistory}
+              summary={view.pointHistorySummary}
             />
           </section>
         </div>
@@ -338,7 +338,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Tier, both counts, rewards, coupons and activity, on one page. */
+/** Tier, both counts, rewards, coupons and pointHistory, on one page. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -388,7 +388,7 @@ export const NoPoints: Story = {
     expect(canvas.getAllByText("0").length).toBeGreaterThan(0);
     expect(
       canvas.getByText(
-        "No activity yet. Purchases appear here once they are recorded.",
+        "No pointHistory yet. Purchases appear here once they are recorded.",
       ),
     ).toBeInTheDocument();
     for (const card of canvasElement.querySelectorAll(

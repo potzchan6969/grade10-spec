@@ -5,9 +5,9 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import {
-  ActivityList,
-  type ActivityEntry,
-  type ActivityTotals,
+  PointHistory,
+  type LedgerEntry,
+  type PointsTotals,
   type AsyncState,
   SiteHeader,
 } from "@grade10/ui";
@@ -15,9 +15,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import {
-  ACTIVITY,
-  ACTIVITY_LIST_COPY,
-  ACTIVITY_SUMMARY,
+  POINT_HISTORY,
+  POINT_HISTORY_COPY,
+  POINT_HISTORY_SUMMARY,
 } from "../loyalty-content";
 
 const PAGE_COPY = {
@@ -27,13 +27,13 @@ const PAGE_COPY = {
 };
 
 type PointHistoryView = {
-  activity: AsyncState<readonly ActivityEntry[]>;
-  summary: ActivityTotals;
+  pointHistory: AsyncState<readonly LedgerEntry[]>;
+  summary: PointsTotals;
 };
 
 /**
  * Point History as a store assembles it: `SiteHeader`, the page's own
- * heading and breadcrumbs, `ActivityList`, and `Footer`. The page owns the
+ * heading and breadcrumbs, `PointHistory`, and `Footer`. The page owns the
  * ledger and its totals; the block only receives them as props.
  */
 function PointHistoryPage({ view }: { view: PointHistoryView }) {
@@ -56,9 +56,9 @@ function PointHistoryPage({ view }: { view: PointHistoryView }) {
           <h1 className="text-3xl font-bold text-foreground">
             {PAGE_COPY.title}
           </h1>
-          <ActivityList
-            copy={ACTIVITY_LIST_COPY}
-            state={view.activity}
+          <PointHistory
+            copy={POINT_HISTORY_COPY}
+            state={view.pointHistory}
             summary={view.summary}
           />
         </div>
@@ -72,12 +72,9 @@ const meta = {
   title: "Loyalty/Points/Screens/Point History",
   component: PointHistoryPage,
   tags: ["autodocs"],
-  parameters: {
-    layout: "fullscreen",
-    journeys: ["grade10-site-loyalty-programme-US-04"],
-  },
+  parameters: { layout: "fullscreen" },
   args: {
-    view: { activity: { status: "ready", data: ACTIVITY }, summary: ACTIVITY_SUMMARY },
+    view: { pointHistory: { status: "ready", data: POINT_HISTORY }, summary: POINT_HISTORY_SUMMARY },
   },
 } satisfies Meta<typeof PointHistoryPage>;
 
@@ -100,12 +97,12 @@ export const Default: Story = {
 };
 
 /** Nothing earned yet: the totals read zero and the list says so. */
-export const NoActivity: Story = {
+export const Empty: Story = {
   args: {
     view: {
-      activity: {
+      pointHistory: {
         status: "empty",
-        message: "No activity yet. Purchases appear here once they are recorded.",
+        message: "No pointHistory yet. Purchases appear here once they are recorded.",
       },
       summary: { earned: 0, used: 0, pending: 0 },
     },
@@ -114,7 +111,7 @@ export const NoActivity: Story = {
     const canvas = within(canvasElement);
     expect(
       canvas.getByText(
-        "No activity yet. Purchases appear here once they are recorded.",
+        "No pointHistory yet. Purchases appear here once they are recorded.",
       ),
     ).toBeInTheDocument();
   },

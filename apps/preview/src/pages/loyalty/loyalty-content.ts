@@ -1,8 +1,8 @@
 import { formatDay, formatMonthName } from "@grade10/date";
 import type {
-  ActivityEntry,
-  ActivityListCopy,
-  ActivityTotals,
+  LedgerEntry,
+  PointHistoryCopy,
+  PointsTotals,
   AsyncState,
   CartItemSummary,
   CouponItem,
@@ -88,7 +88,7 @@ const COUPON_ACTION_COPY = {
   showToTill: "Show to the till",
 };
 
-const ACTIVITY_LIST_COPY: ActivityListCopy = {
+const POINT_HISTORY_COPY: PointHistoryCopy = {
   label: "Point history",
   summary: { earned: "Earned", used: "Used", pending: "Pending" },
   filters: { all: "All", earned: "Earned", used: "Used", pending: "Pending" },
@@ -144,7 +144,7 @@ const HOW_POINTS_WORK = {
     {
       id: "expiry",
       title: "Expiry",
-      body: "Points expire after 12 months with no activity. We’ll remind you 30 days before.",
+      body: "Points expire after 12 months with no pointHistory. We’ll remind you 30 days before.",
     },
   ] satisfies readonly HowPointsWorkRow[],
 };
@@ -218,7 +218,7 @@ const MEMBERSHIP_PAGE_COPY = {
   spendBody:
     "Points come off your bill at checkout. No code is needed, and nothing is held until you pay.",
   spendAction: "Go to checkout",
-  activityHeading: "Point History",
+  pointHistoryHeading: "Point History",
 };
 
 /** Stand-in product art for the item rewards. */
@@ -385,7 +385,7 @@ const ISSUED_COUPON: CouponItem = {
   qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-issued:4HVD" },
 };
 
-const ACTIVITY: ActivityEntry[] = [
+const POINT_HISTORY: LedgerEntry[] = [
   {
     id: "entry-pending-online",
     kind: "Online order",
@@ -446,7 +446,7 @@ const ACTIVITY: ActivityEntry[] = [
   },
 ];
 
-const ACTIVITY_SUMMARY: ActivityTotals = {
+const POINT_HISTORY_SUMMARY: PointsTotals = {
   earned: 440,
   used: -820,
   pending: 128,
@@ -492,8 +492,8 @@ type MembershipView = {
   earnLine?: string;
   rewards: AsyncState<readonly RewardMenuItem[]>;
   coupons: AsyncState<readonly CouponItem[]>;
-  activity: AsyncState<readonly ActivityEntry[]>;
-  activitySummary: ActivityTotals;
+  pointHistory: AsyncState<readonly LedgerEntry[]>;
+  pointHistorySummary: PointsTotals;
   /** The wallets the member already carries a pass in. */
   heldWallets: readonly string[];
 };
@@ -509,8 +509,8 @@ const MEMBERSHIP_VIEW: MembershipView = {
   earnLine: "Gold earning 1.2x points",
   rewards: { status: "ready", data: REWARDS },
   coupons: { status: "ready", data: COUPONS },
-  activity: { status: "ready", data: ACTIVITY },
-  activitySummary: ACTIVITY_SUMMARY,
+  pointHistory: { status: "ready", data: POINT_HISTORY },
+  pointHistorySummary: POINT_HISTORY_SUMMARY,
   heldWallets: [],
 };
 
@@ -529,11 +529,11 @@ const MEMBERSHIP_STATE_VIEWS = {
       status: "empty",
       message: "You have no coupons yet. Redeem a reward to get one.",
     },
-    activity: {
+    pointHistory: {
       status: "empty",
-      message: "No activity yet. Purchases appear here once they are recorded.",
+      message: "No pointHistory yet. Purchases appear here once they are recorded.",
     },
-    activitySummary: { earned: 0, used: 0, pending: 0 },
+    pointHistorySummary: { earned: 0, used: 0, pending: 0 },
   },
   thresholdReached: {
     ...MEMBERSHIP_VIEW,
@@ -577,9 +577,9 @@ const POINTS_BALANCE_LABEL = "You’ve 1,250 pts.";
 
 export type { HowPointsWorkRow, MembershipView, TierBenefitsRow };
 export {
-  ACTIVITY,
-  ACTIVITY_LIST_COPY,
-  ACTIVITY_SUMMARY,
+  POINT_HISTORY,
+  POINT_HISTORY_COPY,
+  POINT_HISTORY_SUMMARY,
   APPLE_HELD,
   APPLE_OFFERED,
   APPLE_PASS_URL,
