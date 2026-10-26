@@ -100,24 +100,54 @@ type CouponItem = {
   qrCode?: PromoTicketQr;
 };
 
+/** The tile an entry draws — what happened, not the programme's name for it.
+ * A pending entry draws an hourglass whatever icon it is given. */
+type LedgerIcon =
+  | "order"
+  | "reward"
+  | "topup"
+  | "credits"
+  | "adjustment"
+  | "expiry";
+
 /** One ledger entry, already translated into member-readable terms. */
-type ActivityEntry = {
+type LedgerEntry = {
   id: string;
   /** What happened, as the member reads it — never an operator reason or retry key. */
   kind: string;
+  /** Which filter the entry answers — earned or used. */
+  track: "earned" | "used";
+  /** The tile beside the entry. Absent on a pending entry, which draws an hourglass. */
+  icon?: LedgerIcon;
   /** Signed points movement. */
   delta: number;
-  /** Already formatted. */
-  date: string;
+  /** The day the points landed, already formatted. Absent on a pending
+   *  entry — still on the way, nothing has landed. */
+  date?: string;
+  /** The month the entry groups under, already formatted — "October 2026".
+   * Absent, the entry lists ungrouped. */
+  month?: string;
   /** Where it came from, as the member reads it — the counter, the online
    *  store, or the programme itself. Absent where the source did not say. */
   channel?: string;
-  /** Running context under the entry — an order reference, a balance line. */
+  /** The line after the date — an order reference, a note like "Rewards". */
   context?: ReactNode;
+  /** Still on the way: lands when its order completes. Pending entries draw
+   *  under the Pending card and never in a month group. */
+  pending?: boolean;
+};
+
+/** The three figures over the ledger, signed the way deltas are. */
+type PointsTotals = {
+  earned: number;
+  used: number;
+  pending: number;
 };
 
 export type {
-  ActivityEntry,
+  LedgerEntry,
+  LedgerIcon,
+  PointsTotals,
   CouponItem,
   CouponStatus,
   RewardCheckoutReward,

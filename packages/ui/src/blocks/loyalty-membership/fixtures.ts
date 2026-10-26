@@ -1,10 +1,12 @@
-import { formatDay } from "@grade10/date";
+import { formatDay, formatMonthName } from "@grade10/date";
 import {
-  FIXTURE_LOYALTY_ADJUST_DAY,
-  FIXTURE_LOYALTY_PURCHASE_DAY,
-  FIXTURE_LOYALTY_REDEEM_DAY,
+  FIXTURE_LOYALTY_ADJUST_AT_MS,
+  FIXTURE_LOYALTY_PURCHASE_AT_MS,
+  FIXTURE_LOYALTY_REDEEM_AT_MS,
 } from "../../lib/datetime-fixtures";
-import type { ActivityEntry, CouponItem, RewardMenuItem } from "./types";
+import type { PointHistoryCopy } from "./point-history";
+import type { PointsTotals } from "./types";
+import type { LedgerEntry, CouponItem, RewardMenuItem } from "./types";
 
 /* Grade10's own programme content, for the examples only. A consumer supplies
  * its own; nothing here is a default. */
@@ -116,33 +118,125 @@ const COUPONS: CouponItem[] = [
   },
 ];
 
-const ACTIVITY: ActivityEntry[] = [
+const LEDGER_ENTRIES: LedgerEntry[] = [
+  {
+    id: "entry-pending-online",
+    kind: "Online purchase",
+    track: "earned",
+    pending: true,
+    delta: 86,
+    context: "Order #10511",
+  },
+  {
+    id: "entry-pending-store",
+    kind: "In-store purchase",
+    track: "earned",
+    pending: true,
+    delta: 42,
+    context: "Order #10514",
+  },
+  {
+    id: "entry-sleeves",
+    kind: "Redeemed reward",
+    track: "used",
+    icon: "reward",
+    delta: -120,
+    date: formatDay(Date.UTC(2026, 9, 14)),
+    month: formatMonthName(Date.UTC(2026, 9, 14)),
+    context: "Redeemed Grade10 card sleeves",
+  },
+  {
+    id: "entry-topup",
+    kind: "Points top-up",
+    track: "earned",
+    icon: "topup",
+    delta: 200,
+    date: formatDay(Date.UTC(2026, 8, 15)),
+    month: formatMonthName(Date.UTC(2026, 8, 15)),
+  },
+  {
+    id: "entry-credits",
+    kind: "Use at checkout",
+    track: "used",
+    icon: "credits",
+    delta: -80,
+    date: formatDay(Date.UTC(2026, 8, 10)),
+    month: formatMonthName(Date.UTC(2026, 8, 10)),
+    context: "Order #10514",
+  },
   {
     id: "entry-purchase",
-    kind: "Purchase",
+    kind: "In-store purchase",
+    track: "earned",
+    icon: "order",
     delta: 105,
-    date: FIXTURE_LOYALTY_PURCHASE_DAY,
-    channel: "In store",
+    date: formatDay(FIXTURE_LOYALTY_PURCHASE_AT_MS),
+    month: formatMonthName(FIXTURE_LOYALTY_PURCHASE_AT_MS),
     context: "Order #10482",
   },
   {
     id: "entry-redeem",
-    kind: "Redeemed HK$50 off",
+    kind: "Redeemed reward",
+    track: "used",
+    icon: "reward",
     delta: -500,
-    date: FIXTURE_LOYALTY_REDEEM_DAY,
-    channel: "Online store",
-    context: "Balance: 1,250",
+    date: formatDay(FIXTURE_LOYALTY_REDEEM_AT_MS),
+    month: formatMonthName(FIXTURE_LOYALTY_REDEEM_AT_MS),
+    context: "Redeemed HK$50 off",
+  },
+  {
+    id: "entry-expiry",
+    kind: "Points expired",
+    track: "used",
+    icon: "expiry",
+    delta: -40,
+    date: formatDay(Date.UTC(2026, 7, 1)),
+    month: formatMonthName(Date.UTC(2026, 7, 1)),
   },
   {
     id: "entry-adjustment",
     kind: "Points adjusted",
+    track: "earned",
+    icon: "adjustment",
     delta: 120,
-    date: FIXTURE_LOYALTY_ADJUST_DAY,
-    channel: "Membership programme",
+    date: formatDay(FIXTURE_LOYALTY_ADJUST_AT_MS),
+    month: formatMonthName(FIXTURE_LOYALTY_ADJUST_AT_MS),
+    context: "Goodwill credit",
   },
 ];
+
+const POINTS_TOTALS: PointsTotals = {
+  earned: 440,
+  used: -820,
+  pending: 128,
+};
+
+const POINT_HISTORY_COPY: PointHistoryCopy = {
+  label: "Point history",
+  summary: { earned: "Earned", used: "Used", pending: "Pending", points: "pts" },
+  filters: { all: "All", earned: "Earned", used: "Used", pending: "Pending" },
+  filteredEmpty: {
+    all: "No entries yet.",
+    earned: "Nothing earned yet.",
+    used: "Nothing used yet.",
+    pending: "Nothing on the way.",
+  },
+  pending: {
+    title: "Pending",
+    body: "Points land when order completes.",
+    points: "pts",
+  },
+};
 
 /** Opaque, single-use, minted by the programme — this one only looks the part. */
 const MEMBER_TOKEN = "g10m.eyJrIjoiZml4dHVyZSJ9.5f2a9c";
 
-export { ACTIVITY, BALANCE, COUPONS, MEMBER_TOKEN, REWARDS };
+export {
+  LEDGER_ENTRIES,
+  POINT_HISTORY_COPY,
+  POINTS_TOTALS,
+  BALANCE,
+  COUPONS,
+  MEMBER_TOKEN,
+  REWARDS,
+};

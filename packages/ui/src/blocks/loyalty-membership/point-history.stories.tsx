@@ -1,0 +1,111 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
+import { PointHistory } from "./point-history";
+import { LEDGER_ENTRIES, POINT_HISTORY_COPY, POINTS_TOTALS } from "./fixtures";
+
+const meta = {
+  title: "Loyalty/Points/Blocks/PointHistory",
+  component: PointHistory,
+  tags: ["autodocs"],
+  parameters: { layout: "padded" },
+  decorators: [
+    (Story) => (
+      <div className="max-w-md">
+        <Story />
+      </div>
+    ),
+  ],
+  args: {
+    copy: POINT_HISTORY_COPY,
+    state: { status: "ready", data: LEDGER_ENTRIES },
+    summary: POINTS_TOTALS,
+  },
+} satisfies Meta<typeof PointHistory>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+/** Totals on top, filters, what is on the way, then the months. */
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("440 pts")).toBeInTheDocument();
+    expect(canvas.getByText("820 pts")).toBeInTheDocument();
+    expect(canvas.getByText("Pending 128 pts")).toBeInTheDocument();
+    expect(canvas.getByText("Order #10511")).toBeInTheDocument();
+    expect(canvas.getByText("Redeemed HK$50 off")).toBeInTheDocument();
+    expect(canvas.getByText("October 2026")).toBeInTheDocument();
+  },
+};
+
+/** Each tab answers one track: Earned hides the spends, Pending the months. */
+export const Filtered: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("tab", { name: /^Earned/ }));
+    expect(canvas.queryByText("Redeemed HK$50 off")).not.toBeInTheDocument();
+    expect(canvas.getByText("Points adjusted")).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: /^Pending/ }));
+    expect(canvas.getByText("Order #10511")).toBeInTheDocument();
+    expect(canvas.queryByText("October 2026")).not.toBeInTheDocument();
+  },
+};
+
+/** A source that did not say carries no channel; the rest name theirs. */
+export const ChannelIsNamed: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: [
+        {
+          id: "entry-online",
+          kind: "Online order",
+          track: "earned",
+          icon: "order",
+          delta: 105,
+          date: "20 Sep 2026",
+          month: "September 2026",
+          channel: "Online store",
+          context: "Order #10482",
+        },
+        {
+          id: "entry-quiet",
+          kind: "Points expired",
+          track: "used",
+          icon: "expiry",
+          delta: -40,
+          date: "1 Mar 2026",
+          month: "March 2026",
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const named = [
+      ...canvasElement.querySelectorAll('[data-slot="point-history-channel"]'),
+    ].map((node) => node.textContent);
+
+    expect(named).toEqual(["Online store"]);
+  },
+};
+
+export const Loading: Story = { args: { state: { status: "loading" } } };
+
+/** Nothing earned, nothing pending: the empty state points at the shop. */
+export const Empty: Story = {
+  args: {
+    state: {
+      status: "empty",
+      message: "No points yet",
+      description: "Earn points with every purchase — online or at the till.",
+      action: { label: "Start shopping", onAction: () => {} },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("No points yet")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: "Start shopping" }),
+    ).toBeInTheDocument();
+  },
+};

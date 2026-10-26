@@ -19,7 +19,7 @@ const textVariants = cva("leading-snug", {
     },
     tone: {
       primary: "text-foreground",
-      secondary: "text-muted-foreground",
+      secondary: "text-secondary-foreground",
       muted: "text-muted-foreground",
       success: "text-success",
       warning: "text-warning",

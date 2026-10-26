@@ -425,10 +425,11 @@ export {
 } from "./blocks/consignment-mine/consignment-seller-line";
 // shared-ui/loyalty-membership
 export {
-  ActivityList,
-  type ActivityListCopy,
-  type ActivityListProps,
-} from "./blocks/loyalty-membership/activity-list";
+  PointHistory,
+  type PointHistoryFilter,
+  type PointHistoryCopy,
+  type PointHistoryProps,
+} from "./blocks/loyalty-membership/point-history";
 export {
   CouponList,
   type CouponListCopy,
@@ -477,7 +478,9 @@ export {
   type TierLadderRung,
 } from "./blocks/loyalty-membership/tier-ladder";
 export type {
-  ActivityEntry,
+  LedgerEntry,
+  LedgerIcon,
+  PointsTotals,
   CouponItem,
   CouponStatus,
   RewardCheckoutReward,

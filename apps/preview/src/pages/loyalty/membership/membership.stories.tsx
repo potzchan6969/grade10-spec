@@ -7,7 +7,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
-  ActivityList,
+  PointHistory,
   CouponList,
   MemberPass,
   RewardCheckout,
@@ -25,7 +25,7 @@ import { expect, userEvent, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { storyHref } from "../../workbench-story-nav";
 import {
-  ACTIVITY_LIST_COPY,
+  POINT_HISTORY_COPY,
   APPLE_HELD,
   APPLE_OFFERED,
   COUPON_LIST_COPY,
@@ -172,7 +172,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
               {MEMBERSHIP_PAGE_COPY.title}
             </BreadcrumbItem>
           </Breadcrumbs>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-3xl font-semibold text-foreground">
             {MEMBERSHIP_PAGE_COPY.title}
           </h1>
 
@@ -287,16 +287,20 @@ function MembershipPage({ view }: { view: MembershipView }) {
           </section>
 
           <section
-            aria-labelledby="membership-activity-heading"
+            aria-labelledby="membership-point-history-heading"
             className="flex flex-col gap-4"
           >
             <h2
               className="text-xl font-semibold text-foreground"
-              id="membership-activity-heading"
+              id="membership-point-history-heading"
             >
-              {MEMBERSHIP_PAGE_COPY.activityHeading}
+              {MEMBERSHIP_PAGE_COPY.pointHistoryHeading}
             </h2>
-            <ActivityList copy={ACTIVITY_LIST_COPY} state={view.activity} />
+            <PointHistory
+              copy={POINT_HISTORY_COPY}
+              state={view.ledger}
+              summary={view.ledgerTotals}
+            />
           </section>
         </div>
       </main>
@@ -346,7 +350,7 @@ export const Default: Story = {
       "Rewards",
       "Your coupons",
       "Spend on your basket",
-      "Activity",
+      "Point History",
     ]) {
       expect(
         canvas.getByRole("heading", { level: 2, name }),
@@ -381,10 +385,10 @@ export const NoPoints: Story = {
   args: { view: MEMBERSHIP_STATE_VIEWS.noPoints },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("0")).toBeInTheDocument();
+    expect(canvas.getAllByText("0").length).toBeGreaterThan(0);
     expect(
       canvas.getByText(
-        "No activity yet. Purchases appear here once they are recorded.",
+        "No points yet",
       ),
     ).toBeInTheDocument();
     for (const card of canvasElement.querySelectorAll(

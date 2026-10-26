@@ -17,7 +17,7 @@ no-screen:
   grading/messages: emails, previewed in apps/emails
   loyalty/expiry-reminders: nothing is delivered yet
   loyalty/paying-with-points: drawn in the Cart Drawer's footer
-  loyalty/points: earn and expiry rules; drawn as Membership activity
+  loyalty/points: earn and expiry rules; drawn as Point History, a section of Membership
   loyalty/rewards: a section of Membership
   loyalty/shopify-integration: the Shopify link; its till panel is Shopify's
   loyalty/tiers: drawn in the Membership summary

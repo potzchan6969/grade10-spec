@@ -258,7 +258,7 @@ export function BookVisitPage({
         ) : null}
         <div className="flex min-w-0 flex-col gap-5">
           <div className="flex flex-col gap-4">
-            <h1 className="m-0 text-xl leading-snug font-bold">
+            <h1 className="m-0 text-xl leading-snug font-semibold">
               {WORDS.title}
             </h1>
             <StageRail
@@ -272,7 +272,7 @@ export function BookVisitPage({
 
           {moment.step === "service" ? (
             <section className="flex flex-col gap-5">
-              <h2 className="m-0 text-[17px] leading-6 font-bold">
+              <h2 className="m-0 text-[17px] leading-6 font-semibold">
                 {WORDS.svcQ}
               </h2>
               {(["grading", "vault"] as const).map((group) => (
@@ -550,7 +550,7 @@ function After({
             {WORDS.confirmingPhase}
           </span>
         ) : null}
-        <h1 className="m-0 text-2xl leading-[30px] font-bold">
+        <h1 className="m-0 text-2xl leading-[30px] font-semibold">
           {confirming ? WORDS.confirmingTitle : WORDS.expiredTitle}
         </h1>
         <p
