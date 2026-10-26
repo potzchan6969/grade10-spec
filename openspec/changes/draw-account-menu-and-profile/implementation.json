@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "12b825ecfcd9949a5a7306f206855ed1603356ad39e421de1dadd7a64e5117d9"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "8936e2e467a0fae22827114c81b7090a2e34871b",
+    "capturedAt": "2026-10-26T10:00:13.940Z",
+    "targets": [
+      {
+        "path": "openspec/changes/draw-account-menu-and-profile/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Signed-in collectors open what the build carries from the account menu"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

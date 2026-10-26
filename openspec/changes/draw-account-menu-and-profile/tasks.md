@@ -6,7 +6,7 @@
 - [x] 1.2 Stories under Auction & Store / Account menu: with a profile image, and with one that fails to load, each with a play test (`grade10-site-site-page-shell-SC-79`; the contract scenarios move to the follow-up)
 - [x] 1.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:stories:ui`
 
-## 2. The site passes the profile's image (grade10)
+## 2. The site passes the profile's image (grade10) (owner: @seankcw)
 
 - [x] 2.1 The grade10 site reads the profile's avatar through `useProfile` wherever the account page is carried and the collector is signed in, and passes it to `SiteHeader` through `SiteShell` (`grade10-site-site-page-shell-SC-79`)
 - [x] 2.2 Verify: `pnpm run typecheck`, `pnpm run lint`, and the site's chrome tests
