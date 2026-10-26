@@ -1,6 +1,7 @@
 schema: grade10-planning
 created: 2026-10-07
-design_waived: the site's one change passes an image the profile read already answers to a prop the header already takes; no new service, table or contract
+depends_on:
+  - restrict-auctions-by-region
 hands:
   pm: "@ecchochan"
 awaiting:

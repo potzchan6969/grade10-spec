@@ -46,6 +46,9 @@ orders item included
 **Profile image** - the menu's avatar shows the profile's image where the
 collector has one, and the initial where they do not
 
+**Image that fails to load** - the avatar shows the initial and no broken
+image
+
 **Avatar without an email** - when `accountEmail` is not supplied, the menu
 shows `copy.accountMenuLabel` and no avatar
 
