@@ -2,9 +2,9 @@
 
 Documents only. The page already carries the 🚧 line for the outcome and the decision row for the product owner's choice; this group records what the round settled beside them and removes no mark.
 
-- [ ] 1.1 Baseline: run `pnpm check:manual --pages` on `docs/prds/products/grade10-site/store/cart.md` and note the findings before the edit, so the edit is judged against the same check; the group makes no scenario pass and names none; tick this task last
-- [ ] 1.2 Update `docs/prds/products/grade10-site/store/cart.md`: keep the 🚧 **When the session ends** line, and add to its decisions block a row for each choice of `decisions.md` that outlives the change and that the page line carries only in part: Q2, Q4, Q5, Q7 and Q11, restating no requirement
-- [ ] 1.3 Verify: `pnpm check:manual`, `pnpm run validate:changes close-cart-drawer-on-session-end` and `pnpm openspec validate close-cart-drawer-on-session-end --strict`
+- [x] 1.1 Baseline: run `pnpm check:manual --pages` on `docs/prds/products/grade10-site/store/cart.md` and note the findings before the edit, so the edit is judged against the same check; the group makes no scenario pass and names none; tick this task last — baseline passed with warnings only (89 warnings)
+- [x] 1.2 Update `docs/prds/products/grade10-site/store/cart.md`: keep the 🚧 **When the session ends** line, and add to its decisions block a row for each choice of `decisions.md` that outlives the change and that the page line carries only in part: Q2, Q4, Q5, Q7 and Q11, restating no requirement — decisions recorded in the current cart PRD
+- [x] 1.3 Verify: `pnpm check:manual`, `pnpm run validate:changes close-cart-drawer-on-session-end` and `pnpm openspec validate close-cart-drawer-on-session-end --strict` — manual check passed with 0 failures; change validation had 0 waiting inputs; strict validation passed
 
 ## 2. The drawer closes with the member's session (grade10) (owner: @seankcw)
 
