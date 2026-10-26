@@ -90,7 +90,7 @@ const COUPON_ACTION_COPY = {
 
 const POINT_HISTORY_COPY: PointHistoryCopy = {
   label: "Point history",
-  summary: { earned: "Earned", used: "Used", pending: "Pending" },
+  summary: { earned: "Earned", used: "Used", pending: "Pending", points: "pts" },
   filters: { all: "All", earned: "Earned", used: "Used", pending: "Pending" },
   pending: {
     title: "Pending",

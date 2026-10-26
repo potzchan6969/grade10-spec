@@ -88,7 +88,7 @@ export const Default: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "Point History" }),
     ).toBeInTheDocument();
-    expect(canvas.getByText("+440")).toBeInTheDocument();
+    expect(canvas.getByText("440 pts")).toBeInTheDocument();
     expect(canvas.getByText("October 2026")).toBeInTheDocument();
     await userEvent.click(canvas.getByRole("tab", { name: "Used" }));
     expect(canvas.queryByText("Points adjusted")).not.toBeInTheDocument();
