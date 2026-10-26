@@ -1,4 +1,5 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import {
   Tabs,
@@ -6,7 +7,9 @@ import {
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
+import { ShoppingBag } from "@phosphor-icons/react";
 import { useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
@@ -97,11 +100,31 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
           <Skeleton className="h-10 w-full" />
         </VStack>
       ) : null}
-      {state.status === "empty" || state.status === "error" ? (
+      {state.status === "empty" ? (
+        <EmptyState
+          actions={
+            state.action ? (
+              <Button
+                disabled={state.action.pending}
+                onClick={state.action.onAction}
+                type="button"
+                variant="secondary"
+              >
+                {state.action.label}
+              </Button>
+            ) : undefined
+          }
+          data-slot="point-history-empty"
+          description={state.description}
+          icon={<ShoppingBag aria-hidden size={24} weight="regular" />}
+          title={state.message}
+        />
+      ) : null}
+      {state.status === "error" ? (
         <AsyncMessage
           action={state.action}
           message={state.message}
-          slot={`point-history-${state.status}`}
+          slot="point-history-error"
         />
       ) : null}
 

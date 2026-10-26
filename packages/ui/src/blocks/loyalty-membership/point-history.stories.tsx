@@ -91,11 +91,21 @@ export const ChannelIsNamed: Story = {
 
 export const Loading: Story = { args: { state: { status: "loading" } } };
 
+/** Nothing earned, nothing pending: the empty state points at the shop. */
 export const Empty: Story = {
   args: {
     state: {
       status: "empty",
-      message: "Nothing here yet — points will show up as you shop.",
+      message: "No points yet",
+      description: "Earn points with every purchase — online or at the till.",
+      action: { label: "Start shopping", onAction: () => {} },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("No points yet")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: "Start shopping" }),
+    ).toBeInTheDocument();
   },
 };
