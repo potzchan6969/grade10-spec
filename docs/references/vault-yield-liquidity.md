@@ -17,12 +17,16 @@ item worth HKD 5,000-10,000, HKD 600 for 10,000-20,000, HKD 1,300 for
 Decided by the owner since, 2026-10-26:
 
 1. **The formula supersedes the table** - one annual rate on the factored
-   value, with no bands, no floor and no cap; the rate is a setting, unset
+   value, with no bands, no floor and no cap; the rate is set per case,
+   starting on a default of 4% kept in code
 2. **A set price's factor is the admin's** - the admin who sets the price
    picks it, and a second admin approves
-3. **The early take-out fee is flat** - one amount per item, set by an admin
+3. **The early take-out fee is flat** - one amount per item, HKD 500 by
+   default and set by an admin
 4. **The yield replaces consignment's incentive** - a consigned item earns
    the vault's yield instead of 5% at signing
+5. **SNKRDUNK consents** - sales are fetched daily, staff typing the fallback
+6. **No cap** - a forecast of the yield's cost and a stop instead
 
 ## Summary
 

@@ -148,9 +148,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | --- | --- | --- |
 | `vault:read` | staff, treasurer, admin | cases, the contact, items, documents, what one case owes, held items, overdue loans, search |
 | `vault:operate` | staff, admin | start valuation, accept, record or reuse identity, record terms explained, prepare, mint, vault, move, release, unwind, cancel, the visit, hand a parked message back to the queue |
-| `vault:approve` | staff, admin | record valuation, make or withdraw an offer, decline, send the forfeiture notice, forfeit; enrol an item in yield or end it, attach its market page, set its price and factor |
+| `vault:approve` | staff, admin | record valuation, make or withdraw an offer, decline, send the forfeiture notice, forfeit; enrol an item in yield or end it, attach its market page, set its price and factor, set a case's rate |
 | `vault:payout` | treasurer, admin | payout, repayment, taking a row back, and the book: the ledger and the position; the yield book and what the yield owes |
-| `vault:settings` | admin | the yield's annual rate, its early take-out fee and its limits, each change from the next day |
+| `vault:settings` | admin | the default rate, the early take-out fee and whether plain storage owes it, the forecast's threshold and the stop, each change from the next day |
 | `kyc:read` | staff, admin | the identity photograph, each download on the audit chain |
 
 - **Walk-ins and names** — `vault:operate` also opens a walk-in;
@@ -180,9 +180,15 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - 🚧 **To review** - an item whose price has gone unobserved past the
   staleness window, whose factor fell to nothing, or whose set price is due
   for review, badged on the queue
-- 🚧 **The yield book** - every day's credits by item and by day, what the
-  yield owes a year at the week's values, and the days still waiting on a
-  price
+- 🚧 **The yield book** - every day's credits by item and by day, and the
+  days still waiting on a price
+- 🚧 **The forecast** - what the yield has cost this month and to date, its
+  run rate a day, and what it will cost over the next 30, 90 and 365 days at
+  the week's values and each case's rate, in total, by owner and by item,
+  beside what is still locked and what has been paid out; a threshold an
+  admin sets badges the console when the run rate passes it
+- 🚧 **The stop** - an admin sets every rate to nothing from the next day;
+  credits already earned stay
 - 🚧 **Who sets a price never approves it alone** - every set price and its
   factor take a second `vault:approve` holder
 

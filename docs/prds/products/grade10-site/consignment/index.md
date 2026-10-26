@@ -18,7 +18,7 @@ the value below is the default it starts on -
 | Store commission | a share of the sale price, by price band; the band prefills each item, and staff may change it per item at intake |
 | Auction commission | a share of the hammer price, prefilled per item the same way; the buyer's premium stays the house's |
 | Minimum commission | per item; none |
-| Fees | listing, return and early take-back; none, and never taken from the payout |
+| Fees | listing, return and early take-back; none, and never taken from the payout; the vault's early take-out fee takes the take-back fee's place |
 | Contract period | **90** days per consignment, from signing |
 | Return window | **14** days after a store sale is delivered; **7** days after an auction lot is delivered or collected |
 | When proceeds are credited | to the consignor's balance, after the return window |
@@ -355,7 +355,7 @@ payouts made on their due day.
 | Delivery never reported | ❓ Open | When an online sale's return window starts if its delivery is never reported; until decided, it waits for a reported delivery or staff recording one | Product |
 | Held in the vault | Decided | Every consigned item is held in a storage vault case, so consignment sells and the vault keeps; a card already in a storage case is consigned without a release, the sale closes the consignor's case, and a buyer who keeps the card opens a case of their own - on the owner's direction, 2026-10-26 | Product |
 | Yield is the vault's | Decided | An admin picks at intake whether a consigned item earns the vault's yield; consignment never pays it - on the owner's direction, 2026-10-26 | Product |
-| Two early fees | ❓ Open | Whether consignment's early take-back fee and the vault's early take-out fee may both fall on one item; proposed that the vault's alone applies, consignment's staying at none | Owner |
+| Two early fees | Decided | The vault's early take-out fee supersedes consignment's early take-back fee, which stays at none; the setting is kept for a later change - decided by the owner, 2026-10-26 | Owner |
 | Points and discounts | ❓ Open | Whether points, coupons and the shop's discounts reach a consigned card; the consignor is paid on the listed price either way | Product |
 | The term's figure | ❓ Open | The running default is **90** days; **30** or **60** are asked for; the figure is unset | Product |
 | An unsold item at term's end | ❓ Open | Proposed actions a consignor may take: reduce the listed price, save it to the vault for long-term custody, or book an appointment to collect it at the shop | Product |

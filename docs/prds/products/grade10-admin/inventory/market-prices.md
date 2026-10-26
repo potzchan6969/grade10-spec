@@ -22,16 +22,14 @@ exact grade or condition the item matches.
 - 🚧 **The exact grade** - PSA 10 is never read with PSA 9, nor A with B; a
   grade SNKRDUNK does not list maps only to an equal or lower one it does,
   or the item takes a set price
-- 🚧 **Typed by staff** - while nothing fetches, staff read the page and type
+- 🚧 **Fetched daily** - each reference in use is read once a day, politely
+  paced, and every read is recorded, failed or not
+- 🚧 **Typed by staff** - when fetching fails, staff read the page and type
   each sale it shows, its day, price and grade; a read that finds nothing
   new is recorded too, and counts as a successful read
 - **The catalogue's current reference** - PriceCharting's confirmed
   identity and current USD prices stay the catalogue's, a cache with no
   history - [Products and Stock](/p/grade10-admin/inventory/catalog#current-reference)
-- ❓ Legal - **Fetching SNKRDUNK** - its terms forbid reaching the service by
-  crawling or scraping and using its content commercially without consent,
-  and its robots.txt closes its API; an automated fetch is built off and
-  waits on SNKRDUNK's written permission or a licensed feed
 
 ## The Week's Snapshot
 
@@ -82,6 +80,6 @@ separate. The working behind the value and the factor is
 | A snapshot per week, kept | Decided | Unlike the catalogue's current reference, a snapshot is history the yield is paid from; it is written once per reference per week and never replaced - 2026-10-26 | Engineering |
 | Eventually right | Decided | A week reads what was observed before its cutoff, so it is the same whenever it is worked, and late observations reach the next week - on the owner's direction, 2026-10-26 | Owner |
 | Every read is kept | Decided | Which source read what, when, and what it saw, so a failed read is told apart from a quiet market - 2026-10-26 | Engineering |
-| Fetching SNKRDUNK | ❓ Open | SNKRDUNK's terms forbid crawling, scraping and commercial use without consent; the fetch is built off and waits on written permission or a licensed feed | Legal |
+| Fetching SNKRDUNK | Decided | SNKRDUNK consents to the house reading its sales; a daily fetch with staff typing as the fallback - 2026-10-26 | Owner |
 | The exchange rate | Decided | An admin's exact rate, applied from the next day, as consignment's auction rate is; the platform fetches no rate - 2026-10-26 | Finance |
 :::

@@ -97,7 +97,7 @@ pinned to a consignment when its agreement is prepared.
 | --- | --- | --- |
 | Commission, for each channel and price band | unset; intended **10–12%** | a share of the price |
 | Minimum commission | none | an amount per item |
-| Fees: listing, return, early take-back | none | an amount each |
+| Fees: listing, return, early take-back | none; early take-back held at none while the vault's early take-out fee supersedes it | an amount each |
 | Contract period | **90** days | any number of days |
 | Return window | **14** days after a store sale is delivered; **7** after an auction lot is delivered or collected | any number of days, per channel |
 | When proceeds are credited | after the return window | at the sale |

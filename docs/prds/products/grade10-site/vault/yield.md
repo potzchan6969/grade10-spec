@@ -7,12 +7,13 @@ order: 3
 | --- | --- |
 | Who earns | an item in a storage vault case that an admin enrols; never one securing a loan |
 | The item's value | its market value in HKD, taken each week, times its liquidity factor; or a price an admin sets, times the factor that admin picks |
-| A day's credit | the item's value × the annual rate / 365, to the owner's balance |
-| Annual rate | ❓ unset - the owner sets it; no item is enrolled in production until it is |
+| A day's credit | the item's value × the case's annual rate / 365, to the owner's balance |
+| Annual rate | **4%**, the default each case starts on; an admin may set a case's own rate |
 | The start | the Monday after enrolment |
 | Cash-out lock | **30** days from the start |
 | Minimum term | **90** days from the start |
-| Early take-out | a flat fee per item, set by an admin |
+| Early take-out | a flat fee per item, **HKD 500** by default, set by an admin |
+| The fee on plain storage | off by default; an admin may turn it on |
 | A change | a price, the rate or the exchange rate applies from the next day; the weekly value from Monday; a day already worked never changes |
 
 ## Earning
@@ -25,8 +26,9 @@ the vault.
 - 🚧 **Whole days** - from the start, every whole day in custody earns,
   until the day the owner asks for the item back, it sells, or it leaves,
   whichever comes first
-- 🚧 **One rate, no bands** - every item earns the same annual rate on its
-  value, with no floor and no cap
+- 🚧 **One rate a case, no bands** - each case earns its annual rate on its
+  value, with no floor and no cap; a case starts on the default and an admin
+  may change it, from the next day
 - 🚧 **Credited once, eventually** - a day's credit is worked out after it
   closes and reaches the balance once; a late price delays it, never doubles it
 - 🚧 **Exact over time** - each credit is whole cents, and what a day rounds
@@ -36,7 +38,7 @@ the vault.
   unwind or an admin ending it stops the yield, and it does not restart on
   the same case
 
-| The item's value, after its factor | A year, at 4% for illustration | A day |
+| The item's value, after its factor | A year, at the default 4% | A day |
 | --- | --- | --- |
 | HKD 7,500 | HKD 300 | about HKD 0.82 |
 | HKD 15,000 | HKD 600 | about HKD 1.64 |
@@ -96,8 +98,8 @@ the vault.
 
 - 🚧 **Inside the minimum term** - an item that leaves custody before the
   90th day after the start owes the early take-out fee
-- 🚧 **A flat fee** - one amount per item, set by an admin, whatever the
-  item is worth or has earned
+- 🚧 **A flat fee** - one amount per item, **HKD 500** unless an admin sets
+  another, whatever the item is worth or has earned
 - 🚧 **Shown first** - asking for the item back shows the fee and the day
   it stops applying; the ask ends the yield either way, so waiting earns
   nothing more
@@ -106,10 +108,8 @@ the vault.
   [Balance](/p/grade10-site/account/balance#paying-grade10)
 - 🚧 **A sale is not a take-out** - an item sold under its consignment owes
   no fee
-- ❓ Owner - **The figure** - the fee is unset, and no item is enrolled in
-  production until it is
-- ❓ Owner - **Plain storage** - whether an item earning no yield owes the fee
-  too; proposed not, storage staying free
+- 🚧 **Plain storage** - an item earning no yield owes no fee unless an admin
+  turns the fee on for storage too; it is off by default
 
 ## Consigned Items
 
@@ -173,13 +173,12 @@ minimum term.
 | A median, not a mean | Decided | One sale far from the rest moved a 30-day mean by half in the advisor's example and the median not at all - 2026-10-26 | Product |
 | The set-price factor | Decided | The admin who sets a price picks its factor, and a second admin approves both - decided by the owner, 2026-10-26 | Owner |
 | Lock and minimum term | Decided | **30** days before a credit can be withdrawn and **90** before the item leaves without a fee, both counted per item from its start - on the owner's direction, 2026-10-26 | Owner |
-| The early take-out fee | Decided | A flat amount per item, set by an admin - decided by the owner, 2026-10-26. With no cap, an item worth HKD 250,000 earns about HKD 820 in 30 days at 4%, which a smaller fee does not recover | Owner |
+| The early take-out fee | Decided | A flat amount per item, **HKD 500** by default and changed by an admin; it supersedes consignment's early take-back fee, which stays at none; on plain storage it is a setting, off by default - decided by the owner, 2026-10-26. With no cap, an item worth HKD 250,000 earns about HKD 820 in 30 days at 4%, more than the default fee | Owner |
 | Asking ends the yield | Decided | The house stops paying the day the owner asks for the item back, so a slow collection earns nothing - 2026-10-26 | Product |
 | Four eyes on what sets a value | Decided | A second person checks the page and grade attached at intake and approves every set price and its factor; the yield pays from both - 2026-10-26 | Product |
 | Called yield | Decided | Not interest: the vault's loan already charges interest, and a card held is not money deposited - 2026-10-26; Legal confirms the name | Product |
-| The annual rate | ❓ Open | Unset; the superseded table read as about **4%** | Owner |
-| The fee's figure | ❓ Open | Unset | Owner |
-| Limits | ❓ Open | A yearly cap per owner, a budget for the whole yield, and a stop that sets the rate to nothing from the next day | Owner |
-| Fetching SNKRDUNK | ❓ Open | Its terms forbid crawling and commercial use without consent; prices are typed by staff until SNKRDUNK agrees | Legal |
+| The annual rate | Decided | Set per case, every case starting on a default of **4%** kept in code - decided by the owner, 2026-10-26 | Owner |
+| No cap, a clear forecast | Decided | No cap per item, per owner or in total; instead the console forecasts what the yield will cost and a stop sets every rate to nothing from the next day - decided by the owner, 2026-10-26 | Owner |
+| Fetching SNKRDUNK | Decided | SNKRDUNK consents; its sales are fetched daily, and staff typing stays the fallback - 2026-10-26 | Owner |
 | Paying a yield | ❓ Open | Whether paying an owner for an item in custody needs a licence or wording beyond the custody agreement, and which entity pays it | Legal |
 :::
