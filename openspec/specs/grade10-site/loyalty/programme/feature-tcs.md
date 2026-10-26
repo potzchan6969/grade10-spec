@@ -1455,9 +1455,9 @@ Runs once per row of **Test data**.
 | named products, saved in the form | staff, from the panel | not applied |
 | a catalog filter, saved in the form | staff, from the panel | not applied |
 | named products, for online and in store through the admin API | staff, from the panel | not applied |
-| named products, for online and in store through the admin API | the member, from their phone | refused |
-| a catalog filter, for online and in store through the admin API | the member, from their phone | refused |
-| named products, for in store alone through the admin API | the member, from their phone | refused |
+| named products, for online and in store through the admin API | the member, from their phone | not offered |
+| a catalog filter, for online and in store through the admin API | the member, from their phone | not offered |
+| named products, for in store alone through the admin API | the member, from their phone | not offered |
 
 **Steps:**
 
@@ -1465,9 +1465,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The panel marks it online only; it is `<outcome>`, the price unchanged; a refused member's phone reads This coupon cannot be used on this sale.
+* The panel marks it online only; it is `<outcome>`, the price unchanged; where the member tries from their phone, the coupon carries no Use at the counter.
 
-<!-- trace:case id=g10.loyalty-programme.TC-q9z rev=1 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-62s,g10.loyalty-programme.SC-gmp,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32,g10.loyalty-programme.SC-ve1,g10.loyalty-programme.SC-zzl,g10.loyalty-programme.SC-cji -->
+<!-- trace:case id=g10.loyalty-programme.TC-q9z rev=2 covers=g10.loyalty-programme.SC-qyo,g10.loyalty-programme.SC-gmn,g10.loyalty-programme.SC-0tt,g10.loyalty-programme.SC-90a,g10.loyalty-programme.SC-29i,g10.loyalty-programme.SC-mn8,g10.loyalty-programme.SC-3q5,g10.loyalty-programme.SC-oqd,g10.loyalty-programme.SC-62s,g10.loyalty-programme.SC-gmp,g10.loyalty-programme.SC-wks,g10.loyalty-programme.SC-z32,g10.loyalty-programme.SC-ve1,g10.loyalty-programme.SC-zzl,g10.loyalty-programme.SC-cji -->
 ### g10.loyalty-programme.US7-TC11: The menu says where a reward's coupon can be spent, before it is redeemed
 
 Runs once per row of **Test data**.

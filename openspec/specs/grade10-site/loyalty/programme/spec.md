@@ -1711,7 +1711,7 @@ whatever the reward" SHALL take such a coupon.
 - **WHEN** a basket does not yet reach a gift's minimum spend
 - **THEN** the gift is refused until the basket reaches it
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-oqd rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-oqd rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-248 - The till holds a coupon scoped to named products or a filter to online only
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
@@ -1720,7 +1720,8 @@ whatever the reward" SHALL take such a coupon.
 - **WHEN** the member is identified at a till
 - **THEN** the till shows that coupon as online only
 - **AND** staff cannot apply it to the sale
-- **AND** the member presenting it from their own session is refused with
+- **AND** the member's own coupon list offers no way to present it, and a
+  presentation of it that reaches the store anyway is refused with
   `This coupon cannot be used on this sale.`, and the sale's price is
   unchanged
 
@@ -1887,14 +1888,17 @@ coupon, used or unused, back into points.
 
 A coupon SHALL be usable in the online store, applied to the order without
 the member typing anything. At the counter, a coupon SHALL reach the sale
-inside the till session staff opened for the member, one of two ways: staff
-apply it from the member's open coupons in the panel, or the member presents
-it from their own session and the till scans it. Either way a product
-coupon's code SHALL be minted the moment it is chosen, against that session's
-sale, and SHALL be reused for every later plan of the same sale; a gift SHALL
-reach the sale as its own line and carry no code, as
-`grade10-site/store/discounts` requires. The member SHALL
-be attached to the sale before either way is offered. A coupon SHALL NOT
+inside a till session, one of two ways: staff apply it from the member's
+open coupons in the panel, or the member presents it from their own phone and
+the till scans it. The coupon's QR SHALL be a single-use presentation of the
+member card naming the coupon, so that one scan identifies the member and
+chooses the coupon for staff to apply, whether or not the member is already
+on a sale; a scan over the member's own sale SHALL keep that sale and the
+points already on it. A product coupon's code SHALL be minted against that
+session's sale when it is applied, and SHALL be reused for
+every later plan of the same sale; a gift SHALL reach the sale as its own
+line and carry no code, as `grade10-site/store/discounts` requires. Staff's
+way SHALL be offered only once the member is attached to the sale. A coupon SHALL NOT
 apply to an auction purchase, and points SHALL NOT be spent against one. The
 order's one discount-code slot is `grade10-site/store/discounts`' own
 requirement, and a coupon is one case of it.
@@ -1905,8 +1909,9 @@ a sale nobody paid SHALL never have been spent, whatever became of that sale.
 A member SHALL be able to read the coupons they hold — what each is for, its
 validity period, and whether it has been used — and to present one for a
 counter sale. A coupon's code SHALL NOT be shown as the coupon's identity or
-offered for the member to keep: it is minted for one sale, and what the
-member presents is the code for that sale alone.
+offered for the member to keep: what the member presents is a single-use
+presentation of their card naming the coupon. A coupon the till cannot take
+SHALL offer no way to present it.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-gmp rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-159 - A physical reward's coupon takes 100% off its own variant
@@ -1917,16 +1922,16 @@ member presents is the code for that sale alone.
   own variant
 - **AND** no separate collection record is created
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-wks rev=2 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-wks rev=3 -->
 #### Scenario: grade10-site-loyalty-programme-SC-166 - A coupon reaches the counter by the member presenting it
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a member holding a product coupon, identified at a till and
   attached to the sale
-- **WHEN** they present that coupon from their own session and the till
-  scans it
-- **THEN** the sale carries the coupon's cut
-- **AND** the code was minted when the member chose the coupon, not before
+- **WHEN** they present that coupon from their own phone and the till scans it
+- **THEN** the coupon is chosen on the same sale, with the points already on it
+- **AND** once staff apply, the sale carries the coupon's cut, its code minted
+  at that apply
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-z32 rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-172 - Staff apply a member's coupon from the till session

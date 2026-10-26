@@ -52,9 +52,13 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
   scan surface's open and close so a consumer could refresh the moment the
   member pockets their phone; whether the coupon and reward lists keep it,
   or the return refresh covers it, is unconfirmed — Engineering
-- ❓ **The scan token's life** — presenting mints a fresh QR on each Use
-  now; whether it also rotates while held out, as the member pass does, is
-  unconfirmed — Engineering
+- **The scan token's life** — each Use now mints a fresh presentation of
+  the member card naming the coupon: it lives ten minutes, one scan consumes
+  it, and while held out it renews itself a minute before it runs out and
+  when the screen wakes, so whatever is on screen scans; a coupon that can
+  no longer be shown puts the square away. It is the same on a sale: a scan
+  over the member's own sale opens a new session that keeps the sale and its
+  points, and chooses the coupon for staff to apply
 - ❓ **Page or section** — whether the wallet stays its own Coupons page or
   folds into the Membership page as a section; UI forthcoming — Design
 - 🚧 **Points still buy more** — under the Available list sits a Rewards
@@ -66,7 +70,7 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 | Channel | How it lands |
 | --- | --- |
 | Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
-| At the till | For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
+| At the till | For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it - before a sale, that one scan also identifies the member; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
 
 - **Answered before chosen** — the drawer answers every coupon against the
   cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
@@ -127,7 +131,7 @@ The paid order stamps it used. The earlier cart was cancelled with its code, so 
 
 :::flow{title="At the till" case="Walked away" diagram="assets/diagrams/coupon-walked-away.svg"}
 ## *Shopkeeper* — **Applies it at the till**
-From the member's panel, or the member opens it on their phone and the till scans it.
+From the member's panel, or the member opens it on their phone and the till scans it; before a sale, that scan also identifies the member.
 
 ## *Member* — **Leaves without paying**
 The shop owns that cart, so the sale is never cancelled.
@@ -175,8 +179,8 @@ The member reads which refusal answered; no basket quietly loses a coupon.
 | Not held | Not a coupon this member holds; a code bound to another member is answered as one nobody minted |
 | Not standing | Already spent, or otherwise not available |
 | Expired | Its own validity passed |
-| Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; presented from the member's phone it reads `This coupon cannot be used on this sale.` |
-| 🚧 Online only by scope | A coupon scoped to named products or a catalog filter, presented at the till from the member's phone, whatever channels it names; it reads as Wrong channel does |
+| Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; on the member's phone it carries no Use now, and a presentation that reaches the store anyway reads `This coupon cannot be used on this sale.` |
+| Online only by scope | A coupon scoped to named products or a catalog filter, whatever channels it names; at the till it reads as Wrong channel does |
 | Not eligible | The definition's eligibility is not met |
 | An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
 | Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
