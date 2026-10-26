@@ -216,10 +216,10 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
                 />
               ) : null}
 
-              {groups.map((group, index) => (
+              {groups.map((group) => (
                 <PointHistoryCard
                   entries={group.items}
-                  key={`${group.key}-${index}`}
+                  key={`${group.key}-${group.items[0].id}`}
                   label={copy.label}
                   month={group.month}
                   points={copy.pending.points}
