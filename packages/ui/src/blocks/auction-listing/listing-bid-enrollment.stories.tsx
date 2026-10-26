@@ -215,6 +215,7 @@ export const SetupSheetFromChange: Story = {
       cardReady
       copy={COPY}
       defaultAgeAttested
+      iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
       open
       paymentField={
         <MockStripePaymentField label={COPY.iframeLinkedCardPlaceholder} />
@@ -227,12 +228,13 @@ export const SetupSheetFromChange: Story = {
       name: "Link a card to bid",
     });
     await waitFor(() =>
-      expect(
-        within(dialog).getByText(
-          "Stripe card form (iframe) — linked card on file",
-        ),
-      ).toBeVisible(),
+      expect(within(dialog).getByText("•••• 4242")).toBeVisible(),
     );
+    expect(
+      within(dialog).getByText(
+        "Stripe card form (iframe) — linked card on file",
+      ),
+    ).toBeVisible();
     const field = dialog.querySelector<HTMLElement>(
       '[data-slot="payment-field"]',
     );
@@ -259,6 +261,7 @@ export const SetupSheetError: Story = {
       copy={COPY}
       defaultAgeAttested
       errorMessage="Could not link that card. Check the details and try again."
+      iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
       open
       paymentField={
         <MockStripePaymentField label={COPY.iframeLinkedCardPlaceholder} />
@@ -277,6 +280,7 @@ export const SetupSheetError: Story = {
         ),
       ).toBeVisible(),
     );
+    expect(within(dialog).getByText("•••• 4242")).toBeVisible();
     expect(
       within(dialog).getByText(
         "Stripe card form (iframe) — linked card on file",
