@@ -34,7 +34,8 @@
     "notAMember": "你尚未加入此計劃。",
     "join": "加入計劃",
     "coupons": "你的優惠券",
-    "noCoupons": "你沒有持有優惠券。"
+    "noCoupons": "你沒有持有優惠券。",
+    "pointHistory": "積分紀錄"
   },
   "collectWithin": "須於 {days} 天內到門市領取",
   "outcome": {
@@ -125,6 +126,19 @@
     "online": "網店",
     "in_store": "門市",
     "internal": "會員計劃"
+  },
+  "pointHistory": {
+    "label": "積分紀錄",
+    "earned": "已賺取",
+    "used": "已使用",
+    "pending": "待入賬",
+    "points": "分",
+    "all": "全部",
+    "allEmpty": "暫無紀錄。",
+    "earnedEmpty": "尚未賺取積分。",
+    "usedEmpty": "尚未使用積分。",
+    "pendingEmpty": "沒有待入賬的積分。",
+    "pendingBody": "訂單完成後，積分即會入賬。"
   },
   "join": {
     "title": "加入計劃",

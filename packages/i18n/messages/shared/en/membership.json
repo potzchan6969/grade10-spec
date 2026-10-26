@@ -34,7 +34,8 @@
     "notAMember": "You have not joined the programme yet.",
     "join": "Join the programme",
     "coupons": "Your coupons",
-    "noCoupons": "You hold no coupons."
+    "noCoupons": "You hold no coupons.",
+    "pointHistory": "Point History"
   },
   "collectWithin": "Collect in store within {days, plural, one {# day} other {# days}}",
   "outcome": {
@@ -125,6 +126,19 @@
     "online": "Online store",
     "in_store": "In store",
     "internal": "Membership programme"
+  },
+  "pointHistory": {
+    "label": "Point history",
+    "earned": "Earned",
+    "used": "Used",
+    "pending": "Pending",
+    "points": "pts",
+    "all": "All",
+    "allEmpty": "No entries yet.",
+    "earnedEmpty": "Nothing earned yet.",
+    "usedEmpty": "Nothing used yet.",
+    "pendingEmpty": "Nothing on the way.",
+    "pendingBody": "Points land when order completes."
   },
   "join": {
     "title": "Join the programme",

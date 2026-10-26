@@ -34,7 +34,8 @@
     "notAMember": "你尚未加入此计划。",
     "join": "加入计划",
     "coupons": "你的优惠券",
-    "noCoupons": "你没有持有优惠券。"
+    "noCoupons": "你没有持有优惠券。",
+    "pointHistory": "积分记录"
   },
   "collectWithin": "须在 {days} 天内到门店领取",
   "outcome": {
@@ -125,6 +126,19 @@
     "online": "网店",
     "in_store": "门店",
     "internal": "会员计划"
+  },
+  "pointHistory": {
+    "label": "积分记录",
+    "earned": "已赚取",
+    "used": "已使用",
+    "pending": "待入账",
+    "points": "分",
+    "all": "全部",
+    "allEmpty": "暂无记录。",
+    "earnedEmpty": "尚未赚取积分。",
+    "usedEmpty": "尚未使用积分。",
+    "pendingEmpty": "没有待入账的积分。",
+    "pendingBody": "订单完成后，积分即会入账。"
   },
   "join": {
     "title": "加入计划",

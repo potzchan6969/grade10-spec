@@ -34,7 +34,8 @@
     "notAMember": "아직 프로그램에 가입하지 않았습니다.",
     "join": "프로그램 가입",
     "coupons": "내 쿠폰",
-    "noCoupons": "보유한 쿠폰이 없습니다."
+    "noCoupons": "보유한 쿠폰이 없습니다.",
+    "pointHistory": "포인트 내역"
   },
   "collectWithin": "{days}일 이내에 매장에서 수령",
   "outcome": {
@@ -125,6 +126,19 @@
     "online": "온라인 스토어",
     "in_store": "매장",
     "internal": "멤버십 프로그램"
+  },
+  "pointHistory": {
+    "label": "포인트 내역",
+    "earned": "적립",
+    "used": "사용",
+    "pending": "적립 예정",
+    "points": "P",
+    "all": "전체",
+    "allEmpty": "아직 내역이 없습니다.",
+    "earnedEmpty": "아직 적립한 포인트가 없습니다.",
+    "usedEmpty": "아직 사용한 포인트가 없습니다.",
+    "pendingEmpty": "적립 예정인 포인트가 없습니다.",
+    "pendingBody": "주문이 완료되면 포인트가 적립됩니다."
   },
   "join": {
     "title": "프로그램 가입",
