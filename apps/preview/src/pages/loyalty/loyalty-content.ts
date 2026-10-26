@@ -78,6 +78,7 @@ const COUPON_LIST_COPY: CouponListCopy = {
   label: "Your coupons",
   spent: "Spent",
   void: "Void",
+  scanTitle: "Use Coupon",
 };
 
 /** The controls a surface hangs on an open coupon. */
@@ -315,8 +316,9 @@ const COUPONS: CouponItem[] = [
     amount: "HK$50",
     code: "GRD-50-7Q2M",
     description: "HK$50 off any order",
-    expiry: `Use by ${COUPON_VALID}`,
+    expiry: `Use by ${formatDay(Date.UTC(2026, 10, 8))}`,
     status: "open",
+    expiringSoon: true,
     qrCode: { ...COUPON_SCAN, value: "g10:redeem:coupon-open:7Q2M" },
   },
   {

@@ -78,6 +78,10 @@ type CouponItem = {
    * Drawn only on open and expired coupons; a spent or void coupon reads
    * its `statusLabel` instead. */
   expiry: string;
+  /** Set on an open coupon whose expiry is near — the consumer owns the
+   * clock and the threshold (inside 14 days at Grade10). The Use by line
+   * then reads emphasised. Never read on a closed coupon. */
+  expiringSoon?: boolean;
   status: CouponStatus;
   /** Where the coupon is spendable when the till cannot take it — "Online
    * only". A scoped coupon reads the line under its expiry and never draws

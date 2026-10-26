@@ -8,6 +8,7 @@ import {
   Dialog,
   DialogBody,
   DialogContent,
+  DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import {
@@ -16,7 +17,6 @@ import {
   DrawerContent,
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
-import { cn } from "@grade10/design-system/lib/utils";
 import { Ticket } from "@phosphor-icons/react";
 import { useEffect, useId, useState } from "react";
 import type { AsyncState } from "../shared/async";
@@ -50,6 +50,9 @@ type CouponListCopy = {
   spent: string;
   /** Names a void coupon. */
   void: string;
+  /** The scan surface's heading — "Use Coupon" — never the coupon's own
+   * name, which the ticket inside already says. */
+  scanTitle: string;
 };
 
 type CouponListProps = {
@@ -100,6 +103,9 @@ function CouponTicket({
     item.status === "spent" || item.status === "void"
       ? (item.statusLabel ?? copy[STATUS_LABEL[item.status]])
       : item.scopeLabel;
+  /* An open coupon the consumer flags as running out reads its Use by line
+   * emphasised; a closed coupon's flag is never read. */
+  const detailEmphasis = open && item.expiringSoon;
 
   return (
     <ListItem
@@ -116,6 +122,7 @@ function CouponTicket({
           title: item.description ?? item.amount,
           detailLabel:
             open || item.status === "expired" ? item.expiry : undefined,
+          detailEmphasis,
           inapplicableReason: statusLabel,
           label: item.code ?? item.amount,
         }}
@@ -133,14 +140,17 @@ function CouponTicket({
  * it up — the member holds it out where the till reads it. The coupon's own
  * ticket sits above the unfolded card, as the redeemed phase lays it out,
  * and carries no scan control of its own — the surface is already the
- * answer to Use now. The coupon names the surface for assistive tech alone;
- * a visible heading would only repeat the ticket. */
+ * answer to Use now. The dialog's header says the copy's scanTitle — the
+ * ticket inside already names the coupon; the sheet names it for assistive
+ * tech alone — the ticket is its heading already. */
 function CouponScanSurface({
+  copy,
   target,
   open,
   onOpenChange,
   smUp,
 }: {
+  copy: CouponListCopy;
   target: ScanTarget;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -153,14 +163,8 @@ function CouponScanSurface({
   const title = item.description ?? item.amount;
 
   const body = (
-    /* The dialog's close control floats at its top corner — the ticket starts
-     * low enough to clear it. */
-    <VStack className={cn("w-full", smUp && "pt-10")} gap="md">
-      {smUp ? (
-        <DialogTitle className="sr-only">{title}</DialogTitle>
-      ) : (
-        <DrawerTitle className="sr-only">{title}</DrawerTitle>
-      )}
+    <VStack className="w-full" gap="md">
+      {!smUp ? <DrawerTitle className="sr-only">{title}</DrawerTitle> : null}
       <PromoTicket
         className="w-full"
         code={{
@@ -168,6 +172,7 @@ function CouponScanSurface({
           id: item.id,
           title,
           detailLabel: item.expiry,
+          detailEmphasis: item.expiringSoon,
           label: item.code ?? item.amount,
         }}
       />
@@ -183,7 +188,11 @@ function CouponScanSurface({
 
   return smUp ? (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="max-w-(--container-md) gap-4" showCloseButton>
+      <DialogContent className="max-w-(--container-md) gap-4">
+        {/* The header owns the close control — title and X share its row. */}
+        <DialogHeader>
+          <DialogTitle>{copy.scanTitle}</DialogTitle>
+        </DialogHeader>
         <DialogBody className="gap-4">{body}</DialogBody>
       </DialogContent>
     </Dialog>
@@ -279,6 +288,7 @@ function CouponList({
       ) : null}
       {scan ? (
         <CouponScanSurface
+          copy={copy}
           onOpenChange={(next) => {
             if (!next) {
               setScanOpen(false);
