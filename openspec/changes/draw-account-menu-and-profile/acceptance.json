@@ -1,0 +1,96 @@
+{
+  "version": 2,
+  "change": "draw-account-menu-and-profile",
+  "baseline": "c47f29c2bc25625bb9fec4e37d1eee44786e3cdd46969105ca9b833b6e773854",
+  "fingerprint": "12b825ecfcd9949a5a7306f206855ed1603356ad39e421de1dadd7a64e5117d9",
+  "reviewedBy": "@seankcw",
+  "acceptedAt": "2026-10-26T09:58:14.314Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/account/profile.md#designs",
+      "sha256": "b0060f6e09571c7c186cb096d44b49dd299040b5d19b37477b05bc11b7b364d5",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/site/page-shell.md#account-menu",
+      "sha256": "7975f397cfe3175a69cbf00593101a22af1be515876b2bd69e9dc00b5f93c5ae",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/site-chrome.md#account-entry",
+      "sha256": "c2233a248990e9fa96b7104f638e224da9f4c469c8d7c2ca5f2c87ed5ffdcbf9",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/draw-account-menu-and-profile/decisions.md",
+      "sha256": "bc51d0a57f44a3fdba75ff6414d3be982838203cafdfd85226738d8ff9f9430e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/draw-account-menu-and-profile/proposal.md",
+      "sha256": "68a3f53c5c27100d1b033cdd58d0f7bc8165ee4685a762d4b31e68869b6087e3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/draw-account-menu-and-profile/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "00642a9f60393c16ec9c5f91e2fd41435a50c5e476e0c79d59be145b80c8fc25",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/draw-account-menu-and-profile/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "26f0a63e4a33c7b769bdb10c460c65790b12122fea1eb0f30bb89bfed2815d60",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/draw-account-menu-and-profile/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "d9910e12708ad43ab60843a1f497ee9f1cdc976806ecabb8238a4021c97ef45d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/draw-account-menu-and-profile/tech-design.md",
+      "sha256": "b7cc94e538e385d4d505f70cc07034cdd82984e6ab470ad6214f262b663a4eaf",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/draw-account-menu-and-profile/ui-design.md",
+      "sha256": "354a0f5a07011ac5b8172d1460a16d61aa71b17c625cd0295b06d7941d1f0739",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "f8d200e9d71e683b63a1eddf020ef2cbe491304f8f91e8ff4897586072bbbbf3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "5347cb31a29a53abc6866d87be2038c9d9186c4ad52809b26f2e6e65f51c063c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "ff7dfc16caaa6427a210247a75f06646330ed2fa6945e0429aea7f1e34436388",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/draw-account-menu-and-profile/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Signed-in collectors open what the build carries from the account menu"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

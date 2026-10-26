@@ -29,11 +29,11 @@ it.
 - Account control
   - Session-aware entry: a primary Sign In button when signed out, the
     account icon when signed in
-  - Account menu: signed in, the sign-in email with its initial avatar above
-    My Auctions and Sign Out; Profile joins first wherever the account page is
-    carried, and My Orders ahead of My Auctions once Store answers; Sign Out
-    stays last; KYC and any item whose page the site
-    withholds stay out
+  - Account menu: signed in, the sign-in email with its avatar - the profile
+    image, else the email's initial - above My Auctions and Sign Out; Profile
+    joins first wherever the account page is carried, and My Orders ahead of
+    My Auctions once Store answers; Sign Out stays last; KYC and any item whose
+    page the site withholds stay out
   - Account page sign-out: the account page offers Sign Out wherever it is
     carried
 - Cart for anyone
@@ -643,8 +643,11 @@ session SHALL NOT restore or replace the current count.
 The account control of a signed-in collector opens a menu of destinations.
 
 **The menu** - When the collector is signed in, activating the account
-control SHALL open a menu that shows the small initial avatar of their
-sign-in email, then the email, above the items. The menu SHALL offer My
+control SHALL open a menu that shows the small avatar of the collector, then
+their sign-in email, above the items. Wherever the site carries the account
+page, the avatar SHALL show the image the collector chose on their profile;
+it SHALL show the initial of their sign-in email where they have chosen none
+or the image fails to load. The menu SHALL offer My
 Auctions and Sign Out, with Sign Out last. Once Store answers, the menu SHALL
 also offer My Orders, immediately before My Auctions. Wherever the site
 carries the account page, the menu SHALL also offer Profile, as its first
@@ -708,11 +711,11 @@ SHALL start sign-out.
 - **WHEN** they activate the account control
 - **THEN** the menu offers My Auctions and Sign Out, in that order, and no other item
 
-<!-- trace:scenario id=g10.site-page-shell.SC-3y1 rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-3y1 rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-61 - Account menu shows the sign-in email and avatar
 **Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
 
-- **GIVEN** a signed-in collector
+- **GIVEN** a signed-in collector who has chosen no profile image
 - **WHEN** they activate the account control
 - **THEN** the menu shows the small initial avatar of their sign-in email, then the email, above the items
 
@@ -763,6 +766,15 @@ SHALL start sign-out.
 - **GIVEN** a signed-in collector on a build that carries the account page, with the account menu open
 - **WHEN** they activate Profile
 - **THEN** they arrive at the account page
+
+<!-- trace:scenario id=g10.site-page-shell.SC-saj rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-79 - Account menu shows the profile image
+**Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
+
+- **GIVEN** a signed-in collector who chose a profile image
+- **WHEN** they activate the account control
+- **THEN** the menu's avatar shows that image, then the email, above the items
+- **AND** once they remove the image, the menu's avatar shows their email's initial
 
 ### Requirement: The account entry holds its place until the session first answers
 
