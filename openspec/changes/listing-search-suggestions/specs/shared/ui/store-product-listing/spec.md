@@ -32,6 +32,7 @@ the next.
 `ProductCard`, and `ProductCardImage` SHALL each be renderable on their own,
 outside `ProductBrowse`, so a later surface can reuse one without the others.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-32i rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-01 - An application imports the surface
 **Serves:** Surface exports - an application imports the surface
 
@@ -39,12 +40,14 @@ outside `ProductBrowse`, so a later surface can reuse one without the others.
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-eio rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-02 - A part is reused alone
 **Serves:** Surface exports - a part is reused alone
 
 - **WHEN** an application renders the product list, the filter panel, the product filter, the list header, a product card, or the product card image without the browse root
 - **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-vlj rev=2 -->
 #### Scenario: shared-ui-store-product-listing-SC-03 - A tile is named once
 **Serves:** Surface exports - a tile is named once
 
