@@ -15,7 +15,10 @@ import { useEffect, useRef, useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
 import { PointHistoryCard } from "./point-history-card";
-import { PointHistorySummary, type PointHistorySummaryCopy } from "./point-history-summary";
+import {
+  PointHistorySummary,
+  type PointHistorySummaryCopy,
+} from "./point-history-summary";
 import type { LedgerEntry, PointsTotals } from "./types";
 
 /** The filter tabs, in the order they read. */
@@ -126,105 +129,111 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
       gap="none"
     >
       <div className="contents" ref={rootRef}>
-      {summary ? <PointHistorySummary copy={copy.summary} totals={summary} /> : null}
+        {summary ? (
+          <PointHistorySummary copy={copy.summary} totals={summary} />
+        ) : null}
 
-      {state.status === "loading" ? (
-        <VStack className="gap-3" data-slot="point-history-loading">
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-        </VStack>
-      ) : null}
-      {state.status === "empty" ? (
-        <EmptyState
-          actions={
-            state.action ? (
-              <Button
-                disabled={state.action.pending}
-                onClick={state.action.onAction}
-                type="button"
-                variant="secondary"
-              >
-                {state.action.label}
-              </Button>
-            ) : undefined
-          }
-          data-slot="point-history-empty"
-          description={state.description}
-          icon={<ShoppingBag aria-hidden size={24} weight="regular" />}
-          title={state.message}
-        />
-      ) : null}
-      {state.status === "error" ? (
-        <AsyncMessage
-          action={state.action}
-          message={state.message}
-          slot="point-history-error"
-        />
-      ) : null}
+        {state.status === "loading" ? (
+          <VStack className="gap-3" data-slot="point-history-loading">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </VStack>
+        ) : null}
+        {state.status === "empty" ? (
+          <EmptyState
+            actions={
+              state.action ? (
+                <Button
+                  disabled={state.action.pending}
+                  onClick={state.action.onAction}
+                  type="button"
+                  variant="secondary"
+                >
+                  {state.action.label}
+                </Button>
+              ) : undefined
+            }
+            data-slot="point-history-empty"
+            description={state.description}
+            icon={<ShoppingBag aria-hidden size={24} weight="regular" />}
+            title={state.message}
+          />
+        ) : null}
+        {state.status === "error" ? (
+          <AsyncMessage
+            action={state.action}
+            message={state.message}
+            slot="point-history-error"
+          />
+        ) : null}
 
-      {state.status === "ready" ? (
-        <Tabs
-          className="gap-6"
-          data-slot="point-history-filters"
-          onValueChange={(value) => setFilter(value as PointHistoryFilter)}
-          value={filter}
-        >
-          <TabsList
-            aria-label={copy.label}
-            className="w-full justify-start gap-4 overflow-x-auto border-b border-border sm:gap-6"
-            variant="list"
+        {state.status === "ready" ? (
+          <Tabs
+            className="gap-6"
+            data-slot="point-history-filters"
+            onValueChange={(value) => setFilter(value as PointHistoryFilter)}
+            value={filter}
           >
-            {FILTERS.map((name) => (
-              <TabsTrigger
-                aria-controls="point-history-panel"
-                id={`point-history-tab-${name}`}
-                key={name}
-                value={name}
-              >
-                {copy.filters[name]}
-                <Badge data-slot="point-history-count">{counts[name]}</Badge>
-              </TabsTrigger>
-            ))}
-          </TabsList>
+            <TabsList
+              aria-label={copy.label}
+              className="w-full justify-start gap-4 overflow-x-auto border-b border-border sm:gap-6"
+              variant="list"
+            >
+              {FILTERS.filter((name) => name === "all" || counts[name] > 0).map(
+                (name) => (
+                  <TabsTrigger
+                    aria-controls="point-history-panel"
+                    id={`point-history-tab-${name}`}
+                    key={name}
+                    value={name}
+                  >
+                    {copy.filters[name]}
+                    <Badge data-slot="point-history-count">
+                      {counts[name]}
+                    </Badge>
+                  </TabsTrigger>
+                ),
+              )}
+            </TabsList>
 
-          <div
-            aria-labelledby={`point-history-tab-${filter}`}
-            className="flex flex-col gap-6"
-            id="point-history-panel"
-            role="tabpanel"
-          >
-            {showPending ? (
-              <PointHistoryCard
-                entries={pending}
-                header={{
-                  title: `${copy.pending.title} ${pending.reduce((sum, entry) => sum + entry.delta, 0)} ${copy.pending.points}`,
-                  description: copy.pending.body,
-                }}
-                label={copy.label}
-                pending
-                points={copy.pending.points}
-              />
-            ) : null}
+            <div
+              aria-labelledby={`point-history-tab-${filter}`}
+              className="flex flex-col gap-6"
+              id="point-history-panel"
+              role="tabpanel"
+            >
+              {showPending ? (
+                <PointHistoryCard
+                  entries={pending}
+                  header={{
+                    title: `${copy.pending.title} ${pending.reduce((sum, entry) => sum + entry.delta, 0)} ${copy.pending.points}`,
+                    description: copy.pending.body,
+                  }}
+                  label={copy.label}
+                  pending
+                  points={copy.pending.points}
+                />
+              ) : null}
 
-            {groups.map((group, index) => (
-              <PointHistoryCard
-                entries={group.items}
-                key={`${group.key}-${index}`}
-                label={copy.label}
-                month={group.month}
-                points={copy.pending.points}
-              />
-            ))}
+              {groups.map((group, index) => (
+                <PointHistoryCard
+                  entries={group.items}
+                  key={`${group.key}-${index}`}
+                  label={copy.label}
+                  month={group.month}
+                  points={copy.pending.points}
+                />
+              ))}
 
-            {!showPending && groups.length === 0 ? (
-              <Text size="sm" tone="secondary">
-                {copy.filteredEmpty[filter]}
-              </Text>
-            ) : null}
-          </div>
-        </Tabs>
-      ) : null}
+              {!showPending && groups.length === 0 ? (
+                <Text size="sm" tone="secondary">
+                  {copy.filteredEmpty[filter]}
+                </Text>
+              ) : null}
+            </div>
+          </Tabs>
+        ) : null}
       </div>
     </VStack>
   );
