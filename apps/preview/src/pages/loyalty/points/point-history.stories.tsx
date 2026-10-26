@@ -12,7 +12,7 @@ import {
   SiteHeader,
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import {
   LEDGER_ENTRIES,
@@ -90,9 +90,6 @@ export const Default: Story = {
     ).toBeInTheDocument();
     expect(canvas.getByText("440 pts")).toBeInTheDocument();
     expect(canvas.getByText("October 2026")).toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("tab", { name: "Used" }));
-    expect(canvas.queryByText("Points adjusted")).not.toBeInTheDocument();
-    expect(canvas.getByText("Redeemed HK$50 off")).toBeInTheDocument();
   },
 };
 

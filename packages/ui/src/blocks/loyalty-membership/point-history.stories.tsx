@@ -42,10 +42,10 @@ export const Default: Story = {
 export const Filtered: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("tab", { name: "Earned" }));
+    await userEvent.click(canvas.getByRole("tab", { name: /^Earned/ }));
     expect(canvas.queryByText("Redeemed HK$50 off")).not.toBeInTheDocument();
     expect(canvas.getByText("Points adjusted")).toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("tab", { name: "Pending" }));
+    await userEvent.click(canvas.getByRole("tab", { name: /^Pending/ }));
     expect(canvas.getByText("Order #10511")).toBeInTheDocument();
     expect(canvas.queryByText("October 2026")).not.toBeInTheDocument();
   },

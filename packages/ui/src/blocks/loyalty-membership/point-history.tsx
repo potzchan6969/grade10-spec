@@ -1,3 +1,4 @@
+import { Badge } from "@grade10/design-system/components/display/badge";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import {
   Tabs,
@@ -5,6 +6,7 @@ import {
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import { useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
@@ -54,6 +56,12 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
   const [filter, setFilter] = useState<PointHistoryFilter>("all");
   const entries = state.status === "ready" ? state.data : [];
   const pending = entries.filter((entry) => entry.pending);
+  const counts: Record<PointHistoryFilter, number> = {
+    all: entries.length,
+    earned: entries.filter((e) => e.track === "earned" && !e.pending).length,
+    used: entries.filter((e) => e.track === "used" && !e.pending).length,
+    pending: pending.length,
+  };
   const settled = entries.filter(
     (entry) => !entry.pending && (filter === "all" || entry.track === filter),
   );
@@ -75,7 +83,11 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
   }
 
   return (
-    <VStack className={className} data-slot="point-history" gap="md">
+    <VStack
+      className={cn("gap-8", className)}
+      data-slot="point-history"
+      gap="none"
+    >
       {summary ? <PointHistorySummary copy={copy.summary} totals={summary} /> : null}
 
       {state.status === "loading" ? (
@@ -95,11 +107,16 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
 
       {state.status === "ready" ? (
         <Tabs
+          className="gap-6"
           data-slot="point-history-filters"
           onValueChange={(value) => setFilter(value as PointHistoryFilter)}
           value={filter}
         >
-          <TabsList aria-label={copy.label} variant="list">
+          <TabsList
+            aria-label={copy.label}
+            className="w-full border-b border-border"
+            variant="list"
+          >
             {FILTERS.map((name) => (
               <TabsTrigger
                 aria-controls="point-history-panel"
@@ -108,13 +125,14 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
                 value={name}
               >
                 {copy.filters[name]}
+                <Badge data-slot="point-history-count">{counts[name]}</Badge>
               </TabsTrigger>
             ))}
           </TabsList>
 
           <div
             aria-labelledby={`point-history-tab-${filter}`}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-6"
             id="point-history-panel"
             role="tabpanel"
           >
