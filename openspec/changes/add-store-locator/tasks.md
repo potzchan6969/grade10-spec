@@ -26,12 +26,12 @@ Needs group 2's row.
 - [x] 3.2 Make `grade10-site-store-product-page-SC-25` and `grade10-site-store-product-page-SC-38` pass: `ProductView` gains an optional `pickupHref` passed to `StoreProductMetadata`; `ProductPage` passes `addressOf("storeLocator")` where the build carries it
 - [x] 3.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, the product page's serving and hydration tests
 
-## 4. The manual (grade10-spec)
+## 4. The manual (grade10-spec) (owner: @seankcw)
 
 4.1 waits for group 5's walk to have run.
 
-- [ ] 4.1 Take the 🚧 off the delivered outcomes on `docs/prds/products/grade10-site/store/store-locator.md`, the Free Pick-up section of `docs/prds/products/grade10-site/store/product-page.md`, `docs/prds/products/grade10-site/site/carried-surfaces.md`, the Store Locator line of `docs/prds/products/grade10-site/site/page-shell.md` and `docs/prds/products/shared/ui/store-locator.md`, whose Designs section gains the block's `::story` cards; restate no requirement — blocked: waits on the walk (group 5); the 🚧 is off every outcome the code delivers, and stays on Narrow screens and the Agreed look
-- [ ] 4.2 Verify: `pnpm run tcs:validate`, `pnpm check:manual` — blocked: with 4.1
+- [x] 4.1 Take the 🚧 off the delivered outcomes on `docs/prds/products/grade10-site/store/store-locator.md`, the Free Pick-up section of `docs/prds/products/grade10-site/store/product-page.md`, `docs/prds/products/grade10-site/site/carried-surfaces.md`, the Store Locator line of `docs/prds/products/grade10-site/site/page-shell.md` and `docs/prds/products/shared/ui/store-locator.md`, whose Designs section gains the block's `::story` cards; restate no requirement — blocked: waits on the walk (group 5); the 🚧 is off every outcome the code delivers, and stays on Narrow screens and the Agreed look
+- [x] 4.2 Verify: `pnpm run tcs:validate`, `pnpm check:manual` — blocked: with 4.1
 
 ## 5. The walk (grade10) (owner: @seankcw)
 
