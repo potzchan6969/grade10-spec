@@ -3,10 +3,12 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
-  Clock,
+  ClockAfternoon,
+  CoinVertical,
   Gift,
-  Hourglass,
-  ShoppingCart,
+  HandCoins,
+  HourglassHigh,
+  ShoppingBag,
   Sparkle,
 } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
@@ -16,10 +18,12 @@ const ICONS: Record<
   LedgerIcon,
   ComponentType<{ className?: string; size?: number }>
 > = {
-  order: ShoppingCart,
+  order: ShoppingBag,
   reward: Gift,
+  topup: CoinVertical,
+  credits: HandCoins,
   adjustment: Sparkle,
-  expiry: Hourglass,
+  expiry: ClockAfternoon,
 };
 
 function signed(delta: number) {
@@ -28,17 +32,17 @@ function signed(delta: number) {
 
 /**
  * One ledger line — the icon tile, the member-readable name over its date,
- * channel and context, and the signed delta. Internal to the ledger
- * blocks; `pendingBadge` is the tag a pending entry reads under its delta.
+ * channel and context, and the signed delta. Internal to the ledger blocks.
+ * A pending entry draws an hourglass on the brand tint and its delta in the
+ * brand colour; the date is the day the points landed, so a pending row
+ * carries none.
  */
-function LedgerRow({
-  entry,
-  pendingBadge,
-}: {
-  entry: LedgerEntry;
-  pendingBadge?: string;
-}) {
-  const Icon = entry.pending ? Clock : entry.icon ? ICONS[entry.icon] : null;
+function LedgerRow({ entry }: { entry: LedgerEntry }) {
+  const Icon = entry.pending
+    ? HourglassHigh
+    : entry.icon
+      ? ICONS[entry.icon]
+      : null;
   return (
     <HStack
       align="center"
@@ -53,7 +57,7 @@ function LedgerRow({
           className={cn(
             "grid size-9 shrink-0 place-items-center rounded-full",
             entry.pending
-              ? "bg-warning-muted text-warning"
+              ? "bg-primary-muted text-primary"
               : "bg-muted text-muted-foreground",
           )}
         >
@@ -62,38 +66,32 @@ function LedgerRow({
       ) : null}
       <VStack className="min-w-0 flex-1" gap="xs">
         <Text weight="medium">{entry.kind}</Text>
-        <Text size="sm" tone="secondary">
-          {entry.date}
-          {entry.channel ? (
-            <>
-              {" · "}
-              <span data-slot="point-history-channel">{entry.channel}</span>
-            </>
-          ) : null}
-          {entry.context ? (
-            <>
-              {" · "}
-              <span data-slot="point-history-context">{entry.context}</span>
-            </>
-          ) : null}
-        </Text>
-      </VStack>
-      <VStack align="end" className="shrink-0" gap="xs">
-        <Text
-          data-slot="point-history-delta"
-          tone={
-            entry.pending ? "warning" : entry.delta > 0 ? "success" : "primary"
-          }
-          weight="medium"
-        >
-          {signed(entry.delta)}
-        </Text>
-        {pendingBadge ? (
+        {entry.date || entry.channel || entry.context ? (
           <Text size="sm" tone="secondary">
-            {pendingBadge}
+            {entry.date}
+            {entry.channel ? (
+              <>
+                {entry.date ? " · " : ""}
+                <span data-slot="point-history-channel">{entry.channel}</span>
+              </>
+            ) : null}
+            {entry.context ? (
+              <>
+                {entry.date || entry.channel ? " · " : ""}
+                <span data-slot="point-history-context">{entry.context}</span>
+              </>
+            ) : null}
           </Text>
         ) : null}
       </VStack>
+      <Text
+        className={cn("shrink-0", entry.pending && "text-primary")}
+        data-slot="point-history-delta"
+        tone={entry.pending ? undefined : entry.delta > 0 ? "success" : "primary"}
+        weight="medium"
+      >
+        {signed(entry.delta)}
+      </Text>
     </HStack>
   );
 }

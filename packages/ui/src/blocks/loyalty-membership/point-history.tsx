@@ -8,8 +8,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
-import { PointsMonthCard } from "./points-month-card";
-import { PendingPointsCard, type PendingPointsCardCopy } from "./pending-points-card";
+import { PointHistoryCard } from "./point-history-card";
 import { PointHistorySummary, type PointHistorySummaryCopy } from "./point-history-summary";
 import type { LedgerEntry, PointsTotals } from "./types";
 
@@ -31,8 +30,9 @@ type PointHistoryCopy = {
   summary: PointHistorySummaryCopy;
   /** The filter tabs' labels, keyed the way `PointHistoryFilter` is. */
   filters: Record<PointHistoryFilter, string>;
-  /** The pending card's words. */
-  pending: PendingPointsCardCopy;
+  /** The pending card's words — its title, the rule it states, and the
+   *  unit its total reads. */
+  pending: { title: string; body: string; points: string };
 };
 
 type PointHistoryProps = {
@@ -119,11 +119,18 @@ function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
             role="tabpanel"
           >
             {showPending ? (
-              <PendingPointsCard copy={copy.pending} entries={pending} />
+              <PointHistoryCard
+                entries={pending}
+                header={{
+                  title: `${copy.pending.title} ${pending.reduce((sum, entry) => sum + entry.delta, 0)}${copy.pending.points}`,
+                  description: copy.pending.body,
+                }}
+                label={copy.label}
+              />
             ) : null}
 
             {groups.map((group, index) => (
-              <PointsMonthCard
+              <PointHistoryCard
                 entries={group.items}
                 key={`${group.key}-${index}`}
                 label={copy.label}

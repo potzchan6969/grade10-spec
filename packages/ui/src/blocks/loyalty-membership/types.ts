@@ -101,8 +101,14 @@ type CouponItem = {
 };
 
 /** The tile an entry draws — what happened, not the programme's name for it.
- * A pending entry draws a clock whatever icon it is given. */
-type LedgerIcon = "order" | "reward" | "adjustment" | "expiry";
+ * A pending entry draws an hourglass whatever icon it is given. */
+type LedgerIcon =
+  | "order"
+  | "reward"
+  | "topup"
+  | "credits"
+  | "adjustment"
+  | "expiry";
 
 /** One ledger entry, already translated into member-readable terms. */
 type LedgerEntry = {
@@ -111,12 +117,13 @@ type LedgerEntry = {
   kind: string;
   /** Which filter the entry answers — earned or used. */
   track: "earned" | "used";
-  /** The tile beside the entry. Absent on a pending entry, which draws a clock. */
+  /** The tile beside the entry. Absent on a pending entry, which draws an hourglass. */
   icon?: LedgerIcon;
   /** Signed points movement. */
   delta: number;
-  /** Already formatted — a settled entry's day, a pending entry's landing line. */
-  date: string;
+  /** The day the points landed, already formatted. Absent on a pending
+   *  entry — still on the way, nothing has landed. */
+  date?: string;
   /** The month the entry groups under, already formatted — "October 2026".
    * Absent, the entry lists ungrouped. */
   month?: string;

@@ -121,11 +121,10 @@ const COUPONS: CouponItem[] = [
 const LEDGER_ENTRIES: LedgerEntry[] = [
   {
     id: "entry-pending-online",
-    kind: "Online order",
+    kind: "Online purchase",
     track: "earned",
     pending: true,
     delta: 86,
-    date: "Lands 25 Oct",
     context: "Order #10511",
   },
   {
@@ -134,7 +133,6 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     track: "earned",
     pending: true,
     delta: 42,
-    date: "Lands 27 Oct",
     context: "Order #10514",
   },
   {
@@ -146,6 +144,25 @@ const LEDGER_ENTRIES: LedgerEntry[] = [
     date: formatDay(Date.UTC(2026, 9, 14)),
     month: formatMonthName(Date.UTC(2026, 9, 14)),
     context: "Rewards",
+  },
+  {
+    id: "entry-topup",
+    kind: "Points top-up",
+    track: "earned",
+    icon: "topup",
+    delta: 200,
+    date: formatDay(Date.UTC(2026, 8, 15)),
+    month: formatMonthName(Date.UTC(2026, 8, 15)),
+    context: "Top-up pack",
+  },
+  {
+    id: "entry-credits",
+    kind: "Credits applied at checkout",
+    track: "used",
+    icon: "credits",
+    delta: -80,
+    date: formatDay(Date.UTC(2026, 8, 10)),
+    month: formatMonthName(Date.UTC(2026, 8, 10)),
   },
   {
     id: "entry-purchase",
@@ -201,7 +218,6 @@ const POINT_HISTORY_COPY: PointHistoryCopy = {
   pending: {
     title: "Pending",
     body: "Points land when each order completes — an online order once every item is fulfilled and paid, an in-store purchase at the till.",
-    badge: "Pending",
     points: "pts",
   },
 };
