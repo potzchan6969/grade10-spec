@@ -1,8 +1,3 @@
-import {
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-  Breadcrumbs,
-} from "@grade10/design-system/components/display/breadcrumbs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import {
   PointHistory,
@@ -21,8 +16,6 @@ import {
 } from "../loyalty-content";
 
 const PAGE_COPY = {
-  breadcrumbAccount: "Account",
-  breadcrumbMembership: "Membership",
   title: "Point History",
 };
 
@@ -33,7 +26,7 @@ type PointHistoryView = {
 
 /**
  * Point History as a store assembles it: `SiteHeader`, the page's own
- * heading and breadcrumbs, `PointHistory`, and `Footer`. The page owns the
+ * heading, `PointHistory`, and `Footer`. The page owns the
  * ledger and its totals; the block only receives them as props.
  */
 function PointHistoryPage({ view }: { view: PointHistoryView }) {
@@ -42,17 +35,6 @@ function PointHistoryPage({ view }: { view: PointHistoryView }) {
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
         <div className="flex w-full max-w-4xl flex-col gap-6 px-4 py-10 sm:px-8">
-          <Breadcrumbs>
-            <BreadcrumbItem href="#account">
-              {PAGE_COPY.breadcrumbAccount}
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem href="#membership">
-              {PAGE_COPY.breadcrumbMembership}
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem current>{PAGE_COPY.title}</BreadcrumbItem>
-          </Breadcrumbs>
           <h1 className="text-3xl font-semibold text-foreground">
             {PAGE_COPY.title}
           </h1>
