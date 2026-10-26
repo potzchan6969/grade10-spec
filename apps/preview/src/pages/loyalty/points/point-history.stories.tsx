@@ -93,6 +93,22 @@ export const Default: Story = {
   },
 };
 
+/** Boneyard: the ledger is still on the wire — the summary and rows draw
+ * as skeletons. */
+export const Loading: Story = {
+  args: {
+    view: {
+      ledger: { status: "loading" },
+      summary: { earned: 0, used: 0, pending: 0 },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    expect(
+      canvasElement.querySelector('[data-slot="point-history-loading"]'),
+    ).toBeInTheDocument();
+  },
+};
+
 /** Nothing earned yet: the totals read zero and the list says so. */
 export const Empty: Story = {
   args: {
