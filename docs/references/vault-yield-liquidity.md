@@ -14,6 +14,16 @@ The owner's sketch, 2026-10-26: a daily credit of
 item worth HKD 5,000-10,000, HKD 600 for 10,000-20,000, HKD 1,300 for
 20,000-50,000, HKD 3,000 for 50,000-100,000 and HKD 4,000 above.
 
+Decided by the owner since, 2026-10-26:
+
+1. **The formula supersedes the table** - one annual rate on the factored
+   value, with no bands, no floor and no cap; the rate is a setting, unset
+2. **A set price's factor is the admin's** - the admin who sets the price
+   picks it, and a second admin approves
+3. **The early take-out fee is flat** - one amount per item, set by an admin
+4. **The yield replaces consignment's incentive** - a consigned item earns
+   the vault's yield instead of 5% at signing
+
 ## Summary
 
 1. **Weekly value** - each enrolled item is valued as of Sunday from its exact
@@ -28,12 +38,13 @@ item worth HKD 5,000-10,000, HKD 600 for 10,000-20,000, HKD 1,300 for
 5. **The credit** - an exact integer per day, credited as
    `floor(cumulative) − floor(previous cumulative)`: one rounding rule, no
    residue lost, nothing paid twice
-6. **A set price** - a fixed factor of **40%** and a 90-day review, rather
-   than the full price
+6. **A set price** - a 90-day review, and a factor the advisor proposed at
+   **40%** and the owner left to the admin who sets the price
 
 ## Assumptions
 
-1. **The owner's amounts** - HKD per item per year
+1. **The owner's amounts** - HKD per item per year, in the table the formula
+   later superseded
 2. **The source** - SNKRDUNK shows a sold history per product grade: each
    sale's date, price and condition; dates are kept as the source gives them,
    in JST
@@ -151,12 +162,12 @@ review; the item out of custody, pledged or held.
 | One rate, 4%, at most HKD 4,000 | none | 0.93-0.98 |
 | Steps with hysteresis | rarer, still 2× | about 1.00 |
 
-The advisor recommends the brackets: they hit the table at four of its five
-band floors and keep the owner's `value × L × rate / 365` below HKD 50,000.
-One 4% rate hits the table at the middle of each band instead, at its cost;
-it is the proposal on [Yield](../prds/products/grade10-site/vault/yield.md),
-and the owner chooses. Either way the HKD 5,000 floor is checked once, at
-enrolment, so nothing flips at it later.
+The advisor recommended the brackets, which hit the table at four of its five
+band floors; one 4% rate hits it at the middle of each band, at its cost. The
+owner decided neither: the formula supersedes the table, one annual rate on
+the factored value with no bands, no floor and no cap -
+[Yield](../prds/products/grade10-site/vault/yield.md). The comparison stays as
+the working that led there.
 
 | Factored value (HKD) | 5,000 | 7,500 | 9,999 | 10,000 | 15,000 | 20,000 | 35,000 | 50,000 | 75,000 | 100,000+ |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -170,10 +181,11 @@ A typed price has no market behind it, so it is the riskiest value in the
 yield; at the full price it would beat every thin market and reward an owner
 for having no page.
 
-1. **Only without a page** - where the exact grade has no SNKRDUNK listing,
-   such as a sports card or a one-off; typed in HKD with evidence, approved by
-   a second admin
-2. **The factor** - a fixed **40%**, about what a card selling weekly earns
+1. **Only without a value** - where the exact grade has no SNKRDUNK listing,
+   such as a sports card or a one-off, or its listing gives no value; typed
+   in HKD with evidence, approved by a second admin
+2. **The factor** - the advisor proposed a fixed **40%**, about what a card
+   selling weekly earns; the owner left it to the admin who sets the price
 3. **Validity** - 90 days from approval, then falling to nothing over 28 days
    unless reviewed again
 4. **Comparables** - sold prices from elsewhere (eBay, Goldin, Yahoo!
@@ -187,10 +199,14 @@ has no minor unit, so V is already in minor units.
 ```
 MV = floor(V × fx_e8 / 10^6)                      HKD cents, at the rate in force on the day credited
 E  = floor(MV × L / 10^4)                         = applyBasisPoints(MV, L); a set price uses its factor
-N  = the year's yield × 10^4, exact               brackets: 600 × min(E, 5,000,000) + 200 × clamp(E − 5,000,000, 0, 5,000,000)
-                                                  one rate: min(400 × E, 4,000,000,000)
+N  = rate_bps × E                                 the year's yield × 10^4, exact: one annual rate, no cap
 C_d = C_(d−1) + N_d;   credit_d = floor(C_d / 3,650,000) − floor(C_(d−1) / 3,650,000)
 ```
+
+- **The carry** - the same credit comes from keeping only the remainder:
+  `credit_d = floor((r_(d−1) + N_d) / 3,650,000)` and
+  `r_d = (r_(d−1) + N_d) mod 3,650,000`, so the figure carried from day to day
+  stays below 3,650,000 however long the item earns
 
 - **Exact over a year** - 365 days at a constant N credit exactly
   `floor(N / 10^4)`
@@ -200,19 +216,20 @@ C_d = C_(d−1) + N_d;   credit_d = floor(C_d / 3,650,000) − floor(C_(d−1) /
 
 ## Worked Examples
 
-The rate is 0.052; the brackets schedule; "Day 1" is a new item's first credit.
+The exchange rate is 0.052 HKD per JPY and the annual rate **4%**, for
+illustration only; "Day 1" is a new item's first credit.
 
 | # | Case | V (¥) | A / D / O | L | MV (HKD) | E (HKD) | Day 1 | HKD a year |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| E1 | Liquid PSA 10, 80 sale days in 90 | 1,210,000 | 100 / 100 / 100 | 100% | 62,920.00 | 62,920.00 | 892 c | 3,258.40 |
+| E1 | Liquid PSA 10, 80 sale days in 90 | 1,210,000 | 100 / 100 / 100 | 100% | 62,920.00 | 62,920.00 | 689 c | 2,516.80 |
 | E2a | Thin, two sales in 90 days | none | — | 0 | — | 0 | 0 | 0 |
-| E2b | Thin, two sales in 30 days and two older | 760,000 | 5.38 / 91.33 / 100 | 4.91% | 39,520.00 | 1,940.43 | 31 c | 116.42 |
-| E3 | One ¥480,000 print among ¥100,000 sales | 100,500 (the mean says 154,143) | 53.18 / 100 / 100 | 53.18% | 5,226.00 | 2,779.18 | 45 c | 166.75 |
-| E4 | A sale every 4 days | 300,000 | 75.82 / 100 / 100 | 75.82% | 15,600.00 | 11,827.92 | 194 c | 709.67 |
-| E4a | E4, last good read 10 days ago | 300,000 | 71.79 / 100 / 91.42 | 65.63% | 15,600.00 | 10,238.28 | 168 c | 614.29 |
-| E4b | E4, read today, no trade for 10 days | 300,000 | 57.14 / 100 / 100 | 57.14% | 15,600.00 | 8,913.84 | 146 c | 534.83 |
-| E6 | Sealed box, a sale every 3 days | 150,000 | 91.09 / 100 / 100 | 91.09% | 7,800.00 | 7,105.02 | 116 c | 426.30 |
-| E7 | A set price of HKD 30,000, within review | — | factor 40% | — | 30,000.00 | 12,000.00 | 197 c | 720.00 |
+| E2b | Thin, two sales in 30 days and two older | 760,000 | 5.38 / 91.33 / 100 | 4.91% | 39,520.00 | 1,940.43 | 21 c | 77.62 |
+| E3 | One ¥480,000 print among ¥100,000 sales | 100,500 (the mean says 154,143) | 53.18 / 100 / 100 | 53.18% | 5,226.00 | 2,779.18 | 30 c | 111.17 |
+| E4 | A sale every 4 days | 300,000 | 75.82 / 100 / 100 | 75.82% | 15,600.00 | 11,827.92 | 129 c | 473.12 |
+| E4a | E4, last good read 10 days ago | 300,000 | 71.79 / 100 / 91.42 | 65.63% | 15,600.00 | 10,238.28 | 112 c | 409.53 |
+| E4b | E4, read today, no trade for 10 days | 300,000 | 57.14 / 100 / 100 | 57.14% | 15,600.00 | 8,913.84 | 97 c | 356.55 |
+| E6 | Sealed box, a sale every 3 days | 150,000 | 91.09 / 100 / 100 | 91.09% | 7,800.00 | 7,105.02 | 77 c | 284.20 |
+| E7 | A set price of HKD 30,000 at a factor of 40%, within review | — | — | — | 30,000.00 | 12,000.00 | 131 c | 480.00 |
 
 E4a and E4b show the two clocks: an outage holds the last state with a small
 haircut, and silence is evidence that costs more.
@@ -221,31 +238,31 @@ haircut, and silence is evidence that costs more.
 
 Sales are `age:¥price`, ages counted back from the snapshot's effective date
 (the watermark during an outage); `obs_age` is the as-of date less the
-watermark; the rate is 5,200,000 unless noted; credits are a new item's days
-1 to 3 on the brackets schedule.
+watermark; the exchange rate is 5,200,000 unless noted; N and the credits
+are a new item's days 1 to 3 at a test rate of **400** bps.
 
 | id | Sales | obs_age | V | W | A | q | D | O | L | MV c | E c | N | Credits |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | T1 | 3:500000, 20:510000 | 0 | — | — | 0 | — | 0 | 10000 | 0 | — | 0 | 0 | 0,0,0 |
-| T2 | 0,1,2:100000 | 0 | 100000 | 267 | 956 | 0 | 10000 | 10000 | 956 | 520000 | 49712 | 29827200 | 8,8,8 |
-| T3 | 0:200000, 10:210000, 30:190000, 47:205000 | 0 | 200000 | 273 | 1000 | 500 | 10000 | 10000 | 1000 | 1040000 | 104000 | 62400000 | 17,17,17 |
-| T4 | 0-19 and 62:300000 | 0 | 300000 | 1638 | 10000 | 0 | 10000 | 10000 | 10000 | 1560000 | 1560000 | 936000000 | 256,256,257 |
-| T5 | 2:98000, 6:480000, 9:101000, 13:99500, 18:103000, 24:97000, 27:100500, 35:99000, 44:96000, 52:100000, 61:97500, 70:98500, 83:96500 | 0 | 100500 | 726 | 5318 | 248 | 10000 | 10000 | 5318 | 522600 | 277918 | 166750800 | 45,46,46 |
-| T6 | 1,4,8,12,20:140000; 31,36,41,47,53,58,64,70,77,85:100000 | 0 | 125000 | 743 | 5443 | 0 | 10000 | 10000 | 5443 | 650000 | 353795 | 212277000 | 58,58,58 |
-| T7 | 1:100000, 5:85000, 9:115000, 14:100000, 22:130000 | 0 | 100000 | 399 | 2384 | 1500 | 7000 | 10000 | 1668 | 520000 | 86736 | 52041600 | 14,14,14 |
-| T8a | T4's sales | 8 | 300000 | 1638 | 10000 | 0 | 10000 | 9714 | 9714 | 1560000 | 1515384 | 909230400 | 249,249,249 |
-| T8b | T4's sales | 14 | 300000 | 1638 | 10000 | 0 | 10000 | 8000 | 8000 | 1560000 | 1248000 | 748800000 | 205,205,205 |
+| T2 | 0,1,2:100000 | 0 | 100000 | 267 | 956 | 0 | 10000 | 10000 | 956 | 520000 | 49712 | 19884800 | 5,5,6 |
+| T3 | 0:200000, 10:210000, 30:190000, 47:205000 | 0 | 200000 | 273 | 1000 | 500 | 10000 | 10000 | 1000 | 1040000 | 104000 | 41600000 | 11,11,12 |
+| T4 | 0-19 and 62:300000 | 0 | 300000 | 1638 | 10000 | 0 | 10000 | 10000 | 10000 | 1560000 | 1560000 | 624000000 | 170,171,171 |
+| T5 | 2:98000, 6:480000, 9:101000, 13:99500, 18:103000, 24:97000, 27:100500, 35:99000, 44:96000, 52:100000, 61:97500, 70:98500, 83:96500 | 0 | 100500 | 726 | 5318 | 248 | 10000 | 10000 | 5318 | 522600 | 277918 | 111167200 | 30,30,31 |
+| T6 | 1,4,8,12,20:140000; 31,36,41,47,53,58,64,70,77,85:100000 | 0 | 125000 | 743 | 5443 | 0 | 10000 | 10000 | 5443 | 650000 | 353795 | 141518000 | 38,39,39 |
+| T7 | 1:100000, 5:85000, 9:115000, 14:100000, 22:130000 | 0 | 100000 | 399 | 2384 | 1500 | 7000 | 10000 | 1668 | 520000 | 86736 | 34694400 | 9,10,9 |
+| T8a | T4's sales | 8 | 300000 | 1638 | 10000 | 0 | 10000 | 9714 | 9714 | 1560000 | 1515384 | 606153600 | 166,166,166 |
+| T8b | T4's sales | 14 | 300000 | 1638 | 10000 | 0 | 10000 | 8000 | 8000 | 1560000 | 1248000 | 499200000 | 136,137,137 |
 | T8c | T4's sales | 42 | 300000 | 1638 | 10000 | 0 | 10000 | 0 | 0 | 1560000 | 0 | 0 | 0,0,0 |
-| T9 | 0-29:3000000 | 0 | 3000000 | 2265 | 10000 | 0 | 10000 | 10000 | 10000 | 15600000 | 15600000 | 4000000000 | 1095,1096,1096 |
-| T10 | 0-29:1200000 | 0 | 1200000 | 2265 | 10000 | 0 | 10000 | 10000 | 10000 | 6240000 | 6240000 | 3248000000 | 889,890,890 |
-| T11 | 0-29:333333, fx_e8 5123457 | 0 | 333333 | 2265 | 10000 | 0 | 10000 | 10000 | 10000 | 1707817 | 1707817 | 1024690200 | 280,281,281 |
-| T12 | 0:260000 eight sales; 3,9,15,21,27,33:200000 | 0 | 200000 | 522 | 3736 | 0 | 10000 | 10000 | 3736 | 1040000 | 388544 | 233126400 | 63,64,64 |
+| T9 | 0-29:3000000 | 0 | 3000000 | 2265 | 10000 | 0 | 10000 | 10000 | 10000 | 15600000 | 15600000 | 6240000000 | 1709,1710,1709 |
+| T10 | 0-29:1200000 | 0 | 1200000 | 2265 | 10000 | 0 | 10000 | 10000 | 10000 | 6240000 | 6240000 | 2496000000 | 683,684,684 |
+| T11 | 0-29:333333, fx_e8 5123457 | 0 | 333333 | 2265 | 10000 | 0 | 10000 | 10000 | 10000 | 1707817 | 1707817 | 683126800 | 187,187,187 |
+| T12 | 0:260000 eight sales; 3,9,15,21,27,33:200000 | 0 | 200000 | 522 | 3736 | 0 | 10000 | 10000 | 3736 | 1040000 | 388544 | 155417600 | 42,43,42 |
 
 | Set price 3,000,000 c, factor 4000: days since review | Factor | E c | N | Credits |
 | --- | --- | --- | --- | --- |
-| 0-90 | 4000 | 1200000 | 720000000 | 197,197,197 |
-| 91 | 3857 | 1157100 | 694260000 | 190,190,190 |
-| 100 | 2571 | 771300 | 462780000 | 126,127,127 |
+| 0-90 | 4000 | 1200000 | 480000000 | 131,132,131 |
+| 91 | 3857 | 1157100 | 462840000 | 126,127,127 |
+| 100 | 2571 | 771300 | 308520000 | 84,85,84 |
 | 118 or more | 0 | 0 | 0 | 0,0,0 |
 
 ## Versioning
