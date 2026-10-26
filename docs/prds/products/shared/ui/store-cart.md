@@ -116,6 +116,11 @@ replaced the sale, the sale returns to the lines while it still runs.
 **Held, cannot apply** - a held code that cannot apply on this cart is
 listed apart from the ones that can, muted with its reason and no Apply.
 
+🚧 **Near-expiry promo detail** - when the consumer marks a live promo as
+near expiry, the ticket emphasises its existing expiry or conditions detail
+slot. The discount title, supplied wording, code, actions and list position
+remain as they are, including for a muted code that cannot apply.
+
 ::story{id="store-cart-blocks-cartitem-price--sale-price" title="A line on the site sale"}
 
 ::story{id="store-cart-blocks-cartitem-price--equal-list-price" title="A list price equal to the price, still struck"}
@@ -137,6 +142,8 @@ listed apart from the ones that can, muted with its reason and no Apply.
 ::story{id="store-cart-blocks-cartdrawerfooter-checkout--order-discount" title="An order discount under the Subtotal"}
 
 ::story{id="store-cart-blocks-promoticket--not-applicable" title="A held code that cannot apply"}
+
+::story{id="store-cart-blocks-promoticket--expiring-soon" title="A promo ticket expiring soon"}
 
 ::story{id="store-cart-blocks-cartdrawer--default" title="The drawer with items"}
 
@@ -182,5 +189,6 @@ line: in every outcome here, the code's discount shows in the summary.
 | No sale row | Decided | A site sale shows only on the lines it cuts, so each cut appears once; the summary names no site sale. | Product |
 | Order discount row | Decided | A cut off the whole order is a row of its own after the Subtotal, with no Remove, because the shop's checkout prints it on the order, not the lines. Chosen over spreading it over the lines or leaving it to the invoice. | Product |
 | Picked code refused | Decided | Its ticket moves apart, muted, with the refusal as its reason, so the shopper is never offered an Apply that fails again. Chosen over keeping it among the ones that can apply, or leaving it to each application. | Design |
+| Near-expiry promo detail | Decided | The ticket keeps the discount title and expiry/conditions detail as separate supplied slots; the consumer may emphasise only the existing detail slot for a live code nearing expiry, without changing wording, actions or order. Confirmed by the designer and PM, 2026-10-27. | Product |
 | Struck price read aloud | Decided | Hidden words the application supplies, such as Sale price and Was, read before each price, so a screen reader says which price is charged. Every struck price needs them - the product tile, the product page, the order line and the cart - so one change adds them to all. Chosen over a strike with no words, which some screen readers read as nothing. | Design |
 :::

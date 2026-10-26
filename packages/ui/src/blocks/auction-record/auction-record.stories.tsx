@@ -171,21 +171,24 @@ type Story = StoryObj<typeof meta>;
 /**
  * The record fades every part of itself in on its own stagger delay, so one
  * element having arrived says nothing about the next. Waiting for the
- * transitions themselves to finish settles the whole record at once, however
+ * animations themselves to finish settles the whole record at once, however
  * many parts it has and whatever order they arrive in.
  */
 async function auctionRecordSettled(canvasElement: HTMLElement) {
   await waitFor(() =>
     expect(
-      canvasElement
-        .querySelector('[data-slot="auction-record"]')
-        ?.getAttribute("data-revealed"),
-    ).toBe("true"),
+      canvasElement.querySelector('[data-slot="auction-record"]'),
+    ).not.toBeNull(),
   );
   await Promise.all(
     canvasElement
       .getAnimations({ subtree: true })
-      .filter((animation) => animation instanceof CSSTransition)
+      .filter(
+        (animation) =>
+          animation instanceof CSSTransition ||
+          (animation instanceof CSSAnimation &&
+            animation.animationName === "enter"),
+      )
       .map((animation) => animation.finished.catch(() => undefined)),
   );
 }

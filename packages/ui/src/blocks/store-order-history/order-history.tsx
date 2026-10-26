@@ -5,12 +5,8 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { Package } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import {
-  REVEAL_HIDDEN_CLASS,
-  REVEAL_REDUCED_MOTION_CLASS,
-  REVEAL_TRANSITION_CLASS,
-  REVEAL_VISIBLE_CLASS,
-  revealStaggerDelayMs,
-  useFirstPaintReveal,
+  REVEAL_ENTRANCE_CLASS,
+  revealEntranceDelayMs,
 } from "../shared/use-first-paint-reveal";
 import { OrderHistoryCard } from "./order-history-card";
 import type { OrderHistoryCardHeaderCopy } from "./order-history-card-header";
@@ -51,7 +47,6 @@ function OrderSection({
   orders,
   copy,
   startIndex,
-  revealed,
   onTrackOrder,
   onViewDetails,
 }: {
@@ -59,7 +54,6 @@ function OrderSection({
   orders: readonly OrderHistoryOrderSummary[];
   copy: OrderHistoryCopy;
   startIndex: number;
-  revealed: boolean;
   onTrackOrder?: (orderId: string) => void;
   onViewDetails?: (orderId: string) => void;
 }) {
@@ -73,16 +67,9 @@ function OrderSection({
           const staggerIndex = startIndex + index;
           return (
             <div
-              className={cn(
-                REVEAL_HIDDEN_CLASS,
-                REVEAL_TRANSITION_CLASS,
-                REVEAL_REDUCED_MOTION_CLASS,
-                revealed && REVEAL_VISIBLE_CLASS,
-              )}
+              className={REVEAL_ENTRANCE_CLASS}
               key={order.id}
-              style={{
-                transitionDelay: revealStaggerDelayMs(staggerIndex, revealed),
-              }}
+              style={{ animationDelay: revealEntranceDelayMs(staggerIndex) }}
             >
               <OrderHistoryCard
                 copy={copy.cardHeader}
@@ -140,7 +127,6 @@ function OrderHistory({
   onShopNow,
   className,
 }: OrderHistoryProps) {
-  const revealed = useFirstPaintReveal();
   const hasActive = activeOrders.length > 0;
   const hasPast = pastOrders.length > 0;
   const isEmpty = !hasActive && !hasPast;
@@ -151,7 +137,6 @@ function OrderHistory({
         "mx-auto w-full max-w-7xl gap-12 overflow-hidden px-8 pt-8 pb-16",
         className,
       )}
-      data-revealed={revealed || undefined}
       data-slot="order-history"
       hAlign="stretch"
     >
@@ -161,12 +146,7 @@ function OrderHistory({
       </h1>
       {isEmpty ? (
         <div
-          className={cn(
-            "w-full scale-[0.97] opacity-0",
-            "transition-[opacity,transform] duration-[220ms] ease-[cubic-bezier(0.23,1,0.32,1)]",
-            "motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none",
-            revealed && "scale-100 opacity-100",
-          )}
+          className="w-full animate-in fade-in zoom-in-97 fill-mode-both duration-[220ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:animate-none"
           data-slot="order-history-empty"
         >
           <EmptyState
@@ -189,7 +169,6 @@ function OrderHistory({
               copy={copy}
               heading={copy.activeHeading}
               orders={activeOrders}
-              revealed={revealed}
               startIndex={0}
               onTrackOrder={onTrackOrder}
               onViewDetails={onViewDetails}
@@ -200,7 +179,6 @@ function OrderHistory({
               copy={copy}
               heading={copy.pastHeading}
               orders={pastOrders}
-              revealed={revealed}
               startIndex={hasActive ? activeOrders.length : 0}
               onTrackOrder={onTrackOrder}
               onViewDetails={onViewDetails}

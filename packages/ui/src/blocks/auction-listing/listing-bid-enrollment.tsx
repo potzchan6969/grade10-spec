@@ -216,6 +216,7 @@ function SetupSheetBody({
   linking,
   paymentField,
   stripePaymentMethodField,
+  iframeLinkedPayment,
   onAgeAttestedChange,
   scrollsPaymentField,
 }: {
@@ -225,12 +226,30 @@ function SetupSheetBody({
   linking: boolean;
   paymentField?: ReactNode;
   stripePaymentMethodField?: ReactNode;
+  iframeLinkedPayment?: EnrollmentSetupSheetProps["iframeLinkedPayment"];
   onAgeAttestedChange: (checked: boolean) => void;
   scrollsPaymentField?: boolean;
 }) {
   const resolvedPaymentField = paymentField ?? stripePaymentMethodField;
+  const linkedCard =
+    iframeLinkedPayment != null ? (
+      <PaymentMethodCard
+        label={iframeLinkedPayment.maskedNumber}
+        leading={<OrderDetailsPaymentLogo brand={iframeLinkedPayment.brand} />}
+      />
+    ) : null;
   const paymentFieldSlot = (
-    <PaymentFieldSlot content={resolvedPaymentField} disabled={linking} />
+    <PaymentFieldSlot
+      content={
+        linkedCard != null || resolvedPaymentField != null ? (
+          <VStack className="w-full" gap="sm">
+            {linkedCard}
+            {resolvedPaymentField}
+          </VStack>
+        ) : undefined
+      }
+      disabled={linking}
+    />
   );
 
   return (
@@ -323,6 +342,7 @@ function EnrollmentSetupSheet({
           ageAttested={ageAttested}
           copy={copy}
           errorMessage={errorMessage}
+          iframeLinkedPayment={iframeLinkedPayment}
           linking={linking}
           onAgeAttestedChange={setAgeAttested}
           paymentField={paymentField}
@@ -350,6 +370,7 @@ function EnrollmentSetupSheet({
             ageAttested={ageAttested}
             copy={copy}
             errorMessage={errorMessage}
+            iframeLinkedPayment={iframeLinkedPayment}
             linking={linking}
             onAgeAttestedChange={setAgeAttested}
             paymentField={paymentField}

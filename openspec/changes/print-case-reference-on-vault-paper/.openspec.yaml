@@ -12,3 +12,4 @@ reviewed:
   decisions: 752ba8f4
   user-journeys: 632ba7de
   tech-design: 7322de53
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 3.3; CI checks are no longer needed for 3.4"

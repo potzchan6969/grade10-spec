@@ -8,3 +8,4 @@ reviewed:
   specs: e40ed314
   test-cases: 658b49c2
   tasks: edaf0094
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 6.1, 6.2, 6.3, 6.4"

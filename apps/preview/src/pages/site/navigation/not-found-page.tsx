@@ -31,7 +31,7 @@ function NotFoundPage({ onBackToHome }: NotFoundPageProps) {
           hAlign="center"
         >
           <VStack className="w-full" gap="sm" hAlign="center">
-            <h2 className="text-4xl font-bold leading-none text-foreground sm:text-5xl">
+            <h2 className="text-4xl font-semibold leading-none text-foreground sm:text-5xl">
               {NOT_FOUND_COPY.title}
             </h2>
             <p className="text-base leading-6 text-secondary-foreground">

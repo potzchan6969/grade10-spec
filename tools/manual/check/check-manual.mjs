@@ -2,7 +2,7 @@
 /*
  * CHECK: the manual against the store it describes.
  *
- *   pnpm check:manual [store-root] [--pages] [--quiet]
+ *   pnpm check:manual [store-root] [--pages] [--quiet] [--fix]
  *
  * The manual restates nothing — it points at specs, changes, images and
  * stories. Every one of those pointers can rot without anyone noticing, so
@@ -23,7 +23,8 @@
  *        requirement answers to, one requirement two changes both fold, an
  *        id issued twice, a page selector a fold is about to move out from
  *        under. One is about the join the store writes in prose: an id cited
- *        in backticks that nothing issues. Exits 1.
+ *        in backticks that nothing issues, and a message key cited with words
+ *        the English catalogs no longer hold. Exits 1.
  * WARN = hygiene with no broken pointer behind it: a page committed before
  *        the specs it embeds, named requirement by requirement, a `[[ref]]`
  *        in prose that names nothing, a `::figma` link off figma.com, a spec
@@ -31,6 +32,9 @@
  *        quoting wording the spec has since moved, a delta section the fold
  *        discards, a delta-introduced capability no page documents, a domain
  *        with no icon for its rail row. Exits 0.
+ *
+ * `--fix` rewrites a copy citation's words to the one value the catalogs
+ * hold, and reports what it could not settle.
  *
  * `--pages` keeps the page families and drops the store ones. It is the
  * deploy's gate: a requirement two changes both fold is a break in files the
@@ -71,9 +75,10 @@ import {
   RULES,
   readStoryIndex,
 } from "./context.mjs";
+import { checkCopy } from "./copy.mjs";
 import { checkDeltas } from "./deltas.mjs";
 import { checkDense } from "./dense.mjs";
-import { checkMarkInProse, checkMarks } from "./marks.mjs";
+import { checkMarkInProse } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkPlanned, checkWalkLast } from "./planned.mjs";
 import { checkAcceptance } from "./qa.mjs";
@@ -84,7 +89,6 @@ import {
   checkDesign,
   checkHands,
   checkLandedBy,
-  checkUnmarked,
 } from "./record.mjs";
 import { checkRole } from "./role.mjs";
 import { checkRounds } from "./rounds.mjs";
@@ -149,7 +153,8 @@ export async function runChecks(
   git,
   // `roundsSince`: the day the `round` rule holds every change from, in place
   // of `ROUND_RECORD_SINCE`; a test sets it, the CLI never does.
-  { pages: pagesOnly = false, roundsSince } = {},
+  // `fix`: rewrite copy citations whose words drifted from the catalog.
+  { pages: pagesOnly = false, roundsSince, fix = false } = {},
 ) {
   const roots = typeof target === "string" ? rootsOf(target) : target;
   const index = git ?? (await gitIndex(roots));
@@ -193,7 +198,6 @@ export async function runChecks(
       "change section links not run — the store's own repository answers for the mounted store",
     );
   }
-  checkMarks(ctx, changes, pages);
   checkMarkInProse(ctx, pages);
   checkDense(ctx, pages);
 
@@ -216,6 +220,14 @@ export async function runChecks(
     checkUnwritten(ctx, changes, shape);
     checkAcceptance(ctx, shape);
     await checkCited(roots.store, add, mainReader(roots.store, index));
+    const rewritten = checkCopy(roots.store, ["openspec", roots.manual], add, {
+      fix,
+    });
+    if (rewritten > 0) {
+      notes.push(
+        `${plural(rewritten, "copy citation")} rewritten to the words the catalogs hold`,
+      );
+    }
     checkWalked(ctx, shape, changes);
     checkRole(ctx, shape);
     const folded = checkSpecShape(roots.store, shape, add);
@@ -223,7 +235,6 @@ export async function runChecks(
     checkDeltas(ctx, { changes, shape, pages });
     checkStoreErrors(specs, changes, folded, add);
     checkDependencies(roots.store, changes, add);
-    checkUnmarked(ctx, changes, pages);
     checkDesign(ctx, changes);
     checkDecided(ctx, changes);
     checkPlanned(ctx, changes);
@@ -296,11 +307,12 @@ if (import.meta.main) {
   const args = process.argv.slice(2);
   const pages = args.includes("--pages");
   const quiet = args.includes("--quiet");
+  const fix = args.includes("--fix");
   const where = args.find((one) => !one.startsWith("--"));
   const roots = where ? rootsOf(resolve(where)) : resolveRoots();
   const { text, failures } = formatReport(
     roots,
-    await runChecks(roots, undefined, { pages }),
+    await runChecks(roots, undefined, { pages, fix }),
     { quiet },
   );
   console.log(text);

@@ -1,0 +1,19 @@
+schema: grade10-planning
+created: 2026-10-22
+depends_on:
+  - usd-lot-currency-winner-settlement-choice
+ui_waived: "@seankcw waived ui-design on 2026-10-22; the Order Summary is drawn
+  in the merged stories (grade10-spec#1288) and the invoice and receipt PDF
+  blocks take strings, so USD lines above HKD summary rows add no variant. On
+  2026-10-23 @seankcw waived it again for the conversion note under the Subtotal
+  on those PDFs, drawn in the muted style of the Order Summary note."
+hands:
+  dev: "@htonyl"
+  pm: "@htonyl"
+reviewed:
+  proposal: 8605f37e
+  decisions: ff7d5484
+  user-journeys: dcbd8bbc
+  tech-design: 0cb89a46
+  specs: 0d65fd02
+  tasks: 6c9bb3ef

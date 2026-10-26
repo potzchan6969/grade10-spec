@@ -1,0 +1,224 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "6dfc7f8559303c013b50bfe6d5ed35cd511c5bdb4aa94988cffb26571baf2734"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "9ea723bc896c8b241ab3443cfd85cd506e690324",
+    "capturedAt": "2026-10-15T15:29:14.579Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A listing edit clears an internal bid it leaves outside its limits",
+          "Requirement: An admin changes a placed internal bid",
+          "Requirement: An admin keeps internal bidder profiles",
+          "Requirement: An admin learns an internal bid came too late",
+          "Requirement: An admin sets an internal bid on a listing",
+          "Requirement: An internal bidder wins a lot the house leads at its close",
+          "Requirement: Call-off and Relist drop the internal bid",
+          "Requirement: Internal bid states",
+          "Requirement: Only secret-floor access reaches an internal bid",
+          "Requirement: Other operators read the house's bids as House"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A lot the house leads at its close is sold to its internal bidder",
+          "Requirement: Auction listing facts are available"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A bid Grade10 places counts as a bid",
+          "Requirement: A bidder commits a maximum",
+          "Requirement: A committed house maximum is raised or lowered",
+          "Requirement: Maximum fields",
+          "Requirement: The house maximum bids as any maximum does",
+          "Requirement: The house maximum is committed at its set time"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The house is mailed about nothing, and its bids mail collectors as any bid does"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A lot close opens an order that waits for the winner's address"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "51357df485d7382cfd929f45786b3d57db1c5bf9",
+      "components": [
+        "admin",
+        "auction-service"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-25T04:23:19.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Case regeneration under tcs-rules r7 and the usd-lot and convert-once case updates: cases merged into rows, unit and API cases deleted, ids and revisions renumbered, statuses flipped, HKD figures restated; no requirement of the capability changes by the case file itself."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Case regeneration under tcs-rules r7 and the usd-lot and convert-once case updates: cases merged into rows, unit and API cases deleted, ids and revisions renumbered, statuses flipped, HKD figures restated; no requirement of the capability changes by the case file itself."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "Adds the House order total line: the operator's quote of an internal bidder's order reads like any HKD quote, one conversion of its USD lines. It follows the convert-once rule of the HKD settlement change; this change's own requirement (an internal order opens in HKD on FPS, the operator quotes, sends, lets expire, cancels) is unchanged.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/internalBids/internalOrder.spec.ts (SC-73: the house order's invoice is sent at one HKD total converted from its USD lines)",
+          "admin/auction/internal-bid.spec.ts TC-dqh@5 (US6-TC5-5), walked against the stack",
+          "packages/grade10-auction/backend/test/services/orders/quote.test.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+        "anchors": [
+          "Requirement: An internal bidder wins a lot the house leads at its close"
+        ],
+        "classification": "semantic",
+        "reason": "The quote of the house order is one conversion of the USD lines at 7.85, rounded up to the next cent (SC-73 now reads 103000 HKD minor units, not 103100 from per-line rounding). The close, the HKD and FPS settlement, the billing address and the no-letter rules are unchanged.",
+        "evidence": [
+          "apps/backend/grade10/auction/test/db/internalBids/internalOrder.spec.ts (SC-73: the house order's invoice is sent at one HKD total converted from its USD lines)",
+          "admin/auction/internal-bid.spec.ts TC-dqh@5 (US6-TC5-5), walked against the stack",
+          "packages/grade10-auction/backend/test/services/orders/quote.test.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Case regeneration under tcs-rules r7 and the usd-lot and convert-once case updates: cases merged into rows, unit and API cases deleted, ids and revisions renumbered, statuses flipped, HKD figures restated; no requirement of the capability changes by the case file itself."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auto-bidding/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Case regeneration under tcs-rules r7 and the usd-lot and convert-once case updates: cases merged into rows, unit and API cases deleted, ids and revisions renumbered, statuses flipped, HKD figures restated; no requirement of the capability changes by the case file itself."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Case regeneration under tcs-rules r7 and the usd-lot and convert-once case updates: cases merged into rows, unit and API cases deleted, ids and revisions renumbered, statuses flipped, HKD figures restated; no requirement of the capability changes by the case file itself."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Case regeneration under tcs-rules r7 and the usd-lot and convert-once case updates: cases merged into rows, unit and API cases deleted, ids and revisions renumbered, statuses flipped, HKD figures restated; no requirement of the capability changes by the case file itself."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Case regeneration under tcs-rules r7 and the usd-lot and convert-once case updates: cases merged into rows, unit and API cases deleted, ids and revisions renumbered, statuses flipped, HKD figures restated; no requirement of the capability changes by the case file itself."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The USD and HKD settlement change of the usd-lot and convert-once changes rewrote the settlement currency, order summary, payment method and invoice lines (convert once, cent rounding, USD lines under HKD, first offered method preselected, receipt link label). The internal bidder order line, which is this change's contract, is unchanged: automatic HKD on FPS, no setup step, no letter.",
+        "evidence": [
+          "packages/grade10-auction/backend/test/services/orders/quote.test.ts",
+          "packages/grade10-auction/backend/test/services/orders/hkdFixtures.test.ts",
+          "packages/grade10-auction/backend/test/services/auctions/invoicePdf.test.ts",
+          "apps/backend/grade10/auction/test/db/orders/settlementQuote.spec.ts",
+          "auction/winner-order/keep-hkd-subtotal.spec.ts"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "US-26 and US-27 now describe USD lines with an HKD Subtotal and total instead of every amount in HKD. No journey of the internal bidder changes.",
+        "evidence": [
+          "packages/grade10-auction/backend/test/services/orders/quote.test.ts",
+          "packages/grade10-auction/backend/test/services/orders/hkdFixtures.test.ts",
+          "packages/grade10-auction/backend/test/services/auctions/invoicePdf.test.ts",
+          "apps/backend/grade10/auction/test/db/orders/settlementQuote.spec.ts",
+          "auction/winner-order/keep-hkd-subtotal.spec.ts"
+        ]
+      }
+    ]
+  }
+}

@@ -85,7 +85,7 @@ function OrderHistoryPage({
         ) : (
           <div className="flex w-full max-w-4xl flex-col gap-8 px-8 py-12">
             {breadcrumbs}
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="text-3xl font-semibold text-foreground">
               {ORDER_HISTORY_COPY.title}
             </h1>
             {read === "loading" ? (
@@ -119,7 +119,7 @@ type Story = StoryObj<typeof meta>;
 
 function orderHistoryRevealed(canvasElement: HTMLElement): boolean {
   const root = canvasElement.querySelector('[data-slot="order-history"]');
-  if (root?.getAttribute("data-revealed") !== "true") return false;
+  if (!root) return false;
 
   const empty = canvasElement.querySelector(
     '[data-slot="order-history-empty"]',

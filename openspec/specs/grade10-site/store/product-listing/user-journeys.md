@@ -87,6 +87,14 @@ collection I came for.
 **I want** a card's name to open its product, as its photo does,
 **so that** the name I read first takes me to the product I came for.
 
+### grade10-site-store-product-listing-US-10: Collector finds a card by typing in search
+
+**As a** collector,
+**I want** the listing search field to suggest products and filters as I
+type, and to commit my words as a chip when I submit them,
+**so that** I can jump to a known card or narrow the shop without waiting on
+a blind query.
+
 ## Retired
 
 - `grade10-site-store-product-listing-US-13` - Retired by the guest cart: Add to cart asks nobody to sign in.

@@ -1,0 +1,199 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "8a80e6d3d0d18d13ea6f2927fcc63fc2070673b1b3acbd1448afc2179bc201e0"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "4e70772094bc64f0a48fb7339f562c5ecb29f5b8",
+    "capturedAt": "2026-10-23T01:20:29.344Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An internal bidder wins a lot the house leads at its close"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An operator quotes and sends the invoice",
+          "Requirement: An operator reissues a sent invoice",
+          "Requirement: Invoice log history",
+          "Requirement: The order page lists a sent HKD invoice's USD lines, then its HKD Subtotal, fee and Total",
+          "Requirement: The payment processing fee follows the invoice's payment method",
+          "Requirement: The quote is typed in USD and read in the settlement currency"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Order letters read the currency the winner pays in"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An HKD invoice and receipt list the USD lines, then the HKD Subtotal, fee and Order Total",
+          "Requirement: An HKD invoice, receipt and letter carry HKD only",
+          "Requirement: An HKD order converts each USD line at a fixed rate and rounds it up",
+          "Requirement: Insurance info tooltip",
+          "Requirement: Invoice fields",
+          "Requirement: Tax info tooltip",
+          "Requirement: The Order Summary reads the settlement currency, with USD beneath each HKD line"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The winner order takes two totals and one rail's bank details"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Each renderer produces A4 pages, one page when the content fits",
+          "Requirement: InvoicePdf and ReceiptPdf render only what they are given",
+          "Requirement: InvoicePdf and ReceiptPdf render their charges in the order given, ending in a summary"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "26328f47a94002b4aecb90ea503fc31a5eaaa491",
+      "components": [
+        "admin",
+        "auction-service",
+        "web"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-25T05:19:21.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Cross-feature admin auction cases regenerated from scratch under tcs-rules r7: unit, API and injection cases deleted, covered scenarios linked, out-of-suite lists categorised. The cases restate the contract and do not change what it requires."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Internal bid cases regenerated with merges under tcs-rules r7; every increment-derived figure refreshed to the configured bid increment schedule (bidIncrementSchedule.ts) and revisions bumped; statuses flipped to automated by the walks. The figures follow the bid-increment change; no requirement of this capability changes by the case file."
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The suite was regenerated with merges under tcs-rules r7, and its HKD cases now state the Subtotal rule of this change: the USD lines convert once at 7.85, rounded up, the card fee is computed on that Subtotal, and the payment cases use the converted fixture invoice (HK$11,775.00) instead of per-line HKD amounts. The expected amounts moved by design; the reissue, payment and refund behaviour they exercise is unchanged.",
+        "evidence": [
+          "admin/auction/post-sale/hkd-subtotal.spec.ts (TC-25a, TC-tui, TC-a57, TC-ao7): the quote preview, the sent total and the order page read USD lines, then the HKD Subtotal, fee and Total",
+          "admin/auction/post-sale/usd-quote.spec.ts and admin/auction/post-sale/reissue.spec.ts (TC-w3j at rev 2): the Subtotal converts once and a reissue shows the previous total beside the new",
+          "apps/backend/grade10/auction/test/db/orders/settlementQuote.spec.ts and quote.spec.ts: the server prices the invoice once under the rule"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Cross-feature site auction cases regenerated from scratch under tcs-rules r7; a dropped gallery image stores at once. The cases restate the contract and do not change what it requires."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The order letter cases were folded into the winner order suite when it was regenerated (1157 lines removed, none added); the letters' requirements are unchanged."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The suite was regenerated and folds in the order letter cases. Its HKD cases state the Subtotal rule of this change (USD lines, one HKD Subtotal converted once, fee, Order Total, the conversion note) and the usd-lot change's refusal case TC-z2f now holds only when no currency offers a method (SC-249 restated; expected results unchanged). The expected amounts moved by design.",
+        "evidence": [
+          "auction/winner-order/keep-hkd-subtotal.spec.ts, keep-records.spec.ts (TC-nf6 at rev 5) and keep-hkd-marks.spec.ts: the Order Summary, invoice page, PDFs and receipt read USD lines, then the HKD Subtotal, fee and Order Total, with the note under the Subtotal",
+          "auction/winner-order/keep-us1.spec.ts (TC-vwm at rev 6) and auction/notifications-order.spec.ts: the summary and the letters read as the rule says",
+          "packages/grade10-auction/backend/test/services/auctions/invoicePdf.test.ts: the note and the lines on the PDFs"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Unit, API, SEO and injection cases deleted under tcs-rules r7 (1011 lines removed, none added); the requirements of the capability are unchanged."
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Unit, API, SEO and injection cases deleted under tcs-rules r7 (3817 lines removed, none added); the requirements of the capability are unchanged."
+      }
+    ]
+  }
+}

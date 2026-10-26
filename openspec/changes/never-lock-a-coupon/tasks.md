@@ -114,4 +114,4 @@
 
 ## 16. The walk (grade10)
 
-- [ ] 16.1 On staging, a member leaves an online checkout and a counter sale each holding a coupon, spends both coupons elsewhere, lets a counter sale run out its hour and pays it with its old code, and is refused by name where an earlier checkout will not close — blocked: needs staging
+- [ ] 16.1 On staging, a member leaves an online checkout and a counter sale each holding a coupon, spends both coupons elsewhere, lets a counter sale run out its hour and pays it with its old code, and is refused by name where an earlier checkout will not close — blocked: needs staging - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived

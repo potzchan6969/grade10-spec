@@ -12,6 +12,10 @@ reviewed: 2026-10-06
 | Product coupon | A fixed amount, or a percentage with an optional maximum discount | Named products or variants, a filter over the catalog's worlds and types, or the whole order | Optional | $50 off Pokémon |
 | Gift | A free line added to the order, the variant it names | — | Required, above zero, so a gift always rides on a purchase | A free booster pack over $500 |
 
+**A gift is handed over at the till alone** - whatever channels a gift's
+definition names, online refuses it as the wrong channel; the console locks
+its channel to In store
+
 Both are coupons, Grade10's own instrument, and a reward that takes money
 off the whole order is a product coupon whose scope is the whole order —
 [Coupons](/p/grade10-site/loyalty/coupons). The store's own promotions use
@@ -82,7 +86,7 @@ Stock reads as a yes or no, never a count.
   the same way
 - 🚧 **The redeemed state stays in the surface** - the ticket the
   redemption issued: every redemption mints a member-readable code —
-  good or discount alike — and the scan QR is generated from that code.
+  good or discount alike — and the scan QR names that redemption.
   A discount coupon's ticket carries the code, a good's names the
   collection in its place. A ticket
   spendable or collectable at the till carries a Use now control, and the
@@ -93,11 +97,13 @@ Stock reads as a yes or no, never a count.
   online-only ticket carries none. A spent coupon's ticket mutes, names
   it used, and drops the scan control, and a spent coupon leaves the coupons
   section
-- 🚧 **The scan QR is the code, drawn** - generated from the
-  redemption's member-readable code, so it is fixed for that redemption
-  rather than rotating like the member pass's
-- ❓ **What the till reads** - the QR carries the redemption's code;
-  whether staff additionally scan the member pass for identity is open
+- **The scan QR presents the member, naming the redemption** - the
+  redemption's code is its fixed reference, read or typed, never the till
+  credential; the QR is a short-lived, single-use presentation of the
+  member card that names the redemption, renewed silently while shown, so
+  a screenshot or a code read aloud cannot spend it
+- **What the till reads** - one scan: it finds the member and puts the
+  coupon on the sale, so staff never scan the member pass as well
 - 🚧 **Apply belongs to the cart** - nothing on the shop, the redeemed
   ticket or the coupons page offers to apply a coupon; the cart's
   apply-rewards flow is the only place it happens
@@ -124,20 +130,21 @@ carrying the definition it was bought under.
 
 - **Made instantly** — the coupon is idle in the member's own list the
   instant the points are spent
-- **Applied online** — on the store's own checkout page, before Shopify's
+- **Applied online** — a product coupon, on the store's own checkout page, before Shopify's
   checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
   lines
 - 🚧 **The member reads a code of their own** — every redemption mints
   one member-readable code, unique to that redemption and bound to the
-  member, and the scan QR is generated from it; a good's ticket shows the
+  member, and the scan QR names it; a good's ticket shows the
   collection in its place, by display choice. The code is good online and at
   the till; the per-sale discount code a claim mints is a different code,
   unchanged
 - **Applied at the counter** — for a scope the till can match, inside the
   till session: staff apply it from the member's panel, or the member opens
-  it on their phone and the till scans it; a product coupon's code is minted
-  when chosen, for that sale alone, and a gift
+  it on their phone and the till scans it - before a sale, that one scan also
+  identifies the member and opens the session; a product coupon's code is
+  minted when applied, for that sale alone, and a gift
   goes on as its own line, discounted to nothing, with no code -
   [Reward Types](#reward-types)
 - **Used by the paid order** — the paid order is what marks the coupon

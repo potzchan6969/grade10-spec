@@ -95,6 +95,14 @@ export const RULES = [
     title: "Ids cited in backticks that the store issues nowhere",
   },
   {
+    // A message key cited with its words: the key names a message the
+    // English catalogs hold, and the words are what they hold. `--fix`
+    // rewrites words that drifted.
+    key: "copy",
+    level: "fail",
+    title: "Copy cited by a message key the catalogs do not hold as written",
+  },
+  {
     // Raised from `warn` by the commit that finished the migration: every
     // scenario in the store names an anchor, so one that does not is new work
     // and not a backlog. Finding a scenario no part of the feature set covers
@@ -213,21 +221,11 @@ export const RULES = [
     title: "MODIFIED scenarios restating a durable id with no trace marker",
   },
   {
-    key: "marks",
-    level: "fail",
-    title: "🚧 lines no in-flight change delivers",
-  },
-  {
     key: "fuse",
     level: "fail",
     title: "Page selectors an in-flight change would break",
   },
   { key: "depends", level: "fail", title: "Dependencies naming no change" },
-  {
-    key: "unmarked",
-    level: "fail",
-    title: "Changes whose deltas no page marks",
-  },
   {
     key: "design",
     level: "fail",

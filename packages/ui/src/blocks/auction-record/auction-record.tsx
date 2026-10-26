@@ -13,21 +13,17 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Gavel } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
-import {
-  REVEAL_REDUCED_MOTION_CLASS,
-  revealStaggerDelayMs,
-  useFirstPaintReveal,
-} from "../shared/use-first-paint-reveal";
+import { revealEntranceDelayMs } from "../shared/use-first-paint-reveal";
 import { AuctionRecordRow } from "./auction-record-row";
 import { AUCTION_RECORD_COLUMNS, AUCTION_RECORD_TABLE_LAYOUT } from "./columns";
 import type { AuctionRecordProps, AuctionRecordRowProps } from "./types";
 
 /** Enter: snappy ease-out, short travel (page content, not a panel). */
 const ENTER_EASE = "cubic-bezier(0.23,1,0.32,1)";
-const ENTER_TRANSITION_CLASS =
-  "transition-[opacity,transform] duration-[250ms] motion-reduce:transition-none";
-const ENTER_HIDDEN_CLASS = "translate-y-1 opacity-0";
-const ENTER_VISIBLE_CLASS = "translate-y-0 opacity-100";
+/** Backwards fill only, so a row's own exit transition is not held by the
+ * entrance once it has played. */
+const ENTER_CLASS =
+  "animate-in fade-in slide-in-from-bottom-1 fill-mode-backwards duration-[250ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:animate-none";
 
 const NO_ROWS: readonly AuctionRecordRowProps[] = [];
 
@@ -136,30 +132,8 @@ function useLeavingRows(rows: readonly AuctionRecordRowProps[]) {
   return { displayRows, markUnwatched };
 }
 
-function enterStyle(staggerIndex: number, revealed: boolean) {
-  return {
-    transitionTimingFunction: ENTER_EASE,
-    transitionDelay: revealStaggerDelayMs(staggerIndex, revealed),
-  } as const;
-}
-
-function enterClassName(revealed: boolean, className?: string) {
-  return cn(
-    ENTER_HIDDEN_CLASS,
-    ENTER_TRANSITION_CLASS,
-    REVEAL_REDUCED_MOTION_CLASS,
-    revealed && ENTER_VISIBLE_CLASS,
-    className,
-  );
-}
-
-/** Visibility only — the row owns `transition` so exit can tween height. */
-function enterVisibilityClass(revealed: boolean) {
-  return cn(
-    ENTER_HIDDEN_CLASS,
-    REVEAL_REDUCED_MOTION_CLASS,
-    revealed && ENTER_VISIBLE_CLASS,
-  );
+function enterStyle(staggerIndex: number) {
+  return { animationDelay: revealEntranceDelayMs(staggerIndex) } as const;
 }
 
 /** Remounts on each empty visit so filled → empty also enters, not only first paint. */
@@ -170,18 +144,10 @@ function AuctionRecordEmptyBody({
   copy: AuctionRecordProps["copy"];
   onBrowseCatalogue?: () => void;
 }) {
-  const revealed = useFirstPaintReveal();
-
   return (
     <div
-      className={cn(
-        "w-full scale-[0.98] opacity-0",
-        ENTER_TRANSITION_CLASS,
-        "motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none",
-        revealed && "scale-100 opacity-100",
-      )}
+      className="w-full animate-in fade-in zoom-in-98 fill-mode-both duration-[250ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:animate-none"
       data-slot="auction-record-empty"
-      style={{ transitionTimingFunction: ENTER_EASE }}
     >
       <EmptyState
         actions={
@@ -217,7 +183,6 @@ function AuctionRecord({
   onBrowseCatalogue,
   className,
 }: AuctionRecordProps) {
-  const revealed = useFirstPaintReveal();
   const mdUp = useIsMdUp();
   const rows = useMemo(
     () => [...biddingItems, ...watchingItems],
@@ -237,14 +202,13 @@ function AuctionRecord({
         "mx-auto w-full max-w-7xl gap-12 overflow-x-clip px-4 pt-8 pb-16 sm:px-8",
         className,
       )}
-      data-revealed={revealed || undefined}
       data-slot="auction-record"
       hAlign="stretch"
     >
       {breadcrumbs}
       <div
-        className={enterClassName(revealed, "w-fit max-w-full")}
-        style={enterStyle(0, revealed)}
+        className={cn(ENTER_CLASS, "w-fit max-w-full")}
+        style={enterStyle(0)}
       >
         <HStack className="w-fit max-w-full" gap="sm" vAlign="center">
           <h1
@@ -272,11 +236,8 @@ function AuctionRecord({
         <div className="scroll-fade-x w-full overflow-x-auto overscroll-x-contain">
           <Table className={AUCTION_RECORD_TABLE_LAYOUT.table}>
             <TableHeader
-              className={enterClassName(
-                revealed,
-                AUCTION_RECORD_TABLE_LAYOUT.row,
-              )}
-              style={enterStyle(1, revealed)}
+              className={cn(ENTER_CLASS, AUCTION_RECORD_TABLE_LAYOUT.row)}
+              style={enterStyle(1)}
             >
               <TableHead className={AUCTION_RECORD_COLUMNS.auction}>
                 {copy.auctionColumn}
@@ -301,7 +262,7 @@ function AuctionRecord({
                   <AuctionRecordRow
                     key={id}
                     {...item}
-                    className={enterVisibilityClass(revealed)}
+                    className={ENTER_CLASS}
                     copy={{
                       openListing: copy.openListing,
                       openBidding: copy.openBidding,
@@ -309,7 +270,7 @@ function AuctionRecord({
                       viewOrder: copy.viewOrder,
                       ...item.copy,
                     }}
-                    enterStyle={enterStyle(index + 2, revealed)}
+                    enterStyle={enterStyle(index + 2)}
                     exiting={leaving}
                     exitEase={ROW_EXIT_EASE}
                     exitMs={ROW_EXIT_MS}
@@ -336,7 +297,7 @@ function AuctionRecord({
               <AuctionRecordRow
                 key={id}
                 {...item}
-                className={enterVisibilityClass(revealed)}
+                className={ENTER_CLASS}
                 copy={{
                   openListing: copy.openListing,
                   openBidding: copy.openBidding,
@@ -344,7 +305,7 @@ function AuctionRecord({
                   viewOrder: copy.viewOrder,
                   ...item.copy,
                 }}
-                enterStyle={enterStyle(index + 2, revealed)}
+                enterStyle={enterStyle(index + 2)}
                 exiting={leaving}
                 exitEase={ROW_EXIT_EASE}
                 exitMs={ROW_EXIT_MS}

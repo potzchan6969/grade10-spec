@@ -1399,42 +1399,23 @@ describe("a page committed before the specs it embeds", () => {
   });
 });
 
-describe("a 🚧 line and the change delivering it", () => {
-  const marked =
-    "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\n## Rules\n\n- 🚧 **Refunds** — the points come back\n";
-  const durable = {
-    "docs/prds/products/demo-product/alpha.md": marked,
-    "openspec/specs/demo-product/alpha/spec.md": spec(
-      "Alpha",
-      requirement("Alpha does things", "alpha-SC-01", "the thing"),
-    ),
-    "openspec/specs/demo-product/alpha/user-journeys.md": NOBODY,
-  };
-
-  it("fails the line when no in-flight change touches the page or its spec", async () => {
-    const result: Result = await runChecks(writeStore(durable), NO_GIT);
-    expect(lines(result, "marks")).toEqual([
-      "docs/prds/products/demo-product/alpha.md — 🚧 `Refunds — the points come back` under `Rules` — no in-flight change on `demo-product/alpha` delivers it",
-    ]);
-    expect(result.findings.find((one) => one.rule === "marks")?.level).toBe(
-      "fail",
+describe("a 🚧 line", () => {
+  it("stands on the page alone: the mark is the record, no change is asked to deliver it", async () => {
+    const result: Result = await runChecks(
+      writeStore({
+        "docs/prds/products/demo-product/alpha.md":
+          "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\n## Rules\n\n- 🚧 **Refunds** — the points come back\n",
+        "openspec/specs/demo-product/alpha/spec.md": spec(
+          "Alpha",
+          requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        ),
+        "openspec/specs/demo-product/alpha/user-journeys.md": NOBODY,
+      }),
+      NO_GIT,
     );
-  });
-
-  it("is satisfied by a delta on the spec, or a proposal linking the section", async () => {
-    const byDelta = writeStore({
-      ...durable,
-      "openspec/changes/build-alpha/proposal.md": proposal("Build alpha"),
-      "openspec/changes/build-alpha/specs/demo-product/alpha/spec.md":
-        "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL do the thing.\n",
-    });
-    expect(lines(await runChecks(byDelta, NO_GIT), "marks")).toEqual([]);
-
-    const byLink = writeStore({
-      ...durable,
-      "openspec/changes/build-alpha/proposal.md": `${proposal("Build alpha")}\n## References\n\n- [Alpha · Rules](../../../docs/prds/products/demo-product/alpha.md#rules)\n`,
-    });
-    expect(lines(await runChecks(byLink, NO_GIT), "marks")).toEqual([]);
+    expect(result.findings.filter((one) => one.reason.includes("🚧"))).toEqual(
+      [],
+    );
   });
 });
 
@@ -1450,7 +1431,6 @@ describe("the record a change leaves", () => {
   const page = (line: string) =>
     `---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\n## Rules\n\n- ${line}\n`;
   const MARKED = page("🚧 **Refunds** — the points come back");
-  const FLAT = page("**Refunds** — the points come back");
   const delta =
     "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL do the thing.\n";
   const links = (...bullets: string[]) =>
@@ -1466,76 +1446,6 @@ describe("the record a change leaves", () => {
     "openspec/changes/build-alpha/proposal.md": proposalText,
     "openspec/changes/build-alpha/specs/demo-product/alpha/spec.md": delta,
     ...files,
-  });
-
-  it("passes a change whose linked section carries a 🚧", async () => {
-    const root = writeStore(
-      carrying({ "docs/prds/products/demo-product/alpha.md": MARKED }),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([]);
-  });
-
-  it("refuses a change that links no section of a PRD", async () => {
-    const root = writeStore(
-      carrying(
-        { "docs/prds/products/demo-product/alpha.md": MARKED },
-        proposal("Build alpha"),
-      ),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([
-      "openspec/changes/build-alpha/proposal.md — links no section of a PRD — mark what this change delivers, or say why in `page_waived`",
-    ]);
-  });
-
-  it("refuses a change linking a section nothing under it marks", async () => {
-    const root = writeStore(
-      carrying({ "docs/prds/products/demo-product/alpha.md": FLAT }),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([
-      "openspec/changes/build-alpha/proposal.md — no 🚧 line sits under a section it links — mark what this change delivers, or say why in `page_waived`",
-    ]);
-  });
-
-  /** A mark above the page's first `## ` belongs to no section, so no link can
-   * name it — the link is what binds the change to the line. */
-  it("refuses a 🚧 sitting above every heading", async () => {
-    const root = writeStore(
-      carrying({
-        "docs/prds/products/demo-product/alpha.md":
-          "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\n🚧 **Refunds** — the points come back\n\n## Rules\n\n- **Scope** — every order\n",
-      }),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([
-      "openspec/changes/build-alpha/proposal.md — no 🚧 line sits under a section it links — mark what this change delivers, or say why in `page_waived`",
-    ]);
-  });
-
-  it("passes a change whose manifest waives the page", async () => {
-    const root = writeStore(
-      carrying(
-        {
-          "docs/prds/products/demo-product/alpha.md": FLAT,
-          "openspec/changes/build-alpha/.openspec.yaml":
-            'schema: grade10-planning\npage_waived: "predates the page rule"\n',
-        },
-        proposal("Build alpha"),
-      ),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([]);
-  });
-
-  /** A key read as absent would waive the rule it answers to, quietly. */
-  it("refuses a page waiver holding anything but text", async () => {
-    const root = writeStore(
-      carrying({
-        "docs/prds/products/demo-product/alpha.md": MARKED,
-        "openspec/changes/build-alpha/.openspec.yaml":
-          "schema: grade10-planning\npage_waived: true\n",
-      }),
-    );
-    expect(lines(await runChecks(root, NO_GIT), "store")).toEqual([
-      "openspec/changes/build-alpha/.openspec.yaml — build-alpha line 1: `page_waived` must be a line of text",
-    ]);
   });
 
   const planned = (group: string, files: Record<string, string> = {}) =>

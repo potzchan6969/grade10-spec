@@ -8,3 +8,4 @@ reviewed:
   tech-design: 53d2f3f5
   specs: e0aa4359
   tasks: d84d5d26
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 4.4"

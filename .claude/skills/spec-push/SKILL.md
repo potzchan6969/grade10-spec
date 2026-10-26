@@ -114,9 +114,9 @@ pnpm push:main
 The gate is what every push owes. CI runs the rest on `main` after the push, so
 these are still yours before it:
 
-**A delta with journeys and no suite does not push**, and that now includes a
-capability whose journeys say `**Walked by:** nobody` — it is anchored on its
-feature set, not exempt. If a `spec.md` on this branch has a `user-journeys.md`
+**A delta with journeys and no suite does not push**. A capability whose
+journeys say `**Walked by:** nobody` owes none: the suites of the capabilities
+that reach it walk its rules. If a `spec.md` on this branch has a `user-journeys.md`
 and no `feature-tcs.md` beside it, stop and run `/spec-to-tcs <change-id>`, then
 commit the suites before pushing — `pnpm run tcs:validate --require-suites`
 names them. The blind pass belongs in the spec's own push, and lands

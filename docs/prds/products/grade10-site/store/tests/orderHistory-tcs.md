@@ -78,7 +78,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Active Orders lists above Past Orders, UI matching store-order-history-screens-order-history--filled.
-* Both orders list under the row's group, `<newer order>` above `<order>`.
+* Both orders list under the row's group, `<newer order>` above `<order>`; the other group shows no heading, and no empty message shows.
 
 <!-- trace:case id=g10.store-order-history.TC-zbs rev=2 -->
 ### g10.store-order-history.TC2: View Details opens the order, and Track Order opens a safe carrier page
@@ -315,7 +315,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 says there are no orders yet, UI matching store-order-history-blocks-orderhistory--empty.
+* Step 1 says there are no orders yet, with no Active or Past heading, UI matching store-order-history-blocks-orderhistory--empty.
 * Step 2 opens the Store.
 
 <!-- trace:case id=g10.store-order-history.TC-sw9 rev=1 -->
@@ -392,6 +392,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | a product whose picture has changed since the purchase | its current picture, as the cart shows it |
 | a product with no picture | the placeholder, UI matching store-order-history-blocks-orderhistorylineitem--without-image, with the order still readable |
+| more items than fit across the order's card | every item reached by scrolling across, faded at the edge it continues past, UI matching store-order-history-blocks-orderhistorycard--overflowing-lines |
 
 **Steps:**
 
@@ -399,7 +400,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The row's picture.
+* The row's picture; each item shows its name and total beside it.
 
 ---
 

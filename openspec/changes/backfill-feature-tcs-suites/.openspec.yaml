@@ -5,3 +5,4 @@ skip_specs: true
 skip_specs_why: "suites only - it derives cases from journeys that already exist and states no new requirement"
 reviewed:
   tasks: 67a7f2be
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 5.2"

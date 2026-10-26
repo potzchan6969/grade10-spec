@@ -1,0 +1,122 @@
+{
+  "version": 2,
+  "change": "add-store-cart-expiring-promo",
+  "baseline": "dcb6dd0616ad329ee2195f631adf118412b48529bf5c3e655e9ad545386a2b63",
+  "fingerprint": "a8ffe5638cb6b9da4e3adc86e23e636a37713b415231759d2e7da36ed75d3a9f",
+  "reviewedBy": "kinisworking",
+  "acceptedAt": "2026-10-26T13:32:08.501Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/cart.md#promo-code",
+      "sha256": "e8d34c44b50afbfacf2874756096177696a5bf12d6bc2e89468438e490537182",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-cart.md#site-sale-and-promo-codes",
+      "sha256": "959ad70505fe0301f5e70146a3222e925e0031628610fd6ab3c64724304ae0d1",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/decisions.md",
+      "sha256": "a8db0ac3fc2e926b3e81069155899ff21776da97cd1f790d10014ab46f8a8ac2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/proposal.md",
+      "sha256": "6e99060804875750de4ab07a12ff701c366ff77993544a714196975f5a8a0932",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/specs/grade10-site/store/cart-drawer/spec.md",
+      "sha256": "26be7901c0820debd32c02e9702591bf912f2843bfc2c8a802fe9316ec600fea",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "sha256": "7d018a6916c4846ef268c85481909dece4a456abe6b9c84466774ba114c75ef0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "75c9b6e71a218f192f7b4b58a9f29c58b0e766998539b0a62db79beeed009e77",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/specs/shared/ui/store-cart/spec.md",
+      "sha256": "2e96ad36d7d2ef502533ceae55c81b5af66a096acc04a7ef0108a6a90c7aab73",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "3d6e44a477babfd60fad827bfa66c01d975c2b89481b91936864060c49f44257",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/tech-design.md",
+      "sha256": "d323d6b3451ec9a232011f274624d785c23b60f250bc124fd51dd4c300c74025",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/ui-design.md",
+      "sha256": "41615749f9e4a3b59e3df03388b803929059e243d2846556a8478d7e84aa5dc2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+      "sha256": "cf0aeea819ec8309d925414f2b81cb9079b371ac6525fe45d8dd8829fe337c89",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "sha256": "0d6a7e863da8db9cb4b1311a7723fb6a72cca32eedfbfdc62f7de54cf0d1475c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "0164820458f8550ce6ac81dcdadf9408ddf262b8e8d9564b06a04be487742110",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "sha256": "b030286fc0f31bd67d0e3f8339b70210509af57a5858872f79ba870dfef0e4d8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "bc7c2a18beb868f9449b9a1f7051b63174077d9a6d7c1d28e31209c6eb4be530",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-store-cart-expiring-promo/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The cart picker emphasizes live near-expiry promo details"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Promo tickets render consumer-owned detail emphasis"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

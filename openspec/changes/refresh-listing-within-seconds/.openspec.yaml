@@ -9,3 +9,4 @@ reviewed:
   user-journeys: 24f82d15
   tech-design: 05f46784
   tasks: 88b76fae
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 5.1, 6.1"

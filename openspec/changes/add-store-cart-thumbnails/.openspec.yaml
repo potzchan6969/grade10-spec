@@ -11,3 +11,4 @@ reviewed:
   specs: 3b27061f
   test-cases: 3f3af0fc
   tasks: 72b37a29
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 1.3, 4.3, 5.1, 5.2, 5.4"

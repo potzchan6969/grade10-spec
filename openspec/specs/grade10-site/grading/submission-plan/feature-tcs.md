@@ -1,24 +1,23 @@
 # grade10-site/grading/submission-plan Test Cases
 
-**Status:** pending-review · 0/63
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Status:** pending-review · 0/43
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
 ## Background
 
-Grade10's currency is HKD; every amount is stated in minor units with its ISO 4217 code, and beside it the dollar reading a tester types or reads: the card's declared value field and a pasted line both take dollars.
+* Grade10's currency is HKD; a declared value field and a pasted line take dollars. `<grading home>` is the grading home on the Grade10 site; Start a submission opens the plan wizard, `<wizard>`, on its Cards step, then Service, then Book. A submission's own page, `<submission page>`, opens from its emailed link with no account.
+* PSA's five levels stand at the sheet's figures: Value up to HKD 3,900.00 a card; Regular up to HKD 11,700.00, HKD 600.00 a card, about 5 weeks; Express up to HKD 19,500.00, HKD 1,200.00 a card with cover at 1.5% of the declared value; Super Express with cover; Bulk up to HKD 1,500.00, HKD 180.00 a card, about 10 weeks, from 20 to 100 cards. The top ceiling is HKD 39,000.00. CGC and BGS carry no figures.
+* The card price reference answers for a card only where a test seeds or mocks it. Fee changes are asked by one `grading:approve` holder in the grading settings on the admin console and written once a second approves. Grading's daily sweep and the shop's clock, Hong Kong's, are moved by the tester to reach a day.
 
-`<grade10 grading url>` is `grade10.com/grading`, the grading home. `<grade10 plan wizard url>` is `grade10.com/grading/new`, the plan wizard, opening on its empty Cards step. `<grade10 grading submission url>` is one submission's own page, opened from its emailed link with no account. `<grade10 book url>` is `grade10.com/book`, the site's walk-in booking. `<grade10 admin grading settings url>` is `admin.grade10.com/grading/settings`: a fee change is asked by one approver and written once a second approves it.
-
-The stack opens with PSA's five levels at the sheet's figures and no figures for CGC or BGS. Its card price reference holds no rows, so a typed name matches nothing and no reference sale shows: a matched card and a PSA 10 reference sale are a seeded or mocked reference. Grading's dev seed (`/grading/dev/submissions/seed`) walks a submission to a named status, dated off the anchors it is given; its fast sweep lane (`/grading/dev/sweep`, lane `fast`) runs the nudge and the expiry now and holds a letter until 09:00 on the shop's clock; its outbox (`/grading/dev/outbox?email=<address>`) reads the last letter sent to an address. Signing in on the site mails a link to the email given.
-
-## grade10-site-grading-submission-plan-US1: Collector learns what grading costs before signing in
+## g10.grading-submission-plan.US1: Collector learns what grading costs before signing in
 
 **As a** collector who has never used the shop for grading,
 **I want** the first visit to say what grading is, the four steps and the price sheet with its cover line, and to let me start a submission or book a drop-off without a list,
 **so that** I know the fee and the return date before I give anyone my name.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-6v4 rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
-### grade10-site-grading-submission-plan-US1-TC1-1: The signed-out home explains grading before any details are given
+### g10.grading-submission-plan.US1-TC1: The signed-out home prices grading, grader by grader, before a name is asked
 
 **Classification:**
 
@@ -26,96 +25,36 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-01
-
-**Pre-conditions:**
-
-* customer(no account) is signed out.
-
-**Steps:**
-
-1. Navigate to `<grade10 grading url>`.
-2. Read How it works.
-3. Scroll to the fee sheet under What it costs.
-4. Read the buttons below the lead.
-
-**Expected Results:**
-
-* The four steps of How it works render, and no name, email or phone is asked for.
-* The fee sheet lists the first grader's levels, each with its declared-value ceiling, cards a submission, fee a card and weeks back.
-* Start a submission and Book a drop-off without a list are both offered.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-c4r rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
-### grade10-site-grading-submission-plan-US1-TC2-1: The fee sheet's cover line shows only at Express and Super Express
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
 * **Type:** functional
-* **Suites:** regression
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-01
 
 **Pre-conditions:**
 
-* customer(no account) is signed out and on `<grade10 grading url>`.
+* A signed-out visitor; PSA, CGC and BGS each carry active levels with figures, written in the grading settings.
 
 **Steps:**
 
-1. Scroll to the fee sheet under What it costs.
-2. Read the cover column on the Value, Regular and Bulk rows.
-3. Read the cover column on the Express and Super Express rows.
+1. Open `<grading home>`, and read How it works and the buttons below the lead.
+2. Read the fee sheet under What it costs, and the lines below its rows.
+3. Click CGC above the sheet.
 
 **Expected Results:**
 
-* Value, Regular and Bulk name no cover rate.
-* Express and Super Express each name a cover rate of 150 basis points (1.5%) of the declared value a card.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-34d rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
-### grade10-site-grading-submission-plan-US1-TC3-1: Multiple graders show as a tab per grader on the fee sheet
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-01
-
-**Pre-conditions:**
-
-* customer(no account) is signed out and on `<grade10 grading url>`.
-* PSA, CGC and BGS each carry active levels with their figures, written in `<grade10 admin grading settings url>`; the stack writes PSA's alone.
-
-**Steps:**
-
-1. Scroll to the fee sheet under What it costs.
-2. Read the grader switch above it.
-3. Click CGC.
-
-**Expected Results:**
-
-* A tab per grader shows above the fee sheet: PSA, CGC, BGS.
-* CGC's tab shows CGC's own levels, replacing PSA's.
+* Step 1 shows the four steps, Start a submission and Book a drop-off without a list, asking for no name, email, phone or account.
+* Step 2 lists PSA's levels, each with its declared-value ceiling, cards a submission, fee a card and weeks back; Express and Super Express name cover at 1.5% of the declared value, Value, Regular and Bulk none; below, a card declared above the top ceiling of HKD 39,000.00 is asked about at the counter or on WhatsApp rather than priced.
+* Step 3 shows CGC's own levels in PSA's place, a tab per grader standing above the sheet.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-0gh rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
-### grade10-site-grading-submission-plan-US1-TC4-1: Starting a submission opens an empty plan wizard
+### g10.grading-submission-plan.US1-TC4: Each way in from the home opens where it says, with no list until one is started
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -127,128 +66,38 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer(no account) is signed out and on `<grade10 grading url>`.
+* A signed-out visitor is on `<grading home>`.
+
+**Test data:**
+
+| `<clicked>` | `<opens>` |
+| --- | --- |
+| Start a submission | `<wizard>` on its Cards step, no card listed, offering Add a card and Paste a list |
+| Book a drop-off without a list | the site's walk-in booking, no card list created |
 
 **Steps:**
 
-1. Click Start a submission.
+1. Click `<clicked>`.
 
 **Expected Results:**
 
-* The plan wizard opens at `<grade10 plan wizard url>` on the Cards step, with no card listed.
-* Add a card and Paste a list are both offered.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-u6c rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
-### grade10-site-grading-submission-plan-US1-TC5-1: Booking without a list leaves the grading home with no list started
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-01
-
-**Pre-conditions:**
-
-* customer(no account) is signed out and on `<grade10 grading url>`.
-
-**Steps:**
-
-1. Click Book a drop-off without a list.
-
-**Expected Results:**
-
-* The browser leaves `<grade10 grading url>` for the walk-in booking at `<grade10 book url>`.
-* No card list is created for this visit.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-2jb rev=1 covers=g10.grading-submission-plan.SC-yns,g10.grading-submission-plan.SC-z5h,g10.grading-submission-plan.SC-d03,g10.grading-submission-plan.SC-48z,g10.grading-submission-plan.SC-a00,g10.grading-submission-plan.SC-e76 -->
-### grade10-site-grading-submission-plan-US1-TC6-1: The fee sheet names the counter for a card above the top ceiling
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-01
-
-**Pre-conditions:**
-
-* customer(no account) is signed out and on `<grade10 grading url>`.
-
-**Steps:**
-
-1. Scroll to the fee sheet under What it costs.
-2. Read the lines below its level rows.
-
-**Expected Results:**
-
-* The sheet names a card declared above the top level's ceiling of 3900000 (HKD minor units, HK$39,000.00).
-* It says such a card is asked about at the counter or on WhatsApp rather than priced.
+* It opens `<opens>`.
 
 ---
 
-## grade10-site-grading-submission-plan-US2: Collector lists a few cards by hand
+## g10.grading-submission-plan.US2: Collector lists a few cards by hand
 
 **As a** collector with a handful of cards,
 **I want** to add each card with its set matched in the card price reference, its declared value and the recent sales beside it as a reference, and to set a minimum grade on a card I do not want slabbed below it,
 **so that** the level and the cover are set by what I would insure each card for, and not by a guess.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-thx rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC1-1: Adding a matched card shows its reference sales
+### g10.grading-submission-plan.US2-TC1: A matched card carries the reference's name and its recent sales, as a reference
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed.
-* The card price reference holds a row for `<card A>`, with recent sales at ungraded, PSA 9 and PSA 10.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<card A>` | Umbreon VMAX (Alternate Art), Evolving Skies 188/203 |
-| Declared value | 850000 (HKD minor units, HK$8,500.00): any value above nought |
-
-**Steps:**
-
-1. Type `<card A>`'s name in the card name field.
-2. Pick the matched result from the list under the field.
-3. Enter the declared value from **Test data**, in dollars.
-
-**Expected Results:**
-
-* The card line shows the card price reference's name for the card, with the set and number as typed.
-* The recent sales at ungraded, PSA 9 and PSA 10 show beside the card as a reference, not a valuation.
-* The declared value entered is held on the card.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-a07 rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC2-1: Setting a minimum grade shows the fee applies either way
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -259,25 +108,90 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with one card listed and its declared value given.
+* A collector is on `<wizard>`'s Cards step; the reference holds Umbreon VMAX (Alternate Art), Evolving Skies 188/203, with sales at ungraded, PSA 9 and PSA 10.
 
 **Steps:**
 
-1. Find the card's minimum-grade tick.
-2. Tick it at PSA 9.
+1. Type its name, pick the matched result, and enter HKD 8,500.00 as its declared value.
 
 **Expected Results:**
 
-* The card shows a caption that it will only be encapsulated at PSA 9 or above.
-* The caption states the fee applies whether or not the minimum is met.
+* The card carries the reference's name with the set and number; its recent sales at ungraded, PSA 9 and PSA 10 show beside it as a reference, not a valuation; the value is held.
 
-<!-- trace:case id=g10.grading-submission-plan.TC-nyh rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC3-1: An empty card list disables Continue
+<!-- trace:case id=g10.grading-submission-plan.TC-njt rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6,g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
+### g10.grading-submission-plan.US2-TC7: A card the reference does not answer for is kept as typed, by hand or pasted
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-02
+
+**Pre-conditions:**
+
+* A collector is on `<wizard>`'s Cards step; the reference answers but holds nothing for Homebrew Test Card.
+
+**Test data:**
+
+| `<added>` |
+| --- |
+| typed in the card name field, then Add this card |
+| pasted as the line Homebrew Test Card, 500 |
+
+**Steps:**
+
+1. Add Homebrew Test Card `<added>`, and give its value where asked.
+
+**Expected Results:**
+
+* It is listed in the name as typed, with no reference sales, its declared value asked for and held.
+
+<!-- trace:case id=g10.grading-submission-plan.TC-a07 rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
+### g10.grading-submission-plan.US2-TC2: A minimum grade is captioned, carried to the review and costs nothing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-02
+
+**Pre-conditions:**
+
+* A collector has Homebrew Lugia, declared HKD 2,000.00, on `<wizard>`'s Cards step, an email given.
+
+**Steps:**
+
+1. Tick its minimum grade at PSA 9.
+2. Continue, pick PSA at Regular, and continue to Book.
+
+**Expected Results:**
+
+* Step 1 captions that it is only encapsulated at PSA 9 or above, the fee applying either way.
+* Step 2's schedule carries PSA 9 beside it, and the fee reads HKD 600.00, Regular's fee unchanged.
+
+<!-- trace:case id=g10.grading-submission-plan.TC-nyh rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6,g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
+### g10.grading-submission-plan.US2-TC3: The Cards step holds a list with no card, or a card with no value
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -288,58 +202,25 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed.
-
-**Steps:**
-
-1. Read the Cards step without adding a card.
-2. Read the continue button at its foot.
-
-**Expected Results:**
-
-* No card is listed.
-* Add a card and Paste a list are both offered.
-* Continue is disabled.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-t4a rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC4-1: Removing a card takes it off the list
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with `<card B>` and `<card C>` listed.
+* A collector is on `<wizard>`'s Cards step holding `<list>`.
 
 **Test data:**
 
-| Field | Value |
+| `<list>` | `<continue>` |
 | --- | --- |
-| `<card B>` | Homebrew Test Card, declared 50000 (HKD minor units, HK$500.00) |
-| `<card C>` | Homebrew Second Card, declared 70000 (HKD minor units, HK$700.00) |
+| no card | disabled, Add a card and Paste a list offered |
+| four cards, Charizard 1st Edition, Base Set, 4/102 pasted with no value | disabled, naming the one card without a value |
 
 **Steps:**
 
-1. Click Remove on `<card C>`.
-2. Read the list.
+1. Read Continue.
 
 **Expected Results:**
 
-* `<card C>` no longer shows on the list.
-* One card remains listed: `<card B>`.
-* `<card B>` keeps its declared value of 50000 (HKD minor units, HK$500.00).
+* Continue is `<continue>`.
 
-<!-- trace:case id=g10.grading-submission-plan.TC-3mk rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC5-1: The wizard rail marks the cards step in progress
+<!-- trace:case id=g10.grading-submission-plan.TC-t4a rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
+### g10.grading-submission-plan.US2-TC4: A card removed leaves the rest of the list alone
 
 **Classification:**
 
@@ -347,7 +228,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** usability
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -355,26 +236,50 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with one card listed, its declared value given and an email in About you.
+* Homebrew Test Card, HKD 500.00, and Homebrew Second Card, HKD 700.00, are listed.
 
 **Steps:**
 
-1. Read the wizard rail.
-2. Click Continue.
-3. Read the wizard rail on the Service step.
+1. Click Remove on Homebrew Second Card.
 
 **Expected Results:**
 
-* On the Cards step, The cards reads in progress, and The service and Book read as still to come.
-* On the Service step, The cards reads done, The service reads in progress and Book reads as still to come.
+* It is off the list; Homebrew Test Card remains, still declared HKD 500.00.
+
+<!-- trace:case id=g10.grading-submission-plan.TC-3mk rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
+### g10.grading-submission-plan.US2-TC5: The wizard rail reads which step the collector is on
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-02
+
+**Pre-conditions:**
+
+* A collector is on `<wizard>`'s Cards step, one card valued and an email given.
+
+**Steps:**
+
+1. Read the rail, click Continue, and read it again.
+
+**Expected Results:**
+
+* On Cards, The cards reads in progress, The service and Book to come; on Service, The cards reads done and The service in progress.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-9ot rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC6-1: Contact details are filled in for a signed-in collector and asked of a signed-out one
+### g10.grading-submission-plan.US2-TC6: Contact details are filled in for a signed-in collector, and asked of a signed-out one
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -385,184 +290,30 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer(signed in) has a name, an email and a phone on their account.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Phone for this submission | +852 5555 0100: any valid phone other than the account's |
+* A collector's account holds a name, an email and a phone.
 
 **Steps:**
 
-1. Navigate to `<grade10 grading url>`.
-2. Click Start a submission.
-3. Read the About you fields.
-4. Change the phone to the one in **Test data**.
-5. Open the account's profile page and read its phone.
+1. Signed in, click Start a submission, and read About you.
+2. Change the phone to +852 5555 0100, and read the account's profile.
+3. Signed out, open `<wizard>` and read About you.
 
 **Expected Results:**
 
-* Signed in, the name, the email and the phone are filled in from the account.
-* The changed phone is held on this submission, and the account is unchanged.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-njt rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC7-1: A card added by hand that the reference does not answer for is kept as typed
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed.
-* The card price reference is reachable and carries no match for the name typed; the stack's reference holds none.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Card typed | Homebrew Test Card |
-| Declared value | 50000 (HKD minor units, HK$500.00): any value above nought |
-
-**Steps:**
-
-1. Type the card name from **Test data** in the card name field.
-2. Click Add this card.
-3. Enter the declared value from **Test data**, in dollars.
-
-**Expected Results:**
-
-* The card is listed in the name as typed, the way a pasted line the reference does not answer for is.
-* No reference sales show beside it.
-* The declared value is asked for and held on the card.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-aq7 rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC8-1: A reference outage keeps a hand-added card unasked and still asks its value
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with no card listed and an email in About you.
-* The card price reference cannot be reached.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Card typed | Homebrew Test Card |
-
-**Steps:**
-
-1. Type the card name from **Test data** in the card name field.
-2. Click Add this card.
-3. Read the card line.
-4. Enter a declared value on the card.
-5. Read the continue button.
-
-**Expected Results:**
-
-* The card carries the reference-unavailable line rather than the kept-as-typed one.
-* The declared value is still asked for.
-* Nothing on the step waits on the reference.
-* Continue is enabled: the list can be finished.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-eiq rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC9-1: A minimum grade is carried to the review and costs nothing
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with `<card D>` listed, its declared value given, and an email in About you.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<card D>` | Homebrew Lugia, declared 200000 (HKD minor units, HK$2,000.00): any value at or below Regular's 1170000 (HK$11,700.00) |
-| Regular fee a card | 60000 (HKD minor units, HK$600.00) |
-
-**Steps:**
-
-1. Tick `<card D>`'s minimum grade at PSA 9.
-2. Click Continue.
-3. Pick PSA at Regular.
-4. Continue to the Book step.
-5. Read the schedule and the fee at the counter.
-
-**Expected Results:**
-
-* `<card D>` carries a minimum grade of PSA 9 beside it on the schedule.
-* The fee at the counter reads 60000 (HKD minor units, HK$600.00), Regular's fee a card for one card, unchanged by the minimum.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-pkr rev=1 covers=g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
-### grade10-site-grading-submission-plan-US2-TC10-1: Contact details are asked of a signed-out collector
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-02
-
-**Pre-conditions:**
-
-* customer(no account) is signed out.
-
-**Steps:**
-
-1. Navigate to `<grade10 plan wizard url>`.
-2. Read the About you fields.
-
-**Expected Results:**
-
-* The name, the email and the phone are all asked for, and none is filled in.
+* Step 1 fills the name, email and phone from the account.
+* Step 2 holds the new phone on this submission, the account unchanged.
+* Step 3 asks for all three, none filled in.
 
 ---
 
-## grade10-site-grading-submission-plan-US3: Collector pastes a list of cards
+## g10.grading-submission-plan.US3: Collector pastes a list of cards
 
 **As a** collector with many cards,
 **I want** to paste one card a line and be told which lines matched the reference, which kept the name I typed, which still need a value and which sit above the level's ceiling,
 **so that** a long list takes a minute and nothing on it is silently dropped or guessed.
 
-<!-- trace:case id=g10.grading-submission-plan.TC-ad1 rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
-### grade10-site-grading-submission-plan-US3-TC1-1: Pasted lines matched in the reference report as matched
+<!-- trace:case id=g10.grading-submission-plan.TC-iiu rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
+### g10.grading-submission-plan.US3-TC8: A paste reports every line before any card is added, and skips a card already listed
 
 **Classification:**
 
@@ -570,42 +321,45 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
+* **Type:** functional
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-03
+* **Trace:** Pasting a list
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
-* The card price reference holds a row for each line's card.
+* A collector has Charizard 1st Edition, Base Set 4/102, HKD 3,500.00, listed and matched; the reference holds every matched line's card.
 
 **Test data:**
 
-| Field | Value |
+| Lines | Pasted as |
 | --- | --- |
-| Line 1 | `Charizard 1st Edition, Base Set, 4/102, 3500`: declared 350000 (HKD minor units, HK$3,500.00) |
-| Line 2 | `Umbreon VMAX (Alternate Art), Evolving Skies, 188/203, 8500`: declared 850000 (HKD minor units, HK$8,500.00) |
+| 6 matched | six cards the reference holds, each at 1000 |
+| 14 kept as typed | Homebrew Card 01, 1000 to Homebrew Card 14, 1000 |
+| 5 without a value | five more cards the reference holds, no value |
+| 4 above the ceiling | Homebrew Card 15, 2000 to Homebrew Card 18, 2000, above Bulk's HKD 1,500.00 |
+| 1 skipped | Charizard 1st Edition, Base Set, 4/102, 3500 |
 
 **Steps:**
 
-1. Paste the two lines from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Read the rows under the lines-read counter.
+1. Click Paste a list, paste the 30 lines, and read the rows and the counts.
+2. Close the sheet with Go back, and read the list.
 
 **Expected Results:**
 
-* Both lines report as matched in the card price reference.
-* The matched count reads 2, with the references-show line offered.
+* Step 1 reports each line as matched, kept as typed, without a value, above the ceiling or skipped as already listed; the five counts add to 30 and show before any card is added.
+* Step 2 lists Charizard once.
 
-<!-- trace:case id=g10.grading-submission-plan.TC-vve rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
-### grade10-site-grading-submission-plan-US3-TC2-1: A pasted line with no reference match is kept as typed
+<!-- trace:case id=g10.grading-submission-plan.TC-rfw rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful,g10.grading-submission-plan.SC-prc,g10.grading-submission-plan.SC-ku6,g10.grading-submission-plan.SC-7xf,g10.grading-submission-plan.SC-bph,g10.grading-submission-plan.SC-w4r,g10.grading-submission-plan.SC-7h7,g10.grading-submission-plan.SC-fp6 -->
+### g10.grading-submission-plan.US3-TC7: The reference out of reach holds nothing up, by hand or pasted
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** major
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -616,33 +370,30 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
-* The card price reference is reachable and carries no match for the pasted name; the stack's reference holds none.
+* A collector is on `<wizard>`'s Cards step, an email given; the card price reference cannot be reached.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Line 1 | `Homebrew Test Card, 500`: no set, declared 50000 (HKD minor units, HK$500.00) |
+| `<added>` |
+| --- |
+| Homebrew Test Card typed, then Add this card |
+| two lines pasted: Charizard 1st Edition, Base Set, 4/102, 3500 and Umbreon VMAX (Alternate Art), Evolving Skies, 188/203, 8500 |
 
 **Steps:**
 
-1. Paste the line from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Read the rows under the lines-read counter.
+1. Add `<added>`, give any value asked, and read the cards and Continue.
 
 **Expected Results:**
 
-* The line reports as kept as typed, naming it as the collector wrote it.
-* No reference sales row shows for that line.
+* Each card is marked unasked rather than kept as typed, its declared value still asked for; nothing waits on the reference, and Continue is enabled.
 
-<!-- trace:case id=g10.grading-submission-plan.TC-js6 rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
-### grade10-site-grading-submission-plan-US3-TC3-1: A pasted line missing a value blocks Continue
+<!-- trace:case id=g10.grading-submission-plan.TC-y5f rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
+### g10.grading-submission-plan.US3-TC4: A pasted line above every level's ceiling goes to the counter
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -653,111 +404,18 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
-* The card price reference is reachable.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Line 1 | `Charizard 1st Edition, Base Set, 4/102`: no value |
+* A collector has the paste sheet open.
 
 **Steps:**
 
-1. Paste the line from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Read the rows under the lines-read counter.
-4. Click the button that adds 1 card to the list.
-5. Read the Cards step and its continue button.
+1. Paste Umbreon VMAX (Alternate Art), Evolving Skies, 188/203, 42000.
 
 **Expected Results:**
 
-* The line reports on a row naming it as needing a declared value.
-* The card is added to the list with its declared value still asked for.
-* Continue is disabled, naming the one card missing a value.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-y5f rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
-### grade10-site-grading-submission-plan-US3-TC4-1: A pasted line above the top ceiling is sent to the counter
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-03
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
-* The card price reference is reachable.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Line 1 | `Umbreon VMAX (Alternate Art), Evolving Skies, 188/203, 42000`: declared 4200000 (HKD minor units, HK$42,000.00), any value above the top ceiling of 3900000 (HK$39,000.00) |
-
-**Steps:**
-
-1. Paste the line from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Read the rows under the lines-read counter.
-
-**Expected Results:**
-
-* The line reports as above the ceiling.
-* The collector is told to ask at the counter or on WhatsApp, 4200000 (HKD minor units) being above the top level's 3900000 (HKD minor units) ceiling.
-* No second submission is named for it.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-3ke rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
-### grade10-site-grading-submission-plan-US3-TC5-1: A pasted duplicate of a listed card is skipped
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-03
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with the listed card from **Test data** added by hand and matched.
-* The card price reference is reachable and holds a row for the listed card.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Listed card | Charizard 1st Edition, Base Set 4/102, declared 350000 (HKD minor units, HK$3,500.00) |
-| Pasted line | `Charizard 1st Edition, Base Set, 4/102, 3500`: the same card |
-
-**Steps:**
-
-1. Click Paste a list.
-2. Paste the pasted line from **Test data** into Your list.
-3. Wait for matching to finish.
-4. Read the rows under the lines-read counter.
-5. Close the sheet with Go back.
-6. Read the list.
-
-**Expected Results:**
-
-* The pasted line reports as skipped, naming it as a card already listed.
-* The skipped count reads 1.
-* The card is listed once.
+* The line reports above the ceiling, telling the collector to ask at the counter or on WhatsApp, HKD 42,000.00 being above the top HKD 39,000.00; no second submission is named.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-6s3 rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
-### grade10-site-grading-submission-plan-US3-TC6-1: An empty paste leaves Add disabled
+### g10.grading-submission-plan.US3-TC6: An empty paste adds nothing
 
 **Classification:**
 
@@ -773,189 +431,86 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
+* A collector has the paste sheet open, Your list empty.
 
 **Steps:**
 
-1. Leave Your list empty.
-2. Read the sheet's add button.
+1. Read the sheet.
 
 **Expected Results:**
 
-* Add stays disabled with nothing read.
-* No outcome row shows.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-rfw rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
-### grade10-site-grading-submission-plan-US3-TC7-1: A reference outage keeps every pasted line as typed
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** integration
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-03
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
-* The card price reference cannot be reached.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Line 1 | `Charizard 1st Edition, Base Set, 4/102, 3500`: declared 350000 (HKD minor units, HK$3,500.00) |
-| Line 2 | `Umbreon VMAX (Alternate Art), Evolving Skies, 188/203, 8500`: declared 850000 (HKD minor units, HK$8,500.00) |
-
-**Steps:**
-
-1. Paste the two lines from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Read the rows and the sheet's add button.
-
-**Expected Results:**
-
-* Both lines report with the reference-unavailable line rather than kept as typed.
-* Add stays enabled, and each line's declared value is still asked for.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-iiu rev=1 covers=g10.grading-submission-plan.SC-r4q,g10.grading-submission-plan.SC-0wj,g10.grading-submission-plan.SC-fik,g10.grading-submission-plan.SC-j6g,g10.grading-submission-plan.SC-40a,g10.grading-submission-plan.SC-34a,g10.grading-submission-plan.SC-oiv,g10.grading-submission-plan.SC-ful -->
-### grade10-site-grading-submission-plan-US3-TC8-1: The paste counts every line back before any card is added
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-03
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
-* The card price reference is reachable and holds a row for each matched line's card.
-* One of the 30 cards pasted is already on the list.
-
-**Test data:**
-
-| Line kind | Lines | Pasted as |
-| --- | --- | --- |
-| Matched | 6 | Six cards the reference holds, each `<name>, <set>, <number>, 1000`: declared 100000 (HKD minor units, HK$1,000.00) |
-| Kept as typed | 14 | `Homebrew Card 01, 1000` to `Homebrew Card 14, 1000` |
-| Without a value | 5 | Five more cards the reference holds, with no value |
-| Above the ceiling | 4 | `Homebrew Card 15, 2000` to `Homebrew Card 18, 2000`: declared 200000 (HK$2,000.00), above Bulk's 150000 (HK$1,500.00), the ceiling a list past 20 lines is read against |
-| Skipped | 1 | The card already on the list, pasted again |
-
-**Steps:**
-
-1. Paste the 30 lines from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Add the counts the paste reports together.
-
-**Expected Results:**
-
-* The five counts - matched, kept as typed, without a value, above the ceiling, skipped - add up to 30.
-* The counts show before any card is added.
+* No outcome row shows, and Add stays disabled.
 
 ---
 
-## grade10-site-grading-submission-plan-US4: Dealer submits a box of cards at Bulk
+## g10.grading-submission-plan.US4: Dealer submits a box of cards at Bulk
 
 **As a** collector dealing in cards, more than twenty at a time,
 **I want** the paste to tell me Bulk is the only level open, what it costs a card and that it takes the longer drop-off, and a card above Bulk's ceiling to be named for a second submission on the same drop-off,
 **so that** the whole box goes in on one visit at the right level.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-3pr rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
-### grade10-site-grading-submission-plan-US4-TC1-1: More than twenty pasted cards leave Bulk the only open level
+### g10.grading-submission-plan.US4-TC1: A paste over twenty lines names Bulk and its longer visit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-04
+
+**Pre-conditions:**
+
+* A collector has the paste sheet open, an email given.
+
+**Steps:**
+
+1. Paste 25 lines, Homebrew Card 01, 1000 to Homebrew Card 25, 1000, and read the Bulk notice.
+
+**Expected Results:**
+
+* It says Bulk is the only level open at the next step, at HKD 180.00 a card, cards up to HKD 1,500.00, about 10 weeks back, up to 100 cards, and names the longer drop-off.
+
+<!-- trace:case id=g10.grading-submission-plan.TC-6co rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
+### g10.grading-submission-plan.US4-TC2: Twenty cards leave every level open
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-04
+
+**Pre-conditions:**
+
+* A collector has the paste sheet open, an email given.
+
+**Steps:**
+
+1. Paste 20 lines, Homebrew Card 01, 1000 to Homebrew Card 20, 1000, add them, and continue to Service.
+
+**Expected Results:**
+
+* Value, Regular, Express, Super Express and Bulk are all open, each naming its ceiling and fee.
+
+<!-- trace:case id=g10.grading-submission-plan.TC-41m rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
+### g10.grading-submission-plan.US4-TC3: The twenty-first card leaves Bulk the only level open
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-04
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with an email in About you and the paste sheet open over it from Paste a list.
-* The card price reference is reachable.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Pasted lines | 25 lines, `Homebrew Card 01, 1000` to `Homebrew Card 25, 1000`: each declared 100000 (HKD minor units, HK$1,000.00), inside Bulk's 150000 (HK$1,500.00); any count above 20 |
-
-**Steps:**
-
-1. Paste the 25 lines from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Read the Bulk notice on the sheet.
-
-**Expected Results:**
-
-* The sheet says Bulk is the only level open at the next step, at 18000 (HKD minor units, HK$180.00) a card, cards up to 150000 (HKD minor units, HK$1,500.00), back in about 10 weeks, up to 100 cards a submission.
-* It names the longer drop-off.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-6co rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
-### grade10-site-grading-submission-plan-US4-TC2-1: Exactly twenty cards leave every level open
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-04
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with an email in About you and the paste sheet open over it from Paste a list.
-* The card price reference is reachable.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Pasted lines | 20 lines, `Homebrew Card 01, 1000` to `Homebrew Card 20, 1000`: each declared 100000 (HKD minor units, HK$1,000.00), inside every level's ceiling |
-
-**Steps:**
-
-1. Paste the 20 lines from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Click the button that adds 20 cards to the list.
-4. Click Continue.
-5. Read the levels.
-
-**Expected Results:**
-
-* Value, Regular, Express, Super Express and Bulk each show open, naming their own ceiling and fee.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-41m rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
-### grade10-site-grading-submission-plan-US4-TC3-1: 21 pasted cards force Bulk as the only open level
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -965,30 +520,46 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with an email in About you and the paste sheet open over it from Paste a list.
-* The card price reference is reachable.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Pasted lines | 21 lines, `Homebrew Card 01, 1000` to `Homebrew Card 21, 1000`: each declared 100000 (HKD minor units, HK$1,000.00), inside Bulk's 150000 (HK$1,500.00) |
+* A collector has the paste sheet open, an email given.
 
 **Steps:**
 
-1. Paste the 21 lines from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Click the button that adds 21 cards to the list.
-4. Click Continue.
-5. Read the levels.
+1. Paste 21 lines, Homebrew Card 01, 1000 to Homebrew Card 21, 1000, add them, and continue to Service.
 
 **Expected Results:**
 
-* Value, Regular, Express and Super Express each show closed, naming the count that closes them.
-* Bulk shows open.
+* Value, Regular, Express and Super Express are closed, naming the count; Bulk is open.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-3nj rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
-### grade10-site-grading-submission-plan-US4-TC4-1: A card above Bulk's ceiling is named for a second submission
+### g10.grading-submission-plan.US4-TC4: A card above Bulk's ceiling is named for a second submission, not refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-04
+
+**Pre-conditions:**
+
+* A collector has the paste sheet open.
+
+**Steps:**
+
+1. Paste 21 lines at 1000 and Homebrew Grail, 2000, and read its row.
+2. Click Add 22 cards, and read its row in Your list.
+
+**Expected Results:**
+
+* Both name it at HKD 2,000.00, going in a second submission on the same drop-off; the other cards stay at Bulk.
+
+<!-- trace:case id=g10.grading-submission-plan.TC-00e rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
+### g10.grading-submission-plan.US4-TC6: The hundredth card is added at Bulk's cap
 
 **Classification:**
 
@@ -1004,36 +575,23 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with the paste sheet open over it from Paste a list.
-* The card price reference is reachable.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Pasted lines | 21 lines, `Homebrew Card 01, 1000` to `Homebrew Card 21, 1000`: each declared 100000 (HKD minor units, HK$1,000.00) |
-| The line above Bulk's ceiling | `Homebrew Grail, 2000`: declared 200000 (HKD minor units, HK$2,000.00), above Bulk's 150000 (HK$1,500.00) and inside the top ceiling of 3900000 (HK$39,000.00) |
+* A collector has 99 cards listed at 1000 each, Bulk the only open level.
 
 **Steps:**
 
-1. Paste the 22 lines from **Test data** into Your list.
-2. Wait for matching to finish.
-3. Read the rows under the lines-read counter.
-4. Click Add 22 cards, then read Homebrew Grail's row in Your list.
+1. Paste Homebrew Card 100, 1000, and add it.
 
 **Expected Results:**
 
-* Step 3: the line above Bulk's ceiling is named for a second submission on the same drop-off.
-* Step 4: the row shows its declared value, 200000 (HKD minor units, HK$2,000.00), and says it goes in a second submission on the same drop-off.
-* Step 4: the other 21 lines are held in this submission at Bulk.
+* It is added at Bulk; nothing is said about a second submission.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-wt4 rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
-### grade10-site-grading-submission-plan-US4-TC5-1: The 101st pasted card is refused at Bulk's cap
+### g10.grading-submission-plan.US4-TC5: The card past Bulk's cap is refused, and the list keeps its hundred
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -1044,77 +602,26 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Cards step at `<grade10 plan wizard url>`, with 100 cards listed, which leaves Bulk the only open level: pasted as `Homebrew Card 001, 1000` to `Homebrew Card 100, 1000`.
-* The card price reference is reachable.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Pasted line | `Homebrew Card 101, 1000`: one more card, declared 100000 (HKD minor units, HK$1,000.00) |
+* A collector has 100 cards listed at 1000 each, Bulk the only open level.
 
 **Steps:**
 
-1. Click Paste a list.
-2. Paste the line from **Test data** into Your list.
-3. Wait for matching to finish.
-4. Click the button that adds the card to the list.
-5. Read the Cards step.
+1. Paste Homebrew Card 101, 1000, and add it.
 
 **Expected Results:**
 
-* The card is refused, naming a second submission on another day.
-* The list still holds 100 cards.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-00e rev=1 covers=g10.grading-submission-plan.SC-22f,g10.grading-submission-plan.SC-g1c,g10.grading-submission-plan.SC-rjw,g10.grading-submission-plan.SC-8gr,g10.grading-submission-plan.SC-diu,g10.grading-submission-plan.SC-46m -->
-### grade10-site-grading-submission-plan-US4-TC6-1: The 100th pasted card is accepted at Bulk's cap
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-04
-
-**Pre-conditions:**
-
-* customer is on the Cards step at `<grade10 plan wizard url>`, with 99 cards listed, which leaves Bulk the only open level: pasted as `Homebrew Card 001, 1000` to `Homebrew Card 099, 1000`.
-* The card price reference is reachable.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Pasted line | `Homebrew Card 100, 1000`: one more card, declared 100000 (HKD minor units, HK$1,000.00) |
-
-**Steps:**
-
-1. Click Paste a list.
-2. Paste the line from **Test data** into Your list.
-3. Wait for matching to finish.
-4. Click the button that adds the card to the list.
-5. Read the Cards step.
-
-**Expected Results:**
-
-* The card is added to the list at Bulk.
-* The over-the-cap line, the rest in a second submission on another day, does not show.
+* It is refused, saying the rest go in a second submission on another day; the list still holds 100.
 
 ---
 
-## grade10-site-grading-submission-plan-US5: Collector sees why a level is closed
+## g10.grading-submission-plan.US5: Collector sees why a level is closed
 
 **As a** collector picking the grader and the level,
 **I want** a closed level to name the card declared above its ceiling, or the count that closes it, and an open one to read its ceiling, fee, cover line and return date,
 **so that** I can change a declared value or split the list instead of wondering why a level is grey.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-3x7 rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
-### grade10-site-grading-submission-plan-US5-TC1-1: An open level reads its ceiling, fee and return date
+### g10.grading-submission-plan.US5-TC1: Each level reads why it is open or closed
 
 **Classification:**
 
@@ -1122,42 +629,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Pre-conditions:**
-
-* customer is on the Service step at `<grade10 plan wizard url>`, the four cards in **Test data** listed and an email given on the Cards step.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Cards | `Homebrew Umbreon` 850000 (HK$8,500.00), `Homebrew Pikachu` 100000 (HK$1,000.00), `Homebrew Eevee` 80000 (HK$800.00), `Homebrew Mew` 50000 (HK$500.00), all HKD minor units: the highest above Value's 390000 (HK$3,900.00) and at or below Regular's 1170000 (HK$11,700.00) |
-
-**Steps:**
-
-1. Click PSA under Grader.
-2. Read the Regular level.
-3. Read the Express level.
-
-**Expected Results:**
-
-* Regular shows open, naming its ceiling of 1170000 (HKD minor units, HK$11,700.00), its fee a card of 60000 (HKD minor units, HK$600.00) and its return date about 5 weeks out.
-* Express additionally names a cover line at 150 basis points (1.5%) of the declared value a card.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-6rf rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
-### grade10-site-grading-submission-plan-US5-TC2-1: A level closed by value names the card declared above it
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -1166,59 +637,24 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Service step at `<grade10 plan wizard url>`, the four cards in **Test data** listed and an email given on the Cards step.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Cards | `Homebrew Umbreon` 850000 (HK$8,500.00), `Homebrew Pikachu` 100000 (HK$1,000.00), `Homebrew Eevee` 80000 (HK$800.00), `Homebrew Mew` 50000 (HK$500.00), all HKD minor units: the highest above Value's 390000 (HK$3,900.00) |
+* A collector is on Service with four cards: Homebrew Umbreon at HKD 8,500.00, Homebrew Pikachu at HKD 1,000.00, Homebrew Eevee at HKD 800.00 and Homebrew Mew at HKD 500.00.
 
 **Steps:**
 
-1. Click PSA under Grader.
-2. Read the Value level.
-3. Read the Regular level.
+1. Click PSA, and read every level.
 
 **Expected Results:**
 
-* Value shows closed, naming the card declared at 850000 (HKD minor units, HK$8,500.00) as above its 390000 (HKD minor units, HK$3,900.00) ceiling.
-* Regular shows open.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-iqq rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
-### grade10-site-grading-submission-plan-US5-TC3-1: Bulk closed by count names how many more cards are needed
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Pre-conditions:**
-
-* customer is on the Service step at `<grade10 plan wizard url>`, four cards listed, each declared inside Bulk's 150000 (HKD minor units, HK$1,500.00), and an email given on the Cards step.
-
-**Steps:**
-
-1. Click PSA under Grader.
-2. Read the Bulk level.
-
-**Expected Results:**
-
-* Bulk shows closed, naming that Bulk starts at 20 cards and the list holds 4.
+* Value is closed, naming the HKD 8,500.00 card above its HKD 3,900.00 ceiling.
+* Regular is open, reading its HKD 11,700.00 ceiling, HKD 600.00 a card and about 5 weeks; Express adds its cover at 1.5% of the declared value.
+* Bulk is closed, naming that it starts at 20 cards and the list holds 4.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-8mg rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
-### grade10-site-grading-submission-plan-US5-TC4-1: A card above every ceiling closes every level
+### g10.grading-submission-plan.US5-TC4: A card above every ceiling closes every level and sends the collector to the counter
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
@@ -1230,94 +666,25 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Service step at `<grade10 plan wizard url>`, the card in **Test data** listed and an email given on the Cards step.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Card | `Homebrew Grail`, declared 4200000 (HKD minor units, HK$42,000.00): any value above the top ceiling of 3900000 (HK$39,000.00) |
+* A collector is on Service with Homebrew Grail declared HKD 42,000.00.
 
 **Steps:**
 
-1. Click PSA under Grader.
-2. Read every level.
-3. Read the line under the levels and the continue button.
+1. Click PSA, and read the levels and Continue.
 
 **Expected Results:**
 
-* Every level shows closed.
-* The step names asking at the counter or on WhatsApp before a level can be picked.
-* Continue is disabled.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-gi9 rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
-### grade10-site-grading-submission-plan-US5-TC5-1: No level picked shows no estimate
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Pre-conditions:**
-
-* customer is on the Service step at `<grade10 plan wizard url>`, with a grader selected and no level chosen.
-
-**Steps:**
-
-1. Read the Service step before picking a level.
-2. Read the continue button.
-
-**Expected Results:**
-
-* No estimate shows.
-* Continue is disabled.
+* Every level is closed; the step names asking at the counter or on WhatsApp, and Continue is disabled.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-iej rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
-### grade10-site-grading-submission-plan-US5-TC6-1: A grader with no figures yet still shows its levels
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-05
-
-**Pre-conditions:**
-
-* customer is on the Service step at `<grade10 plan wizard url>`, with cards listed.
-* CGC's fee sheet carries only the example figures: no CGC figure is written in `<grade10 admin grading settings url>`, as the stack opens.
-
-**Steps:**
-
-1. Click CGC under Grader.
-2. Read CGC's levels.
-
-**Expected Results:**
-
-* CGC's levels show, marked as carrying no figures.
-* None of CGC's levels can be picked, so the step does not continue on one.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-qwl rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
-### grade10-site-grading-submission-plan-US5-TC7-1: The level picked covers every card on the list
+### g10.grading-submission-plan.US5-TC6: A grader nobody has priced shows its levels, none pickable
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -1326,22 +693,45 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Service step at `<grade10 plan wizard url>`, four cards listed, none declared above Regular's 1170000 (HKD minor units, HK$11,700.00), and an email given on the Cards step.
+* A collector is on Service with cards listed; CGC carries no figures.
 
 **Steps:**
 
-1. Click PSA under Grader.
-2. Pick Regular.
-3. Continue to the Book step.
-4. Read the review's header and the schedule.
+1. Click CGC, and read its levels.
 
 **Expected Results:**
 
-* All four cards read as PSA Regular on the schedule.
-* No card on the submission carries another grader or another level.
+* They are listed, marked as carrying no figures, and none can be picked.
 
-<!-- trace:case id=g10.grading-submission-plan.TC-2kx rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
-### grade10-site-grading-submission-plan-US5-TC8-1: The estimate reads the cards times the fee, paid at the counter
+<!-- trace:case id=g10.grading-submission-plan.TC-gi9 rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
+### g10.grading-submission-plan.US5-TC5: No level picked shows no estimate and holds the step
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-05
+
+**Pre-conditions:**
+
+* A collector is on Service, PSA picked and no level.
+
+**Steps:**
+
+1. Read the step and Continue.
+
+**Expected Results:**
+
+* No estimate shows, and Continue is disabled.
+
+<!-- trace:case id=g10.grading-submission-plan.TC-qwl rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
+### g10.grading-submission-plan.US5-TC7: Four cards at Regular estimate at four times the fee, all on PSA Regular
 
 **Classification:**
 
@@ -1357,34 +747,24 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Service step at `<grade10 plan wizard url>`, four cards listed, none declared above Regular's 1170000 (HKD minor units, HK$11,700.00), and an email given on the Cards step.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Regular fee a card | 60000 (HKD minor units, HK$600.00) |
-| Estimate, 4 cards | 240000 (HKD minor units, HK$2,400.00) |
+* A collector is on Service with four cards, none above HKD 11,700.00.
 
 **Steps:**
 
-1. Click PSA under Grader.
-2. Pick Regular.
-3. Read Your estimate.
+1. Click PSA, pick Regular, and read Your estimate.
+2. Continue to Book, and read the header and the schedule.
 
 **Expected Results:**
 
-* The estimate reads 240000 (HKD minor units) from **Test data**, being 4 times the fee a card.
-* It carries no cover line at Regular.
-* It reads about 5 weeks back, counted from the day the batch leaves the shop.
-* It says everything on it is paid at the counter.
+* Step 1 reads HKD 2,400.00, four times HKD 600.00, with no cover line, about 5 weeks counted from the day the batch leaves, all paid at the counter.
+* Step 2 reads all four cards as PSA Regular, none on another grader or level.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-31a rev=1 covers=g10.grading-submission-plan.SC-6qn,g10.grading-submission-plan.SC-a3o,g10.grading-submission-plan.SC-9yc,g10.grading-submission-plan.SC-wfm,g10.grading-submission-plan.SC-bzg,g10.grading-submission-plan.SC-xoj,g10.grading-submission-plan.SC-qbf,g10.grading-submission-plan.SC-vy8,g10.grading-submission-plan.SC-w4u,g10.grading-submission-plan.SC-w6e -->
-### grade10-site-grading-submission-plan-US5-TC9-1: The estimate at Express carries a cover line per card
+### g10.grading-submission-plan.US5-TC9: A covered level prices cover per card on the declared value
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -1396,37 +776,26 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Service step at `<grade10 plan wizard url>`, one card listed, declared at 850000 (HKD minor units, HK$8,500.00), and an email given on the Cards step.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Express fee a card | 120000 (HKD minor units, HK$1,200.00) |
-| Cover, 150 basis points (1.5%) of 850000 | 12750 (HKD minor units, HK$127.50) |
-| Total | 132750 (HKD minor units, HK$1,327.50) |
+* A collector is on Service with one card declared HKD 8,500.00.
 
 **Steps:**
 
-1. Click PSA under Grader.
-2. Pick Express.
-3. Read Your estimate.
+1. Click PSA, pick Express, and read Your estimate.
 
 **Expected Results:**
 
-* The cover line for the card reads 12750 (HKD minor units) from **Test data**.
-* The total reads 132750 (HKD minor units), the fee and the cover line added.
+* The card's cover reads HKD 127.50, and the total HKD 1,327.50, the fee and the cover added.
 
 ---
 
-## grade10-site-grading-submission-plan-US6: Collector finds the plan again from the emailed link or the signed-in home
+## g10.grading-submission-plan.US6: Collector finds the plan again from the emailed link or the signed-in home
 
 **As a** collector who leaves the wizard before booking,
 **I want** the plan kept under the email I gave and its link mailed to me once by the next daily sweep while it stays unbooked, opening on any device with no account, and the home page to list every submission under that email once I sign in with it and no password,
 **so that** I can finish on another day, and find every old submission, without a password or a second list.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-26o rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC1-1: Finishing later keeps the plan and the daily sweep mails its link
+### g10.grading-submission-plan.US6-TC1: Finishing later asks for an email, keeps the plan, and the sweep mails its link once
 
 **Classification:**
 
@@ -1434,43 +803,6 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-06
-
-**Pre-conditions:**
-
-* customer(no account) is signed out and on the Cards step at `<grade10 plan wizard url>`, with one card listed and its declared value given.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<collector email>` | An address only this run writes to, such as `plan-later-<run>@grade10.dev` |
-
-**Steps:**
-
-1. Enter `<collector email>` in About you.
-2. Click Finish later.
-3. Leave the page.
-4. Let the daily sweep run, and read the letters to `<collector email>` in grading's outbox.
-
-**Expected Results:**
-
-* The plan is kept under the email entered.
-* Nothing is sent on leaving the page; the daily sweep sends one email carrying the plan's link.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-9as rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC2-1: Finishing later with no email asks for one first
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -1479,29 +811,22 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer(no account) is signed out and on the Cards step at `<grade10 plan wizard url>`, with one card listed and the email field blank.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<collector email>` | An address only this run writes to, such as `plan-noemail-<run>@grade10.dev` |
+* A signed-out collector is on `<wizard>`'s Cards step, one card valued, the email blank.
 
 **Steps:**
 
-1. Click Finish later without entering an email.
-2. Read the Cards step under About you.
-3. Enter `<collector email>` in About you.
-4. Click Finish later.
+1. Click Finish later.
+2. Enter `<collector email>`, a mailbox only this run uses, click Finish later, and leave the page.
+3. Let the daily sweep run, and read `<collector email>`.
 
 **Expected Results:**
 
-* The plan is not kept.
-* The email field is asked for before the plan can be kept.
-* Once the email is given, the plan is kept.
+* Step 1 keeps nothing, asking for the email.
+* Step 2 keeps the plan under it, sending nothing on leaving.
+* Step 3 holds one email carrying the plan's link.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-k1k rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC3-1: The emailed link opens the kept plan on another device
+### g10.grading-submission-plan.US6-TC3: The emailed link reopens the plan on a device that never signed in
 
 **Classification:**
 
@@ -1517,24 +842,18 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer(no account) has a plan kept under an email with Save and book later, and holds its emailed link.
-* A second device, or a private window, has never signed in to the site.
+* A collector kept a plan with Save and book later, and holds its emailed link.
 
 **Steps:**
 
-1. Open the emailed link on the second device.
-2. Read the page that opens.
+1. Open the link in a private window.
 
 **Expected Results:**
 
-* The kept plan opens with its cards, grader and level as saved.
-* No sign-in or account is asked for.
-* Its estimate shows.
-* The day it is kept until shows.
-* Booking the drop-off is offered.
+* The plan opens with its cards, grader, level and estimate, the day it is kept until, and booking the drop-off offered; no sign-in or account is asked for.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-am9 rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC4-1: Signing in with no password lists every submission
+### g10.grading-submission-plan.US6-TC4: Signing in with no password lists every submission under the email
 
 **Classification:**
 
@@ -1550,38 +869,26 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer(signed out) has two submissions under `<collector email>`: one planned on the site and kept, and one seeded at `collected` through grading's dev seed.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<collector email>` | An address only this run writes to, such as `plan-home-<run>@grade10.dev` |
+* Under `<collector email>`, a signed-out collector has a kept plan and a collected submission.
 
 **Steps:**
 
-1. Navigate to `<grade10 grading url>`.
-2. Click Sign in in the header.
-3. Enter `<collector email>`.
-4. Open the sign-in link mailed to it.
-5. Read Your submissions on the home.
-6. Click each listed submission.
+1. On `<grading home>`, click Sign in, enter `<collector email>`, and open the link mailed to it.
+2. Read Your submissions, and click each.
 
 **Expected Results:**
 
-* No password is asked for.
-* Both submissions list under Your submissions, each with its summary, status word and chip.
-* Each opens its own page at `<grade10 grading submission url>`.
+* No password is asked for; both are listed, open and closed, each with its summary, status word and chip, each opening its own page.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-bxv rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC5-1: A signed-in collector with no submissions sees the empty state
+### g10.grading-submission-plan.US6-TC5: A signed-in collector who has planned nothing is told so
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -1590,19 +897,18 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer(signed in) has no submission under their email and is on `<grade10 grading url>`.
+* A signed-in collector holds no submission under their email.
 
 **Steps:**
 
-1. Read Your submissions on the home.
+1. Read Your submissions on `<grading home>`.
 
 **Expected Results:**
 
-* Your submissions shows the empty state.
-* Start a submission is offered.
+* It says they have none, offering Start a submission.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-8q8 rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC6-1: A failed submissions read shows the error state
+### g10.grading-submission-plan.US6-TC6: A home that cannot read the submissions says so
 
 **Classification:**
 
@@ -1618,20 +924,20 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer(signed in) is on `<grade10 grading url>`.
-* Reading the collector's submissions fails.
+* A signed-in collector's submissions cannot be read.
 
 **Steps:**
 
-1. Read Your submissions on the home.
+1. Read Your submissions on `<grading home>`.
 
 **Expected Results:**
 
-* The failure shows in the error tone.
-* No submission list renders.
+* The failure shows in the page's error tone, and no submission is listed.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-01a rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC7-1: A sheet changed after booking leaves the submission's figures alone
+### g10.grading-submission-plan.US6-TC7: A fee changed on the sheet reaches a plan, and leaves a booked submission alone
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1643,71 +949,30 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-06
+* **Trace:** Priced at booking
 
 **Pre-conditions:**
 
-* customer has a submission at PSA Regular with its drop-off booked from its page, while Regular was 60000 (HKD minor units, HK$600.00) a card, and holds its emailed link.
-* admin A(holds grading:approve) and admin B(holds grading:approve) are each on `<grade10 admin grading settings url>`.
+* A collector holds `<held>` at PSA Regular, made while Regular was HKD 600.00 a card, and its emailed link.
 
 **Test data:**
 
-| Field | Value |
+| `<held>` | `<reads>` |
 | --- | --- |
-| Regular fee a card, booked on | 60000 (HKD minor units, HK$600.00) |
-| Regular fee a card, changed to | 70000 (HKD minor units, HK$700.00): any figure other than the booked one |
+| a submission with its drop-off booked | HKD 600.00 a card, its estimate and totals unchanged |
+| a plan with no drop-off booked | HKD 700.00 a card |
 
 **Steps:**
 
-1. As admin A, change PSA Regular's fee a card to the changed figure from **Test data**, with a reason.
-2. As admin B, approve the waiting change.
-3. As the customer, open the booked submission from its emailed link.
-4. Read its fee a card, its estimate and its totals.
+1. As one approver, change PSA Regular to HKD 700.00 a card with a reason; as a second, approve it.
+2. Open the link, and read the fee and the estimate.
 
 **Expected Results:**
 
-* The submission still reads 60000 (HKD minor units) a card.
-* Its estimate and its totals are unchanged.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-jrd rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC8-1: A sheet changed before booking reaches the reopened plan
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-06
-
-**Pre-conditions:**
-
-* customer has a plan kept at PSA Regular with Save and book later, no drop-off booked, made while Regular was 60000 (HKD minor units, HK$600.00) a card, and holds its emailed link.
-* admin A(holds grading:approve) and admin B(holds grading:approve) are each on `<grade10 admin grading settings url>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Regular fee a card, changed to | 70000 (HKD minor units, HK$700.00): any figure other than the one the plan was made on |
-
-**Steps:**
-
-1. As admin A, change PSA Regular's fee a card to the figure from **Test data**, with a reason.
-2. As admin B, approve the waiting change.
-3. As the customer, open the kept plan from its emailed link.
-4. Read its estimate.
-
-**Expected Results:**
-
-* The estimate reads 70000 (HKD minor units) a card.
+* It reads `<reads>`.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-ycj rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC9-1: A plan saved unticked asks for the statement before its drop-off
+### g10.grading-submission-plan.US6-TC9: A plan kept unticked asks for the statement before its drop-off
 
 **Classification:**
 
@@ -1718,29 +983,27 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
 
 **Pre-conditions:**
 
-* customer has a plan saved for later with the collection statement unticked, no drop-off booked and none held under the same email, and holds its emailed link.
+* A collector holds the emailed link of a plan saved for later with the collection statement unticked, no drop-off held under the email.
 
 **Steps:**
 
-1. Open the kept plan from its emailed link.
-2. Send a booking of a free day and time for the plan, carrying no tick, outside its page.
-3. In the first tab, tick the statement.
-4. Book a free day and time.
+1. Open the link.
+2. Send a booking for the plan carrying no tick, outside its page.
+3. Tick the statement, and book a free day and time.
 
 **Expected Results:**
 
-* Step 1: the statement is asked for in the review's words, and no day is offered.
-* Step 2: the booking is refused by name, and the plan holds no drop-off.
-* Step 3: the days are offered.
-* Step 4: the drop-off is booked, and on reload the plan holds the tick with it.
+* Step 1 asks for the statement in the review's words, offering no day.
+* Step 2 is refused by name; the plan holds no drop-off.
+* Step 3 offers the days and books the drop-off, the plan holding the tick on reload.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-njb rev=1 covers=g10.grading-submission-plan.SC-90m,g10.grading-submission-plan.SC-p75,g10.grading-submission-plan.SC-hpb,g10.grading-submission-plan.SC-rsr,g10.grading-submission-plan.SC-vqr,g10.grading-submission-plan.SC-3d2,g10.grading-submission-plan.SC-hk7,g10.grading-submission-plan.SC-ad7,g10.grading-submission-plan.SC-r30,g10.grading-submission-plan.SC-xnp -->
-### grade10-site-grading-submission-plan-US6-TC10-1: A plan kept with no level asks for one before its drop-off
+### g10.grading-submission-plan.US6-TC10: A plan kept with no level asks for one before its drop-off
 
 **Classification:**
 
@@ -1751,48 +1014,35 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-06
 
 **Pre-conditions:**
 
-* customer has a plan kept part way through the wizard with Finish later on the Service step, PSA picked, no level picked, the collection statement unticked and no drop-off booked, and holds its emailed link.
-* A drop-off is booked under the same email for another submission.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Level picked in the edit | Regular |
+* A collector holds the emailed link of a plan kept from Service with PSA and no level, unticked; a drop-off is booked under the same email for another submission.
 
 **Steps:**
 
-1. Open the kept plan from its emailed link.
-2. Send a booking of a free day and time for the plan, outside its page.
-3. Send a join of the other submission's drop-off for the plan, outside its page.
-4. Click the list's edit link.
-5. On the service step, pick the level from **Test data**.
-6. Save the changes from the review.
+1. Open the link.
+2. Send a booking, and a join of the other drop-off, for the plan outside its page.
+3. Click the list's edit link, pick Regular, and save from the review.
 
 **Expected Results:**
 
-* Step 1: the page asks for a level beside the list's edit link; no day and no join are offered.
-* Step 2: the booking is refused by name; the diary holds no new visit.
-* Step 3: the join is refused by name; the other drop-off is unchanged.
-* Step 4: the editor opens on the kept list.
-* Step 5: the estimate shows for the level picked.
-* Step 6: the page no longer asks for a level; it asks for the statement in the review's words, and no day is offered yet.
+* Step 1 asks for a level beside the edit link, offering no day and no join.
+* Step 2 refuses both by name; the diary holds no new visit, and the other drop-off is unchanged.
+* Step 3 shows the estimate for Regular, then asks for the statement in the review's words, still offering no day.
 
 ---
 
-## grade10-site-grading-submission-plan-US7: Collector reads the review before booking
+## g10.grading-submission-plan.US7: Collector reads the review before booking
 
 **As a** collector about to book the drop-off,
 **I want** the review to total the declared value, the fee and the cover line, to name each card that could grade above the level's ceiling with the level the grader would move it to, the sheet's difference due at the counter and what the higher level would cost now, and to say that a fee is charged on a card returned ungraded, that a card can move up a level, that the return date is an estimate, that nothing is paid or signed before the cards are checked with me, and that slabs are not shipped back,
 **so that** I choose the level knowing both prices and agree to the terms the agreement will later print rather than meet them on the iPad.
 
-<!-- trace:case id=g10.grading-submission-plan.TC-9a6 rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC1-1: The review totals the fee and lists Good to know
+<!-- trace:case id=g10.grading-submission-plan.TC-68a rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
+### g10.grading-submission-plan.US7-TC10: The review totals the declared value, the fee and the cover, and reads the five good-to-know lines
 
 **Classification:**
 
@@ -1800,35 +1050,30 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
+* **Type:** functional
+* **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-grading-submission-plan-US-07
 
 **Pre-conditions:**
 
-* customer is on the Book step at `<grade10 plan wizard url>`, four cards listed at PSA Regular, none declared above Regular's 1170000 (HKD minor units, HK$11,700.00), and an email given.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Fee a card at Regular | 60000 (HKD minor units, HK$600.00) |
-| Fee at the counter, 4 cards | 240000 (HKD minor units, HK$2,400.00) |
+* A collector is on Book with Homebrew Umbreon at HKD 8,500.00 and Homebrew Charizard at HKD 4,000.00, at PSA Express, an email given.
 
 **Steps:**
 
-1. Read the review's totals.
-2. Read Good to know.
+1. Read the schedule, the totals and Good to know.
 
 **Expected Results:**
 
-* The totals show the fee at the counter of 240000 (HKD minor units) from **Test data**, with no cover line at Regular.
-* Good to know lists, in order: a fee is charged on a card returned ungraded, a card can move up a level, the return date is an estimate, nothing is paid or signed before the cards are checked, and slabs are not shipped back.
+* The schedule carries cover of HKD 127.50 on Umbreon and HKD 60.00 on Charizard.
+* The totals read HKD 12,500.00 declared, HKD 2,400.00 in fees and HKD 187.50 in cover.
+* Good to know reads, in order: a fee on a card returned ungraded, a card can move up a level, the return date is an estimate, nothing paid or signed before the cards are checked, and slabs not shipped back.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-ztl rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC2-1: The upcharge warning names the level and both prices
+### g10.grading-submission-plan.US7-TC2: A card whose PSA 10 sale tops the level's ceiling is warned about, with both prices
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1844,35 +1089,32 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Book step at `<grade10 plan wizard url>`, four cards listed at PSA Regular.
-* One card, Umbreon VMAX (Alternate Art), is matched in the card price reference and declared at 850000 (HKD minor units, HK$8,500.00), its PSA 10 reference reading 1500000 (HKD minor units, HK$15,000.00) at the reference rate, above Regular's 1170000 (HKD minor units, HK$11,700.00) ceiling.
+* A collector is on Book at PSA Regular; Umbreon VMAX (Alternate Art), matched and declared HKD 8,500.00, has a PSA 10 reference sale of `<sale>`; the reference rate reads 7.84 HKD to 1 USD.
 
 **Test data:**
 
-| Field | Value |
+| `<sale>` | `<sale reads>` |
 | --- | --- |
-| Regular fee a card | 60000 (HKD minor units, HK$600.00) |
-| Express fee a card | 120000 (HKD minor units, HK$1,200.00) |
+| HKD 15,000.00 | HKD 15,000.00 |
+| USD 1,500.00 | HKD 11,760.00 |
 
 **Steps:**
 
-1. Read the review's upcharge warning for Umbreon VMAX.
+1. Read the upcharge warning.
 
 **Expected Results:**
 
-* Umbreon VMAX is named with Express as the level the grader would move it to.
-* The difference due at the counter before collection reads 60000 (HKD minor units), Express's fee less Regular's fee from **Test data**.
-* Express's fee now, 120000 (HKD minor units), shows beside it.
+* The sale reads `<sale reads>`, above Regular's HKD 11,700.00; Umbreon is named with Express as the level the grader would move it to, HKD 600.00 due at the counter as the difference, and Express's HKD 1,200.00 a card beside it.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-jn5 rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC3-1: No card above the ceiling shows no upcharge warning
+### g10.grading-submission-plan.US7-TC3: No card's PSA 10 sale above the ceiling, no warning
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** minor
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
@@ -1881,7 +1123,7 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Book step at `<grade10 plan wizard url>`, four cards listed at PSA Regular, every card's PSA 10 reference within Regular's 1170000 (HKD minor units, HK$11,700.00) ceiling.
+* A collector is on Book at PSA Regular, every card's PSA 10 reference within HKD 11,700.00.
 
 **Steps:**
 
@@ -1889,10 +1131,10 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Expected Results:**
 
-* No upcharge warning block shows.
+* No upcharge warning shows.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-ipn rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC4-1: An unticked consent statement disables booking
+### g10.grading-submission-plan.US7-TC4: Booking is refused until the statement is ticked
 
 **Classification:**
 
@@ -1908,122 +1150,22 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Book step at `<grade10 plan wizard url>`, with the collection statement unticked.
+* A collector is on Book, the collection statement unticked.
 
 **Steps:**
 
-1. Read Book the drop-off before ticking the collection statement.
-2. Tick the collection statement.
-3. Read Book the drop-off again.
+1. Read Book the drop-off; tick the statement and read it again.
 
 **Expected Results:**
 
-* Book the drop-off is disabled while the statement is unticked.
-* Book the drop-off becomes enabled once ticked.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-vhf rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC5-1: The review totals include the cover line
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-07
-
-**Pre-conditions:**
-
-* customer is on the Book step at `<grade10 plan wizard url>`, the two cards in **Test data** listed at PSA Express and an email given.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Cards | `Homebrew Umbreon` 850000 (HK$8,500.00) and `Homebrew Charizard` 400000 (HK$4,000.00), HKD minor units, each inside Express's 1950000 (HK$19,500.00) |
-| Cover, `Homebrew Umbreon` | 12750 (HKD minor units, HK$127.50), 150 basis points (1.5%) of 850000 |
-| Cover, `Homebrew Charizard` | 6000 (HKD minor units, HK$60.00), 150 basis points (1.5%) of 400000 |
-
-**Steps:**
-
-1. Read the review's schedule.
-
-**Expected Results:**
-
-* `Homebrew Umbreon` carries a cover line of 12750 (HKD minor units) from **Test data**.
-* `Homebrew Charizard` carries a cover line of 6000 (HKD minor units) from **Test data**.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-vru rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC6-1: Booking shows pending and disables both buttons
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-07
-
-**Pre-conditions:**
-
-* customer is on the Book step at `<grade10 plan wizard url>`, with the collection statement ticked.
-
-**Steps:**
-
-1. Click Book the drop-off.
-2. Read both buttons while the booking is in progress.
-
-**Expected Results:**
-
-* Book the drop-off shows pending.
-* Book the drop-off and Save and book later are both disabled while booking is in progress.
+* It is disabled while unticked, and enabled once ticked.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-18q rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC7-1: Saving the plan for later works with the statement unticked
+### g10.grading-submission-plan.US7-TC7: Saving the plan for later needs no tick
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-07
-
-**Pre-conditions:**
-
-* customer is on the Book step at `<grade10 plan wizard url>`, with an email given and the collection statement unticked.
-
-**Steps:**
-
-1. Leave the collection statement unticked.
-2. Click Save and book later.
-3. Read the submission page that opens.
-
-**Expected Results:**
-
-* Save and book later is offered while the statement is unticked.
-* The plan is kept, and its page opens at Planned.
-* The statement is still unticked on the plan.
-* Book the drop-off was the only action the unticked statement refused.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-bxu rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC8-1: A USD reference sale is warned about at the rate staff set
-
-**Classification:**
-
-* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -2035,65 +1177,22 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* The reference rate in `<grade10 admin grading settings url>` reads 7.84 HKD to 1 USD, as the stack seeds it.
-* customer is on the Book step at `<grade10 plan wizard url>`, at PSA Regular.
-* One card, Umbreon VMAX (Alternate Art), is matched in the card price reference and declared at 850000 (HKD minor units, HK$8,500.00), with a PSA 10 reference sale of 150000 (USD minor units, US$1,500.00).
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Reference rate | 784 (HKD minor units) to 1 USD (7.84) |
-| Regular ceiling | 1170000 (HKD minor units, HK$11,700.00) |
-| Regular fee a card | 60000 (HKD minor units, HK$600.00) |
-| Express fee a card | 120000 (HKD minor units, HK$1,200.00) |
+* A collector is on Book, an email given, the statement unticked.
 
 **Steps:**
 
-1. Read the review's upcharge warning for Umbreon VMAX.
+1. Click Save and book later.
 
 **Expected Results:**
 
-* The PSA 10 sale reads 1176000 (HKD minor units, HK$11,760.00), 150000 (USD minor units) at the rate from **Test data**, above Regular's ceiling.
-* Umbreon VMAX is named with Express as the level the grader would move it to.
-* The difference due at the counter reads 60000 (HKD minor units).
+* The plan is kept, its page opening at Planned with the statement still unticked; booking was the only act refused.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-65d rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC9-1: A plan booked from a ticked review opens on the picker with nothing asked
+### g10.grading-submission-plan.US7-TC9: A plan booked from a ticked review opens on the picker with nothing asked
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-submission-plan-US-07
-
-**Pre-conditions:**
-
-* customer is on the wizard's review at `<grade10 plan wizard url>`, with an email given, a level picked and no drop-off held under the email.
-
-**Steps:**
-
-1. Tick the collection statement.
-2. Click Book the drop-off.
-3. Reload the submission page that opens.
-
-**Expected Results:**
-
-* Step 2: the submission page opens on the drop-off picker, and the statement is not asked for.
-* Step 3: the page still opens on the picker with no statement asked: the plan was kept ticked.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-68a rev=1 covers=g10.grading-submission-plan.SC-h3s,g10.grading-submission-plan.SC-6u8,g10.grading-submission-plan.SC-21y,g10.grading-submission-plan.SC-hym,g10.grading-submission-plan.SC-8zk,g10.grading-submission-plan.SC-i18,g10.grading-submission-plan.SC-93c,g10.grading-submission-plan.SC-s0l -->
-### grade10-site-grading-submission-plan-US7-TC10-1: The review totals the declared value, the fee and the cover
-
-**Classification:**
-
-* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -2105,76 +1204,31 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Book step at `<grade10 plan wizard url>`, the two cards in **Test data** listed at PSA Express and an email given.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Cards | `Homebrew Umbreon` 850000 (HK$8,500.00) and `Homebrew Charizard` 400000 (HK$4,000.00), HKD minor units, each inside Express's 1950000 (HK$19,500.00) |
-| Declared in total | 1250000 (HKD minor units, HK$12,500.00) |
-| Fee at the counter | 240000 (HKD minor units, HK$2,400.00) |
-| Cover | 18750 (HKD minor units, HK$187.50) |
+* A collector is on Book, an email given and a level picked, no drop-off held under the email.
 
 **Steps:**
 
-1. Read the review's totals.
+1. Tick the statement, click Book the drop-off, and reload the page that opens.
 
 **Expected Results:**
 
-* The declared total reads 1250000 (HKD minor units) from **Test data**, the two declared values added.
-* The fee reads 240000 (HKD minor units), 2 times Express's fee a card of 120000.
-* The cover reads 18750 (HKD minor units), 150 basis points (1.5%) of each card's declared value, added.
+* The page opens on the drop-off picker, asking no statement, before and after the reload.
 
 ---
 
-## grade10-site-grading-submission-plan-US8: Collector who never books is nudged and then let go
+## g10.grading-submission-plan.US8: Collector who never books is nudged and then let go
 
 **As a** collector who planned a submission and booked no drop-off,
 **I want** one reminder with the link and then a short email saying the list has expired with nothing paid and nothing owed,
 **so that** I am prompted once and not left with an old list at stale prices.
 
 <!-- trace:case id=g10.grading-submission-plan.TC-8pw rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
-### grade10-site-grading-submission-plan-US8-TC1-1: An unbooked plan at day 21 shows the nudge
+### g10.grading-submission-plan.US8-TC1: An unbooked plan is nudged once at twenty-one days and expires at thirty owing nothing
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-grading-submission-plan-US-08
-
-**Pre-conditions:**
-
-* customer has a plan kept 21 Asia/Hong_Kong days ago with no drop-off booked: seeded at `planned` through grading's dev seed, created 21 days back, and holds its link.
-
-**Steps:**
-
-1. Run grading's fast sweep lane, after 09:00 on the shop's clock.
-2. Read the last letter to the plan's email in grading's outbox.
-3. Run grading's fast sweep lane again.
-4. Read the outbox again.
-5. Open the plan's page from its link.
-6. Read the lead under the status.
-
-**Expected Results:**
-
-* Step 2: one nudge letter carries the plan's link.
-* Step 4: the second pass sends no second nudge.
-* The page reads a kept-until line naming the expiry day, 30 days from when the plan was kept.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-8ro rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
-### grade10-site-grading-submission-plan-US8-TC2-1: An unbooked plan at day 30 expires
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -2185,29 +1239,27 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer has a plan kept 30 Asia/Hong_Kong days ago with no drop-off booked: seeded at `planned` through grading's dev seed, created 30 days back, and holds its link.
+* A collector holds the link of a plan kept 21 days ago, no drop-off booked.
 
 **Steps:**
 
-1. Run grading's fast sweep lane.
-2. Read the last letter to the plan's email in grading's outbox.
-3. Open the plan's page from its link.
-4. Read the status and the lead.
+1. Let the sweep run after 09:00 on the shop's clock, twice, and read the plan's email.
+2. Open the plan from its link.
+3. Move to 30 days after it was kept, let the sweep run, and read the email and the page.
 
 **Expected Results:**
 
-* An expiry letter says the list expired, with nothing paid and nothing owed.
-* The status reads Expired.
-* The page states nothing is paid and nothing is owed.
-* Start a submission is offered.
+* Step 1 sends one nudge with the plan's link, the second pass none.
+* Step 2 reads the day it is kept until, 30 days from its keeping.
+* Step 3 sends an email saying the list expired with nothing paid and nothing owed; the page reads Expired, says the same, and offers Start a submission.
 
-<!-- trace:case id=g10.grading-submission-plan.TC-guj rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
-### grade10-site-grading-submission-plan-US8-TC3-1: Booking an expired plan is refused
+<!-- trace:case id=g10.grading-submission-plan.TC-ro2 rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
+### g10.grading-submission-plan.US8-TC4: A plan with a drop-off booked does not expire
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
@@ -2218,25 +1270,49 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer is on the Book step at `<grade10 plan wizard url>`, the plan kept from the wizard with Finish later, and its keep moved 30 Asia/Hong_Kong days back while the review stays open, no drop-off booked.
+* A plan kept 30 days ago has a drop-off booked.
 
 **Steps:**
 
-1. Tick the collection statement.
-2. Click Book the drop-off.
+1. Let the sweep run; open the plan, and read its email.
 
 **Expected Results:**
 
-* Booking is refused by name, stating the plan has expired.
-* The collector is offered starting a submission again.
-* Book stays withdrawn.
+* It still reads Drop-off booked; no nudge and no expiry email is sent.
 
-<!-- trace:case id=g10.grading-submission-plan.TC-ro2 rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
-### grade10-site-grading-submission-plan-US8-TC4-1: A booked plan does not expire at day 30
+<!-- trace:case id=g10.grading-submission-plan.TC-guj rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
+### g10.grading-submission-plan.US8-TC3: Booking a plan that expired meanwhile is refused by name
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-08
+
+**Pre-conditions:**
+
+* A collector left Book open on a plan that has since passed 30 days unbooked.
+
+**Steps:**
+
+1. Tick the statement, and click Book the drop-off.
+
+**Expected Results:**
+
+* It is refused, saying the plan has expired, and offers starting a submission again.
+
+<!-- trace:case id=g10.grading-submission-plan.TC-ky4 rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
+### g10.grading-submission-plan.US8-TC5: A cancelled visit restarts the plan's clock and its nudge
+
+**Classification:**
+
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
@@ -2248,108 +1324,23 @@ The stack opens with PSA's five levels at the sheet's figures and no figures for
 
 **Pre-conditions:**
 
-* customer has a plan with a drop-off booked, kept 30 Asia/Hong_Kong days ago: seeded at `booked` through grading's dev seed, created 30 days back, and holds its link.
+* A plan kept on 1 March was nudged on 22 March, then booked on 25 March and its visit cancelled.
 
 **Steps:**
 
-1. Run grading's fast sweep lane.
-2. Open the plan's page from its link.
-3. Read the status and the lead.
-4. Read the last letter to the plan's email in grading's outbox.
+1. Read its emails through 24 April, and the plan's page.
 
 **Expected Results:**
 
-* The status still reads Drop-off booked, not Expired.
-* No nudge and no expiry letter is sent.
-
-<!-- trace:case id=g10.grading-submission-plan.TC-ky4 rev=1 covers=g10.grading-submission-plan.SC-e27,g10.grading-submission-plan.SC-vzu,g10.grading-submission-plan.SC-tuf,g10.grading-submission-plan.SC-5af,g10.grading-submission-plan.SC-l55 -->
-### grade10-site-grading-submission-plan-US8-TC5-1: A cancelled visit restarts the plan's clock and its nudge
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-grading-submission-plan-US-08
-
-**Pre-conditions:**
-
-* A plan kept on 1 March by <collector> with no drop-off, nudged on 22 March.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <collector> | an email only this run uses |
-
-**Steps:**
-
-1. Book a drop-off for the plan on 25 March, then cancel it.
-2. Read the letters to <collector> through 24 April, and the plan's page.
-
-**Expected Results:**
-
-* Step 2: a second nudge on 15 April, and the plan expires on 24 April, not on 31 March.
-
----
-
-## Settled
-
-Nothing yet; the fold carries what this run refused into the durable suite.
+* It is nudged again on 15 April and expires on 24 April, not on 31 March.
 
 ## Reconciliation
-
-**Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. It wrote 44 cases over US1 to US8 and four raised questions; the scenario pass wrote `grade10-site-grading-submission-plan-SC-01` to `SC-45` over fourteen ADDED requirements. Nothing verifies the bundle; this line is the run's own word for it.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| 33 of the 44 blind cases | **Joined** | each reached a scenario that states it; the rows below are the differences |
-| `US1-TC3-1` a tab per grader | **Folded in:** `grade10-site-grading-submission-plan-SC-47` | the home shows every active grader's sheet; no scenario read past the first grader |
-| `US1-TC4-1` Start a submission opens an empty wizard | **Folded in:** `grade10-site-grading-submission-plan-SC-49` | the step the home opens on was stated nowhere |
-| `US1-TC5-1` booking without a list | **Joined** to `grade10-site-grading-submission-plan-SC-01` | the walk-in visit itself is `grade10-site/grading/dropoff-booking`'s, US-05 |
-| `US2-TC3-1` an empty list holds Continue | **Folded in:** `grade10-site-grading-submission-plan-SC-52` | the requirement refused a card with no value and said nothing about a list with no card |
-| `US2-TC4-1` removing a card | **Folded in:** `grade10-site-grading-submission-plan-SC-50` | the list is editable on the design and was stated in no requirement |
-| `US3-TC4-1` a line above the ceiling named for a second submission | **Corrected against `grade10-site-grading-submission-plan-SC-07`** | at 4200000 HKD minor units the card is above every level's ceiling, so it goes to the counter; the second-submission line is the chosen level's, `grade10-site-grading-submission-plan-SC-22`. Landed as Q65. Corrected again at the walk against `grade10-site-grading-submission-plan-SC-54`, which states the line reports above the ceiling and goes to the counter, and no declared value |
-| `US3-TC6-1` an empty paste | **Folded in:** `grade10-site-grading-submission-plan-SC-53` | the paste's own guard |
-| `US4-TC2-1` exactly twenty cards leave every level open | **Folded in:** `grade10-site-grading-submission-plan-SC-55`, and the requirement's boundary corrected | "Twenty or more" closed every level at 20, against its own `grade10-site-grading-submission-plan-SC-20`, against the paste's more-than-20 rule and against the sheet's cards-a-submission column of 20. Rewritten as "More than twenty"; the blind pass found it |
-| `US4-TC6-1` the hundredth card at Bulk's cap | **Folded in:** `grade10-site-grading-submission-plan-SC-56` | the accepted edge beside `grade10-site-grading-submission-plan-SC-21`'s refused one |
-| `US5-TC1-1` what an open level reads | **Folded in:** `grade10-site-grading-submission-plan-SC-57` | the sheet's figures were stated on the home and never on the level picker |
-| `US5-TC6-1` a grader with only the example figures is selectable | **Covered by `grade10-site-grading-submission-plan-SC-06`, corrected** | Example figures are not figures supplied, so such a grader shows its levels and none of them can be picked. The case now reads that, and `decisions.md` carries the rule |
-| `US6-TC5-1` the empty state | **Folded in:** `grade10-site-grading-submission-plan-SC-46` | the requirement said the home says there is none, and no scenario read it |
-| `US7-TC6-1` booking pending, both buttons disabled | **Kept, no scenario** | the button's in-flight state, decided by the view's colocated test rather than by a requirement |
-| Raised 1, the home's above-the-top-ceiling note | **Answered, folded in:** `grade10-site-grading-submission-plan-SC-48` | Q63: the note is part of the sheet wherever it renders. Case added, `US1-TC6-1` |
-| Raised 2, a hand-added card's outcomes | **Answered, folded in:** `grade10-site-grading-submission-plan-SC-51` | Q64: one set of states however the card arrived. Case added, `US2-TC7-1` |
-| Raised 3, which ceiling the Cards step measures | **Answered, folded in:** `grade10-site-grading-submission-plan-SC-54` | Q65: the grader's top ceiling, or Bulk's where the count has closed the rest. `US3-TC4-1` corrected |
-| Raised 4, the consent and Save and book later | **Answered, folded in:** `grade10-site-grading-submission-plan-SC-58` | Q66: the statement gates booking the drop-off alone. Case added, `US7-TC7-1` |
-| `grade10-site-grading-submission-plan-SC-02` the home still reading | **Out of suite:** the home view's colocated test | presentation only; named under the header, and the design row closes on it |
-| `grade10-site-grading-submission-plan-SC-08` the wizard rail | **Case added:** `US2-TC5-1` | |
-| `grade10-site-grading-submission-plan-SC-09` contact details | **Case added:** `US2-TC6-1` | |
-| `grade10-site-grading-submission-plan-SC-12` the reference out of reach while adding by hand | **Case added:** `US2-TC8-1` | the blind pass walked the outage on the paste alone |
-| `grade10-site-grading-submission-plan-SC-17` every line counted back | **Case added:** `US3-TC8-1` | |
-| `grade10-site-grading-submission-plan-SC-23` one grader and one level | **Case added:** `US5-TC7-1` | |
-| `grade10-site-grading-submission-plan-SC-28`, `grade10-site-grading-submission-plan-SC-30` the estimate | **Case added:** `US5-TC8-1` | the blind pass read the totals on the review and never the estimate on the service step |
-| `grade10-site-grading-submission-plan-SC-29` the cover line on the estimate | **Case added:** `US5-TC9-1` | |
-| `grade10-site-grading-submission-plan-SC-36` the sheet pinned at booking | **Case added:** `US6-TC7-1` | |
-| `grade10-site-grading-submission-plan-SC-37` a sheet changed before booking | **Case added:** `US6-TC8-1` | |
-| `grade10-site-grading-submission-plan-SC-60` a USD sale read at the rate staff set | **Case added:** `US7-TC8-1` | written after the blind pass, with Q116; the reference answers in USD alone, so without the rate `US7-TC2-1` never fires |
-| `grade10-site-grading-submission-plan-SC-62` a plan kept from a ticked review | **Case added:** `US7-TC9-1` | written after the blind pass: the keep carries the review's tick, so a plan booked from the review is never asked for it again |
-| `grade10-site-grading-submission-plan-SC-61` a plan kept unticked asks for the statement | **Case added:** `US6-TC9-1` | written after the blind pass: a plan saved unticked and booked from its page was asked for nothing, so the plan now holds its tick and a booking or a join for it unticked is refused |
-| `grade10-site-grading-submission-plan-SC-63` a plan kept with no level asks for one | **Case added:** `US6-TC10-1` | written after the blind pass: a plan kept before a level was picked was offered a drop-off its booking could only refuse, so its page now asks for the level through the list's edit, and a booking or a join sent for it is refused before the diary is asked |
-| `grade10-site-grading-submission-plan-SC-64` | Case added at the acceptance review | `grade10-site-grading-submission-plan-US8-TC5-1`: the clock restarts on a cancelled or missed visit and nudges again, decided by the product owner, 2026-10-01 |
-| `US4-TC4-1` | **Corrected against `grade10-site-grading-submission-plan-SC-22`**, at the walk | the declared value is read where the build names it, on the card's own row in Your list; the paste row names the card alone |
-| `US8-TC3-1` | **Corrected against `grade10-site-grading-submission-plan-SC-45` and shared-ui-grading-submission-SC-79**, at the walk | the scenario offers starting again without saying how, and the review stays; how a page offers it is the designer's to settle |
 
 ### Manual
 
 | Manual | Why |
 | --- | --- |
-| `US6-TC1-1` the link mailed by the sweep | the mail is read in an inbox; a script drives the plan being kept and no further |
-| `US8-TC1-1` the nudge at day 21 | the day is moved and the nudge is read in an inbox |
-| `US8-TC2-1` the expiry at day 30 | the same clock, and the words on the expired page |
-| `US6-TC7-1`, `US6-TC8-1` a changed fee sheet | a console settings write sits between the two reads |
-| `US2-TC1-1` the reference sales read as a reference | a judgement of the words beside the card, not an assertion |
+| `g10.grading-submission-plan.US6-TC1` | the mail is read in an inbox; a script drives the plan being kept and no further |
+| `g10.grading-submission-plan.US8-TC1` | the day is moved, and the nudge and the expired page are read |
+| `g10.grading-submission-plan.US6-TC7` | a console settings write sits between the two reads |
+| `g10.grading-submission-plan.US2-TC1` | a judgement of the words beside the card, not an assertion |

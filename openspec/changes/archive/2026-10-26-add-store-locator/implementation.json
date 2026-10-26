@@ -1,0 +1,98 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "ac171891197fde9b35a643856881799839b414677de83ca53f7f36a26dd704ba"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "4a5d85dfc7eff598d3e53d16505f41de9efbfecc",
+    "capturedAt": "2026-10-26T04:31:21.496Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-store-locator/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/carried-surfaces/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/carried-surfaces/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Each waiting product waits for its own launch",
+          "Requirement: Nothing in a build names a surface it does not carry",
+          "Requirement: Where a product is carried it behaves as it is specified to"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/carried-surfaces/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Free pick-up opens Store Locator"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/store-locator/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/store-locator/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Chrome reaches Store Locator",
+          "Requirement: Store Locator answers with Location & Hours",
+          "Requirement: Store Locator stays usable at a narrow width",
+          "Requirement: The map opens Google Maps"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/store-locator/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-locator/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-locator/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: StoreLocator shows supplied Location & Hours",
+          "Requirement: The store locator surface exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-locator/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "07af8707a57be338f8a0856545ca5d76b6c2c285",
+      "components": [
+        "web"
+      ]
+    }
+  ]
+}

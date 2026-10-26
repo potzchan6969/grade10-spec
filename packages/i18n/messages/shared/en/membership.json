@@ -34,7 +34,8 @@
     "notAMember": "You have not joined the programme yet.",
     "join": "Join the programme",
     "coupons": "Your coupons",
-    "noCoupons": "You hold no coupons."
+    "noCoupons": "You hold no coupons.",
+    "pointHistory": "Point History"
   },
   "collectWithin": "Collect in store within {days, plural, one {# day} other {# days}}",
   "outcome": {
@@ -65,7 +66,37 @@
     "minimumSpend": "Spend {amount} or more",
     "onlyOnline": "Online store only",
     "onlyInStore": "In store only",
-    "redeemFailed": "Couldn’t redeem this reward. Try again."
+    "redeemFailed": "Couldn’t redeem this reward. Try again.",
+    "until": "Until {date}",
+    "useAtOnline": "Online store",
+    "useAtInStore": "In store",
+    "useAtAnywhere": "Online or in store",
+    "validForDays": "{days, plural, one {# day} other {# days}} from redemption"
+  },
+  "checkout": {
+    "useAt": "Use at",
+    "validFor": "Valid for",
+    "pointBalance": "Point balance",
+    "pointsNeeded": "Need {points} more pts",
+    "redeemFor": "Redeem for {points} pts",
+    "cancel": "Cancel",
+    "redeemedCouponTitle": "Added to your coupons",
+    "redeemedItemTitle": "Ready to collect",
+    "done": "Done",
+    "viewCoupons": "View coupons",
+    "summary": "{points} pts redeemed · {balance} pts left",
+    "useBy": "Use by {date}",
+    "collectBy": "Collect by {date}",
+    "collectNote": "Collect in store",
+    "useNow": "Use now",
+    "qrAlt": "Show this code to store staff",
+    "qrCaption": "Staff scan this at the counter",
+    "soldOutTitle": "This reward just ran out",
+    "soldOutBody": "No points were taken. Pick another reward.",
+    "retryTitle": "Couldn’t redeem just now",
+    "retryBody": "No points were taken. Check your connection and try again.",
+    "shortTitle": "Not enough points",
+    "shortBody": "You need {points} more pts to redeem this reward. No points were taken."
   },
   "quantityRefusal": {
     "wholeUnits": "{name} is redeemed in whole units.",
@@ -96,6 +127,19 @@
     "in_store": "In store",
     "internal": "Membership programme"
   },
+  "pointHistory": {
+    "label": "Point history",
+    "earned": "Earned",
+    "used": "Used",
+    "pending": "Pending",
+    "points": "pts",
+    "all": "All",
+    "allEmpty": "No entries yet.",
+    "earnedEmpty": "Nothing earned yet.",
+    "usedEmpty": "Nothing used yet.",
+    "pendingEmpty": "Nothing on the way.",
+    "pendingBody": "Points land when order completes."
+  },
   "join": {
     "title": "Join the programme",
     "lead": "Earn points on everything you buy, and spend them in store or at checkout.",
@@ -119,6 +163,7 @@
     "maskedCode": "••••••",
     "spent": "Used",
     "void": "Cancelled",
+    "scanTitle": "Use Coupon",
     "expired": "Expired",
     "validUntil": "Valid until {date}",
     "noExpiry": "No expiry",
@@ -132,9 +177,9 @@
   "present": {
     "action": "Use at the counter",
     "heading": "Show this at the counter",
-    "qrAlt": "Promo code for this sale, as a scannable square",
+    "qrAlt": "This coupon, as a scannable square",
     "code": "Or read this out",
-    "instruction": "Staff scan this to put the coupon on the sale. It is for this sale only.",
+    "instruction": "Staff scan this to put the coupon on your sale. It works once.",
     "done": "Done",
     "noCounter": "No counter has your card open right now.",
     "notAttached": "Ask staff to add you to the sale first.",

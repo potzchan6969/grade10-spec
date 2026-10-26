@@ -12,4 +12,4 @@ The order already runs (`packages/grade10-store/backend/src/services/catalog/bro
 
 ## 3. The walk (grade10)
 
-- [ ] 3.1 Order the listing by each order on the isolated stack's fixture catalogue with one card sold out, and read the cards for sale first - blocked: the isolated e2e stack needs Docker, which this environment does not have; the blind feature suite for `grade10-site/store/product-listing` is owed by the planning pass, not written here
+- [ ] 3.1 Order the listing by each order on the isolated stack's fixture catalogue with one card sold out, and read the cards for sale first - blocked: the isolated e2e stack needs Docker, which this environment does not have; the blind feature suite for `grade10-site/store/product-listing` is owed by the planning pass, not written here - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived

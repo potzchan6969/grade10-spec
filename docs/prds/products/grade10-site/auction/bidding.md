@@ -40,7 +40,7 @@ Auction bids use USD. Winners choose USD or HKD for settlement.
 | Chosen by | Fixed for every lot | The winner, once, at [Order Setup](/p/grade10-site/auction/post-bidding#order-setup) |
 | What it is for | The unit of every lot, bid and maximum | What the invoice, order total, fees and letters are paid in |
 
-- 🚧 **One unit for every lot** — a bid, a maximum, a quick bid, the ceiling
+- **One unit for every lot** — a bid, a maximum, a quick bid, the ceiling
   and the increment are all USD; no lot is priced in another currency
 - **Settlement currency** — a USD fact becomes an HKD fact only at
   settlement, at one fixed rate — [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
@@ -168,11 +168,11 @@ $10, where Goldin names none.
 | A bidder offers more | $100 | $110 | $120 is accepted as $120; nothing rounds it to a multiple |
 | Lot at the ceiling | $10,000,000 | — | Every further bid is refused |
 
-- 🚧 **One configured schedule** — the USD tiers above apply to every lot, to
+- **One configured schedule** — the USD tiers above apply to every lot, to
   the house's maximum and to a bid in extended bidding as to any other, and a
   change to their values reaches the next bid on every lot, open ones
   included; a bid already standing keeps its amount
-- 🚧 **Whole dollars only** — a bid, a maximum, a starting price, every tier
+- **Whole dollars only** — a bid, a maximum, a starting price, every tier
   bound and every increment are whole dollars; a bid with cents is refused and
   nothing moves, and a starting price an operator or a consignment sets with
   cents is not saved. A price already stored with cents is left as it is
@@ -183,7 +183,7 @@ $10, where Goldin names none.
 - **Opening price** — the first bid must reach the starting price, or the
   lowest increment when the lot starts at 0, and a lone bidder stands there;
   one increment above the current bid applies from the second bid
-- 🚧 **Opening price of a stored price with cents** - a listing already stored
+- **Opening price of a stored price with cents** - a listing already stored
   with a starting price that has cents opens at the next whole dollar at or
   above it; the page still shows the starting price
 
@@ -195,18 +195,18 @@ any maximum.
 
 | Refused when | What the bid form says |
 | --- | --- |
-| Below the next minimum the page shows | Nothing is sent: the custom field says **Min:** the minimum, and the bid action stays disabled |
-| Below a next minimum that moved after the page showed it | **Minimum bid is** the minimum |
+| Below the next minimum the page shows | Nothing is sent: the custom field says `auctionListing.minAmount` ("Min: {amount}"), and the bid action stays disabled |
+| Below a next minimum that moved after the page showed it | `auctionListing.minimumBidIs` ("Minimum bid is…") |
 | Above the USD ceiling | No maximum-bid message; custom entry already stops or corrects the amount at the ceiling |
-| Not above the bidder's own maximum | **Your new maximum must be higher than your current one.** |
-| At or above the bar without a verified identity | **Bids this high need a verified identity. Verify from your account, then bid again.** and a **Verify** link |
-| Grade10 asked the account to verify, and it has not | **We asked you to verify before you bid again.** and a **Verify** link |
-| No linked card | **Link a card to bid.** |
-| Another card after the first accepted bid on the lot | **This listing's card is locked after the first accepted bid.** |
-| Bidding suspended on the account | **Bidding is suspended on this account. Contact Us to resolve it.** |
-| Account banned from bidding | **This account cannot bid.** |
-| A typed amount that is not valid, caught before the bid is sent | **Enter a valid amount.** |
-| Before the start, after the close, or any other refusal | **Your bid did not go through.** |
+| Not above the bidder's own maximum | `auctionListing.maximumNotRaised` ("Your new maximum…") |
+| At or above the bar without a verified identity | `auctionListing.identityRequired` ("Bids this high…") and a `auctionListing.verifyAction` ("Verify") link |
+| Grade10 asked the account to verify, and it has not | `auctionListing.identityRequested` ("We asked you…") and a `auctionListing.verifyAction` ("Verify") link |
+| No linked card | `auctionListing.linkACardToBid` ("Link a card to bid") |
+| Another card after the first accepted bid on the lot | `auctionListing.enrollmentLocked` ("This listing's card…") |
+| Bidding suspended on the account | `auctionListing.bidderSuspended` ("Bidding is suspended…") |
+| Account banned from bidding | `auctionListing.bidderBanned` ("This account cannot bid.") |
+| A typed amount that is not valid, caught before the bid is sent | `auctionListing.invalidAmount` ("Enter a valid amount.") |
+| Before the start, after the close, or any other refusal | `auctionListing.bidDidNotGoThrough` ("Your bid did…") |
 
 - **Kept for operators** — each refusal is one operational log line naming the
   lot and the reason; the bidder's record never shows it
@@ -323,10 +323,11 @@ account's bids address; signed out, sign-in runs first.
 - **One listing's story** — every maximum set or raised, interleaved with the public movements that changed the
   collector's standing; they read as You and every rival by the lot's
   pseudonym, and no rival's maximum ever appears
-- 🚧 **Highest bid on top** — a listing's story follows bid amount, the higher
+- **Highest bid on top** — a listing's story follows bid amount, the higher
   amount above the lower. When one bid and the automatic bid it set off share a
   moment, the automatic response reads above the bid that caused it; a maximum
-  set or raised reads below the bid it causes
+  set or raised reads below the bid it causes; a raise that causes no bid
+  reads by its time, newer above older
 - **Your bidding, on the lot** — two tabs, Bid placed, the bids Grade10 placed
   for them, then Your maximums; amount and time only, owner only
 - **Never edited** — nothing deletes or hides an entry, because the record is
@@ -453,7 +454,7 @@ the account's registered address, and the letters about a won lot are
   last warnings before a close are Bidding closes in 24 hours, then Extended
   bidding has started if the lot extends
 - **Footer** — every letter says email alerts are on for this auction, and
-  **Manage alerts** opens My Auctions to mute that auction; never an
+  its alerts link opens My Auctions to mute that auction; never an
   unauthenticated one-click stop, never unwatch
 - **Never a false statement** — a called-off lot sends nothing further, and a
   letter that would state something no longer true is not sent late
@@ -539,11 +540,11 @@ surface.
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; every row tied on amount with a row above it shows an Info tip in the amount tone (when maximums match, the earlier one leads), at the current price and at any older tie lower down. Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Public Recent bids avatar | Decided | Each public Recent Bids avatar shows one letter from the bidder email local part (first A-Z or 0-9, uppercased; `B` when none or the email is erased). Readable label stays Bidder N. Full email and name stay private. Separate public field from the label. | Product (@mason5991) |
 | Hidden cap, raise only | Decided | A leading maximum is not public; a collector's can go up but never down. | Product |
-| Increments | 🚧 In flight | One USD schedule for every lot, selected from the amount being beaten; a threshold includes its lower bound. The values are configuration in `packages/grade10-auction/contracts/src/bidIncrementSchedule.ts`, retuned by pull request and shown in the manual table. Bids, maximums, starting prices, tier bounds and increments are whole dollars, and a bid may exceed the minimum. No listing-level override; collectors see the next minimum, not the schedule. A stored price with cents is left alone and opens at the next whole dollar. Replaces "need not be a multiple". Decided by the product manager. | Product (@htonyl) |
+| Increments | Decided | One USD schedule for every lot, selected from the amount being beaten; a threshold includes its lower bound. The values are configuration in `packages/grade10-auction/contracts/src/bidIncrementSchedule.ts`, retuned by pull request and shown in the manual table. Bids, maximums, starting prices, tier bounds and increments are whole dollars, and a bid may exceed the minimum. No listing-level override; collectors see the next minimum, not the schedule. A stored price with cents is left alone and opens at the next whole dollar. Replaces "need not be a multiple". Decided by the product manager. | Product (@htonyl) |
 | Bid ceiling | Decided | USD 10,000,000 on every lot, refused above it. The custom field uses that same ceiling. | Product |
 | Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
 | If card holds return | Decided | The line stays at acceptance: a bid exists only once every precondition, a card authorization included, has succeeded and been judged under the lot's lock. The authorization is taken outside the lock, for the maximum, keyed to the attempt, and released if the attempt is refused; a later failure or expiry never revokes an accepted bid and is the winner's settlement at the close. Accepting first and revoking later moves the price down, swaps the leader and unwinds automatic bids, extensions and closes; eBay, Catawiki, Heritage, real-time bidding and exchanges all draw the line at acceptance. | Product and engineering |
-| Story order | 🚧 In flight | A listing's story on My bids follows bid amount, higher on top. Within one moment the challenger's bid is older than the leader's automatic response, so it reads below the response, and an owner's maximum set reads below the bid it causes. Chronology by clock (the challenger first) was ruled out: at one moment the clock cannot tell the two apart, and a collector reads the price ladder, not the order of arrival. The admin Bids tab keeps its own order. | Product (@htonyl) |
+| Story order | Decided | A listing's story on My bids follows bid amount, higher on top. Within one moment the challenger's bid is older than the leader's automatic response, so it reads below the response, and an owner's maximum set reads below the bid it causes. Chronology by clock (the challenger first) was ruled out: at one moment the clock cannot tell the two apart, and a collector reads the price ladder, not the order of arrival. The admin Bids tab keeps its own order. | Product (@htonyl) |
 | A refused bid is not a bid | Decided | No My Auctions row, no Bidding History entry and no standing moves. The form explains refusals except an amount above the USD ceiling, which shows no maximum-bid message. | Product |
 | Below the minimum on the page | Decided | The bid action stays disabled and the custom field says Min: the minimum; nothing is sent. The server's Minimum bid is refusal answers only a minimum that moved after the page showed it. Enabling the action to let the server refuse was ruled out: it costs a round trip for a bid the page already knows is too low ([#1007](https://github.com/9gag/grade10/issues/1007)). | Product |
 | Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the USD ceiling; never in the bidder's record. | Product and engineering |

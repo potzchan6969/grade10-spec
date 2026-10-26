@@ -1,0 +1,84 @@
+import { Card } from "@grade10/design-system/components/display/card";
+import { List, ListItem } from "@grade10/design-system/components/display/list";
+import { Text } from "@grade10/design-system/components/display/text";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
+import { LedgerRow } from "./ledger-row";
+import type { LedgerEntry } from "./types";
+
+/** The card's own header — the pending variant's title and rule. */
+type PointHistoryCardHeader = {
+  title: string;
+  description?: string;
+};
+
+type PointHistoryCardProps = {
+  /** The card's entries, newest first. */
+  entries: readonly LedgerEntry[];
+  /** The pending variant: the card wears the brand tint. */
+  pending?: boolean;
+  /** A header inside the card — the pending card's title and rule. */
+  header?: PointHistoryCardHeader;
+  /** The unit after each delta — "pts". */
+  points?: string;
+  /** The group's label, already formatted — "October 2026". Absent, no
+   * heading draws and `label` names the list. */
+  month?: string;
+  /** Accessible name of the list when no month or header names it. */
+  label: string;
+  className?: string;
+};
+
+/** One card of ledger rows — a month's settled entries, or what is still on
+ * the way under its own header on the pending variant. */
+function PointHistoryCard({
+  entries,
+  pending = false,
+  header,
+  points,
+  month,
+  label,
+  className,
+}: PointHistoryCardProps) {
+  return (
+    <VStack className={className} data-slot="point-history-card" gap="sm">
+      {month ? (
+        <Text size="sm" tone="secondary" weight="medium">
+          {month}
+        </Text>
+      ) : null}
+      <Card
+        className={cn("gap-0", pending && "border-primary/20 bg-primary/5")}
+        padding={false}
+      >
+        {header ? (
+          <div className="flex flex-col gap-0 px-(--card-spacing) pb-2 pt-4 [--card-spacing:--spacing(4)]">
+            <Text weight="medium">{header.title}</Text>
+            {header.description ? (
+              <Text size="sm" tone="secondary">
+                {header.description}
+              </Text>
+            ) : null}
+          </div>
+        ) : null}
+        <List
+          aria-label={header?.title ?? month ?? label}
+          className="px-(--card-spacing) [--card-spacing:--spacing(4)]"
+        >
+          {entries.map((entry, index) => (
+            <ListItem
+              className="gap-3 px-0 py-3 sm:gap-4"
+              divider={index < entries.length - 1}
+              key={entry.id}
+            >
+              <LedgerRow entry={entry} points={points} />
+            </ListItem>
+          ))}
+        </List>
+      </Card>
+    </VStack>
+  );
+}
+
+export type { PointHistoryCardHeader, PointHistoryCardProps };
+export { PointHistoryCard };

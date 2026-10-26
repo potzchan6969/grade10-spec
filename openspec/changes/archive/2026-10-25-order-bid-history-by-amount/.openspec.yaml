@@ -1,0 +1,13 @@
+schema: grade10-planning
+created: 2026-10-24
+hands:
+  dev: "@htonyl"
+  pm: "@htonyl"
+reviewed:
+  proposal: a932fc3c
+  decisions: 690a8453
+  user-journeys: 73bdc422
+  tech-design: e5ee50f8
+  specs: dde84430
+  test-cases: e5ee50f8
+  tasks: ddaa5fbe

@@ -46,7 +46,7 @@ Needs group 2 and group 3's port.
 
 Needs every group above.
 
-- [ ] 5.1 Deploy to staging through the ordinary dispatch, read the listing from two locations cold and warm, and record the answer times on the pull request (`SC-48`); with a product edited in the staging shop's admin, record seconds from the shop's read to the listing (`SC-49`, `SC-51`) — blocked: needs a staging deploy and the staging shop's admin
+- [ ] 5.1 Deploy to staging through the ordinary dispatch, read the listing from two locations cold and warm, and record the answer times on the pull request (`SC-48`); with a product edited in the staging shop's admin, record seconds from the shop's read to the listing (`SC-49`, `SC-51`) — blocked: needs a staging deploy and the staging shop's admin - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 - [x] 5.2 Add `apps/frontend/grade10/e2e/tests/store/catalog-keeper.spec.ts`: replay `products/delete` for a fixture product through `POST /dev/webhooks/shopify` and assert the product leaves the listing within 10 s, then replay `products/update` for it and assert it returns; runs under `pnpm run test:e2e`
 - [x] 5.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, `pnpm run test:e2e`
 
@@ -54,5 +54,5 @@ Needs every group above.
 
 Needs group 5.
 
-- [ ] 6.1 Write the staging figures into `docs/references/store-catalogue-index.md` and clear the ❓ measurement rows there and on `docs/prds/products/grade10-site/store/product-listing.md` — blocked: waits on 5.1's staging figures
+- [ ] 6.1 Write the staging figures into `docs/references/store-catalogue-index.md` and clear the ❓ measurement rows there and on `docs/prds/products/grade10-site/store/product-listing.md` — blocked: waits on 5.1's staging figures - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 6.2 Verify: `pnpm check:manual` — blocked: with 6.1

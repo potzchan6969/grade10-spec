@@ -1,7 +1,7 @@
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { SiteHeader, StoreLocator } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, waitFor, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { STORE_LOCATOR_HREF } from "../../workbench-story-nav";
 import {
@@ -57,15 +57,22 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    /* The block's sections fade in once on first paint. */
-    await waitFor(() =>
-      expect(
-        canvas.getByRole("heading", {
-          level: 1,
-          name: STORE_LOCATOR_COPY.heading,
-        }),
-      ).toBeVisible(),
+    await Promise.all(
+      canvasElement
+        .getAnimations({ subtree: true })
+        .filter(
+          (animation) =>
+            animation instanceof CSSAnimation &&
+            animation.animationName === "enter",
+        )
+        .map((animation) => animation.finished.catch(() => undefined)),
     );
+    expect(
+      canvas.getByRole("heading", {
+        level: 1,
+        name: STORE_LOCATOR_COPY.heading,
+      }),
+    ).toBeVisible();
     expect(canvas.getByText(STORE_LOCATOR_STORE.name)).toBeVisible();
     expect(canvas.getByText(STORE_LOCATOR_STORE.addressLines[0])).toBeVisible();
     expect(

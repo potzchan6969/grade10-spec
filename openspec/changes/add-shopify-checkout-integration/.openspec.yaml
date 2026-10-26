@@ -12,3 +12,4 @@ reviewed:
   ui-design: a3b270cf
   tech-design: a3b270cf
   tasks: 1b8d4823
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 5.6, 5.7, 13.3; CI checks are no longer needed for 13.1, 16.1, 16.3"

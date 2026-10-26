@@ -24,7 +24,7 @@ so redefining the reward never rewrites a coupon a member already holds —
 | What it takes off | What that definition says |
 | Uses | **One** |
 | Who | The member who redeemed it |
-| Channels | The selling channels the definition names, or online alone for a scope the till cannot match, whatever channels it names - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) |
+| Channels | The selling channels the definition names, online alone for a scope the till cannot match, and the till alone for a gift, whatever channels it names - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types) |
 | Runs from | The redemption, for the whole days the reward states |
 | Expiry | Read off the clock, never written down |
 
@@ -41,6 +41,8 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 
 - **Ordered for the next spend** — Available reads nearest expiry first;
   Used & Expired reads newest first
+- 🚧 **Running out reads louder** — an available coupon inside its last
+  14 days draws its Use by line emphasised
 - 🚧 **Online-only is never a QR** — a coupon the till cannot match names
   its scope and carries no Use now, so no member holds out a code the sale
   refuses
@@ -50,18 +52,25 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
   scan surface's open and close so a consumer could refresh the moment the
   member pockets their phone; whether the coupon and reward lists keep it,
   or the return refresh covers it, is unconfirmed — Engineering
-- ❓ **The scan token's life** — presenting mints a fresh QR on each Use
-  now; whether it also rotates while held out, as the member pass does, is
-  unconfirmed — Engineering
+- **The scan token's life** — each Use now mints a fresh presentation of
+  the member card naming the coupon: it lives ten minutes, one scan consumes
+  it, and while held out it renews itself a minute before it runs out and
+  when the screen wakes, so whatever is on screen scans; a coupon that can
+  no longer be shown puts the square away. It is the same on a sale: a scan
+  over the member's own sale opens a new session that keeps the sale and its
+  points, and chooses the coupon for staff to apply
 - ❓ **Page or section** — whether the wallet stays its own Coupons page or
   folds into the Membership page as a section; UI forthcoming — Design
+- 🚧 **Points still buy more** — under the Available list sits a Rewards
+  upsell ("Want more coupons?"); where its CTA lands waits on the
+  Membership design, so the link target is ❓ — Design
 
 ## Applying one
 
 | Channel | How it lands |
 | --- | --- |
-| Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
-| At the till | For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
+| Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it. Never a gift |
+| At the till | For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it - before a sale, that one scan also identifies the member; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
 
 - **Answered before chosen** — the drawer answers every coupon against the
   cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
@@ -70,6 +79,17 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
   [Discounts](/p/grade10-site/store/discounts)
 - **The newest claim is the only live one** — choosing a coupon again takes
   it off every earlier sale first
+- **A gift keeps its minimum to the end** — staff ringing the sale below a
+  gift's minimum spend after Apply take its line back off, the coupon goes
+  back to the wallet and staff are told
+- ❓ **A gift on a sale locked for tender** — whether staff are told to
+  cancel the tender and remove a gift whose sale fell below its minimum
+  while locked, or the sale is let through, is unconfirmed — Product
+- ❓ **A gift with no membership to reach** — whether a sale rung while the
+  till cannot reach membership refuses the gift so the member comes back,
+  or staff may key it by hand, is unconfirmed — Product
+- ❓ **A returned sale's gift** — whether returning the goods takes the gift
+  back, or the member keeps it, is unconfirmed — Product
 - **A sale that ends gives it back** — a counter sale nobody paid releases
   its coupon when a newer promise retires it, or an hour after its last plan,
   not the next day
@@ -122,7 +142,7 @@ The paid order stamps it used. The earlier cart was cancelled with its code, so 
 
 :::flow{title="At the till" case="Walked away" diagram="assets/diagrams/coupon-walked-away.svg"}
 ## *Shopkeeper* — **Applies it at the till**
-From the member's panel, or the member opens it on their phone and the till scans it.
+From the member's panel, or the member opens it on their phone and the till scans it; before a sale, that scan also identifies the member.
 
 ## *Member* — **Leaves without paying**
 The shop owns that cart, so the sale is never cancelled.
@@ -170,8 +190,8 @@ The member reads which refusal answered; no basket quietly loses a coupon.
 | Not held | Not a coupon this member holds; a code bound to another member is answered as one nobody minted |
 | Not standing | Already spent, or otherwise not available |
 | Expired | Its own validity passed |
-| Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; presented from the member's phone it reads `This coupon cannot be used on this sale.` |
-| 🚧 Online only by scope | A coupon scoped to named products or a catalog filter, presented at the till from the member's phone, whatever channels it names; it reads as Wrong channel does |
+| Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; on the member's phone it carries no Use now, and a presentation that reaches the store anyway reads `This coupon cannot be used on this sale.` |
+| Online only by scope | A coupon scoped to named products or a catalog filter, whatever channels it names; at the till it reads as Wrong channel does |
 | Not eligible | The definition's eligibility is not met |
 | An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
 | Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
@@ -215,6 +235,9 @@ the store's instrument, not the programme's.
   one member it belongs to — [Discounts](/p/grade10-site/store/discounts)
 - **Listed for its member** — with their reward coupons in the cart drawer
   and at `/checkout`, answered against the cart before it is picked
+- **A store gift is the till's too** — a gift the store mints is refused
+  online as the wrong channel, as a reward's is, and goes on at the counter
+  from the member's panel or a typed code
 - **Never a reward** — no reward defines an order coupon; those are the
   store's to mint — [Discounts](/p/grade10-site/store/discounts)
 

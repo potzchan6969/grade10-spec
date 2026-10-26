@@ -10,3 +10,4 @@ reviewed:
   decisions: "57017523"
   tech-design: 43c2d9d8
   tasks: 7ba92330
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.1"

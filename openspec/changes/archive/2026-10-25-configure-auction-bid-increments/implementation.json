@@ -1,0 +1,76 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "320f595b0727e2cc657fa3e3004a524150076ab8f1008de385b1ef4ebb3407e4"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "f74b8bc2bb7ddc52cf81c6e2da8c76dccb75853f",
+    "capturedAt": "2026-10-23T01:42:46.246Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Prices and window are writable before publish"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Every lot is bid in USD and no other currency stays",
+          "Requirement: Grade10 owns the supported-currency schedules",
+          "Requirement: The minimum uses the amount being beaten"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "85696f6f209b7e93f3eacc5b4573d3e841a73fec",
+      "components": [
+        "admin",
+        "auction-service",
+        "web"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "htonyl",
+    "reviewedAt": "2026-10-25T04:23:19.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite was regenerated under tcs-rules r7 and folded into the feature: 172 cases became 62, unit and API cases were deleted or moved to the out-of-suite list, and statuses and revs moved. The cents refusal cases US1-TC7 and US3-TC31 (SC-221, SC-222) were merged into g10adm.auction-listing.TC-qk8 rev 3. No requirement of the admin listing contract changed; spec.md is unchanged in scope."
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite was regenerated from scratch under tcs-rules r7: 31 cases became 12, API, unit and schedule-change cases were removed or listed out of suite, case ids were reissued, and the cases for the whole-dollar USD schedule were restyled. The requirements stay in spec.md, whose scoped anchors have no difference. The kept cases (TC-2ed, TC-9do, TC-0lh, TC-qui, TC-d1v, TC-jbt, TC-xdy, TC-d9d, TC-gti, TC-dlw, TC-y0l, TC-pn8) test the same bid-increment behaviour."
+      }
+    ]
+  }
+}

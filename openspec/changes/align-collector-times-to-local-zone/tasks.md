@@ -270,7 +270,7 @@ Uses draft `feature-tcs.md` as its planning input. Groups 1 to 4 landed first.
       `shared-ui-auction-listing-SC-55`, `shared-ui-auction-listing-SC-57`,
       `shared-ui-invoice-and-receipt-pdf-SC-43`,
       `shared-ui-invoice-and-receipt-pdf-SC-54` and
-      `shared-ui-invoice-and-receipt-pdf-SC-55`. — blocked: the walk reads Storybook, deployed pages and mail clients in three viewer zones; the E2E stack needs Docker and Playwright browsers, unavailable to this run. The unit and page suites of groups 1 to 4 pass
+      `shared-ui-invoice-and-receipt-pdf-SC-55`. — blocked: the walk reads Storybook, deployed pages and mail clients in three viewer zones; the E2E stack needs Docker and Playwright browsers, unavailable to this run. The unit and page suites of groups 1 to 4 pass - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 5.2 Flip the cases the walks decide with
       `pnpm run tcs:automated <case...> --decided-by grade10:<walk path>`, in
       the walks' own commit; the cases that stay manual remain draft and are

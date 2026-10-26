@@ -76,7 +76,7 @@ type Story = StoryObj<typeof meta>;
 
 function orderDetailsRevealed(canvasElement: HTMLElement): boolean {
   const root = canvasElement.querySelector('[data-slot="order-details"]');
-  if (root?.getAttribute("data-revealed") !== "true") return false;
+  if (!root) return false;
 
   const header = canvasElement.querySelector(
     '[data-slot="order-details-header"]',

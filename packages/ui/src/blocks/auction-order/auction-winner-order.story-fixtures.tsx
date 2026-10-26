@@ -142,9 +142,16 @@ export const BASE_ARGS: AuctionWinnerOrderProps = {
 export async function settled(canvasElement: HTMLElement) {
   await waitFor(() =>
     expect(
-      canvasElement
-        .querySelector('[data-slot="winner-order"]')
-        ?.getAttribute("data-revealed"),
-    ).toBe("true"),
+      canvasElement.querySelector('[data-slot="winner-order"]'),
+    ).not.toBeNull(),
+  );
+  await Promise.all(
+    canvasElement
+      .getAnimations({ subtree: true })
+      .filter(
+        (animation) =>
+          animation.effect?.getComputedTiming().iterations !== Infinity,
+      )
+      .map((animation) => animation.finished.catch(() => undefined)),
   );
 }

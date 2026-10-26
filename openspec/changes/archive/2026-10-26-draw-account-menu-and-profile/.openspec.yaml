@@ -1,0 +1,11 @@
+schema: grade10-planning
+created: 2026-10-07
+hands:
+  pm: "@ecchochan"
+reviewed:
+  proposal: 51a20e9d
+  decisions: a336a539
+  user-journeys: ac397561
+  specs: 4a7cb479
+  tasks: 60fd004b
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 4.1"

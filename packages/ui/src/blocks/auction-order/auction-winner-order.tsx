@@ -43,12 +43,8 @@ import {
 } from "react";
 import { PaymentMethodCard } from "../payment-method/payment-method-card";
 import {
-  REVEAL_HIDDEN_CLASS,
-  REVEAL_REDUCED_MOTION_CLASS,
-  REVEAL_TRANSITION_CLASS,
-  REVEAL_VISIBLE_CLASS,
-  revealStaggerDelayMs,
-  useFirstPaintReveal,
+  REVEAL_ENTRANCE_CLASS,
+  revealEntranceDelayMs,
 } from "../shared/use-first-paint-reveal";
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type {
@@ -85,25 +81,17 @@ function stepStates(
 function RevealGroup({
   children,
   className,
-  revealed,
   staggerIndex,
 }: {
   children: ReactNode;
   className?: string;
-  revealed: boolean;
   staggerIndex: number;
 }) {
   return (
     <div
-      className={cn(
-        REVEAL_HIDDEN_CLASS,
-        REVEAL_TRANSITION_CLASS,
-        REVEAL_REDUCED_MOTION_CLASS,
-        revealed && REVEAL_VISIBLE_CLASS,
-        className,
-      )}
+      className={cn(REVEAL_ENTRANCE_CLASS, className)}
       data-slot="winner-order-reveal"
-      style={{ transitionDelay: revealStaggerDelayMs(staggerIndex, revealed) }}
+      style={{ animationDelay: revealEntranceDelayMs(staggerIndex) }}
     >
       {children}
     </div>
@@ -928,7 +916,6 @@ function AuctionWinnerOrder({
   billing,
   bankDetails,
 }: AuctionWinnerOrderProps) {
-  const revealed = useFirstPaintReveal();
   const mainStaggerIndex = progress ? 1 : 0;
   const lotStaggerIndex = progress ? 2 : 1;
   const sidebarStaggerIndex = progress ? 3 : 2;
@@ -936,12 +923,11 @@ function AuctionWinnerOrder({
   return (
     <VStack
       className="w-full gap-8 sm:gap-12"
-      data-revealed={revealed || undefined}
       data-slot="winner-order"
       gap="none"
       hAlign="stretch"
     >
-      <RevealGroup revealed={revealed} staggerIndex={0}>
+      <RevealGroup staggerIndex={0}>
         <HStack className="w-full" gap="sm" vAlign="center">
           <h1 className="text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
             {title}
@@ -956,11 +942,7 @@ function AuctionWinnerOrder({
         {/* The note sits under progress on a phone and under the lot from lg. */}
         <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
           {progress ? (
-            <RevealGroup
-              className="order-1"
-              revealed={revealed}
-              staggerIndex={mainStaggerIndex}
-            >
+            <RevealGroup className="order-1" staggerIndex={mainStaggerIndex}>
               <ProgressCard copy={copy} progress={progress} />
             </RevealGroup>
           ) : null}
@@ -968,7 +950,6 @@ function AuctionWinnerOrder({
           {note ? (
             <RevealGroup
               className="order-2 w-full lg:order-3"
-              revealed={revealed}
               staggerIndex={progress ? mainStaggerIndex + 1 : lotStaggerIndex}
             >
               <Alert
@@ -990,7 +971,6 @@ function AuctionWinnerOrder({
               "w-full",
               progress && note ? "order-3 lg:order-2" : undefined,
             )}
-            revealed={revealed}
             staggerIndex={lotStaggerIndex}
           >
             <VStack className="w-full" gap="lg" hAlign="stretch">
@@ -1004,7 +984,6 @@ function AuctionWinnerOrder({
 
         <RevealGroup
           className="min-w-0 w-full"
-          revealed={revealed}
           staggerIndex={sidebarStaggerIndex}
         >
           <OrderSidebar

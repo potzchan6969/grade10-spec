@@ -15,3 +15,4 @@ reviewed:
   ui-design: 4c56200e
   tech-design: 4c56200e
   tasks: 0dfa5fdb
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.3"

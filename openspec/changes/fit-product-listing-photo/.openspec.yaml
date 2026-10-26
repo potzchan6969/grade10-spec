@@ -8,3 +8,4 @@ reviewed:
   ui-design: b4c156aa
   tech-design: b4c156aa
   tasks: e829a774
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.2"

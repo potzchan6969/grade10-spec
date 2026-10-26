@@ -13,3 +13,4 @@ reviewed:
   test-cases: 0a118077
   tasks: 3d7589fe
   user-journeys: 2aef430a
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 6.3, 6.4"

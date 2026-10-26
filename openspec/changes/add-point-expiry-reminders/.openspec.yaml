@@ -6,3 +6,4 @@ reviewed:
   tech-design: b67e3c3f
   specs: "11014734"
   test-cases: b67e3c3f
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 2.4"

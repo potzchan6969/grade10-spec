@@ -7,5 +7,5 @@
 
 ## 2. Walk And Page (grade10)
 
-- [ ] 2.1 Walk watch, unwatch and the watched list on a ZZZ lane — blocked: the local E2E stack needs Docker, and no ZZZ lane carries a seeded listing
+- [ ] 2.1 Walk watch, unwatch and the watched list on a ZZZ lane — blocked: the local E2E stack needs Docker, and no ZZZ lane carries a seeded listing - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 2.2 Draft the ZZZ auction page and fold this delta onto it — blocked: Product owes the ZZZ auction PRD (`page_waived`)

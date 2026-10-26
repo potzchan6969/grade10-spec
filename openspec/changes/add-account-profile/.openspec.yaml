@@ -8,3 +8,4 @@ reviewed:
   specs: f5c2f827
   test-cases: 14f3d795
   tasks: 9c411987
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 6.1, 7.1, 7.3"

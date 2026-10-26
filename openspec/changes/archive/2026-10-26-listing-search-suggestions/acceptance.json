@@ -1,0 +1,123 @@
+{
+  "version": 2,
+  "change": "listing-search-suggestions",
+  "baseline": "9e4735981e6bda4c3143a2e65b230c9e7e7194abdc66592671ac00913f0e74d2",
+  "fingerprint": "925987f258a0ad4acfc68ecd964d5ecd38dd8a3148d0229bd9ff7185070d4f91",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-26T13:05:33.241Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/product-listing.md#search",
+      "sha256": "2a0230a91899d5d2b534d97341c9d1463830f8627d555813d3f6608a7d5ffa46",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-product-listing.md#search",
+      "sha256": "2b0a4065fc0eb087132d9e55108ff1418ec0e4a59cf4dad71f75bbe290222a0d",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/listing-search-suggestions/decisions.md",
+      "sha256": "bd04bcba9732b8f7e18f46bef5b3048c321792051029972a3c5c6768ff77cae3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-search-suggestions/proposal.md",
+      "sha256": "976f77d23affaffc7a1e72c8702afb69d87061733ea5be40464d2f510f7d2f1d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-search-suggestions/specs/grade10-site/store/product-listing/spec.md",
+      "sha256": "0656a7cf00685b9226152671bf7cc77000d71c4a6964237e38352253b75944d6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-search-suggestions/specs/grade10-site/store/product-listing/user-journeys.md",
+      "sha256": "215ff9abf110b98dcdf18779d5681cd2fb3ad213732bd5d243bdf7eadb36dd82",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-search-suggestions/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "ab347d595414fe314d758340214f5f8383be6ef6f9eec19830028457955b826e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-search-suggestions/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "102b935a6c3db09182e63802b17509659940eb3f2e9b182add8cba4d2a669b3b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-search-suggestions/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "c8114f752d6e5052d5c151c3d6fe2c8febfe50c66df9ed4a3fa7a32147f8385a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-search-suggestions/tech-design.md",
+      "sha256": "f459824b2c57efaf72f96aae6b3ddf7b4f142291df566acb0efb93875e15aa75",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-search-suggestions/ui-design.md",
+      "sha256": "2a387272016c49629553ca2025ee4f6f993ad73c2284894d670f346efa7a74f2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+      "sha256": "2c7cfe0494d719c26583f0b0a92440c7002ec26cfae4d446ebe683b101e902f7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+      "sha256": "0dfd07763d7f8d65ce595d2d141d3cacf840abc18bd763fd2298919394d71795",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "ab347d595414fe314d758340214f5f8383be6ef6f9eec19830028457955b826e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "f80182ade71dffc54e0bd6e5b6004e9664ef371f148000a4ba3af8e4a49d3f28",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "c8114f752d6e5052d5c151c3d6fe2c8febfe50c66df9ed4a3fa7a32147f8385a",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/listing-search-suggestions/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+      "anchors": [
+        "Requirement: Free text offers suggestions and commits as a narrowing"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A search suggestion carries display fields",
+        "Requirement: The listing search field offers supplied suggestions",
+        "Requirement: The listing surface exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

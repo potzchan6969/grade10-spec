@@ -17,6 +17,7 @@ description: Plan and accept one OpenSpec change in one invocation: QA1 writes b
   own artifacts.
 - **Cases** - Planning produces draft cases. Human classification and execution
   belong to `tcs-review` and `tcs-run-sheet` after deployment.
+- **Deployed evidence** - Never requested before archive; no task waits on it.
 
 ## Prepare
 

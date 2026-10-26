@@ -1,0 +1,15 @@
+schema: grade10-planning
+promoted_by: "@ecchochan"
+created: 2026-09-14
+reviewed:
+  proposal: 9c5a7796
+  decisions: d8b2b56f
+  user-journeys: 3a6a7fa8
+  ui-design: cc76ffae
+  tech-design: cc76ffae
+  tasks: 18bd460d
+hands:
+  dev: "@seankcw"
+  pm: "@seankcw"
+  design: "@seankcw"
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 5.3; CI checks are no longer needed for 2.1, 5.1, 5.2"

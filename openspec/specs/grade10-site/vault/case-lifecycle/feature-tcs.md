@@ -1,21 +1,114 @@
 # grade10-site/vault/case-lifecycle Test Cases
 
-**Status:** pending-review · 0/12
-**Drafts styled:** 2026-10-02, tcs-rules r4
-**Out of suite (api):**
-- `grade10-site-vault-case-lifecycle-SC-53` — the vault's transition tests, which see no due row raised by a corrected advance (task 7.1)
-- `grade10-site-vault-case-lifecycle-SC-18`
+**Status:** pending-review · 0/30
+**Drafts styled:** 2026-10-25, tcs-rules r7
+**Regenerated:** 2026-10-25, tcs-rules r7
 
-## grade10-site-vault-case-lifecycle-US1: Collector calls off a request before the item is in the vault
+## Background
+
+* customer(collector) reads their own vault case on `<g10url>`; the console case page, its Case, Documents and Custody tabs, and the item register's item page are read by admin(holds `vault:operate`) unless a case names more. A tester moves the clock and runs the vault's sweeps to reach a moment.
+* A walk-in draft is one staff opened at the counter under a collector's account. The register can be made not to answer the vault.
+* `<collector A>` is Ana Wong and `<collector B>` Ben Lee, each with an account.
+
+## Walk 1: A case from request to the item going home
+
+Starting state:
+
+- customer(collector) Ana Wong has sent in a storage request for a trading card; admin(holds `vault:operate`) is on its console page.
+
+Shared test data:
+
+| Field | Value |
+| --- | --- |
+| item | a trading card titled Charizard card |
+
+### Route
+
+1. Start its valuation.
+   - The register holds the item, owned by Ana Wong. `g10.vault-case-lifecycle.US3-TC1`
+2. As the collector, read the case.
+   - Six stages, Valued in progress, and that it waits on the shop. `g10.vault-case-lifecycle.US5-TC2`
+3. Agree terms, sign, and confirm it vaulted.
+   - The item is marked by the vault for the case. `g10.vault-case-lifecycle.US3-TC2`
+4. Release it at a pickup visit; as the collector, read the case.
+   - The mark is closed; the case reads collected on the day, and names the visit. `g10.vault-case-lifecycle.US3-TC3`
+
+## g10.vault-case-lifecycle.US1: Collector calls off a request before the item is in the vault
 
 **As a** collector,
 **I want** to end my own request at any point before I hand the item over,
 **so that** nothing is left open in my name and any visit I booked goes with
 it.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-3ve rev=1 -->
+### g10.vault-case-lifecycle.US1-TC1: Calling a request off names what it closes, ends the case, and reads back
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-01
+
+**Pre-conditions:**
+
+* customer(collector) owns `<case>`.
+
+**Test data:**
+
+| `<case>` | `<confirmation names>` | `<afterwards>` |
+| --- | --- | --- |
+| holding a live offer and a booked visit | the offer and the visit it closes | cancelled; the offer closed, the visit cancelled, a letter sent |
+| sent in, no offer and no visit | the request alone | cancelled, a letter sent |
+| a walk-in draft staff opened for them | the request alone | cancelled, still listed as a cancelled request; nobody told |
+
+**Steps:**
+
+1. Select Cancel this request, read the confirmation, and confirm.
+2. Read the case, the vault page and the inbox.
+
+**Expected Results:**
+
+* Step 1 names `<confirmation names>`.
+* Step 2 reads `<afterwards>`.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-3ak rev=1 -->
+### g10.vault-case-lifecycle.US1-TC2: A case whose item is in the vault is not the collector's to cancel
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-01
+
+**Pre-conditions:**
+
+* customer(collector)'s case holds its item in the vault.
+
+**Steps:**
+
+1. Look for Cancel this request; open the cancel address directly.
+
+**Expected Results:**
+
+* It is not offered, and the cancel is refused, naming the item in the vault; the case is unchanged.
+
 ---
 
-## grade10-site-vault-case-lifecycle-US2: Collector who stops answering is not left with an open case
+## g10.vault-case-lifecycle.US2: Collector who stops answering is not left with an open case
 
 **As a** collector,
 **I want** a request I never came back to to end by itself, with a message
@@ -23,9 +116,99 @@ saying so,
 **so that** I am not waiting on a case nobody is working and my item is not
 expected at a counter.
 
+<!-- trace:case id=g10.vault-case-lifecycle.TC-enu rev=1 -->
+### g10.vault-case-lifecycle.US2-TC1: Terms agreed 31 days ago with no visit ahead end the case, and the collector is told
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-02
+
+**Pre-conditions:**
+
+* The collector's case agreed terms 31 days ago and holds no visit.
+
+**Steps:**
+
+1. Run the sweeps; read the case and the inbox.
+
+**Expected Results:**
+
+* The case reads cancelled; a letter says it was called off for want of a visit.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-ueu rev=1 -->
+### g10.vault-case-lifecycle.US2-TC2: A case with a visit ahead, or a settled loan still holding its item, is left as it is
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-02
+
+**Pre-conditions:**
+
+* The collector's case is `<case>`.
+
+**Test data:**
+
+| `<case>` |
+| --- |
+| terms agreed 31 days ago, a visit booked for next week |
+| its loan repaid six months ago, the item still held |
+
+**Steps:**
+
+1. Run the sweeps; read the case, its balance and the inbox.
+
+**Expected Results:**
+
+* The case is where it was, nothing is owed for keeping the item, and no letter arrives.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-b2f rev=1 -->
+### g10.vault-case-lifecycle.US2-TC3: A case with terms and no visit says it waits on the collector, and the day it would be called off
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-02
+
+**Pre-conditions:**
+
+* customer(collector)'s case agreed terms 3 days ago, with no visit ahead.
+
+**Steps:**
+
+1. Read the case.
+
+**Expected Results:**
+
+* It reads that it waits on them, to book a visit, naming the day the 30-day clock would call it off.
+
 ---
 
-## grade10-site-vault-case-lifecycle-US3: Operator moves a case through the counter without stepping over a guard
+## g10.vault-case-lifecycle.US3: Operator moves a case through the counter without stepping over a guard
 
 **As a** member of shop staff,
 **I want** each move to run only where it belongs and to be refused when the
@@ -34,7 +217,7 @@ case has moved under me,
 state neither of us meant.
 
 <!-- trace:case id=g10.vault-case-lifecycle.TC-vip rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC1-1: Starting the valuation registers the item under the collector
+### g10.vault-case-lifecycle.US3-TC1: Starting the valuation registers the item under its collector
 
 **Classification:**
 
@@ -43,30 +226,27 @@ state neither of us meant.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-lifecycle-US-03
 
 **Pre-conditions:**
 
-* admin(staff) is on <grade10 admin vault case page url> for `<case_1>`.
-* `<case_1>` is submitted by `<collector A>`, a request for a comic titled `<request title>`, naming no slab; no item is linked to it.
+* `<case>` is submitted by `<collector A>`, a request for a trading card titled Charizard card, no item linked.
 
 **Steps:**
 
-1. Click Start valuation on the Case tab.
-2. Read the item's facts on the Case tab.
-3. Click the link to the item.
+1. Select Start valuation on the Case tab, and read the item's facts.
+2. Select the item's link.
 
 **Expected Results:**
 
-* `<case_1>` reads under valuation.
-* The Case tab reads the registered item's category comic and title `<request title>`, linking it.
-* Step 3 opens an item owned by `<collector A>`, not marked.
+* Step 1 reads under valuation, the item a trading card titled Charizard card, linked.
+* Step 2 opens an item owned by `<collector A>`, not marked.
 
 <!-- trace:case id=g10.vault-case-lifecycle.TC-10a rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC2-1: Confirm vaulted marks the item for the vault
+### g10.vault-case-lifecycle.US3-TC2: Confirming an item vaulted marks it for the vault's case
 
 **Classification:**
 
@@ -82,23 +262,19 @@ state neither of us meant.
 
 **Pre-conditions:**
 
-* admin(staff) is on the Custody tab of <grade10 admin vault case page url> for `<case_2>`.
-* `<case_2>`'s packet is signed; its item `<item_2>` is owned by `<collector A>` and not marked.
+* `<case>`'s packet is signed; its item is owned by `<collector A>`, not marked.
 
 **Steps:**
 
-1. Confirm `<case_2>` vaulted with a shop.
-2. Navigate to <grade10 admin item page url> for `<item_2>`.
-3. Navigate to the marked tab of <grade10 admin items url>.
+1. Confirm the case vaulted at a shop.
+2. Open the item's page, then the register's marked items.
 
 **Expected Results:**
 
-* `<case_2>` reads vaulted.
-* Step 2's place row names the vault, `<case_2>`'s reference and its status; Transfer and Retire are not offered.
-* Step 3 lists `<item_2>`.
+* The case reads vaulted; the item's place names the vault, the case's reference and status, offering no Transfer or Retire; the marked items list it.
 
 <!-- trace:case id=g10.vault-case-lifecycle.TC-tcj rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC3-1: Release and unwind close the mark and keep the owner
+### g10.vault-case-lifecycle.US3-TC3: Release or unwind closes the mark and keeps the owner, and the case keeps its visit
 
 Runs once per row of **Test data**.
 
@@ -116,29 +292,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(staff) is on the Custody tab of <grade10 admin vault case page url> for `<case_3>`.
-* `<case_3>` is as the row of **Test data** says; its item `<item_3>` is owned by `<collector A>` and marked by the vault on `<case_3>`.
+* `<case>` is `<state>`; its item is owned by `<collector A>`, marked by the vault on it.
 
 **Test data:**
 
-| `<case_3>` | Act |
-| --- | --- |
-| Vaulted on the storage lane, release packet signed | Release |
-| Vaulted on the financed lane, no payout recorded | Unwind with a reason |
+| `<state>` | `<act>` | `<case reads>` |
+| --- | --- | --- |
+| vaulted on the storage lane, its release packet signed, at its pickup visit | release | released, naming the pickup visit |
+| vaulted on the financed lane, no advance recorded | unwind, with a reason | cancelled |
 
 **Steps:**
 
-1. Take the act from **Test data**.
-2. Navigate to <grade10 admin item page url> for `<item_3>`.
+1. `<act>`; read the case and the item's page.
 
 **Expected Results:**
 
-* `<case_3>` reads released or cancelled as the act gives.
-* `<item_3>` reads not marked, still owned by `<collector A>`, with no new move.
-* Transfer and Retire are offered.
+* The case reads `<case reads>`; the item reads not marked, still owned by `<collector A>` with no new move, offering Transfer and Retire.
 
 <!-- trace:case id=g10.vault-case-lifecycle.TC-exj rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC4-1: Forfeit closes the mark and moves the item to the lender
+### g10.vault-case-lifecycle.US3-TC4: A forfeit closes the mark and moves the item to the lender
 
 **Classification:**
 
@@ -154,30 +326,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(staff) is on the Custody tab of <grade10 admin vault case page url> for `<case_4>`.
-* `<case_4>` is active, past its due date and past the cure date of a sent forfeiture notice; its item `<item_4>` is owned by `<collector A>` and marked by the vault on `<case_4>`.
+* `<case>` is active, past its due date and the cure date of a sent forfeiture notice; its item is owned by `<collector A>`, marked by the vault on it.
 
 **Steps:**
 
-1. Forfeit `<case_4>` with a reason.
-2. Navigate to <grade10 admin item page url> for `<item_4>`.
-3. Navigate to <grade10 admin collector page url> for `<collector A>`.
+1. Forfeit the case with a reason.
+2. Read the item's page and `<collector A>`'s collector page.
 
 **Expected Results:**
 
-* `<case_4>` reads forfeited.
-* `<item_4>` reads not marked and owned by the lender's registered name.
-* Its newest move reads from `<collector A>` to the lender, made by the vault on `<case_4>`.
-* Step 3's Items section no longer lists `<item_4>`.
+* The case reads forfeited; the item reads not marked, owned by the lender's registered name, its newest move from `<collector A>` to the lender by the vault on the case; the collector page no longer lists it.
 
 <!-- trace:case id=g10.vault-case-lifecycle.TC-pbt rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC5-1: An item that never reached custody stays registered and unmarked
+### g10.vault-case-lifecycle.US3-TC5: A case that ends before custody leaves its item registered to its collector, unmarked
 
 Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** normal
+* **Severity:** major
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
@@ -189,28 +356,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(staff) is on <grade10 admin vault case page url> for `<case_5>`.
-* `<case_5>` is under valuation by `<collector A>`; its item `<item_5>` is registered and not marked.
+* `<case>` is under valuation by `<collector A>`; its item is registered and not marked.
 
 **Test data:**
 
-| Act |
+| `<act>` |
 | --- |
-| Decline with a reason |
-| Cancel |
+| decline, with a reason |
+| cancel |
 
 **Steps:**
 
-1. Take the act from **Test data** on `<case_5>`.
-2. Navigate to <grade10 admin item page url> for `<item_5>`.
+1. `<act>`; read the item's page.
 
 **Expected Results:**
 
-* `<case_5>` reads declined or cancelled as the act gives.
-* `<item_5>` is still owned by `<collector A>` and reads not marked.
+* The case reads declined or cancelled; the item is still owned by `<collector A>`, not marked.
 
 <!-- trace:case id=g10.vault-case-lifecycle.TC-5s5 rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC6-1: Prepare documents is not offered while the register names another owner
+### g10.vault-case-lifecycle.US3-TC6: Prepare documents waits while the register names another owner, and returns once the item is moved back
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -226,24 +392,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(staff) holds `inventory:transfer` and is signed in to the Grade10 console.
-* `<case_6>` of `<collector A>` is accepted, its identity check recorded; its item `<item_6>` is owned by `<collector B>` and not marked.
+* `<operator>` is on the Documents tab of `<collector A>`'s accepted case, its check recorded; its item is owned by `<collector B>`.
+
+**Test data:**
+
+| `<operator>` | `<line names>` |
+| --- | --- |
+| admin(holds `vault:operate`, `inventory:transfer` and `kyc:read`) | `<collector B>`'s name |
+| admin(holds `vault:operate`, `inventory:read` and `inventory:transfer`, not `kyc:read`) | `<collector B>`'s short id |
 
 **Steps:**
 
-1. Navigate to the Documents tab of <grade10 admin vault case page url> for `<case_6>`.
-2. Click the item link on the line that names the owner.
-3. Transfer `<item_6>` to `<collector A>`'s exact email with a reason.
-4. Return to the Documents tab of `<case_6>` and reload it.
+1. Read the tab, and select the item link on its line.
+2. Transfer the item to `<collector A>`'s exact email with a reason; reload the tab.
 
 **Expected Results:**
 
-* Step 1 does not offer Prepare documents; a line names `<collector B>` and links `<item_6>`.
-* Step 2 opens `<item_6>`.
-* Step 4 offers Prepare documents.
+* Step 1 offers no Prepare documents; a line names `<line names>` and links the item, which opens.
+* Step 2 offers Prepare documents.
 
 <!-- trace:case id=g10.vault-case-lifecycle.TC-9rk rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC7-1: An owner moved under an open Documents tab refuses Prepare documents
+### g10.vault-case-lifecycle.US3-TC7: Preparing papers is refused by name when the register moved, cannot answer, or holds the item retired or not yet
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -259,21 +430,65 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(staff) holds `inventory:transfer` and is on the Documents tab of <grade10 admin vault case page url> for `<case_7>`.
-* `<case_7>` of `<collector A>` is accepted, its identity check recorded and its key terms recorded where its lane needs them; its item `<item_7>` is owned by `<collector A>` and not marked.
+* admin(holds `vault:operate` and `inventory:transfer`) is on `<case>`'s Documents tab; then `<meanwhile>`.
+
+**Test data:**
+
+| `<case>` | `<meanwhile>` | `<act>` | `<refusal names>` |
+| --- | --- | --- | --- |
+| accepted, check recorded, item owned by `<collector A>` | in another tab the item is transferred to `<collector B>` | Prepare documents | `<collector B>`, linking the item |
+| accepted, check recorded | the register stops answering | Prepare documents | that the register cannot be read now |
+| accepted, its item's registration not yet reached the register | nothing | Prepare documents | that the item is still being registered |
+| accepted, check recorded | in another tab the item is retired as a duplicate | Prepare documents | the item as retired, linking it |
+| vaulted, owing nothing | the register reads the item retired | Prepare release receipt | the item as retired, linking it |
+| vaulted, owing nothing | the register stops answering | Prepare release receipt | that the register cannot be read now |
 
 **Steps:**
 
-1. In a second tab, transfer `<item_7>` to `<collector B>`'s exact email with a reason.
-2. On the first tab, click Prepare documents.
+1. Select `<act>`.
 
 **Expected Results:**
 
-* Step 2 is refused with an error naming `<collector B>` and linking `<item_7>`.
-* `<case_7>` stays accepted and no packet is prepared.
+* It is refused, naming `<refusal names>`; nothing is rendered and the case stays where it was.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-dy2 rev=1 -->
+### g10.vault-case-lifecycle.US3-TC12: Preparing papers registers an item nothing has registered, and works again once a retired item is restored
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-03
+
+**Pre-conditions:**
+
+* admin(holds `vault:operate`) is on `<case>`'s Documents tab.
+
+**Test data:**
+
+| `<case>` | `<before>` |
+| --- | --- |
+| accepted, valued before the vault's deploy, no item registered | nothing |
+| accepted, its item retired and its prepare refused | the item restored with a reason |
+
+**Steps:**
+
+1. Do `<before>`, then select Prepare documents; read the packet and the item.
+
+**Expected Results:**
+
+* The packet is prepared, its custody agreement naming the item; the item is registered under the case's collector.
 
 <!-- trace:case id=g10.vault-case-lifecycle.TC-owi rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC8-1: Confirm vaulted lands while the register is down
+### g10.vault-case-lifecycle.US3-TC8: Confirming an item vaulted never waits on the register
 
 **Classification:**
 
@@ -281,145 +496,413 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** integration
+* **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
+* **Trace:** Moving a case
+
+**Pre-conditions:**
+
+* `<case>`'s packet is signed; its item registered, not marked; the register does not answer.
+
+**Steps:**
+
+1. Confirm the case vaulted at a shop.
+2. Let the register answer again, and the vault's next delivery run; read the item's page.
+
+**Expected Results:**
+
+* Step 1 is taken at once; the case reads vaulted.
+* Step 2: the item reads marked by the vault on the case, with one place.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-nyn rev=1 -->
+### g10.vault-case-lifecycle.US3-TC13: A move is refused on an ended case, under a case that moved, or an unwind past the advance
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-lifecycle-US-03
 
 **Pre-conditions:**
 
-* admin(staff) is on the Custody tab of <grade10 admin vault case page url> for `<case_8>`.
-* `<case_8>`'s packet is signed; its item `<item_8>` is registered and not marked.
-* The register is mocked not to answer the vault.
+* admin(holds `vault:operate`) is on `<case>`.
+
+**Test data:**
+
+| `<case>` | `<attempt>` | `<refusal names>` |
+| --- | --- | --- |
+| released | any move it shows, from a tab opened before release | the case as ended |
+| under valuation, open in two operators' tabs | the same move from both | that the case moved, for the second |
+| with an advance recorded | unwind from the vault | the advance |
 
 **Steps:**
 
-1. Confirm `<case_8>` vaulted with a shop.
-2. Let the register answer again, and wait for the vault's next delivery.
-3. Navigate to <grade10 admin item page url> for `<item_8>`.
+1. `<attempt>`.
 
 **Expected Results:**
 
-* Step 1 is not refused; `<case_8>` reads vaulted at once.
-* Step 3 reads `<item_8>` marked by the vault on `<case_8>`, with one place row.
+* It is refused, naming `<refusal names>`; the case is as the first move or nothing left it.
 
-<!-- trace:case id=g10.vault-case-lifecycle.TC-5qj rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC9-1: Prepare documents is refused while the register cannot be read
+<!-- trace:case id=g10.vault-case-lifecycle.TC-idj rev=1 -->
+### g10.vault-case-lifecycle.US3-TC14: Every move and record lands on the case's history with its actor, and a refused one leaves none
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-03
+
+**Pre-conditions:**
+
+* admin(holds `vault:operate`) is on a case under valuation.
+
+**Steps:**
+
+1. Record a valuation; try a move the case refuses; agree terms.
+2. Read the case's history.
+
+**Expected Results:**
+
+* It shows the valuation and the terms, each naming the operator, and no entry for the refused move.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-buj rev=1 -->
+### g10.vault-case-lifecycle.US3-TC15: A storage case owes nothing, and a repayment against it is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** The statuses
+
+**Pre-conditions:**
+
+* treasurer is on a storage case whose item is in the vault, its terms agreed with no offer.
+
+**Steps:**
+
+1. Look for Record a repayment; record one through its address.
+
+**Expected Results:**
+
+* None is offered, and the repayment is refused as a case that owes nothing.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-z39 rev=1 -->
+### g10.vault-case-lifecycle.US3-TC16: A correction taken back returns the case to where the record found it
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** The exits
+
+**Pre-conditions:**
+
+* treasurer is on `<case>`.
+
+**Test data:**
+
+| `<case>` | `<taken back>` | `<afterwards>` |
+| --- | --- | --- |
+| active, advanced in full | the advance | vaulted, and may be advanced against again; the item still marked once |
+| repaid by its last repayment | that repayment | active, owing what it would have owed had the record never been written |
+
+**Steps:**
+
+1. Take `<taken back>` back with a reason; read the case and the item.
+
+**Expected Results:**
+
+* It reads `<afterwards>`.
+
+---
+
+## g10.vault-case-lifecycle.US4: Collector reads how their case ended
+
+**As a** collector whose case ended without a release,
+**I want** the page to say why in my own words — the reason staff gave, that
+the request was called off and by whom, the clock that ran out, or the figure
+the item settled with the dates of the notice,
+**so that** I know what happened and what, if anything, is still mine.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-dhk rev=1 -->
+### g10.vault-case-lifecycle.US4-TC2: An ended case says why in the collector's words, and stops at the stage it ended on
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-04
+
+**Pre-conditions:**
+
+* customer(collector)'s case `<ended>`.
+
+**Test data:**
+
+| `<ended>` | `<reads>` |
+| --- | --- |
+| was declined by staff with the reason Not a genuine card | declined, the day, and Not a genuine card verbatim |
+| was cancelled by staff while holding a live offer and a visit, terms agreed | called off by staff, the day, the offer that closed; Agreed the stage it stopped at |
+| expired, never booking a visit | closed as expired, the day, the timeline naming the visit clock |
+| expired, its booked visit missed | closed as expired in the same words, the timeline naming the missed visit |
+| was forfeited after a notice | the figure the item settled, the day the notice was written and the date it gave to pay by |
+| was released | collected, on the day |
+
+**Steps:**
+
+1. Read the case and the vault page.
+
+**Expected Results:**
+
+* Both read `<reads>`.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-7ic rev=1 -->
+### g10.vault-case-lifecycle.US4-TC1: A case's timeline stamps read UTC, whatever the viewer's zone
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-04
+
+**Pre-conditions:**
+
+* customer owns a case kept at a Hong Kong shop with a timeline entry at 2026-10-07T01:30:00Z, and reads it on a machine set to America/New_York.
+
+**Steps:**
+
+1. Read that entry's stamp.
+
+**Expected Results:**
+
+* It reads 01:30 on 7 Oct, UTC, never 09:30 or 21:30 on 6 Oct.
+
+---
+
+## g10.vault-case-lifecycle.US5: Collector reads the fact their case meets
+
+**As a** collector whose offer ran out, was declined or was replaced, whose
+visit was closed as missed, or who asked for the item back,
+**I want** the page to say so in my own words, that the case is still where it
+was, and what to do next,
+**so that** I do not take a closed offer or a closed visit for a closed case.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-9ud rev=1 -->
+### g10.vault-case-lifecycle.US5-TC1: A case says the fact it meets, the case still where it was, and the later fact when two meet
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Derived at the read
+
+**Pre-conditions:**
+
+* customer(collector)'s case is `<case>`.
+
+**Test data:**
+
+| `<case>` | `<reads>` |
+| --- | --- |
+| its offer expired yesterday, no sweep run since | that the offer ran out, its amount and the day; still offer made |
+| its offer declined by them | that they declined it, the figure and the day; being valued, the visit standing |
+| in the vault, its booked visit closed as missed | that the visit was missed, its slot; another may be booked |
+| held, the collector having asked for the item back | the ask and its day; a pickup may be booked |
+| its offer ran out on Monday, its visit missed on Wednesday | the missed visit, the later one |
+
+**Steps:**
+
+1. Read the case; as admin(holds `vault:operate`), read its console status.
+
+**Expected Results:**
+
+* The case reads `<reads>`; the console status is as it was before the read.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-lf1 rev=1 -->
+### g10.vault-case-lifecycle.US5-TC2: The case walks its lane's stages, says whose turn it is, and reads the same held state on the list
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer(collector)'s case is `<case>`.
+
+**Test data:**
+
+| `<case>` | `<reads>` |
+| --- | --- |
+| financed, its item in the vault | eight stages, Request to Home, Vault in progress, earlier ones done |
+| storage, being valued | six stages, no Offer or Loan, Valued in progress |
+| holding a live offer | waiting on them |
+| storage, its item held since 2 Oct | with us since 2 Oct, on the vault page and the case alike |
+| financed, its item in the vault, no advance yet | with us since the day it was held |
+
+**Steps:**
+
+1. Read the case and the vault page.
+
+**Expected Results:**
+
+* They read `<reads>`.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-xpy rev=1 -->
+### g10.vault-case-lifecycle.US5-TC3: Asking for the item back twice records one ask
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-case-lifecycle-US-03
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
 
 **Pre-conditions:**
 
-* admin(staff) is on the Documents tab of <grade10 admin vault case page url> for `<case_9>`.
-* `<case_9>` is accepted, its identity check recorded; its item is registered under its collector.
-* The register is mocked not to answer the vault.
+* customer(collector)'s case holds the item with nothing outstanding, open in two tabs.
 
 **Steps:**
 
-1. Click Prepare documents.
+1. Ask for the item back in each tab; read the case and its history.
 
 **Expected Results:**
 
-* Step 1 is refused with an error saying the register cannot be read now.
-* `<case_9>` stays accepted and no packet is prepared.
+* One ask is recorded; the second tab's answer reads the case as the first left it.
 
-<!-- trace:case id=g10.vault-case-lifecycle.TC-ify rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC10-1: Without the identity read the other owner reads by short id
+<!-- trace:case id=g10.vault-case-lifecycle.TC-7wj rev=1 -->
+### g10.vault-case-lifecycle.US5-TC4: A call-off sent after the counter moved the case is refused, and the confirmation stays open
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* customer(collector) has their case open; the counter then moves it.
+
+**Steps:**
+
+1. Select Cancel this request, and confirm.
+
+**Expected Results:**
+
+* It is refused as a case that moved; the confirmation stays open, and a reload shows the case as it now stands.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-w7j rev=1 -->
+### g10.vault-case-lifecycle.US5-TC5: Another collector's case reads the same not-found page as an id nobody was issued
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-vault-case-lifecycle-US-03
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
 
 **Pre-conditions:**
 
-* admin(holds `vault:operate`, `inventory:read` and `inventory:transfer`, not `kyc:read`) is on the Documents tab of <grade10 admin vault case page url> for `<case_10>`.
-* `<case_10>` of `<collector A>` is accepted, its identity check recorded and its key terms recorded where its lane needs them; its item `<item_10>` is owned by `<collector A>` and not marked.
+* customer(collector) is signed in.
+
+**Test data:**
+
+| `<address>` |
+| --- |
+| another collector's case |
+| a case id never issued |
+| another collector's case's offer answer |
 
 **Steps:**
 
-1. In a second tab, transfer `<item_10>` to `<collector B>`'s exact email with a reason.
-2. On the first tab, click Prepare documents.
-3. Reload the Documents tab.
+1. Open `<address>`.
 
 **Expected Results:**
 
-* Step 2 is refused with an error naming `<collector B>`'s short id, not their name, and linking `<item_10>`.
-* Step 3 does not offer Prepare documents; its line names `<collector B>`'s short id and links `<item_10>`.
-
-<!-- trace:case id=g10.vault-case-lifecycle.TC-wkt rev=1 covers=g10.vault-case-lifecycle.SC-tro,g10.vault-case-lifecycle.SC-vvb,g10.vault-case-lifecycle.SC-an5,g10.vault-case-lifecycle.SC-am3,g10.vault-case-lifecycle.SC-hpb,g10.vault-case-lifecycle.SC-01y,g10.vault-case-lifecycle.SC-1ku,g10.vault-case-lifecycle.SC-lln,g10.vault-case-lifecycle.SC-17k,g10.vault-case-lifecycle.SC-tqz,g10.vault-case-lifecycle.SC-zb0,g10.vault-case-lifecycle.SC-6yn,g10.vault-case-lifecycle.SC-01t,g10.vault-case-lifecycle.SC-hhb,g10.vault-case-lifecycle.SC-q4b -->
-### grade10-site-vault-case-lifecycle-US3-TC11-1: A retired item refuses Prepare documents until it is restored
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-case-lifecycle-US-03
-
-**Pre-conditions:**
-
-* admin(staff) is on the Documents tab of <grade10 admin vault case page url> for `<case_11>`.
-* `<case_11>` of `<collector A>` is accepted, its identity check recorded and its key terms recorded where its lane needs them; its item `<item_11>` is owned by `<collector A>` and not marked.
-
-**Steps:**
-
-1. In a second tab, retire `<item_11>` as a duplicate.
-2. On the first tab, click Prepare documents.
-3. Restore `<item_11>` with a reason, then click Prepare documents again.
-
-**Expected Results:**
-
-* Step 2 is refused with an error saying the item is retired, naming and linking `<item_11>`; no packet is prepared.
-* Step 3 prepares the packet, and its custody agreement names `<item_11>`.
+* It reads not found, the same for every row, with nothing telling them apart.
 
 ---
 
-## grade10-site-vault-case-lifecycle-US4: Collector reads how their case ended
-
-**As a** collector whose case ended without a release,
-**I want** the page to say why in my own words — the reason staff gave, that
-the request was called off and by whom, the clock that ran out, or the
-figure the item settled with the dates of the notice,
-**so that** I know what happened and what, if anything, is still mine.
-
----
-
-## grade10-site-vault-case-lifecycle-US5: Collector reads the fact their case meets
-
-**As a** collector whose offer ran out, was declined or was replaced, whose
-visit was closed as missed, or who asked for the item back,
-**I want** the page to say so in my own words, that the case is still where
-it was, and what to do next,
-**so that** I do not take a closed offer or a closed visit for a closed
-case.
-
----
-
-## grade10-site-vault-case-lifecycle-US6: Operator opens a walk-in again under the right address
+## g10.vault-case-lifecycle.US6: Operator opens a walk-in again under the right address
 
 **As a** member of shop staff who typed a customer's address wrong,
 **I want** to cancel the unsent draft and open it again under the right
@@ -427,10 +910,93 @@ address,
 **so that** the customer can send it, and the account at the wrong address
 is never emailed and keeps nothing of it.
 
-<!-- trace:case id=g10.vault-case-lifecycle.TC-skm rev=1 covers=g10.vault-case-lifecycle.SC-68t,g10.vault-case-lifecycle.SC-8rr,g10.vault-case-lifecycle.SC-plk,g10.vault-case-lifecycle.SC-6aa,g10.vault-case-lifecycle.SC-hir -->
-### grade10-site-vault-case-lifecycle-US6-TC3-1: A walk-in nobody sends ends on the seven-day draft clock and leaves nothing on the account
+<!-- trace:case id=g10.vault-case-lifecycle.TC-ulp rev=1 -->
+### g10.vault-case-lifecycle.US6-TC1: A walk-in typed under the wrong address is cancelled leaving nothing, and opened again under the right one
 
-Runs once per row of **Test data**.
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Pre-conditions:**
+
+* Staff opened a walk-in draft with two photographs under a mistyped address.
+
+**Steps:**
+
+1. Cancel it.
+2. Read the account at the mistyped address, and its inbox.
+3. Open a walk-in for the right address.
+
+**Expected Results:**
+
+* Step 1: the case reads cancelled.
+* Step 2: the account lists nothing of it, and nothing was sent.
+* Step 3 opens a new draft under the right account, with a reference of its own.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-2sn rev=1 -->
+### g10.vault-case-lifecycle.US6-TC2: A walk-in the collector sent is cancelled like any case
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Pre-conditions:**
+
+* The collector sent a walk-in draft; admin(holds `vault:operate`) is on it.
+
+**Steps:**
+
+1. Cancel it; as the collector, read the vault page and the inbox.
+
+**Expected Results:**
+
+* It reads cancelled and stays listed with its photographs; the cancelled letter arrives.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-j8i rev=1 -->
+### g10.vault-case-lifecycle.US6-TC3: A cancel from a page read before the collector sent the draft is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-06
+
+**Pre-conditions:**
+
+* admin(holds `vault:operate`) read a walk-in draft while it was unsent; the collector then sent it.
+
+**Steps:**
+
+1. From that page, without reloading, cancel it.
+
+**Expected Results:**
+
+* It is refused as a case that moved; the case stays submitted.
+
+<!-- trace:case id=g10.vault-case-lifecycle.TC-zaj rev=1 -->
+### g10.vault-case-lifecycle.US6-TC4: Staff's cancel removes an unsent walk-in even after someone signed in to the account
 
 **Classification:**
 
@@ -441,132 +1007,65 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-lifecycle-US-06
 
 **Pre-conditions:**
 
-* Walk-in draft `<case_1>` was opened for `<walk-in email>` and nobody has touched it since, for the time in the row.
-* admin(staff, holds vault:read and kyc:read) is signed in to the console.
-
-**Test data:**
-
-| Untouched for | `<case_1>` |
-| --- | --- |
-| 7 days less one hour | still a draft, in the Drafts view |
-| 7 days and one sweep | ended as expired; no longer under the account |
-| 8 days, the collector having changed its title on day 5 | still a draft, the edit having restarted its clock |
+* Someone signed in to the account a walk-in draft was opened under, without sending it.
 
 **Steps:**
 
-1. Let the draft clock's sweep run.
-2. Open the queue's Drafts view.
-3. Open the collector page of `<walk-in email>`'s account.
+1. As admin(holds `vault:operate`), cancel it; read the account's vault page and inbox.
 
 **Expected Results:**
 
-* `<case_1>` reads as the row says.
-* An expired `<case_1>` is not listed on the collector page, and nothing is emailed to `<walk-in email>`.
-* An expired `<case_1>` stays in the queue's Closed view under its reference, its item reading as erased and no collector named.
+* The draft is gone from the account; nobody is told.
 
----
+<!-- trace:case id=g10.vault-case-lifecycle.TC-skm rev=1 covers=g10.vault-case-lifecycle.SC-68t,g10.vault-case-lifecycle.SC-8rr,g10.vault-case-lifecycle.SC-plk,g10.vault-case-lifecycle.SC-6aa,g10.vault-case-lifecycle.SC-hir -->
+### g10.vault-case-lifecycle.US6-TC5: An unsent walk-in runs out seven days after its last touch, silently, and a collector's edit restarts the clock
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Clocks
+
+**Pre-conditions:**
+
+* A walk-in draft was opened for an address the tester reads; `<touched>`.
+
+**Test data:**
+
+| `<touched>` | `<after the sweep>` |
+| --- | --- |
+| untouched for 7 days less an hour | still a draft, in the console's Drafts view |
+| untouched for 7 days | expired, no longer under the account, no letter |
+| untouched since the collector changed its title on day 5, now day 8 | still a draft |
+| untouched since the collector changed its title on day 5, now day 13 | expired, gone from their list without a word |
+
+**Steps:**
+
+1. Run the draft sweep; read the console's queue and the account's vault page.
+
+**Expected Results:**
+
+* It reads `<after the sweep>`; an expired draft stays in the queue's Closed view under its reference, its item erased and no collector named.
 
 ## Settled
 
 - Cancel this request names only what stands open — the live offer, the booked visit, or both; a request holding neither names the request alone.
-- Release refused answers Ask for it back, the collector's own release request, and the refusal stays on that confirmation.
-- The guarded-move refusal fires on any status change under the caller, not on custody alone; the durable guarded-move rule already states it.
-- An expired case reads one wording whichever clock ran out, with the clock that ran out named on the case's timeline.
-- An unissued id and another collector's case read the same not-found page, and nothing on it tells the two apart.
-- The book-within-30-days line shows from terms agreed onward, in every state with no live booking, and never before.
-- A draft staff opened runs out 7 days from its last touch, so a collector's edit restarts the clock; it stays a draft staff opened until it is sent, silent and removed from the account when it runs out.
-- Staff's cancel of an unsent draft staff opened removes it and emails nobody, whoever has signed in to the account since it opened.
-- A collector who read a draft staff opened and never sent it loses it from their list without a word when the clock ends it.
-- **A second ask for the item back** - answered with the case as the first ask left it, and records nothing (Q21)
-
-## Reconciliation
-
-**Run** — the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. It wrote 23 cases over four journeys and six raised questions; the scenario pass issued `grade10-site-vault-case-lifecycle-SC-16` to `grade10-site-vault-case-lifecycle-SC-36`.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `US1-TC1-1` row 1 — a request with no offer and no visit | Folded | The confirmation names only what stands open; `grade10-site-vault-case-lifecycle-SC-37`, and the move table's cell. Raised row 1, landed as Q38 |
-| `US1-TC2-1` — Cancel withheld once the item is in the vault | Covered | Durable `grade10-site-vault-case-lifecycle-SC-10`, and the move table's Offered while |
-| `US1-TC3-1` — Cancel refused once the case moved | Covered | `grade10-site-vault-case-lifecycle-SC-19`, guarded by durable `grade10-site-vault-case-lifecycle-SC-04`, which refuses any status change under the caller. Raised row 3, landed as Q40 |
-| `US2-TC1-1` — the deadline while a visit is unbooked | Covered | `grade10-site-vault-case-lifecycle-SC-28`; the rule reads from terms agreed onward, never before. Raised row 6, landed as Q43 |
-| `US2-TC2-1`, `US2-TC3-1`, `US2-TC4-1` — the clock boundaries | Covered | The durable clock table and durable `grade10-site-vault-case-lifecycle-SC-06`; this change adds no clock |
-| `US2-TC5-1` — a missed visit on a vaulted case | Covered | The durable clock table and `grade10-site-vault-case-lifecycle-SC-26` |
-| `US4-TC1-1` | Covered | `grade10-site-vault-case-lifecycle-SC-20`, `grade10-site-vault-case-lifecycle-SC-32`, `grade10-site-vault-case-lifecycle-SC-36` |
-| `US4-TC2-1` | Covered | `grade10-site-vault-case-lifecycle-SC-21`, `grade10-site-vault-case-lifecycle-SC-17` for the collector's own row |
-| `US4-TC3-1` — a wording per clock | Amended | One wording whichever clock ran out, the clock named on the timeline: `grade10-site-vault-case-lifecycle-SC-22` and the case's expected results. Raised row 4, landed as Q41 |
-| `US4-TC4-1` | Covered | `grade10-site-vault-case-lifecycle-SC-23`; the money's rendering is `grade10-site/vault/loan-and-settlement`'s |
-| `US4-TC5-1` | Covered | `grade10-site-vault-case-lifecycle-SC-35` |
-| `US5-TC1-1` | Covered | `grade10-site-vault-case-lifecycle-SC-30`, `grade10-site-vault-case-lifecycle-SC-31` |
-| `US5-TC2-1` | Covered | `grade10-site-vault-case-lifecycle-SC-33` |
-| `US5-TC3-1` — the With us rows | Amended | A fourth row for a vaulted financed case; `grade10-site-vault-case-lifecycle-SC-38` and the chip table now read either lane. Landed as Q45 |
-| `US5-TC4-1`, `US5-TC5-1`, `US5-TC6-1`, `US5-TC7-1` | Covered | `grade10-site-vault-case-lifecycle-SC-24`, `grade10-site-vault-case-lifecycle-SC-25`, `grade10-site-vault-case-lifecycle-SC-26`, `grade10-site-vault-case-lifecycle-SC-27` and `grade10-site-vault-case-lifecycle-SC-18` |
-| `US5-TC8-1` — the vaulted storage page | Covered | The move table's Offered while and `grade10-site-vault-case-lifecycle-SC-18`; the documents and their fingerprints are `grade10-site/vault/documents-and-signing`'s |
-| `US5-TC9-1` | Covered | `grade10-site-vault-case-lifecycle-SC-19` |
-| `US5-TC10-1` — one not-found page | Amended | Two not-found rows, an unissued id and another collector's case, reading one page: `grade10-site-vault-case-lifecycle-SC-39`. Raised row 5, landed as Q42 |
-| `grade10-site-vault-case-lifecycle-SC-18` — the act of asking | Case added | `US5-TC11-1`: no case confirmed the ask; the suite only read the state after it |
-| `grade10-site-vault-case-lifecycle-SC-34` — the list and the case | Case added | `US5-TC12-1`: the suite read the chip on the case and never against the list |
-| `grade10-site-vault-case-lifecycle-SC-29` — nothing derived is written | Case added | `US5-TC13-1`: two reads, the same fact, no history entry. It traces `Derived at the read`, the group the scenario serves, so the group anchor is walked |
-| `grade10-site-vault-case-lifecycle-SC-40` — two facts at once | Case added | `US5-TC14-1`, from the ruling that the later event's fact is the one read, landed as Q44 |
-| `grade10-site-vault-case-lifecycle-SC-19` — Release refused | Covered | The design's Release refused state is the ask's own refusal. Raised row 2, landed as Q39 |
-
-**Run:** the blind pass read only its bundle: the spec-to-tcs skill and the rulebook, the change's `proposal.md`, `decisions.md` with its `## Raised` table empty, `ui-design.md`, `openspec/config.yaml`'s context, the PRD pages Operator Console, Collector Page, Collector Pages, Case Lifecycle and Compliance and Readiness, and for each of the five capabilities its `## Purpose` and `## Feature set`, the change's `user-journeys.md` and, where one exists, the durable purpose, journeys and suite with its `## Settled` and without its `## Reconciliation`. It was denied every `## Requirements` section, `openspec/specs/` beyond the bundle, `openspec/changes/archive/`, `tech-design.md`, `tasks.md` and the store's `tcs-conventions.md`, so the house style was taken from the existing suites. It wrote five cases over one journey and raised five questions for this capability, writing no case for the collector's own cancel; the scenario pass issued `grade10-site-vault-case-lifecycle-SC-41` to `grade10-site-vault-case-lifecycle-SC-44` and carried `grade10-site-vault-case-lifecycle-SC-09` and `grade10-site-vault-case-lifecycle-SC-10` in its MODIFIED block. Two scenarios were folded here, `grade10-site-vault-case-lifecycle-SC-45` and `grade10-site-vault-case-lifecycle-SC-46`, and one case added.
-
-| Case or scenario | Disposition | Where it went / why |
-| --- | --- | --- |
-| `grade10-site-vault-case-lifecycle-US6-TC1-1` | Joined | `grade10-site-vault-case-lifecycle-SC-41` and `grade10-site-vault-case-lifecycle-SC-42` |
-| `grade10-site-vault-case-lifecycle-US6-TC2-1` | Joined | `grade10-site-vault-case-lifecycle-SC-41`; the empty collector page is `grade10-admin/console/collector-page`'s rule that a removed case is not listed, and the freed places are the intake cap's |
-| `grade10-site-vault-case-lifecycle-US6-TC3-1` | Joined | `grade10-site-vault-case-lifecycle-SC-43` and `grade10-site-vault-case-lifecycle-SC-47`; the expired case stays in the Closed view reading as erased, Q29 |
-| `grade10-site-vault-case-lifecycle-US6-TC2-1` | Joined | `grade10-site-vault-case-lifecycle-SC-48` for the row someone signed in to, Q31 |
-| `grade10-site-vault-case-lifecycle-US6-TC4-1` | Folded | `grade10-site-vault-case-lifecycle-SC-45`: the requirement ends a draft staff opened only while it is unsent, and no scenario walked the sent one cancelled, told and kept |
-| `grade10-site-vault-case-lifecycle-US6-TC5-1` | Folded | `grade10-site-vault-case-lifecycle-SC-46`: the durable guarded-move rule refuses a move on any status change under its caller, and no scenario walked staff's cancel racing the collector's send. The tech design's `admin.cancel` now carries the status the page read |
-| `grade10-site-vault-case-lifecycle-SC-44` | Case added | `grade10-site-vault-case-lifecycle-US1-TC4-1`, under the collector's own journey the scenario serves; Q28 keeps it on their list |
-| Raised: the collector's own cancel of a draft staff opened | Settled | Q28; `grade10-site-vault-case-lifecycle-SC-44` |
-| Raised: a walk-in that runs out at the right address | Settled | Q20, Q23 and Q29; `grade10-site-vault-case-lifecycle-SC-43` and `grade10-site-vault-case-lifecycle-SC-41` |
-| Raised: the clock on a draft staff opened, and a collector's edit | Settled | Q30 |
-| Raised: a sign-in to the wrong account before staff cancel | Settled | Q31; `grade10-site-vault-case-lifecycle-SC-41` removes it whoever has signed in |
-| Raised: staff's queue after an unsent walk-in is cancelled | Settled | Q29; `grade10-site-vault-case-lifecycle-SC-41` |
-| Dev: the collector's own photographs on a removed draft | Settled | Q49; every photograph on it is removed |
-| Dev: a removed walk-in reading as erased on staff's Closed view | Settled | Q29 |
-| Design: Cancelled for a typo, Cancelled before sending | Closed on the row | `ui-design.md` names `grade10-site-vault-case-lifecycle-SC-41` and `grade10-site-vault-case-lifecycle-SC-44`; the second row is Q28's |
-
-**Run:** QA2, 2026-10-02. QA1's blind pass read the Feature set, the journey, the proposal, `decisions.md` with its empty `## Raised`, `ui-design.md` with its anchors stripped, the Case Lifecycle, Items and Operator Console PRD pages, and the durable case-lifecycle suite for id continuity with its Reconciliation stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the code. QA2 read QA1's suite and questions, the delta spec, `tech-design.md`, `tasks.md`, `ui-design.md` whole and the items delta. It is a statement, not proof.
-
-- **Folded** - `grade10-site-vault-case-lifecycle-US3-TC1-1` into `grade10-site-vault-case-lifecycle-SC-49`; `grade10-site-vault-case-lifecycle-US3-TC2-1` into `grade10-site-vault-case-lifecycle-SC-50`'s vaulting; `grade10-site-vault-case-lifecycle-US3-TC3-1` into `grade10-site-vault-case-lifecycle-SC-50`'s release and unwind; `grade10-site-vault-case-lifecycle-US3-TC4-1` into `grade10-site-vault-case-lifecycle-SC-51`, gaining the vault's move to the lender as Q46; `grade10-site-vault-case-lifecycle-US3-TC6-1` into `grade10-site-vault-case-lifecycle-SC-54`; `grade10-site-vault-case-lifecycle-US3-TC7-1` into `grade10-site-vault-case-lifecycle-SC-55`
-- **Folded into the spec** - `grade10-site-vault-case-lifecycle-US3-TC5-1`: a decline or cancel after the valuation started leaves the item registered and not marked, which no scenario stated; the "Nothing else" rule now names it and `grade10-site-vault-case-lifecycle-SC-58` carries it
-- **Added by QA2** - `grade10-site-vault-case-lifecycle-US3-TC8-1` for `grade10-site-vault-case-lifecycle-SC-52`; `grade10-site-vault-case-lifecycle-US3-TC9-1` for `grade10-site-vault-case-lifecycle-SC-56`; `grade10-site-vault-case-lifecycle-SC-57`, the third refusal the requirement's table names, was written by QA2 and is out of suite
-- **Round 4** - the other owner is named only behind `kyc:read`, else by short id: `grade10-site-vault-case-lifecycle-SC-54` and `grade10-site-vault-case-lifecycle-SC-55` gain that line, walked by `grade10-site-vault-case-lifecycle-US3-TC10-1`; `grade10-site-vault-case-lifecycle-SC-59`, Prepare documents registering an item nothing has registered, is out of suite; the fill it once stood beside is gone (Q52); the register is owed the case's state rather than each word in order, which changes no case
-- **Raised, answered by the owner** - Q56, an item retired after its valuation: Prepare documents is refused while the register reads it as retired, `grade10-site-vault-case-lifecycle-SC-60`, walked by `grade10-site-vault-case-lifecycle-US3-TC11-1`
-- **Raised, answered by the round** - none other
-- **Rejected** - none
-- **Contradicted** - none
-- **Uncovered anchors** - none: US-03 has a case for every scenario but `grade10-site-vault-case-lifecycle-SC-53` and `grade10-site-vault-case-lifecycle-SC-57`, which are out of suite with their verifiers
-
-**Run:** QA2, 2026-10-02, for change `retire-vault-collector-site`. QA1's blind pass read the Feature set, the journeys, `decisions.md` through Q15, the proposal and the durable suite; it was denied every requirement. QA2 read both suites, this delta, `tech-design.md`, `tasks.md` and the worker they name: `trpc/routers/cases.ts`, `cases/releaseRequest.ts`, the contracts' `standing.ts` and `ended.ts`. It is a statement, not proof.
-
-- **Raised, escalated** - a second ask for the item back, landed as Q21, answered as the first ask left it
-- **Raised, rejected** - none
-- **Re-versioned to the API** - every case whose behaviour the worker or the contracts' case standing keeps and whose run walked the case list or the case page: `grade10-site-vault-case-lifecycle-US1-TC1-2`, `grade10-site-vault-case-lifecycle-US1-TC2-2`, `grade10-site-vault-case-lifecycle-US1-TC3-2`, `grade10-site-vault-case-lifecycle-US1-TC4-2`, `grade10-site-vault-case-lifecycle-US2-TC1-2`, `grade10-site-vault-case-lifecycle-US2-TC2-2`, `grade10-site-vault-case-lifecycle-US2-TC3-2`, `grade10-site-vault-case-lifecycle-US2-TC4-2`, `grade10-site-vault-case-lifecycle-US2-TC5-2`, `grade10-site-vault-case-lifecycle-US4-TC1-2`, `grade10-site-vault-case-lifecycle-US4-TC2-2`, `grade10-site-vault-case-lifecycle-US4-TC3-2`, `grade10-site-vault-case-lifecycle-US4-TC4-2`, `grade10-site-vault-case-lifecycle-US4-TC5-2`, `grade10-site-vault-case-lifecycle-US5-TC1-2`, `grade10-site-vault-case-lifecycle-US5-TC2-2`, `grade10-site-vault-case-lifecycle-US5-TC3-2`, `grade10-site-vault-case-lifecycle-US5-TC4-2`, `grade10-site-vault-case-lifecycle-US5-TC5-2`, `grade10-site-vault-case-lifecycle-US5-TC6-2`, `grade10-site-vault-case-lifecycle-US5-TC7-2`, `grade10-site-vault-case-lifecycle-US5-TC8-2`, `grade10-site-vault-case-lifecycle-US5-TC9-2`, `grade10-site-vault-case-lifecycle-US5-TC10-2`, `grade10-site-vault-case-lifecycle-US5-TC11-2`, `grade10-site-vault-case-lifecycle-US5-TC12-2`, `grade10-site-vault-case-lifecycle-US5-TC13-2`, `grade10-site-vault-case-lifecycle-US5-TC14-2`, `grade10-site-vault-case-lifecycle-US6-TC1-2`, `grade10-site-vault-case-lifecycle-US6-TC2-2`, `grade10-site-vault-case-lifecycle-US6-TC4-2`, `grade10-site-vault-case-lifecycle-US6-TC5-2`; the stage and whose the item is are worked out from the read with the contracts' case standing (task 2.3)
-- **Deprecated** - none: no case's subject is a removed screen alone
-- **Carried into a bump** - QA1's new ids that re-covered an earlier case leave the delta: `US1-TC5-1` and `US1-TC8-1` into `grade10-site-vault-case-lifecycle-US1-TC1-2`; `US1-TC6-1` into `grade10-site-vault-case-lifecycle-US1-TC2-2`; `US5-TC19-1` into `grade10-site-vault-case-lifecycle-US1-TC3-2`; `US2-TC6-1` into `grade10-site-vault-case-lifecycle-US2-TC1-2`; `US4-TC6-1` into `grade10-site-vault-case-lifecycle-US4-TC1-2` to `grade10-site-vault-case-lifecycle-US4-TC4-2`; `US5-TC15-1` into `grade10-site-vault-case-lifecycle-US5-TC11-2`; `US5-TC17-1` into `grade10-site-vault-case-lifecycle-US5-TC4-2`, `grade10-site-vault-case-lifecycle-US5-TC5-2` and `grade10-site-vault-case-lifecycle-US5-TC6-2`; `US5-TC18-1` into `grade10-site-vault-case-lifecycle-US5-TC10-2`
-- **New ids kept** - `grade10-site-vault-case-lifecycle-US1-TC7-1`, another collector's call-off; `grade10-site-vault-case-lifecycle-US5-TC16-1`, an ask for the item back that is not the collector's to make
-- **Contradicted** - none
-- **Uncovered anchors** - none: every journey this delta serves has a case
-- **Automated cases re-versioned** - `grade10-site-vault-case-lifecycle-US1-TC1-2`, `grade10-site-vault-case-lifecycle-US1-TC2-2`, `grade10-site-vault-case-lifecycle-US1-TC3-2`, `grade10-site-vault-case-lifecycle-US2-TC1-2`, `grade10-site-vault-case-lifecycle-US4-TC1-2`, `grade10-site-vault-case-lifecycle-US4-TC2-2`, `grade10-site-vault-case-lifecycle-US4-TC5-2`, `grade10-site-vault-case-lifecycle-US5-TC1-2`, `grade10-site-vault-case-lifecycle-US5-TC2-2`, `grade10-site-vault-case-lifecycle-US5-TC3-2`, `grade10-site-vault-case-lifecycle-US5-TC4-2`, `grade10-site-vault-case-lifecycle-US5-TC5-2`, `grade10-site-vault-case-lifecycle-US5-TC8-2`, `grade10-site-vault-case-lifecycle-US5-TC10-2`, `grade10-site-vault-case-lifecycle-US5-TC12-2`, `grade10-site-vault-case-lifecycle-US6-TC1-2`, `grade10-site-vault-case-lifecycle-US6-TC2-2`, `grade10-site-vault-case-lifecycle-US6-TC4-2`, `grade10-site-vault-case-lifecycle-US6-TC5-2` were decided by `request.spec.ts`, `offer.spec.ts`, `loan.spec.ts` or `walk-in.spec.ts` at `-1`; each is `manual` until task 4.4 retitles its API walk and flips it
-
-### Manual
-
-| Manual | Why |
-| --- | --- |
-| `US4-TC1-1` | A person reads the staff reason against what staff typed; only the reason's presence automates |
-| `US4-TC2-1` | A person reads that the ending names the party who closed it in the collector's words |
-| `US4-TC3-1` | A person reads that both clocks give one wording and the timeline names the clock |
-| `US4-TC4-1` | A person reads the figure, the notice date and the date to pay by against the notice that was sent |
-| `US5-TC4-1`, `US5-TC5-1`, `US5-TC6-1`, `US5-TC7-1` | A person reads that the fact and the one thing to do next are the collector's words, not the status word |
-| `US5-TC14-1` | A person reads which of the two facts the page leads with |
-| `grade10-site-vault-case-lifecycle-US1-TC4-1` | A person cancels a draft staff opened from the collector's side and reads the mailbox; the worker's test decides it stays listed |
-| `grade10-site-vault-case-lifecycle-US6-TC3-1` | Deferred at review: a row the pre-condition contradicts, and the collector's own list is never read |
+- A second ask for the item back is answered with the case as the first left it, and records nothing (Q21).
+- The guarded-move refusal fires on any status change under the caller.
+- An expired case reads one wording whichever clock ran out; the clock is named on its timeline.
+- An unissued id and another collector's case read the same not-found page.
+- The book-within-30-days line shows from terms agreed onward, in every state with no live booking.
+- A walk-in draft runs out 7 days from its last touch; it stays a walk-in until sent, and is removed silently when it runs out or staff cancel it.
