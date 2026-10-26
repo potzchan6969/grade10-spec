@@ -57,8 +57,8 @@ has only Order Placed reached. Design confirms
 ❓ **A full refund** — the summary keeps the paid total and shows the whole
 amount as its Refund row. Design confirms
 
-❓ **A safe carrier address** — an `https` address opens; any other scheme,
-such as `javascript:`, offers no Track Order. Engineering confirms
+**A safe carrier address** — an `https` address opens; any other scheme,
+such as `javascript:`, offers no Track Order
 
 **Read states** — loading, localized failure with Retry, and not-found stay
 distinct at the same address

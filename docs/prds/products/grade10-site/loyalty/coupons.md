@@ -46,12 +46,11 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 - 🚧 **Online-only is never a QR** — a coupon the till cannot match names
   its scope and carries no Use now, so no member holds out a code the sale
   refuses
-- 🚧 **The wallet refreshes on return** — a spent coupon shows as used the
-  next time the page loads; the list does not listen while the card is up
-- ❓ **A close signal for a presented coupon** — `CouponList` reports its
-  scan surface's open and close so a consumer could refresh the moment the
-  member pockets their phone; whether the coupon and reward lists keep it,
-  or the return refresh covers it, is unconfirmed — Engineering
+- 🚧 **The wallet re-reads when the scan closes** — `CouponList` reports
+  its scan surface's open and close; closing it puts the token away and
+  re-reads the coupons, so one staff just scanned reads as used the moment
+  the member pockets their phone. The list does not listen while the card
+  is up
 - **The scan token's life** — each Use now mints a fresh presentation of
   the member card naming the coupon: it lives ten minutes, one scan consumes
   it, and while held out it renews itself a minute before it runs out and
@@ -59,11 +58,14 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
   no longer be shown puts the square away. It is the same on a sale: a scan
   over the member's own sale opens a new session that keeps the sale and its
   points, and chooses the coupon for staff to apply
-- ❓ **Page or section** — whether the wallet stays its own Coupons page or
-  folds into the Membership page as a section; UI forthcoming — Design
+- 🚧 **Its own page** — the wallet is its own Coupons page, Available and
+  Used & Expired as tabs; Membership keeps the coupons still to spend as a
+  section
 - 🚧 **Points still buy more** — under the Available list sits a Rewards
   upsell ("Want more coupons?"); where its CTA lands waits on the
   Membership design, so the link target is ❓ — Design
+
+::story{id="loyalty-coupons-screens-coupons--default" title="The Coupons page"}
 
 ## Applying one
 
@@ -82,14 +84,14 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
 - **A gift keeps its minimum to the end** — staff ringing the sale below a
   gift's minimum spend after Apply take its line back off, the coupon goes
   back to the wallet and staff are told
-- ❓ **A gift on a sale locked for tender** — whether staff are told to
-  cancel the tender and remove a gift whose sale fell below its minimum
-  while locked, or the sale is let through, is unconfirmed — Product
-- ❓ **A gift with no membership to reach** — whether a sale rung while the
-  till cannot reach membership refuses the gift so the member comes back,
-  or staff may key it by hand, is unconfirmed — Product
-- ❓ **A returned sale's gift** — whether returning the goods takes the gift
-  back, or the member keeps it, is unconfirmed — Product
+- **A sale locked for tender keeps its minimum too** — nothing may write to
+  it, so the gift's line stays and staff are told to cancel the tender and
+  remove the gift; the sale is never let through below the minimum
+- **No membership, no gift** — a sale the till cannot tie to a member offers
+  no gift; the coupon stays with the member for a later visit, and staff
+  never key a free line in its place
+- **A return keeps the gift with the member** — whatever the sale falls to,
+  the gift is never taken back, and its coupon stays used
 - **A sale that ends gives it back** — a counter sale nobody paid releases
   its coupon when a newer promise retires it, or an hour after its last plan,
   not the next day
@@ -274,5 +276,8 @@ are on [Discounts](/p/grade10-site/store/discounts).
 | Deactivating a code | Decided | It never refuses a claim. The shop honours a code a cart already carries, so settlement guards the money and the deactivation is retried. | Product |
 | What the member is shown | Decided | A coupon a sale claims reads as it would unclaimed: no claimed state, no sale named, and nothing said when a claim moves. A till spend they were told had landed is still corrected if its sale is abandoned unpaid. | Product |
 | An online order that expires | Decided | It keeps its claim until its code can no longer be collected, and the programme's clock then releases it. A counter sale gives its coupon back at its hour. | Engineering |
+| A gift on a sale locked for tender | Decided | Staff are told to cancel the tender and remove the gift. The extension cannot write to a locked sale, and letting it through hands out a gift below its minimum. | Product |
+| A gift with no membership to reach | Decided | Refused; the member comes back. A free line keyed by hand spends no coupon, so the same gift could be claimed again online or at another till. | Product |
+| A returned sale's gift | Decided | The member keeps it. Staff never price a gift out of a refund at the counter, and the coupon already stays used. | Product |
 | A code collected after it was let go | Decided | The paid sale spends the coupon where no other sale claims it, so a counter sale that pays with its old code costs the member the coupon once. Where another sale claims it, that sale spends it and the paid one is reported. | Product |
 :::
