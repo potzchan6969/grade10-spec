@@ -226,7 +226,7 @@ compatibility test rather than weakening the production schema.
 4. Verify member list, owned detail, valid and rejected private links, and
    existing admin preview. Preserve the current shared submodule pin unless
    the accepted contract handoff requires its normal update.
-5. Keep `add-store-order-status` as the status owner and the guest-checkout
+5. Keep the durable spec `grade10-site/commerce/order-status` as the status owner and the guest-checkout
    change as the link/account owner. No production operation is part of this
    planning work.
 6. Optional fields allow backend and frontend rollout in either order after

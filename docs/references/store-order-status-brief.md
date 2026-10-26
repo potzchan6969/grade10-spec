@@ -5,9 +5,8 @@ records: one row per note and each combination a decision settles by name,
 drawn in #132 from the owner's thirty rows, with the badge and note the store
 gives it and where the store records it. The owner's file is
 `Grade10_Store_OrderStatus_PRD_v2.0.md`, which the store does not hold. The
-change `add-store-order-status` carries the decisions it led to, and they are
-on [Order Status](../prds/products/grade10-site/commerce/order-status.md). Read
-this as the rows task 1.1 checks, not as the requirements; where a row and the
+decisions it led to are on [Order Status](../prds/products/grade10-site/commerce/order-status.md). Read
+this as the rows the durable spec `grade10-site/commerce/order-status` was checked against, not as the requirements; where a row and the
 spec disagree, the spec is correct.
 
 ## Status
