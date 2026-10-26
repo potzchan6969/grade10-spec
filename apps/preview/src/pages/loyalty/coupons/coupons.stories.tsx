@@ -196,6 +196,39 @@ export const NoCoupons: Story = {
   },
 };
 
+/** Everything spendable is spent or lapsed: Available falls back to its
+ * own empty line — and still carries the upsell — while the history tab
+ * holds the record. */
+export const AvailableEmpty: Story = {
+  args: { coupons: COUPONS.filter((coupon) => !isOpen(coupon)) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Nothing to use yet")).toBeInTheDocument();
+    expect(canvas.getByText("Want more coupons?")).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
+    expect(await canvas.findByText(/Used on/)).toBeInTheDocument();
+    expect(
+      canvas.queryByText("No used or expired coupons"),
+    ).not.toBeInTheDocument();
+  },
+};
+
+/** A fresh wallet with only live coupons: Used & Expired is offered and
+ * answers with its own empty line. */
+export const HistoryEmpty: Story = {
+  args: { coupons: COUPONS.filter(isOpen) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
+    expect(
+      await canvas.findByText("No used or expired coupons"),
+    ).toBeInTheDocument();
+    /* The promo stays with Available, not with history's empty line. */
+    expect(canvas.queryByText("Want more coupons?")).not.toBeInTheDocument();
+  },
+};
+
 /** The same page at a phone width: Use now slides the scan card up as a
  * bottom sheet. */
 export const Narrow: Story = {
