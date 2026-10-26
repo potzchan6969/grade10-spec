@@ -34,5 +34,23 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@seankcw",
+    "reviewedAt": "2026-10-26T12:00:00Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "6feaa3419 removed the durable store suites store-wide; this change's requirement and scenarios SC46 to SC54 are untouched, and their tests live in the application repository"
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "8d58356a9 added US11, US12, US13 and US15 for guest checkout and public codes; US14, the journey this change serves, is unchanged"
+      }
+    ]
+  }
 }
