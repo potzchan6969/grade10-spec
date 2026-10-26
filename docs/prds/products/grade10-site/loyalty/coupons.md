@@ -57,6 +57,9 @@ code, unique to it — [Rewards](/p/grade10-site/loyalty/rewards#using-a-reward)
   unconfirmed — Engineering
 - ❓ **Page or section** — whether the wallet stays its own Coupons page or
   folds into the Membership page as a section; UI forthcoming — Design
+- 🚧 **Points still buy more** — under the Available list sits a Rewards
+  upsell ("Want more coupons?"); where its CTA lands waits on the
+  Membership design, so the link target is ❓ — Design
 
 ## Applying one
 

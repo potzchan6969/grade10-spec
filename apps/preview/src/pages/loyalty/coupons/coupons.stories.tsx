@@ -1,19 +1,26 @@
+import { Alert } from "@grade10/design-system/components/display/alert";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
+import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { type CouponItem, CouponList, SiteHeader } from "@grade10/ui";
+import { Gift } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
+import { storyHref } from "../../workbench-story-nav";
 import {
   COUPON_LIST_COPY,
+  COUPON_PROMO_COPY,
   COUPONS,
   COUPONS_PAGE_COPY,
 } from "../loyalty-content";
+
+const REWARDS_HREF = storyHref("loyalty-rewards-screens-rewards--default");
 
 const isOpen = (coupon: CouponItem) => coupon.status === "open";
 
@@ -24,6 +31,21 @@ const couponState = (
   data.length > 0
     ? { status: "ready" as const, data }
     : { status: "empty" as const, ...empty };
+
+/** The upsell under Available: points still buy more coupons. */
+const couponPromo = (
+  <Alert
+    actions={
+      <Button render={<a href={REWARDS_HREF} />} size="sm" variant="secondary">
+        {COUPON_PROMO_COPY.cta}
+      </Button>
+    }
+    description={COUPON_PROMO_COPY.description}
+    dismissible={false}
+    icon={<Gift aria-hidden />}
+    title={COUPON_PROMO_COPY.title}
+  />
+);
 
 /**
  * The coupon wallet as a store assembles it: `SiteHeader`, the page's own
@@ -70,6 +92,7 @@ function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
               <TabsContent className="pt-4" value="available">
                 <CouponList
                   copy={COUPON_LIST_COPY}
+                  promo={couponPromo}
                   state={couponState(coupons.filter(isOpen), {
                     message: COUPONS_PAGE_COPY.noAvailable,
                     description: COUPONS_PAGE_COPY.noAvailableDescription,
@@ -119,6 +142,11 @@ export const Default: Story = {
       canvas.getByRole("heading", { level: 1, name: "Coupons" }),
     ).toBeInTheDocument();
     expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
+    /* The upsell sits under Available, not on the history tab. */
+    expect(canvas.getByText("Want more coupons?")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: "Browse Rewards" }),
+    ).toBeInTheDocument();
     /* Inside its last 14 days the Use by line reads emphasised; an
      * unflagged coupon's reads plainly. */
     expect(canvas.getByText(/Use by 8 Nov 2026/)).toHaveClass(
@@ -130,6 +158,8 @@ export const Default: Story = {
     );
     expect(canvas.queryByText(/Used on/)).not.toBeInTheDocument();
     await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
+    /* The upsell is Available's alone — history shows no promo. */
+    expect(canvas.queryByText("Want more coupons?")).not.toBeInTheDocument();
     expect(await canvas.findByText(/Used on/)).toBeInTheDocument();
     expect(canvas.getByText(/Void/)).toBeInTheDocument();
     expect(canvas.getByText(/Expired 1 May 2026/)).toBeInTheDocument();

@@ -18,7 +18,7 @@ import {
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
 import { Ticket } from "@phosphor-icons/react";
-import { useEffect, useId, useState } from "react";
+import { type ReactNode, useEffect, useId, useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
 import { PromoQrCard } from "../store-cart/promo-qr-card";
@@ -62,6 +62,10 @@ type CouponListProps = {
    * consumer's cue to refetch — a scanned coupon may have been spent at the
    * till meanwhile, and a fresh `state` moves it to history on its own. */
   onScanOpenChange?: (open: boolean, coupon: CouponItem) => void;
+  /** Consumer-owned promo under the list — an upsell banner, say. Drawn only
+   * when the list is ready: loading, empty and error states keep their own
+   * surfaces. */
+  promo?: ReactNode;
   className?: string;
 };
 
@@ -226,6 +230,7 @@ function CouponList({
   copy,
   state,
   onScanOpenChange,
+  promo,
   className,
 }: CouponListProps) {
   const smUp = useSmUp();
@@ -286,6 +291,7 @@ function CouponList({
           ))}
         </List>
       ) : null}
+      {state.status === "ready" && promo ? promo : null}
       {scan ? (
         <CouponScanSurface
           copy={copy}
