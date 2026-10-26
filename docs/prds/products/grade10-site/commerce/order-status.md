@@ -31,6 +31,11 @@ and nothing else.
   up; one no carrier held - a till sale, a hand delivery, a fulfilment marked
   done with no tracking - arrives as it is handed over. A canceled parcel or
   voided label counts for nothing
+- **Staff confirm delivery** - a parcel its carrier never reports delivered,
+  lost or returned to sender, keeps the order Shipped until staff mark the
+  order delivered on its admin order page, once the customer has it or it is
+  settled another way. The mark is set once, names who made it, and no read
+  from Shopify clears it. Points still earn at fulfilment
 - **Till sales** - a sale at the counter reads through the same rules as a
   web order; where an order was sold never decides its badge
 - **Orders covered** - orders Shopify holds. Your Orders lists a web
@@ -96,6 +101,7 @@ Badges beyond the five, and thresholds a merchant sets.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Completed | Decided | Every item fulfilled, paid in full and delivered, which is what a collector reads as done. Not archived: the shop does not archive orders, so a rule waiting on it would never show Completed. Waits for delivery since 2026-10-24: Completed beside a parcel still travelling contradicted the delivery steps. A parcel no carrier tracks arrives as it is handed over, so till sales and untracked fulfilments still complete. | Product |
+| A carrier that never reports delivery | Decided | Staff mark the order delivered in the store admin; no time limit completes it on its own. A carrier that never scans delivered is rare, and a person who knows the customer has the goods is a better judge than a clock. Decided 2026-10-26. | Product |
 | Pickup | Decided | No pickup badge this delivery. The shared pill keeps its pickup rung, since pickup is a confirmed later phase and removing the rung means adding it back. | Product |
 | Refund before fulfilment | Decided | Money going back is reported ahead of shipping progress. A held or scheduled order stays Processing, since it is still being worked on. | Product |
 | Returns | Decided | Whether items came back can choose a note, never the badge. The refund already moves the badge; the return only explains it. | Product |

@@ -28,13 +28,14 @@ the same answer from the same facts.
 ### Requirement: Order status reads a named vocabulary of Shopify facts
 
 Four Shopify facts about an order decide its status: three decide the badge,
-and return state only the note. A value outside a fact's set reads as its
-default.
+and return state only the note. Completed also waits for the order's parcels
+to arrive. A value outside a fact's set reads as its default.
 
 **Named vocabulary** - Order status SHALL be derived from exactly these four
-facts about an order, read from these Shopify sources, and from no other
-input. The badge SHALL read only order state, payment state and fulfilment
-state; return state SHALL feed the note alone.
+facts about an order, read from these Shopify sources, and from whether its
+parcels arrived, and from no other input. The badge SHALL read only order
+state, payment state and fulfilment state, and whether the parcels arrived
+for Completed alone; return state SHALL feed the note alone.
 
 | Fact | Shopify source | Accepted values | Default | Feeds |
 | --- | --- | --- | --- | --- |
@@ -51,8 +52,8 @@ regard to letter case. No value of any fact SHALL prevent a badge from
 resolving.
 
 **Not read** - The mapping SHALL NOT read whether Shopify archived the order
-(`closedAt`), carrier tracking, delivery estimates, line-item quantities,
-monetary amounts, or elapsed time.
+(`closedAt`), delivery estimates, line-item quantities, monetary amounts, or
+elapsed time, and SHALL read a parcel's tracking only for whether it arrived.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-qux rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-01 - An unrecognised Shopify value is indeterminate
@@ -82,8 +83,8 @@ monetary amounts, or elapsed time.
 - **THEN** the badge is `completed`
 - **AND** it is the badge the same order resolves to with `paid` and `fulfilled`
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-unk rev=1 -->
-#### Scenario: grade10-site-commerce-order-status-SC-17 - A carrier status does not move the badge
+<!-- trace:scenario id=g10.commerce-order-status.SC-unk rev=2 -->
+#### Scenario: grade10-site-commerce-order-status-SC-17 - A delivered parcel does not complete an unfulfilled order
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order whose order state is `open`, payment state is `paid`, and fulfilment state is `unfulfilled`
@@ -343,6 +344,13 @@ display status is `delivered` or `picked_up`, or when it names no tracking
 number and no tracking link, since no carrier held it. A fulfilled order with
 no parcel recorded SHALL count as arrived.
 
+**Staff confirm delivery** - A fulfilled web order SHALL also count as
+arrived once staff mark it delivered in the store admin, for a parcel whose
+carrier never reports delivery. The mark SHALL be offered only on a
+fulfilled web order that has not arrived, SHALL be set once, SHALL record
+who marked it and when, and no read from Shopify SHALL clear it. It SHALL
+NOT change when points are earned.
+
 **One delivered rule** - Every surface that says whether an order was
 delivered - the delivery steps, the badge, and the operator's order list -
 SHALL read this one rule.
@@ -356,6 +364,16 @@ SHALL read this one rule.
 - **WHEN** its order status is resolved
 - **THEN** the badge is `shipped`
 - **AND** it becomes `completed` once every tracked parcel is delivered or picked up
+
+<!-- trace:scenario id=g10.commerce-order-status.SC-3xr rev=1 -->
+#### Scenario: grade10-site-commerce-order-status-SC-32 - Staff confirm a parcel its carrier never reported
+**Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
+
+- **GIVEN** a web order whose fulfilment state is `fulfilled` and payment state is `paid`
+- **AND** a parcel a carrier tracks has never been reported delivered or picked up
+- **WHEN** staff mark the order delivered in the store admin
+- **THEN** the badge is `completed`
+- **AND** a later read from Shopify that still shows the parcel in transit leaves it `completed`
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-5s3 rev=2 -->
 #### Scenario: grade10-site-commerce-order-status-SC-31 - Archiving an order does not move the badge
@@ -410,12 +428,12 @@ refunded or canceled SHALL reach that copy within 5 minutes. Any other change
 to an order not canceled and placed in the last 90 days - its fulfilment or
 return, or a payment voided or expired - SHALL reach it within an hour.
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-nwz rev=1 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-nwz rev=2 -->
 #### Scenario: grade10-site-commerce-order-status-SC-14 - Two surfaces report one order identically
 **Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
 
 - **GIVEN** one order read by two surfaces that both show its status
-- **WHEN** both resolve its order status from the same four facts
+- **WHEN** both resolve its order status from the same stored facts
 - **THEN** both display the same badge
 - **AND** a surface that displays the note displays the identifier this mapping emitted
 

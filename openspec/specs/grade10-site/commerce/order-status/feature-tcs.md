@@ -18,7 +18,7 @@ way, finished, canceled, or refunded,
 **so that** I am never shown a blank status and never shown a status the surface
 invented for a combination nobody defined.
 
-<!-- trace:case id=g10.commerce-order-status.TC-oa5 rev=1 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3,g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
+<!-- trace:case id=g10.commerce-order-status.TC-oa5 rev=2 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3,g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28,g10.commerce-order-status.SC-3xr -->
 ### g10.commerce-order-status.US1-TC1: Each order's badge reads from the facts that define it, alike on both pages
 
 Runs once per row of **Test data**.
@@ -46,13 +46,16 @@ Runs once per row of **Test data**.
 | paid, unfulfilled | Processing |
 | paid, one of two items fulfilled | Shipped |
 | paid in part, fulfilled | Shipped |
-| paid, fulfilled | Completed |
+| paid, fulfilled with no tracking number | Completed |
 | paid, unfulfilled, canceled | Canceled |
 | refunded in full, unfulfilled | Refunded |
 | partially refunded, fulfilled | Refunded |
 | local pickup, paid, unfulfilled | Processing |
 | local pickup, paid, fulfilled | Completed |
-| paid in full and fulfilled, the carrier reading in transit or out for delivery | Completed |
+| paid in full and fulfilled, the carrier reading in transit or out for delivery | Shipped |
+| paid in full and fulfilled, the carrier reading delivered or picked up | Completed |
+| paid in full and fulfilled, the carrier reading in transit, marked delivered by staff in the admin | Completed |
+| paid in full and fulfilled, its one tracked parcel canceled in Shopify | Completed |
 | paid in part and fulfilled, the carrier reading delivered | Shipped |
 | paid, one of two items fulfilled, the carrier reading delivered | Shipped |
 | paid, partially fulfilled, placed before this delivery | Shipped |
@@ -185,7 +188,7 @@ Runs once per row of **Test data**.
 **I want** order history and order detail to agree,
 **so that** I do not have to decide which surface is telling the truth.
 
-<!-- trace:case id=g10.commerce-order-status.TC-e0j rev=1 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
+<!-- trace:case id=g10.commerce-order-status.TC-e0j rev=2 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
 ### g10.commerce-order-status.US3-TC2: A change in the shop reaches both pages within its window
 
 Runs once per row of **Test data**.
@@ -214,17 +217,18 @@ Runs once per row of **Test data**.
 | in the last day | paid, fulfilled | refund one item | Refunded | 5 minutes |
 | in the last day | paid, one of two items fulfilled | refund one item | Refunded | 5 minutes |
 | in the last day | paid, unfulfilled | cancel it, refunding nothing | Canceled | 5 minutes |
-| in the last day | payment pending, fulfilled | record the payment in full | Completed | 5 minutes |
+| in the last day | payment pending, fulfilled with no tracking number | record the payment in full | Completed | 5 minutes |
 | 91 days ago | paid, fulfilled | refund one item | Refunded | 5 minutes |
 | in the last day | paid, two items unfulfilled | fulfil one | Shipped | 60 minutes |
-| in the last day | paid, unfulfilled | fulfil every item | Completed | 60 minutes |
+| in the last day | paid, unfulfilled | fulfil every item with no tracking number | Completed | 60 minutes |
+| in the last day | paid, fulfilled, the carrier reading in transit | mark it delivered on its admin order page | Completed | 1 minute |
 | in the last day | payment authorized, unfulfilled | void the payment | Canceled | 60 minutes |
-| 89 days ago | paid, unfulfilled | fulfil every item | Completed | 60 minutes |
+| 89 days ago | paid, unfulfilled | fulfil every item with no tracking number | Completed | 60 minutes |
 
 **Steps:**
 
 1. Read its badge on Your Orders.
-2. Make `<change>` in the staging shop's admin, noting the time; reload Your Orders until the badge changes.
+2. Make `<change>` in the staging shop's admin, or in the store admin for a delivery staff mark, noting the time; reload Your Orders until the badge changes.
 3. Open Order Details, and read the badge.
 
 **Expected Results:**
@@ -242,7 +246,7 @@ Runs once per row of **Test data**.
 - No surface shows the note in this delivery, so no catalog holds its words yet.
 - A change to an order Shopify has archived reaches the badge on its next payment, refund, cancellation or shipment, not within the hour.
 - An order staff delete in Shopify stays in Your Orders with the badge it last read.
-- Whether Shopify archived an order never decides its badge: the shop does not archive orders, and Completed is every item fulfilled and paid in full.
+- Whether Shopify archived an order never decides its badge: the shop does not archive orders, and Completed is every item fulfilled, paid in full and arrived.
 - An order partly fulfilled and paid reads Shipped: Completed needs every item fulfilled.
 - A fulfilled order paid only in part, or not yet paid, reads Shipped with no note: Completed needs it paid in full.
 - Your Orders and Order Details derive the badge from one stored row, so they differ only until Your Orders loads again. An order paid in full, refunded or canceled reaches the row within 5 minutes; any other change to an order not canceled and placed in the last 90 days, a fulfilment or a payment voided or expired included, within the hour, archived in Shopify or not.
