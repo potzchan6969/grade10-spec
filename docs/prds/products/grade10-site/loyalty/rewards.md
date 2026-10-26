@@ -51,7 +51,8 @@ variant alone, so a coupon scoped to named products or a filter is online only
 | Reward shop | A member buys it | Points, the reward's cost |
 | Birthday `TBC` | Once a year, on the birthday the member's profile holds | None |
 | Registration `TBC` | Once, when the account is created | None |
-| Operator gift `TBC` | An operator hands one out, for a campaign or as goodwill | None |
+| Operator gift `TBC` | An operator hands one out as goodwill | None |
+| Campaign gift | A member wins a campaign - [Campaigns](/p/grade10-site/loyalty/campaigns) | None |
 
 ## Reward Shop
 
@@ -175,7 +176,7 @@ Every reward the programme knows, on sale or not; the
 | Field | Meaning |
 | --- | --- |
 | Slug and name | The id it is referred to by, and what the member reads |
-| Cost | Points per redemption, copied onto the redemption when it is made |
+| Cost | Points per redemption, copied onto the redemption when it is made; optional on a campaign gift |
 | Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken - [Authoring a Reward](/p/grade10-site/loyalty/operator-console#authoring-a-reward) |
 | Stock | Optional; a stocked reward is never oversold |
 | Window | Optional; outside it the reward cannot be redeemed |
@@ -188,6 +189,19 @@ Every reward the programme knows, on sale or not; the
   rule the member never sees
 - ❓ **The physical catalog** - which items, and their point prices; Product's
   call
+
+## Gifts from a Campaign
+
+A grant-only reward is one only a campaign hands out -
+[Campaigns](/p/grade10-site/loyalty/campaigns).
+
+- **Never in the shop** - never listed, and no member, till or quote spends
+  points on it
+- **No cost needed** - its cost may stay empty; a reward in the shop always
+  has one
+- **No stock** - the campaign's quota is its one limit
+- **Not reversible** - voiding its coupon takes it back, with no points to
+  return
 
 ## Cancelling a Redemption
 
