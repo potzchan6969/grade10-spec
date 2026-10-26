@@ -30,9 +30,9 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Earned")).toBeInTheDocument();
-    expect(canvas.getByText("+440")).toBeInTheDocument();
-    expect(canvas.getByText("-820")).toBeInTheDocument();
-    expect(canvas.getByText("+128")).toBeInTheDocument();
+    expect(canvas.getByText("440 pts")).toBeInTheDocument();
+    expect(canvas.getByText("820 pts")).toBeInTheDocument();
+    expect(canvas.getByText("128 pts")).toBeInTheDocument();
   },
 };
 
@@ -41,6 +41,6 @@ export const Empty: Story = {
   args: { totals: { earned: 0, used: 0, pending: 0 } },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getAllByText("0")).toHaveLength(3);
+    expect(canvas.getAllByText("0 pts")).toHaveLength(3);
   },
 };

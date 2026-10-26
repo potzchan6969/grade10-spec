@@ -29,8 +29,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("+440")).toBeInTheDocument();
-    expect(canvas.getByText("-820")).toBeInTheDocument();
+    expect(canvas.getByText("440 pts")).toBeInTheDocument();
+    expect(canvas.getByText("820 pts")).toBeInTheDocument();
     expect(canvas.getByText("+128 pts")).toBeInTheDocument();
     expect(canvas.getByText("Order #10511")).toBeInTheDocument();
     expect(canvas.getByText("Redeemed HK$50 off")).toBeInTheDocument();
