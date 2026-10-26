@@ -11,3 +11,4 @@ reviewed:
   user-journeys: ac397561
   specs: 4a7cb479
   tasks: 60fd004b
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 4.1"

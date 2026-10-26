@@ -5,3 +5,4 @@ page_waived: "predates the page rule"
 reviewed:
   user-journeys: 948a7440
   specs: "65627925"
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 5.3, 5.6"

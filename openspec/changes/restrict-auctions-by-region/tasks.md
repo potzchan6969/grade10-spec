@@ -20,5 +20,5 @@
 
 ## 5. The Walk (grade10)
 
-- [ ] 5.1 Walk a restricted request end to end on a deployed lane — blocked: the local E2E stack needs Docker, and the edge's region signal exists only behind Cloudflare
+- [ ] 5.1 Walk a restricted request end to end on a deployed lane — blocked: the local E2E stack needs Docker, and the edge's region signal exists only behind Cloudflare - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 5.2 Product and legal confirm the restricted list (decision Q9) — blocked: needs Product and legal

@@ -10,3 +10,4 @@ awaiting:
 reviewed:
   proposal: aade30ab
   decisions: 33717ffa
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 3.1"

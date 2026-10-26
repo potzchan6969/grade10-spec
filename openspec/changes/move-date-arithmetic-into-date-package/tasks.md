@@ -17,4 +17,4 @@
 
 ## 3. The walk (grade10)
 
-- [ ] 3.1 Run the E2E specs that reach a moved function, directly (auction listing media, vault loan, vault offer) or through `helpers/grading-uncollected.ts` (grading uncollected and handback), and compare any failure with `main`'s own E2E run — blocked: the E2E specs need the local application stack (Docker), which this environment does not have
+- [ ] 3.1 Run the E2E specs that reach a moved function, directly (auction listing media, vault loan, vault offer) or through `helpers/grading-uncollected.ts` (grading uncollected and handback), and compare any failure with `main`'s own E2E run — blocked: the E2E specs need the local application stack (Docker), which this environment does not have - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived

@@ -1425,7 +1425,7 @@ Stage (c).
       `grade10-admin-grading-counter-SC-68`,
       `grade10-site-grading-submission-lifecycle-SC-36`,
       `grade10-site-grading-submission-lifecycle-SC-37`)
-      — partly: the console walks read the 90 days pinned (`grade10-admin-grading-counter-US12-TC4-2`, `grade10-admin-grading-counter-US12-TC5-2`); the site's two cases wait on the redesigned submission page (Q147); not run — blocked: the isolated stack needs Docker
+      — partly: the console walks read the 90 days pinned (`grade10-admin-grading-counter-US12-TC4-2`, `grade10-admin-grading-counter-US12-TC5-2`); the site's two cases wait on the redesigned submission page (Q147); not run — blocked: the isolated stack needs Docker - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [x] 20.8 Skip every rung, the storage letter, the notice and the ready letter
       for a submission with no card left on the ladder, and count every rung
       on the `Asia/Hong_Kong` day, its tests red first; then run 20.5's checks
@@ -2387,7 +2387,7 @@ lands. Stage (c).
 - [ ] 30.8 Verify: `pnpm run test`, `pnpm run check:app-bundles`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
-      — partly: the grading suites, `check:libs`, the typecheck and lint pass; `check:app-bundles` fails on the base, where the auction's winner-order view reads `@grade10/i18n`'s root into the console's orders chunk, and the stories lane was not run
+      — partly: the grading suites, `check:libs`, the typecheck and lint pass; `check:app-bundles` fails on the base, where the auction's winner-order view reads `@grade10/i18n`'s root into the console's orders chunk, and the stories lane was not run - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [x] 30.9 Read the notice period off the detail's pinned terms in
       `PostNoticeDialog` and the timeline's notice entry, the detail carrying
       `noticePeriodDays`, its tests red first; needs 20.6; then run 30.8's
@@ -2480,7 +2480,7 @@ Both walks drive these routes, so it lands with stage (b).
       `apps/frontend/grade10/e2e/helpers/env.ts`
 - [ ] 32.6 Verify: `pnpm run test:backend`, `pnpm run test:e2e:smoke` on the
       isolated stack, `pnpm run typecheck`, `pnpm run lint`
-      — blocked: `pnpm run test:e2e:smoke` needs the isolated stack, which needs Docker
+      — blocked: `pnpm run test:e2e:smoke` needs the isolated stack, which needs Docker - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [x] 32.7 Seed a customer-bookable diary service under the slug `grading` at
       the isolated stack's start, so the site's `/book?service=grading` link
       resolves on the dev and e2e stacks; then run 32.6's checks
@@ -2502,7 +2502,7 @@ and `ready_at` that stand in for waiting. Stage (b).
       `grade10-site-grading-submission-plan-US-05`,
       `grade10-site-grading-submission-plan-US-06`,
       `grade10-site-grading-submission-plan-US-07`,
-      `grade10-site-grading-submission-plan-US-08`)
+      `grade10-site-grading-submission-plan-US-08`) - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 33.2 Walk the drop-off in
       `apps/frontend/grade10/e2e/tests/grading/dropoff.spec.ts`
       (`grade10-site-grading-dropoff-booking-US-01`,
@@ -2510,7 +2510,7 @@ and `ready_at` that stand in for waiting. Stage (b).
       `grade10-site-grading-dropoff-booking-US-03`,
       `grade10-site-grading-dropoff-booking-US-04`,
       `grade10-site-grading-dropoff-booking-US-05`,
-      `grade10-site-grading-dropoff-booking-US-06`)
+      `grade10-site-grading-dropoff-booking-US-06`) - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 33.3 Walk the counter's hand-in in
       `apps/frontend/grade10/e2e/tests/grading/handin.spec.ts`
       (`grade10-admin-grading-counter-US-01`,
@@ -2527,7 +2527,7 @@ and `ready_at` that stand in for waiting. Stage (b).
       `grade10-site-grading-submission-lifecycle-US-11`,
       `grade10-admin-grading-batches-US-05`,
       `grade10-site-grading-collector-notifications-US-01`,
-      `grade10-site-grading-collector-notifications-US-02`)
+      `grade10-site-grading-collector-notifications-US-02`) - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 33.4 Flip the cases these walks decide with
       `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks'
       own commit, and name in the counter suite and in this change's
@@ -2538,7 +2538,7 @@ and `ready_at` that stand in for waiting. Stage (b).
       other step, the agreement signed at `/grading/sign` included, is driven
 - [ ] 33.5 Verify: `pnpm run test:e2e` on the isolated stack,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
-      grade10-spec
+      grade10-spec - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 
 ## 34. The walk — the batch, the hand-back and what is left behind (grade10) (owner: @ecchochan)
 
@@ -2556,7 +2556,7 @@ and `ready_at` that stand in for waiting. Stage (c).
       `grade10-admin-grading-batches-US-04`,
       `grade10-site-grading-submission-lifecycle-US-03`,
       `grade10-site-grading-submission-lifecycle-US-04`,
-      `grade10-site-grading-submission-lifecycle-US-05`)
+      `grade10-site-grading-submission-lifecycle-US-05`) - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 34.2 Walk the hand-back in
       `apps/frontend/grade10/e2e/tests/grading/handback.spec.ts`
       (`grade10-admin-grading-counter-US-04`,
@@ -2573,7 +2573,7 @@ and `ready_at` that stand in for waiting. Stage (c).
       `grade10-site-grading-counter-documents-US-05`,
       `grade10-site-grading-submission-lifecycle-US-06`,
       `grade10-site-grading-submission-lifecycle-US-07`,
-      `grade10-site-grading-submission-lifecycle-US-09`)
+      `grade10-site-grading-submission-lifecycle-US-09`) - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 34.3 Walk what is left behind in
       `apps/frontend/grade10/e2e/tests/grading/uncollected.spec.ts`, an
       admin's erasure refused while a submission is live and taken once it is
@@ -2584,7 +2584,7 @@ and `ready_at` that stand in for waiting. Stage (c).
       `grade10-site-vault-retention-and-erasure-US-01`,
       `grade10-site-vault-retention-and-erasure-US-02`,
       `grade10-site-vault-retention-and-erasure-US-03`,
-      `grade10-site-vault-retention-and-erasure-US-04`)
+      `grade10-site-vault-retention-and-erasure-US-04`) - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 34.4 Flip the cases these walks decide with
       `pnpm run tcs:automated <case…> --decided-by <walk path>` — among them
       `grade10-admin-grading-batches-US1-TC18-1` and
@@ -2598,7 +2598,7 @@ and `ready_at` that stand in for waiting. Stage (c).
       (`grade10-admin-grading-counter-US12-TC2-1`). Every other step is driven
 - [ ] 34.5 Verify: `pnpm run test:e2e` on the isolated stack,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
-      grade10-spec
+      grade10-spec - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 
 ## 35. The manual (grade10-spec) (owner: @ecchochan)
 

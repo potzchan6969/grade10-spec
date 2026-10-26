@@ -10,3 +10,4 @@ reviewed:
   tech-design: 269b73fd
   specs: "73561418"
   tasks: 34ab7bd1
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.1"

@@ -11,3 +11,4 @@ reviewed:
   specs: 710b8869
   test-cases: 6278661d
   tasks: e4a0e579
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 8.4; CI checks are no longer needed for 6.4, 8.1, 8.2"

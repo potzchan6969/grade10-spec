@@ -14,3 +14,4 @@ reviewed:
   proposal: 74785a55
   decisions: fc0edaea
   tech-design: "002839e3"
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 5.1"

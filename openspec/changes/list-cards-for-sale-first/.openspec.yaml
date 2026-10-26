@@ -6,3 +6,4 @@ reviewed:
   decisions: 93428ff2
   user-journeys: de234c07
   tasks: 509c7f56
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.1"

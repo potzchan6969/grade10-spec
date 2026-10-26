@@ -17,4 +17,4 @@
 
 ## 4. The walk
 
-- [ ] 4.1 Walk `grade10-site-site-page-shell-US-03` on staging: set a profile image, open the account menu, see it; remove it, see the initial — blocked: needs a deployed stack with the `AVATARS` bucket (add-account-profile 6.1)
+- [ ] 4.1 Walk `grade10-site-site-page-shell-US-03` on staging: set a profile image, open the account menu, see it; remove it, see the initial — blocked: needs a deployed stack with the `AVATARS` bucket (add-account-profile 6.1) - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived

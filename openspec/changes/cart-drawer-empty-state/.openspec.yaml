@@ -11,3 +11,4 @@ reviewed:
   user-journeys: 34adb52e
   specs: 10d0e7a5
   test-cases: 73483bc9
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.1, 3.2"

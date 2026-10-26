@@ -172,7 +172,7 @@ Uses draft `feature-tcs.md` as its planning input. Groups 2 to 5 landed first.
       are named in the walk's `rounds.md` row.
 - [ ] 6.3 Walk the same three journeys in the staging console once the work
       is deployed there.
-      — blocked: needs the work deployed to staging and a staging console session
+      — blocked: needs the work deployed to staging and a staging console session - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 6.4 Verify: the walks pass on the local stack and on staging, and
       `pnpm run tcs:validate` is clean in the store.
-      — blocked: the walks need the isolated stack (Docker) and staging
+      — blocked: the walks need the isolated stack (Docker) and staging - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived

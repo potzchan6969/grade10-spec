@@ -12,3 +12,4 @@ hands:
   dev: "@seankcw"
   pm: "@seankcw"
   design: "@seankcw"
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 5.3; CI checks are no longer needed for 2.1, 5.1, 5.2"

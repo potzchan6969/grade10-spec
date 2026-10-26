@@ -12,3 +12,4 @@ reviewed:
   specs: 0de1b9ec
   test-cases: a9e067e9
   tasks: cab28396
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 4.1, 4.2, 4.3, 4.4, 4.5"

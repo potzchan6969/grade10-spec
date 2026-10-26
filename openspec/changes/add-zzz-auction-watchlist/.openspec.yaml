@@ -7,3 +7,4 @@ reviewed:
   tech-design: fbd361e0
   specs: 887f4b26
   tasks: b85863a0
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 2.1"

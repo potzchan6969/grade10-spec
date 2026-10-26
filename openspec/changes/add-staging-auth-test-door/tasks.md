@@ -41,7 +41,7 @@ Needs groups 2 and 3 landed for a green staging run; the seam and the local lane
 - [x] 4.3 Generate `freshEmail()` under the tester domain when the target is staging, and clear the sign-in limits before each spec so the suite is not held as an attacker (`shared-auth-test-sign-in-SC-06`, `shared-auth-test-sign-in-SC-21`)
 - [x] 4.4 Add a `staging-auth` Playwright project running `tests/auth/**` against the staging hosts, carrying the Cloudflare Access service token the gated apex needs, and prove the acceptance signal end to end: capture a tester's link and follow it into a session (`shared-auth-test-sign-in-SC-12`) — `e2e/playwright.staging.config.ts`, beside `uat` and `production` configs; the staging run itself needs a reviewed dispatch
 - [x] 4.5 Add the staging auth workflow — `workflow_dispatch` only, in a GitHub Environment a reviewer must approve, requesting an OIDC token for the test endpoint's audience with `id-token: write` in a workflow that checks out no pull-request code (`shared-auth-test-sign-in-SC-01`, `shared-auth-test-sign-in-SC-04`) — `.github/workflows/e2e-hosted.yml`, one workflow for staging, uat and production
-- [ ] 4.6 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test:e2e` — blocked: `test:e2e` runs on the isolated stack, which needs Docker; the test endpoint's backend, worker and seam tests pass
+- [ ] 4.6 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test:e2e` — blocked: `test:e2e` runs on the isolated stack, which needs Docker; the test endpoint's backend, worker and seam tests pass - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 
 ## 5. The architecture record (grade10)
 
