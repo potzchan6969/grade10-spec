@@ -1065,7 +1065,13 @@ artifacts:
       the cases that stay manual remain draft for human QA after deployment
       makes implementation available and are named in the walk's `rounds.md`
       row. Human review is downstream work discovered from the suite; it is
-      never a task, walk input, acceptance gate or archive gate.
+      never a task, walk input, acceptance gate or archive gate. The walk
+      runs on the local or isolated stack: deployed evidence - a walk on
+      staging, UAT or production, an observation on a live shop or a real
+      device - is never requested before archive, so no task, walk or
+      verify step waits on it. A journey only a deployed stack reaches is
+      left manual and named in the walk's row. A deploy step may be a task;
+      its verification is the local check, never the deployed system.
 
       - An `automated` case this change joined a result to - its `<v>` bumped,
       back to `draft` - owes a task in the group that builds the behaviour:

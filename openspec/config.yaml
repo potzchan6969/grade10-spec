@@ -75,7 +75,6 @@ rules:
     - "The schema instruction above holds the section rules; `pnpm check:manual` refuses a change that owes this file and carries neither it nor `design_waived: <why>` in `.openspec.yaml`."
   tasks:
     - "The schema instruction above holds the rules; `docs/governance/task-ownership.md` is the format tooling on both sides parses, and `pnpm check:manual` verifies the PRD task."
-
 # Per-operation guidance (optional)
 operations:
   apply:
@@ -87,8 +86,8 @@ operations:
       - "Commit to the current branch as tasks complete, atomically, per AGENTS.md § Pull Requests and Commits."
   archive:
     guidance:
-      - "Archive after engineering verifies implementation and records `implementation.json`; deployment does not wait for archive. `.claude/skills/openspec-archive-change/SKILL.md` and `pnpm run archive:preflight <change>` carry the steps."
-      - "Never archive with an unchecked task: finish it, or append its disposition (dropped, moved where, blocked on what) to the task text. A change that never grew a tasks.md is archived once its specs are confirmed deployed."
+      - "Archive after engineering verifies implementation and records `implementation.json`; deployment does not wait for archive. Never request deployed evidence before archive - no staging, UAT or production walk, live-shop observation or real-device check holds a task, a walk or the archive. The application repository's `/archive-change` skill and `pnpm run archive:preflight <change>` carry the steps."
+      - "Never archive with an unchecked task: finish it, or append its disposition (dropped, moved where, blocked on what) to the task text and record the owner's `tasks_waived: \"<who, why>\"`, passed to `archive:preflight` as `--tasks-waived`. A change that never grew a tasks.md is archived once its specs are confirmed implemented."
       - "The accepted contract is already durable and continues to reflect the latest accepted facts. Preserve the immutable acceptance snapshot and acceptance/implementation records with the archived change. Archive compares the first claim's durable-spec targets with their current content and requires an acknowledgement for every difference before it archives; do not copy or fold requirements again. Leave a one-line tombstone under the durable journeys' `## Retired` for every removed journey, and never delete the journey outright: archived suites still trace its id. Preserve QA1/QA2 reconciliation history in the archived suite. `pnpm run archive:preflight` checks archive readiness."
       - "Put the decisions that outlive the change on the capability's PRD, in its `Product decisions` block, before archiving. `decisions.md` is folded nowhere: it archives with the change, and a rejected option readable only under `openspec/changes/archive/` is one the blind suite pass may not read, so the question returns next quarter answered the other way. `archive:preflight` asks for `--decisions-carried \"<what went where>\"`, or `none` where nothing outlived it."
       - "After implementation verification and before archiving, take 🚧 marks off the lines this change delivered and run `pnpm check:manual`. Track deployment availability separately; human QA review and any manual execution happen after deployment."
