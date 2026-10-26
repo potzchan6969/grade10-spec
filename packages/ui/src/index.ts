@@ -426,6 +426,7 @@ export {
 // shared-ui/loyalty-membership
 export {
   ActivityList,
+  type ActivityFilter,
   type ActivityListCopy,
   type ActivityListProps,
 } from "./blocks/loyalty-membership/activity-list";
@@ -478,6 +479,8 @@ export {
 } from "./blocks/loyalty-membership/tier-ladder";
 export type {
   ActivityEntry,
+  ActivityIcon,
+  ActivityTotals,
   CouponItem,
   CouponStatus,
   RewardCheckoutReward,
