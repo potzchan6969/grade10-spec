@@ -41,7 +41,7 @@ function PointHistoryCard({
   className,
 }: PointHistoryCardProps) {
   return (
-    <VStack className={className} data-slot="point-history-card" gap="xs">
+    <VStack className={className} data-slot="point-history-card" gap="sm">
       {month ? (
         <Text size="sm" tone="secondary" weight="medium">
           {month}
