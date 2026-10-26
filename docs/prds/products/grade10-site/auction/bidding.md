@@ -195,18 +195,18 @@ any maximum.
 
 | Refused when | What the bid form says |
 | --- | --- |
-| Below the next minimum the page shows | Nothing is sent: the custom field says **Min:** the minimum, and the bid action stays disabled |
-| Below a next minimum that moved after the page showed it | **Minimum bid is** the minimum |
+| Below the next minimum the page shows | Nothing is sent: the custom field says `auctionListing.minAmount` ("Min: {amount}"), and the bid action stays disabled |
+| Below a next minimum that moved after the page showed it | `auctionListing.minimumBidIs` ("Minimum bid is {amount}.") |
 | Above the USD ceiling | No maximum-bid message; custom entry already stops or corrects the amount at the ceiling |
-| Not above the bidder's own maximum | **Your new maximum must be higher than your current one.** |
-| At or above the bar without a verified identity | **Bids this high need a verified identity. Verify from your account, then bid again.** and a **Verify** link |
-| Grade10 asked the account to verify, and it has not | **We asked you to verify before you bid again.** and a **Verify** link |
+| Not above the bidder's own maximum | `auctionListing.maximumNotRaised` ("Your new maximum must be higher than your current one.") |
+| At or above the bar without a verified identity | `auctionListing.identityRequired` ("Bids this high need a verified identity. Verify from your account, then bid again.") and a `auctionListing.verifyAction` ("Verify") link |
+| Grade10 asked the account to verify, and it has not | `auctionListing.identityRequested` ("We asked you to verify before you bid again.") and a `auctionListing.verifyAction` ("Verify") link |
 | No linked card | **Link a card to bid.** |
-| Another card after the first accepted bid on the lot | **This listing's card is locked after the first accepted bid.** |
-| Bidding suspended on the account | **Bidding is suspended on this account. Contact Us to resolve it.** |
-| Account banned from bidding | **This account cannot bid.** |
-| A typed amount that is not valid, caught before the bid is sent | **Enter a valid amount.** |
-| Before the start, after the close, or any other refusal | **Your bid did not go through.** |
+| Another card after the first accepted bid on the lot | `auctionListing.enrollmentLocked` ("This listing's card is locked after the first accepted bid.") |
+| Bidding suspended on the account | `auctionListing.bidderSuspended` ("Bidding is suspended on this account. Contact Us to resolve it.") |
+| Account banned from bidding | `auctionListing.bidderBanned` ("This account cannot bid.") |
+| A typed amount that is not valid, caught before the bid is sent | `auctionListing.invalidAmount` ("Enter a valid amount.") |
+| Before the start, after the close, or any other refusal | `auctionListing.bidDidNotGoThrough` ("Your bid did not go through.") |
 
 - **Kept for operators** — each refusal is one operational log line naming the
   lot and the reason; the bidder's record never shows it
@@ -454,7 +454,7 @@ the account's registered address, and the letters about a won lot are
   last warnings before a close are Bidding closes in 24 hours, then Extended
   bidding has started if the lot extends
 - **Footer** — every letter says email alerts are on for this auction, and
-  **Manage alerts** opens My Auctions to mute that auction; never an
+  its alerts link opens My Auctions to mute that auction; never an
   unauthenticated one-click stop, never unwatch
 - **Never a false statement** — a called-off lot sends nothing further, and a
   letter that would state something no longer true is not sent late
