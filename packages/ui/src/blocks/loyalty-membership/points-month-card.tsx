@@ -2,12 +2,12 @@ import { Card } from "@grade10/design-system/components/display/card";
 import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { ActivityRow } from "./activity-row";
-import type { ActivityEntry } from "./types";
+import { LedgerRow } from "./ledger-row";
+import type { LedgerEntry } from "./types";
 
-type ActivityMonthCardProps = {
+type PointsMonthCardProps = {
   /** The entries of one month, newest first. */
-  entries: readonly ActivityEntry[];
+  entries: readonly LedgerEntry[];
   /** The group's label, already formatted — "October 2026". Absent, no
    * heading draws and `label` names the list. */
   month?: string;
@@ -17,14 +17,14 @@ type ActivityMonthCardProps = {
 };
 
 /** One month's settled entries: the month label over a card of ledger rows. */
-function ActivityMonthCard({
+function PointsMonthCard({
   entries,
   month,
   label,
   className,
-}: ActivityMonthCardProps) {
+}: PointsMonthCardProps) {
   return (
-    <VStack className={className} data-slot="activity-month-card" gap="xs">
+    <VStack className={className} data-slot="points-month-card" gap="xs">
       {month ? (
         <Text size="sm" tone="secondary" weight="medium">
           {month}
@@ -38,7 +38,7 @@ function ActivityMonthCard({
               divider={index < entries.length - 1}
               key={entry.id}
             >
-              <ActivityRow entry={entry} />
+              <LedgerRow entry={entry} />
             </ListItem>
           ))}
         </List>
@@ -47,5 +47,5 @@ function ActivityMonthCard({
   );
 }
 
-export type { ActivityMonthCardProps };
-export { ActivityMonthCard };
+export type { PointsMonthCardProps };
+export { PointsMonthCard };

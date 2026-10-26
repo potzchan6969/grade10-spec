@@ -10,10 +10,10 @@ import {
   Sparkle,
 } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
-import type { ActivityEntry, ActivityIcon } from "./types";
+import type { LedgerEntry, LedgerIcon } from "./types";
 
 const ICONS: Record<
-  ActivityIcon,
+  LedgerIcon,
   ComponentType<{ className?: string; size?: number }>
 > = {
   order: ShoppingCart,
@@ -28,14 +28,14 @@ function signed(delta: number) {
 
 /**
  * One ledger line — the icon tile, the member-readable name over its date,
- * channel and context, and the signed delta. Internal to the activity
+ * channel and context, and the signed delta. Internal to the pointHistory
  * blocks; `pendingBadge` is the tag a pending entry reads under its delta.
  */
-function ActivityRow({
+function LedgerRow({
   entry,
   pendingBadge,
 }: {
-  entry: ActivityEntry;
+  entry: LedgerEntry;
   pendingBadge?: string;
 }) {
   const Icon = entry.pending ? Clock : entry.icon ? ICONS[entry.icon] : null;
@@ -43,13 +43,13 @@ function ActivityRow({
     <HStack
       align="center"
       className="w-full"
-      data-slot="activity-list-item"
+      data-slot="point-history-item"
       gap="md"
     >
       {Icon ? (
         <span
           aria-hidden
-          data-slot="activity-list-icon"
+          data-slot="point-history-icon"
           className={cn(
             "grid size-9 shrink-0 place-items-center rounded-full",
             entry.pending
@@ -67,20 +67,20 @@ function ActivityRow({
           {entry.channel ? (
             <>
               {" · "}
-              <span data-slot="activity-list-channel">{entry.channel}</span>
+              <span data-slot="point-history-channel">{entry.channel}</span>
             </>
           ) : null}
           {entry.context ? (
             <>
               {" · "}
-              <span data-slot="activity-list-context">{entry.context}</span>
+              <span data-slot="point-history-context">{entry.context}</span>
             </>
           ) : null}
         </Text>
       </VStack>
       <VStack align="end" className="shrink-0" gap="xs">
         <Text
-          data-slot="activity-list-delta"
+          data-slot="point-history-delta"
           tone={
             entry.pending ? "warning" : entry.delta > 0 ? "success" : "primary"
           }
@@ -98,4 +98,4 @@ function ActivityRow({
   );
 }
 
-export { ActivityRow, signed };
+export { LedgerRow, signed };

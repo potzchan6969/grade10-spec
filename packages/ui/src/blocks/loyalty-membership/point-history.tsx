@@ -8,15 +8,15 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
-import { ActivityMonthCard } from "./activity-month-card";
-import { ActivityPendingCard, type ActivityPendingCardCopy } from "./activity-pending-card";
-import { ActivitySummary, type ActivitySummaryCopy } from "./activity-summary";
-import type { ActivityEntry, ActivityTotals } from "./types";
+import { PointsMonthCard } from "./points-month-card";
+import { PendingPointsCard, type PendingPointsCardCopy } from "./pending-points-card";
+import { PointHistorySummary, type PointHistorySummaryCopy } from "./point-history-summary";
+import type { LedgerEntry, PointsTotals } from "./types";
 
 /** The filter tabs, in the order they read. */
-type ActivityFilter = "all" | "earned" | "used" | "pending";
+type PointHistoryFilter = "all" | "earned" | "used" | "pending";
 
-const FILTERS: readonly ActivityFilter[] = [
+const FILTERS: readonly PointHistoryFilter[] = [
   "all",
   "earned",
   "used",
@@ -24,22 +24,22 @@ const FILTERS: readonly ActivityFilter[] = [
 ];
 
 /** The words the list says, whatever the member did. */
-type ActivityListCopy = {
+type PointHistoryCopy = {
   /** Accessible name of the list. */
   label: string;
   /** The three figures over the list — Earned, Used, Pending. */
-  summary: ActivitySummaryCopy;
-  /** The filter tabs' labels, keyed the way `ActivityFilter` is. */
-  filters: Record<ActivityFilter, string>;
+  summary: PointHistorySummaryCopy;
+  /** The filter tabs' labels, keyed the way `PointHistoryFilter` is. */
+  filters: Record<PointHistoryFilter, string>;
   /** The pending card's words. */
-  pending: ActivityPendingCardCopy;
+  pending: PendingPointsCardCopy;
 };
 
-type ActivityListProps = {
-  copy: ActivityListCopy;
-  state: AsyncState<readonly ActivityEntry[]>;
+type PointHistoryProps = {
+  copy: PointHistoryCopy;
+  state: AsyncState<readonly LedgerEntry[]>;
   /** The stat box over the list. Absent, no box draws. */
-  summary?: ActivityTotals;
+  summary?: PointsTotals;
   className?: string;
 };
 
@@ -50,8 +50,8 @@ type ActivityListProps = {
  * an operator wrote on it, its retry key, and how it was priced internally
  * never reach this surface, so no prop can carry them.
  */
-function ActivityList({ copy, state, summary, className }: ActivityListProps) {
-  const [filter, setFilter] = useState<ActivityFilter>("all");
+function PointHistory({ copy, state, summary, className }: PointHistoryProps) {
+  const [filter, setFilter] = useState<PointHistoryFilter>("all");
   const entries = state.status === "ready" ? state.data : [];
   const pending = entries.filter((entry) => entry.pending);
   const settled = entries.filter(
@@ -61,7 +61,7 @@ function ActivityList({ copy, state, summary, className }: ActivityListProps) {
     pending.length > 0 && (filter === "all" || filter === "pending");
 
   /* Months in first-seen order; consecutive entries of one month share a card. */
-  const groups: { key: string; month?: string; items: ActivityEntry[] }[] = [];
+  const groups: { key: string; month?: string; items: LedgerEntry[] }[] = [];
   for (const entry of settled) {
     const key = entry.month ?? "";
     const last = groups[groups.length - 1];
@@ -75,11 +75,11 @@ function ActivityList({ copy, state, summary, className }: ActivityListProps) {
   }
 
   return (
-    <VStack className={className} data-slot="activity-list" gap="md">
-      {summary ? <ActivitySummary copy={copy.summary} totals={summary} /> : null}
+    <VStack className={className} data-slot="point-history" gap="md">
+      {summary ? <PointHistorySummary copy={copy.summary} totals={summary} /> : null}
 
       {state.status === "loading" ? (
-        <VStack className="gap-3" data-slot="activity-list-loading">
+        <VStack className="gap-3" data-slot="point-history-loading">
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-10 w-full" />
           <Skeleton className="h-10 w-full" />
@@ -89,21 +89,21 @@ function ActivityList({ copy, state, summary, className }: ActivityListProps) {
         <AsyncMessage
           action={state.action}
           message={state.message}
-          slot={`activity-list-${state.status}`}
+          slot={`point-history-${state.status}`}
         />
       ) : null}
 
       {state.status === "ready" ? (
         <Tabs
-          data-slot="activity-list-filters"
-          onValueChange={(value) => setFilter(value as ActivityFilter)}
+          data-slot="point-history-filters"
+          onValueChange={(value) => setFilter(value as PointHistoryFilter)}
           value={filter}
         >
           <TabsList aria-label={copy.label} variant="list">
             {FILTERS.map((name) => (
               <TabsTrigger
-                aria-controls="activity-list-panel"
-                id={`activity-list-tab-${name}`}
+                aria-controls="point-history-panel"
+                id={`point-history-tab-${name}`}
                 key={name}
                 value={name}
               >
@@ -113,17 +113,17 @@ function ActivityList({ copy, state, summary, className }: ActivityListProps) {
           </TabsList>
 
           <div
-            aria-labelledby={`activity-list-tab-${filter}`}
+            aria-labelledby={`point-history-tab-${filter}`}
             className="flex flex-col gap-4"
-            id="activity-list-panel"
+            id="point-history-panel"
             role="tabpanel"
           >
             {showPending ? (
-              <ActivityPendingCard copy={copy.pending} entries={pending} />
+              <PendingPointsCard copy={copy.pending} entries={pending} />
             ) : null}
 
             {groups.map((group, index) => (
-              <ActivityMonthCard
+              <PointsMonthCard
                 entries={group.items}
                 key={`${group.key}-${index}`}
                 label={copy.label}
@@ -137,5 +137,5 @@ function ActivityList({ copy, state, summary, className }: ActivityListProps) {
   );
 }
 
-export type { ActivityFilter, ActivityListCopy, ActivityListProps };
-export { ActivityList };
+export type { PointHistoryFilter, PointHistoryCopy, PointHistoryProps };
+export { PointHistory };

@@ -3,11 +3,11 @@ import { List, ListItem } from "@grade10/design-system/components/display/list";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { ActivityRow, signed } from "./activity-row";
-import type { ActivityEntry } from "./types";
+import { LedgerRow, signed } from "./ledger-row";
+import type { LedgerEntry } from "./types";
 
 /** The pending card's words. */
-type ActivityPendingCardCopy = {
+type PendingPointsCardCopy = {
   title: string;
   /** Why the points are not here yet, in the programme's own logic. */
   body: string;
@@ -17,25 +17,25 @@ type ActivityPendingCardCopy = {
   points: string;
 };
 
-type ActivityPendingCardProps = {
-  copy: ActivityPendingCardCopy;
+type PendingPointsCardProps = {
+  copy: PendingPointsCardCopy;
   /** The entries still on the way; the total is summed from them. */
-  entries: readonly ActivityEntry[];
+  entries: readonly LedgerEntry[];
   className?: string;
 };
 
 /** What is still on the way: the rule on top, the pending entries under it,
  * each tagged Pending under its delta. */
-function ActivityPendingCard({
+function PendingPointsCard({
   copy,
   entries,
   className,
-}: ActivityPendingCardProps) {
+}: PendingPointsCardProps) {
   const total = entries.reduce((sum, entry) => sum + entry.delta, 0);
   return (
     <Card
       className={cn("gap-2 border-warning-border bg-warning-muted", className)}
-      data-slot="activity-pending-card"
+      data-slot="pending-points-card"
     >
       <HStack
         align="baseline"
@@ -57,7 +57,7 @@ function ActivityPendingCard({
             divider={index < entries.length - 1}
             key={entry.id}
           >
-            <ActivityRow entry={entry} pendingBadge={copy.badge} />
+            <LedgerRow entry={entry} pendingBadge={copy.badge} />
           </ListItem>
         ))}
       </List>
@@ -65,5 +65,5 @@ function ActivityPendingCard({
   );
 }
 
-export type { ActivityPendingCardCopy, ActivityPendingCardProps };
-export { ActivityPendingCard };
+export type { PendingPointsCardCopy, PendingPointsCardProps };
+export { PendingPointsCard };

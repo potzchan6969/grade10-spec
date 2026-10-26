@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { ActivitySummary } from "./activity-summary";
-import { ACTIVITY_LIST_COPY, ACTIVITY_SUMMARY } from "./fixtures";
+import { PointHistorySummary } from "./point-history-summary";
+import { POINT_HISTORY_COPY, POINT_HISTORY_SUMMARY } from "./fixtures";
 
 const meta = {
-  title: "Loyalty/Points/Blocks/ActivitySummary",
-  component: ActivitySummary,
+  title: "Loyalty/Points/Blocks/PointHistorySummary",
+  component: PointHistorySummary,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   decorators: [
@@ -16,10 +16,10 @@ const meta = {
     ),
   ],
   args: {
-    copy: ACTIVITY_LIST_COPY.summary,
-    totals: ACTIVITY_SUMMARY,
+    copy: POINT_HISTORY_COPY.summary,
+    totals: POINT_HISTORY_SUMMARY,
   },
-} satisfies Meta<typeof ActivitySummary>;
+} satisfies Meta<typeof PointHistorySummary>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

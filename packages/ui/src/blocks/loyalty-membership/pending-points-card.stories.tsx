@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { ActivityPendingCard } from "./activity-pending-card";
-import { ACTIVITY, ACTIVITY_LIST_COPY } from "./fixtures";
+import { PendingPointsCard } from "./pending-points-card";
+import { POINT_HISTORY, POINT_HISTORY_COPY } from "./fixtures";
 
-const PENDING = ACTIVITY.filter((entry) => entry.pending);
+const PENDING = POINT_HISTORY.filter((entry) => entry.pending);
 
 const meta = {
-  title: "Loyalty/Points/Blocks/ActivityPendingCard",
-  component: ActivityPendingCard,
+  title: "Loyalty/Points/Blocks/PendingPointsCard",
+  component: PendingPointsCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   decorators: [
@@ -18,10 +18,10 @@ const meta = {
     ),
   ],
   args: {
-    copy: ACTIVITY_LIST_COPY.pending,
+    copy: POINT_HISTORY_COPY.pending,
     entries: PENDING,
   },
-} satisfies Meta<typeof ActivityPendingCard>;
+} satisfies Meta<typeof PendingPointsCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

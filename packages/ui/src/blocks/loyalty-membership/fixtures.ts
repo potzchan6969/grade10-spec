@@ -4,9 +4,9 @@ import {
   FIXTURE_LOYALTY_PURCHASE_AT_MS,
   FIXTURE_LOYALTY_REDEEM_AT_MS,
 } from "../../lib/datetime-fixtures";
-import type { ActivityListCopy } from "./activity-list";
-import type { ActivityTotals } from "./types";
-import type { ActivityEntry, CouponItem, RewardMenuItem } from "./types";
+import type { PointHistoryCopy } from "./point-history";
+import type { PointsTotals } from "./types";
+import type { LedgerEntry, CouponItem, RewardMenuItem } from "./types";
 
 /* Grade10's own programme content, for the examples only. A consumer supplies
  * its own; nothing here is a default. */
@@ -118,7 +118,7 @@ const COUPONS: CouponItem[] = [
   },
 ];
 
-const ACTIVITY: ActivityEntry[] = [
+const POINT_HISTORY: LedgerEntry[] = [
   {
     id: "entry-pending-online",
     kind: "Online order",
@@ -188,13 +188,13 @@ const ACTIVITY: ActivityEntry[] = [
   },
 ];
 
-const ACTIVITY_SUMMARY: ActivityTotals = {
+const POINT_HISTORY_SUMMARY: PointsTotals = {
   earned: 440,
   used: -820,
   pending: 128,
 };
 
-const ACTIVITY_LIST_COPY: ActivityListCopy = {
+const POINT_HISTORY_COPY: PointHistoryCopy = {
   label: "Point history",
   summary: { earned: "Earned", used: "Used", pending: "Pending" },
   filters: { all: "All", earned: "Earned", used: "Used", pending: "Pending" },
@@ -210,9 +210,9 @@ const ACTIVITY_LIST_COPY: ActivityListCopy = {
 const MEMBER_TOKEN = "g10m.eyJrIjoiZml4dHVyZSJ9.5f2a9c";
 
 export {
-  ACTIVITY,
-  ACTIVITY_LIST_COPY,
-  ACTIVITY_SUMMARY,
+  POINT_HISTORY,
+  POINT_HISTORY_COPY,
+  POINT_HISTORY_SUMMARY,
   BALANCE,
   COUPONS,
   MEMBER_TOKEN,

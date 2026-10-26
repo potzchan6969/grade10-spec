@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { ActivityMonthCard } from "./activity-month-card";
-import { ACTIVITY, ACTIVITY_LIST_COPY } from "./fixtures";
+import { PointsMonthCard } from "./points-month-card";
+import { POINT_HISTORY, POINT_HISTORY_COPY } from "./fixtures";
 
-const OCTOBER = ACTIVITY.filter((entry) => entry.month === "October 2026");
+const OCTOBER = POINT_HISTORY.filter((entry) => entry.month === "October 2026");
 
 const meta = {
-  title: "Loyalty/Points/Blocks/ActivityMonthCard",
-  component: ActivityMonthCard,
+  title: "Loyalty/Points/Blocks/PointsMonthCard",
+  component: PointsMonthCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   decorators: [
@@ -19,10 +19,10 @@ const meta = {
   ],
   args: {
     entries: OCTOBER,
-    label: ACTIVITY_LIST_COPY.label,
+    label: POINT_HISTORY_COPY.label,
     month: "October 2026",
   },
-} satisfies Meta<typeof ActivityMonthCard>;
+} satisfies Meta<typeof PointsMonthCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -42,12 +42,12 @@ export const Default: Story = {
  * adjustment's sparkle, an expiry's hourglass. */
 export const Icons: Story = {
   args: {
-    entries: ACTIVITY.filter((entry) => !entry.pending && entry.icon),
+    entries: POINT_HISTORY.filter((entry) => !entry.pending && entry.icon),
     month: "August 2026",
   },
   play: async ({ canvasElement }) => {
     expect(
-      canvasElement.querySelectorAll('[data-slot="activity-list-icon"]')
+      canvasElement.querySelectorAll('[data-slot="point-history-icon"]')
         .length,
     ).toBe(5);
   },

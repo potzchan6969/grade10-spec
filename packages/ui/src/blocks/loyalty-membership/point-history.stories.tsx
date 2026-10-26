@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { ActivityList } from "./activity-list";
-import { ACTIVITY, ACTIVITY_LIST_COPY, ACTIVITY_SUMMARY } from "./fixtures";
+import { PointHistory } from "./point-history";
+import { POINT_HISTORY, POINT_HISTORY_COPY, POINT_HISTORY_SUMMARY } from "./fixtures";
 
 const meta = {
-  title: "Loyalty/Points/Blocks/ActivityList",
-  component: ActivityList,
+  title: "Loyalty/Points/Blocks/PointHistory",
+  component: PointHistory,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   decorators: [
@@ -16,11 +16,11 @@ const meta = {
     ),
   ],
   args: {
-    copy: ACTIVITY_LIST_COPY,
-    state: { status: "ready", data: ACTIVITY },
-    summary: ACTIVITY_SUMMARY,
+    copy: POINT_HISTORY_COPY,
+    state: { status: "ready", data: POINT_HISTORY },
+    summary: POINT_HISTORY_SUMMARY,
   },
-} satisfies Meta<typeof ActivityList>;
+} satisfies Meta<typeof PointHistory>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -82,7 +82,7 @@ export const ChannelIsNamed: Story = {
   },
   play: async ({ canvasElement }) => {
     const named = [
-      ...canvasElement.querySelectorAll('[data-slot="activity-list-channel"]'),
+      ...canvasElement.querySelectorAll('[data-slot="point-history-channel"]'),
     ].map((node) => node.textContent);
 
     expect(named).toEqual(["Online store"]);

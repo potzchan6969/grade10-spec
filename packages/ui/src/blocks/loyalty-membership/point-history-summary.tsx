@@ -2,33 +2,33 @@ import { Card } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { signed } from "./activity-row";
-import type { ActivityTotals } from "./types";
+import { signed } from "./ledger-row";
+import type { PointsTotals } from "./types";
 
 /** The three labels over the ledger — Earned, Used, Pending. */
-type ActivitySummaryCopy = {
+type PointHistorySummaryCopy = {
   earned: string;
   used: string;
   pending: string;
 };
 
-type ActivitySummaryProps = {
-  copy: ActivitySummaryCopy;
+type PointHistorySummaryProps = {
+  copy: PointHistorySummaryCopy;
   /** The figures, signed the way deltas are. */
-  totals: ActivityTotals;
+  totals: PointsTotals;
   className?: string;
 };
 
 /** The stat box over a member's ledger: what they earned, spent, and still
  * has on the way. */
-function ActivitySummary({ copy, totals, className }: ActivitySummaryProps) {
+function PointHistorySummary({ copy, totals, className }: PointHistorySummaryProps) {
   return (
     <Card
       className={cn(
         "grid grid-cols-3 gap-0 divide-x divide-border",
         className,
       )}
-      data-slot="activity-summary"
+      data-slot="point-history-summary"
     >
       {(
         [
@@ -50,5 +50,5 @@ function ActivitySummary({ copy, totals, className }: ActivitySummaryProps) {
   );
 }
 
-export type { ActivitySummaryCopy, ActivitySummaryProps };
-export { ActivitySummary };
+export type { PointHistorySummaryCopy, PointHistorySummaryProps };
+export { PointHistorySummary };
