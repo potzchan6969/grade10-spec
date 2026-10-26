@@ -3,7 +3,11 @@
 ## Feature set
 
 - Account control
-  - Account menu avatar: the collector's profile image, else their email's initial
+  - Account menu: signed in, the sign-in email with its avatar - the profile
+    image, else the email's initial - above My Auctions and Sign Out; Profile
+    joins first wherever the account page is carried, and My Orders ahead of
+    My Auctions once Store answers; Sign Out stays last; KYC and any item whose
+    page the site withholds stay out
 
 ## MODIFIED Requirements
 
@@ -80,7 +84,7 @@ SHALL start sign-out.
 - **WHEN** they activate the account control
 - **THEN** the menu offers My Auctions and Sign Out, in that order, and no other item
 
-<!-- trace:scenario id=g10.site-page-shell.SC-3y1 rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-3y1 rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-61 - Account menu shows the sign-in email and avatar
 **Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
 
