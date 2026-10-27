@@ -1,18 +1,18 @@
 import { join } from "node:path";
-import {
-  overlapClaims,
-  readDeltaFiles,
-} from "../../../tools/manual/check/deltas.mjs";
 import { readTextIfExists } from "../../../tools/manual/src/store/disk.mts";
 import { NO_GIT } from "../../../tools/manual/src/store/git.mts";
 import {
-  scenarioIdsIn,
-  scenarioToken,
-} from "../../../tools/manual/src/store/markdown.mts";
+  overlapClaims,
+  readDeltaFiles,
+} from "../../../tools/openspec-store/src/delta-files.mjs";
 import {
   readChanges,
   readIssuedIds,
-} from "../../../tools/manual/src/store/read-changes.mts";
+} from "../../../tools/openspec-store/src/read-changes.mts";
+import {
+  scenarioIdsIn,
+  scenarioToken,
+} from "../../../tools/openspec-store/src/spec-text.mts";
 
 /** Groups of in-flight changes that edit one durable requirement or are
  *  linked by `depends_on`, with the requirements they share and an order that

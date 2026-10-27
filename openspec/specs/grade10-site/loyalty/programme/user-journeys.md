@@ -65,3 +65,9 @@
 **As a** member,
 **I want** every coupon I hold to be spendable on the sale in front of me, whatever checkout or counter sale I walked away from,
 **so that** changing my mind never costs me the coupon and never makes me wait.
+
+### grade10-site-loyalty-programme-US-13: Member compares tiers and learns how points work
+
+**As a** member,
+**I want** every tier's ask and benefits and the programme's mechanics on one surface,
+**so that** I can see where I stand, what the next rung costs, and what my points do.

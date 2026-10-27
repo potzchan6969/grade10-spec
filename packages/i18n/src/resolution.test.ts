@@ -141,6 +141,7 @@ const ORDER_DETAIL_KEYS = [
   "status.pickup",
   "status.canceled",
   "status.refunded",
+  "line.refundIssued",
   "ask.guest.title",
   "ask.guest.body",
   "ask.guest.bodyCompleted",

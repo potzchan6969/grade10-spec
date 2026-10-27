@@ -29,12 +29,12 @@ import {
   deltaSections,
   proposalSectionLinks,
   renamedPairs,
-} from "../../../tools/manual/src/store/read-changes.mts";
+} from "../../../tools/openspec-store/src/read-changes.mts";
 import {
   acceptedSnapshots,
   describeReuse,
   reusedInChange,
-} from "../../../tools/manual/src/store/reused-ids.mts";
+} from "../../../tools/openspec-store/src/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { idsMainHolds } from "../spec-issue.mjs";
 import { git, textAt } from "../store-main.mjs";
@@ -230,9 +230,9 @@ function journeyIds(text) {
 const WALKED_BY = /^\*\*Walked by:\*\*.*(?:\n(?!#).+)*/m;
 
 /** A delta's Walked by line, reason and all, stands where the journeys would,
- * and may retire the last of them in the same delta; `pnpm check:manual`
- * refuses a file holding both, so a journey the delta adds or leaves standing
- * beside it is refused. */
+ * and may retire the last of them in the same delta; a file never holds
+ * both, so a journey the delta adds or leaves standing beside it is
+ * refused. */
 function refuseBesideWalkedBy(added, standing, capability) {
   for (const [ids, which] of [
     [added, "the journeys this delta adds:"],
@@ -1677,9 +1677,8 @@ function manualFailures(output) {
  *  anything is written, so `accept:preflight` and `spec:accept` refuse the
  *  same changes: `validate:changes`, the fold's own checks, `tcs:validate`
  *  on a copy of the store that holds the fold, the trace markers of the
- *  files the fold writes, and `check:manual` on that copy with the
- *  acceptance recorded - the store-wide rules (`overlap`, `issued`) that a
- *  change accepted beside another one breaks. Nothing stops at the first
+ *  files the fold writes, and `check:manual` on that copy, so the pages
+ *  still hold to their grammar once the fold lands. Nothing stops at the first
  *  finding. Returns `{ failures, warnings }`, each `{ rule, detail }`.
  *  `command(args, cwd)` runs `pnpm` with `args`. */
 export function acceptanceGate(prepared, command) {

@@ -18,7 +18,7 @@ way, finished, canceled, or refunded,
 **so that** I am never shown a blank status and never shown a status the surface
 invented for a combination nobody defined.
 
-<!-- trace:case id=g10.commerce-order-status.TC-oa5 rev=2 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3,g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28,g10.commerce-order-status.SC-3xr -->
+<!-- trace:case id=g10.commerce-order-status.TC-oa5 rev=3 covers=g10.commerce-order-status.SC-qux,g10.commerce-order-status.SC-w9f,g10.commerce-order-status.SC-7vs,g10.commerce-order-status.SC-unk,g10.commerce-order-status.SC-a9h,g10.commerce-order-status.SC-19w,g10.commerce-order-status.SC-ln4,g10.commerce-order-status.SC-5n2,g10.commerce-order-status.SC-r3l,g10.commerce-order-status.SC-oyu,g10.commerce-order-status.SC-3ua,g10.commerce-order-status.SC-hpt,g10.commerce-order-status.SC-hv0,g10.commerce-order-status.SC-4h5,g10.commerce-order-status.SC-5s3,g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28,g10.commerce-order-status.SC-3xr -->
 ### g10.commerce-order-status.US1-TC1: Each order's badge reads from the facts that define it, alike on both pages
 
 Runs once per row of **Test data**.
@@ -49,7 +49,7 @@ Runs once per row of **Test data**.
 | paid, fulfilled with no tracking number | Completed |
 | paid, unfulfilled, canceled | Canceled |
 | refunded in full, unfulfilled | Refunded |
-| partially refunded, fulfilled | Refunded |
+| partially refunded, fulfilled, the carrier reading delivered | Completed |
 | local pickup, paid, unfulfilled | Processing |
 | local pickup, paid, fulfilled | Completed |
 | paid in full and fulfilled, the carrier reading in transit or out for delivery | Shipped |
@@ -136,13 +136,14 @@ Runs once per row of **Test data**.
 
 ## g10.commerce-order-status.US2: Collector understands a refund or a hold
 
-**As a** collector whose order was partly refunded or put on hold,
-**I want** its badge to report the refund ahead of any shipping, and a held
-order as still being prepared,
-**so that** I can tell a refund from a shipment, and a held order from a
-finished one, without contacting support.
+**As a** collector whose order was refunded or put on hold,
+**I want** its badge to report a full refund ahead of any shipping, a partial
+refund without hiding where the order stands, and a held order as still being
+prepared,
+**so that** I can tell a refunded order from one still on its way, and a held
+order from a finished one, without contacting support.
 
-<!-- trace:case id=g10.commerce-order-status.TC-z0s rev=1 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0 -->
+<!-- trace:case id=g10.commerce-order-status.TC-z0s rev=2 covers=g10.commerce-order-status.SC-o4y,g10.commerce-order-status.SC-0st,g10.commerce-order-status.SC-1b0 -->
 ### g10.commerce-order-status.US2-TC4: A refunded or held order reads its badge on both pages, with no note
 
 Runs once per row of **Test data**.
@@ -169,7 +170,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | paid, fulfilment on hold | Processing |
 | paid, fulfilment on hold, one item refunded | Processing |
-| paid, fulfilled, one item refunded | Refunded |
+| paid, fulfilled, the carrier reading delivered, one item refunded | Completed |
+| paid, unfulfilled, one item refunded | Processing |
+| paid, unfulfilled, refunded in full | Refunded |
 | paid, one of two items fulfilled | Shipped |
 
 **Steps:**
@@ -188,7 +191,7 @@ Runs once per row of **Test data**.
 **I want** order history and order detail to agree,
 **so that** I do not have to decide which surface is telling the truth.
 
-<!-- trace:case id=g10.commerce-order-status.TC-e0j rev=2 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
+<!-- trace:case id=g10.commerce-order-status.TC-e0j rev=3 covers=g10.commerce-order-status.SC-nwz,g10.commerce-order-status.SC-22a,g10.commerce-order-status.SC-s28 -->
 ### g10.commerce-order-status.US3-TC2: A change in the shop reaches both pages within its window
 
 Runs once per row of **Test data**.
@@ -214,11 +217,9 @@ Runs once per row of **Test data**.
 | `<placed>` | `<before>` | `<change>` | `<after>` | `<within>` |
 | --- | --- | --- | --- | --- |
 | in the last day | paid, fulfilled | refund it in full | Refunded | 5 minutes |
-| in the last day | paid, fulfilled | refund one item | Refunded | 5 minutes |
-| in the last day | paid, one of two items fulfilled | refund one item | Refunded | 5 minutes |
 | in the last day | paid, unfulfilled | cancel it, refunding nothing | Canceled | 5 minutes |
 | in the last day | payment pending, fulfilled with no tracking number | record the payment in full | Completed | 5 minutes |
-| 91 days ago | paid, fulfilled | refund one item | Refunded | 5 minutes |
+| 91 days ago | paid, fulfilled | refund it in full | Refunded | 5 minutes |
 | in the last day | paid, two items unfulfilled | fulfil one | Shipped | 60 minutes |
 | in the last day | paid, unfulfilled | fulfil every item with no tracking number | Completed | 60 minutes |
 | in the last day | paid, fulfilled, the carrier reading in transit | mark it delivered on its admin order page | Completed | 1 minute |
@@ -241,6 +242,7 @@ Runs once per row of **Test data**.
 - A canceled order refunded in full carries no note; `awaiting-refund` is for money still to come back.
 - A canceled order whose payment was only pending or authorized carries no note; `awaiting-refund` needs money taken.
 - A canceled order whose held card payment Shopify voided carries no note; `payment-voided` is for a void on an order still open.
+- A partly refunded order reads the badge its fulfilment earns, Completed included once every parcel arrived; only a refund in full reads Refunded.
 - A held order carrying a partial refund carries `on-hold-partial-refund`, one note naming both.
 - A held order refunded in full carries `on-hold`, and a scheduled order carrying a refund carries `scheduled`; a note naming both exists only for a combination the source rows confirm.
 - No surface shows the note in this delivery, so no catalog holds its words yet.

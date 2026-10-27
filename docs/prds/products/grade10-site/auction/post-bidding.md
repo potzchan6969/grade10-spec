@@ -2,7 +2,6 @@
 title: Post-Bidding
 spec: grade10-site/auction/winner-order
 order: 4
-reviewed: 2026-10-06
 ---
 
 What happens after a lot stops taking bids: the result, then the winner's
@@ -471,8 +470,6 @@ failure, and locks the form while work is in progress.
   receipt already issued exactly as it was, and moves no later receipt's
   Previous Payments
 
-::changes{spec="shared/ui/invoice-and-receipt-pdf"}
-
 #### Receipt Policy Pending
 
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company
@@ -609,13 +606,13 @@ other lots.
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/auction/winner-order"}
+[Test cases · grade10-site/auction/winner-order](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/winner-order)
 
-::cases{id="grade10-site/auction/order-status"}
+[Test cases · grade10-site/auction/order-status](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/order-status)
 
-::cases{id="grade10-site/auction/notifications-order"}
+[Test cases · grade10-site/auction/notifications-order](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/notifications-order)
 
-::cases{id="grade10-site/auction/bidder-suspension"}
+[Test cases · grade10-site/auction/bidder-suspension](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/bidder-suspension)
 :::
 
 :::detail{title="Product decisions" for="pm"}

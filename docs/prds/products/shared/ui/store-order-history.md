@@ -23,5 +23,5 @@ application enables it, and each part is importable alone, so a console that
 needs just the badge or just a card takes that and no more.
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/ui/store-order-history"}
+[Test cases · shared/ui/store-order-history](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/ui/store-order-history)
 :::

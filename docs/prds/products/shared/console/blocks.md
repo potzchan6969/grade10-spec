@@ -36,5 +36,5 @@ a queue longer than its page is walkable in both directions, rather than merely
 told it has more.
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/console/blocks"}
+[Test cases · shared/console/blocks](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/console/blocks)
 :::

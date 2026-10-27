@@ -15,7 +15,7 @@ import {
 } from "./lib/moves.mjs";
 import { deliver, readSentKeys } from "./lib/notify.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
-import { escapeSlackText } from "./lib/wording.mjs";
+import { changePageOf, escapeSlackText } from "./lib/wording.mjs";
 import { absentAt } from "./store-main.mjs";
 
 const exec = promisify(execFile);
@@ -180,11 +180,7 @@ function slackLink(url, label) {
 }
 
 function changeLink(id, title, openspecUrl) {
-  const baseUrl = openspecUrl.replace(/\/$/, "");
-  return slackLink(
-    `${baseUrl}/#/change/${encodeURIComponent(id)}`,
-    escapeSlackText(title),
-  );
+  return slackLink(changePageOf(openspecUrl, id), escapeSlackText(title));
 }
 
 /**
@@ -268,7 +264,6 @@ export function slackPayload({
   milestones,
   commitSha,
   commitUrl,
-  manualUrl,
   openspecUrl = "https://spec.grade10-stg.com/openspec/",
 }) {
   const sections = SECTIONS.flatMap(([milestone, heading, detail]) =>
@@ -290,7 +285,7 @@ export function slackPayload({
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `…and ${dropped} more sections — ${slackLink(manualUrl, "the planning board")} has them all`,
+        text: `…and ${dropped} more sections — ${slackLink(openspecUrl, "the planning board")} has them all`,
       },
     });
   }
@@ -304,7 +299,7 @@ export function slackPayload({
         elements: [
           {
             type: "mrkdwn",
-            text: `${slackLink(manualUrl, "Planning")} | ${slackLink(commitUrl, commitSha.slice(0, 7))}`,
+            text: `${slackLink(openspecUrl, "Planning")} | ${slackLink(commitUrl, commitSha.slice(0, 7))}`,
           },
         ],
       },
@@ -523,10 +518,6 @@ async function main() {
         default: process.env.SLACK_WORKSPACE_URL ?? "",
       },
       "commit-url": { type: "string" },
-      "manual-url": {
-        type: "string",
-        default: "https://spec.grade10-stg.com/planning",
-      },
       "openspec-url": {
         type: "string",
         default: "https://spec.grade10-stg.com/openspec/",
@@ -570,7 +561,7 @@ async function main() {
       head === checkout ? await readingOf(root) : await readingAt(root, head);
     stages = Object.fromEntries([...atHead].map(([id, at]) => [id, at.stage]));
     const told = messagesOf(atBase, atHead, team, {
-      manualUrl: values["manual-url"],
+      openspecUrl: values["openspec-url"],
       workspaceUrl: values["workspace-url"],
       sheetUrl: values["sheet-url"],
       pushHead: head,
@@ -601,7 +592,6 @@ async function main() {
     milestones,
     commitSha: head,
     commitUrl: values["commit-url"],
-    manualUrl: values["manual-url"],
     openspecUrl: values["openspec-url"],
   });
 

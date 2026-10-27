@@ -24,7 +24,7 @@ import {
   issuedIdsIn,
   issuedKey,
   issuing,
-} from "../../tools/manual/src/store/issued-ids.mts";
+} from "../../tools/openspec-store/src/issued-ids.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { git, storeMain } from "./store-main.mjs";
 

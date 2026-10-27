@@ -112,9 +112,12 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
-import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
-import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
+import { roundArtifactOf } from "../../tools/openspec-store/src/read-rounds.mts";
+import {
+  behindOf,
+  handOfArtifact,
+} from "../../tools/openspec-store/src/stages.ts";
+import { WHOLE_CHANGE } from "../../tools/openspec-store/src/types.ts";
 import { parseArgs } from "./lib/args.mjs";
 import { SCENARIO_ID } from "./lib/cites.mjs";
 import { gate } from "./lib/gate.mjs";

@@ -90,7 +90,7 @@ The PM writes 1 to 3, and a designer adds 4 where needed. One `/planning-dev` in
 
 The PRD is the exception to teammates. It is the source of truth for what the product should be, so a product detail learned anywhere — a designer's state, an engineer's constraint, a QA case that exposes an unwritten rule, a delta that says more than the PRD — lands on the PRD first, marked 🚧 or ❓, by whoever learned it, before the artifact that depends on it. A product detail is a line the reader would act differently without — a value, a set they meet, an outcome they see, a decision — and one 🚧 line carries an outcome however many scenarios prove it; what each teammate learns beyond that stays in its own artifact, tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#what-does-not-go-on-the-prd). The product manager keeps the PRD whole.
 
-The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — `pnpm check:manual` refuses a delta that holds one, and the archive copies the file across beside the feature set. Every capability has the file: the journeys, or the one line `**Walked by:** nobody on their own - <why>` for a policy, a package contract or a convention, which owes no suite of its own: the suites that reach it walk its rules. A tool only the product's makers use writes `**Walked by:** makers only - <who uses it>` and gets no test cases.
+The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — the archive copies the file across beside the feature set. Every capability has the file: the journeys, or the one line `**Walked by:** nobody on their own - <why>` for a policy, a package contract or a convention, which owes no suite of its own: the suites that reach it walk its rules. A tool only the product's makers use writes `**Walked by:** makers only - <who uses it>` and gets no test cases.
 
 For a new product feature:
 
@@ -145,7 +145,7 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
-- `pnpm push:main` runs `pnpm check:manual`, `pnpm run validate:changes` and `pnpm run tcs:validate` on what it sends, as CI does; run one alone while drafting. `check:manual` refuses an unmarked page, application work with no tech design, a capability with no journeys file, a backticked id the store issues nowhere; it warns (`dense`) past the budget in `docs/prds/guides/writing-the-manual.md`.
+- `pnpm push:main` runs `pnpm check:manual`, `pnpm run validate:changes` and `pnpm run tcs:validate` on what it sends, as CI does; run one alone while drafting. `check:manual` holds the pages under `docs/prds/` to their grammar and `manual.yaml` to the pages that exist, and warns (`dense`) past the budget in `docs/prds/guides/writing-the-manual.md`; it reads nothing under `openspec/`. `pnpm accept:preflight <change>` refuses application work with no tech design.
 - `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
 - `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
 - `pnpm run test:openspec` after anything under `scripts/openspec/` changes.

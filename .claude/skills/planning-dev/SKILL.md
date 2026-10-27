@@ -102,8 +102,8 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    first-accepted change's directory: no validator reads it and acceptance
    does not hash it, like `accept-review.md`. It holds:
 
-   - **Ownership** - The change owning each shared requirement (the `overlap`
-     rule of `check:manual`) and what the others say
+   - **Ownership** - The change owning each shared requirement and what the
+     others say
    - **Decisions** - Open ❓ and conflicts, resolved through the shared
      Clarification Request; preserve the human's decision log
    - **Order** - The acceptance order

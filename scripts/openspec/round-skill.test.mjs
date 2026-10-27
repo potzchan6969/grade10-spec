@@ -17,7 +17,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, normalize, resolve } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
+import { STAGE_LABEL } from "../../tools/openspec-store/src/stages.ts";
 import { LINE_SKILLS } from "./lib/line-skills.mjs";
 import { planningSchema, TRIGGERS } from "./lib/perspectives.mjs";
 

@@ -2,13 +2,12 @@ import type { ManualIndex } from "../api/derive";
 import type { Block } from "../content/grammar";
 
 /**
- * What the attribute fields offer. Every list comes from the snapshot — spec
- * ids from the store, story ids and asset paths from what the manual already
- * uses — so nothing here is a hand-kept list that can go stale.
+ * What the attribute fields offer. Every list comes from what the manual
+ * already uses — story ids and asset paths — so nothing here is a hand-kept
+ * list that can go stale.
  */
 
 export type Suggestions = {
-  specIds: string[];
   storyIds: string[];
   assets: string[];
 };
@@ -38,7 +37,6 @@ export function suggestionsFor(index: ManualIndex): Suggestions {
   }
 
   const suggestions: Suggestions = {
-    specIds: index.snapshot.specs.map((spec) => spec.id).sort(),
     storyIds: [...stories].sort(),
     assets: [...assets].sort(),
   };
@@ -52,12 +50,6 @@ export function suggestionsForAttr(
   type: string,
   attr: string,
 ): string[] {
-  if (attr === "id" && (type === "spec" || type === "cases")) {
-    return suggestions.specIds;
-  }
-  if ((type === "changes" || type === "next") && attr === "spec") {
-    return suggestions.specIds;
-  }
   if (type === "story" && attr === "id") return suggestions.storyIds;
   if (type === "image" && attr === "src") return suggestions.assets;
   if (type === "flow" && attr === "diagram") return suggestions.assets;

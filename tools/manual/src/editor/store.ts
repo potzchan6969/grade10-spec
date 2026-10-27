@@ -7,9 +7,6 @@
  * has no store at all, and every editor surface hides itself rather than
  * rendering read-only. */
 
-import type { Role } from "../api/types";
-import { allowedProposal, type ProposalFile } from "./propose";
-
 export type Version = string;
 
 export type StoredFile = { source: string; version: Version };
@@ -33,17 +30,6 @@ export type ContentStore = {
     bytes: Uint8Array,
     baseVersion: Version | null,
   ): Promise<WriteOutcome>;
-
-  /** One new change directory, written as one commit. Refuses anything that
-   * is not a proposal's own two files, and a slug that is already taken. */
-  propose(files: ProposalFile[]): Promise<{ id: string }>;
-  /** Take a proposal back — whoever is at the keyboard may. */
-  withdraw(id: string): Promise<void>;
-
-  /** Name one role's handle on a change already in flight, in one commit —
-   * the local Assign, confined to the same allowlist a proposal writes
-   * behind. */
-  hand(change: string, role: Role, handle: string): Promise<void>;
 
   deletePage(path: string, baseVersion: Version): Promise<void>;
 };
@@ -70,15 +56,6 @@ export function assertManualPath(manualDir: string, path: string): void {
   if (!path.startsWith(under)) refuse(`is not under ${under}`);
   if (path === under) refuse("names no file");
   if (path.split("/").includes("..")) refuse(`walks out of ${under}`);
-}
-
-/** The same confinement, for the other tree a write can name. A proposal
- * writes one new change directory's own files, checked here before a path
- * becomes a request. */
-export function assertProposal(files: ProposalFile[]): string {
-  const answer = allowedProposal(files);
-  if ("error" in answer) throw new StoreError(400, answer.error);
-  return answer.slug;
 }
 
 export function describeCause(cause: unknown): string {

@@ -1,7 +1,6 @@
 ---
 title: Product Analytics
 order: 3
-reviewed: 2026-09-29
 ---
 
 Events reach Mixpanel from Grade10's own backends — never from the browser

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T08:02:34.571Z",
+  "generatedAt": "2026-10-27T04:19:59.246Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -147,9 +147,8 @@
     "loyalty-membership: member-pass/qr": "skipped",
     "loyalty-membership: reward-art/hero": "ok",
     "loyalty-membership: reward-checkout/balance": "ok",
-    "loyalty-membership: reward-menu/card-row": "fail",
-    "loyalty-membership: reward-menu/coupon-card-row": "fail",
-    "loyalty-membership: reward-menu/price": "fail",
+    "loyalty-membership: reward-menu/coupon-card-row": "ok",
+    "loyalty-membership: reward-menu/price": "ok",
     "loyalty-membership: tier-badge/tier": "skipped",
     "loyalty-membership: tier-info-card/benefit-text": "ok",
     "loyalty-membership: tier-info-card/caption": "ok",
@@ -1011,7 +1010,6 @@
     "7259-799": "Product / Cart / Promo Ticket",
     "7264-4712": "Drawer",
     "7264-6580": "Rewards Checkout (Coupon)",
-    "7264-6652": "loyalty-membership: reward-menu/coupon-card-row",
     "7265-461": "Product / Cart / Cart Drawer / Large Viewport",
     "7265-564": "Product / Cart / Cart Drawer / Small Viewport",
     "7266-6742": "Rewards Redeemed (Item)",
@@ -1020,8 +1018,6 @@
     "7266-6876": "Reward / Checkout Point Balance",
     "7266-6883": "loyalty-membership: reward-checkout/balance",
     "7266-6909": "Rewards Redeemed (Coupon)",
-    "7270-1377": "loyalty-membership: reward-menu/card-row",
-    "7270-1382": "loyalty-membership: reward-menu/price",
     "7276-2028": "Attachment",
     "7276-2707": "AttachmentAction",
     "7276-2708": "AttachmentAction",
@@ -1036,9 +1032,11 @@
     "7330-1082": "Reward / Item Media",
     "7330-1083": "Reward / Item Media",
     "7330-1087": "Reward / Item",
+    "7330-1106": "loyalty-membership: reward-menu/coupon-card-row",
     "7330-1128": "Reward / Item",
     "7330-1129": "Reward / Item",
     "7330-1143": "Membership",
+    "7330-929": "loyalty-membership: reward-menu/price",
     "7365-7547": "Coupons",
     "7373-2": "Product / Cart / Promo Ticket",
     "7373-8037": "Product / Cart / Promo Ticket",
@@ -1271,15 +1269,6 @@
     ],
     "Vault Asset Status": [
       "Vault Asset Status: no code component (looked for src/components/**/vaultassetstatus.tsx or vaultassetstatus.tsx)"
-    ],
-    "loyalty-membership: reward-menu/card-row": [
-      "node 7270:1377 not found in file GW2WL6JcWok5ypUrUFi9bU"
-    ],
-    "loyalty-membership: reward-menu/coupon-card-row": [
-      "node 7264:6652 not found in file GW2WL6JcWok5ypUrUFi9bU"
-    ],
-    "loyalty-membership: reward-menu/price": [
-      "node 7270:1382 not found in file GW2WL6JcWok5ypUrUFi9bU"
     ],
     "press list item": [
       "press list item: no code component (looked for src/components/**/presslistitem.tsx or presslistitem.tsx)"

@@ -2,7 +2,6 @@
 title: Membership
 spec: grade10-site/loyalty/programme
 order: 6
-reviewed: 2026-10-06
 ---
 
 An account is a member. The membership is run from `/membership`; the
@@ -87,15 +86,14 @@ a Google account under it -
   [Top-ups](/p/grade10-site/loyalty/top-ups)
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
-  to say here. ❓ Where the expiry date reads instead — the Tiers & Benefits
-  page is being designed 🚧
+  to say here. The Membership page keeps one dated expiry line of its own,
+  drawn outside the card
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
 - **Each section loads on its own** — a catalog that failed to load is no
   reason to hide a balance
 
-❓ Whether "Points to spend" and the tier-progress labels are the launch
-names.
+"Points to spend" and the tier-progress labels are the launch names.
 
 ::story{id="loyalty-membership-blocks-tiercard--gold" title="Tier, balance and progress"}
 
@@ -116,8 +114,8 @@ list 🚧
 - **Reaches** — the `TierCard` on Membership links here whole, and the same
   list is a section of its Overview
 - **The expiry date's home** — the mechanics card states the lapse rule;
-  ❓ where a member's own "how many points expire and the day they go"
-  line reads is not drawn yet
+  the Tiers & Benefits page draws no member-dated line; the Membership page's own
+  line carries the date
 
 ::story{id="loyalty-membership-screens-tiers-benefits--default" title="Tiers & Benefits, a gold member"}
 
@@ -131,10 +129,11 @@ list 🚧
 
 - **Email, not name** — no name is collected at registration, so the pass
   carries the member's account email under the tier badge
-- **Its own page on a phone** — the pass is presented alone and the page
+- **Its own page on a phone** — the pass section opens it, its route the consumer app's to name, and the page
   holds a screen wake lock while it is up, so the phone cannot dim or lock
-  mid-scan; a web page cannot raise screen brightness, so keeping the screen
-  awake is the part that is feasible
+  mid-scan; the consumer renders the pass only once it holds a code; a web page cannot
+  raise screen brightness, so keeping the screen awake is the part that is
+  feasible
 - **A code swaps in and out** — a fresh code dips the square out of view,
   fading and easing down, and settles the new one in — a transition,
   never an abrupt swap, so a scanner never loses its square mid-read
@@ -143,7 +142,8 @@ list 🚧
   the refusal a replayed code earns stays on the till
 - **New code on demand** — the earlier code stays alive until it is used or
   lapses, and the countdown rotates it out before it does, so the pass
-  never draws an expired code
+  never draws an expired code; the countdown runs to the next rotation, set
+  inside the code's life
 - **Never stored** — the QR payload is answered once, and only its digest is
   kept
 - **Card code history** — kept only to power the refusal above, naming

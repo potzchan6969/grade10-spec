@@ -51,6 +51,9 @@
     "canceled": "Canceled",
     "refunded": "Refunded"
   },
+  "line": {
+    "refundIssued": "Refund issued on {date}"
+  },
   "ask": {
     "guest": {
       "title": "Add this order to your account",

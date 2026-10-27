@@ -1,9 +1,0 @@
-schema: grade10-planning
-created: 2026-10-21
-ui_waived: the design is the designer's Figma frames (Grade10-DS-2026, nodes 7227:1069, 7250:1875, 7254:384, 7229:7427); the change implements them rather than choosing a look
-design_waived: all work is in this store - `@grade10/ui` blocks with their stories and preview call sites; no application-side technical design
-page_waived: the membership PRD's Tiers & Benefits lines land in this same change - the section prose and the story embeds it names
-depends_on:
-  - redesign-tier-card
-awaiting:
-  decisions: 2026-10-21, where the member's own expiry date reads - the surface states the lapse rule but no member-dated line is designed yet - @tangconst

@@ -25,7 +25,7 @@ const PAGE = "---\ntitle: Handbook\n---\n\nWhat this repository builds.\n";
 
 describe("a manual over a store it does not own", () => {
   it("owes the store nothing it did not list", async () => {
-    const { findings, notes } = await runChecks(
+    const { findings } = await runChecks(
       satellite({
         "docs/prds/manual.yaml": CONFIG,
         "docs/prds/index.md": PAGE,
@@ -35,9 +35,6 @@ describe("a manual over a store it does not own", () => {
     // In the store's own repository an empty manual fails coverage for every
     // spec, product and topic; here the store is somebody else's to cover.
     expect(findings).toEqual([]);
-    expect(notes).toContain(
-      `store rules not run — the store's own repository answers for ${STORE}`,
-    );
   });
 
   it("still holds its own pages to every page rule", async () => {
@@ -45,17 +42,18 @@ describe("a manual over a store it does not own", () => {
       satellite({
         "docs/prds/manual.yaml": CONFIG,
         "docs/prds/index.md":
-          '---\ntitle: Handbook\n---\n\n::spec{id="demo-product/alpha"}\n\n::spec{id="demo-product/gone"}\n',
+          "---\ntitle: Handbook\n---\n\n[[demo-product/gone]]\n",
       }),
       NO_GIT,
     );
-    // The good embed of the store's spec passes; the rotten one still fails.
+    // A ref naming nothing on disk is flagged, though a ref in prose is only a warning.
     expect(findings).toEqual([
       {
-        rule: "reference",
-        level: "fail",
+        rule: "ref",
+        level: "warn",
         path: "docs/prds/index.md",
-        reason: '::spec{id="demo-product/gone"} names no spec on disk',
+        reason:
+          "`[[demo-product/gone]]`: no page documents `demo-product/gone`",
       },
     ]);
   });

@@ -11,7 +11,7 @@ the thing it acts on. `openspec/changes/add-store-cross-sell/` holds every
 artifact, and no second change is opened for the same work.
 
 - **Drawn from the first sentence**, and never renamed — it is in the branch
-  `claude/add-store-cross-sell`, the commits and the board
+  `claude/add-store-cross-sell`, the commits and the store
 - **Not the capability** — `grade10-site/store/cross-sell` is what the change
   writes *about*; the ids inside the files carry that path instead
 
@@ -189,7 +189,7 @@ terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/a
 
 - **What proves each stage** - [Change Stages](/p/shared/planning/change-stages). Deployment availability is tracked separately and does not wait for archive.
 
-[My turn](/my-turn) shows what is on you; [Board](/in-flight) shows every change; ask the agent where a change stands to read this for one.
+Ask the agent where a change stands to read this for one.
 
 ## Each Way In
 
@@ -201,7 +201,7 @@ say what you say, and what has to be running.
 | --- | --- | --- | --- |
 | The thread | A sentence to the app in the planning channel, then your answers in the change's thread | The relay, on your word or the Confirm button | The Slack app, the relay and the Routine, which Operations sets up — [Agent Runner](/references/agent-runner) |
 | A terminal | The line command in Claude Code, in a clone of this store: `/workflow-plan <sentence>` first, then each hand's command from the table above | `/workflow-land <id> <artifact>` from the terminal, on the handle the team map gives your git e-mail | The clone, and a GitHub account that may push `main` — no Slack at all |
-| The locally run manual | Assign on a change page, Propose on a product page, Pull when the checkout is behind | Your working tree, uncommitted: committing and pushing it is yours, as any other edit | `pnpm manual` on the clone; the hosted manual is read-only |
+| The locally run manual | Pull when the checkout is behind | Your working tree, uncommitted: committing and pushing it is yours, as any other edit | `pnpm manual` on the clone; the hosted manual is read-only |
 | The application repository | `pnpm plan claim`, `done`, `hand` and `implementation` | A commit straight to the store's `main` | `grade10`, with the store clone beside it |
 | A push of your own | A push to the change's branch, from a terminal or the code host | The round, which reads it as your word for the lines it touched | Nothing more |
 
@@ -216,7 +216,7 @@ say what you say, and what has to be running.
   terminal and back: the files are the state, and each door reads them
 - **The old flow, meanwhile** — `spec-push` and `dev-help`
   stay until the team has adopted the line commands. A change opened with
-  them shows on the board like any other, owes no round row, and gets the
+  them is listed like any other, owes no round row, and gets the
   same channel post
 
 ## The Ids Inside the Change

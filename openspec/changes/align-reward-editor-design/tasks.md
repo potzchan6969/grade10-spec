@@ -62,7 +62,7 @@ its fix lands in this group.
 - [x] 6.10 `ReadBackRail.test.tsx` opens a stored manual handover and a stored counter collection: the menu card states no coupon limit for the first and the collection days for the second, never the form's 30-day validity, as the member's menu reads them; the sentence reads the stored handover, and the basket check asks for the coupon to be finished (`grade10-site-loyalty-programme-SC-246`) — the menu card's terms are pinned on `menuRewardOf` in `customer-view/projection.test.ts`, since the card's frame does not render in jsdom
 - [x] 6.11 Verify: `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`
 
-## 7. The walk - online only by product or filter (grade10)
+## 7. The walk - online only by product or filter (grade10) (owner: @cheunglok97)
 
 Uses draft `feature-tcs.md` as its planning input, with group 6 landed.
 

@@ -1,0 +1,8 @@
+# Rounds
+
+One row per round: what it read, who read it, what stood and what it asked.
+Written by the landing, in the landing's own commit.
+
+| Round | Artifact | Perspectives | Stood | Asked | Tests |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 5 | qa, simpler, verifier | Root-composition tests passed 84/84; focused cart-count Docker E2E passed 4/4; trace citations were expanded to the full durable IDs; web implementation was recorded at the verified branch; no backend files changed. | - | grade10-site-site-page-shell-SC-04: apps/frontend/grade10/src/chrome/CartDrawer.test.tsx; grade10-site-site-page-shell-SC-05: apps/frontend/grade10/src/chrome/CartDrawer.test.tsx; grade10-site-site-page-shell-SC-16: apps/frontend/grade10/src/chrome/CartDrawer.test.tsx; grade10-site-site-page-shell-SC-42: apps/frontend/grade10/src/chrome/CartDrawer.test.tsx; grade10-site-site-page-shell-SC-45: apps/frontend/grade10/src/store-shut.test.tsx; grade10-site-site-page-shell-SC-46: apps/frontend/grade10/src/chrome/CartDrawer.test.tsx; grade10-site-site-page-shell-SC-50: apps/frontend/grade10/src/chrome/CartDrawer.test.tsx; grade10-site-site-page-shell-SC-54: apps/frontend/grade10/src/chrome/CartDrawer.test.tsx; grade10-site-site-page-shell-SC-55: apps/frontend/grade10/src/chrome/CartDrawer.test.tsx, apps/frontend/grade10/e2e/tests/store/cart-count.spec.ts; grade10-site-site-page-shell-SC-44: apps/frontend/grade10/e2e/tests/store/cart-count.spec.ts; grade10-site-site-page-shell-SC-47: apps/frontend/grade10/e2e/tests/store/cart-count.spec.ts; grade10-site-site-page-shell-SC-49: apps/frontend/grade10/e2e/tests/store/cart-count.spec.ts; grade10-site-site-page-shell-SC-52: apps/frontend/grade10/e2e/tests/store/cart-count.spec.ts |

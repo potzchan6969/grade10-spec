@@ -5,7 +5,7 @@
  * the other drops.
  */
 
-import { deltaSections } from "../../../tools/manual/src/store/markdown.mts";
+import { deltaSections } from "../../../tools/openspec-store/src/spec-text.mts";
 
 /** A feature set's root groups in order: each column-0 bullet line, trimmed,
  * mapped to its items, an item being its lines. */

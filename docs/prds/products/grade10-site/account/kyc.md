@@ -103,7 +103,7 @@ and the hosted check's states - [KYC Service](/p/grade10-site/account/kyc-servic
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/store/account-identity"}
+[Test cases · grade10-site/store/account-identity](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/account-identity)
 :::
 
 :::detail{title="Product decisions" for="pm"}

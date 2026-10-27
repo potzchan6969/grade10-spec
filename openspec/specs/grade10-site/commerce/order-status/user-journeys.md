@@ -10,11 +10,12 @@ invented for a combination nobody defined.
 
 ### grade10-site-commerce-order-status-US-02: Collector understands a refund or a hold
 
-**As a** collector whose order was partly refunded or put on hold,
-**I want** its badge to report the refund ahead of any shipping, and a held
-order as still being prepared,
-**so that** I can tell a refund from a shipment, and a held order from a
-finished one, without contacting support.
+**As a** collector whose order was refunded or put on hold,
+**I want** its badge to report a full refund ahead of any shipping, a partial
+refund without hiding where the order stands, and a held order as still being
+prepared,
+**so that** I can tell a refunded order from one still on its way, and a held
+order from a finished one, without contacting support.
 
 ### grade10-site-commerce-order-status-US-03: Collector sees one answer everywhere
 

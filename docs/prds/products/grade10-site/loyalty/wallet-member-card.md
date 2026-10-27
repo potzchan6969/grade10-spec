@@ -2,7 +2,6 @@
 title: Member Card in a Wallet
 spec: grade10-site/store/wallet-member-card
 order: 8
-reviewed: 2026-10-06
 ---
 
 ## Wallets

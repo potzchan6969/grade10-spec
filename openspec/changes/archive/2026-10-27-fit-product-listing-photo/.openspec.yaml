@@ -1,0 +1,11 @@
+schema: grade10-planning
+created: 2026-09-09
+page_waived: "delivered: its 🚧 lines came off when the outcomes shipped, 2026-10-16; awaiting archive"
+reviewed:
+  proposal: 06c62d86
+  decisions: a1e31986
+  user-journeys: b0b23659
+  ui-design: b4c156aa
+  tech-design: b4c156aa
+  tasks: e829a774
+tasks_waived: "seankcw, building on htonyl 2026-10-26: 3.2 deployed and CI evidence is not part of this archive"

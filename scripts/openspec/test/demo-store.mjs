@@ -3,9 +3,9 @@
  * and real enough that `plan-land.mjs`'s gate — the pinned `openspec` CLI,
  * `check:manual` and `tcs:validate` — runs against it rather than around it.
  *
- * The scripts read the store through the manual's own readers, so they stay
- * where they are and take `--root`: a copy in a temporary directory could not
- * import `tools/manual/src/store/*`. What `sandbox` carries is one change
+ * The scripts read the store through `tools/openspec-store` and the manual's
+ * page readers, so they stay where they are and take `--root`: a copy in a
+ * temporary directory could not import them. What `sandbox` carries is one change
  * with five artifacts (plus `specs`, waited on rather than written, so the
  * CLI's "at least one delta" refusal never fires), two people in the team
  * map, and — with `remote: true`, the default — `origin/main` and the
@@ -19,7 +19,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { contentIdOf } from "../../../tools/manual/src/store/content-id.mts";
+import { contentIdOf } from "../../../tools/openspec-store/src/content-id.mts";
 import { FRESH } from "./fresh.mjs";
 
 export const CHANGE = "round-probe";
@@ -160,8 +160,7 @@ export const TEAM = [
  * The change's record, its own default lines plus whatever a test needs on
  * top — a `reviewed:` or `landed_by:` mapping, an `awaiting:` wait, and so
  * on. `awaiting: specs:` and `page_waived:` are always on: the fixture never
- * carries a real delta, so the CLI's own delta gate and `check:manual`'s
- * `unmarked` rule both need telling why.
+ * carries a real delta or a page to mark, so its record says why.
  */
 export function record(...lines) {
   const { reviewed, rest } = splitReviewed(lines.join("\n"));

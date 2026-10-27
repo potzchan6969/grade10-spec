@@ -6,18 +6,6 @@ spec: demo-product/alpha
 
 Alpha is the demo capability, and this page reaches every kind of reference.
 
-::spec{id="demo-product/alpha"}
-
-::spec{id="demo-product/alpha" requirement="Alpha does things"}
-
-::spec{id="demo-product/alpha" scenario="alpha-SC-01"}
-
-::spec{id="demo-product/alpha" story="alpha-US-01"}
-
-::cases{id="demo-product/alpha"}
-
-::changes{spec="demo-product/alpha"}
-
 ::figma{url="https://www.figma.com/design/abc/Demo" title="Alpha"}
 
 ::story{id="blocks-demo--default"}

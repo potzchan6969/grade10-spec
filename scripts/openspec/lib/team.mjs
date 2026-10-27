@@ -17,7 +17,7 @@
  * there is no file to open.
  */
 import { join } from "node:path";
-import { ROLES } from "../../../tools/manual/src/api/types.ts";
+import { ROLES } from "../../../tools/openspec-store/src/types.ts";
 import { handleOf, isHandle } from "./handle.mjs";
 import { readTextIfThere } from "./read-text.mjs";
 import { parseTeamMap, TEAM_MAP } from "./team-parse.mjs";

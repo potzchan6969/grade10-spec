@@ -25,8 +25,8 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { WHOLE_CHANGE } from "../../../tools/manual/src/api/types.ts";
-import { roundArtifactOf } from "../../../tools/manual/src/store/read-rounds.mts";
+import { roundArtifactOf } from "../../../tools/openspec-store/src/read-rounds.mts";
+import { WHOLE_CHANGE } from "../../../tools/openspec-store/src/types.ts";
 
 /** The wake's own file, root-relative — what a refusal names. */
 export const RELAY_FILE = join(".round", "relay.json");

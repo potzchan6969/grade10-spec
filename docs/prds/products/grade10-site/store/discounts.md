@@ -2,7 +2,6 @@
 title: Discounts
 spec: grade10-site/store/discounts
 order: 20
-reviewed: 2026-10-06
 ---
 
 ## Kinds of Discount
@@ -49,7 +48,7 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 - **A code joins** - the shop keeps the combination that takes the most off,
   so a product discount not set to combine can leave the cart above the card
 
-::cases{id="grade10-site/store/site-discounts"}
+[Test cases · grade10-site/store/site-discounts](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/site-discounts)
 
 ## Order of Application
 
@@ -254,7 +253,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 
 :::detail{title="Each step" for="operator"}
 1. **Staff ring the goods** — barcode scanner into Shopify POS's own cart; the extension adds nothing here
-2. **Staff identify the member** — the QR on the member card (profile page) or on one of the member's coupons, the short code under it, or the exact account email; phone number and "the customer already on the sale" are switches, off by default. A miss says only that no member was found
+2. **Staff identify the member** — the QR on the member card (membership page), on one of the member's coupons or on a wallet pass, or the exact account email; phone number and "the customer already on the sale" are switches, off by default. A miss says only that no member was found
    - A card presentation lives ten minutes and is consumed once; a second till scanning the same screenshot is refused, naming where the first was used. A coupon's QR is a card presentation and follows the same rule
 3. **A session opens** — ten minutes from the server's clock, bound to the shop and the member, never to the staff label; a second identify of the same member at the same shop ends the first; a switch flipped mid-session only ever takes capability away
    - A scanned session outlives the modal: reopening it resumes, and it ends only when the customer on the sale becomes somebody else
@@ -324,7 +323,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 
 ### Switches
 
-Per shop, flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend. QR and short code carry no switch of their own, so stopping the counter means the terminal switch.
+Per shop, flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend. The QR carries no switch of its own, so stopping the counter means the terminal switch.
 
 ## Designs
 

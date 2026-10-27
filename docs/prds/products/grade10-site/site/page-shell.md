@@ -2,7 +2,6 @@
 title: Page Shell
 spec: grade10-site/site/page-shell
 order: 1
-reviewed: 2026-09-21
 ---
 
 One wrapper renders every surface of the site, not-found included, so no

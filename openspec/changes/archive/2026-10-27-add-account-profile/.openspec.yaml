@@ -1,0 +1,11 @@
+schema: grade10-planning
+created: 2026-08-18
+reviewed:
+  proposal: 8bc006f0
+  decisions: 4d9ac031
+  user-journeys: 2a2bd5c6
+  tech-design: fbed11e8
+  specs: f5c2f827
+  test-cases: 14f3d795
+  tasks: 9c411987
+tasks_waived: "seankcw, building on htonyl 2026-10-26: 6.1 bucket creation and the 7.x walks are not part of this archive"

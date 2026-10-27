@@ -2,7 +2,6 @@
 title: Cart Drawer
 spec: shared/ui/store-cart
 order: 5
-reviewed: 2026-09-11
 ---
 
 The cart is a drawer that slides in over the page. It lists the items the
@@ -152,7 +151,7 @@ remain as they are, including for a muted code that cannot apply.
 ::story{id="store-cart-blocks-cartdrawer--loading-with-lines" title="The skeleton state while the drawer re-reads prices"}
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/ui/store-cart"}
+[Test cases · shared/ui/store-cart](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/ui/store-cart)
 :::
 
 :::detail{title="Product decisions" for="pm"}

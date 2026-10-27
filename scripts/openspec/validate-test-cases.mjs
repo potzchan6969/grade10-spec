@@ -447,8 +447,8 @@ function checkSuite(root, filePath, rulesRev, allCases) {
   // half a derived reading could not have produced. They no longer close the
   // file: they go to the change's `decisions.md`, under `## Raised`, where the
   // author is already reading and where every row owes a landing before the
-  // change merges. `pnpm check:manual` reads that table; what is left here is
-  // refusing the list in the wrong place.
+  // change merges. Acceptance refuses an open row in that table; what is left
+  // here is refusing the list in the wrong place.
   //
   // Gated on the change carrying a `decisions.md`. A suite written before that
   // artifact existed keeps its own section and its own signal — the empty-list

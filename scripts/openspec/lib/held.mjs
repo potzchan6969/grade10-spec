@@ -7,7 +7,7 @@
  * the landing commit.
  *
  * The rows are read through the manual's own question reader,
- * `readQuestions` in `tools/manual/src/store/read-changes.mts` — the same
+ * `readQuestions` in `tools/openspec-store/src/read-changes.mts` — the same
  * reader `My turn`, the digest and the ❓ counts read, over the same table
  * reader every other table of this store is read with. There is no second
  * parser here: two readers of one table drift the day a column moves.
@@ -28,7 +28,7 @@ import {
   decisionRows,
   decisionsSection,
   readQuestions,
-} from "../../../tools/manual/src/store/read-changes.mts";
+} from "../../../tools/openspec-store/src/read-changes.mts";
 
 /** `❓ <role> - recommended: <option>` is how the interview writes what it
  * would do; a cell that says it another way is its own recommendation. */

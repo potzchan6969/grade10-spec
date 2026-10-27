@@ -1,10 +1,8 @@
 import MiniSearch, { type SearchResult } from "minisearch";
 import type { Block, BodyItem, PageAst } from "../content/grammar";
-import { plainInline } from "../content/inline";
-import { requirementAnchor, scenarioAnchor } from "./anchors";
-import { type ManualIndex, routeForSpec } from "./derive";
+import type { ManualIndex } from "./derive";
 
-export type SearchKind = "page" | "spec" | "case" | "change" | "reference";
+export type SearchKind = "page" | "reference";
 
 export type SearchDoc = {
   id: string;
@@ -24,19 +22,10 @@ export type SearchGroup = {
 
 const GROUP_LABELS: Record<SearchKind, string> = {
   page: "Pages",
-  spec: "Requirements & scenarios",
-  case: "Test cases",
-  change: "In flight",
   reference: "References",
 };
 
-const GROUP_ORDER: SearchKind[] = [
-  "page",
-  "spec",
-  "case",
-  "change",
-  "reference",
-];
+const GROUP_ORDER: SearchKind[] = ["page", "reference"];
 
 /** Markdown read as words: enough for an index, never re-rendered from here. */
 function plainText(markdown: string): string {
@@ -91,79 +80,6 @@ export function buildDocs(index: ManualIndex): SearchDoc[] {
       body: pageText(page.ast),
       to: page.route,
     });
-  }
-
-  for (const spec of index.snapshot.specs) {
-    const route = routeForSpec(index, spec.id);
-    for (const requirement of spec.requirements) {
-      const anchor = requirementAnchor(requirement);
-      docs.push({
-        id: `spec:${spec.id}#${anchor}`,
-        kind: "spec",
-        title: requirement.name,
-        subtitle: `${spec.title} · requirement`,
-        body: requirement.text,
-        to: `${route}#${anchor}`,
-      });
-      for (const scenario of requirement.scenarios) {
-        const scenarioId = scenarioAnchor(requirement, scenario);
-        docs.push({
-          id: `spec:${spec.id}#${scenarioId}`,
-          kind: "spec",
-          title: scenario.name,
-          subtitle: `${spec.title} · ${requirement.name}`,
-          body: scenario.text,
-          to: `${route}#${scenarioId}`,
-        });
-      }
-    }
-  }
-
-  for (const spec of index.snapshot.specs) {
-    const route = routeForSpec(index, spec.id);
-    for (const testCase of spec.testCases ?? []) {
-      docs.push({
-        id: `case:${spec.id}#${testCase.id}`,
-        kind: "case",
-        title: `${testCase.id} ${testCase.title}`,
-        subtitle: `${spec.title} · ${testCase.status}`,
-        body: `${testCase.id} ${testCase.traces.join(" ")}`,
-        to: `${route}#${testCase.id}`,
-      });
-    }
-  }
-
-  // A delta is where the words a change is about actually live: 157 of the
-  // in-flight requirements are ADDED, so nothing durable carries their text and
-  // searching for what somebody is building would find the change by its title
-  // or not at all.
-  for (const change of index.snapshot.changes) {
-    const title = plainInline(change.title);
-    docs.push({
-      id: `change:${change.id}`,
-      kind: "change",
-      title,
-      subtitle: `${change.id} · ${change.status}`,
-      body: [
-        change.id,
-        plainText(change.why),
-        ...change.deltas.map((delta) => delta.spec),
-      ].join(" "),
-      to: `/in-flight/${change.id}`,
-    });
-
-    for (const delta of change.deltas) {
-      for (const requirement of delta.requirements) {
-        docs.push({
-          id: `change:${change.id}#${delta.spec}#${requirement.kind}#${requirement.name}`,
-          kind: "change",
-          title: requirement.name,
-          subtitle: `${title} · ${requirement.kind} ${delta.spec}`,
-          body: plainText(requirement.text ?? requirement.to ?? ""),
-          to: `/in-flight/${change.id}`,
-        });
-      }
-    }
   }
 
   // A reference's text rides its own artifact, so it is found by its title

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildIndex } from "../src/api/derive";
-import { pageEntry, snapshotOf, specEntry } from "./manual-fixture";
+import { pageEntry, snapshotOf } from "./manual-fixture";
 
 /** Operator pages leave their product's own branch and regroup under one
  * Admin group, keyed by `audience: operator` in the page's frontmatter —
@@ -39,17 +39,11 @@ const pages = [
   }),
 ];
 
-const specs = [
-  specEntry("demo-product/loyalty", ["A rule"]),
-  specEntry("demo-product/queue", ["A rule"]),
-];
-
 const index = buildIndex(
   snapshotOf({
     config,
     taxonomy: { products: ["demo-product", "back-office"], topics: [] },
     pages,
-    specs,
   }),
 );
 
@@ -72,10 +66,6 @@ describe("the derived Admin group", () => {
     expect(branch?.capabilities.map((capability) => capability.id)).toEqual([
       "queue",
     ]);
-    // The product's own branch already wears the count and the incubating
-    // entries; the derived branch carries neither.
-    expect(branch?.changeCount).toBe(0);
-    expect(branch?.incubating).toEqual([]);
   });
 
   it("keeps every capability of a product listed under Admin itself", () => {
@@ -90,7 +80,6 @@ describe("the derived Admin group", () => {
         config: { ...config, groups: [config.groups[0]] },
         taxonomy: { products: ["demo-product"], topics: [] },
         pages,
-        specs,
       }),
     );
     const created = bare.groups.find((group) => group.title === "Admin");

@@ -4,7 +4,7 @@ A capability's PRD under `docs/prds/` is written first, and it moves first: whoe
 
 ## The rule
 
-A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. A domain may instead fold its capabilities into chapter pages, each capability a `##` section of the chapter the reader meets it in; the section is then what a proposal links, and the chapter shows the capability's suite under it with `::cases`. Its prose states the shape of the product in the reader's words and pictures, and never restates a requirement. Three kinds of line sit on it:
+A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. A domain may instead fold its capabilities into chapter pages, each capability a `##` section of the chapter the reader meets it in; the section is then what a proposal links, and the chapter links the capability's suite under it. Its prose states the shape of the product in the reader's words and pictures, and never restates a requirement. Three kinds of line sit on it:
 
 - **Unmarked** — the product contract in the reader's words. The spec holds its checkable form.
 - **🚧** — confirmed and being built. The mark is the whole record: nothing else says the outcome is in progress, so no change has to deliver it. It comes off when the outcome is verified, and it does not say the outcome is available in a deployed application.
@@ -37,7 +37,7 @@ The PRD moves first, whoever learns the detail — and a detail is a line the re
 | --- | --- | --- |
 | Product manager | One 🚧 line per outcome the reader can see, in the section it belongs to; a ❓ line or decisions row for what is open | The scenarios that prove an outcome, however many — the delta's. A 🚧 inside a flow step, a sub-step or mid-sentence is a scenario wearing a mark |
 | Designer | A state or a variant that changes an outcome the reader meets — what they can do, see counted, or are refused — as one 🚧 line that replaces the line it supersedes | A breakpoint, a token, a label rule, an empty, loading or error treatment — `ui-design.md`'s States table and a `::story` card on the page |
-| QA | A rule the reader would act on that no spec states, as one ❓ line stating the rule | A case, an edge, a boundary value, a precondition that only tests a stated rule — `feature-tcs.md`; the page shows the suite with `::cases`, never as prose |
+| QA | A rule the reader would act on that no spec states, as one ❓ line stating the rule | A case, an edge, a boundary value, a precondition that only tests a stated rule — `feature-tcs.md`; the page links the suite, never as prose |
 | Engineer | A constraint that changes an outcome, as a 🚧 or ❓ line | A mechanism, a key, a lock, a metric, a sweep, what was tried and dropped — the application repository's architecture doc, which the page's engineer block links as a code map |
 
 A page over the budget is the expansion, not the essence: `pnpm check:manual` warns (`dense`) past 120 lines of prose outside its examples and details, on a section opening on more than six sentences, on an engineer block holding a paragraph, and on a 🚧 inside a flow step or mid-line. The warning asks for the cut and never blocks acceptance.
@@ -70,7 +70,7 @@ If an unmarked line and the spec disagree, the spec is right about what runs: fi
 
 ### 2. Mark the PRD
 
-A change starts on the PRDs it touches, whoever starts it. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Then link every section the change marked from the proposal's `## References`, as `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`: the manual shows the change under that heading, and `pnpm check:manual` refuses a link to a section that does not exist. It also refuses a change carrying deltas whose links reach no 🚧 line at all; `page_waived: <why>` in the change's `.openspec.yaml` stands in for the mark. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
+A change starts on the PRDs it touches, whoever starts it. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Then link every section the change marked from the proposal's `## References`, as `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`. A change carrying deltas whose links reach no 🚧 line at all says why in `page_waived: <why>` in its `.openspec.yaml`. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
 
 ### 3. Write requirements into the change's delta
 
@@ -105,32 +105,32 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
 Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. When the constraint changes an outcome or a recorded product decision, the PRD moves first — a 🚧 or ❓ line — and the change follows. A small durable-spec or design refinement may land while implementation continues. It is reconciled at archive against the claim baseline; it does not rewrite the historical acceptance snapshot.
 
-The first three artifacts are written before planning-dev; `ui-design.md` is optional. `/planning-dev` writes `tech-design.md`, the spec outline and scenarios, `feature-tcs.md`, and `tasks.md` as one invocation. The same human clarifies open questions and accepts once after QA2. Run `pnpm accept:preflight <change>`; pass its `baselineFingerprint` to `pnpm spec:accept <change> --baseline <digest> --reviewed-by <human>`. Acceptance records the accepted snapshots and publishes the requirements into `openspec/specs/` before implementation. `tech-design.md` is owed by every change carrying a task group outside this store — the repository tag on the group heading says where the work lands, and an untagged group counts; `design_waived: <why>` in the manifest stands in for it, and `pnpm check:manual` refuses a change with neither. A later accepted amendment names the prior fingerprint with `--supersedes <old-fingerprint>` and retains its snapshot.
+The first three artifacts are written before planning-dev; `ui-design.md` is optional. `/planning-dev` writes `tech-design.md`, the spec outline and scenarios, `feature-tcs.md`, and `tasks.md` as one invocation. The same human clarifies open questions and accepts once after QA2. Run `pnpm accept:preflight <change>`; pass its `baselineFingerprint` to `pnpm spec:accept <change> --baseline <digest> --reviewed-by <human>`. Acceptance records the accepted snapshots and publishes the requirements into `openspec/specs/` before implementation. `tech-design.md` is owed by every change carrying a task group outside this store — the repository tag on the group heading says where the work lands, and an untagged group counts; `design_waived: <why>` in the manifest stands in for it, and `pnpm accept:preflight` refuses a change with neither. A later accepted amendment names the prior fingerprint with `--supersedes <old-fingerprint>` and retains its snapshot.
 
 That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there. At the first task claim, `pnpm plan claim` records the published store commit and target paths and anchors in `implementation.json`. Implement against the rolling durable contract. After engineering verification, `pnpm plan implementation` records repository commits and concrete deploy components. Archive compares the claim baseline with current durable targets: each difference needs a compatibility acknowledgement, and a semantic difference names its test or other evidence. Archive before deployment; human QA review starts after deployment when the application is available.
 
 ### The change's record
 
-`.openspec.yaml` in the change directory is the record the boards and the checks read. Every key it can hold, who writes it, and what reads it:
+`.openspec.yaml` in the change directory is the record the OpenSpec scripts read, through `tools/openspec-store`. Every key it can hold, who writes it, and what reads it:
 
 | Key | Written by | When | Read by |
 | --- | --- | --- | --- |
 | `schema` | The CLI, at `openspec new change` | Always | Every reader |
-| `created` | The CLI, at `openspec new change` | Always | The boards, for the planning age |
-| `skip_specs: true` with `skip_specs_why: "<why>"` | The author | A change altering no product behaviour | `openspec validate`, `pnpm check:manual` rule `hatch` |
-| `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The boards |
-| `awaiting:` with `<artifact>: "<what is missing>"` | Whoever is held up | A change that cannot write its next artifact until somebody answers; deleted by its author when the wait is over | The Pending page; `pnpm run validate:changes`; `pnpm check:manual`, rule `awaiting` |
-| `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
-| `decisions_waived: "<why>"` | The author | A change with genuinely nothing to settle, or one opened before `decisions.md` existed whose scope is in its proposal | `pnpm check:manual`, rule `decided`; the Pending page |
-| `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
-| `ui_waived: "<why>"` | The designer, or the author | A change nothing a reader sees moves on, so it draws no `ui-design.md` | The stage ladder, which reads it as the UI design; the change page, which shows it as not owed |
+| `created` | The CLI, at `openspec new change` | Always | The digest, for the planning age |
+| `skip_specs: true` with `skip_specs_why: "<why>"` | The author | A change altering no product behaviour | `openspec validate`; `pnpm spec:accept`, which accepts it with no deltas |
+| `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The stage ladder in `tools/openspec-store`, which reads the change as planned only once it is set |
+| `awaiting:` with `<artifact>: "<what is missing>"` | Whoever is held up | A change that cannot write its next artifact until somebody answers; deleted by its author when the wait is over | `pnpm run validate:changes`; `pnpm accept:preflight`, which refuses a change still waiting |
+| `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | Nothing checks it since `check:manual` stopped reading changes; it records the decision |
+| `decisions_waived: "<why>"` | The author | A change with genuinely nothing to settle, or one opened before `decisions.md` existed whose scope is in its proposal | The stage ladder, which reads it as the decisions |
+| `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm accept:preflight`, which refuses a change with neither |
+| `ui_waived: "<why>"` | The designer, or the author | A change nothing a reader sees moves on, so it draws no `ui-design.md` | The stage ladder, which reads it as the UI design |
 | `purpose_rewritten:` with `<capability>: "<why>"` | The author | A delta whose Purpose replaces a durable Purpose the change makes untrue; `<capability>` is its path under `openspec/specs/` | `pnpm accept:preflight` and `pnpm spec:accept`, check `fold:purpose`, which warns with the line instead of refusing |
-| `hands:` with `<role>: @handle` | The product manager at the interview's end, Assign on the locally run manual, or `pnpm plan hand` | From the interview's end; one handle for each of `pm`, `design`, `qa`, `dev`, `release` | The board and the change page, for whose turn it is; the notify workflow, for who is told; `pnpm check:manual`, rule `hands` |
-| `landed_by:` with `<artifact>: @handle` | The landing — `pnpm run plan:land`, or the person's own push through it | In the same commit as the artifact it names | The change page, beside each artifact; `pnpm check:manual`, rule `landed_by` |
+| `hands:` with `<role>: @handle` | The product manager at the interview's end, or `pnpm plan hand` | From the interview's end; one handle for each of `pm`, `design`, `qa`, `dev`, `release` | The notify workflow and the digest, for who is told and whose turn it is |
+| `landed_by:` with `<artifact>: @handle` | The landing — `pnpm run plan:land`, or the person's own push through it | In the same commit as the artifact it names | `pnpm run plan:land` and the relay, for whose word landed it |
 | `reviewed:` with `<artifact>: <content id>` | The round's re-read | When an artifact is read again against what is before it | The freshness read, which shows an artifact behind until the id matches; `archive:preflight`'s behind gate, which refuses the fold while one still does not |
-| `thread: <channel>/<ts>` | The round, from the first planning-channel message about the change | Once, and never rewritten | Every message, which links the thread rather than the change page |
+| `thread: <channel>/<ts>` | The round, from the first planning-channel message about the change | Once, and never rewritten | Every message, which links the thread |
 | `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
-| `target`, `owner`, `owners`, `depends_on` | ❓ The manual reads them; no document says who writes them | ❓ | The boards |
+| `target`, `owner`, `owners`, `depends_on` | ❓ No document says who writes them | ❓ | `depends_on`: the digest and the review's clusters; the others nothing since the boards left the manual |
 
 `acceptance.json` is a separate version 2 record, written by `pnpm spec:accept`. It carries the change id, baseline content fingerprint, `reviewedBy`, `acceptedAt`, accepted artifact digests and the derived `contractTargets`: durable paths with their touched requirement headings, plus whole-file journey, suite and UI-design targets. Each accepted snapshot is immutable historical planning evidence; an amendment passes `--supersedes <old-fingerprint>` and keeps the prior snapshot.
 
@@ -151,12 +151,12 @@ A question the record cannot answer belongs in `decisions.md`, whose `Decided` c
 
 `skip_specs` turns the entire planning cross-check off in one line: no journeys, no blind suite, no scenarios, no reconciliation. It is also the cheapest line in the manifest to write, and author-declared. The realistic failure is not dishonesty but an author who sincerely believes a refactor moves no behaviour and is wrong, which is a thing honour systems do not catch. Three guards, none of them new machinery: it owes a `skip_specs_why` beside it; a change carrying it cannot mark a 🚧 line, because 🚧 means an outcome a reader can see and claiming both is a contradiction; and QA reads the `## Why` and the reason of every change that claims it.
 
-`blind_pass_skipped` is granted by the checker, never declared, and granting it is `pnpm check:manual`'s `blind` rule staying quiet: the spec diff adds no scenario id and modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line. It is nothing the manifest records - a key would go stale the moment behaviour moved under it, and the verdict is cheap to recompute. Behaviour lives entirely in those lines, so the only way to take the shortcut is to genuinely not change behaviour. Where the checker refuses and the author disagrees, that is a question for the interview, not a self-service waiver.
+The blind pass is skipped only where the spec diff adds no scenario id and modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line. It is nothing the manifest records - a key would go stale the moment behaviour moved under it, and the verdict is cheap to recompute by reading the diff. Behaviour lives entirely in those lines, so the only way to take the shortcut is to genuinely not change behaviour. Where the author and QA disagree, that is a question for the interview, not a self-service waiver.
 
 The strongest control is one clear route. `/workflow-plan` writes the PM's artifacts; `/planning-dev` runs QA1, Dev, QA2, human clarification, acceptance and publication together. A slower or noisy run increases `skip_specs` use, so the integrated route must remain usable.
 
 
-A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text. `skip_specs` is the one exception, and not a waiver of the rule but the switch beneath it: the OpenSpec CLI owns that key and reads it as a boolean, so a reason written there invalidates the manifest and the marker stops being honoured at all. The switch stays `true`, and `skip_specs_why` carries the line.
+A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so the store's reader in `tools/openspec-store` refuses a record key holding anything but text. `skip_specs` is the one exception, and not a waiver of the rule but the switch beneath it: the OpenSpec CLI owns that key and reads it as a boolean, so a reason written there invalidates the manifest and the marker stops being honoured at all. The switch stays `true`, and `skip_specs_why` carries the line.
 
 ### Waiting for an input
 
@@ -168,12 +168,12 @@ awaiting:
   ui-design: nothing draws the reminder banner
 ```
 
-It is written by whoever is held up, and read two ways. The [Pending](/pending) page shows the change under the teammate who owes each artifact, carrying the line, so a designer sees what is waiting on them and why. And `pnpm run validate:changes` drops the one error `openspec validate` raises against a change with no delta — `awaiting: specs:` — so a confirmed outcome sits in the store as a proposal until somebody answers. Every other error that run reports still counts.
+It is written by whoever is held up. `pnpm run validate:changes` drops the one error `openspec validate` raises against a change with no delta — `awaiting: specs:` — so a confirmed outcome sits in the store as a proposal until somebody answers. Every other error that run reports still counts.
 
 Every wait:
 
-- **Ends when its author deletes the line.** A wait names a decision, a screen or an answer from outside, and no tool reads those. A wait may stand on an artifact the change has written - a design that waits on its frame - and ends only when its author deletes the line; `pnpm check:manual` refuses a wait that says nothing, and one naming an artifact the schema does not declare, which would reach no worklist at all.
-- **Carries the date it started.** Pending dates the change, not the wait, so a wait that has run for months is only visible in its own line. A proposal that has waited that long is one to drop or to answer.
+- **Ends when its author deletes the line.** A wait names a decision, a screen or an answer from outside, and no tool reads those. A wait may stand on an artifact the change has written - a design that waits on its frame - and ends only when its author deletes the line, and names an artifact the schema declares.
+- **Carries the date it started.** Nothing else dates the wait, so a wait that has run for months is only visible in its own line. A proposal that has waited that long is one to drop or to answer.
 - **Lowers no bar.** The page the change marks still needs its 🚧 line, the proposal still needs its `## Why`, and the moment a delta exists the requirements are validated in full.
 
 A wait on `specs` and `skip_specs: true` are opposites and never appear together: one says requirements are coming, the other that none are owed.

@@ -52,7 +52,7 @@ const TEAM = map(
   { dev: "C-DEV" },
 );
 
-const options = { manualUrl: "https://spec.test/planning" };
+const options = { openspecUrl: "https://spec.test/openspec/" };
 
 test("movesBetween tells a role that gained the turn", () => {
   const base = new Map([["probe", at("probe", { roles: [] })]]);

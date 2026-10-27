@@ -7,11 +7,11 @@
  */
 import { writeFileSync } from "node:fs";
 import { NO_GIT } from "../../../tools/manual/src/store/git.mts";
-import { readChanges } from "../../../tools/manual/src/store/read-changes.mts";
 import { readManualPages } from "../../../tools/manual/src/store/read-manual.mts";
-import { schemaArtifacts } from "../../../tools/manual/src/store/read-schema.mts";
 import { rootsOf } from "../../../tools/manual/src/store/roots.mts";
-import { markUpstream } from "../../../tools/manual/src/store/upstream.mts";
+import { readChanges } from "../../../tools/openspec-store/src/read-changes.mts";
+import { schemaArtifacts } from "../../../tools/openspec-store/src/read-schema.mts";
+import { markUpstream } from "../../../tools/openspec-store/src/upstream.mts";
 import { openRecord, setEntry } from "../lib/record.mjs";
 
 /** The changes with their upstream reading, read with no history: the ids a

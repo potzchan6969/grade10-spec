@@ -155,30 +155,3 @@ export function ownerOfSpec(
   const parts = specId.split("/");
   return parts.length === 1 ? specId : parts.slice(0, -1).join("/");
 }
-
-/**
- * The name a spec wears on screen. The store titles most specs `<id>
- * Specification` — the id said twice, noise beside the id badge that sits next
- * to it — and the reader hands that title over verbatim on purpose, leaving the
- * choice here. A title that says something of its own is kept as written.
- */
-export function specTitle(spec: { id: string; title: string }): string {
-  const bare = spec.title.replace(/\s+Specification$/i, "").trim();
-  const echoesId =
-    bare !== spec.title || bare === "" || bare.startsWith(spec.id);
-  return echoesId ? humanize(spec.id.split("/").at(-1) ?? spec.id) : spec.title;
-}
-
-/** Where a spec lives in the store — the base its own relative links resolve from. */
-export function specDir(specId: string): string {
-  return `openspec/specs/${specId}`;
-}
-
-export function specSourceUrl(specId: string): string {
-  return `${GITHUB_BLOB}/${specDir(specId)}/spec.md`;
-}
-
-export function changeSourceUrl(changeId: string, shippedOn?: string): string {
-  const directory = shippedOn ? `archive/${shippedOn}-${changeId}` : changeId;
-  return `${GITHUB_BLOB}/openspec/changes/${directory}`;
-}

@@ -34,9 +34,9 @@ import {
  * landing case here runs `validate:changes`, `check:manual` and
  * `tcs:validate` for real).
  *
- * The scripts read the store through the manual's own readers, so they stay
- * where they are and take `--root`: a copy in a temporary directory could not
- * import `tools/manual/src/store/*`.
+ * The scripts read the store through `tools/openspec-store` and the manual's
+ * page readers, so they stay where they are and take `--root`: a copy in a
+ * temporary directory could not import them.
  */
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
@@ -88,7 +88,7 @@ test("shared-planning-agent-rounds-SC-36 - plan:land --reviewed writes the conte
   assert.match(result.stdout, /read against proposal/);
 
   const { contentIdOf } = await import(
-    "../../tools/manual/src/store/content-id.mts"
+    "../../tools/openspec-store/src/content-id.mts"
   );
   const { PROPOSAL, DECISIONS } = await import("./test/demo-store.mjs");
   assert.equal(contentIdOf([PROPOSAL]), BEFORE_DECISIONS);
@@ -713,7 +713,7 @@ test("shared-planning-agent-rounds-SC-43 - plan:land refuses a group while an ar
 });
 
 test("shared-planning-agent-rounds-SC-37 - a landing with changed content puts every artifact drawn from it behind", async () => {
-  const { behindOf } = await import("../../tools/manual/src/api/stages.ts");
+  const { behindOf } = await import("../../tools/openspec-store/src/stages.ts");
   const { readChangeEntry } = await import("./lib/store-read.mjs");
   const { root, git } = sandbox();
 
@@ -815,35 +815,6 @@ test("shared-planning-agent-rounds-SC-04, shared-planning-agent-rounds-SC-65 - p
     }).trim(),
     git("rev-parse", "HEAD").trim(),
   );
-});
-
-test("plan:land's gate refuses a change the store cannot read", () => {
-  // The gate reads the landing commit's own tree, so the artifact whose file
-  // the branch broke is the one whose landing it refuses: a proposal with no
-  // Why, carried into `L` and refused there.
-  const { root, git } = sandbox();
-  writeFileSync(
-    join(root, DIR, "proposal.md"),
-    "# Round probe\n\nNo why here.\n",
-  );
-  git("add", "-A");
-  git("commit", "--quiet", "-m", "break the proposal");
-  git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
-
-  const result = run("plan-land.mjs", [
-    CHANGE,
-    "proposal",
-    "--root",
-    root,
-    "--perspectives",
-    "verifier",
-    "--stood",
-    "nothing stood",
-  ]);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /the gate refuses: check:manual/);
-  assert.doesNotMatch(recordOf(root), /landed_by:/);
 });
 
 test("plan:land lands a task group with the dev's word, its row and no landed_by:", () => {

@@ -2,7 +2,6 @@
 title: Invoice and Receipt PDF Blocks
 spec: shared/ui/invoice-and-receipt-pdf
 order: 20
-reviewed: 2026-10-06
 ---
 
 These blocks are the shared PDF contract for an auction order's invoice and
@@ -57,8 +56,6 @@ document rules into either application.
 - **Bank details** — an invoice shows only the bank rails that are
   enabled
 
-::changes{spec="shared/ui/invoice-and-receipt-pdf"}
-
 :::detail{title="Code map" for="engineer"}
 - **Exports** - `InvoicePdf` and `ReceiptPdf` in `packages/ui`
 - **Preview** - the invoice and receipt stories in `apps/preview` render the
@@ -66,5 +63,5 @@ document rules into either application.
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/ui/invoice-and-receipt-pdf"}
+[Test cases · shared/ui/invoice-and-receipt-pdf](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/ui/invoice-and-receipt-pdf)
 :::

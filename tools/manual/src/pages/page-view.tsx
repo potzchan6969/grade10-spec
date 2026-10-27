@@ -1,18 +1,11 @@
 import type { ReactNode } from "react";
-import {
-  changesForSpec,
-  type ManualIndex,
-  type ParsedPage,
-  proposalsForSpec,
-} from "../api/derive";
+import type { ManualIndex, ParsedPage } from "../api/derive";
 import { BlockList } from "../blocks/block-list";
 import { BlockScopeProvider } from "../blocks/block-scope";
 import { BrokenCard } from "../blocks/broken-card";
-import { ChangeRibbon } from "../blocks/change-views";
 import { PageActions } from "../editor/edit-actions";
 import { useEditMode } from "../editor/edit-mode";
 import { PageEditor } from "../editor/page-editor";
-import { ArchiveTimeline } from "./archive-timeline";
 import { PageWarnings, warningsForPage } from "./check-warnings";
 import { NotFoundPage } from "./not-found";
 import { PageHeading } from "./page-heading";
@@ -22,14 +15,13 @@ type PageViewProps = {
   index: ManualIndex;
   path: string;
   eyebrow?: ReactNode;
-  /** Rendered after the page's own blocks, before the archive. */
+  /** Rendered after the page's own blocks. */
   children?: ReactNode;
 };
 
 /**
  * One page, rendered the same way wherever it sits: heading from frontmatter,
- * blocks in order, and — when the page names a spec — the ribbon and the
- * archive that spec earns automatically.
+ * blocks in order.
  */
 export function PageView({ index, path, eyebrow, children }: PageViewProps) {
   const page = index.pageByPath.get(path);
@@ -42,17 +34,6 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
   if (!page.ast) return <PageBroken page={page} />;
 
   const { frontmatter, blocks } = page.ast;
-  const specId = frontmatter.spec;
-  const changes = specId ? changesForSpec(index, specId) : [];
-  const proposals = specId ? proposalsForSpec(index, specId) : [];
-  // A change a proposal placed on a section shows there and nowhere else;
-  // the ribbon keeps what has no section on this page.
-  const unplaced = changes.filter(
-    (change) => !change.sections?.some((section) => section.page === path),
-  );
-  const ribbon =
-    unplaced.length > 0 || proposals.length > 0 || changes.length === 0;
-
   return (
     <>
       <PageActions path={path} />
@@ -62,20 +43,10 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
         title={frontmatter.title}
       />
       <PageWarnings warnings={warningsForPage(index.snapshot.warnings, path)} />
-      {specId && ribbon ? (
-        <ChangeRibbon
-          changes={unplaced}
-          proposals={proposals}
-          specId={specId}
-        />
-      ) : null}
-
       <BlockScopeProvider value={{ index, pagePath: path }}>
         <BlockList blocks={blocks} />
         {children}
       </BlockScopeProvider>
-
-      {specId ? <ArchiveTimeline specId={specId} /> : null}
     </>
   );
 }

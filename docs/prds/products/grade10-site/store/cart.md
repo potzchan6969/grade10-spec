@@ -2,7 +2,6 @@
 title: Cart Drawer
 spec: grade10-site/store/cart-drawer
 order: 4
-reviewed: 2026-10-14
 ---
 
 The Cart Drawer opens over the page the collector is on: they check what is in
@@ -147,7 +146,7 @@ The refusals are the coupon's own —
 ::story{id="store-cart-blocks-cartdrawerfooter-guest--member-with-public-codes" title="A member's codes beside the public ones"}
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/store/cart-drawer"}
+[Test cases · grade10-site/store/cart-drawer](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/cart-drawer)
 :::
 
 :::detail{title="Code map" for="engineer"}

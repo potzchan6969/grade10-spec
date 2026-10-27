@@ -1,14 +1,19 @@
 schema: grade10-planning
 created: 2026-09-09
 purpose_rewritten:
-  shared/ui/store-cart: the durable Purpose names the 5-slot baseline grid of items and placeholder slots this change removes
+  shared/ui/store-cart: the durable Purpose names the 5-slot baseline grid of
+    items and placeholder slots this change removes
 reviewed:
   proposal: 47c4f4a5
   decisions: 38cf419f
   ui-design: e027ca02
   tech-design: e027ca02
-  tasks: cb117566
+  tasks: aeb7f93b
   user-journeys: 34adb52e
   specs: 10d0e7a5
   test-cases: 73483bc9
 tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.1, 3.2"
+hands:
+  dev: "@kinisworking"
+  pm: "@kinisworking"
+  design: "@kinisworking"

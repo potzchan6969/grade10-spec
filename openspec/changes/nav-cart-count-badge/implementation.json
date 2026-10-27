@@ -1,0 +1,63 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "221687fcda35a24db4061bd0a531ad30047c3b0cac4fe7adf59c1d3d33cb31f0"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "023b560cab72c3b8a64ed1245234789cb7ccbc90",
+    "capturedAt": "2026-10-27T06:15:54.742Z",
+    "targets": [
+      {
+        "path": "openspec/changes/nav-cart-count-badge/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The cart count belongs only to the current member",
+          "Requirement: The cart count refreshes without opening the drawer",
+          "Requirement: The chrome does not wait for the session",
+          "Requirement: The header shows the member cart's reviewed active-line count"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A control renders only when it can act",
+          "Requirement: Compact viewports open navigation from a left menu drawer",
+          "Requirement: Nav accepts a cart slot",
+          "Requirement: SiteHeader owns the cart count badge",
+          "Requirement: The chrome exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "e15b95584fb5901565e094b761215747d1ae1c2b",
+      "components": [
+        "web"
+      ]
+    }
+  ]
+}

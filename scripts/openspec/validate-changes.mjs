@@ -34,7 +34,7 @@ import YAML from "yaml";
 import {
   readRounds,
   roundArtifactOf,
-} from "../../tools/manual/src/store/read-rounds.mts";
+} from "../../tools/openspec-store/src/read-rounds.mts";
 import { verifyAcceptance } from "./lib/acceptance.mjs";
 import { fixPassFloor, planningSchema, SCHEMA } from "./lib/perspectives.mjs";
 import { readTextIfThere } from "./lib/read-text.mjs";
@@ -57,8 +57,8 @@ const REMOVED_FEATURE_SET = /^##\s+REMOVED\s+Feature set\s*$/m;
 /**
  * What the change says it is waiting on before it can write a requirement, or
  * nothing when it owes one now. A change whose deltas all name requirements is
- * past the wait whatever the line still says — the `awaiting` rule in
- * `check:manual` is what asks the author to delete it.
+ * past the wait whatever the line still says — `pnpm accept:preflight`
+ * refuses the change until its author deletes it.
  */
 export function waitingOnSpecs(dir) {
   // A record that is there and cannot be opened stops the run naming it: read
@@ -69,8 +69,7 @@ export function waitingOnSpecs(dir) {
   try {
     fields = YAML.parse(text) ?? {};
   } catch {
-    // A manifest the readers refuse is `check:manual`'s `store` rule to
-    // report; here it excuses nothing.
+    // A manifest the readers refuse excuses nothing here.
     return undefined;
   }
   const why = fields?.awaiting?.specs;
@@ -145,7 +144,7 @@ export function addedRowRefusals(root, main, id) {
   const refusals = [];
   for (const row of readRounds(now)) {
     const target = roundArtifactOf(row.artifact);
-    // A row with no artifact is `check:manual`'s `round` rule to refuse.
+    // A row with no artifact names no draft to hold a reader to.
     if (before.has(key(row)) || target === null) continue;
     let found;
     try {

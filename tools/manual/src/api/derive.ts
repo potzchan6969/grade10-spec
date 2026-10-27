@@ -7,36 +7,14 @@ import type {
 } from "../content/grammar";
 import { type PageAst, parsePage } from "../content/grammar";
 import type { PageIcon } from "../content/icons";
-import { resolveRef } from "../content/refs";
-import { type OpenMark, openMarksOfPage } from "./open-marks";
 import {
   dirOf,
   humanize,
   ownerOfSpec,
   pagePath,
   routeForPagePath,
-  slugify,
-  specTitle,
 } from "./paths";
-import { findRequirement } from "./requirements";
-import { laneOfStage } from "./stages.ts";
-import type {
-  ChangeEntry,
-  ChangeLane,
-  ChangeSuite,
-  DeltaKind,
-  DeltaRequirement,
-  HistoryRef,
-  ItemError,
-  PageEntry,
-  Scenario,
-  SchemaArtifact,
-  Snapshot,
-  SpecEntry,
-  TestCase,
-  TestSuiteStatus,
-} from "./types";
-import { waivedOf } from "./waivers";
+import type { HistoryRef, PageEntry, Snapshot } from "./types";
 
 /** A page as the app reads it: parsed, or contained with the parse error. */
 export type ParsedPage = {
@@ -47,9 +25,6 @@ export type ParsedPage = {
   route: string | null;
 };
 
-/** Derived from the store, never stored: what shape a capability is in. */
-export type CapabilityStatus = "changing" | "incubating" | "planned" | "stable";
-
 export type NavItem = {
   id: string;
   title: string;
@@ -58,18 +33,11 @@ export type NavItem = {
   order: number;
   /** The glyph beside the title, from the page's own frontmatter. */
   icon?: PageIcon;
-  /** Capability entries only — a guide has no spec to be changing. */
-  status?: CapabilityStatus;
   /** Capability entries only — who the page serves, from its frontmatter. */
   audience?: "operator";
 };
 
-export type NavProduct = NavItem & {
-  capabilities: NavItem[];
-  /** Capabilities that exist only as a delta — no durable spec, no page. */
-  incubating: Incubating[];
-  changeCount: number;
-};
+export type NavProduct = NavItem & { capabilities: NavItem[] };
 
 export type NavGroup = { title: string; products: NavProduct[] };
 
@@ -93,22 +61,10 @@ export type ManualIndex = {
   pages: ParsedPage[];
   pageByPath: Map<string, ParsedPage>;
   pageByRoute: Map<string, ParsedPage>;
-  specById: Map<string, SpecEntry>;
-  changeById: Map<string, ChangeEntry>;
-  changesBySpec: Map<string, ChangeEntry[]>;
-  changesByOwner: Map<string, ChangeEntry[]>;
-  /** `page#slug` → the in-flight changes whose proposal links that section. */
-  changesBySection: Map<string, ChangeEntry[]>;
-  /** Spec id → the proposals whose `## References` name it, directly or
-   * through an id it issued. A proposal has no delta, so this is the only way
-   * a capability learns one is about it. */
-  proposalsBySpec: Map<string, ChangeEntry[]>;
-  /** Every id a spec answers to — its own, its requirement headings, and the
-   * permanent ids it issued — mapped back to the spec. What a `## References`
-   * bullet is resolved through, for a change in the snapshot or out of it. */
-  specsByCitedId: Map<string, string[]>;
   /** Spec id → the route of the page that documents it. */
   routeBySpec: Map<string, string>;
+  /** Spec id → the title of the page that documents it. */
+  titleBySpec: Map<string, string>;
   groups: NavGroup[];
   topicGroups: NavTopicGroup[];
   /** Every topic of every group, in nav order — what search and the platform
@@ -118,8 +74,6 @@ export type ManualIndex = {
   /** The store's references, in path order; each `to` is `/references/<slug>`. */
   references: NavItem[];
   referenceByRoute: Map<string, NavItem>;
-  /** Delta-only capabilities whose product has no branch to sit under. */
-  incubating: Incubating[];
 };
 
 const cache = new WeakMap<Snapshot, ManualIndex>();
@@ -160,40 +114,13 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
   const pageByRoute = new Map(
     pages.flatMap((page) => (page.route ? [[page.route, page] as const] : [])),
   );
-  const specById = new Map(snapshot.specs.map((spec) => [spec.id, spec]));
-  const changeById = new Map(
-    snapshot.changes.map((change) => [change.id, change]),
-  );
-
-  const changesBySpec = new Map<string, ChangeEntry[]>();
-  const changesByOwner = new Map<string, ChangeEntry[]>();
-  for (const change of snapshot.changes) {
-    for (const delta of change.deltas) {
-      push(changesBySpec, delta.spec, change);
-      push(changesByOwner, ownerOfSpec(delta.spec, snapshot.taxonomy), change);
-    }
-  }
-  const changesBySection = new Map<string, ChangeEntry[]>();
-  for (const change of snapshot.changes) {
-    for (const section of change.sections ?? []) {
-      push(changesBySection, sectionKey(section.page, section.slug), change);
-    }
-  }
-  for (const list of [
-    ...changesBySpec.values(),
-    ...changesByOwner.values(),
-    ...changesBySection.values(),
-  ]) {
-    dedupe(list);
-  }
-
-  const specsByCitedId = deriveSpecsByCitedId(snapshot);
-
   const routeBySpec = new Map<string, string>();
+  const titleBySpec = new Map<string, string>();
   for (const page of pages) {
     const spec = page.ast?.frontmatter.spec;
     if (spec && page.route && !routeBySpec.has(spec)) {
       routeBySpec.set(spec, page.route);
+      titleBySpec.set(spec, page.ast?.frontmatter.title ?? spec);
     }
   }
 
@@ -203,24 +130,16 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
     pages,
     pageByPath,
     pageByRoute,
-    specById,
-    changeById,
-    changesBySpec,
-    changesByOwner,
-    changesBySection,
-    proposalsBySpec: new Map(),
-    specsByCitedId,
     routeBySpec,
+    titleBySpec,
     groups: [],
     topicGroups: [],
     topics: [],
     guides: [],
     references: [],
     referenceByRoute: new Map(),
-    incubating: [],
   };
 
-  index.proposalsBySpec = deriveProposalsBySpec(snapshot, specsByCitedId);
   index.groups = deriveGroups(index);
   index.topicGroups = deriveTopicGroups(index);
   index.topics = index.topicGroups.flatMap((group) => group.topics);
@@ -234,32 +153,7 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
   index.referenceByRoute = new Map(
     index.references.map((item) => [item.to, item]),
   );
-  index.incubating = incubatingFor(
-    index,
-    undefined,
-    new Set(
-      index.groups.flatMap((group) => group.products.map((one) => one.id)),
-    ),
-  );
   return index;
-}
-
-function push<T>(map: Map<string, T[]>, key: string, value: T) {
-  const list = map.get(key);
-  if (list) list.push(value);
-  else map.set(key, [value]);
-}
-
-function dedupe(list: ChangeEntry[]) {
-  const seen = new Set<string>();
-  let write = 0;
-  for (const change of list) {
-    if (seen.has(change.id)) continue;
-    seen.add(change.id);
-    list[write] = change;
-    write += 1;
-  }
-  list.length = write;
 }
 
 function navItem(page: ParsedPage, fallbackId: string): NavItem {
@@ -297,10 +191,7 @@ function productNav(index: ManualIndex, id: string): NavProduct {
   const dir = pagePath(index.manualDir, "products", id);
   const landing = index.pageByPath.get(`${dir}/index.md`);
   const capabilities = childPages(index, dir).map((page) => {
-    const item: NavItem = {
-      ...navItem(page, page.path.slice(dir.length + 1, -3)),
-      status: capabilityStatus(index, page.ast?.frontmatter.spec),
-    };
+    const item = navItem(page, page.path.slice(dir.length + 1, -3));
     const audience = page.ast?.frontmatter.audience;
     if (audience) item.audience = audience;
     return item;
@@ -314,8 +205,6 @@ function productNav(index: ManualIndex, id: string): NavProduct {
     to: `/p/${id}`,
     order: landing?.ast?.frontmatter.order ?? Number.MAX_SAFE_INTEGER,
     capabilities,
-    incubating: incubatingFor(index, id),
-    changeCount: index.changesByOwner.get(id)?.length ?? 0,
   };
 }
 
@@ -367,9 +256,7 @@ function withoutOperators(product: NavProduct): NavProduct {
  * Every `audience: operator` page, regrouped by the product it operates, under
  * the one Admin group. The store's taxonomy stays put — the rail is the only
  * thing that regroups — and a missing Admin group in manual.yaml is created
- * rather than letting an operator page fall out of the rail entirely. The
- * derived branch carries neither incubating entries nor a change count; the
- * product's own branch already wears both.
+ * rather than letting an operator page fall out of the rail entirely.
  */
 function appendOperatorBranches(index: ManualIndex, groups: NavGroup[]) {
   const admin = groups.find((group) => group.title === ADMIN_GROUP);
@@ -383,12 +270,7 @@ function appendOperatorBranches(index: ManualIndex, groups: NavGroup[]) {
       (one) => one.audience === "operator",
     );
     if (operators.length === 0) continue;
-    branches.push({
-      ...product,
-      capabilities: operators,
-      incubating: [],
-      changeCount: 0,
-    });
+    branches.push({ ...product, capabilities: operators });
   }
   if (branches.length === 0) return;
 
@@ -468,88 +350,6 @@ export function productTitle(index: ManualIndex, id: string): string {
   return landing?.ast?.frontmatter.title ?? humanize(id);
 }
 
-export function changesForSpec(
-  index: ManualIndex,
-  specId: string,
-): ChangeEntry[] {
-  return index.changesBySpec.get(specId) ?? [];
-}
-
-export function sectionKey(pagePath: string, slug: string): string {
-  return `${pagePath}#${slug}`;
-}
-
-/** The in-flight changes a proposal attached to one section of a page,
- * newest movement first. */
-export function changesForSection(
-  index: ManualIndex,
-  pagePath: string,
-  slug: string,
-): ChangeEntry[] {
-  return [
-    ...(index.changesBySection.get(sectionKey(pagePath, slug)) ?? []),
-  ].sort(byLastMoved);
-}
-
-export function changesForOwner(
-  index: ManualIndex,
-  owner: string,
-): ChangeEntry[] {
-  return index.changesByOwner.get(owner) ?? [];
-}
-
-/** One in-flight change touching a requirement row, and how it touches it. */
-export type RequirementChange = { change: ChangeEntry; kind: DeltaKind };
-
-/**
- * The in-flight changes whose delta names this requirement, newest movement
- * first. A rename is recorded under its FROM name — the row that exists until
- * the change archives — so the badge lands on the row being read today.
- */
-export function changesForRequirement(
-  index: ManualIndex,
-  specId: string,
-  requirementName: string,
-): RequirementChange[] {
-  const touching: RequirementChange[] = [];
-  for (const change of changesForSpec(index, specId)) {
-    const touched = deltaRequirement(change, specId, requirementName);
-    if (touched) touching.push({ change, kind: touched.kind });
-  }
-  return touching.sort((a, b) => byLastMoved(a.change, b.change));
-}
-
-function deltaRequirement(
-  change: ChangeEntry,
-  specId: string,
-  requirementName: string,
-): DeltaRequirement | undefined {
-  for (const delta of change.deltas) {
-    if (delta.spec !== specId) continue;
-    // A snapshot built before the reader named requirements carries none.
-    const touched = findRequirement(delta.requirements ?? [], requirementName);
-    if (touched) return touched;
-  }
-  return undefined;
-}
-
-/**
- * A capability's status. A durable spec is stable or changing; a spec that
- * lives only as a delta is incubating — being written right now. Everything
- * else is planned: the page describes an intended shape that neither the
- * durable store nor any change carries yet.
- */
-export function capabilityStatus(
-  index: ManualIndex,
-  specId: string | undefined,
-): CapabilityStatus {
-  if (specId && index.specById.has(specId)) {
-    return changesForSpec(index, specId).length > 0 ? "changing" : "stable";
-  }
-  if (specId && changesForSpec(index, specId).length > 0) return "incubating";
-  return "planned";
-}
-
 /**
  * What a `/p/...` route names. `/p/a/b` is the product `a/b` where the store
  * groups its products by the application shipping them, and the capability `b`
@@ -576,359 +376,6 @@ export function splitProductRoute(
   return parts.length <= 2 ? { product: parts[0], capability: parts[1] } : null;
 }
 
-/** Only a product's own children are capabilities; guides and topics are not.
- * A product directory sits one or two levels under `products/`, depending on
- * whether the store groups its products by the application shipping them. */
-export function isProductDir(manualDir: string, dir: string): boolean {
-  const prefix = pagePath(manualDir, "products");
-  if (!dir.startsWith(`${prefix}/`)) return false;
-  const rest = dir.slice(prefix.length + 1);
-  return rest !== "" && rest.split("/").length <= 2;
-}
-
-/** The marks of every page under a product, pages in their nav order. Here
- * rather than in `open-marks.ts`, which stays reachable from plain node: this
- * is the app's own `ParsedPage`, and the store never asks for one product's
- * pages at a time. */
-export function openMarksForProduct(
-  index: ManualIndex,
-  productId: string,
-): OpenMark<ParsedPage>[] {
-  const dir = `${pagePath(index.manualDir, "products", productId)}/`;
-  return index.pages
-    .filter((page) => page.path.startsWith(dir) && page.route)
-    .sort(byOrder)
-    .flatMap(openMarksOfPage);
-}
-
-function byOrder(a: ParsedPage, b: ParsedPage): number {
-  const order = (page: ParsedPage) =>
-    page.path.endsWith("/index.md")
-      ? -1
-      : (page.ast?.frontmatter.order ?? Number.POSITIVE_INFINITY);
-  return order(a) - order(b) || a.path.localeCompare(b.path);
-}
-
-/**
- * Where a change stands, in the four lanes that ran before the eight stages:
- * the lane its stage projects to, so the two can never disagree about one
- * change. Every entry carries a stage, computed where the schema is, so there
- * is one derivation and this is a projection of it.
- */
-export function laneOf(change: ChangeEntry): ChangeLane {
-  return laneOfStage(change.stage);
-}
-
-/**
- * A change that is still only a reason: no delta, so it flips no capability
- * status, badges no row and bumps no product's count — it collects on the
- * Board's own lane instead of standing among the work in flight.
- *
- * The deltas, not the lane: the ladder reads a change whose plan was written
- * before its designs as Proposed, and a change carrying requirements is not
- * an unplanned thought whatever rung it sits on.
- */
-export function isProposal(change: ChangeEntry): boolean {
-  return change.deltas.length === 0;
-}
-
-/** One artifact a change still owes, and why it is owed. */
-export type PendingItem = {
-  change: ChangeEntry;
-  /** The schema's artifact id — `specs`, `ui-design`, `tasks`. */
-  artifact: string;
-  /** The line the change's author wrote in `awaiting:`, when it wrote one. */
-  why?: string;
-};
-
-/** What one teammate owes, oldest change first. */
-export type PendingTeammate = { teammate: string; items: PendingItem[] };
-
-/**
- * Every teammate's worklist, derived from the artifacts each change has written
- * against the ones its own schema declares. Nothing is stored: a change owes
- * an artifact when it has not written it, everything that artifact is built
- * on is settled, and nothing waived it. A change on a schema this store does
- * not define is left alone — its artifacts are the CLI's, not ours.
- *
- * `ui-design` and `tech-design` are never derived as owed: both turn on
- * something no worklist can see — whether there is a screen, whether the
- * work lands outside this store — and guessing would fill a designer's list
- * with changes that draw nothing. They appear when the change says so in
- * `awaiting:`, which is also the only way to say why a wait is a wait.
- */
-export function pendingByTeammate(
-  changes: ChangeEntry[],
-  schemas: Record<string, SchemaArtifact[]>,
-): PendingTeammate[] {
-  const byTeammate = new Map<string, PendingItem[]>();
-  for (const artifacts of Object.values(schemas)) {
-    for (const { teammate } of artifacts) {
-      if (teammate) byTeammate.set(teammate, byTeammate.get(teammate) ?? []);
-    }
-  }
-
-  for (const change of [...changes].sort(byCreated)) {
-    // A change the reader could not finish has an incomplete `written`, so
-    // asking a teammate for a file it may already hold would be worse than
-    // saying nothing — the `store` rule is what reports it.
-    const artifacts = change.error ? undefined : schemas[change.schema];
-    if (!artifacts) continue;
-    const waived = waivedOf(artifacts, change);
-    const written = new Set(change.written);
-    const declared = new Map(
-      (change.awaiting ?? []).map((wait) => [wait.artifact, wait.why]),
-    );
-    for (const artifact of artifacts) {
-      const why = declared.get(artifact.id);
-      if (!artifact.teammate || (written.has(artifact.id) && why === undefined))
-        continue;
-      const settled = (id: string) => written.has(id) || waived.has(id);
-      const owed =
-        why !== undefined ||
-        (artifact.required &&
-          artifact.requires.every(settled) &&
-          !waived.has(artifact.id));
-      if (!owed) continue;
-      byTeammate
-        .get(artifact.teammate)
-        ?.push({ change, artifact: artifact.id, ...(why ? { why } : {}) });
-    }
-  }
-
-  return [...byTeammate].map(([teammate, items]) => ({ teammate, items }));
-}
-
-/** Oldest first: the change that has waited longest is the one to answer for. */
-function byCreated(a: ChangeEntry, b: ChangeEntry): number {
-  return (a.created || "9999").localeCompare(b.created || "9999");
-}
-
-/** How a `depends_on:` id resolved: still in flight and holding this change
- * up, archived and therefore satisfied, or naming nothing at all. */
-export type DependencyState = "blocking" | "satisfied" | "missing";
-
-export type Dependency = {
-  id: string;
-  state: DependencyState;
-  /** The change the id resolved to, when it resolved to one. */
-  change?: ChangeEntry;
-};
-
-/**
- * A change's dependencies against the two sets a change can live in. The
- * archive is a separate artifact, so a caller that has not loaded it gets
- * `missing` for a shipped dependency — pass it whenever the answer matters.
- */
-export function dependenciesOf(
-  change: ChangeEntry,
-  index: ManualIndex,
-  archived: ChangeEntry[] = [],
-): Dependency[] {
-  const shipped = new Map(archived.map((one) => [one.id, one]));
-  return (change.dependsOn ?? []).map((id) => {
-    const inFlight = index.changeById.get(id);
-    if (inFlight) return { id, state: "blocking", change: inFlight };
-    const done = shipped.get(id);
-    return done
-      ? { id, state: "satisfied", change: done }
-      : { id, state: "missing" };
-  });
-}
-
-/** Proposals a capability page should show: they cite it, and they carry no
- * delta yet, so nothing else on the page would mention them. */
-export function proposalsForSpec(
-  index: ManualIndex,
-  specId: string,
-): ChangeEntry[] {
-  return index.proposalsBySpec.get(specId) ?? [];
-}
-
-function deriveSpecsByCitedId(snapshot: Snapshot): Map<string, string[]> {
-  const specsByCitedId = new Map<string, string[]>();
-  const name = (id: string, specId: string) => {
-    push(specsByCitedId, id, specId);
-  };
-  for (const spec of snapshot.specs) {
-    name(spec.id, spec.id);
-    for (const requirement of spec.requirements) {
-      name(requirement.name, spec.id);
-      for (const scenario of requirement.scenarios) {
-        if (scenario.id) name(scenario.id, spec.id);
-      }
-    }
-    for (const journey of spec.journeys ?? []) name(journey.id, spec.id);
-    for (const one of spec.testCases ?? []) name(one.id, spec.id);
-  }
-  return specsByCitedId;
-}
-
-function deriveProposalsBySpec(
-  snapshot: Snapshot,
-  specsByCitedId: Map<string, string[]>,
-): Map<string, ChangeEntry[]> {
-  const found = new Map<string, ChangeEntry[]>();
-  for (const proposal of snapshot.changes.filter(isProposal)) {
-    for (const specId of specsCited(specsByCitedId, proposal)) {
-      push(found, specId, proposal);
-    }
-  }
-  return found;
-}
-
-/** The specs a change's `## References` bullets land on. A change out of the
- * snapshot — an archived one, fetched separately — resolves the same way, so
- * the archive is not a second rule. */
-function specsCited(
-  specsByCitedId: Map<string, string[]>,
-  change: ChangeEntry,
-): Set<string> {
-  return new Set(
-    (change.cites ?? []).flatMap((id) => specsByCitedId.get(id) ?? []),
-  );
-}
-
-/** One change's follow-on bullets, as a capability page shows them: the
- * change that wrote them, so a reader can date the intent. */
-export type FollowOn = { change: ChangeEntry; items: string[] };
-
-/**
- * What the changes about a capability said would come next.
- *
- * Gathered from every change that is about this spec — one whose delta touches
- * it, and one whose `## References` cite it and has no delta yet — plus the
- * archived changes handed in, which ride their own artifact and reach a page
- * only once it has been fetched. Never merged and never deduped: two changes
- * naming the same next step named it on two different days, and the reader is
- * owed both.
- *
- * Ordered live intent first — a change still in flight has not spent its
- * follow-ons — then the shipped ones, newest first.
- */
-export function followOnsForSpec(
-  index: ManualIndex,
-  specId: string,
-  archived: ChangeEntry[] = [],
-): FollowOn[] {
-  const found = new Map<string, FollowOn>();
-  const take = (change: ChangeEntry) => {
-    const items = change.followOns ?? [];
-    if (items.length === 0 || found.has(change.id)) return;
-    found.set(change.id, { change, items });
-  };
-
-  for (const change of changesForSpec(index, specId)) take(change);
-  for (const change of proposalsForSpec(index, specId)) take(change);
-  for (const change of archived) {
-    const about =
-      change.deltas.some((delta) => delta.spec === specId) ||
-      specsCited(index.specsByCitedId, change).has(specId);
-    if (about) take(change);
-  }
-
-  return [...found.values()].sort(byIntent);
-}
-
-/** Live intent first — a change still in flight has not spent its follow-ons
- * — then the shipped ones, newest first. */
-function byIntent(a: FollowOn, b: FollowOn): number {
-  const shipped = (one: FollowOn) => one.change.status === "archived";
-  if (shipped(a) !== shipped(b)) return shipped(a) ? 1 : -1;
-  return shipped(a)
-    ? byShipped(a.change, b.change)
-    : byLastMoved(a.change, b.change);
-}
-
-/** A domain's follow-on, which is one of its capabilities' with the
- * capabilities named: the same change speaks for every spec it is about, and a
- * reader arriving at the domain has not yet chosen one. */
-export type ProductFollowOn = FollowOn & { specs: string[] };
-
-/**
- * What the changes about a domain's capabilities said would come next, pooled
- * from the capability pages that each show their own.
- *
- * Deduped by change and never by bullet: a change about two capabilities wrote
- * its follow-ons once, and both are named against it rather than the bullets
- * being repeated under each. Ordering and dating are the capability block's —
- * this is the same reading, one level up.
- */
-export function followOnsForProduct(
-  index: ManualIndex,
-  productId: string,
-  archived: ChangeEntry[] = [],
-): ProductFollowOn[] {
-  const found = new Map<string, ProductFollowOn>();
-  for (const specId of specsOfProduct(index, productId, archived)) {
-    for (const followOn of followOnsForSpec(index, specId, archived)) {
-      const seen = found.get(followOn.change.id);
-      if (seen) seen.specs.push(specId);
-      else found.set(followOn.change.id, { ...followOn, specs: [specId] });
-    }
-  }
-  return [...found.values()].sort(byIntent);
-}
-
-/**
- * The spec ids a product owns, in id order. Read off the taxonomy the same way
- * a change's owner is, so a capability that exists only as a delta — durably
- * unwritten, and the kind a follow-on most often names — is counted with the
- * durable ones.
- */
-export function specsOfProduct(
-  index: ManualIndex,
-  productId: string,
-  archived: ChangeEntry[] = [],
-): string[] {
-  const owned = new Set<string>();
-  const take = (specId: string) => {
-    if (ownerOfSpec(specId, index.snapshot.taxonomy) === productId) {
-      owned.add(specId);
-    }
-  };
-  for (const specId of index.specById.keys()) take(specId);
-  for (const specId of index.changesBySpec.keys()) take(specId);
-  for (const change of archived) {
-    for (const delta of change.deltas) take(delta.spec);
-  }
-  return [...owned].sort((a, b) => a.localeCompare(b));
-}
-
-/** A cited id as somewhere to click. `to` is absent when the id names nothing
- * the snapshot holds — a proposal may cite a capability that does not exist
- * yet, and saying so is better than dropping the line. */
-export type CiteTarget = { id: string; label: string; to?: string };
-
-/**
- * Where a proposal's `## References` id points. The `[[ref]]` resolver answers
- * for spec ids and permanent ids; a requirement heading is the third thing a
- * propose dialog writes, and it resolves by name against the row it came from.
- */
-export function citeTarget(index: ManualIndex, id: string): CiteTarget {
-  const resolved = resolveRef(id, index.snapshot);
-  if (resolved.ok) {
-    const { target } = resolved;
-    const route = routeForSpec(index, target.spec);
-    return {
-      id,
-      label: target.title,
-      to: target.kind === "spec" ? route : `${route}#${target.id}`,
-    };
-  }
-
-  for (const spec of index.snapshot.specs) {
-    const requirement = findRequirement(spec.requirements, id);
-    if (!requirement) continue;
-    return {
-      id,
-      label: requirement.name,
-      to: `${routeForSpec(index, spec.id)}#req-${slugify(requirement.name)}`,
-    };
-  }
-  return { id, label: id };
-}
-
 /** What a commit touched, as a chip: a stable key, what to call it, and where
  * it leads when it still leads anywhere. */
 export type FeedRef = {
@@ -939,13 +386,16 @@ export type FeedRef = {
 };
 
 /**
- * A history ref against today's store. A page deleted since, a change already
- * archived, a file no reader claims — each keeps its label and loses its link,
- * because the commit happened whatever became of what it touched.
+ * A history ref against today's store. A page deleted since, or a file no
+ * reader claims, keeps its label and loses its link, because the commit
+ * happened whatever became of what it touched.
  */
 export function feedRef(index: ManualIndex, ref: HistoryRef): FeedRef {
-  const key = "id" in ref ? `${ref.kind}:${ref.id}` : `${ref.kind}:${ref.path}`;
-  return { key, kind: ref.kind, ...linked(index, ref) };
+  return {
+    key: `${ref.kind}:${ref.path}`,
+    kind: ref.kind,
+    ...linked(index, ref),
+  };
 }
 
 function linked(
@@ -960,174 +410,7 @@ function linked(
       ...(page.route ? { to: page.route } : {}),
     };
   }
-  if (ref.kind === "spec") {
-    const route = index.routeBySpec.get(ref.id);
-    const page = route ? index.pageByRoute.get(route) : undefined;
-    return {
-      label: page?.ast?.frontmatter.title ?? ref.id,
-      ...(route ? { to: route } : {}),
-    };
-  }
-  // A change that is no longer in flight has archived: it has no card left to
-  // anchor to, so the board itself is all there is to point at.
-  if (ref.kind === "change") {
-    const change = index.changeById.get(ref.id);
-    return change
-      ? { label: change.title, to: `/in-flight/${ref.id}` }
-      : { label: ref.id, to: "/in-flight" };
-  }
-  if (ref.kind === "archived") return { label: ref.id, to: "/in-flight" };
   return { label: ref.path };
-}
-
-/** One capability's acceptance, as a reviewer has to see it to pick the next
- * job: what the suite claims, what it covers, and what it never mentions. */
-export type QaRow = {
-  spec: SpecEntry;
-  route: string;
-  /** The row's own shelf on that page — a case where there is a suite, the
-   * first journey otherwise. */
-  anchor?: string;
-  journeys: number;
-  suiteStatus?: TestSuiteStatus;
-  cases: { draft: number; actual: number; deprecated: number; total: number };
-  /** Scenarios a case traces, over the scenarios a case is owed — the
-   * deliberately uncovered ones subtracted from both. */
-  covered: number;
-  countable: number;
-  untraced: string[];
-  outOfSuite: string[];
-  error?: ItemError;
-};
-
-/** Every capability that has claimed acceptance of any kind. A spec with
- * neither journeys nor a suite has nothing to review yet, and listing it would
- * bury the ones that do. */
-export function qaRows(index: ManualIndex): QaRow[] {
-  const rows: QaRow[] = [];
-  for (const spec of index.snapshot.specs) {
-    const journeys = spec.journeys ?? [];
-    const cases = spec.testCases ?? [];
-    if (journeys.length === 0 && cases.length === 0 && !spec.testCasesError) {
-      continue;
-    }
-
-    const allScenarios = spec.requirements.flatMap(
-      (requirement) => requirement.scenarios,
-    );
-    const traced = tracedBy(cases, allScenarios);
-    const exempt = new Set(spec.outOfSuite ?? []);
-    const issued = allScenarios.flatMap((scenario) =>
-      scenario.id ? [scenario.id] : [],
-    );
-    const countable = issued.filter((id) => !exempt.has(id));
-
-    rows.push({
-      spec,
-      route: routeForSpec(index, spec.id),
-      anchor: cases[0]?.id ?? journeys[0]?.id,
-      journeys: journeys.length,
-      ...(spec.testCasesStatus ? { suiteStatus: spec.testCasesStatus } : {}),
-      cases: {
-        draft: cases.filter((one) => one.status === "draft").length,
-        actual: cases.filter((one) => one.status === "actual").length,
-        deprecated: cases.filter((one) => one.status === "deprecated").length,
-        total: cases.length,
-      },
-      covered: countable.filter((id) => traced.has(id)).length,
-      countable: countable.length,
-      untraced: countable.filter((id) => !traced.has(id)),
-      outOfSuite: [...exempt],
-      ...(spec.testCasesError ? { error: spec.testCasesError } : {}),
-    });
-  }
-  return rows.sort(byReviewFirst);
-}
-
-/** The scenarios living cases reach. A case walks an anchor, and reaches every
- * scenario whose `**Serves:**` names that same anchor; an older case names a
- * scenario outright, and reaches that one. The join runs through the anchor
- * rather than through a link the two files keep on each other, so neither is
- * written from the other. A `deprecated` case is history, not coverage —
- * counting its traces is how a scenario reads as covered after it loses its
- * last case. */
-export function tracedBy(
-  cases: TestCase[],
-  scenarios: Scenario[] = [],
-): Set<string> {
-  const served = new Map<string, string[]>();
-  for (const scenario of scenarios) {
-    if (!scenario.id) continue;
-    for (const anchor of scenario.serves ?? []) {
-      const at = served.get(anchor);
-      if (at) at.push(scenario.id);
-      else served.set(anchor, [scenario.id]);
-    }
-  }
-  return new Set(
-    cases
-      .filter((one) => one.status !== "deprecated")
-      .flatMap((one) => one.traces)
-      .flatMap((trace) => served.get(trace) ?? [trace]),
-  );
-}
-
-/** A suite riding an in-flight change, beside the change that carries it — the
- * work `/qa`'s capability rows cannot see, because the capability may not
- * exist durably yet. Drafts first: they are what a reviewer is here for. */
-export type ChangeSuiteRow = { change: ChangeEntry; suite: ChangeSuite };
-
-export function changeSuiteRows(index: ManualIndex): ChangeSuiteRow[] {
-  const rows: ChangeSuiteRow[] = [];
-  for (const change of index.snapshot.changes) {
-    for (const suite of change.suites ?? []) rows.push({ change, suite });
-  }
-  return rows.sort(
-    (a, b) =>
-      Number(Boolean(b.suite.error)) - Number(Boolean(a.suite.error)) ||
-      b.suite.cases.draft - a.suite.cases.draft ||
-      a.change.id.localeCompare(b.change.id) ||
-      a.suite.spec.localeCompare(b.suite.spec),
-  );
-}
-
-/** A suite nobody can read comes first — nothing else about it is knowable.
- * Then the drafts somebody has to stand behind, then the holes. */
-function byReviewFirst(a: QaRow, b: QaRow): number {
-  return (
-    Number(Boolean(b.error)) - Number(Boolean(a.error)) ||
-    b.cases.draft - a.cases.draft ||
-    b.untraced.length - a.untraced.length ||
-    a.spec.id.localeCompare(b.spec.id)
-  );
-}
-
-/** A capability that exists only as a delta: no durable spec, no page, and no
- * way into it but the change that is writing it. */
-export type Incubating = { specId: string; title: string; change: ChangeEntry };
-
-export function incubatingFor(
-  index: ManualIndex,
-  product: string | undefined,
-  homed: Set<string> = new Set(),
-): Incubating[] {
-  const found: Incubating[] = [];
-  for (const [specId, changes] of index.changesBySpec) {
-    if (index.specById.has(specId)) continue;
-    if (index.routeBySpec.has(specId)) continue;
-    const owner = ownerOfSpec(specId, index.snapshot.taxonomy);
-    // Named product, or — with no product named — the leftovers no product
-    // branch is going to show, which are the easiest ones to lose.
-    if (product === undefined ? homed.has(owner) : owner !== product) continue;
-    const change = [...changes].sort(byLastMoved)[0];
-    if (!change) continue;
-    found.push({
-      specId,
-      title: humanize(specId.split("/").at(-1) ?? specId),
-      change,
-    });
-  }
-  return found.sort((a, b) => a.title.localeCompare(b.title));
 }
 
 /** A callout owning no signature of its own — the ones the build signs. */
@@ -1208,45 +491,6 @@ export function designShelves(index: ManualIndex): DesignShelf[] {
     });
   }
   return shelves.sort((a, b) => a.title.localeCompare(b.title));
-}
-
-/** Newest movement first; a change that never moved sorts last. */
-export function byLastMoved(a: ChangeEntry, b: ChangeEntry): number {
-  const left = a.lastMoved ? Date.parse(a.lastMoved) : 0;
-  const right = b.lastMoved ? Date.parse(b.lastMoved) : 0;
-  return right - left || a.id.localeCompare(b.id);
-}
-
-/** The day a change shipped: its archive directory's date prefix, with the
- * last commit behind it for a directory nobody dated. */
-export function shippedDate(change: ChangeEntry): string | undefined {
-  return change.shippedOn ?? change.lastMoved ?? (change.created || undefined);
-}
-
-/** Newest shipped first, for the archive. Not `byLastMoved`: the timeline
- * shows the shipped day, and an order read off anything else puts a change
- * under a heading that disagrees with its own date. */
-export function byShipped(a: ChangeEntry, b: ChangeEntry): number {
-  const left = Date.parse(shippedDate(a) ?? "");
-  const right = Date.parse(shippedDate(b) ?? "");
-  return (
-    (Number.isNaN(right) ? 0 : right) - (Number.isNaN(left) ? 0 : left) ||
-    a.id.localeCompare(b.id)
-  );
-}
-
-/**
- * What a capability is called on screen: the title of the page that documents
- * it, the spec's own title where no page does, and the id read out where
- * neither exists yet.
- */
-export function capabilityTitle(index: ManualIndex, specId: string): string {
-  const route = index.routeBySpec.get(specId);
-  const page = route ? index.pageByRoute.get(route) : undefined;
-  const titled = page?.ast?.frontmatter.title;
-  if (titled) return titled;
-  const spec = index.specById.get(specId);
-  return spec ? specTitle(spec) : humanize(specId.split("/").at(-1) ?? specId);
 }
 
 /** Route to a spec's page, falling back to the route its id implies. */

@@ -1,0 +1,465 @@
+import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
+import { NO_GIT } from "../../manual/src/store/git.mts";
+import { discoverSpecs, readSpecs, readTestCases } from "../src/read-specs.mts";
+import { writeStore } from "./tmp-store";
+
+const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
+
+const specs = readSpecs(FIXTURE, NO_GIT);
+const alpha = specs.find((spec) => spec.id === "demo-product/alpha");
+
+describe("taxonomy from disk shape", () => {
+  it("reads a dir of capability dirs as a product", () => {
+    expect(discoverSpecs(FIXTURE).products).toEqual(["demo-product"]);
+  });
+
+  it("reads a dir holding spec.md directly as a topic", () => {
+    expect(discoverSpecs(FIXTURE).topics).toEqual(["demo-topic"]);
+  });
+
+  it("ids a capability as product/capability and a topic bare", () => {
+    expect(specs.map((spec) => spec.id)).toEqual([
+      "demo-product/alpha",
+      "demo-product/broken",
+      "demo-topic",
+    ]);
+  });
+});
+
+describe("spec entries", () => {
+  it("takes title, purpose and feature set verbatim", () => {
+    expect(alpha?.title).toBe("demo-product/alpha Specification");
+    expect(alpha?.purpose).toBe(
+      "Alpha does one thing, and this fixture is what proves the reader sees it.",
+    );
+    expect(alpha?.featureSet).toContain("- Doing the thing");
+    expect(alpha?.featureSet).toContain("  - Once only:");
+  });
+
+  it("reads requirements with their scenario bodies", () => {
+    expect(alpha?.requirements.map((one) => one.name)).toEqual([
+      "The thing happens once",
+      "The thing is written down",
+    ]);
+    const first = alpha?.requirements[0];
+    expect(first?.text).toBe(
+      "The system SHALL do the thing exactly once and SHALL refuse a second ask.",
+    );
+    expect(first?.scenarios[0]).toEqual({
+      id: "alpha-SC-01",
+      name: "The thing happens",
+      serves: ["alpha-US-01"],
+      servesProse: "Reader follows the thing end to end",
+      text: "**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** a reader asks for the thing\n- **THEN** the thing happens",
+    });
+  });
+
+  it("carries a scenario that predates permanent ids without one", () => {
+    const scenario = alpha?.requirements[1].scenarios[0];
+    expect(scenario?.id).toBeUndefined();
+    expect(scenario?.name).toBe("A scenario that predates permanent ids");
+  });
+
+  it("reads journeys, which name no scenario of their own", () => {
+    expect(alpha?.journeys).toHaveLength(1);
+    const journey = alpha?.journeys?.[0];
+    expect(journey?.id).toBe("alpha-US-01");
+    expect(journey?.title).toBe("Reader follows the thing end to end");
+    expect(journey?.text).toContain("**As a** reader,");
+  });
+
+  it("reads a sibling feature-tcs.md into traced cases with their status", () => {
+    expect(alpha?.testCases).toEqual([
+      {
+        id: "alpha-TC-01",
+        title: "Reader asks for the thing and it happens",
+        traces: ["alpha-SC-01"],
+        status: "draft",
+        automationStatus: "manual",
+      },
+      {
+        id: "alpha-TC-02",
+        title: "Reader asks a second time and is refused",
+        traces: ["alpha-SC-01", "alpha-SC-02"],
+        status: "draft",
+        automationStatus: "manual",
+      },
+    ]);
+  });
+
+  it("carries the suite file's own status", () => {
+    expect(alpha?.testCasesStatus).toBe("pending-review");
+  });
+
+  it("leaves testCases unset where no suite exists", () => {
+    const topic = specs.find((spec) => spec.id === "demo-topic");
+    expect(topic?.testCases).toBeUndefined();
+    expect(topic?.testCasesStatus).toBeUndefined();
+  });
+});
+
+describe("case headings in every form the store writes", () => {
+  const caseText = (heading: string, trace: string) =>
+    [
+      `### ${heading}`,
+      "",
+      "* **Status:** draft",
+      "* **Automation status:** manual",
+      `* **Trace:** ${trace}`,
+      "",
+    ].join("\n");
+  const suite = readTestCases(
+    [
+      "# Alpha Test Cases",
+      "",
+      "**Status:** pending-review",
+      "",
+      "## Walk 1: Reader follows the thing",
+      "",
+      caseText(
+        "g10.demo-alpha.US1-TC1: Reader asks for the thing",
+        "g10.demo-alpha.US1",
+      ),
+      caseText(
+        "g10.demo-alpha.TC-ue2 (US1-TC2): Reader asks again",
+        "g10.demo-alpha.US1, g10.demo-beta.US2",
+      ),
+      caseText("alpha-US1-TC3-1: Reader asks a third time", "alpha-US-01"),
+      caseText("alpha-TC-04: Reader asks for a scenario", "alpha-SC-02"),
+    ].join("\n"),
+  );
+
+  it("reads each case under the id its heading displays, with its traces", () => {
+    expect(suite.cases.map(({ id, traces }) => [id, traces])).toEqual([
+      ["g10.demo-alpha.US1-TC1", ["g10.demo-alpha.US1"]],
+      ["g10.demo-alpha.TC-ue2", ["g10.demo-alpha.US1", "g10.demo-beta.US2"]],
+      ["alpha-US1-TC3-1", ["alpha-US-01"]],
+      ["alpha-TC-04", ["alpha-SC-02"]],
+    ]);
+  });
+});
+
+describe("error containment", () => {
+  const broken = specs.find((spec) => spec.id === "demo-product/broken");
+
+  it("contains a malformed spec instead of throwing", () => {
+    expect(broken?.error).toEqual({
+      file: "openspec/specs/demo-product/broken/spec.md",
+      line: 1,
+      message: "spec has no `## Purpose`",
+    });
+  });
+
+  it("keeps whatever parsed before the break", () => {
+    expect(broken?.title).toBe("demo-product/broken Specification");
+  });
+});
+
+const SPEC = "openspec/specs/demo-product/alpha/spec.md";
+const JOURNEYS = "openspec/specs/demo-product/alpha/user-journeys.md";
+const CASES = "openspec/specs/demo-product/alpha/feature-tcs.md";
+
+const written = (files: Record<string, string>) =>
+  readSpecs(writeStore(files), NO_GIT)[0];
+
+const specText = (...scenarios: string[]) =>
+  [
+    "# Alpha",
+    "",
+    "## Purpose",
+    "",
+    "Alpha exists so the reader has something to read.",
+    "",
+    "## Requirements",
+    "",
+    "### Requirement: Alpha does things",
+    "",
+    "Alpha SHALL do the thing.",
+    "",
+    ...scenarios.flatMap((one) => [
+      `#### Scenario: ${one}`,
+      "",
+      "- **WHEN** asked",
+      "- **THEN** it happens",
+      "",
+    ]),
+  ].join("\n");
+
+/** An id is issued once, ever: the ref resolves to one of the pair and the
+ * anchor lands on the other, so the file is refused where it was written. */
+describe("a spec issuing one id twice", () => {
+  it("refuses two scenarios wearing one id", () => {
+    const entry = written({
+      [SPEC]: specText("alpha-SC-01 - it happens", "alpha-SC-01 - it repeats"),
+    });
+    expect(entry.error?.message).toMatch(
+      /scenario `alpha-SC-01` is issued twice, at line 13 and line 18/,
+    );
+  });
+
+  it("refuses two scenarios wearing one `<app>.<domain>-<capability>.SC<n>` id", () => {
+    const entry = written({
+      [SPEC]: specText(
+        "g10.demo-alpha.SC1 - it happens",
+        "g10.demo-alpha.SC1 - it repeats",
+      ),
+    });
+    expect(entry.error?.message).toMatch(
+      /scenario `g10.demo-alpha.SC1` is issued twice, at line 13 and line 18/,
+    );
+  });
+
+  it("refuses two journeys wearing one id", () => {
+    const entry = written({
+      [SPEC]: [
+        "# Alpha",
+        "",
+        "## Purpose",
+        "",
+        "Alpha exists.",
+        "",
+        "## Requirements",
+        "",
+        "### Requirement: Alpha does things",
+        "",
+        "Alpha SHALL do the thing.",
+        "",
+      ].join("\n"),
+      [JOURNEYS]: [
+        "## User journeys",
+        "",
+        "### alpha-US-01: Someone does the thing",
+        "",
+        "They do the thing.",
+        "",
+        "### alpha-US-01: Someone does it again",
+        "",
+        "They do it again.",
+        "",
+      ].join("\n"),
+    });
+    expect(entry.journeysError?.message).toMatch(
+      /story `alpha-US-01` is issued twice, at line 3 and line 7/,
+    );
+  });
+
+  it("keeps the requirements that parsed before the refusal", () => {
+    const entry = written({
+      [SPEC]: specText("alpha-SC-01 - it happens", "alpha-SC-01 - it repeats"),
+    });
+    expect(entry.requirements.map((one) => one.name)).toEqual([
+      "Alpha does things",
+    ]);
+  });
+});
+
+/** One missing line in a QA file used to blank the engineering contract on
+ * every page that embeds the spec. The suite gets its own channel. */
+describe("a suite the reader refuses beside a spec that parsed", () => {
+  const entry = written({
+    [SPEC]: specText("alpha-SC-01 - it happens"),
+    [CASES]: "# Alpha test cases\n\n## alpha-US-01: Someone does the thing\n",
+  });
+
+  it("hangs the refusal on the suite, never on the spec", () => {
+    expect(entry.error).toBeUndefined();
+    expect(entry.testCasesError).toEqual({
+      file: CASES,
+      line: 1,
+      message: "`Alpha test cases` has no `**Status:**`",
+    });
+  });
+
+  it("leaves the spec's own content whole", () => {
+    expect(entry.requirements[0].scenarios[0].id).toBe("alpha-SC-01");
+    expect(entry.testCases).toBeUndefined();
+    expect(entry.testCasesStatus).toBeUndefined();
+  });
+});
+
+/** A durable file writes `## User journeys`; a change's file writes the delta
+ * sections instead, and both are one reader's to read. Knowing only the durable
+ * heading refused every change's journeys file, and the refusal was dropped —
+ * so the schema's own template passed the `walked` gate by parsing as nothing. */
+describe("the shape a change's journeys file is written in", () => {
+  const story = (id: string, title: string) =>
+    [
+      `### ${id}: ${title}`,
+      "",
+      "**As a** collector,",
+      "**I want** the thing,",
+      "**so that** it is done.",
+      "",
+    ].join("\n");
+
+  const journeys = (body: string) =>
+    written({ [SPEC]: specText("alpha-SC-01 - it happens"), [JOURNEYS]: body });
+
+  it("reads the delta sections, restated and added alike", () => {
+    const entry = journeys(
+      [
+        "## Context user journeys",
+        "",
+        story("alpha-US-01", "Someone does the thing"),
+        "## ADDED User journeys",
+        "",
+        story("alpha-US-02", "Someone does another thing"),
+        "## MODIFIED User journeys",
+        "",
+        story("alpha-US-03", "Someone does the third thing"),
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeUndefined();
+    expect(entry.journeys?.map((one) => one.id)).toEqual([
+      "alpha-US-01",
+      "alpha-US-02",
+      "alpha-US-03",
+    ]);
+  });
+
+  it("reads modern and legacy journey ids with their full story", () => {
+    const entry = journeys(
+      [
+        "## User journeys",
+        "",
+        story("g10.auction-bidder-suspension.US1", "A modern journey"),
+        story("alpha-US-02", "A legacy journey"),
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeUndefined();
+    expect(
+      entry.journeys?.map(({ id, title, text }) => ({ id, title, text })),
+    ).toEqual([
+      {
+        id: "g10.auction-bidder-suspension.US1",
+        title: "A modern journey",
+        text: "**As a** collector,\n**I want** the thing,\n**so that** it is done.",
+      },
+      {
+        id: "alpha-US-02",
+        title: "A legacy journey",
+        text: "**As a** collector,\n**I want** the thing,\n**so that** it is done.",
+      },
+    ]);
+  });
+
+  it("refuses malformed modern journey ids and headings", () => {
+    for (const heading of [
+      "g10.auction-bidder-suspension.US-1: A malformed id",
+      "g10.auction-bidder-suspension.US1 A missing colon",
+    ]) {
+      const entry = journeys(
+        [
+          "## User journeys",
+          "",
+          `### ${heading}`,
+          "",
+          "**As a** collector,",
+          "**I want** the thing,",
+          "**so that** it is done.",
+        ].join("\n"),
+      );
+      expect(entry.journeysError).toEqual({
+        file: JOURNEYS,
+        line: 3,
+        message:
+          "a journey heading is `### <scope>.US<n>: <title>` or the legacy `### <capability>-US-<n>: <title>`",
+      });
+    }
+  });
+
+  it("holds a file whose delta sections are all empty", () => {
+    const entry = journeys(
+      [
+        "## Context user journeys",
+        "",
+        "## ADDED User journeys",
+        "",
+        "## MODIFIED User journeys",
+        "",
+        "## REMOVED User journeys",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeUndefined();
+    expect(entry.journeys).toEqual([]);
+  });
+
+  it("leaves a removed journey out of the ones the capability holds", () => {
+    const entry = journeys(
+      [
+        "## ADDED User journeys",
+        "",
+        story("alpha-US-02", "Someone does another thing"),
+        "## REMOVED User journeys",
+        "",
+        story("alpha-US-01", "Someone did the thing"),
+        "**Reason:** the thing went away.",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeys?.map((one) => one.id)).toEqual(["alpha-US-02"]);
+    expect(entry.retiredJourneys).toEqual(["alpha-US-01"]);
+  });
+
+  /** A durable file keeps the same id under `## Retired`, as one line. It is
+   * not a journey — nothing renders it — but a qualified anchor on another
+   * capability still resolves through it, and archived suites still trace it. */
+  it("reads the durable tombstone a retired journey leaves", () => {
+    const entry = journeys(
+      [
+        "# User journeys",
+        "",
+        "## User journeys",
+        "",
+        story("alpha-US-02", "Someone does another thing"),
+        "## Retired",
+        "",
+        "- `alpha-US-01` - Someone did the thing · removed in `drop-it` · 2026-09-17",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeys?.map((one) => one.id)).toEqual(["alpha-US-02"]);
+    expect(entry.retiredJourneys).toEqual(["alpha-US-01"]);
+  });
+
+  it("holds the tombstones of a file the journey reader refuses", () => {
+    const entry = journeys(
+      [
+        "## Retired",
+        "",
+        "- `alpha-US-01` - Someone did the thing · removed in `drop-it` · 2026-09-17",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeDefined();
+    expect(entry.retiredJourneys).toEqual(["alpha-US-01"]);
+  });
+
+  it("refuses one id issued under two of the sections", () => {
+    const entry = journeys(
+      [
+        "## Context user journeys",
+        "",
+        story("alpha-US-01", "Someone does the thing"),
+        "## MODIFIED User journeys",
+        "",
+        story("alpha-US-01", "Someone does the thing differently"),
+      ].join("\n"),
+    );
+    expect(entry.journeysError?.message).toMatch(
+      /story `alpha-US-01` is issued twice, at line 3 and line 11/,
+    );
+  });
+
+  it("refuses a file whose headings no reader knows", () => {
+    const entry = journeys(`## Journeys\n\n${story("alpha-US-01", "A thing")}`);
+    expect(entry.journeysError).toEqual({
+      file: JOURNEYS,
+      line: 1,
+      message:
+        "a journeys file needs a `## User journeys` heading, or the `## ADDED User journeys` sections a change writes",
+    });
+  });
+});

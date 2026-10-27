@@ -140,7 +140,6 @@ test("builds one Slack section for each milestone, in the order a change meets t
     ],
     commitSha: "1234567890",
     commitUrl: "https://github.com/9gag/grade10-spec/commit/1234567890",
-    manualUrl: "https://spec.grade10-stg.com/planning",
     openspecUrl: "https://spec.grade10-stg.com/openspec/",
   });
 
@@ -180,7 +179,6 @@ test("splits a milestone too long for one Slack section, and caps the post at 50
     milestones: many(60, "proposed"),
     commitSha: "1234567890",
     commitUrl: "",
-    manualUrl: "https://spec.grade10-stg.com/planning",
   });
 
   const sections = split.blocks.filter((block) => block.type === "section");
@@ -198,7 +196,6 @@ test("splits a milestone too long for one Slack section, and caps the post at 50
     milestones: many(2000, "archived"),
     commitSha: "1234567890",
     commitUrl: "",
-    manualUrl: "https://spec.grade10-stg.com/planning",
   });
   assert.equal(capped.blocks.length, 50);
   assert.match(capped.blocks.at(-2).text.text, /more sections/);
@@ -209,7 +206,6 @@ test("builds no post for a push that crossed no milestone", () => {
     milestones: [],
     commitSha: "1234567890",
     commitUrl: "",
-    manualUrl: "https://spec.grade10-stg.com/planning",
   });
 
   assert.deepEqual(payload.blocks, []);
@@ -220,13 +216,12 @@ test("names the commit sha in plain text when no --commit-url was given", () => 
     milestones: [{ id: "new-change", milestone: "proposed", title: "Add" }],
     commitSha: "1234567890",
     commitUrl: "",
-    manualUrl: "https://spec.grade10-stg.com/planning",
   });
 
   const text = payload.blocks.at(-1).elements[0].text;
   assert.equal(
     text,
-    "<https://spec.grade10-stg.com/planning|Planning> | 1234567",
+    "<https://spec.grade10-stg.com/openspec/|Planning> | 1234567",
   );
   assert.doesNotMatch(text, /<\|/);
 });
@@ -241,7 +236,7 @@ test("names the commit sha in plain text when no --commit-url was given", () => 
  * `tools/manual/test/store-main.test.ts`'s `checkout()` builds one, with each
  * commit carrying the day it is given so a freshness reading is exact rather
  * than approximately today. The script stays where it is and takes `--root`:
- * a copy in a temporary directory could not import `tools/manual/src/store`.
+ * a copy in a temporary directory could not import `tools/openspec-store`.
  */
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
@@ -459,8 +454,8 @@ function stages(root, args = []) {
       root,
       "--workspace-url",
       "grade10.slack.com",
-      "--manual-url",
-      "https://spec.test/planning",
+      "--openspec-url",
+      "https://spec.test/openspec/",
       ...args,
     ],
     { encoding: "utf8", env: { ...process.env, NO_COLOR: "1" } },
@@ -500,7 +495,7 @@ test("shared-planning-change-stages-SC-40 and shared-planning-change-stages-SC-4
     // The change page, because the record names no thread.
     assert.match(
       message.text,
-      /https:\/\/spec\.test\/planning\/in-flight\/probe/,
+      /https:\/\/spec\.test\/openspec\/#\/change\/probe/,
     );
     assert.match(message.text, /`\/[a-z-]+ probe/);
   }
@@ -532,7 +527,7 @@ test("shared-planning-change-stages-SC-40 - --stages links the change's thread w
       message.text,
       /https:\/\/grade10\.slack\.com\/archives\/C0AB\/p1700000000000100/,
     );
-    assert.doesNotMatch(message.text, /spec\.test\/planning\/in-flight/);
+    assert.doesNotMatch(message.text, /spec\.test\/openspec\/#\/change/);
   }
 });
 
