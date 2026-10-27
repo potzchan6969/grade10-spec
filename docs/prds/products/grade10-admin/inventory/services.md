@@ -20,11 +20,9 @@ other mark stands alone.
 
 - **A consignment with its sale** - a consignment and its auction lot, or a
   consignment and its store listing
-- **A card in a vault case** - consignment refuses it until its vault case
-  is released
-- ❓ Product - **Selling from the vault** - whether the consignor releases
-  the vault case first, or the case stays under the sale and passes to the
-  buyer
+- 🚧 **Selling from the vault** - a storage-lane vault case shares its item
+  with a consignment and that consignment's sale; the case stays under the
+  sale and the vault releases the card to its buyer on delivery
 - **One sale at a time** - an auction lot or a store listing, never both
 - **Someone else's item sells under a consignment** - an auction lot or a
   store listing on an item the house does not own needs the owner's live
@@ -116,10 +114,10 @@ zero; marks refused by name; hand-offs completed in one visit.
 | --- | --- | --- | --- |
 | Every service marks | Decided | Grading, consignment, the auction and the store mark the items they act on, as the vault does; the store sells a consigned item under the consignment's mark - decided under the owner's delegation, 2026-10-08 | Product |
 | Ask before marking | Decided | A service asks before it marks and is refused by name; what it then does under its mark is mirrored and never refused - decided under the owner's delegation, 2026-10-08 | Engineering |
-| Which marks share an item | Decided | A consignment with its sale; one sale at a time - decided under the owner's delegation, 2026-10-08. A storage-lane vault case under a sale waits on Selling from the vault, below | Product |
+| Which marks share an item | Decided | A consignment with its sale; one sale at a time - decided under the owner's delegation, 2026-10-08. A storage-lane vault case with a consignment and its sale - Selling from the vault, below | Product |
 | A hand-off is one act | Decided | Paper first, the owner decides, and the item never leaves custody - decided under the owner's delegation, 2026-10-08 | Product |
 | A sale settles itself | Decided | The selling service moves the owner and closes its mark; a sale is recorded by hand only when the channel did not report it - decided under the owner's delegation, 2026-10-08 | Product |
-| Selling from the vault | ❓ Open | Whether the consignor releases the vault case first, or a storage-lane item sells from the vault and its case passes to the buyer, as decided by the owner on 2026-10-08; no case can pass to a buyer yet, so until decided consignment refuses a card in a vault case until it is released | Product |
+| Selling from the vault | 🚧 | A storage-lane card sells from the vault: its case stays under the consignment and its sale, and the vault releases it to the buyer on delivery under the consignment agreement; a financed case still blocks a sale - decided by the owner's draft, 2026-10-27 | Owner |
 | A live loan and a sale | Decided | A setting, by default no sale until the loan is repaid; the other choice lets the proceeds repay it first - decided by the owner, 2026-10-08. A financed case blocks a sale until it is released, since the vault tells inventory nothing on a payout or a repayment - decided by the owner, 2026-10-11 | Product |
 | The vault takes an item over | Decided | A slab at grading and a won lot pass into the vault case in one act once its custody agreement is executed; grading reads the case from the item rather than a typed reference, which stays only for a card handed in before cards were items - decided under the owner's delegation, 2026-10-10 | Product |
 | Consignment takes an item over | Decided | Adding an item another service holds - grading's card, a lot or a listing ended unsold, a storage vault case - names that mark, and the hand-off runs when the consignment agreement is sealed - decided under the owner's delegation, 2026-10-10 | Product |

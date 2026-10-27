@@ -19,7 +19,8 @@ the value below is the default it starts on -
 | Auction commission | a share of the hammer price, unset until an admin sets it; the buyer's premium stays the house's |
 | Minimum commission | per item; none |
 | Fees | listing, return and early take-back; none |
-| Incentive | intended **5%** of the item's estimated value, paid to the consignor at consignment |
+| Incentive | **0**; a card from the vault earns the vault's daily incentive instead |
+| Where a person's proceeds go | the vault balance for cards from the vault, the bank otherwise; a partner always by bank |
 | Term on sale | intended **90** days |
 | Return window | **14** days after a store sale is delivered; **7** days after an auction lot is delivered or collected |
 | When a consignor is paid | after the return window |
@@ -34,12 +35,9 @@ the value below is the default it starts on -
   online sale starts if its delivery is never reported; until the owner
   decides, it waits for a reported delivery or staff recording one
 - ❓ Product - **The figures** - the intended consignment fee is **10–12%**
-  of the sale price at sale and the intended incentive **5%** of the
-  item's estimated value; the exact figures are unset
+  of the sale price at sale; the exact figures are unset
 - ❓ Product - **The term's figure** - the running default is **90**
   days; **30** or **60** are asked for; the figure is unset
-- ❓ Product - **The incentive against the payout** - whether the incentive
-  already paid at consignment is set against the sale's payout
 - ❓ Product - **Graded only** - intake is proposed to take graded
   collectables only at launch, there being no grading service on day 1;
   whether ungraded is ever taken is unsettled
@@ -104,15 +102,18 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - **The first sale wins** - a second sale of the same item is refunded
 - 🚧 **In the shop, online or both** - staff list a store item in the shop
   only, online only, or both
-- 🚧 **One buyer, before payment** - the till and an online checkout each
-  hold a card before taking payment, and a card held by one is refused to the
-  other, so two buyers never both pay for it
-- ❓ Owner - **Who wins the counter** - both rules are built and an admin
-  picks one: the first hold wins and an online hold that has started payment
-  is never taken back, or the till wins over an online checkout that has not
-  paid; recommended the first
-- **A card in a vault case** - refused until its vault case is released;
-  the item can be consigned in the same visit
+- 🚧 **One buyer at a time** - an open order holds the card, refusing every
+  other buyer until it is paid, expires or is cancelled
+- 🚧 **Sold twice** - a till sale of a card an online buyer paid for at the
+  same moment stands; the online buyer is refunded and staff alerted
+- ❓ Owner - **Who wins the counter** - the first hold, the shop reserving
+  the card for an online checkout, or the till, cancelling an unpaid online
+  checkout; built on the first
+- 🚧 **Sold from the vault** - a storage card is consigned where it sits, a
+  store listing moving it to the counter and back; a financed card waits
+- 🚧 **Released to its buyer** - on delivery, under the consignment agreement
+- ❓ Owner - **The release clause** - its exact words; a draft prints
+  until they are confirmed
 - 🚧 **Recorded at intake** - where the consignment was taken - the shop's
   counter or an event such as a card show - and its channel, the store or
   the auction
@@ -144,6 +145,8 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - **At auction** - the floor is the lot's start price, and the auction
   cannot change it; no reserve, as on every listing -
   [Bidding](/p/grade10-site/auction/bidding)
+- 🚧 **An HKD floor at a dollar auction** - converted at US$1 = HK$7.85,
+  rounded up, the rate kept on the lot; the sale comes back in HKD
 - **Paid on the listed price** - a cut the buyer gets at checkout is the
   house's
 - ❓ Product - **Points and discounts** - whether points, coupons and the
@@ -157,12 +160,8 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - **Outside the schedule** - a commission a partner negotiates is set by
   someone who may approve it -
   [Consignment Console](/p/grade10-site/consignment/operator-console#grants)
-- 🚧 **An incentive at consignment** - the consignor is paid the incentive
-  when the consignment is taken
-- ❓ Owner - **The incentive moves to the vault** - the owner's new draft pays
-  the incentive daily on a vaulted card instead, consigned or not -
-  [Earnings](/p/grade10-site/vault/earnings); recommended: the incentive at
-  consignment stays a setting, off by default
+- 🚧 **No incentive by default** - it starts at 0 and the agreement leaves
+  its line out - [Earnings](/p/grade10-site/vault/earnings)
 - **What is paid** - the listed price less commission and fees; at auction, the
   hammer price less commission and fees, the buyer's premium being the
   house's
@@ -170,10 +169,10 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   statement and a commission invoice, with the contact details for payment
 - **How** - a bank transfer a treasurer records with its reference; a
   correction takes a second holder of the payout grant
-- ❓ Product - **The payout flow** - the proposed directions: a bank
-  transfer directly, a payout the consignor requests and a bank transfer
-  follows, or credits or points; until decided, a bank transfer the
-  treasurer records stands
+- 🚧 **Into the vault balance** - a person's proceeds may go to their vault
+  balance instead of the bank, pinned at sealing; a partner is paid by bank
+- ❓ Owner - **Where proceeds go by default** - recommended the vault
+  balance; built as the balance for cards from the vault, the bank otherwise
 - **When** - after the return window by default; an admin may switch a
   channel to paying at the sale, the refund then set against later payouts,
   or to one monthly statement
@@ -220,10 +219,12 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - **Taken back early** - the consignor may take an item back before it
   sells, for the early take-back fee where an admin set one; a lot live at
   auction only once the auction calls it off or it closes
-- ❓ Owner - **A contract with an end date** - the agreement carries the date
-  it ends, and a renewal is a newly signed version linked to the one it
-  renews; a contract that runs out puts the card back in the vault on its
-  own. Built this way until the owner confirms it
+- 🚧 **A contract with dates** - set when it is sealed; an item ends on its
+  latest signed renewal, and a lot already placed runs to its close
+- 🚧 **Renewal is signed** - extending or repricing prepares a renewal the
+  consignor signs, linked to the one it renews
+- ❓ Owner - **Running out** - a card from the vault goes back to the vault
+  on its own; built this way until the owner confirms it
 - 🚧 **A return is tracked and signed for** - an item going back to the
   consignor travels under its tracking, and the return closes on a signed
   return receipt
@@ -268,7 +269,7 @@ and the seller named only where an admin sets it. The design is
 | Treasurer | A consigned item sold | Knows what is owed to whom and when, and records it once |
 | Buyer | Buying a consigned card | Buys it as any other card, in the shop or online |
 
-**Not in scope.** Payouts by card or into a wallet; consignments in a
+**Not in scope.** Payouts by card; consignments in a
 currency other than the brand's; a consignor setting a price below the floor
 themselves.
 
@@ -289,7 +290,7 @@ payouts made on their due day.
 | Messages | Decided | The consignment service sends its own, by email, as the vault and grading do - decided under the owner's delegation, 2026-10-08 | Product |
 | Every figure is a setting | Decided | Commission, the minimum, fees, the term and the windows are settings admins change in the console, each pinned to a consignment when its agreement is prepared - decided by the owner, 2026-10-08 | Product |
 | Flexible, with a default | Decided | Identity, when a consignor is paid and a refund after payout are settings too; the recommendation is the default: always verified, paid after the return window, a refund set against the next payout - decided by the owner, 2026-10-08 | Product |
-| Instant incentive | Decided | The consignor is paid an incentive on the item's estimated value - the card's value from its last-sold average - instantly when the consignment is taken; the figure is intended at **5%** and unset, as is whether it is set against the payout - decided under the owner's delegation, 2026-10-16 | Product |
+| Instant incentive | 🚧 | The consignor is paid an incentive on the item's estimated value instantly when the consignment is taken - decided under the owner's delegation, 2026-10-16; it defaults to 0 now that a vault card earns daily, and stays a setting - 2026-10-27 | Owner |
 | The channel at intake | Decided | staff record the store or the auction for the consignment when it is taken - decided under the owner's delegation, 2026-10-16 | Product |
 | Taken at an event | Decided | staff receive a consignment at the shop's counter or at an event such as a card show, recording where it was taken - decided under the owner's delegation, 2026-10-16 | Product |
 | Registered on the form | Decided | each item is registered with its market value and the consignment rates applying to it, and logged in Shopify when the consignment form is completed - decided under the owner's delegation, 2026-10-16 | Product |
@@ -306,8 +307,8 @@ payouts made on their due day.
 | Points and discounts | ❓ Open | Whether points, coupons and the shop's discounts reach a consigned card; the consignor is paid on the listed price either way | Product |
 | Nothing to set against | ❓ Open | When a refund after payout is asked back from the consignor if no later payout comes | Product |
 | Graded only | ❓ Open | Proposed: intake takes graded collectables only at launch, there being no grading service on day 1; whether ungraded is ever taken | Product |
-| The figures | ❓ Open | Proposed: a consignment fee of **10–12%** of the sale price at sale and an incentive of **5%** of the estimated value; the exact figures, and whether the paid incentive is set against the payout | Product |
+| The figures | ❓ Open | Proposed: a consignment fee of **10–12%** of the sale price at sale; the exact figures, and whether a paid incentive is set against the payout | Product |
 | The term's figure | ❓ Open | The running default is **90** days; **30** or **60** are asked for; the figure is unset | Product |
 | An unsold item at term's end | ❓ Open | Proposed actions a consignor may take: reduce the listed price, save it to the vault for long-term custody, or book an appointment to collect it at the shop | Product |
-| The payout flow | ❓ Open | Proposed: a bank transfer directly, a payout the consignor requests and a bank transfer follows, or credits or points; until decided, a bank transfer the treasurer records stands | Product |
+| The payout flow | ❓ Open | A bank transfer the treasurer records, or the person's vault balance, pinned at sealing; a partner is always paid by bank. Which is a person's default is open - owner, 2026-10-27 | Owner |
 :::

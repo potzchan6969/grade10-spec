@@ -47,6 +47,13 @@ names those currencies and does not decide them.
 
 A spend or payment in another currency is refused, not converted.
 
+- 🚧 **A reference price may be converted** - a price quoted in another
+  currency is converted at a recorded rate where it only values something: a
+  yen market price behind a vault card's incentive, at the day's ECB rate -
+  [Earnings](/p/grade10-site/vault/earnings) - or a consignment's HKD floor
+  listed at a dollar auction, at the auction's fixed rate. Neither is a
+  payment, and what is paid is still in the payer's own currency
+
 ## Display Shapes
 
 Money takes two shapes, and each surface uses the one its audience calls for.
@@ -102,5 +109,5 @@ symbol, rather than bare numbers under a header that names the currency, so a
 document reads one shape throughout.
 
 **Not in scope.** Which currency a brand quotes in, which sits on its owning
-page. Currency conversion, which the platform does not do.
+page. Converting a payment, which the platform never does.
 :::
