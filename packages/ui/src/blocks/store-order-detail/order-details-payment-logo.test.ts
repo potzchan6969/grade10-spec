@@ -9,6 +9,8 @@ describe("OrderDetailsPaymentLogo", () => {
   it.each([
     ["jcb", "JCB"],
     ["unionpay", "UnionPay"],
+    ["discover", "Discover"],
+    ["diners", "Diners Club"],
   ] as const)("draws the %s mark named %s", (brand, name) => {
     const html = renderToStaticMarkup(
       createElement(OrderDetailsPaymentLogo, {
