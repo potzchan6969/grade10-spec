@@ -9,7 +9,7 @@ reviewed:
   tech-design: c343bc6c
   specs: 1b071b1f
   test-cases: 40dcc75b
-  tasks: 4605fe79
+  tasks: 74cef59a
 tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for
   6.1; CI checks are no longer needed for 5.5"
 hands:
