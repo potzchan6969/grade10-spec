@@ -130,7 +130,7 @@ const ORDER_DETAIL_KEYS = [
   "money.refund",
   "fulfilment.title",
   "fulfilment.orderPlaced",
-  "fulfilment.shipped",
+  "fulfilment.shipping",
   "fulfilment.pickup",
   "fulfilment.completed",
   "fulfilment.estimate",

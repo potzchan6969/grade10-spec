@@ -34,7 +34,8 @@
     "notAMember": "아직 프로그램에 가입하지 않았습니다.",
     "join": "프로그램 가입",
     "coupons": "내 쿠폰",
-    "noCoupons": "보유한 쿠폰이 없습니다."
+    "noCoupons": "보유한 쿠폰이 없습니다.",
+    "pointHistory": "포인트 내역"
   },
   "collectWithin": "{days}일 이내에 매장에서 수령",
   "outcome": {
@@ -65,7 +66,37 @@
     "minimumSpend": "{amount} 이상 구매 시",
     "onlyOnline": "온라인 스토어 전용",
     "onlyInStore": "매장 전용",
-    "redeemFailed": "리워드를 교환하지 못했습니다. 다시 시도해 주세요."
+    "redeemFailed": "리워드를 교환하지 못했습니다. 다시 시도해 주세요.",
+    "until": "{date}까지",
+    "useAtOnline": "온라인 스토어",
+    "useAtInStore": "매장",
+    "useAtAnywhere": "온라인 또는 매장",
+    "validForDays": "교환 후 {days}일"
+  },
+  "checkout": {
+    "useAt": "사용처",
+    "validFor": "유효 기간",
+    "pointBalance": "포인트 잔액",
+    "pointsNeeded": "{points}P 더 필요",
+    "redeemFor": "{points}P로 교환",
+    "cancel": "취소",
+    "redeemedCouponTitle": "쿠폰함에 추가됨",
+    "redeemedItemTitle": "수령 가능",
+    "done": "완료",
+    "viewCoupons": "쿠폰 보기",
+    "summary": "{points}P 교환 · 잔액 {balance}P",
+    "useBy": "{date}까지 사용",
+    "collectBy": "{date}까지 수령",
+    "collectNote": "매장에서 수령",
+    "useNow": "지금 사용",
+    "qrAlt": "매장 직원에게 이 코드를 보여 주세요",
+    "qrCaption": "카운터에서 직원이 스캔합니다",
+    "soldOutTitle": "방금 리워드가 소진되었습니다",
+    "soldOutBody": "포인트가 차감되지 않았습니다. 다른 리워드를 선택해 주세요.",
+    "retryTitle": "지금은 교환할 수 없습니다",
+    "retryBody": "포인트가 차감되지 않았습니다. 연결을 확인하고 다시 시도해 주세요.",
+    "shortTitle": "포인트가 부족합니다",
+    "shortBody": "이 리워드를 교환하려면 {points}P가 더 필요합니다. 포인트가 차감되지 않았습니다."
   },
   "quantityRefusal": {
     "wholeUnits": "{name}은(는) 낱개 단위로만 교환할 수 있습니다.",
@@ -96,6 +127,19 @@
     "in_store": "매장",
     "internal": "멤버십 프로그램"
   },
+  "pointHistory": {
+    "label": "포인트 내역",
+    "earned": "적립",
+    "used": "사용",
+    "pending": "적립 예정",
+    "points": "P",
+    "all": "전체",
+    "allEmpty": "아직 내역이 없습니다.",
+    "earnedEmpty": "아직 적립한 포인트가 없습니다.",
+    "usedEmpty": "아직 사용한 포인트가 없습니다.",
+    "pendingEmpty": "적립 예정인 포인트가 없습니다.",
+    "pendingBody": "주문이 완료되면 포인트가 적립됩니다."
+  },
   "join": {
     "title": "프로그램 가입",
     "lead": "모든 구매에서 포인트를 적립하고, 매장이나 결제 시에 사용하세요.",
@@ -119,6 +163,7 @@
     "maskedCode": "••••••",
     "spent": "사용됨",
     "void": "취소됨",
+    "scanTitle": "쿠폰 사용",
     "expired": "기한 만료",
     "validUntil": "{date}까지 유효",
     "noExpiry": "유효기간 없음",
@@ -132,9 +177,9 @@
   "present": {
     "action": "카운터에서 사용",
     "heading": "카운터에서 보여 주세요",
-    "qrAlt": "이 거래의 프로모션 코드, 스캔할 수 있는 사각형",
+    "qrAlt": "이 쿠폰, 스캔할 수 있는 사각형",
     "code": "또는 이 코드를 읽어 주세요",
-    "instruction": "직원이 스캔하면 이 거래에 쿠폰이 적용됩니다. 이 거래에만 사용할 수 있습니다.",
+    "instruction": "직원이 스캔하면 이 쿠폰이 거래에 선택됩니다. 한 번만 사용할 수 있습니다.",
     "done": "완료",
     "noCounter": "지금 회원 정보를 연 카운터가 없습니다.",
     "notAttached": "먼저 직원에게 이 거래에 회원을 추가해 달라고 요청하세요.",

@@ -38,6 +38,11 @@ export const RULES = [
   },
   { key: "dense", level: "warn", title: "Pages denser than the style allows" },
   {
+    key: "copy",
+    level: "fail",
+    title: "Copy cited by a message key the catalogs do not hold as written",
+  },
+  {
     key: "prose",
     level: "warn",
     title: "Marks inside a sentence, read as words",

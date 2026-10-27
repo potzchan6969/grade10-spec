@@ -20,6 +20,7 @@ export type CheckResult = { findings: Finding[]; notes: string[] };
 export function runChecks(
   target: string | Roots,
   git?: GitIndex,
+  options?: { pages?: boolean; roundsSince?: string; fix?: boolean },
 ): Promise<CheckResult>;
 
 export function formatReport(

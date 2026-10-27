@@ -2,7 +2,7 @@
 /*
  * CHECK: the manual against the pages it renders.
  *
- *   pnpm check:manual [store-root] [--quiet]
+ *   pnpm check:manual [store-root] [--quiet] [--fix]
  *
  * The manual reads only docs/prds/: its pages, their images, and the
  * workbench Storybook index. Nothing here reads a change or a test case.
@@ -38,6 +38,7 @@ import {
   RULES,
   readStoryIndex,
 } from "./context.mjs";
+import { checkCopy } from "./copy.mjs";
 import { checkDense } from "./dense.mjs";
 import { checkMarkInProse } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
@@ -55,7 +56,7 @@ const EMPTY_CONFIG = {
  * pin commit dates. `target` is the resolved roots, or one directory that is
  * both — the store documenting itself.
  */
-export async function runChecks(target, git) {
+export async function runChecks(target, git, { fix = false } = {}) {
   const roots = typeof target === "string" ? rootsOf(target) : target;
   const index = git ?? (await gitIndex(roots));
   const report = createReport();
@@ -94,6 +95,13 @@ export async function runChecks(target, git) {
 
   checkTaxonomy(ctx.roots, config, readPageShape(roots), add);
   checkIcons(ctx, pages);
+
+  const rewritten = checkCopy(roots.store, [roots.manual], add, { fix });
+  if (rewritten > 0) {
+    notes.push(
+      `${plural(rewritten, "copy citation")} rewritten to the words the catalogs hold`,
+    );
+  }
 
   return { findings, notes };
 }
@@ -151,11 +159,12 @@ async function gitIndex(roots) {
 if (import.meta.main) {
   const args = process.argv.slice(2);
   const quiet = args.includes("--quiet");
+  const fix = args.includes("--fix");
   const where = args.find((one) => !one.startsWith("--"));
   const roots = where ? rootsOf(resolve(where)) : resolveRoots();
   const { text, failures } = formatReport(
     roots,
-    await runChecks(roots, undefined),
+    await runChecks(roots, undefined, { fix }),
     { quiet },
   );
   console.log(text);

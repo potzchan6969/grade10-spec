@@ -39,7 +39,7 @@ item a collector can add.
 - 🚧 **Unknown product address** — `grade10.com/store/products/<handle>` still
   answers 404 when the catalogue has no card for the handle, but the Store
   product route shows its own localized not-found state inside the Store shell.
-  `Browse the store` returns the collector to the product listing in the same
+  Its one action returns the collector to the product listing in the same
   tab; an address outside an owned surface keeps the generic site not-found
   page and its Home action.
 

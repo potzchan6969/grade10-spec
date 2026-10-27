@@ -102,6 +102,9 @@ type HeldPromoCode = {
   title: ReactNode;
   /** Expiry and/or conditions under the title. */
   detailLabel?: ReactNode;
+  /** Renders the detail line emphasised — an expiry running out. The
+   * consumer owns the clock and the threshold. */
+  detailEmphasis?: boolean;
   applicable: boolean;
   /** Shown when `applicable` is false — prefer actionable copy. */
   inapplicableReason?: string;

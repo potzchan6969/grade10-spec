@@ -12,3 +12,4 @@ reviewed:
   ui-design: 7b2069cd
   tech-design: 7b2069cd
   tasks: 7d7fc5b6
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 5.1"

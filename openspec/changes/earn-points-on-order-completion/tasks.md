@@ -11,4 +11,4 @@
 
 ## 3. The walk (grade10)
 
-- [ ] 3.1 On staging, a member's order earns when it is Completed, not when it is paid — blocked: needs staging
+- [ ] 3.1 On staging, a member's order earns when it is Completed, not when it is paid — blocked: needs staging - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived

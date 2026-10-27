@@ -2,12 +2,8 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import {
-  REVEAL_HIDDEN_CLASS,
-  REVEAL_REDUCED_MOTION_CLASS,
-  REVEAL_TRANSITION_CLASS,
-  REVEAL_VISIBLE_CLASS,
-  revealStaggerDelayMs,
-  useFirstPaintReveal,
+  REVEAL_ENTRANCE_CLASS,
+  revealEntranceDelayMs,
 } from "../shared/use-first-paint-reveal";
 import { OrderDetailsDeliveryStatus } from "./order-details-delivery-status";
 import { OrderDetailsHeader } from "./order-details-header";
@@ -53,26 +49,16 @@ type OrderDetailsProps = {
 function RevealGroup({
   children,
   className,
-  revealed,
   staggerIndex,
 }: {
   children: ReactNode;
   className?: string;
-  revealed: boolean;
   staggerIndex: number;
 }) {
   return (
     <div
-      className={cn(
-        REVEAL_HIDDEN_CLASS,
-        REVEAL_TRANSITION_CLASS,
-        REVEAL_REDUCED_MOTION_CLASS,
-        revealed && REVEAL_VISIBLE_CLASS,
-        className,
-      )}
-      style={{
-        transitionDelay: revealStaggerDelayMs(staggerIndex, revealed),
-      }}
+      className={cn(REVEAL_ENTRANCE_CLASS, className)}
+      style={{ animationDelay: revealEntranceDelayMs(staggerIndex) }}
     >
       {children}
     </div>
@@ -85,8 +71,9 @@ function RevealGroup({
  *
  * Figma frame `Order Details` (`4835:1654`). Site chrome (Nav/Footer) stays
  * outside this compound. Delivery status is hidden when `delivery` is omitted
- * (offline in-store payment orders). Stepper states are derived from `status`
- * and `delivery.variant` so a future milestone is not shown as current.
+ * (offline in-store payment orders). Stepper states are drawn as supplied when
+ * every step carries one; otherwise they are derived from `status` and
+ * `delivery.variant` so a future milestone is not shown as current.
  *
  * First paint: header, delivery card (when present), table, and sidebar stagger
  * in (opacity + translateY). Settles immediately under reduced motion.
@@ -110,7 +97,6 @@ function OrderDetails({
   onTrackOrder,
   className,
 }: OrderDetailsProps) {
-  const revealed = useFirstPaintReveal();
   const hasDelivery = delivery != null;
   const hasSummary =
     summary != null &&
@@ -146,12 +132,11 @@ function OrderDetails({
         "w-full max-w-7xl gap-8 overflow-hidden px-4 pt-6 pb-12 sm:gap-12 sm:px-8 sm:pt-8 sm:pb-16",
         className,
       )}
-      data-revealed={revealed || undefined}
       data-slot="order-details"
       hAlign="stretch"
     >
       {breadcrumbs}
-      <RevealGroup revealed={revealed} staggerIndex={0}>
+      <RevealGroup staggerIndex={0}>
         <OrderDetailsHeader
           needHelp={needHelpConfig}
           orderId={orderId}
@@ -172,7 +157,7 @@ function OrderDetails({
       >
         <VStack className="min-w-0" gap="lg" hAlign="stretch">
           {delivery ? (
-            <RevealGroup revealed={revealed} staggerIndex={1}>
+            <RevealGroup staggerIndex={1}>
               <OrderDetailsDeliveryStatus
                 copy={copy.delivery}
                 steps={resolveDeliverySteps(delivery, status)}
@@ -181,7 +166,7 @@ function OrderDetails({
               />
             </RevealGroup>
           ) : null}
-          <RevealGroup revealed={revealed} staggerIndex={tableStaggerIndex}>
+          <RevealGroup staggerIndex={tableStaggerIndex}>
             <OrderDetailsOrderTable
               copy={copy.table}
               lines={lines}
@@ -190,11 +175,7 @@ function OrderDetails({
           </RevealGroup>
         </VStack>
         {hasSidebar ? (
-          <RevealGroup
-            className="min-w-0"
-            revealed={revealed}
-            staggerIndex={sidebarStaggerIndex}
-          >
+          <RevealGroup className="min-w-0" staggerIndex={sidebarStaggerIndex}>
             <OrderDetailsSidebar
               copy={copy.sidebar}
               loyaltyPoints={loyaltyPoints}

@@ -8,9 +8,17 @@ type OrderDetailsDeliveryStepState = "completed" | "current" | "upcoming";
 
 type OrderDetailsDeliveryStep = {
   label: ReactNode;
-  /** Omit on upcoming steps and on steps that have not happened yet. */
+  /**
+   * When the step happened, or a labelled fact about it such as the carrier
+   * or an estimate. Derived states drop it on upcoming steps; supplied
+   * states keep it, so a consumer can put an estimate on an unreached step.
+   */
   date?: ReactNode;
-  /** Set by `resolveDeliverySteps` from status; omit when passing into `OrderDetails`. */
+  /**
+   * Where the parcel stands at this step. Set it on every step to draw the
+   * steps as supplied; omit it on all of them and `OrderDetails` derives
+   * states from the order status.
+   */
   state?: OrderDetailsDeliveryStepState;
 };
 

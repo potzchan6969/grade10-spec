@@ -35,7 +35,7 @@
   "fulfilment": {
     "title": "Delivery Status",
     "orderPlaced": "Order Placed",
-    "shipped": "Shipped",
+    "shipping": "Shipping",
     "pickup": "Ready for Pickup",
     "completed": "Completed",
     "estimate": "Estimated delivery"

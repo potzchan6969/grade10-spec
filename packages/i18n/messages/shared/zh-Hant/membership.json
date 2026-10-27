@@ -34,7 +34,8 @@
     "notAMember": "你尚未加入此計劃。",
     "join": "加入計劃",
     "coupons": "你的優惠券",
-    "noCoupons": "你沒有持有優惠券。"
+    "noCoupons": "你沒有持有優惠券。",
+    "pointHistory": "積分紀錄"
   },
   "collectWithin": "須於 {days} 天內到門市領取",
   "outcome": {
@@ -65,7 +66,37 @@
     "minimumSpend": "最低消費 {amount}",
     "onlyOnline": "只限網店",
     "onlyInStore": "只限門市",
-    "redeemFailed": "無法兌換此獎賞，請再試一次。"
+    "redeemFailed": "無法兌換此獎賞，請再試一次。",
+    "until": "截至 {date}",
+    "useAtOnline": "網店",
+    "useAtInStore": "門市",
+    "useAtAnywhere": "網店或門市",
+    "validForDays": "兌換後 {days} 天"
+  },
+  "checkout": {
+    "useAt": "使用地點",
+    "validFor": "有效期",
+    "pointBalance": "積分結餘",
+    "pointsNeeded": "尚欠 {points} 分",
+    "redeemFor": "以 {points} 分兌換",
+    "cancel": "取消",
+    "redeemedCouponTitle": "已加入你的優惠券",
+    "redeemedItemTitle": "可以領取",
+    "done": "完成",
+    "viewCoupons": "查看優惠券",
+    "summary": "已兌換 {points} 分 · 尚餘 {balance} 分",
+    "useBy": "{date} 前使用",
+    "collectBy": "{date} 前領取",
+    "collectNote": "請到門市領取",
+    "useNow": "立即使用",
+    "qrAlt": "向門市職員出示此二維碼",
+    "qrCaption": "職員會在櫃檯掃描",
+    "soldOutTitle": "此獎賞剛剛換完",
+    "soldOutBody": "沒有扣除積分。請選擇其他獎賞。",
+    "retryTitle": "暫時未能兌換",
+    "retryBody": "沒有扣除積分。請檢查網絡連線後再試。",
+    "shortTitle": "積分不足",
+    "shortBody": "尚欠 {points} 分才可兌換此獎賞。沒有扣除積分。"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} 只能以整件兌換。",
@@ -96,6 +127,19 @@
     "in_store": "門市",
     "internal": "會員計劃"
   },
+  "pointHistory": {
+    "label": "積分紀錄",
+    "earned": "已賺取",
+    "used": "已使用",
+    "pending": "待入賬",
+    "points": "分",
+    "all": "全部",
+    "allEmpty": "暫無紀錄。",
+    "earnedEmpty": "尚未賺取積分。",
+    "usedEmpty": "尚未使用積分。",
+    "pendingEmpty": "沒有待入賬的積分。",
+    "pendingBody": "訂單完成後，積分即會入賬。"
+  },
   "join": {
     "title": "加入計劃",
     "lead": "所有消費都可賺取積分，並可於門市或結帳時使用。",
@@ -119,6 +163,7 @@
     "maskedCode": "••••••",
     "spent": "已使用",
     "void": "已取消",
+    "scanTitle": "使用優惠券",
     "expired": "已過期",
     "validUntil": "有效至 {date}",
     "noExpiry": "沒有期限",
@@ -132,9 +177,9 @@
   "present": {
     "action": "在櫃檯使用",
     "heading": "請向店員出示",
-    "qrAlt": "此單的優惠碼，可供掃描的方格",
+    "qrAlt": "此優惠券，可供掃描的方格",
     "code": "或讀出這組編號",
-    "instruction": "店員掃描後即可為此單套用優惠，只適用於這一單。",
+    "instruction": "店員掃描後即可為你這一單選取此優惠券，只可使用一次。",
     "done": "完成",
     "noCounter": "目前沒有櫃檯開啟你的會員資料。",
     "notAttached": "請先請店員把你加入此單。",

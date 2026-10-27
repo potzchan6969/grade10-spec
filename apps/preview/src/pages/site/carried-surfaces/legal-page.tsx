@@ -30,7 +30,7 @@ function LegalPage({ surface }: { surface: LegalSurface }) {
       <main className="flex w-full flex-1 justify-center">
         <VStack className="mx-auto w-full max-w-2xl px-4 py-20" gap="none">
           <VStack className="w-full text-center" gap="lg">
-            <h2 className="text-4xl font-bold leading-none text-foreground sm:text-5xl lg:text-6xl">
+            <h2 className="text-4xl font-semibold leading-none text-foreground sm:text-5xl lg:text-6xl">
               {document.title}
             </h2>
             <p className="text-base leading-6 text-secondary-foreground">

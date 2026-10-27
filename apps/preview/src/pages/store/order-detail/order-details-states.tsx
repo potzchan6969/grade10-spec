@@ -56,7 +56,7 @@ function OrderDetailsNotFound({
     >
       {breadcrumbs}
       <VStack className="w-full" gap="sm" hAlign="center">
-        <h1 className="text-4xl font-bold leading-none text-foreground sm:text-5xl">
+        <h1 className="text-4xl font-semibold leading-none text-foreground sm:text-5xl">
           {title}
         </h1>
         <p className="text-base leading-6 text-secondary-foreground">

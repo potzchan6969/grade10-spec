@@ -1,0 +1,16 @@
+schema: grade10-planning
+created: 2026-10-16
+ui_waived: "no new screen or state: an open cart drawer closes through its
+  existing closed state, and no message, toast or prompt is drawn"
+hands:
+  dev: "@seankcw"
+  pm: "@seankcw"
+  design: "@seankcw"
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 4.1, 4.2"
+reviewed:
+  proposal: 84d476f8
+  decisions: b866b807
+  user-journeys: cb5b6f5f
+  tech-design: 6bb7fd29
+  specs: 582c7d85
+  tasks: 97a05acc

@@ -40,4 +40,4 @@ of delivery.
 ## 5. Close the rule (grade10-spec)
 
 - [ ] 5.1 Confirm `pnpm check:manual` reports no `derived` warning. — blocked: the nineteen are derived, but `derived` still names eight capabilities this list never held, written since (`grade10-admin/console/api-docs`, `shared/design-sync/{annotation-monitoring,annotation-verification,coverage}`, `shared/frontend-composition`, `shared/money-amounts`, `shared/ui/{auth-sign-in,component-package}`); each owes its own `/spec-to-tcs feature` run
-- [ ] 5.2 Raise `derived` from `warn` to `fail` in `tools/manual/check/context.mjs`, so CI gates the pairing from here on. — blocked: waits on 5.1, or raising now fails `main` on those eight
+- [ ] 5.2 Raise `derived` from `warn` to `fail` in `tools/manual/check/context.mjs`, so CI gates the pairing from here on. — blocked: waits on 5.1, or raising now fails `main` on those eight - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived

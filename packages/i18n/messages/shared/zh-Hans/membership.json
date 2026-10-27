@@ -34,7 +34,8 @@
     "notAMember": "你尚未加入此计划。",
     "join": "加入计划",
     "coupons": "你的优惠券",
-    "noCoupons": "你没有持有优惠券。"
+    "noCoupons": "你没有持有优惠券。",
+    "pointHistory": "积分记录"
   },
   "collectWithin": "须在 {days} 天内到门店领取",
   "outcome": {
@@ -65,7 +66,37 @@
     "minimumSpend": "最低消费 {amount}",
     "onlyOnline": "只限网店",
     "onlyInStore": "只限门店",
-    "redeemFailed": "无法兑换此奖励，请重试。"
+    "redeemFailed": "无法兑换此奖励，请重试。",
+    "until": "截至 {date}",
+    "useAtOnline": "网店",
+    "useAtInStore": "门店",
+    "useAtAnywhere": "网店或门店",
+    "validForDays": "兑换后 {days} 天"
+  },
+  "checkout": {
+    "useAt": "使用地点",
+    "validFor": "有效期",
+    "pointBalance": "积分余额",
+    "pointsNeeded": "还差 {points} 分",
+    "redeemFor": "以 {points} 分兑换",
+    "cancel": "取消",
+    "redeemedCouponTitle": "已加入你的优惠券",
+    "redeemedItemTitle": "可以领取",
+    "done": "完成",
+    "viewCoupons": "查看优惠券",
+    "summary": "已兑换 {points} 分 · 剩余 {balance} 分",
+    "useBy": "{date} 前使用",
+    "collectBy": "{date} 前领取",
+    "collectNote": "请到门店领取",
+    "useNow": "立即使用",
+    "qrAlt": "向门店店员出示此二维码",
+    "qrCaption": "店员会在柜台扫描",
+    "soldOutTitle": "此奖励刚刚兑完",
+    "soldOutBody": "没有扣除积分。请选择其他奖励。",
+    "retryTitle": "暂时无法兑换",
+    "retryBody": "没有扣除积分。请检查网络连接后重试。",
+    "shortTitle": "积分不足",
+    "shortBody": "还差 {points} 分才能兑换此奖励。没有扣除积分。"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} 只能以整件兑换。",
@@ -96,6 +127,19 @@
     "in_store": "门店",
     "internal": "会员计划"
   },
+  "pointHistory": {
+    "label": "积分记录",
+    "earned": "已赚取",
+    "used": "已使用",
+    "pending": "待入账",
+    "points": "分",
+    "all": "全部",
+    "allEmpty": "暂无记录。",
+    "earnedEmpty": "尚未赚取积分。",
+    "usedEmpty": "尚未使用积分。",
+    "pendingEmpty": "没有待入账的积分。",
+    "pendingBody": "订单完成后，积分即会入账。"
+  },
   "join": {
     "title": "加入计划",
     "lead": "所有消费都可赚取积分，并可在门店或结算时使用。",
@@ -119,6 +163,7 @@
     "maskedCode": "••••••",
     "spent": "已使用",
     "void": "已取消",
+    "scanTitle": "使用优惠券",
     "expired": "已过期",
     "validUntil": "有效至 {date}",
     "noExpiry": "没有期限",
@@ -132,9 +177,9 @@
   "present": {
     "action": "在柜台使用",
     "heading": "请向店员出示",
-    "qrAlt": "此单的优惠码，可供扫描的方格",
+    "qrAlt": "此优惠券，可供扫描的方格",
     "code": "或读出这组编号",
-    "instruction": "店员扫描后即可为此单应用优惠，只适用于这一单。",
+    "instruction": "店员扫描后即可为你这一单选取此优惠券，只可使用一次。",
     "done": "完成",
     "noCounter": "目前没有柜台开启你的会员资料。",
     "notAttached": "请先请店员把你加入此单。",

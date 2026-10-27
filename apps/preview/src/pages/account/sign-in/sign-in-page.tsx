@@ -104,7 +104,7 @@ function SignInPage({
             src={PRODUCT_IMAGE}
           />
           <div className="flex flex-col gap-4">
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="text-3xl font-semibold text-foreground">
               {PRODUCT.name}
             </h1>
             <p className="text-lg text-foreground">{PRODUCT.price}</p>

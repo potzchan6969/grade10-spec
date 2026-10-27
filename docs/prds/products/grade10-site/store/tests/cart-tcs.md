@@ -4,7 +4,7 @@ title: Store Cart Test Cases
 
 # grade10-site/store/cart Test Cases
 
-**Status:** pending-review · 0/51
+**Status:** pending-review · 0/54
 **Drafts styled:** 2026-10-24, tcs-rules r7
 **Capabilities:** grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/discounts
 
@@ -162,6 +162,112 @@ Runs once per row of **Test data**.
 
 * Step 1: the row's list.
 * Step 2 applies it as a typed one applies.
+
+### g10.store-cart.TC52: A near-expiry code emphasises only its expiry detail
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cart#promo-code
+
+**Pre-conditions:**
+
+* customer, as the row says, has `<product A>` and `<product B>` in the cart, HKD1,300, no code chosen; the row's live code or codes fit the cart and are listed.
+
+**Test data:**
+
+| Customer | Code | Expiry |
+| --- | --- | --- |
+| signed-in member | `<member code>` | exactly 14 days from the current consumer clock (fixed boundary) |
+| signed out | `<public code>` | 5 days from the current consumer clock |
+| signed-in member | `<member code>` and `<public code>` | both 5 days from the current consumer clock (merged list) |
+
+**Steps:**
+
+1. Open Cart, wait for the read, open the code list and read each row's code or codes.
+
+**Expected Results:**
+
+* Each row's discount title and `Use by` detail stay in separate slots; only the `Use by` detail is emphasised, and each code and Apply affordance remain unchanged, UI matching `store-cart-blocks-promoticket--expiring-soon`.
+
+### g10.store-cart.TC53: A near-expiry refused code keeps its muted ticket state
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cart#promo-code
+
+**Pre-conditions:**
+
+* customer, as the row says, has `<product A>` in the cart; the row's live code is listed and the quote marks it unable to apply, expiring in 6 days from the current consumer clock.
+
+**Test data:**
+
+| Customer | Code | Applicability |
+| --- | --- | --- |
+| signed-in member | `<member code>` | held code refuses this cart |
+| signed out | `<public code>` | public code refuses this cart |
+
+**Steps:**
+
+1. Open Cart, wait for the read, open the code list and read the row's code.
+
+**Expected Results:**
+
+* The row's code remains in the existing refused/inapplicable partition and muted with the refusal reason and no Apply; its `Use by` detail stays in its own slot and is emphasised, and Tab never reaches an Apply on it.
+
+### g10.store-cart.TC54: Later or missing expiry leaves picker details plain
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** cart#promo-code
+
+**Pre-conditions:**
+
+* customer(signed-in member) has `<product A>` and `<product B>` in the cart, HKD1,300, no code chosen; the row's live code fits the cart and is listed.
+
+**Test data:**
+
+| Code | Expiry |
+| --- | --- |
+| `<member code>` | 15 days from the current consumer clock (just outside the inclusive boundary) |
+| `<public code>` | no expiry |
+
+**Steps:**
+
+1. Open Cart, wait for the read, open the code list and read the row's code.
+
+**Expected Results:**
+
+* The discount title and any existing conditions or expiry detail remain in separate slots; the 15-day code's `Use by` detail is plain, and the code without expiry has no expiry emphasis. The code and Apply affordance remain unchanged.
 
 ---
 

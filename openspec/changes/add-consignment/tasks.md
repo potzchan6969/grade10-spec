@@ -53,4 +53,4 @@
 - [ ] 3.1 Walk the incentive from the seal to its record in
       `apps/frontend/grade10/e2e/tests/consignment/lifecycle.spec.ts`, beside
       the walks that already consign on each channel — written, not run:
-      blocked: the isolated stack needs Docker, which this environment lacks
+      blocked: the isolated stack needs Docker, which this environment lacks - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived

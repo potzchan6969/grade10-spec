@@ -42,7 +42,7 @@ function LinkToastPage({ toast: kind }: LinkToastPageProps) {
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...STORE_SITE_HEADER} session="signed-out" />
       <main className="flex w-full flex-1 justify-center px-8 py-12">
-        <h1 className="text-3xl font-bold text-foreground">{HOME.title}</h1>
+        <h1 className="text-3xl font-semibold text-foreground">{HOME.title}</h1>
       </main>
       <Footer {...STORE_FOOTER} />
       <Toast position="bottom-right" />

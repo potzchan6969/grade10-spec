@@ -5,8 +5,8 @@
 - Rewards and redemption
   - Member-readable code: every redemption mints one member-readable code
     at the moment it settles, unique to that redemption and bound to the
-    member — good or discount alike — and the scan QR is generated from
-    that code; the ticket shows code or collection line by context
+    member — gift or discount alike — and the scan QR names that
+    redemption; the ticket shows code or collection line by context
 - Member surface
   - Reward shop: the menu draws each reward as a card — the item's art or
     the coupon's gift tile, name, description, its deadline where the
@@ -17,7 +17,7 @@
     it is good for, shows the balance before and after, refuses a short
     balance whole, and draws the redeemed state in the same surface
   - Redeemed ticket: a discount coupon's ticket carries the unique code the
-    redemption minted; a good's ticket names the collection in the code's
+    redemption minted; a gift's ticket names the collection in the code's
     place; no surface outside the cart offers Apply
 
 ## ADDED Requirements
@@ -29,8 +29,9 @@ at the moment the coupon is issued — unique to that redemption, bound to
 the member, and good at the channels the coupon names — and that holds
 for a physical reward as for a money-off coupon. The code SHALL NOT be
 shared across redemptions, so a code another member reads answers as one
-nobody minted for them. The staff-facing scan QR SHALL be generated from
-that code, never an unrelated token. Whether a ticket shows the code is
+nobody minted for them. The staff-facing scan QR SHALL be a short-lived,
+single-use presentation of the member card naming that redemption, never
+the code itself, so reading the code cannot spend it. Whether a ticket shows the code is
 the surface's choice — a collection ticket names the collection in the
 code's place.
 
@@ -46,13 +47,13 @@ mints for that coupon's spend: claiming mints and deactivates per sale as
 - **THEN** each coupon carries a different member-readable code
 - **AND** each code answers only for the member it was minted to
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-q8z rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-q8z rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-263 - A physical reward mints a code the collection ticket leaves unseen
 **Serves:** grade10-site-loyalty-programme-US-12 - Member browses the shop, confirms the cost and sees the redemption
 
 - **WHEN** a redemption of a physical reward settles
 - **THEN** it carries a member-readable code like a discount's
-- **AND** its scan QR is generated from that code
+- **AND** its scan QR names that redemption, not its code
 - **AND** the collection ticket names the collection in the code's place
 
 ## MODIFIED Requirements
@@ -149,7 +150,7 @@ a balance dropped mid-checkout SHALL re-read the deficit row; either
 refusal is raised outside the surface. Given a
 redemption it SHALL
 draw the redeemed phase in the same surface: the member-readable code a
-discount coupon's ticket carries, the collection a good's ticket names in
+discount coupon's ticket carries, the collection a gift's ticket names in
 the code's place. Where the redemption supplies a scan QR the ticket
 SHALL carry a Use now control in its action slot, and the surface SHALL
 draw the scan QR as its own card apart from the ticket — collapsed until
@@ -261,9 +262,9 @@ SHALL require no export of its own.
 #### Scenario: grade10-site-loyalty-programme-SC-268 - The redeemed ticket carries the code or the collection, never Apply
 **Serves:** grade10-site-loyalty-programme-US-12 - Member browses the shop, confirms the cost and sees the redemption
 
-- **WHEN** the redeemed phase renders for a discount coupon and for a good
+- **WHEN** the redeemed phase renders for a discount coupon and for a gift
 - **THEN** the coupon's ticket carries the unique code the redemption minted
-- **AND** the good's ticket names the collection in the code's place
+- **AND** the gift's ticket names the collection in the code's place
 - **AND** where the redemption supplies a scan token the ticket draws the QR
 - **AND** neither draws an Apply action
 

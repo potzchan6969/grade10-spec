@@ -36,7 +36,7 @@ back to that page.
   member's cart
 - ❓ **A product in both carts** — signing in combines the two lines into
   one, its quantity the sum of both. Product confirms it runs
-- 🚧 **When the session ends** - an open drawer closes by itself, with no
+- **When the session ends** - an open drawer closes by itself, with no
   message, when the member signs out in another tab of this site or the
   session expires. A guest's drawer stays open, and so does a member's
   through a session read that is still pending or fails. A member who
@@ -73,6 +73,10 @@ read against the cart as it stands and held nowhere.
   members alike; a member-only code typed by a guest gets the same refusal
   as a code nobody minted —
   [Discounts](/p/grade10-site/store/discounts#public-codes)
+- 🚧 **Running out reads louder** — in the cart picker, a live promo code
+  whose expiry is within its last 14 days keeps its discount title and its
+  expiry/conditions detail slot; only the “Use by” detail is emphasised. The
+  picker does not change the text or replace the title with the expiry.
 - **Set aside for a site discount** — where the code and a site discount
   cannot both apply and the site discount takes more, the drawer says so and
   the total shows the site discount, the answer the shop's checkout gives;
@@ -187,9 +191,15 @@ and tax before the invoice. A second code on one cart.
 | Product pictures | Decided | Use the product's first picture, as the collection card does, from the current cart read. Chosen over variant-specific pictures or pictures held with the cart, which can differ from the catalogue. | Product |
 | Guest cart | Decided | A signed-out collector's cart is kept in this browser and checked out as a guest; signing in moves its lines into the member's cart. Supersedes one session scope. | Product |
 | Session ends with the drawer open | Decided | The drawer closes by itself, with no message, when the member's session ends in another tab of this site or expires. Chosen over leaving it open and empty, which reads as a cart with nothing in it beside a header that says Sign In. Decided 2026-10-09. | Product |
+| A guest's open drawer | Decided | A guest's drawer stays open when the session reads as signed out; only a member's session ending closes the drawer. Decided by the round. | Product |
+| A direct member switch | Decided | A switch the tab reads directly from one member to another keeps the drawer open on the new member's cart; a signed-out reading between them closes it. Decided by the round. | Product |
+| Checkout after session expiry | Decided | An expired member session closes the drawer; what checkout asks next remains Checkout's decision. Confirmed by @seankcw, 2026-10-16. | Product |
+| Sign-out and sign-in in another tab | Decided | A member's drawer closes when this tab reads the signed-out step between the two members and stays closed until Cart is opened again. Confirmed by @seankcw, 2026-10-16. | Product |
+| Sign-in from the guest drawer | Decided | A sign-in started from the guest drawer's Sign in link reopens that drawer; a sign-in started elsewhere does not. Decided by the round. | Product |
 | One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
 | Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. Promo editing stays: typed, picked and removed codes cut the total. Display-only promo is not this drawer. | Product |
 | Held list | Decided | The member's own store codes and reward coupons, plus public codes, answered before they are picked; a guest's list holds the public codes only. | Product |
+| Expiring promo detail | Decided | The cart picker emphasises only the “Use by” detail for a live promo within its last 14 days; the discount title and detail copy remain separate. Confirmed by the designer and PM, 2026-10-27. | Product |
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
 | Shipping | Decided | Unknown until the invoice; the estimated total is the goods after the site discounts and this store's own tender. | Product |

@@ -177,7 +177,14 @@ function PromoTicketContent({
           {hasDetail ? (
             <VStack gap="none">
               {!used && code.detailLabel != null ? (
-                <span className="text-xs font-normal leading-4 text-secondary-foreground">
+                <span
+                  className={cn(
+                    "text-xs leading-4",
+                    code.detailEmphasis
+                      ? "font-medium text-accent-foreground"
+                      : "font-normal text-secondary-foreground",
+                  )}
+                >
                   {code.detailLabel}
                 </span>
               ) : null}

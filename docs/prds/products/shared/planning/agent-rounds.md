@@ -191,9 +191,8 @@ An artifact is drawn from what is before it, the page's marks first.
   the form, and the application repository checks the file on every push
 - 🚧 **The cited test carries the id** — a row, or a suite's Manual row, that
   credits a test the file does not cite is refused
-- 🚧 **A walk's ids are signed** — in the application repository, a walk that
-  carries a case of the change ticking it that is still draft is refused; a
-  draft another change left in the same file is that change's to sign
+- 🚧 **A walk may cite a draft case** — in the application repository, a walk's
+  case need not be reviewed first; ticking its task never waits on QA
 
 ## Ids
 

@@ -4,7 +4,7 @@
 
 - [x] 1.1 Operator Console · Authoring a Reward, Rewards · Reward Types and Reward Shop, and Coupons · Validity and Refusals state the reward form, the currency mark and the online-only rule by product or filter, marking what this change delivers
 - [x] 1.2 Verify: `pnpm check:manual`, `pnpm run tcs:validate`, `pnpm openspec validate align-reward-editor-design --strict`
-- [ ] 1.3 Once groups 4, 6 and 7 are verified, take the 🚧 off Free item on Operator Console · Authoring a Reward, Online only on the menu on Rewards · Reward Shop, and Online only by scope on Coupons · Refusals — blocked: groups 4 and 6 are verified; group 7's e2e walks need the isolated local stack
+- [ ] 1.3 Once groups 4, 6 and 7 are verified, take the 🚧 off Free item on Operator Console · Authoring a Reward, Online only on the menu on Rewards · Reward Shop, and Online only by scope on Coupons · Refusals — blocked: groups 4 and 6 are verified; group 7's e2e walks need the isolated local stack - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 
 ## 2. Console words (grade10)
 
@@ -66,8 +66,8 @@ its fix lands in this group.
 
 Uses draft `feature-tcs.md` as its planning input, with group 6 landed.
 
-- [ ] 7.1 `rewards.spec.ts` creates a reward scoped to named products with Both chosen first: the form shows online only, and the reopened reward and the rewards list read online only — blocked: e2e walks need the isolated local stack, which could not be brought up on this shared machine
+- [ ] 7.1 `rewards.spec.ts` creates a reward scoped to named products with Both chosen first: the form shows online only, and the reopened reward and the rewards list read online only — blocked: e2e walks need the isolated local stack, which could not be brought up on this shared machine - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 7.2 `rewards.spec.ts` opens a reward stored through the admin API, scoped to named products for both channels, saves it unchanged, and reopens it online only — blocked: same as 7.1
 - [ ] 7.3 `rewards.spec.ts` stores a reward scoped to named products for both channels through the admin API, and the member's reward menu reads it `Online store only` — blocked: same as 7.1
 - [ ] 7.4 `presented-coupon.spec.ts` grants a member a coupon scoped to named products for both channels: the member presenting it from their own phone reads `This coupon cannot be used on this sale.`, and the sale's price is unchanged — blocked: same as 7.1
-- [ ] 7.5 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/loyalty/rewards.spec.ts e2e/tests/pos/presented-coupon.spec.ts` passes — blocked: same as 7.1
+- [ ] 7.5 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/loyalty/rewards.spec.ts e2e/tests/pos/presented-coupon.spec.ts` passes — blocked: same as 7.1 - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived

@@ -14,3 +14,4 @@ reviewed:
   specs: de7caeb8
   tech-design: b6488772
   test-cases: 9ecd870d
+tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 5.1"

@@ -14,6 +14,9 @@
     spent — nearest expiry first — and what is spent, void or expired —
     newest first; refresh on the member's return is the settled way a
     spent coupon moves halves
+  - Upsell: a consumer-owned promo can sit under a resolved wallet — the
+    Rewards nudge on the Coupons surface — never drawn over loading, empty
+    or error
 
 ## ADDED Requirements
 
@@ -25,6 +28,10 @@ closed coupon says, and a stub reading the code where the consumer passes
 one, else the amount. A spent or void coupon SHALL mute and name its
 state; an expired coupon SHALL read its expiry, which already says so.
 None of them SHALL draw a scan or an action.
+
+An open coupon the consumer flags `expiringSoon` — at Grade10, inside its
+last 14 days — SHALL read its expiry line emphasised; the list SHALL NOT
+count days itself, and SHALL NOT read the flag on a closed coupon.
 
 A coupon whose scope the till cannot match SHALL carry a `scopeLabel`
 naming where it is spendable and SHALL draw no Use now and no scan,
@@ -41,7 +48,17 @@ refresh the wallet on return.
 
 While the wallet resolves it SHALL draw skeletons in a ticket's shape;
 its empty rung SHALL name the wallet, explain it where the consumer
-describes one, and offer the consumer's action where one is given.
+describes one, and offer the consumer's action where one is given. Where
+the consumer supplies a `promo`, the list SHALL draw it under a resolved
+list and nowhere else — loading, empty and error keep their own surfaces.
+
+#### Scenario: grade10-site-loyalty-programme-SC-282 - The wallet's upsell shows only under a resolved list
+
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a `CouponList` whose consumer supplies a promo
+- **WHEN** the list is loading, empty, or in error
+- **THEN** no promo is drawn
 
 #### Scenario: grade10-site-loyalty-programme-SC-272 - Presenting a coupon opens its scan card unfolded
 
@@ -72,3 +89,12 @@ describes one, and offer the consumer's action where one is given.
 - **THEN** each mutes and names its state — the spent and void coupons
   their one line, the expired one its expiry — and none draws a scan
   control or an action
+
+#### Scenario: grade10-site-loyalty-programme-SC-283 - A coupon running out reads its expiry emphasised
+
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** an open coupon the consumer flags expiring soon
+- **WHEN** `CouponList` renders it
+- **THEN** its expiry line is rendered emphasised, where a coupon the
+  consumer does not flag renders it plainly

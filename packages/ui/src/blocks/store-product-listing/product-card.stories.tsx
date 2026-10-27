@@ -475,14 +475,38 @@ export const CartRefused: Story = {
 };
 
 /**
- * Scenario: shared-ui-store-product-listing-SC-61 - No remaining count
- * supplied, so the card says nothing about what is left.
+ * Scenarios: grade10-site-commerce-product-status-SC-10 and SC-11 - A
+ * listing card communicates availability without exposing a remaining count.
  */
 export const NoRemainingCount: Story = {
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.queryByText(/left/i)).not.toBeInTheDocument();
+    expect(canvas.queryByText(/Only \d+ left/i)).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Scenario: grade10-site-commerce-product-status-SC-17 - A browse quantity
+ * can rise past the shop's count without a tile-imposed ceiling.
+ */
+export const QuantityBeyondBrowseCount: Story = {
+  args: {
+    inCart: true,
+    cartCount: "4",
+    onCartQuantityChange: fn(),
+  },
+  decorators: well,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText(/Only \d+ left/i)).not.toBeInTheDocument();
+    await userEvent.click(
+      canvas.getByRole("button", { name: `4. ${copy.adjustQuantity}` }),
+    );
+    await userEvent.click(
+      canvas.getByRole("button", { name: copy.increaseQuantity }),
+    );
+    expect(args.onCartQuantityChange).toHaveBeenCalledWith(5);
   },
 };
 

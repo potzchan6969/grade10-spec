@@ -1,13 +1,15 @@
 # grade10-site/site/page-shell Test Cases
 
-**Status:** pending-review · 0/31
-**Drafts styled:** 2026-10-25, tcs-rules r7
+**Status:** pending-review · 0/32
+**Drafts styled:** 2026-10-26, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
 ## Background
 
 * `<site>` is the Grade10 site: staging answers Store and carries the account page; UAT and production, the auction launch, carry neither Store, the account page nor the membership page. A wide viewport is 1280 CSS pixels; a narrow one 375.
 * A held session read is the session request paused by the tester until released; a cart review is the basket read the header's count waits on.
+
+* `<site>` is the Grade10 site: staging answers Store and carries the account page; UAT and production, the auction launch, carry neither Store, the account page nor the membership page. A wide viewport is 1280 CSS pixels; a narrow one 375.
 
 ## g10.site-page-shell.US1: Collector opens any surface inside the site shell
 
@@ -174,12 +176,12 @@ Runs once per row of **Test data**.
 
 **As a** collector,
 **I want** Sign In when I am signed out, and when I am signed in an account
-menu that shows my sign-in email with its small initial avatar above My
+menu that shows my sign-in email with my avatar - my profile image where I
+chose one, else the initial of my email - above My
 Auctions and Sign Out on auction launch, with Profile first wherever the
 account page is carried and My Orders ahead of My Auctions once Store
 answers, and no item whose page the site withholds,
-**so that** one place in the header takes me where I can go for this launch,
-without a second auction-orders link.
+**so that** one place in the header takes me where I can go for this launch.
 
 <!-- trace:case id=g10.site-page-shell.TC-eek rev=1 covers=g10.site-page-shell.SC-0ao -->
 ### g10.site-page-shell.US3-TC1: A signed-out collector gets Sign In
@@ -208,7 +210,7 @@ without a second auction-orders link.
 
 * It is a primary Sign In button, with no account icon; sign-in opens.
 
-<!-- trace:case id=g10.site-page-shell.TC-1su rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-79q,g10.site-page-shell.SC-o1v -->
+<!-- trace:case id=g10.site-page-shell.TC-1su rev=2 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-79q,g10.site-page-shell.SC-o1v -->
 ### g10.site-page-shell.US3-TC6: The account menu shows the email and avatar, offering only what this build carries
 
 Runs once per row of **Test data**.
@@ -227,7 +229,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A collector is signed in on `<build>`.
+* A collector with no profile image is signed in on `<build>`.
 
 **Test data:**
 
@@ -244,7 +246,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* A small initial avatar sits above the sign-in email, both above `<items>`, in that order and nothing else: no KYC, no Membership, nothing opening My Auction orders; the last reads Sign Out, in Title Case.
+* A small avatar showing the initial of the sign-in email sits above the sign-in email, both above `<items>`, in that order and nothing else: no KYC, no Membership; the last reads Sign Out, in Title Case.
 * Step 2 names the same collector on every page, Profile with their name and email, and no other person.
 
 <!-- trace:case id=g10.site-page-shell.TC-asx rev=1 covers=g10.site-page-shell.SC-70a,g10.site-page-shell.SC-lcs,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-04a -->
@@ -284,6 +286,44 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * It opens `<opens>`.
+
+<!-- trace:case id=g10.site-page-shell.TC-av7 rev=1 covers=g10.site-page-shell.SC-saj -->
+### g10.site-page-shell.US3-TC7: The account menu avatar shows the profile image, not the initial
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* A collector is signed in on staging.
+* The collector has a profile image `<image_1>` on file.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `image_1` | A profile image the collector has saved, in the account page's accepted formats |
+| `email_1` | The collector's sign-in email |
+
+**Steps:**
+
+1. Open `<site>`.
+2. Select the account control, and read the menu.
+3. Open Profile, remove `<image_1>`, then open the account menu again.
+
+**Expected Results:**
+
+* The avatar above `<email_1>` shows `<image_1>`, both above the items, with no initial drawn over it.
+* The avatar shows the initial of `<email_1>` once `<image_1>` is removed.
 
 ---
 
@@ -1174,4 +1214,8 @@ Runs once per row of **Test data**.
 * When the session arrives, only the language and search controls on the wide
   header may move, and only by the account entry's change in width; the
   centred primary navigation, Cart and the compact bar stay where they are.
-
+* The account menu's avatar shows the collector's profile image where the site carries the account page, and the initial of the sign-in email where they have none.
+* On a build that withholds the account page, UAT and production, the avatar is the initial of the sign-in email: no profile image is read there.
+* An image that fails to load leaves the initial in the avatar and no broken image.
+* The initial is drawn as the header's avatar draws it today; this change does not set its casing or a rule for a first character outside Latin script.
+* A changed or removed profile image shows in the menu the next time it opens in the same session, with no reload; the header and the account page share one profile read.

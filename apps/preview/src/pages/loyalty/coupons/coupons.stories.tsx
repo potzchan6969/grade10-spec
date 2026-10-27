@@ -1,19 +1,26 @@
+import { Alert } from "@grade10/design-system/components/display/alert";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
+import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { type CouponItem, CouponList, SiteHeader } from "@grade10/ui";
+import { Gift } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
+import { storyHref } from "../../workbench-story-nav";
 import {
   COUPON_LIST_COPY,
+  COUPON_PROMO_COPY,
   COUPONS,
   COUPONS_PAGE_COPY,
 } from "../loyalty-content";
+
+const REWARDS_HREF = storyHref("loyalty-rewards-screens-rewards--default");
 
 const isOpen = (coupon: CouponItem) => coupon.status === "open";
 
@@ -24,6 +31,21 @@ const couponState = (
   data.length > 0
     ? { status: "ready" as const, data }
     : { status: "empty" as const, ...empty };
+
+/** The upsell under Available: points still buy more coupons. */
+const couponPromo = (
+  <Alert
+    actions={
+      <Button render={<a href={REWARDS_HREF} />} size="sm" variant="secondary">
+        {COUPON_PROMO_COPY.cta}
+      </Button>
+    }
+    description={COUPON_PROMO_COPY.description}
+    dismissible={false}
+    icon={<Gift aria-hidden />}
+    title={COUPON_PROMO_COPY.title}
+  />
+);
 
 /**
  * The coupon wallet as a store assembles it: `SiteHeader`, the page's own
@@ -38,14 +60,9 @@ function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
       <SiteHeader {...STORE_SITE_HEADER} />
       <main className="flex w-full flex-1 justify-center">
         <div className="flex w-full max-w-4xl flex-col gap-6 px-4 py-10 sm:px-8">
-          <header className="flex flex-col gap-2">
-            <h1 className="text-3xl font-bold text-foreground">
-              {COUPONS_PAGE_COPY.title}
-            </h1>
-            <p className="text-sm text-secondary-foreground">
-              {COUPONS_PAGE_COPY.subtitle}
-            </p>
-          </header>
+          <h1 className="text-3xl font-semibold text-foreground">
+            {COUPONS_PAGE_COPY.title}
+          </h1>
           {coupons.length === 0 ? (
             /* Nothing to part — the wallet's own empty state stands for the
              * whole page, no tab bar. */
@@ -59,7 +76,10 @@ function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
             />
           ) : (
             <Tabs defaultValue="available">
-              <TabsList>
+              <TabsList
+                className="w-full justify-start border-b border-border"
+                variant="list"
+              >
                 <TabsTrigger value="available">
                   {COUPONS_PAGE_COPY.availableTab}
                 </TabsTrigger>
@@ -70,6 +90,7 @@ function CouponsPage({ coupons = COUPONS }: { coupons?: CouponItem[] }) {
               <TabsContent className="pt-4" value="available">
                 <CouponList
                   copy={COUPON_LIST_COPY}
+                  promo={couponPromo}
                   state={couponState(coupons.filter(isOpen), {
                     message: COUPONS_PAGE_COPY.noAvailable,
                     description: COUPONS_PAGE_COPY.noAvailableDescription,
@@ -119,8 +140,24 @@ export const Default: Story = {
       canvas.getByRole("heading", { level: 1, name: "Coupons" }),
     ).toBeInTheDocument();
     expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
+    /* The upsell sits under Available, not on the history tab. */
+    expect(canvas.getByText("Want more coupons?")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: "Browse Rewards" }),
+    ).toBeInTheDocument();
+    /* Inside its last 14 days the Use by line reads emphasised; an
+     * unflagged coupon's reads plainly. */
+    expect(canvas.getByText(/Use by 8 Nov 2026/)).toHaveClass(
+      "text-accent-foreground",
+      "font-medium",
+    );
+    expect(canvas.getByText(/Use by 15 Jan 2027/)).toHaveClass(
+      "text-secondary-foreground",
+    );
     expect(canvas.queryByText(/Used on/)).not.toBeInTheDocument();
     await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
+    /* The upsell is Available's alone — history shows no promo. */
+    expect(canvas.queryByText("Want more coupons?")).not.toBeInTheDocument();
     expect(await canvas.findByText(/Used on/)).toBeInTheDocument();
     expect(canvas.getByText(/Void/)).toBeInTheDocument();
     expect(canvas.getByText(/Expired 1 May 2026/)).toBeInTheDocument();
@@ -156,6 +193,39 @@ export const NoCoupons: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("tab")).not.toBeInTheDocument();
     expect(canvas.getByText("No coupons yet")).toBeInTheDocument();
+  },
+};
+
+/** Everything spendable is spent or lapsed: Available falls back to its
+ * own empty line — and still carries the upsell — while the history tab
+ * holds the record. */
+export const AvailableEmpty: Story = {
+  args: { coupons: COUPONS.filter((coupon) => !isOpen(coupon)) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Nothing to use yet")).toBeInTheDocument();
+    expect(canvas.getByText("Want more coupons?")).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
+    expect(await canvas.findByText(/Used on/)).toBeInTheDocument();
+    expect(
+      canvas.queryByText("No used or expired coupons"),
+    ).not.toBeInTheDocument();
+  },
+};
+
+/** A fresh wallet with only live coupons: Used & Expired is offered and
+ * answers with its own empty line. */
+export const HistoryEmpty: Story = {
+  args: { coupons: COUPONS.filter(isOpen) },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Used & Expired" }));
+    expect(
+      await canvas.findByText("No used or expired coupons"),
+    ).toBeInTheDocument();
+    /* The promo stays with Available, not with history's empty line. */
+    expect(canvas.queryByText("Want more coupons?")).not.toBeInTheDocument();
   },
 };
 

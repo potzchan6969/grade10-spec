@@ -12,4 +12,4 @@
 
 ## 3. The walk (grade10)
 
-- [ ] 3.1 On staging, a member on `/membership` meets each wallet's own artwork as the save action — blocked: needs staging with a wallet issuer recorded
+- [ ] 3.1 On staging, a member on `/membership` meets each wallet's own artwork as the save action — blocked: needs staging with a wallet issuer recorded - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived

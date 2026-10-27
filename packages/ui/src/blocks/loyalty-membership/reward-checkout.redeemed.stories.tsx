@@ -64,7 +64,7 @@ export const RedeemedCoupon: Story = {
   },
 };
 
-/** The redeemed good's ticket names the collection under a storefront mark
+/** The redeemed gift's ticket names the collection under a storefront mark
  * — no code — and folds its collection QR behind Use now. */
 export const RedeemedItem: Story = {
   args: {

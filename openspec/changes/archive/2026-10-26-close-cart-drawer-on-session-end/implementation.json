@@ -1,0 +1,56 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "8117725d5d4d2a899d03a9751c69e22ab19787e4d605f42f94a755ec10faa626"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "5ac6ca1792bfd75cb0d1875d1bfc3836ac3cd813",
+    "capturedAt": "2026-10-16T09:32:35.251Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: An open drawer closes when its member's session ends"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "0d5c1a1428111bf748d2d8781f97ed25afd75378",
+      "components": [
+        "web"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@seankcw",
+    "reviewedAt": "2026-10-26T12:00:00Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "6feaa3419 removed the durable store suites store-wide; this change's requirement and scenarios SC46 to SC54 are untouched, and their tests live in the application repository"
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "8d58356a9 added US11, US12, US13 and US15 for guest checkout and public codes; US14, the journey this change serves, is unchanged"
+      }
+    ]
+  }
+}

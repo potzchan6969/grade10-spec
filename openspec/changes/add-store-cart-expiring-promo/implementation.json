@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "a8ffe5638cb6b9da4e3adc86e23e636a37713b415231759d2e7da36ed75d3a9f"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "b92071076078d2a235c9c5abe2ea4f0f86a3b709",
+    "capturedAt": "2026-10-26T14:06:20.064Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-store-cart-expiring-promo/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The cart picker emphasizes live near-expiry promo details"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Promo tickets render consumer-owned detail emphasis"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

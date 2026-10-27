@@ -95,7 +95,25 @@ export const Default: Story = {
 };
 
 /**
- * Product-status SC-11: a browse count does not cap the requested quantity.
+ * Scenario: grade10-site-store-product-page-SC-33 - The page exposes no
+ * shopper-facing variant choice and adds the one supplied sale item.
+ */
+export const AddsOneItemWithoutVariantChoice: Story = {
+  args: {
+    onAddToCart: fn(),
+    saleItem: PRODUCT_DETAIL_STORY.saleItem,
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("radiogroup")).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
+    expect(args.onAddToCart).toHaveBeenCalledTimes(1);
+  },
+};
+
+/**
+ * Scenarios: grade10-site-commerce-product-status-SC-11 and SC-17 - a browse
+ * count does not cap the requested quantity.
  * The product-detail fixture intentionally leaves the browse-only count out
  * of the purchase item, so the request reaches cart review unbounded.
  */
@@ -110,10 +128,12 @@ export const QuantityBeyondBrowseCount: Story = {
     await userEvent.click(increase);
     await userEvent.click(increase);
     await userEvent.click(increase);
+    await userEvent.click(increase);
 
     expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(
-      "4",
+      "5",
     );
+    expect(canvas.queryByText(/Only \d+ left/i)).not.toBeInTheDocument();
   },
 };
 
@@ -121,6 +141,7 @@ export const SoldOut: Story = {
   render: () => <InteractivePurchasePanel product={SOLD_OUT_PRODUCT_STORY} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.queryByRole("radiogroup")).not.toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Sold out" })).toBeDisabled();
     expect(canvas.queryByText("This product is not for sale.")).toBeNull();
     expect(canvas.queryByRole("radiogroup", { name: "Grade" })).toBeNull();

@@ -85,6 +85,92 @@ const PICKUP_DELIVERY: OrderDetailsDelivery = {
   trackOrder: false,
 };
 
+/**
+ * Steps a consumer supplies from where the parcels are, each with its state,
+ * so the card follows the parcel rather than the status.
+ */
+const PARCEL_IN_TRANSIT: OrderDetailsDelivery = {
+  variant: "delivery",
+  steps: [
+    {
+      label: "Order Placed",
+      date: FIXTURE_ORDER_PLACED_DAY,
+      state: "completed",
+    },
+    { label: "Shipping", date: "SF Express · SF1408862301", state: "current" },
+    {
+      label: "Completed",
+      date: "Estimated delivery: 2 Sep 2026",
+      state: "upcoming",
+    },
+  ],
+  trackOrder: true,
+};
+
+const PARCEL_DELIVERED: OrderDetailsDelivery = {
+  variant: "delivery",
+  steps: [
+    {
+      label: "Order Placed",
+      date: FIXTURE_ORDER_PLACED_DAY,
+      state: "completed",
+    },
+    {
+      label: "Shipping",
+      date: "SF Express · SF1408862301",
+      state: "completed",
+    },
+    { label: "Completed", state: "completed" },
+  ],
+  trackOrder: true,
+};
+
+const PARCEL_CANCELED: OrderDetailsDelivery = {
+  variant: "delivery",
+  steps: [
+    {
+      label: "Order Placed",
+      date: FIXTURE_ORDER_PLACED_DAY,
+      state: "completed",
+    },
+    { label: "Canceled", date: FIXTURE_ORDER_SHIPPED_DAY, state: "completed" },
+  ],
+  trackOrder: false,
+};
+
+/** Refunded before a parcel left: the steps end at Refunded. */
+const PARCEL_REFUNDED: OrderDetailsDelivery = {
+  variant: "delivery",
+  steps: [
+    {
+      label: "Order Placed",
+      date: FIXTURE_ORDER_PLACED_DAY,
+      state: "completed",
+    },
+    { label: "Refunded", date: FIXTURE_ORDER_SHIPPED_DAY, state: "completed" },
+  ],
+  trackOrder: false,
+};
+
+/** A parcel had already left when the refund landed: Shipping stays reached. */
+const PARCEL_REFUNDED_AFTER_SHIP: OrderDetailsDelivery = {
+  variant: "delivery",
+  steps: [
+    {
+      label: "Order Placed",
+      date: FIXTURE_ORDER_PLACED_DAY,
+      state: "completed",
+    },
+    {
+      label: "Shipping",
+      date: "SF Express · SF1408862301",
+      state: "completed",
+    },
+    { label: "Refunded", date: FIXTURE_ORDER_SHIPPED_DAY, state: "completed" },
+  ],
+  trackOrder: false,
+};
+
 /** Line item with an item-level coupon; discounted amounts are on the row only. */
 const FILLED_LINES: readonly OrderDetailsLineItem[] = [
   {
@@ -210,6 +296,11 @@ export {
   FILLED_SUMMARY_WITH_POINTS,
   IMAGE,
   ORDER_DETAILS_COPY,
+  PARCEL_CANCELED,
+  PARCEL_DELIVERED,
+  PARCEL_IN_TRANSIT,
+  PARCEL_REFUNDED,
+  PARCEL_REFUNDED_AFTER_SHIP,
   PICKUP_DELIVERY,
   PICKUP_STEPS,
   STATUS_LABELS,

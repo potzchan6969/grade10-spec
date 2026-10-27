@@ -35,7 +35,7 @@
   "fulfilment": {
     "title": "配送状态",
     "orderPlaced": "已下单",
-    "shipped": "已发货",
+    "shipping": "运送中",
     "pickup": "可取货",
     "completed": "已完成",
     "estimate": "预计送达"

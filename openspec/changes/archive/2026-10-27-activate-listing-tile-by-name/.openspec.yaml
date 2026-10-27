@@ -1,0 +1,20 @@
+schema: grade10-planning
+created: 2026-09-11
+hands:
+  pm: "@seankcw"
+  design: "@seankcw"
+  qa: "@ecchochan"
+  dev: "@seankcw"
+depends_on:
+  - add-store-cross-sell
+page_waived: "delivered: its 🚧 lines came off when the outcomes shipped,
+  2026-10-16; awaiting archive"
+reviewed:
+  proposal: b107ce81
+  decisions: "94530072"
+  user-journeys: ffb868c7
+  ui-design: cbea125f
+  tech-design: cbea125f
+  tasks: c7fadb2b
+  specs: 52c3af5c
+tasks_waived: "@htonyl, 2026-10-26: CI checks are no longer needed for 3.3"

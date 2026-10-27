@@ -1,7 +1,7 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review · 0/8
-**Drafts styled:** 2026-10-25, tcs-rules r7
+**Status:** pending-review · 0/9
+**Drafts styled:** 2026-10-27, tcs-rules r7
 **Regenerated:** 2026-10-25, tcs-rules r7
 
 **Out of suite (non-GUI):** shared-ui-store-cart-SC-01, shared-ui-store-cart-SC-22, shared-ui-store-cart-SC-43 - the export set, its types and the retired slot exports, held by `packages/ui/src/index.test.ts` and `pnpm run typecheck`
@@ -11,6 +11,10 @@
 * Every outcome a store page shows is walked in the store's cart suite; these cases hold the variants no application renders, walked in the shared UI Storybook.
 * `<storybook>` is the shared UI Storybook, served by `pnpm storybook:ui`; the drawer's stories sit under Store/Cart. A story's Controls panel changes the props it passes to the drawer; its Actions panel records each callback the drawer calls.
 * A story named in a case opens the drawer on the lines the case's pre-conditions describe.
+
+* `<storybook>` is the shared UI Storybook's Store Cart area. The
+  `Store/Cart/Blocks/PromoTicket` stories accept the supplied title, detail,
+  code, applicability, detail emphasis and action props.
 
 ## shared.ui-store-cart.US2: Shopper reviews what the cart holds
 
@@ -303,6 +307,65 @@ Runs once per row of **Test data**.
 
 ---
 
+## shared.ui-store-cart.US22: Shopper sees public codes in the picker
+
+**As a** shopper,
+**I want** the promo-code picker to list the public codes the consumer passes in their own section,
+**so that** I can pick a code open to everyone beside whatever codes are mine.
+
+<!-- trace:case id=g10.shared-store-cart.TC-97c rev=1 covers=g10.shared-store-cart.SC-n0y,g10.shared-store-cart.SC-rt4,g10.shared-store-cart.SC-p5j -->
+### shared.ui-store-cart.US22-TC1: Promo tickets keep supplied detail emphasis separate from the title
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared.ui-store-cart.US22
+
+**Pre-conditions:**
+
+* The matching `PromoTicket` story is available at `<storybook>` and can be
+  supplied the row's title, expiry/conditions detail, code, applicability,
+  refusal reason, detail emphasis and action.
+
+**Test data:**
+
+| State | `detailEmphasis` | Applicability and action |
+| --- | --- | --- |
+| applicable near-expiry ticket | `true` | applicable, Apply action supplied |
+| applicable plain ticket | `false`, then omitted | applicable, Apply action supplied |
+| public inapplicable near-expiry ticket | `true` | muted and inapplicable, refusal supplied, no action |
+
+**Steps:**
+
+1. Open the matching `PromoTicket` story at `<storybook>` with the row's
+   props.
+2. Read the title, detail, code, refusal reason and action slots, and inspect
+   the ticket order and the detail's classes.
+3. Activate Apply where the row supplies it and inspect the callback record.
+
+**Expected Results:**
+
+* The near-expiry applicable row keeps the supplied discount title, expiry or
+  conditions detail, code, Apply action, callback and position; only the
+  existing detail slot has the emphasis treatment.
+* The plain row remains plain for both false and omitted values; the shared
+  ticket does not infer emphasis from the displayed text or a clock, and all
+  supplied slots remain unchanged.
+* The public inapplicable row remains muted with its refusal reason and no
+  Apply action, while its supplied expiry detail alone receives the emphasis;
+  title, detail text, code and position remain unchanged.
+
+---
+
 ## Settled
 
 - A cart of only sold-out lines is not empty: it lists them with the footer and no count beside the drawer title.
@@ -318,3 +381,11 @@ Runs once per row of **Test data**.
 - **A line both repriced and on sale** - not the drawer's: it strikes the list price it is given; which price Grade10 supplies is open on the Grade10 Cart Drawer page
 - **Whitespace-only alt text** - Q7 retains the supplied non-empty string; only absent or empty alt text uses the item name.
 - **Empty picture source** - Q8 uses the existing placeholder.
+
+## Reconciliation
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `shared.ui-store-cart.US22-TC1` | To be walked in the controlled shared UI Storybook after the shared contract and Grade10 mapper land. |

@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "7be0a025f3bdf5f6952e4cc0c40edf5636dbc0a69371be2dd229efd4b62559f6"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ec4fa357234740a48db90ca7fbfdc7d97ea84c8a",
+    "capturedAt": "2026-10-26T13:33:38.213Z",
+    "targets": [
+      {
+        "path": "openspec/changes/cart-drawer-empty-state/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: An empty cart shows the design-system empty state",
+          "Requirement: Fetching status and price info on open with Boneyard skeletons",
+          "Requirement: Item count badge excludes sold-out items",
+          "Requirement: The drawer displays a minimum 5-row baseline",
+          "Requirement: The drawer lists items without placeholder slots",
+          "Requirement: The store cart drawer exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

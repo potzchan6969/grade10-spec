@@ -37,10 +37,10 @@ function winnerOrderMeta(): Omit<Meta<typeof WinnerOrderPage>, "title"> {
   };
 }
 
-/** Same settle gate as Order Details — wait for first-paint reveal + opacity. */
+/** Same settle gate as Order Details — wait for the entrance to rest at full opacity. */
 function winnerOrderRevealed(canvasElement: HTMLElement): boolean {
   const root = canvasElement.querySelector('[data-slot="winner-order"]');
-  if (root?.getAttribute("data-revealed") !== "true") return false;
+  if (!root) return false;
 
   const groups = canvasElement.querySelectorAll(
     '[data-slot="winner-order-reveal"]',

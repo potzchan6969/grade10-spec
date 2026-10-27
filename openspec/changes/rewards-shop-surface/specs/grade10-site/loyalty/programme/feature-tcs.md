@@ -15,7 +15,7 @@ member-readable code unique to it.
   shows the code each coupon is passed, not "a reward coupon carries none" —
   a money-off redemption now mints one.
 - **Arriving** — `grade10-site-loyalty-programme-SC-262` (one code per
-  redemption), `-SC-263` (a good mints a code its collection ticket leaves
+  redemption), `-SC-263` (a gift mints a code its collection ticket leaves
   unseen), `-SC-264` (a card per reward,
   press reports), `-SC-265` (no quantity), `-SC-266` (sheet under 640px,
   dialog from it), `-SC-267` (short balance refused whole), `-SC-268`

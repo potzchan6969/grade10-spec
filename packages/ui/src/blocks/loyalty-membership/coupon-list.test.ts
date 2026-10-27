@@ -8,6 +8,7 @@ const COPY = {
   label: "Your coupons",
   spent: "Spent",
   void: "Void",
+  scanTitle: "Use Coupon",
 };
 
 const markup = (items: readonly CouponItem[]) =>

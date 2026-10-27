@@ -119,7 +119,7 @@ The listing answers from the store's mirror of the shop's catalogue.
 | A change the shop never reports | Within 5 minutes |
 | A location's check on the mirror | Every 3 s while the listing is in use |
 
-- 🚧 **Within seconds** — a product the shop publishes, takes down, reprices,
+- **Within seconds** — a product the shop publishes, takes down, reprices,
   sells out or brings back reaches the cards, the counts and the sidebar
   within seconds, the same at every location; the store reads the product back
   from the shop rather than trusting the report
@@ -128,7 +128,7 @@ The listing answers from the store's mirror of the shop's catalogue.
 - **No collector waits on the mirror** — a listing view answers from the
   copy its own location holds, and the location asks the mirror for a newer one
   at most every 3 seconds, however many collectors it is serving
-- 🚧 **A quiet location answers too** — the first collector at a location that
+- **A quiet location answers too** — the first collector at a location that
   has not served the listing waits on no read of the catalogue, and gets the
   cards, counts and sidebar everyone else gets
 - **While the shop is unreachable** — the cards, the counts and the sidebar
@@ -174,7 +174,7 @@ sidebar can say how many cards sit behind a choice before it is picked.
 | --- | --- | --- |
 | Collector who collects one world | Opens the listing cold | Narrows to their world and sees how much is there before picking. |
 | Collector following a front-door tile | Arrives inside a collection | Sees which collection they are in, and can step out of it. |
-| Collector hunting a price | Sorts by lowest price | Is shown the cheapest card in the shop, not the cheapest already loaded. |
+| Collector hunting a price | Sorts by lowest price | Is shown the cheapest card for sale in the shop, not the cheapest already loaded. |
 | Collector sharing what they found | Pastes the address | The receiver opens the same narrowing. |
 
 **Not in scope.** Combining a collection with a facet in one query. A
@@ -201,7 +201,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | Seconds after save | Decided | A change reaches the listing in seconds, not minutes. The shop's report and its own reads are the floor, so nothing here can be faster than Shopify: the store reads a change back rather than trusting the report, and a report that never arrives is caught by the 5-minute re-read. A listing narrowed to a collection stays on the shop's own read, which the mirror does not reproduce in the collection's own order. | Product |
 | Collection with facets | ❓ Open | Whether a collection and a facet can be applied together; nothing in the catalogue's own reads prevents it. | Product |
 | Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
-| Price order | Decided | A card for sale lists before a sold-out one in every order, latest at rest included. A price order sorts on the lowest price of every variant, which can differ from the one item's price the tile shows. `list-cards-for-sale-first` writes both into the listing spec. | Product |
+| Price order | Decided | A card for sale lists before a sold-out one in every order, latest at rest included. A price order sorts on the lowest price of every variant, which can differ from the one item's price the tile shows. The listing spec states both. | Product |
 | Price order on the tile's price | Decided | A price order keeps sorting on the lowest price of every variant, as it runs; sorting on the tile's own price would move the backend and leave a collection on the shop's own price sort. Decided by agent in `list-cards-for-sale-first` (Q2), 2026-10-16; Product may reopen it. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |

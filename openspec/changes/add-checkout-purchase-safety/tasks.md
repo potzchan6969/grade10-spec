@@ -22,7 +22,7 @@
 - [x] 4.1 PGlite service tests for repeat, concurrency, lost answer, paid replay, changed purchase, unpaid retry, stopped dispatch, manual review, operator bind and cancel, and the edit's due row (`test/services/checkoutIntent.test.ts`); Shopify provider and draft-client tag tests; storefront resolution tests
 - [x] 4.2 Regenerate migrations and API docs; run backend, frontend and Shopify suites, type checks and lint
 - [ ] 4.3 Operator screen for checkouts under review in store-admin — blocked: needs a design; `admin.orders.settleDispatch` is the API it would call
-- [ ] 4.4 Observe a lost Shopify draft answer recovered by tag on the staging shop — blocked: needs staging Shopify access
+- [ ] 4.4 Observe a lost Shopify draft answer recovered by tag on the staging shop — blocked: needs staging Shopify access - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 
 ## 5. The walk (grade10)
 

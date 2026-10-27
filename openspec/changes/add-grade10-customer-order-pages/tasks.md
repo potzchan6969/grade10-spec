@@ -50,14 +50,14 @@ Uses the landed group 4 catalogs and completes the frontend copy boundary on the
 - [x] 6.1 Replace the literal Discount, Shipping and Tax summary labels in `OrderDetailsPage` with the existing `orderDetail.money` catalog keys, preserving zero and absent rows from `grade10-site-store-order-detail-SC-14`; cover `en`, `zh-Hant`, and `zh-Hans` with typed fixtures
 - [x] 6.2 Verify focused order projection, page and locale tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:submodules`
 
-## 7. Product picture records (grade10-spec)
+## 7. Product picture records (grade10-spec) (owner: @kinisworking)
 
 This documentation group adds no component behavior. It uses existing checks;
 new application tests belong to groups 8-10.
 
-- [ ] 7.1 Run focused strict change and product-record link checks before reconciling the picture handoff; confirm the existing shared line props already accept optional pictures and no component change is owed.
-- [ ] 7.2 Reconcile `docs/prds/products/grade10-site/store/order-history.md` and `docs/prds/products/grade10-site/store/order-detail.md` with the selected current-picture policy, earlier purchases, readable fallback and retained private-link restrictions. Keep the in-flight marks until archive.
-- [ ] 7.3 Verify the two product-record links and focused strict change validation; record any unrelated manual baseline failures separately.
+- [x] 7.1 Run focused strict change and product-record link checks before reconciling the picture handoff; confirm the existing shared line props already accept optional pictures and no component change is owed.
+- [x] 7.2 Reconcile `docs/prds/products/grade10-site/store/order-history.md` and `docs/prds/products/grade10-site/store/order-detail.md` with the selected current-picture policy, earlier purchases, readable fallback and retained private-link restrictions. Keep the in-flight marks until archive.
+- [x] 7.3 Verify the two product-record links and focused strict change validation; record any unrelated manual baseline failures separately.
 
 ## 8. Optional order picture contracts (grade10) (owner: @kinisworking)
 
@@ -98,4 +98,4 @@ existing order-facts and optional-section regression coverage.
 - [ ] 11.1 Keep the member history/sign-in/empty-account, owned-detail/sign-in and shared-detail journeys as end-to-end tests; add controlled loaded-picture walks for `g10.store-order-history.US5`, `g10.store-order-detail.US7` and `g10.store-order-detail.US8`. Include earlier purchases, two matching products, a changed first image on reread, absent pictures, blank alt text, picture lookup failure, legacy responses, rejected access and a failed image resource. Assert loaded dimensions for successful image assets and unchanged purchase facts and actions.
 - [ ] 11.2 Verify the existing admin customer detail/card preview against the same controlled item fixture and projection, preserving grants and Audit behavior; retain this as preview parity evidence rather than a new admin journey. Check the existing item frames at narrow and wide widths.
 - [ ] 11.3 In the walks' own commit, mark only the draft cases the walks decide automated with `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>`. Name remaining manual cases in the suite and the walk's `rounds.md` row; human execution follows deployment.
-- [ ] 11.4 Verify the derived browser suite and focused contract/backend/frontend regressions, then the repository's change-sensitive validation gate. Record loaded-image evidence separately from any unperformed live-provider or deployment acceptance.
+- [ ] 11.4 Verify the derived browser suite and focused contract/backend/frontend regressions, then the repository's change-sensitive validation gate. Record loaded-image evidence separately from any unperformed live-provider or deployment acceptance. - waived 2026-10-26 by @htonyl: CI checks are no longer needed; left unchecked and waived at archive by tasks_waived

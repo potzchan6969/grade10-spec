@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "8f195a623580afcb7cba8028af05371956ec28c889111a2f5dc61bc36ba2ed6d"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "9df122a8ae4d3868cb53128c360e00c12b8ccd08",
+    "capturedAt": "2026-10-27T03:27:24.502Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+        "anchors": [
+          "Requirement: Order and free text describe the whole catalogue"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "85c57f254773779e41845df2cfb6d283dc95dfc3",
+      "components": [
+        "store-service",
+        "zzz-store-service"
+      ]
+    }
+  ]
+}

@@ -51,7 +51,7 @@ function ProductDetailPage({
         </>
       ) : (
         <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-start gap-6 px-8 py-16">
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-3xl font-semibold text-foreground">
             {UNKNOWN_PRODUCT_COPY.title}
           </h1>
           <p className="text-sm text-secondary-foreground">

@@ -50,6 +50,11 @@ address. The catalogue narrows by one collection or by a query, never by both.
 - Opening a card
   - Name and photo alike: a card's name and its photo open that card's own page
   - Sold out, closed: a sold-out card opens from neither, because the listing sells
+- Product data
+  - Within seconds: a change the shop reports reaches the listing everywhere within seconds of the shop's read answering it
+  - The re-read as the net: a change the shop never reported reaches the listing within 5 minutes
+  - A quiet location answers too: a location holding no copy answers from the store's, without reading the shop
+  - While the shop is unreachable: the listing keeps answering from the store's own copy
 
 ## Requirements
 
@@ -316,8 +321,15 @@ the previous narrowing.
 
 The listing SHALL narrow by free text and order its cards over the whole set
 the query describes, never over the cards already loaded. A collector who asks
-for the lowest price SHALL be shown the lowest-priced card in the narrowed
-catalogue first, whether or not it had been loaded when they asked.
+for the lowest price SHALL be shown the lowest-priced card for sale in the
+narrowed catalogue first, whether or not it had been loaded when they asked.
+
+In every order — latest product, lowest price and highest price, at rest and
+inside a collection — every card for sale SHALL be listed before every
+sold-out card, and the order asked for SHALL hold within each of the two
+groups. A price order SHALL sort a card on the lowest price among its
+variants; inside a collection, the shop's own price order holds within each
+group.
 
 The listing SHALL offer only orders the catalogue can answer: latest product,
 lowest price, and highest price. It SHALL NOT offer a popularity order.
@@ -339,14 +351,14 @@ The free text and the order in force SHALL be reflected in the address, so the
 collector can link to what they are looking at, and going back SHALL return the
 listing to the previous narrowing.
 
-<!-- trace:scenario id=g10.store-product-listing.SC-l5j rev=1 -->
+<!-- trace:scenario id=g10.store-product-listing.SC-l5j rev=2 -->
 #### Scenario: grade10-site-store-product-listing-SC-13 - An order covers the whole catalogue
 **Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
 - **GIVEN** a catalogue holding more cards than one page lists, whose
-  lowest-priced card is not among those first listed
+  lowest-priced card for sale is not among those first listed
 - **WHEN** a collector orders the listing by lowest price
-- **THEN** that lowest-priced card is listed first
+- **THEN** that lowest-priced card for sale is listed first
 
 <!-- trace:scenario id=g10.store-product-listing.SC-7b0 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-14 - Free text covers the whole catalogue
@@ -394,6 +406,27 @@ listing to the previous narrowing.
 - **THEN** that collection's cards are listed by latest product
 - **AND** the sort trigger reads `Sort by` followed by the latest option's
   label, and that option is marked selected in the menu
+
+<!-- trace:scenario id=g10.store-product-listing.SC-h0j rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-57 - Cards for sale list before sold-out ones in every order
+**Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
+
+- **GIVEN** a narrowed catalogue, or a collection, holding cards for sale and
+  sold-out cards, with a sold-out card cheaper and newer than every card for
+  sale
+- **WHEN** a collector orders it by latest product, by lowest price or by
+  highest price
+- **THEN** every card for sale is listed before every sold-out card
+- **AND** within each group the cards follow the order asked for
+
+<!-- trace:scenario id=g10.store-product-listing.SC-59p rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-58 - A price order sorts on a card's cheapest variant
+**Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
+
+- **GIVEN** two cards for sale, one whose cheapest variant costs less than any
+  variant of the other while the item its tile shows costs more
+- **WHEN** a collector orders the listing by lowest price
+- **THEN** the card with the cheaper variant is listed first
 
 ### Requirement: The browse listing holds a collector to the shop's count
 
@@ -625,3 +658,206 @@ open from neither.
 - **GIVEN** a sold-out card on the listing
 - **WHEN** a collector presses the card's name and its photo
 - **THEN** the listing stays where it is and no product page renders
+
+### Requirement: Free text offers suggestions and commits as a narrowing
+
+The listing search field SHALL offer suggestions while the collector types,
+before free text is committed as a narrowing. Suggestions SHALL cover the
+whole catalogue for product hits, even when facet choices are already in
+force. Suggestion groups SHALL include matching products and matching facet
+choices from the catalogue's world and collectible-type groups. Each group
+SHALL be capped at five hits. A facet suggestion SHALL name the choice and
+SHALL show whether it is a world or a collectible type as trailing chrome.
+
+Typing alone SHALL NOT put free text in the address and SHALL NOT change
+which cards the listing lists. Committing the typed words — by submitting
+the field with no suggestion selected — SHALL narrow the whole catalogue by
+those words, reflect them in the address, and show them among the applied
+narrowings as a dismissible chip. The field SHALL clear once the words are
+committed.
+
+Selecting a product suggestion SHALL open that product and SHALL clear the
+search field. Selecting a facet suggestion SHALL apply that facet choice as
+if the collector had selected it in the panel, SHALL clear the search field,
+and SHALL NOT put free text in force. Dismissing the free-text chip SHALL
+clear free text from the address and from the applied narrowings.
+
+When no suggestion matches, the field SHALL show that nothing matched and
+SHALL still accept a commit of the typed words. While suggestion hits are
+still being resolved, the field SHALL show that it is searching until
+matches or an empty result are offered. Free text remains catalogue-wide
+store search: suggestion hits SHALL NOT include auction lots or other site
+surfaces.
+
+<!-- trace:scenario id=g10.store-product-listing.SC-rv9 rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-31 - Typing offers product and filter suggestions
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
+
+- **GIVEN** a catalogue holding a product named for words a collector types,
+  and a world or collectible type whose name matches those words
+- **WHEN** the collector types those words in the listing search field
+- **THEN** the field offers that product under a products group and that
+  facet choice under a filters group
+- **AND** each group shows at most five hits
+- **AND** the filter hit names the choice and shows whether it is a world
+  or a collectible type
+- **AND** the address and the listed cards are unchanged until they commit
+  or select
+
+<!-- trace:scenario id=g10.store-product-listing.SC-v1f rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-32 - Enter commits free text as a chip
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
+
+- **GIVEN** a collector who has typed words in the listing search field with
+  no suggestion selected
+- **WHEN** they commit those words
+- **THEN** the listing lists the catalogue narrowed by those words
+- **AND** the address carries the words
+- **AND** the words appear among the applied narrowings as a dismissible chip
+- **AND** the search field is empty
+
+<!-- trace:scenario id=g10.store-product-listing.SC-hch rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-33 - A product suggestion opens the product
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
+
+- **GIVEN** suggestions offering a product
+- **WHEN** the collector selects that product suggestion
+- **THEN** that product's details page opens
+- **AND** free text is not put in force on the listing from that selection
+- **AND** the search field is empty
+
+<!-- trace:scenario id=g10.store-product-listing.SC-xip rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-34 - A filter suggestion applies the facet
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
+
+- **GIVEN** suggestions offering a world or collectible-type choice
+- **WHEN** the collector selects that filter suggestion
+- **THEN** the listing narrows by that facet choice
+- **AND** the address names it
+- **AND** the choice appears among the applied narrowings
+- **AND** free text is not put in force from that selection
+- **AND** the search field is empty
+
+<!-- trace:scenario id=g10.store-product-listing.SC-fep rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-35 - Dismissing the search chip clears free text
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
+
+- **GIVEN** free text in force, shown among the applied narrowings
+- **WHEN** the collector dismisses that chip
+- **THEN** free text is no longer in force
+- **AND** the address no longer carries the words
+
+<!-- trace:scenario id=g10.store-product-listing.SC-5yb rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-36 - No suggestions still allows commit
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
+
+- **GIVEN** typed words that match no product and no facet choice
+- **WHEN** the collector commits those words
+- **THEN** the listing narrows by those words as free text
+- **AND** the address carries the words
+- **AND** before commit the field showed that nothing matched
+
+<!-- trace:scenario id=g10.store-product-listing.SC-1q7 rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-37 - Suggestions stay on the store catalogue
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
+
+- **WHEN** a collector types in the listing search field
+- **THEN** every suggestion offered is a store catalogue product or a store
+  listing facet choice
+- **AND** no auction lot or other site surface is offered
+
+<!-- trace:scenario id=g10.store-product-listing.SC-ph5 rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-38 - Waiting for suggestions shows searching
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
+
+- **GIVEN** a collector who has typed words and whose suggestion hits are
+  still being resolved
+- **WHEN** the listing has not yet offered matches or an empty result
+- **THEN** the search field shows that it is searching
+- **AND** the address and the listed cards remain unchanged
+
+### Requirement: The listing follows the shop within seconds
+
+A listing not narrowed to a collection — its cards, its count and its sidebar
+counts — SHALL answer from one copy of the catalogue the store keeps per shop
+and reads at every location. On the shop's report of a change — a product
+published, taken down or changed, or its stock moved — the store SHALL read
+that product back from the shop, and read again every 2 seconds while the
+shop answers older than the report, for up to 60 seconds. A product the shop
+reported changed and then answers nothing for, twice, SHALL leave the copy;
+one the shop reported created and answers nothing for SHALL be left to the
+whole read. The change SHALL reach the listing at every location within 10
+seconds of the shop's read answering it. A change the shop never reports, or
+one its reads did not answer within 60 seconds, SHALL reach the listing within
+5 minutes, from a whole read of the catalogue.
+
+A copy SHALL hold what the shop answered, never what a report alone said, and
+a read older than the report that caused it SHALL NOT be published.
+
+<!-- trace:scenario id=g10.store-product-listing.SC-5zl rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-49 - A published product is listed within seconds
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
+
+- **GIVEN** a listing whose count is N
+- **WHEN** the shop publishes a product to the store's channel and reports it
+- **THEN** within 10 seconds of the shop's read answering that product, the listing at any location lists it
+- **AND** its count reads N + 1, and the product's facets count it
+
+<!-- trace:scenario id=g10.store-product-listing.SC-gxw rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-50 - A product taken down leaves within seconds
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
+
+- **GIVEN** a listing holding a product
+- **WHEN** the shop takes that product off the store's channel and reports it
+- **THEN** within 10 seconds of the shop's read no longer answering it, no location lists it, and no count counts it
+
+<!-- trace:scenario id=g10.store-product-listing.SC-6q8 rev=2 -->
+#### Scenario: grade10-site-store-product-listing-SC-51 - A card follows the shop's price and availability
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
+
+- **GIVEN** a card showing a price and reading available
+- **WHEN** the shop changes that product's price, or stops selling every variant, and reports it
+- **THEN** within 10 seconds of the shop's read answering the change, the card at any location shows the new price, or reads Sold out
+- **AND** a price order places the card by the new price
+
+<!-- trace:scenario id=g10.store-product-listing.SC-kj0 rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-52 - A change the shop never reported is caught by the re-read
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
+
+- **GIVEN** a change the shop made without a report reaching the store — a facet renamed, or a report lost
+- **WHEN** 5 minutes pass
+- **THEN** the listing at any location shows the change
+
+#### Scenario: grade10-site-store-product-listing-SC-53 - A read older than the report is not published
+**Serves:** Product data - a read older than the report is not published
+
+- **GIVEN** the shop reports a change before its own reads answer it
+- **WHEN** the store reads the product back and the answer is older than the report, or is nothing
+- **THEN** the older answer is not published, the store reads again every 2 seconds, and the change is listed once the shop answers it
+- **AND** a product the shop reported created but still answers nothing for after 60 seconds is left to the whole read
+
+<!-- trace:scenario id=g10.store-product-listing.SC-71h rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-48 - A location holding no copy answers from the one the store keeps
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
+
+- **GIVEN** a location that has not served the listing, and a copy the store already holds
+- **WHEN** a collector opens the listing there
+- **THEN** the listing answers the same cards, count and sidebar a location that has already served it answers
+- **AND** nothing reads the catalogue from the shop to answer it
+
+### Requirement: The listing answers while the shop is unreachable
+
+While the shop cannot be read, the listing SHALL keep answering from the copy
+it holds — cards, counts and sidebar alike — and SHALL say nothing to the
+collector about the shop. The copy SHALL stop moving until the shop answers
+again.
+
+<!-- trace:scenario id=g10.store-product-listing.SC-bcq rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-54 - The listing lists while the shop is down
+**Serves:** grade10-site-store-product-listing-US-15 - Collector browses while the shop is unreachable
+
+- **GIVEN** a listing that answered while the shop could be read
+- **WHEN** the shop stops answering and a collector opens the listing at any location
+- **THEN** the listing lists the cards, the count and the sidebar it last held
+- **AND** the listing goes on answering the same cards, count and sidebar until the shop answers again
+- **AND** opening a product or reviewing the cart is what waits on the shop

@@ -26,6 +26,9 @@ draws each coupon as a `PromoTicket`, and a Use now press opens the
 - `CouponList` gains `onScanOpenChange`, reporting the surface's open and
   close with the coupon. ❓ on the PRD whether it survives — the wallet's
   refresh-on-return may cover it.
+- `CouponItem` gains `expiringSoon` and `HeldPromoCode` `detailEmphasis` —
+  an open coupon the consumer flags (inside its last 14 days at Grade10)
+  reads its expiry line emphasised.
 - `CouponList` drops `masked` — dead contract; no surface withholds codes.
 - `CouponList`'s loading draws ticket-shaped Boneyard skeletons and its
   empty draws the `EmptyState` primitive; `AsyncState`'s empty variant

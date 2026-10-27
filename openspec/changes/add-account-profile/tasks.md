@@ -84,7 +84,7 @@ Depends on group 1 through the submodule, and on groups 2 and 4.
 
 The `profile` gate stays shut in this change; it opens by its own reviewed line once this change ships, as Carried Surfaces records.
 
-- [ ] 6.1 Create the `AVATARS` bucket for both brands' store workers in each Cloudflare account, and confirm the binding resolves in staging before the workers deploy — blocked: creating R2 buckets needs the Cloudflare accounts; bound in `wrangler.jsonc` as `<brand>-store-avatars-<env>` (decisions Q28)
+- [ ] 6.1 Create the `AVATARS` bucket for both brands' store workers in each Cloudflare account, and confirm the binding resolves in staging before the workers deploy — blocked: creating R2 buckets needs the Cloudflare accounts; bound in `wrangler.jsonc` as `<brand>-store-avatars-<env>` (decisions Q28) - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 - [x] 6.2 Verify every scenario in the four deltas, then run `openspec validate add-account-profile` and `openspec validate --specs`
 - [x] 6.3 Review the branch for convention drift and for delta coverage separately: requirements missing, partial, or implemented differently than specified
 - [x] 6.4 In grade10-spec, add the `ui/store-profile` row to `openspec/specs/shared/README.md`, and to `openspec/specs/grade10-site/README.md` the `store/account-profile` row with the store rows its table lacks - `account-identity`, `checkout`, `discounts`, `membership`, `site-discounts` and `wallet-member-card` - then archive this change; acceptance already published the deltas, so there is no fold — the README rows are in; the archive is the coordinator's
@@ -93,6 +93,6 @@ The `profile` gate stays shut in this change; it opens by its own reviewed line 
 
 Uses draft `feature-tcs.md` as its planning input.
 
-- [ ] 7.1 One walk per journey, end to end through the account page, the till and the wallet pass, kept as the change's end-to-end suite: `grade10-site-store-account-profile-US-01` to `grade10-site-store-account-profile-US-05`, `grade10-site-store-membership-US-02`, `grade10-site-store-wallet-member-card-US-06` — blocked: the walks run against staging, which needs 6.1 and a deploy
+- [ ] 7.1 One walk per journey, end to end through the account page, the till and the wallet pass, kept as the change's end-to-end suite: `grade10-site-store-account-profile-US-01` to `grade10-site-store-account-profile-US-05`, `grade10-site-store-membership-US-02`, `grade10-site-store-wallet-member-card-US-06` — blocked: the walks run against staging, which needs 6.1 and a deploy - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived
 - [ ] 7.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>`, a walk in grade10 named `grade10:<path>`, in the walks' own commit; the ones that stay manual are named in the suite and in the walk's `rounds.md` row — blocked: follows 7.1
-- [ ] 7.3 Verify: the walks pass against staging, and `pnpm run tcs:validate` in grade10-spec — blocked: follows 7.1
+- [ ] 7.3 Verify: the walks pass against staging, and `pnpm run tcs:validate` in grade10-spec — blocked: follows 7.1 - waived 2026-10-26 by @htonyl: deployed evidence is no longer needed; left unchecked and waived at archive by tasks_waived

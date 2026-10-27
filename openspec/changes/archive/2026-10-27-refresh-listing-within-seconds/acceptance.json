@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "change": "refresh-listing-within-seconds",
+  "baseline": "b1330eb66d73dfebe3e8b8071ad1ca5a012ddb572a417e77b89e4db8ba4e29f5",
+  "fingerprint": "2d852d2c406ac52efae0a6969ba2f2ab39f6b0ded42fb5f49ff44229e4d70141",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-27T03:16:01.085Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/commerce/commerce.md#catalog",
+      "sha256": "9e5b33974be0c3ae3bc1971d31142ae9e4e1b962599753b81af2095afccc5b71",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/product-listing.md#product-data",
+      "sha256": "b3648318a7b0b8170efadafe4cccae97232ff8b30d709144e2c937eb4df3e64d",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/refresh-listing-within-seconds/decisions.md",
+      "sha256": "8f6fb0ea3c135f917e2b5c5df50ff6df353e0ff78c6fd451aea6f9641a6c2755",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refresh-listing-within-seconds/proposal.md",
+      "sha256": "38003c11fdcac0ef6a820afaff7b7b32a0cd843ad8588c0097d185e5a5c3a327",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refresh-listing-within-seconds/specs/grade10-site/store/product-listing/spec.md",
+      "sha256": "0802822aa15d3bc27ae275e3d9d9aaa840498fe0383a5a365a635546882d348a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refresh-listing-within-seconds/specs/grade10-site/store/product-listing/user-journeys.md",
+      "sha256": "8fedf305e9725c8329b358391a623824565c283d93d7c6a779795197d2fb5adf",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/refresh-listing-within-seconds/tech-design.md",
+      "sha256": "851ca96992ae30795096560846d755deaf8690044379041e7eaa3040755bc16a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+      "sha256": "3c3cdc4b555696e0ff6aef3d639a9b61095e81e7bc02f5002f629b6d5565b45d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+      "sha256": "24d66ea4bc9c41b3d503948093db7ef2bb5b882bcbe2841db6bea0f843baf1b7",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The listing answers while the shop is unreachable",
+        "Requirement: The listing follows the shop within seconds"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

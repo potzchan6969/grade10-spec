@@ -54,7 +54,8 @@ const SKILLS_BUDGET = {
   "planning-design": 1879,
   // 1050 after the engineer lane gained its hand-off and archive guidance.
   // 1170 after the sweep, review preflight and cluster reconciliation steps.
-  "planning-dev": 1170,
+  // 1185 after the rule that deployed evidence is never requested before archive.
+  "planning-dev": 1185,
 };
 const RULES_BUDGET = {
   // 150 after the proposal lane gained its PRD and metric guardrails.

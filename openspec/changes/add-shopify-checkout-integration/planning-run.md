@@ -29,7 +29,7 @@ Preparation dated 2026-10-07 for the cart-header amendment described in [the pro
 ## Ownership and Isolation
 
 - **Checkout overlap** - The existing checkout amendment has no same-capability overlaps in its review-preflight manifest.
-- **Status ownership** - `add-store-order-status` and `add-grade10-customer-order-pages` retain ownership of status mapping and order surfaces. This amendment consumes their existing contracts and adds no competing status delta.
+- **Status ownership** - The durable spec `grade10-site/commerce/order-status` and `add-grade10-customer-order-pages` retain ownership of status mapping and order surfaces. This amendment consumes their existing contracts and adds no competing status delta.
 - **Suite history** - The current checkout suite is `in-review` and contains draft and deprecated cases. Update it with permanent IDs and retained history; do not delete or regenerate the whole suite.
 - **QA1 inputs** - A fresh context receives frozen Purpose/Feature set, journeys, proposal, decisions, linked PRDs, design without scenario dispositions, existing cases without reconciliation or scenario coverage markers, and the applicable higher suites. It receives no requirements, technical design or previous reconciliation.
 - **Dev inputs** - A separate fresh context receives the same frozen product anchors, the durable requirements and owning implementation sources. It receives no QA1 cases or reconciliation until its design, scenarios and tasks are complete.
