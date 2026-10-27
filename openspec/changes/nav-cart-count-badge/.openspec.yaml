@@ -15,3 +15,4 @@ tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for
 hands:
   dev: "@kinisworking"
   pm: "@kinisworking"
+  design: "@kinisworking"
