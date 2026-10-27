@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Replace TOPIC with the topic's name. No script: every viewer draws it. -->
+    <title>TOPIC flow</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --fg: #1c1c1c;
+        --muted: #666666;
+        --card: #f4f4f2;
+        --line: #c8c8c4;
+        --read: #2f6fb3;
+        --write: #a5520f;
+        --ext: #6b4fa8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #141414;
+          --fg: #ededed;
+          --muted: #a0a0a0;
+          --card: #222222;
+          --line: #444444;
+          --read: #7fb2e8;
+          --write: #e8a46a;
+          --ext: #b9a2ea;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #141414;
+        --fg: #ededed;
+        --muted: #a0a0a0;
+        --card: #222222;
+        --line: #444444;
+        --read: #7fb2e8;
+        --write: #e8a46a;
+        --ext: #b9a2ea;
+      }
+      body {
+        margin: 0;
+        padding: 24px 16px;
+        background: var(--bg);
+        color: var(--fg);
+        font: 15px/1.45 system-ui, sans-serif;
+      }
+      main {
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0 0 4px;
+      }
+      h2 {
+        margin: 28px 0 10px;
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .legend,
+      .note {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .legend span {
+        margin-right: 14px;
+      }
+      .flow {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .step {
+        min-width: 150px;
+        max-width: 220px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--card);
+      }
+      .step.end {
+        border-radius: 999px;
+        text-align: center;
+      }
+      .step b {
+        display: block;
+      }
+      .edge {
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+      }
+      .edge::after {
+        content: "→";
+        display: block;
+        font-size: 18px;
+        line-height: 1;
+        color: var(--fg);
+      }
+      .data {
+        margin: 6px 0 0;
+        padding: 0;
+        list-style: none;
+        font-size: 12px;
+      }
+      .data li {
+        margin-top: 3px;
+        padding: 1px 6px;
+        border: 1px dashed currentColor;
+        border-radius: 4px;
+      }
+      .read {
+        color: var(--read);
+      }
+      .write {
+        color: var(--write);
+      }
+      .ext {
+        color: var(--ext);
+      }
+      .branches {
+        margin: 10px 0 0;
+        padding-left: 18px;
+        font-size: 14px;
+      }
+      @media (max-width: 640px) {
+        .flow {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .step {
+          max-width: none;
+        }
+        .edge::after {
+          content: "↓";
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>TOPIC</h1>
+      <p class="legend">
+        <span>→ the reader moves to the next step</span>
+        <span class="read">reads: data the step uses</span>
+        <span class="write">writes: data the step changes</span>
+        <span class="ext">calls: an external service</span>
+      </p>
+
+      <!-- One section per lane: a channel or an actor. 15 steps at most in all. -->
+      <h2>Lane name</h2>
+      <ol class="flow">
+        <li class="step end"><b>Reader opens the page</b></li>
+        <li class="edge">picks an item</li>
+        <li class="step">
+          <b>Detail screen</b>
+          <ul class="data">
+            <li class="read">reads Item record</li>
+            <li class="ext">calls Service: what it asks</li>
+          </ul>
+        </li>
+        <li class="edge">confirms</li>
+        <li class="step end">
+          <b>Outcome the reader sees</b>
+          <ul class="data">
+            <li class="write">writes Item record</li>
+          </ul>
+        </li>
+      </ol>
+      <!-- A branch off the main path: from step, condition, to outcome. -->
+      <ul class="branches">
+        <li><b>Detail screen</b> - if the item is gone → <b>Empty state</b></li>
+      </ul>
+
+      <!-- Name the branches left out of the chart. -->
+      <p class="note">Not in the chart: ...</p>
+    </main>
+  </body>
+</html>

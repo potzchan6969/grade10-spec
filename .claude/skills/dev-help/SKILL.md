@@ -63,6 +63,12 @@ Off the delivery line, and not a sequence — pick by what you are touching. All
 | --- | --- | --- |
 | `/email-templating` | Compose or revise a React Email template, shared email component, preheader, CTA, or email-safe styling. | "Draft the outbid email for the auction notification." |
 
+## Learn
+
+| Invoke | When | Example |
+| --- | --- | --- |
+| `/teach-me` | Learn a part of the product from the store: the big picture, one behaviour, or every case, with a flow chart, journeys, stories and manual links to match. Reads only. | "/teach-me all cases about discount code" |
+
 ## Hand over
 
 | Invoke | When | Example |
