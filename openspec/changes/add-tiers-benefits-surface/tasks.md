@@ -24,7 +24,7 @@
       ladder), `Black` (invitation-held, qualifying suppressed) and a
       story asserting the pill waits for both figures
 
-## 3. The mechanics card (grade10-spec)
+## 3. The mechanics card (grade10-spec) (owner: @seankcw)
 
 - [x] 3.1 Add `how-points-work.tsx` — icon rows stacked on a narrow
       viewport and paired across a wide one, icons and words through props;
