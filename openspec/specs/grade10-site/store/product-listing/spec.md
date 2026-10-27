@@ -321,8 +321,15 @@ the previous narrowing.
 
 The listing SHALL narrow by free text and order its cards over the whole set
 the query describes, never over the cards already loaded. A collector who asks
-for the lowest price SHALL be shown the lowest-priced card in the narrowed
-catalogue first, whether or not it had been loaded when they asked.
+for the lowest price SHALL be shown the lowest-priced card for sale in the
+narrowed catalogue first, whether or not it had been loaded when they asked.
+
+In every order — latest product, lowest price and highest price, at rest and
+inside a collection — every card for sale SHALL be listed before every
+sold-out card, and the order asked for SHALL hold within each of the two
+groups. A price order SHALL sort a card on the lowest price among its
+variants; inside a collection, the shop's own price order holds within each
+group.
 
 The listing SHALL offer only orders the catalogue can answer: latest product,
 lowest price, and highest price. It SHALL NOT offer a popularity order.
@@ -344,14 +351,14 @@ The free text and the order in force SHALL be reflected in the address, so the
 collector can link to what they are looking at, and going back SHALL return the
 listing to the previous narrowing.
 
-<!-- trace:scenario id=g10.store-product-listing.SC-l5j rev=1 -->
+<!-- trace:scenario id=g10.store-product-listing.SC-l5j rev=2 -->
 #### Scenario: grade10-site-store-product-listing-SC-13 - An order covers the whole catalogue
 **Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
 - **GIVEN** a catalogue holding more cards than one page lists, whose
-  lowest-priced card is not among those first listed
+  lowest-priced card for sale is not among those first listed
 - **WHEN** a collector orders the listing by lowest price
-- **THEN** that lowest-priced card is listed first
+- **THEN** that lowest-priced card for sale is listed first
 
 <!-- trace:scenario id=g10.store-product-listing.SC-7b0 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-14 - Free text covers the whole catalogue
@@ -399,6 +406,27 @@ listing to the previous narrowing.
 - **THEN** that collection's cards are listed by latest product
 - **AND** the sort trigger reads `Sort by` followed by the latest option's
   label, and that option is marked selected in the menu
+
+<!-- trace:scenario id=g10.store-product-listing.SC-h0j rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-57 - Cards for sale list before sold-out ones in every order
+**Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
+
+- **GIVEN** a narrowed catalogue, or a collection, holding cards for sale and
+  sold-out cards, with a sold-out card cheaper and newer than every card for
+  sale
+- **WHEN** a collector orders it by latest product, by lowest price or by
+  highest price
+- **THEN** every card for sale is listed before every sold-out card
+- **AND** within each group the cards follow the order asked for
+
+<!-- trace:scenario id=g10.store-product-listing.SC-59p rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-58 - A price order sorts on a card's cheapest variant
+**Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
+
+- **GIVEN** two cards for sale, one whose cheapest variant costs less than any
+  variant of the other while the item its tile shows costs more
+- **WHEN** a collector orders the listing by lowest price
+- **THEN** the card with the cheaper variant is listed first
 
 ### Requirement: The browse listing holds a collector to the shop's count
 
