@@ -21,3 +21,16 @@ describe("OrderDetailsPaymentLogo", () => {
     expect(html).toContain('role="img"');
   });
 });
+
+describe("OrderDetailsPaymentLogo for a card of no known brand", () => {
+  it("draws a plain card mark that leaves the name to the masked number", () => {
+    const html = renderToStaticMarkup(
+      createElement(OrderDetailsPaymentLogo, {
+        brand: "card" as OrderDetailsPaymentBrand,
+      }),
+    );
+    expect(html).toContain("<svg");
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).not.toContain('role="img"');
+  });
+});
