@@ -4,10 +4,9 @@ summary: The store, the loop, and how to work both with an agent.
 order: 1
 ---
 
-This site is a reading surface over the spec store — a git repository where
-every product spec, in-flight change, and page of prose lives as a file. A
-page states the shape we want in plain words and pictures; the evidence
-around it is live. Work in flight shows up as 🚧 lines on the pages it touches, and visuals come straight from Figma and
+This site is a reading surface over the pages of the spec store — a git
+repository where every product spec, change, and page of prose lives as a
+file. A page states the shape we want in plain words and pictures. Work in flight shows up as 🚧 lines on the pages it touches, and visuals come straight from Figma and
 the deployed Storybook.
 
 ## How it is organized

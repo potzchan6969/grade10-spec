@@ -430,7 +430,7 @@ const runStack = async (stack) => {
 
 const designPrompt = () => `${rules}
 
-Write one design-phase OpenSpec change per group below, so the designer finds each on the Pending page. Work in ${wtOf("_design")}: \`git -C ${A.repo} worktree add -b docs/accept-design ${wtOf("_design")} ${BASE}\`; do not fetch, the run fetched once.
+Write one design-phase OpenSpec change per group below, so the designer finds each waiting on them in the Monday digest. Work in ${wtOf("_design")}: \`git -C ${A.repo} worktree add -b docs/accept-design ${wtOf("_design")} ${BASE}\`; do not fetch, the run fetched once.
 Every ask has an interim the feature change ships; the designer confirms it as the agreed look or redraws it. Model each change on docs/governance/prd-and-openspec.md "Waiting for an input":
 - **.openspec.yaml** - schema grade10-planning, created ${A.date}, hands design "${A.hands?.design}" and pm "${A.hands?.pm}", and awaiting \`ui-design: ${A.date}, <frames or states to confirm or draw> - ${A.hands?.design}\`. A group with \`looks: true\` also carries \`skip_specs: true\` and \`skip_specs_why: the designer confirms or redraws looks the feature change ships; no requirement moves\`. A group with \`looks: false\` instead awaits \`specs: ${A.date}, requirement deltas once the designer confirms or redraws\`
 - **proposal.md** - Why, What Changes (one bullet per ask, the surface first), Non-Goals, Capabilities by durable path, Impact

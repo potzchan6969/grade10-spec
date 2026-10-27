@@ -18,10 +18,7 @@ glyph a domain wears in the rail and on its card — one name from the fixed
 list the editor's field offers, and a landing page without one draws a
 warning. `audience` is `operator` or absent — `operator` files the page under
 the Admin nav group, absent means the product's own users. `order` sorts it
-among its siblings. `reviewed` is the day the page was last read against a
-spec that had changed under it and found right as it stood — set it when the
-stale warning names a page that needs no other edit, and leave it off
-otherwise. Any other key is a hard error, because an editor that silently
+among its siblings. Any other key is a hard error, because an editor that silently
 drops a field you typed is worse than one that refuses to save.
 
 ```yaml
@@ -32,11 +29,10 @@ order: 1
 ---
 ```
 
-`spec` may name a capability an in-flight change is still writing — that is
-how an incubating capability gets its page before it lands, and the check
-warns while any delta-introduced capability has none. A page with no `spec` at
-all wears no pip: its 🚧 and ❓ lines state the intended shape, and a change to
-it is where the requirements start.
+`spec` may name a capability a change is still writing — that is how a
+capability gets its page before it lands. A page with no `spec` at all states
+the intended shape in its 🚧 and ❓ lines, and a change to it is where the
+requirements start.
 
 Everything between directives is prose — GitHub markdown, headings starting at
 `##`, no raw HTML. Directives sit at column 0: two colons open a leaf, three
@@ -360,17 +356,12 @@ silent overwrite.
 
 ## Checks
 
-`check:manual` runs in CI, in the same job as spec validation, so the two can
-never drift apart quietly. It fails on a page that does not parse or is not
-canonical, and on a reference that does not resolve: a `spec` id, a
-`requirement=` that matches no heading in that spec, a `scenario=` or `story=`
-id, a missing image, a Storybook id no story answers. It also fails when a
-durable spec has no page mentioning it, when a product or platform topic has no
-page at all, and when `manual.yaml` lists a product twice. A page whose embedded
-specs changed meaning after the page's last commit is flagged stale — a
-warning, not a failure — naming the requirements that moved and the commit
-that moved them. Read the page against them; an edit clears it, and so does
-`reviewed:` dated in the frontmatter when the page already reads right.
+`check:manual` runs in CI on every push. It fails on a page that does not
+parse or is not canonical, on an image no file under `docs/prds/assets`
+answers, on a `story=` id the workbench Storybook does not index, on an
+example ledger whose balances do not add up, and when a product, topic or
+guide `manual.yaml` lists has no page, or is listed twice. A `[[ref]]` that no
+page's `spec` names is a warning.
 
 :::callout{kind="note"}
 Write short and straight. The page states the shape and shows what it looks
