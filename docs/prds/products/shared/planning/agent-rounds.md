@@ -40,8 +40,7 @@ One round per artifact, and one per task group while the change is building.
 - **A question about a look never holds a feature** — the feature ships an
   interim built from the store's existing blocks and tokens; a look that needs
   a new variant, token or block ships without that look; the question waits on
-  the designer in one change per capability, listed under them on
-  [Pending](/pending)
+  the designer in one change per capability
 - 🚧 **One sentence plans the change** — the first message drafts every artifact
   of the chain, each from the one before it and each read by its perspectives,
   and lands nothing; you read the held questions, not seven documents
@@ -202,8 +201,8 @@ A journey, a scenario and a case each keep one id for life once it lands on
 `main`, and no id is issued twice.
 
 - **Two branches at once** - the first to land keeps its ids; the second is
-  refused at its landing, naming each journey or scenario id another change
-  or `main` already holds
+  refused at its acceptance, naming each journey or scenario id `main`
+  already holds
 - **The next id** - issued by a command from the branch and the published
   `main`, never counted by hand: a journey or scenario number within its
   capability, a case number within its journey, or a letter beside a named id
@@ -213,19 +212,22 @@ A journey, a scenario and a case each keep one id for life once it lands on
 - **Case numbers** - a case number another change or `main` holds is
   refused the same way, at every suite level
 - **Acceptance reads `main`** - an id `main` holds is refused before a
-  change is accepted; a change accepted on its branch and beaten to the
-  landing moves its ids and is accepted again
+  change is accepted; nothing refuses it at the landing, so a change accepted
+  on its branch and beaten to the landing moves its ids and is accepted again
+  by its own hand
 - **One record, one id** - a scenario or a case copied into a second change
   keeps the trace id it already holds, however its title is reworded
 
 ## Checks
 
-- 🚧 **A page first, for a new capability** — a page naming a capability an
-  in-flight change declares resolves, before the delta exists
+- **A page first, for a new capability** — a page names its capability
+  before any spec or delta exists; the manual reads the name from the page
+  alone
 - 🚧 **A written design may wait** — a design missing its frame stays written
   and open; only a wait that names nothing is refused
-- 🚧 **Two deltas on one requirement** — two in-flight changes that fold one
-  requirement are named to each other, however each has headed its block
+- 🚧 **Two deltas on one requirement** — `pnpm accept:preflight --clusters`
+  names two in-flight changes that fold one requirement to each other, however
+  each has headed its block
 - 🚧 **A suite's Manual table where it is written** — a table outside the
   reconciliation is refused when the suite is validated, not at the fold
 
@@ -234,10 +236,8 @@ A journey, a scenario and a case each keep one id for life once it lands on
 - 🚧 **The thread** — one per change in the planning channel, opened by the
   first message; the summaries, the numbered questions, each landing and each
   re-read are replies, and the message that says it is your turn points at it
-- 🚧 **Change page** — the open questions by hand, the rounds one row each, the
-  automated count against the suite, the thread as `main` records it, and what
-  the hands are told now
-- 🚧 **My turn** — your open questions, above the changes on you
+- **The change in the OpenSpec viewer** — every artifact it carries,
+  `rounds.md` among them, one tab per file; the manual shows pages only
 - 🚧 **The record** — one row per round: the artifact or group, the readers,
   what stood, what was asked, the tests per scenario; archived with the change
 - 🚧 **The runner** — a custom Slack app in front of the relay, one queue per

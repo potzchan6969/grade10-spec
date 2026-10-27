@@ -25,8 +25,8 @@ A change is in exactly one planning or delivery stage, proven by a file on
 | 7 | Implementation complete | `implementation.json`, with the repository, commit and concrete application component ids | Records implementation and ancestry against the accepted contract | QA: run human review after implementation, on a deployed environment when required |
 | 8 | Archived | The directory under `archive/`; the accepted contract and implementation record verified | Compares the claimed targets with the current durable contract; acceptance already folded it | Engineer: archive after implementation verification |
 
-- 🚧 **One stage per change** — the board, the change page, a page's in-flight
-  ribbon and My turn all show the same one
+- 🚧 **One stage per change** — every command and message that names a
+  change's stage names the same one
 - 🚧 **One stage for what is wanted** — the product manager settles the proposal,
   the decisions and the journeys in one sitting; a decision still open holds
   acceptance
@@ -50,31 +50,32 @@ A change is in exactly one planning or delivery stage, proven by a file on
   planning run, after QA1 freezes the blind cases and before the scenarios,
   and it proves Specified beside the requirements and the suite; a question it
   cannot settle is a Raised row, which holds acceptance
-- **Four lanes today** — proposed, specified, in progress and complete, read
-  the same way — [Board](/in-flight)
+- **Read in the OpenSpec viewer** — its board lists every change in
+  development, who holds it and how far along it is; the manual shows no
+  change
 
 ## Overlays
 
 A fact beside the stage, never a stage of its own. The set is five, and closed.
 
-| Overlay | Read from | Shown as |
-| --- | --- | --- |
-| Waiting | `awaiting:`, one line per artifact, dated | An amber chip with the line |
-| Blocked | `depends_on:` naming a change not yet released | A grey chip naming it |
-| Idle | 7 days without a tick, a claim or an artifact landing; shelved at 30 | A red chip with the day count |
-| 🚧 Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again | A chip naming the earliest behind artifact and its hand, and whether it holds their next landing |
-| Suite | `feature-tcs.md` status, `draft` or `approved` | A chip beside the stage |
+| Overlay | Read from |
+| --- | --- |
+| Waiting | `awaiting:`, one line per artifact, dated |
+| Blocked | `depends_on:` naming a change not yet released |
+| Idle | 7 days without a tick, a claim or an artifact landing; shelved at 30 |
+| 🚧 Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again |
+| Suite | `feature-tcs.md` status, `draft` or `approved` |
 
-- **Waiting and blocked** — read today from the same two keys —
-  [Pending](/pending)
+- **Waiting and blocked** — read from the same two keys; the Monday digest
+  lists a wait, and a dependency once it frees
 - 🚧 **Idle** — counted from the last tick, claim or artifact landing, so a
   repository-wide commit moves nobody's count
-- 🚧 **Behind** — shown, told once, and listed in the digest after 7 days
+- 🚧 **Behind** — told once, and listed in the digest after 7 days
   counted from the day it went behind; it holds a tick, a claim and a wait
   never, the archive always, and the next landing where what moved is
   major —
   what clears it is [Agent Rounds · Read Again](agent-rounds#read-again)
-- 🚧 **Suite** — shown beside the stage and never holding the ladder
+- 🚧 **Suite** — read beside the stage and never holding the ladder
 - **Flag and hotfix** — the release line carries both: a flag on a change and a
   hotfix branch are read where releases are cut, not here
 - 🚧 **Day bounds** — whole calendar days on the Hong Kong date, the chip from
@@ -84,8 +85,8 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
 
 Deployment availability is separate from a change's stage. Each application
 component has its own status in each environment, read from its GitHub
-Deployment receipt. A change remains Archived after deployment; the manual
-keeps its availability visible with both active and archived changes.
+Deployment receipt. A change remains Archived after deployment, and its
+availability stays readable for active and archived changes alike.
 
 | Status | Meaning |
 | --- | --- |
@@ -98,8 +99,6 @@ keeps its availability visible with both active and archived changes.
 
 - 🚧 **Receipt detail** — each row links to the GitHub Deployment, the resolved
   deployed ref, the component URL and the manual and QA testing links
-- 🚧 **Testing summary** — the change page and the environment view show a
-  friendly summary of the components QA should verify
 
 ## Hands
 
@@ -118,14 +117,12 @@ One handle per role on each change.
 | Release hand | `release` | Availability review after archive |
 
 - 🚧 **Recorded in git** — `hands:` in the change's `.openspec.yaml`, written
-  by the product manager at the interview's end, by Assign on the locally run
-  manual, or by `pnpm plan hand` from the application repository
+  by the product manager at the interview's end, or by `pnpm plan hand` from
+  the application repository
 - 🚧 **Standing in** — a handle may be named for a role the team map does not
-  list it under; Assign offers every handle, the role's own first
-- 🚧 **Unnamed hand** — the role's channel is told instead, and the card says
-  the hand is open
-- 🚧 **Who landed it** — each artifact records the hand whose word landed it,
-  and the change page shows the handle beside the artifact
+  list it under
+- 🚧 **Unnamed hand** — the role's channel is told instead
+- 🚧 **Who landed it** — each artifact records the hand whose word landed it
 - 🚧 **Team map** — `docs/prds/team.yaml` in the store: one entry per handle
   with its e-mail, its Slack member and the roles it takes, and one channel per
   role
@@ -148,8 +145,8 @@ Slack tells one person, once per move, in the change's thread.
 - 🚧 **Once per move** — a move is the hand changing; a move told twice, or a
   message per commit, never happens
 - 🚧 **One thread per change** — every direct message links the change's
-  thread, and the change page until the round opens one; a reply in the
-  thread is how a hand answers
+  thread, and the change in the OpenSpec viewer until the round opens one; a
+  reply in the thread is how a hand answers
 - **The channel post** — names a change only when it is proposed, accepted,
   claimed, has every task checked, or is archived; any other push is silent
   in the channel
@@ -160,31 +157,13 @@ Slack tells one person, once per move, in the change's thread.
   lines, not messages of their own
 - 🚧 **QA follows implementation** — the QA hand is told when implementation
   is complete and sees the run sheet and application components to verify
-- 🚧 **Availability is a receipt** — the environment view links each component
-  to its GitHub Deployment receipt and the actual deployed ref
 
 ## Surfaces
 
-- 🚧 **Board** — eight lanes, one per stage, stacked as In Flight stacks four
-  today; the five drafted lanes wear the agent mark and the hand's move in
-  their heading; each card the hand, the age, the overlays and the task bar;
-  Mine, Waiting, Idle, Behind and Blocked filters; a shelf for a change idle
-  30 days
-- 🚧 **Change page** — the stage as a stepper, the agent mark and the hand's
-  move under each drafted step; a Your turn card with the thread and the
-  command; the hands; each artifact with fresh or behind, its open questions
-  and who landed it; the marked lines it delivers, by page and section; tasks
-  by group; the accepted fingerprint and archived implementation record
-- 🚧 **[My turn](/my-turn)** — the open questions addressed to the reader, then the
-  changes whose current stage names them, then the ones that are theirs
-  later, then what moved before their artifacts and is not read yet; the
-  handle is chosen once per browser
-- 🚧 **A section's in-flight row** — names the stage and the hand of each
-  change delivering it
-- 🚧 **A page's marked line** — a line a page marks as being built wears the
-  pip of its change's stage
-- 🚧 **Actions on the hosted manual** — Assign stays on the locally run
-  manual until the hosted site has a sign-in
+- **The OpenSpec viewer** — the board, each change with every artifact
+  rendered, and the capabilities each change deltas — `tools/openspec-viewer`
+- **The manual shows pages only** — no change, stage, hand or overlay; a
+  page's marked line names what is being built in its own words
 - 🚧 **A page open while `main` moves** — the hosted manual says `main` moved,
   with the commit's subject and how long ago, offers Refresh now, and refreshes
   itself once the site has caught up, never under a reader who is typing
@@ -215,9 +194,9 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, a channel post on five milestones only, a weekly digest; never one per commit, and nothing before the manual has deployed it. | Product |
 | Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, 🚧 and the next landing where what moved is major. | Product, Engineering |
 | Plan acceptance | Decided | `acceptance.json` records an immutable content fingerprint after QA2 and human resolution. | Product, Engineering |
-| Measure | Decided | Days between a stage landing and the next hand's word, shown on the change page. | Product |
+| Measure | Decided | Days between a stage landing and the next hand's word. | Product |
 | Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |
-| Hosted actions | Decided | Assign stays on the locally run manual until the hosted site has a sign-in. | Operations |
+| Planning views | Decided | The manual shows the pages under `docs/prds/` and nothing of a change; the OpenSpec viewer reads the changes. | Product |
 | Open pages | Decided | A page open while `main` moves is told and refreshes once the site has caught up; the locally run manual pulls. | Operations, Engineering |
 | Implementation evidence | Decided | `implementation.json` records the first claim's durable baseline, the repository, commit and concrete application component ids. Archive verifies it; deployment does not wait for archive. | Engineering |
 | Availability | Decided | GitHub Deployment receipts report per-component environment status as newly, still, no longer, partial, unknown or stale; archived changes remain visible. | Product, Operations |
