@@ -13,7 +13,7 @@
       and repoint the preview Membership screen and `loyalty-content.ts`
       to the new names
 
-## 2. Rebuild the pass (grade10-spec)
+## 2. Rebuild the pass (grade10-spec) (owner: @seankcw)
 
 - [x] 2.1 Rewrite `member-pass.tsx` to the Figma pass: the `variant` skin —
       silver, gold or black — the Grade10 mark, tier badge and account
