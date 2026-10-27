@@ -1,7 +1,9 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   AmericanExpress,
+  JCB,
   Mastercard,
+  UnionPay,
   Visa,
 } from "react-svg-credit-card-payment-icons/icons/logo";
 import applePayLogo from "./order-details-apple-pay.logo.png";
@@ -12,6 +14,8 @@ const PAYMENT_BRAND_LABEL: Record<OrderDetailsPaymentBrand, string> = {
   visa: "Visa",
   mastercard: "Mastercard",
   amex: "American Express",
+  jcb: "JCB",
+  unionpay: "UnionPay",
   "apple-pay": "Apple Pay",
   "google-pay": "Google Pay",
 };
@@ -31,7 +35,7 @@ type OrderDetailsPaymentLogoProps = {
  *
  * Card brands use `react-svg-credit-card-payment-icons` (`logo` format),
  * imported from that format's subpath: the package root keeps every brand in
- * every format, over 500 KB, for these three.
+ * every format, over 500 KB, for these five.
  * Wallet brands use bundled brand marks from SVGRepo assets.
  */
 function OrderDetailsPaymentLogo({
@@ -63,6 +67,24 @@ function OrderDetailsPaymentLogo({
     case "amex":
       return (
         <AmericanExpress
+          aria-label={label}
+          className={shared}
+          height={LOGO_HEIGHT}
+          role="img"
+        />
+      );
+    case "jcb":
+      return (
+        <JCB
+          aria-label={label}
+          className={shared}
+          height={LOGO_HEIGHT}
+          role="img"
+        />
+      );
+    case "unionpay":
+      return (
+        <UnionPay
           aria-label={label}
           className={shared}
           height={LOGO_HEIGHT}

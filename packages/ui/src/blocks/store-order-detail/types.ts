@@ -76,6 +76,8 @@ type OrderDetailsPaymentBrand =
   | "visa"
   | "mastercard"
   | "amex"
+  | "jcb"
+  | "unionpay"
   | "apple-pay"
   | "google-pay";
 

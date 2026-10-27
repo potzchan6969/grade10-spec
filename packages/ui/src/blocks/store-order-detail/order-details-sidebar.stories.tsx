@@ -111,11 +111,11 @@ export const PartialAddress: Story = {
 /** An unrecognized provider stays text-only instead of receiving a guessed logo. */
 export const UnrecognizedPayment: Story = {
   args: {
-    payment: { label: "UnionPay", maskedNumber: "···· 5678" },
+    payment: { label: "Discover", maskedNumber: "···· 5678" },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("UnionPay")).toBeVisible();
+    expect(canvas.getByText("Discover")).toBeVisible();
     expect(canvas.getByText("···· 5678")).toBeVisible();
     expect(canvas.queryByRole("img")).not.toBeInTheDocument();
   },

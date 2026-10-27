@@ -7,6 +7,8 @@ const BRANDS: OrderDetailsPaymentBrand[] = [
   "visa",
   "mastercard",
   "amex",
+  "jcb",
+  "unionpay",
   "apple-pay",
   "google-pay",
 ];
@@ -33,6 +35,14 @@ export const Mastercard: Story = {
 
 export const Amex: Story = {
   args: { brand: "amex" },
+};
+
+export const Jcb: Story = {
+  args: { brand: "jcb" },
+};
+
+export const UnionPay: Story = {
+  args: { brand: "unionpay" },
 };
 
 export const ApplePay: Story = {
