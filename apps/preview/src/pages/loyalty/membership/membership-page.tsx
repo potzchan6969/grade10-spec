@@ -38,8 +38,8 @@ import {
 } from "../loyalty-content";
 import {
   CouponsPane,
-  MemberPassOverlay,
   MEMBERSHIP_TABS,
+  MemberPassOverlay,
   type MembershipTab,
   OverviewPane,
   PointHistoryPane,
@@ -231,11 +231,7 @@ function MembershipPage({
                 <OverviewPane balance={balance} view={view} />
               ) : null}
               {active === "rewards" ? (
-                <RewardsPane
-                  balance={balance}
-                  onSelect={select}
-                  view={view}
-                />
+                <RewardsPane balance={balance} onSelect={select} view={view} />
               ) : null}
               {active === "coupons" ? <CouponsPane coupons={coupons} /> : null}
               {active === "points" ? <PointHistoryPane view={view} /> : null}

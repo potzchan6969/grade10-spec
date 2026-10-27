@@ -1,5 +1,7 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import {
+  type AsyncState,
+  type CouponItem,
   CouponList,
   HowPointsWork,
   MemberPass,
@@ -9,8 +11,6 @@ import {
   TierInfoCard,
   TierLadder,
   WalletPassLinks,
-  type AsyncState,
-  type CouponItem,
   type WalletPassWallet,
 } from "@grade10/ui";
 import {
@@ -339,11 +339,11 @@ function MemberPassOverlay({
 
 export {
   CouponsPane,
-  MemberPassOverlay,
   MEMBERSHIP_TABS,
+  MemberPassOverlay,
+  type MembershipTab,
   OverviewPane,
   PointHistoryPane,
   RewardsPane,
   TiersBenefitsPane,
-  type MembershipTab,
 };

@@ -19,9 +19,7 @@ export const PassAdded: Story = {
   args: { view: MEMBERSHIP_STATE_VIEWS.passAdded, platform: null },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Member Pass" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: "Member Pass" }));
     const overlay = within(document.body);
     expect(
       await overlay.findByText("Carried in Google Wallet"),

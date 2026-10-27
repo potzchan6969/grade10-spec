@@ -14,7 +14,7 @@ import type {
   TierCardCopy,
   WalletPassLinksCopy,
   WalletPassWallet,
-} from "@grade10/ui";/* Stand-in programme content the Loyalty workbench draws with. Grade10's own
+} from "@grade10/ui"; /* Stand-in programme content the Loyalty workbench draws with. Grade10's own
  * copy and figures for the examples only; a consumer supplies its own. */
 
 const RENEWS = formatDay(Date.UTC(2027, 2, 1));
