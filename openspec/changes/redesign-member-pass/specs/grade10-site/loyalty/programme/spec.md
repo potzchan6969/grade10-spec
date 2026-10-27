@@ -119,6 +119,29 @@ SHALL require no export of its own.
 - **THEN** it carries the member's account email under the tier name
 - **AND** no display name, none being collected at registration
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-8qm rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-255 - The card wears the skin of the tier held
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` is rendered for a silver, a gold or a black member
+- **THEN** it wears that tier's skin, taken from the `variant` prop
+- **AND** the skin never follows the tier name the consumer words
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-3vf rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-256 - A tier that names no threshold renders no progress
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
+- **THEN** neither the qualifying count nor its progress is rendered
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-257 - The whole card opens the tier-and-benefits surface
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `TierCard` is given an `href`
+- **THEN** the whole card is the link to it, the Benefits affordance included
+- **AND** a plain press reports `onClick` while a modified press keeps the link's behaviour
+
 <!-- trace:scenario id=g10.loyalty-programme.SC-tzp rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-185 - The summary names one expiry line
 **Serves:** grade10-site-loyalty-programme-US-04 - the membership surface names one expiry line

@@ -10,7 +10,7 @@ the membership surface gains its tier-and-benefits page. The requirement is
 restated with the three components; no existing clause is dropped.
 
 - **Staying** — `grade10-site-loyalty-programme-SC-123`, `-SC-124`,
-  `-SC-125`, `-SC-243`, `-SC-279`, `-SC-280`, `-SC-281`, restated under the
+  `-SC-125`, `-SC-243`, `-SC-255`, `-SC-256`, `-SC-257`, restated under the
   widened export list.
 - **Staying, re-owned** — `grade10-site-loyalty-programme-SC-185` and
   `-SC-186` stand against the membership surface: the new page states the

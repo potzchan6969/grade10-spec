@@ -91,7 +91,7 @@ SHALL require no export of its own.
 - **THEN** every count, date, state and word it shows arrived through props
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-8qm rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-279 - The card wears the skin of the tier held
+#### Scenario: grade10-site-loyalty-programme-SC-255 - The card wears the skin of the tier held
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** `TierCard` is rendered for a silver, a gold or a black member
@@ -99,14 +99,14 @@ SHALL require no export of its own.
 - **AND** the skin never follows the tier name the consumer words
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-3vf rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-280 - A tier that names no threshold renders no progress
+#### Scenario: grade10-site-loyalty-programme-SC-256 - A tier that names no threshold renders no progress
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** `TierCard` is rendered for a tier that names no qualifying threshold
 - **THEN** neither the qualifying count nor its progress is rendered
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-6xz rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-281 - The whole card opens the tier-and-benefits surface
+#### Scenario: grade10-site-loyalty-programme-SC-257 - The whole card opens the tier-and-benefits surface
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** `TierCard` is given an `href`
