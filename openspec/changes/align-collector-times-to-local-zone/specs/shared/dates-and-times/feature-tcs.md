@@ -107,9 +107,11 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Stated zones
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/winner-order/invoice-page-zone.spec.ts`
 
 **Pre-conditions:**
 
