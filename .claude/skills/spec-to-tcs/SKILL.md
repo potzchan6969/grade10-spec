@@ -9,7 +9,7 @@ This skill is the workflow. What a case is and covers is [Specs to Test Cases](.
 
 - **Scope** - Write or update the named suite in the named tree. Planning-dev invokes this for QA1; an explicit refresh may invoke it directly. New cases stay `draft`; review belongs to [tcs-review](../tcs-review/SKILL.md), execution to [tcs-run-sheet](../tcs-run-sheet/SKILL.md).
 - **Isolation** - A feature QA1 run reads only the caller's bundle. Never read scenario text, technical design, QA2 material, archive or unpermitted durable specs to create or shape a case.
-- **Store** - A Grade10 store target writes only to `docs/prds/products/grade10-site/store/tests/`, from the PRD pages and Storybook; never a `*-tcs.md` under `openspec/`. Each case traces the PRD rule it checks, such as `product-listing#filters/combining-choices`, and carries no `**Status:**`, as the rules' **Store** section says.
+- **Store** - A Grade10 store target writes only to `docs/prds/products/grade10-site/store/tests/`, from the PRD pages and Storybook; never a `*-tcs.md` under `openspec/`. Each case traces the PRD rule it checks, such as `product-listing#filters/combining-options`, and carries no `**Status:**`, as the rules' **Store** section says.
 
 ## Workflow
 

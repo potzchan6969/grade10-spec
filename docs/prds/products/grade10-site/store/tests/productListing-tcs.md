@@ -355,7 +355,7 @@ Runs once per row of **Test data**.
 * **Suites:** smoke, regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#filters/combining-choices, product-listing#filters/option-count, product-listing#links-and-back/address
+* **Trace:** product-listing#filters/combining-options, product-listing#filters/option-count, product-listing#links-and-back/address
 
 **Pre-conditions:**
 

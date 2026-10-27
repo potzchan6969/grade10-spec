@@ -29,7 +29,7 @@ Where collectors browse the store, narrow it to what they collect, and open a pr
 - **Filter Groups** — lists of options to tick
   - **Worlds** — such as Pokémon and One Piece; the top five, then a link to the rest
   - **Types** — such as Graded Card and Booster Box; always listed in full
-- **Combining Choices** — choices in one group widen the results; choices in different groups narrow them
+- **Combining Options** — options ticked in one group widen the results; options in different groups narrow them
   - Pokémon + One Piece shows both worlds; adding Graded Cards keeps only the graded cards from either
 - **Option Count** — number of products picking the option would give, with the other filters
   - **Empty Option** — hidden when the store has nothing for it; shown at 0 when the current filters rule it out
