@@ -70,7 +70,7 @@ a Google account under it -
 
 | Section | Shows |
 | --- | --- |
-| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tiers & Benefits ❓ |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tiers & Benefits |
 | Your member pass | The tier's skin and the member's email, the QR a till scans, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
@@ -79,8 +79,7 @@ a Google account under it -
 
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
-  to say here. ❓ Where the expiry date reads instead — the Tiers & Benefits
-  page is being designed 🚧
+  to say here. The expiry date reads on the Tiers & Benefits page instead
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
 - **Each section loads on its own** — a catalog that failed to load is no
@@ -108,8 +107,8 @@ the Membership page's composition, not drawn yet.
 - **Reaches** — the `TierCard` on Membership links here whole, and it has
   its own navigation entry ❓
 - **The expiry date's home** — the mechanics card states the lapse rule;
-  ❓ where a member's own "how many points expire and the day they go"
-  line reads is not drawn yet
+  a member's own "how many points expire and the day they go" line reads
+  here, and the page design draws it
 
 ::story{id="loyalty-membership-screens-tiers-benefits--default" title="Tiers & Benefits, a gold member"}
 

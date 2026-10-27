@@ -32,8 +32,8 @@ partial-expiry reminder has nothing to say there.
   through an `href` prop. **BREAKING**: `renewalDate`, `tierValidity` and
   `balanceExpiry` leave the props, and `TierCardCopy` becomes
   `{ balance, points, worthSuffix, qualifying, benefits }`.
-- The card carries no expiry line. ❓ Expiry wording relocates to the Tier &
-  Benefits page, which is being designed 🚧.
+- The card carries no expiry line. Expiry wording relocates to the Tier &
+  Benefits page.
 - `TierCardVariant` joins the exports beside `TierCard`, `TierCardCopy` and
   `TierCardProps`.
 - The block story gains `Silver`, `Gold`, `Black`, `ThresholdReached`,
@@ -72,5 +72,4 @@ None.
   with the whole-card link through `href`. None are known in this store
   beyond the preview.
 - **The expiry surface** — the card carries no expiry line; the membership
-  surface's one-line rule stays, ❓ relocating to the Tier & Benefits page,
-  which is being designed 🚧.
+  surface's one-line rule stays, relocating to the Tier & Benefits page.

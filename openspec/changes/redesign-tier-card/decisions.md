@@ -25,13 +25,9 @@
 | --- | --- | --- | --- |
 | Q1 | What does `MembershipSummary` become? | `TierCard` — the human's choice | `MembershipStatus`, `MembershipFigures` or `PointsAndStanding` — each clear of `MemberCard` too; the interview settled on `TierCard` |
 | Q2 | How does the skin arrive? | A `variant` prop, `"silver" \| "gold" \| "black"`, separate from `tier` | Deriving the skin from the `tier` string — the tier name is consumer-worded copy, not a skin selector |
-| Q3 | Where does the balance-expiry line go? | Off the card entirely — `balanceExpiry` leaves the props; ❓ its reading relocates to the Tier & Benefits page 🚧 | Keeping the line on the card — the whole balance lapses on one shared inactivity date, never in parts, so the line had nothing to say there |
+| Q3 | Where does the balance-expiry line go? | Off the card entirely — `balanceExpiry` leaves the props; its reading relocates to the Tier & Benefits page — the human's choice | Keeping the line on the card — the whole balance lapses on one shared inactivity date, never in parts, so the line had nothing to say there |
+| Q4 | Does the whole card open Tiers & Benefits (SC-257)? | Yes — the human's choice | A Benefits link alone, leaving the rest of the card inert |
 
 ## Raised
 
-The inactivity-expiry date's new home is unconfirmed until the Tier &
-Benefits page lands.
-
-| Capability | Raised | Landed |
-| --- | --- | --- |
-| grade10-site/loyalty/programme | ❓ where the expiry date reads — Tier & Benefits page 🚧 | profile PRD ❓ — `docs/prds/products/grade10-site/loyalty/membership.md` |
+Nothing. The blind pass settled everything it was given.

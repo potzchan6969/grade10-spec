@@ -33,7 +33,7 @@
 - [x] 2.4 Update `docs/prds/products/grade10-site/loyalty/membership.md`: the
       Membership row names the tier skin, the worth, the keep-or-upgrade run
       and the Benefits link; the expiry-line bullet becomes the no-expiry
-      rule with the relocation marked ❓ on the Tier & Benefits page 🚧
+      rule with the relocation to the Tier & Benefits page
 - [x] 2.5 Verify: `tsc` on `@grade10/ui` and `apps/preview`,
       `pnpm storybook:check`, biome on the touched files
 
