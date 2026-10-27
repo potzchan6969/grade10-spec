@@ -14,8 +14,8 @@
  */
 import { parse } from "yaml";
 import { handleOf } from "../../../scripts/openspec/lib/handle.mjs";
-import type { Role, SchemaArtifact } from "../../manual/src/api/types.ts";
-import { ROLES, WHOLE_CHANGE } from "../../manual/src/api/types.ts";
+import type { Role, SchemaArtifact } from "../../openspec-store/src/types.ts";
+import { ROLES, WHOLE_CHANGE } from "../../openspec-store/src/types.ts";
 import { changeDir, recordPath } from "./paths.ts";
 import { isLandingWord } from "./slack.ts";
 

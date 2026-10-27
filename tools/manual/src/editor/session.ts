@@ -1,14 +1,12 @@
 import { useCallback, useSyncExternalStore } from "react";
-import { handleOf } from "../../../../scripts/openspec/lib/handle.mjs";
 import { useSnapshotIfAny } from "../api/snapshot-provider";
-import { browserKeyStore, STORAGE } from "./config";
 import { LocalStore, probeLocalStore } from "./local-store";
 import type { ContentStore } from "./store";
 
 /**
  * The editor writes to the dev server's working tree and nowhere else: a
  * session probes for it once, and every surface that can edit — a page, the
- * sidebar, the propose dialog — asks this one module-level value rather than
+ * sidebar — asks this one module-level value rather than
  * being wrapped to find out. A deployed build has no dev server behind it, so
  * `store` stays null there and every editor surface hides itself.
  *
@@ -66,15 +64,4 @@ export function useEditorSession(): EditorSession {
     () => state,
     () => state,
   );
-}
-
-/** The dev server writes as whoever is at the keyboard, and a proposal has to
- * name someone — so the handle is asked for once and remembered here. */
-export function rememberedHandle(): string {
-  return browserKeyStore.get(STORAGE.handle) ?? "";
-}
-
-export function rememberHandle(handle: string): void {
-  const written = handleOf(handle);
-  if (written !== "") browserKeyStore.set(STORAGE.handle, written);
 }

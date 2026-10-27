@@ -1,4 +1,3 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "react-router";
 import type { NavProduct } from "../api/derive";
@@ -17,11 +16,6 @@ export function ProductCard({ product }: { product: NavProduct }) {
         <Text as="span" className="min-w-0 flex-1" weight="bold">
           {product.title}
         </Text>
-        {product.changeCount > 0 ? (
-          <Badge size="sm" variant="warning">
-            {product.changeCount} in flight
-          </Badge>
-        ) : null}
       </div>
 
       {product.summary ? (

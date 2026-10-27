@@ -2,7 +2,6 @@
 title: Product Listing Blocks
 spec: shared/ui/store-product-listing
 order: 4
-reviewed: 2026-09-25
 ---
 
 This is the page a shopper browses a category on. A sidebar carries a heading, a

@@ -1,11 +1,14 @@
 /** What a scenario id looks like, named once for the store in
  * `tools/manual/src/store/markdown.mts`. */
-import { ID_END, ID_START } from "../../../tools/manual/src/store/markdown.mts";
+import {
+  ID_END,
+  ID_START,
+} from "../../../tools/openspec-store/src/spec-text.mts";
 
 export {
   SCENARIO_ID,
   scenarioIdsIn,
-} from "../../../tools/manual/src/store/markdown.mts";
+} from "../../../tools/openspec-store/src/spec-text.mts";
 
 /**
  * Whether a text cites an id, bounded on both sides as `ID_START` and `ID_END`

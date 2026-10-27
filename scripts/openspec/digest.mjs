@@ -4,7 +4,7 @@
  *
  *   node scripts/openspec/digest.mjs [--root <dir>] [--team <path>]
  *                                    [--sent-keys <file>] [--send]
- *                                    [--manual-url <url>] [--now <iso>]
+ *                                    [--openspec-url <url>] [--now <iso>]
  *
  * Six lines, from the same derivation every surface reads: the questions
  * addressed to them, the changes on them now, the changes nothing has moved
@@ -20,19 +20,21 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-
-import { IDLE_FROM, overlaysOf } from "../../tools/manual/src/api/overlays.ts";
-import {
-  behindOf,
-  handOf,
-  handOfArtifact,
-  STAGE_LABEL,
-} from "../../tools/manual/src/api/stages.ts";
 import {
   dayIn,
   daysBetween,
   TIME_ZONE,
 } from "../../tools/manual/src/api/time.ts";
+import {
+  IDLE_FROM,
+  overlaysOf,
+} from "../../tools/openspec-store/src/overlays.ts";
+import {
+  behindOf,
+  handOf,
+  handOfArtifact,
+  STAGE_LABEL,
+} from "../../tools/openspec-store/src/stages.ts";
 import { cliArgs } from "./lib/args.mjs";
 import { addressOf, deliver, readSentKeys } from "./lib/notify.mjs";
 import { readChangesAt } from "./lib/store-read.mjs";
@@ -89,7 +91,7 @@ function linesFor(handle, changes, ctx) {
       held.includes(role),
     );
     const named = linkOf({
-      manualUrl: ctx.manualUrl,
+      openspecUrl: ctx.openspecUrl,
       id: change.id,
       title: change.title,
     });
@@ -232,9 +234,9 @@ async function main() {
       "sent-keys": { type: "string" },
       send: { type: "boolean", default: false },
       now: { type: "string" },
-      "manual-url": {
+      "openspec-url": {
         type: "string",
-        default: "https://spec.grade10-stg.com/planning",
+        default: "https://spec.grade10-stg.com/openspec/",
       },
     },
   });
@@ -260,7 +262,7 @@ async function main() {
     now,
     released: new Set(releases.keys()),
     releases,
-    manualUrl: values["manual-url"],
+    openspecUrl: values["openspec-url"],
     artifactsOf: read.artifactsOf,
   });
   const sent = readSentKeys(values["sent-keys"]);

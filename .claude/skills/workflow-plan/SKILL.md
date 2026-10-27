@@ -24,7 +24,7 @@ openspec instructions user-journeys --change <change>
 ## Opening a Change From One Sentence
 
 - **Input** - A planning-channel sentence naming no change comes from the first of `.round/relay.json`'s `messages`; a terminal sentence is the argument. A message naming an existing change uses its thread and opens nothing.
-- **Overlap** - Read active changes before opening one. A change whose proposal links the page sections the sentence would mark overlaps it too. The manual's stage comes from [stageOf](../../../tools/manual/src/api/stages.ts). Read archive only for the last table row. Where a change overlaps, answer in that change's thread and use its stage and asker below.
+- **Overlap** - Read active changes before opening one. A change whose proposal links the page sections the sentence would mark overlaps it too. A change's stage comes from [stageOf](../../../tools/openspec-store/src/stages.ts). Read archive only for the last table row. Where a change overlaps, answer in that change's thread and use its stage and asker below.
 - **Active Changes** - List the changes:
 
 ```bash
@@ -48,7 +48,7 @@ pnpm run spec:id <capability>
 
 Where no change overlaps, or the table opens a new one:
 
-1. **Id** - Derive it from the sentence with `slugOf` in [propose.ts](../../../tools/manual/src/editor/propose.ts).
+1. **Id** - Derive it from the sentence with `slugOf` in [change-id.ts](../../../tools/openspec-store/src/change-id.ts).
 2. **Record** - Create it with the repository schema; add `depends_on: <change>` where the table requires it.
 
    ```bash

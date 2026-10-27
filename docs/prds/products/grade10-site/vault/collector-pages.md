@@ -152,11 +152,11 @@ again.
 
 ## Specs and journeys
 
-::spec{id="grade10-site/vault/case-intake"}
+[Requirements · grade10-site/vault/case-intake](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/case-intake/spec.md)
 
-::spec{id="grade10-site/vault/visit-booking"}
+[Requirements · grade10-site/vault/visit-booking](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/visit-booking/spec.md)
 
-::spec{id="grade10-site/vault/collector-notifications"}
+[Requirements · grade10-site/vault/collector-notifications](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/collector-notifications/spec.md)
 
 :::detail{title="Code map" for="engineer"}
 - **Pages** — `apps/frontend/grade10/src/pages/vault/SignPage.tsx`; the

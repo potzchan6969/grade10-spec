@@ -18,26 +18,9 @@ export type Frontmatter = {
    * `operator` moves the page into the derived Admin nav group. */
   audience?: "operator";
   order?: number;
-  /** The day the page was last read against a spec that had changed under it
-   * and found right as it stood; the stale check dates the page by the later
-   * of this and its last commit. */
-  reviewed?: string;
 };
 
 export type ProseBlock = { type: "prose"; markdown: string };
-export type SpecBlock = {
-  type: "spec";
-  id: string;
-  requirement?: string;
-  scenario?: string;
-  story?: string;
-};
-export type CasesBlock = { type: "cases"; id: string };
-export type ChangesBlock = { type: "changes"; spec: string };
-/** What the changes about a capability said it would lead to. Aggregated out
- * of every proposal's `## Follow-on changes`, attributed to the change that
- * wrote it, because intent read without its date is a promise nobody made. */
-export type NextBlock = { type: "next"; spec: string };
 export type FigmaBlock = {
   type: "figma";
   url: string;
@@ -61,15 +44,7 @@ export type ImageBlock = {
 };
 export type ChildrenBlock = { type: "children" };
 
-export type LeafBlock =
-  | SpecBlock
-  | CasesBlock
-  | ChangesBlock
-  | NextBlock
-  | FigmaBlock
-  | StoryBlock
-  | ImageBlock
-  | ChildrenBlock;
+export type LeafBlock = FigmaBlock | StoryBlock | ImageBlock | ChildrenBlock;
 
 export type BodyItem = ProseBlock | LeafBlock;
 
@@ -156,26 +131,6 @@ type BlockSpec = {
 
 /** Attribute order here is the canonical order. */
 export const BLOCK_SPECS: Record<string, BlockSpec> = {
-  spec: {
-    container: false,
-    attrs: [
-      { name: "id", required: true },
-      { name: "requirement" },
-      { name: "scenario" },
-      { name: "story" },
-    ],
-    check: (a) => {
-      const selectors = ["requirement", "scenario", "story"].filter(
-        (s) => a[s] !== undefined,
-      );
-      return selectors.length > 1
-        ? `use only one of requirement, scenario, story`
-        : null;
-    },
-  },
-  cases: { container: false, attrs: [{ name: "id", required: true }] },
-  changes: { container: false, attrs: [{ name: "spec", required: true }] },
-  next: { container: false, attrs: [{ name: "spec", required: true }] },
   figma: {
     container: false,
     attrs: [
@@ -256,10 +211,8 @@ const FRONTMATTER_KEYS = [
   "icon",
   "audience",
   "order",
-  "reviewed",
 ] as const;
 
-const REVIEWED_RE = /^\d{4}-\d{2}-\d{2}$/;
 const LEAF_RE = /^::([a-z][a-z0-9-]*)(\{.*\})?\s*$/;
 export const CONTAINER_OPEN_RE = /^:::([a-z][a-z0-9-]*)(\{.*\})?\s*$/;
 export const CONTAINER_CLOSE_RE = /^:::\s*$/;
@@ -329,16 +282,6 @@ function parseFrontmatter(lines: string[]): {
       throw new GrammarError(1, "`order` must be an integer");
     }
     fm.order = entries.order;
-  }
-  if (entries.reviewed !== undefined) {
-    const reviewed =
-      entries.reviewed instanceof Date
-        ? entries.reviewed.toISOString().slice(0, 10)
-        : entries.reviewed;
-    if (typeof reviewed !== "string" || !REVIEWED_RE.test(reviewed)) {
-      throw new GrammarError(1, "`reviewed` must be a date, `YYYY-MM-DD`");
-    }
-    fm.reviewed = reviewed;
   }
   return { frontmatter: fm, bodyStart: close + 1 };
 }

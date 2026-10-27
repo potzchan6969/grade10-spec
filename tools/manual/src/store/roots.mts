@@ -5,8 +5,8 @@ import { dirname, join, resolve } from "node:path";
 /**
  * The two directories everything here reads from. `content` holds the manual —
  * `manual.yaml` and the pages beside it, in the directory `manual` names,
- * relative to the content root. `store` holds the OpenSpec store —
- * `openspec/specs` and `openspec/changes`. In the store's own repository they
+ * relative to the content root. `store` is the spec store the pages draw on —
+ * its references, its stories and its design-sync report. In the store's own repository they
  * are the same directory; a repository that mounts this viewer carries its
  * own manual and points at the store it plans against, so every reader has
  * to say which of the two it means.

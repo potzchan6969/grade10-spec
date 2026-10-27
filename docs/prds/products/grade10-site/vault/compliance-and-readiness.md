@@ -147,9 +147,9 @@ Every item is a value or an act outside the code, with who closes it;
 
 ## Specs and journeys
 
-::spec{id="grade10-site/vault/identity-verification"}
+[Requirements · grade10-site/vault/identity-verification](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/identity-verification/spec.md)
 
-::spec{id="grade10-site/vault/retention-and-erasure"}
+[Requirements · grade10-site/vault/retention-and-erasure](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/retention-and-erasure/spec.md)
 
 :::detail{title="Code map" for="engineer"}
 - **Identity** — `packages/e-kyc` (contracts `identity.ts`, `vocabulary.ts`,
@@ -211,5 +211,5 @@ the code holds until they do.
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/vault/identity-verification"}
+[Test cases · grade10-site/vault/identity-verification](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/vault/identity-verification)
 :::

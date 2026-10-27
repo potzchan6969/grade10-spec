@@ -13,7 +13,7 @@ import {
   type StoreRequest,
   storeEndpoints,
 } from "../src/store/vite-plugin.mts";
-import { gitStore, MANIFEST } from "./git-store";
+import { gitStore } from "./git-store";
 
 /**
  * The four endpoints the live line adds to the dev server, driven without a
@@ -24,6 +24,7 @@ import { gitStore, MANIFEST } from "./git-store";
 
 const HEAD = "9f1c2b4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b";
 const MINUTE = 60_000;
+const PAGE = "docs/prds/products/demo-product/gift-cards.md";
 const IDENTITY = ["-c", "user.email=manual@test", "-c", "user.name=manual"];
 
 /** The store the head endpoint answers from. Reading a real one would read a
@@ -57,8 +58,8 @@ function checkout() {
 
   const { root, git, write, commit } = gitStore("manual-upstream-");
   git(["symbolic-ref", "HEAD", "refs/heads/main"]);
-  write("openspec/changes/add-gift-cards/.openspec.yaml", MANIFEST);
-  commit("chore(openspec): open the change");
+  write(PAGE, "---\ntitle: Gift cards\n---\n");
+  commit("docs(prds): open the page");
   git(["remote", "add", "origin", remote]);
   git(["push", "--quiet", "origin", "main"]);
 
@@ -123,18 +124,15 @@ describe("what the checkout stands at", () => {
 
   it("counts what the checkout has and `main` does not", async () => {
     const store = checkout();
-    store.write(
-      "openspec/changes/add-gift-cards/proposal.md",
-      "# Gift cards\n",
-    );
-    store.commit("docs(openspec): draft the proposal");
+    store.write(PAGE, "---\ntitle: Gift cards\n---\n\nNobody can buy one.\n");
+    store.commit("docs(prds): say why");
 
     expect(await upstreamOf(store.api)).toMatchObject({ ahead: 1, behind: 0 });
   });
 
   it("says a working tree with anything in it is dirty", async () => {
     const store = checkout();
-    store.write("openspec/changes/add-gift-cards/tasks.md", "## 1. Work\n");
+    store.write(PAGE, "---\ntitle: Gift cards\n---\n\nDraft.\n");
 
     expect(await upstreamOf(store.api)).toMatchObject({ dirty: true });
   });
@@ -218,7 +216,7 @@ describe("the pull", () => {
   it("refuses a checkout with uncommitted changes, and moves nothing", async () => {
     const store = checkout();
     moveMain(store.remote, "one");
-    store.write("openspec/changes/add-gift-cards/tasks.md", "## 1. Work\n");
+    store.write(PAGE, "---\ntitle: Gift cards\n---\n\nDraft.\n");
 
     const answer = await pull(store);
 
@@ -231,11 +229,8 @@ describe("the pull", () => {
   it("refuses a checkout that is ahead", async () => {
     const store = checkout();
     moveMain(store.remote, "one");
-    store.write(
-      "openspec/changes/add-gift-cards/proposal.md",
-      "# Gift cards\n",
-    );
-    store.commit("docs(openspec): draft the proposal");
+    store.write(PAGE, "---\ntitle: Gift cards\n---\n\nNobody can buy one.\n");
+    store.commit("docs(prds): say why");
 
     const answer = await pull(store);
 

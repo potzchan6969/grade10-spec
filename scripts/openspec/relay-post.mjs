@@ -59,7 +59,7 @@ import {
   decisionRows,
   handsOfRecord,
   readQuestions,
-} from "../../tools/manual/src/store/read-changes.mts";
+} from "../../tools/openspec-store/src/read-changes.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
 import { appendSentKeys, readSentKeys } from "./lib/notify.mjs";

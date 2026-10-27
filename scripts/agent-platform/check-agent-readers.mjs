@@ -5,7 +5,7 @@
  *
  * Read through `scripts/openspec/lib/perspectives.mjs`'s `planningSchema()` —
  * the store's one reader of the schema, itself built on
- * `tools/manual/src/store/read-schema.mts` — rather than a second, grep-based
+ * `tools/openspec-store/src/read-schema.mts` — rather than a second, grep-based
  * parse of the YAML that a multi-line `perspectives:` block or a YAML anchor
  * would silently miss. Prints one line per distinct reader, and fails where
  * the schema declares none: an empty round dispatches nobody, which is a

@@ -6,13 +6,13 @@
  * `scripts/openspec/lib/` is. `handle.d.mts` and `team-parse.d.mts` are
  * beside it for the same reason.
  */
-import type { Told } from "../../../tools/manual/src/api/told.ts";
+import type { Told } from "../../../tools/openspec-store/src/told.ts";
 import type {
   BehindArtifact,
   ChangeEntry,
   Role,
   Stage,
-} from "../../../tools/manual/src/api/types.ts";
+} from "../../../tools/openspec-store/src/types.ts";
 
 /** The change as a message reads it: the id a command is written with and the
  * stage the sentence names. */
@@ -39,13 +39,13 @@ export declare const threadPathOf: (
   thread: string | undefined,
 ) => string | undefined;
 export declare const linkedOf: (url: string, title: string) => string;
-export declare const changePageOf: (manualUrl: string, id: string) => string;
+export declare const changePageOf: (openspecUrl: string, id: string) => string;
 export declare const permalinkOf: (
   workspaceUrl: string,
   thread: string | undefined,
 ) => string | undefined;
 export declare const linkOf: (link: {
-  manualUrl: string;
+  openspecUrl: string;
   workspaceUrl: string;
   thread?: string;
   id: string;

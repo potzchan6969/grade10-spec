@@ -18,10 +18,7 @@ glyph a domain wears in the rail and on its card — one name from the fixed
 list the editor's field offers, and a landing page without one draws a
 warning. `audience` is `operator` or absent — `operator` files the page under
 the Admin nav group, absent means the product's own users. `order` sorts it
-among its siblings. `reviewed` is the day the page was last read against a
-spec that had changed under it and found right as it stood — set it when the
-stale warning names a page that needs no other edit, and leave it off
-otherwise. Any other key is a hard error, because an editor that silently
+among its siblings. Any other key is a hard error, because an editor that silently
 drops a field you typed is worse than one that refuses to save.
 
 ```yaml
@@ -32,11 +29,10 @@ order: 1
 ---
 ```
 
-`spec` may name a capability an in-flight change is still writing — that is
-how an incubating capability gets its page before it lands, and the check
-warns while any delta-introduced capability has none. A page with no `spec` at
-all wears the **planned** pip: it states an intended shape, and the propose
-action on it is where the requirements start.
+`spec` may name a capability a change is still writing — that is how a
+capability gets its page before it lands. A page with no `spec` at all states
+the intended shape in its 🚧 and ❓ lines, and a change to it is where the
+requirements start.
 
 Everything between directives is prose — GitHub markdown, headings starting at
 `##`, no raw HTML. Directives sit at column 0: two colons open a leaf, three
@@ -68,15 +64,13 @@ The structure is what the tools read. Top to bottom:
 - **Nothing recaps the change** — no today's gap, no note that a spec is
   still being written, no scenario id. A confirmed plan reads as the product
   does, in the present tense, marked 🚧 until the outcome is verified; the
-  in-flight cards beneath say what has not shipped, and a page with no
-  `spec` wears the planned pip
+  🚧 lines say what has not shipped
 - **The page is the roadmap** — a change starts here, one 🚧 line per
   outcome the reader can see, and its deltas derive from those lines; a delta
   promising what no line marks is the delta's error, not the page's. The
   scenarios that prove an outcome are the delta's, however many: a 🚧 inside
   a flow step, a sub-step or mid-sentence is a scenario wearing a mark. The
-  proposal links each section it marked, and the manual shows the change
-  under that heading
+  proposal links each section it marked, and the change is read against that heading
 - **The page is the essence** — every line is one the reader would act
   differently without: a value, a set they meet, an outcome they see, a
   decision. A case that only proves a rule is the suite's, a state that only
@@ -98,47 +92,20 @@ The page itself carries the shape we want — plain prose and the visuals below.
 Requirement text stays in the store: a page states the rule in its own
 words and links the capability, and never embeds the contract.
 
-What a page does embed is acceptance: the spec's test-case suite, out of the
-spec named in the frontmatter. The block renders the suite's index — each
-case, its status, and the journey it traces — so a page never lists a case
-in prose; the check warns on a suite no page shows.
-
-```md
-::cases{id="grade10-site/loyalty/programme"}
-```
+A page links out to its acceptance and its requirements rather than
+embedding them. The test-case suite and the spec sit in the spec store, and a
+page that wants to point at them writes a plain link beside the prose, such as
+`[Test cases · grade10-site/loyalty/programme](…)`. Nothing on a page lists
+in-flight changes or follow-ons: the page's own 🚧 lines say what is being
+built, and its ❓ lines say what is open.
 
 A chapter — one page whose `##` sections are the capabilities a reader meets
-in order, the way the auction's pages are cut — names the first capability in
-its frontmatter and shows every other one's suite with its own `cases` block,
-or its `changes` block while the capability is still being introduced. The
-check counts each as the page naming that capability, so none of them needs a
-page of its own; a proposal links the `##` section that holds the capability.
+in order — names the first capability in its frontmatter. Each later section
+is a capability in its own right; a proposal links the `##` section that holds
+it.
 
-User journeys are derivative of the page's own content and stay in the
-capability's `user-journeys.md` — a page never embeds them.
-
-A page that names a spec in its frontmatter already shows that spec's in-flight
-changes. Author this block only to show a *different* spec's:
-
-```md
-::changes{spec="grade10-site/loyalty/programme"}
-```
-
-What the changes about a capability said would come next — the
-`## Follow-on changes` bullets of every proposal whose delta touches that spec
-or whose `## References` cite it, in flight and shipped alike:
-
-```md
-::next{spec="grade10-site/loyalty/programme"}
-```
-
-Every bullet stays under the change that wrote it, dated by that change, and
-the block says so out loud — a follow-on is one author's intent on one day, and
-pooling them into a bare list turns it into a promise nobody made. Nothing else
-on the page may repeat them: the prose above still describes the product as it
-is, in the present tense. The product page pools the same reading over every
-capability it owns, after every ❓ and `TBC` its pages carry, as its pending
-spec.
+User journeys stay in the capability's `user-journeys.md` and are never
+shown on a page.
 
 Visuals. Figma URLs and Storybook ids are never invented — take them from the
 design record or the workbench, and the check now holds you to it: a url naming
@@ -348,25 +315,19 @@ What it is worth.
 
 ## Citing the Spec
 
-Prose can cite the store by id, and the reference stays honest when the
+Prose links a capability by its spec id, and the link stays honest when the
 store moves. Write the id in double brackets:
 
 ```md
-Expiry is exact — [[grade10-site-loyalty-programme-SC-96]] — and a balance is never negative
-([[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]).
+Points expire on a fixed date — the rules are in [[grade10-site/loyalty/programme]].
 ```
 
-**A page never cites a scenario.** `…-SC-32` says nothing to the person
-reading the page, so a rule is stated in the page's own words and the
-capability is linked whole. The scenario form below is for the specs and the
-guides that quote them.
-
-A reference renders the target's current title as a link, so a renamed
-scenario can never orphan the prose that cites it. On a page with a `spec`
-in its frontmatter, a bare id resolves inside that spec; anywhere else —
-this guide, say — qualify it as `spec-id#item-id`, like
-[[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]. A reference that resolves to
-nothing renders as a marked dead link and draws a check warning.
+**A page never cites an item.** A scenario, journey or test-case id such as
+`…-SC-32` says nothing to the person reading the page, so a rule is stated in
+the page's own words and the capability is linked whole. A reference renders
+the capability's current title as a link, so a renamed capability can never
+orphan the prose that cites it. One that names nothing, or an item, renders as
+a marked dead link and draws a check warning.
 
 ## Naming a Control
 
@@ -420,17 +381,12 @@ silent overwrite.
 
 ## Checks
 
-`check:manual` runs in CI, in the same job as spec validation, so the two can
-never drift apart quietly. It fails on a page that does not parse or is not
-canonical, and on a reference that does not resolve: a `spec` id, a
-`requirement=` that matches no heading in that spec, a `scenario=` or `story=`
-id, a missing image, a Storybook id no story answers. It also fails when a
-durable spec has no page mentioning it, when a product or platform topic has no
-page at all, and when `manual.yaml` lists a product twice. A page whose embedded
-specs changed meaning after the page's last commit is flagged stale — a
-warning, not a failure — naming the requirements that moved and the commit
-that moved them. Read the page against them; an edit clears it, and so does
-`reviewed:` dated in the frontmatter when the page already reads right.
+`check:manual` runs in CI on every push. It fails on a page that does not
+parse or is not canonical, on an image no file under `docs/prds/assets`
+answers, on a `story=` id the workbench Storybook does not index, on an
+example ledger whose balances do not add up, and when a product, topic or
+guide `manual.yaml` lists has no page, or is listed twice. A `[[ref]]` that no
+page's `spec` names is a warning.
 
 :::callout{kind="note"}
 Write short and straight. The page states the shape and shows what it looks

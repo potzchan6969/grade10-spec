@@ -9,7 +9,7 @@
  * parsed and re-emitted: `parseDocument` keeps every other line, its comments
  * and its order, and a write touches the one key it names.
  *
- * `tools/manual/src/store/read-changes.mts` is the reader of this file and
+ * `tools/openspec-store/src/read-changes.mts` is the reader of this file and
  * stays the only one — nothing here reads a key back to judge it, and a
  * malformed record is the reader's to refuse.
  */

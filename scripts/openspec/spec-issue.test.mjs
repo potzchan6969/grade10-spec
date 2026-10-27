@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { idsInText } from "../../tools/manual/src/store/issued-ids.mts";
+import { idsInText } from "../../tools/openspec-store/src/issued-ids.mts";
 import {
   idsMainHolds,
   nextCaseOf,

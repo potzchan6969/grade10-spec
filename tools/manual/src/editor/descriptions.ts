@@ -8,22 +8,6 @@ const INFO: Record<string, BlockInfo> = {
     label: "Prose",
     hint: "Markdown — the narrative between everything else.",
   },
-  spec: {
-    label: "Spec",
-    hint: "A spec's requirements, or one requirement, scenario or story.",
-  },
-  cases: {
-    label: "Test cases",
-    hint: "The capability's test suite and what it covers.",
-  },
-  changes: {
-    label: "Changes",
-    hint: "In-flight changes whose deltas touch a spec.",
-  },
-  next: {
-    label: "Pending Spec",
-    hint: "The `## Follow-on changes` every change about a spec named, under the change that named it.",
-  },
   figma: { label: "Figma", hint: "A titled frame that embeds on click." },
   story: { label: "Story", hint: "A Storybook story from the workbench." },
   image: { label: "Image", hint: "A picture from the manual's assets/." },

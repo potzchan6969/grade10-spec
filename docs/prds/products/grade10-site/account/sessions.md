@@ -27,7 +27,7 @@ An operator with the revoke grant can end one session, or every session an accou
 - **Sign-out** — ends the surface you are on. It is a separate capability — [Sign-Out](/p/grade10-site/account/sign-in#sign-out)
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/auth/sessions"}
+[Test cases · shared/auth/sessions](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/auth/sessions)
 :::
 
 :::detail{title="Product decisions" for="pm"}

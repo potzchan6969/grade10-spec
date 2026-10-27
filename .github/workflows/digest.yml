@@ -22,7 +22,7 @@ concurrency:
 
 env:
   NODE_VERSION: 24.14.1
-  MANUAL_URL: https://spec.grade10-stg.com/planning
+  OPENSPEC_VIEWER_URL: https://spec.grade10-stg.com/openspec/
   # One file per week, restored and saved by exact key: it makes a re-run of
   # this week's digest send nobody's message twice.
   SENT_KEYS: digest-sent.txt
@@ -89,7 +89,7 @@ jobs:
           node scripts/openspec/digest.mjs \
             --send \
             --sent-keys "$SENT_KEYS" \
-            --manual-url "$MANUAL_URL"
+            --openspec-url "$OPENSPEC_VIEWER_URL"
 
       - name: Save the keys this week has sent
         if: always()

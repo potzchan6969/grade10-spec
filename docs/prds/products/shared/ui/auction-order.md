@@ -2,7 +2,6 @@
 title: Auction Order Blocks
 spec: shared/ui/auction-order
 order: 10
-reviewed: 2026-09-30
 ---
 
 Blocks make a winner's auction order, composed by every application that
@@ -44,7 +43,7 @@ component contract underneath it.
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/ui/auction-order"}
+[Test cases · shared/ui/auction-order](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/ui/auction-order)
 :::
 
 :::detail{title="Product decisions" for="pm"}

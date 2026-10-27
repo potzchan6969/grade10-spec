@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import { composeStore } from "../src/store/snapshot.mts";
@@ -12,95 +12,20 @@ const HOME = "---\ntitle: Demo\n---\n\nA demo store.\n";
 const LANDING =
   "---\ntitle: Demo product\nicon: storefront\n---\n\nThe one product.\n";
 
-/** A capability page that names its spec but never shows the suite behind
- * it — the gap the `suite` rule warns about. */
 const ALPHA_PAGE =
   "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha is a demo capability.\n";
-
-const ALPHA_JOURNEYS = [
-  "## User journeys",
-  "",
-  "### alpha-US-01: Someone does the thing",
-  "",
-  "They open alpha and do the thing.",
-  "",
-].join("\n");
-
-const ALPHA_SPEC = [
-  "# Alpha",
-  "",
-  "## Purpose",
-  "",
-  "Alpha exists so a page has something to embed.",
-  "",
-  "## Requirements",
-  "",
-  "### Requirement: Alpha does things",
-  "",
-  "Alpha SHALL do the thing when asked.",
-  "",
-  "#### Scenario: alpha-SC-01 - it does the thing",
-  "",
-  "- **WHEN** asked",
-  "- **THEN** it does the thing",
-  "",
-].join("\n");
-
-const ALPHA_CASES = [
-  "# demo-product/alpha Test Cases",
-  "",
-  "**Status:** pending-review",
-  "",
-  "## alpha-US-01: Someone does the thing",
-  "",
-  "**As a** someone,",
-  "**I want** the thing to happen,",
-  "**so that** it is done.",
-  "",
-  "### alpha-TC-01: Someone asks for the thing and it happens",
-  "",
-  "**Description:** Proves the thing happens on ask.",
-  "",
-  "**Preconditions:**",
-  "",
-  "- None.",
-  "",
-  "**Test data:** None — the case takes no input.",
-  "",
-  "**Steps:**",
-  "",
-  "| # | Action | Expected result |",
-  "| --- | --- | --- |",
-  "| 1 | Ask for the thing. | The thing happens. |",
-  "",
-  "**Properties:**",
-  "",
-  "- **Severity:** major",
-  "- **Priority:** high",
-  "- **Status:** draft",
-  "- **Behaviour:** positive",
-  "- **Type:** smoke",
-  "- **Automation status:** manual",
-  "- **Testability:** automation",
-  "- **Trace:** alpha-SC-01",
-  "",
-].join("\n");
 
 const BASE = {
   "docs/prds/manual.yaml": CONFIG,
   "docs/prds/index.md": HOME,
   "docs/prds/products/demo-product/index.md": LANDING,
   "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE,
-  "openspec/specs/demo-product/alpha/spec.md": ALPHA_SPEC,
-  "openspec/specs/demo-product/alpha/user-journeys.md": ALPHA_JOURNEYS,
-  "openspec/specs/demo-product/alpha/feature-tcs.md": ALPHA_CASES,
 };
 
 const snapshotOfStore = async (root: string) =>
   composeStore(
     rootsOf(root),
     NO_GIT,
-    null,
     await checkWarnings(rootsOf(root), NO_GIT),
   ).snapshot;
 
@@ -134,51 +59,9 @@ describe("the assets the snapshot carries", () => {
   });
 });
 
-describe("the run sheet the snapshot carries", () => {
-  /** Composed with the variable set: the manual's Told now links the same
-   * sheet the push workflow's message does. */
-  const withSheet = (url: string | undefined) => {
-    vi.stubEnv("TCS_SHEET_URL", url);
-    return snapshotOfStore(writeStore(BASE));
-  };
-
-  it("names the run sheet the environment gave it", async () => {
-    expect((await withSheet("https://sheets.test/run")).sheetUrl).toBe(
-      "https://sheets.test/run",
-    );
-  });
-
-  it.each([
-    ["nothing is set", undefined],
-    ["the variable is empty", ""],
-  ])("names none where %s", async (_what, url) => {
-    expect((await withSheet(url)).sheetUrl).toBeUndefined();
-  });
-});
-
 describe("the warnings the snapshot carries", () => {
-  it("ships the checker's own warnings, page warnings pointing at their page", async () => {
-    const warnings = (await snapshotOfStore(writeStore(BASE))).warnings;
-
-    expect(warnings).toEqual([
-      {
-        rule: "suite",
-        message:
-          "openspec/specs/demo-product/alpha/feature-tcs.md: holds 1 test case and no page shows them",
-      },
-    ]);
-  });
-
-  it("carries nothing a failure would have stopped the deploy for", async () => {
-    const root = writeStore({
-      ...BASE,
-      "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE.replace(
-        "Alpha is a demo capability.",
-        '::cases{id="demo-product/alpha"}',
-      ),
-    });
-
-    expect((await snapshotOfStore(root)).warnings).toEqual([]);
+  it("carries no warnings for a store the checker finds clean", async () => {
+    expect((await snapshotOfStore(writeStore(BASE))).warnings).toEqual([]);
   });
 });
 

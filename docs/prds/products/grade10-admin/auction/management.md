@@ -233,7 +233,7 @@ Operator-curated slides on the collector catalogue's Featured band —
   first gallery image, or the stage’s default background colour if that is
   missing too — no broken-image chrome
 
-::spec{id="grade10-admin/auction/featured"}
+[Requirements · grade10-admin/auction/featured](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/auction/featured/spec.md)
 
 ## Orders
 
@@ -583,11 +583,7 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 - **Worked as any order** - the order reads Test in Orders, where Cancel is
   the ordinary cancel and the lot stays closed; Winners cancels nothing itself
 
-::changes{spec="grade10-admin/auction/test-winners"}
-
 ## Pending Spec
-
-::next{spec="grade10-admin/auction/post-sale"}
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service)
@@ -596,17 +592,17 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-admin/auction/listing"}
+[Test cases · grade10-admin/auction/listing](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/auction/listing)
 
-::cases{id="grade10-admin/auction/campaign"}
+[Test cases · grade10-admin/auction/campaign](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/auction/campaign)
 
-::cases{id="grade10-admin/auction/featured"}
+[Test cases · grade10-admin/auction/featured](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/auction/featured)
 
-::cases{id="grade10-admin/auction/post-sale"}
+[Test cases · grade10-admin/auction/post-sale](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/auction/post-sale)
 
-::cases{id="grade10-admin/auction/payment-settings"}
+[Test cases · grade10-admin/auction/payment-settings](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/auction/payment-settings)
 
-::cases{id="grade10-admin/auction/internal-bid"}
+[Test cases · grade10-admin/auction/internal-bid](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-admin/auction/internal-bid)
 :::
 
 :::detail{title="Product decisions" for="pm"}

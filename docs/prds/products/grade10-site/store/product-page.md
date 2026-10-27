@@ -2,7 +2,6 @@
 title: Product Details
 spec: grade10-site/store/product-page
 order: 3
-reviewed: 2026-10-23
 ---
 
 The product details page shows one product, its price, and the one sellable

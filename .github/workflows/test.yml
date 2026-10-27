@@ -52,7 +52,7 @@ jobs:
           BEFORE: ${{ github.event_name == 'push' && github.event.before || '' }}
           DOCS_ONLY: ^(openspec/changes|docs)/
           PLAN_ONLY: ^openspec/changes/.+/tasks\.md$
-          TOOLING: ^(tools/manual/|tools/openspec-viewer(/|$)|scripts/(openspec|storybook|design-sync)/|packages/(design-system|ui|date)/|openspec/(schemas/|config\.yaml$)|\.design-sync/|\.github/workflows/|package\.json$|pnpm-(lock|workspace)\.yaml$)
+          TOOLING: ^(tools/(manual|openspec-store)/|tools/openspec-viewer(/|$)|scripts/(openspec|storybook|design-sync)/|packages/(design-system|ui|date)/|openspec/(schemas/|config\.yaml$)|\.design-sync/|\.github/workflows/|package\.json$|pnpm-(lock|workspace)\.yaml$)
           EVENT: ${{ github.event_name }}
         run: |
           base=HEAD^1
@@ -165,14 +165,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # The manual's tests cover the claim ages it reads out of the
-          # viewer's published entry in tools/openspec-viewer. They skip
-          # themselves without it, so leaving it out would pass by not asking.
-          submodules: true
-          # They read the real store's claims at its main, and a pull
-          # request's shallow checkout has no origin/main to read.
-          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -189,8 +181,9 @@ jobs:
       - name: Run tests
         run: pnpm run test:manual
 
-  # The store's scripts against their fixtures: a pull request that moves
-  # none of them, nor the schemas they copy, has nothing for them.
+  # The store's scripts and tools/openspec-store against their fixtures: a
+  # pull request that moves none of them, nor the schemas they copy, has
+  # nothing for them.
   openspec:
     needs: changes
     if: ${{ !cancelled() && needs.changes.outputs.plan != 'true' && needs.changes.outputs.tooling != 'false' }}
@@ -200,7 +193,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          # The claim ages tools/openspec-store reads out of the viewer's
+          # published entry in tools/openspec-viewer; its tests skip
+          # themselves without it, so leaving it out would pass by not asking.
           submodules: true
+          # They read the real store's claims at its main, and a pull
+          # request's shallow checkout has no origin/main to read.
           fetch-depth: 0
 
       - name: Install pnpm

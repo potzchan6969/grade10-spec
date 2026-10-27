@@ -27,8 +27,8 @@
  * claims holds that brand's words, and a citation matching any of them is
  * true. `--fix` rewrites the words only where the catalogs agree on one value.
  *
- * Citations are checked in the durable store, the in-flight changes and the
- * manual's pages. The archive is the record of what shipped, worded as it was.
+ * Citations are checked in the manual's pages. The store's own files are not
+ * read here: the manual check reads only the pages.
  */
 import { existsSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";

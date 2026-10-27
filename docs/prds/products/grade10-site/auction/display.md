@@ -2,7 +2,6 @@
 title: Auction Display
 spec: grade10-site/auction/listing-page
 order: 2
-reviewed: 2026-10-14
 ---
 
 Where a collector meets a lot: the catalogue card, the lot's own page with its
@@ -196,8 +195,6 @@ lot before any script runs.
   item while the listing is draft, created or published, never after it
   closes — [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
 
-::changes{spec="grade10-site/auction/listing-media"}
-
 ### Lot Status
 
 Every lot a collector can see shows one status. It describes the lot,
@@ -223,8 +220,6 @@ never the collector's bid or order, and every page reads the same value.
 - **Live without a reload** — an open lot page, the catalogue and Featured
   show each recorded bid, extension and close as it happens
 
-::changes{spec="grade10-site/auction/lot-status"}
-
 ## Admin Panel
 
 An operator drafts a lot, fills it, prices and schedules it, holds its stock
@@ -249,11 +244,11 @@ and publishes it; from the close on, the sale is worked in Orders
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/auction/listing-page"}
+[Test cases · grade10-site/auction/listing-page](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/listing-page)
 
-::cases{id="grade10-site/auction/listing-media"}
+[Test cases · grade10-site/auction/listing-media](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/listing-media)
 
-::cases{id="grade10-site/auction/availability"}
+[Test cases · grade10-site/auction/availability](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/auction/availability)
 :::
 
 :::detail{title="Product decisions" for="pm"}

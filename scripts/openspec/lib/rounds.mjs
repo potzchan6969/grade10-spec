@@ -5,7 +5,7 @@
  * the same commit as `landed_by:`, so the row and the line that proves it
  * land together or not at all. It counts the round's number by reading the
  * rows already there with the store's own reader
- * (`tools/manual/src/store/read-rounds.mts`): a second parser would number a
+ * (`tools/openspec-store/src/read-rounds.mts`): a second parser would number a
  * round differently from the surface that shows it.
  *
  * A row's Perspectives cell is held to the schema here too, once for both
@@ -20,7 +20,7 @@ import { join } from "node:path";
 import {
   ROUND_COLUMNS,
   readRounds,
-} from "../../../tools/manual/src/store/read-rounds.mts";
+} from "../../../tools/openspec-store/src/read-rounds.mts";
 import { perspectivesOf, verifierNeeded } from "./perspectives.mjs";
 
 /** What the file opens with, written by the first round. */

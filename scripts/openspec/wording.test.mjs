@@ -21,7 +21,7 @@ import {
  * `landedText` from here.
  */
 
-const LINKED = "<https://spec.test/in-flight/probe|Probe>";
+const LINKED = "<https://spec.test/openspec/#/change/probe|Probe>";
 
 test("shared-planning-change-stages-SC-88 - yourTurnText names the stage and pastes the hand's command", () => {
   assert.equal(
@@ -202,8 +202,11 @@ test("threadPathOf says nothing for a record that names no thread", () => {
 
 test("linkedOf links a title, escaped, in Slack's own markup", () => {
   assert.equal(
-    linkedOf("https://spec.test/in-flight/probe", "Gift cards & <vouchers>"),
-    "<https://spec.test/in-flight/probe|Gift cards &amp; &lt;vouchers&gt;>",
+    linkedOf(
+      "https://spec.test/openspec/#/change/probe",
+      "Gift cards & <vouchers>",
+    ),
+    "<https://spec.test/openspec/#/change/probe|Gift cards &amp; &lt;vouchers&gt;>",
   );
 });
 

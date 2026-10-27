@@ -4,7 +4,6 @@ import type { ManualConfig, PageEntry, Taxonomy } from "../api/types.ts";
 import { GrammarError, type PageAst, parsePage } from "../content/grammar.ts";
 import { readText, readTextIfExists, walkAll, walkFiles } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
-import type { SpecShape } from "./read-specs.mts";
 import { MANUAL_CONFIG, manualConfigPath, type Roots } from "./roots.mts";
 
 /** The manual is this app's own content, so a malformed page fails the build
@@ -159,23 +158,38 @@ function requireString(fields: Record<string, unknown>, key: string): string {
   return value;
 }
 
-/** Disk decides what exists, `manual.yaml` decides the order and may add a
- * product that has no specs yet. Only the store's own manual owes the whole
- * store: a manual mounted in another repository shows what it lists, so
- * discovery adds nothing there. */
-export function deriveTaxonomy(
-  shape: SpecShape,
-  config: ManualConfig,
-  own = true,
-): Taxonomy {
+/** What the pages say exists: a product is a directory under `products/`,
+ * one or two levels down, that holds pages of its own; a topic is a page
+ * under `platform/`, named by its path there. */
+export type PageShape = { products: string[]; topics: string[] };
+
+export function readPageShape(roots: Roots): PageShape {
+  const base = join(roots.content, roots.manual);
+  const products = new Set<string>();
+  const topics: string[] = [];
+  for (const path of walkFiles(roots.content, base, ".md")) {
+    const rest = path.slice(roots.manual.length + 1);
+    if (rest.startsWith("products/")) {
+      const dir = rest.slice("products/".length).split("/").slice(0, -1);
+      if (dir.length >= 1 && dir.length <= 2) products.add(dir.join("/"));
+    } else if (rest.startsWith("platform/")) {
+      topics.push(rest.slice("platform/".length, -".md".length));
+    }
+  }
+  return { products: [...products].sort(), topics: topics.sort() };
+}
+
+/** The pages decide what exists, `manual.yaml` decides the order. */
+export function deriveTaxonomy(roots: Roots, config: ManualConfig): Taxonomy {
+  const shape = readPageShape(roots);
   return {
     products: order(
       config.groups.flatMap((group) => group.products),
-      own ? shape.products : [],
+      shape.products,
     ),
     topics: order(
       config.platform.flatMap((group) => group.topics),
-      own ? shape.topics : [],
+      shape.topics,
     ),
   };
 }

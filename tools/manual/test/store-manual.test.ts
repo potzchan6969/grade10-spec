@@ -6,7 +6,6 @@ import {
   readManualConfig,
   readManualPages,
 } from "../src/store/read-manual.mts";
-import { discoverSpecs } from "../src/store/read-specs.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import { writeStore as write } from "./tmp-store";
 
@@ -23,10 +22,14 @@ describe("manual pages", () => {
 
   it("walks docs/prds/**/*.md into store-relative entries", () => {
     expect(pages.map((page) => page.path)).toEqual([
+      "docs/prds/guides/getting-started.md",
       "docs/prds/index.md",
+      "docs/prds/platform/demo-topic.md",
       "docs/prds/products/demo-product/index.md",
+      "docs/prds/products/demo-shared/index.md",
+      "docs/prds/products/page-only/index.md",
     ]);
-    expect(pages[0].source).toContain("title: Demo manual");
+    expect(pages[1].source).toContain("title: Demo manual");
   });
 
   it("keeps the parse of every page it walked", () => {
@@ -112,44 +115,27 @@ describe("manual.yaml", () => {
 });
 
 describe("taxonomy", () => {
-  it("orders by manual.yaml and keeps page-only products", () => {
-    const taxonomy = deriveTaxonomy(
-      discoverSpecs(FIXTURE),
-      readManualConfig(rootsOf(FIXTURE)),
-    );
-    expect(taxonomy.products).toEqual([
-      "demo-product",
-      "page-only",
-      "demo-shared",
-    ]);
-    expect(taxonomy.topics).toEqual(["demo-topic"]);
+  const root = write({
+    "docs/prds/products/demo-product/index.md": "---\ntitle: Demo\n---\n",
+    "docs/prds/products/demo-product/alpha.md": "---\ntitle: Alpha\n---\n",
+    "docs/prds/products/app/shop/index.md": "---\ntitle: Shop\n---\n",
+    "docs/prds/platform/demo-topic.md": "---\ntitle: Topic\n---\n",
+    "docs/prds/platform/shared/money.md": "---\ntitle: Money\n---\n",
+  });
+  const config = (products: string[]) => ({
+    storybookBase: "https://s.example",
+    groups: [{ title: "Mine", products }],
+    platform: [],
+    guides: [],
   });
 
-  it("keeps a disk product manual.yaml has not listed yet", () => {
-    const taxonomy = deriveTaxonomy(discoverSpecs(FIXTURE), {
-      storybookBase: "https://s.example",
-      groups: [],
-      platform: [],
-      guides: [],
-    });
-    expect(taxonomy.products).toEqual(["demo-product"]);
-    expect(taxonomy.topics).toEqual(["demo-topic"]);
+  it("orders by manual.yaml, then the products the pages hold", () => {
+    const taxonomy = deriveTaxonomy(rootsOf(root), config(["app/shop"]));
+    expect(taxonomy.products).toEqual(["app/shop", "demo-product"]);
   });
 
-  /** A manual mounted in another repository shows what it lists — discovery
-   * would pull the whole store into a rail that documents none of it. */
-  it("adds nothing from disk when the manual is not the store's own", () => {
-    const taxonomy = deriveTaxonomy(
-      discoverSpecs(FIXTURE),
-      {
-        storybookBase: "https://s.example",
-        groups: [{ title: "Mine", products: ["page-only"] }],
-        platform: [],
-        guides: [],
-      },
-      false,
-    );
-    expect(taxonomy.products).toEqual(["page-only"]);
-    expect(taxonomy.topics).toEqual([]);
+  it("names a topic by its page's path under platform/", () => {
+    const taxonomy = deriveTaxonomy(rootsOf(root), config([]));
+    expect(taxonomy.topics).toEqual(["demo-topic", "shared/money"]);
   });
 });

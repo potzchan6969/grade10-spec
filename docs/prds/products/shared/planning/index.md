@@ -5,9 +5,9 @@ icon: squares-four
 
 Planning is not a product surface. It is the set of rails that carry a change
 from a product idea to a released feature across this store and the
-application repository: the schema every change is written on, the board that
-reads where each change stands, and the messages that tell the next teammate
-it is their turn.
+application repository: the schema every change is written on, the OpenSpec
+viewer that reads where each change stands, and the messages that tell the
+next teammate it is their turn.
 
 ## Mechanism
 

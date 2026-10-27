@@ -21,7 +21,7 @@
  *   - not written yet — the schema still names what is before it, but the
  *     artifact itself is not on the branch to read again
  */
-import { waivedOf } from "../../../tools/manual/src/api/waivers.ts";
+import { waivedOf } from "../../../tools/openspec-store/src/waivers.ts";
 
 /**
  * What one artifact's `reviewed:` line holds: `{ content, items }` — the

@@ -6,7 +6,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { slugify } from "../src/api/paths.ts";
-import { findRequirement } from "../src/api/requirements.ts";
 import { fileKeyOf } from "../src/blocks/design-drift.ts";
 import {
   PERIOD_COLUMN,
@@ -18,7 +17,7 @@ import {
 import { parsePage, serializePage } from "../src/content/grammar.ts";
 import { readDesignSync } from "../src/store/design-sync.mts";
 import { confine, readText } from "../src/store/disk.mts";
-import { everyBlock, message, scenarioIds } from "./context.mjs";
+import { everyBlock, message } from "./context.mjs";
 import { checkRefs } from "./refs.mjs";
 
 /** A page the grammar refuses never reaches the reference checks — it has no
@@ -43,19 +42,6 @@ export function readPages(root, paths, git, add) {
 
 export function checkPages(ctx, pages) {
   for (const page of pages) {
-    const spec = page.ast.frontmatter.spec;
-    if (spec !== undefined) {
-      ctx.referenced.add(spec);
-      // A page may claim a capability an in-flight change is still writing —
-      // that is how an incubating capability gets a page before it lands.
-      if (!ctx.specs.has(spec) && !ctx.changing.has(spec)) {
-        ctx.add(
-          "reference",
-          page.path,
-          `frontmatter \`spec: ${spec}\` names no spec on disk and no in-flight change`,
-        );
-      }
-    }
     for (const block of everyBlock(page.ast.blocks)) {
       checkBlock(ctx, page.path, block);
     }
@@ -219,78 +205,13 @@ function previous(blocks, block) {
 }
 
 function checkBlock(ctx, path, block) {
-  const { add, specs } = ctx;
+  const { add } = ctx;
   switch (block.type) {
-    case "spec": {
-      ctx.referenced.add(block.id);
-      const spec = specs.get(block.id);
-      if (!spec) {
-        add("reference", path, `${label(block, "id")} names no spec on disk`);
-        break;
-      }
-      if (
-        block.requirement !== undefined &&
-        !findRequirement(spec.requirements, block.requirement)
-      ) {
-        add(
-          "reference",
-          path,
-          `${label(block, "id")} has no requirement \`${block.requirement}\``,
-        );
-      }
-      if (
-        block.scenario !== undefined &&
-        !scenarioIds(spec).has(block.scenario)
-      ) {
-        add(
-          "reference",
-          path,
-          `${label(block, "id")} issues no scenario \`${block.scenario}\``,
-        );
-      }
-      if (block.story !== undefined && !journeyIds(spec).has(block.story)) {
-        add(
-          "reference",
-          path,
-          `${label(block, "id")} issues no story \`${block.story}\``,
-        );
-      }
-      break;
-    }
-    // What a page can get wrong about a suite is the id it names; whether the
-    // suite itself holds together is asked of the store directory, so it is
-    // asked once and asked even where no page shows it. A page that shows a
-    // capability's suite names that capability: a chapter holding several
-    // capabilities names the first in its frontmatter and shows every other
-    // one under its own section, or its changes while it is still being
-    // introduced.
-    case "cases": {
-      ctx.cased.add(block.id);
-      ctx.referenced.add(block.id);
-      if (!specs.has(block.id)) {
-        add("reference", path, `${label(block, "id")} names no spec on disk`);
-      }
-      break;
-    }
     case "example": {
       const read = readExample(block);
       if ("problem" in read) {
         add("example", path, `${label(block, "title")}: ${read.problem}`);
       }
-      break;
-    }
-    case "changes":
-    case "next": {
-      // Either may point at a capability that is still being introduced, so
-      // any capability an in-flight change declares resolves it as well as a
-      // durable spec.
-      if (block.type === "changes") ctx.referenced.add(block.spec);
-      if (specs.has(block.spec) || ctx.changing.has(block.spec)) break;
-      add(
-        "reference",
-        path,
-        `${label(block, "spec")} names no spec on disk and no in-flight change`,
-      );
       break;
     }
     case "image": {
@@ -362,7 +283,7 @@ export function checkIcons(ctx, pages) {
   }
 }
 
-const journeyIds = (spec) =>
+const _journeyIds = (spec) =>
   new Set((spec.journeys ?? []).map((one) => one.id));
 
 const label = (block, key) => `::${block.type}{${key}="${block[key]}"}`;

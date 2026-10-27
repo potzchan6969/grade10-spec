@@ -1,6 +1,4 @@
 export const STORAGE = {
-  /** Dev only: the handle a proposal's author line carries. */
-  handle: "manual.propose.handle",
   /** Set once the first-visit card has been answered — it never returns. */
   welcome: "manual.welcome",
   /** ISO date of the newest history event this reader has seen. */

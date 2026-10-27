@@ -94,7 +94,7 @@ const workflows = () =>
     ]);
 
 /** A workflow one of whose steps runs a gate that reads a change's plan:
- * `check:manual` — never `check:manual:pages`, which reads the pages alone —
+ * `check:manual` —
  * or `validate-changes`, by its script or its `validate:changes` alias. */
 const readsThePlan = (workflow) =>
   Object.values(workflow.jobs ?? {}).some((job) =>
@@ -145,12 +145,12 @@ const runsOn = (trigger, path) =>
 
 /** A change's plan, and the two files of the same name a filter written for
  * the tick may not catch: the plan template `test:openspec` reads, and the
- * demo store's plans the manual's tests read. Both asserted to exist, so a
+ * demo store's plans the OpenSpec readers' tests read. Both asserted to exist, so a
  * moved file fails here rather than passing on a path nothing writes. */
 const PLAN = "openspec/changes/some-change/tasks.md";
 const TEMPLATE = "openspec/schemas/grade10-planning/templates/tasks.md";
 const FIXTURE_PLAN =
-  "tools/manual/demo-store/openspec/changes/add-thing/tasks.md";
+  "tools/openspec-store/demo-store/openspec/changes/add-thing/tasks.md";
 for (const path of [TEMPLATE, FIXTURE_PLAN])
   assert.ok(existsSync(join(ROOT, path)), `${path} is not there`);
 /** The workflows that skip the tick's push: the set the skip case holds,

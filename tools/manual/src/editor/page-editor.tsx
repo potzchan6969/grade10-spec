@@ -22,7 +22,7 @@ import { FrontmatterForm } from "./frontmatter-form";
 import { savePage } from "./save";
 import { useEditorSession } from "./session";
 import { describeCause, type Version } from "./store";
-import { checkReferences, REFERENCE_ID } from "./validate";
+import { checkReferences } from "./validate";
 
 /**
  * Edit mode for one page. It reads from the store, never from the snapshot,
@@ -106,7 +106,7 @@ export function PageEditor({ path }: { path: string }) {
   const build = buildPage(loaded.draft);
   // References are only worth resolving once the page is a page.
   const references = build.ok
-    ? checkReferences(index, path, loaded.draft)
+    ? checkReferences(index, loaded.draft)
     : NO_PROBLEMS;
   const problems = build.ok ? references : build.problems;
   const changed = build.ok ? build.source !== loaded.source : true;
@@ -215,18 +215,6 @@ export function PageEditor({ path }: { path: string }) {
         <Notice
           key={problem.message}
           title="This page will not serialize"
-          tone="error"
-        >
-          <Text as="p" size="sm" tone="secondary">
-            {problem.message}
-          </Text>
-        </Notice>
-      ))}
-
-      {problems.get(REFERENCE_ID)?.map((problem) => (
-        <Notice
-          key={problem.message}
-          title="This save would leave a spec unshown"
           tone="error"
         >
           <Text as="p" size="sm" tone="secondary">

@@ -79,7 +79,6 @@ function pageOf(blocks: DraftBlock[]): Draft {
       icon: "",
       audience: "",
       order: "",
-      reviewed: "",
     },
     blocks,
   };
@@ -136,17 +135,6 @@ describe("what the forms refuse", () => {
     ]);
   });
 
-  it("marks a missing required attribute", () => {
-    const block = newDraftBlock("spec") as DraftLeaf;
-    const built = buildPage(pageOf([block]));
-
-    expect(built.ok).toBe(false);
-    if (built.ok) return;
-    expect(built.problems.get(block.id)).toEqual([
-      { attr: "id", message: "id is required" },
-    ]);
-  });
-
   it("marks a choice outside the set", () => {
     const block = newDraftBlock("callout") as DraftLeaf;
     block.attrs = { kind: "shout" };
@@ -169,23 +157,6 @@ describe("what the forms refuse", () => {
     expect(built.problems.get(block.id)?.[0].attr).toBe("height");
   });
 
-  it("marks the spec block using two selectors at once", () => {
-    const block = newDraftBlock("spec") as DraftLeaf;
-    block.attrs = {
-      id: "a/b",
-      requirement: "R",
-      scenario: "b-SC-01",
-      story: "",
-    };
-    const built = buildPage(pageOf([block]));
-
-    expect(built.ok).toBe(false);
-    if (built.ok) return;
-    expect(built.problems.get(block.id)?.[0].message).toContain(
-      "use only one of",
-    );
-  });
-
   it("refuses a title-less page", () => {
     const built = buildPage({
       frontmatter: {
@@ -195,7 +166,6 @@ describe("what the forms refuse", () => {
         icon: "",
         audience: "",
         order: "",
-        reviewed: "",
       },
       blocks: [],
     });
@@ -203,10 +173,10 @@ describe("what the forms refuse", () => {
   });
 
   it("catches prose that would parse as a directive", () => {
-    expect(proseProblem('::spec{id="a/b"}')).toContain("directive");
+    expect(proseProblem('::wheel{id="a/b"}')).toContain("directive");
     expect(proseProblem(":::")).not.toBe(null);
     expect(proseProblem("Plain words.")).toBe(null);
-    expect(proseProblem('```\n::spec{id="a/b"}\n```')).toBe(null);
+    expect(proseProblem('```\n::wheel{id="a/b"}\n```')).toBe(null);
   });
 
   it("drops an empty prose block instead of writing whitespace", () => {
@@ -236,18 +206,6 @@ describe("what the forms keep", () => {
     expect((again.blocks[0] as DraftLeaf).attrs.caption).toBe(" — ");
     expect(buildPage(again)).toMatchObject({ source: built.source });
   });
-
-  it("still calls a field of nothing but spaces empty", () => {
-    const block = newDraftBlock("spec") as DraftLeaf;
-    block.attrs = { ...block.attrs, id: "   " };
-    const built = buildPage(pageOf([block]));
-
-    expect(built.ok).toBe(false);
-    if (built.ok) return;
-    expect(built.problems.get(block.id)).toEqual([
-      { attr: "id", message: "id is required" },
-    ]);
-  });
 });
 
 describe("frontmatter", () => {
@@ -260,12 +218,11 @@ describe("frontmatter", () => {
         icon: "medal",
         audience: "operator",
         order: "6",
-        reviewed: "2026-09-10",
       },
       blocks: [],
     });
     expect(built.ok && built.source).toBe(
-      "---\ntitle: Loyalty\nsummary: Points.\nspec: grade10-store/loyalty\nicon: medal\naudience: operator\norder: 6\nreviewed: 2026-09-10\n---\n",
+      "---\ntitle: Loyalty\nsummary: Points.\nspec: grade10-store/loyalty\nicon: medal\naudience: operator\norder: 6\n---\n",
     );
   });
 
@@ -278,7 +235,6 @@ describe("frontmatter", () => {
         icon: "sparkles",
         audience: "",
         order: "",
-        reviewed: "",
       },
       blocks: [],
     });

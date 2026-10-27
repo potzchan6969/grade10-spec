@@ -63,5 +63,5 @@ A permission is one resource and one action, written `resource:action`. A permis
 - **Money** — `vault:payout` is the only vault grant that moves money
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="shared/auth/roles"}
+[Test cases · shared/auth/roles](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/shared/auth/roles)
 :::

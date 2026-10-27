@@ -74,8 +74,6 @@ to the case it was made for.
 - **Erasing a person** ends their live checks, drops their requests, and
   commands their whole provider account away
 
-::changes{spec="grade10-site/e-kyc/identity-record"}
-
 ## Hosted Verification
 
 A verification provider hosts the check on the collector's own phone and
@@ -115,8 +113,6 @@ To the account that raised the check.
   another chance starts a new check
 - **One live check per case** - asking again while one is out hands back the
   one the collector already has
-
-::changes{spec="grade10-site/e-kyc/hosted-verification"}
 
 :::detail{title="Code map" for="engineer"}
 - **The record** - `grade10-e-kyc-service`, one record for a person or a

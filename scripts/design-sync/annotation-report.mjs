@@ -2,8 +2,8 @@
 
 import { readdir, readFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
-import { AUTHOR_LINE } from "../../tools/manual/src/api/author-line.ts";
-import { taskGroupHeading } from "../../tools/manual/src/store/read-changes.mts";
+import { AUTHOR_LINE } from "../../tools/openspec-store/src/author-line.ts";
+import { taskGroupHeading } from "../../tools/openspec-store/src/read-changes.mts";
 
 export const REPORT_SCHEMA_VERSION = 1;
 

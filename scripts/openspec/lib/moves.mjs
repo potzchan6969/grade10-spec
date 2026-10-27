@@ -15,8 +15,8 @@ import {
   behindOf,
   handOf,
   taskTotals,
-} from "../../../tools/manual/src/api/stages.ts";
-import { toldOf } from "../../../tools/manual/src/api/told.ts";
+} from "../../../tools/openspec-store/src/stages.ts";
+import { toldOf } from "../../../tools/openspec-store/src/told.ts";
 import { addressOf } from "./notify.mjs";
 import { readChangesAt } from "./store-read.mjs";
 import {
@@ -180,9 +180,9 @@ export function milestonesBetween(base, head, archived = []) {
 
 /** The change, linked: its thread where the record names one, the change page
  * where it does not. */
-function linkedTitle(at, { manualUrl, workspaceUrl }) {
+function linkedTitle(at, { openspecUrl, workspaceUrl }) {
   return linkOf({
-    manualUrl,
+    openspecUrl,
     workspaceUrl,
     thread: at.thread,
     id: at.id,

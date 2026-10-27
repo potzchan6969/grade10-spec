@@ -148,5 +148,5 @@ joins one under that email.
 :::
 
 :::detail{title="Test cases" for="qa"}
-::cases{id="grade10-site/store/checkout"}
+[Test cases · grade10-site/store/checkout](https://github.com/9gag/grade10-spec/tree/main/openspec/specs/grade10-site/store/checkout)
 :::

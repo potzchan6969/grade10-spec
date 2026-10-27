@@ -2,7 +2,6 @@
 title: Product Listing
 spec: grade10-site/store/product-listing
 order: 2
-reviewed: 2026-09-25
 ---
 
 The product listing lets collectors browse the catalogue and open a product.

@@ -1,14 +1,15 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, resolve, sep } from "node:path";
-import type { ItemError } from "../api/types.ts";
+import { DEFAULT_MANUAL_DIR, manualConfigPath } from "./roots.mts";
 
-/** The store root is the directory holding `openspec/`. */
+/** The store root is the directory holding the manual's config. */
 export function findStoreRoot(from: string): string {
+  const marker = manualConfigPath(DEFAULT_MANUAL_DIR);
   let dir = resolve(from);
   for (;;) {
-    if (existsSync(join(dir, "openspec"))) return dir;
+    if (existsSync(join(dir, marker))) return dir;
     const up = dirname(dir);
-    if (up === dir) throw new Error(`no openspec/ directory above ${from}`);
+    if (up === dir) throw new Error(`no ${marker} above ${from}`);
     dir = up;
   }
 }
@@ -54,25 +55,6 @@ export function confine(
   return file;
 }
 
-/** Where a proposal's files go: inside one change directory under
- * `openspec/changes/`, and nowhere else. What shape a slug and a file name may
- * take is settled before this is called; what this adds is the refusal of
- * anything that resolves out of the changes tree. */
-export function changeFile(
-  root: string,
-  slug: string,
-  name = "",
-): string | { error: string } {
-  const base = resolve(root, "openspec", "changes");
-  const dir = resolve(base, slug);
-  const file = name === "" ? dir : resolve(dir, name);
-  const inside = file === dir || file.startsWith(dir + sep);
-  if (dir === base || !dir.startsWith(base + sep) || !inside) {
-    return { error: `\`${slug}/${name}\` resolves outside openspec/changes/` };
-  }
-  return file;
-}
-
 export function readText(file: string): string {
   return readFileSync(file, "utf8");
 }
@@ -85,22 +67,6 @@ export function readTextIfExists(file: string): string | undefined {
  * name carries its level (`docs/governance/specs-to-test-cases.md`, Levels),
  * so a capability's is `feature-tcs.md` and nothing else. Returns the
  * store-relative path. */
-export function featureSuitePath(
-  root: string,
-  dir: string,
-): string | undefined {
-  const relative = `${dir}/feature-tcs.md`;
-  return existsSync(join(root, relative)) ? relative : undefined;
-}
-
-export function subdirectories(dir: string): string[] {
-  if (!existsSync(dir)) return [];
-  return readdirSync(dir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort();
-}
-
 /** `ext` is either a suffix (`.md`) or a whole file name (`spec.md`). A name
  * that merely ends in the second — `draft-spec.md` — is a different file, and
  * matching it invents a spec nobody wrote. */
@@ -154,25 +120,4 @@ export function newestMtime(dir: string): number {
     if (at > newest) newest = at;
   }
   return newest;
-}
-
-/** A structural problem in someone else's file. Specs and changes contain it
- * as an `error` entry; manual pages let it out. */
-export class StoreFileError extends Error {
-  readonly line: number;
-  constructor(line: number, message: string) {
-    super(message);
-    this.name = "StoreFileError";
-    this.line = line;
-  }
-}
-
-export function toItemError(file: string, cause: unknown): ItemError {
-  if (cause instanceof StoreFileError) {
-    return { file, line: cause.line, message: cause.message };
-  }
-  return {
-    file,
-    message: cause instanceof Error ? cause.message : String(cause),
-  };
 }
