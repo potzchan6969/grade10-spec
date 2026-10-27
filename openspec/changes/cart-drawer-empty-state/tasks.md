@@ -11,7 +11,7 @@ the evidence and fixes only what a test exposes.
 - [x] 1.6 On the Cart Drawer page, once 1.1 has created the stories: replace the `store-cart-blocks-cartdrawer--fetching-on-open` embed with `store-cart-blocks-cartdrawer--loading-with-lines`, and embed `store-cart-blocks-cartdrawer--loading-no-lines` beside the Not read yet line; `pnpm check:manual --pages` passes
 - [x] 1.7 Verify: `pnpm run test:stories:ui`, `pnpm --filter @grade10/ui exec vitest run --project audit`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run validate:changes cart-drawer-empty-state`, `pnpm openspec validate cart-drawer-empty-state --strict`, `pnpm run tcs:validate openspec/changes/cart-drawer-empty-state/specs/shared/ui/store-cart/feature-tcs.md` and `pnpm check:manual`
 
-## 2. Grade10 cart tests and the unread-cart fix (grade10)
+## 2. Grade10 cart tests and the unread-cart fix (grade10) (owner: @kinisworking)
 
 The pinned store commit already carries the block, so no submodule bump. The
 host's one change is its `loading`, which a failed review ends over a basket it
