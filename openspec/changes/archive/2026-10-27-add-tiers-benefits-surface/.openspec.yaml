@@ -5,3 +5,4 @@ design_waived: all work is in this store - `@grade10/ui` blocks with their stori
 page_waived: the membership PRD's Tiers & Benefits lines land in this same change - the section prose and the story embeds it names
 depends_on:
   - redesign-tier-card
+tasks_waived: "seankcw, archived without the workbench walk, as for redesign-tier-card; Storybook is the source of truth"

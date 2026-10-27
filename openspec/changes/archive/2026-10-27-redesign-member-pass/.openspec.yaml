@@ -6,3 +6,4 @@ page_waived: the membership PRD's marked lines land in this same change - the se
 depends_on:
   - redesign-tier-card
   - add-tiers-benefits-surface
+tasks_waived: "seankcw, archived without the workbench walk, as for redesign-tier-card; Storybook is the source of truth"
