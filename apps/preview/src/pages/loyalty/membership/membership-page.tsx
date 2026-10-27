@@ -77,12 +77,9 @@ function useSmUp() {
 function MembershipPage({
   view,
   tab,
-  platform,
 }: {
   view: MembershipView;
   tab: MembershipTab;
-  /** Pins the wallet offers for a story; unset, the device is read. */
-  platform?: "apple" | "google" | null;
 }) {
   const [active, setActive] = useState<MembershipTab>(tab);
   const [balance, setBalance] = useState(view.balance);
@@ -253,7 +250,6 @@ function MembershipPage({
             <MemberPassOverlay
               codeGeneration={codes}
               onRefreshCode={refreshCode}
-              platform={platform}
               view={view}
               walletProps={walletProps}
             />
@@ -273,7 +269,6 @@ function MembershipPage({
               <MemberPassOverlay
                 codeGeneration={codes}
                 onRefreshCode={refreshCode}
-                platform={platform}
                 view={view}
                 walletProps={walletProps}
               />

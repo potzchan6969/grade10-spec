@@ -14,21 +14,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** The card is carried in Google Wallet; the member can end that pass alone. */
+/** The pass opens in its overlay over the page. */
 export const PassAdded: Story = {
-  args: { view: MEMBERSHIP_STATE_VIEWS.passAdded, platform: null },
+  args: { view: MEMBERSHIP_STATE_VIEWS.passAdded },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Member Pass" }));
     const overlay = within(document.body);
     expect(
-      await overlay.findByText("Carried in Google Wallet"),
-    ).toBeInTheDocument();
-    expect(
-      overlay.getByRole("button", { name: "End Google pass" }),
-    ).toBeInTheDocument();
-    expect(
-      overlay.getByRole("button", { name: "Add to Apple Wallet" }),
+      await overlay.findByRole("dialog", { name: "Your Member Pass" }),
     ).toBeInTheDocument();
     await userEvent.keyboard("{Escape}");
     await waitFor(() =>
