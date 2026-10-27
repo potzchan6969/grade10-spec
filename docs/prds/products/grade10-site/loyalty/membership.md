@@ -121,10 +121,11 @@ it, on a wide viewport too.
 
 - **Email, not name** — no name is collected at registration, so the pass
   carries the member's account email under the tier badge
-- **Its own page on a phone** — the pass is presented alone and the page
+- **Its own page on a phone** — the pass section opens it, and the page
   holds a screen wake lock while it is up, so the phone cannot dim or lock
-  mid-scan; a web page cannot raise screen brightness, so keeping the screen
-  awake is the part that is feasible
+  mid-scan; the pass draws nothing until it holds a code; a web page cannot
+  raise screen brightness, so keeping the screen awake is the part that is
+  feasible
 - **A code swaps in and out** — a fresh code dips the square out of view,
   fading and easing down, and settles the new one in — a transition,
   never an abrupt swap, so a scanner never loses its square mid-read
@@ -133,7 +134,8 @@ it, on a wide viewport too.
   the refusal a replayed code earns stays on the till
 - **New code on demand** — the earlier code stays alive until it is used or
   lapses, and the countdown rotates it out before it does, so the pass
-  never draws an expired code
+  never draws an expired code; the countdown runs to the next rotation, set
+  inside the code's life
 - **Never stored** — the QR payload is answered once, and only its digest is
   kept
 - **Card code history** — kept only to power the refusal above, naming

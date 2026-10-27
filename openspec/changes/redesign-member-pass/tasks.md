@@ -23,7 +23,7 @@
       toast; the square moving out and in on a fresh token, instantly
       under reduced motion; no `expired` rendering — the consumer rotates
       the code out before it lapses
-      `grade10-site-loyalty-programme-SC-mp2`, `grade10-site-loyalty-programme-SC-mp3`, `grade10-site-loyalty-programme-SC-mp4`, `grade10-site-loyalty-programme-SC-mp5`
+      `grade10-site-loyalty-programme-SC-mp1`, `grade10-site-loyalty-programme-SC-mp2`, `grade10-site-loyalty-programme-SC-mp3`, `grade10-site-loyalty-programme-SC-mp4`, `grade10-site-loyalty-programme-SC-mp5`, `grade10-site-loyalty-programme-SC-mp6`, `grade10-site-loyalty-programme-SC-mp7`, `grade10-site-loyalty-programme-SC-mp8`
 - [x] 2.2 Remove `ScanPlate` and its exports — with the short code gone
       it has no consumer left
 - [x] 2.3 Rewrite `member-pass.stories.tsx` under

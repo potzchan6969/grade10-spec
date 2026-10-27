@@ -38,9 +38,11 @@ in flight the refresh control SHALL show busy, and a refused refresh
 SHALL toast the reason the consumer passes, once per refusal. When a
 fresh token arrives, `MemberPass` SHALL dip the square out of view and
 settle the fresh one in — a transition, never an abrupt swap — and
-SHALL swap instantly under reduced motion. `MemberPass` SHALL
-still render the code's life as a countdown while it lives — never an
-expired rendering, the consumer rotating the code out before it lapses —
+SHALL swap instantly under reduced motion. A refused refresh SHALL leave
+the earlier code on show with its countdown running. `MemberPass` SHALL
+render a countdown to the next rotation, which the consumer sets inside the
+code's life — never an expired rendering, the consumer rotating the code out
+before it lapses — and SHALL draw nothing until the consumer holds a token,
 and SHALL carry no used state of its own: a code the till takes is
 answered by the next minted token arriving through props,
 so the pass keeps rotating rather than freezing on what was spent.
@@ -114,6 +116,38 @@ SHALL require no export of its own.
 
 - **WHEN** any of the membership components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp1 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp1 - The pass draws nothing before its first token
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the consumer holds no token yet
+- **THEN** `MemberPass` draws nothing
+- **AND** it draws once a token arrives through props
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp6 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp6 - A refresh shows busy and a refusal keeps the earlier code
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the member asks for a fresh code and the ask is in flight
+- **THEN** the refresh control shows busy
+- **AND** a refused ask toasts the consumer's reason once, leaving the earlier code on show with its countdown running
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp7 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp7 - The countdown runs to the next rotation
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` renders a token with the time to its next rotation
+- **THEN** the countdown reads down to that rotation
+- **AND** no expired code is ever drawn, the consumer rotating the code out before it lapses
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp8 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp8 - A taken code is answered by the next token
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the till takes the pass's code and the consumer mints the next token
+- **THEN** the pass shows the next token, keeping its rotation rather than freezing on the spent one
+- **AND** the pass carries no used state of its own
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-mp2 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-mp2 - The pass encodes the consumer's token, never its own
