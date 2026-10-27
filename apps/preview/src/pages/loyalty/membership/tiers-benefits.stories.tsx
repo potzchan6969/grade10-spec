@@ -42,7 +42,11 @@ function TiersBenefitsPage({ heldTier }: { heldTier: string }) {
           <h1 className="text-xl font-semibold text-foreground sm:text-3xl">
             {TIER_BENEFITS_PAGE_COPY.title}
           </h1>
-          <TiersBenefitsPane heldTier={heldTier} />
+          <TiersBenefitsPane
+            heldTier={heldTier}
+            qualifyingPoints={MEMBERSHIP_VIEW.qualifyingPoints}
+            qualifyingTarget={MEMBERSHIP_VIEW.qualifyingThreshold}
+          />
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
