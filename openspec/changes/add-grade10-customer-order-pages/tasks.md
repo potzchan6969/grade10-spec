@@ -88,7 +88,7 @@ controlled image assets; group 9's running backend is not a dependency.
 - [x] 10.3 Exercise the existing member pages, private-link page and admin customer preview through the shared customer components. Preserve link account-data restrictions and usable facts/actions on image-resource failure, making `g10.store-order-history.SC7`, `g10.store-order-detail.SC7` and `g10.store-order-detail.SC9` pass without shared block redesign or new copy.
 - [x] 10.4 Verify focused production-decoder, projection, member/private-link page and admin-preview tests; run affected frontend/admin typechecks and lint, then affected application builds. Preserve unrelated nested work if the accepted-contract handoff advances the shared submodule pin, and run `pnpm run check:submodules` when it does.
 
-## 11. The walk - order pictures (grade10) (owner: @kinisworking)
+## 11. The walk - order pictures (grade10) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its planning input and groups 8-10 landed.
 Existing groups 1-6 remain the delivered baseline. Walk every journey of every
