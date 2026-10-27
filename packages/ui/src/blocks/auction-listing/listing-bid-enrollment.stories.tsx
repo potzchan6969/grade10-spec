@@ -54,7 +54,7 @@ const LINKED_CARD_CONTROLS = {
   argTypes: {
     brand: {
       control: "select",
-      options: Object.keys(PAYMENT_BRAND_LABEL),
+      options: [...Object.keys(PAYMENT_BRAND_LABEL), "card"],
     },
     maskedNumber: { control: "text" },
     copy: { table: { disable: true } },

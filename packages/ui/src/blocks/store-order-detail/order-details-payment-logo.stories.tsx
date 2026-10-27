@@ -13,6 +13,7 @@ const BRANDS: OrderDetailsPaymentBrand[] = [
   "diners",
   "apple-pay",
   "google-pay",
+  "card",
 ];
 
 const meta = {
@@ -62,6 +63,11 @@ export const ApplePay: Story = {
 
 export const GooglePay: Story = {
   args: { brand: "google-pay" },
+};
+
+/** A card of no recognized brand: a plain card, named by its masked number. */
+export const PlainCard: Story = {
+  args: { brand: "card" },
 };
 
 export const AllBrands: Story = {
