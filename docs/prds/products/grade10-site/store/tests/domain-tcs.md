@@ -155,7 +155,7 @@ Runs once per row of **Test data**.
 
 ---
 
-### product-listing#product-tile: Product Tile
+### product-listing#products-display: Products Display
 
 <!-- trace:case id=g10.store-dmn.TC-eel rev=1 -->
 #### g10.store-dmn.TC5: A member's code and points carry from the cart to the order page
@@ -169,7 +169,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#product-tile, cart#promo-code, cart#points, cart#checkout, order-history#orders, order-detail#order
+* **Trace:** product-listing#products-display, cart#promo-code, cart#points, cart#checkout, order-history#orders, order-detail#order
 
 **Pre-conditions:**
 
@@ -200,7 +200,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** product-listing#product-tile, product-page#buy, cart#checkout
+* **Trace:** product-listing#products-display, product-page#buy, cart#checkout
 
 **Pre-conditions:**
 
