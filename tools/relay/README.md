@@ -3,7 +3,7 @@
 The relay sits between the Slack app, the hosted runner and the code host: it
 verifies Slack's events, keeps one queue per change, fires one session per wake
 with the thread's messages as data, takes that session's posts and its landing
-back, and tells every open manual page when `main` moves.
+back.
 
 Everything about the runner that is not in this directory — the Slack app's
 [scopes and event subscription](../../docs/references/agent-runner.md#the-slack-app),
@@ -39,22 +39,6 @@ the run's own — `--confirm <artifact|group>` and `--held` on
 [`routine-prompt.md`](routine-prompt.md), pasted into the Routine as written.
 The prompt never changes per wake; the payload carries everything that does.
 
-## The Live Line
-
-One Durable Object, named `main`, holds where `main` is and every open page's
-socket. `POST /github/events` is the code host's push webhook, and a push of
-this store's `main` is the only delivery that reaches the object; every other
-one is answered with the reason it told nobody. A page reads the head two ways:
-`GET /live` upgrades a socket, which is sent the head on accept and again on
-every move, and `GET /head` answers the same shape to a page that is polling.
-`GET /head` is a plain read, answered to any origin and cached nowhere; a
-socket needs no such header, and any origin may open one.
-
-The webhook is the one writer of the head: nothing re-reads `main` from the
-code host, so the head is the last delivery the object took. A delivery the
-relay could not take leaves it behind until the next push, and Redeliver —
-under the webhook's Recent Deliveries — is how that one is caught up.
-
 ## Deploying
 
 ```bash
@@ -69,13 +53,12 @@ In this order, because each step needs the one before it:
    app's own member id for `SLACK_APP_USER`
 2. **The secrets**, each with `pnpm dlx wrangler@4.120.0 secret put <name> -c
    wrangler.jsonc`: `SLACK_SIGNING_SECRET` and `SLACK_BOT_TOKEN` from step 1,
-   `GITHUB_TOKEN`, `TOKEN_SECRET`, `WAKE_TOKEN`, `GITHUB_WEBHOOK_SECRET` — any
-   long random string, the same one the webhook is given — and
-   `ROUTINE_FIRE_URL` and `ROUTINE_TOKEN` as placeholders until step 5: the
-   router refuses every request while one of the eight is unset, and names it
+   `GITHUB_TOKEN`, `TOKEN_SECRET`, `WAKE_TOKEN`, and `ROUTINE_FIRE_URL` and
+   `ROUTINE_TOKEN` as placeholders until step 5: the router refuses every
+   request while one of the seven is unset, and names it
 3. **The first deploy**, with the placeholder vars in `wrangler.jsonc`. The
-   Durable Object migrations `v1` and `v2` run here and create the `Room` and
-   `Live` classes, and the deploy prints the Worker's own origin
+   Durable Object migrations run here and leave the `Room` class, and the
+   deploy prints the Worker's own origin
 4. **The event subscription**, pointed at `<origin>/slack/events` and saved:
    the relay answers Slack's `url_verification` challenge, and the bot is
    invited to the planning channel. Interactivity is turned on beside it,
@@ -86,32 +69,22 @@ In this order, because each step needs the one before it:
    placeholders
 6. **The second deploy**, with `PLANNING_CHANNEL`, `REPO`, `RELAY_URL` and
    `SLACK_APP_USER` set to the real values in `wrangler.jsonc`
-7. **The code host's webhook**, on the store's repository under `Settings →
-   Webhooks`: payload URL `<origin>/github/events` — the origin step 3
-   printed — content type `application/json`, the secret from step 2, and the
-   `push` event alone, not every event. It is saved after the deploy that set
-   the real `REPO`, because every real push before that one is answered
-   `{"ignored":"another-repository"}`. Saving it sends a `ping`, and
-   `{"pong":true}` under Recent Deliveries says the relay answered a delivery
-   the secret signs, and 401 one it does not: the signature and the route, and
-   nothing about the head
 
 A relay already running takes a new secret in that same order, and for the
-same reason: the entry refuses every request while one of the eight is unset,
+same reason: the entry refuses every request while one of the seven is unset,
 so a deploy that reads a secret nobody set answers Slack's events, `/wake` and
 the run's own calls with 500 until Operations sets it. The secret, then the
-deploy, then the webhook that sends it anything — `wrangler secret put` takes a
+deploy — `wrangler secret put` takes a
 name the deployed code has never read, so the secret is set first and nothing
 is down in between.
 
-Then two calls, which are the smoke test:
+Then one call, which is the smoke test:
 
 ```bash
 curl -s -X POST "$RELAY_URL/wake" \
   -H "authorization: Bearer $WAKE_TOKEN" \
   -H 'content-type: application/json' \
   -d '{"change":"relay-smoke","head":"0000000000000000000000000000000000000000"}'
-curl -s "$RELAY_URL/head"
 ```
 
 `{"queued":true}` proves three things at once: the origin is this relay, since
@@ -119,11 +92,6 @@ nothing else serves `/wake`; every secret is set, since the router answers
 `{"reason":"missing-secret","secret":"…"}` with 500 while one is not; and the
 migration ran, since the wake reached a room. Repeat the same call and
 `{"queued":false,"why":"duplicate"}` proves the room kept what it answered.
-
-The second call is the live line's: `{"main":null}` is the `Live` object
-created by migration `v2` and holding no head yet, and a sha is the object
-holding what the last push told it. The webhook's `ping` proves its signature
-and its route alone, so this is the one call that says the head is answered.
 
 The wake costs one firing: the room fires a session on a change the store does
 not hold, which answers in the planning channel and ends. A wrong `WAKE_TOKEN`
@@ -133,10 +101,7 @@ answers 401, and a body with no `head` answers 400 without reaching a room.
 
 `pnpm dlx wrangler@4.120.0 secret put <name> -c wrangler.jsonc`, then the one
 holder of the other end — the Slack app, the Routine, the code host, or the
-repository secret `AGENT_WAKE_TOKEN`. `GITHUB_WEBHOOK_SECRET`'s other end is
-the webhook's own Secret field under `Settings → Webhooks`: the relay first,
-then the field, and a push delivered between the two answers 401 and is caught
-up with Redeliver. Rotating `TOKEN_SECRET` cancels every wake token that is
+repository secret `AGENT_WAKE_TOKEN`. Rotating `TOKEN_SECRET` cancels every wake token that is
 out.
 
 ## Changing the State
@@ -153,16 +118,7 @@ no state at all starts from.
 - **A real Slack, Routine or code host** — every test in this package answers
   its own `fetch`; nothing reaches a network
 - **The Durable Object runtime** — the tests drive `Room` over a storage map
-  and one alarm, and `Live` over a storage map and a list of sockets, so the
-  runtime's own eviction, alarm retries, concurrency and the hibernation that
-  wakes an object with a socket on it are not read here
-- **A push the relay never took** — nothing re-reads `main` from the code
-  host, so a delivery that failed leaves the head behind until the next push
-  or a Redeliver, and the same window is what puts two deliveries in the other
-  order
-- **The two public reads** — `/head` and `/live` carry neither a signature nor
-  a token, which the head is: a commit sha and a subject line already on
-  `main`. Nothing caps how many sockets one object holds and no `Origin` is
-  read; both are accepted
+  and one alarm, so the runtime's own eviction, alarm retries and concurrency
+  are not read here
 - **The store's scripts** — what a run does with the payload is
   `scripts/openspec/`'s and is tested there

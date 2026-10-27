@@ -66,16 +66,25 @@ describe("the Durable Objects", () => {
     ),
   ].map((found) => ({ name: found[1], className: found[2] }));
 
-  /** Every class a migration creates. */
-  const migrated = [
-    ...WRANGLER.matchAll(/"new_sqlite_classes":\s*\[([^\]]*)\]/g),
-  ].flatMap((found) =>
-    [...found[1].matchAll(/"(\w+)"/g)].map((name) => name[1]),
-  );
+  /** Every class a migration creates, and every class one deletes. */
+  const classes = (key: string) =>
+    [
+      ...WRANGLER.matchAll(new RegExp(`"${key}":\\s*\\[([^\\]]*)\\]`, "g")),
+    ].flatMap((found) =>
+      [...found[1].matchAll(/"(\w+)"/g)].map((name) => name[1]),
+    );
+  const migrated = classes("new_sqlite_classes");
+  const deleted = classes("deleted_classes");
 
   it("has a binding for every namespace `Env` names", () => {
-    expect(namespaces).toEqual(["ROOM", "LIVE"]);
+    expect(namespaces).toEqual(["ROOM"]);
     expect(bindings.map((binding) => binding.name)).toEqual(namespaces);
+  });
+
+  it("deletes every class it created and binds no longer", () => {
+    const bound = bindings.map((binding) => binding.className);
+    expect(migrated.filter((name) => !bound.includes(name))).toEqual(deleted);
+    expect(deleted.filter((name) => bound.includes(name))).toEqual([]);
   });
 
   it("creates every bound class in one migration", () => {

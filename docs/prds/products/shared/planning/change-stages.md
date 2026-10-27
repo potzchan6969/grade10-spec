@@ -190,7 +190,6 @@ availability, so deployment receipts are shown separately. The owner's brief is
 | Measure | Decided | Days between a stage landing and the next hand's word. | Product |
 | Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |
 | Planning views | Decided | The manual shows the pages under `docs/prds/` and nothing of a change; the OpenSpec viewer reads the changes. | Product |
-| Open pages | Decided | A page open while `main` moves is told and refreshes once the site has caught up; the locally run manual pulls. | Operations, Engineering |
 | Implementation evidence | Decided | `implementation.json` records the first claim's durable baseline, the repository, commit and concrete application component ids. Archive verifies it; deployment does not wait for archive. | Engineering |
 | Availability | Decided | GitHub Deployment receipts report per-component environment status as newly, still, no longer, partial, unknown or stale; archived changes remain visible. | Product, Operations |
 :::

@@ -1,14 +1,11 @@
 /**
  * The router. What it serves and nothing else: Slack's events, a Confirm
  * button pressed, the code host's push, the workflow's wake, the four calls a
- * running session makes, where `main` is and the socket a page listens on,
- * and 404.
+ * running session makes, and 404.
  *
  * Slack is answered inside three seconds and the work happens in
  * `ctx.waitUntil`, because a Slack delivery that is not acknowledged is
- * retried. A push is answered by the live object itself, which is one hop with
- * no network behind it. Every rule the relay has lives in the modules this file
- * calls.
+ * retried. Every rule the relay has lives in the modules this file calls.
  *
  * It fails closed at the entry: a deployment missing one of the secrets
  * nothing works without answers 500 and names the secret, rather than
@@ -18,22 +15,9 @@
 import { equalBytes, utf8 } from "./bytes.ts";
 import { type Env, missingSecret } from "./env.ts";
 import { readFileAt } from "./github.ts";
-import {
-  IS_SHA,
-  parseGithubEvent,
-  verifyGithubSignature,
-} from "./github-events.ts";
-import { isUpgrade } from "./live-state.ts";
 import type { Thread } from "./room-state.ts";
 import { changeRoom } from "./rooms.ts";
-import {
-  callLive,
-  callRoom,
-  json,
-  type LiveOp,
-  type RoomOp,
-  reasonOf,
-} from "./rpc.ts";
+import { callRoom, json, type RoomOp, reasonOf } from "./rpc.ts";
 import {
   actionPayload,
   type Confirm,
@@ -55,39 +39,17 @@ import {
 import { slackHandles, TEAM_MAP } from "./team.ts";
 import { verifyWakeToken } from "./token.ts";
 
-export { Live } from "./live.ts";
 export { Room } from "./room.ts";
+
+/** A commit, as the code host spells one: the sha a landing asks the relay to
+ * move `main` to. A call naming anything else is refused before the relay
+ * reads a thing. */
+const IS_SHA = /^[0-9a-f]{40}$/;
 
 /** One room, addressed by name: `change/<id>`, and `channel/ts` for a thread
  * whose change no run has named yet. */
 function roomByName(env: Env, name: string): DurableObjectStub {
   return env.ROOM.get(env.ROOM.idFromName(name));
-}
-
-/** The one live object. `main` is one line, so every page listens to the same
- * object and a push is one call. */
-function liveObject(env: Env): DurableObjectStub {
-  return env.LIVE.get(env.LIVE.idFromName("main"));
-}
-
-/** What a browser needs to read the head from the manual's own origin, and to
- * read it again rather than a copy: any origin may read it, and an answer that
- * is true until the next push is cached nowhere. */
-const HEAD_HEADERS: Record<string, string> = {
-  "access-control-allow-origin": "*",
-  "cache-control": "no-store",
-};
-
-/** Every answer the head's surface writes carries them, not the object's alone:
- * a page refused by the entry's secret check, by the method gate or by a live
- * object that could not be reached reads the reason, where an answer with no
- * such header reaches it as a CORS error and nothing more. */
-function withHead(path: string, answer: Response): Response {
-  if (path !== "/head") return answer;
-  const headers = new Headers(answer.headers);
-  for (const [name, value] of Object.entries(HEAD_HEADERS))
-    headers.set(name, value);
-  return new Response(answer.body, { status: answer.status, headers });
 }
 
 /** The text as JSON, or null. One reading, so every surface answers a body it
@@ -370,66 +332,6 @@ async function taken(
   }
 }
 
-/**
- * One ask of the live object, answered as the object answered it. A failure is
- * named and logged rather than left to reject the fetch handler, which is the
- * shape `queue()` holds for a room: an object the relay could not reach is a
- * line in the log and a reason in the code host's own delivery record.
- */
-async function askLive(env: Env, op: LiveOp, what: string): Promise<Response> {
-  try {
-    return await callLive(liveObject(env), op);
-  } catch (error) {
-    console.error(
-      `relay: the live object could not ${what}: ${reasonOf(error)}`,
-    );
-    return json(502, { reason: "live-unreachable" });
-  }
-}
-
-/**
- * The code host's push. The webhook is subscribed to `push` alone, so a
- * delivery that is not a push, or not this store's `main`, is answered with the
- * reason and tells nobody: the head a page compares its own snapshot with is
- * this store's.
- */
-async function onGithubEvents(request: Request, env: Env): Promise<Response> {
-  const body = await request.text();
-  const signed = await verifyGithubSignature(env.GITHUB_WEBHOOK_SECRET, {
-    signature: request.headers.get("x-hub-signature-256"),
-    body,
-  });
-  if (!signed) return json(401, { reason: "bad-signature" });
-  const parsed = parseJson(body);
-  if (parsed === null) return notJson();
-  const event = parseGithubEvent(
-    request.headers.get("x-github-event"),
-    parsed,
-    env.REPO,
-  );
-  // The delivery the code host sends the moment the webhook is saved, which is
-  // that leg's smoke test.
-  if (event.kind === "ping") return json(200, { pong: true });
-  if (event.kind === "ignored") return json(200, { ignored: event.why });
-  // The object's answer is the delivery's: the code host reads that the move
-  // reached the object, rather than an ack the relay wrote before it knew.
-  return askLive(env, { op: "moved", push: event.push }, "take the push");
-}
-
-/** Where `main` is, for a page that is polling and for one whose socket the
- * relay could not take. The object's answer is passed through as it stands;
- * the head's own headers are the entry's. */
-async function onHead(env: Env): Promise<Response> {
-  return askLive(env, { op: "head" }, "answer where `main` is");
-}
-
-/** A page's socket. The upgrade is the live object's to accept, and a read that
- * is not one is told so rather than left waiting. */
-async function onLive(request: Request, env: Env): Promise<Response> {
-  if (!isUpgrade(request)) return json(426, { reason: "upgrade-required" });
-  return liveObject(env).fetch(request);
-}
-
 async function onWake(request: Request, env: Env): Promise<Response> {
   const given = (request.headers.get("authorization") ?? "").replace(
     /^Bearer\s+/i,
@@ -538,19 +440,12 @@ interface Surface {
   ) => Promise<Response>;
 }
 
-/** Everything the relay serves. The two a page reads are GET; everything else
- * is a POST, and a read where a write belongs is refused before anything is
- * verified. The run's four calls are a path with a token in it, so the entry
+/** Everything the relay serves, each a POST: a read where a write belongs is
+ * refused before anything is verified. The run's four calls are a path with a token in it, so the entry
  * reads those off one regex instead. */
 const SURFACES: Record<string, Surface> = {
   "/slack/events": { method: "POST", handler: onSlackEvents },
   "/slack/actions": { method: "POST", handler: onSlackActions },
-  "/github/events": {
-    method: "POST",
-    handler: (request, env) => onGithubEvents(request, env),
-  },
-  "/head": { method: "GET", handler: (_request, env) => onHead(env) },
-  "/live": { method: "GET", handler: (request, env) => onLive(request, env) },
   "/wake": { method: "POST", handler: (request, env) => onWake(request, env) },
 };
 
@@ -566,8 +461,7 @@ function confirmOf(given: unknown): Confirm | undefined {
   return { label, word };
 }
 
-/** What the path answers. It is read before the secret check so the head's own
- * headers reach every answer a page can be given. */
+/** What the path answers. */
 async function served(
   request: Request,
   env: Env,
@@ -593,6 +487,6 @@ export default {
     ctx: ExecutionContext,
   ): Promise<Response> {
     const path = new URL(request.url).pathname;
-    return withHead(path, await served(request, env, ctx, path));
+    return served(request, env, ctx, path);
   },
 };

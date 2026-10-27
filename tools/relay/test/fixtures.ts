@@ -1,15 +1,13 @@
 /**
- * What the router's tests, the room's tests and the live object's tests all
- * need: one deployment, a Durable Object namespace whose objects are whatever
- * the test answers with, the storage a test drives one over, and the push the
- * code host sends.
+ * What the router's tests and the room's tests both need: one deployment, a
+ * Durable Object namespace whose objects are whatever the test answers with,
+ * and the storage a test drives one over.
  *
  * Written once here because a second copy drifts: a secret the router reads
- * under one name and the room under another, or a head two files spell
- * differently, is a test that passes while the relay refuses.
+ * under one name and the room under another is a test that passes while the
+ * relay refuses.
  */
 import type { Env } from "../src/env.ts";
-import type { Head, Push } from "../src/live-state.ts";
 
 export const CHANNEL = "C0PLAN";
 export const APP = "U0APP";
@@ -22,7 +20,6 @@ export const RELAY_URL = "https://grade10-relay.workers.dev";
 export const FIRE_URL = "https://runner.example/fire";
 export const ROUTINE_TOKEN = "the-routine-token";
 export const GITHUB_TOKEN = "the-code-host-token";
-export const WEBHOOK_SECRET = "the-code-host-webhook-secret";
 
 /**
  * A namespace whose rooms are one function: the name the caller addressed and
@@ -49,9 +46,6 @@ export function testEnv(over: Partial<Env> = {}): Env {
     ROOM: stubNamespace(async () => {
       throw new Error("this test reaches no room");
     }),
-    LIVE: stubNamespace(async () => {
-      throw new Error("this test reaches no live object");
-    }),
     PLANNING_CHANNEL: CHANNEL,
     REPO,
     RELAY_URL,
@@ -63,42 +57,6 @@ export function testEnv(over: Partial<Env> = {}): Env {
     GITHUB_TOKEN,
     TOKEN_SECRET,
     WAKE_TOKEN: WAKE,
-    GITHUB_WEBHOOK_SECRET: WEBHOOK_SECRET,
-    ...over,
-  };
-}
-
-/** Where `main` is: the commit a push named, and the stamp the object wrote
- * when it arrived. Written as the object's own clock reads one, so a test can
- * set the clock to it. */
-export const HEAD: Head = {
-  main: "d6fde92930d4715a2b49857d24b940956b26d2d3",
-  at: "2026-09-20T06:02:11.000Z",
-  subject: "docs(planning): the live line",
-};
-
-/** The commit after it, for a second move. */
-export const NEXT: Head = {
-  main: "9f1c0a7b2d3e4f5061728394a5b6c7d8e9f01234",
-  at: "2026-09-20T07:11:02.000Z",
-  subject: "feat(relay): the eighth secret",
-};
-
-/** The push behind a head: what the code host named, with no stamp on it. */
-export const pushOf = ({ main, subject }: Head): Push => ({ main, subject });
-
-/** A push of `main` as the code host sends one, with whatever this test
- * changes of it. */
-export function push(over: Record<string, unknown> = {}): unknown {
-  return {
-    ref: "refs/heads/main",
-    after: HEAD.main,
-    repository: { full_name: REPO },
-    head_commit: {
-      id: HEAD.main,
-      timestamp: HEAD.at,
-      message: `${HEAD.subject}\n\nThe body a page never shows.`,
-    },
     ...over,
   };
 }

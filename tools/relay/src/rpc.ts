@@ -1,13 +1,11 @@
 /**
- * The wire between the router and a Durable Object — a room, and the one object
- * that holds where `main` is — and the one JSON answer every surface here
- * writes.
+ * The wire between the router and a room, and the one JSON answer every
+ * surface here writes.
  *
  * An object is reached by a POST whose body is an op, so there is one place that
  * builds that request and one type it accepts: a call the object does not know
  * is a call this file does not let anybody make.
  */
-import type { Push } from "./live-state.ts";
 import type { EnqueueInput, Thread } from "./room-state.ts";
 import type { Confirm } from "./slack.ts";
 
@@ -24,14 +22,9 @@ export type RoomOp =
   | { op: "done"; wake: number }
   | { op: "alive"; wake: number };
 
-/** What the live object is asked: `main` moved, or where is it. A page's socket
- * is not an op — the upgrade is forwarded as it arrived, because the object
- * answers it with the socket itself. */
-export type LiveOp = { op: "moved"; push: Push } | { op: "head" };
-
 /** What went wrong, in the words a log can read. Every surface here says a
- * failure the same way, so one reading answers the router, the room and the
- * live object alike. */
+ * failure the same way, so one reading answers the router and the room
+ * alike. */
 export const reasonOf = (error: unknown): string =>
   error instanceof Error ? error.message : String(error);
 
@@ -51,18 +44,10 @@ export function callRoom(
   return call(stub, "room", op);
 }
 
-/** One op to the live object. */
-export function callLive(
-  stub: DurableObjectStub,
-  op: LiveOp,
-): Promise<Response> {
-  return call(stub, "live", op);
-}
-
 function call(
   stub: DurableObjectStub,
   name: string,
-  op: RoomOp | LiveOp,
+  op: RoomOp,
 ): Promise<Response> {
   return stub.fetch(
     new Request(`https://relay.invalid/${name}`, {
