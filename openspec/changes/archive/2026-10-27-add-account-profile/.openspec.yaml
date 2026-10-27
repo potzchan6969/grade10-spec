@@ -8,4 +8,4 @@ reviewed:
   specs: f5c2f827
   test-cases: 14f3d795
   tasks: 9c411987
-tasks_waived: "@htonyl, 2026-10-26: deployed evidence is no longer needed for 6.1, 7.1, 7.3"
+tasks_waived: "seankcw, building on htonyl 2026-10-26: 6.1 bucket creation and the 7.x walks are not part of this archive"
