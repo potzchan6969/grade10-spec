@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "fc1fcf55349d739a3fdefe89b6ccea5b95803da288bcdf2d44dd801f0170ce88"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "bc891dde02167e0ccb17e426a2ad1c42280dc8bd",
+    "capturedAt": "2026-10-27T05:07:56.621Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+        "anchors": [
+          "Requirement: The membership surface exports"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
