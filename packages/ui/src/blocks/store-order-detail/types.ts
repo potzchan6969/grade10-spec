@@ -78,6 +78,8 @@ type OrderDetailsPaymentBrand =
   | "amex"
   | "jcb"
   | "unionpay"
+  | "discover"
+  | "diners"
   | "apple-pay"
   | "google-pay";
 

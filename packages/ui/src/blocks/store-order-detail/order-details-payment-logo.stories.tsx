@@ -9,6 +9,8 @@ const BRANDS: OrderDetailsPaymentBrand[] = [
   "amex",
   "jcb",
   "unionpay",
+  "discover",
+  "diners",
   "apple-pay",
   "google-pay",
 ];
@@ -38,11 +40,20 @@ export const Amex: Story = {
 };
 
 export const Jcb: Story = {
+  name: "JCB",
   args: { brand: "jcb" },
 };
 
 export const UnionPay: Story = {
   args: { brand: "unionpay" },
+};
+
+export const Discover: Story = {
+  args: { brand: "discover" },
+};
+
+export const DinersClub: Story = {
+  args: { brand: "diners" },
 };
 
 export const ApplePay: Story = {

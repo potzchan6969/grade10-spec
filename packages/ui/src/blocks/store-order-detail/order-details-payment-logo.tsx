@@ -1,6 +1,8 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   AmericanExpress,
+  DinersClub,
+  Discover,
   JCB,
   Mastercard,
   UnionPay,
@@ -16,6 +18,8 @@ const PAYMENT_BRAND_LABEL: Record<OrderDetailsPaymentBrand, string> = {
   amex: "American Express",
   jcb: "JCB",
   unionpay: "UnionPay",
+  discover: "Discover",
+  diners: "Diners Club",
   "apple-pay": "Apple Pay",
   "google-pay": "Google Pay",
 };
@@ -35,7 +39,7 @@ type OrderDetailsPaymentLogoProps = {
  *
  * Card brands use `react-svg-credit-card-payment-icons` (`logo` format),
  * imported from that format's subpath: the package root keeps every brand in
- * every format, over 500 KB, for these five.
+ * every format, over 500 KB, for these seven.
  * Wallet brands use bundled brand marks from SVGRepo assets.
  */
 function OrderDetailsPaymentLogo({
@@ -85,6 +89,24 @@ function OrderDetailsPaymentLogo({
     case "unionpay":
       return (
         <UnionPay
+          aria-label={label}
+          className={shared}
+          height={LOGO_HEIGHT}
+          role="img"
+        />
+      );
+    case "discover":
+      return (
+        <Discover
+          aria-label={label}
+          className={shared}
+          height={LOGO_HEIGHT}
+          role="img"
+        />
+      );
+    case "diners":
+      return (
+        <DinersClub
           aria-label={label}
           className={shared}
           height={LOGO_HEIGHT}
