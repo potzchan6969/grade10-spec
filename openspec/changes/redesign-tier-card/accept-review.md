@@ -1,23 +1,23 @@
-reviewed: ea5ac1b35964833fafb479b50c63a89af1be7bcd
-source-identity: 313fe45ff096dad4900a51f0257bf19ce3fcf5cb42a812d479f06dfb40bf6bdf
-baseline-identity: unavailable
-verdict: Not ready - 1 blocker
+reviewed: f7c5ba0cd1f5d21572c16527272c0c75bd2bb3ed
+source-identity: dd986d1ffcf12a2c557f4e714f67bc13e13ead57e62f8c7ae44cb9d8b621f499
+baseline-identity: 7fb750b92b2608bc5128ac7689a70562aa7220cb2264a8ba569941ac1c5f8864
+verdict: Ready to accept
 
 | # | Severity | Where | Finding | Owner | Fix in | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | blocker | `docs/prds/products/grade10-site/loyalty/membership.md` (Membership row, "No expiry line" bullet) × `decisions.md` Q3 and `## Raised` × `proposal.md` × `specs/.../feature-tcs.md` | The balance-expiry line's new home is undecided and every artifact carries the open mark: the page says `❓ Where the expiry date reads instead`, Q3's decided cell and the Raised row carry `❓ ... Tier & Benefits page 🚧`, and `accept:preflight` refuses the change while any of them stand. The line leaves `TierCard` either way; the question is only whether its relocation to the Tier & Benefits page is confirmed. Parked: `awaiting: decisions` in `.openspec.yaml` holds acceptance until the Tier & Benefits page design answers it. | PM | the PRD line and `decisions.md`, then the delta prose | open |
-| 2 | note | `openspec/changes/never-lock-a-coupon/specs/grade10-site/loyalty/programme/spec.md:442` × `openspec/changes/redesign-tier-card/specs/grade10-site/loyalty/programme/spec.md:5` | Both deltas restate `The membership surface exports` with different text: `never-lock-a-coupon` carries the pre-redesign clause set (expiry-line prop, renewal validity) under the `TierCard` name. `depends_on` orders the fold correctly, but if it accepts or archives first, the durable contract briefly claims the card renders a line it no longer has — publish order matters, not correctness of the final fold. | — | landing order; no source change | open |
+| 1 | note | `never-lock-a-coupon` delta × this delta | Its leftover `ActivityList` and old expiry-prop `TierCard` text does not break the fold: both MODIFY the whole requirement and `depends_on` puts this change last, so the end state is `PointHistory` and the new card. | none | landing order | open |
+| 2 | note | `add-tiers-benefits-surface`, `redesign-member-pass`, `rewards-shop-surface` deltas | They restate the same `TierCard` paragraph and `PointHistory`; no conflict. | none | none | open |
+| 3 | note | acceptance baseline `7fb750b9…` | `never-lock-a-coupon` is already accepted; if it archives first the baseline moves and archive preflight asks for an acknowledgement. | Engineering | at archive | open |
+| 4 | note | `membership.md` Tiers & Benefits ❓ lines; `tiers.md` ❓ lines | Open marks outside this change's lines, owned by `add-tiers-benefits-surface` and the tiers page. | PM | other changes | open |
+| 5 | note | SC-123, SC-185, SC-186 | "summary" wording and the expiry line's surface are deferred to `add-tiers-benefits-surface`, which places the line. | `add-tiers-benefits-surface` | cross-change | open |
 
 ## Coverage
 
 | Source or dependency | Checked identity | Checks applied | Carried from |
 | --- | --- | --- | --- |
-| `redesign-tier-card` sources (proposal, decisions, spec delta, user-journeys, feature-tcs, tasks, `.openspec.yaml`) | `313fe45f…` review-scope digest, 404 inputs | full read; page-to-delta, same-facts, nothing-open, folded-result | — |
-| `docs/prds/products/grade10-site/loyalty/membership.md` | worktree | 🚧/❓ lines vs delta; embed `loyalty-membership-blocks-tiercard--gold`; callout names Figma frame | — |
-| `docs/prds/products/grade10-site/loyalty/{coupons,operator-console,paying-with-points,points,rewards,tiers}.md` | worktree | frontmatter `spec:` scope; no page states the card's old facts | — |
-| `openspec/specs/grade10-site/loyalty/programme/spec.md` | `ea5ac1b` | MODIFIED names an existing requirement; all six scenarios carried; Purpose untouched | — |
-| `never-lock-a-coupon` delta | worktree | overlap on the shared requirement; `depends_on` fold order | — |
-| `pnpm plan:review-preflight --json` | — | `ready`, zero blockers; overlap expansion taken | — |
-| `pnpm accept:preflight` | — | refused: unresolved ❓/TBC in decisions, proposal, feature-tcs; open Raised row | — |
-| `pnpm check:manual` | — | 0 failures; warnings are pre-existing suite/doc gaps | — |
-| `pnpm openspec validate`, `pnpm validate:changes` | — | change valid; 81 changes validated | — |
+| `redesign-tier-card` sources | `dd986d1f…` review-scope digest | full read; page-to-delta, same-facts, nothing-open, folded result | — |
+| `docs/prds/products/grade10-site/loyalty/membership.md` | `f7c5ba0c` | marks vs delta; Membership row and no-expiry bullet served | — |
+| `openspec/specs/grade10-site/loyalty/programme/spec.md` | `f7c5ba0c` | MODIFIED names an existing requirement; `PointHistory` clauses carried; Purpose untouched | — |
+| sibling deltas on the shared requirement | `f7c5ba0c` | overlap and `depends_on` fold order | — |
+| `pnpm accept:preflight` | — | ready to fold and accept | — |
+| `pnpm check:manual` | — | 0 failures; 56 warnings, none in scope | — |
