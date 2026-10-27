@@ -63,7 +63,7 @@ Depends on the contract in group 2 and the columns in group 3.
 - [x] 4.16 Make `grade10-site-store-account-profile-SC-14`, `grade10-site-store-account-profile-SC-15`, `grade10-site-store-account-profile-SC-18`, `grade10-site-store-account-profile-SC-21`, `grade10-site-store-account-profile-SC-22` and `grade10-site-store-account-profile-SC-29` answer typed refusals: `profile.update` judges with `profileEditRefusal` and answers `refused` with its reason, the input schema keeps only shape, and the avatar route answers `avatarType` or `avatarTooLarge`, the length refused before the body is read included
 - [x] 4.17 Make `grade10-site-store-wallet-member-card-SC-39` and `grade10-site-store-wallet-member-card-SC-58` hold per member: the wallet's facts reader takes shop names from the store before asking auth for the rest, an auth failure fails only the rows it could not name, keeping each one's rung and recording why, and the lap refreshes every other member, so a pass with a shop name never waits on another member; `displayNames` keeps throwing for adding a pass and the till
 
-## 5. The account page (grade10)
+## 5. The account page (grade10) (owner: @seankcw)
 
 Depends on group 1 through the submodule, and on groups 2 and 4.
 
