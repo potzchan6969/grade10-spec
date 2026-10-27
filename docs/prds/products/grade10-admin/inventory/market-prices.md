@@ -38,11 +38,10 @@ exact grade or condition the item matches.
   last read in ten pages keeps what it read, is flagged, and claims
   yesterday only where it reached back past yesterday's start, as after a
   missed night
-- ❓ **A card selling more than ten pages a night** - over about 200 sales
+- 🚧 **A card selling more than ten pages a night** - over about 200 sales
   between nightly reads, fewer where pages are slow, every night's read is
   cut short in yesterday, so its claim stays put and its factor fades as if
-  reads failed; more pages a read, or the SNKRDUNK worker, would reach it -
-  TBC, owner and engineering
+  reads failed, until the house's SNKRDUNK worker reads it
 - ❓ **How many a night** - at one reference a minute, 1,440 fit a day; past
   that reads fall more than a day apart. Faster reads come with the
   SNKRDUNK worker - TBC, owner and engineering
@@ -106,6 +105,7 @@ separate. The working behind the value and the factor is
 | Eventually right | Decided | A week reads what was observed before its cutoff, so it is the same whenever it is worked, and late observations reach the next week - on the owner's direction, 2026-10-26 | Owner |
 | Every read is kept | Decided | Which source read what, when, and what it saw, so a failed read is told apart from a quiet market - 2026-10-26 | Engineering |
 | Fetching SNKRDUNK | Decided | SNKRDUNK consents to the house reading its sales; a daily fetch with staff typing as the fallback - 2026-10-26 | Owner |
+| Cards too busy for ten pages | Decided | Read no more pages a night than ten; a card selling more waits for the house's SNKRDUNK worker - 2026-10-27 | Owner |
 | The day a sale counts on | Decided | Hong Kong's: each day's price comes from all of that day's sales, read just after its midnight; a new reference's first read takes the older days as SNKRDUNK prints them, in Japan's - 2026-10-27 | Owner |
 | The exchange rate | Decided | An admin's exact rate, applied from the next day, as consignment's auction rate is; the platform fetches no rate - 2026-10-26 | Finance |
 :::
