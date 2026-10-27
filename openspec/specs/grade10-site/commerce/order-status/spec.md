@@ -122,8 +122,8 @@ evaluating these rules in order and taking the first that matches:
 | --- | --- | --- |
 | 1 | Order state is `canceled` | `canceled` |
 | 2 | Payment state is `voided` | `canceled` |
-| 3 | Payment state is `refunded` or `partially_refunded`, **and** fulfilment state is neither `on_hold` nor `scheduled` | `refunded` |
-| 4 | Fulfilment state is `fulfilled` **and** payment state is `paid` **and** every parcel arrived | `completed` |
+| 3 | Payment state is `refunded`, **and** fulfilment state is neither `on_hold` nor `scheduled` | `refunded` |
+| 4 | Fulfilment state is `fulfilled` **and** payment state is `paid` or `partially_refunded` **and** every parcel arrived | `completed` |
 | 5 | Fulfilment state is `fulfilled` or `partially_fulfilled` | `shipped` |
 | 6 | Otherwise | `processing` |
 
@@ -131,10 +131,14 @@ evaluating these rules in order and taking the first that matches:
 to a badge. The mapping SHALL NOT return an empty, absent, or error status for
 any combination.
 
-**Refund first** - Rule 3 SHALL outrank rules 4 and 5, so that money returning
-to a collector is reported ahead of fulfilment progress. Rule 3's exclusion of
-`on_hold` and `scheduled` SHALL keep an order that is still in progress
-reported as `processing`, even when part of it has been refunded.
+**A full refund first** - Rule 3 SHALL outrank rules 4 and 5, so that money
+returned in full is reported ahead of fulfilment progress. Rule 3's exclusion
+of `on_hold` and `scheduled` SHALL keep an order that is still in progress
+reported as `processing`, even when it has been refunded in full.
+
+**A partial refund keeps the progress** - A partial refund SHALL NOT move the
+badge: an order whose payment state is `partially_refunded` SHALL resolve to
+the badge it would resolve to paid in full, `completed` included.
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-ln4 rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-02 - A canceled order reports Canceled
@@ -154,14 +158,15 @@ reported as `processing`, even when part of it has been refunded.
 - **THEN** the badge is `canceled`
 - **AND** the badge is not `processing`
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-o4y rev=1 -->
-#### Scenario: grade10-site-commerce-order-status-SC-04 - A refund outranks fulfilment progress
+<!-- trace:scenario id=g10.commerce-order-status.SC-o4y rev=2 -->
+#### Scenario: grade10-site-commerce-order-status-SC-04 - A partial refund leaves the badge to fulfilment progress
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
-- **GIVEN** an order whose payment state is `partially_refunded` and whose fulfilment state is `fulfilled`
+- **GIVEN** an order whose order state is `open`, payment state is `partially_refunded`, and fulfilment state is `fulfilled`
+- **AND** every parcel arrived
 - **WHEN** its order status is resolved
-- **THEN** the badge is `refunded`
-- **AND** the badge is neither `shipped` nor `completed`
+- **THEN** the badge is `completed`
+- **AND** the badge is not `refunded`
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-0st rev=1 -->
 #### Scenario: grade10-site-commerce-order-status-SC-05 - A held order carrying a partial refund stays Processing
@@ -232,11 +237,11 @@ rules in order, after the badge is known, and taking the first that matches:
 | 1 | Badge `canceled`, order state not `canceled`, payment `voided` | `payment-voided` |
 | 2 | Badge `canceled`, payment `partially_paid` or `paid` | `awaiting-refund` |
 | 3 | Badge `canceled`, fulfilment `partially_fulfilled` | `canceled-some-items-shipped` |
-| 4 | Badge `refunded`, return state `returned`, payment `partially_refunded` | `items-returned-partial-refund` |
+| 4 | Badge `completed` or `shipped`, return state `returned`, payment `partially_refunded` | `items-returned-partial-refund` |
 | 5 | Badge `refunded`, return state `returned` | `items-returned` |
-| 6 | Badge `refunded`, payment `partially_refunded`, fulfilment `fulfilled` | `partial-refund-shipped` |
-| 7 | Badge `refunded`, payment `partially_refunded`, fulfilment `partially_fulfilled` | `partial-refund-partly-shipped` |
-| 8 | Badge `refunded`, payment `partially_refunded` | `partial-refund-unshipped` |
+| 6 | Badge `completed` or `shipped`, payment `partially_refunded`, fulfilment `fulfilled` | `partial-refund-shipped` |
+| 7 | Badge `shipped`, payment `partially_refunded`, fulfilment `partially_fulfilled` | `partial-refund-partly-shipped` |
+| 8 | Badge `processing`, payment `partially_refunded`, fulfilment neither `on_hold` nor `scheduled` | `partial-refund-unshipped` |
 | 9 | Badge `refunded`, payment `refunded`, fulfilment `fulfilled` | `refunded-all-items-shipped` |
 | 10 | Badge `shipped`, fulfilment `partially_fulfilled` | `some-items-shipped` |
 | 11 | Badge `processing`, fulfilment `on_hold`, payment `partially_refunded` | `on-hold-partial-refund` |
@@ -259,13 +264,13 @@ display text. A surface that displays a note SHALL take its words from the
 message catalogs, keyed by that identifier, so that a note is not pinned to
 one language or one brand.
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-t5o rev=1 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-t5o rev=2 -->
 #### Scenario: grade10-site-commerce-order-status-SC-09 - A confirmed combination carries its note
 **Serves:** Secondary note - a partial refund before shipping names its note for the surface that shows one
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `unfulfilled`, and payment state is `partially_refunded`
 - **WHEN** its order status is resolved
-- **THEN** the badge is `refunded`
+- **THEN** the badge is `processing`
 - **AND** the note identifier is `partial-refund-unshipped`
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-x4g rev=1 -->
@@ -286,13 +291,14 @@ one language or one brand.
 - **THEN** the result carries a note identifier from the table above
 - **AND** it carries no human-readable status or note text
 
-<!-- trace:scenario id=g10.commerce-order-status.SC-zkk rev=1 -->
+<!-- trace:scenario id=g10.commerce-order-status.SC-zkk rev=2 -->
 #### Scenario: grade10-site-commerce-order-status-SC-24 - A return chooses the refund's note
 **Serves:** Secondary note - a return names which refund note that surface shows
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `fulfilled`, payment state is `partially_refunded`, and return state is `returned`
+- **AND** every parcel arrived
 - **WHEN** its order status is resolved
-- **THEN** the badge is `refunded`
+- **THEN** the badge is `completed`
 - **AND** the note identifier is `items-returned-partial-refund`
 
 <!-- trace:scenario id=g10.commerce-order-status.SC-7ce rev=1 -->
