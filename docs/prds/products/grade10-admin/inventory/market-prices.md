@@ -28,12 +28,14 @@ exact grade or condition the item matches.
   new reference's first read reaches back 90 days or ten pages, older days
   as SNKRDUNK prints them, in Japan's. Every read is recorded, failed or not
 - 🚧 **Where a read is less exact** - read at the same minute each night,
-  every sale counts once; a read moved against the night before counts the
-  sales within half an hour of the last read twice or not at all. A failed
-  read is tried again minutes later, ahead of the batch; one more than a day
-  after the last places what SNKRDUNK then shows as days ago within half a
-  day, and is flagged, as is one that cannot reach the last read in ten
-  pages, which keeps what it read
+  every sale counts once; a read later than the night before loses the
+  sales of the minutes it moved, and one up to half an hour earlier counts
+  them twice. A failed read is tried again minutes later, ahead of the
+  batch. A read more than a day after the last, after an outage or a
+  refusal, places what SNKRDUNK then shows as days ago by the middle of the
+  day it names, so up to half a day counts twice or not at all, and is
+  flagged; one that cannot reach the last read in ten pages keeps what it
+  read, is flagged, and claims no more than the reads before it
 - ❓ **How many a night** - at one reference a minute, 1,440 fit a day; past
   that reads fall more than a day apart. Faster reads come with the
   SNKRDUNK worker - TBC, owner and engineering
