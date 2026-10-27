@@ -72,10 +72,16 @@ type OrderDetailsSummary = {
   total?: OrderDetailsSummaryRow;
 };
 
+/** A card or wallet mark; `card` is a card of no recognized brand, drawn plain. */
 type OrderDetailsPaymentBrand =
+  | "card"
   | "visa"
   | "mastercard"
   | "amex"
+  | "jcb"
+  | "unionpay"
+  | "discover"
+  | "diners"
   | "apple-pay"
   | "google-pay";
 
