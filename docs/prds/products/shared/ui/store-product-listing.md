@@ -4,135 +4,46 @@ spec: shared/ui/store-product-listing
 order: 4
 ---
 
-This is the page a shopper browses a category on. A sidebar carries a heading, a
-search box and the filter groups. A header above the grid states how many
-results there are, which filters are applied, and how the list is sorted. The
-grid shows product tiles that reflow their column count with the width available
-and load more as the shopper scrolls.
+The blocks a store's catalogue is browsed with: a filter sidebar, a results header and a grid of product tiles.
 
-## Product Tile
+## What the App Supplies
 
-**Whole photo** - the square well shows the whole photo, centred and as
-large as it fits; leftover space is the well, not a cropped edge. Where a photo
-reaches into the well's rounded corners, it rounds with them. Available, on
-sale, sold out and in cart all do this. A photo that grows on hover may lose its
-edges until the pointer leaves.
-
-**Photo as supplied** - the photo is not blended into the well. Available,
-on sale, sold out and in cart all do this; a sold-out photo takes its sold-out
-treatment over it.
-
-**Name opens the product** - when the tile can open a product, the name
-does too, the same way the photo does, and shows it by an underline on hover
-and on keyboard focus; a sold-out tile's name stays inert where the tile
-sells, and a name that does not open is plain text.
-
-**One stop to open** - the name is the tile's only keyboard stop for
-opening the product and the one control a screen reader announces for it, so
-each product is announced once; the photo opens on a pointer press only.
-
-**Photo on its own** - used without its tile, the photo opens where a tile
-would, and is its own keyboard stop, named for the product.
-
-**A link** - a tile that opens, given its product's page, is a link to
-it: it can open in a new tab, and its address can be copied -
-[You May Also Like](/p/grade10-site/store/cross-sell)'s tiles
-
-**Opens where it does not sell** - on a surface that draws no cart control,
-a sold-out tile still opens its product, sold-out treatment and all -
-[You May Also Like](/p/grade10-site/store/cross-sell), and the
-[Main Page](/p/grade10-site/store/home)'s row of cards
-
-**No cart words where it does not sell** - a tile that draws no cart
-control needs no cart word from the surface
-
-**Cart on a small screen** - where the tile sells, the round cart control
-stays visible without hover on a narrow viewport and on touch; on a wide
-viewport with a fine pointer it still appears on hover or keyboard focus.
-
-## Adaptive Filter
-
-**Narrow pills** — below the wide breakpoint: result count and pills for
-sort and each facet group; bottom drawers; no listing search. Facet drawers
-draft until Show Results. Wide keeps the sidebar and chip header.
-
-## Search
-
-On a wide viewport the listing search field sits with the filters. Narrow
-chrome has no search. The application decides which hits to show.
-
-- **Supplied groups** — while they type, the field shows the product and
-  filter groups it is given; it invents none
-- **Searching and empty** — while hits resolve it shows searching and
-  invents no row; when nothing matched it says so; Enter still reports a
-  commit either way
-- **Commit and pick** — submitting with no row highlighted reports a
-  search commit; activating a row reports that suggestion; the surface does
-  not navigate or apply filters
-
-The surface holds no state of its own. Which products match, how they are
-ordered, how many there are and what a cart control does are all the
-application's answers; the components render a selection and report a change.
-The ceiling a cart control stops at and the count a tile says are the
-application's too — the card derives neither and judges nothing about scarcity.
-A sold-out tile shows no count, because nothing is left to run out of. An empty
-catalogue and a search that matched nothing are told apart, because they need
-different words.
-
-:::flow{title="Browsing and filtering"}
-## The page opens
-
-On a wide viewport the sidebar shows the search box and filter groups; the
-header shows the result count, sort, and chips. On a narrow viewport the
-listing shows the result count and pills for sort and each facet group.
-
-## The shopper searches
-
-On a wide viewport they type in the listing search field. The field shows the
-groups it is given, or that it is searching, or that nothing matched. Submitting
-or picking a row is reported; the application decides what matches. Narrow
-chrome has no search.
-
-## They open a facet on a narrow viewport
-
-A facet pill opens a bottom drawer for that group. They tick options in a
-draft; Show Results applies and closes; Clear empties the draft for that group.
-
-## They tick a filter on a wide viewport
-
-A chip for it appears in the result header under the applied filters, and can be
-removed from there.
-
-## They change the sort
-
-The header reports it and the grid re-renders with whatever the application
-returns.
-
-## They scroll
-
-More products load in place, until the end of the catalogue is reached.
-
-## Nothing matches
-
-The surface shows a no-match state — distinct from the state it shows when the
-catalogue itself is empty.
-
-## They add to the cart
-
-The tile reports the quantity change and the application updates the cart.
-:::
+- **Everything Shown** — the products, their order, the counts, the filters and the suggestions; the blocks show what they are given and report each change
+- **Cart Limits** — a cart control's maximum and a tile's remaining count; the card works out neither
+- **Empty and No Match** — told apart, each with its own words
 
 ::story{id="store-product-listing-blocks-productbrowse--default" title="The whole browse surface"}
 
-::story{id="store-product-listing-blocks-productbrowse-states--no-match" title="A search that matched nothing"}
+## Product Tile
 
-::story{id="store-product-listing-blocks-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
+- **Photo** — the whole photo, centred and as large as it fits in the square well, rounding with the well's corners
+  - **As Supplied** — not blended into the well
+  - **On Hover** — may grow and lose its edges until the pointer leaves
+- **Name** — opens the product, as the photo does, underlined on hover and keyboard focus; a name that doesn't open is plain text
+  - **One Stop to Open** — the name is the tile's only keyboard stop and the one control a screen reader announces; the photo opens on a pointer press
+- **Link** — a tile given its product's page is a link, so it opens in a new tab and its address can be copied — [You May Also Like](/p/grade10-site/store/cross-sell)
+- **Cart Control** — always visible on small screens and touch; on a wide screen with a mouse, on hover or keyboard focus
+- **Sold Out** — the sold-out treatment over the photo; doesn't open where the tile sells
+  - **Where Nothing Sells** — opens its product, as on [You May Also Like](/p/grade10-site/store/cross-sell) and the [Main Page](/p/grade10-site/store/home)'s row of cards
+- **Photo on Its Own** — used without its tile, opens where the tile would, as its own keyboard stop named for the product
 
 ::story{id="store-product-listing-blocks-productcardimage--non-square-photo" title="The whole photo in the well"}
 
-::story{id="store-product-listing-blocks-productcardimage--sold-out" title="A sold-out product tile"}
+## Small Screens
 
-::story{id="store-product-listing-blocks-productcard--sold-out-opens-where-nothing-sells" title="A sold-out tile that opens where nothing sells"}
+- **Pills** — the result count, sort and one per facet group, each opening a drawer from the bottom
+  - **Facet Drawers** — a draft until the shopper confirms
+
+::story{id="store-product-listing-blocks-productbrowse--narrow" title="Small screen"}
+
+## Search
+
+- **Search Box** — wide screens only, with the filters
+  - **Suggestions** — the product and filter groups the app gives
+  - **Searching and No Match** — shown while hits resolve, and when nothing matched
+  - **Enter and Picking** — reported to the app; the box doesn't navigate or apply a filter itself
+
+::story{id="store-product-listing-blocks-productbrowse-search--suggestions-and-commit" title="Search"}
 
 :::detail{title="Product decisions" for="pm"}
 The surface displays what a consuming application supplies and decides none of
