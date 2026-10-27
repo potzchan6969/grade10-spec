@@ -1038,6 +1038,7 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** manual
 * **Trace:** product-listing#filters
+* **Retired:** 2026-10-27 - the product listing page no longer states what a shop with no filters shows
 
 **Pre-conditions:**
 
