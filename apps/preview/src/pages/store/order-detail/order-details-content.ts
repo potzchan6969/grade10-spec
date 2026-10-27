@@ -172,6 +172,63 @@ const PARTIAL_REFUND_CONTENT = {
   } satisfies OrderDetailsSummary,
 };
 
+/** A web order refunded in full before a parcel left: every line is
+ * struck, the steps end at Refunded, the paid total stays and the whole
+ * amount reads as its Refund row. An order that will not earn shows no
+ * points section — the page passes none. */
+const FULL_REFUND_CONTENT = {
+  ...ORDER_DETAILS_CONTENT,
+  orderId: "Order #G10-10440",
+  status: "refunded" as const,
+  delivery: {
+    variant: "delivery",
+    trackOrder: false,
+    steps: [
+      {
+        label: "Order Placed",
+        date: FIXTURE_ORDER_PLACED_DAY,
+        state: "completed",
+      },
+      {
+        label: "Refunded",
+        date: FIXTURE_ORDER_SHIPPED_DAY,
+        state: "completed",
+      },
+    ],
+  } satisfies OrderDetailsDelivery,
+  lines: [
+    {
+      id: "refund-line-1",
+      product: "Pokémon TCG Sealed Booster Box – Ninja Spinner (M4)",
+      subtotal: "HK$780",
+      quantity: "1",
+      total: "HK$780",
+      imageSrc: IMAGE,
+      imageAlt: "Pokémon TCG Sealed Booster Box – Ninja Spinner (M4)",
+      lineStatus: "refunded" as const,
+      statusMessage: FIXTURE_REFUND_MESSAGE,
+      struckThrough: true,
+    },
+    {
+      id: "refund-line-2",
+      product: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+      subtotal: "HK$105",
+      quantity: "1",
+      total: "HK$105",
+      imageSrc: IMAGE,
+      imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+      lineStatus: "refunded" as const,
+      statusMessage: FIXTURE_REFUND_MESSAGE,
+      struckThrough: true,
+    },
+  ] satisfies readonly OrderDetailsLineItem[],
+  summary: {
+    subtotal: { label: "Subtotal", value: "HK$885.00" },
+    refund: { label: "Refund", value: "−HK$885.00" },
+    total: { label: "Total", value: "HK$885.00" },
+  } satisfies OrderDetailsSummary,
+};
+
 /** A point-of-sale order: the paid total only, with no web fields invented. */
 const POINT_OF_SALE_CONTENT = {
   copy: ORDER_DETAILS_COPY,
@@ -219,6 +276,7 @@ const ORDER_DETAILS_READ_COPY = {
 const ORDER_DETAILS_READ_MS = 400;
 
 export {
+  FULL_REFUND_CONTENT,
   ORDER_DETAILS_CONTENT,
   ORDER_DETAILS_READ_COPY,
   ORDER_DETAILS_READ_MS,
