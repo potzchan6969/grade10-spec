@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync, spawn, spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -8,14 +8,11 @@ import { fileURLToPath } from "node:url";
 import { changedPaths, landedShas } from "./lib/landed.mjs";
 import { writableBy } from "./lib/writable.mjs";
 import { outOfBounds } from "./reread-guard.mjs";
-import { answer, stubRelay, urlOf } from "./test/stub-relay.mjs";
 
 /**
  * What a re-read may write (`lib/writable.mjs`), and the guard that fails on
- * a path it pushed outside that set. What the settings once denied and the
- * notice once posted are the relay's own business now — the session runs the
- * guard itself before it pushes (`reread-guard.mjs`'s own header), and
- * `relay-post.mjs` is what tells the thread. A bare remote stands in for the
+ * a path it pushed outside that set. The session runs the guard itself before
+ * it pushes (`reread-guard.mjs`'s own header). A bare remote stands in for the
  * session's checkout and the push it makes to it, so the guard is proved
  * against what a real run pushes rather than against two commits in one
  * working tree.
@@ -126,42 +123,6 @@ const guard = (root, args = [], target = ARTIFACT) =>
     ],
     { encoding: "utf8" },
   );
-
-/** The guard in a child that does not block this process's event loop: what
- * the `--alive` cases need, since the stub relay answers from here. */
-const guardAsync = (root, args = [], target = ARTIFACT) =>
-  new Promise((resolve) => {
-    const child = spawn(process.execPath, [
-      join(SCRIPTS, "reread-guard.mjs"),
-      CHANGE,
-      target,
-      "--root",
-      root,
-      ...args,
-    ]);
-    let stdout = "";
-    let stderr = "";
-    child.stdout.on("data", (chunk) => {
-      stdout += chunk;
-    });
-    child.stderr.on("data", (chunk) => {
-      stderr += chunk;
-    });
-    child.on("close", (status) => resolve({ status, stdout, stderr }));
-  });
-
-/** `.round/relay.json` as a wake writes it. */
-function writeRelayFile(root, url) {
-  mkdirSync(join(root, ".round"), { recursive: true });
-  writeFileSync(
-    join(root, ".round", "relay.json"),
-    JSON.stringify({
-      relay: { url, token: "wake-tok-9" },
-      change: CHANGE,
-      sender: { handle: "@dana" },
-    }),
-  );
-}
 
 // ── The guard's own argv parser ─────────────────────────────────────────────
 
@@ -444,65 +405,4 @@ test("a checkout with no origin/main stops the guard: it cannot say what the run
   assert.equal(result.status, 1);
   assert.match(result.stderr, /::error::no origin\/main in this checkout/);
   assert.match(result.stderr, /cannot say what this run pushed/);
-});
-
-// ── --alive: the wake asked before the push ─────────────────────────────────
-
-test("shared-planning-agent-rounds-SC-74 - --alive with no wake asks nothing: the terminal round pushes on its own word", async () => {
-  const { root } = sandbox();
-
-  const result = await guardAsync(root, ["--alive"]);
-
-  assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /no wake to ask about/);
-});
-
-test("shared-planning-agent-rounds-SC-74 - --alive passes while the wake is the room's own", async () => {
-  let seen;
-  const server = await stubRelay((req, res) => {
-    seen = { method: req.method, url: req.url };
-    answer(res, 200, { alive: true });
-  });
-  const { root } = sandbox();
-  writeRelayFile(root, urlOf(server));
-
-  const result = await guardAsync(root, ["--alive"]);
-  server.close();
-
-  assert.equal(result.status, 0, result.stderr);
-  assert.equal(seen.method, "GET");
-  assert.equal(seen.url, "/runs/wake-tok-9/alive");
-  assert.match(result.stdout, /the wake is alive/);
-});
-
-test("shared-planning-agent-rounds-SC-74 - --alive stops a group's push too, though no path is checked", async () => {
-  const server = await stubRelay((_req, res) => {
-    answer(res, 401, { reason: "this wake is closed" });
-  });
-  const { root } = sandbox();
-  writeRelayFile(root, urlOf(server));
-
-  const result = await guardAsync(root, ["--alive"], GROUP);
-  server.close();
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /401/);
-  assert.doesNotMatch(result.stdout, /a task group writes/);
-});
-
-test("shared-planning-agent-rounds-SC-74 - --alive stops the run where the relay has closed its wake", async () => {
-  const server = await stubRelay((_req, res) => {
-    answer(res, 401, { reason: "this wake is closed" });
-  });
-  const { root } = sandbox();
-  writeRelayFile(root, urlOf(server));
-
-  const result = await guardAsync(root, ["--alive"]);
-  server.close();
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /::error::/);
-  assert.match(result.stderr, /401/);
-  // It stops there: nothing about the paths, which it never read.
-  assert.doesNotMatch(result.stdout, /path\(s\)/);
 });

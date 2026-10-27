@@ -6,8 +6,6 @@ packages:
   - "tools/manual"
   # The OpenSpec store's readers, which `scripts/openspec` runs on.
   - "tools/openspec-store"
-  # The relay: a Cloudflare Worker, deployed with wrangler as the manual is.
-  - "tools/relay"
 allowBuilds:
   esbuild: true
 enableGlobalVirtualStore: true

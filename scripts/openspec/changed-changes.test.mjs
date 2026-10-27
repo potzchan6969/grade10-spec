@@ -659,20 +659,15 @@ test("shared-planning-change-stages-SC-70 - --stages names no change for a push 
     ),
   });
   const head = commit("record the round", 1);
-  const output = join(root, "output.txt");
 
-  const { read } = stages(root, [
+  const { messages, changes } = stages(root, [
     "--base",
     base,
     "--head",
     head,
-    "--github-output",
-    output,
-  ]);
-  const { messages, changes, matrix } = read();
+  ]).read();
 
-  // Nobody's turn moved, the change is named nowhere and the re-read matrix is
-  // empty. The one message owed is the thread's: `landed_by:` gained an entry,
+  // Nobody's turn moved and the change is named nowhere. The one message owed is the thread's: `landed_by:` gained an entry,
   // and the reply is about that very line, so a landing whose only file is the
   // record is told all the same.
   assert.deepEqual(
@@ -681,8 +676,6 @@ test("shared-planning-change-stages-SC-70 - --stages names no change for a push 
   );
   assert.equal(messages[0].key, `probe:landed:${head}`);
   assert.deepEqual(changes.updated, []);
-  assert.deepEqual(matrix, []);
-  assert.match(readFileSync(output, "utf8"), /^matrix=\[\]$/m);
 });
 
 test("shared-planning-change-stages-SC-44 - --stages tells the artifact's hand what changed before it", () => {
@@ -1118,11 +1111,7 @@ const PROPOSED = {
   [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
 };
 
-/** The trailer `plan:land` writes in wake mode, and only there: the landing
- * commit says it was a run's, so the push leaves the reply to the run. */
-const WAKE_TRAILER = "\n\nWake: probe@C0AB/1700000000.000100";
-
-test("shared-planning-change-stages-SC-70 - --stages replies in the thread when a landing commit carries no `Wake:` trailer", () => {
+test("shared-planning-change-stages-SC-70 - --stages replies in the thread for a landing", () => {
   const { root, write, commit } = sandbox();
   write({
     [`${DIR}/.openspec.yaml`]: record(
@@ -1152,35 +1141,6 @@ test("shared-planning-change-stages-SC-70 - --stages replies in the thread when 
   );
   assert.match(landed.text, /now at \*Proposed\*/);
   assert.match(landed.text, /your turn: @dana \(designer\)$/);
-});
-
-test("shared-planning-change-stages-SC-70 - --stages says nothing in the thread for a landing a run marked with the `Wake:` trailer", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    [`${DIR}/.openspec.yaml`]: record(
-      ...HANDS,
-      "thread: C0AB/1700000000.000100",
-    ),
-    [`${DIR}/proposal.md`]: proposalOf(),
-  });
-  const base = commit("propose probe", 3);
-  write({
-    [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
-    ...PROPOSED,
-  });
-  // A hosted run's landing, pushed by the same e-mail a person's would be:
-  // what says it is the run's is the trailer the run wrote, and the run has
-  // replied in the thread itself.
-  const head = commit(`land the three of probe on @dana${WAKE_TRAILER}`, 1);
-
-  const { messages } = stages(root, ["--base", base, "--head", head]).read();
-
-  // Nothing in the thread, and the change's own Your turn messages still go
-  // out: the marker says who told the thread, not whether the push moved
-  // anybody.
-  assert.deepEqual(messages.map((one) => one.key).sort(), [
-    "probe:proposed:design",
-  ]);
 });
 
 test("shared-planning-change-stages-SC-70 - the thread's reply goes out whatever --dms says", () => {
@@ -1220,125 +1180,6 @@ test("shared-planning-change-stages-SC-70 - --stages posts no landing reply for 
   const { messages } = stages(root, ["--base", base, "--head", head]).read();
 
   assert.deepEqual(messages.map((one) => one.kind).sort(), ["your-turn"]);
-});
-
-test("--stages matrix names the change the push touched, as its id alone", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
-    [`${DIR}/proposal.md`]: proposalOf(),
-    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
-  });
-  const base = commit("propose probe", 10);
-  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
-  const head = commit("reword the proposal", 1);
-  const output = join(root, "output.txt");
-
-  const { read } = stages(root, [
-    "--base",
-    base,
-    "--head",
-    head,
-    "--github-output",
-    output,
-  ]);
-  const { matrix } = read();
-
-  // The id alone: the job's own steps name `matrix.id`, and the change's
-  // thread is read from its record by the step that posts.
-  assert.deepEqual(matrix, [{ id: "probe" }]);
-  assert.match(readFileSync(output, "utf8"), /^matrix=\[\{"id":"probe"\}\]$/m);
-});
-
-test("--stages matrix names every change of one push whose behind set at head is not empty, in id order", () => {
-  const { root, write, commit } = sandbox();
-  for (const id of ["alpha", "zebra"]) {
-    write({
-      [`openspec/changes/${id}/.openspec.yaml`]: record("hands:", "  pm: dana"),
-      [`openspec/changes/${id}/proposal.md`]: proposalOf(),
-      [`openspec/changes/${id}/decisions.md`]: "## Goals\n\n- One\n",
-    });
-  }
-  const base = commit("propose both", 10);
-  for (const id of ["alpha", "zebra"]) {
-    write({
-      [`openspec/changes/${id}/proposal.md`]: proposalOf(" Again."),
-    });
-  }
-  const head = commit("reword both proposals", 1);
-
-  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
-
-  // One entry per change, in id order: the job runs them as a matrix, and
-  // the order is the store's own rather than the diff's.
-  assert.deepEqual(matrix, [{ id: "alpha" }, { id: "zebra" }]);
-});
-
-test("--stages matrix names a change the push touched that was behind already", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana", "  design: dana"),
-    [`${DIR}/proposal.md`]: proposalOf(),
-    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
-  });
-  commit("propose and decide", 10);
-  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
-  // The decisions are behind before this push, and stay behind after it: the
-  // designer's own landing arrives with nothing newly behind, and the read
-  // again is still owed on what is.
-  const base = commit("reword the proposal", 5);
-  write({ [`${DIR}/ui-design.md`]: "## Screens\n\nOne.\n" });
-  const head = commit("draw the screens", 1);
-
-  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
-
-  assert.deepEqual(matrix, [{ id: CHANGE }]);
-});
-
-test("--stages matrix names nothing when nothing at head is behind", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    ...throughSpecs(),
-    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
-    [`${DIR}/proposal.md`]: proposalOf(),
-    [`${DIR}/tasks.md`]: tasksMd(0),
-  });
-  const base = commit("plan probe", 3);
-  write({ [`${DIR}/tasks.md`]: tasksMd(1) });
-  const head = commit("build probe 1.1", 1);
-
-  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
-
-  assert.deepEqual(matrix, []);
-});
-
-test("--stages matrix excludes a push that only writes the record's keys", () => {
-  const { root, write, commit } = sandbox();
-  // Proposal and decisions committed together read fresh by the commit-date
-  // fallback (no `reviewed:` line yet, and neither is later than the other).
-  write({
-    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
-    [`${DIR}/proposal.md`]: proposalOf(),
-    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
-  });
-  const base = commit("propose and decide", 5);
-  // A re-read's own commit: only the record's keys change, and the wrong
-  // content id it writes would otherwise read `decisions` as newly behind —
-  // exactly the case the exclusion exists for, since nothing about the push
-  // itself moved anything.
-  write({
-    [`${DIR}/.openspec.yaml`]: record(
-      "hands:",
-      "  pm: dana",
-      "reviewed:",
-      "  decisions: deadbeef",
-    ),
-  });
-  const head = commit("record the round", 1);
-
-  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
-
-  assert.deepEqual(matrix, []);
 });
 
 test("the sender posts each message once and retries a 429 once", async () => {

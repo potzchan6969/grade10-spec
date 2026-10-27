@@ -9,12 +9,9 @@
  * commits it made touched a path the round has no business in — a page the
  * proposal never linked included, since `docs/prds/` and `docs/references/`
  * are where the pages it may mark and the evidence it may correct live, and
- * nothing narrower denies the rest of them up front. The relay checks its own
- * coarser set again before it moves `main` — the change's own directory and
- * those two trees whole (Q55) — so a session that skipped this guard is still
- * caught, just later and more broadly.
+ * nothing narrower denies the rest of them up front.
  *
- *   node scripts/openspec/reread-guard.mjs <change> <artifact|group> [--alive] [--root <dir>]
+ *   node scripts/openspec/reread-guard.mjs <change> <artifact|group> [--root <dir>]
  *
  * The target is the round's own: an artifact is held to the set above, and a
  * task group is held to nothing here. A group pushes code — a package, a
@@ -32,12 +29,6 @@
  * round was reading arrives in the checkout and would otherwise read as a
  * path the re-read pushed.
  *
- * `--alive` asks the relay, before the paths are read, whether this run's
- * wake is still the room's own: a run whose lease the relay has closed under
- * it — its budget spent, or a second wake queued on the change — stops here
- * rather than pushing work no thread is waiting for. With no wake there is
- * nothing to ask and nothing to refuse, which is the terminal round.
- *
  * There is no range to pass: the union above is read from the checkout
  * itself, so a start sha would select nothing and is refused as any other
  * unknown option is.
@@ -47,7 +38,6 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
 import { commitPaths, LANDED, landedShas } from "./lib/landed.mjs";
 import { isGroup } from "./lib/perspectives.mjs";
-import { readWake, relayOf } from "./lib/relay.mjs";
 import { isWritable, writableBy } from "./lib/writable.mjs";
 import { git, storeMain } from "./store-main.mjs";
 
@@ -56,7 +46,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
  * it, the usage refusal the parser prints included. */
 const ERROR = "::error::";
 const USAGE =
-  "usage: node reread-guard.mjs <change> <artifact|group> [--alive] [--root <dir>]";
+  "usage: node reread-guard.mjs <change> <artifact|group> [--root <dir>]";
 
 /** The paths of those the writable set does not hold. */
 export function outOfBounds(paths, writable) {
@@ -92,34 +82,9 @@ function runCommits(root) {
   };
 }
 
-/** The wake this run was fired with, asked whether it is still the room's
- * own. Nothing to ask from a terminal round, which holds no wake. */
-async function checkAlive(root) {
-  const wake = readWake(root);
-  if (!wake) {
-    console.log("no wake to ask about: this run pushes on its own word");
-    return;
-  }
-  let answer;
-  try {
-    answer = await relayOf(wake).alive();
-  } catch (cause) {
-    fail(`the relay could not be reached: ${cause.message}`);
-    return;
-  }
-  if (answer.status !== 200) {
-    fail(
-      `this run's wake is not the room's any more (${answer.status}) — it pushes nothing further`,
-    );
-    return;
-  }
-  console.log("the wake is alive");
-}
-
 async function main() {
   const { positional, flags } = parseArgs(process.argv.slice(2), {
     keys: ["root"],
-    booleans: ["alive"],
     usage: USAGE,
     prefix: ERROR,
   });
@@ -127,10 +92,8 @@ async function main() {
   if (!change || !target) fail(USAGE);
   const root = flags.root ?? join(HERE, "..", "..");
 
-  if (flags.alive) await checkAlive(root);
-
-  // A task group's own work is code, which no writable set holds: the wake is
-  // still asked, and the paths are not read.
+  // A task group's own work is code, which no writable set holds: the paths
+  // are not read.
   if (isGroup(target)) {
     console.log("a task group writes what its tasks name - no path check here");
     return;

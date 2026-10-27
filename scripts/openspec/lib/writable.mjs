@@ -10,7 +10,7 @@
  * that gives a reader what is before the draft, so what a round is given and
  * what it may write are one list read two ways. A `docs/references/` page the
  * proposal cites is one of them: the evidence behind a decision is a round's
- * to correct, and the relay's own set has held it since Q55.
+ * to correct.
  */
 import { pageSections } from "./perspectives.mjs";
 

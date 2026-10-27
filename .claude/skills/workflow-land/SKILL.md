@@ -14,7 +14,7 @@ pnpm run plan:land <change> --whole --perspectives <a,b> --stood "<what stood>"
 ```
 
 Then follow `workflow-round`: its Step 6 is this step's one home - the chain's order,
-the held rows, the reply and the re-read a landing wakes. What the command
+the held rows, the reply and the re-read after a landing. What the command
 does with each flag, and in what order, is its own header's. This skill says
 what you do with each refusal.
 
@@ -24,8 +24,8 @@ what you do with each refusal.
   reassigning the hand is the way around
 - **A held row** — reply with the rows it named; the hand answers them, or
   says `land with recommendations`
-- **The relay's 403** — reply with the check it named and stop; a 409 is one
-  re-read and one retry
+- **A `main` that moved** — the command reads it again once and retries;
+  losing again, it stops: say so
 - **Behind** — say which artifact is behind and whose hand it is, and run
   `/workflow-round reread <change>`
 - **A branch that will not rebase on `main`** — resolve it on the branch: a

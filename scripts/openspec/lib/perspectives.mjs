@@ -775,8 +775,7 @@ const walk = (root, dir) => {
 
 /** The two trees a proposal's link can reach: the pages it marks, and the
  * evidence it cites. A reference is explanatory rather than authoritative,
- * and it is a round's to correct the same way a page is — the relay's own
- * coarser set has held both since Q55. */
+ * and it is a round's to correct the same way a page is. */
 const LINKED = ["docs/prds/", "docs/references/"];
 
 /** The page sections the change's proposal marks: every `docs/prds/` and

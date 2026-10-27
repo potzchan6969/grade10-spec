@@ -1,18 +1,12 @@
 import { execFile } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
-import { appendFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs, promisify } from "node:util";
 import YAML from "yaml";
 import { cliArgs } from "./lib/args.mjs";
-import {
-  messagesOf,
-  milestonesBetween,
-  readingOf,
-  toldBetween,
-} from "./lib/moves.mjs";
+import { messagesOf, milestonesBetween, readingOf } from "./lib/moves.mjs";
 import { deliver, readSentKeys } from "./lib/notify.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
 import { changePageOf, escapeSlackText } from "./lib/wording.mjs";
@@ -344,44 +338,6 @@ async function readingAt(root, base) {
   }
 }
 
-/**
- * The changes whose record a run's own landing wrote in this push.
- *
- * `plan:land` writes a `Wake:` trailer on the commit it cuts in wake mode,
- * and only there, so what says a landing was a run's is the commit the run
- * made. A committer's e-mail cannot say it: it names the machine the push came
- * from, which a rebase, a second account and a workflow's own identity each
- * answer differently, and a person whose e-mail the map does not hold would be
- * read as a run. One `git log` over the push's own range reads every trailer
- * beside the paths each commit touched, and a change whose record a marked
- * commit wrote has had its thread told by the run itself. A git call that
- * refused is not "nobody landed it": it throws, and the step says so.
- */
-async function runLandedOf(root, base, head) {
-  const { stdout } = await exec(
-    "git",
-    [
-      "log",
-      "--format=%x00%(trailers:key=Wake,valueonly,separator=%x2C)",
-      "--name-only",
-      `${base}..${head}`,
-    ],
-    { cwd: root },
-  );
-  const ids = new Set();
-  for (const commit of stdout.split("\0").slice(1)) {
-    const [marker, ...paths] = commit.split("\n");
-    if (marker.trim() === "") continue;
-    for (const path of paths) {
-      const at = location(path);
-      if (at?.kind !== "active") continue;
-      if (path === `${CHANGE_ROOT}${at.directory}/${RECORD_FILE}`)
-        ids.add(at.id);
-    }
-  }
-  return ids;
-}
-
 /** The files of each touched change, change by change — what says whether a
  * push wrote anything but the record's own keys. */
 function touchedByChange(changed) {
@@ -424,42 +380,6 @@ async function keysOnly(root, base, head, touched) {
     if (withoutRecordKeys(was) === withoutRecordKeys(now)) only.add(id);
   }
   return only;
-}
-
-/**
- * The re-read job's matrix: one entry per change this push touched whose
- * behind set at head is not empty.
- *
- * Behind at head, not newly behind against the base: a landing that arrives
- * while something of the change is already behind puts nothing new behind,
- * and the read again is owed on what is. A change the push did not touch is
- * left out either way — re-reading it here would fire the same change again
- * on every unrelated push until a landing clears it. Touched is its own
- * directory or an artifact of it this push put newly behind, which is how a
- * commit on a page the proposal links reaches the change that links it.
- *
- * A change touched only through the round's own record lines is excluded by
- * the same `suppressed` set that silences its messages, which is what keeps
- * the cascade finite: the re-read's own commit never re-enters this matrix,
- * even where the content id it wrote leaves the artifact reading as behind.
- *
- * The id is the whole entry: every step of the job names `matrix.id`, and the
- * step that posts reads the change's `thread:` from its own record, so an
- * entry carrying the address too would be a second copy of it to keep true.
- */
-export function rereadMatrixOf(touched, base, head, suppressed) {
-  const ids = new Set([
-    ...touched.keys(),
-    ...toldBetween(base, head).map((one) => one.id),
-  ]);
-  const matrix = [];
-  for (const id of ids) {
-    if (suppressed.has(id)) continue;
-    const at = head.get(id);
-    if (at === undefined || at.behind.length === 0) continue;
-    matrix.push({ id });
-  }
-  return matrix.sort((left, right) => left.id.localeCompare(right.id));
 }
 
 function without(changes, suppressed) {
@@ -522,7 +442,6 @@ async function main() {
         type: "string",
         default: "https://spec.grade10-stg.com/openspec/",
       },
-      "github-output": { type: "string" },
     },
   });
   if (!values.base) throw new Error("--base is required");
@@ -550,7 +469,6 @@ async function main() {
   let atHead = new Map();
   let messages = [];
   let skipped = [];
-  let matrix = [];
   if (values.stages) {
     const team = readTeamMap(root, values.team);
     // The head is the checkout, which is what a push's job holds; a head
@@ -567,20 +485,14 @@ async function main() {
       pushHead: head,
     });
     const sent = readSentKeys(values["sent-keys"]);
-    // One git call for the whole push, whatever it landed: the changes whose
-    // landing a run marked, and whose threads it has told itself.
-    const runLanded = await runLandedOf(root, values.base, head);
     // A push whose only word about a change is the round's own record keys
     // moves nobody, and says so rather than naming the change - but the
     // thread's landing reply is about those very keys, so it is owed even
-    // then, and is dropped only where the run that landed it replied itself.
-    // Each message carries the change's own id, so it is read off directly
-    // rather than split back out of the key.
-    const held = (one) =>
-      one.kind === "landed" ? runLanded.has(one.id) : suppressed.has(one.id);
+    // then. Each message carries the change's own id, so it is read off
+    // directly rather than split back out of the key.
+    const held = (one) => one.kind !== "landed" && suppressed.has(one.id);
     messages = told.messages.filter((one) => !sent.has(one.key) && !held(one));
     skipped = told.skipped.filter((one) => !suppressed.has(one.id));
-    matrix = rereadMatrixOf(touched, atBase, atHead, suppressed);
   }
 
   const milestones = milestonesBetween(
@@ -630,12 +542,6 @@ async function main() {
     token: process.env.SLACK_BOT_TOKEN,
   });
 
-  if (values["github-output"]) {
-    await appendFile(
-      values["github-output"],
-      `matrix=${JSON.stringify(matrix)}\n`,
-    );
-  }
   process.stdout.write(
     JSON.stringify({
       changedPaths,
@@ -645,7 +551,6 @@ async function main() {
       stages,
       messages,
       skipped,
-      matrix,
     }),
   );
 }

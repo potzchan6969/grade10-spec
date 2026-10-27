@@ -13,8 +13,7 @@
  * root rather than reading the file itself.
  *
  * The text itself is read by `team-parse.mjs`, which imports nothing of
- * node's: the relay reads the same map from the code host at a sha, where
- * there is no file to open.
+ * node's.
  */
 import { join } from "node:path";
 import { ROLES } from "../../../tools/openspec-store/src/types.ts";
@@ -22,7 +21,7 @@ import { handleOf, isHandle } from "./handle.mjs";
 import { readTextIfThere } from "./read-text.mjs";
 import { parseTeamMap, TEAM_MAP } from "./team-parse.mjs";
 
-/** All four pure, and read by a browser and by the relay as well as by this
+/** All four pure, and read by a browser as well as by this
  * reader — `handle.mjs`'s and `team-parse.mjs`'s own reason for existing
  * beside this file, which reads the map off disk. They are re-exported here
  * so the store's callers still have one module. */

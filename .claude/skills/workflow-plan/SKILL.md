@@ -23,7 +23,7 @@ openspec instructions user-journeys --change <change>
 
 ## Opening a Change From One Sentence
 
-- **Input** - A planning-channel sentence naming no change comes from the first of `.round/relay.json`'s `messages`; a terminal sentence is the argument. A message naming an existing change uses its thread and opens nothing.
+- **Input** - The sentence is the argument, typed in a terminal or handed to the Routine by its person; a planning-channel sentence naming no change is read through the session's Slack connector. A message naming an existing change uses its thread and opens nothing.
 - **Exact edits** - A sentence that already is the code or CSS edit - pixel values, classes, tokens, variants - opens no change and extends none. Reply with its lane from [Bug or Change](../../../docs/governance/bug-fixes.md#bug-or-change).
 - **Overlap** - Read active changes before opening one. A change whose proposal links the page sections the sentence would mark overlaps it too. A change's stage comes from [stageOf](../../../tools/openspec-store/src/stages.ts). Read archive only for the last table row. Where a change overlaps, answer in that change's thread and use its stage and asker below.
 - **Active Changes** - List the changes:
@@ -56,17 +56,11 @@ Where no change overlaps, or the table opens a new one:
    pnpm openspec new change <id> --schema grade10-planning
    ```
 
-   From a wake, bind the thread immediately after creation:
-
-   ```bash
-   node scripts/openspec/relay-post.mjs --bind <change>
-   ```
-
 3. **Hand** - Set `hands: pm: @<handle>` from `docs/prds/team.yaml`. If the asker is absent from the map, leave the PM unnamed and request their handle in the reply.
 4. **Branch** - Create and push `claude/<id>`, the round workflow's branch convention.
 5. **Reply** - Name the change id in the originating thread. Use workflow-round's thread-recording procedure.
 
-## The Whole Plan in One Wake
+## The Whole Plan in One Run
 
 - **Draft Chain** - Draft the three artifacts in the order the schema gives them, landed nowhere; workflow-round owns the draft-ahead procedure.
 - **Completion** - Return the three drafts and round outcome. Hand the settled artifacts to planning-dev as planning-pm directs, which drafts the cases, the tech design and the requirements in that order; if requirements cannot start, record `awaiting: specs:` with the missing input.

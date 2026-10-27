@@ -6,9 +6,8 @@
  *
  * The round calls this when it answers the first planning-channel message
  * about a change — the sentence that opened it, or the first later message
- * naming it. Every reply, every direct message and every wake on a landing
- * reads the address back from the record, so it is written once and never
- * rewritten: a `thread:` already there stops this and says what it holds. A
+ * naming it. Every reply and every direct message reads the address back
+ * from the record, so it is written once and never rewritten: a `thread:` already there stops this and says what it holds. A
  * wrong address is a person's edit to the record.
  *
  * The push workflow's own per-push post is a channel message about several
