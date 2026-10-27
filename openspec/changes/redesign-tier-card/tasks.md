@@ -11,7 +11,7 @@
       repoint the preview Membership screen and `loyalty-content.ts` to the
       new names
 
-## 2. Rebuild the card (grade10-spec)
+## 2. Rebuild the card (grade10-spec) (owner: @seankcw)
 
 - [x] 2.1 Rewrite `tier-card.tsx` to the Figma card: the `variant` skin —
       silver, gold or black — the balance with its formatted checkout worth,
