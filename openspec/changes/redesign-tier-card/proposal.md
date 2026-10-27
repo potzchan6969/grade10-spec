@@ -10,7 +10,7 @@ becomes `TierCard`. The designer has then redrawn it in Figma
 (Grade10-DS-2026, node 7141:2000) as a dark, tier-skinned card — silver,
 gold and black — that shows the spendable balance and what it pays at
 checkout, the run to keep or upgrade the tier, and the tier's earn rate, and
-that opens the Tier & Benefits page whole. The card shipped so far is a
+that opens the Tiers & Benefits page whole. The card shipped so far is a
 plain card with a points-expiry line that no longer belongs on it: the
 balance lapses on one shared inactivity date, never in parts, so a
 partial-expiry reminder has nothing to say there.
@@ -39,7 +39,7 @@ partial-expiry reminder has nothing to say there.
 - The block story gains `Silver`, `Gold`, `Black`, `ThresholdReached`,
   `NoPoints`, `OpensBenefits` and `Pressed`; the expiry-line stories leave.
 - The preview Membership screen draws the gold skin and passes a placeholder
-  `href` for the Tier & Benefits page, which has no story yet.
+  `href` for the Tiers & Benefits page, which has no story yet.
 
 ## Non-Goals
 
@@ -72,4 +72,4 @@ None.
   with the whole-card link through `href`. None are known in this store
   beyond the preview.
 - **The expiry surface** — the card carries no expiry line; the membership
-  surface's one-line rule stays, relocating to the Tier & Benefits page.
+  surface's one-line rule stays, relocating to the Tiers & Benefits page.

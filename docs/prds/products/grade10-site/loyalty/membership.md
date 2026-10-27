@@ -85,8 +85,7 @@ a Google account under it -
 - **Each section loads on its own** — a catalog that failed to load is no
   reason to hide a balance
 
-❓ Whether "Points to spend" and the tier-progress labels are the launch
-names.
+"Points to spend" and the tier-progress labels are the launch names.
 
 ::story{id="loyalty-membership-blocks-tiercard--gold" title="Tier, balance and progress"}
 

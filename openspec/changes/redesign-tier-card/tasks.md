@@ -29,11 +29,11 @@
 - [x] 2.3 Update the preview: `loyalty-content.ts` carries `worth`,
       `retentionLine` and `earnLine` on the membership view and drops the
       expiry helpers; `membership.stories.tsx` draws `variant="gold"` and a
-      placeholder Tier & Benefits `href`
+      placeholder Tiers & Benefits `href`
 - [x] 2.4 Update `docs/prds/products/grade10-site/loyalty/membership.md`: the
       Membership row names the tier skin, the worth, the keep-or-upgrade run
       and the Benefits link; the expiry-line bullet becomes the no-expiry
-      rule with the relocation to the Tier & Benefits page
+      rule with the relocation to the Tiers & Benefits page
 - [x] 2.5 Verify: `tsc` on `@grade10/ui` and `apps/preview`,
       `pnpm storybook:check`, biome on the touched files
 
