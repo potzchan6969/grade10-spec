@@ -1,4 +1,4 @@
-## 1. Rename the export (grade10-spec)
+## 1. Rename the export (grade10-spec) (owner: @seankcw)
 
 - [x] 1.1 Rename `member-card.tsx` to `member-pass.tsx` and its story
       likewise; the component becomes `MemberPass` with `MemberPassCopy`,
