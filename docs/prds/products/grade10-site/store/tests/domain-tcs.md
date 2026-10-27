@@ -4,9 +4,7 @@ title: Store Test Cases
 
 # grade10-site/store Test Cases
 
-**Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-24, tcs-rules r7
-**Reviewed:** 2026-10-22, tcs-rules r6, lapsed 2026-10-24
 **Capabilities:** grade10-site/store/home, grade10-site/store/product-listing, grade10-site/store/product-page, grade10-site/store/cart-drawer, grade10-site/store/checkout, grade10-site/store/order-detail, grade10-site/store/order-history
 
 ## Background
@@ -31,7 +29,6 @@ title: Store Test Cases
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -63,7 +60,6 @@ title: Store Test Cases
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -99,7 +95,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -135,7 +130,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -170,7 +164,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -202,7 +195,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -236,7 +228,6 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
