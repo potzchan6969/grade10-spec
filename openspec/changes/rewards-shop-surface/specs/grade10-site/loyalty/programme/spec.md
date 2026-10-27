@@ -117,10 +117,13 @@ in flight the refresh control SHALL show busy, and a refused refresh
 SHALL toast the reason the consumer passes, once per refusal. When a
 fresh token arrives, `MemberPass` SHALL dip the square out of view and
 settle the fresh one in — a transition, never an abrupt swap — and
-SHALL swap instantly under reduced motion. `MemberPass` SHALL
-still render the code's life as a countdown while it lives — never an
-expired rendering, the consumer rotating the code out before it lapses —
-and SHALL carry no used state of its own: a code the till takes is
+SHALL swap instantly under reduced motion. A refused refresh SHALL leave
+the earlier code on show with its countdown running. The consumer SHALL render
+`MemberPass` only once it holds a token; the block draws no placeholder of
+its own. `MemberPass` SHALL
+render a countdown to the next rotation, which the consumer sets inside the
+code's life — never an expired rendering, the consumer rotating the code out
+before it lapses — and SHALL carry no used state of its own: a code the till takes is
 answered by the next minted token arriving through props,
 so the pass keeps rotating rather than freezing on what was spent.
 

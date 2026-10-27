@@ -98,7 +98,7 @@ Runs once per row of **Test data**.
 
 ---
 
-<!-- trace:case id=g10.loyalty-programme.TC-3zg rev=1 covers=g10.loyalty-programme.SC-mp4,g10.loyalty-programme.SC-mp6 -->
+<!-- trace:case id=g10.loyalty-programme.TC-3zg rev=1 covers=g10.loyalty-programme.SC-mp4 -->
 ### g10.loyalty-programme.US4-TC16: A fresh code settles in over the old one, never snapping, and at once under reduced motion
 
 Runs once per row of **Test data**.
@@ -273,7 +273,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | `g10.loyalty-programme.US4-TC14` | Covered, edge added | `grade10-site-loyalty-programme-SC-mp5`. A long-address row and a "never cut off" result were added: the email is the till's fallback (decisions Q8). Reaches the skin half of `grade10-site-loyalty-programme-SC-mp3` and the no-typed-code half of `grade10-site-loyalty-programme-SC-mp2` but not their second halves, so neither is linked |
 | `g10.loyalty-programme.US4-TC15` | Real, no scenario | Real per the PRD and decisions Q5 and Q10 (the pass section opens the standalone page on a phone; its route is the consumer app's to name), but no scenario states the wake lock or the standalone page. Kept `draft`; not linked |
-| `g10.loyalty-programme.US4-TC16` | Covered, merged | Absorbs `g10.loyalty-programme.US4-TC17`: same steps, other data, so one case with a `<motion>` row each. Asserts both THEN halves of `grade10-site-loyalty-programme-SC-mp4` and the busy control of `grade10-site-loyalty-programme-SC-mp6`. The refresh control's busy state was added as a result, the same route. "From the code's full life" became "a fresh run": the countdown's start is open (decisions Q9) |
+| `g10.loyalty-programme.US4-TC16` | Covered, merged | Absorbs `g10.loyalty-programme.US4-TC17`: same steps, other data, so one case with a `<motion>` row each. Asserts both THEN halves of `grade10-site-loyalty-programme-SC-mp4` and shows the busy control that opens `grade10-site-loyalty-programme-SC-mp6`. The refresh control's busy state was added as a result, the same route. "From the code's full life" became "a fresh run", the countdown running to the next rotation (decisions Q9) |
 | `g10.loyalty-programme.US4-TC17` | Dropped, merged into TC16 | A draft duplicate of TC16 with other data; nothing was lost, and the id is left unused |
 | `g10.loyalty-programme.US4-TC18` | Covered | `grade10-site-loyalty-programme-SC-mp7`: the countdown runs to the next rotation (decisions Q9) and no expired code is drawn |
 | `g10.loyalty-programme.US4-TC19` | Covered | `grade10-site-loyalty-programme-SC-mp8`: a taken code is answered by the next token. Needs a till and a consumer app that rotates; no time bound is asserted (Settled, decisions Q12) |
@@ -288,7 +288,7 @@ Runs once per row of **Test data**.
 
 ### Raised
 
-- Decided by the human: Q7 the pass draws nothing before its first token; Q9 the countdown runs to the next rotation; Q10 the pass section opens the standalone page on a phone, its route the consumer's
+- Decided by the human: Q7 the consumer renders the pass only once it holds a token; Q9 the countdown runs to the next rotation; Q10 the pass section opens the standalone page on a phone, its route the consumer's
 - Decided by the round: Q8 a long email shows in full; Q11 Refresh leaves the earlier code alive and on show; Q12 no rotation time asserted after a scan. Their answers are in Settled
 
 ### Uncovered scenarios
@@ -296,8 +296,8 @@ Runs once per row of **Test data**.
 - `grade10-site-loyalty-programme-SC-mp2` - TC14 and TC19 reach the square and no typed code, and the till scan shows it identifies, but nobody can observe that the pass never mints, persists or substitutes; no product user reaches that half. Dev and the reviewer choose between the workbench story `PassNeverMintsItsCode` as a manual row and listing it out of suite as `unit`
 - `grade10-site-loyalty-programme-SC-mp3` - TC14 shows the skin following the tier on the site, which is the consumer's mapping; "the skin never follows the tier name the consumer words" needs a workbench story whose tier name and `variant` differ. Owed a case on the story route
 - `grade10-site-loyalty-programme-SC-125` - the delta restates it unchanged; no case in this suite reaches "every count, date, state and word arrived through props" for the pass. Out of suite as `unit` is a candidate, Dev's call
-- `grade10-site-loyalty-programme-SC-mp1` - the pass draws nothing before its first token; no product user reaches a pass without a token, since the consumer renders it only once it holds one. Dev's call
-- Requirement text with no scenario: the Grade10 mark on the header. Fold owed to Dev as a scenario; the refused refresh now has `grade10-site-loyalty-programme-SC-mp6`, and the earlier code staying on show after a refusal is Settled
+- `grade10-site-loyalty-programme-SC-mp1` - no product user reaches a pass without a token, since the consumer renders it only once it holds one. Dev's call
+- `grade10-site-loyalty-programme-SC-mp6` - TC16 reaches the busy control; the refusal toast, once per refusal, and the earlier code staying on show need a consumer that refuses, and no case reaches it. Dev's call
 - `grade10-site-store-membership-SC-09` - amended to drop the member-side mirror. No case here walks it, and the store's cases live in `docs/prds/products/grade10-site/store/tests/`, out of this suite
 
 ### Over-claimed cases

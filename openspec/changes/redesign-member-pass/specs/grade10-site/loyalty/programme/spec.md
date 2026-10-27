@@ -39,11 +39,12 @@ SHALL toast the reason the consumer passes, once per refusal. When a
 fresh token arrives, `MemberPass` SHALL dip the square out of view and
 settle the fresh one in — a transition, never an abrupt swap — and
 SHALL swap instantly under reduced motion. A refused refresh SHALL leave
-the earlier code on show with its countdown running. `MemberPass` SHALL
+the earlier code on show with its countdown running. The consumer SHALL render
+`MemberPass` only once it holds a token; the block draws no placeholder of
+its own. `MemberPass` SHALL
 render a countdown to the next rotation, which the consumer sets inside the
 code's life — never an expired rendering, the consumer rotating the code out
-before it lapses — and SHALL draw nothing until the consumer holds a token,
-and SHALL carry no used state of its own: a code the till takes is
+before it lapses — and SHALL carry no used state of its own: a code the till takes is
 answered by the next minted token arriving through props,
 so the pass keeps rotating rather than freezing on what was spent.
 `TierInfoCard` SHALL render one tier of the programme — its name, the ask
@@ -87,9 +88,9 @@ day on an entry is the day its points landed, so a pending entry carries no
 date.
 
 Each of those components SHALL take the words it renders in a single `copy`
-prop of its own copy type, and SHALL receive every count, date and state
-through props — none of them SHALL fetch, subscribe to, or store product
-state.
+prop of its own copy type, or an equivalent content prop where the shape is
+a list, and SHALL receive every count, date and state through props — none
+of them SHALL fetch, subscribe to, or store product state.
 
 The operator console composes these same exports as brand-owned view code and
 SHALL require no export of its own.
@@ -114,16 +115,16 @@ SHALL require no export of its own.
 #### Scenario: grade10-site-loyalty-programme-SC-125 - The components take content, not sources
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** any of the membership components is rendered
+- **WHEN** any of the membership surface's components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-mp1 rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-mp1 - The pass draws nothing before its first token
+#### Scenario: grade10-site-loyalty-programme-SC-mp1 - The pass is rendered only once a token exists
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** the consumer holds no token yet
-- **THEN** `MemberPass` draws nothing
-- **AND** it draws once a token arrives through props
+- **THEN** the consumer does not render `MemberPass`
+- **AND** the block draws no placeholder of its own
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-mp6 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-mp6 - A refresh shows busy and a refusal keeps the earlier code

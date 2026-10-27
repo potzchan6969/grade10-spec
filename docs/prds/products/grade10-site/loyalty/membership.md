@@ -121,9 +121,9 @@ it, on a wide viewport too.
 
 - **Email, not name** — no name is collected at registration, so the pass
   carries the member's account email under the tier badge
-- **Its own page on a phone** — the pass section opens it, and the page
+- **Its own page on a phone** — the pass section opens it, its route the consumer app's to name, and the page
   holds a screen wake lock while it is up, so the phone cannot dim or lock
-  mid-scan; the pass draws nothing until it holds a code; a web page cannot
+  mid-scan; the consumer renders the pass only once it holds a code; a web page cannot
   raise screen brightness, so keeping the screen awake is the part that is
   feasible
 - **A code swaps in and out** — a fresh code dips the square out of view,
