@@ -24,5 +24,15 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "eabaf5f2859141a2a8a633e8ce6d35096e9b8278",
+      "components": [
+        "storybook"
+      ],
+      "verifiedBy": "seankcw",
+      "verification": "The TierCard block, its stories and the Membership page are on the store's main; `tsc` on @grade10/ui and `pnpm storybook:check` pass at this commit. The owner took Storybook (`?path=/docs/loyalty-membership-blocks-tiercard`) as the source of truth and archived without the 3.1 workbench walk. No grade10 application source is part of this change."
+    }
+  ]
 }
