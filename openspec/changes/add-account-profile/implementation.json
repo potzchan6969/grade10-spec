@@ -101,5 +101,14 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "80cb09c3c18f02645007573b047d9540d6c1c59f",
+      "components": [
+        "store-service",
+        "web"
+      ]
+    }
+  ]
 }
