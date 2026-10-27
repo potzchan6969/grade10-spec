@@ -24,8 +24,8 @@ the cards for sale first in every order, as the listing shows them.
   `projection.ts:73-76`, `collection.ts:52-54`)
 - **The price a price order sorts on** - the lowest price of every variant
   (`services/catalog/projection.ts:136-141`), which can differ from the one
-  item's price the tile shows. ❓ Whether it sorts on the tile's price instead
-  is Q2, held for Product
+  item's price the tile shows. Whether it sorts on the tile's price instead
+  is decided in Q2: it does not
 - **The requirement** - MODIFIED `Order and free text describe the whole
   catalogue` states both, and its scenario An order covers the whole
   catalogue lists the lowest-priced card for sale first

@@ -11,7 +11,8 @@ In every order — latest product, lowest price and highest price, at rest and
 inside a collection — every card for sale SHALL be listed before every
 sold-out card, and the order asked for SHALL hold within each of the two
 groups. A price order SHALL sort a card on the lowest price among its
-variants.
+variants; inside a collection, the shop's own price order holds within each
+group.
 
 The listing SHALL offer only orders the catalogue can answer: latest product,
 lowest price, and highest price. It SHALL NOT offer a popularity order.
@@ -33,7 +34,7 @@ The free text and the order in force SHALL be reflected in the address, so the
 collector can link to what they are looking at, and going back SHALL return the
 listing to the previous narrowing.
 
-<!-- trace:scenario id=g10.store-product-listing.SC-l5j rev=1 -->
+<!-- trace:scenario id=g10.store-product-listing.SC-l5j rev=2 -->
 #### Scenario: grade10-site-store-product-listing-SC-13 - An order covers the whole catalogue
 **Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
@@ -89,6 +90,7 @@ listing to the previous narrowing.
 - **AND** the sort trigger reads `Sort by` followed by the latest option's
   label, and that option is marked selected in the menu
 
+<!-- trace:scenario id=g10.store-product-listing.SC-h0j rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-57 - Cards for sale list before sold-out ones in every order
 **Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
@@ -100,6 +102,7 @@ listing to the previous narrowing.
 - **THEN** every card for sale is listed before every sold-out card
 - **AND** within each group the cards follow the order asked for
 
+<!-- trace:scenario id=g10.store-product-listing.SC-59p rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-58 - A price order sorts on a card's cheapest variant
 **Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
