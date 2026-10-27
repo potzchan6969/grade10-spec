@@ -4,10 +4,8 @@ import type { ReactNode } from "react";
  * The shell's notice: one strip above the page, saying something about the
  * reading rather than about the route.
  *
- * Two of them are worn — the bundled fixture's line, and the banner that says
- * `main` moved — so the chrome is written here once and neither drifts into a
- * second look for one kind of thing. It is a status, never an alert: nothing
- * it says is a failure the reader has to answer.
+ * It is a status, never an alert: nothing it says is a failure the reader
+ * has to answer.
  */
 export function ShellNotice({
   children,

@@ -12,7 +12,6 @@ import {
   NAV_WIDTH,
   useLayout,
 } from "./layout";
-import { MainMoved } from "./main-moved";
 import { PageSectionsProvider } from "./page-sections";
 import { ResizeHandle } from "./resize-handle";
 import { useScrollMemory } from "./scroll-memory";
@@ -118,9 +117,6 @@ function Shell() {
                     {snapshot.source === "fixture" ? (
                       <FixtureNotice reason={snapshot.reason} />
                     ) : null}
-                    {/* Above the page, inside the column it reads in: what
-                        the banner says is about the reading, not the route. */}
-                    <MainMoved />
                     <Outlet />
                   </>
                 ) : null}
