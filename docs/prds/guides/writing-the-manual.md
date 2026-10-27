@@ -16,7 +16,9 @@ Write for a teammate who joined this week and has never seen the code.
 - **Name it, then define it** — one item per thing the user meets: its name
   in bold, then the shortest phrase that defines it, such as
   "**Product Count** — number of products given the filters". Write a
-  sentence only where a phrase can't carry it
+  sentence only where a phrase can't carry it. Where examples say it faster,
+  give them: "such as Pokémon and One Piece", not "the franchise a card comes
+  from". Each definition reads alone, never only against its neighbour
 - **Group by what the user does** — browsing, filtering, searching, paying.
   Everything about one topic sits in one section, and each fact is said
   once, in the section that owns it
