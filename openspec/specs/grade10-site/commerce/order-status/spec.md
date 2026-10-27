@@ -237,7 +237,7 @@ rules in order, after the badge is known, and taking the first that matches:
 | 1 | Badge `canceled`, order state not `canceled`, payment `voided` | `payment-voided` |
 | 2 | Badge `canceled`, payment `partially_paid` or `paid` | `awaiting-refund` |
 | 3 | Badge `canceled`, fulfilment `partially_fulfilled` | `canceled-some-items-shipped` |
-| 4 | Badge `completed` or `shipped`, return state `returned`, payment `partially_refunded` | `items-returned-partial-refund` |
+| 4 | Badge `completed`, `shipped` or `processing`, return state `returned`, payment `partially_refunded`, fulfilment neither `on_hold` nor `scheduled` | `items-returned-partial-refund` |
 | 5 | Badge `refunded`, return state `returned` | `items-returned` |
 | 6 | Badge `completed` or `shipped`, payment `partially_refunded`, fulfilment `fulfilled` | `partial-refund-shipped` |
 | 7 | Badge `shipped`, payment `partially_refunded`, fulfilment `partially_fulfilled` | `partial-refund-partly-shipped` |
