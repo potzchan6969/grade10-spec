@@ -11,7 +11,6 @@ import {
   TierInfoCard,
   TierLadder,
   WalletPassLinks,
-  type WalletPassWallet,
 } from "@grade10/ui";
 import {
   Basket,
@@ -21,11 +20,7 @@ import {
 } from "@phosphor-icons/react";
 import { storyHref } from "../../workbench-story-nav";
 import {
-  APPLE_HELD,
-  APPLE_OFFERED,
   COUPON_LIST_COPY,
-  GOOGLE_HELD,
-  GOOGLE_OFFERED,
   HOW_POINTS_WORK,
   MEMBER,
   MEMBER_PASS_COPY,
@@ -72,32 +67,6 @@ type WalletProps = {
   onAddWallet: (id: string) => void;
   onEndWallet: (id: string) => void;
 };
-
-/** Which wallet the device most likely carries — iOS and iPadOS take Apple,
- * Android takes Google, everything else is offered both. */
-function walletPlatform(): "apple" | "google" | null {
-  if (typeof navigator === "undefined") return null;
-  const ua = navigator.userAgent;
-  if (
-    /iPad|iPhone|iPod/.test(ua) ||
-    (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)
-  ) {
-    return "apple";
-  }
-  return /Android/.test(ua) ? "google" : null;
-}
-
-/** `platform` pins the offer for a story; left undefined the device is
- * read — iOS and iPadOS take Apple, Android takes Google, the rest both. */
-function wallets(
-  held: readonly string[],
-  platform = walletPlatform(),
-): WalletPassWallet[] {
-  return [
-    held.includes("google") ? GOOGLE_HELD : GOOGLE_OFFERED,
-    held.includes("apple") ? APPLE_HELD : APPLE_OFFERED,
-  ].filter((wallet) => platform == null || wallet.id === platform);
-}
 
 /** The member pass's code counts down from this many seconds. */
 const CODE_SECONDS = 480;
@@ -307,13 +276,11 @@ function MemberPassOverlay({
   codeGeneration,
   onRefreshCode,
   walletProps,
-  platform,
 }: {
   view: MembershipView;
   codeGeneration: number;
   onRefreshCode: () => void;
   walletProps: WalletProps;
-  platform?: "apple" | "google" | null;
 }) {
   return (
     <MemberPass
@@ -331,7 +298,9 @@ function MemberPassOverlay({
         onAdd={walletProps.onAddWallet}
         onEnd={walletProps.onEndWallet}
         state={{ status: "read" }}
-        wallets={wallets(walletProps.heldWallets, platform)}
+        /* The wallets stay hidden until the Apple and Google issuers are
+         * registered — the PRD carries the rule, no launch date is set. */
+        wallets={[]}
       />
     </MemberPass>
   );
