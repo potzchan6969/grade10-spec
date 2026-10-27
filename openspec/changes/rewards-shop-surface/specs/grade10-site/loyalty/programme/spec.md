@@ -362,3 +362,68 @@ SHALL require no export of its own.
 - **THEN** every row's icon, title and body arrived through props
 - **AND** the rows stack on a narrow viewport and pair across a wide one
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp1 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp1 - The pass is rendered only once a token exists
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the consumer holds no token yet
+- **THEN** the consumer does not render `MemberPass`
+- **AND** the block draws no placeholder of its own
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp2 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp2 - The pass encodes the consumer's token, never its own
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` renders a token
+- **THEN** the scannable square encodes that token verbatim, no typed
+  code beside it
+- **AND** the pass mints, persists and substitutes it never
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp3 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp3 - The pass wears the skin of the tier held
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` is rendered for a silver, a gold or a black member
+- **THEN** it wears that tier's skin, taken from the `variant` prop
+- **AND** the skin never follows the tier name the consumer words
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp4 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp4 - A fresh code swaps the code area, never snaps
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** a fresh token arrives after `onRefresh` reported the ask
+- **THEN** the square eases out of view and the fresh one settles in
+- **AND** under reduced motion the swap is instant
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp5 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp5 - The pass names the member by account email
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` is rendered
+- **THEN** it carries the member's account email under the tier name
+- **AND** no display name, none being collected at registration
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp6 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp6 - A refresh shows busy and a refusal keeps the earlier code
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the member asks for a fresh code and the ask is in flight
+- **THEN** the refresh control shows busy
+- **AND** a refused ask toasts the consumer's reason once, leaving the earlier code on show with its countdown running
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp7 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp7 - The countdown runs to the next rotation
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** `MemberPass` renders a token with the time to its next rotation
+- **THEN** the countdown reads down to that rotation
+- **AND** no expired code is ever drawn, the consumer rotating the code out before it lapses
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-mp8 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-mp8 - A taken code is answered by the next token
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **WHEN** the till takes the pass's code and the consumer mints the next token
+- **THEN** the pass shows the next token, keeping its rotation rather than freezing on the spent one
+- **AND** the pass carries no used state of its own
+
