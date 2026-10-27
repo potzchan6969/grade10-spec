@@ -9,7 +9,7 @@ import {
   Play,
   WarningDiamond,
 } from "@phosphor-icons/react";
-import { type ReactNode, useState } from "react";
+import { createContext, type ReactNode, use, useState } from "react";
 import type { FigmaBlock, StoryBlock } from "../content/grammar";
 import { useBlockScope } from "./block-scope";
 import {
@@ -20,6 +20,10 @@ import {
 } from "./design-drift";
 
 const DEFAULT_HEIGHT = 480;
+
+/** Inside the side column an embed is the frame alone: the section beside
+ * it already says what it is, so its header would only repeat it. */
+export const BareEmbedContext = createContext(false);
 
 type EmbedCardProps = {
   title: string;
@@ -58,10 +62,75 @@ function EmbedCard({
   const [generation, setGeneration] = useState(0);
   const [why, setWhy] = useState(false);
 
+  const bare = use(BareEmbedContext);
+
   const reload = () => {
     setLoaded(true);
     setGeneration((current) => current + 1);
   };
+
+  if (bare) {
+    return (
+      <figure className="group/embed relative m-0">
+        {loaded ? (
+          <iframe
+            allowFullScreen
+            className="mx-auto block max-w-full rounded-(--radius-2xl) border border-border bg-background"
+            height={height}
+            key={generation}
+            src={src}
+            style={{ width: width ? `${width}px` : "100%" }}
+            title={title}
+          />
+        ) : (
+          <button
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-(--radius-2xl) border border-border bg-background-subtle text-secondary-foreground hover:bg-muted"
+            onClick={() => setLoaded(true)}
+            style={{ height: `${Math.min(height, 320)}px` }}
+            type="button"
+          >
+            <Play aria-hidden size={16} weight="fill" />
+            <Text as="span" size="sm" weight="medium">
+              Load {title}
+            </Text>
+          </button>
+        )}
+        {/* Drift is the one thing worth saying unasked; the rest shows on
+            hover or focus. */}
+        <figcaption className="absolute top-2 right-2 flex items-center gap-1">
+          {verdict && isDrifting(verdict.class) ? (
+            <DriftBadge
+              expanded={why}
+              onToggle={() => setWhy((open) => !open)}
+              verdict={verdict}
+            />
+          ) : null}
+          <span className="flex items-center gap-1 rounded-(--radius-md) border border-border bg-background/95 p-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover/embed:opacity-100">
+            <IconButton
+              aria-label={`Reload ${title}`}
+              onClick={reload}
+              size="xs"
+              title={`Reload ${title}`}
+              variant="ghost"
+            >
+              <ArrowClockwise aria-hidden />
+            </IconButton>
+            <a
+              aria-label={`${openLabel}: ${title}`}
+              className="inline-flex size-6 items-center justify-center rounded-(--radius-sm) text-foreground outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
+              href={openUrl}
+              rel="noreferrer noopener"
+              target="_blank"
+              title={openLabel}
+            >
+              <ArrowSquareOut aria-hidden size={12} />
+            </a>
+          </span>
+        </figcaption>
+        {verdict && why ? <DriftNote verdict={verdict} /> : null}
+      </figure>
+    );
+  }
 
   return (
     <figure className="my-6 overflow-hidden rounded-(--radius-2xl) border border-border bg-card">

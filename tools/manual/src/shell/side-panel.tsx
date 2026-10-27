@@ -1,7 +1,6 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   Tabs,
-  TabsContent,
   TabsList,
   TabsTrigger,
 } from "@grade10/design-system/components/display/tabs";
@@ -20,6 +19,7 @@ import { BlockList } from "../blocks/block-list";
 import { useBlockScope } from "../blocks/block-scope";
 import { BlockView } from "../blocks/block-view";
 import { Collapsible } from "../blocks/collapsible";
+import { BareEmbedContext } from "../blocks/embed-block";
 import { MarkdownView } from "../blocks/markdown";
 import {
   type SectionRow,
@@ -101,15 +101,43 @@ export function SplitPage({
     return () => setSideShown(false);
   }, [setSideShown]);
 
+  const shelves = rows.map((row) => shelfOf(row, cases));
+  const total = (tab: SideTab) =>
+    shelves.reduce((sum, shelf) => sum + shelf[tab].length, 0);
+
   return (
     <div
       className="relative"
       ref={frame}
       style={{ "--side-width": `${width}px` } as CSSProperties}
     >
+      {/* The one switcher, held at the top of the side column for the whole
+          page. It takes no height, so the page's opening reads beside it. */}
+      <div className="sticky top-16 z-10 flex h-0 items-start justify-end">
+        <Tabs
+          className="border-border border-b bg-background pt-2 shadow-[0_8px_12px_-12px_var(--shadow-color)]"
+          onValueChange={(value) => layout.setTab(value as SideTab)}
+          style={{ width }}
+          value={layout.tab}
+        >
+          <TabsList fullWidth size="sm" variant="list">
+            {SIDE_TABS.map((tab) => (
+              <TabsTrigger className="gap-1.5" key={tab} value={tab}>
+                {TAB_ICON[tab]}
+                {TAB_LABEL[tab]}
+                {total(tab) > 0 ? (
+                  <Badge size="sm" variant="outline">
+                    {total(tab)}
+                  </Badge>
+                ) : null}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
       <div style={{ marginRight: width + GAP }}>{head}</div>
-      {rows.map((row) => {
-        const shelf = shelfOf(row, cases);
+      {rows.map((row, position) => {
+        const shelf = shelves[position];
         return (
           <div
             className="grid grid-cols-[minmax(0,1fr)_var(--side-width)]"
@@ -121,11 +149,12 @@ export function SplitPage({
               <BlockList blocks={row.main} />
             </div>
             <div className="min-w-0">
-              {isEmpty(shelf) ? null : (
-                <div className="sticky top-20 py-4">
-                  <SideCard shelf={shelf} />
-                </div>
-              )}
+              {/* Blank where the section has nothing under the tab. */}
+              {shelf[layout.tab].length > 0 ? (
+                <BareEmbedContext value>
+                  <SideItems shelf={shelf} tab={layout.tab} />
+                </BareEmbedContext>
+              ) : null}
             </div>
           </div>
         );
@@ -151,69 +180,32 @@ export function SplitPage({
   );
 }
 
-const EMPTY: Record<SideTab, string> = {
-  ui: "No story or design in this section.",
-  tech: "No engineering detail in this section.",
-  qa: "No test case traces this section.",
-};
-
-/** One section's side: the tabs, shared across the page, and what this
- * section holds under each. */
-function SideCard({ shelf }: { shelf: Shelf }) {
-  const layout = useLayout();
+/** What one section holds under the tab, held below the switcher while the
+ * section is read. A side taller than the screen scrolls, or its end could
+ * never be reached while it is held. */
+function SideItems({ shelf, tab }: { shelf: Shelf; tab: SideTab }) {
   return (
-    <Tabs
-      className="rounded-(--radius-xl) border border-border bg-background"
-      onValueChange={(value) => layout.setTab(value as SideTab)}
-      value={layout.tab}
-    >
-      <TabsList className="px-2" fullWidth size="sm" variant="list">
-        {SIDE_TABS.map((tab) => (
-          <TabsTrigger className="gap-1.5" key={tab} value={tab}>
-            {TAB_ICON[tab]}
-            {TAB_LABEL[tab]}
-            {shelf[tab].length > 0 ? (
-              <Badge size="sm" variant="outline">
-                {shelf[tab].length}
-              </Badge>
-            ) : null}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-
-      {SIDE_TABS.map((tab) => (
-        <TabsContent
-          className="flex max-h-[calc(100dvh-9rem)] flex-col gap-3 overflow-y-auto overscroll-contain p-3 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]"
-          key={tab}
-          value={tab}
-        >
-          {tab === "qa"
-            ? shelf.qa.map(({ testCase, rules }) => (
-                <CaseCard key={testCase.id} rules={rules} testCase={testCase} />
-              ))
-            : shelf[tab].map((item, position) =>
-                item.block.type === "detail" ? (
-                  <SideDetail
-                    block={item.block}
-                    // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-                    key={`detail-${position}`}
-                  />
-                ) : (
-                  <BlockView
-                    block={item.block}
-                    // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
-                    key={`${item.block.type}-${position}`}
-                  />
-                ),
-              )}
-          {shelf[tab].length === 0 ? (
-            <Text as="p" className="px-1 py-2" size="sm" tone="secondary">
-              {EMPTY[tab]}
-            </Text>
-          ) : null}
-        </TabsContent>
-      ))}
-    </Tabs>
+    <div className="sticky top-30 flex flex-col gap-3 overflow-y-auto overscroll-contain py-4 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]">
+      {tab === "qa"
+        ? shelf.qa.map(({ testCase, rules }) => (
+            <CaseCard key={testCase.id} rules={rules} testCase={testCase} />
+          ))
+        : shelf[tab].map((item, position) =>
+            item.block.type === "detail" ? (
+              <SideDetail
+                block={item.block}
+                // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
+                key={`detail-${position}`}
+              />
+            ) : (
+              <BlockView
+                block={item.block}
+                // biome-ignore lint/suspicious/noArrayIndexKey: blocks are a fixed positional sequence parsed from one immutable source; position is their identity.
+                key={`${item.block.type}-${position}`}
+              />
+            ),
+          )}
+    </div>
   );
 }
 
