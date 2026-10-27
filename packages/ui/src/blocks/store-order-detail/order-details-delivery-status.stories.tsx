@@ -3,6 +3,8 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import {
   FILLED_DELIVERY,
   ORDER_DETAILS_COPY,
+  PARCEL_REFUNDED,
+  PARCEL_REFUNDED_AFTER_SHIP,
   PICKUP_DELIVERY,
 } from "./fixtures";
 import { OrderDetailsDeliveryStatus } from "./order-details-delivery-status";
@@ -96,5 +98,34 @@ export const ParcelDelivered: Story = {
       { label: "Shipping", date: "SF Express · SF123", state: "completed" },
       { label: "Completed", state: "completed" },
     ],
+  },
+};
+
+/** Refunded before a parcel left: the steps end at Refunded. */
+export const ParcelRefunded: Story = {
+  args: {
+    steps: resolveDeliverySteps(PARCEL_REFUNDED, "refunded"),
+    trackOrder: false,
+    onTrackOrder: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Refunded")).toBeVisible();
+    expect(canvas.queryByText("Completed")).not.toBeInTheDocument();
+  },
+};
+
+/** The parcel had already left when the refund landed: Shipping stays
+ * reached and the steps still end at Refunded. */
+export const ParcelRefundedAfterShip: Story = {
+  args: {
+    steps: resolveDeliverySteps(PARCEL_REFUNDED_AFTER_SHIP, "refunded"),
+    trackOrder: false,
+    onTrackOrder: undefined,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Shipping")).toBeVisible();
+    expect(canvas.getByText("Refunded")).toBeVisible();
   },
 };

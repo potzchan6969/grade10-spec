@@ -14,6 +14,7 @@ import {
   ORDER_HISTORY_STORY_ID,
 } from "../../workbench-story-nav";
 import {
+  FULL_REFUND_CONTENT,
   ORDER_DETAILS_CONTENT,
   ORDER_DETAILS_READ_COPY,
   ORDER_DETAILS_READ_MS,
@@ -38,7 +39,7 @@ function OrderDetailsPage({
   read: initialRead = "filled",
 }: {
   /** Which order to draw: a web order, one with a refund, or a point-of-sale sale. */
-  order?: "web" | "partialRefund" | "pointOfSale" | "pointsCredit";
+  order?: "web" | "partialRefund" | "fullRefund" | "pointOfSale" | "pointsCredit";
   /** The read: `notFound` draws the not-found treatment, `failed` offers Retry. */
   read?: "filled" | "loading" | "failed" | "notFound";
 }) {
@@ -46,11 +47,13 @@ function OrderDetailsPage({
   const content =
     order === "partialRefund"
       ? PARTIAL_REFUND_CONTENT
-      : order === "pointOfSale"
-        ? POINT_OF_SALE_CONTENT
-        : order === "pointsCredit"
-          ? POINTS_CREDIT_CONTENT
-          : ORDER_DETAILS_CONTENT;
+      : order === "fullRefund"
+        ? FULL_REFUND_CONTENT
+        : order === "pointOfSale"
+          ? POINT_OF_SALE_CONTENT
+          : order === "pointsCredit"
+            ? POINTS_CREDIT_CONTENT
+            : ORDER_DETAILS_CONTENT;
 
   const retry = () => {
     setRead("loading");
@@ -78,7 +81,7 @@ function OrderDetailsPage({
             delivery={content.delivery}
             lines={content.lines}
             loyaltyPoints={
-              order === "pointOfSale" ? undefined : (
+              order === "pointOfSale" || order === "fullRefund" ? undefined : (
                 <>
                   <span className="font-semibold">+177</span>{" "}
                   <span className="text-sm font-medium text-secondary-foreground">
@@ -221,6 +224,43 @@ export const PartialRefund: Story = {
       const row = summary.getByText(label, { exact: true }).parentElement;
       expect(within(row as HTMLElement).getByText("HK$885.00")).toBeVisible();
     }
+  },
+};
+
+/** Refunded in full before a parcel left: every line is struck, the steps
+ * end at Refunded, the whole amount sits below the paid total as its Refund
+ * row, and no points section shows. */
+export const FullRefund: Story = {
+  args: { order: "fullRefund" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
+    const badge = canvasElement.querySelector(
+      '[data-slot="order-details-header"]',
+    ) as HTMLElement;
+    expect(within(badge).getByText("Refunded")).toBeVisible();
+    expect(canvas.getByText("−HK$885.00")).toBeVisible();
+    const summary = within(
+      canvasElement.querySelector(
+        '[data-slot="order-details-sidebar"]',
+      ) as HTMLElement,
+    );
+    for (const label of ["Subtotal", "Total"]) {
+      const row = summary.getByText(label, { exact: true }).parentElement;
+      expect(within(row as HTMLElement).getByText("HK$885.00")).toBeVisible();
+    }
+    expect(summary.queryByText("Points to Earn")).toBeNull();
+    expect(summary.queryByText("Points Earned")).toBeNull();
+    const delivery = within(
+      canvasElement.querySelector(
+        '[data-slot="order-details-delivery-status"]',
+      ) as HTMLElement,
+    );
+    expect(delivery.getByText("Refunded")).toBeVisible();
+    expect(delivery.queryByText("Completed")).toBeNull();
+    expect(
+      delivery.queryByRole("button", { name: "Track Order" }),
+    ).toBeNull();
   },
 };
 

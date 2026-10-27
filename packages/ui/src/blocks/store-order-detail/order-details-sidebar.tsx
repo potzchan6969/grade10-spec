@@ -28,15 +28,19 @@ type OrderDetailsSidebarProps = {
 function SummaryRow({
   label,
   value,
+  labelClassName,
   valueClassName,
 }: {
   label: ReactNode;
   value: ReactNode;
+  labelClassName?: string;
   valueClassName?: string;
 }) {
   return (
     <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
-      <span className="text-sm leading-5 text-foreground">{label}</span>
+      <span className={cn("text-sm leading-5 text-foreground", labelClassName)}>
+        {label}
+      </span>
       <span
         className={cn(
           "text-right text-sm leading-5 whitespace-nowrap text-foreground tabular-nums",
@@ -99,7 +103,8 @@ function AddressSection({
  *
  * Figma set `Product / Order / Order Details Sidebar` (`5057:6908`). Summary
  * rows are conditional: discount when present, points credit after discount
- * when applied (cart-drawer parity), refund when issued, shipping hidden for
+ * when applied (cart-drawer parity), refund below the total when issued,
+ * shipping hidden for
  * pickup/in-store, tax optional, shipping address hidden offline, loyalty
  * points for logged-in users only. Amounts are consumer-formatted: summary
  * line rows use `$` with at least two decimal places (`$0` stays bare), while
@@ -135,7 +140,6 @@ function OrderDetailsSidebar({
       summary.subtotal,
       summary.discount,
       summary.points,
-      summary.refund,
       summary.shipping,
       summary.tax,
     ].some((row) => row != null);
@@ -193,13 +197,6 @@ function OrderDetailsSidebar({
                     valueClassName="text-success"
                   />
                 ) : null}
-                {summary?.refund ? (
-                  <SummaryRow
-                    label={summary.refund.label}
-                    value={summary.refund.value}
-                    valueClassName="text-secondary-foreground"
-                  />
-                ) : null}
                 {summary?.shipping ? (
                   <SummaryRow
                     label={summary.shipping.label}
@@ -214,20 +211,30 @@ function OrderDetailsSidebar({
                 ) : null}
               </VStack>
             ) : null}
-            {summary?.total ? (
-              <>
-                {hasLineMoneyRows ? (
-                  <hr className="w-full border-border" />
+            {hasLineMoneyRows && (summary?.total || summary?.refund) ? (
+              <hr className="w-full border-border" />
+            ) : null}
+            {summary?.total || summary?.refund ? (
+              <VStack className="w-full" gap="sm" hAlign="stretch">
+                {summary?.total ? (
+                  <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+                    <span className="text-base leading-6 font-semibold text-foreground">
+                      {summary.total.label}
+                    </span>
+                    <span className="text-right text-base leading-6 font-semibold whitespace-nowrap text-foreground tabular-nums">
+                      {summary.total.value}
+                    </span>
+                  </div>
                 ) : null}
-                <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-                  <span className="text-base leading-6 font-semibold text-foreground">
-                    {summary.total.label}
-                  </span>
-                  <span className="text-right text-base leading-6 font-semibold whitespace-nowrap text-foreground tabular-nums">
-                    {summary.total.value}
-                  </span>
-                </div>
-              </>
+                {summary?.refund ? (
+                  <SummaryRow
+                    label={summary.refund.label}
+                    value={summary.refund.value}
+                    labelClassName="text-secondary-foreground"
+                    valueClassName="text-secondary-foreground"
+                  />
+                ) : null}
+              </VStack>
             ) : null}
           </VStack>
         ) : null}
