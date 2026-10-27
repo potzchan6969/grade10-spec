@@ -4,7 +4,7 @@ hands:
   pm: "@seankcw"
   design: "@seankcw"
   qa: "@ecchochan"
-  dev: "@ecchochan"
+  dev: "@seankcw"
 depends_on:
   - add-store-cross-sell
 page_waived: "delivered: its 🚧 lines came off when the outcomes shipped,
