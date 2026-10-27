@@ -1542,8 +1542,9 @@ never silent.
 ### Requirement: The membership surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
-components for the membership surface — `TierCard`, `RewardMenu`,
-`CouponList`, and `PointHistory` — and the props and copy type of each.
+components for the membership surface — `TierCard`, `TierInfoCard`,
+`TierLadder`, `HowPointsWork`, `RewardMenu`, `CouponList`, and
+`PointHistory` — and the props and copy type of each.
 
 `TierCard` SHALL wear the skin of the tier held — silver, gold or black,
 taken through a `variant` prop and never derived from the tier name the
@@ -1562,6 +1563,28 @@ expire and the day they go, in the tone supplied with it, a member holding
 no points seeing no such line — that line is the surface's own, never the
 card's, and it SHALL NOT derive its day or tone from a clock or a balance of
 its own.
+
+`TierInfoCard` SHALL render one tier of the programme — its name, the ask
+its rung states as consumer-worded copy, and its benefits behind checks —
+and SHALL wear the held tier's emphasis, a primary border and its tint,
+where a `currentTier` prop marks it the rung held, never derived from the
+tier name.
+
+`TierLadder` SHALL draw the tiers in climb order inside a card — each rung
+through the stepper, earned rungs beneath the held tier completed, the held
+rung in progress, unearned rungs upcoming — and SHALL draw no connector
+into a rung marked `invitationOnly`. Where the held rung is invitation-only
+every other rung SHALL read upcoming, never completed, and neither the
+qualifying count nor its footnote SHALL render however they are passed;
+otherwise the count SHALL render inside the ladder's card only where both
+the count and its target arrive. The ladder SHALL receive its rungs, the
+held rung's index and the figures through props.
+
+`HowPointsWork` SHALL render the programme's mechanics as rows — an icon,
+a title and a body each, the icons the consumer's own — stacked on a
+narrow viewport and paired across a wide one, every word arriving through
+props.
+
 `RewardMenu` SHALL price each reward in points, state a
 money-off reward's own validity period, and state what its coupon cannot be
 spent without — the basket it has to reach, and the one channel it is good at,
@@ -1582,9 +1605,9 @@ day on an entry is the day its points landed, so a pending entry carries no
 date.
 
 Each of those components SHALL take the words it renders in a single `copy`
-prop of its own copy type, and SHALL receive every count, date and state
-through props — none of them SHALL fetch, subscribe to, or store product
-state.
+prop of its own copy type, or an equivalent content prop where the shape is
+a list, and SHALL receive every count, date and state through props — none
+of them SHALL fetch, subscribe to, or store product state.
 
 The operator console composes these same exports as brand-owned view code and
 SHALL require no export of its own.
@@ -1609,7 +1632,7 @@ SHALL require no export of its own.
 #### Scenario: grade10-site-loyalty-programme-SC-125 - The components take content, not sources
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
-- **WHEN** any of the four components is rendered
+- **WHEN** any of the membership surface's components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-8qm rev=1 -->
@@ -1658,6 +1681,37 @@ SHALL require no export of its own.
 - **GIVEN** a member holding a reward coupon, and a store coupon whose code the consumer passes
 - **WHEN** `CouponList` renders them
 - **THEN** the store coupon shows its code, and the reward coupon shows none
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-vkq rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-275 - The held tier wears the emphasis
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `TierInfoCard` renders the rung marked `currentTier`
+- **THEN** it wears the primary border and its tint
+- **AND** the unheld rungs wear the plain border
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-rwd rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-276 - An invitation-held tier earns nothing beneath it
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `TierLadder` renders a member whose held rung is `invitationOnly`
+- **THEN** every other rung reads upcoming, never completed
+- **AND** no connector is drawn into the held rung, and neither the qualifying count nor its footnote renders
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-xnm rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-277 - The qualifying line waits for both figures
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `TierLadder` renders with a qualifying count but no target, or a target but no count
+- **THEN** no qualifying line is rendered
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-fzj rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-278 - The mechanics rows take the consumer's icons and words
+**Serves:** grade10-site-loyalty-programme-US-13 - Member compares tiers and learns how points work
+
+- **WHEN** `HowPointsWork` renders a member's mechanics
+- **THEN** every row's icon, title and body arrived through props
+- **AND** the rows stack on a narrow viewport and pair across a wide one
 
 ### Requirement: A reward names a kind, a discount and a scope
 
