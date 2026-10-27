@@ -44,7 +44,9 @@ import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
 import { applicationRoot, decidedByProblem } from "./lib/decided-by.mjs";
 import {
+  checkRuleCoverage,
   checkStoreSuite,
+  STORE_PRD,
   STORE_IN_OPENSPEC,
   storeSuites,
 } from "./lib/store-suites.mjs";
@@ -1098,6 +1100,7 @@ for (const p of suites) {
 
 {
   const anchors = new Map();
+  const traced = new Map();
   for (const p of storeSuites(ROOT)) {
     const rel = relative(ROOT, p);
     if (args.scope && !rel.includes(args.scope)) continue;
@@ -1106,8 +1109,16 @@ for (const p of suites) {
       p,
       (severity, line, message) => record(severity, rel, line, message),
       anchors,
+      traced,
     );
   }
+  checkRuleCoverage(
+    ROOT,
+    traced,
+    (page, line, message) =>
+      record("warning", join(STORE_PRD, `${page}.md`), line, message),
+    anchors,
+  );
 }
 
 // --- a walk saves a tester setup and time ---------------------------------

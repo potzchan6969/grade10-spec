@@ -201,9 +201,11 @@ The PRD and Storybook are the store's only sources of truth. What a store spec s
 
 - **One folder** - every store case lives in `docs/prds/products/grade10-site/store/tests/`. No `*-tcs.md` exists under `openspec/specs/grade10-site/store/` or under any change's `specs/grade10-site/store/`, and `pnpm run tcs:validate` refuses one
 - **A file per page** - each file covers one store page and states what it holds in a header line: `**Capabilities:** grade10-site/store/cart-drawer, grade10-site/store/checkout`. A feature shown on several pages stays in the page file it sits in
-- **A case traces a PRD section** - `**Trace:** order-detail#product-pictures`, a heading anchor on that page under `docs/prds/products/grade10-site/store/`, or the page name alone, `**Trace:** home`, for the rules it states before its first heading. Sections in the file are named for PRD sections. Nothing in openspec is traced, unless the PM moves journeys into the PRD
+- **A case traces a PRD rule** - `**Trace:** product-listing#filters/combining-choices`: the page under `docs/prds/products/grade10-site/store/`, the section's heading anchor, then the anchor of a rule's bold name in a bullet under it, at any depth. A case that walks a whole section traces the section, `product-listing#filters`; the page name alone, `**Trace:** home`, traces the rules before its first heading. Sections in the file are named for PRD sections. Nothing in openspec is traced, unless the PM moves journeys into the PRD
+- **Every rule has a case** - `pnpm run tcs:validate` warns on each named rule of a page with a suite that no case traces, by its rule anchor or its section's. A ❓ rule is not yet a rule and is skipped
+- **No review state** - a store case carries no `**Status:**`, and its file no `**Status:**` header line. A case is live until it carries `**Retired:** <YYYY-MM-DD> - <why>`; a retired case keeps its number, which is never reused. Run results live in the run sheet, and a failed case's bug is a GitHub issue the sheet links
 - **A store change writes there directly** - its QA1 drafts cases in the page file on the change's branch, and acceptance has nothing to fold. QA1 stays blind to the requirements; QA2 reconciles against the PRD page and Storybook, so store cases carry no scenario links
-- **Checked for shape, not scenarios** - store files are checked for format, ids, header, the `**Capabilities:**` line and that each trace resolves. Scenario coverage does not apply
+- **Checked for shape, not scenarios** - store files are checked for format, ids, header, the `**Capabilities:**` line and that each trace resolves. Scenario coverage does not apply; rule coverage does, as a warning
 
 ## When Suites Are Written
 
@@ -281,13 +283,13 @@ Nine properties, in the template's order, on every case.
 | --- | --- |
 | Severity | `blocker` - a main flow cannot start or finish · `critical` - money, data integrity, permission or privacy is wrong · `major` - a main result is wrong · `minor` - supporting behaviour is wrong, the flow still completes · `trivial` - presentation only |
 | Priority | `high` - core flows and major risks; run first · `medium` - rules and branches beside the main functions · `low` - presentation or convenience |
-| Status | `draft` - new or changed since review; not exported · `actual` - a reviewer stands behind it; exported · `deprecated` - retired; kept, never exported or renumbered |
+| Status | `draft` - new or changed since review; not exported · `actual` - a reviewer stands behind it; exported · `deprecated` - retired; kept, never exported or renumbered. Not on a store case - see **Store** |
 | Behaviour | `positive` - the intended thing works · `negative` - a wrong input, state or permission is refused and nothing stored changes · `destructive` - the actor removes, withdraws or cancels and the product unwinds |
 | Type | `functional` - behaviour, rules and results; the default · `usability` - whether a person can understand and operate it · `security` - identity, permission, ownership, data protection · `performance` - a stated timing or capacity · `compatibility` - the browsers, devices or locales the spec names |
 | Suites | `acceptance` - the fixed core-flow baseline · `smoke` - a build's key functions · `regression` - protects existing behaviour, selected by impact · `health-check` - the environment and its dependencies are up · `prod` - read-only, safe in production · `none` |
 | Automation status | `manual` - no test runs it yet · `automated` - a test covers it in CI |
 | Testability | `automation` - a script asserts it exactly · `manual` - a judgment a script cannot make · `automation, manual` |
-| Trace | the journey, or for store the PRD section; composed levels list every journey, in the order reached |
+| Trace | the journey, or for store the PRD rule or section; composed levels list every journey, in the order reached |
 
 - **Severity is the impact if it fails** - take the higher of two. A refusal protecting money or permission is `critical` even when nothing changes
 - **Priority is run order**, not fix urgency
