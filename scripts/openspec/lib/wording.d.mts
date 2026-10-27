@@ -39,13 +39,13 @@ export declare const threadPathOf: (
   thread: string | undefined,
 ) => string | undefined;
 export declare const linkedOf: (url: string, title: string) => string;
-export declare const changePageOf: (manualUrl: string, id: string) => string;
+export declare const changePageOf: (openspecUrl: string, id: string) => string;
 export declare const permalinkOf: (
   workspaceUrl: string,
   thread: string | undefined,
 ) => string | undefined;
 export declare const linkOf: (link: {
-  manualUrl: string;
+  openspecUrl: string;
   workspaceUrl: string;
   thread?: string;
   id: string;

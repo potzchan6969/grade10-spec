@@ -53,10 +53,10 @@ export function linkedOf(url, title) {
   return `<${url}|${escapeSlackText(title)}>`;
 }
 
-/** A change's own page on the manual: `<manualUrl>/in-flight/<id>`, what a
- * message links to where the record names no thread. */
-export function changePageOf(manualUrl, id) {
-  return `${manualUrl.replace(/\/$/, "")}/in-flight/${encodeURIComponent(id)}`;
+/** A change's own page in the OpenSpec viewer: `<openspecUrl>/#/change/<id>`,
+ * what a message links to where the record names no thread. */
+export function changePageOf(openspecUrl, id) {
+  return `${openspecUrl.replace(/\/$/, "")}/#/change/${encodeURIComponent(id)}`;
 }
 
 /**
@@ -69,8 +69,9 @@ export function changePageOf(manualUrl, id) {
  * names one, and the digest — which never reads a thread — always gets the
  * change page.
  */
-export function linkOf({ manualUrl, workspaceUrl, thread, id, title }) {
-  const url = permalinkOf(workspaceUrl, thread) ?? changePageOf(manualUrl, id);
+export function linkOf({ openspecUrl, workspaceUrl, thread, id, title }) {
+  const url =
+    permalinkOf(workspaceUrl, thread) ?? changePageOf(openspecUrl, id);
   return linkedOf(url, title);
 }
 
