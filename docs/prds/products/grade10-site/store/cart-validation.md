@@ -20,8 +20,9 @@ decision. Neither answer turns the shop's later acceptance into a guarantee.
   changed, a rise as plainly as a fall; that price is the line's from then on
 - **Priced from its own read** — checkout prices every line from the read it
   takes, never from an earlier read or a price the browser sends
-- **A sold-out line holds checkout** — Proceed to Checkout stays unavailable
-  until the collector removes it
+- **A sold-out line is skipped** — the subtotal, shipping and total leave it
+  out, and checkout takes only the lines that still sell; Proceed to Checkout
+  stays unavailable only when no line still sells
 - **A product that left the shop** — a line whose product left the
   store's channel, or whose variant no longer exists, leaves the cart when it
   opens or when checkout finds it, and one notice names every line removed. A

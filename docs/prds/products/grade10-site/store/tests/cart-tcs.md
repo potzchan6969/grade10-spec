@@ -721,7 +721,7 @@ Runs once per row of **Test data**.
 * The row's line, and a total that follows its quantity times its price.
 
 <!-- trace:case id=g10.store-product-listing.TC-4ba rev=1 -->
-#### g10.store-cart.TC12: A sold-out line holds checkout until it is removed
+#### g10.store-cart.TC12: A sold-out line is skipped at checkout while another line sells
 
 **Classification:**
 
@@ -746,7 +746,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: `<sold-out product>` marked Sold out, keeping its picture, and Proceed to Checkout unavailable; the count beside the title reads 1 and the Subtotal leaves it out.
+* Step 1: `<sold-out product>` marked Sold out, keeping its picture, and the Subtotal leaves it out; Proceed to Checkout is available, since `<product A>` still sells, and the count beside the title reads 1.
 * Step 2: Proceed to Checkout available.
 
 <!-- trace:case id=g10.store-product-listing.TC-2fl rev=1 -->
