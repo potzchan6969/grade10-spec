@@ -6,9 +6,7 @@
  * `scripts/openspec/lib/` is. `handle.d.mts` and `team-parse.d.mts` are
  * beside it for the same reason.
  */
-import type { Told } from "../../../tools/openspec-store/src/told.ts";
 import type {
-  BehindArtifact,
   ChangeEntry,
   Role,
   Stage,
@@ -19,20 +17,6 @@ import type {
 export type WordedChange = Pick<ChangeEntry, "id"> & {
   stage: Stage;
 };
-
-/** The change as a landing reply reads it: the stage it is at now, the roles
- * of that stage and the hand each names, where one is named. */
-export type WordedLanding = {
-  stage: Stage;
-  roles: Role[];
-  hands: Partial<Record<Role, string>>;
-};
-
-/** One artifact that landed, and whose word landed it. */
-export type WordedLanded = { artifact: string; by: string };
-
-/** One person told what moved before their artifacts. */
-export type WordedTold = Pick<Told, "behind">;
 
 export declare const escapeSlackText: (text: string) => string;
 export declare const threadPathOf: (
@@ -64,10 +48,3 @@ export declare const toldBodyOf: (
   role: Role,
   options: { linked: string; sheetUrl?: string },
 ) => { kind: "your-turn"; text: string };
-export declare const movedText: (told: WordedTold, linked: string) => string;
-export declare const behindLabelOf: (behind: BehindArtifact) => string;
-export declare const handText: (role: Role, hand?: string) => string;
-export declare const landedText: (
-  at: WordedLanding,
-  landed: WordedLanded[],
-) => string;

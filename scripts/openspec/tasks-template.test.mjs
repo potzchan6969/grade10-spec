@@ -22,7 +22,6 @@ const ROOT = join(dirname(dirname(fileURLToPath(import.meta.url))), "..");
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
 
 const SCHEMA = "openspec/schemas/grade10-planning";
-const SKILL = ".claude/skills/workflow-tasks/SKILL.md";
 /** The rules the instruction is the one home of: the group's test task, its
  * own commit and its tick, the walk, and the flip the walk's commit makes. */
 const RULES = [
@@ -31,7 +30,6 @@ const RULES = [
   /ticked last/,
   /The last group is the walk/,
   /pnpm run tcs:automated <case…> --decided-by <walk path>/,
-  /named in the walk's `rounds\.md` row/,
 ];
 
 /** The `tasks` row of the schema: its instruction and its template. */
@@ -142,7 +140,7 @@ test("shared-planning-agent-rounds-SC-59 - the tasks template's last group is th
   assert.match(walk.tasks[0], /journey/i, "the walk group names no journey");
   // The flip as the store refuses it otherwise: a case of an in-flight change
   // owes the test that decides it, and the manual cases are named in the
-  // walk's own row as well as in the suite.
+  // suite.
   assert.match(
     walk.tasks.join("\n"),
     /pnpm run tcs:automated <case…> --decided-by <walk path>/,
@@ -150,8 +148,8 @@ test("shared-planning-agent-rounds-SC-59 - the tasks template's last group is th
   );
   assert.match(
     walk.tasks.join("\n"),
-    /`rounds\.md` row/,
-    "the walk group does not name the manual cases in its row",
+    /stay manual are named in the suite/,
+    "the walk group does not name the manual cases in the suite",
   );
 });
 
@@ -170,21 +168,6 @@ test("the tasks instruction holds the rule for the group's test task and the wal
     instruction,
     /Example:|```/,
     "the instruction carries an example beside the template",
-  );
-});
-
-test("the plan's skill points at the instruction and restates none of its rules", () => {
-  // The rule has one home on the plan's path: the skill names the command
-  // that prints it and the file that holds it, and carries no copy a later
-  // edit could drift.
-  const skill = read(SKILL);
-
-  assert.match(skill, /openspec instructions tasks/);
-  assert.match(skill, /scripts\/openspec\/tasks-template\.test\.mjs/);
-  assert.doesNotMatch(
-    skill,
-    /own commit|ticked last|end to end|tcs:automated/,
-    `${SKILL} restates a rule the instruction holds`,
   );
 });
 

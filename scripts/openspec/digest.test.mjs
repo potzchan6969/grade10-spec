@@ -7,15 +7,14 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import { weekOf } from "./digest.mjs";
-import { FRESH } from "./test/fresh.mjs";
 
 /**
  * Monday's digest, over one store committed at fixed dates.
  *
  * Every line the digest can say is a fact somebody has to have left in the
- * store days ago — a question nobody answered, a change nothing has moved, an
- * artifact something before it moved past — so the fixture is a git history
- * and not a directory: the day count is the point of four of the six lines.
+ * store days ago — a question nobody answered, a change nothing has moved —
+ * so the fixture is a git history and not a directory: the day count is the
+ * point of two of the five lines.
  */
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
@@ -100,13 +99,7 @@ function sandbox() {
       writeFileSync(file, text);
     }
   };
-  /** A commit stands for a landing: an artifact with no `reviewed:` line is
-   * read again against what is before it as it stands. */
   const commit = (message, daysAgo = 0) => {
-    const fresh = spawnSync(process.execPath, [FRESH, root], {
-      encoding: "utf8",
-    });
-    if (fresh.status !== 0) throw new Error(fresh.stderr);
     git(["add", "-A"]);
     git(["commit", "--quiet", "-m", message], daysAgo);
     return git(["rev-parse", "HEAD"]);
@@ -136,8 +129,8 @@ const digest = (root, args = []) => {
 };
 
 /** One week of one person: a change on them with a question nobody answered
- * and a wait written on it, idle since it landed; an artifact something before
- * it moved past nine days ago; and a change a released dependency freed. */
+ * and a wait written on it, idle since it landed; and a change a released
+ * dependency freed. */
 function week() {
   const { root, write, commit } = sandbox();
   write({
@@ -155,28 +148,6 @@ function week() {
     "openspec/changes/ask-it/decisions.md": DECIDED,
   });
   commit("propose ask-it", 10);
-  write({
-    "openspec/changes/behind-it/.openspec.yaml": [
-      "schema: demo-planning",
-      "created: 2026-10-01",
-      "hands:",
-      "  pm: dana",
-      "",
-    ].join("\n"),
-    "openspec/changes/behind-it/proposal.md": proposalOf("Behind it"),
-    "openspec/changes/behind-it/decisions.md": DECIDED.replace(
-      "❓ pm -",
-      "It is",
-    ),
-  });
-  commit("propose behind-it", 20);
-  write({
-    "openspec/changes/behind-it/proposal.md": proposalOf(
-      "Behind it",
-      " Again.",
-    ),
-  });
-  commit("reword behind-it", 9);
   write({
     "openspec/changes/dep-done/.openspec.yaml": [
       "schema: demo-planning",
@@ -216,7 +187,7 @@ function week() {
   return root;
 }
 
-test("shared-planning-change-stages-SC-48 - the digest says all six kinds of line in one message", () => {
+test("shared-planning-change-stages-SC-48 - the digest says all five kinds of line in one message", () => {
   const { read } = digest(week());
   const { messages } = read();
 
@@ -226,7 +197,6 @@ test("shared-planning-change-stages-SC-48 - the digest says all six kinds of lin
   assert.equal(message.channel, "U-DANA");
   assert.equal(message.to, "member");
   assert.deepEqual([...new Set(message.lines.map((one) => one.kind))].sort(), [
-    "behind",
     "freed",
     "idle",
     "now",
@@ -244,8 +214,6 @@ test("the digest's lines name what each is about", () => {
   assert.match(of("question")[0].text, /Q1/);
   assert.match(of("question")[0].text, /Which bound/);
   assert.equal(of("idle")[0].days, 10);
-  assert.match(of("behind")[0].text, /decisions/);
-  assert.equal(of("behind")[0].days, 9);
   assert.match(of("waiting")[0].text, /brand review/);
   assert.match(of("freed")[0].text, /dep-done/);
   assert.match(messages[0].text, /Ask it/);
@@ -259,118 +227,6 @@ test("shared-planning-change-stages-SC-50 - the digest reaches nobody with nothi
     messages.map((one) => one.handle),
     ["dana"],
   );
-});
-
-/** One change whose `decisions.md` is behind, because `proposal.md` — what it
- * is drawn from — was reworded `daysAgo` days ago. The bound is the point of
- * the case, so the two rows either side of it read one store each. */
-function behindFor(daysAgo) {
-  const { root, write, commit } = sandbox();
-  write({
-    "openspec/changes/fresh-it/.openspec.yaml": [
-      "schema: demo-planning",
-      "created: 2026-10-01",
-      "hands:",
-      "  pm: dana",
-      "",
-    ].join("\n"),
-    "openspec/changes/fresh-it/proposal.md": proposalOf("Fresh it"),
-    "openspec/changes/fresh-it/decisions.md": "## Goals\n\n- One\n",
-  });
-  commit("propose fresh-it", 20);
-  write({
-    "openspec/changes/fresh-it/proposal.md": proposalOf("Fresh it", " Again."),
-  });
-  commit("reword fresh-it", daysAgo);
-  return digest(root).read();
-}
-
-const behindLines = (read) =>
-  (read.messages[0]?.lines ?? []).filter((one) => one.kind === "behind");
-
-test("shared-planning-change-stages-SC-49 - the digest lists an artifact behind seven days and leaves one behind six off the week", () => {
-  assert.deepEqual(
-    behindLines(behindFor(7)).map((one) => [
-      one.change,
-      one.artifact,
-      one.days,
-    ]),
-    [["fresh-it", "decisions", 7]],
-  );
-
-  assert.deepEqual(behindLines(behindFor(6)), []);
-});
-
-test("shared-planning-change-stages-SC-49 - the digest counts the days from the day the artifact went behind", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    "openspec/changes/first-moved/.openspec.yaml": [
-      "schema: demo-planning",
-      "created: 2026-10-01",
-      "hands:",
-      "  pm: dana",
-      "  design: dana",
-      "",
-    ].join("\n"),
-    "openspec/changes/first-moved/proposal.md": proposalOf("First moved"),
-    "openspec/changes/first-moved/decisions.md": "## Goals\n\n- One\n",
-    "openspec/changes/first-moved/ui-design.md": "## Screens\n\nOne screen.\n",
-  });
-  commit("propose first-moved", 20);
-  // The decisions are drawn from the proposal, which moved seven days ago:
-  // that is the day they went behind. The UI design is drawn from both, and
-  // the decisions moving again yesterday is its newest move, so its week
-  // starts yesterday.
-  write({
-    "openspec/changes/first-moved/proposal.md": proposalOf(
-      "First moved",
-      " Again.",
-    ),
-  });
-  commit("reword the proposal", 7);
-  write({ "openspec/changes/first-moved/decisions.md": "## Goals\n\n- Two\n" });
-  commit("reword the decisions", 1);
-
-  const { messages } = digest(root).read();
-  const behind = (messages[0]?.lines ?? []).filter(
-    (one) => one.kind === "behind",
-  );
-
-  assert.deepEqual(
-    behind.map((one) => [one.artifact, one.days]),
-    [["decisions", 7]],
-  );
-});
-
-test("shared-planning-change-stages-SC-49 - a stale reviewed: id is listed once what changed is old enough", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    "openspec/changes/stale-it/.openspec.yaml": [
-      "schema: demo-planning",
-      "created: 2026-10-01",
-      "hands:",
-      "  pm: dana",
-      "  design: dana",
-      "reviewed:",
-      "  ui-design: '00000000'",
-      "",
-    ].join("\n"),
-    "openspec/changes/stale-it/proposal.md": proposalOf("Stale it"),
-    "openspec/changes/stale-it/decisions.md": "## Goals\n\n- One\n",
-    "openspec/changes/stale-it/ui-design.md": "## Screens\n\nOne screen.\n",
-  });
-  // A `reviewed:` id already on the branch, wrong from the day it was
-  // written: the digest still counts its days from the newest of what is
-  // before the artifact, an id carrying no date of its own.
-  commit("propose stale-it, already read against a stale id", 8);
-
-  const { messages } = digest(root).read();
-  const behind = (messages[0]?.lines ?? []).filter(
-    (one) => one.kind === "behind" && one.change === "stale-it",
-  );
-
-  assert.equal(behind.length, 1);
-  assert.equal(behind[0].days, 8);
 });
 
 test("the digest lists a page's open question beside the decisions rows", () => {
@@ -484,49 +340,4 @@ test("shared-planning-change-stages-SC-36 - the workflow's cache key names the w
     assert.equal(format[1], "+%G-W%V");
     assert.match(weekOf(Date.parse(at)), /^\d{4}-W\d{2}$/, at);
   }
-});
-
-test("shared-planning-change-stages-SC-49 - the digest counts a behind artifact's own days, not the change's last commit", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    "openspec/changes/behind-it/.openspec.yaml": [
-      "schema: demo-planning",
-      "created: 2026-10-01",
-      "hands:",
-      "  pm: dana",
-      "",
-    ].join("\n"),
-    "openspec/changes/behind-it/proposal.md": proposalOf("Behind it"),
-    "openspec/changes/behind-it/decisions.md": DECIDED.replace(
-      "❓ pm -",
-      "It is",
-    ),
-  });
-  commit("propose behind-it", 20);
-  write({
-    "openspec/changes/behind-it/proposal.md": proposalOf(
-      "Behind it",
-      " Again.",
-    ),
-  });
-  // What puts `decisions` behind: `proposal.md` reworded 9 days ago.
-  commit("reword behind-it", 9);
-  const recordPath = join(root, "openspec/changes/behind-it/.openspec.yaml");
-  write({
-    "openspec/changes/behind-it/.openspec.yaml": readFileSync(
-      recordPath,
-      "utf8",
-    ).replace("  pm: dana\n", "  pm: dana\n  design: dana\n"),
-  });
-  // A later, unrelated commit on the same change: naming a second hand moves
-  // `lastMoved` to 2 days ago without touching what `decisions` is behind.
-  commit("name a designer", 2);
-
-  const { messages } = digest(root).read();
-
-  const behind = (messages[0]?.lines ?? []).find(
-    (one) => one.kind === "behind",
-  );
-  assert.ok(behind, "expected `decisions` behind by its own, older date");
-  assert.equal(behind.days, 9);
 });

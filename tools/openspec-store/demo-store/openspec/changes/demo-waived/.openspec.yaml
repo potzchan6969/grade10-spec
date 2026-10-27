@@ -4,7 +4,3 @@ ui_waived: "the change draws nothing - no screen moves"
 hands:
   pm: tester
   design: tester
-reviewed:
-  decisions: 4c2b1947
-  user-journeys: 102106db
-  tech-design: fc395fd1

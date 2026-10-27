@@ -25,7 +25,6 @@ import {
   toItemError,
 } from "./files.mts";
 import { mainStateOf, type StoreMain } from "./main.mts";
-import { askedIdsOf } from "./rounds.ts";
 import { deltaSections } from "./spec-text.mts";
 import { ASKED_OF, ladderOf } from "./stages.ts";
 import type {
@@ -37,7 +36,6 @@ import type {
   DeltaRequirement,
   OpenQuestion,
   PageSectionRef,
-  RoundRow,
   SchemaArtifact,
   TaskGroup,
   TaskLine,
@@ -46,7 +44,6 @@ import type {
 export { deltaSections };
 
 import { readLandings } from "./read-landings.mts";
-import { readRounds, roundArtifactOf } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
 import { readTestCases } from "./read-specs.mts";
 
@@ -282,10 +279,6 @@ function readChange(
       }
       const hands = readIdMap("hands", fields.hands, handleOf);
       if (hands) entry.hands = hands;
-      const landedBy = readIdMap("landed_by", fields.landed_by, handleOf);
-      if (landedBy) entry.landedBy = landedBy;
-      const reviewed = readIdMap("reviewed", fields.reviewed);
-      if (reviewed) entry.reviewed = reviewed;
       const rewritten = readIdMap(
         "purpose_rewritten",
         fields.purpose_rewritten,
@@ -368,18 +361,6 @@ function readChange(
     capabilitiesOf(root, dir),
   );
 
-  // The round's record, written by the first landing and absent until then —
-  // read ahead of the decisions so an open question can be marked against the
-  // draft a round was actually reading rather than the file its row lives in.
-  const rounds: RoundRow[] = [];
-  if (detailed) {
-    const roundsText = readTextIfExists(join(dir, "rounds.md"));
-    if (roundsText !== undefined) {
-      entry.rounds = readRounds(roundsText);
-      rounds.push(...entry.rounds);
-    }
-  }
-
   // In flight only: an archived change's interview is over, and both readers
   // are pure over the text - a row nothing matches is a row nobody asked, so
   // there is nothing here to catch and nothing to report.
@@ -387,7 +368,7 @@ function readChange(
     ? readTextIfExists(join(dir, "decisions.md"))
     : undefined;
   if (decisions !== undefined) {
-    const open = readQuestions(decisions, entry.hands, rounds);
+    const open = readQuestions(decisions, entry.hands);
     if (open.length > 0) entry.questions = open;
   }
 
@@ -572,7 +553,6 @@ export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
 
 /**
  * A record key that maps an id to one line — `hands:` against a role,
- * `landed_by:` and `reviewed:` against a schema artifact id,
  * `purpose_rewritten:` against a capability path.
  *
  * The line is read as written, normalized only by `normalize`, and an entry
@@ -608,24 +588,6 @@ function readIdMap(
 export const DECISION_ROW = /^Q\d+$/;
 
 /**
- * Which artifact or task group each open `Q<n>` was raised against, from
- * every round's own Asked column — never `decisions.md`'s own row, which
- * always names the file it lives in rather than the draft under challenge.
- * A later round's line wins where an id somehow appears more than once,
- * since it is the more recent reading; a round whose own Artifact cell names
- * nothing raises against nobody rather than against an empty string.
- */
-function artifactRaisedAgainst(rounds: RoundRow[]): Map<string, string> {
-  const found = new Map<string, string>();
-  for (const round of rounds) {
-    const resolved = roundArtifactOf(round.artifact);
-    if (resolved === null) continue;
-    for (const id of askedIdsOf(round.asked)) found.set(id, resolved);
-  }
-  return found;
-}
-
-/**
  * The decisions rows nobody has settled, addressed to the hand each names.
  *
  * A row is open when its `Decided` cell is written `❓ <role> - <what is
@@ -638,19 +600,12 @@ function artifactRaisedAgainst(rounds: RoundRow[]): Map<string, string> {
  * Any role is read, the five or not: a question naming one outside them is
  * listed under that role and routed to its channel, the way an unnamed hand
  * is, and narrowing the set here would drop the question instead.
- *
- * Exported for the landing step, which refuses while a row is open and takes
- * its recommendation on `--with-recommendations` (`scripts/openspec/lib/held.mjs`):
- * the held rows are read here or nowhere, never by a second parser of the
- * same table.
  */
 export function readQuestions(
   text: string,
   hands?: Record<string, string> | undefined,
-  rounds: RoundRow[] = [],
 ): OpenQuestion[] {
   const open: OpenQuestion[] = [];
-  const raisedAgainst = artifactRaisedAgainst(rounds);
   for (const cells of decisionRows(text)) {
     if (!DECISION_ROW.test(cells[0])) continue;
     const asked = ASKED_OF.exec(cells[2] ?? "");
@@ -658,7 +613,7 @@ export function readQuestions(
     const [, role, recommended] = asked;
     open.push({
       id: cells[0],
-      artifact: raisedAgainst.get(cells[0]) ?? "decisions",
+      artifact: "decisions",
       role,
       hand: hands?.[role] ?? role,
       text: cells[1] ?? "",
@@ -685,7 +640,7 @@ export function questionIdsOf(text: string): Set<string> {
 /**
  * The rows of one change's `## Decisions` table, header dropped — the one
  * table `Q<n>` ids are issued from, found once for every reader of it: the
- * open questions, the cited ids, and the reply a held row makes. A file with
+ * open questions and the cited ids. A file with
  * no such table has no rows.
  */
 export function decisionRows(text: string): string[][] {

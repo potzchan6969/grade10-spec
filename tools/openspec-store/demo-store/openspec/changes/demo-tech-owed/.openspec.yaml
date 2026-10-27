@@ -4,8 +4,3 @@ ui_waived: "the fixture is about the tech design, not the UI design"
 hands:
   pm: tester
   dev: tester
-reviewed:
-  decisions: 79a6b8e2
-  user-journeys: "56977751"
-  specs: 1cdad93f
-  test-cases: 1cdad93f

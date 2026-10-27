@@ -1,41 +1,31 @@
-# The Round's Readers
+# The Bug Readers
 
-The challenger and verifier definitions a round dispatches. `.claude/agents/`
-is canonical and mirrored nowhere: every platform reads these files, and
-`pnpm run agent:check-parity` asserts the directory is here and that every
-`perspectives[].agent` path in
-[`openspec/schemas/grade10-planning/schema.yaml`](../../openspec/schemas/grade10-planning/schema.yaml)
-resolves to one of them.
+The challenger and verifier definitions a bug fix's rounds dispatch.
+`.claude/agents/` is canonical and mirrored nowhere: every platform reads
+these files, and `pnpm run agent:check-parity` asserts the directory is here
+and that every `agent` path in the schema resolves to one of them.
 
-- **One perspective, one dispatch** — the round dispatches one challenger per
-  perspective summoned, each given the draft and what is before it and never
-  another reader's output, and one verifier over every reader's findings. Several
-  perspectives share one definition where they are one reader with one stance:
-  the dispatch carries the perspective's name, and the definition says which
-  reading is which
-- **The table is the schema's** — a perspective is a row there, with its
-  `name`, its `when` and its `agent`. The `workflow-round` skill reads them through
-  `node scripts/openspec/perspectives.mjs`; nothing carries a second copy
-- **`always` is per artifact** — a reader whose `when` is `always` runs on
-  every round of the artifacts whose list names it. Only the simpler thing
-  sits on every list, and it is the floor when a round has one reader
-- **The model** — `opus` where the tech design's or a task group's round can
-  dispatch the reader, because those two readings are held to the eight
-  principles and read code; `sonnet` everywhere else. A file has one model, so
-  a reader that sits on both kinds of list takes `opus`; the fallback is
-  [Round Summary and Landing](../../docs/governance/round-summary.md#readers)'s
-- **Read-only** — every definition carries `tools: Read, Grep, Glob, Bash` and
-  writes nothing. The round applies what the verifier says stands
-- **A bug's rounds** - a bug fix is no change, but its diagnosis and its fix
-  are read the same way: the schema's `bug:` block names their readers,
-  `node scripts/openspec/bug-readers.mjs` reads them, and each definition's
-  `On a Bug` section says what that round gives it and what it argues
-
-The mapping from an artifact to its perspectives lives once, in
-[`openspec/schemas/grade10-planning/schema.yaml`](../../openspec/schemas/grade10-planning/schema.yaml),
-and is read through
-[`scripts/openspec/perspectives.mjs`](../../scripts/openspec/perspectives.mjs).
-This file carries no copy of it.
+- **The table is the schema's** — the `bug:` block of
+  [`openspec/schemas/grade10-planning/schema.yaml`](../../openspec/schemas/grade10-planning/schema.yaml)
+  names each round's readers, with their `name`, their `when` and their
+  `agent`. `node scripts/openspec/bug-readers.mjs` reads it; nothing carries a
+  second copy
+- **Two rounds** — the diagnosis round and the fix round of
+  [Bug Fixes](../../docs/governance/bug-fixes.md), which `/fix-bug` runs and
+  dispatches
+- **One perspective, one dispatch** — one challenger per perspective
+  summoned, each given the report, the diagnosis and, in the fix round, the
+  diff, and never another reader's output; then one verifier over every
+  reader's findings where more than one ran. Several perspectives share one
+  definition where they are one reader with one stance: the dispatch carries
+  the perspective's name, and the definition says which reading is which
+- **`always` is per round** — a reader whose `when` is `always` reads every
+  run of that round. The simpler thing reads both rounds, and is the floor
+  when a round has one reader
+- **The model** — `opus` where a reading is held to the eight principles and
+  reads code; `sonnet` everywhere else. A file has one model
+- **Read-only** — every definition carries `tools: Read, Grep, Glob, Bash`
+  and writes nothing. What the verifier says stands goes back to its round
 
 ## The Page Verifier
 
@@ -57,10 +47,10 @@ file, which the skill's `merge.mjs` folds into the day's page. It runs on
 1. Write the definition here, with `name`, `description`, `model` and
    `tools: Read, Grep, Glob, Bash`, and say what it is given, what it reads
    for, its stance and the table it returns
-2. Add its `perspectives:` entry to the schema, with a `when` a draft can
-   actually summon
+2. Add its entry to the schema's `bug:` block, with a `when` a diagnosis or a
+   diff can actually summon
 3. Run `pnpm run agent:sync-parity && pnpm run agent:check-parity` and
-   `node --test scripts/openspec/round-skill.test.mjs`
+   `node --test scripts/openspec/bug-readers.test.mjs`
 
-A reader with no `when` a draft can summon is not an entry, and a reader
+A reader with no `when` a bug can summon is not an entry, and a reader
 nothing dispatches is deleted.

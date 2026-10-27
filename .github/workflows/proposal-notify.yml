@@ -19,8 +19,7 @@ name: OpenSpec changes
 #
 # The job commits nothing: `contents: read` and `actions: read` — the second
 # to find the last deployed head — are the whole of it, and the only token it
-# holds beyond the workflow's own is the Slack bot's. `thread:` and `reviewed:`
-# are written by the round, not here.
+# holds beyond the workflow's own is the Slack bot's.
 
 on:
   workflow_run:

@@ -19,7 +19,6 @@ import {
   slackPayload,
 } from "./changed-changes.mjs";
 import { deliver, sendAll } from "./lib/notify.mjs";
-import { FRESH } from "./test/fresh.mjs";
 
 test("parses regular and renamed OpenSpec files from git's NUL format", () => {
   assert.deepEqual(
@@ -398,14 +397,7 @@ function sandbox() {
     }
   };
   const drop = (path) => rmSync(join(root, path), { force: true });
-  /** A commit stands for a landing: every artifact with no `reviewed:` line
-   * is read again against what is before it as it stands, so what a later
-   * commit moves is what reaches a hand. */
   const commit = (message, daysAgo = 0, email) => {
-    const fresh = spawnSync(process.execPath, [FRESH, root], {
-      encoding: "utf8",
-    });
-    if (fresh.status !== 0) throw new Error(fresh.stderr);
     git(["add", "-A"], 0, email);
     git(["commit", "--quiet", "-m", message], daysAgo, email);
     return git(["rev-parse", "HEAD"]);
@@ -638,71 +630,6 @@ test("shared-planning-change-stages-SC-38 - --stages tells nobody when a push on
   assert.deepEqual(payload.blocks, []);
 });
 
-test("shared-planning-change-stages-SC-70 - --stages names no change for a push that only writes the record's keys, and the thread still hears what landed", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    ...throughSpecs(),
-    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
-    [`${DIR}/proposal.md`]: proposalOf(),
-    [`${DIR}/tasks.md`]: tasksMd(0),
-  });
-  const base = commit("plan probe", 3);
-  write({
-    [`${DIR}/.openspec.yaml`]: record(
-      ...HANDS,
-      'promoted_by: "@dana"',
-      "thread: C0AB/1700000000.000100",
-      "reviewed:",
-      "  decisions: abcd1234",
-      "landed_by:",
-      "  tasks: erin",
-    ),
-  });
-  const head = commit("record the round", 1);
-
-  const { messages, changes } = stages(root, [
-    "--base",
-    base,
-    "--head",
-    head,
-  ]).read();
-
-  // Nobody's turn moved and the change is named nowhere. The one message owed is the thread's: `landed_by:` gained an entry,
-  // and the reply is about that very line, so a landing whose only file is the
-  // record is told all the same.
-  assert.deepEqual(
-    messages.map((one) => one.kind),
-    ["landed"],
-  );
-  assert.equal(messages[0].key, `probe:landed:${head}`);
-  assert.deepEqual(changes.updated, []);
-});
-
-test("shared-planning-change-stages-SC-44 - --stages tells the artifact's hand what changed before it", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
-    [`${DIR}/proposal.md`]: proposalOf(),
-    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
-  });
-  const base = commit("propose probe", 10);
-  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
-  const head = commit("reword the proposal", 1);
-
-  const { read } = stages(root, ["--base", base, "--head", head]);
-  const { messages } = read();
-
-  assert.deepEqual(
-    messages.map((one) => [one.key, one.kind, one.channel]),
-    [["probe:behind:dana", "behind", "U-DANA"]],
-  );
-  assert.match(textOf(messages, "probe:behind:dana"), /before `decisions`/);
-  assert.match(
-    textOf(messages, "probe:behind:dana"),
-    /`proposal` ## Why, small — before: Nobody has\. — after: Nobody has\. Again\./,
-  );
-});
-
 /** One capability's suite beside the change's delta, one draft case. */
 const SUITE = [
   "# Rail",
@@ -729,7 +656,6 @@ const SUITE = [
   "",
 ].join("\n");
 
-// Proves part of shared-planning-agent-rounds-US11-TC1-1.
 test("shared-planning-agent-rounds-SC-89 - --stages keeps Specified with the product manager and creates no QA review turn", () => {
   const { root, write, commit } = sandbox();
   const designed = throughSpecs();
@@ -769,7 +695,7 @@ test("shared-planning-agent-rounds-SC-89 - --stages keeps Specified with the pro
   assert.equal(reached[CHANGE], "specified", first.stderr);
   const pm = textOf(messages, "probe:specified:pm");
   assert.match(pm, /\*Your turn\*/);
-  assert.match(pm, /\/workflow-specify probe/);
+  assert.match(pm, /\/planning-dev probe/);
   assert.equal(textOf(messages, "probe:specified:qa"), "");
   assert.doesNotMatch(pm, /\/tcs-review|Suite:/);
   // Sent once: a re-run of the same push tells nobody again.
@@ -779,13 +705,15 @@ test("shared-planning-agent-rounds-SC-89 - --stages keeps Specified with the pro
 test("shared-planning-change-stages-SC-36 - --stages sends nothing twice for one push", () => {
   const { root, write, commit } = sandbox();
   write({
-    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS),
     [`${DIR}/proposal.md`]: proposalOf(),
-    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
   });
-  const base = commit("propose probe", 10);
-  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
-  const head = commit("reword the proposal", 1);
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+    [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
+  });
+  const head = commit("decide probe", 1);
   const keys = join(root, "sent-keys.txt");
   const args = ["--base", base, "--head", head, "--sent-keys", keys];
 
@@ -794,12 +722,11 @@ test("shared-planning-change-stages-SC-36 - --stages sends nothing twice for one
 
   assert.deepEqual(
     first.messages.map((one) => one.key),
-    ["probe:behind:dana"],
+    ["probe:proposed:design"],
   );
   assert.deepEqual(second.messages, []);
-  // Rewording a proposal crosses no milestone, so no channel post is keyed.
   assert.deepEqual(readFileSync(keys, "utf8").trim().split("\n"), [
-    "probe:behind:dana",
+    "probe:proposed:design",
   ]);
 });
 
@@ -853,7 +780,7 @@ test("shared-planning-change-stages-SC-41 - --stages posts to the role's channel
     messages.map((one) => [one.key, one.to, one.channel]),
     [["probe:planned:dev", "channel", "C-DEV"]],
   );
-  assert.match(messages[0].text, /`\/workflow-tasks probe`/);
+  assert.match(messages[0].text, /`\/planning-dev probe`/);
 });
 
 test("shared-planning-change-stages-SC-42 - --stages posts to the role's channel when the hand is taken off", () => {
@@ -1093,95 +1020,6 @@ test("--stages does not treat a completed task list as a QA execution signal", (
   assert.deepEqual(messages, []);
 });
 
-/** A landing as `plan:land` writes it: the artifacts, and the record naming
- * whose word landed each. */
-const landedRecord = (...lines) =>
-  record(
-    ...HANDS,
-    ...lines,
-    "landed_by:",
-    "  proposal: dana",
-    "  decisions: dana",
-    "  user-journeys: dana",
-  );
-
-/** What the landing of Proposed's second half carries beside the record. */
-const PROPOSED = {
-  [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
-  [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
-};
-
-test("shared-planning-change-stages-SC-70 - --stages replies in the thread for a landing", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    [`${DIR}/.openspec.yaml`]: record(
-      ...HANDS,
-      "thread: C0AB/1700000000.000100",
-    ),
-    [`${DIR}/proposal.md`]: proposalOf(),
-  });
-  const base = commit("propose probe", 3);
-  write({
-    [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
-    ...PROPOSED,
-  });
-  const head = commit("land the three of probe on @dana", 1);
-
-  const { messages } = stages(root, ["--base", base, "--head", head]).read();
-
-  const landed = messages.find((one) => one.kind === "landed");
-  assert.equal(landed.key, `probe:landed:${head}`);
-  assert.equal(landed.id, CHANGE);
-  assert.equal(landed.to, "channel");
-  assert.equal(landed.channel, "C0AB");
-  assert.equal(landed.threadTs, "1700000000.000100");
-  assert.match(
-    landed.text,
-    /\*Landed\* — `proposal`, `decisions`, `user-journeys` by @dana/,
-  );
-  assert.match(landed.text, /now at \*Proposed\*/);
-  assert.match(landed.text, /your turn: @dana \(designer\)$/);
-});
-
-test("shared-planning-change-stages-SC-70 - the thread's reply goes out whatever --dms says", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    [`${DIR}/.openspec.yaml`]: record(
-      ...HANDS,
-      "thread: C0AB/1700000000.000100",
-    ),
-    [`${DIR}/proposal.md`]: proposalOf(),
-  });
-  const base = commit("propose probe", 3);
-  write({
-    [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
-    ...PROPOSED,
-  });
-  const head = commit("land the three of probe on @dana", 1);
-
-  const done = stages(root, ["--base", base, "--head", head, "--dms", "false"]);
-
-  // `--dms false` is the per-hand messages turned off; the reply in the
-  // thread is nobody's inbox and is delivered either way.
-  assert.match(done.stderr, new RegExp(`\\[probe:landed:${head}\\]`));
-  assert.doesNotMatch(done.stderr, /probe:proposed:design/);
-});
-
-test("shared-planning-change-stages-SC-70 - --stages posts no landing reply for a change whose record names no thread", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    [`${DIR}/.openspec.yaml`]: record(...HANDS),
-    [`${DIR}/proposal.md`]: proposalOf(),
-  });
-  const base = commit("propose probe", 3);
-  write({ [`${DIR}/.openspec.yaml`]: landedRecord(), ...PROPOSED });
-  const head = commit("land the three of probe on @dana", 1);
-
-  const { messages } = stages(root, ["--base", base, "--head", head]).read();
-
-  assert.deepEqual(messages.map((one) => one.kind).sort(), ["your-turn"]);
-});
-
 test("the sender posts each message once and retries a 429 once", async () => {
   const calls = [];
   let first = true;
@@ -1215,7 +1053,7 @@ test("the sender posts each message once and retries a 429 once", async () => {
         text: "One",
       },
       {
-        key: "probe:behind:decisions",
+        key: "probe:proposed:design",
         to: "channel",
         channel: "C-DESIGN",
         text: "Two",
@@ -1225,7 +1063,7 @@ test("the sender posts each message once and retries a 429 once", async () => {
     { token: "xoxb-test", fetch: fetched, sleep: async () => {} },
   );
 
-  assert.deepEqual(sent, ["probe:planned:dev", "probe:behind:decisions"]);
+  assert.deepEqual(sent, ["probe:planned:dev", "probe:proposed:design"]);
   assert.equal(calls.length, 3);
   assert.equal(calls[0].url, "https://slack.com/api/chat.postMessage");
   assert.equal(calls[0].auth, "Bearer xoxb-test");
@@ -1261,7 +1099,7 @@ test("the sender's refusal carries what it did send before the channel it was re
             text: "One",
           },
           {
-            key: "probe:behind:decisions",
+            key: "probe:proposed:design",
             to: "channel",
             channel: "C-BAD",
             text: "Two",
@@ -1305,7 +1143,7 @@ test("deliver keys what went out even when the rest is refused", async () => {
           text: "One",
         },
         {
-          key: "probe:behind:decisions",
+          key: "probe:proposed:design",
           to: "channel",
           channel: "C-BAD",
           text: "Two",

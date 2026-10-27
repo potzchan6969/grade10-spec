@@ -2,9 +2,8 @@
 // under plain node, which resolves no extensionless path.
 
 import { daysBetween, TIME_ZONE } from "../../manual/src/api/time.ts";
-import { behindOf, handOfArtifact } from "./stages.ts";
+import { handOfArtifact } from "./stages.ts";
 import type {
-  BehindArtifact,
   ChangeEntry,
   ChangeSuite,
   Role,
@@ -12,7 +11,7 @@ import type {
 } from "./types.ts";
 
 /**
- * What sits beside a change's stage: the five overlays, their shapes, and the
+ * What sits beside a change's stage: the four overlays, their shapes, and the
  * day bounds the idle one is read by.
  *
  * Its own module beside `stages.ts`, because none of it is the ladder: every
@@ -22,14 +21,8 @@ import type {
  * reads.
  */
 
-/** The five overlays, in the order the table lists them. */
-export const OVERLAYS = [
-  "waiting",
-  "blocked",
-  "idle",
-  "behind",
-  "suite",
-] as const;
+/** The four overlays, in the order the table lists them. */
+export const OVERLAYS = ["waiting", "blocked", "idle", "suite"] as const;
 
 export type OverlayKind = (typeof OVERLAYS)[number];
 
@@ -37,7 +30,7 @@ export type OverlayKind = (typeof OVERLAYS)[number];
 export type SuiteVerdict = "draft" | "approved";
 
 /** A fact beside the stage. Never a stage of its own, and never one of these
- * five plus a sixth: the set is closed, so a reader meets one list of chips. */
+ * four plus a fifth: the set is closed, so a reader meets one list of chips. */
 export type Overlay =
   | {
       kind: "waiting";
@@ -52,11 +45,6 @@ export type Overlay =
     }
   | { kind: "blocked"; change: string }
   | { kind: "idle"; days: number; shelved: boolean }
-  | ({
-      kind: "behind";
-      role?: Role;
-      hand?: string;
-    } & BehindArtifact)
   | { kind: "suite"; verdict: SuiteVerdict };
 
 export type OverlayContext = {
@@ -66,7 +54,7 @@ export type OverlayContext = {
   /** The changes a release has carried: `depends_on:` naming one of these
    * blocks nothing. The caller holds the archive and the released set. */
   released: Set<string>;
-  /** The schema's artifacts, for the behind reading's order. */
+  /** The schema's artifacts, for the hand each wait is shown against. */
   artifacts: SchemaArtifact[];
 };
 
@@ -106,14 +94,6 @@ export function overlaysOf(
   const days = idleDaysOf(change, ctx.now);
   if (days !== undefined && days >= IDLE_FROM) {
     overlays.push({ kind: "idle", days, shelved: days >= SHELVED_FROM });
-  }
-  const [earliest] = behindOf(change, ctx.artifacts);
-  if (earliest) {
-    overlays.push({
-      kind: "behind",
-      ...earliest,
-      ...whose(change, earliest.artifact, ctx.artifacts),
-    });
   }
   const verdict = verdictOf(change.suites);
   if (verdict) overlays.push({ kind: "suite", verdict });

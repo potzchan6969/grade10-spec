@@ -7,9 +7,3 @@ hands:
   pm: tester
   qa: tester
   dev: tester
-reviewed:
-  decisions: 1d7bbbaa
-  user-journeys: e7ce6426
-  specs: 2f3e7021
-  test-cases: 2f3e7021
-  tasks: b19408d5
