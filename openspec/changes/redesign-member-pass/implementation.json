@@ -34,5 +34,15 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "8aed92909c461a5439215b8967af8079b95d7691",
+      "components": [
+        "storybook"
+      ],
+      "verifiedBy": "seankcw",
+      "verification": "The blocks, their stories and the preview screens are on the store's main; `tsc` on @grade10/ui and `pnpm storybook:check` pass at this commit. The owner archived without the workbench walk, as for redesign-tier-card, taking Storybook as the source of truth. No grade10 application source is part of this change."
+    }
+  ]
 }
