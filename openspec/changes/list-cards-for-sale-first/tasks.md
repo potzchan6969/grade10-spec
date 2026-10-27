@@ -1,4 +1,4 @@
-## 1. The requirement (grade10-spec)
+## 1. The requirement (grade10-spec) (owner: @seankcw)
 
 - [x] 1.1 Write the MODIFIED `Order and free text describe the whole catalogue` delta: a card for sale lists before a sold-out one in every order, at rest and inside a collection, the order asked for holding within each group; a price order sorts on a card's cheapest variant; SC-13 reads the lowest-priced card for sale; new SC-57 and SC-58
 - [x] 1.2 Record Q2 as decided on the basis that runs, with no backend change
