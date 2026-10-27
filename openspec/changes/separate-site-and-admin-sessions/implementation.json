@@ -115,5 +115,21 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "1d3972db9d49c8dfce88ad1b43d72ec5ecbf1e89",
+      "components": [
+        "admin",
+        "api",
+        "auction-service",
+        "auth",
+        "grading-service",
+        "inventory-service",
+        "store-service",
+        "vault-service",
+        "web"
+      ]
+    }
+  ]
 }
