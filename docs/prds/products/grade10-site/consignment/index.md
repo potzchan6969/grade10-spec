@@ -111,7 +111,12 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   checkout; built on the first
 - 🚧 **Sold from the vault** - a storage card is consigned where it sits, a
   store listing moving it to the counter and back; a financed card waits
-- 🚧 **Released to its buyer** - on delivery, under the consignment agreement
+- 🚧 **Released to its buyer** - on delivery, under the consignment agreement;
+  no release paper, no early withdrawal fee, and the card's vault incentive
+  is kept - [Earnings](/p/grade10-site/vault/earnings#the-balance)
+- 🚧 **The vault hears each fact** - the sale, a reversed sale, the delivery,
+  the settlement and a refund after payout reach the vault once each, which
+  decides when the card stops earning
 - ❓ Owner - **The release clause** - its exact words; a draft prints
   until they are confirmed
 - 🚧 **Recorded at intake** - where the consignment was taken - the shop's
@@ -129,9 +134,6 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   the online store or the auction - its agreed list price, the commission
   rate and the consignor's estimated net payout, and counts down the days
   left on its term
-- ❓ Product - **Selling from the vault** - whether the consignor releases
-  the vault case first, or the case passes to the buyer -
-  [Services and Hand-offs](/p/grade10-admin/inventory/services#marks-that-share-an-item)
 - ❓ **Asking online, not built** - only staff open a consignment; the site
   has no request page until its form and rules are designed
 
@@ -170,9 +172,14 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - **How** - a bank transfer a treasurer records with its reference; a
   correction takes a second holder of the payout grant
 - 🚧 **Into the vault balance** - a person's proceeds may go to their vault
-  balance instead of the bank, pinned at sealing; a partner is paid by bank
+  balance instead of the bank, pinned at sealing, and need no bank details on
+  file; a partner is paid by bank
 - ❓ Owner - **Where proceeds go by default** - recommended the vault
-  balance; built as the balance for cards from the vault, the bank otherwise
+  balance; built as the balance when every item of the consignment is a card
+  from the vault, the bank otherwise
+- 🚧 **A refund after a balance payout** - is a negative entry on the
+  balance; a balance below zero is a debt that blocks cash-out and that new
+  credits pay down first
 - **When** - after the return window by default; an admin may switch a
   channel to paying at the sale, the refund then set against later payouts,
   or to one monthly statement
@@ -303,12 +310,12 @@ payouts made on their due day.
 | A consignor's own page | ❓ Open | The service answers a signed-in consignor with each consignment, its items - an auction-bound one showing once checked in, before its lot lists - their prices, sales and payouts, the terms pinned to it, the payouts made, its documents and the emails sent; the screen itself is still to be drawn, and a buyer's seller line waits for a store product that names its item - owner, 2026-10-12, brief 2026-10-16. The designer proposes it under a Consignments and Sales section - one of three signed-in sections by what the items mean, with vault pages for held assets and submissions for items in service - designer, 2026-10-16 | Product |
 | Nobody collects | ❓ Open | Reminders, then a written notice, as grading's ladder runs | Legal |
 | Delivery never reported | ❓ Open | When an online sale's return window starts if its delivery is never reported; until decided, it waits for a reported delivery or staff recording one | Product |
-| Selling from the vault | ❓ Open | Whether the consignor releases the vault case first, or the case passes to the buyer; until decided, a card in a vault case is refused until it is released | Product |
+| Selling from the vault | Decided | A storage card is consigned where it sits and released to its buyer on delivery under the consignment agreement; the exact clause is confirmed later - owner, 2026-10-27 | Owner |
 | Points and discounts | ❓ Open | Whether points, coupons and the shop's discounts reach a consigned card; the consignor is paid on the listed price either way | Product |
 | Nothing to set against | ❓ Open | When a refund after payout is asked back from the consignor if no later payout comes | Product |
 | Graded only | ❓ Open | Proposed: intake takes graded collectables only at launch, there being no grading service on day 1; whether ungraded is ever taken | Product |
 | The figures | ❓ Open | Proposed: a consignment fee of **10–12%** of the sale price at sale; the exact figures, and whether a paid incentive is set against the payout | Product |
 | The term's figure | ❓ Open | The running default is **90** days; **30** or **60** are asked for; the figure is unset | Product |
 | An unsold item at term's end | ❓ Open | Proposed actions a consignor may take: reduce the listed price, save it to the vault for long-term custody, or book an appointment to collect it at the shop | Product |
-| The payout flow | ❓ Open | A bank transfer the treasurer records, or the person's vault balance, pinned at sealing; a partner is always paid by bank. Which is a person's default is open - owner, 2026-10-27 | Owner |
+| The payout flow | ❓ Open | A bank transfer the treasurer records, or the person's vault balance, pinned at sealing; a partner is always paid by bank. Which is a person's default is open - owner, 2026-10-27; built as the balance when every item is a vault card, the bank otherwise | Owner |
 :::

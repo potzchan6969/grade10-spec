@@ -27,9 +27,14 @@ against it.
   staff open, prepare, vault and authenticate the case in one act each —
   [Earnings](/p/grade10-site/vault/earnings)
 - 🚧 **An early withdrawal pays its fee** — a card taken back inside the
-  vault's early-withdrawal period is released only once its fee is paid,
-  online or at the shop's till —
+  vault's early-withdrawal period is released only once its fee is paid by
+  card on its Shopify invoice, online or at the shop's till; the refusal names
+  the fee outstanding, and a withdrawn request voids the invoice —
   [Earnings](/p/grade10-site/vault/earnings#taking-a-card-back-early)
+- 🚧 **Released to its buyer** — a storage card sold through consignment is
+  released to its buyer on delivery under the consignment agreement, with no
+  release paper and no early withdrawal fee —
+  [Consignment](/p/grade10-site/consignment)
 
 :::flow{title="Intake to release"}
 # Intake

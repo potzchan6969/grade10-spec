@@ -16,6 +16,10 @@ made.
 - 🚧 **A case of one-card contracts** — everything one owner hands in on a
   visit is one case, and each card in it is its own contract, earning on its
   own — [Case Lifecycle](/p/grade10-site/vault/case-lifecycle)
+- 🚧 **One balance, cashed out by bank** — a card's incentive and the
+  proceeds of a card sold from the vault land in one balance, cashed out to
+  an account in the owner's verified name once a second treasurer approves —
+  [Earnings](/p/grade10-site/vault/earnings#cashing-out)
 - **Two entities** — the custodian holds the item and the lender lends
   against it; each prints on its own paper, and only the lender's carries a
   licence

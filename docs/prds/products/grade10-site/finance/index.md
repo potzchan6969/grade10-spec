@@ -21,6 +21,8 @@ and the lender it is made under is not the entity that holds the item.
 - 🚧 **Many cards, each its own contract** — a case holds every card handed
   in on a visit as one-card contracts, and a financed card is its own loan
   beside its own incentive rate — [Earnings](/p/grade10-site/vault/earnings)
+- 🚧 **A financed card is not sold from the vault** — only a storage card may
+  be consigned where it sits; a card under a loan is refused
 - **One of everything** — one case, one database, one worker, one console
   section: the loan lives where its collateral does, and infrastructure held
   in reserve for a product nobody has described is a moving part with no owner
