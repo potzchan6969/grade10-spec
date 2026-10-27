@@ -14,8 +14,8 @@ restated with the three components; no existing clause is dropped.
   widened export list.
 - **Staying, re-owned** — `grade10-site-loyalty-programme-SC-185` and
   `-SC-186` stand against the membership surface: the new page states the
-  lapse rule in its mechanics card but draws no member-dated line yet, so
-  the cases stay parked against it.
+  lapse rule in its mechanics card and draws no member-dated line; the
+  Membership page keeps its own dated line (Q5), so the cases stand as they are.
 - **Arriving** — `grade10-site-loyalty-programme-SC-275` (the held rung's
   emphasis), `-SC-276` (an invitation-held tier earns nothing beneath it),
   `-SC-277` (the qualifying line waits for both figures), `-SC-278` (the

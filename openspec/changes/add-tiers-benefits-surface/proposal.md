@@ -11,7 +11,7 @@ points themselves work. The designer has drawn that surface in Figma
 ladder marking the member's climb (`7250:1875` and its invitation-held
 variant `7254:384`), and a how-points-work card of the four mechanics
 (`7229:7427`), composed into a page (`7250:1607`) that a small viewport
-navigates to and a wide one hosts as a Membership section. It exists in the
+navigates to, on a wide viewport too. It exists in the
 workbench on this change's branch; this change records the contract.
 
 ## What Changes
@@ -38,7 +38,8 @@ workbench on this change's branch; this change records the contract.
   semibold title, the ladder, the rung cards, the mechanics card — reached
   from the `TierCard` link on Membership.
 - The surface states the lapse rule and draws no member-dated "how many
-  points expire and the day they go" line (Q5).
+  points expire and the day they go" line; the Membership page keeps that
+  line (Q5).
 
 ## Non-Goals
 
@@ -66,5 +67,5 @@ None.
   `ladderCaption`/`HOW_POINTS_WORK` content, and the `TierCard` link's
   story target.
 - **Consumer apps** — additive only; nothing existing renames or reshapes.
-- **The expiry line** — still seeks its designed home; this surface is the
-  expected one, but no member-dated rendering is drawn yet.
+- **The expiry line** — stays on the Membership page, outside the card; this
+  surface states the lapse rule alone (Q5).

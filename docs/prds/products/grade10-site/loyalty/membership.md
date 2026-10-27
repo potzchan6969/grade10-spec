@@ -79,7 +79,8 @@ a Google account under it -
 
 - **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
-  to say here. The expiry date reads on the Tiers & Benefits page instead
+  to say here. The Membership page keeps one dated expiry line of its own,
+  drawn outside the card
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
 - **Each section loads on its own** — a catalog that failed to load is no
@@ -105,8 +106,8 @@ it, on a wide viewport too.
 - **Reaches** — the `TierCard` on Membership links here whole, and it has
   no navigation entry of its own
 - **The expiry date's home** — the mechanics card states the lapse rule;
-  no line names a member's own expiring points and the day they go; the
-  programme states the rule alone
+  the Tiers & Benefits page draws no member-dated line; the Membership page's own
+  line carries the date
 
 ::story{id="loyalty-membership-screens-tiers-benefits--default" title="Tiers & Benefits, a gold member"}
 
