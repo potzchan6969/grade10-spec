@@ -158,9 +158,9 @@ the lanes in the `flow` section of
 - **Annotation targets** - give each step a stable `id` and a `title` that
   says what it is, so a comment names exactly one step
 - **Lanes** - one `<article class="tile">` and one `<ol class="chain">` for
-  each channel or actor (online, POS till, after payment). The main lane is
-  `span-4`; a shorter lane is `span-2`. Steps alternate with
-  `<li class="via">` labels: the reader's action
+  each channel or actor (online, POS till, after payment). The chain runs
+  top to bottom. Steps alternate with `<li class="via">` labels: the
+  reader's action
 - **Steps** - screens and steps in the reader's words, as the page names
   them. `class="node end"` for a start or an outcome
 - **Data** - chips under a step: `read`, `write`, or `ext` for a call to an
@@ -346,13 +346,14 @@ after its `--help` is read again.
 1. **Copy the template** - [`lesson-template.html`](lesson-template.html)
    to `${TMPDIR:-/tmp}/teach-me/<topic-slug>/lesson.html`. Lavish names a
    session by the file path, so one topic keeps one path. The look is a
-   chosen one - V7's tile layout in Heron AI's style - and it is complete in
-   the file: do not add a stylesheet, a font or a CDN
-2. **Tiles** - each section is a two-line heading (the claim, then a grey
-   `sub` line) and a grid of `tile`s. A tile has a `tag`, an `h3` and its
-   text. Use `span-2` for a tile with more than three cases or a long lane,
-   and `span-4` for the main lane. Number rules `R-01` on and cases `C-01`
-   on, so a reader can name one in a comment
+   chosen one - one column with V7's two-line headings, in Heron AI's style -
+   and it is complete in the file: do not add a stylesheet, a font or a CDN
+2. **One column** - the page reads top to bottom. Each section is a
+   two-line heading (the claim, then a grey `sub` line) and full-width
+   `tile`s stacked one under another; never place blocks side by side. A
+   tile has a `tag`, an `h3` and its text. A list of short items - kinds,
+   stories, manual pages - is `rows` inside one tile. Number rules `R-01`
+   on and cases `C-01` on, so a reader can name one in a comment
 3. **Name the question** - the reader's words at the top, then the kind,
    the purpose and the pages read
 4. **One claim, one target** - each feature, case, tile, step and open
