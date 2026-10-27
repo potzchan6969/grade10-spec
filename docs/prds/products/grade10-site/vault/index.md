@@ -40,6 +40,7 @@ made.
 | [Collector Pages](/p/grade10-site/vault/collector-pages) | What a collector does on their own case, and what they hear |
 | [Portfolio](/p/grade10-site/vault/portfolio) | What a collector holds in the vault, and the acts on one item |
 | [Case Lifecycle](/p/grade10-site/vault/case-lifecycle) | The fourteen statuses, the two lanes, the timers, the exits |
+| [Earnings](/p/grade10-site/vault/earnings) | What a card earns while it is held, the balance it lands in, and the fee for taking it back early |
 | [Loan and Money](/p/grade10-site/vault/loan-and-money) | The arithmetic, the policy the brand lends under, the money records and corrections, the ledger |
 | [Documents and Signing](/p/grade10-site/vault/documents-and-signing) | The three documents, the ceremony, consent, copies, verification |
 | [Operator Console](/p/grade10-site/vault/operator-console) | The queue and its views, one case's tabs, grants, the physical vault |
@@ -99,14 +100,15 @@ valued. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 
 **Not in scope.** Automated payments in either direction; an external
 e-signature vendor; online identity verification; a second custodian; storage
-fees; multi-item cases; renewing a live loan.
+fees; renewing a live loan.
 
 **Measurement.** On [Analytics](/p/grade10-site/analytics#vault).
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Custody is the product, financing an attachment | Decided | One case, two lanes, decided by the financing amount at intake | Product |
-| One case is one item | Decided | A unique index; siblings are separate cases booked on the lead case | Product |
+| One case is one item | 🚧 | Reversed by the owner on 2026-10-27: a case holds many cards, each with its own incentive rate and financing term, because the vault and finance share one vaulting base — `add-vault-earnings` | Owner |
+| The vault pays to keep cards | 🚧 | Each card earns a daily incentive into one balance on the owner's account — [Earnings](/p/grade10-site/vault/earnings) | Owner |
 | A payout takes two people; a correction takes a second one | Decided | Staff and treasurer share no money grant, and nobody may take back a row they recorded | Product |
 | Entity, retention and lending policy are data | Decided | Three per-brand tables on one mechanism, every undecided field null and named by the checks with its owner and its cost. A set bound refuses; a null one allows outside production and, where a loan cannot be written without it, refuses the offer in production; a field marked blocking refuses a production deploy | Engineering |
 | Storage is free | Decided | The obligations seam is where a fee schedule lands | Owner |

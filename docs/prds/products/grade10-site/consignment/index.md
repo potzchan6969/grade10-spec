@@ -14,7 +14,7 @@ the value below is the default it starts on -
 
 | Setting | Default |
 | --- | --- |
-| Channels | the store, in the shop and online; the auction |
+| Channels | the store, in the shop, online or both; the auction |
 | Store commission | a share of the sale price, by price band; unset until an admin sets it |
 | Auction commission | a share of the hammer price, unset until an admin sets it; the buyer's premium stays the house's |
 | Minimum commission | per item; none |
@@ -102,6 +102,15 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   sale, delivery and refund; staff record one by hand only when a channel
   did not report it
 - **The first sale wins** - a second sale of the same item is refunded
+- 🚧 **In the shop, online or both** - staff list a store item in the shop
+  only, online only, or both
+- 🚧 **One buyer, before payment** - the till and an online checkout each
+  hold a card before taking payment, and a card held by one is refused to the
+  other, so two buyers never both pay for it
+- ❓ Owner - **Who wins the counter** - both rules are built and an admin
+  picks one: the first hold wins and an online hold that has started payment
+  is never taken back, or the till wins over an online checkout that has not
+  paid; recommended the first
 - **A card in a vault case** - refused until its vault case is released;
   the item can be consigned in the same visit
 - 🚧 **Recorded at intake** - where the consignment was taken - the shop's
@@ -150,6 +159,10 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   [Consignment Console](/p/grade10-site/consignment/operator-console#grants)
 - 🚧 **An incentive at consignment** - the consignor is paid the incentive
   when the consignment is taken
+- ❓ Owner - **The incentive moves to the vault** - the owner's new draft pays
+  the incentive daily on a vaulted card instead, consigned or not -
+  [Earnings](/p/grade10-site/vault/earnings); recommended: the incentive at
+  consignment stays a setting, off by default
 - **What is paid** - the listed price less commission and fees; at auction, the
   hammer price less commission and fees, the buyer's premium being the
   house's
@@ -207,6 +220,10 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - **Taken back early** - the consignor may take an item back before it
   sells, for the early take-back fee where an admin set one; a lot live at
   auction only once the auction calls it off or it closes
+- ❓ Owner - **A contract with an end date** - the agreement carries the date
+  it ends, and a renewal is a newly signed version linked to the one it
+  renews; a contract that runs out puts the card back in the vault on its
+  own. Built this way until the owner confirms it
 - 🚧 **A return is tracked and signed for** - an item going back to the
   consignor travels under its tracking, and the return closes on a signed
   return receipt
@@ -262,7 +279,7 @@ payouts made on their due day.
 | --- | --- | --- | --- |
 | One service, two channels | Decided | One consignment service serves the store and the auction; the consignor, the agreement, the commission and the payout are the same, and only the sale differs - decided under the owner's delegation, 2026-10-08 | Product |
 | Commission bound to the consignment | Decided | Pinned when the agreement is prepared, as grading pins its fee sheet; an agreement waiting for a signature keeps its schedule, and a change reaches the next agreement prepared - decided by the owner, 2026-10-08 | Product |
-| The shop and online | Decided | One store product per consigned item sells in the shop and online, wherever the store sells - decided under the owner's delegation, 2026-10-08; no shop-only listing - decided by the owner, 2026-10-11 | Product |
+| The shop and online | 🚧 | One store product per consigned item; staff list it in the shop, online or both - decided by the owner, 2026-10-27, reversing no shop-only listing of 2026-10-11 | Product |
 | No reserve | Decided | A consigned lot is absolute like every auction listing; the consignor's protection is the floor and the choice of channel - decided by the owner, 2026-10-11 | Product |
 | List price and floor | Decided | Staff change the price within the floor; below it only on the consignor's written yes - decided under the owner's delegation, 2026-10-08 | Product |
 | Floor is the start price | Decided | An item for auction needs a floor at signing, 0 allowed; the lot opens at it and the auction cannot change it - decided under the owner's delegation, 2026-10-11 | Product |

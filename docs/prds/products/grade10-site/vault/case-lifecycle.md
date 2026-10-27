@@ -22,6 +22,14 @@ decided at intake by one question: does the collector want a loan against it.
   overdue (a computation against the clock)
 - **One case, one item** — a unique index; a collector with three items
   sends three requests and books one visit on the first
+- 🚧 **One case, many cards** — a case holds every card handed in on one
+  visit, each with its own contract effective start date, its own incentive
+  rate and, on a financed card, its own financing term —
+  [Earnings](/p/grade10-site/vault/earnings)
+- 🚧 **An early withdrawal pays its fee** — a card taken back inside the
+  vault's early-withdrawal period is released only once its fee is paid,
+  online or at the shop's till —
+  [Earnings](/p/grade10-site/vault/earnings#taking-a-card-back-early)
 
 :::flow{title="Intake to release"}
 # Intake

@@ -90,6 +90,15 @@ sealing cannot be sealed — the paper would name a person the case no longer sa
 it is about. The name printed comes from the verified record and from nothing
 anybody types.
 
+- 🚧 **When identity is asked is a setting** — each point the vault may ask
+  for a verified identity — before the custody paperwork, the first cash-out,
+  the first sale payout, a withdrawal, a total held above a value — is
+  switched on or off by an admin, so the rule moves without a release
+- ❓ Owner — **Which points ask** — when identity is required is still being
+  discussed; the draft asks at the first cash-out, sale payout or withdrawal,
+  or above a total held of **HKD 50,000** or **HKD 100,000**, and today's
+  vault asks before the custody paperwork
+
 :::detail{title="Product decisions" for="pm"}
 The vault is where an identity is felt: who is asked, when, what the counter
 can do when the hosted check cannot, and what happens to paperwork already

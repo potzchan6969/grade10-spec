@@ -18,6 +18,9 @@ and the lender it is made under is not the entity that holds the item.
   signs the custody agreement
 - **Where it answers** — `grade10.com/vault`, one host and a path, with a
   vanity domain redirecting to it
+- 🚧 **Many cards, each its own term** — one case holds every card handed in
+  on a visit, and each financed card carries its own financing term beside
+  its own incentive rate — [Earnings](/p/grade10-site/vault/earnings)
 - **One of everything** — one case, one database, one worker, one console
   section: the loan lives where its collateral does, and infrastructure held
   in reserve for a product nobody has described is a moving part with no owner
