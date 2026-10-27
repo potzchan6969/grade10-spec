@@ -131,5 +131,86 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@seankcw",
+    "reviewedAt": "2026-10-27T00:00:00Z",
+    "changes": [
+      {
+        "path": "openspec/changes/separate-site-and-admin-sessions/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Two links re-pointed after the PRD and Storybook ids moved; no design changed"
+      },
+      {
+        "path": "openspec/specs/shared/auth/domain-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/auth/session/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/auth/sessions/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-out/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements"
+      },
+      {
+        "path": "openspec/specs/shared/console/user-directory/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Regenerated or folded test-case suite; the cases restate the unchanged requirements; the withdrawn session-surface cases left with 8341b40de"
+      },
+      {
+        "path": "openspec/specs/shared/auth/sign-in/spec.md",
+        "anchors": [
+          "Requirement: A failed link follow leaves the asking surface with the failure announced"
+        ],
+        "classification": "semantic",
+        "reason": "Adds SC-115: a failed console-asked link leaves an already signed-in operator in the console unchanged; the change's behaviour already did this",
+        "evidence": [
+          "grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts (shared-auth-sign-in-SC-115 walk)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/console/user-directory/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The session-surface display was withdrawn after the console redesign (8341b40de); the change keeps surface on AdminSession and the operator list, which the spec still allows",
+        "evidence": [
+          "grade10:packages/grade10-auth/admin-frontend/src/core/client/UserDirectoryClient.ts (AdminSession.surface is carried, not displayed)"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/console/user-directory/spec.md",
+        "anchors": [
+          "Requirement: A session is named without its secret"
+        ],
+        "classification": "semantic",
+        "reason": "The requirement no longer names the surface as a rendered field; sessions are still named by id and never by their secret",
+        "evidence": [
+          "grade10:packages/grade10-auth/admin-frontend/src/core/client/UserDirectoryClient.ts (AdminSession carries id, never the secret)"
+        ]
+      }
+    ]
+  }
 }
