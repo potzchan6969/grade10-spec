@@ -86,8 +86,8 @@ Stock reads as a yes or no, never a count.
   the same way
 - 🚧 **The redeemed state stays in the surface** - the ticket the
   redemption issued: every redemption mints a member-readable code —
-  good or discount alike — and the scan QR names that redemption.
-  A discount coupon's ticket carries the code, a good's names the
+  gift or discount alike — and the scan QR names that redemption.
+  A discount coupon's ticket carries the code, a gift's names the
   collection in its place. A ticket
   spendable or collectable at the till carries a Use now control, and the
   member's scan QR opens as its own card apart from the ticket — a
@@ -136,7 +136,7 @@ carrying the definition it was bought under.
   lines
 - 🚧 **The member reads a code of their own** — every redemption mints
   one member-readable code, unique to that redemption and bound to the
-  member, and the scan QR names it; a good's ticket shows the
+  member, and the scan QR names it; a gift's ticket shows the
   collection in its place, by display choice. The code is good online and at
   the till; the per-sale discount code a claim mints is a different code,
   unchanged

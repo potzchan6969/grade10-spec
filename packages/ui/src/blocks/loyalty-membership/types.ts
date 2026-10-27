@@ -44,7 +44,7 @@ type RewardRedemption = {
   summary: string;
   /** The ticket's deadline line — use-by or collect-by, as supplied. */
   deadline: string;
-  /** The member-readable code the redemption minted; a good's ticket shows
+  /** The member-readable code the redemption minted; a gift's ticket shows
    * `note` in its place. */
   code?: string;
   /** The ticket's footer line where no code is shown — the collect-in-store line. */

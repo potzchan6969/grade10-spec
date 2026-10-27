@@ -35,7 +35,7 @@
 - [x] 2.2 Add `reward-checkout.stories.tsx` under
       `Loyalty/Rewards/Blocks/RewardCheckout`: coupon confirm, item confirm,
       insufficient balance, busy, redeemed coupon (code, no Apply), redeemed
-      good (collection, no code), sheet under 640px vs dialog at 640px
+      gift (collection, no code), sheet under 640px vs dialog at 640px
       `grade10-site-loyalty-programme-SC-266`, `grade10-site-loyalty-programme-SC-267`, `grade10-site-loyalty-programme-SC-268`
 - [x] 2.3 Add the preview Rewards screen (Figma `7254:500`) under
       `apps/preview/src/pages/loyalty/`, composing `RewardMenu` +
@@ -50,6 +50,6 @@
 - [ ] 3.1 Walk `grade10-site-loyalty-programme-US-12` on the workbench:
       `Loyalty/Rewards` cards open the sheet under 640px and the dialog at
       640px; the balance reads before→after; a short balance refuses in the
-      warning tone; the coupon's ticket shows its code and the good's its
+      warning tone; the coupon's ticket shows its code and the gift's its
       collection; no Apply anywhere
       (`grade10-site-loyalty-programme-SC-264`, `grade10-site-loyalty-programme-SC-266`, `grade10-site-loyalty-programme-SC-267`, `grade10-site-loyalty-programme-SC-268`)

@@ -71,7 +71,7 @@ type RewardCheckoutCopy = {
   cancel: string;
   /** The redeemed heading for a discount coupon — "Added to your coupons". */
   redeemedCouponTitle: string;
-  /** The redeemed heading for a good — "Ready to Collect". */
+  /** The redeemed heading for a gift — "Ready to Collect". */
   redeemedItemTitle: string;
   /** Dismisses the redeemed surface. */
   done: string;
@@ -107,7 +107,7 @@ type RewardCheckoutProps = {
  * spendable and how long it is good for — shows the balance before and
  * after, and refuses a short balance whole. Given a `redemption` it draws
  * the redeemed phase in the same surface: the coupon's ticket carries the
- * unique code the redemption minted, the good's names the collection in
+ * unique code the redemption minted, the gift's names the collection in
  * the code's place, and a Use now control on either unfolds the scan-QR
  * card below the ticket. Apply belongs to the cart; the surface offers
  * none.
