@@ -132,8 +132,9 @@ L = floor(A × D × O / 10^8)
 
 Every source - a fetcher, staff typing, a licensed feed - records each read,
 its outcome and the sales it saw. Staff finding nothing new is a successful
-read. Where reads overlap, each day, grade and price keeps the highest count
-one read showed.
+read. The fetcher's reads each take what came after the one before began,
+so together they add up as one read; where staff reads overlap them or each
+other, each day, grade and price keeps the highest count one read showed.
 
 - **We failed to observe** - no read succeeded, so the watermark stops; the
   snapshot is taken as of it, sale ages freeze, and O takes the haircut below.

@@ -23,14 +23,17 @@ exact grade or condition the item matches.
   grade SNKRDUNK does not list maps only to an equal or lower one it does,
   or the item takes a set price
 - 🚧 **Fetched after midnight** - each reference in use is read once a day,
-  just after 00:00 Hong Kong time, politely paced, and each read takes what
-  came after the one before it began, so a sale counts once, on its Hong
-  Kong day. A read that fails is tried again in five minutes; one that comes
-  more than a day after the last loses the sales SNKRDUNK by then shows only
-  as days ago, and is flagged. A new reference's first read reaches back 90
-  days or ten pages: what SNKRDUNK shows as days ago lands within half a
-  day, and older days as it prints them, in Japan's. Every read is
-  recorded, failed or not
+  just after 00:00 Hong Kong time, politely paced; each read takes what
+  came after the one before it began, each sale on its Hong Kong day, and a
+  new reference's first read reaches back 90 days or ten pages, older days
+  as SNKRDUNK prints them, in Japan's. Every read is recorded, failed or not
+- 🚧 **Where a read is less exact** - read at the same minute each night,
+  every sale counts once; a read moved against the night before counts the
+  sales within half an hour of the last read twice or not at all. A failed
+  read is tried again minutes later, ahead of the batch; one more than a day
+  after the last places what SNKRDUNK then shows as days ago within half a
+  day, and is flagged, as is one that cannot reach the last read in ten
+  pages, which keeps what it read
 - ❓ **How many a night** - at one reference a minute, 1,440 fit a day; past
   that reads fall more than a day apart. Faster reads come with the
   SNKRDUNK worker - TBC, owner and engineering
@@ -55,8 +58,8 @@ exact grade or condition the item matches.
   before Monday 06:00, so one taken late is the one that would have been
   taken on time, and a late observation improves the next week
 - 🚧 **A sale counts once** - every sale observed is kept with its day,
-  price and grade, and each source and each read is recorded, so overlapping
-  reads add only what is new
+  price and grade, and each source and each read is recorded; the nightly
+  reads add up, and a staff read overlapping them adds only what is new
 - 🚧 **A failed read is not a quiet market** - while reads fail, the
   snapshot is taken as of the last good read and its factor fades with the
   read's age; while reads succeed and nothing sells, the sales age and the
