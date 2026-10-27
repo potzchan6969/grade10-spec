@@ -10,7 +10,7 @@
       `Loyalty/Membership/Blocks/TierInfoCard` — `Silver`, `Gold`, `Black`,
       the held and unheld emphasis
 
-## 2. The tier ladder (grade10-spec)
+## 2. The tier ladder (grade10-spec) (owner: @seankcw)
 
 - [x] 2.1 Add `tier-ladder.tsx` — a card drawing the rungs through the
       design-system Stepper: earned rungs completed, the held rung in
