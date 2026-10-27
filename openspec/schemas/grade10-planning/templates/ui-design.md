@@ -11,7 +11,10 @@
 <!-- Design-system primitives and packages/ui exports each screen composes,
      named exactly. Flag what does not exist yet as work in this repo: a
      component, a variant, a token, or a word packages/i18n has to answer in
-     every language of its layer. -->
+     every language of its layer. Name the export, never its variant, size,
+     tone, class or pixel value: the frame carries those to whoever builds
+     it. -->
+
 
 ## States
 

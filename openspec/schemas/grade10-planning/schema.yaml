@@ -440,7 +440,17 @@ artifacts:
       cross-repo contract. A component, variant, token or message key that does
       not exist yet is work in this repo; flag it so tasks can carry it. A word
       is work like the rest: `packages/i18n` answers it in every language of
-      its layer, and `pnpm run test` refuses one left unanswered.
+      its layer, and `pnpm run test` refuses one left unanswered. Name the
+      export, never its variant, size, tone, class or value: whoever builds
+      the component reads those off the frame, and a second copy here drifts.
+
+
+      **Describe the look only as an outcome to achieve.** "The whole photo
+      shows, centred, its long side at the well's edges" is a behavior an
+      agent must reach and a test can assert. "20px padding, `#D5D3D2`
+      border, `rounded-lg`" is an edit already decided. A design that can only
+      be written as pixels, classes, tokens or variants needs no change at all
+      - [Bug or Change](docs/governance/bug-fixes.md#bug-or-change).
 
       - **States**: Loading, empty, error, and edge states per screen, as a
       markdown table under one `###` per screen — columns **State**, **Shows**,
