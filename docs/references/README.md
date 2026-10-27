@@ -36,6 +36,12 @@ grading, the auction and consignment, store and auction consignment, a
 documents service, and the admin console; the inventory pages, Consignment
 and the Documents Service page carry it, and no change does yet.
 
+[`g10-vault-and-consignment-draft.md`](g10-vault-and-consignment-draft.md)
+is the owner's draft for a vault that pays collectors a daily incentive to
+keep cards in it and a consignment that sells them from it, with the owner's
+answers of 2026-10-27; the `add-vault-earnings` change, the Earnings page and
+the Consignment page carry it.
+
 The `shopify-*` set is the working notes behind the
 `add-shopify-membership-pos` change: the umbrella plan, the checkout identity
 flow, the POS extension, and the resilience test plan. Application code and
