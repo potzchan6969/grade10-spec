@@ -39,7 +39,12 @@ function OrderDetailsPage({
   read: initialRead = "filled",
 }: {
   /** Which order to draw: a web order, one with a refund, or a point-of-sale sale. */
-  order?: "web" | "partialRefund" | "fullRefund" | "pointOfSale" | "pointsCredit";
+  order?:
+    | "web"
+    | "partialRefund"
+    | "fullRefund"
+    | "pointOfSale"
+    | "pointsCredit";
   /** The read: `notFound` draws the not-found treatment, `failed` offers Retry. */
   read?: "filled" | "loading" | "failed" | "notFound";
 }) {
@@ -258,9 +263,7 @@ export const FullRefund: Story = {
     );
     expect(delivery.getByText("Refunded")).toBeVisible();
     expect(delivery.queryByText("Completed")).toBeNull();
-    expect(
-      delivery.queryByRole("button", { name: "Track Order" }),
-    ).toBeNull();
+    expect(delivery.queryByRole("button", { name: "Track Order" })).toBeNull();
   },
 };
 
