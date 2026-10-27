@@ -34,6 +34,9 @@ each way once.
   leaves the account and its membership as they are
 - **A link is the proof** — a submission is the link to the member's post;
   there is no screenshot or selfie upload
+- **The operator judges a link** — whether a post counts (a public account,
+  the car in frame, the mention) is the reviewer's call; nothing is checked
+  on the way in
 
 ## Winning and Receiving
 
@@ -52,7 +55,8 @@ the gift follows when the campaign has one to give.
 ## Running a Campaign
 
 An operator writes a campaign in the console, picks each gift and its count,
-and reviews submissions.
+and reviews submissions. A published campaign opens at its start time on its
+own, and closes at its end.
 
 - **The quota moves while it runs** — raise it to make room after a bad win
   (a fraudulent signup, a link approved by mistake) whose coupon was voided,
@@ -88,4 +92,6 @@ it: the first fifty signups and the members who find the car win a card pack.
 | Proof for a submission | Decided | A link to the member's Instagram or Threads post; no screenshot or selfie upload for now. | Product |
 | An operator's grant | Decided | A gift like a campaign's: no points records, reversed only by voiding its coupon. | Product |
 | A gift's point cost | Decided | Optional on a grant-only reward; the card-pack reward is created with none. | Product |
+| When the card pack is attached | Decided | At launch, before the store opens: winners hold the coupon at once and collect it once the store opens. The reward's pickup window has to outlast the wait. | Product |
+| What makes a submission valid | Decided | The reviewer decides, private accounts included; the product enforces no rule on the link. | Product |
 :::
