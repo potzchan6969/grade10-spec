@@ -122,8 +122,8 @@ label such as "TL;DR" or "Key point".
   so the purpose orders the sections and sets their detail; it does not
   remove one. Every case gives every case
 - **In the chat** - Lavish did not start. Give the short answer and the
-  first three sections the purpose puts the depth on. Offer the rest in
-  the closing line, by name
+  first three sections the purpose puts the depth on, and the file path of
+  the full lesson page
 - **No reader in the conversation** - a run with nobody to answer, or a
   lesson written for other people: give every section in the chat, and do
   not start Lavish
@@ -147,36 +147,32 @@ two levels at most:
 
 ### Product flow
 
-A flow chart in plain HTML and CSS: the screens the reader moves through,
-and the data and services each step uses. Copy
-[`flow-template.html`](flow-template.html), replace its lanes, and write it
-to `${TMPDIR:-/tmp}/teach-me/<topic-slug>.html`. Give the file path. Where
-the agent can publish a private page, also give that link.
+A flow chart in plain HTML and CSS, inside the lesson page: the screens
+the reader moves through, and the data and services each step uses. Replace
+the lanes in the `flow` section of
+[`lesson-template.html`](lesson-template.html).
 
 - **No script** - do not add a script, a CDN or a chart library. A file
   viewer, a preview pane and an attachment show no script, so a chart that
-  a script draws shows as raw text there. In Lavish, the lanes go inside
-  the lesson page, with the same rules
+  a script draws shows as raw text there
 - **Annotation targets** - give each step a stable `id` and a `title` that
   says what it is, so a comment names exactly one step
-- **Lanes** - one `<h2>` and one `<ol class="flow">` for each channel or
-  actor (online, POS till, after payment). Steps alternate with
-  `<li class="edge">` labels: the reader's action
+- **Lanes** - one `<article class="tile">` and one `<ol class="chain">` for
+  each channel or actor (online, POS till, after payment). The main lane is
+  `span-4`; a shorter lane is `span-2`. Steps alternate with
+  `<li class="via">` labels: the reader's action
 - **Steps** - screens and steps in the reader's words, as the page names
-  them. `class="step end"` for a start or an outcome
+  them. `class="node end"` for a start or an outcome
 - **Data** - chips under a step: `read`, `write`, or `ext` for a call to an
   external service, with the store or service name
-- **Branches** - one line each under the lane: the step, the condition, the
-  outcome
+- **Branches** - one `<p class="branch">` under the lane: the step, the
+  condition, the outcome
 - **Size** - 15 steps at most. A larger topic draws its main path and names
-  the branches it left out in the `note`
+  the branches it left out in the `left-out` note
 - **Existing charts** - a chart under `docs/prds/diagrams/` that covers the
   topic is the start; draw the same shape, do not invent a second one
-- **Build it up** - a chart with two or more lanes is a series, not one
-  file. `<topic-slug>-1.html` holds the main lane. Each next file is a copy
-  of the last with one more lane or branch added. Give the paths in order.
-  For a reader in the conversation, give the first file, then the next one
-  when they ask
+- **Build it up** - the main lane comes first. Each next lane starts with
+  one line that says what it adds to the lanes above it
 
 #### A picture for a spatial idea
 
@@ -348,25 +344,28 @@ after its `--help` is read again.
 ### Build the page
 
 1. **Copy the template** - [`lesson-template.html`](lesson-template.html)
-   to `${TMPDIR:-/tmp}/teach-me/<topic-slug>/lesson.html`. Copy
-   `packages/design-system/src/theme.css` and
-   `packages/design-system/src/themes/grade10.css` beside it: the page
-   then uses the Grade10 tokens, and falls back to its own colours without
-   them. Lavish names a session by the file path, so one topic keeps one
-   path
-2. **Name the question** - the reader's words at the top, then the kind,
+   to `${TMPDIR:-/tmp}/teach-me/<topic-slug>/lesson.html`. Lavish names a
+   session by the file path, so one topic keeps one path. The look is a
+   chosen one - V7's tile layout in Heron AI's style - and it is complete in
+   the file: do not add a stylesheet, a font or a CDN
+2. **Tiles** - each section is a two-line heading (the claim, then a grey
+   `sub` line) and a grid of `tile`s. A tile has a `tag`, an `h3` and its
+   text. Use `span-2` for a tile with more than three cases or a long lane,
+   and `span-4` for the main lane. Number rules `R-01` on and cases `C-01`
+   on, so a reader can name one in a comment
+3. **Name the question** - the reader's words at the top, then the kind,
    the purpose and the pages read
-3. **One claim, one target** - each feature, case, row, step and open
-   question is its own element with a stable `id`. A table's row header is
-   a `<th scope="row">`, so Lavish names the row in a comment
-4. **Summary first** - a table starts with one line that says what the rows
-   show. Do not use colour as the only sign of a status: 🚧 and ❓ stay as
-   text
-5. **Known and not known** - a line from the store links its source. A line
+4. **One claim, one target** - each feature, case, tile, step and open
+   question is its own element with a stable `id`. A long reference list
+   that does not fit tiles uses the `table` style, with each row header a
+   `<th scope="row">`, so Lavish names the row in a comment
+5. **Summary first** - the grey `sub` line says what the tiles show. Do not
+   use colour as the only sign of a status: 🚧 and ❓ stay as text
+6. **Known and not known** - a line from the store links its source. A line
    the agent inferred says so, or is a ❓
-6. **End with what is left out** - the `left-out` section names what the
+7. **End with what is left out** - the `left-out` section names what the
    lesson did not cover and where to look next. Do not restate the lesson
-7. **More** - the More buttons queue the other kinds and the hand-offs as
+8. **More** - the More buttons queue the other kinds and the hand-offs as
    prompts. The rest of the page needs no script
 
 ### Run the session
@@ -414,9 +413,10 @@ after its `--help` is read again.
   reader. To check the page, open the HTML file itself
 - **Do not use the Mermaid whiteboard** - the lanes are the chart, so the
   page reads the same without Lavish
-- **Fallback** - `npx` refused, no network, or no permission: give the
-  lesson in the chat with the static chart files, and say why Lavish did
-  not start
+- **Fallback** - `npx` refused, no network, or no permission: write the
+  same lesson page, give its file path, and say why Lavish did not start.
+  The page reads the same without Lavish; only the More buttons stay
+  hidden
 
 ## Hand-offs
 
