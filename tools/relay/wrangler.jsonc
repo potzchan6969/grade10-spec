@@ -14,14 +14,7 @@
   "durable_objects": {
     "bindings": [{ "name": "ROOM", "class_name": "Room" }]
   },
-  // Append-only: a tag that has run on this Worker stays in the list as it
-  // stands, and a new class, or a class retired, is a new tag after it. `v3`
-  // retires `Live`, which held where `main` was for the manual's open pages.
-  "migrations": [
-    { "tag": "v1", "new_sqlite_classes": ["Room"] },
-    { "tag": "v2", "new_sqlite_classes": ["Live"] },
-    { "tag": "v3", "deleted_classes": ["Live"] }
-  ],
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
   // The Slack app's request URL and the workflow's wake URL are the
   // workers.dev address; no custom domain is needed for either.
   "workers_dev": true,
